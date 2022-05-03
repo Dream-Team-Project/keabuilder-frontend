@@ -12,7 +12,7 @@
 
               <input type="text" class="form-control mb-3" name="username" placeholder="username" [(ngModel)]="form.username" required
                 #username="ngModel" />
-              <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
+              <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted" >
                 <i class="fas fa-exclamation-triangle"></i> Username is required!
               </div>
 
@@ -25,7 +25,7 @@
                 </div>
               </div>
               <br>
-              <button type="submit" class="btn btn-outline-dark login-btn">Login</button>
+              <button type="submit" class="btn btn-outline-dark login-btn" (click)="showAlign()">Login</button>
               <br>
               <div class="form-group">
                 <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
