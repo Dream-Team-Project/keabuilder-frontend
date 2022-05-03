@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
-// import { setTimeout } from 'timers';
-=======
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
->>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['../../assets/style/auth.css']
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   form: any = {
@@ -36,19 +32,14 @@ export class LoginComponent implements OnInit {
   isSignUpFailed = false;
   isActive= '';
 
-<<<<<<< HEAD
   // counter = 0;
   // height = 0;
 
-
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
-=======
   constructor(
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
     private router: Router,
     private route: ActivatedRoute) { }
->>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
