@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 // import { setTimeout } from 'timers';
+=======
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+>>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['../../assets/style/auth.css']
 })
 export class LoginComponent implements OnInit {
   form: any = {
@@ -24,7 +28,7 @@ export class LoginComponent implements OnInit {
   errors = [];
   loginbox = true;
   registerbox = false;
-  cssVars = 'url(./assets/images/login/login-bk1.jpg)';
+  bgImg = 'url(./assets/images/login/login-bk1.jpg)';
   min = 1;
   max = 3;
   forforget = false;
@@ -32,11 +36,19 @@ export class LoginComponent implements OnInit {
   isSignUpFailed = false;
   isActive= '';
 
+<<<<<<< HEAD
   // counter = 0;
   // height = 0;
 
 
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+=======
+  constructor(
+    private authService: AuthService, 
+    private tokenStorage: TokenStorageService, 
+    private router: Router,
+    private route: ActivatedRoute) { }
+>>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
@@ -77,7 +89,7 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
+        this.redirectToDashboard();
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -90,7 +102,6 @@ export class LoginComponent implements OnInit {
 
   onregisterSubmit(): void {
     const { username, email, password } = this.form;
-
     this.authService.register(username, email, password).subscribe({
       next: data => {
         console.log(data);
@@ -104,13 +115,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  reloadPage(): void {
-    window.location.reload();
+  redirectToDashboard(): void {
+    this.router.navigate(['/dashboard'],{relativeTo: this.route});
   }
 
   createNewImg(){
     var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-      this.cssVars = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
+      this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
   }
 
   anchorsignin() {
