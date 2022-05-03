@@ -1,5 +1,16 @@
 <div class="container">
   <header class="jumbotron">
-    <p>{{ content }}</p>
+    <table class="table table-striped">
+      <tr>
+        <th>S. No.</th>
+        <th>Usename</th>
+        <th>Email</th>
+      </tr>
+      <tr *ngFor="let user of users; index as i">
+        <td>{{i+1}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+      </tr>
+    </table>
   </header>
 </div>
