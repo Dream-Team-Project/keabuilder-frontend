@@ -6,7 +6,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['../../assets/style/auth.css']
 })
 export class LoginComponent implements OnInit {
   form: any = {
@@ -24,14 +24,13 @@ export class LoginComponent implements OnInit {
   errors = [];
   loginbox = true;
   registerbox = false;
-  cssVars = 'url(./assets/images/login/login-bk1.jpg)';
+  bgImg = 'url(./assets/images/login/login-bk1.jpg)';
   min = 1;
   max = 3;
   forforget = false;
   isSuccessful = false;
   isSignUpFailed = false;
   isActive= '';
-
 
   constructor(
     private authService: AuthService, 
@@ -90,7 +89,7 @@ export class LoginComponent implements OnInit {
 
   createNewImg(){
     var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-      this.cssVars = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
+      this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
   }
 
   anchorsignin() {

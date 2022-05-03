@@ -11,7 +11,7 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    RoutingComponents
+    RoutingComponents,
   ],
   imports: [
     BrowserModule,

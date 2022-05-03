@@ -2,11 +2,9 @@
   <div class="row">
     <div class="pt-3 bw-colside ml-4 mt-4">
       <div class="login-form">
-
         <img src="./assets/images/logo/kblogo.svg">
         <h5>{{signheading}}</h5>
         <p>{{signpara}}</p>
-
           <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onloginSubmit()" #f="ngForm" novalidate>
             <div class="bu-forlogin" *ngIf="loginbox">
 
@@ -100,7 +98,7 @@
     </div>
 
     <div class="col-md-6">
-      <div class="bw-container__bg" [style.backgroundImage]="cssVars"></div>
+      <div class="bw-container__bg" [style.backgroundImage]="bgImg"></div>
     </div>
   </div>
 </div>
