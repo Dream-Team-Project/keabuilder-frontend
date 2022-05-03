@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
@@ -32,7 +33,11 @@ export class LoginComponent implements OnInit {
   isActive= '';
 
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(
+    private authService: AuthService, 
+    private tokenStorage: TokenStorageService, 
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
@@ -53,7 +58,7 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
+        this.redirectToDashboard();
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -66,7 +71,6 @@ export class LoginComponent implements OnInit {
 
   onregisterSubmit(): void {
     const { username, email, password } = this.form;
-
     this.authService.register(username, email, password).subscribe({
       next: data => {
         console.log(data);
@@ -80,8 +84,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  reloadPage(): void {
-    window.location.reload();
+  redirectToDashboard(): void {
+    this.router.navigate(['/dashboard'],{relativeTo: this.route});
   }
 
   createNewImg(){

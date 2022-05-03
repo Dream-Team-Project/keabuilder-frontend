@@ -78,7 +78,7 @@
 
                   <button class="btn btn-outline-dark login-btn" type="submit">Register</button>
 
-                  <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+                  <div class="alert alert-warning" ngIf="f.submitted && isSignUpFailed">
                     <i class="fas fa-exclamation-triangle"></i> Signup failed!<br />{{ errorMessage }}
                   </div>
 
