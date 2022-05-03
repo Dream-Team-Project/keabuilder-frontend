@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
-// import { setTimeout } from 'timers';
-=======
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
->>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
@@ -36,19 +32,14 @@ export class LoginComponent implements OnInit {
   isSignUpFailed = false;
   isActive= '';
 
-<<<<<<< HEAD
   // counter = 0;
   // height = 0;
 
-
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
-=======
   constructor(
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
     private router: Router,
     private route: ActivatedRoute) { }
->>>>>>> 6d3bc7bc076866ba16783c07e00023a7876fa958
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
@@ -56,26 +47,6 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
     }
     this.createNewImg();
-  }
-
-  showAlign(){
-    // var vm = this;
-    // setTimeout(function(){
-
-      
-    //   var test = Array.from(document.querySelectorAll('.alert'))
-      
-    //   test.forEach(element => {
-    //       if (vm.counter > 0) {
-    //           vm.height = vm.height + element.clientHeight;
-    //           // element.style.top = vm.height+'px';
-    //           element.setAttribute('style','top:'+vm.height+'px');
-    //         }
-    //         vm.counter++;
-    //       });
-
-    //     },500);
-
   }
 
   onloginSubmit(): void {
