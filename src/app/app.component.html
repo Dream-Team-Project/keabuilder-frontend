@@ -34,7 +34,7 @@
       </li>
     </ul>
   </nav>
-  <app-navbar></app-navbar>
+  <app-navbar *ngIf="isLoggedIn"></app-navbar>
   <div id="angularApp">
     <router-outlet></router-outlet>
   </div>
