@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
+import { TokenStorageService } from '../_services/token-storage.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -9,10 +12,21 @@ import { UserService } from '../_services/user.service';
 export class DashboardComponent implements OnInit {
   users:any = [];
   error?: string;
+  isLoggedIn = false;
+  isLoginFailed = false;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private tokenStorage: TokenStorageService,
+              private router: Router) { }
 
   ngOnInit(): void {
+
+    if (this.tokenStorage.getToken()) {
+      this.isLoggedIn = true;
+    }else{
+      this.router.navigate(['/login']);
+    }
+
     this.userService.getUsers().subscribe({
       next: data => {
         this.users = data.data;

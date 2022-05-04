@@ -32,9 +32,6 @@ export class LoginComponent implements OnInit {
   isSignUpFailed = false;
   isActive= '';
 
-  // counter = 0;
-  // height = 0;
-
   constructor(
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
