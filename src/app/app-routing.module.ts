@@ -5,19 +5,15 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
@@ -29,6 +25,4 @@ export const RoutingComponents = [DashboardComponent,
                                   LoginComponent, 
                                   RegisterComponent, 
                                   ProfileComponent,
-                                  BoardUserComponent, 
-                                  BoardModeratorComponent, 
-                                  BoardAdminComponent];
+                                  PageNotFoundComponent];
