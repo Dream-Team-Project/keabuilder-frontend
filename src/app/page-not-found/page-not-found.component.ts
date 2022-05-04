@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
+import { NavbarService } from '../_services/navbar.service';
 @Component({
   selector: 'app-page-not-found',
   templateUrl: './page-not-found.component.html',
@@ -8,9 +8,11 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 })
 
 export class PageNotFoundComponent implements OnInit {
-  mouseY=0;
-  mouseX=0;
-  constructor(private _cdr: ChangeDetectorRef) {
+  mouseY=50;
+  mouseX=-50;
+  constructor(private _cdr: ChangeDetectorRef, public _nav: NavbarService) {
+      this._nav.hide();
+      console.log(this._nav.hide());
    }
 
   ngOnInit(): void {

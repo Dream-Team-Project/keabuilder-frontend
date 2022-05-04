@@ -1,6 +1,6 @@
 <div id="app">
-  <app-sidebar *ngIf="isLoggedIn"></app-sidebar>
-  <app-navbar *ngIf="isLoggedIn"></app-navbar>
+  <app-sidebar *ngIf="_nav.visible && isLoggedIn"></app-sidebar>
+  <app-navbar *ngIf="_nav.visible && isLoggedIn"></app-navbar>
   <div id="angularApp" [class.insidecont]="isLoggedIn">
     <router-outlet></router-outlet>
   </div>

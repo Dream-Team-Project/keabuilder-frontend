@@ -36,7 +36,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute) { 
+    }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
