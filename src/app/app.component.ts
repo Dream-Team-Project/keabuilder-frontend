@@ -10,7 +10,7 @@ import { NavbarService } from './_services/navbar.service';
 export class AppComponent {
   title = 'Keabuilder';
   private roles: string[] = [];
-  isLoggedIn = false;
+  isLoggedIn:boolean = false;
   showAdminBoard = false;
   showModeratorBoard = false;
   username?: string;
@@ -21,15 +21,15 @@ export class AppComponent {
     }
 
   ngOnInit(): void {
+    // this.isLoggedIn = !!this.tokenStorageService.getToken();
+
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
       this.username = user.username;
     }
   }

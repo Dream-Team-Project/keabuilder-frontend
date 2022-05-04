@@ -20,13 +20,6 @@ export class DashboardComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-
-    if (this.tokenStorage.getToken()) {
-      this.isLoggedIn = true;
-    }else{
-      this.router.navigate(['/login']);
-    }
-
     this.userService.getUsers().subscribe({
       next: data => {
         this.users = data.data;
