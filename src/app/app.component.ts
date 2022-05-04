@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
+import { NavbarService } from './_services/navbar.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,10 @@ export class AppComponent {
   showModeratorBoard = false;
   username?: string;
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService,
+    public _nav: NavbarService) { 
+      this._nav.show();
+    }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
