@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
   }
 
   redirectToDashboard(): void {
-    this.router.navigate(['/dashboard'],{relativeTo: this.route});
+    this.router.navigate(['/'],{relativeTo: this.route});
   }
 
   createNewImg(){

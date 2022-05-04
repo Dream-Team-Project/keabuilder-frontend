@@ -22,3 +22,10 @@ button:focus {
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     color: #fff;
 }
+.insidecont{
+    padding: 20px 0px;
+    width: 96.5%;
+    margin-left: auto;
+    top: 72px;
+    position: relative;
+}

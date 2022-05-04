@@ -35,5 +35,9 @@ export class DashboardComponent implements OnInit {
         this.error = JSON.parse(err.error).message;
       }
     });
+
+    // var a = document.getElementById('angularApp')!;
+    // a.style.background='#F2F3F7';
+
   }
 }

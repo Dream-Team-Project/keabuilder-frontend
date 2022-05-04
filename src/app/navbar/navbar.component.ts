@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
   logs = false;
 
   ngOnInit(): void {
+    
 
     if (this.tokenStorage.getToken()) {
       this.bwname = this.tokenStorage.getUser().username;
