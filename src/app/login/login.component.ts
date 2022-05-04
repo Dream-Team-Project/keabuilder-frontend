@@ -32,9 +32,6 @@ export class LoginComponent implements OnInit {
   isSignUpFailed = false;
   isActive= '';
 
-  // counter = 0;
-  // height = 0;
-
   constructor(
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
@@ -47,26 +44,6 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
     }
     this.createNewImg();
-  }
-
-  showAlign(){
-    // var vm = this;
-    // setTimeout(function(){
-
-      
-    //   var test = Array.from(document.querySelectorAll('.alert'))
-      
-    //   test.forEach(element => {
-    //       if (vm.counter > 0) {
-    //           vm.height = vm.height + element.clientHeight;
-    //           // element.style.top = vm.height+'px';
-    //           element.setAttribute('style','top:'+vm.height+'px');
-    //         }
-    //         vm.counter++;
-    //       });
-
-    //     },500);
-
   }
 
   onloginSubmit(): void {
