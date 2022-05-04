@@ -27,7 +27,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.tokenStorage.getToken()) {
-      this.tokenStorage.getUser().roles;
+      this.bwname = this.tokenStorage.getUser().username;
+      this.bwemail = this.tokenStorage.getUser().email;
     }
 
     window.addEventListener('scroll', this.updateScroll);
@@ -54,15 +55,15 @@ export class NavbarComponent implements OnInit {
       this.offcanvasoverlay=false;
   }
 
-  logout(){
-    // this.offcanvasoverlay=false;
-
+  logout(): void {
+    this.tokenStorage.signOut();
+    this.offcanvasoverlay=false;
+    this.router.navigate(['/'],{relativeTo: this.route});
   }
 
   gotouser(){
     this.router.navigate(['/edituser'],{relativeTo: this.route});
-
-    // this.offcanvasoverlay=false;
+    this.offcanvasoverlay=false;
   }
 
   showNotify(value:any){
