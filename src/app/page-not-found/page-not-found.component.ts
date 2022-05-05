@@ -12,7 +12,6 @@ export class PageNotFoundComponent implements OnInit {
   mouseX=-50;
   constructor(private _cdr: ChangeDetectorRef, public _nav: NavbarService) {
       this._nav.hide();
-      console.log(this._nav.hide());
    }
 
   ngOnInit(): void {

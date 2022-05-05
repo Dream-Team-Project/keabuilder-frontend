@@ -1,0 +1,21 @@
+main {
+    position: relative;
+}
+
+.componentLoad{
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    margin: 0 auto 0 auto;
+    transform-origin: center;
+    opacity: 1;
+    animation-name: componentLoad;
+    animation-timing-function: ease-in;
+    position: relative;
+    margin-bottom: 20%;
+}
+
+@keyframes componentLoad {   
+    0% { transform: scale(1,1)  translateY(40px); opacity: 0;}
+    70% { transform: scale(1,1)  translateY(-10px); opacity: 0.7;}
+    100% { transform: scale(1,1)    translateY(0px); opacity: 1;}
+}
