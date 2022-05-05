@@ -11,21 +11,12 @@ export class SidebarComponent implements OnInit {
 
   fullsidebar = true;
   hoveropen = false;
-  activeItem = 'dashboard';
   isOpen = false;
   isOpen2 = false;
   isOpen3 = false;
 
 
   ngOnInit(): void {
-  }
-
-  isActive(menuItem:any) {
-    return this.activeItem === menuItem;
-  }
-
-  setActive(menuItem:any) {
-    this.activeItem = menuItem;
   }
 
 }

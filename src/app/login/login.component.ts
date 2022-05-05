@@ -11,7 +11,6 @@ import { TokenStorageService } from '../_services/token-storage.service';
 export class LoginComponent implements OnInit {
   form: any = {
     username: null,
-    email:null,
     password: null
   };
   isLoggedIn = false;
@@ -19,18 +18,9 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  signheading = 'Sign In To Admin';
-  signpara = 'Enter your details to login to your account:';
-  errors = [];
-  loginbox = true;
-  registerbox = false;
   bgImg = 'url(./assets/images/login/login-bk1.jpg)';
   min = 1;
   max = 3;
-  forforget = false;
-  isSuccessful = false;
-  isSignUpFailed = false;
-  isActive= '';
 
   constructor(
     private authService: AuthService, 
@@ -47,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.createNewImg();
   }
 
-  onloginSubmit(): void {
+  onSubmit(): void {
     const { username, password } = this.form;
 
     this.authService.login(username, password).subscribe({
@@ -69,21 +59,6 @@ export class LoginComponent implements OnInit {
 
   }
 
-  onregisterSubmit(): void {
-    const { username, email, password } = this.form;
-    this.authService.register(username, email, password).subscribe({
-      next: data => {
-        console.log(data);
-        this.isSuccessful = true;
-        this.isSignUpFailed = false;
-      },
-      error: err => {
-        this.errorMessage = err.error.message;
-        this.isSignUpFailed = true;
-      }
-    });
-  }
-
   redirectToDashboard(): void {
     this.router.navigate(['/'],{relativeTo: this.route});
   }
@@ -93,20 +68,5 @@ export class LoginComponent implements OnInit {
       this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
   }
 
-  anchorsignin() {
-    this.loginbox = true;
-    this.registerbox = false;
-    this.forforget = false;
-    this.signheading = 'Sign In To Admin';
-    this.signpara = 'Enter your details to login to your account:';
-  }
-
-  anchorsignup() {
-      this.loginbox = false;
-      this.registerbox = true;
-      this.forforget = false;
-      this.signheading = 'Sign Up To Admin';
-      this.signpara = 'Enter your details to Register to your account:';
-  }
 
 }

@@ -3,10 +3,10 @@
     <div class="pt-3 bw-colside ml-4 mt-4">
       <div class="login-form">
         <img src="./assets/images/logo/kblogo.svg">
-        <h5>{{signheading}}</h5>
-        <p>{{signpara}}</p>
-          <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onloginSubmit()" #f="ngForm" novalidate>
-            <div class="bu-forlogin" *ngIf="loginbox">
+        <h5>Sign In To Admin</h5>
+        <p>Enter your details to login to your account:</p>
+          <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+            <div class="bu-forlogin">
 
               <input type="text" class="form-control mb-3" name="username" placeholder="username" [(ngModel)]="form.username" required
                 #username="ngModel" />
@@ -33,65 +33,15 @@
               <br>
               <a class="btn btn-outline-dark signup-btn pl-0" >Forget password?</a>
 
-              <div class="mt-4">
+              <div>
                 <span class="txt-light">Don't have an account yet?</span>
-                <a class="btn btn-outline-dark signup-btn" (click)="anchorsignup()">Sign Up</a>
+                <a class="btn signup-btn" [routerLink]="['/register']">Sign Up</a>
               </div>
             </div>
           </form>
 
-         <!-- register -->
-          <form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onregisterSubmit()" #f="ngForm" novalidate>
-              <div class="bu-forregister" *ngIf="registerbox">
-
-                <input type="text" class="form-control mb-3" placeholder="Username..." name="username" [(ngModel)]="form.username" required minlength="3"
-                maxlength="20" #username="ngModel" />
-                <div class="alert alert-danger" *ngIf="username.errors && f.submitted">
-                  <div *ngIf="username.errors['required']"><i class="fas fa-exclamation-triangle"></i> Username is required</div>
-                  <div *ngIf="username.errors['minlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Username must be at least 3 characters
-                  </div>
-                  <div *ngIf="username.errors['maxlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Username must be at most 20 characters
-                  </div>
-                </div>
-
-                <input type="email" class="form-control mb-3" placeholder="Email..." name="email" [(ngModel)]="form.email" required email
-                  #email="ngModel" />
-                <div class="alert alert-danger" *ngIf="email.errors && f.submitted">
-                  <div *ngIf="email.errors['required']"><i class="fas fa-exclamation-triangle"></i> Email is required</div>
-                  <div *ngIf="email.errors['email']">
-                    <i class="fas fa-exclamation-triangle"></i> Email must be a valid email address
-                  </div>
-                </div>
-
-                <input type="password" class="form-control mb-3" placeholder="Password..." name="password" [(ngModel)]="form.password" required minlength="6"
-                  #password="ngModel" />
-                <div class="alert alert-danger" *ngIf="password.errors && f.submitted">
-                  <div *ngIf="password.errors['required']"><i class="fas fa-exclamation-triangle"></i> Password is required</div>
-                  <div *ngIf="password.errors['minlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Password must be at least 6 characters
-                  </div>
-                </div>
-
-                  <button class="btn btn-outline-dark login-btn" type="submit">Register</button>
-
-                  <div class="alert alert-warning" ngIf="f.submitted && isSignUpFailed">
-                    <i class="fas fa-exclamation-triangle"></i> Signup failed!<br />{{ errorMessage }}
-                  </div>
-
-                  <div class="mt-4">
-                      <span class="txt-light">Have an account?</span>
-                      <a class="btn btn-outline-dark signup-btn" (click)="anchorsignin()">Log In</a>
-                  </div>
-              </div>
-          </form>
-          
           <div class="alert alert-success" *ngIf="isLoggedIn">
             Logged in as {{ roles }}.
-          </div>
-          <div class="alert alert-success" *ngIf="isSuccessful">
-            Your registration is successful!
           </div>
 
       </div>
