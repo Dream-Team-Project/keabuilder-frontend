@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class TokenStorageService {
+
+  @Output() loggedInUser: EventEmitter<any> = new EventEmitter<any>();
 
   private TOKEN_KEY = 'auth-token';
   private USER_KEY = 'auth-user';
@@ -34,7 +37,10 @@ export class TokenStorageService {
     if (user) {
       return JSON.parse(user);
     }
-
     return {};
   }
+
+  public getUserLoggedInStatus(): Observable<any> {
+      return this.loggedInUser.asObservable();
+    }
 }
