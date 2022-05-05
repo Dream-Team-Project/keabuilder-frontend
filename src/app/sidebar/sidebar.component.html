@@ -28,7 +28,7 @@
       </button>
     </a>
 
-    <a [routerLink]="['/pages']" [ngClass]="activeItem=='pages'?'a-active':''" (click)="setActive('pages')">
+    <a [routerLink]="['/pages']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-desktop"></i>
@@ -39,7 +39,7 @@
       </button>
     </a>
 
-    <a [routerLink]="['/strategies']" [ngClass]="activeItem=='strategies'?'a-active':''" (click)="setActive('strategies')">
+    <a [routerLink]="['/strategies']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-chess-knight"></i>
@@ -50,7 +50,7 @@
       </button>
     </a>
 
-    <a [routerLink]="['/membership']" [ngClass]="activeItem=='membership'?'a-active':''" (click)="setActive('membership')">
+    <a [routerLink]="['/membership']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-shield-alt"></i>
@@ -61,7 +61,7 @@
       </button>
     </a>
 
-    <a [routerLink]="['/analytics']" [ngClass]="activeItem=='analytics'?'a-active':''" (click)="setActive('analytics')">
+    <a [routerLink]="['/analytics']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-chart-pie"></i>
@@ -71,7 +71,7 @@
         </div>
       </button>
     </a>
-    <a [routerLink]="['/contacts']" [ngClass]="activeItem=='contacts'?'a-active':''" (click)="setActive('contacts')">
+    <a [routerLink]="['/contacts']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="far fa-id-badge"></i>
@@ -82,20 +82,22 @@
         </div>
       </button>
     </a>
-    <button class="bw-sidebar__item hasIcon" (click)="setActive('affiliates')" [ngClass]="activeItem=='affiliates'?'a-active':''" (click)="setActive('affiliates')">
-      <div class="bw-sidebar__item__icon">
-        <i class="fas fa-search-dollar"></i>
+    <a [routerLink]="['/affiliates']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-search-dollar"></i>
 
-      </div>
-      <div class="bw-sidebar__item__text">
-        Affilates
-      </div>
-    </button>
+        </div>
+        <div class="bw-sidebar__item__text">
+          Affiliates
+        </div>
+      </button>
+    </a>
 
     <!-- Dropdown1 -->
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen }" (click)="isOpen = !isOpen">
       <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('integrations')" [ngClass]="activeItem=='integrations'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"> <i class="fas fa-cogs"></i></div>
           <div class="bw-sidebar__item__text">
             Integrations
@@ -104,7 +106,7 @@
         </button>
       </div>
       <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen ? '100%' : '0px'}">
-        <button class="bw-sidebar__item active hasIcon" (click)="setActive('activecampaign')" [ngClass]="activeItem=='activecampaign'?'a-active':''">
+        <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/activecampaign.svg" class="img-fluid">
           </div>
@@ -112,7 +114,7 @@
             Active Campaign
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('mailchimp')" [ngClass]="activeItem=='mailchimp'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/mailchimp.svg" class="img-fluid">
           </div>
@@ -120,7 +122,7 @@
             Mailchimp
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('caltweet')" [ngClass]="activeItem=='caltweet'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/caltweet.svg" class="img-fluid">
           </div>
@@ -128,7 +130,7 @@
             Caltweet
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('calendly')" [ngClass]="activeItem=='calendly'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/calendly.svg" class="img-fluid">
           </div>
@@ -136,7 +138,7 @@
             Calendly
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('zoho')" [ngClass]="activeItem=='zoho'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/zoho.svg" class="img-fluid">
           </div>
@@ -144,7 +146,7 @@
             Zoho
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('hubspot')" [ngClass]="activeItem=='hubspot'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
             <img src="/assets/images/sidebaricons/hubspot.svg" class="img-fluid">
           </div>
@@ -152,7 +154,7 @@
             Hubspot
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('crmmore')" [ngClass]="activeItem=='crmmore'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-external-link-square-alt"></i></div>
           <div class="bw-sidebar__item__text">
             More
@@ -164,7 +166,7 @@
     <!-- Dropdown2 -->
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2">
       <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('help')" [ngClass]="activeItem=='help'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"> <i class="fas fa-life-ring"></i></div>
           <div class="bw-sidebar__item__text">
             Help
@@ -173,19 +175,19 @@
         </button>
       </div>
       <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen2 ? '100%' : '0px'}">
-        <button class="bw-sidebar__item active hasIcon" (click)="setActive('gethelp')" [ngClass]="activeItem=='gethelp'?'a-active':''">
+        <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-comments"></i></div>
           <div class="bw-sidebar__item__text">
             Get Help
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('mysupportrequest')" [ngClass]="activeItem=='mysupportrequest'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"> <i class="fas fa-comments"></i></div>
           <div class="bw-sidebar__item__text">
             My Support Request
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('whatsnew')" [ngClass]="activeItem=='whatsnew'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-gifts"></i></div>
           <div class="bw-sidebar__item__text">
             What's New
@@ -197,7 +199,7 @@
     <!-- Dropdown3 -->
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3">
       <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('documentation')" [ngClass]="activeItem=='documentation'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-book"></i></div>
           <div class="bw-sidebar__item__text">
             Documentation
@@ -206,19 +208,19 @@
         </button>
       </div>
       <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen3 ? '100%' : '0px'}">
-        <button class="bw-sidebar__item active hasIcon" (click)="setActive('gettingstarted')" [ngClass]="activeItem=='gettingstarted'?'a-active':''">
+        <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-rocket"></i></div>
           <div class="bw-sidebar__item__text">
             Getting Started
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('myaccountsettings')" [ngClass]="activeItem=='myaccountsettings'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"> <i class="fas fa-user-cog"></i></div>
           <div class="bw-sidebar__item__text">
             My Account Settings
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" (click)="setActive('followupfunnel')" [ngClass]="activeItem=='followupfunnel'?'a-active':''">
+        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-user-cog"></i></div>
           <div class="bw-sidebar__item__text">
             Follow Up Funnels
@@ -227,7 +229,7 @@
       </div>
     </div>
 
-    <button class="bw-sidebar__item hasIcon" (click)="setActive('qaadvice')" [ngClass]="activeItem=='qaadvice'?'a-active':''">
+    <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
       <div class="bw-sidebar__item__icon">
         <i class="fas fa-chalkboard-teacher"></i>
       </div>
@@ -236,7 +238,7 @@
       </div>
     </button>
     
-    <button class="bw-sidebar__item hasIcon" (click)="setActive('trainingresources')" [ngClass]="activeItem=='trainingresources'?'a-active':''">
+    <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
       <div class="bw-sidebar__item__icon">
         <i class="fas fa-clipboard-check"></i>
       </div>
