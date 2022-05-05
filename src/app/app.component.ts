@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
 import { NavbarService } from './_services/navbar.service';
 import { AuthService } from './_services/auth.service';
-import { Router, RouterOutlet,NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
+import { Router, RouterOutlet,NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,7 @@ export class AppComponent {
   showModeratorBoard = false;
   username?: string;
   componetLoaded:boolean = false;
+  loading:boolean = false;
 
   constructor(private tokenStorageService: TokenStorageService,
     private router:Router,
@@ -27,12 +28,27 @@ export class AppComponent {
       this.router.events
       .subscribe(
         (event: NavigationEvent) => {
-          if(event instanceof NavigationStart) {
-            console.log('start');
-          }
-          else if(event instanceof NavigationEnd) {
-            console.log('end')
-          }
+            switch (true) {
+              case event instanceof NavigationStart: {
+                this.loading = true;
+                break;
+              }
+              case event instanceof NavigationEnd: {
+                this.loading = false;
+                break;
+              }
+              case event instanceof NavigationCancel: {
+                this.loading = false;
+                break;
+              }
+              case event instanceof NavigationError: {
+                this.loading = false;
+                break;
+              }
+              default: {
+                break;
+              }
+            }
         });
     }
 

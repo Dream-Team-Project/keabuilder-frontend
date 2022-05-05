@@ -1,34 +1,16 @@
 main {
     position: relative;
 }
-
-.componentLoad{
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    margin: 0 auto 0 auto;
-    transform-origin: center;
-    opacity: 1;
-    animation-name: componentLoad;
-    animation-timing-function: ease-in;
-    position: relative;
-    margin-bottom: 20%;
-}
-
-@keyframes componentLoad {   
-    0% { transform: scale(1,1)  translateY(40px); opacity: 0;}
-    70% { transform: scale(1,1)  translateY(-10px); opacity: 0.7;}
-    100% { transform: scale(1,1)    translateY(0px); opacity: 1;}
-}
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 body{
     font-family: Poppins;   
 }
 .btn-primary{
-    background-color: #d8c898;  
-    border-color: #d8c898; 
+    background-color: var(--clr-primay);  
+    border-color: var(--clr-primay);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     font-size: 14px;
-    color: #fff;
+    color: var(--clr-light);
 }
 .btn-primary:hover{
     opacity: 0.8;
@@ -36,11 +18,11 @@ body{
 .btn-secondary {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-    color: #fff;
+    color: var(--clr-light);
 }
 .insidecont{
     padding: 20px 0px;
-    width: 96.5%;
+    width: 96.7%;
     margin-left: auto;
     top: 70px;
     position: relative;
