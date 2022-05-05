@@ -25,18 +25,19 @@ export class NavbarComponent implements OnInit {
   logs = false;
 
   ngOnInit(): void {
-    
 
     if (this.tokenStorage.getToken()) {
       this.bwname = this.tokenStorage.getUser().username;
       this.bwemail = this.tokenStorage.getUser().email;
     }
-
-    window.addEventListener('scroll', this.updateScroll);
+    var th:any = this;
+    window.addEventListener('scroll', function(){
+      th.scrollPosition = window.scrollY;
+    });
 
   }
 
-  updateScroll():void{
+  updateScroll(){
     this.scrollPosition = window.scrollY;
   }
 

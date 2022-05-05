@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
+    ForgetPasswordComponent,
   ],
   imports: [
     BrowserModule,
