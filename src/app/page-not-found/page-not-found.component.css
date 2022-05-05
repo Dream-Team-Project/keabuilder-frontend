@@ -16,7 +16,7 @@ body {
   min-height: 450px;
   background: #332f63;
   border-radius: 20px;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
