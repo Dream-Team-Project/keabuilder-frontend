@@ -2,6 +2,6 @@
   <app-sidebar *ngIf="isLoggedIn"></app-sidebar>
   <app-navbar *ngIf="isLoggedIn"></app-navbar>
   <div id="angularApp" [class.insidecont]="isLoggedIn">
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
   </div>
 </div>
