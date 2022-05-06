@@ -55,7 +55,8 @@ export class NavbarComponent implements OnInit {
 
   hideoverlay(){
       this.offcanvasoverlay=false;
-  }
+      this.notification = false;
+    }
 
   logout(): void {
     this.tokenStorage.signOut();

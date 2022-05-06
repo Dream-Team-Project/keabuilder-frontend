@@ -129,8 +129,8 @@
   position: relative;
 }
 
-.hoveropen .kb-padinglft .bw-sidebar__item {
-  padding-left: 20px !important;
+.hoveropen .kb-padinglft {
+  padding-left: 20px;
 }
 
 /* user notification */
@@ -466,7 +466,7 @@ div#topbar_notifications_logs {
 }
 
 .bw-sidebar-content.reduce .bw-sidebar__item.hasIcon:after {
-  left: -6px;
+  left: -20px;
 }
 
 .bw-sidebar__group__header {
@@ -632,11 +632,6 @@ div#topbar_notifications_logs {
 .bw-avatar__badge.top-right {
   top: -4px;
   bottom: auto;
-}
-
-.bw-sidebar__group__content .bw-sidebar__item,
-.bw-sidebar__group__content .bw-sidebar__item__icon {
-  background: #f3f6f9;
 }
 
 .hidden .bw-avatar-content {

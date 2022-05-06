@@ -18,10 +18,10 @@ export class PageNotFoundComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    document.addEventListener('mousemove',this.goofyEyes.bind(this,));
+    document.addEventListener('mousemove',this.googlyEyes.bind(this,));
   }
 
-  goofyEyes(event: { clientX: number; clientY: number; }) {
+  googlyEyes(event: { clientX: number; clientY: number; }) {
     
     var width = window.innerWidth;
     var height = window.innerHeight;
