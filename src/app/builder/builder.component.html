@@ -1,0 +1,50 @@
+<div id="page-container">
+        <div name="section" class="kb-drag-container" tag="div" [sortablejs]="sections" [sortablejsOptions]="builderSectionOptions">
+          <div *ngFor="let section of sections, index as si" class="kb-section kb-block-container">
+            <div> 
+                <div class="kb-module-setting">
+                  <span class="kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
+                  <span><i class="far fa-edit"></i></span>
+                  <span><i class="far fa-copy"></i></span>
+                  <span *ngIf="section.length != 1"><i class="far fa-trash-alt"></i></span>
+                </div>
+                <span class="kb-ispan-add add-row"><i class="fa fa-plus"></i></span>
+                <span class="kb-ispan-add add-section bottom-add-btn"><i class="fa fa-plus"></i></span>
+            </div>
+            <div>
+                <div name="row" class="kb-drag-container" [sortablejs]="section.items" [sortablejsOptions]="builderRowOptions">
+                    <div *ngFor="let row of section.items, index as ri" class="kb-row kb-block-container">
+                        <div class="kb-module-setting">
+                            <span class="kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
+                            <span><i class="fa fa-columns"></i></span>
+                            <span><i class="far fa-edit"></i></span>
+                            <span><i class="far fa-copy"></i></span>
+                            <span *ngIf="row.length != 1"><i class="far fa-trash-alt"></i></span>
+                        </div>
+                        <div name="column" class="kb-column-wrap">
+                            <div *ngFor="let column of row.items, index as ci" class="kb-column kb-block-container" >
+                                <!-- <span class="kb-handle-column">Column {{'Column'+ci}}</span> -->
+                                <div name="element" class="kb-drag-container" [sortablejs]="column.items" [sortablejsOptions]="builderElementOptions">
+                                    <div *ngFor="let element of column.items, index as ei" class="kb-element kb-block-container" >
+                                        <div class="kb-module-setting">
+                                            <span class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
+                                            <span><i class="far fa-edit"></i></span>
+                                            <span><i class="far fa-copy"></i></span>
+                                            <span><i class="far fa-trash-alt"></i></span>
+                                        </div> 
+                                        <div class="kb-element-content">
+                                            Element {{'Element'+ei}}
+                                        </div>
+                                        <span class="kb-ispan-add add-element bottom-add-btn"><i class="fa fa-plus"></i></span>
+                                    </div>
+                                </div>
+                                <span *ngIf="column.items.length == 0" class="kb-ispan-add add-element"><i class="fa fa-plus"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="kb-ispan-add add-row bottom-add-btn" ><i class="fa fa-plus"></i></span>
+            </div>
+        </div>
+        </div>
+  </div>

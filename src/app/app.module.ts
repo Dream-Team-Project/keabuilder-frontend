@@ -13,6 +13,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SortablejsModule } from 'ngx-sortablejs';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SortablejsModule,
+    DragDropModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

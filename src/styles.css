@@ -1,6 +1,25 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 :root {
+    
+/* builder root */
+
+    --primary-color: #d8c898;
+    --section-color: #1867c0;
+    --row-color: #1BC5BD;
+    --light: #f8f9fa;
+    --padding: 60px 0px;
+    --border-width: 0px;
+    --kb-success: #1BC5BD;
+    --kb-danger: #dc3545;
+    --kb-info: #17a2b8;
+    --kb-gray: #e6eaef;
+    --kb-dim-black: #22262a66;
+    --kb-mid-black: #22262acc;
+    --box-shadow: box-shadow: 4px 8px 16px rgb(0 0 0 / 16%);
+
+/* builder root */
+
     --clr-primay: #d8c898;
     --clr-light: #fff;
 }
