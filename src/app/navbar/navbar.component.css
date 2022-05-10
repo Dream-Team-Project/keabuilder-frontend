@@ -175,7 +175,7 @@
   position: fixed;
   top: 10%;
   left: 41%;
-  z-index: 96;
+  z-index: 9999;
   display: none;
   float: left;
   min-width: 10rem;

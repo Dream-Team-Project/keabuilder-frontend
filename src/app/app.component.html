@@ -1,7 +1,8 @@
 <div id="app">
-  <app-sidebar *ngIf="isLoggedIn"></app-sidebar>
-  <app-navbar *ngIf="isLoggedIn"></app-navbar>
-  <div id="angularApp" [class.insidecont]="isLoggedIn">
-    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
-  </div>
+  <app-sidebar *ngIf="isLoggedIn && _nav.visible"></app-sidebar>
+  <app-navbar *ngIf="isLoggedIn && _nav.visible"></app-navbar>
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <main id="angularApp" [class.insidecont]="isLoggedIn && _nav.visible" [class.loadEffect]="componetLoaded && _nav.visible">
+  <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+  </main>
 </div>

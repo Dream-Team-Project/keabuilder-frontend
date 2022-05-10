@@ -8,14 +8,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
+import { BuilderComponent } from './builder/builder.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'builder', component: BuilderComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -24,8 +26,12 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const RoutingComponents = [DashboardComponent, 
-                                  LoginComponent, 
-                                  RegisterComponent, 
-                                  ProfileComponent,
-                                  PageNotFoundComponent];
+export const RoutingComponents = 
+  [
+    DashboardComponent, 
+    LoginComponent, 
+    RegisterComponent, 
+    ProfileComponent,
+    PageNotFoundComponent,
+    BuilderComponent,
+  ];

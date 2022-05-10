@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { NavbarService } from '../_services/navbar.service';
 @Component({
   selector: 'app-page-not-found',
   templateUrl: './page-not-found.component.html',
@@ -10,19 +9,16 @@ import { NavbarService } from '../_services/navbar.service';
 export class PageNotFoundComponent implements OnInit {
   mouseY=50;
   mouseX=-50;
-  constructor(private _cdr: ChangeDetectorRef, public _nav: NavbarService) {
-      this._nav.hide();
-      console.log(this._nav.hide());
-   }
+  constructor(private _cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit() {
-    document.addEventListener('mousemove',this.goofyEyes.bind(this,));
+    document.addEventListener('mousemove',this.googlyEyes.bind(this,));
   }
 
-  goofyEyes(event: { clientX: number; clientY: number; }) {
+  googlyEyes(event: { clientX: number; clientY: number; }) {
     
     var width = window.innerWidth;
     var height = window.innerHeight;

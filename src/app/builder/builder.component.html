@@ -1,0 +1,64 @@
+<div id="page-container">
+    <ng-template>
+        <div id="kb-selection-ask" class="kb-outer-selection-container" cdkDragBoundary="#page-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
+            <div *ngIf="rowSelection" id="kb-row-selection" class="kb-inner-selection-container">
+                <span (click)="overlayRefDetach(); _row.selectedRow = ''" class="kb-selection-top-actions"><i class="fa fa-times"></i></span>
+                <div class="kb-ask-head" cdkDragHandle>Row Dimension</div>
+                <div>
+                    <ul class="kb-row-list">
+                        <li *ngFor="let rt of _row.rowTypes" (click)="_row.addRow('kb-'+rt.appendCls+'-block', rt.nofcolumn)" [class]="(selectedRow.rowSize == 'kb-'+rt.appendCls ? 'kb-row-type-active ' : '') + 'row-'+rt.cls" class="kb-row-type">
+                            <span *ngFor="let c of rt.nofcolumn | keyvalue" class="block">
+                                <span></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>   
+    </ng-template>     
+    <div name="section" class="kb-drag-container" tag="div" [sortablejs]="_section.sections" [sortablejsOptions]="builderSectionOptions">
+        <div *ngFor="let section of _section.sections, index as si" (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr" (mouseleave)="section.setting = false" [id]="'kb-section-'+section.id" class="kb-section kb-block-container">
+            <div class="kb-module-setting" *ngIf="section.setting">
+                <span class="kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
+                <span matTooltip="Section Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
+                <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section" matTooltipPosition="above"><i class="far fa-copy"></i></span>
+                <span  (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1" matTooltip="Delete Section" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+            </div>
+            <span (click)="openDialog(); rowSelection = true" *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row" matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+            <span (click)="_section.addSection(si)" *ngIf="section.setting" class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section" matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+        <div>
+            <div name="row" class="kb-drag-container" [sortablejs]="section.rowArr" [sortablejsOptions]="builderRowOptions">
+                <div *ngFor="let row of section.rowArr, index as ri" class="kb-row kb-block-container">
+                    <div class="kb-module-setting">
+                        <span class="kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
+                        <span><i class="fa fa-columns"></i></span>
+                        <span><i class="far fa-edit"></i></span>
+                        <span><i class="far fa-copy"></i></span>
+                        <span *ngIf="section.rowArr.length != 1"><i class="far fa-trash-alt"></i></span>
+                    </div>
+                    <div name="column" class="kb-column-wrap">
+                        <div *ngFor="let column of row.columnArr, index as ci" [class]="row.rowSize+((selectedBlock.id == column.id && selectedBlock.type == column.type) || column.style ? ' kb-demo-styling' : '')" class="kb-column kb-block-container" >
+                            <div name="element" class="kb-drag-container" [sortablejs]="column.items" [sortablejsOptions]="builderElementOptions">
+                                <div *ngFor="let element of column.elementArr, index as ei" class="kb-element kb-block-container" >
+                                    <div class="kb-module-setting">
+                                        <span class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
+                                        <span><i class="far fa-edit"></i></span>
+                                        <span><i class="far fa-copy"></i></span>
+                                        <span><i class="far fa-trash-alt"></i></span>
+                                    </div> 
+                                    <div class="kb-element-content">
+                                        Element {{'Element'+ei}}
+                                    </div>
+                                    <span class="kb-ispan-add add-element bottom-add-btn"><i class="fa fa-plus"></i></span>
+                                </div>
+                            </div>
+                            <span *ngIf="column.elementArr.length == 0" class="kb-ispan-add add-element"><i class="fa fa-plus"></i></span>
+                        </div>
+                    </div>
+                    <span *ngIf="row.setting" class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
