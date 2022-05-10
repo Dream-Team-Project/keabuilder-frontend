@@ -26,6 +26,7 @@
 
 /* You can add global styles to this file, and also import other style files */
 
+@import url('https://fonts.googleapis.com/css?family=Poppins');
 body{
     font-family: Poppins;   
 }
@@ -33,12 +34,13 @@ button:focus, a:focus, .btn:focus {
     outline: none!important;
     box-shadow: none!important;
 }
+
 .btn-primary{
-    background-color: #d8c898;  
-    border-color: #d8c898; 
+    background-color: var(--clr-primay);  
+    border-color: var(--clr-primay);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     font-size: 14px;
-    color: #fff;
+    color: var(--clr-light);
 }
 .btn-primary:hover{
     opacity: 0.8;
@@ -46,7 +48,7 @@ button:focus, a:focus, .btn:focus {
 .btn-secondary {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-    color: #fff;
+    color: var(--clr-light);
 }
 
 main.insidecont .box {
