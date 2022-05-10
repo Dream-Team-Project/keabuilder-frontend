@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SortablejsModule } from 'ngx-sortablejs';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { SortablejsModule } from 'ngx-sortablejs';
     HttpClientModule,
     MatProgressBarModule,
     SortablejsModule,
-    DragDropModule
+    DragDropModule,
+    MatTooltipModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

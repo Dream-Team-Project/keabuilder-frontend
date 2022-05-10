@@ -4,6 +4,14 @@
 
 input:focus, button:focus{outline: none!important;}
 
+::ng-deep .mat-tooltip {
+    position: relative;
+    font-size: 13px;
+    border-radius: 10px;
+    background: rgba(37, 36, 36, 0.8);
+    overflow: visible;
+}
+
 .kb-d-none {
     display: none;
 }
@@ -93,21 +101,21 @@ input.kb-chngname-inp {
 
 /* images group */
 
-div#kb-img-group, div.kb-outer-selection-container {
+/* div#kb-img-group, div.kb-outer-selection-container {
     position: fixed;
     width: 100%;
     height: 100%;
     animation: bounce 0.3s ease;
-}
+} */
 
 div#kb-img-group {
     z-index: 999;
     background-color: rgb(226 226 226 / 50%);
 }
 
-div.kb-outer-selection-container {
+/* div.kb-outer-selection-container {
     z-index: 99;
-}
+} */
 
 div#kb-img-group .kb-img-inner-group {
     position: absolute;
@@ -199,18 +207,19 @@ div#kb-selection-ask span.kb-selection-top-actions {
 }
 
 div#kb-selection-ask {
-    position: fixed;
+    position: relative;
     z-index: 99;
     margin: auto;
     box-shadow: 0 5px 30px rgb(43 135 218 / 30%);
     width: 550px;
     height: auto!important;
-    top: 10%;
     background: var(--light);
-    left: 500px;
     overflow: hidden;
     border-radius: 5px;
     color: initial;
+    /* position: fixed; */
+    /* top: 10%; */
+    /* left: 500px; */
 }
 
 @keyframes bounce {
@@ -714,7 +723,7 @@ span.kb-ispan-add.bottom-add-btn {
     top: 100%!important;
 }
 
-div.kb-section>div>.kb-module-setting, div.kb-section span.kb-ispan-add.add-section {
+div.kb-section>.kb-module-setting, div.kb-section span.kb-ispan-add.add-section {
     background-color: var(--section-color);
 }
 
@@ -1232,11 +1241,3 @@ kb-img-element {
     margin: auto;
     opacity: 0.5;
 }
-
-/* .ghost {
-  display: none;
-} */
-/* 
-  .grid-move {
-    transition: all 0.3s ease-in-out;
-  } */

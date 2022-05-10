@@ -1,64 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { NavbarService } from '../_services/navbar.service';
-import { UserService } from '../_services/user.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import {TemplatePortal} from '@angular/cdk/portal';
 import { Options } from 'sortablejs';
+import { NavbarService } from '../_services/navbar.service';
+import { SectionService } from '../_services/_builderService/section.service';
+import { RowService } from '../_services/_builderService/row.service';
 
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.css']
 })
-export class BuilderComponent implements OnInit {
+export class BuilderComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  sections:Array<any> = [
-    {
-      name: 'Section A',
-      items: [{name: 'Row A', 
-              items: [{name: 'Column A', 
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column B',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column C',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column D',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}] 
-              }]
-    },
-    {
-      name: 'Section B',
-      items: [{name: 'Row A', 
-              items: [{name: 'Column A', 
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column B',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column C',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column D',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}] 
-              }]
-    },
-    {
-      name: 'Section C',
-      items: [{name: 'Row A', 
-              items: [{name: 'Column A', 
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column B',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column C',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}, 
-                      {name: 'Column D',
-                      items: [{name: 'Element A'}, {name: 'Element B'}, {name: 'Element C'}, {name: 'Element D'}]}] 
-              }]
-    },
-  ];
+  @ViewChild(TemplateRef)
+  _dialogTemplate!: TemplateRef<any>;
+  private _overlayRef!: OverlayRef;
+  private _portal!: TemplatePortal;
 
-  constructor(public _nav: NavbarService, public _user: UserService) {
+  elementObj = {id: 0, type: 'element', content: {}, setting: false, style: ''};
+  rowSelection:boolean = false;
+  selectedElements:Array<any> = [];
+  selectedBlock:any = '';
+  selectedColumn:any = '';
+  selectedRow:any = '';
+
+
+  constructor(
+    private _nav: NavbarService,
+    public _section: SectionService,
+    public _row: RowService,
+    private _overlay: Overlay,
+    private _viewContainerRef: ViewContainerRef) {
     this._nav.hide();
    }
 
   ngOnInit(): void {
   }
+
+  ngAfterViewInit() {
+    this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
+    this._overlayRef = this._overlay.create({
+      positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
+      hasBackdrop: true,
+    });
+    this._overlayRef.backdropClick().subscribe(() => {
+      this.overlayRefDetach();
+    });
+  }
+
+  // drag drop box
+
+  overlayRefDetach() {
+    this._overlayRef.detach();
+    this.selectedRow = '';
+  }
+  
+  ngOnDestroy() {
+    this._overlayRef.dispose();
+  }
+
+  openDialog() {
+    this._overlayRef.attach(this._portal);
+  }
+
+  // drag drop box
+
+  // builder options
 
   builderSectionOptions: Options = {
     group: 'section',
@@ -134,5 +142,7 @@ export class BuilderComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   };  
+
+  // builder options
 
 }
