@@ -35,4 +35,18 @@ export class AuthService {
     return !!sessionStorage.getItem('auth-token');
   }
 
+  forgetPassword(email: string): Observable<any>{
+    return this.http.post('/api/reset-password-email', {
+      email
+    }, httpOptions);
+  }
+
+  onupdatePassword(password: string, token: string): Observable<any>{
+    return this.http.post('/api/update-password', {
+      password,
+      token
+    }, httpOptions);
+  }
+
+
 }
