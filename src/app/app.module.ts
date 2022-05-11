@@ -16,6 +16,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SortablejsModule } from 'ngx-sortablejs';
+import { FunnelComponent } from './funnel/funnel.component';
+import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
+import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
+import { WebsiteComponent } from './website/website.component';
+import { StrategiesComponent } from './strategies/strategies.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
+import { HeatmapsComponent } from './heatmaps/heatmaps.component';
 
 
 @NgModule({
@@ -25,6 +32,13 @@ import { SortablejsModule } from 'ngx-sortablejs';
     SidebarComponent,
     NavbarComponent,
     ForgetPasswordComponent,
+    FunnelComponent,
+    FunnelArchieveComponent,
+    FunnelMarketplaceComponent,
+    WebsiteComponent,
+    StrategiesComponent,
+    AnalyticsComponent,
+    HeatmapsComponent,
   ],
   imports: [
     BrowserModule,

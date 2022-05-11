@@ -35,6 +35,10 @@ button:focus, a:focus, .btn:focus {
     box-shadow: none!important;
 }
 
+a{
+text-decoration: none;
+}
+
 .btn-primary{
     background-color: var(--clr-primay);  
     border-color: var(--clr-primay);
@@ -44,6 +48,9 @@ button:focus, a:focus, .btn:focus {
 }
 .btn-primary:hover{
     opacity: 0.8;
+    background-color: var(--clr-primay);  
+    border-color: var(--clr-primay);
+    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
 }
 .btn-secondary {
     font-size: 14px;
@@ -73,18 +80,18 @@ main.insidecont .box {
 }
 
 @keyframes slideUp{
-        0% {
-            opacity: 0;
-            top: 180px;
-        }
-        70% {
-            opacity: 0.5;
-            top: 50px;
-        }
-        100% {
-            opacity: 1;
-            top: 70px;            
-        }
+    0% {
+        opacity: 0;
+        top: 180px;
+    }
+    70% {
+        opacity: 0.5;
+        top: 50px;
+    }
+    100% {
+        opacity: 1;
+        top: 70px;            
+    }
 }
 
 .loadEffectFromLeft {

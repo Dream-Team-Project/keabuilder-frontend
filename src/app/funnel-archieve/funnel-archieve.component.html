@@ -1,0 +1,134 @@
+<div id="archievesteps">
+    <div class="container-fluid">
+        <div class="row whitefunnel pb-5 loadEffect">
+            <div class="col-md-12 mb-5">
+                <ul class="kea-barfunnelsearch">
+                      <li >
+                          <a routerLink="/funnel" href="javascript:void(0)">
+                              <i class="fas fa-filter"></i> All Funnel
+                          </a>
+                      </li>
+                      <li class="active">
+                          <a routerLink="/archieve-steps" href="javascript:void(0)">
+                              <i class="fas fa-archive"></i> Archived
+                          </a>
+                      </li>
+                      <li>
+                        <a routerLink="/marketplace" href="javascript:void(0)">
+                              <i class="fas fa-store"></i> Marketplace
+                          </a>
+                      </li>
+                  </ul>
+            </div>
+              <div class="col-md-12">
+                  <h4>Your Archive Funnel Steps</h4>
+                  <br>
+                  <section class="users-list-wrapper" id='table-userslist'>
+                      <div class="users-list-table">
+                          <div class="card">
+                              <div class="card-body">
+                                  <!-- datatable start -->
+                                  <div class="table-responsive">
+                                      <div id="users-list-datatable_wrapper"
+                                          class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                          <div class="row">
+                                              <div class="col-sm-12 col-md-6">
+                                                  <div class="dataTables_length" id="users-list-datatable_length">
+                                                      <label>Show <select name="users-list-datatable_length"
+                                                              aria-controls="users-list-datatable"
+                                                              class="custom-select custom-select-sm form-control form-control-sm">
+                                                              <option value="10">10</option>
+                                                              <option value="25">25</option>
+                                                              <option value="50">50</option>
+                                                              <option value="100">100</option>
+                                                          </select> entries</label></div>
+                                              </div>
+                                              <div class="col-sm-12 col-md-6">
+                                                  <div id="users-list-datatable_filter" class="dataTables_filter">
+                                                      <label>Search:<input type="search"
+                                                              class="form-control form-control-sm" placeholder="Search By Product"
+                                                              aria-controls="users-list-datatable"></label></div>
+                                              </div>
+                                          </div>
+                                          <div class="row">
+                                              <div class="col-sm-12">
+                                                  <table id="users-list-datatable" class="table dataTable no-footer"
+                                                      role="grid" aria-describedby="users-list-datatable_info">
+                                                      <thead>
+                                                          <tr role="row">
+                                                              <th class="sorting" tabindex="0"
+                                                                  aria-controls="users-list-datatable" rowspan="1"
+                                                                  colspan="1"
+                                                                  aria-label="username: activate to sort column ascending"
+                                                                  style="width: 110.325px;">Funnel</th>
+                                                              <th class="sorting" tabindex="0"
+                                                                  aria-controls="users-list-datatable" rowspan="1"
+                                                                  colspan="1"
+                                                                  aria-label="name: activate to sort column ascending"
+                                                                  style="width: 158.062px;">Name</th>
+                                                              <th class="sorting" tabindex="0"
+                                                                  aria-controls="users-list-datatable" rowspan="1"
+                                                                  colspan="1"
+                                                                  aria-label="last activity: activate to sort column ascending"
+                                                                  style="width: 112.725px;">Created At</th>
+                                                              <th class="sorting_disabled" rowspan="1" colspan="1"
+                                                                  aria-label="edit" style="width: 38.1px;">Action</th>
+                                                              
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr role="row" class="odd">
+                                                              <td>123456</td>
+                                                              <td>Optin</td>
+                                                              <td>Wed, 03 Mar 2021 00:36:31 -0500</td>
+                                                              <td><a href=""><i class="fas fa-trash-restore"></i> Restore</a></td>
+                                                          </tr>
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                          <div class="row">
+                                              <div class="col-sm-12 col-md-5">
+                                                  <div class="dataTables_info" id="users-list-datatable_info"
+                                                      role="status" aria-live="polite">Showing 1 to 10 of 36 entries
+                                                  </div>
+                                              </div>
+                                              <div class="col-sm-12 col-md-7">
+                                                  <div class="dataTables_paginate paging_simple_numbers"
+                                                      id="users-list-datatable_paginate">
+                                                      <ul class="pagination">
+                                                          <li class="paginate_button page-item previous disabled"
+                                                              id="users-list-datatable_previous"><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="0"
+                                                                  tabindex="0" class="page-link">Previous</a></li>
+                                                          <li class="paginate_button page-item active"><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="1"
+                                                                  tabindex="0" class="page-link">1</a></li>
+                                                          <li class="paginate_button page-item "><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="2"
+                                                                  tabindex="0" class="page-link">2</a></li>
+                                                          <li class="paginate_button page-item "><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="3"
+                                                                  tabindex="0" class="page-link">3</a></li>
+                                                          <li class="paginate_button page-item "><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="4"
+                                                                  tabindex="0" class="page-link">4</a></li>
+                                                          <li class="paginate_button page-item next"
+                                                              id="users-list-datatable_next"><a href="#"
+                                                                  aria-controls="users-list-datatable" data-dt-idx="5"
+                                                                  tabindex="0" class="page-link">Next</a></li>
+                                                      </ul>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- datatable ends -->
+                              </div>
+                          </div>
+                      </div>
+                  </section>
+              </div>
+          </div>
+    </div>
+</div>

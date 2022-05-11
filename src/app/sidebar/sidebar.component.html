@@ -26,23 +26,13 @@
         </div>
       </button>
     </a>
-    <a [routerLink]="['/pages']" [routerLinkActive]="['a-active']">
+    <a [routerLink]="['/website']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-desktop"></i>
         </div>
         <div class="bw-sidebar__item__text">
           Website
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/strategies']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-chess-knight"></i>
-        </div>
-        <div class="bw-sidebar__item__text">
-          Strategies
         </div>
       </button>
     </a>
@@ -56,6 +46,56 @@
         </div>
       </button>
     </a>
+    <a [routerLink]="['/forms']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-address-card"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          Forms
+        </div>
+      </button>
+    </a>
+    <a [routerLink]="['/domain']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-globe-americas"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          Domains
+        </div>
+      </button>
+    </a>
+    <a [routerLink]="['/crm']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-user-secret"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          CRM
+        </div>
+      </button>
+    </a>
+    <a [routerLink]="['/strategies']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-chess-knight"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          Strategies
+        </div>
+      </button>
+    </a>
+    <a [routerLink]="['/heatmap']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-fire"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          HeatMap
+        </div>
+      </button>
+    </a>    
     <a [routerLink]="['/analytics']" [routerLinkActive]="['a-active']">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
@@ -63,17 +103,6 @@
         </div>
         <div class="bw-sidebar__item__text">
           Analytics
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/contacts']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="far fa-id-badge"></i>
-
-        </div>
-        <div class="bw-sidebar__item__text">
-          Contacts
         </div>
       </button>
     </a>
@@ -88,7 +117,17 @@
         </div>
       </button>
     </a>
+    <a [routerLink]="['/payment']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon">
+        <div class="bw-sidebar__item__icon">
+          <i class="fa fa-dollar-sign"></i>
 
+        </div>
+        <div class="bw-sidebar__item__text">
+          Payment
+        </div>
+      </button>
+    </a>
     <!-- Dropdown1 -->
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen }" (click)="isOpen = !isOpen">
       <div class="bw-sidebar__group__header">

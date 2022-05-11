@@ -9,6 +9,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
 import { BuilderComponent } from './builder/builder.component';
+import { FunnelComponent } from './funnel/funnel.component';
+import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
+import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
+import { WebsiteComponent } from './website/website.component';
+import { StrategiesComponent } from './strategies/strategies.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
+import { HeatmapsComponent } from './heatmaps/heatmaps.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -16,6 +23,13 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'funnel', component: FunnelComponent, canActivate: [AuthGuard] },
+  { path: 'archieve-steps', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
+  { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
+  { path: 'website', component: WebsiteComponent, canActivate: [AuthGuard] },
+  { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
+  { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
+  { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder', component: BuilderComponent },
   { path: '**', component: PageNotFoundComponent },

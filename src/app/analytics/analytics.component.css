@@ -1,0 +1,12 @@
+.kb-heatmapnew{
+    font-size: 75px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    /* top: 75%; */
+    /* left: 33%; */
+}
+.kb-heatmapnew span {
+    font-size: 22px;
+    color: #d8c898;
+}
