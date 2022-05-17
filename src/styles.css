@@ -5,6 +5,7 @@
 /* builder root */
 
     --primary-color: #d8c898;
+    --secondary-color: #6c757d;
     --section-color: #1867c0;
     --row-color: #1BC5BD;
     --light: #f8f9fa;
@@ -27,18 +28,26 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url('https://fonts.googleapis.com/css?family=Poppins');
-body{
-    font-family: Poppins;   
+body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox{
+    font-family: Poppins!important;   
 }
-button:focus, a:focus, .btn:focus {
-    outline: none!important;
-    box-shadow: none!important;
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background{
+    background-color: var(--clr-primay); 
 }
-
+.mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent{
+    background-color: var(--secondary-color);
+}
 a{
-text-decoration: none;
+text-decoration: none!important;
 }
-
+.btn {
+    margin-right: 5px;
+}
+.text-muted {
+    color: #B5B5C3 !important;
+    font-size: 13px;
+    font-weight: 500;
+}
 .btn-primary{
     background-color: var(--clr-primay);  
     border-color: var(--clr-primay);
@@ -46,11 +55,12 @@ text-decoration: none;
     font-size: 14px;
     color: var(--clr-light);
 }
-.btn-primary:hover{
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus{
     opacity: 0.8;
-    background-color: var(--clr-primay);  
+    background-color: var(--clr-primay)!important;  
     border-color: var(--clr-primay);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
+    border-color: var(--clr-primay)!important;
 }
 .btn-secondary {
     font-size: 14px;
@@ -71,7 +81,7 @@ main.insidecont .box {
  /* animation  */
 .loadEffect {
     animation-name: slideUp;
-    animation-duration: 0.3s;
+    animation-duration: 0.5s;
     animation-timing-function: ease-out;
     animation-iteration-count: 1;
     transform-origin: center;

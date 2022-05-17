@@ -65,7 +65,7 @@ export class NavbarComponent implements OnInit {
   }
 
   gotouser(){
-    this.router.navigate(['/edituser'],{relativeTo: this.route});
+    this.router.navigate(['/profile'],{relativeTo: this.route});
     this.offcanvasoverlay=false;
   }
 

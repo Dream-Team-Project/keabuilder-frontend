@@ -1,9 +1,16 @@
 import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { GoogleMapsModule } from '@angular/google-maps';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +30,8 @@ import { WebsiteComponent } from './website/website.component';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { HeatmapsComponent } from './heatmaps/heatmaps.component';
+import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
+import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
 
 
 @NgModule({
@@ -39,6 +48,8 @@ import { HeatmapsComponent } from './heatmaps/heatmaps.component';
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
+    BuildFunnelComponent,
+    CreateFunnelComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +60,18 @@ import { HeatmapsComponent } from './heatmaps/heatmaps.component';
     MatProgressBarModule,
     SortablejsModule,
     DragDropModule,
-    MatTooltipModule
+    MatTooltipModule,
+    BrowserModule,
+    FormsModule,
+    NgApexchartsModule,
+    GoogleMapsModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatCheckboxModule,
+  
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

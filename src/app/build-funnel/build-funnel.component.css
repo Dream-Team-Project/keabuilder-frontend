@@ -1,0 +1,63 @@
+#buildfunnelcomp{
+    background:#F2F4F4;
+    margin-top: -20px;
+    padding-top: 20px;
+}
+.clmwithshadow{
+    padding: 20px;
+}
+.clmwithshadow >div{
+    text-align: center;
+    padding: 20px;
+    box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%);
+    -webkit-transition: all .3s ease-in-out,background 0s,color 0s,border-color 0s;
+    transition: all .3s ease-in-out,background 0s,color 0s,border-color 0s;
+    border-radius: .267rem;
+    background:#fff;
+    cursor: pointer;
+}
+.clmicon svg {
+    width: 112px;
+    margin-bottom: 13px;
+    color: rgb(216 200 152 / 40%);
+}
+.adjustloopvfor >div{
+    width: 33%;
+    float: left;
+}
+.list-unstyled li a.active {
+    color: #2c2c28!important;
+    font-weight: bold;
+    background: #d8c898;
+}
+.loader-transition1-enter-active {
+  transition: all .3s ease;
+}
+.loader-transition1-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.loader-transition1-enter, .loader-transition1-leave-to{
+  transform: translateX(10px);
+  opacity: 0;
+}
+.fixedcategory{
+    position: fixed;
+    top: 126px;
+    z-index: 99;
+}
+.gobackward{
+    font-size: 10px;
+    color: #444;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: .5s ease;
+}
+.gobackward:hover{
+    opacity: 1;
+}
+@media screen and (max-width:500px){
+    .adjustloopvfor >div{
+      width: 100%;
+    }
+
+}

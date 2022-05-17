@@ -16,6 +16,8 @@ import { WebsiteComponent } from './website/website.component';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { HeatmapsComponent } from './heatmaps/heatmaps.component';
+import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
+import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+  { path: 'build-funnel', component: BuildFunnelComponent, canActivate: [AuthGuard] },
+  { path: 'create-funnel', component: CreateFunnelComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder', component: BuilderComponent },
   { path: '**', component: PageNotFoundComponent },

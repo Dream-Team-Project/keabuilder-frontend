@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router,ActivatedRoute } from '@angular/router';
-
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-forget-password',
@@ -9,6 +9,10 @@ import { Router,ActivatedRoute } from '@angular/router';
   styleUrls: ['./forget-password.component.css']
 })
 export class ForgetPasswordComponent implements OnInit {
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
+  hide = true;
+
 
   emailInp = '';
   passwInp = '';
@@ -50,7 +54,9 @@ export class ForgetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.emailInp!=''){
+    // console.log(this.emailInp);
+    if(this.emailFormControl.status=='VALID'){
+    // if(this.emailInp!=''){
       this._auth.forgetPassword(this.emailInp).subscribe(resp=>{
         this.submitShow = true;
         this.submitError = resp[1];
@@ -64,7 +70,9 @@ export class ForgetPasswordComponent implements OnInit {
   }
 
   onupdatePassword(){
-    if(this.passwInp!=''){
+    if(this.passwordFormControl.status=='VALID'){
+    
+    // if(this.passwInp!=''){
       this._auth.onupdatePassword(this.passwInp, this.chktoken).subscribe(resp=>{
         this.submitShow = true;
         this.submitError = resp[1];
