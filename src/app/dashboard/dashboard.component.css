@@ -6,6 +6,10 @@
 }
 /* Dashboard css start */
 
+.insidecont .font-weight-bolder{
+    font-weight: 600!important;;
+}
+
 /* Card start */
 .card{
     border-radius: 8px!important;

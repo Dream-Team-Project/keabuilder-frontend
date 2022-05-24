@@ -1,0 +1,90 @@
+<div id="funnelcontainer">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+               <div routerLink="/build-funnel"> <button class="btn btn-primary">
+                   <i class="far fa-plus-square"></i> Build A Funnel
+                   </button>
+               </div>
+            </div>
+            <div class="col-md-10">
+                <ul class="kea-barfunnelsearch">
+                    <li  class="active">
+                        <a routerLink="/funnel" href="javascript:void(0)">
+                            <i class="fas fa-filter"></i> All Funnel
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="/archieve-steps" href="javascript:void(0)">
+                            <i class="fas fa-archive"></i> Archived
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="/marketplace" href="javascript:void(0)">
+                            <i class="fas fa-store"></i> Marketplace
+                        </a>
+                    </li>
+                </ul>
+                <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
+                    <input type="text" class="form-control" id="email-search" placeholder="Search funnel">
+                    <div class="form-control-position">
+                        <i class="fab fa-searchengin"></i>                        
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+                <div [sortablejs]="funnels" [sortablejsOptions]="parentOptions" class="steps-group row keabuilder-container mt-5">
+                    <div class="col-md-3 " *ngFor="let funnel of funnels; index as i">
+                        <div class=" keabuilder-board">
+                            <header class="keabuilder-board-header">
+                                <div class="keabuilder-title-board line-ellipsis"><span>{{funnels[i]['name']}}</span> <input type="text" [(ngModel)]="funnels[i]['name']"></div>
+                                <div class="btn-group">
+                                    <div class="cursor-pointer dropdownMenuButton" role="button">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        <div class="dropdown-menu" >
+                                            <a class="dropdown-item keabuilder-edit" href="javascript:void(0);">
+                                                <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> Edit
+                                            </a>
+                                            <a class="dropdown-item keabuilder-copy" href="javascript:void(0);">
+                                                <i class="fas fa-link mr-2"></i> Copy Link
+                                            </a>
+                                            <a class="dropdown-item keabuilder-duplicate" href="javascript:void(0);">
+                                                <i class="far fa-clone mr-2"></i> Duplicate
+                                            </a>
+                                            <a class="dropdown-item keabuilder-changepath" href="javascript:void(0);">
+                                                <i class="fas fa-pen-fancy mr-2"></i> change path
+                                            </a>
+                                            <a class="dropdown-item keabuilder-delete" href="javascript:void(0);">
+                                                <i class="far fa-trash-alt mr-2"></i> Archive
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <main [sortablejs]="funnels[i]['steps']" [sortablejsOptions]="childrenOptions" >
+                                <div *ngFor="let funnelstep of funnels[i]['steps']; index as j" [style.background-image]="'url('+funnels[i]['steps'][j]['img']+')'" >
+                                    <div class="keabuilder-item is-moving" [attr.data-border]="funnels[i]['steps'][j]['color']">{{funnels[i]['steps'][j]['title']}}
+                                        <div class="keabuilder-footer d-flex justify-content-between mt-3">
+                                        <div class="keabuilder-footer-left d-flex">
+                                            <div class="keabuilder-due-date d-flex align-items-center mr-50">
+                                                <i class="far fa-clock"></i> <span
+                                                    class="font-size-small">{{funnels[i]['steps'][j]['updatedat']}}</span></div>
+                                            <div class="keabuilder-comment d-flex align-items-center mr-50">
+                                                <i class="fas fa-puzzle-piece"></i> <span
+                                                    class="font-size-small">{{funnels[i]['steps'][j]['variation']}}</span>
+                                                    </div>
+                                            <div class="keabuilder-attachment d-flex align-items-center">
+                                                <i class="fas fa-tags"></i> <span
+                                                    class="font-size-small">{{funnels[i]['steps'][j]['tag']}}</span></div>
+                                        </div>
+                                        <div class="keabuilder-footer-right"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>

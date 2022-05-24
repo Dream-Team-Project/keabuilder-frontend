@@ -29,8 +29,5 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // var a = document.getElementById('angularApp')!;
-    // a.style.background='#F2F3F7';
-
   }
 }

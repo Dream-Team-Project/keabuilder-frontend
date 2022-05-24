@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -8,6 +9,12 @@ import { AuthService } from '../_services/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
+  passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
+
+  hide = true;
+
   form: any = {
     username: null,
     email: null,
@@ -30,19 +37,21 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(): void {
     const { username, email, password } = this.form;
+    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
+        this.authService.register(username, email, password).subscribe({
+          next: data => {
+            this.isSuccessful = true;
+            this.isSignUpFailed = false;
+            this.redirectToDashboard();
+            
+        },
+        error: err => {
+          this.errorMessage = err.error.message;
+          this.isSignUpFailed = true;
+        }
+      });
+    }
 
-    this.authService.register(username, email, password).subscribe({
-      next: data => {
-        this.isSuccessful = true;
-        this.isSignUpFailed = false;
-        this.redirectToDashboard();
-        
-      },
-      error: err => {
-        this.errorMessage = err.error.message;
-        this.isSignUpFailed = true;
-      }
-    });
   }
 
   redirectToDashboard(): void {
