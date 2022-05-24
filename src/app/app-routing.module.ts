@@ -20,6 +20,7 @@ import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
 import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
 import { HeatmapsRecordingsComponent } from './heatmaps-recordings/heatmaps-recordings.component';
 import { MembershipComponent } from './membership/membership.component';
+import { MembershipProductComponent } from './membership-product/membership-product.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'create-funnel', component: CreateFunnelComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
   { path: 'membership', component: MembershipComponent, canActivate: [AuthGuard] },
+  { path: 'membership-product', component: MembershipProductComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder', component: BuilderComponent },
   { path: '**', component: PageNotFoundComponent },
@@ -68,4 +70,5 @@ export const RoutingComponents =
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
     MembershipComponent,
+    MembershipProductComponent,
   ];
