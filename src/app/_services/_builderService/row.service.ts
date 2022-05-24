@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { GeneralService } from './general.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RowService {
+
+  distroyDialogue = new Subject<any>();
   selectedRow:any = '';
   rowObj = {id: 0, type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: ''};
   selectedSectionRows = [];
-  allBlocksIds:Array<number> = [];
   row_index:number = 0;
   columnObj = {id: 0, type: 'column', elementArr: [], name: '', chngName: false, style: '', };
   rowTypes:Array<any> = [{cls: '1', appendCls: 'full', nofcolumn: 1}, {cls: '1-2', appendCls: 'half', nofcolumn: 2}, {cls: '1-3', appendCls: 'three', nofcolumn: 3}, 
@@ -21,7 +23,7 @@ export class RowService {
   {cls: '60-20-20', appendCls: 's-t-t', nofcolumn: 3}, {cls: '15-15-70', appendCls: 'ft-ft-s', nofcolumn: 3}, {cls: '70-15-15', appendCls: 's-ft-ft', nofcolumn: 3}, 
   {cls: '10-10-80', appendCls: 't-t-e', nofcolumn: 3}, {cls: '80-10-10', appendCls: 'e-t-t', nofcolumn: 3}];
 
-  constructor() {
+  constructor(private _general: GeneralService) {
     var num = 0;
     this.rowTypes.forEach(item=>{
       item.nofcolumn = Array(item.nofcolumn).fill(num++).map((i)=> {
@@ -30,9 +32,13 @@ export class RowService {
     })
   }
 
+  getDialogueEvent():Observable<any> {
+    return this.distroyDialogue.asObservable();
+  }
+
   addRow(rowSize: string, column: any[]) {
     if(!this.selectedRow) {
-    var tempObj = JSON.parse(JSON.stringify(this.rowObj));
+      var tempObj = JSON.parse(JSON.stringify(this.rowObj));
       for(var i=0; i<column.length; i++) {
         tempObj.columnArr.push(this.createColumn(rowSize,i));
       }
@@ -46,18 +52,30 @@ export class RowService {
         this.selectedRow.columnArr.push(this.createColumn(rowSize,i));
       }
       this.selectedRow.rowSize = rowSize;
-      this.selectedRow = '';
     }
+    this.selectedRow = '';
+    this._general.blockSelection = '';
+    this.distroyDialogue.next(void 0);
   }
 
-  appendRow(rowArr: any[], tempObj: { id: any; }, index: number) {
-    tempObj.id = this.createBlockId(tempObj);
+  duplicateRow(rowArr: any[], row: any, index: number) {
+    var tempObj = JSON.parse(JSON.stringify(row));
+    this.appendRow(rowArr, tempObj, index);
+  }
+
+  deleteRow(rowArr: any[], index: any) {
+      rowArr.splice(index, 1);
+  }    
+
+  appendRow(rowArr: any[], tempObj: any, index: number) {
+    tempObj.id = this._general.createBlockId(tempObj);
+    tempObj.setting = false;
     rowArr.splice(index+1, 0, tempObj);
     if(rowArr[index+1] != undefined) {
         rowArr[index+1].columnArr.forEach((item: { id: any; elementArr?: any; })=>{
-          item.id = this.createBlockId(item);
+          item.id = this._general.createBlockId(item);
           item.elementArr.forEach((item2: { id: any; })=>{
-            item2.id = this.createBlockId(item2);
+            item2.id = this._general.createBlockId(item2);
           })
       })
     }
@@ -66,17 +84,8 @@ export class RowService {
   createColumn(rowSize: string, i: number) {
     var width = rowSize.split('-');
     var tempObj = JSON.parse(JSON.stringify(this.columnObj));
-    tempObj.id = this.createBlockId(tempObj);
+    tempObj.id = this._general.createBlockId(tempObj);
     tempObj.width = width.length > 3 ? width[i+1] : 'equal';
     return tempObj;
-  }
-
-  createBlockId(temp: { id: number; }):any {
-    temp.id = Math.floor(Math.random() * 10000000000);
-    if(this.allBlocksIds.includes(temp.id)) {
-      return this.createBlockId(temp);
-    }
-    this.allBlocksIds.push(temp.id);
-    return temp.id;
   }
 }

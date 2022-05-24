@@ -9,6 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
 import { BuilderComponent } from './builder/builder.component';
+import { BuilderSettingComponent } from './builder-setting/builder-setting.component';
 import { FunnelComponent } from './funnel/funnel.component';
 import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
 import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
@@ -67,6 +68,7 @@ export const RoutingComponents =
     CreateFunnelComponent,
     ProfileComponent,
     BuilderComponent,
+    BuilderSettingComponent,
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
     MembershipComponent,

@@ -1,0 +1,140 @@
+::ng-deep .mat-radio-checked, ::ng-deep .mat-button-toggle-checked button {
+    color: var(--section-color)!important;
+}
+
+::ng-deep .mat-radio-button {
+    margin-left: 15px;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: var(--section-color);
+}
+
+::ng-deep .mat-select {
+    color: var(--text-color);
+    background: var(--kb-gray);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+::ng-deep .mat-snack-bar-container {
+    background-color: var(--opacity-blue);
+    color: #fff;
+}
+
+::ng-deep .mat-simple-snackbar-action button {
+    color: #fff;
+    font-weight: 600;
+}
+
+::ng-deep .mat-slider.slider {
+    width: 100%;
+}
+
+::ng-deep .mat-tab-body-content {
+    overflow: unset!important;
+}
+
+::ng-deep .mat-ink-bar {
+    height: 3px!important;
+}
+
+::ng-deep .mat-ink-bar, ::ng-deep .mat-tab-body-wrapper {
+    transition-duration: 200ms!important;
+}
+
+::ng-deep .mat-slider-horizontal .mat-slider-wrapper, ::ng-deep .mat-slider-horizontal .mat-slider-track-wrapper {
+    height: 6px!important;
+    border-radius: 4px;
+}
+
+::ng-deep .mat-slider-horizontal .mat-slider-track-background, ::ng-deep .mat-slider-horizontal .mat-slider-track-fill {
+    height: 100%!important;
+}
+
+::ng-deep .mat-slider-track-background, ::ng-deep .mat-slider:hover .mat-slider-track-background, ::ng-deep .mat-slider.cdk-focused .mat-slider-track-background{
+    background-color: var(--kb-gray);
+}
+
+::ng-deep .mat-slider.mat-accent .mat-slider-track-fill,
+::ng-deep .mat-slider.mat-accent .mat-slider-thumb,
+::ng-deep .mat-slider.mat-accent .mat-slider-thumb-label,
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar,
+::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar, 
+::ng-deep .mat-slider.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb,
+::ng-deep .mat-slider.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb-label,
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle,
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+::ng-deep .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+    background-color: var(--section-color);
+}
+
+::ng-deep .mat-tab-body-wrapper .mat-tab-body {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 14px;
+    overflow-y: auto!important;
+    height: 400px;
+}
+
+::ng-deep .mat-radio-label-content {
+    display: flex!important;
+    align-items: center;
+    justify-content: center;
+}
+
+::ng-deep .mat-tab-labels {
+    align-items: stretch;
+    display: flex;
+    border-top: 1px solid rgb(0 0 0 / 10%);
+}
+
+::ng-deep .mat-tab-labels .mat-tab-label:hover, ::ng-deep .mat-button-toggle:hover, .mat-button-toggle-checked {
+    z-index: 2;
+    transform: translateY(0);
+    background-color: rgb(24 103 192 / 10%)!important;
+}
+
+::ng-deep .mat-tab-labels .mat-tab-label, ::ng-deep .mat-button-toggle {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    min-height: 48px;
+    transition: background .2s ease, transform .2s ease, opacity .2s;
+    min-width: 100px;
+    user-select: none;
+    transform: translateY(2px);
+    opacity: 1;
+}
+
+::ng-deep color-material {
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px #0000001f, 0 2px 5px #00000029;
+}
+
+::ng-deep .tox .tox-toolbar__primary {
+    background-color: #f1f5f9!important;
+    background-image: none!important;
+}
+
+::ng-deep .tox.tox-tinymce {
+    box-shadow: 0 2px 10px #0000001f, 0 2px 5px #00000029;
+    border-width: 0px!important;
+    border-radius: 5px;
+}
+
+::ng-deep .mat-button-toggle button i {
+    margin-right: 6px;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard {
+    background: transparent;
+}
+
+::ng-deep .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle, ::ng-deep .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+    border: none;
+}
