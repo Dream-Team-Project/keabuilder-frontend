@@ -9,6 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
 import { BuilderComponent } from './builder/builder.component';
+import { BuilderSettingComponent } from './builder-setting/builder-setting.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -34,4 +35,5 @@ export const RoutingComponents =
     ProfileComponent,
     PageNotFoundComponent,
     BuilderComponent,
+    BuilderSettingComponent
   ];

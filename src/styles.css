@@ -1,27 +1,98 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 :root {
     
-/* builder root */
+    /* builder root */
+        --opacity-blue: rgb(24 103 192 / 80%);
+        --primary-color: #d8c898;
+        --section-color: #1867c0;
+        --row-color: #1BC5BD;
+        --light: #f8f9fa;
+        --kb-success: #1BC5BD;
+        --kb-danger: #dc3545;
+        --kb-info: #17a2b8;
+        --kb-gray: #e6eaef;
+        --kb-dim-black: #22262a66;
+        --kb-mid-black: #22262acc;
+        --text-color: #4c5866;
+    
+    /* builder root */
+    
+        --clr-primay: #d8c898;
+        --clr-light: #fff;
+    }
+    
+    /* scrolling */
+    
+    * ::-webkit-scrollbar, .kb-scroll ::-webkit-scrollbar {
+        width: 0px;
+        transition: 2s ease-in-out;
+        z-index: 9999;
+    }
 
-    --primary-color: #d8c898;
-    --section-color: #1867c0;
-    --row-color: #1BC5BD;
-    --light: #f8f9fa;
-    --padding: 60px 0px;
-    --border-width: 0px;
-    --kb-success: #1BC5BD;
-    --kb-danger: #dc3545;
-    --kb-info: #17a2b8;
-    --kb-gray: #e6eaef;
-    --kb-dim-black: #22262a66;
-    --kb-mid-black: #22262acc;
-    --box-shadow: box-shadow: 4px 8px 16px rgb(0 0 0 / 16%);
+     *:hover ::-webkit-scrollbar {
+        width: 8px;
+    }
 
-/* builder root */
+        
+    .kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
+        width: 6px;
+    }
+      
+      /* Track */
 
-    --clr-primay: #d8c898;
-    --clr-light: #fff;
+      * ::-webkit-scrollbar-track {
+            background-color: #e2e2e2;
+        }
+
+        .kb-scroll ::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+       
+      /* Handle */
+      
+      * ::-webkit-scrollbar-thumb, .kb-scroll ::-webkit-scrollbar-thumb {
+        background-color: var(--opacity-blue);
+      }
+
+      * ::-webkit-scrollbar-thumb, .kb-scroll ::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+      }
+      /* Handle on hover */
+      /* .kb-scroll ::-webkit-scrollbar-thumb:hover {
+        background: #b30000; 
+      }
+     */
+      /* scrolling */
+    
+
+.mat-snack-bar-container {
+    color: #000;
+    background-color: var(--light);
+}
+
+* {
+    font-family: Poppins;   
+}
+main {
+    position: relative;
+}
+.btn-primary{
+    background-color: var(--clr-primay);  
+    border-color: var(--clr-primay);
+    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
+    font-size: 14px;
+    color: var(--clr-light);
+}
+.btn-primary:hover{
+    opacity: 0.8;
+}
+.btn-secondary {
+    font-size: 14px;
+    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
+    color: var(--clr-light);
 }
 
 /* You can add global styles to this file, and also import other style files */
