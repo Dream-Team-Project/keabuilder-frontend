@@ -1,8 +1,8 @@
 <div id="createfunnel">
 
   <div id="kb-automation-actions" *ngIf="poupsidebar">
-    <i class="fas fa-times" (click)="hidepopupsidebar"></i>
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" *ngIf="automationaddnewaction">
+      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
       <h6><b>NEW FUNNEL STEPS</b></h6>
       <p><i class="fas fa-cogs"></i> Action Settings</p>
       <hr>
@@ -48,7 +48,7 @@
     </div>
 
   </div>
-  <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar"></div>
+  <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
 
 
   <header class="wizard-nav">

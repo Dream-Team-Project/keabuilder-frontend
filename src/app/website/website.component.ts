@@ -54,6 +54,7 @@ export class WebsiteComponent implements OnInit {
            }else if(element.type=='landing_page'){
              this.kblandingpages.push(element);
           }
+          console.log(this.kbpages);
 
         });
 

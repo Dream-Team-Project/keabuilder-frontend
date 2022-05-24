@@ -18,6 +18,8 @@ import { AnalyticsComponent } from './analytics/analytics.component';
 import { HeatmapsComponent } from './heatmaps/heatmaps.component';
 import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
 import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
+import { HeatmapsRecordingsComponent } from './heatmaps-recordings/heatmaps-recordings.component';
+import { MembershipComponent } from './membership/membership.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -34,6 +36,8 @@ const routes: Routes = [
   { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
   { path: 'build-funnel', component: BuildFunnelComponent, canActivate: [AuthGuard] },
   { path: 'create-funnel', component: CreateFunnelComponent, canActivate: [AuthGuard] },
+  { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+  { path: 'membership', component: MembershipComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder', component: BuilderComponent },
   { path: '**', component: PageNotFoundComponent },
@@ -46,10 +50,22 @@ const routes: Routes = [
 export class AppRoutingModule { }
 export const RoutingComponents = 
   [
-    DashboardComponent, 
     LoginComponent, 
     RegisterComponent, 
+    ForgetPasswordComponent,
+    DashboardComponent, 
+    FunnelComponent,
+    FunnelArchieveComponent,
+    FunnelMarketplaceComponent,
+    WebsiteComponent,
+    StrategiesComponent,
+    AnalyticsComponent,
+    HeatmapsComponent,
+    BuildFunnelComponent,
+    CreateFunnelComponent,
     ProfileComponent,
-    PageNotFoundComponent,
     BuilderComponent,
+    PageNotFoundComponent,
+    HeatmapsRecordingsComponent,
+    MembershipComponent,
   ];

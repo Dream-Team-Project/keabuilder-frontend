@@ -75,15 +75,20 @@ function makeid(length) {
 
 function getuserlocation(){ 
 
-    $.ajax({
-        url: "https://geolocation-db.com/jsonp",
-        jsonpCallback: "callback",
-        dataType: "jsonp",
-        success: function( location ) {
-            return location.country_name;
-        }
-    });
+        $.ajax({
+            url: "https://geolocation-db.com/jsonp",
+            jsonpCallback: "callback",
+            dataType: "jsonp",
+            success: function( location ) {
+                callback();
+                // return location.country_name;
+            }
+        });
 
+}
+
+function callback(response){
+    // kb_location = response.country_name;
 }
 
 let kb_created_at, //done
@@ -111,6 +116,7 @@ kb_created_at = formatDate(new Date());
 kb_unique_id = makeid(8);
 
 kb_location = getuserlocation();
+
 
 kb_doctitle = document.getElementsByTagName('title')[0].innerText;
 
@@ -185,16 +191,16 @@ function forclick(e){
 
     kb_fulldata['locx'] = kb_usergetlocX;
     kb_fulldata['locY'] = kb_usergetlocY;
+    kb_fulldata['location'] = kb_location;
 
+    console.log(kb_fulldata);
     $.ajax({
-        url: "http://127.0.0.1:8000/heat-request",
-        type: "GET",
+        url: "http://127.0.0.1:4200/api/heat-request",
+        type: "POST",
         dataType: 'json',
         data:  {
             name: kb_fulldata
         },
-        contentType: 'application/json',
-        CrossDomain:true,
         success: function (data) {
             console.log(data);
         },
@@ -209,6 +215,7 @@ function forclick(e){
 
 function formouse(e){
     kb_mousegetlocX.push(e.clientX);
+    kb_fulldata['location'] = kb_location;
 
     if(window.scrollY!=0){
         kb_mousegetlocY.push(e.clientY+window.scrollY);
@@ -223,14 +230,12 @@ function formouse(e){
     kb_fulldata['MlocY'] = kb_mousegetlocY;
 
     $.ajax({
-        url: "http://127.0.0.1:8000/heat-request",
-        type: "GET",
+        url: "http://127.0.0.1:4200/api/heat-request",
+        type: "POST",
         dataType: 'json',
         data:  {
             name: kb_fulldata
         },
-        contentType: 'application/json',
-        CrossDomain:true,
         success: function (data) {
             console.log(data);
         },
@@ -385,15 +390,16 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
                 // file name
                 formData.append('video-filename', fileObject.name);
             
-            // upload using jQuery
+                // upload using jQuery
                 $.ajax({
                     url: 'http://127.0.0.1:8000/uploadheatmap.php', 
                     data: formData,
                     cache: false,
                     contentType: false,
                     processData: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function(response) {
+                        // console.log(response);
                     }
                 });
 
@@ -408,8 +414,8 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
 
 
                 $.ajax({
-                    url: "http://127.0.0.1:8000/saverecordheat",
-                    type: "GET",
+                    url: "http://127.0.0.1:4200/api/saverecordheat",
+                    type: "POST",
                     dataType: 'json',
                     data:  {
                         date: gendt(),
@@ -424,8 +430,6 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
                         longitude: allinonegeoloc[6],
                         ipv4: allinonegeoloc[7] 
                     },
-                    contentType: 'application/json',
-                    CrossDomain:true,
                     success: function (data) {
                         console.log(data);
                     },
@@ -754,7 +758,7 @@ padding-top: 7px;
 #segmentation-panel header h3 {
     margin: 0px;
 }
-.ui-input, input:not([type="checkbox"]) {
+.ui-input, input[type="date"] {
     background: #fff;
     border: 1px solid #CFD8DC;
     border-radius: 3px;
@@ -1153,10 +1157,10 @@ color:#fff!important;
                       </button>
                 </span>
             </div> 
-            <a href="http://127.0.0.1:8000/heat-maps" target="_blank" id="brand-link"
+            <a href="http://127.0.0.1:4200/heatmap" target="_blank" id="brand-link"
                 class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img
                     id="brand-wordmark"
-                    src="http://127.0.0.1:8000/images/logo/kblogo.svg"
+                    src="http://127.0.0.1:4200/assets/images/logo/kblogo.svg"
                     alt="Kia Builder Logo" /></a>
         </div>
         <div class="ui-panel-manager size-fill">
@@ -1651,20 +1655,18 @@ if(window.location.hash=='#kb-heatmaps'){
     setTimeout(() => {
         
         $.ajax({
-            url: "http://127.0.0.1:8000/heatfetchloc-request",
-            type: "GET",
+            url: "http://127.0.0.1:4200/api/heatfetchloc-request",
+            type: "POST",
             dataType: 'json',
             data:  {
                 url: window.location.href.toString().split('#kb-heatmaps')[0]
             },
-            contentType: 'application/json',
-            CrossDomain:true,
             success: function (data) {
 
                 var strng1 = [];
                 var strng2 = [];
 
-                data.forEach(element => {
+                data.data.forEach(element => {
                     var elm1 =  element['locY'].split(',')
                     elm1.forEach(element2 => {
                         strng1.push(element2);
@@ -1855,14 +1857,12 @@ if(window.location.hash=='#kb-heatmaps'){
 
         // fetch all data
         $.ajax({
-            url: "http://127.0.0.1:8000/heatall-request",
-            type: "GET",
+            url: "http://127.0.0.1:4200/api/heatall-request",
+            type: "POST",
             dataType: 'json',
             data:  {
                 url: window.location.href.toString().split('#kb-heatmaps')[0]
             },
-            contentType: 'application/json',
-            CrossDomain:true,
             success: function (data) {
                 // console.log(data);
 
@@ -1870,7 +1870,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 var os_segment = [];
                 var country_segment = [];
                 var numberofvisit_segment = [];
-                data.forEach(element => {
+                data.data.forEach(element => {
                         browser_segment.push(element['browser']);
                         os_segment.push(element['os']);
                         country_segment.push(element['location']);
@@ -1997,8 +1997,8 @@ if(window.location.hash=='#kb-heatmaps'){
                  for (bs in counts4) {
                      document.getElementById('kb_nuofvisit_segment').innerHTML+=`<div class="padding-bottom-half"><label
                          class="layout-row layout-align-start-center margin-none">
-                         <div class="padding-right-half"><input type="checkbox"
-                                 value="`+bs+`" name="numberofvisit_segment" checked /></div>
+                         <div class="padding-right-half"><input type="radio"
+                                 value="`+bs+`" name="numberofvisit_segment" /></div>
                          <div aria-label="" role="listitem"
                              class="ui-list-item padding-none flex">
                              <div
@@ -2009,11 +2009,11 @@ if(window.location.hash=='#kb-heatmaps'){
                              </label>
                          </div>`;
                  }
-                 var numberofvisitsegmnt = [];
-                document.getElementsByName('numberofvisit_segment').forEach((numberofvisitseg) => {
-                    numberofvisitsegmnt.push(numberofvisitseg.value);
-                    numberofvisitseg.addEventListener('click',function(){
-                            data3 = [];
+                 document.getElementsByName('numberofvisit_segment').forEach((numberofvisitseg) => {
+                     // numberofvisitsegmnt.push(numberofvisitseg.value);
+                     numberofvisitseg.addEventListener('click',function(){
+                         var numberofvisitsegmnt = [];
+                         data3 = [];
                             if (this.checked) {
                                 numberofvisitsegmnt.push(this.value);
                                 getrequireddata(numberofvisitsegmnt,'created_at');
@@ -2058,23 +2058,21 @@ if(window.location.hash=='#kb-heatmaps'){
         // get required data
         function getrequireddata(value1,value2){
             $.ajax({
-                url: "http://127.0.0.1:8000/heatshome-request",
-                type: "GET",
+                url: "http://127.0.0.1:4200/api/heatshome-request",
+                type: "POST",
                 dataType: 'json',
                 data:  {
                     url: window.location.href.toString().split('#kb-heatmaps')[0],
                     browser_segment: value1,
                     whichvalue: value2
                 },
-                contentType: 'application/json',
-                CrossDomain:true,
                 success: function (data) {
-                    // console.log(data);
+                    console.log(data);
 
                 var strng1 = [];
                 var strng2 = [];
 
-                data.forEach(element => {
+                data.data.forEach(element => {
                     var elm1 =  element['locY'].split(',')
                     elm1.forEach(element2 => {
                         strng1.push(element2);
@@ -2372,20 +2370,18 @@ if(window.location.hash=='#kb-heatmaps'){
     
     function createheatmpmouse(){
         $.ajax({
-            url: "http://127.0.0.1:8000/heatfetchmou-request",
-            type: "GET",
+            url: "http://127.0.0.1:4200/api/heatfetchmou-request",
+            type: "POST",
             dataType: 'json',
             data:  {
                 url: window.location.href.toString().split('#kb-heatmaps')[0]
             },
-            contentType: 'application/json',
-            CrossDomain:true,
             success: function (data) {
 
                 var strng1 = [];
                 var strng2 = [];
 
-                data.forEach(element => {
+                data.data.forEach(element => {
                     var elm1 =  element['mouseY'].split(',')
                     elm1.forEach(element2 => {
                         strng1.push(element2);
@@ -2810,34 +2806,30 @@ if(window.location.hash=='#kb-heatmaps'){
 
    
     $.ajax({
-        url: "http://127.0.0.1:8000/showrecordheat",
-        type: "GET",
+        url: "http://127.0.0.1:4200/api/showrecordheat",
+        type: "POST",
         dataType: 'json',
         data:  {
             url: window.location.href.toString().split('#kb-heatmaps')[0]
         },
-        contentType: 'application/json',
-        CrossDomain:true,
         success: function (data) {
-            // console.log(data);
-            data.forEach(element => {
+            // console.log(data.data);
+            data.data.forEach(element => {
                 var myArray = element['created_at'].split("-");
                 if(myArray[0]!=''){
 
                     $.ajax({
-                        url: "http://127.0.0.1:8000/getheatdir",
-                        type: "GET",
+                        url: "http://127.0.0.1:4200/api/getheatdir",
+                        type: "POST",
                         dataType: 'json',
                         data:  {
                             hash: element['uniqueid']
                         },
-                        contentType: 'application/json',
-                        CrossDomain:true,
                         success: function (data) {
-                            if(data[0]!=undefined){
+                            if(data.data[0]!=undefined){
                                 var dt = myArray[0]+'-'+myArray[1]+'-'+myArray[2];
                                 var hashvl = element['uniqueid'];
-                                document.getElementById('myheatrecordol').innerHTML += "<li><span>"+dt+"</span><span><a target='_blank' href='http://127.0.0.1:8000/heatmaps-recordings#"+hashvl+"'>View Recording</a></span></li>";
+                                document.getElementById('myheatrecordol').innerHTML += "<li><span>"+dt+"</span><span><a target='_blank' href='http://localhost:4200/heatmaps-recordings#"+hashvl+"'>View Recording</a></span></li>";
                             }
                         }
                     });
@@ -2859,7 +2851,7 @@ if(window.location.hash=='#kb-heatmaps'){
 {/* <script>
 (function() {
     var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-    wa.src = 'http://127.0.0.1:8000/js/kb_heatmap.js';
+    wa.src = 'http://127.0.0.1:4200/assets/js/kb_heatmap.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
   })();
 </script> */}

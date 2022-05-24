@@ -21,6 +21,7 @@
     padding-bottom: 13px;
 }
 .card-header{
+    padding-top: 0px;
     margin: -16px!important;;
 }
 .bw-maincontainer .nav-tabs .nav-item {
@@ -343,3 +344,10 @@
     background-color: #1BC5BD;
 }
 /* edit user */
+
+.bw-maincontainer .card{
+    border: none;
+}
+.bw-maincontainer .card-header{
+    background-color:transparent;
+}

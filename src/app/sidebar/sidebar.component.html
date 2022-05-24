@@ -10,6 +10,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fa fa-home" aria-hidden="true"></i>
+          <img src="/assets/images/sidebar/home.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Dashboard
@@ -20,6 +21,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fa fa-filter" aria-hidden="true"></i>
+          <img src="/assets/images/sidebar/funnel.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Funnels
@@ -30,6 +32,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-desktop"></i>
+          <img src="/assets/images/sidebar/browser.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Website
@@ -40,6 +43,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-shield-alt"></i>
+          <img src="/assets/images/sidebar/shield.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Membership
@@ -50,6 +54,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-address-card"></i>
+          <img src="/assets/images/sidebar/complete.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Forms
@@ -60,6 +65,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-globe-americas"></i>
+          <img src="/assets/images/sidebar/worldwide.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Domains
@@ -70,6 +76,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-user-secret"></i>
+          <img src="/assets/images/sidebar/hacker.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           CRM
@@ -80,6 +87,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-chess-knight"></i>
+          <img src="/assets/images/sidebar/chess.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Strategies
@@ -90,6 +98,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-fire"></i>
+          <img src="/assets/images/sidebar/way.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           HeatMap
@@ -100,6 +109,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-chart-pie"></i>
+          <img src="/assets/images/sidebar/growth.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Analytics
@@ -110,7 +120,7 @@
       <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-search-dollar"></i>
-
+          <img src="/assets/images/sidebar/money-bag.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Affiliates
@@ -121,7 +131,7 @@
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
           <i class="fa fa-dollar-sign"></i>
-
+          <img src="/assets/images/sidebar/payment.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Payment
@@ -132,7 +142,10 @@
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen }" (click)="isOpen = !isOpen">
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"> <i class="fas fa-cogs"></i></div>
+          <div class="bw-sidebar__item__icon"> 
+            <i class="fas fa-cogs"></i>
+          <img src="/assets/images/sidebar/cloud-network.gif" width="35" class="d-none">
+          </div>
           <div class="bw-sidebar__item__text">
             Integrations
           </div>
@@ -201,7 +214,10 @@
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2">
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"> <i class="fas fa-life-ring"></i></div>
+          <div class="bw-sidebar__item__icon"> 
+            <i class="fas fa-life-ring"></i>
+            <img src="/assets/images/sidebar/safe-box.gif" width="35" class="d-none">
+          </div>
           <div class="bw-sidebar__item__text">
             Help
           </div>
@@ -234,7 +250,10 @@
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3">
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"><i class="fas fa-book"></i></div>
+          <div class="bw-sidebar__item__icon">
+            <i class="fas fa-book"></i>
+            <img src="/assets/images/sidebar/books.gif" width="35" class="d-none">
+          </div>
           <div class="bw-sidebar__item__text">
             Documentation
           </div>
@@ -263,23 +282,29 @@
       </div>
     </div>
 
-    <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-      <div class="bw-sidebar__item__icon">
-        <i class="fas fa-chalkboard-teacher"></i>
-      </div>
-      <div class="bw-sidebar__item__text">
-        Q&As, Advice and Troubleshooting
-      </div>
-    </button>
-    
-    <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-      <div class="bw-sidebar__item__icon">
-        <i class="fas fa-clipboard-check"></i>
-      </div>
-      <div class="bw-sidebar__item__text">
-        Training & Resources
-      </div>
-    </button>
+    <a [routerLink]="['/advice']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+            <img src="/assets/images/sidebar/support.gif" width="35" class="d-none">
+          </div>
+        <div class="bw-sidebar__item__text">
+          Q&As, Advice and Troubleshooting
+        </div>
+      </button>
+    </a>
+
+    <a [routerLink]="['/training']" [routerLinkActive]="['a-active']">
+      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
+        <div class="bw-sidebar__item__icon">
+          <i class="fas fa-clipboard-check"></i>
+            <img src="/assets/images/sidebar/notebook.gif" width="35" class="d-none">
+          </div>
+        <div class="bw-sidebar__item__text">
+          Training & Resources
+        </div>
+      </button>
+    </a>
 
   </div>
 </div>

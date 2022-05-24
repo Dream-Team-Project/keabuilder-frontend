@@ -22,7 +22,7 @@
 
   <div class="container">
     <!--begin::Card-->
-    <mat-card class="card card-custom">
+    <div class="card card-custom">
       <!--begin::Card header-->
       <div class="card-header card-header-tabs-line nav-tabs-line-3x">
         <!--begin::Toolbar-->
@@ -219,7 +219,7 @@
                     <div class="col-9">
                       <div class="input-group input-group-lg input-group-solid">
                         <input type="text" class="form-control form-control-lg form-control-solid"
-                          placeholder="Username" disabled [value]="bwname">
+                          placeholder="Username">
                         <div class="input-group-append">
                           <span class="input-group-text">.com</span>
                         </div>
@@ -252,7 +252,7 @@
                       <label class="col-form-label col-3 text-lg-right text-left">Username</label>
                       <div class="col-9">
                         <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
-                          <input class="form-control form-control-lg form-control-solid" type="text" value="nick84">
+                          <input class="form-control form-control-lg form-control-solid" disabled type="text" [value]="bwname" >
                         </div>
                       </div>
                     </div>
@@ -483,17 +483,17 @@
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox">
                           <mat-checkbox color="primary" formControlName="notification">You have new notifications.</mat-checkbox>
-                          </label>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox">
-                          <input type="checkbox">
-                          <span></span>You're sent a direct message</label>
+                          <mat-checkbox color="primary" formControlName="directmessage">You're sent a direct message.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox">
-                          <input type="checkbox" checked="checked">
-                          <span></span>Someone adds you as a connection</label>
+                          <mat-checkbox color="primary" formControlName="connection">Someone adds you as a connection.</mat-checkbox>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -502,18 +502,18 @@
                     <div class="col-9">
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox">
-                          <span></span>Upon new order</label>
+                          <mat-checkbox color="accent" formControlName="neworder">Upon new order.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox">
-                          <span></span>New membership approval</label>
+                          <mat-checkbox color="accent" formControlName="newmembership">New membership approval.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox">
-                          <span></span>Member registration</label>
+                          <mat-checkbox color="accent" formControlName="memberresigter">Member registration.</mat-checkbox>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -534,28 +534,28 @@
                     <div class="col-9">
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox">
-                          <span></span>News about Metronic product and feature updates</label>
+                          <mat-checkbox color="accent" formControlName="newsabout">News about Metronic product and feature updates.</mat-checkbox>
+                          </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox">
-                          <span></span>Tips on getting more out of Keen</label>
+                          <mat-checkbox color="accent" formControlName="tipson">Tips on getting more out of Keen.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox" checked="checked">
-                          <span></span>Things you missed since you last logged into Keen</label>
+                          <mat-checkbox color="accent" formControlName="loggedinto">Things you missed since you last logged into Keen.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox" checked="checked">
-                          <span></span>News about Metronic on partner products and other services</label>
+                          <mat-checkbox color="accent" formControlName="partnerparoduct">News about Metronic on partner products and other services.</mat-checkbox>
+                        </label>
                       </div>
                       <div class="checkbox-inline mb-2">
                         <label class="checkbox checkbox-success">
-                          <input type="checkbox" checked="checked">
-                          <span></span>Tips on Metronic business products</label>
+                          <mat-checkbox color="accent" formControlName="businessproduct">Tips on Metronic business products.</mat-checkbox>
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -567,7 +567,7 @@
         </form>
       </div>
       <!--begin::Card body-->
-    </mat-card>
+    </div>
     <!--end::Card-->
   </div>
 

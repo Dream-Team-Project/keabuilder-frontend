@@ -11,6 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSelectModule} from '@angular/material/select';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,20 +19,10 @@ import { AppComponent } from './app.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SortablejsModule } from 'ngx-sortablejs';
-import { FunnelComponent } from './funnel/funnel.component';
-import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
-import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
-import { WebsiteComponent } from './website/website.component';
-import { StrategiesComponent } from './strategies/strategies.component';
-import { AnalyticsComponent } from './analytics/analytics.component';
-import { HeatmapsComponent } from './heatmaps/heatmaps.component';
-import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
-import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
 
 
 @NgModule({
@@ -40,16 +31,6 @@ import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    ForgetPasswordComponent,
-    FunnelComponent,
-    FunnelArchieveComponent,
-    FunnelMarketplaceComponent,
-    WebsiteComponent,
-    StrategiesComponent,
-    AnalyticsComponent,
-    HeatmapsComponent,
-    BuildFunnelComponent,
-    CreateFunnelComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +52,7 @@ import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
     MatPaginatorModule,
     MatCardModule,
     MatCheckboxModule,
+    MatSelectModule,
   
   ],
   providers: [authInterceptorProviders],

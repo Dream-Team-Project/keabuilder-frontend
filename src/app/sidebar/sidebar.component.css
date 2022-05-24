@@ -711,3 +711,10 @@ div#topbar_notifications_logs {
 .a-active .bw-sidebar__item__text, .a-active i {
   color: #a99c76;
 }
+
+.bw-sidebar a:hover img, .bw-sidebar__group__header:hover .bw-sidebar__item__icon img{
+  display: block!important;
+}
+.bw-sidebar a:hover i, .bw-sidebar__group__header:hover .bw-sidebar__item__icon i{
+  display: none!important;
+}

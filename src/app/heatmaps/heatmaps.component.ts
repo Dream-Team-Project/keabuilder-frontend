@@ -8,22 +8,28 @@ import { HeatmapsService } from '../_services/heatmaps.service';
 })
 export class HeatmapsComponent implements OnInit {
 
-  constructor(private heatmapsService: HeatmapsService) { }
+  constructor(private heatmapsService: HeatmapsService,) { }
   
   visited = [];
 
-  ngOnInit(): void {
+  bgImg = './assets/images/heatmap/bk-heatmap1.jpg';
+  min = 1;
+  max = 2;
 
+  ngOnInit(): void {
+    
     this.heatmapsService.get().subscribe({
       next: data => {
+        console.log(data.data);
         this.visited = data.data;
         // console.log(this.visited);
-
       },
       error: err => {
         console.log(err);
       }
     });
+
+    this.createNewImg();
 
   }
 
@@ -33,6 +39,11 @@ export class HeatmapsComponent implements OnInit {
     if(inputval!=''){
             window.open(inputval+'#kb-heatmaps','_blank');
         }
+    }
+
+    createNewImg(){
+      var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
+        this.bgImg = './assets/images/heatmap/bk-heatmap'+genNum+'.jpg';
     }
 
 }
