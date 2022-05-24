@@ -4,7 +4,6 @@
 
 :root {
     
-<<<<<<< HEAD
     /* builder root */
         --opacity-blue: rgb(24 103 192 / 80%);
         --primary-color: #d8c898;
@@ -94,7 +93,6 @@ main {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     color: var(--clr-light);
-=======
 /* builder root */
 
     --primary-color: #d8c898;
@@ -116,7 +114,6 @@ main {
 
     --clr-primay: #d8c898;
     --clr-light: #fff;
->>>>>>> 9550893dbe0702d5024119648ad3039151129034
 }
 
 /* You can add global styles to this file, and also import other style files */
