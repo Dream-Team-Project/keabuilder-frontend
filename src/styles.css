@@ -256,3 +256,23 @@ main.insidecont .box {
 #kb-offer-actions .mat-form-field-infix{
     width:100%!important;
 }
+.offcanvas-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 999;
+    -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
+    animation: animation-offcanvas-fade-in 0.6s ease 1;    
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+@media (max-width: 500px){
+    .symbol .symbol-label {
+        width: 50px;
+        height: 50px;
+    }
+}

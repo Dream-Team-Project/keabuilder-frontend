@@ -11,6 +11,7 @@ import { ElementService } from '../_services/_builderService/element.service';
 import { StyleService } from '../_services/_builderService/style.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { GeneralService } from '../_services/_builderService/general.service';
+import { ImageService } from '../_services/image.service';
 
 @Component({
   selector: 'app-builder-setting',
@@ -50,6 +51,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     public _column: ColumnService,
     public _element: ElementService,
     public _general: GeneralService,
+    public _image: ImageService,
     // builder services end
     private _overlay: Overlay,
     private _snackBar: MatSnackBar,

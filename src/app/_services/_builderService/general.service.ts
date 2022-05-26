@@ -48,5 +48,4 @@ export class GeneralService {
     this.allBlocksIds.push(temp.id);
     return 'kb-'+temp.type+'-'+temp.id;
   }
-
 }
