@@ -9,11 +9,11 @@
                 <mat-tab label="Upload">
                     <div class="kb-img-thumbnail-group">
                         <div *ngIf="!_image.loading else loading">
-                        <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event)">
+                        <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)">
                         <button mat-stroked-button (click)="imgInp.click()" class="kb-btn kb-btn-success">
                             <span>Upload a new image</span></button>
                         </div>
-                        <ng-template #loading><img src="./assets/images/builder/upload_images/loading.gif" alt=""></ng-template>    
+                        <ng-template #loading><img [src]="this._image.imgPath+'builder/upload_images/loading.gif'" alt="loading..."></ng-template>    
                     </div>
                     <!-- <div class="kb-imgUploadPreviewGroup">
                         <div class="kb-imgUploadPreview">
@@ -84,7 +84,7 @@
                     <div class="kb-img-thumbnail-group">
                         <ul *ngIf="_image.galleryImg.length != 0 else noImg" class="kb-img-list">
                             <li *ngFor="let img of _image.galleryImg"><span>
-                                    <img [src]="'images/builder/upload_images/'+img.name"
+                                    <img [src]="'images/builder/upload_images/'+img.title"
                                         (click)="_image.addImage(img)"></span>
                             </li>
                         </ul>

@@ -7,6 +7,8 @@ import { FileUploadService } from './file-upload.service';
   providedIn: 'root'
 })
 export class ImageService {
+  imgPath: string = './assets/images/';  
+  uploadImgPath: string = './assets/uploads/images/';  
   imageChangedEvent: any = '';
   croppedImage: any = '';
   canvasRotation = 0;
@@ -21,7 +23,7 @@ export class ImageService {
     loading: boolean = false; // Flag variable
     file:any = null; // Variable to store file
     imgSelection:boolean = false;
-    selectedImg:any = {id:'', upload: '', name: '', discription: '', alt: '', path: '', original: ''};
+    selectedImg:any = {id:'', title: '', discription: '', alt: '', path: ''};
     galleryImg:any[] = [];
     galleryImgName:string[] = [];
 
@@ -50,15 +52,15 @@ export class ImageService {
 
       // On file Select
 
-    fileChangeEvent(event: any): void {
+    fileChangeEvent(event: any, directUpload: boolean): void {
       if (event.target.files && event.target.files[0]) {
         this.imageChangedEvent = event;
         this.file = event.target.files[0];
-        this.selectedImg.name = this.file.name;
+        this.selectedImg.title = this.file.name;
         const reader = new FileReader();
         reader.onload = e => this.selectedImg.path = reader.result;
         reader.readAsDataURL(this.file);
-        this.onUpload();
+        if(directUpload) this.onUpload();
       }
     }
 
@@ -71,6 +73,7 @@ export class ImageService {
         this.loading = !this.loading;
         this.fileUploadService.upload(this.file).subscribe(
             (event: any) => {
+                console.log(event);
                 if (typeof (event) === 'object') {
                     // Short link via api response
                     this.shortLink = event.link;
