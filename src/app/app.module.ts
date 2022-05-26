@@ -21,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
+import { MatTableModule } from '@angular/material/table';
 
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
@@ -82,7 +83,8 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     MatSelectModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
-    })
+    }),
+    MatTableModule,
   
   ],
   providers: [authInterceptorProviders, { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],

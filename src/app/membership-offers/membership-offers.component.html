@@ -1,0 +1,334 @@
+<div id="kb-membership-product">
+
+    <div id="kb-offer-actions" *ngIf="poupsidebar && automationaddnewaction">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+            
+            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+            <h6><b>NEW OFFER</b></h6>
+            <hr>
+            <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Title</mat-label>
+            <input type="text" matInput placeholder="Ex. 10 Days to Productivity" required minlength="3" maxlength="140" >
+            </mat-form-field>
+            
+            <mat-form-field class="kb-full-width" appearance="fill" >
+                <mat-label>Select Your Product (Optional)</mat-label>
+                <mat-select [formControl]="productoptionals" multiple>
+                  <mat-select-trigger>
+                    {{productoptionals.value ? productoptionals.value[0] : ''}}
+                    <span *ngIf="productoptionals.value?.length > 1" class="example-additional-selection">
+                      (+{{productoptionals.value.length - 1}} {{productoptionals.value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let productoptional of productoptionalList" [value]="productoptional">{{productoptional}}</mat-option>
+                </mat-select>
+                <small>You can always add or remove products later.</small>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Payment Type</mat-label>
+                <mat-select [(value)]="paymenttype" >
+                  <mat-option>None</mat-option>
+                  <mat-option value="onetime">One-time Payment</mat-option>
+                  <mat-option value="multiple">Multiple Payments</mat-option>
+                  <mat-option value="subscription">Subscription</mat-option>
+                  <mat-option value="free">Free</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <hr>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paymenttype=='onetime' || paymenttype=='multiple' || paymenttype=='subscription'" >
+                  <mat-label>Price ({{pricetype}})</mat-label>
+                  <input matInput type="number">
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paymenttype=='onetime' || paymenttype=='multiple' || paymenttype=='subscription'" >
+                <mat-label>Currency</mat-label>
+                <mat-select [(value)]="pricetype" >
+                    <mat-option value="USD">USD - United States Dollar</mat-option>
+                    <mat-option value="AED">AED - United Arab Emirates Dirham</mat-option>
+                    <mat-option value="AFN">AFN - Afghan Afghani</mat-option>
+                    <mat-option value="ALL">ALL - Albanian Lek</mat-option>
+                    <mat-option value="AMD">AMD - Armenian Dram</mat-option>
+                    <mat-option value="ANG">ANG - Netherlands Antillean Gulden</mat-option>
+                    <mat-option value="AOA">AOA - Angolan Kwanza</mat-option>
+                    <mat-option value="ARS">ARS - Argentine Peso</mat-option>
+                    <mat-option value="AUD">AUD - Australian Dollar</mat-option>
+                    <mat-option value="AWG">AWG - Aruban Florin</mat-option>
+                    <mat-option value="AZN">AZN - Azerbaijani Manat</mat-option>
+                    <mat-option value="BAM">BAM - Bosnia and Herzegovina Convertible Mark</mat-option>
+                    <mat-option value="BBD">BBD - Barbadian Dollar</mat-option>
+                    <mat-option value="BDT">BDT - Bangladeshi Taka</mat-option>
+                    <mat-option value="BGN">BGN - Bulgarian Lev</mat-option>
+                    <mat-option value="BIF">BIF - Burundian Franc</mat-option>
+                    <mat-option value="BMD">BMD - Bermudian Dollar</mat-option>
+                    <mat-option value="BND">BND - Brunei Dollar</mat-option>
+                    <mat-option value="BOB">BOB - Bolivian Boliviano</mat-option>
+                    <mat-option value="BRL">BRL - Brazilian Real</mat-option>
+                    <mat-option value="BSD">BSD - Bahamian Dollar</mat-option>
+                    <mat-option value="BWP">BWP - Botswana Pula</mat-option>
+                    <mat-option value="BZD">BZD - Belize Dollar</mat-option>
+                    <mat-option value="CAD">CAD - Canadian Dollar</mat-option>
+                    <mat-option value="CDF">CDF - Congolese Franc</mat-option>
+                    <mat-option value="CHF">CHF - Swiss Franc</mat-option>
+                    <mat-option value="CLP">CLP - Chilean Peso</mat-option>
+                    <mat-option value="CNY">CNY - Chinese Renminbi Yuan</mat-option>
+                    <mat-option value="COP">COP - Colombian Peso</mat-option>
+                    <mat-option value="CRC">CRC - Costa Rican Colón</mat-option>
+                    <mat-option value="CVE">CVE - Cape Verdean Escudo</mat-option>
+                    <mat-option value="CZK">CZK - Czech Koruna</mat-option>
+                    <mat-option value="DJF">DJF - Djiboutian Franc</mat-option>
+                    <mat-option value="DKK">DKK - Danish Krone</mat-option>
+                    <mat-option value="DOP">DOP - Dominican Peso</mat-option>
+                    <mat-option value="DZD">DZD - Algerian Dinar</mat-option>
+                    <mat-option value="EGP">EGP - Egyptian Pound</mat-option>
+                    <mat-option value="ETB">ETB - Ethiopian Birr</mat-option>
+                    <mat-option value="EUR">EUR - Euro</mat-option>
+                    <mat-option value="FJD">FJD - Fijian Dollar</mat-option>
+                    <mat-option value="FKP">FKP - Falkland Pound</mat-option>
+                    <mat-option value="GBP">GBP - British Pound</mat-option>
+                    <mat-option value="GEL">GEL - Georgian Lari</mat-option>
+                    <mat-option value="GIP">GIP - Gibraltar Pound</mat-option>
+                    <mat-option value="GMD">GMD - Gambian Dalasi</mat-option>
+                    <mat-option value="GNF">GNF - Guinean Franc</mat-option>
+                    <mat-option value="GTQ">GTQ - Guatemalan Quetzal</mat-option>
+                    <mat-option value="GYD">GYD - Guyanese Dollar</mat-option>
+                    <mat-option value="HKD">HKD - Hong Kong Dollar</mat-option>
+                    <mat-option value="HNL">HNL - Honduran Lempira</mat-option>
+                    <mat-option value="HRK">HRK - Croatian Kuna</mat-option>
+                    <mat-option value="HTG">HTG - Haitian Gourde</mat-option>
+                    <mat-option value="HUF">HUF - Hungarian Forint</mat-option>
+                    <mat-option value="IDR">IDR - Indonesian Rupiah</mat-option>
+                    <mat-option value="ILS">ILS - Israeli New Sheqel</mat-option>
+                    <mat-option value="INR">INR - Indian Rupee</mat-option>
+                    <mat-option value="ISK">ISK - Icelandic Króna</mat-option>
+                    <mat-option value="JMD">JMD - Jamaican Dollar</mat-option>
+                    <mat-option value="JPY">JPY - Japanese Yen</mat-option>
+                    <mat-option value="KES">KES - Kenyan Shilling</mat-option>
+                    <mat-option value="KGS">KGS - Kyrgyzstani Som</mat-option>
+                    <mat-option value="KHR">KHR - Cambodian Riel</mat-option>
+                    <mat-option value="KMF">KMF - Comorian Franc</mat-option>
+                    <mat-option value="KRW">KRW - South Korean Won</mat-option>
+                    <mat-option value="KYD">KYD - Cayman Islands Dollar</mat-option>
+                    <mat-option value="KZT">KZT - Kazakhstani Tenge</mat-option>
+                    <mat-option value="LAK">LAK - Lao Kip</mat-option>
+                    <mat-option value="LBP">LBP - Lebanese Pound</mat-option>
+                    <mat-option value="LKR">LKR - Sri Lankan Rupee</mat-option>
+                    <mat-option value="LRD">LRD - Liberian Dollar</mat-option>
+                    <mat-option value="LSL">LSL - Lesotho Loti</mat-option>
+                    <mat-option value="MAD">MAD - Moroccan Dirham</mat-option>
+                    <mat-option value="MDL">MDL - Moldovan Leu</mat-option>
+                    <mat-option value="MGA">MGA - Malagasy Ariary</mat-option>
+                    <mat-option value="MKD">MKD - Macedonian Denar</mat-option>
+                    <mat-option value="MMK">MMK - Myanmar Kyat</mat-option>
+                    <mat-option value="MNT">MNT - Mongolian Tögrög</mat-option>
+                    <mat-option value="MOP">MOP - Macanese Pataca</mat-option>
+                    <mat-option value="MRO">MRO - Mauritanian Ouguiya</mat-option>
+                    <mat-option value="MUR">MUR - Mauritian Rupee</mat-option>
+                    <mat-option value="MVR">MVR - Maldivian Rufiyaa</mat-option>
+                    <mat-option value="MWK">MWK - Malawian Kwacha</mat-option>
+                    <mat-option value="MXN">MXN - Mexican Peso</mat-option>
+                    <mat-option value="MYR">MYR - Malaysian Ringgit</mat-option>
+                    <mat-option value="MZN">MZN - Mozambican Metical</mat-option>
+                    <mat-option value="NAD">NAD - Namibian Dollar</mat-option>
+                    <mat-option value="NGN">NGN - Nigerian Naira</mat-option>
+                    <mat-option value="NIO">NIO - Nicaraguan Córdoba</mat-option>
+                    <mat-option value="NOK">NOK - Norwegian Krone</mat-option>
+                    <mat-option value="NPR">NPR - Nepalese Rupee</mat-option>
+                    <mat-option value="NZD">NZD - New Zealand Dollar</mat-option>
+                    <mat-option value="PAB">PAB - Panamanian Balboa</mat-option>
+                    <mat-option value="PEN">PEN - Peruvian Sol</mat-option>
+                    <mat-option value="PGK">PGK - Papua New Guinean Kina</mat-option>
+                    <mat-option value="PHP">PHP - Philippine Peso</mat-option>
+                    <mat-option value="PKR">PKR - Pakistani Rupee</mat-option>
+                    <mat-option value="PLN">PLN - Polish Złoty</mat-option>
+                    <mat-option value="PYG">PYG - Paraguayan Guaraní</mat-option>
+                    <mat-option value="QAR">QAR - Qatari Riyal</mat-option>
+                    <mat-option value="RON">RON - Romanian Leu</mat-option>
+                    <mat-option value="RSD">RSD - Serbian Dinar</mat-option>
+                    <mat-option value="RUB">RUB - Russian Ruble</mat-option>
+                    <mat-option value="RWF">RWF - Rwandan Franc</mat-option>
+                    <mat-option value="SAR">SAR - Saudi Riyal</mat-option>
+                    <mat-option value="SBD">SBD - Solomon Islands Dollar</mat-option>
+                    <mat-option value="SCR">SCR - Seychellois Rupee</mat-option>
+                    <mat-option value="SEK">SEK - Swedish Krona</mat-option>
+                    <mat-option value="SGD">SGD - Singapore Dollar</mat-option>
+                    <mat-option value="SHP">SHP - Saint Helenian Pound</mat-option>
+                    <mat-option value="SLL">SLL - Sierra Leonean Leone</mat-option>
+                    <mat-option value="SOS">SOS - Somali Shilling</mat-option>
+                    <mat-option value="SRD">SRD - Surinamese Dollar</mat-option>
+                    <mat-option value="STD">STD - São Tomé and Príncipe Dobra</mat-option>
+                    <mat-option value="SZL">SZL - Swazi Lilangeni</mat-option>
+                    <mat-option value="THB">THB - Thai Baht</mat-option>
+                    <mat-option value="TJS">TJS - Tajikistani Somoni</mat-option>
+                    <mat-option value="TOP">TOP - Tongan Paʻanga</mat-option>
+                    <mat-option value="TRY">TRY - Turkish Lira</mat-option>
+                    <mat-option value="TTD">TTD - Trinidad and Tobago Dollar</mat-option>
+                    <mat-option value="TWD">TWD - New Taiwan Dollar</mat-option>
+                    <mat-option value="TZS">TZS - Tanzanian Shilling</mat-option>
+                    <mat-option value="UAH">UAH - Ukrainian Hryvnia</mat-option>
+                    <mat-option value="UGX">UGX - Ugandan Shilling</mat-option>
+                    <mat-option value="UYU">UYU - Uruguayan Peso</mat-option>
+                    <mat-option value="UZS">UZS - Uzbekistan Som</mat-option>
+                    <mat-option value="VND">VND - Vietnamese Đồng</mat-option>
+                    <mat-option value="VUV">VUV - Vanuatu Vatu</mat-option>
+                    <mat-option value="WST">WST - Samoan Tala</mat-option>
+                    <mat-option value="XAF">XAF - Central African Cfa Franc</mat-option>
+                    <mat-option value="XCD">XCD - East Caribbean Dollar</mat-option>
+                    <mat-option value="XOF">XOF - West African Cfa Franc</mat-option>
+                    <mat-option value="XPF">XPF - Cfp Franc</mat-option>
+                    <mat-option value="YER">YER - Yemeni Rial</mat-option>
+                    <mat-option value="ZAR">ZAR - South African Rand</mat-option>
+                    <mat-option value="ZMW">ZMW - Zambian Kwacha</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paymenttype=='multiple'" >
+                <mat-label>Number of monthly payments</mat-label>
+                <input type="number" matInput minlength="2" maxlength="12" pattern="[0-9]{1,2}" >
+                <small>Number of payments must be between 2 and 12</small>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paymenttype=='subscription'" >
+                <mat-label>Bill Every</mat-label>
+                <input type="number" matInput minlength="1" maxlength="51" pattern="[0-9]{1,41" >
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paymenttype=='subscription'" >
+                <mat-label>Interval</mat-label>
+                <mat-select  >
+                    <mat-option>None</mat-option>
+                    <mat-option value="week">Week</mat-option>
+                    <mat-option value="month">Month</mat-option>
+                    <mat-option value="year">Year</mat-option>
+                  </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Create Offer</button>
+
+        </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+
+  <div class="container-fluid mb-4">
+    <div class="row">
+      <div class="col-md-4">
+        <h3 class="d-inline-block mr-2">Offers</h3>
+        <button (click)="addnewcourse()" mat-raised-button color="primary" matTooltip="Add New Offer" matTooltipPosition="above" class="mr-2">New
+          Offer <i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-md-8 text-right">
+        <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+            <input type="text" class="form-control" id="offer-search" placeholder="Search Offer">
+            <div class="form-control-position">
+                <i class="fab fa-searchengin"></i>                        
+            </div>
+        </fieldset>
+        <button mat-raised-button matTooltip="Show Statistics" matTooltipPosition="above" class="mr-2"
+        (click)="changemystate('stats'); showstats=true;" [ngClass]="activeoffer=='stats' ? 'active-primary':''">Stats <i
+          class="fa fa-chart-bar" aria-hidden="true"></i></button>
+        <button mat-raised-button matTooltip="Show Published" matTooltipPosition="above" class="mr-2"
+          (click)="changemystate('publish'); showstats=false;" [ngClass]="activeoffer=='publish' ? 'active-primary':''">Published <i
+            class="fa fa-check" aria-hidden="true"></i></button>
+        <button mat-raised-button matTooltip="Show Draft" matTooltipPosition="above" class="mr-2"
+          (click)="changemystate('draft'); showstats=false;" [ngClass]="activeoffer=='draft' ? 'active-primary':''">Draft <i
+            class="fa fa-file" aria-hidden="true"></i></button>
+        <button mat-raised-button matTooltip="Show All" matTooltipPosition="above" class="mr-2"
+          (click)="changemystate('all'); showstats=false;" [ngClass]="activeoffer=='all' ? 'active-primary':''">All <i
+            class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4" *ngIf="!showstats">
+    <div class="row" *ngIf="addnewpages">
+
+      <div class="col-md-4 cardpage mt-4 loadEffect" *ngFor="let kbpage of kbcourses; index as i;">
+        <div>
+          <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Offer Name" matTooltipPosition="above">
+            <h4>{{kbcourses[i]['offer_name']}}</h4>
+            <input type="text" [(ngModel)]="kbcourses[i]['offer_name']">
+          </div>
+          <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+            <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
+              (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
+              <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+              {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+            </span>
+            <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus">
+              <ul class="kb-dropdown__menu">
+                <li>
+                  <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
+                </li>
+                <li>
+                  <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <hr>
+          <p class="kb-pagedate mb-4 mt-4">
+            <span matTooltip="Total Courses Assign" matTooltipPosition="above"><i class="fa fa-book"
+                aria-hidden="true"></i> {{kbcourses[i]['course_assign']}}</span>
+            &nbsp; <span matTooltip="Offer Price" matTooltipPosition="above"><i class="fa fa-dollar-sign"
+                aria-hidden="true"></i> {{kbcourses[i]['offer_price']}} USD </span>
+            &nbsp; <span matTooltip="Total Qty Sold" matTooltipPosition="above"><i class="fa fa-bolt"
+                aria-hidden="true"></i> {{kbcourses[i]['qty_sold']}} </span>
+            &nbsp; <span matTooltip="Net Revenue" matTooltipPosition="above"><i class="fa fa-dollar-sign"
+                aria-hidden="true"></i> {{kbcourses[i]['net_revenue']}} USD</span></p>
+
+          <button class="btn btn-secondary">Preview <i class="far fa-eye"></i></button>
+          <button class="btn btn-primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+          <div class="kb-page-settting" (click)="kbcourses[i].itemshow = !kbcourses[i].itemshow" matTooltip="Settings"
+            matTooltipPosition="above"><i class="fas fa-cog"></i>
+          </div>
+          <div *ngIf="kbcourses[i].itemshow" class="kb-dropdown__panel">
+            <ul class="kb-dropdown__menu">
+              <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
+              <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Export</a></li>
+              <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Stats</a></li>
+              <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
+              <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
+                  Offer</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4" *ngIf="showstats">
+    <div class="row">
+        <div class="col-md-6">
+            <apx-chart
+                [series]="chartOptions.series"
+                [chart]="chartOptions.chart"
+                [markers]="chartOptions.markers"
+                [stroke]="chartOptions.stroke"
+                [dataLabels]="chartOptions.dataLabels"
+                [title]="chartOptions.title"
+            ></apx-chart>
+          </div>
+          <div class="col-md-6">
+            <apx-chart
+                [series]="chartOptions2.series"
+                [chart]="chartOptions2.chart"
+                [xaxis]="chartOptions2.xaxis"
+                [stroke]="chartOptions2.stroke"
+                [dataLabels]="chartOptions2.dataLabels"
+                [yaxis]="chartOptions2.yaxis"
+                [labels]="chartOptions2.labels"
+                [legend]="chartOptions2.legend"
+                [title]="chartOptions2.title"
+                [subtitle]="chartOptions2.subtitle"
+            ></apx-chart>
+          </div>
+    </div>
+  </div>
+
+
+
+</div>

@@ -30,16 +30,6 @@
     font-weight: bold;
     background: #d8c898;
 }
-.loader-transition1-enter-active {
-  transition: all .3s ease;
-}
-.loader-transition1-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.loader-transition1-enter, .loader-transition1-leave-to{
-  transform: translateX(10px);
-  opacity: 0;
-}
 .fixedcategory{
     position: fixed;
     top: 126px;
