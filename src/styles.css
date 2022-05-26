@@ -118,7 +118,6 @@ main {
 
 /* You can add global styles to this file, and also import other style files */
 
-@import url('https://fonts.googleapis.com/css?family=Poppins');
 body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox{
     font-family: Poppins!important;   
 }
@@ -235,3 +234,24 @@ main.insidecont .box {
         }
 }
 /*  animation  */
+
+.offcanvas-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 999;
+    -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
+    animation: animation-offcanvas-fade-in 0.6s ease 1;    
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+@media (max-width: 500px){
+    .symbol .symbol-label {
+        width: 50px;
+        height: 50px;
+    }
+}

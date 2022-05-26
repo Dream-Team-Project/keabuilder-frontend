@@ -40,10 +40,6 @@ export class StyleService {
   background_image_positions= ['top left', 'top center', 'top right', 'center', 'bottom left', 'bottom center', 'bottom right'];
   background_image_repeats= [{name: 'no repeat', value: 'no-repeat'}, {name: 'repeat', value: 'repeat'}, {name: 'repeat x (horizontal)', value: 'repeat-x'}, {name: 'repeat y (vertical)', value: 'repeat-y'}, {name: 'space', value: 'sapce'}, {name: 'round', value: 'round'}];
   background_type:string='color';
-  newImg:any = {id:'', upload: '', name: '', path: ''};
-  galleryImg:string[] = [];
-  galleryImgName:string[] = [];
-  imgSelection:boolean = false;
   // background
   // advance
   zindex:number=0;
@@ -437,11 +433,9 @@ export class StyleService {
   }
 
   blockSetting(build: any) {
-    console.log(build);
     if(build.style) {
         var obj = build.style;
         if(obj['background-image']) {
-          console.log(obj['background-image']);
           var bgImg = obj['background-image'].trim().split('(');
           if(bgImg[0] == 'url') {
               this.background_image.name = 'url(../assets/images/builder/upload_images/'+bgImg[1].split(')')[0]+')';
@@ -514,42 +508,4 @@ export class StyleService {
     }
   }
 
-  addImage(_img:any) {
-    // if(this.selectedTab == 'Background') {
-    //   this.background_image.name = this.uploadImgPath+img.name; 
-    //   this.background_image.active = true;
-    // }
-    // else {
-    //   this._general.selectedBlock.content.src = this.uploadImgPath+img.name;
-    // }
-    this.imgSelection = !this.imgSelection;
-  }
-
-  // onSelected(img:any){
-  //   let files = img.target.files || img.dataTransfer.files;
-  //   if (!files.length)
-  //       return;
-  //   let reader = new FileReader();
-  //   let vm = this;
-  //   reader.onload = (e) => {
-  //       vm.newImg.upload = e.target.result;
-  //       vm.newImg.id = this.galleryImg.length;
-  //       vm.newImg.path = URL.createObjectURL(img.target.files[0]);
-  //       var strn = img.target.files[0].name;
-  //       vm.newImg.name = vm.galleryImgName.includes(strn) ? strn.slice(0, strn.lastIndexOf(".")) + '-' + new Date().getTime() + strn.slice(strn.lastIndexOf("."), strn.length) : strn;
-  //       var obj = new Object();
-  //       obj.name = 'loading.gif';
-  //       vm.galleryImg.unshift(obj);
-  //       axios.post('api/upload_image',vm.newImg)
-  //       .then(response=>{
-  //         this.getUploadImages();
-  //         vm.newImg = {};
-  //       })
-  //   };
-  //   reader.readAsDataURL(files[0]);
-  // }
-
-  selectImg() {
-    // document.getElementById('imgInp').click();
-  }
 }

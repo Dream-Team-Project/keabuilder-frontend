@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,6 +21,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 
 
@@ -53,6 +56,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ImageCropperModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -80,6 +84,8 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     MatCardModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatDividerModule,
+    MatSlideToggleModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
     })

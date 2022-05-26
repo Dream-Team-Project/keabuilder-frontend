@@ -11,7 +11,7 @@
             <!-- sections setting navigation start -->
             <div class="kb-module-setting" *ngIf="section.setting">
                 <span class="kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
-                <span (click)="_general.selectedBlock = section; _style.blockSetting(section); openDialog($event)" matTooltip="Section Setting"
+                <span (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)" matTooltip="Section Setting"
                     matTooltipPosition="above"><i class="far fa-edit"></i></span>
                 <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
                     matTooltipPosition="above"><i class="far fa-copy"></i></span>
@@ -22,7 +22,7 @@
             <!-- add new row option start -->
             <span (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
                 *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row"
-                matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+                matTooltipPosition="right"><i class="fa fa-plus"></i></span>
             <!-- add new row option end -->
             <!-- add new section option start -->
             <span (click)="_section.addSection(si)" *ngIf="section.setting"
@@ -108,7 +108,7 @@
                             <span
                                 (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
                                 *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
-                                matTooltipPosition="above" class="kb-ispan-add add-element"><i
+                                matTooltipPosition="right" class="kb-ispan-add add-element"><i
                                     class="fa fa-plus"></i></span>
                             <!-- add new column option end -->
                         </div>
@@ -117,7 +117,7 @@
                     <!-- add new row option start -->
                     <span *ngIf="row.setting"
                         (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
-                        matTooltip="Add New Row" matTooltipPosition="above"
+                        matTooltip="Add New Row" matTooltipPosition="below"
                         class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
                     <!-- add new row option end -->
                 </div>
