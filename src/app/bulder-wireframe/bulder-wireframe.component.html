@@ -1,0 +1,208 @@
+<app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
+<div #wireframe mwlResizable [enableGhostResize]="true" (resizeEnd)="_general.onResizeEnd($event, wireframe)"
+    id="kb-wireframe" style="background-color: #f7f8f9" [class.openWireframe]="_general.wireframe.open"
+    [class.closeWireframe]="_general.wireframe.close" class="kb-wfs-contain">
+    <div id="kb-wfs-navtimes" [style]="navtimeStyle" (click)="_general.wireframeToggle(false)" [class.kb-wfs-navtimes-btn-open]="_general.wireframe.open"
+    [class.kb-wfs-navtimes-btn-close]="_general.wireframe.close" matTooltip="Close" matTooltipPosition="below">
+        <div class="kb-wfs-navtimes">
+            <div class="kb-wfs-navtime"></div>
+        </div>
+    </div>
+    <div class="wireframe-head">
+        <button (click)="_general.expandAll(sectionUl, true)" mat-raised-button class="kb-btn kb-btn-secondry">Expand
+            All</button>
+        <button (click)="_general.expandAll(sectionUl, false)" mat-raised-button class="kb-btn kb-btn-primary">Collapse
+            All</button>
+    </div>
+    <ul #sectionUl class="kb-drag-container kb-wfs-section" [sortablejs]="_section.sections"
+        [sortablejsOptions]="builderSectionOptions">
+        <li *ngFor="let section of _section.sections, index as si"
+            (mouseenter)="_row.selectedSectionRows = section.rowArr">
+            <span (mouseleave)="section.chngName = false" class="kb-wfs">
+                <span *ngIf="_section.sections.length > 1" class="kb-setting-icon kb-handle-block kb-handle-section">
+                    <i class="fas fa-arrows-alt-v"></i>
+                </span>
+                <span class="kb-wfs-name">
+                    <span *ngIf="!section.chngName else chngInp" matTooltip="Click To Rename" matTooltipPosition="above"
+                        (mouseover)="section.chngName = !section.chngName" class="kb-chngName">{{section.name ?
+                        section.name : 'Section'}}</span>
+                    <ng-template #chngInp>
+                        <span>
+                            <input type="text" placeholder="Section Name" [(ngModel)]="section.name"
+                                (keydown.enter)="section.chngName = !section.chngName" class="kb-chngname-inp">
+                        </span>
+                    </ng-template>
+                </span>
+                <span class="kb-setting-icon">
+                    <i (click)="_section.addSection(si)" matTooltip="Add New Section" matTooltipPosition="above"
+                        class="fa fa-plus"></i>
+                    <i (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
+                        matTooltip="Section Setting" matTooltipPosition="above" class="far fa-edit"></i>
+                    <i (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
+                        matTooltipPosition="above" class="far fa-copy"></i>
+                    <i *ngIf="_section.sections.length > 1" (click)="_section.deleteSection(si)"
+                        matTooltip="Delete Section" matTooltipPosition="above" class="far fa-trash-alt"></i>
+                    <i (click)="_general.expandToggle(rowUl)" class="fa fa-angle-down"
+                        [style.transform]="'rotate('+(rowUl.style.maxHeight != '0px' ? '180' : '0') +'deg)'"
+                        [matTooltip]="rowUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
+                        matTooltipPosition="above"></i>
+                </span>
+            </span>
+            <ul #rowUl [style.maxHeight]="'fit-content'" name="row" class="kb-drag-container kb-wfs-row kb-block-shift"
+                [sortablejs]="section.rowArr" [sortablejsOptions]="builderRowOptions">
+                <li *ngFor="let row of section.rowArr, index as ri" (mouseenter)="_row.selectedRow = row;">
+                    <span (mouseleave)="row.chngName = false" class="kb-wfs">
+                        <span *ngIf="_section.sections.length > 1 || section.rowArr.length > 1"
+                            class="kb-setting-icon kb-handle-block kb-handle-row">
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </span>
+                        <span class="kb-wfs-name">
+                            <span *ngIf="!row.chngName else chngInp" matTooltip="Click To Rename"
+                                matTooltipPosition="above" (mouseover)="row.chngName = !row.chngName"
+                                class="kb-chngName">{{row.name ? row.name : 'Row'}}</span>
+                            <ng-template #chngInp>
+                                <span>
+                                    <input type="text" placeholder="Row Name" [(ngModel)]="row.name"
+                                        (keydown.enter)="row.chngName = !row.chngName" class="kb-chngname-inp">
+                                </span>
+                            </ng-template>
+                        </span>
+                        <span class="kb-setting-icon">
+                            <i (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
+                                matTooltip="Add New Row" matTooltipPosition="above" class="fa fa-plus"></i>
+                            <i *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
+                                matTooltip="Column Structure" matTooltipPosition="above" class="fa fa-columns"></i>
+                            <i (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
+                                matTooltip="Row Setting" matTooltipPosition="above" class="far fa-edit"></i>
+                            <i (click)="_row.duplicateRow(section.rowArr, row, ri)" matTooltip="Duplicate Row"
+                                matTooltipPosition="above" class="far fa-copy"></i>
+                            <i (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
+                                matTooltipPosition="above" class="far fa-trash-alt"></i>
+                            <i (click)="_general.expandToggle(columnUl)" class="fa fa-angle-down"
+                                [style.transform]="'rotate('+(columnUl.style.maxHeight != '0px' ? '180' : '0') +'deg)'"
+                                [matTooltip]="columnUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
+                                matTooltipPosition="above"></i>
+                        </span>
+                    </span>
+                    <ul #columnUl [style.maxHeight]="'fit-content'" name="column"
+                        class="kb-drag-container kb-wfs-column" [sortablejs]="row.columnArr"
+                        [sortablejsOptions]="builderColumnOptions">
+                        <li class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
+                            (mouseenter)="_element.selectedElements = column.elementArr">
+                            <span (mouseleave)="column.chngName = false" class="kb-wfs">
+                                <span *ngIf="row.columnArr.length > 1"
+                                    class="kb-setting-icon kb-handle-block kb-handle-column">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                </span>
+                                <span class="kb-wfs-name">
+                                    <span *ngIf="!column.chngName else chngInp" matTooltip="Click To Rename"
+                                        matTooltipPosition="above" (mouseover)="column.chngName = !column.chngName"
+                                        class="kb-chngName">{{column.name ? column.name : 'Column'}}</span>
+                                    <ng-template #chngInp>
+                                        <span>
+                                            <input type="text" placeholder="Column Name" [(ngModel)]="column.name"
+                                                (keydown.enter)="column.chngName = !column.chngName"
+                                                class="kb-chngname-inp">
+                                        </span>
+                                    </ng-template>
+                                </span>
+                                <span class="kb-setting-icon">
+                                    <i *ngIf="row.columnArr.length < 6"
+                                        (click)="_column.addColumn(row.rowSize,ci); _general.expandOnAction(columnUl)"
+                                        matTooltip="Add New Column" matTooltipPosition="above" class="fa fa-plus"></i>
+                                    <i *ngIf="row.columnArr.length < 6"
+                                        (click)="_column.duplicateColumn(column,ci); _general.expandOnAction(columnUl)"
+                                        matTooltip="Duplicate Column" matTooltipPosition="above"
+                                        class="far fa-copy"></i>
+                                    <i *ngIf="row.columnArr.length > 1"
+                                        (click)="_column.deleteColumn(row.columnArr,ci); _general.expandOnAction(columnUl)"
+                                        matTooltip="Delete Column" matTooltipPosition="above"
+                                        class="far fa-trash-alt"></i>
+                                </span>
+                            </span>
+                            <ul name="element" class="kb-drag-container kb-wfs-element" [sortablejs]="column.elementArr"
+                                [sortablejsOptions]="builderElementOptions">
+                                <li *ngFor="let element of column.elementArr, index as ei">
+                                    <span (mouseleave)="element.chngName = false" class="kb-wfs">
+                                        <span class="kb-setting-icon kb-handle-block kb-handle-element">
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                        </span>
+                                        <span class="kb-wfs-name">
+                                            <span *ngIf="!element.chngName else chngInp" matTooltip="Click To Rename"
+                                                matTooltipPosition="above"
+                                                (mouseover)="element.chngName = !element.chngName"
+                                                class="kb-chngName">{{element.name ? element.name : element.content.name
+                                                | titlecase}}</span>
+                                            <ng-template #chngInp>
+                                                <span>
+                                                    <input type="text" placeholder="Element Name"
+                                                        [(ngModel)]="element.name"
+                                                        (keydown.enter)="element.chngName = !element.chngName"
+                                                        class="kb-chngname-inp">
+                                                </span>
+                                            </ng-template>
+                                        </span>
+                                        <span class="kb-setting-icon">
+                                            <i (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
+                                                matTooltip="Add New Element" matTooltipPosition="above"
+                                                class="fa fa-plus"></i>
+                                            <i (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
+                                                matTooltip="Element Setting" matTooltipPosition="above"
+                                                class="far fa-edit"></i>
+                                            <i (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
+                                                matTooltip="Duplicate Element" matTooltipPosition="above"
+                                                class="far fa-copy"></i>
+                                            <i (click)="_element.deleteElement(column.elementArr, ei)"
+                                                matTooltip="Delete Element" matTooltipPosition="above"
+                                                class="far fa-trash-alt"></i>
+                                        </span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div *ngIf="column.elementArr == 0" class="kb-wfs-add-block" matTooltip="Add New Element"
+                                matTooltipPosition="above"
+                                (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)">
+                                <span class="kb-wfs-addnew"><i class="fa fa-plus"></i></span>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li *ngIf="section.rowArr.length == 0" class="kb-wfs">
+                    <div class="kb-wfs-add-block"
+                        (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
+                        matTooltip="Add New Row" matTooltipPosition="below"><span class="kb-wfs-addnew"><i
+                                class="fa fa-plus"></i></span></div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
+</div>
+<!-- <div
+#rectangle
+class="rectangle"
+mwlResizable
+[enableGhostResize]="true"
+(resizeEnd)="_general.onResizeEnd($event, rectangle)"
+>
+<div
+  class="resize-handle-top"
+  mwlResizeHandle
+  [resizeEdges]="{ top: true }"
+></div>
+<div
+  class="resize-handle-left"
+  mwlResizeHandle
+  [resizeEdges]="{ left: true }"
+></div>
+<div
+  class="resize-handle-right"
+  mwlResizeHandle
+  [resizeEdges]="{ right: true }"
+></div>
+<div
+  class="resize-handle-bottom"
+  mwlResizeHandle
+  [resizeEdges]="{ bottom: true }"
+></div>
+</div> -->

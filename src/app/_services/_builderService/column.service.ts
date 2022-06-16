@@ -21,6 +21,16 @@ export class ColumnService {
   
   constructor(private _general: GeneralService, private _row: RowService) { }
 
+  filterCls(row: { columnArr: any[]; rowSize: string; }) {
+    var rowCls = 'kb-';
+    row.columnArr.forEach(item=>{
+      if(item.width != 'equal') {
+        rowCls = rowCls + item.width + '-';
+      }
+    })
+    rowCls != 'kb-' ? row.rowSize = rowCls + 'block' : '';
+  }
+
  
   createColumn(rowSize: string, i: number) {
     var width = rowSize.split('-');
@@ -58,7 +68,6 @@ export class ColumnService {
   }
 
   deleteColumn(columns: any[], index: any) {
-    console.log('hello');
       columns.splice(index, 1);
       this.resizeColumn(columns);
   }    

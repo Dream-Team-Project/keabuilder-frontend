@@ -1,16 +1,52 @@
 import { Injectable } from '@angular/core';
-import { ConnectableObservable } from 'rxjs';
 import { GeneralService } from './general.service';
+import { ImageService } from '../image.service';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class StyleService {
-  // content
-  font= {value: '16px'};
-  fontRange:any= {value: 16, max: 120, type: 'px'};
-  // general
+  // content/element styling
+  // text
+  font_size = {value: '16px'};
+  font_sizeRange:any = {value: 16, max: 100, type: 'px'};
+  font_weight = {name: 'normal', value:400};
+  font_weight_types = [
+    {name:'thin', value:100},
+    {name:'extra light (ultra light)', value:200},
+    {name:'light', value:300},
+    {name:'normal', value:400},
+    {name:'medium', value:500},
+    {name:'semi bold (demi bold)', value:600},
+    {name:'bold', value:700},
+    {name:'extra bold (ultra bold)', value:800},
+    {name:'black (heavy)', value:900},];
+  font_style = 'normal';
+  font_style_types = ['normal','italic','oblique'];
+  font_family = 'poppins';
+  font_family_types = ['Arial','Arial Black','Courier New','cursive','fantasy','Georgia','Helvetica','Impact','Lucida Console','Lucida Sans Unicode','monospace','poppins','sans-serif','serif','Tahoma','Times New Roman','Verdana'];
+  text_color = 'rgba(0,0,0,1)';
+  text_align = 'left';
+  text_transform = 'none';
+  text_transform_types = ['capitalize','uppercase','lowercase', 'none'];
+  line_height = {value: 'normal'};
+  line_heightRange:any = {value: 0, max: 100, type: 'px'};
+  letter_spacing = {value: 'normal'};
+  letter_spacingRange:any = {value: 0, min: -50, max: 50, type: 'px'};
+  // text
+  // image
+  image_objectfit='fill';
+  image_objectfit_types= ['fill','cover','contain','scale-down','none'];
+  // image
+  // button
+  button_text='Read More';
+  button_subtext='Sub Text';
+  button_link='#';
+  button_subfont_size = {value: '80'};
+  button_subfont_sizeRange:any = {value: 80, max: 200, type: '%'};
+  // button
+    // general
   width= {value: '100%'};
   widthRange:any= {value: 100, max: 100, type: '%'};
   height= {value: 'auto'};
@@ -20,6 +56,7 @@ export class StyleService {
   margin= {top: '0px', bottom: '0px', left: '0px', right: '0px'};
   p_link= {tb: false, lr: false, a: false};
   padding= {top: '0px', bottom: '0px', left: '0px', right: '0px'};
+  columnGap = 0;
   // general
   // border
   b_link= {tb: true, lr: true, a: true};
@@ -45,7 +82,18 @@ export class StyleService {
   zindex:number=0;
   // advance
 
-  constructor(private _general: GeneralService) {
+  constructor(private _general: GeneralService, private _image: ImageService) {
+  }
+
+  // important functions will be used in future
+
+  strToObjCss(css:any) {
+    var cssStr = '';
+    css.split(';').forEach((val: any) => {
+      var attr = val.split(':');
+      cssStr += '"'+attr[0]+'":"'+attr[1]+'",';
+    });
+    return JSON.parse('{'+cssStr.slice(0, -1)+'}');
   }
 
   curS() {
@@ -66,29 +114,60 @@ export class StyleService {
             ';z-index:'+css['z-index'];
   }
 
-  currentStyling() {        
-    return { 
-      'margin': this.getMargin(),
-      'padding': this.getPadding(),
-      'border-width': this.border.top + ' '  + this.border.right + ' ' + this.border.bottom + ' ' + this.border.left,
-      'border-radius': this.border_radius.top_left + ' '  + this.border_radius.top_right + ' ' + this.border_radius.bottom_right + ' ' + this.border_radius.bottom_left, 
-      'border-color': this.border_color,
-      'border-style': this.border_style,
-      'background-color': this.background_color,
-      'background-image': this.background_type == 'image' ? 'url(../assets/images/builder/upload_images/'+this.background_image.name+')' : this.background_type == 'gradient' ? this.getBackgroundGradient() : '',
-      'background-size': this.background_type == 'image' ? this.background_image.size : '',
-      'background-position': this.background_type == 'image' ? this.background_image.position : '',
-      'background-repeat': this.background_type == 'image' ? this.background_image.repeat.value : '',
-      'width': this.width.value,
-      'height': this.height.value,
-      'z-index': this.zindex == 0 ? 'auto' : this.zindex,
+  // important functions will be used in future
+
+  currentStyling() {  
+      return { 
+        'margin': this.getMargin(),
+        'padding': this.getPadding(),
+        'border-width': this.getBorder(),
+        'border-radius': this.getBorderRadius(), 
+        'border-color': this.border_color,
+        'border-style': this.border_style,
+        'background-color': this.background_color,
+        'background-image': this.background_type == 'image' ? 'url('+this.background_image.name+')' : this.background_type == 'gradient' ? this.getBackgroundGradient() : '',
+        'background-size': this.background_type == 'image' ? this.background_image.size : '',
+        'background-position': this.background_type == 'image' ? this.background_image.position : '',
+        'background-repeat': this.background_type == 'image' ? this.background_image.repeat.value : '',
+        'width': this.width.value,
+        'height': this.height.value,
+        'z-index': this.zindex == 0 ? 'auto' : this.zindex,
+      }
+  }
+
+  textStyling() {
+    return {
+      'font-size': this.font_size.value,
+      'font-weight': this.font_weight.value,
+      'font-style': this.font_style,
+      'font-family': this.font_family,
+      'color': this.text_color,
+      'text-align': this.text_align,
+      'text-transform': this.text_transform,
+      'line-height': this.line_height.value,
+      'letter-spacing': this.letter_spacing.value
     }
   }
 
-  getFontStyling() {
+  imageStyling() {
     return {
-      'font-size': this.font.value,
+      'object-fit': this.image_objectfit
     }
+  }
+
+  buttonStyling() {
+    var btnS = {
+      'font-size': this.font_size.value,
+      'font-weight': this.font_weight.value,
+      'font-style': this.font_style,
+      'font-family': this.font_family,
+      'color': this.text_color,
+      'text-align': this.text_align,
+      'text-transform': this.text_transform,
+      'line-height': this.line_height.value,
+      'letter-spacing': this.letter_spacing.value
+    }
+    return {...btnS, ...this.currentStyling()}
   }
 
   getMargin() {
@@ -140,13 +219,26 @@ export class StyleService {
     else return this.padding.top + ' '  + this.padding.right + ' ' + this.padding.bottom + ' ' + this.padding.left;
   }
 
+  getBorder() {
+    if(this.b_link.a) return this.border.top;
+    else if(this.b_link.tb && this.b_link.lr) return this.border.top + ' ' + this.border.left;
+    else if(this.b_link.tb) return this.border.top + ' '  + this.border.right + ' ' + this.border.top + ' ' + this.border.left;
+    else if(this.b_link.lr) return this.border.top + ' ' + this.border.left + ' '  + this.border.bottom;
+    else return this.border.top + ' '  + this.border.right + ' ' + this.border.bottom + ' ' + this.border.left;
+  }
+
+  getBorderRadius() {
+    if(this.br_link) return this.border_radius.top_left;
+    else return this.border_radius.top_left + ' '  + this.border_radius.top_right + ' ' + this.border_radius.bottom_right + ' ' + this.border_radius.bottom_left;
+  }
+
   getBackgroundGradient() {
     return this.background_gradient.type+'-gradient('+(this.background_gradient.type=='radial'?'circle at '+this.background_gradient.radial_direction:this.background_gradient.direction + 'deg') + ', ' +this.background_gradient.start+ ' ' + this.background_gradient.startPosition + '%, ' +this.background_gradient.end+ ' ' + this.background_gradient.endPosition +'%)';
   }
 
   demoBorder() {
     return {
-      'border-radius': this.br_link ? this.border_radius.top_left : this.border_radius.top_left + ' ' + this.border_radius.top_right + ' ' + this.border_radius.bottom_left + ' ' + this.border_radius.bottom_right,
+      'border-radius': this.getBorderRadius(),
       'border-color': this.border_color,
       'border-style': this.border_style
     }
@@ -172,8 +264,8 @@ export class StyleService {
     else this.blockAlign = pos;
   }
   
-  compareImgRepeat(imgR1:any, imgR2:any) {
-    return imgR1.name === imgR2.name && imgR1.value === imgR2.value;
+  compareOptValue(item1:any, item2:any) {
+    return item1.name === item2.name && item1.value === item2.value;
   }
 
   reverseValue(val:any, $event: { target: any; }) {
@@ -189,17 +281,58 @@ export class StyleService {
     return value;
   }
 
-  fontChange(val:any) {
+  fontSizeChange(val:any) {
     var vm = this;
-    vm.font.value = vm.updateRexVal(val, 'wh');
-    vm.fontRange.value = vm.font.value != 'auto' ? vm.font.value.replace(/[^0-9]/g, '') : 100;
-    if(vm.font.value[vm.font.value.length-1] != '%' && vm.font.value != 'auto') {
-      vm.fontRange.max = '120';
-      vm.fontRange.type = 'px';
+    if(val) {
+      vm.font_size.value = vm.updateRexVal(val, 'fs');
+      vm.font_sizeRange.value = vm.font_size.value != 'auto' ? vm.font_size.value.replace(/[^0-9]/g, '') : 100;
+      if(vm.font_size.value[vm.font_size.value.length-1] != '%' && vm.font_size.value != 'auto') {
+        vm.font_sizeRange.type = 'px';
+      }
+      else {
+        vm.font_sizeRange.type = '%';
+      }
     }
     else {
-      vm.fontRange.max = '100';
-      vm.fontRange.type = '%';
+      vm.font_size.value = this._general.selectedBlock.content.name == 'button' ? '14px' : '16px';
+      vm.font_sizeRange.value = this._general.selectedBlock.content.name == 'button' ? 14 : 16;
+      vm.font_sizeRange.type = 'px';
+    }
+  }
+
+  lineHeightChange(val:any) {
+    var vm = this;
+    if(val) {
+      if(isNaN(val)) {
+        console.log(val);
+          vm.line_height.value = vm.updateRexVal(val, 'lh');
+          vm.line_heightRange.value = vm.line_height.value != 'auto' ? vm.line_height.value.replace(/[^0-9]/g, '') : 0;
+          if(vm.line_height.value[vm.line_height.value.length-1] != '%' && vm.line_height.value != 'auto') {
+            vm.line_heightRange.type = 'px';
+          }
+          else {
+            vm.line_height.value = val;
+            vm.line_heightRange.type = '%';
+          }
+      }
+      else {
+        vm.line_heightRange.value = val;
+      }
+    }
+    else {
+      vm.line_height.value = 'normal';
+      vm.line_heightRange.value = '0';
+      vm.line_heightRange.type = 'px';
+    }
+  }
+
+  letterSpacingChange(val:any) {
+    var vm = this;
+    vm.letter_spacing.value = vm.updateRexVal(val, 'ls');
+    vm.letter_spacingRange.value = vm.letter_spacing.value != 'auto' ? vm.letter_spacing.value.replace(/[^0-9]/g, '') : 0;
+    if(vm.letter_spacing.value[vm.letter_spacing.value.length-1] == '%' || vm.letter_spacingRange.value == 0) {
+      vm.letter_spacing.value = 'normal';
+      vm.letter_spacingRange.type = 'px';
     }
   }
 
@@ -244,7 +377,7 @@ export class StyleService {
   // general values
 
   updateRexVal(val: any | string[], op: string | undefined | void) {
-    if(val[0] != 'a') {
+    if(val[0].toLowerCase() != 'a') {
       let unit = 'px', len = val.length;
       val.includes('px') && val.lastIndexOf('px') == len - 2 ? unit = 'px' : '';
       val.includes('%') && val.lastIndexOf('%') == len - 1 ? unit = '%' : '';
@@ -256,6 +389,7 @@ export class StyleService {
       val.includes('vh') && val.lastIndexOf('vh') == len - 2 ? unit = 'vh' : '';
       val.includes('vw') && val.lastIndexOf('vw') == len - 2 ? unit = 'vw' : '';
       var result = val.replace(/[^0-9]/g, '') ? this.getNumVal(val) : '0';
+      result = result.replace(/-/g, '');
       if(op == 'inc') {
         return (parseInt(result)+1).toString() + unit;
       }
@@ -336,53 +470,89 @@ export class StyleService {
 
   updateStyle() {
     this._general.selectedBlock.style = this.currentStyling();
+    if(this._general.selectedBlock.type == 'element') {
+      if(this._general.selectedBlock.content.name == 'text' || this._general.selectedBlock.content.name == 'heading') {
+        this._general.selectedBlock.content.style = this.textStyling();
+      }
+      else if(this._general.selectedBlock.content.name == 'image') {
+        this._general.selectedBlock.content.style = this.imageStyling();
+      }
+      else if(this._general.selectedBlock.content.name == 'button') {
+        this._general.selectedBlock.content.style = this.buttonStyling();
+        this._general.selectedBlock.content.text = this.button_text;
+        this._general.selectedBlock.content.subtext = this.button_subtext;
+        this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
+        this._general.selectedBlock.content.link = this.button_link;
+      }
+    }
     if(this._general.selectedBlock.type != "column") {
       this._general.selectedBlock = '';
     }
+    this._general.openSnackBar('Changes has been saved','Done');
   }
 
   resetStyling() {
     this.margin.top = '0px';
     this.margin.right = '0px';
-    this.margin.bottom = '0px';
+    this.margin.bottom = this._general.selectedBlock.type == 'element' ? '10px' : '0px';
     this.margin.left = '0px';
 
-    var ptb = this._general.selectedBlock.type == 'element' || this._general.selectedBlock.type == 'column' ? '0px' : this._general.selectedBlock.type == 'row' ? '30px' : '60px';
-    var plr = this._general.selectedBlock.type == 'column' ? '20px' :'0px';
+    var ptb, plr, brw, br, bclr, bgclr;
+
+    if(this._general.selectedBlock.content?.name == 'button') {
+      ptb = '4px';
+      plr = '16px';
+      brw = '2px';
+      br = '5px';
+      bclr = '#1BC5BD';
+      bgclr = '#1BC5BD';
+    }
+    else {
+      ptb = this._general.selectedBlock.type == 'element' || this._general.selectedBlock.type == 'column' ? '0px' : this._general.selectedBlock.type == 'row' ? '30px' : '60px';
+      plr = this._general.selectedBlock.type == 'column' ? '20px' :'0px';
+      brw = '0px';
+      br = '0px';
+      bclr = 'rgba(0,0,0,1)';
+      bgclr = 'rgba(0,0,0,0)';
+    }
 
     this.padding.top = ptb;
     this.padding.right = plr;
     this.padding.bottom = ptb;
     this.padding.left = plr;
 
-    this.border.top = '0px';
-    this.border.right = '0px';
-    this.border.bottom = '0px';
-    this.border.left = '0px';
+    this.border.top = brw;
+    this.border.right = brw;
+    this.border.bottom = brw;
+    this.border.left = brw;
 
-    this.border_radius.top_left = '0px';
-    this.border_radius.top_right = '0px';
-    this.border_radius.bottom_left = '0px';
-    this.border_radius.bottom_right = '0px';
+    this.border_radius.top_left = br;
+    this.border_radius.top_right = br;
+    this.border_radius.bottom_left = br;
+    this.border_radius.bottom_right = br;
 
     this.border_style = 'solid';
-    this.border_color = 'rgba(0,0,0,1)';
+    this.border_color = bclr;
 
-    this.background_color = 'rgba(0,0,0,0)';
+    this.background_color = bgclr;
 
     this.blockAlign = '';
 
     if(this._general.selectedBlock.type == 'row') {
       this.width.value = '80%';
-      this.widthRange.value = '80';
+      this.widthRange.value = 80;
+    }
+    else if(this._general.selectedBlock.content?.name == 'button') {
+      this.width.value = 'auto';
+      this.widthRange.value = 100;
     }
     else {
       this.width.value = '100%';
-      this.widthRange.value = '100';
+      this.widthRange.value = 100;
     }
 
     this.height.value = 'auto';
-    this.heightRange.value = '100';
+    this.heightRange.value = 100;
 
     this.zindex = 0;
 
@@ -399,9 +569,10 @@ export class StyleService {
     this.b_link.lr = true;
 
     this.br_link = true;
-
+   
     this.resetBackgroundImage();
     this.resetBackgroundGradient();
+    if(this._general.selectedBlock.type == 'element') this.resetElementStyling();
   }
 
   resetBackgroundImage() {
@@ -423,22 +594,59 @@ export class StyleService {
       this.background_gradient.endPosition = 100; 
   }
 
-  strToObjCss(css:any) {
-    var cssStr = '';
-    css.split(';').forEach((val: any) => {
-      var attr = val.split(':');
-      cssStr += '"'+attr[0]+'":"'+attr[1]+'",';
-    });
-    return JSON.parse('{'+cssStr.slice(0, -1)+'}');
+  resetElementStyling() {
+    // text
+    var fsv, fsr, fwn, fwv, tc, ta;
+    if(this._general.selectedBlock.content.name == 'button'){
+      fsv = '14px';
+      fsr = 14;
+      fwn = 'semi bold (demi bold)';
+      fwv = 600;
+      tc = 'rgba(255, 255, 255, 1)';
+      ta = 'center';
+    }
+    else {
+      fsv = '16px';
+      fsr = 16;
+      fwn = 'normal';
+      fwv = 400;
+      tc = 'rgba(0,0,0,1)';
+      ta = 'left';
+    }
+    this.font_size.value = fsv;
+    this.font_sizeRange.value = fsr;
+    this.font_weight.name = fwn;
+    this.font_weight.value = fwv;
+    this.text_color = tc;
+    this.text_align = ta;
+    this.font_style = 'normal';
+    this.font_family = 'poppins';
+    this.text_transform = 'none';
+    this.line_height.value = 'normal'
+    this.line_heightRange.value = 0;
+    this.letter_spacing.value = 'normal';
+    this.letter_spacingRange.value = 0;
+    // text
+    // image
+    this.image_objectfit = 'fill';
+    // image
+    // button
+    this.button_text='Read More';
+    this.button_subtext='Sub Text';
+    this.button_subfont_size.value='80%';
+    this.button_subfont_sizeRange.value='80';
+    this.button_link='#';
+    // button
   }
 
   blockSetting(build: any) {
     if(build.style) {
         var obj = build.style;
+        if(build.type == 'element') this.elementSetting(build.content);
         if(obj['background-image']) {
           var bgImg = obj['background-image'].trim().split('(');
           if(bgImg[0] == 'url') {
-              this.background_image.name = 'url(../assets/images/builder/upload_images/'+bgImg[1].split(')')[0]+')';
+              this.background_image.name = bgImg[1].split(')')[0];
               this.background_image.size = obj['background-size'];
               this.background_image.position = obj['background-position'];
               this.background_image.repeat.value = obj['background-repeat'];
@@ -470,42 +678,202 @@ export class StyleService {
             this.resetBackgroundImage();
             this.resetBackgroundGradient();
         }
+        this.background_color = obj['background-color'];
+
         this.width.value = obj.width ? obj.width : '100%';
         this.height.value = obj.height ? obj.height : '100%';
 
-        this.margin.top = obj.margin.split(' ')[0];
-        this.margin.right = obj.margin.split(' ')[1] != 'auto' ? obj.margin.split(' ')[1] : '0px';
-        this.margin.bottom = obj.margin.split(' ')[2];
-        this.margin.left = obj.margin.split(' ')[3] != 'auto' ? obj.margin.split(' ')[3] : '0px';
+        var mg = obj.margin.split(' ');
 
-        obj['margin-left'] == 'auto!important' ? this.blockAlign = 'right' : '';
-        obj['margin-right'] == 'auto!important' ? this.blockAlign = 'left' : '';
-        obj['margin-left'] == 'auto!important' && obj['margin-right'] == 'auto!important' ? this.blockAlign = 'center' : '';
+        if(mg.length == 1) {
+          this.margin.top = mg[0];
+          this.margin.bottom = mg[0];
+          this.margin.right = mg[0] != 'auto' ? mg[0] : '0px';
+          this.margin.left = mg[0] != 'auto' ? mg[0] : '0px';
+          this.m_link.a = true;
+        }
+      
+        else if(mg.length == 2) {
+          this.margin.top = mg[0];
+          this.margin.bottom = mg[0];
+          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
+          this.margin.left = mg[1] != 'auto' ? mg[1] : '0px';
+          this.m_link.a = false;
+        }
+      
+        else if(mg.length == 3) {
+          this.margin.top = mg[0];
+          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
+          this.margin.left = mg[1] != 'auto' ? mg[1] : '0px';
+          this.margin.bottom = mg[2];
+          this.m_link.a = false;
+        }
+      
+        else {
+          this.margin.top = mg[0];
+          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
+          this.margin.bottom = mg[2];
+          this.margin.left = mg[3] != 'auto' ? mg[3] : '0px';       
+          this.m_link.a = false;
+        }
+        
+        this.m_link.tb = this.margin.top == this.margin.bottom;
+        this.m_link.lr = this.margin.right == this.margin.left;  
 
-        this.padding.top = obj.padding.split(' ')[0];
-        this.padding.right = obj.padding.split(' ')[1];
-        this.padding.bottom = obj.padding.split(' ')[2];
-        this.padding.left = obj.padding.split(' ')[3];
+        this.blockAlign = this.margin.right == 'auto' ? 'left' : '';
+        this.blockAlign = this.margin.left == 'auto' ? 'right' : '';
+        this.blockAlign = this.margin.right == 'auto' && this.margin.left == 'auto' ? 'center' : '';
 
-        this.border.top = obj['border-width'].split(' ')[0];
-        this.border.right = obj['border-width'].split(' ')[1];
-        this.border.bottom = obj['border-width'].split(' ')[2];
-        this.border.left = obj['border-width'].split(' ')[3];
+        var pd = obj.padding.split(' ');
 
-        this.border_radius.top_left = obj['border-radius'].split(' ')[0];
-        this.border_radius.top_right = obj['border-radius'].split(' ')[1];
-        this.border_radius.bottom_left = obj['border-radius'].split(' ')[2];
-        this.border_radius.bottom_right = obj['border-radius'].split(' ')[3];
+        if(pd.length == 1) {
+          this.padding.top = pd[0];
+          this.padding.bottom = pd[0];
+          this.padding.right = pd[0];
+          this.padding.left = pd[0];
+          this.p_link.a = true;
+        }
+
+        else if(pd.length == 2) {
+          this.padding.top = pd[0];
+          this.padding.bottom = pd[0];
+          this.padding.right = pd[1];
+          this.padding.left = pd[1];        
+          this.p_link.a = false;
+        }
+
+        else if(pd.length == 3) {
+          this.padding.top = pd[0];
+          this.padding.right = pd[1];
+          this.padding.left = pd[1];
+          this.padding.bottom = pd[2]; 
+          this.p_link.a = false;
+        }
+
+        else {
+          this.padding.top = pd[0];
+          this.padding.right = pd[1];
+          this.padding.bottom = pd[2];
+          this.padding.left = pd[3];           
+          this.p_link.a = false;
+        }
+
+        this.p_link.tb = this.padding.top == this.padding.bottom;
+        this.p_link.lr = this.padding.right == this.padding.left;  
+
+
+        var brd = obj['border-width'].split(' ');
+
+        if(brd.length == 1) {
+          this.border.top = brd[0];
+          this.border.bottom = brd[0];
+          this.border.right = brd[0];
+          this.border.left = brd[0];
+          this.b_link.a = true;
+        }
+
+        else if(brd.length == 2) {
+          this.border.top = brd[0];
+          this.border.bottom = brd[0];
+          this.border.right = brd[1];
+          this.border.left = brd[1];      
+          this.b_link.a = false;
+        }
+
+        else if(brd.length == 3) {
+          this.border.top = brd[0];
+          this.border.right = brd[1];
+          this.border.left = brd[1];
+          this.border.bottom = brd[2];
+          this.b_link.a = false;
+        }
+
+        else {
+          this.border.top = brd[0];
+          this.border.right = brd[1];
+          this.border.bottom = brd[2];
+          this.border.left = brd[3];           
+          this.b_link.a = false;
+        }
+
+        this.b_link.tb = this.border.top == this.border.bottom;
+        this.b_link.lr = this.border.right == this.border.left;  
+
+        var brdr = obj['border-radius'].split(' ');
+
+        if(brdr.length == 1) {
+          this.border_radius.top_left = brdr[0];
+          this.border_radius.top_right = brdr[0];
+          this.border_radius.bottom_right = brdr[0];
+          this.border_radius.bottom_left = brdr[0];
+          this.br_link = true;
+        }
+      
+        else if(brdr.length == 2) {
+          this.border_radius.top_left = brdr[0];
+          this.border_radius.top_right = brdr[1];
+          this.border_radius.bottom_right = brdr[0];
+          this.border_radius.bottom_left = brdr[1];   
+          this.br_link = false;
+        }
+      
+        else if(brdr.length == 3) {
+          this.border_radius.top_left = brdr[0];
+          this.border_radius.top_right = brdr[1];
+          this.border_radius.bottom_left = brdr[1];
+          this.border_radius.bottom_right = brdr[2];
+          this.br_link = false;
+        }
+      
+        else {
+          this.border_radius.top_left = brdr[0];
+          this.border_radius.top_right = brdr[1];
+          this.border_radius.bottom_right = brdr[2];
+          this.border_radius.bottom_left = brdr[3];       
+          this.br_link = false;
+        }
         
         this.border_style = obj['border-style'];
 
         this.border_color = obj['border-color'];
-
-        this.background_color = obj['background-color'];
     }
     else {
       this.resetStyling();
     }
   }
 
+  elementSetting(element: any) {
+    var obj = element.style;
+    if(element.name == 'text' || element.name == 'button') {
+      this.font_size.value = obj['font-size'];
+      this.font_weight.value = obj['font-weight'];
+      this.font_style = obj['font-style'];
+      this.font_family = obj['font-family'];
+      this.text_color = obj['color'];
+      this.text_align = obj['text-align'];
+      this.text_transform = obj['text-transform'];
+      this.line_height.value = obj['line-height'];
+      this.letter_spacing.value = obj['letter-spacing'];
+    }
+    else if(element.name == 'image') {
+      this.image_objectfit = obj['object-fit'];
+    }
+    else if(element.name == 'button') {
+      this.button_text=element.text;
+      this.button_subtext=element.subtext;
+      this.button_subfont_size.value=element.subfont_size;
+      this.button_link=element.link;
+    }
+  }
+  
+  addImage(img:any) {
+    if(this._general.selectedTab == 'Background') {
+      this.background_image.name = !img.ext_link ? this._image.uploadImgPath+img.path : img.path;
+    }
+    else {
+      this._general.selectedBlock.content.src = !img.ext_link ? this._image.uploadImgPath+img.path : img.path;
+    }
+  }
+
 }
+

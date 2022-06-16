@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@tinymce/tinymce-angular": "^6.0.1",
+    "angular-resizable-element": "^5.0.0",
+    "angular-svg-icon": "^13.0.0",
     "apexcharts": "^3.35.2",
     "ng-apexcharts": "^1.7.1",
     "ngx-color": "^7.3.3",

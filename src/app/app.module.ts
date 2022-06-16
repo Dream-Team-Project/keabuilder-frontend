@@ -7,11 +7,13 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ImageCropperModule } from 'ngx-image-cropper';
 
+import { MatListModule } from '@angular/material/list';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatSliderModule } from '@angular/material/slider'
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,7 +25,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -45,6 +50,7 @@ import { NgxColorsModule } from 'ngx-colors';
 import { NgxTinymceModule } from 'ngx-tinymce';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { ResizableModule } from 'angular-resizable-element';
 
 @NgModule({
   declarations: [
@@ -66,6 +72,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     DragDropModule,
     NgxMatColorPickerModule,
     NgxColorsModule,
+    MatListModule,
     MatFormFieldModule,
     MatProgressBarModule,
     MatTabsModule,
@@ -88,6 +95,10 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatSelectModule,
     MatDividerModule,
     MatSlideToggleModule,
+    MatBottomSheetModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    ResizableModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
     }),
@@ -97,8 +108,14 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatChipsModule,
     MatMenuModule,
   
+    ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
+    AngularSvgIconModule.forRoot()
   ],
-  providers: [authInterceptorProviders, { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],
+  providers: [authInterceptorProviders, { 
+    provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
+    MatTableModule
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
