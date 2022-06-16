@@ -1,16 +1,119 @@
 .dragBox {
-    animation: toggleDrag 0.2s ease;
+    animation: bounce 0.2s ease-out;
 }
 
-@keyframes toggleDrag {
+.dragBoxClose {
+    opacity: 0!important;
+    transform: scale(0)!important;
+    animation: bounce 0.2s ease-in;
+    animation-direction: reverse;
+}
+
+span.side-floating-btn-group {
+    position: absolute;
+    left: -100px;
+    top: -24px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    cursor: default;
+    padding: 20px;
+}
+
+button.side-floating-btn {
+    position: relative;
+    padding: 0px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    min-width: 40px;
+    opacity: 1;
+    background-color: var(--section-color);
+    transition: 0.2s ease;
+}
+
+button.side-floating-btn:hover {
+    transform: scale(1.1)
+}
+
+button.side-floating-btn:first-child {
+    top: -5px;
+}
+
+.sidefloatOpen button.side-floating-btn:first-child {
+    animation: tolefttop 0.2s ease;
+}
+
+.sidefloatOpen button.side-floating-btn:last-child {
+    animation: toleftbottom 0.3s ease;
+}
+
+.sidefloatClose button.side-floating-btn:first-child {
+    animation: tolefttop 0.2s ease;
+    animation-direction: reverse;
+}
+
+.sidefloatClose button.side-floating-btn:last-child {
+    animation: toleftbottomreverse 0.3s ease;
+    animation-delay: 0.1s;
+}
+
+@keyframes tolefttop {
+    0% {
+        opacity: 0; 
+        left: 60px;
+        top: 15px;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        left: 0px;
+        top: -5px;
+        transform: scale(1);
+    }  
+}
+
+@keyframes toleftbottom {
+    0% {
+        opacity: 0; 
+        left: 60px;
+        top: -25px;
+        transform: scale(0);
+    }
+    20% {
+        opacity: 0; 
+        left: 60px;
+        top: -25px;
+        transform: scale(0);       
+    }
+    100% {
+        opacity: 1;
+        left: 0px;
+        top: 0px;
+        transform: scale(1);
+    }  
+}
+
+@keyframes toleftbottomreverse {
+    0% {
+        opacity: 1;
+        left: 0px;
+        top: 0px;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0; 
+        left: 60px;
+        top: -25px;
+        transform: scale(0); 
+    }  
+}
+
+@keyframes bounce {
     0% {
         opacity: 0;
         transform: scale(0);
     }
-    /* 80% {
-        opacity: 0.8;
-        transform: scale(1.1);
-    }    */
     100% {
         opacity: 1;
         transform: scale(1);

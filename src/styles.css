@@ -1,27 +1,51 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import url('https://fonts.googleapis.com/css?family=Poppins');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;500;600;700;800;900&display=swap');
+
 
 :root {
-    
     /* builder root */
+    
         --opacity-blue: rgb(24 103 192 / 80%);
         --primary-color: #d8c898;
+        --secondary-color: #6c757d;
         --section-color: #1867c0;
         --row-color: #1BC5BD;
-        --light: #f8f9fa;
+        --kb-light: #f8f9fa;
         --kb-success: #1BC5BD;
         --kb-danger: #dc3545;
         --kb-info: #17a2b8;
         --kb-gray: #e6eaef;
         --kb-dim-black: #22262a66;
-        --kb-mid-black: #22262acc;
-        --text-color: #4c5866;
+        --kb-text-color: #4c5866;
     
     /* builder root */
     
         --clr-primay: #d8c898;
         --clr-light: #fff;
+    }
+    
+    *, ::after, ::before {
+        box-sizing: border-box;
+    }
+
+    * {
+        font-family: Poppins;
+    }
+   
+    h1, h2, h3, h4, h5, h6, p {
+        font-family: inherit;
+        margin: 0;
+    }
+    
+    body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
+        font-family: Poppins;   
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
     }
     
     /* scrolling */
@@ -31,15 +55,15 @@
         transition: 2s ease-in-out;
         z-index: 9999;
     }
+    
+    .kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
+        width: 6px!important;
+    }
 
      *:hover ::-webkit-scrollbar {
         width: 8px;
     }
 
-        
-    .kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
-        width: 6px;
-    }
       
       /* Track */
 
@@ -52,14 +76,12 @@
         }
        
       /* Handle */
-      
-      * ::-webkit-scrollbar-thumb, .kb-scroll ::-webkit-scrollbar-thumb {
-        background-color: var(--opacity-blue);
-      }
 
-      * ::-webkit-scrollbar-thumb, .kb-scroll ::-webkit-scrollbar-thumb {
+      * ::-webkit-scrollbar-thumb, * .kb-scroll ::-webkit-scrollbar-thumb {
+        background-color: var(--section-color);
         border-radius: 5px;
       }
+
       /* Handle on hover */
       /* .kb-scroll ::-webkit-scrollbar-thumb:hover {
         background: #b30000; 
@@ -73,12 +95,23 @@
     background-color: var(--light);
 }
 
-* {
-    font-family: Poppins;   
-}
 main {
     position: relative;
 }
+
+.kb-alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.kb-alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
 .btn-primary{
     background-color: var(--clr-primay);  
     border-color: var(--clr-primay);
@@ -93,40 +126,17 @@ main {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     color: var(--clr-light);
-/* builder root */
-
-    --primary-color: #d8c898;
-    --secondary-color: #6c757d;
-    --section-color: #1867c0;
-    --row-color: #1BC5BD;
-    --light: #f8f9fa;
-    --padding: 60px 0px;
-    --border-width: 0px;
-    --kb-success: #1BC5BD;
-    --kb-danger: #dc3545;
-    --kb-info: #17a2b8;
-    --kb-gray: #e6eaef;
-    --kb-dim-black: #22262a66;
-    --kb-mid-black: #22262acc;
-    --box-shadow: box-shadow: 4px 8px 16px rgb(0 0 0 / 16%);
-
-/* builder root */
-
-    --clr-primay: #d8c898;
-    --clr-light: #fff;
 }
 
 /* You can add global styles to this file, and also import other style files */
 
-body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox{
-    font-family: Poppins!important;   
-}
 .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background{
     background-color: var(--clr-primay); 
 }
 .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background{
     background-color: var(--secondary-color);
 }
+input:focus, button:focus{outline: none!important;}
 a{
 text-decoration: none!important;
 }
@@ -247,6 +257,57 @@ main.insidecont .box {
     animation: animation-offcanvas-fade-in 0.6s ease 1;    
     background: rgba(0, 0, 0, 0.1);
 }
+
+/* resizable */
+
+.rectangle {
+    position: relative;
+    width: 300px;
+    height: 150px;
+    background-color: #fd4140;
+    border: solid 1px #121621;
+    color: #121621;
+  }
+
+  mwlResizable {
+    box-sizing: border-box;
+  }
+
+  .resize-handle-top,
+  .resize-handle-bottom {
+    position: absolute;
+    height: 5px;
+    cursor: row-resize;
+    width: 100%;
+  }
+
+  .resize-handle-top {
+    top: 0;
+  }
+
+  .resize-handle-bottom {
+    bottom: 0;
+  }
+
+  .resize-handle-left,
+  .resize-handle-right {
+    position: absolute;
+    height: 100%;
+    cursor: col-resize;
+    width: 5px;
+  }
+
+  .resize-handle-left {
+    left: 0;
+    top: 0;
+  }
+
+  .resize-handle-right {
+    right: 0;
+    top: 0;
+  }
+
+/* resizable */
 
 
 @media (max-width: 500px){

@@ -9,10 +9,10 @@ export class RowService {
 
   distroyDialogue = new Subject<any>();
   selectedRow:any = '';
-  rowObj = {id: 0, type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: ''};
+  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: '', columnGap: 0};
   selectedSectionRows = [];
   row_index:number = 0;
-  columnObj = {id: 0, type: 'column', elementArr: [], name: '', chngName: false, style: '', };
+  columnObj:any = {id: '', type: 'column', elementArr: [], name: '', chngName: false, style: '', };
   rowTypes:Array<any> = [{cls: '1', appendCls: 'full', nofcolumn: 1}, {cls: '1-2', appendCls: 'half', nofcolumn: 2}, {cls: '1-3', appendCls: 'three', nofcolumn: 3}, 
   {cls: '1-4', appendCls: 'four', nofcolumn: 4}, {cls: '1-5', appendCls: 'five', nofcolumn: 5}, {cls: '1-6', appendCls: 'six', nofcolumn: 6}, 
   {cls: '40-60', appendCls: 'f-s', nofcolumn: 2}, {cls: '60-40', appendCls: 's-f', nofcolumn: 2}, {cls: '25-75', appendCls: 'tf-sf', nofcolumn: 2},
@@ -39,10 +39,12 @@ export class RowService {
   addRow(rowSize: string, column: any[]) {
     if(!this.selectedRow) {
       var tempObj = JSON.parse(JSON.stringify(this.rowObj));
+      // console.log(column);
       for(var i=0; i<column.length; i++) {
         tempObj.columnArr.push(this.createColumn(rowSize,i));
       }
       tempObj.rowSize = rowSize;
+      console.log(this.selectedSectionRows);
       this.appendRow(this.selectedSectionRows, tempObj, this.row_index);
       this.row_index = 0;
     }
@@ -54,7 +56,6 @@ export class RowService {
       this.selectedRow.rowSize = rowSize;
     }
     this.selectedRow = '';
-    this._general.blockSelection = '';
     this.distroyDialogue.next(void 0);
   }
 
@@ -64,7 +65,8 @@ export class RowService {
   }
 
   deleteRow(rowArr: any[], index: any) {
-      rowArr.splice(index, 1);
+    console.log(index);
+    rowArr.splice(index, 1);
   }    
 
   appendRow(rowArr: any[], tempObj: any, index: number) {

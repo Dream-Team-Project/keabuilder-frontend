@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef} from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Options } from 'sortablejs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavbarService } from '../_services/navbar.service';
 import { SectionService } from '../_services/_builderService/section.service';
 import { RowService } from '../_services/_builderService/row.service';
@@ -22,7 +21,6 @@ import { ImageService } from '../_services/image.service';
 
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
-  showEditor:boolean = false;
   connectWParent:boolean = false;
 
   @Input()
@@ -41,6 +39,9 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   private _overlayRef!: OverlayRef;
   private _portal!: TemplatePortal;
 
+  dragBoxAnime:any = {open: false, close: false};
+  imgBoxAnime:any = {open: false, close: false};
+  backToRow:boolean = false;
 
   constructor(
     private _nav: NavbarService,
@@ -54,14 +55,13 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     public _image: ImageService,
     // builder services end
     private _overlay: Overlay,
-    private _snackBar: MatSnackBar,
     private _viewContainerRef: ViewContainerRef) {
       this._nav.hide();
       this._row.getDialogueEvent().subscribe(()=>{
-        this.overlayRefDetach();
+      this.overlayRefDetach(false);
       })
       this._element.getDialogueEvent().subscribe(()=>{
-        this.overlayRefDetach();
+      this.overlayRefDetach(false);
       })
    }
 
@@ -72,37 +72,81 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      this.overlayRefDetach();
+      this.overlayRefDetach(true);
     });
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+  openImgSelBox() {
+      this.imgBoxAnime.open = true;
+      this._general.imgSelection = true;
+    setTimeout(()=>{
+      this.imgBoxAnime.open = false;
+    },200)
+  }
+
+  closeImgSelBox() {
+      this.imgBoxAnime.close = true;
+    setTimeout(()=>{
+      this._general.imgSelection = false;
+      this.imgBoxAnime.close = false;
+      this._image.showEditImgContainer = false;
+      this._image.imgMatTabIndex = 1;
+    },200)
   }
 
   // drag drop box
 
-  overlayRefDetach() {
+  overlayRefDetach(update: boolean) {
+    if(this.backToRow) {
+        this.resetDialog(update);
+        this.openDialog();
+    }
+    else {
+      this.dragBoxAnime.close = true;
+      setTimeout(()=>{
+        this.resetDialog(update);
+      },200);
+    }
+  }
+
+  resetDialog(update: boolean) {
     this._overlayRef.detach();
-    this.showEditor = false;
+    if(update && this._general.selectedBlock) this._style.updateStyle();
+    else if(this.backToRow) {
+      this._general.selectedBlock = this._row.selectedRow;
+      this._style.blockSetting(this._general.selectedBlock);
+    }
+    else this._general.selectedBlock='';
+    this.dragBoxAnime.close = false;
+    this._general.showEditor = false;
+    this._general.selectedTab = '';
+    this._general.setExpPanelStep(0);
   }
   
   ngOnDestroy() {
     this._overlayRef.dispose();
-    this.showEditor = false;
+    this._general.imgSelection = false;
+    this._general.showEditor = false;
+    this._general.selectedTab = '';
   }
 
   openDialog() {
+    this.backToRow ? this.backToRow = false : this.dragBoxAnime.open = true;
     this._overlayRef.attach(this._portal);
-  }
-
-  detectTabChange() {
-    if(this._general.selectedBlock.type == 'element') {
-        this.showEditor = false;
-    }
+    setTimeout(()=>{
+      this.dragBoxAnime.open = false;
+    },200)
   }
 
   // drag drop box
+  
+  moveBackToRow(savecolumn:boolean) {
+    this.backToRow = true;
+    this.dragBoxAnime.open = false;
+    this._general.showBackToRowOption=false;
+    savecolumn ? this._style.updateStyle() : '';
+    this.overlayRefDetach(false);
+  }
 
   // builder options
 
@@ -114,6 +158,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
+      this._column.filterCls(this._row.selectedRow);
       // console.log(event);
     },
     onStart: function (/**Event*/evt) {

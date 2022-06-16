@@ -1,129 +1,177 @@
-<div id="page-container">
+
+<div id="page-container" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : ''">
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
-    <div name="section" class="kb-drag-container" [sortablejs]="_section.sections"
-        [sortablejsOptions]="builderSectionOptions">
-        <!-- sections start -->
-        <div *ngFor="let section of _section.sections, index as si"
-            (mouseenter)="!showEditor ? section.setting = true : ''; _row.selectedSectionRows = section.rowArr"
-            (mouseleave)="section.setting = false"
-            [ngStyle]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.currentStyling() : section.style"
-            [id]="section.id" class="kb-section kb-block-container">
-            <!-- sections setting navigation start -->
-            <div class="kb-module-setting" *ngIf="section.setting">
-                <span class="kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
-                <span (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)" matTooltip="Section Setting"
-                    matTooltipPosition="above"><i class="far fa-edit"></i></span>
-                <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
-                    matTooltipPosition="above"><i class="far fa-copy"></i></span>
-                <span (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1"
-                    matTooltip="Delete Section" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
-            </div>
-            <!-- sections setting navigation end -->
-            <!-- add new row option start -->
-            <span (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
-                *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row"
-                matTooltipPosition="right"><i class="fa fa-plus"></i></span>
-            <!-- add new row option end -->
-            <!-- add new section option start -->
-            <span (click)="_section.addSection(si)" *ngIf="section.setting"
-                class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
-                matTooltipPosition="below"><i class="fa fa-plus"></i></span>
-            <!-- add new section option end -->
-            <div name="row" class="kb-drag-container" [sortablejs]="section.rowArr"
-                [sortablejsOptions]="builderRowOptions">
-                <!-- rows start -->
-                <div *ngFor="let row of section.rowArr, index as ri"
-                    (mouseenter)="!showEditor ? row.setting = true : ''; _row.selectedRow = row;" (mouseleave)="row.setting = false"
-                    [ngStyle]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.currentStyling() : row.style"
-                    [id]="row.id"
-                    [class]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type) || row.style ? 'kb-demo-styling' : ''"
-                    class="kb-row kb-block-container">
-                    <!-- rows setting navigation start -->
-                    <div class="kb-module-setting" *ngIf="row.setting">
-                        <span class="kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
-                        <span *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
-                            matTooltip="Column Structure" matTooltipPosition="above"><i
-                                class="fa fa-columns"></i></span>
-                        <span (click)="_general.selectedBlock = row; _style.blockSetting(row); openDialog($event)" matTooltip="Row Setting"
-                            matTooltipPosition="above"><i class="far fa-edit"></i></span>
-                        <span (click)="_row.duplicateRow(section.rowArr, row, ri)" matTooltip="Duplicate Row"
+    <div id="kb-block-container" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
+        <div #main id="kb-main">
+            <div name="section" class="kb-drag-container" [sortablejs]="_section.sections"
+                [sortablejsOptions]="builderSectionOptions">
+                <!-- sections start -->
+                <div *ngFor="let section of _section.sections, index as si"
+                    (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
+                    (mouseleave)="section.setting = false"
+                    [ngStyle]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.currentStyling() : section.style"
+                    [id]="section.id" class="kb-section kb-block-container"
+                    [class.kb-block-disabled]="_general.showInlineEditor">
+                    <!-- sections setting navigation start -->
+                    <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
+                        <span *ngIf="_section.sections.length > 1" class="kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
+                        <span
+                            (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
+                            matTooltip="Section Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
+                        <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
                             matTooltipPosition="above"><i class="far fa-copy"></i></span>
-                        <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
-                            matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+                        <span (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1"
+                            matTooltip="Delete Section" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
                     </div>
-                    <!-- rows setting navigation end -->
-                    <div name="column" class="kb-column-wrap">
-                        <!-- columns start -->
-                        <div *ngFor="let column of row.columnArr, index as ci"
-                            (mouseenter)="_element.selectedElements = column.elementArr"
-                            [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : column.style"
-                            [class]="row.rowSize+((_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type) || column.style ? ' kb-demo-styling' : '')"
-                            [id]="'kb-column-'+column.id" class="kb-column kb-block-container">
-                            <div name="element" class="kb-drag-container" [sortablejs]="column.elementArr"
-                                [sortablejsOptions]="builderElementOptions"
-                                (change)="_element.selectedElements = column.elementArr">
-                                <!-- elements start -->
-                                <div *ngFor="let element of column.elementArr, index as ei"
-                                    (mouseenter)="!showEditor ? element.setting = true : ''" (mouseleave)="element.setting = false"
-                                    [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.currentStyling() : element.style"
-                                    [class]="(_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type) || element.style ? 'kb-demo-styling ' : ''"
-                                    [id]="element.id" class="kb-element kb-block-container">
-                                    <div class="kb-module-setting" *ngIf="element.setting">
-                                        <span class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
-                                        <span (click)="_general.selectedBlock = element; _style.blockSetting(element); openDialog($event)" matTooltip="Element Setting"
-                                        matTooltipPosition="above"><i class="far fa-edit"></i></span>
-                                        <span
-                                            (click)="_column.selectedColumn = column; _element.duplicateElement(element, si)"
-                                            matTooltip="Duplicate Element" matTooltipPosition="above"><i
-                                                class="far fa-copy"></i></span>
-                                        <span (click)="_element.deleteElement(column.elementArr, si)"
-                                            matTooltip="Delete Element" matTooltipPosition="above"><i
-                                                class="far fa-trash-alt"></i></span>
-                                    </div>
-                                    <div class="kb-element-content">
-                                        <div *ngIf="element.content.name == 'text'" class="kb-text-element" [ngStyle]="_style.getFontStyling()">
-                                            <!-- <div *ngIf="showEditor">
-                                                <tinymce [inline]="true" [(ngModel)]="element.content.html" [config]="_general.config"></tinymce>
-                                                <span class="kb-check-cross-icon">
-                                                    <span class="kb-check"><i class="fa fa-check"></i></span>
-                                                    <span class="kb-cross"><i class="fa fa-check"></i></span>
-                                                </span>
-                                            </div> -->
-                                            <div [innerHTML]="element.content.html | safeHtml"></div>
-                                        </div>
-                                        <div *ngIf="element.content.name == 'image'" class="kb-img-element"><img
-                                                [src]="element.content.src ? element.content.src : _element.uploadImgPath+'no-image.png'"
-                                                alt="image" width="100%" [class]="{'dummyImg':!element.content.src}">
-                                        </div>
-                                    </div>
-                                    <span
-                                        (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
-                                        *ngIf="element.setting" matTooltip="Add New Element" matTooltipPosition="above"
-                                        class="kb-ispan-add add-element bottom-add-btn"><i
-                                            class="fa fa-plus"></i></span>
-                                </div>
-                                <!-- elements end -->
-                            </div>
-                            <!-- add new column option start -->
-                            <span
-                                (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
-                                *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
-                                matTooltipPosition="right" class="kb-ispan-add add-element"><i
-                                    class="fa fa-plus"></i></span>
-                            <!-- add new column option end -->
-                        </div>
-                        <!-- columns end -->
-                    </div>
+                    <!-- sections setting navigation end -->
                     <!-- add new row option start -->
-                    <span *ngIf="row.setting"
-                        (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
-                        matTooltip="Add New Row" matTooltipPosition="below"
-                        class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
+                    <span (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
+                        *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row"
+                        matTooltipPosition="right"><i class="fa fa-plus"></i></span>
                     <!-- add new row option end -->
+                    <!-- add new section option start -->
+                    <span (click)="_section.addSection(si)" *ngIf="section.setting && !_general.showInlineEditor"
+                        class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
+                        matTooltipPosition="below"><i class="fa fa-plus"></i></span>
+                    <!-- add new section option end -->
+                    <div name="row" class="kb-drag-container" [sortablejs]="section.rowArr"
+                        [sortablejsOptions]="builderRowOptions">
+                        <!-- rows start -->
+                        <div *ngFor="let row of section.rowArr, index as ri"
+                            (mouseenter)="row.setting = true; _row.selectedRow = row;"
+                            (mouseleave)="row.setting = false"
+                            [ngStyle]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.currentStyling() : row.style"
+                            [id]="row.id"
+                            [class.kb-block-disabled]="_general.showInlineEditor"
+                            class="kb-row kb-block-container">
+                            <!-- rows setting navigation start -->
+                            <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
+                                <span *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
+                                <span *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
+                                    matTooltip="Column Structure" matTooltipPosition="above"><i
+                                        class="fa fa-columns"></i></span>
+                                <span
+                                    (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
+                                    matTooltip="Row Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
+                                <span (click)="_row.duplicateRow(section.rowArr, row, ri)" matTooltip="Duplicate Row"
+                                    matTooltipPosition="above"><i class="far fa-copy"></i></span>
+                                <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
+                                    matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+                            </div>
+                            <!-- rows setting navigation end -->
+                            <div name="column" class="kb-column-wrap" [style.columnGap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.columnGap : row.columnGap) + '%'">
+                                <!-- columns start -->
+                                <div *ngFor="let column of row.columnArr, index as ci"
+                                    (mouseenter)="_element.selectedElements = column.elementArr"
+                                    [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : column.style"
+                                    [class]="row.rowSize"
+                                    [id]="'kb-column-'+column.id" class="kb-column kb-block-container">
+                                    <div name="element" class="kb-drag-container" [sortablejs]="column.elementArr"
+                                        [sortablejsOptions]="builderElementOptions"
+                                        (change)="_element.selectedElements = column.elementArr">
+                                        <!-- elements start -->
+                                        <div *ngFor="let element of column.elementArr, index as ei"
+                                            (dblclick)="elementDblClk(element, $event)"
+                                            (mouseenter)="element.setting = true"
+                                            (mouseleave)="element.setting = false"
+                                            [id]="element.id" class="kb-element kb-block-container"
+                                            [ngStyle]="element.content.name != 'button' ? (_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.currentStyling() : element.style) : ''"
+                                            [class.kb-block-disabled]="_general.showInlineEditor">
+                                            <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
+                                                <span class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
+                                                <span
+                                                    (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
+                                                    matTooltip="Element Setting" matTooltipPosition="above"><i
+                                                        class="far fa-edit"></i></span>
+                                                <span
+                                                    (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
+                                                    matTooltip="Duplicate Element" matTooltipPosition="above"><i
+                                                        class="far fa-copy"></i></span>
+                                                <span (click)="_element.deleteElement(column.elementArr, ei)"
+                                                    matTooltip="Delete Element" matTooltipPosition="above"><i
+                                                        class="far fa-trash-alt"></i></span>
+                                            </div>
+                                            <div>
+                                                <div *ngIf="element.content.name == 'text' || element.content.name == 'heading'" class="kb-element-content">
+                                                    <div *ngIf="element.content.editor else text">
+                                                        <tinymce [inline]="true" (mouseenter)="_general.insideEditor = true" (mouseleave)="_general.insideEditor = false" [(ngModel)]="element.content.html"
+                                                            [config]="_general.config"></tinymce>
+                                                    </div>
+                                                    <ng-template #text>
+                                                        <div
+                                                            [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.textStyling() : element.content.style"
+                                                            [innerHTML]="element.content.html | safeHtml"></div>
+                                                    </ng-template>
+                                                </div>
+                                                <img *ngIf="element.content.name == 'image'"
+                                                    [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.imageStyling() : element.content.style"
+                                                    [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
+                                                    alt="image" width="100%" height="100%" [class]="{'dummyImg':!element.content.src}">
+                                                <div *ngIf="element.content.name == 'button'" class="kb-element-content">
+                                                    <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn" class="kb-default-btn" [href]="_style.button_link" [ngStyle]="_style.buttonStyling()">
+                                                        <div>{{_style.button_text}}</div>
+                                                        <div class="subtext" [style.fontSize]="_style.button_subfont_size.value">{{_style.button_subtext}}</div>
+                                                    </a>
+                                                    <ng-template #showBtn><a class="kb-default-btn" [href]="element.content.link" [ngStyle]="element.content.style">
+                                                        <div>{{element.content.text}}</div>
+                                                        <div class="subtext" [style.fontSize]="element.content.subfont_size">{{element.content.subtext}}</div>
+                                                    </a></ng-template>
+                                                </div>
+                                            </div>
+                                            <span
+                                                (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
+                                                *ngIf="element.setting && !_general.showInlineEditor" matTooltip="Add New Element" matTooltipPosition="above"
+                                                class="kb-ispan-add add-element bottom-add-btn"><i
+                                                    class="fa fa-plus"></i></span>
+                                        </div>
+                                        <!-- elements end -->
+                                    </div>
+                                    <!-- add new column option start -->
+                                    <span
+                                        (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
+                                        *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
+                                        matTooltipPosition="right" class="kb-ispan-add add-element"><i
+                                            class="fa fa-plus"></i></span>
+                                    <!-- add new column option end -->
+                                </div>
+                                <!-- columns end -->
+                            </div>
+                            <!-- add new row option start -->
+                            <span *ngIf="row.setting && !_general.showInlineEditor"
+                                (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
+                                matTooltip="Add New Row" matTooltipPosition="below"
+                                class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
+                            <!-- add new row option end -->
+                        </div>
+                        <!-- rows end -->
+                    </div>
                 </div>
-                <!-- rows end -->
+                <!-- sections end -->
             </div>
         </div>
-        <!-- sections end -->
+        <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
+    </div>
+    <div id="kb-bulder-nav" cdkDrag cdkDragBoundary="#page-container" (cdkDragEnded)="onDragEnded($event)">
+        <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
+            <button mat-button class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
+            <button mat-button class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
+            <button mat-button (click)="_general.saveHTML(main)" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
+            <button mat-button (click)="_general.wireframeToggle(true)" matTooltip="Wireframe" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
+            <button mat-button class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
+        </span>
+        <button mat-button cdkDragHandle (click)="_general.showfloatnavtoggle()" class="nav-floating-btn-host">
+            <div *ngIf="!_general.showNavAnim.navopen else navtimes" class="navdots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ng-template #navtimes>
+                <div id="navtimes" [class.navtimes-btn-open]="_general.showNavAnim.open" [class.navtimes-btn-close]="_general.showNavAnim.close">
+                    <div class="navtimes">
+                    <div class="navtime"></div>
+                    </div>
+                </div>
+            </ng-template>
+        </button>
     </div>
 </div>

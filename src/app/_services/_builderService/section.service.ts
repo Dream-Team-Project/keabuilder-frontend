@@ -7,8 +7,19 @@ import { GeneralService } from './general.service';
 })
 export class SectionService {
 
+  testObj:any = {id: '', type: 'section', rowArr: [
+    {id: 'kb-row-5419236692', type: 'row', columnArr: [
+      {id: '', type: 'column', elementArr: [
+        { id: '', content: { name: 'text',
+        html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
+        editor: false,
+        style: '',
+      }, style: '', setting: false, type: 'element' }
+      ], name: '', chngName: false, style: '', }
+    ], setting: false, columnSetting: true, rowSize: '', style: ''}], 
+    setting: false, style: ''};
   sections:Array<any> = [];
-  sectionObj = {id: 0, type: 'section', rowArr: [], setting: false, style: ''};
+  sectionObj:any = {id: '', type: 'section', rowArr: [], setting: false, style: ''};
   selectedSectionRows = [];
 
   constructor(private _general: GeneralService) { 
