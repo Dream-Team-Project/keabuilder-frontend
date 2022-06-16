@@ -29,6 +29,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { MatTableModule } from '@angular/material/table';
+
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -102,7 +104,8 @@ import { ResizableModule } from 'angular-resizable-element';
   ],
   providers: [authInterceptorProviders, { 
     provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}}
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
+    MatTableModule
   ],
   bootstrap: [AppComponent]
 })

@@ -12,4 +12,10 @@ export class MembershipProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  itemshow = false;
+
+  kbitemshow(){
+    this.itemshow = !this.itemshow;
+  }
+
 }

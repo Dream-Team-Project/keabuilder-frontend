@@ -243,8 +243,29 @@ main.insidecont .box {
             left: 0px;            
         }
 }
+.loadEffectFromLeftsidebar{
+    animation-name: slideRightsidebar;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+    transform-origin: center;
+    position: relative;
+}
+@keyframes slideRightsidebar{
+    0% {
+        opacity: 0;
+        right: -384px;
+    }
+    100% {
+        opacity: 1;
+        right: 7px;            
+    }
+}
 /*  animation  */
 
+#kb-offer-actions .mat-form-field-infix{
+    width:100%!important;
+}
 .offcanvas-overlay {
     position: fixed;
     top: 0;

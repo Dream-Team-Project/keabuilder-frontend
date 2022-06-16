@@ -1,6 +1,5 @@
 .outer-card-add {
-    padding: 20px;
-    text-align: center;
+    padding: 0px 80px;
     border: 1px dashed #444;
 }
 .cardpage >div{
@@ -386,6 +385,14 @@
     background: rgba(0, 0, 0, 0.1);
 }
 
+@keyframes animation-offcanvas-fade-in {
+    0%{
+        opacity:0;
+    }100%{
+        opacity: 1;
+    }
+}
+
 
 @media (max-width: 500px){
     .symbol .symbol-label {
@@ -401,16 +408,44 @@
 }
 #imgdiv {
     background: #fff;
-    height: 200px;
-    padding: 25px;
+    /* height: 200px; */
+    padding: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     font-weight: 500;
-    font-size: 20px;
+    /* font-size: 20px; */
     cursor: pointer;
     color: #cccccc;
     border: 3px dashed var(--clr-primay);
     border-radius: 10px;
+}
+.kea-barfieldset{
+    width: 50%;
+    float: right;
+}
+.btnul{
+    z-index: 99;
+}
+.kb-ul {
+    display: none;
+    position: absolute;
+    left: 0px;
+    padding: 0;
+    top: 0;
+    padding-top: 45px;
+    list-style: none;
+    text-align: left;
+}
+.kb-ul li {
+    margin-bottom: 8px;
+}
+
+.btnul:hover .kb-ul{
+    display: inline-block;
+}
+.kb-ul li button {
+    width: 100%;
+    text-align: left;
 }

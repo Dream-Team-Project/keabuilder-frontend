@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
   <div id="kb-automation-actions" *ngIf="poupsidebar && automationaddnewaction">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
       
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
       <h6><b>NEW COURSE STEPS</b></h6>
@@ -41,58 +41,77 @@
   </div>
   <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
 
-  <div class="row mt-4" *ngIf="addnewpages">
-      <div class="col-md-12 mb-4">
-        <a href="javascript:void(0)" (click)="addnewcourse()">
+  <div class="row" *ngIf="addnewpages">
+      <div class="col-md-12 mb-4 text-right pb-4">
+        <button mat-raised-button class="mr-2 outer-card-add" (click)="addnewcourse()" >Add New Course <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+        <button mat-raised-button class="mr-2 btnul" >Pages 
+          <i class="fa fa-file-alt" aria-hidden="true"></i>
+          <ul class="kb-ul">
+            <li> <button mat-raised-button class="mr-2" ><i class="fa fa-file"></i> Landing Page</button> </li>
+            <li> <button mat-raised-button class="mr-2" ><i class="fa fa-file" aria-hidden="true"></i> Library Page</button> </li>
+          </ul>
+        </button>
+        <button mat-raised-button class="mr-2 btnul" >Sales 
+          <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+            <ul class="kb-ul">
+              <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-offers']" > <i class="fa fa-percentage" aria-hidden="true"></i> Offers</button> </li>
+              <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-coupons']" > <i class="fa fa-percent" aria-hidden="true"></i> Coupon</button> </li>
+              <li> <button mat-raised-button class="mr-2" > <i class="fa fa-dollar-sign" aria-hidden="true"></i> Payment</button> </li>
+            </ul>
+        </button>
+        <button mat-raised-button class="mr-2" >Members <i class="fa fa-users" aria-hidden="true"></i></button>
+        <button mat-raised-button class="mr-2" >Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+
+        <!-- <a href="javascript:void(0)" (click)="addnewcourse()">
           <mat-card class="outer-card-add">
             Add New Course
           </mat-card>
-        </a>
+        </a> -->
       </div>
-        <div class="col-md-4 cardpage mt-10 loadEffect" *ngFor="let kbpage of kbcourses; index as i;">
-        <div>
-            <img [src]="kbcourses[i]['thumbnail']" alt="" class="img-fluid img-fit">
+      <div class="col-md-4 cardpage mt-10 loadEffect" *ngFor="let kbpage of kbcourses; index as i;">
+      <div>
+          <img [src]="kbcourses[i]['thumbnail']" alt="" class="img-fluid img-fit">
 
-            <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
-              <span>{{kbcourses[i]['page_name']}}</span>
-              <input type="text" [(ngModel)]="kbcourses[i]['page_name']">
+          <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
+            <span>{{kbcourses[i]['page_name']}}</span>
+            <input type="text" [(ngModel)]="kbcourses[i]['page_name']">
+          </div>
+          <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+            <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
+                (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
+                <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+                {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+            </span>
+            <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
+                <ul class="kb-dropdown__menu">
+                <li>
+                    <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
+                </li>
+                <li>
+                    <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
+                </li>
+                </ul>
             </div>
-            <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-              <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
-                  (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
-                  <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
-                  {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
-              </span>
-              <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
-                  <ul class="kb-dropdown__menu">
-                  <li>
-                      <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                  </li>
-                  <li>
-                      <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                  </li>
-                  </ul>
-              </div>
-            </div>
-            <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['members']+' Members'" matTooltipPosition="above"><i class="fa fa-user" aria-hidden="true"></i> {{kbcourses[i]['members']}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</p>
+          </div>
+          <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['members']+' Members'" matTooltipPosition="above"><i class="fa fa-user" aria-hidden="true"></i> {{kbcourses[i]['members']}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</p>
 
-            <button class="btn btn-secondary">Preview <i class="far fa-eye"></i></button>
-            <button class="btn btn-primary">Edit <i class="fas fa-pencil-alt"></i></button>
+          <button class="btn btn-secondary">Preview <i class="far fa-eye"></i></button>
+          <button class="btn btn-primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
-            <div class="kb-page-settting" (click)="kbcourses[i].itemshow = !kbcourses[i].itemshow" matTooltip="Settings" matTooltipPosition="above"><i class="fas fa-cog"></i>
-            </div>
-            <div *ngIf="kbcourses[i].itemshow" class="kb-dropdown__panel">
-            <ul class="kb-dropdown__menu">
-                <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
-                <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Analytics</a></li>
-                <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
-                <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Copy URL</a></li>
-                <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
-                    Course</a></li>
-            </ul>
-            </div>
-        </div>
-        </div>
+          <div class="kb-page-settting" (click)="kbcourses[i].itemshow = !kbcourses[i].itemshow" matTooltip="Settings" matTooltipPosition="above"><i class="fas fa-cog"></i>
+          </div>
+          <div *ngIf="kbcourses[i].itemshow" class="kb-dropdown__panel">
+          <ul class="kb-dropdown__menu">
+              <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
+              <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Analytics</a></li>
+              <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
+              <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Copy URL</a></li>
+              <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
+                  Course</a></li>
+          </ul>
+          </div>
+      </div>
+      </div>
   </div>
 
 </div>
