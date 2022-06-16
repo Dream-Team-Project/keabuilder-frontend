@@ -1,0 +1,62 @@
+<div id="kb-affiliates">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates']" color="primary"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-users']" ><i class="fa fa-users" aria-hidden="true"></i> Users</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-commission']" ><i class="fas fa-hand-holding-usd"></i> Commission Setup</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-transactions']" ><i class="fas fa-credit-card"></i> Transactions</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-share']" ><i class="fas fa-share"></i> Share Links</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-announcements']" ><i class="fas fa-bullhorn"></i> Announcements</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-exports']"><i class="fas fa-file-download"></i> Exports</button>
+                <button mat-raised-button [routerLink]="['/affiliates-settings']"><i class="fas fa-cogs"></i> Settings</button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-4">
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="kb-insidecard">
+                    <i class="fa fa-mouse mb-2" aria-hidden="true"></i>
+                    <h6><b>Clicks</b></h6>
+                    <h4>{{clicks}}</h4>
+                </div>
+                <div class="kb-insidecard">
+                    <i class="fa fa-newspaper mb-2" aria-hidden="true"></i>   
+                    <h6><b>Form Submissions</b></h6>
+                    <h4>{{formsubmission}}</h4>
+                </div>
+                <div class="kb-insidecard">
+                    <i class="fa fa-comment-dollar mb-2" aria-hidden="true"></i>   
+                    <h6><b>Conversions</b></h6>
+                    <h4>{{conversions}}</h4>
+                </div>
+                <div class="kb-insidecard">
+                    <i class="fa fa-percentage mb-2" aria-hidden="true"></i>   
+                    <h6><b>Conversion Rate</b></h6>
+                    <h4>{{conversionrate}}%</h4>
+                </div>
+                <div class="clearfix"></div>
+                <mat-card class="mt-4 kb-afflink">
+
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Affiliate Signup Link</mat-label>
+                        <input id="affliatesignup" matInput disabled value="https://my.keabuilder.com/affiliate_users/sign_up">
+                        <mat-icon (click)="copytoclipboard('signup')" matSuffix matTooltip="Copy" matTooltipPosition="left"><i class="fas fa-copy"></i></mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Affiliate Login Link</mat-label>
+                        <input id="affliatesignin" matInput disabled value="https://my.keabuilder.com/affiliate_users/sign_in">
+                        <mat-icon (click)="copytoclipboard('signin')" matSuffix matTooltip="Copy" matTooltipPosition="left" ><i class="fas fa-copy"></i></mat-icon>
+                    </mat-form-field>
+
+                </mat-card>
+
+            </div>
+            <div class="col-md-4">
+                <img src="/assets/images/affiliate/affiliate-payment.png" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</div>

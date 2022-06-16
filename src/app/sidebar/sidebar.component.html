@@ -1,217 +1,54 @@
-<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" style="width:50px;"
-  (mouseover)="hoveropen = true" (mouseleave)="hoveropen = false" [class]="{ 'hoveropen' : hoveropen }" >
+<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" style="width:50px;" (mouseover)="hoveropen = true" (mouseleave)="hoveropen = false" [class]="{ 'hoveropen' : hoveropen }" >
   <div class="bw-sidebar-logo" [style]="hoveropen ? 'padding-left: 20px;': ''">
     <img src="/assets/images/logo/kblogo.svg" alt="">
     <div class="bw-logo__item__text" *ngIf="hoveropen">Keabuilder<div class="fadingEffect"></div>
     </div>
   </div>
   <div class="bw-sidebar">
-    <a [routerLink]="['/dashboard']" id="myhome" [routerLinkActive]="['a-active']" >
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fa fa-home" aria-hidden="true"></i>
-          <img src="/assets/images/sidebar/home.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Dashboard
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/funnel']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fa fa-filter" aria-hidden="true"></i>
-          <img src="/assets/images/sidebar/funnel.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Funnels
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/website']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-desktop"></i>
-          <img src="/assets/images/sidebar/browser.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Website
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/membership']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-shield-alt"></i>
-          <img src="/assets/images/sidebar/shield.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Membership
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/forms']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-address-card"></i>
-          <img src="/assets/images/sidebar/complete.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Forms
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/domain']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-globe-americas"></i>
-          <img src="/assets/images/sidebar/worldwide.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Domains
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/crm']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-user-secret"></i>
-          <img src="/assets/images/sidebar/hacker.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          CRM
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/strategies']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-chess-knight"></i>
-          <img src="/assets/images/sidebar/chess.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Strategies
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/heatmap']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-fire"></i>
-          <img src="/assets/images/sidebar/way.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          HeatMap
-        </div>
-      </button>
-    </a>    
-    <a [routerLink]="['/analytics']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-chart-pie"></i>
-          <img src="/assets/images/sidebar/growth.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Analytics
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/affiliates']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-search-dollar"></i>
-          <img src="/assets/images/sidebar/money-bag.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Affiliates
-        </div>
-      </button>
-    </a>
-    <a [routerLink]="['/payment']" [routerLinkActive]="['a-active']">
-      <button class="bw-sidebar__item hasIcon">
-        <div class="bw-sidebar__item__icon">
-          <i class="fa fa-dollar-sign"></i>
-          <img src="/assets/images/sidebar/payment.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Payment
-        </div>
-      </button>
-    </a>
-    <!-- Dropdown1 -->
-    <div class="bw-sidebar__group" [class]="{ 'open' : isOpen }" (click)="isOpen = !isOpen">
-      <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"> 
-            <i class="fas fa-cogs"></i>
-          <img src="/assets/images/sidebar/cloud-network.gif" width="35" class="d-none">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Integrations
-          </div>
-          <div class="bw-sidebar__item__arrow"><i class="fas fa-chevron-up"></i></div>
-        </button>
-      </div>
-      <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen ? '100%' : '0px'}">
-        <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
+    
+    <span *ngFor="let menu of allmenu; index as i;">
+        <a [routerLink]="allmenu[i].routerlink" [routerLinkActive]="['a-active']" (click)="changeFn($event)" >
+          <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]">
+            <div class="bw-sidebar__item__icon">
+              <i [class]="allmenu[i].icon" aria-hidden="true"></i>
+              <img [src]="'/assets/images/sidebar/'+allmenu[i].img" width="35" class="d-none">
+            </div>
+            <div class="bw-sidebar__item__text">
+              {{allmenu[i].title}}
+            </div>
+          </button>
+        </a>
+
+        <span *ngIf="allmenu[i]['submenu']!=null">
+          <a *ngFor="let submenu of allmenu[i]['submenu']; index as j;" [routerLink]="allmenu[i]['submenu'][j].routerlink" [routerLinkActive]="['a-active']" >
+            <button class="bw-sidebar__item hasIcon" *ngIf="!allmenu[i]['submenu'][j][0]">
+              <div class="bw-sidebar__item__icon">
+                <i [class]="allmenu[i]['submenu'][j].icon" aria-hidden="true"></i>
+                <img [src]="'/assets/images/sidebar/'+allmenu[i]['submenu'][j].img" width="35" class="d-none">
+              </div>
+              <div class="bw-sidebar__item__text">
+                {{allmenu[i]['submenu'][j].title}}
+              </div>
+            </button>
+          </a>
+        </span>
+
+    </span>
+
+    <a href="javascript:void(0)" (click)="backFn($event)" *ngIf="backme" >
+        <button class="bw-sidebar__item hasIcon">
           <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/activecampaign.svg" class="img-fluid">
+            <i class="fas fa-arrow-alt-circle-left"></i>
+            <img src="/assets/images/sidebar/back.gif" width="35" class="d-none">
           </div>
           <div class="bw-sidebar__item__text">
-            Active Campaign
+            Back
           </div>
         </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/mailchimp.svg" class="img-fluid">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Mailchimp
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/caltweet.svg" class="img-fluid">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Caltweet
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/calendly.svg" class="img-fluid">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Calendly
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/zoho.svg" class="img-fluid">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Zoho
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon">
-            <img src="/assets/images/sidebaricons/hubspot.svg" class="img-fluid">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Hubspot
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"><i class="fas fa-external-link-square-alt"></i></div>
-          <div class="bw-sidebar__item__text">
-            More
-          </div>
-        </button>
-      </div>
-    </div>
+    </a>
 
     <!-- Dropdown2 -->
-    <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2">
+    <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2" *ngIf="extramenus" >
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"> 
@@ -247,7 +84,7 @@
     </div>
 
     <!-- Dropdown3 -->
-    <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3">
+    <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3" *ngIf="extramenus" >
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon">
@@ -282,7 +119,7 @@
       </div>
     </div>
 
-    <a [routerLink]="['/advice']" [routerLinkActive]="['a-active']">
+    <a [routerLink]="['/advice']" [routerLinkActive]="['a-active']" *ngIf="extramenus" >
       <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-chalkboard-teacher"></i>
@@ -294,7 +131,7 @@
       </button>
     </a>
 
-    <a [routerLink]="['/training']" [routerLinkActive]="['a-active']">
+    <a [routerLink]="['/training']" [routerLinkActive]="['a-active']" *ngIf="extramenus" >
       <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-clipboard-check"></i>

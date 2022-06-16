@@ -718,3 +718,14 @@ div#topbar_notifications_logs {
 .bw-sidebar a:hover i, .bw-sidebar__group__header:hover .bw-sidebar__item__icon i{
   display: none!important;
 }
+
+.bw-sidebar-content.hoveropen a .bw-sidebar__item__text{
+  display: block;
+}
+
+.bw-sidebar-content a .bw-sidebar__item__text{
+  display: none;
+}
+
+
+

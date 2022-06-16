@@ -1,0 +1,82 @@
+<div id="kb-membershippayments">
+
+    <div id="kb-offer-actions" *ngIf="poupsidebar && automationaddnewaction">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+          
+          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+          <h6><b>NEW Tag</b></h6>
+          <hr>
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput required minlength="3" maxlength="140" >
+            <small>You can add multiple tag seprated by comma. EX: member,experts</small>
+          </mat-form-field>
+  
+        <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Create Tag</button>
+  
+      </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+  
+    <div class="container-fluid mb-4">
+      <div class="row">
+        <div class="col-md-6">
+          <h3 class="d-inline-block mr-2">All tags</h3>
+          <button (click)="addnewcontact()" mat-raised-button color="primary" matTooltip="Add New Tag" matTooltipPosition="above" class="mr-2">Add Tag <i class="fa fa-tags" aria-hidden="true"></i></button>
+  
+            <button [routerLink]="['/membership-members']" mat-raised-button matTooltip="Manage Contacts" matTooltipPosition="above" class="mr-2">Manage Contacts <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
+        <div class="col-md-6 text-right">
+          <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+              <input type="text" class="form-control" id="offer-search" #input (keyup)="applyFilter($event)"  placeholder="Search members...">
+              <div class="form-control-position">
+                  <i class="fab fa-searchengin"></i>                        
+              </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container-fluid mt-4">
+      <div class="row">
+          <div class="col-md-12">
+            
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" matSort>
+            
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                  <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                </ng-container>
+            
+                <ng-container matColumnDef="people">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> People </th>
+                  <td mat-cell *matCellDef="let row"> {{row.people}} </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="options">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button mat-raised-button class="mr-2">Edit <i class="fa fa-pen" aria-hidden="true"></i></button>
+                    <button mat-raised-button class="mr-2">Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button mat-raised-button class="mr-2">View Members <i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+            
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+              </table>
+            
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+          </div>
+      </div>
+    </div>
+  
+  
+  </div>

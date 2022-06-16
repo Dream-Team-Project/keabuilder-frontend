@@ -1,0 +1,131 @@
+<div id="kb-membershippayments">
+
+  <div id="kb-offer-actions" *ngIf="poupsidebar">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+          
+          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+          <h6><b>Add a Contact</b></h6>
+          <hr>
+          <mat-form-field class="kb-full-width" appearance="fill" >
+              <mat-label>First Name</mat-label>
+              <input type="text" matInput required minlength="3" maxlength="140" >
+          </mat-form-field>
+          
+          <mat-form-field class="kb-full-width" appearance="fill" >
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput required minlength="3" maxlength="140" >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill" >
+              <mat-label>Email</mat-label>
+              <input type="email" matInput required minlength="3" maxlength="140" >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill" >
+              <mat-label>Phone Number</mat-label>
+              <input type="tel" matInput required >                
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Add</button>
+
+      </div>
+  </div>
+  <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+
+
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-8">
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm-campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']" color="primary" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/forms']" ><i class="fa fa-id-card" aria-hidden="true"></i> Forms</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+              <button mat-raised-button [routerLink]="['/crm-settings']"><i class="fa fa-mail-bulk" aria-hidden="true"></i> SMTP</button>
+          </div>
+          <div class="col-md-4 text-right">
+              <button mat-raised-button color="accent" class="mr-2 d-inline-block" (click)="addnewconnect()" ><i class="fa fa-users" aria-hidden="true"></i> Add a contact</button>
+              <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+                  <input type="text" (keyup)="applyFilter($event)" class="form-control" id="offer-search" #input  placeholder="Search Contacts...">
+                  <div class="form-control-position">
+                      <i class="fab fa-searchengin"></i>                        
+                  </div>
+              </fieldset>
+          </div>
+      </div>
+  </div>
+
+  <div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-12">
+          
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <!-- Checkbox Column -->
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+                </td>
+              </ng-container>
+              <!-- Checkbox Column -->
+          
+              <ng-container matColumnDef="fullname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fullname </th>
+                <td mat-cell *matCellDef="let row"> {{row.fullname}} <span class="kb-status" [ngClass]="{'success': row.status == 'Successful', 'failed' : row.status == 'Failed' }">{{row.status}}</span></td>
+              </ng-container>
+          
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+                <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+              </ng-container>
+          
+              <ng-container matColumnDef="datecreated">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Created </th>
+                <td mat-cell *matCellDef="let row"> {{row.datecreated}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-raised-button class="mr-2">View <i class="fa fa-eye" aria-hidden="true"></i></button>
+                    <button mat-raised-button>Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                </td>
+              </ng-container>
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+          
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </table>
+          
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+
+</div>

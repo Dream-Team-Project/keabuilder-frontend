@@ -6,33 +6,51 @@
       <h6><b>NEW FUNNEL STEPS</b></h6>
       <p><i class="fas fa-cogs"></i> Action Settings</p>
       <hr>
-      <label for="">Name</label>
-      <input type="text" placeholder="Give your action a name" class="form-control">
-      <label for="" class="mt-3">Condition</label>
-      <select name="" id="" class="form-control">
-        <option value="">Everyone</option>
-      </select>
-      <label for="" class="mt-3">Integration</label>
-      <select name="" id="" class="form-control">
-        <option value="">Keabuilder Integration</option>
-      </select>
-      <label for="" class="mt-3">Action To Do</label>
-      <select name="" id="" class="form-control">
-        <option value="">Add To List</option>
-        <option value="">Remove From List</option>
-        <option value="">Email Notification</option>
-        <option value="">Add Tag</option>
-        <option value="">Remove Tag</option>
-      </select>
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput placeholder="Give your action a name" value="">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-label>Condition</mat-label>
+        <mat-select>
+          <mat-option value="everyone">Everyone</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-label>Integration</mat-label>
+        <mat-select>
+          <mat-option value="keabuilderintegration">Keabuilder Integration</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-label>Action To Do</mat-label>
+        <mat-select>
+          <mat-option value="">Add To List</mat-option>
+          <mat-option value="">Remove From List</mat-option>
+          <mat-option value="">Email Notification</mat-option>
+          <mat-option value="">Add Tag</mat-option>
+          <mat-option value="">Remove Tag</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <br>
       <p><i class="far fa-clock"></i> Action Delay</p>
       <hr>
-      <label for="">Delay Days</label>
-      <input type="number" placeholder="# Of Days Before Action Happens..." class="form-control">
-      <label for="" class="mt-3">Delay Hours</label>
-      <input type="number" placeholder="# Of Hours Before Action Happens..." class="form-control">
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Delay Days</mat-label>
+        <input type="number" matInput placeholder="# Of Days Before Action Happens..." value="">
+      </mat-form-field>
+
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Delay Hours</mat-label>
+        <input type="number" matInput placeholder="# Of Hours Before Action Happens..." value="">
+      </mat-form-field>
+
       <br>
-      <button class="btn btn-primary"><i class="fas fa-plus"></i> Create Funnel Action</button>
+      <button mat-raised-button color="primary"><i class="fas fa-plus"></i> Create Funnel Action</button>
 
     </div>
 
@@ -48,14 +66,12 @@
     </div>
 
   </div>
-  <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
-
+  <div class="offcanvas-overlay" *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
 
   <header class="wizard-nav">
     <div class="wizard-steps">
       <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" data-wizard-type="step"
-        [attr.data-wizard-state]="mainOpen == 'steps' ? 'current' : 'pending'" (click)="kb_mainsteps('steps')">
+      <div class="wizard-step" routerLink="/create-funnel" data-wizard-state="current">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-filter"></i></div>
           <div class="wizard-label">
@@ -66,8 +82,7 @@
       </div>
       <!--end::Wizard Step 1 Nav-->
       <!--begin::Wizard Step 2 Nav-->
-      <div class="wizard-step" data-wizard-type="step"
-        [attr.data-wizard-state]="mainOpen == 'stats' ? 'current' : 'pending'" (click)="kb_mainsteps('stats')">
+      <div class="wizard-step" routerLink="/create-funnel-stats">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
           <div class="wizard-label">
@@ -78,8 +93,7 @@
       </div>
       <!--end::Wizard Step 2 Nav-->
       <!--begin::Wizard Step 3 Nav-->
-      <div class="wizard-step" data-wizard-type="step"
-        [attr.:data-wizard-state]="mainOpen == 'contacts' ? 'current' : 'pending'" (click)="kb_mainsteps('contacts')">
+      <div class="wizard-step" routerLink="/create-funnel-contacts">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-users"></i></div>
           <div class="wizard-label">
@@ -90,8 +104,7 @@
       </div>
       <!--end::Wizard Step 3 Nav-->
       <!--begin::Wizard Step 4 Nav-->
-      <div class="wizard-step" data-wizard-type="step"
-        [attr.:data-wizard-state]="mainOpen == 'sales' ? 'current' : 'pending'" (click)="kb_mainsteps('sales')">
+      <div class="wizard-step" routerLink="/create-funnel-sales">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
           <div class="wizard-label">
@@ -102,8 +115,7 @@
       </div>
       <!--end::Wizard Step 4 Nav-->
       <!--begin::Wizard Step 5 Nav-->
-      <div class="wizard-step" data-wizard-type="step"
-        [attr.:data-wizard-state]="mainOpen == 'settings' ? 'current' : 'pending'" (click)="kb_mainsteps('settings')">
+      <div class="wizard-step" routerLink="/create-funnel-settings">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
           <div class="wizard-label">
@@ -116,40 +128,51 @@
 
     </div>
   </header>
-  <div class="container-fluid">
-    <div class="row whitefunnel loadEffect" *ngIf="mainOpen == 'steps'">
-      <div class="col-md-3 pb-3 pt-3 rightbrder">
-        <button class="btn btn-primary mt-2 btn-block mb-3" (click)="addsteps"><i class="fas fa-plus"></i>
-          Add A Step</button>
-        <div class="Keabuilder-item" [class]="tabOpen2 == element.id ? 'success' : ''"
-          (click)="kb_substeps2(element.id)" *ngFor="let element of steps; index as i;" [attr.key]="element.id"
-          [attr.data-listid]="element.id">
-          <div class="keabuilder-title-board">
-            <span>{{ element.name }}</span>
-            <input type="text" [ngModel]="element.name">
-          </div>
 
-          <i class="fas fa-grip-lines float-right mt-1"></i>
-          <div class="btn-group float-right mr-1">
-            <div class="cursor-pointer dropdownMenuButton" role="button">
-              <i class="fas fa-ellipsis-v"></i>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="javascript:void(0);">
-                  <i class="fas fa-link"></i> Copy Link
-                </a>
-                <a class="dropdown-item Keabuilder-delete" href="javascript:void(0);">
-                  <i class="far fa-clone"></i> Duplicate
-                </a>
-                <a class="dropdown-item Keabuilder-changepath" href="javascript:void(0);">
-                  <i class="fas fa-pen-fancy "></i> change path
-                </a>
-                <a class="dropdown-item Keabuilder-delete" href="javascript:void(0);">
-                  <i class="far fa-trash-alt"></i> Archive
-                </a>
+  <div class="container-fluid">
+    <div class="row whitefunnel loadEffect" >
+      <div class="col-md-3 pb-3 pt-3 rightbrder">
+        <button class="mt-2 btn-block mb-3" (click)="addsteps()" mat-raised-button color="primary" ><i class="fas fa-plus"></i> Add A Step</button>
+        
+          <div [sortablejs]="steps" [sortablejsOptions]="parentOptions" >
+            <div class="Keabuilder-item" [class]="tabOpen2 == element.id ? 'success' : ''"
+              (click)="kb_substeps2(element.id)" *ngFor="let element of steps; index as i;" [attr.key]="element.id"
+              [attr.data-listid]="element.id">
+
+              <div class="keabuilder-title-board">
+                <span>{{ element.name }}</span>
+                <input type="text" [(ngModel)]="element.name">
               </div>
+
+
+
+              <i class="fas fa-grip-lines float-right mt-1"></i>
+              <div class="btn-group float-right mr-1">
+
+                <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <i class="fas fa-link"></i> Copy Link
+                    </button>
+                    <button mat-menu-item>
+                        <i class="far fa-clone mr-2"></i> Duplicate
+                    </button>
+                    <button mat-menu-item>
+                        <i class="fas fa-pen-fancy mr-2"></i> change path
+                    </button>
+                    <button mat-menu-item>
+                        <i class="far fa-trash-alt mr-2"></i> Archive
+                    </button>
+                </mat-menu>
+
+              </div>
+
+
             </div>
           </div>
-        </div>
+
         <!-- </draggable> -->
 
       </div>
@@ -274,61 +297,18 @@
             </ul>
 
             <ul class="kb-alltemplates mb-5">
-              <li>
+              <li *ngFor="let item of emailoptintemps; index as i;">
                 <div class="kb-showtemp-header">
-                  <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="">
+                  <img [src]="emailoptintemps[i].imgthumb" class="img-fluid" alt="">
                 </div>
                 <div class="kb-showtemp-footer">
-                  <p>Step 1</p>
-                  <button class="btn btn-primary"><i class="fas fa-plus-square"></i> Select
+                  <p>{{emailoptintemps[i].name}}</p>
+                  <button mat-raised-button color="primary" class="mr-2"><i class="fas fa-plus-square"></i> Select
                     Template</button>
-                  <button class="btn btn-secondary"><i class="fas fa-eye"></i> Preview</button>
+                  <button mat-raised-button color="accent"><i class="fas fa-eye"></i> Preview</button>
                 </div>
               </li>
-              <li>
-                <div class="kb-showtemp-header">
-                  <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="kb-showtemp-footer">
-                  <p>Blog Render</p>
-                  <button class="btn btn-primary"><i class="fas fa-plus-square"></i> Select
-                    Template</button>
-                  <button class="btn btn-secondary"><i class="fas fa-eye"></i> Preview</button>
-                </div>
-              </li>
-              <li>
-                <div class="kb-showtemp-header">
-                  <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="kb-showtemp-footer">
-                  <p>Blog Render</p>
-                  <button class="btn btn-primary"><i class="fas fa-plus-square"></i> Select
-                    Template</button>
-                  <button class="btn btn-secondary"><i class="fas fa-eye"></i> Preview</button>
-                </div>
-              </li>
-              <li>
-                <div class="kb-showtemp-header">
-                  <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="kb-showtemp-footer">
-                  <p>Clean leanding</p>
-                  <button class="btn btn-primary"><i class="fas fa-plus-square"></i> Select
-                    Template</button>
-                  <button class="btn btn-secondary"><i class="fas fa-eye"></i> Preview</button>
-                </div>
-              </li>
-              <li>
-                <div class="kb-showtemp-header">
-                  <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="kb-showtemp-footer">
-                  <p>Big Sale</p>
-                  <button class="btn btn-primary"><i class="fas fa-plus-square"></i> Select
-                    Template</button>
-                  <button class="btn btn-secondary"><i class="fas fa-eye"></i> Preview</button>
-                </div>
-              </li>
+             
             </ul>
           </div>
           <!-- templates -->
@@ -499,11 +479,11 @@
 
             </div>
             <div class="kb-automation-footer text-center">
-              <button class="btn btn-secondary" (click)="automation_show('action')"><i class="fas fa-plus"></i> Add New
+              <button mat-raised-button color="accent" class="mr-2" (click)="automation_show('action')"><i class="fas fa-plus"></i> Add New
                 Action</button>
-              <button class="btn btn-secondary" (click)="automation_show('email')"><i class="fas fa-plus"></i> Add New
+              <button mat-raised-button color="accent" class="mr-2" (click)="automation_show('email')"><i class="fas fa-plus"></i> Add New
                 Email</button>
-              <button class="btn btn-secondary" (click)="automation_show('sms')"><i class="fas fa-plus"></i> Add New Sms
+              <button mat-raised-button color="accent" (click)="automation_show('sms')"><i class="fas fa-plus"></i> Add New Sms
                 Text</button>
             </div>
           </div>
@@ -512,17 +492,47 @@
           <div class="kb-publishing loadEffect" *ngIf="tabOpen == 'publishing'">
             <div class="row mt-4 pb-5">
               <div class="col-md-6">
-                <p><b>FUNNEL STEP NAME</b></p>
-                <input type="text" class="form-control" value="Optin">
-              </div>
-              <div class="col-md-6">
-                <p><b>PATH</b></p>
-                <input type="text" class="form-control" value="/optin">
-              </div>
-              <div class="col-md-12 pt-3">
-                <button class="btn btn-primary float-right">Update Funnel Step</button>
+
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>FUNNEL STEP NAME</mat-label>
+                  <input type="text" matInput value="Optin">
+                </mat-form-field>
 
               </div>
+              <div class="col-md-6">
+                
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>PATH</mat-label>
+                  <input type="text" matInput value="/optin">
+                </mat-form-field>
+               
+              </div>
+              <div class="col-md-12 pt-3">
+                <button class="float-right" mat-raised-button color="primary" ><i class="fa fa-check"></i> Update Funnel Step</button>
+              </div>
+
+              <div class="col-md-12 mt-4">
+
+                <mat-form-field class="kb-chip-list" appearance="fill">
+                  <mat-label>Add Tags</mat-label>
+                  <mat-chip-list #chipList aria-label="Fruit selection">
+                    <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
+                      {{fruit.name}}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                    <input placeholder="New Tags..."
+                           [matChipInputFor]="chipList"
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           [matChipInputAddOnBlur]="addOnBlur"
+                           (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list>
+                </mat-form-field>
+
+              </div>
+
+
             </div>
           </div>
           <!-- publishing end -->
@@ -532,506 +542,6 @@
       </div>
       <!-- col -->
     </div>
-    <!-- row 1 end / for steps -->
-
-    <div class="row whitefunnel pt-5 pb-5 loadEffect" *ngIf="mainOpen == 'stats'">
-      <div class="col-md-6">
-        <apx-chart
-          [series]="chartOptions.series"
-          [chart]="chartOptions.chart"
-          [dataLabels]="chartOptions.dataLabels"
-          [plotOptions]="chartOptions.plotOptions"
-          [yaxis]="chartOptions.yaxis"
-          [xaxis]="chartOptions.xaxis"
-          [fill]="chartOptions.fill"
-          [title]="chartOptions.title"
-        ></apx-chart>
-      </div>
-      <div class="col-md-6">
-        <apx-chart
-          [series]="chartOptions2.series"
-          [chart]="chartOptions2.chart"
-          [xaxis]="chartOptions2.xaxis"
-          [dataLabels]="chartOptions2.dataLabels"
-          [grid]="chartOptions2.grid"
-          [stroke]="chartOptions2.stroke"
-          [title]="chartOptions2.title"
-        ></apx-chart>
-      </div>
-      <div class="col-md-6">
-        <apx-chart
-        [series]="chartOptions3.series"
-        [chart]="chartOptions3.chart"
-        [dataLabels]="chartOptions3.dataLabels"
-        [plotOptions]="chartOptions3.plotOptions"
-        [title]="chartOptions3.title"
-      ></apx-chart>
-      </div>
-      <div class="col-md-6">
-        <apx-chart
-        [series]="chartOptions4.series"
-        [chart]="chartOptions4.chart"
-        [yaxis]="chartOptions4.yaxis"
-        [xaxis]="chartOptions4.xaxis"
-        [labels]="chartOptions4.labels"
-        [stroke]="chartOptions4.stroke"
-        [plotOptions]="chartOptions4.plotOptions"
-        [markers]="chartOptions4.markers"
-        [fill]="chartOptions4.fill"
-        [tooltip]="chartOptions4.tooltip"
-      ></apx-chart>
-      </div>
-
-    </div>
-    <!-- row 2 end / for stats -->
-
-    <div class="row whitefunnel pt-5 pb-5 loadEffect" *ngIf="mainOpen == 'contacts'">
-      <div class="col-md-12">
-        <section class="users-list-wrapper" id='table-userslist'>
-          <div class="users-list-filter px-1">
-            <form class="container-fluid">
-              <div class="row border rounded py-2 mb-2">
-                <div class="col-12 col-sm-6 col-lg-3">
-                  <label for="users-list-verified">Showing Contacts for</label>
-                  <fieldset class="form-group">
-                    <select class="form-control" id="users-list-verified">
-                      <option value="Yes">Last 7 Days</option>
-                      <option value="" selected>Last 30 Days</option>
-                      <option value="Yes">Last 2 Months</option>
-                      <option value="No">This Year</option>
-                      <option value="No">All Time</option>
-                    </select>
-                  </fieldset>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3">
-                  <label for="users-list-role">Steps</label>
-                  <fieldset class="form-group">
-                    <select class="form-control" id="users-list-role">
-                      <option value="">All Funnel Steps</option>
-                      <optgroup label="Funnel Steps">
-                        <option value="User">Optin</option>
-                        <option value="Staff">Thank you</option>
-                      </optgroup>
-                    </select>
-                  </fieldset>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                  <button type="reset" class="btn btn-primary btn-block glow users-list-clear mt-2"><i
-                      class="far fa-check-circle"></i> Apply</button>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                  <button type="reset" class="btn btn-primary btn-block glow users-list-clear mt-2"><i
-                      class="fas fa-download"></i> Download Contacts</button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="users-list-table">
-            <div class="card">
-              <div class="card-body">
-                <!-- datatable start -->
-                <div class="table-responsive">
-                  <div id="users-list-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="users-list-datatable_length">
-                          <label>Show <select name="users-list-datatable_length" aria-controls="users-list-datatable"
-                              class="custom-select custom-select-sm form-control form-control-sm">
-                              <option value="10">10</option>
-                              <option value="25">25</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select> entries</label></div>
-                      </div>
-                      <div class="col-sm-12 col-md-6">
-                        <div id="users-list-datatable_filter" class="dataTables_filter">
-                          <label>Search:<input type="search" class="form-control form-control-sm"
-                              placeholder="Search By Product" aria-controls="users-list-datatable"></label></div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <table id="users-list-datatable" class="table dataTable no-footer" role="grid"
-                          aria-describedby="users-list-datatable_info">
-                          <thead>
-                            <tr role="row">
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="username: activate to sort column ascending"
-                                style="width: 110.325px;">Name</th>
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="name: activate to sort column ascending"
-                                style="width: 158.062px;">Email</th>
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="last activity: activate to sort column ascending"
-                                style="width: 112.725px;">Sign Up</th>
-                              <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="edit"
-                                style="width: 38.1px;">edit</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr role="row" class="odd">
-                              <td><a href="">Dean Stanley</a>
-                              </td>
-                              <td>DeanStanley@gmail.com</td>
-                              <td>30/04/2019</td>
-                              <td><a href=""><i class="fas fa-user-edit"></i></a></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12 float-right">
-                          <mat-paginator [length]="100"
-                          [pageSize]="10"
-                          [pageSizeOptions]="[5, 10, 25, 100]"
-                          aria-label="Select page">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- datatable ends -->
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-    <!-- row 3 end / for contacts -->
-
-    <div class="row whitefunnel pt-5 pb-5 loadEffect" *ngIf="mainOpen == 'sales'">
-      <div class="col-md-12">
-        <section class="users-list-wrapper" id='table-userslist'>
-          <div class="users-list-filter px-1">
-            <form class="container-fluid">
-              <div class="row border rounded py-2 mb-2">
-                <div class="col-12 col-sm-6 col-lg-3">
-                  <label for="users-list-verified">Showing Contacts for</label>
-                  <fieldset class="form-group">
-                    <select class="form-control" id="users-list-verified">
-                      <option value="Yes">Last 7 Days</option>
-                      <option value="" selected>Last 30 Days</option>
-                      <option value="Yes">Last 2 Months</option>
-                      <option value="No">This Year</option>
-                      <option value="No">All Time</option>
-                    </select>
-                  </fieldset>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3">
-                  <label for="users-list-role">Steps</label>
-                  <fieldset class="form-group">
-                    <select class="form-control" id="users-list-role">
-                      <option value="">All Funnel Steps</option>
-                      <optgroup label="Funnel Steps">
-                        <option value="User">Optin</option>
-                        <option value="Staff">Thank you</option>
-                      </optgroup>
-                    </select>
-                  </fieldset>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                  <button type="reset" class="btn btn-primary btn-block glow users-list-clear mt-2"><i
-                      class="far fa-check-circle"></i> Apply</button>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                  <button type="reset" class="btn btn-primary btn-block glow users-list-clear mt-2">
-                    <i class="far fa-file-excel"></i> Export to CSV</button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="users-list-table">
-            <div class="card">
-              <div class="card-body">
-                <!-- datatable start -->
-                <div class="table-responsive">
-                  <div id="users-list-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                      <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="users-list-datatable_length">
-                          <label>Show <select name="users-list-datatable_length" aria-controls="users-list-datatable"
-                              class="custom-select custom-select-sm form-control form-control-sm">
-                              <option value="10">10</option>
-                              <option value="25">25</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select> entries</label></div>
-                      </div>
-                      <div class="col-sm-12 col-md-6">
-                        <div id="users-list-datatable_filter" class="dataTables_filter">
-                          <label>Search:<input type="search" class="form-control form-control-sm"
-                              placeholder="Search By Product" aria-controls="users-list-datatable"></label></div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <table id="users-list-datatable" class="table dataTable no-footer" role="grid"
-                          aria-describedby="users-list-datatable_info">
-                          <thead>
-                            <tr role="row">
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="username: activate to sort column ascending"
-                                style="width: 110.325px;">Product</th>
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="name: activate to sort column ascending"
-                                style="width: 158.062px;">Amount</th>
-                              <th class="sorting" tabindex="0" aria-controls="users-list-datatable" rowspan="1"
-                                colspan="1" aria-label="last activity: activate to sort column ascending"
-                                style="width: 112.725px;">Customer</th>
-                              <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="edit"
-                                style="width: 38.1px;">Status</th>
-                              <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="edit"
-                                style="width: 38.1px;">Transition</th>
-                              <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="edit"
-                                style="width: 38.1px;">View Details</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr role="row" class="odd">
-                              <td>Optin</td>
-                              <td>$12.00</td>
-                              <td><a href="">DeanStanley@gmail.com</a></td>
-                              <td><span class="badge badge-light-success">Active</span></td>
-                              <td>2 Days Ago</td>
-                              <td><a href=""><i class="fas fa-pencil-alt"></i> Details</a></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12 float-right">
-                          <mat-paginator [length]="100"
-                          [pageSize]="10"
-                          [pageSizeOptions]="[5, 10, 25, 100]"
-                          aria-label="Select page">
-                        </mat-paginator>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- datatable ends -->
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-    <!-- row 4 end / for sales -->
-
-    <div class="row whitefunnel pt-5 pb-5 loadEffect" *ngIf="mainOpen == 'settings'">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-body">
-            <form action="#" class="wizard-vertical wizard clearfix vertical" id="steps-uid-2">
-              <div class="steps clearfix">
-                <ul>
-                  <li class="first" [class]="tabOpen3 == 'basic' ? 'current' : ''">
-                    <a (click)="kb_settingsteps('basic')">
-                      <span class="fonticon-wrap mr-1">
-                        <i class="fas fa-cog"></i>
-                      </span>
-                      <span class="icon-title">
-                        <span class="d-block">Basic Details</span>
-                        <small class="text-muted">Setup your details here.</small>
-                      </span>
-                    </a></li>
-                  <li [class]="tabOpen3 == 'smtp' ? 'current' : ''"><a (click)="kb_settingsteps('smtp')">
-                      <span class="fonticon-wrap mr-1">
-                        <i class="fas fa-mail-bulk"></i>
-                      </span>
-                      <span class="icon-title">
-                        <span class="d-block">SMTP Configuation</span>
-                        <small class="text-muted">Your SMTP Details here.</small>
-                      </span>
-                    </a></li>
-                  <li [class]="tabOpen3 == 'tracking' ? 'current' : ''"><a (click)="kb_settingsteps('tracking')">
-                      <span class="fonticon-wrap mr-1">
-                        <i class="fas fa-code"></i>
-                      </span>
-                      <span class="icon-title">
-                        <span class="d-block">Tracking</span>
-                        <small class="text-muted">Your tracking code details.</small>
-                      </span>
-                    </a></li>
-                  <li [class]="tabOpen3 == 'payment' ? 'current' : ''"><a (click)="kb_settingsteps('payment')">
-                      <span class="fonticon-wrap mr-1">
-                        <i class="fas fa-money-check-alt"></i>
-                      </span>
-                      <span class="icon-title">
-                        <span class="d-block">Payment</span>
-                        <small class="text-muted">Payment integration.</small>
-                      </span>
-                    </a></li>
-                </ul>
-              </div>
-              <div class="content clearfix">
-                <!-- step 1 content -->
-                <fieldset class="pt-0 body loadEffect " *ngIf="tabOpen3 == 'basic'" id="steps-uid-2-p-0" role="tabpanel"
-                  aria-labelledby="steps-uid-2-h-0" aria-hidden="false">
-                  <h6 class="pb-50">Edit Settings For This Funnel</h6>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="firstName12">Name </label>
-                        <input type="text" class="form-control" id="firstName12" placeholder="Funnel Name">
-                        <small class="text-muted form-text">Name of this funnel</small>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="firstName12">Tags </label>
-                        <input type="text" class="form-control" id="firstName12" placeholder="Group Tags">
-                        <small class="text-muted form-text">The group this funnel belongs too</small>
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="emailAddress12">Domain</label>
-                        <select name="" id="" class="form-control">
-                          <option value=""></option>
-                        </select>
-                        <small class="text-muted form-text">The domain for the funnel — <a href="#">Add/Edit
-                            Domains</a></small>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label>Path</label>
-                        <input type="text" class="form-control" placeholder="optin">
-                        <small class="text-muted form-text">The path of this funnels starting page</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label>Favicon Url</label>
-                        <input type="text" class="form-control" placeholder="https://this.com/this.png">
-                        <small class="text-muted form-text">Add a URL to your .png or .ico favicon image. For ALL your
-                          pages inside your funnel.</small>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <!-- step 1 content end-->
-                <!-- step 2 content -->
-                <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'smtp'" id="steps-uid-2-p-1" role="tabpanel"
-                  aria-labelledby="steps-uid-2-h-1" aria-hidden="true">
-                  <h6 class="py-50">Edit Settings For This Funnel</h6>
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="form-group">
-                        <label for="proposalTitle1"><a>SMTP Configuation</a></label>
-                        <small>Provide your <a>Account SMTP Settings</a> to customize outgoing emails from
-                          Clickfunnels</small>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <!-- step 2 content end-->
-                <!-- step 3 content -->
-                <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'tracking'" id="steps-uid-2-p-2"
-                  role="tabpanel" aria-labelledby="steps-uid-2-h-2" aria-hidden="true">
-                  <h6 class="py-50">Edit Settings For This Funnel</h6>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label>Head Tracking Code:</label>
-                        <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
-                        <small>Funnel wide tracking code for the head tag.</small>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="eventLocation12">Body Tracking Code:</label>
-                        <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
-                        <small>Funnel wide tracking codes for the body tag.</small>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <!-- step 3 content end-->
-                <!-- step 4 content -->
-                <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'payment'" id="steps-uid-2-p-3"
-                  role="tabpanel" aria-labelledby="steps-uid-2-h-3" aria-hidden="true">
-                  <h6 class="py-50">Edit Settings For This Funnel</h6>
-                  <div class="row">
-                    <div class="col-md-2">
-                      <div class="kb-payment-stripe-i">
-                        <i class="fab fa-stripe"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-10">
-                      <div class="form-group">
-                        <label for="eventName13">Stripe Account</label>
-                        <select name="" id="" class="form-control">
-                          <option value="">Account not connnected</option>
-                        </select>
-                        <br>
-                        <label for="">Test Mode</label>
-                        <p style="line-height: 16px;">
-                          <small style="line-height:10px;">Enable Test Mode for Stripe. Use CC number: 4012888888881881
-                            with any future Exp date and CVV number. Note: To test subscriptions, you MUST have
-                            subscription plans with the same ID in Stripe in Test mode and Live mode. In test mode disc
-                            delivered will not operate.</small>
-                        </p>
-                        <small>
-                          <a href="">Edit Stripe Details</a>
-                        </small>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <hr>
-                    </div>
-
-                    <div class="col-md-2">
-                      <div class="kb-payment-stripe-i">
-                        <i class="fab fa-cc-paypal"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-10">
-                      <div class="form-group">
-                        <label for="eventName13">Paypal Account</label>
-                        <select name="" id="" class="form-control">
-                          <option value="">Account not connnected</option>
-                        </select>
-                        <br>
-                        <label for="">Test Mode</label>
-                        <p style="line-height: 16px;">
-                          <small style="line-height:10px;">Enable Test Mode for Stripe. Use CC number: 4012888888881881
-                            with any future Exp date and CVV number. Note: To test subscriptions, you MUST have
-                            subscription plans with the same ID in Stripe in Test mode and Live mode. In test mode disc
-                            delivered will not operate.</small>
-                        </p>
-                        <small>
-                          <a href="">Edit Stripe Details</a>
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <!-- step 4 content end-->
-              </div>
-              <div class="actions clearfix" id="kb-settingsaction">
-                <ul role="menu">
-                  <li class="ml-2"><a mat-raised-button color="accent"><i class="fas fa-archive"></i> Archive Funnel</a></li>
-
-                  <li class="ml-2"><a mat-raised-button color="accent"><i class="fas fa-binoculars"></i> View Archive Funnel Steps</a></li>
-
-                  <li class="ml-2"><a mat-raised-button color="primary"><i class="far fa-check-circle"></i> Update Settings</a></li>
-                </ul>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- row 5 end / for settings -->
   </div>
-  <!-- container -->
+
 </div>

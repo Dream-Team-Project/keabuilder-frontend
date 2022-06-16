@@ -15,6 +15,7 @@ export class FunnelComponent implements OnInit {
     {
       id:'1',  
       name:'Marketing',
+      grouptags:'',
       steps:[
           {
           title:'Facebook Campaign 😎',
@@ -45,6 +46,7 @@ export class FunnelComponent implements OnInit {
     {
       id:'2',  
       name:'Developing',
+      grouptags:'Develop',
       steps:[
           {
           title:'Sales page',
@@ -99,6 +101,7 @@ export class FunnelComponent implements OnInit {
     {
       id:'3',  
       name:'Webinar',
+      grouptags:'Extra',
       steps:[
           {
           title:'Webinar Registration',
@@ -129,6 +132,7 @@ export class FunnelComponent implements OnInit {
     {
       id:'4',  
       name:'kea Ebook',
+      grouptags:'webinars',
       steps:[
           {
           title:'kea Customer Optin',
@@ -161,6 +165,7 @@ export class FunnelComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
   parentOptions: Options = {
     group: 'parent',
     scroll: true,
@@ -181,6 +186,7 @@ export class FunnelComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   }; 
+  
   childrenOptions: Options = {
     group: 'child',
     scroll: true,

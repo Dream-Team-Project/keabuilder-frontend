@@ -279,22 +279,31 @@
             &nbsp; <span matTooltip="Net Revenue" matTooltipPosition="above"><i class="fa fa-dollar-sign"
                 aria-hidden="true"></i> {{kbcourses[i]['net_revenue']}} USD</span></p>
 
-          <button class="btn btn-secondary">Preview <i class="far fa-eye"></i></button>
-          <button class="btn btn-primary">Edit <i class="fas fa-pencil-alt"></i></button>
+          <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
-          <div class="kb-page-settting" (click)="kbcourses[i].itemshow = !kbcourses[i].itemshow" matTooltip="Settings"
-            matTooltipPosition="above"><i class="fas fa-cog"></i>
-          </div>
-          <div *ngIf="kbcourses[i].itemshow" class="kb-dropdown__panel">
-            <ul class="kb-dropdown__menu">
-              <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Export</a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Stats</a></li>
-              <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
-              <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
-                  Offer</a></li>
-            </ul>
-          </div>
+          <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+            <i class="fas fa-cog"></i>
+          </button>
+          <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                  <i class="fas fa-pen mr-2" aria-hidden="true"></i> Edit details
+              </button>
+              <button mat-menu-item>
+                <i class="fas fa-link pr-2"></i>Export
+              </button>
+              <button mat-menu-item>
+                <i class="fas fa-chart-pie pr-2"></i>View Stats
+              </button>
+              <button mat-menu-item>
+                <i class="far fa-copy pr-2"></i>Duplicate
+              </button>
+              <button mat-menu-item class="text-danger">
+              <i class="fas fa-trash pr-2"></i>Delete Offer
+              </button>
+          </mat-menu>
+
+
         </div>
       </div>
     </div>

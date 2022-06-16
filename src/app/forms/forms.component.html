@@ -1,0 +1,77 @@
+<div id="kbformcomponent">
+    <div class="container-fluid mb-4">
+        <div class="row">
+          <div class="col-md-6">
+            <h3 class="d-inline-block mr-2">All Forms</h3>
+            <button mat-raised-button color="primary" matTooltip="Add New Form" matTooltipPosition="above" class="mr-2">Create A Form <i class="fa fa-plus" aria-hidden="true"></i></button>
+    
+          </div>
+          <div class="col-md-6 text-right">
+            <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+                <input type="text" class="form-control" id="offer-search" #input  placeholder="Search members...">
+                <div class="form-control-position">
+                    <i class="fab fa-searchengin"></i>                        
+                </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 cardpage mt-10 loadEffect" *ngFor="let kbpage of kbcourses; index as i;">
+                <div>
+                    <img [src]="kbcourses[i]['thumbnail']" alt="" class="img-fluid img-fit">
+        
+                    <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Form Name" matTooltipPosition="above">
+                      <span>{{kbcourses[i]['form_name']}}</span>
+                      <input type="text" [(ngModel)]="kbcourses[i]['form_name']">
+                    </div>
+                    <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+                      <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
+                          (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
+                          <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+                          {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+                      </span>
+                      <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
+                          <ul class="kb-dropdown__menu">
+                          <li>
+                              <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
+                          </li>
+                          <li>
+                              <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
+                          </li>
+                          </ul>
+                      </div>
+                    </div>
+                    <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['entries']+' Entries'" matTooltipPosition="above"><i class="fa fa-tasks" aria-hidden="true"></i> {{kbcourses[i]['entries']}}</span> &nbsp; <span><i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</span>  &nbsp; <span matTooltip="Actions" matTooltipPosition="above"><i class="fa fa-bolt" aria-hidden="true"></i> {{kbcourses[i]['actions']}}</span></p>
+        
+                    <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+                    <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+                    <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+                      <i class="fas fa-cog"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <i class="fas fa-code pr-2"></i>Integrate
+                        </button>
+                        <button mat-menu-item>
+                          <i class="fas fa-chart-pie pr-2"></i>Statistics
+                        </button>
+                        <button mat-menu-item>
+                            <i class="far fa-copy pr-2"></i>Duplicate
+                        </button>
+                        <button mat-menu-item>
+                            <i class="fas fa-link pr-2"></i>Copy URL
+                        </button>
+                        <button mat-menu-item class="text-danger">
+                        <i class="fas fa-trash pr-2"></i>Delete
+                        </button>
+                    </mat-menu>
+        
+
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

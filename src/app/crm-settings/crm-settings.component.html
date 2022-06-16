@@ -1,0 +1,409 @@
+<div id="kb-settings">
+
+    <div id="kb-crmsettings-actions" *ngIf="poupsidebar && automationaddnewaction">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+          
+          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+          <h6><b>New {{kbforsmtp==false?'Email':'SMTP'}} Integration</b></h6>
+          <p>Enter your {{kbforsmtp==false?'Email':'SMTP'}} settings using the options below.</p>
+          <hr>
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Title</mat-label>
+            <input type="text" matInput placeholder="Integration Name" required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>From Name</mat-label>
+            <input type="text" matInput placeholder="Send From Name" required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>From Email</mat-label>
+            <input type="text" matInput placeholder="Send From Email Address" required >
+          </mat-form-field>
+
+          <!-- for custom -->
+          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
+            <mat-label>SMTP Server</mat-label>
+            <input type="text" matInput placeholder="SMTP Server URL" required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
+            <mat-label>SMTP Port</mat-label>
+            <input type="number" matInput placeholder="SMTP Port Number" required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
+            <mat-label>SMTP User</mat-label>
+            <input type="text" matInput placeholder="SMTP Username" required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
+            <mat-label>SMTP Password</mat-label>
+            <input type="text" matInput placeholder="SMTP Password" required >
+          </mat-form-field>
+          <!-- for custom -->
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Domain</mat-label>
+            <mat-select required>
+              <mat-option >Select a domain</mat-option>
+              <mat-option value="clickfunnel">www.clickfunnel.com</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address 1</mat-label>
+            <input type="text" matInput required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address 2</mat-label>
+            <input type="text" matInput >
+          </mat-form-field>
+          
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>City</mat-label>
+            <input type="text" matInput required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>State</mat-label>
+            <input type="text" matInput required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Zip Code</mat-label>
+            <input type="number" matInput required >
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Country</mat-label>
+            <mat-select>
+                
+                <mat-option class="item " value="AF">Afghanistan</mat-option>
+                <mat-option class="item" value="AL">Albania</mat-option>
+                <mat-option class="item" value="DZ">Algeria</mat-option>
+                <mat-option class="item" value="AS">American Samoa</mat-option>
+                <mat-option class="item" value="AD">Andorra</mat-option>
+                <mat-option class="item" value="AO">Angola</mat-option>
+                <mat-option class="item" value="AI">Anguilla</mat-option>
+                <mat-option class="item" value="AQ">Antarctica</mat-option>
+                <mat-option class="item" value="AG">Antigua and Barbuda</mat-option>
+                <mat-option class="item" value="AR">Argentina</mat-option>
+                <mat-option class="item" value="AM">Armenia</mat-option>
+                <mat-option class="item" value="AW">Aruba</mat-option>
+                <mat-option class="item" value="AU">Australia</mat-option>
+                <mat-option class="item" value="AT">Austria</mat-option>
+                <mat-option class="item" value="AZ">Azerbaijan</mat-option>
+                <mat-option class="item" value="BS">Bahamas</mat-option>
+                <mat-option class="item" value="BH">Bahrain</mat-option>
+                <mat-option class="item" value="BD">Bangladesh</mat-option>
+                <mat-option class="item" value="BB">Barbados</mat-option>
+                <mat-option class="item" value="BY">Belarus</mat-option>
+                <mat-option class="item" value="BE">Belgium</mat-option>
+                <mat-option class="item" value="BZ">Belize</mat-option>
+                <mat-option class="item" value="BJ">Benin</mat-option>
+                <mat-option class="item" value="BM">Bermuda</mat-option>
+                <mat-option class="item" value="BT">Bhutan</mat-option>
+                <mat-option class="item" value="BO">Bolivia, Plurinational State of</mat-option>
+                <mat-option class="item" value="BQ">Bonaire, Sint Eustatius and Saba</mat-option>
+                <mat-option class="item" value="BA">Bosnia and Herzegovina</mat-option>
+                <mat-option class="item" value="BW">Botswana</mat-option>
+                <mat-option class="item" value="BV">Bouvet Island</mat-option>
+                <mat-option class="item" value="BR">Brazil</mat-option>
+                <mat-option class="item" value="IO">British Indian Ocean Territory</mat-option>
+                <mat-option class="item" value="BN">Brunei Darussalam</mat-option>
+                <mat-option class="item" value="BG">Bulgaria</mat-option>
+                <mat-option class="item" value="BF">Burkina Faso</mat-option>
+                <mat-option class="item" value="BI">Burundi</mat-option>
+                <mat-option class="item" value="KH">Cambodia</mat-option>
+                <mat-option class="item" value="CM">Cameroon</mat-option>
+                <mat-option class="item" value="CA">Canada</mat-option>
+                <mat-option class="item" value="CV">Cape Verde</mat-option>
+                <mat-option class="item" value="KY">Cayman Islands</mat-option>
+                <mat-option class="item" value="CF">Central African Republic</mat-option>
+                <mat-option class="item" value="TD">Chad</mat-option>
+                <mat-option class="item" value="CL">Chile</mat-option>
+                <mat-option class="item" value="CN">China</mat-option>
+                <mat-option class="item" value="CX">Christmas Island</mat-option>
+                <mat-option class="item" value="CC">Cocos (Keeling) Islands</mat-option>
+                <mat-option class="item" value="CO">Colombia</mat-option>
+                <mat-option class="item" value="KM">Comoros</mat-option>
+                <mat-option class="item" value="CG">Congo</mat-option>
+                <mat-option class="item" value="CD">Congo, The Democratic Republic of the</mat-option>
+                <mat-option class="item" value="CK">Cook Islands</mat-option>
+                <mat-option class="item" value="CR">Costa Rica</mat-option>
+                <mat-option class="item" value="HR">Croatia</mat-option>
+                <mat-option class="item" value="CU">Cuba</mat-option>
+                <mat-option class="item" value="CW">Curaçao</mat-option>
+                <mat-option class="item" value="CY">Cyprus</mat-option>
+                <mat-option class="item" value="CZ">Czech Republic</mat-option>
+                <mat-option class="item" value="CI">Côte d'Ivoire</mat-option>
+                <mat-option class="item" value="DK">Denmark</mat-option>
+                <mat-option class="item" value="DJ">Djibouti</mat-option>
+                <mat-option class="item" value="DM">Dominica</mat-option>
+                <mat-option class="item" value="DO">Dominican Republic</mat-option>
+                <mat-option class="item" value="EC">Ecuador</mat-option>
+                <mat-option class="item" value="EG">Egypt</mat-option>
+                <mat-option class="item" value="SV">Salvador</mat-option>
+                <mat-option class="item" value="GQ">Equatorial Guinea</mat-option>
+                <mat-option class="item" value="ER">Eritrea</mat-option>
+                <mat-option class="item" value="EE">Estonia</mat-option>
+                <mat-option class="item" value="ET">Ethiopia</mat-option>
+                <mat-option class="item" value="FK">Falkland Islands (Malvinas)</mat-option>
+                <mat-option class="item" value="FO">Faroe Islands</mat-option>
+                <mat-option class="item" value="FJ">Fiji</mat-option>
+                <mat-option class="item" value="FI">Finland</mat-option>
+                <mat-option class="item" value="FR">France</mat-option>
+                <mat-option class="item" value="GF">French Guiana</mat-option>
+                <mat-option class="item" value="PF">French Polynesia</mat-option>
+                <mat-option class="item" value="TF">French Southern Territories</mat-option>
+                <mat-option class="item" value="GA">Gabon</mat-option>
+                <mat-option class="item" value="GM">Gambia</mat-option>
+                <mat-option class="item" value="GE">Georgia</mat-option>
+                <mat-option class="item" value="DE">Germany</mat-option>
+                <mat-option class="item" value="GH">Ghana</mat-option>
+                <mat-option class="item" value="GI">Gibraltar</mat-option>
+                <mat-option class="item" value="GR">Greece</mat-option>
+                <mat-option class="item" value="GL">Greenland</mat-option>
+                <mat-option class="item" value="GD">Grenada</mat-option>
+                <mat-option class="item" value="GP">Guadeloupe</mat-option>
+                <mat-option class="item" value="GU">Guam</mat-option>
+                <mat-option class="item" value="GT">Guatemala</mat-option>
+                <mat-option class="item" value="GG">Guernsey</mat-option>
+                <mat-option class="item" value="GN">Guinea</mat-option>
+                <mat-option class="item" value="GW">Guinea-Bissau</mat-option>
+                <mat-option class="item" value="GY">Guyana</mat-option>
+                <mat-option class="item" value="HT">Haiti</mat-option>
+                <mat-option class="item" value="HM">Heard Island and McDonald Islands</mat-option>
+                <mat-option class="item" value="VA">Holy See (Vatican City State)</mat-option>
+                <mat-option class="item" value="HN">Honduras</mat-option>
+                <mat-option class="item" value="HK">Hong Kong</mat-option>
+                <mat-option class="item" value="HU">Hungary</mat-option>
+                <mat-option class="item" value="IS">Iceland</mat-option>
+                <mat-option class="item" value="IN">India</mat-option>
+                <mat-option class="item" value="ID">Indonesia</mat-option>
+                <mat-option class="item" value="IR">Iran, Islamic Republic of</mat-option>
+                <mat-option class="item" value="IQ">Iraq</mat-option>
+                <mat-option class="item" value="IE">Ireland</mat-option>
+                <mat-option class="item" value="IM">Isle of Man</mat-option>
+                <mat-option class="item" value="IL">Israel</mat-option>
+                <mat-option class="item" value="IT">Italy</mat-option>
+                <mat-option class="item" value="JM">Jamaica</mat-option>
+                <mat-option class="item" value="JP">Japan</mat-option>
+                <mat-option class="item" value="JE">Jersey</mat-option>
+                <mat-option class="item" value="JO">Jordan</mat-option>
+                <mat-option class="item" value="KZ">Kazakhstan</mat-option>
+                <mat-option class="item" value="KE">Kenya</mat-option>
+                <mat-option class="item" value="KI">Kiribati</mat-option>
+                <mat-option class="item" value="KP">Korea, Democratic People's Republic of</mat-option>
+                <mat-option class="item" value="KR">Korea, Republic of</mat-option>
+                <mat-option class="item" value="KW">Kuwait</mat-option>
+                <mat-option class="item" value="KG">Kyrgyzstan</mat-option>
+                <mat-option class="item" value="LA">Lao People's Democratic Republic</mat-option>
+                <mat-option class="item" value="LV">Latvia</mat-option>
+                <mat-option class="item" value="LB">Lebanon</mat-option>
+                <mat-option class="item" value="LS">Lesotho</mat-option>
+                <mat-option class="item" value="LR">Liberia</mat-option>
+                <mat-option class="item" value="LY">Libya</mat-option>
+                <mat-option class="item" value="LI">Liechtenstein</mat-option>
+                <mat-option class="item" value="LT">Lithuania</mat-option>
+                <mat-option class="item" value="LU">Luxembourg</mat-option>
+                <mat-option class="item" value="MO">Macao</mat-option>
+                <mat-option class="item" value="MK">Macedonia, Republic of</mat-option>
+                <mat-option class="item" value="MG">Madagascar</mat-option>
+                <mat-option class="item" value="MW">Malawi</mat-option>
+                <mat-option class="item" value="MY">Malaysia</mat-option>
+                <mat-option class="item" value="MV">Malmat-optiones</mat-option>
+                <mat-option class="item" value="ML">Mali</mat-option>
+                <mat-option class="item" value="MT">Malta</mat-option>
+                <mat-option class="item" value="MH">Marshall Islands</mat-option>
+                <mat-option class="item" value="MQ">Martinique</mat-option>
+                <mat-option class="item" value="MR">Mauritania</mat-option>
+                <mat-option class="item" value="MU">Mauritius</mat-option>
+                <mat-option class="item" value="YT">Mayotte</mat-option>
+                <mat-option class="item" value="MX">Mexico</mat-option>
+                <mat-option class="item" value="FM">Micronesia, Federated States of</mat-option>
+                <mat-option class="item" value="MD">Moldova, Republic of</mat-option>
+                <mat-option class="item" value="MC">Monaco</mat-option>
+                <mat-option class="item" value="MN">Mongolia</mat-option>
+                <mat-option class="item" value="ME">Montenegro</mat-option>
+                <mat-option class="item" value="MS">Montserrat</mat-option>
+                <mat-option class="item" value="MA">Morocco</mat-option>
+                <mat-option class="item" value="MZ">Mozambique</mat-option>
+                <mat-option class="item" value="MM">Myanmar</mat-option>
+                <mat-option class="item" value="NA">Namibia</mat-option>
+                <mat-option class="item" value="NR">Nauru</mat-option>
+                <mat-option class="item" value="NP">Nepal</mat-option>
+                <mat-option class="item" value="NL">Netherlands</mat-option>
+                <mat-option class="item" value="NC">New Caledonia</mat-option>
+                <mat-option class="item" value="NZ">New Zealand</mat-option>
+                <mat-option class="item" value="NI">Nicaragua</mat-option>
+                <mat-option class="item" value="NE">Niger</mat-option>
+                <mat-option class="item" value="NG">Nigeria</mat-option>
+                <mat-option class="item" value="NU">Niue</mat-option>
+                <mat-option class="item" value="NF">Norfolk Island</mat-option>
+                <mat-option class="item" value="MP">Northern Mariana Islands</mat-option>
+                <mat-option class="item" value="NO">Norway</mat-option>
+                <mat-option class="item" value="OM">Oman</mat-option>
+                <mat-option class="item" value="PK">Pakistan</mat-option>
+                <mat-option class="item" value="PW">Palau</mat-option>
+                <mat-option class="item" value="PS">Palestine, State of</mat-option>
+                <mat-option class="item" value="PA">Panama</mat-option>
+                <mat-option class="item" value="PG">Papua New Guinea</mat-option>
+                <mat-option class="item" value="PY">Paraguay</mat-option>
+                <mat-option class="item" value="PE">Peru</mat-option>
+                <mat-option class="item" value="PH">Philippines</mat-option>
+                <mat-option class="item" value="PN">Pitcairn</mat-option>
+                <mat-option class="item" value="PL">Poland</mat-option>
+                <mat-option class="item" value="PT">Portugal</mat-option>
+                <mat-option class="item" value="PR">Puerto Rico</mat-option>
+                <mat-option class="item" value="QA">Qatar</mat-option>
+                <mat-option class="item" value="RO">Romania</mat-option>
+                <mat-option class="item" value="RU">Russian Federation</mat-option>
+                <mat-option class="item" value="RW">Rwanda</mat-option>
+                <mat-option class="item" value="RE">Réunion</mat-option>
+                <mat-option class="item" value="BL">Saint Barthélemy</mat-option>
+                <mat-option class="item" value="SH">Saint Helena, Ascension and Tristan da Cunha</mat-option>
+                <mat-option class="item" value="KN">Saint Kitts and Nevis</mat-option>
+                <mat-option class="item" value="LC">Saint Lucia</mat-option>
+                <mat-option class="item" value="MF">Saint Martin (French part)</mat-option>
+                <mat-option class="item" value="PM">Saint Pierre and Miquelon</mat-option>
+                <mat-option class="item" value="VC">Saint Vincent and the Grenadines</mat-option>
+                <mat-option class="item" value="WS">Samoa</mat-option>
+                <mat-option class="item" value="SM">San Marino</mat-option>
+                <mat-option class="item" value="ST">Sao Tome and Principe</mat-option>
+                <mat-option class="item" value="SA">Saudi Arabia</mat-option>
+                <mat-option class="item" value="SN">Senegal</mat-option>
+                <mat-option class="item" value="RS">Serbia</mat-option>
+                <mat-option class="item" value="SC">Seychelles</mat-option>
+                <mat-option class="item" value="SL">Sierra Leone</mat-option>
+                <mat-option class="item" value="SG">Singapore</mat-option>
+                <mat-option class="item" value="SX">Sint Maarten (Dutch part)</mat-option>
+                <mat-option class="item" value="SK">Slovakia</mat-option>
+                <mat-option class="item" value="SI">Slovenia</mat-option>
+                <mat-option class="item" value="SB">Solomon Islands</mat-option>
+                <mat-option class="item" value="SO">Somalia</mat-option>
+                <mat-option class="item" value="ZA">South Africa</mat-option>
+                <mat-option class="item" value="GS">South Georgia and the South Sandwich Islands</mat-option>
+                <mat-option class="item" value="SS">South Sudan</mat-option>
+                <mat-option class="item" value="ES">Spain</mat-option>
+                <mat-option class="item" value="LK">Sri Lanka</mat-option>
+                <mat-option class="item" value="SD">Sudan</mat-option>
+                <mat-option class="item" value="SR">Suriname</mat-option>
+                <mat-option class="item" value="SJ">Svalbard and Jan Mayen</mat-option>
+                <mat-option class="item" value="SZ">Swaziland</mat-option>
+                <mat-option class="item" value="SE">Sweden</mat-option>
+                <mat-option class="item" value="CH">Switzerland</mat-option>
+                <mat-option class="item" value="SY">Syrian Arab Republic</mat-option>
+                <mat-option class="item" value="TW">Taiwan</mat-option>
+                <mat-option class="item" value="TJ">Tajikistan</mat-option>
+                <mat-option class="item" value="TZ">Tanzania, United Republic of</mat-option>
+                <mat-option class="item" value="TH">Thailand</mat-option>
+                <mat-option class="item" value="TL">Timor-Leste</mat-option>
+                <mat-option class="item" value="TG">Togo</mat-option>
+                <mat-option class="item" value="TK">Tokelau</mat-option>
+                <mat-option class="item" value="TO">Tonga</mat-option>
+                <mat-option class="item" value="TT">Trinidad and Tobago</mat-option>
+                <mat-option class="item" value="TN">Tunisia</mat-option>
+                <mat-option class="item" value="TR">Turkey</mat-option>
+                <mat-option class="item" value="TM">Turkmenistan</mat-option>
+                <mat-option class="item" value="TC">Turks and Caicos Islands</mat-option>
+                <mat-option class="item" value="TV">Tuvalu</mat-option>
+                <mat-option class="item" value="UG">Uganda</mat-option>
+                <mat-option class="item" value="UA">Ukraine</mat-option>
+                <mat-option class="item" value="AE">United Arab Emirates</mat-option>
+                <mat-option class="item" value="GB">United Kingdom</mat-option>
+                <mat-option class="item" value="US">United States</mat-option>
+                <mat-option class="item" value="UM">United States Minor Outlying Islands</mat-option>
+                <mat-option class="item" value="UY">Uruguay</mat-option>
+                <mat-option class="item" value="UZ">Uzbekistan</mat-option>
+                <mat-option class="item" value="VU">Vanuatu</mat-option>
+                <mat-option class="item" value="VE">Venezuela, Bolivarian Republic of</mat-option>
+                <mat-option class="item" value="VN">Viet Nam</mat-option>
+                <mat-option class="item" value="VG">Virgin Islands, British</mat-option>
+                <mat-option class="item" value="VI">Virgin Islands, U.S.</mat-option>
+                <mat-option class="item" value="WF">Wallis and Futuna</mat-option>
+                <mat-option class="item" value="EH">Western Sahara</mat-option>
+                <mat-option class="item" value="YE">Yemen</mat-option>
+                <mat-option class="item" value="ZM">Zambia</mat-option>
+                <mat-option class="item" value="ZW">Zimbabwe</mat-option>
+                <mat-option class="item" value="AX">Åland Islands</mat-option>
+
+
+            </mat-select>
+          </mat-form-field>          
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address 1</mat-label>
+            <input type="text" matInput required >
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width">
+            <mat-label>SMTP Footer</mat-label>
+            <textarea matInput placeholder="Footer Added to all Outgoing Emails.  Including physical address in emails is required for CAN-SPAM compliance.  #UN_SUB# will be substituted for your contact's unsubscribe link." ></textarea>
+          </mat-form-field>
+    
+          <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Save SMTP Integration</button>
+    
+        </div>
+      </div>
+      <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']"><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/forms']" ><i class="fa fa-id-card" aria-hidden="true"></i> Forms</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+                <button mat-raised-button [routerLink]="['/crm-settings']" color="primary" ><i class="fa fa-mail-bulk" aria-hidden="true"></i> SMTP</button>
+            </div>
+            <div class="col-md-6 mt-4">
+               <h2>Email Integrations (SMTP)</h2>
+               <p>Setup transactional or marketing emails. We have included transactional emails with your domain, or you can add your own external SMTP service to support both your transactional and marketing emails.</p>
+               <h4 class="mt-4">Choose an Email Type you want to setup:</h4>
+               <div class="kb-insidecard" (click)="addnewcourse('transactional')">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    <h5><b>Transactional Only</b></h5>
+                    <small>Free Clickfunnels service to send order confirmations, email receipts, etc.</small>                
+               </div>
+               <div class="kb-insidecard" (click)="addnewcourse('marketing')">
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>   
+                    <h5><b>Transactional & Marketing</b></h5>
+                    <small>Third party integration for marketing and transactional emails.</small>                
+                </div>
+
+                <div class="clearfix"></div>
+
+                <mat-card class="mt-4">
+                    <ul class="kb-domainul">
+                        <li>Connected <i class="fa fa-check-circle" aria-hidden="true"></i></li>
+                        <li>Transactional Only <i class="fa fa-shopping-cart" aria-hidden="true"></i></li>
+                        <li><b>Name: </b>My SMTP Integration</li>
+                        <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
+                    </ul>
+                </mat-card>
+
+                <mat-card class="mt-4">
+                   <ul class="kb-domainul">
+                       <li>Setup Pending <i class="fa fa-clock" aria-hidden="true"></i></li>
+                       <li>Transactional & Marketing <i class="fa fa-bullhorn" aria-hidden="true"></i></li>
+                       <li><b>Name: </b>For External</li>
+                       <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
+                   </ul>
+               </mat-card>
+
+            </div>
+            <div class="col-md-5 mt-4">
+                <img src="/assets/images/payment/email-campaign.png" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+    
+</div>

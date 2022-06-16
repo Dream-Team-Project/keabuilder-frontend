@@ -1,0 +1,93 @@
+<div id="kb-crm">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <button mat-raised-button class="mr-2" color="primary"><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/forms']" ><i class="fa fa-id-card" aria-hidden="true"></i> Forms</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+                <button mat-raised-button [routerLink]="['/crm-settings']"><i class="fa fa-mail-bulk" aria-hidden="true"></i> SMTP</button>
+            </div>
+            <div class="col-md-4 text-right">
+                <button mat-raised-button color="accent" class="mr-2 d-inline-block" ><i class="fa fa-random" aria-hidden="true"></i> Create an automation</button>
+                <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+                    <input type="text" class="form-control" id="offer-search" #input  placeholder="Search Automations...">
+                    <div class="form-control-position">
+                        <i class="fab fa-searchengin"></i>                        
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            
+            <div class="col-md-4 cardpage mt-5 mb-5 loadEffect" *ngFor="let automation of automations; index as i;">
+                <div>
+                    <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + automations[i]['thumbnail'] + ')'}">
+                        <!-- <img [src]="automations[i]['thumbnail']" alt="" class="img-fluid"> -->
+                    </div>
+        
+                    <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Automation Name" matTooltipPosition="above">
+                      <span>{{automations[i]['automation_name']}}</span>
+                      <input type="text" [(ngModel)]="automations[i]['automation_name']">
+                    </div>
+                    <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+                      <span class="statusbadge" [class]="automations[i]['publish_status']==1 ? 'active1':'active2'"
+                          (click)="automations[i].dropdownstatus = !automations[i].dropdownstatus">
+                          <i class="fas" [class]="automations[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+                          {{automations[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+                      </span>
+                      <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="automations[i].dropdownstatus" >
+                          <ul class="kb-dropdown__menu">
+                          <li>
+                              <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
+                          </li>
+                          <li>
+                              <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
+                          </li>
+                          </ul>
+                      </div>
+                    </div>
+                    <p class="kb-pagedate"><span [matTooltip]="automations[i]['entries']+' Contact currently in the automation'" matTooltipPosition="above"><i class="fa fa-retweet" aria-hidden="true"></i> {{automations[i]['entries']}}</span> &nbsp; <span [matTooltip]="automations[i]['automation_campaigns']+' Campaign in the automation'" matTooltipPosition="above" ><i class="fa fa-envelope" aria-hidden="true"></i> {{automations[i]['automation_campaigns']}}</span> &nbsp; <span [matTooltip]="'Last Update: '+automations[i]['updated_at']" matTooltipPosition="above" ><i class="fa fa-calendar" aria-hidden="true"></i> {{automations[i]['updated_at']}}</span></p>
+        
+                    <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+                    <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <i class="fas fa-users pr-2"></i>View Contacts
+                        </button>
+                        <button mat-menu-item>
+                            <i class="fas fa-share pr-2"></i>Share
+                        </button>
+                        <button mat-menu-item>
+                            <i class="far fa-copy pr-2"></i>Duplicate
+                        </button>
+                        <button mat-menu-item>
+                            <i class="fas fa-link pr-2"></i>Copy URL
+                        </button>
+                        <button mat-menu-item class="text-danger">
+                        <i class="fas fa-trash pr-2"></i>Delete
+                        </button>
+                    </mat-menu>
+        
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <mat-paginator [length]="100"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page">
+                </mat-paginator>
+            </div>
+            
+        </div>
+    </div>
+</div>

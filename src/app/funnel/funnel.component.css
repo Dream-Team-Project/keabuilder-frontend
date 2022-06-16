@@ -264,3 +264,12 @@ ul.kea-barfunnelsearch li.active a {
 .sortable-ghost >div{
 opacity: 0;
 }
+
+.keabuilder-footer-right{
+    position: relative;
+}
+.keabuilder-footer-right a {
+    font-size: 12px;
+}
+
+

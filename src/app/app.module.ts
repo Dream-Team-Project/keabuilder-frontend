@@ -25,7 +25,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 import { MatTableModule } from '@angular/material/table';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatMenuModule} from '@angular/material/menu';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,7 +45,6 @@ import { NgxColorsModule } from 'ngx-colors';
 import { NgxTinymceModule } from 'ngx-tinymce';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
-import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,6 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    ForgetPasswordComponent,
     SafeHtmlPipe,
   ],
   imports: [
@@ -91,6 +92,10 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
     }),
     MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule,
+    MatMenuModule,
   
   ],
   providers: [authInterceptorProviders, { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }],

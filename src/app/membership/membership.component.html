@@ -55,11 +55,11 @@
           <i class="fa fa-dollar-sign" aria-hidden="true"></i>
             <ul class="kb-ul">
               <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-offers']" > <i class="fa fa-percentage" aria-hidden="true"></i> Offers</button> </li>
-              <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-coupons']" > <i class="fa fa-percent" aria-hidden="true"></i> Coupon</button> </li>
-              <li> <button mat-raised-button class="mr-2" > <i class="fa fa-dollar-sign" aria-hidden="true"></i> Payment</button> </li>
+              <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-coupons']" > <i class="fa fa-percent" aria-hidden="true"></i> Coupons</button> </li>
+              <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership-payments']" > <i class="fa fa-dollar-sign" aria-hidden="true"></i> Payments</button> </li>
             </ul>
         </button>
-        <button mat-raised-button class="mr-2" >Members <i class="fa fa-users" aria-hidden="true"></i></button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/membership-members']" >Members <i class="fa fa-users" aria-hidden="true"></i></button>
         <button mat-raised-button class="mr-2" >Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
 
         <!-- <a href="javascript:void(0)" (click)="addnewcourse()">
@@ -69,48 +69,57 @@
         </a> -->
       </div>
       <div class="col-md-4 cardpage mt-10 loadEffect" *ngFor="let kbpage of kbcourses; index as i;">
-      <div>
-          <img [src]="kbcourses[i]['thumbnail']" alt="" class="img-fluid img-fit">
+        <div>
+            <img [src]="kbcourses[i]['thumbnail']" alt="" class="img-fluid img-fit">
 
-          <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
-            <span>{{kbcourses[i]['page_name']}}</span>
-            <input type="text" [(ngModel)]="kbcourses[i]['page_name']">
-          </div>
-          <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-            <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
-                (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
-                <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
-                {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
-            </span>
-            <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
-                <ul class="kb-dropdown__menu">
-                <li>
-                    <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                </li>
-                <li>
-                    <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                </li>
-                </ul>
+            <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
+              <span>{{kbcourses[i]['page_name']}}</span>
+              <input type="text" [(ngModel)]="kbcourses[i]['page_name']">
             </div>
-          </div>
-          <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['members']+' Members'" matTooltipPosition="above"><i class="fa fa-user" aria-hidden="true"></i> {{kbcourses[i]['members']}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</p>
+            <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+              <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
+                  (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
+                  <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+                  {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+              </span>
+              <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
+                  <ul class="kb-dropdown__menu">
+                  <li>
+                      <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
+                  </li>
+                  <li>
+                      <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
+                  </li>
+                  </ul>
+              </div>
+            </div>
+            <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['members']+' Members'" matTooltipPosition="above"><i class="fa fa-user" aria-hidden="true"></i> {{kbcourses[i]['members']}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</p>
 
-          <button class="btn btn-secondary">Preview <i class="far fa-eye"></i></button>
-          <button class="btn btn-primary">Edit <i class="fas fa-pencil-alt"></i></button>
+            <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+            <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
-          <div class="kb-page-settting" (click)="kbcourses[i].itemshow = !kbcourses[i].itemshow" matTooltip="Settings" matTooltipPosition="above"><i class="fas fa-cog"></i>
-          </div>
-          <div *ngIf="kbcourses[i].itemshow" class="kb-dropdown__panel">
-          <ul class="kb-dropdown__menu">
-              <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Analytics</a></li>
-              <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Copy URL</a></li>
-              <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
-                  Course</a></li>
-          </ul>
-          </div>
-      </div>
+            <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+              <i class="fas fa-cog"></i>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> Edit
+                </button>
+                <button mat-menu-item>
+                    <i class="fas fa-chart-pie pr-2"></i>View Analytics
+                </button>
+                <button mat-menu-item>
+                    <i class="far fa-copy pr-2"></i>Duplicate
+                </button>
+                <button mat-menu-item>
+                   <i class="fas fa-link pr-2"></i>Copy URL
+                </button>
+                <button mat-menu-item class="text-danger">
+                  <i class="fas fa-trash pr-2"></i>Delete
+               </button>
+            </mat-menu>
+
+        </div>
       </div>
   </div>
 

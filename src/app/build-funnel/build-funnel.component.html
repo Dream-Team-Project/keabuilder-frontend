@@ -1,57 +1,60 @@
 <div id="buildfunnelcomp">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
-        <h3>
-          <a [routerLink]="['/funnel']" class="gobackward">
-            <i class="fas fa-arrow-left fa-2x "></i></a> Choose Your Path
-          <a [routerLink]="['/create-funnel']">
-            <button class="btn btn-primary">Or.. Create a Custom Funnel</button>
-          </a>
+      <div class="col-md-12 topfixadjust">
+        <h3 class="d-inline-block">
+           Choose Your Path
         </h3>
+            <button [routerLink]="['/funnel']" mat-raised-button color="accent" class="gobackward float-right ml-2"><i class="fas fa-arrow-left fa-2x "></i> Back</button>
+            <button mat-raised-button color="primary" [routerLink]="['/create-funnel']" class="float-right">Or.. Create a Custom Funnel</button>
       </div>
       <div class="col-md-2 mt-3 fixedcategory loadEffectFromLeft">
         <h6>INDUSTRY</h6>
         <ul class="list-unstyled">
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9],'author')"
-              [class]="{ active:author }"> Author / Speaker / Coach / Consultant</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,10,11,0,8,18,12,15,4,9,21],'professional')" [class]="{ active:professional }">
-              Professional Services</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,7,11,18,19,13],'retail')" [class]="{ active:retail }">Retail</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,7,11,16,6,18,19,9,21,13],'ecommerce')" [class]="{ active:ecommerce }">Ecommerce</a>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9],'author')"
+              [class]="{ active:author }">Author / Speaker / Coach / Consultant</mat-card>
           </li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,11,18,4,15,4,9,13],'b2b')" [class]="{ active:b2b }"> B2B</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,11,0,8,18,12,15,4,9],'network')" [class]="{ active:network }"> Network
-              Marketing</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,9,21,13],'other1')"
-              [class]="{ active:other1 }"> Other</a></li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,0,8,18,12,15,4,9,21],'professional')" [class]="{ active:professional }">Professional Services</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,11,18,19,13],'retail')" [class]="{ active:retail }">Retail</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,11,16,6,18,19,9,21,13],'ecommerce')" [class]="{ active:ecommerce }">Ecommerce</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,11,18,4,15,4,9,13],'b2b')" [class]="{ active:b2b }">B2B</mat-card>
+            </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,11,0,8,18,12,15,4,9],'network')" [class]="{ active:network }">Network Marketing</mat-card>
+            </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,9,21,13],'other1')"
+              [class]="{ active:other1 }">Other</mat-card>
+            </li>
         </ul>
 
         <h6>TYPE OF FUNNEL</h6>
         <ul class="list-unstyled">
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,7,10,11,0,8,18,15,9],'generate')" [class]="{ active:generate }">Generate Leads</a>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,10,11,0,8,18,15,9],'generate')" [class]="{ active:generate }">Generate Leads</mat-card>
           </li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([20,16,6,1,19,12,14,4,2,9,21,13],'sellaproduct')" [class]="{ active:sellaproduct }">
-              Sell A Product</a></li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([17,1,12,4,2],'createaevent')" [class]="{ active:createaevent }">Create An Event</a>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([20,16,6,1,19,12,14,4,2,9,21,13],'sellaproduct')" [class]="{ active:sellaproduct }">Sell A Product</mat-card>
           </li>
-          <li class="mb-1"><a href="javascript:void(0)" class="text-muted "
-              (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9,21,13],'other2')"
-              [class]="{ active:other2 }">Other</a></li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([17,1,12,4,2],'createaevent')" [class]="{ active:createaevent }">Create An Event</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9,21,13],'other2')"
+              [class]="{ active:other2 }">Other</mat-card>
+          </li>
         </ul>
       </div>
       <div class="col-md-2 mt-3"></div>
-      <div class="col-md-10">
+      <div class="col-md-10 mt-4">
         <div class="">
           <span *ngFor="let allcategor of allcategory; index as i;" class="adjustloopvfor">
             <div class="clmwithshadow loadEffect" *ngIf="allcategory[i][0]">

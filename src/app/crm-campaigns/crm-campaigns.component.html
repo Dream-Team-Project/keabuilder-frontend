@@ -1,0 +1,90 @@
+<div id="kb-crm">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+                <button mat-raised-button class="mr-2" color="primary" [routerLink]="['/crm-campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/forms']" ><i class="fa fa-id-card" aria-hidden="true"></i> Forms</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+                <button mat-raised-button [routerLink]="['/crm-settings']"><i class="fa fa-mail-bulk" aria-hidden="true"></i> SMTP</button>
+            </div>
+            <div class="col-md-4 text-right">
+                <button mat-raised-button color="accent" class="mr-2 d-inline-block" ><i class="fa fa fa-envelope" aria-hidden="true"></i> Create a campaign</button>
+                <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+                    <input type="text" class="form-control" id="offer-search" #input  placeholder="Search Campaigns...">
+                    <div class="form-control-position">
+                        <i class="fab fa-searchengin"></i>                        
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            
+            <div class="col-md-4 cardpage mt-5 mb-5 loadEffect" *ngFor="let automation of automations_campaign; index as i;">
+                <div>
+                    <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + automations_campaign[i]['thumbnail'] + ')'}">
+                    </div>
+        
+                    <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Campaign Name" matTooltipPosition="above">
+                      <span>{{automations_campaign[i]['campaign_name']}}</span>
+                      <input type="text" [(ngModel)]="automations_campaign[i]['campaign_name']">
+                    </div>
+                    <div class="statbadg" [matTooltip]="automations_campaign[i]['publish_status']==1?'Sent to '+automations_campaign[i]['campaign_sent_to']+' contacts in '+automations_campaign[i]['campaign_sent']:'Status'" matTooltipPosition="above">
+                        <span class="statusbadge" [class]="automations_campaign[i]['publish_status']==1 ? 'active1':'active2'">
+                            <i class="fa" [class]="automations_campaign[i]['publish_status']==1 ? 'fa-check':'fa-clock'" ></i> {{automations_campaign[i]['quick_status']}}
+                        </span>
+                      </div>
+                    <p class="kb-pagedate">
+                        <span [matTooltip]="automations_campaign[i]['campaign_sent']+' Campaign has been sent'"
+                        matTooltipPosition="above"><i class="fa fa-calendar-check" aria-hidden="true"></i>
+                        {{automations_campaign[i]['campaign_sent']}}</span> &nbsp;
+                      <span [matTooltip]="' Campaign has been sent to '+automations_campaign[i]['campaign_sent_to']"
+                        matTooltipPosition="above"><i class="fa fa-check-square" aria-hidden="true"></i>
+                        {{automations_campaign[i]['campaign_sent_to']}}</span> &nbsp; <span
+                        [matTooltip]="automations_campaign[i]['updated_at']+' Campaign last Modified'"
+                        matTooltipPosition="above"><i class="fa fa-calendar-alt" aria-hidden="true"></i>
+                        {{automations_campaign[i]['updated_at']}}</span> &nbsp; <span
+                        [matTooltip]="'Campaign Type: '+automations_campaign[i]['campaign_type']"
+                        matTooltipPosition="above"><i class="fa fa-tachometer-alt" aria-hidden="true"></i>
+                        {{automations_campaign[i]['campaign_type']}}</span>
+                    </p>
+        
+                    <button mat-raised-button color="primary">{{automations_campaign[i]['publish_status']=='1'?'View Report':'Edit'}} <i class="fas " [ngClass]="automations_campaign[i]['publish_status']=='1'?'fa-chart-pie':'fa-pencil-alt'"></i></button>
+
+                    <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <i class="far fa-copy pr-2"></i>Duplicate
+                        </button>
+                        <button mat-menu-item>
+                            <i class="fas fa-save pr-2"></i>Save as a template
+                        </button>
+                        <button mat-menu-item>
+                            <i class="fas fa-link pr-2"></i>Copy URL
+                        </button>
+                        <button mat-menu-item class="text-danger">
+                        <i class="fas fa-trash pr-2"></i>Delete
+                        </button>
+                    </mat-menu>
+        
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <mat-paginator [length]="100"
+                    [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page">
+                </mat-paginator>
+            </div>
+            
+        </div>
+    </div>
+</div>

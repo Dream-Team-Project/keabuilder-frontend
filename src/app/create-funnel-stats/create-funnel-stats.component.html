@@ -1,0 +1,114 @@
+<div id="kb-createfunnelstats">
+    <header class="wizard-nav">
+      <div class="wizard-steps">
+        <!--begin::Wizard Step 1 Nav-->
+        <div class="wizard-step" routerLink="/create-funnel">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-filter"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">My Funnel Name</div>
+              <div class="wizard-desc">Steps</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 1 Nav-->
+        <!--begin::Wizard Step 2 Nav-->
+        <div class="wizard-step" routerLink="/create-funnel-stats" data-wizard-state="current">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">STATS</div>
+              <div class="wizard-desc">View Your Stats</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 2 Nav-->
+        <!--begin::Wizard Step 3 Nav-->
+        <div class="wizard-step" routerLink="/create-funnel-contacts">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-users"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">CONTACTS</div>
+              <div class="wizard-desc">Check Your Contacts</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 3 Nav-->
+        <!--begin::Wizard Step 4 Nav-->
+        <div class="wizard-step" routerLink="/create-funnel-sales">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">SALES</div>
+              <div class="wizard-desc">See Your Sales</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 4 Nav-->
+        <!--begin::Wizard Step 5 Nav-->
+        <div class="wizard-step" routerLink="/create-funnel-settings">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">SETTINGS</div>
+              <div class="wizard-desc">Review Your Settings</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 5 Nav-->
+
+      </div>
+    </header>
+
+    <div class="container-fluid loadEffect">
+        <div class="row whitefunnel pt-5 pb-5" *ngIf="mainOpen == 'stats'">
+            <div class="col-md-6">
+              <apx-chart
+                [series]="chartOptions.series"
+                [chart]="chartOptions.chart"
+                [dataLabels]="chartOptions.dataLabels"
+                [plotOptions]="chartOptions.plotOptions"
+                [yaxis]="chartOptions.yaxis"
+                [xaxis]="chartOptions.xaxis"
+                [fill]="chartOptions.fill"
+                [title]="chartOptions.title"
+              ></apx-chart>
+            </div>
+            <div class="col-md-6">
+              <apx-chart
+                [series]="chartOptions2.series"
+                [chart]="chartOptions2.chart"
+                [xaxis]="chartOptions2.xaxis"
+                [dataLabels]="chartOptions2.dataLabels"
+                [grid]="chartOptions2.grid"
+                [stroke]="chartOptions2.stroke"
+                [title]="chartOptions2.title"
+              ></apx-chart>
+            </div>
+            <div class="col-md-6">
+              <apx-chart
+              [series]="chartOptions3.series"
+              [chart]="chartOptions3.chart"
+              [dataLabels]="chartOptions3.dataLabels"
+              [plotOptions]="chartOptions3.plotOptions"
+              [title]="chartOptions3.title"
+            ></apx-chart>
+            </div>
+            <div class="col-md-6">
+              <apx-chart
+              [series]="chartOptions4.series"
+              [chart]="chartOptions4.chart"
+              [yaxis]="chartOptions4.yaxis"
+              [xaxis]="chartOptions4.xaxis"
+              [labels]="chartOptions4.labels"
+              [stroke]="chartOptions4.stroke"
+              [plotOptions]="chartOptions4.plotOptions"
+              [markers]="chartOptions4.markers"
+              [fill]="chartOptions4.fill"
+              [tooltip]="chartOptions4.tooltip"
+            ></apx-chart>
+            </div>
+        </div>
+    </div>
+
+</div>  

@@ -145,6 +145,6 @@ export class BuildFunnelComponent implements OnInit {
                 this.allcategory[index][0] = !this.allcategory[index][0];
             }
         }
-    }
+  }
 
 }

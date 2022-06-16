@@ -1,0 +1,15 @@
+.kb-domainul {
+    padding: 0;
+    list-style: none;
+    display: inline-flex;
+    column-gap: 40px;
+    justify-content: space-between;
+    width: 100%;
+}
+.kb-domainul li:first-child {
+    font-size: 13px;
+    background: #f3eee0;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 3px;
+}

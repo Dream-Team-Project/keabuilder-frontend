@@ -1,7 +1,9 @@
 #buildfunnelcomp{
-    background:#F2F4F4;
+    background: #F2F4F4;
     margin-top: -20px;
     padding-top: 20px;
+    margin-bottom: -20px;
+    padding-bottom: 20px;
 }
 .clmwithshadow{
     padding: 20px;
@@ -25,19 +27,26 @@
     width: 33%;
     float: left;
 }
-.list-unstyled li a.active {
+.list-unstyled li .mat-card.active {
     color: #2c2c28!important;
     font-weight: bold;
     background: #d8c898;
+}
+.list-unstyled li .mat-card{
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 .fixedcategory{
     position: fixed;
     top: 126px;
     z-index: 99;
+    overflow-y: scroll;
+    height: 600px;
 }
 .gobackward{
     font-size: 10px;
-    color: #444;
+    color: #fff;
     cursor: pointer;
     opacity: 0.5;
     transition: .5s ease;
@@ -45,6 +54,13 @@
 .gobackward:hover{
     opacity: 1;
 }
+.topfixadjust{
+    position: fixed;
+    top: 81px;
+    width: 97%;
+    z-index: 99;
+}
+
 @media screen and (max-width:500px){
     .adjustloopvfor >div{
       width: 100%;
