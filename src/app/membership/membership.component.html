@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-  <div id="kb-automation-actions" *ngIf="poupsidebar && automationaddnewaction">
+  <div id="kb-automation-actions" *ngIf="poupsidebar">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
       
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
@@ -77,21 +77,16 @@
               <input type="text" [(ngModel)]="kbcourses[i]['page_name']">
             </div>
             <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-              <span class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'"
-                  (click)="kbcourses[i].dropdownstatus = !kbcourses[i].dropdownstatus">
+
+              <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'">
                   <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
                   {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
               </span>
-              <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbcourses[i].dropdownstatus" >
-                  <ul class="kb-dropdown__menu">
-                  <li>
-                      <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                  </li>
-                  <li>
-                      <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                  </li>
-                  </ul>
-              </div>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
+                <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
+              </mat-menu>
+
             </div>
             <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['members']+' Members'" matTooltipPosition="above"><i class="fa fa-user" aria-hidden="true"></i> {{kbcourses[i]['members']}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</p>
 
@@ -121,6 +116,16 @@
 
         </div>
       </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12 mt-4">
+      <mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page">
+      </mat-paginator>
+    </div>
   </div>
 
 </div>

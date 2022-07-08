@@ -26,21 +26,16 @@
                       <input type="text" [(ngModel)]="kb_aff_commission[i]['kb_commission_name']">
                     </div>
                     <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-                      <span class="statusbadge" [class]="kb_aff_commission[i]['publish_status']==1 ? 'active1':'active2'"
-                          (click)="kb_aff_commission[i].dropdownstatus = !kb_aff_commission[i].dropdownstatus">
+
+                      <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kb_aff_commission[i]['publish_status']==1 ? 'active1':'active2'">
                           <i class="fas" [class]="kb_aff_commission[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
                           {{kb_aff_commission[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
                       </span>
-                      <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kb_aff_commission[i].dropdownstatus" >
-                          <ul class="kb-dropdown__menu">
-                          <li>
-                              <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                          </li>
-                          <li>
-                              <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                          </li>
-                          </ul>
-                      </div>
+                      <mat-menu #menu="matMenu">
+                            <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
+                            <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
+                      </mat-menu>
+
                     </div>
                     <p class="kb-pagedate" matTooltip="Offer" matTooltipPosition="above">
                         <span><i class="fa fa-file-invoice-dollar" aria-hidden="true"></i> {{kb_aff_commission[i]['offer']}}</span>

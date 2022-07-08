@@ -2,18 +2,18 @@
   <header class="wizard-nav">
     <div class="wizard-steps">
       <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel">
+      <div class="wizard-step" [routerLink]="['/create-funnel/'+uniqueid+'/'+uniqueidstep]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-filter"></i></div>
           <div class="wizard-label">
-            <div class="wizard-title">My Funnel Name</div>
+            <div class="wizard-title">{{funnelname}}</div>
             <div class="wizard-desc">Steps</div>
           </div>
         </div>
       </div>
       <!--end::Wizard Step 1 Nav-->
       <!--begin::Wizard Step 2 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-stats">
+      <div class="wizard-step" [routerLink]="['/create-funnel-stats',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
           <div class="wizard-label">
@@ -24,7 +24,7 @@
       </div>
       <!--end::Wizard Step 2 Nav-->
       <!--begin::Wizard Step 3 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-contacts" data-wizard-state="current">
+      <div class="wizard-step" [routerLink]="['/create-funnel-contacts',uniqueid]" data-wizard-state="current">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-users"></i></div>
           <div class="wizard-label">
@@ -35,7 +35,7 @@
       </div>
       <!--end::Wizard Step 3 Nav-->
       <!--begin::Wizard Step 4 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-sales">
+      <div class="wizard-step" [routerLink]="['/create-funnel-sales',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
           <div class="wizard-label">
@@ -46,7 +46,7 @@
       </div>
       <!--end::Wizard Step 4 Nav-->
       <!--begin::Wizard Step 5 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-settings">
+      <div class="wizard-step" [routerLink]="['/create-funnel-settings',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
           <div class="wizard-label">
@@ -72,12 +72,12 @@
       
                         <mat-form-field appearance="fill" class="kb-form-field">
                           <mat-label>Showing Contacts for</mat-label>
-                          <mat-select value="1">
-                            <mat-option value="1">Last 7 Days</mat-option>
-                            <mat-option value="2">Last 30 Days</mat-option>
-                            <mat-option value="3">Last 2 Months</mat-option>
-                            <mat-option value="4">This Year</mat-option>
-                            <mat-option value="5">All Time</mat-option>
+                          <mat-select name="showingcontacts" [(ngModel)]="showingcontacts">
+                            <mat-option value="7 DAY">Last 7 Days</mat-option>
+                            <mat-option value="30 DAY">Last 30 Days</mat-option>
+                            <mat-option value="2 MONTH">Last 2 Months</mat-option>
+                            <mat-option value="1 YEAR">This Year</mat-option>
+                            <mat-option value="all">All Time</mat-option>
                           </mat-select>
                         </mat-form-field>
       
@@ -86,23 +86,24 @@
       
                         <mat-form-field appearance="fill" class="kb-form-field">
                           <mat-label>Steps</mat-label>
-                          <mat-select value="1">
-                            <mat-option value="1">All Funnel Steps</mat-option>
+                          <mat-select name="steps" [(ngModel)]="selectedfunnelsteps">
+                            <mat-option value="all">All Funnel Steps</mat-option>
                             <mat-optgroup label="Funnel Steps">
-                              <mat-option value="2">Optin</mat-option>
-                              <mat-option value="3">Thank you</mat-option>
+                              <mat-option *ngFor="let funnelstep of funnelsteps" [value]="funnelstep.id">
+                                {{funnelstep.value}}
+                              </mat-option>
                             </mat-optgroup>
                           </mat-select>
                         </mat-form-field>
       
                       </div>
                       <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                        <button mat-raised-button color="primary" class="btn-block"><i
+                        <button mat-raised-button color="primary" class="btn-block" (click)="applykbfilter()" ><i
                             class="far fa-check-circle"></i> Apply</button>
                       </div>
                       <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
-                        <button type="reset" class="btn-block" mat-raised-button color="primary"><i
-                            class="fas fa-download"></i> Download Contacts</button>
+                        <button type="reset" class="btn-block" mat-raised-button color="primary" (click)="exportexcel()" ><i
+                            class="fas fa-download"></i> Download All Contacts</button>
                       </div>
                     </div>
                   </form>
@@ -120,28 +121,10 @@
                         <i class="fab fa-searchengin"></i>                        
                     </div>
                 </fieldset>
+                <button mat-raised-button class="mb-4" *ngIf="selecteddelete">Delete Selected <i class="fa fa-trash" aria-hidden="true"></i></button>
               <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" matSort>
-    
-                  <!-- Checkbox Column -->
-                  <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                                    [checked]="selection.hasValue() && isAllSelected()"
-                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                    [aria-label]="checkboxLabel()">
-                    </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? selection.toggle(row) : null"
-                                    [checked]="selection.isSelected(row)"
-                                    [aria-label]="checkboxLabel(row)">
-                    </mat-checkbox>
-                    </td>
-                  </ng-container>
-                  <!-- Checkbox Column -->
-              
+                <table mat-table [dataSource]="dataSource" id="excel-table" matSort>
+
                   <ng-container matColumnDef="fullname">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Fullname </th>
                     <td mat-cell *matCellDef="let row"> {{row.fullname}} <span class="kb-status" [ngClass]="{'success': row.status == 'Successful', 'failed' : row.status == 'Failed' }">{{row.status}}</span></td>
@@ -157,28 +140,28 @@
                     <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
                   </ng-container>
               
-                  <ng-container matColumnDef="datecreated">
+                  <ng-container matColumnDef="createdAt">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Created </th>
-                    <td mat-cell *matCellDef="let row"> {{row.datecreated}} </td>
+                    <td mat-cell *matCellDef="let row"> {{datecusfilter(row.createdAt)}} </td>
                   </ng-container>
     
-                  <ng-container matColumnDef="actions">
+                  <ng-container matColumnDef="updatedAt">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
                     <td mat-cell *matCellDef="let row">
                       <button mat-raised-button class="mr-2">View <i class="fa fa-eye" aria-hidden="true"></i></button>
-                        <button mat-raised-button>Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button mat-raised-button (click)="deletecontact(row.id)" >Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
                   </ng-container>
               
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
               
                   <!-- Row shown when there is no matching data. -->
                   <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">No data matching the filter "{{searchinput.value}}"</td>
                   </tr>
                 </table>
-              
+
                 <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
               </div>
             </div>

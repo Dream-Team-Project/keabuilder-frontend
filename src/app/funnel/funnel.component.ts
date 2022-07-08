@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Options } from 'sortablejs';
+import { FunnelService } from '../_services/funnels.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-funnel',
@@ -9,161 +11,26 @@ import { Options } from 'sortablejs';
 })
 export class FunnelComponent implements OnInit {
 
-  constructor() { }
+  constructor(private funnelService: FunnelService,
+              private router: Router, 
+              private route: ActivatedRoute,
+              private _snackBar: MatSnackBar) { }
 
-  funnels = [
-    {
-      id:'1',  
-      name:'Marketing',
-      grouptags:'',
-      steps:[
-          {
-          title:'Facebook Campaign 😎',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'campaign',
-          color:'success',
-          img:'https://bootstrapmade.com/content/templatefiles/Reveal/Reveal-bootstrap-website-template.png',
-          },
-           {
-          title:'Social Media Graphics',
-          updatedat:'Feb 8',
-          variation:'0',
-          tag:'graphic, media',
-          color:'warning',
-          img:'https://bootstrapmade.com/content/templatefiles/OnePage/OnePage-bootstrap-website-template.png',
-          },
-           {
-          title:'Database Management System (DBMS) is a collection of programs',
-          updatedat:'Mar 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'info',
-          img:'https://bootstrapmade.com/content/templatefiles/Bootslander/Bootslander-bootstrap-website-template.png',
-          }
-      ],
-    },
-    {
-      id:'2',  
-      name:'Developing',
-      grouptags:'Develop',
-      steps:[
-          {
-          title:'Sales page',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'campaign',
-          color:'secondary',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-          {
-          title:'Upsell 1',
-          updatedat:'Feb 8',
-          variation:'0',
-          tag:'graphic, media',
-          color:'primary',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-          {
-          title:'Upsell 2',
-          updatedat:'Mar 6',
-          variation:'0',
-          tag:'graphic, media',
-          color:'primary',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-          {
-          title:'Downsell 1',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'info',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-          {
-          title:'Downsell 2',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'danger',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-          {
-          title:'Thank you',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'info',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          }
-      ],
-    },
-    {
-      id:'3',  
-      name:'Webinar',
-      grouptags:'Extra',
-      steps:[
-          {
-          title:'Webinar Registration',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'campaign',
-          color:'success',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-           {
-          title:'Webinar Confrimation',
-          updatedat:'Feb 8',
-          variation:'0',
-          tag:'graphic, media',
-          color:'primary',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-           {
-          title:'Thank you',
-          updatedat:'Mar 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'info',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          }
-      ],
-    },
-    {
-      id:'4',  
-      name:'kea Ebook',
-      grouptags:'webinars',
-      steps:[
-          {
-          title:'kea Customer Optin',
-          updatedat:'Feb 6',
-          variation:'1',
-          tag:'optin',
-          color:'danger',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-           {
-          title:'kea Customer Variation',
-          updatedat:'Feb 8',
-          variation:'0',
-          tag:'variation, media',
-          color:'warning',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          },
-           {
-          title:'Thank you',
-          updatedat:'Mar 6',
-          variation:'1',
-          tag:'DBMS, program',
-          color:'secondary',
-          img:'https://storage.googleapis.com/website-production/uploads/2018/05/landing-page-wireframe-example-long.jpg',
-          }
-      ],
-    },
-
-]
+  funnels:any = [];
+  poupsidebar = false;
+  funnelurl = '';
+  reason = '';
+  firstpart = true;
+  forarchiveid = '';
+  funnelnotfound = false;
+  shwobtnfirst = true;
+  funneltostep = true;
+  pageurl = '';
 
   ngOnInit(): void {
+
+    this.showfunnels();
+
   }
 
   parentOptions: Options = {
@@ -208,6 +75,192 @@ export class FunnelComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   }; 
+
+  funneledit(uniqueid: any, id: any, type:any){
+
+    if(type=='archive'){
+      this.forarchiveid = id;
+      this.poupsidebar = true;
+      this.firstpart = false;
+      this.shwobtnfirst = true;
+    }else if(type=='duplicate'){
+      // console.log(uniqueid+'--'+id);
+      this._snackBar.open('Duplicate In Progress!', 'Close');
+
+      this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
+        next: data => {
+          // console.log(data);
+          if(data.success==1){
+            this.showfunnels();
+            this._snackBar.open('Successfully Duplicate Funnel!', 'Close');
+          }
+        }
+      });
+    }else{
+      this.funnelService.makefunnelsettings(uniqueid,id,type).subscribe({
+        next: data => {
+          console.log(data); 
+          
+          if(type=='edit'){
+            this.router.navigate(['/create-funnel/'+uniqueid+'/'+data.data[0].uniqueid],{relativeTo: this.route});
+          }else if(type=='copy'){
+            this.firstpart = true;
+            this.poupsidebar = true;
+            this.funneltostep = true;
+            this.funnelurl = 'http://localhost:4200/create-funnel/'+uniqueid+'/'+data.data[0].uniqueid;
+          }
+          
+        }
+      });
+    }
+
+  }
+
+  makearchive(){
+    this.funnelService.makefunnelsettings(this.reason,this.forarchiveid,'archive').subscribe({
+      next: data => {
+        if(data.status==1){
+            this.reason = '';
+            this.poupsidebar = false;
+            this.showfunnels();
+        }
+      }
+    });
+  }
+
+  hidepopupsidebar(){
+    this.poupsidebar = false;
+  }
+
+  copyInputMessage(inputElement:any){
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+  }
+
+  showfunnels(){
+    this.funnelService.getallfunnelandstep().subscribe({
+      next: data => {
+        console.log(data); 
+        this.funnels = [];
+        if(data.data2.length!=0){
+          this.funnelnotfound = false;
+
+          data.data2.forEach((element: any) => {
+              var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',steps:[]};
+              newob.uniqueid = element.uniqueid;
+              newob.id = element.id;
+              newob.name = element.name;
+              newob.grouptags = element.grouptags;
+
+                data.data.forEach((element2: any) => {
+                  var newob2 = {id:'',uniqueid:'',title:'',updatedat:'',variation:'',tag:'',color:'',img:''};
+                  if(element2.funnelid==newob.id){
+                    newob2.id = element2.id;
+                    newob2.title = element2.title;
+                    newob2.uniqueid = element2.uniqueid;
+
+                  var subdate = (new Date(element2.updatedAt).toDateString()).substr(3, 7);
+                    newob2.updatedat = subdate;
+                    newob2.variation = element2.variation;
+                    newob2.tag = element2.tags;
+                    newob2.color = element2.color;
+                    newob2.img = element2.img;
+                    newob.steps.push(newob2);
+                  }
+                });
+
+            this.funnels.push(newob);
+            // console.log(this.funnels);
+
+          });
+
+        }else{
+            this.funnelnotfound = true;
+        }
+
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  funnelstepedit(unique1:any, unique2:any,type:any){
+    console.log(unique1+' - '+unique2+' - '+type);
+
+    if(type=='edit'){
+      this.router.navigate(['/create-funnel/'+unique1+'/'+unique2],{relativeTo: this.route});
+    }else if(type=='copy'){
+      this.firstpart = true;
+      this.poupsidebar = true;
+      this.funneltostep = false;
+      this.funnelurl = 'http://localhost:4200/create-funnel/'+unique1+'/'+unique2;
+      this.pageurl = '';
+
+      this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
+          next: data => {
+            // console.log(data); 
+            this.pageurl = 'http://localhost:4200/'+data.data[0].steppath;
+          }
+      });
+    }else if(type=='archive'){
+      this.forarchiveid = unique2;
+      this.poupsidebar = true;
+      this.firstpart = false;
+      this.shwobtnfirst = false;
+    }else if(type=='duplicate'){
+        // console.log(unique1+' - '+unique2);
+        this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
+          next: data => {
+            if(data.success==1){
+              this.showfunnels();
+              this._snackBar.open('Successfully Duplicate Step!', 'Close');
+            }
+          }
+        });
+    } 
+
+  }
+
+  makearchivestep(){
+    this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
+      next: data => {
+        console.log(data);
+
+        if(data.status==1){
+          this.reason = '';
+          this.poupsidebar = false;
+          this.showfunnels();
+          this._snackBar.open('Successfully Archived!', 'Close');
+        }else if(data.status==0){
+          if(data.notallow==1){
+            this._snackBar.open('Single Step Can not be Archived!', 'Close');
+          }
+        }
+
+
+      }
+    });
+  }
+
+  changestepnamesoutside(id:any,title:any){
+    console.log(id+''+title);
+    this.funnelService.namepathchanges(id,title,'changefunnelname').subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.success==1){
+          this._snackBar.open('Successfully Name Changed!', 'Close');
+          this.showfunnels();
+        }
+      }
+    });
+
+  }
+
+
+
 
 }
 

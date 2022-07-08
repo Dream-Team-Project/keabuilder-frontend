@@ -1,67 +1,94 @@
 <div id="kb-createfunnelsettings">
-  <header class="wizard-nav">
-    <div class="wizard-steps">
-      <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-filter"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">My Funnel Name</div>
-            <div class="wizard-desc">Steps</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 1 Nav-->
-      <!--begin::Wizard Step 2 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-stats">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">STATS</div>
-            <div class="wizard-desc">View Your Stats</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 2 Nav-->
-      <!--begin::Wizard Step 3 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-contacts">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-users"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">CONTACTS</div>
-            <div class="wizard-desc">Check Your Contacts</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 3 Nav-->
-      <!--begin::Wizard Step 4 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-sales">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">SALES</div>
-            <div class="wizard-desc">See Your Sales</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 4 Nav-->
-      <!--begin::Wizard Step 5 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-settings" data-wizard-state="current">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">SETTINGS</div>
-            <div class="wizard-desc">Review Your Settings</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 5 Nav-->
 
+    <div id="kb-buildfunnel-actions" *ngIf="poupsidebar">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+        
+        <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+        <h6><b>ARCHIVE</b></h6>
+        <hr>
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Archive Reason</mat-label>
+            <textarea matInput [(ngModel)]="form.reason" rows="10" name="reasons"></textarea>
+            <small>Optional</small>
+          </mat-form-field>
+
+          <p>It will help you remember why you deleted it!</p>
+
+          <button mat-raised-button color="primary" type="submit" >
+            <i class="fas fa-archive"></i> Archive Funnel
+          </button>
+
+        </form>
+
+      </div>
     </div>
-  </header>
+    <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+    
+    <header class="wizard-nav">
+      <div class="wizard-steps">
+        <!--begin::Wizard Step 1 Nav-->
+        <div class="wizard-step" [routerLink]="['/create-funnel/'+uniqueid+'/'+uniqueidstep]">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-filter"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">{{funnelname}}</div>
+              <div class="wizard-desc">Steps</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 1 Nav-->
+        <!--begin::Wizard Step 2 Nav-->
+        <div class="wizard-step" [routerLink]="['/create-funnel-stats',uniqueid]">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">STATS</div>
+              <div class="wizard-desc">View Your Stats</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 2 Nav-->
+        <!--begin::Wizard Step 3 Nav-->
+        <div class="wizard-step" [routerLink]="['/create-funnel-contacts',uniqueid]">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-users"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">CONTACTS</div>
+              <div class="wizard-desc">Check Your Contacts</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 3 Nav-->
+        <!--begin::Wizard Step 4 Nav-->
+        <div class="wizard-step" [routerLink]="['/create-funnel-sales',uniqueid]">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">SALES</div>
+              <div class="wizard-desc">See Your Sales</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 4 Nav-->
+        <!--begin::Wizard Step 5 Nav-->
+        <div class="wizard-step" [routerLink]="['/create-funnel-settings',uniqueid]" data-wizard-state="current">
+          <div class="wizard-wrapper">
+            <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
+            <div class="wizard-label">
+              <div class="wizard-title">SETTINGS</div>
+              <div class="wizard-desc">Review Your Settings</div>
+            </div>
+          </div>
+        </div>
+        <!--end::Wizard Step 5 Nav-->
+
+      </div>
+    </header>
 
     <div class="container-fluid loadEffect">
-        <div class="row whitefunnel pt-5 pb-5" *ngIf="mainOpen == 'settings'">
+        <div class="row whitefunnel pt-5 pb-5">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-body">
@@ -109,7 +136,7 @@
                     </div>
                     <div class="content clearfix">
                       <!-- step 1 content -->
-                      <fieldset class="pt-0 body loadEffect " *ngIf="tabOpen3 == 'basic'" id="steps-uid-2-p-0" role="tabpanel"
+                      <fieldset class="pt-0 body  " *ngIf="tabOpen3 == 'basic'" id="steps-uid-2-p-0" role="tabpanel"
                         aria-labelledby="steps-uid-2-h-0" aria-hidden="false">
                         <h6 class="pb-50">Edit Settings For This Funnel</h6>
 
@@ -117,15 +144,15 @@
                           <div class="col-sm-6">
                               <mat-form-field class="kb-full-width" appearance="fill">
                                 <mat-label>Name</mat-label>
-                                <input type="text" matInput placeholder="Funnel Name">
+                                <input type="text" matInput placeholder="Funnel Name" name="funnelname" [(ngModel)]="funnelname" >
                               </mat-form-field>
                               <small class="text-muted form-text mt-n3">Name of this funnel</small>
                           </div>
                           <div class="col-sm-6">
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Domain</mat-label>
-                              <mat-select>
-                                <mat-option>None</mat-option>
+                              <mat-select name="domainname" [(ngModel)]="domainname" >
+                                <mat-option value="">None</mat-option>
                               </mat-select>
                             </mat-form-field>
                             <small class="text-muted form-text mt-n3">The domain for the funnel — <a href="#">Add/Edit Domains</a></small>
@@ -134,19 +161,33 @@
 
                         <div class="row mt-4">
                           <div class="col-sm-6">
+
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Tags</mat-label>
-                              <input type="text" matInput placeholder="Group Tags">
+                              <mat-chip-list #chipList aria-label="Fruit selection">
+                                <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                                  {{tag}}
+                                  <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                  </button>
+                                </mat-chip>
+                                <input placeholder="Group Tags..."
+                                       [matChipInputFor]="chipList"
+                                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                       [matChipInputAddOnBlur]="addOnBlur"
+                                       (matChipInputTokenEnd)="add($event)">
+                              </mat-chip-list>
                             </mat-form-field>
+
                             <small class="text-muted form-text mt-n3">The group this funnel belongs too</small>
                           </div>
 
                           <div class="col-sm-6">
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Path</mat-label>
-                              <input type="text" matInput placeholder="Ex: optin">
+                              <input type="text" matInput disabled name="path" [value]="funnelpath">
                             </mat-form-field>
-                            <small class="text-muted form-text mt-n3">The path of this funnels starting page</small>
+                            <small class="text-muted form-text mt-n3">The path of this funnels</small>
 
                           </div>
                         </div>
@@ -156,7 +197,7 @@
 
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Favicon Url</mat-label>
-                              <input type="text" matInput placeholder="Ex: https://this.com/this.png">
+                              <input type="text" matInput placeholder="Ex: https://this.com/this.png" name="faviconurl" [(ngModel)]="faviconurl" >
                             </mat-form-field>
                             <small class="text-muted form-text mt-n3">Add a URL to your .png or .ico favicon image. For ALL your pages inside your funnel.</small>
 
@@ -165,13 +206,13 @@
                       </fieldset>
                       <!-- step 1 content end-->
                       <!-- step 2 content -->
-                      <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'smtp'" id="steps-uid-2-p-1" role="tabpanel"
+                      <fieldset class="pt-0 body " *ngIf="tabOpen3 == 'smtp'" id="steps-uid-2-p-1" role="tabpanel"
                         aria-labelledby="steps-uid-2-h-1" aria-hidden="true">
                         <h6 class="py-50">Edit Settings For This Funnel</h6>
                         <div class="row">
                           <div class="col-sm-12">
                             <div class="form-group">
-                              <label for="proposalTitle1"><a>SMTP Configuation</a></label>
+                              <label for="proposalTitle1"><a>SMTP Configuation</a></label><br>
                               <small>Provide your <a>Account SMTP Settings</a> to customize outgoing emails from Keabuilder.</small>
                             </div>
                           </div>
@@ -179,7 +220,7 @@
                       </fieldset>
                       <!-- step 2 content end-->
                       <!-- step 3 content -->
-                      <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'tracking'" id="steps-uid-2-p-2"
+                      <fieldset class="pt-0 body " *ngIf="tabOpen3 == 'tracking'" id="steps-uid-2-p-2"
                         role="tabpanel" aria-labelledby="steps-uid-2-h-2" aria-hidden="true">
                         <h6 class="py-50">Edit Settings For This Funnel</h6>
                         <div class="row">
@@ -187,7 +228,7 @@
                           <div class="col-sm-6">
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Head Tracking Code</mat-label>
-                              <textarea rows="10" matInput></textarea>
+                              <textarea rows="10" matInput name="headtrack" [(ngModel)]="headertracking" ></textarea>
                             </mat-form-field>
                             <small class="mt-n3 form-text">Funnel wide tracking code for the head tag.</small>
                           </div>
@@ -195,7 +236,7 @@
                           <div class="col-sm-6">
                             <mat-form-field class="kb-full-width" appearance="fill">
                               <mat-label>Body Tracking Code</mat-label>
-                              <textarea rows="10" matInput></textarea>
+                              <textarea rows="10" matInput  name="bodytrack" [(ngModel)]="bodytracking" ></textarea>
                             </mat-form-field>
                             <small class="mt-n3 form-text">Funnel wide tracking codes for the body tag.</small>
                           </div>
@@ -204,7 +245,7 @@
                       </fieldset>
                       <!-- step 3 content end-->
                       <!-- step 4 content -->
-                      <fieldset class="pt-0 body loadEffect" *ngIf="tabOpen3 == 'payment'" id="steps-uid-2-p-3"
+                      <fieldset class="pt-0 body " *ngIf="tabOpen3 == 'payment'" id="steps-uid-2-p-3"
                         role="tabpanel" aria-labelledby="steps-uid-2-h-3" aria-hidden="true">
                         <h6 class="py-50">Edit Settings For This Funnel</h6>
                         <div class="row">
@@ -268,13 +309,26 @@
                       </fieldset>
                       <!-- step 4 content end-->
                     </div>
-                    <div class="actions clearfix" id="kb-settingsaction">
-                      <ul role="menu">
-                        <li class="ml-2"><a mat-raised-button color="accent"><i class="fas fa-archive"></i> Archive Funnel</a></li>
+                    <div class="actions clearfix " id="kb-settingsaction">
+                      <ul>
+                        <li class="ml-2">
+                          <a mat-raised-button color="accent" (click)="showpopup()">
+                            <i class="fas fa-archive"></i> Archive Funnel
+                          </a>
+                        </li>
       
-                        <li class="ml-2"><a mat-raised-button color="accent"><i class="fas fa-binoculars"></i> View Archive Funnel Steps</a></li>
+                        <li class="ml-2">
+                          <a mat-raised-button color="accent" (click)="viewarchivefunnel()">
+                            <i class="fas fa-binoculars"></i> View Archive Funnel Steps
+                          </a>
+                        </li>
       
-                        <li class="ml-2"><a mat-raised-button color="primary"><i class="far fa-check-circle"></i> Update Settings</a></li>
+                        <li class="ml-2">
+                          <a mat-raised-button color="primary" (click)="updatesetting()" >
+                            <span *ngIf="processon"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
+                            <span *ngIf="!processon" ><i class="far fa-check-circle"></i> {{processondata}}</span>
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </form>

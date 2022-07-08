@@ -51,7 +51,6 @@ export class RegisterComponent implements OnInit {
         }
       });
     }
-
   }
 
   redirectToDashboard(): void {
@@ -60,7 +59,7 @@ export class RegisterComponent implements OnInit {
 
   createNewImg(){
     var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-      this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
+    this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
   }
 
 

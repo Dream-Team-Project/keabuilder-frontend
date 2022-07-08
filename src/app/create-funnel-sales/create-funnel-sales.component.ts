@@ -3,15 +3,16 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
+import { FunnelService } from '../_services/funnels.service';
+import * as XLSX from 'xlsx';
 
 export interface UserData {
-  position:number;
-  product:string;
+  product_name:string;
   amount:string;
   customer:string;
   status:string;
-  transition:string;
-  actions: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 @Component({
@@ -21,7 +22,7 @@ export interface UserData {
 })
 export class CreateFunnelSalesComponent implements OnInit {
  
-  displayedColumns: string[] = ['select', 'product', 'amount', 'customer', 'status','transition', 'actions'];
+  displayedColumns: string[] = ['product_name', 'amount', 'customer', 'status','createdAt', 'updatedAt'];
   selection = new SelectionModel<UserData>(true, []);
   dataSource: MatTableDataSource<UserData>;
   
@@ -29,19 +30,62 @@ export class CreateFunnelSalesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   mainOpen = 'sales';
+  uniqueid = '';
+  uniqueidstep = '';
+  funnelname = '';
+  users:any = [];
+  funnelsteps: any = [];
+  fileName= 'SalesExcelSheet.xlsx';
+  showingcontacts = '7 DAY';
+  selectedfunnelsteps:any = 'all';
+  selecteddelete = false;
 
-  constructor() { 
+  constructor(private funnelService: FunnelService,) { 
 
-    const users =[
-      {position:1,product:'Optin', amount:'$12.00', customer:'DeanStanley@gmail.com', status:'Active',transition:'2 Days Ago', actions:''},
-      {position:1,product:'Landing page', amount:'$2.00', customer:'peter@gmail.com', status:'Active',transition:'4 Days Ago', actions:''},
-      {position:1,product:'Upsell', amount:'$120.00', customer:'newwork@gmail.com', status:'InActive',transition:'1 Days Ago', actions:''},
-    ];
-    this.dataSource = new MatTableDataSource(users);
+    this.dataSource = new MatTableDataSource(this.users);
 
   }
 
   ngOnInit(): void {
+    var geta = window.location.href.split('/'); geta[geta.length];
+    this.uniqueid = geta[geta.length-1];
+
+    this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
+      next: data => {
+        this.funnelname = data.data2[0].name;
+        this.uniqueidstep = data.data[0].uniqueid;
+
+        var gensepratestep:any = [];
+
+        data.data.forEach((element: any) => {
+          var gennewobj = {id:'',value:''};
+          gennewobj.id = element.uniqueid;
+          gennewobj.value = element.title;
+
+          gensepratestep.push(gennewobj);
+        });
+
+        this.funnelsteps = gensepratestep;
+        
+        // console.log(data); 
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+    this.funnelService.getfunnelsales(this.uniqueid,'7 DAY','all').subscribe({
+      next: data => {
+        // console.log(data.data); 
+        this.users = data.data;
+        this.dataSource = new MatTableDataSource(this.users);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+    
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -60,29 +104,49 @@ export class CreateFunnelSalesComponent implements OnInit {
     }
   }
 
-  /* Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  datecusfilter(value:any){
+    return new Date(value).toDateString();
   }
 
-  /* Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
+  exportexcel(): void
+  {
 
-    this.selection.select(...this.dataSource.data);
+    this.funnelService.getfunnelexportsale(this.uniqueid).subscribe({
+      next: data => {
+
+        const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
+     
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+     
+        /* save to file */  
+        XLSX.writeFile(wb, this.fileName);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+ 
   }
 
-  /* The label for the checkbox on the passed row */
-  checkboxLabel(row?: UserData): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  applykbfilter(){
+
+    this.funnelService.getfunnelsales(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
+      next: data => {
+        // console.log(data.data); 
+        this.users = data.data;
+        this.dataSource = new MatTableDataSource(this.users);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
   }
+
 
 }

@@ -160,10 +160,6 @@
   border-radius: 0.5rem;
 }
 
-.Keabuilder-item.success:before {
-  background-color: #39DA8A;
-}
-
 .Keabuilder-item i {
   top: 4px;
   position: relative;
@@ -506,7 +502,7 @@
   border: 1px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;
   position: absolute;
-  top: 34%;
+  top: 33%;
   width: 100%;
   padding: 20px;
   left: 0px;
@@ -602,15 +598,6 @@ input[type=range]::-webkit-slider-runnable-track {
   font-weight: bold;
 }
 
-.savechangesvs {
-  text-align: center;
-  float: left;
-  width: 100%;
-  background: #e7edf3;
-  padding: 23px 0px;
-  box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-}
-
 .kb-split-text center {
   margin: 25px 0px;
   font-size: 18px;
@@ -669,7 +656,7 @@ input[type=range]::-webkit-slider-runnable-track {
   cursor: move;
 }
 
-.keabuilder-title-board {
+.keabuilder-title-board, .keabuilder-title-board-archived {
   font-weight: 700;
   margin: 0;
   padding: 0;
@@ -683,7 +670,7 @@ input[type=range]::-webkit-slider-runnable-track {
   left: -8px;
 }
 
-.keabuilder-title-board span {
+.keabuilder-title-board span, .keabuilder-title-board-archived span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -691,7 +678,7 @@ input[type=range]::-webkit-slider-runnable-track {
   display: inline-block;
 }
 
-.keabuilder-title-board input {
+.keabuilder-title-board input, .keabuilder-title-board-archived input {
   display: none;
   background-color: #475F7B;
   color: #FFFFFF;
@@ -1264,22 +1251,6 @@ select#users-list-verified {
     color: #d8c898;
 }
 
-.bg-light-warning {
-    background-color: #FFF4DE !important;
-}
-
-.bg-light-success {
-    background-color: #C9F7F5 !important;
-}
-
-.bg-light-danger {
-    background-color: #FFE2E5 !important;
-}
-
-.bg-light-info {
-    background-color: #EEE5FF !important;
-}
-
 /* width */
 .offcanvas-content::-webkit-scrollbar {
     width: 5px;
@@ -1320,3 +1291,51 @@ select#users-list-verified {
   width:100%;
 }
 
+
+.rightbrder .success:before {
+  background-color: #39DA8A;
+}
+.rightbrder .warning:before {
+  background-color: #FDAC41;
+}
+.rightbrder .info:before {
+  background-color: #00CFDD;
+}
+.rightbrder .primary:before {
+  background-color: #5A8DEE;
+}
+.rightbrder .secondary::before {
+  background-color: #475F7B!important;
+}
+.rightbrder .danger:before {
+  background-color: #FF5B5C;
+}
+
+.mymt-3{
+  margin-top: 30px;
+}
+
+.kea-selectarea {
+  position: absolute;
+  left: 43%;
+  width: 30%;
+  background: transparent;
+  height: 100%;
+  top: 0px;
+}
+
+.selectedstep{
+  background: #d8c898;
+  color:#fff;
+}
+
+.kb-archivebtn {
+  width: 37px;
+  height: 40px;
+  background: #6c757d;
+  color: #fff;
+  margin-top: 2px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  padding: 8px;
+  margin-right: 5px;
+}

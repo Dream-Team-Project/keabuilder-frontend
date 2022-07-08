@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import {
     ChartComponent,
     ApexAxisChartSeries,
@@ -10,7 +9,8 @@ import {
     ApexStroke,
     ApexGrid
   } from "ng-apexcharts";
-  
+import { FunnelService } from '../_services/funnels.service';
+
 export type ChartOptions = {
 series: ApexAxisChartSeries;
 chart: ApexChart;
@@ -36,7 +36,7 @@ export class CreateFunnelStatsComponent implements OnInit {
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
 
-  constructor() { 
+  constructor(private funnelService: FunnelService,) { 
 
     this.chartOptions = {
         series: [
@@ -357,8 +357,23 @@ export class CreateFunnelStatsComponent implements OnInit {
     };
     
   }
+  uniqueid = '';
+  uniqueidstep = '';
+  funnelname = '';
 
   ngOnInit(): void {
+    var geta = window.location.href.split('/'); geta[geta.length];
+    this.uniqueid = geta[geta.length-1];
+    this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
+      next: data => {
+        this.funnelname = data.data2[0].name;
+        this.uniqueidstep = data.data[0].uniqueid;
+        // console.log(data); 
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
   kb_mainsteps(value: string) {

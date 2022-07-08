@@ -36,21 +36,17 @@
                       <input type="text" [(ngModel)]="automations[i]['automation_name']">
                     </div>
                     <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-                      <span class="statusbadge" [class]="automations[i]['publish_status']==1 ? 'active1':'active2'"
-                          (click)="automations[i].dropdownstatus = !automations[i].dropdownstatus">
+
+                      <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="automations[i]['publish_status']==1 ? 'active1':'active2'">
                           <i class="fas" [class]="automations[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
                           {{automations[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
                       </span>
-                      <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="automations[i].dropdownstatus" >
-                          <ul class="kb-dropdown__menu">
-                          <li>
-                              <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                          </li>
-                          <li>
-                              <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                          </li>
-                          </ul>
-                      </div>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
+                        <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
+                    </mat-menu>
+
+
                     </div>
                     <p class="kb-pagedate"><span [matTooltip]="automations[i]['entries']+' Contact currently in the automation'" matTooltipPosition="above"><i class="fa fa-retweet" aria-hidden="true"></i> {{automations[i]['entries']}}</span> &nbsp; <span [matTooltip]="automations[i]['automation_campaigns']+' Campaign in the automation'" matTooltipPosition="above" ><i class="fa fa-envelope" aria-hidden="true"></i> {{automations[i]['automation_campaigns']}}</span> &nbsp; <span [matTooltip]="'Last Update: '+automations[i]['updated_at']" matTooltipPosition="above" ><i class="fa fa-calendar" aria-hidden="true"></i> {{automations[i]['updated_at']}}</span></p>
         
