@@ -27,10 +27,7 @@
     padding: 0px 20px;
 }
 .kb-findsection button {
-    background-image: linear-gradient(to bottom,#337ab7 0,#265a88 100%);
-    color: #fff;
-    border: navajowhite;
-    padding: 11px 20px;
+    padding: 6px 20px;
     border-radius: 0px 64px 64px 0px;
 }
 .kb-mostvisitpage h3 {

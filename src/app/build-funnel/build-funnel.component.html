@@ -1,12 +1,63 @@
 <div id="buildfunnelcomp">
   <div class="container-fluid">
+
+    <div id="kb-buildfunnel-actions" *ngIf="poupsidebar">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+        
+        <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+        <h6><b>NEW FUNNEL STEPS</b></h6>
+        <hr>
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Funnel Name</mat-label>
+            <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" maxlength="140" >
+            <mat-error *ngIf="userFormControl.hasError('required')">
+              Funnel Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="userFormControl.hasError('minlength')">
+              Funnel Name must be at least <strong>3</strong> characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Funnel First Step Name</mat-label>
+            <input type="text" matInput [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
+            <small>Optional</small>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Badge Color</mat-label>
+            <mat-select name="badgecolor" [(ngModel)]="form.badgecolor">
+              <mat-option value="">None</mat-option>
+              <mat-option value="primary">Primary</mat-option>
+              <mat-option value="secondary">Secondary</mat-option>
+              <mat-option value="success">Success</mat-option>
+              <mat-option value="warning">Warning</mat-option>
+              <mat-option value="info">Info</mat-option>
+              <mat-option value="danger">Danger</mat-option>
+            </mat-select>
+            <small>Optional</small>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" ><i class="fas fa-plus"></i> Create Funnel</button>
+
+        </form>
+
+      </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+
     <div class="row">
       <div class="col-md-12 topfixadjust">
         <h3 class="d-inline-block">
            Choose Your Path
         </h3>
+
             <button [routerLink]="['/funnel']" mat-raised-button color="accent" class="gobackward float-right ml-2"><i class="fas fa-arrow-left fa-2x "></i> Back</button>
-            <button mat-raised-button color="primary" [routerLink]="['/create-funnel']" class="float-right">Or.. Create a Custom Funnel</button>
+
+            <button mat-raised-button color="primary"  class="float-right" (click)="createfunnel()" >Or.. Create a Custom Funnel</button>
+
       </div>
       <div class="col-md-2 mt-3 fixedcategory loadEffectFromLeft">
         <h6>INDUSTRY</h6>
@@ -76,5 +127,6 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>

@@ -11,8 +11,8 @@ export class WebsiteComponent implements OnInit {
   constructor(private webpagesService: WebpagesService,
               ) { }
 
-      kbpages:any[] = [];
-      kblandingpages:any[] = [];
+  kbpages:any[] = [];
+  kblandingpages:any[] = [];
 
   ngOnInit(): void {
 
@@ -35,7 +35,7 @@ export class WebsiteComponent implements OnInit {
            }else if(element.type=='landing_page'){
              this.kblandingpages.push(element);
           }
-          console.log(this.kbpages);
+          // console.log(this.kbpages);
 
         });
 
@@ -44,7 +44,6 @@ export class WebsiteComponent implements OnInit {
         console.log(err);
       }
     });
-
 
   }
 

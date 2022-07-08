@@ -56,7 +56,6 @@ export class MembershipComponent implements OnInit {
   ];
   addnewpages = true;
   poupsidebar = false;
-  automationaddnewaction = false;
   file = null;
   typeerror = '';
   offers = new FormControl();
@@ -74,7 +73,6 @@ export class MembershipComponent implements OnInit {
 
   addnewcourse(){
     this.poupsidebar = true;
-    this.automationaddnewaction = true;
   }
 
   OnOpen(){

@@ -42,13 +42,6 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
-          routerlink: '/create-funnel',
-          img: 'funnel.gif',
-          icon: 'far fa-plus-square',
-          title: 'Create A Custom Funnel'
-        },
-        {
-          0:true,
           routerlink: '/archieve-steps',
           img: 'funnel.gif',
           icon: 'fas fa-archive',
@@ -333,6 +326,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {  }
   
   changeFn(event:any){
+
     var myhref = event.currentTarget.attributes["href"].nodeValue;
 
     if(myhref=='/funnel'){
@@ -402,13 +396,16 @@ export class SidebarComponent implements OnInit {
       });
     }
 
-
     this.backme = true;
-
+    
+    if(myhref!='/funnel' && myhref!='/website-design' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+      this.backme = false;
+    }
 
   }
 
   backFn(event:any){
+
     this.allmenu.forEach((element: any) => {
       element[0] = true;
 
@@ -422,6 +419,5 @@ export class SidebarComponent implements OnInit {
     this.backme = false;
 
   }
-
 
 }

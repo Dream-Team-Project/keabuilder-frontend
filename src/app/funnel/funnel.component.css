@@ -248,7 +248,6 @@ ul.kea-barfunnelsearch li.active {
 ul.kea-barfunnelsearch li.active a {
     color: #000;
 }
-
 .keabuilder-board >main >div{
     background-size: 0px;
 }
@@ -264,12 +263,14 @@ ul.kea-barfunnelsearch li.active a {
 .sortable-ghost >div{
 opacity: 0;
 }
-
 .keabuilder-footer-right{
     position: relative;
 }
 .keabuilder-footer-right a {
     font-size: 12px;
 }
-
+.keabuilder-attachment {
+    max-width: 125px;
+    word-break: break-all;
+}
 

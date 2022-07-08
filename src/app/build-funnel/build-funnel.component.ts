@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FunnelService } from '../_services/funnels.service';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-build-funnel',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BuildFunnelComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, 
+              private funnelService: FunnelService,
+              private route: ActivatedRoute) { }
 
-  allcategory = [
+    form: any = {
+        funnelname: null,
+        funnelfirststep: '',
+        badgecolor:''
+    };
+    userFormControl = new FormControl('',[Validators.required ]);
+    
+    allcategory = [
         {0:true,
             title:'Survey Funnel',
             paragraph:'Find out who your visitors are first and then send them into the right funnel.',
@@ -110,11 +122,31 @@ export class BuildFunnelComponent implements OnInit {
     sellaproduct = false;
     createaevent = false;
     other2 = false;
+    poupsidebar = false;
+    errorMessage = '';
 
   ngOnInit(): void {
   }
 
-  loopthefor(value: any,which: any){
+  onSubmit(): void {
+    const { funnelname, funnelfirststep, badgecolor } = this.form;
+
+    if(this.userFormControl.status=='VALID'){
+        this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor).subscribe({
+            next: data => {
+                // console.log(data);
+                this.router.navigate(['/create-funnel/'+data.data.hash+'/'+data.data.hash2],{relativeTo: this.route});
+            
+            },
+            error: err => {
+            this.errorMessage = err.error.message;
+            }
+      });
+    }
+
+  }
+
+  loopthefor(value: any, which: any){
         if(which=='author'){    
             this.author = !this.author;
         }else if(which=='professional'){  
@@ -146,5 +178,15 @@ export class BuildFunnelComponent implements OnInit {
             }
         }
   }
+
+  createfunnel(){
+    this.poupsidebar = true;
+  }
+  
+  hidepopupsidebar(){
+    this.poupsidebar = false;
+  }
+
+
 
 }

@@ -33,14 +33,10 @@
     * {
         font-family: Poppins;
     }
-   
-    h1, h2, h3, h4, h5, h6, p {
-        font-family: inherit;
-        margin: 0;
-    }
     
     body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
         font-family: Poppins;   
+        font-weight: 400;
     }
 
     body {
@@ -336,4 +332,106 @@ main.insidecont .box {
         width: 50px;
         height: 50px;
     }
+}
+  
+
+
+.kb-full-width{
+    width:100%;
+}
+
+/* sidepopup */
+
+ #kb-offcanvas-actions>div {
+    overflow-y: scroll;
+  }
+  #kb-offcanvas-actions>div::-webkit-scrollbar {
+    width: 5px;
+  }
+  #kb-offcanvas-actions>div::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  #kb-offcanvas-actions>div::-webkit-scrollbar-thumb {
+    background: #e2e2e2;
+  }
+  #kb-offcanvas-actions .fa-times {
+    position: absolute;
+    right: 24px;
+    z-index: 99999;
+    cursor: pointer;
+    top:20px;
+  }
+  .offcanvas, .offcanvas-mobile {
+    -ms-flex-negative: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .offcanvas {
+    z-index: 1000;
+    position: fixed;
+    top: 5px;
+    bottom: 5px;
+    -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+    transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+    left: -395px;
+    width: 375px;
+  }
+  .offcanvas {
+    background: #ffffff;
+    -webkit-box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
+    box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
+  }
+  .offcanvas.offcanvas-right.offcanvas-on {
+    -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+    transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+    right: 7px;
+    left: auto;
+  }
+  .offcanvas h3{
+   font-size: 19px;
+  }
+  .offcanvas .text-muted{
+    font-size: 13px;
+    color: #B5B5C3 !important;
+  }
+  .offcanvas .btn.btn-light-primary {
+    color: #000000;
+    background-color: #d8c898;
+    border-color: transparent;
+    display: inline-block;
+    font-size: 11px;
+    padding: 7px 17px!important;
+  }
+  .offcanvas-content::-webkit-scrollbar {
+    width: 5px;
+  }
+  .offcanvas-content::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+  .offcanvas-content::-webkit-scrollbar-thumb {
+    background: #e2e2e2; 
+  }
+  .offcanvas-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 999;
+    -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
+    animation: animation-offcanvas-fade-in 0.6s ease 1;    
+    background: rgba(0, 0, 0, 0.1);
+  }
+  @keyframes animation-offcanvas-fade-in {
+    0%{
+        opacity:0;
+    }100%{
+        opacity: 1;
+    }
+  }
+
+/* sidepopup */
+
+.mat-simple-snackbar .mat-button-wrapper {
+  color: var(--clr-primay); 
 }

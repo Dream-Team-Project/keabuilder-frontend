@@ -33,17 +33,16 @@ export class HeatmapsComponent implements OnInit {
 
   }
 
-
   settheurl(){
     var inputval = (<HTMLInputElement>document.getElementById('inpurl')).value;
     if(inputval!=''){
-            window.open(inputval+'#kb-heatmaps','_blank');
-        }
-    }
+          window.open(inputval+'#kb-heatmaps','_blank');
+      }
+  }
 
-    createNewImg(){
-      var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-        this.bgImg = './assets/images/heatmap/bk-heatmap'+genNum+'.jpg';
-    }
+  createNewImg(){
+    var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
+      this.bgImg = './assets/images/heatmap/bk-heatmap'+genNum+'.jpg';
+  }
 
 }

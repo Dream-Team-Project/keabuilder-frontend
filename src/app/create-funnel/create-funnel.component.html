@@ -1,7 +1,7 @@
 <div id="createfunnel">
 
   <div id="kb-automation-actions" *ngIf="poupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" *ngIf="automationaddnewaction">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewaction">
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
       <h6><b>NEW FUNNEL STEPS</b></h6>
       <p><i class="fas fa-cogs"></i> Action Settings</p>
@@ -54,15 +54,67 @@
 
     </div>
 
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" *ngIf="automationaddnewemail">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewemail">
       <h6><b>CREATE NEW EMAIL</b></h6>
       <p>Provide your <a href="#">Account SMTP Settings</a> to customize outgoing emails from Keabuilder</p>
     </div>
 
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" *ngIf="automationaddnewtext">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewtext">
       <h6><b>CREATE NEW TEXT</b></h6>
       <p>Create a <a href="#">Twilio SMS Integration</a> first to customize outgoing text messages from
         Keabuilder</p>
+    </div>
+
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="copylink">
+
+      <div *ngIf="firstpart">
+
+        <h6><b>Copy Step URL</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Funnel Url</mat-label>
+          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+            <i class="fas fa-copy"></i> Copy Step Url
+        </button>
+          
+        <hr>
+          
+        <h6><b>Copy Page URL</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Url</mat-label>
+          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+            <i class="fas fa-copy"></i> Copy Url
+        </button>
+
+      </div>
+
+      <div *ngIf="!firstpart">
+          <h6><b>Archive</b></h6>
+          <hr>
+          
+          <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Archive Reason</mat-label>
+              <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
+              <small>Optional</small>
+          </mat-form-field>
+
+          <p>It will help you remember why you archive it!</p>
+          
+          <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" >
+              <i class="fas fa-archive"></i> Archive Funnel Step
+          </button>
+      </div>
+
+      <img src="/assets/images/funnel/funnel1.png" class="img-fluid" alt="">
+
+
     </div>
 
   </div>
@@ -71,18 +123,18 @@
   <header class="wizard-nav">
     <div class="wizard-steps">
       <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel" data-wizard-state="current">
+      <div class="wizard-step" [routerLink]="['/create-funnel/'+uniqueid+'/'+uniqueidstep]" data-wizard-state="current">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-filter"></i></div>
           <div class="wizard-label">
-            <div class="wizard-title">My Funnel Name</div>
+            <div class="wizard-title">{{funnelname}}</div>
             <div class="wizard-desc">Steps</div>
           </div>
         </div>
       </div>
       <!--end::Wizard Step 1 Nav-->
       <!--begin::Wizard Step 2 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-stats">
+      <div class="wizard-step" [routerLink]="['/create-funnel-stats',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
           <div class="wizard-label">
@@ -93,7 +145,7 @@
       </div>
       <!--end::Wizard Step 2 Nav-->
       <!--begin::Wizard Step 3 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-contacts">
+      <div class="wizard-step" [routerLink]="['/create-funnel-contacts',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-users"></i></div>
           <div class="wizard-label">
@@ -104,7 +156,7 @@
       </div>
       <!--end::Wizard Step 3 Nav-->
       <!--begin::Wizard Step 4 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-sales">
+      <div class="wizard-step" [routerLink]="['/create-funnel-sales',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
           <div class="wizard-label">
@@ -115,7 +167,7 @@
       </div>
       <!--end::Wizard Step 4 Nav-->
       <!--begin::Wizard Step 5 Nav-->
-      <div class="wizard-step" routerLink="/create-funnel-settings">
+      <div class="wizard-step" [routerLink]="['/create-funnel-settings',uniqueid]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
           <div class="wizard-label">
@@ -129,48 +181,78 @@
     </div>
   </header>
 
-  <div class="container-fluid">
+  <div class="container-fluid" *ngIf="steps.length>0">
     <div class="row whitefunnel loadEffect" >
       <div class="col-md-3 pb-3 pt-3 rightbrder">
         <button class="mt-2 btn-block mb-3" (click)="addsteps()" mat-raised-button color="primary" ><i class="fas fa-plus"></i> Add A Step</button>
         
           <div [sortablejs]="steps" [sortablejsOptions]="parentOptions" >
-            <div class="Keabuilder-item" [class]="tabOpen2 == element.id ? 'success' : ''"
-              (click)="kb_substeps2(element.id)" *ngFor="let element of steps; index as i;" [attr.key]="element.id"
-              [attr.data-listid]="element.id">
+            <div class="Keabuilder-item infome" [class]="element.color" [class.selectedstep]="selectedstep==element.id"
+               *ngFor="let element of steps; index as i;" >
 
               <div class="keabuilder-title-board">
-                <span>{{ element.name }}</span>
-                <input type="text" [(ngModel)]="element.name">
+                <span>{{ element.title }}</span>
+                <input type="text" [(ngModel)]="element.title" (blur)="changestepnamesoutside(element.id,element.title)" >
               </div>
 
-
+              <div class="kea-selectarea" (click)="kb_substeps2(element.id)" [attr.key]="element.id"
+              [attr.data-listid]="element.id"></div>
 
               <i class="fas fa-grip-lines float-right mt-1"></i>
-              <div class="btn-group float-right mr-1">
+
+              <div class="btn-group float-right mr-1 mt-lg-n2">
 
                 <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
                   <i class="fas fa-ellipsis-v"></i>
                 </button>
+                
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
-                      <i class="fas fa-link"></i> Copy Link
+                    <button mat-menu-item (click)="funnelstepedit(steps[i].steppath, steps[i].uniqueid, 'copy')">
+                      <i class="fas fa-link" ></i> Copy Link
                     </button>
-                    <button mat-menu-item>
-                        <i class="far fa-clone mr-2"></i> Duplicate
+                    <button mat-menu-item (click)="funnelstepedit(steps[i].funnelid, steps[i].uniqueid, 'duplicate')">
+                        <i class="far fa-clone mr-2" ></i> Duplicate
                     </button>
-                    <button mat-menu-item>
-                        <i class="fas fa-pen-fancy mr-2"></i> change path
-                    </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
                         <i class="far fa-trash-alt mr-2"></i> Archive
                     </button>
                 </mat-menu>
 
               </div>
 
-
             </div>
+          </div>
+
+          <div>
+              <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" (click)="archivepanel('archivefunnelstep','')">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Archive Steps
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div class="Keabuilder-item infome" [class]="element.color" [class.selectedstep]="selectedstep==element.id" *ngFor="let element of archivesteps; index as i;" >
+  
+                    <div class="keabuilder-title-board-archived">
+                      <span>{{ element.title }}</span>
+                    </div>
+      
+                    <div class="btn-group float-right mr-1 mt-lg-n2">
+      
+                      <div class="kb-archivebtn" matTooltip="UnArchive It" (click)="archivepanel('unarchiveit',element.id)" matTooltipPosition="above">
+                        <i class="fa fa-trash-restore"></i>
+                      </div>
+                      <div class="kb-archivebtn" matTooltip="Permanent Delete It!" (click)="archivepanel('deleteit',element.id)" matTooltipPosition="above">
+                        <i class="fa fa-trash"></i>
+                      </div>
+      
+                    </div>
+  
+                  </div>
+
+                </mat-expansion-panel>
+              </mat-accordion>
           </div>
 
         <!-- </draggable> -->
@@ -183,7 +265,7 @@
             <div class="showwhendrag"><i class="fas fa-caret-down"></i></div>
             <div class="wizard-step" data-wizard-type="step" data-wizard-state="pending"></div>
             <div class="wizard-step" data-wizard-type="step"
-              [attr.:data-wizard-state]="tabOpen == 'overview' ? 'current' : 'pending'"
+              [attr.:data-wizard-state]="tabOpen == 'overview' || tabOpen == 'overviewstep' ? 'current' : 'pending'"
               (click)="kb_substeps('overview')">
               <div class="wizard-wrapper">
                 <div class="wizard-number"><i class="fas fa-th"></i></div>
@@ -303,8 +385,7 @@
                 </div>
                 <div class="kb-showtemp-footer">
                   <p>{{emailoptintemps[i].name}}</p>
-                  <button mat-raised-button color="primary" class="mr-2"><i class="fas fa-plus-square"></i> Select
-                    Template</button>
+                  <button mat-raised-button (click)="usertemplateselected(emailoptintemps[i].name)" color="primary" class="mr-2"><i class="fas fa-plus-square"></i> Select Template</button>
                   <button mat-raised-button color="accent"><i class="fas fa-eye"></i> Preview</button>
                 </div>
               </li>
@@ -315,49 +396,52 @@
 
           <div class="kb-overview loadEffectFromLeft" *ngIf="tabOpen == 'overviewstep'">
             <div class="sage-input site_support_email mt-3">
-              <input class="sage-input__field" type="url" value="/optin" id="site_support_email">
+              <input class="sage-input__field" type="url" [(value)]="'/'+funnelstepurl" disabled >
               <label class="sage-input__label" for="site_support_email">Your Link</label>
-              <span class="kb-settings-i"><i class="fas fa-cog"></i></span>
-              <span class="kb-sharelink"><i class="fas fa-external-link-alt"></i></span>
+              <span class="kb-settings-i" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('settings')" ><i class="fas fa-cog"></i></span>
+              <span class="kb-sharelink" matTooltip="View Steps" matTooltipPosition="above" (click)="checkpagesettings('redirect')" ><i class="fas fa-external-link-alt"></i></span>
             </div>
 
             <div class="kb-insidebodycard row pb-5">
-              <div class="kb-insidecard col-md-4">
+              <div class="kb-insidecard col-md-4" >
                 <div class=" kb-internalshadow ">
                   <div class="toast toast-light toast-translucent mr-auto ml-auto pt-2 pb-2" role="alert"
                     aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                       <span class="mr-auto toast-title">Main</span>
                       <i class="fas fa-history pr-2"></i>
-                      <small class="d-sm-block d-none">11 mins ago</small>
+                      <small class="d-sm-block d-none">{{maintime}}</small>
                     </div>
                     <div class="toast-body yesdeclarewinner">
                       <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="Kia Builder Logo">
-                      <div class="declarewinner">
+                      <div class="declarewinner" *ngIf="funnelvariation==1" >
                         <i class="fas fa-trophy"></i>
-                        <a href="#">
+                        <a href="javascript:void(0)" (click)="declarewinner()">
                           Declare As winner
                         </a>
                       </div>
                     </div>
                     <div class="toast-header">
-                      <button class="btn btn-secondary btn-block mr-2"><i class="fas fa-pen"></i> Edit Page</button>
-                      <button class="btn btn-secondary mr-2"><i class="fas fa-external-link-alt"></i></button>
-                      <button class="btn btn-secondary "><i class="fas fa-cog"></i></button>
+                      <button mat-raised-button color="accent" class="btn-block mr-2" matTooltip="Edit with Keabuilder" matTooltipPosition="above" ><i class="fas fa-pen"></i> Edit Page</button>
+                      <button mat-raised-button color="accent" matTooltip="View Step" matTooltipPosition="above" (click)="checkpagesettings('redirect')" class="mr-2"><i class="fas fa-external-link-alt"></i></button>
+                      <button mat-raised-button color="accent" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('settings')" ><i class="fas fa-cog"></i></button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="kb-insidecard col-md-4 kb-internalshadow">
-                <div class=" kb-internalshadow">
+
+              <div class="kb-insidecard col-md-4 kb-internalshadow mymt-3">
+                <div class=" kb-internalshadow ">
                   <div class="toast toast-light toast-translucent mr-auto ml-auto pt-2 pb-2" role="alert"
                     aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
+
+                    <div class="toast-header" *ngIf="funnelvariation==1" >
                       <span class="mr-auto toast-title">Split Test</span>
                       <i class="fas fa-bolt mr-2"></i>
                       <small class="d-sm-block d-none">Optmize your lead</small>
                     </div>
-                    <div class="toast-body">
+
+                    <div class="toast-body" *ngIf="funnelvariation==1" >
                       <div class="progress progress-bar-success progress-sm" style="display:flex;">
                         <div class="progress-bar" id="kb-changemyprogress" role="progressbar" aria-valuenow="79"
                           aria-valuemin="101" aria-valuemax="100" style="width: 50%;"></div>
@@ -371,16 +455,13 @@
                         <span class="number" id="kb-variation">50%</span>
                         of traffic
                       </div>
-                      <div class="savechangesvs">
-                        <h6>Ready to go</h6>
-                        <p>You've changed your split test, which will invalidate any
-                          previous results. Please confirm that you'd like to apply these
-                          changes and start the test over</p>
-                        <button class="btn btn-primary">Apply Changes</button>
+                      <div class="text-center">
+                        <button mat-raised-button color="primary" (click)="splitapply()" >Apply Changes</button>
                       </div>
 
                     </div>
-                    <div class="kb-split-text pl-2 pr-2" style="display:none;">
+
+                    <div class="kb-split-text pl-2 pr-2" *ngIf="funnelvariation==0">
                       <div class="btn-block mb-3">
                         <div class="svgimg3">
                           <svg version="1.1" id="Layer_1" class="animation" xmlns="http://www.w3.org/2000/svg"
@@ -416,47 +497,47 @@
                       <!-- <center> -->
                       <p class="text-center">Start Split Test</p>
                       <!-- </center> -->
-                      <button class="btn btn-secondary m-auto btn-block" (click)="showvariation"><i
-                          class="fas fa-plus"></i> Create
-                        Variation</button>
+                      <button mat-raised-button color="accent" class="m-auto btn-block" (click)="showvariation()">
+                        <i class="fas fa-plus"></i> Create Variation
+                      </button>
 
                       <div *ngIf="createvariation">
                         <div class="kb-createvar">
-                          <button class="btn btn-secondary m-auto btn-block"><i class="fas fa-plus"></i> Duplicate
-                            Variation 1</button>
+                          <button mat-raised-button color="accent" class="btn-block" (click)="duplicatemain()" ><i class="fas fa-plus"></i> Duplicate Variation 1</button>
                           <br>
-                          <button class="btn btn-secondary m-auto btn-block mt-2"><i class="fas fa-plus"></i> Create
-                            from Templates</button>
+                          <button mat-raised-button color="accent" class="btn-block mt-2"><i class="fas fa-plus"></i> Create from Templates</button>
                         </div>
-                        <div class="kb-bxoverlay" (click)="hidevariation"></div>
+                        <div class="kb-bxoverlay" (click)="hidevariation()"></div>
                       </div>
                     </div>
+                    
                   </div>
 
                 </div>
               </div>
-              <div class="kb-insidecard col-md-4 kb-internalshadow">
+
+              <div class="kb-insidecard col-md-4 kb-internalshadow" *ngIf="funnelvariation==1" >
                 <div class=" kb-internalshadow">
                   <div class="toast toast-light toast-translucent mr-auto ml-auto pt-2 pb-2" role="alert"
                     aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                       <span class="mr-auto toast-title">Variation</span>
                       <i class="fas fa-history pr-2"></i>
-                      <small class="d-sm-block d-none">1 mins ago</small>
+                      <small class="d-sm-block d-none">{{variationtime}}</small>
                     </div>
                     <div class="toast-body yesdeclarewinner">
                       <img src="/assets/images/funnelpreviewimg/preview1.jpg" class="img-fluid" alt="Kia Builder Logo">
                       <div class="declarewinner kb-red">
                         <i class="fas fa-trophy"></i>
-                        <a href="#">
+                        <a href="javascript:void(0)" (click)="declarewinner()">
                           Declare As winner
                         </a>
                       </div>
                     </div>
                     <div class="toast-header">
-                      <button class="btn btn-secondary btn-block mr-2"><i class="fas fa-pen"></i> Edit Page</button>
-                      <button class="btn btn-secondary mr-2"><i class="fas fa-external-link-alt"></i></button>
-                      <button class="btn btn-secondary "><i class="fas fa-cog"></i></button>
+                      <button mat-raised-button color="accent" matTooltip="Edit with Keabuilder" matTooltipPosition="above" class="btn-block mr-2"><i class="fas fa-pen"></i> Edit Page</button>
+                      <button mat-raised-button color="accent" matTooltip="View Step" matTooltipPosition="above" (click)="checkpagesettings('variationnewtab')" class="mr-2"><i class="fas fa-external-link-alt"></i></button>
+                      <button mat-raised-button color="accent" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('variationsetting')" ><i class="fas fa-cog"></i></button>
                     </div>
                   </div>
                 </div>
@@ -464,12 +545,9 @@
             </div>
 
             <div class="footer-wizard-kb mb-5">
-              <button class="btn btn-secondary"><i class="fas fa-times"></i> Remove From
-                Funnel</button>
-              <button class="btn btn-secondary"><i class="far fa-trash-alt"></i> Delete Funnel
-                Step</button>
-              <button class="btn btn-secondary"><i class="far fa-clone"></i> Clone Funnel
-                Step</button>
+              <button mat-raised-button color="accent" (click)="kbfootersteps('archivefunnelstep')"><i class="fas fa-times"></i> Archive Funnel step</button>
+              <button mat-raised-button color="accent" (click)="kbfootersteps('deletefunnelstep')"><i class="far fa-trash-alt"></i> Delete Funnel Step</button>
+              <button mat-raised-button color="accent" (click)="kbfootersteps('clonefunnelstep')"><i class="far fa-clone"></i> Clone Funnel Step</button>
             </div>
           </div>
           <!-- overview end -->
@@ -491,33 +569,41 @@
 
           <div class="kb-publishing loadEffect" *ngIf="tabOpen == 'publishing'">
             <div class="row mt-4 pb-5">
-              <div class="col-md-6">
+
+              <div class="col-md-6 mt-4" *ngIf="isvariationinactive">
 
                 <mat-form-field class="kb-full-width" appearance="fill">
                   <mat-label>FUNNEL STEP NAME</mat-label>
-                  <input type="text" matInput value="Optin">
+                  <input type="text" name="funnelname" (blur)="changestepnames('stepname')" [(ngModel)]="funnelstepname" matInput>
                 </mat-form-field>
 
               </div>
-              <div class="col-md-6">
+
+              <div class="col-md-6 mt-4" *ngIf="isvariationinactive">
                 
                 <mat-form-field class="kb-full-width" appearance="fill">
                   <mat-label>PATH</mat-label>
-                  <input type="text" matInput value="/optin">
+                  <input type="text" matInput name="funnelpath" (blur)="changestepnames('steppath')" [(ngModel)]="funnelstepurl">
                 </mat-form-field>
                
               </div>
-              <div class="col-md-12 pt-3">
-                <button class="float-right" mat-raised-button color="primary" ><i class="fa fa-check"></i> Update Funnel Step</button>
+
+              <div class="col-md-12 mt-4" *ngIf="!isvariationinactive">
+                
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Variation Path</mat-label>
+                  <input type="text" matInput name="funnelvariationpath" (blur)="changestepnames('variationsteppath')" [(ngModel)]="funnelstepvariationurl">
+                </mat-form-field>
+               
               </div>
 
-              <div class="col-md-12 mt-4">
+              <div class="col-md-12" *ngIf="isvariationinactive">
 
                 <mat-form-field class="kb-chip-list" appearance="fill">
                   <mat-label>Add Tags</mat-label>
                   <mat-chip-list #chipList aria-label="Fruit selection">
-                    <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                      {{fruit.name}}
+                    <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                      {{tag}}
                       <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
                       </button>

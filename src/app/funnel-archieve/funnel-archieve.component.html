@@ -1,7 +1,7 @@
 <div id="archievesteps">
     <div class="container-fluid">
         <div class="row whitefunnel pb-5 loadEffect">
-            <div class="col-md-12 mb-5">
+            <div class="col-md-12">
                 <ul class="kea-barfunnelsearch">
                       <li >
                           <a routerLink="/funnel" href="javascript:void(0)" mat-button>
@@ -28,48 +28,80 @@
                       </li>
                   </ul>
             </div>
-              <div class="col-md-12">
-                  <h4 class="mb-4">Your Archive Funnel Steps</h4>
 
-                  <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource" matSort>
-                  
-                      <ng-container matColumnDef="funnel">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Funnel Name </th>
-                        <td mat-cell *matCellDef="let row"> {{row.funnel}} </td>
-                      </ng-container>
-                  
-                      <ng-container matColumnDef="step">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Step Name </th>
-                        <td mat-cell *matCellDef="let row"> {{row.step}} </td>
-                      </ng-container>
-                  
-                      <ng-container matColumnDef="created_at">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-                        <td mat-cell *matCellDef="let row"> {{row.created_at}} </td>
-                      </ng-container>
-                  
-                      <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-                        <td mat-cell *matCellDef="let row">
-                          <button mat-raised-button class="mr-2">Restore <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                            <button mat-raised-button>Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </td>
-                      </ng-container>
-                  
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)" ></tr>
-                  
-                      <!-- Row shown when there is no matching data. -->
-                      <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-                      </tr>
-                    </table>
-                  
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-                  </div>
+            <div class="col-md-12 mt-2">
 
-              </div>
-          </div>
+              <section class="users-list-wrapper" id='table-userslist'>
+
+                <div class="users-list-filter px-1">
+                  <form class="container-fluid">
+                    <div class="row border rounded py-2 mb-2">
+                      <div class="col-12 col-sm-6 col-lg-3">
+      
+                        <mat-form-field appearance="fill" class="kb-full-width ">
+                          <mat-label>Showing Archive for</mat-label>
+                          <mat-select name="showingcontacts" [(ngModel)]="showingcontacts">
+                            <mat-option value="7 DAY">Last 7 Days</mat-option>
+                            <mat-option value="30 DAY">Last 30 Days</mat-option>
+                            <mat-option value="2 MONTH">Last 2 Months</mat-option>
+                            <mat-option value="1 YEAR">This Year</mat-option>
+                            <mat-option value="all">All Time</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+      
+                      </div>
+                      <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
+                        <button mat-raised-button color="primary" class="btn-block" (click)="applykbfilter()"><i
+                            class="far fa-check-circle"></i> Apply</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+              </section>
+            </div>            
+
+            <div class="col-md-12">
+
+                <div class="mat-elevation-z8">
+                  <table mat-table [dataSource]="dataSource" matSort>
+                
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Funnel Name </th>
+                      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="createdAt">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+                      <td mat-cell *matCellDef="let row"> {{datecusfilter(row.createdAt)}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="archive_reason">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Archive Reason </th>
+                      <td mat-cell *matCellDef="let row"> {{row.archive_reason}} </td>
+                    </ng-container>
+                
+                    <ng-container matColumnDef="updatedAt">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                      <td mat-cell *matCellDef="let row">
+                        <button mat-raised-button class="mr-2" (click)="restoredeleteme(row.id,'restore')" >Restore <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
+                        <button mat-raised-button (click)="restoredeleteme(row.id,'delete')" >Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                      </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)" ></tr>
+                
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                    </tr>
+                  </table>
+                
+                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>

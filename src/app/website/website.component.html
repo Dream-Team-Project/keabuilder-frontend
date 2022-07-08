@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-6">
         <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
-          <input type="text" class="form-control" id="email-search" placeholder="Search funnel">
+          <input type="text" class="form-control" id="email-search" placeholder="Search Pages">
           <div class="form-control-position">
               <i class="fab fa-searchengin"></i>                        
           </div>
@@ -31,21 +31,17 @@
             <input type="text" [(ngModel)]="kbpages[i]['page_name']">
           </div>
           <div class="statbadg">
-            <span class="statusbadge" [class]="kbpages[i]['publish_status']==1 ? 'active1':'active2'"
-              (click)="kbpages[i].dropdownstatus = !kbpages[i].dropdownstatus">
+
+            <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpages[i]['publish_status']==1 ? 'active1':'active2'">
               <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
               {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
             </span>
-            <div class="kb-dropdown__panel kb-dropdown__status" *ngIf="kbpages[i].dropdownstatus">
-              <ul class="kb-dropdown__menu">
-                <li>
-                  <a href=""><i class="fa fa-check pr-2"></i> Publish</a>
-                </li>
-                <li>
-                  <a href=""><i class="fa fa-file pr-2"></i> Draft</a>
-                </li>
-              </ul>
-            </div>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
+              <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
+            </mat-menu>
+
           </div>
 
 
@@ -68,6 +64,16 @@
             </ul>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12 mt-4">
+        <mat-paginator [length]="100"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                aria-label="Select page">
+        </mat-paginator>
       </div>
     </div>
 

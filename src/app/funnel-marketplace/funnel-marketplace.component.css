@@ -159,12 +159,18 @@
 .kb-fitimg {
   height: 300px;
   overflow-y: hidden;
-  transition: all 1s ease;
   background-size: cover;
-  background-position: 0px 0px;
+  background-position: left top;
   background-repeat: no-repeat;
+  
+  -webkit-transition: all 5s linear;
+  -moz-transition: all 5s linear;
+  -ms-transition: all 5s linear;
+  -o-transition: all 5s linear;
+  transition: all 5s linear;
+
 }
 
 .kb-fitimg:hover {
-  background-position: 0px -500px;
+    background-position: left bottom;
 }

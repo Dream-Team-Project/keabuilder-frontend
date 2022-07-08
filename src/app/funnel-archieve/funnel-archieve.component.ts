@@ -3,12 +3,13 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
+import { FunnelService } from '../_services/funnels.service';
 
 export interface UserData {
-  funnel:string;
-  step:string;
-  created_at:string;
-  actions: string;
+  name:string;
+  createdAt:string;
+  archive_reason:string;
+  updatedAt:string;
 }
 
 @Component({
@@ -19,28 +20,40 @@ export interface UserData {
 export class FunnelArchieveComponent implements OnInit {
 
   
-  displayedColumns: string[] = ['funnel', 'step', 'created_at', 'actions'];
+  displayedColumns: string[] = ['name', 'createdAt','archive_reason', 'updatedAt'];
   selection = new SelectionModel<UserData>(true, []);
   dataSource: MatTableDataSource<UserData>;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
 
+  funnelsteps: any = [];
+  showingcontacts = '7 DAY';
+  users:any = [];
 
-  constructor() {
-    const users =[
-      {funnel:'Book A Call', step:'Optin', created_at:'Wed, 03 Mar 2021 00:36:31', actions:''},
-      {funnel:'Marketing', step:'Sales Page', created_at:'Wed, 03 Mar 2021 00:36:31', actions:''},
-      {funnel:'Webinar', step:'Book a call', created_at:'Wed, 03 Mar 2021 00:36:31', actions:''},
-    ];
-    this.dataSource = new MatTableDataSource(users);
+  constructor(private funnelService: FunnelService,) { 
+    this.dataSource = new MatTableDataSource(this.users);
   }
 
   ngOnInit(): void {
+
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }, 500);
+
+    this.funnelService.getarchivefunnel('7 DAY').subscribe({
+      next: data => {
+        console.log(data.data); 
+        this.users = data.data;
+        this.dataSource = new MatTableDataSource(this.users);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
   }
 
   applyFilter(event: Event) {
@@ -50,5 +63,46 @@ export class FunnelArchieveComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  applykbfilter(){
+
+    this.funnelService.getarchivefunnel(this.showingcontacts).subscribe({
+      next: data => {
+        // console.log(data.data); 
+        this.users = data.data;
+        this.dataSource = new MatTableDataSource(this.users);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+  }
+
+  datecusfilter(value:any){
+    return new Date(value).toDateString();
+  }
+
+  restoredeleteme(id:any,type:any){
+
+    this.funnelService.restoredeletefunnel(id,type).subscribe({
+      next: data => {
+        
+        if(data.success==1){
+          this.applykbfilter();
+        }
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+  }
+
+
+
+
 
 }
