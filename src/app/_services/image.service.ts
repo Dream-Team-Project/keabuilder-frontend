@@ -60,7 +60,7 @@ export class ImageService {
         if(this.croppedEvent) {
             this.file = this.base64ToFile(
                 this.croppedImage,
-                (this.saveasnew ? Math.floor(Math.random() * 10000000000) : this.selectedImg.title)+'.'+this.croppedImage.split('data:image/')[1].split(';base64')[0]
+                (this.saveasnew ? Math.floor(Math.random() * 10000000000) : this.selectedImg.title.toLowerCase().replace(/ /g,"_"))+'.'+this.croppedImage.split('data:image/')[1].split(';base64')[0]
               )
         }
         this.fileUploadService.upload(this.file).subscribe(
@@ -134,7 +134,7 @@ export class ImageService {
                 this.saveasnew = true;
                 this.croppedEvent = false;
                 this.imgMatTabIndex = 1;
-                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'Done');
+                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'X');
             })
     }
 

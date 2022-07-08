@@ -33,14 +33,10 @@
     * {
         font-family: Poppins;
     }
-   
-    h1, h2, h3, h4, h5, h6, p {
-        font-family: inherit;
-        margin: 0;
-    }
     
     body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
         font-family: Poppins;   
+        font-weight: 400;
     }
 
     body {
@@ -136,9 +132,9 @@ main {
 .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background{
     background-color: var(--secondary-color);
 }
-input:focus, button:focus{outline: none!important;}
+input:focus, textarea:focus, button:focus{outline: none!important;}
 a{
-text-decoration: none!important;
+text-decoration: none;
 }
 .btn {
     margin-right: 5px;

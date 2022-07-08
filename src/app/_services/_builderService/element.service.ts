@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { RowService } from './row.service';
 import { GeneralService } from './general.service';
+import { StyleService } from './style.service';
+import { SectionService } from './section.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { GeneralService } from './general.service';
 export class ElementService {
 
   distroyDialogue = new Subject<any>();
-  elementObj:any = { id: '', content: {}, style: '', setting: false, type: 'element' };
+  elementObj:any = { id: '', content: {}, setting: false, type: 'element', item_alignment: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
   element_index = 0;
   selectedElements: any = [];
   elementList: Array<any> = [
@@ -17,7 +19,6 @@ export class ElementService {
     { content: { name: 'heading',
     html: '<h2>Heading Goes Here</h2>',
     editor: false,
-    style: '',
     },
     iconCls: 'fas fa-heading' },
     // heading
@@ -25,7 +26,6 @@ export class ElementService {
     { content: { name: 'text',
     html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
     editor: false,
-    style: '',
   },
     iconCls: 'fas fa-pen' },
     // text
@@ -33,11 +33,38 @@ export class ElementService {
     { content: { name: 'image', src: '' }, iconCls: 'fas fa-image' },
     // image
     // button
-    { content: { name: 'button', text: 'Read More', subtext: 'Sub Text', subfont_size:'80%', link: '#' }, iconCls: 'fas fa-font' }
+    { content: { name: 'button', text: 'Read More', subtext: 'Sub Text', subfont_size:'80%', link: '#', target: '_self' }, iconCls: 'fas fa-font' },
     // button
+    // menu
+    { content: { name: 'menu', items:[]}, iconCls: 'fas fa-font' },
+    // menu
+    // form
+    { content: { name: 'form', items:[]}, iconCls: 'fab fa-wpforms' }
+    // form
   ];
-
-  constructor(private _general: GeneralService, private _row: RowService) { }
+  menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
+  preMenuItems:any = ['Home','About','Blog','Contact'];
+  constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
+    this.elementList.filter(item=>{
+      if(item.content.name == 'menu') {
+        for(var i=0; i<=3; i++) {
+          this.menuItemObj.name = this.preMenuItems[i];
+          // if(i == 0) {
+          //     var obj = JSON.parse(JSON.stringify(this.menuItemObj));
+          //     this.menuItemObj.dropdown.push(obj);
+          //     this.menuItemObj.dropdown.push(obj);
+          //     this.menuItemObj.dropdown.push(obj);
+          //     this.menuItemObj.dropdown.push(obj);
+          // }
+          // else {
+          //   this.menuItemObj.dropdown = [];
+          // }
+          this.addMenuItem(item.content.items, this.menuItemObj, i);
+        }
+        this.menuItemObj.name = 'Item';
+      }
+    })
+  }
 
   getDialogueEvent(): Observable<any> {
     return this.distroyDialogue.asObservable();
@@ -46,6 +73,14 @@ export class ElementService {
   addElement(element: any) {
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
+    var respS = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
+    tempObj.content.style = {
+      desktop: this._style.defaultElementStyling(tempObj), 
+      tablet_h:'',
+      tablet_v:respS,
+      mobile:respS}
+    var objSA =  this._style.defaultStyling(tempObj);
+    tempObj.style.desktop = objSA;
     this.appendElement(tempObj, this.element_index);
     this._row.selectedRow.columnSetting = false;
     this.distroyDialogue.next(void 0);
@@ -58,28 +93,38 @@ export class ElementService {
 
   deleteElement(elements: any[], index: any) {
     elements.splice(index, 1);
+    this._section.savePageSession();
   }
 
   appendElement(tempObj: any, index: number) {
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj.setting = false;
-    if(tempObj.content.name == 'button') {
-      if(!tempObj.style) {
-        tempObj.content.style = {
-          'padding': '4px 16px',
-          'font-weight': 600,
-          'font-size': '14px',
-          'color': '#fff',
-          'background-color': '#1BC5BD',
-          'border-width': '2px',
-          'border-color': '#1BC5BD',
-          'border-style': 'solid',
-          'border-radius': '5px', 
-          'transition': '0.2s ease-in-out',  
-        }
-      }
-    }
     this.selectedElements.splice(index + 1, 0, tempObj);
+    this._section.savePageSession();
   }
+
+  // menu
+
+  // session storage
+
+  addMenuItem(menu:any, item:any, mi: number) {
+    this.appendMenuItem(menu, item, mi);
+  }
+
+  duplicateMenuItem(menu:any, item:any, mi: number) {
+    this.appendMenuItem(menu, item, mi);
+  }
+
+  deleteMenuItem(menu:any, mi: number) {
+    menu.splice(mi, 1);
+  }
+
+  appendMenuItem(menu: any, item:any, mi: number) {
+    var tempObj = JSON.parse(JSON.stringify(item));
+    tempObj.id = this._general.createBlockId(item);
+    menu.splice(mi+1, 0, tempObj);
+  }
+
+  // menu
 }
 

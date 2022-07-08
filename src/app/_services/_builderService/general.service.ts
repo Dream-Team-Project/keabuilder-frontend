@@ -2,12 +2,28 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralService {
-
+  main:any = {type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  page_title = 'New Page';
+  description = 'This is the first builder page.';
+  keywords:any = [];
+  author = 'Abhi Tiwari';
+  meta_img = '';
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  lastDevList:any;
+  respDevices:any = [
+  {name:'tablet-h', width:'1024px'},
+  {name:'tablet-v', width:'768px'},
+  {name:'mobile', width:'425px'}];
+  respToggleDevice:any = this.respDevices[2];
+  showResp:any = {toggle: false, open: false, close: false};
+  undoRedo:any = {toggle: false, open: false, close: false};
   wireframe = {toggle: false, open: false, close: false};
   showNavAnim = {open: false, close: false, show: false, toggle: true, navopen: false};
   allBlocksIds:Array<number> = [];
@@ -24,6 +40,7 @@ export class GeneralService {
   insideEditor:boolean = false;
   selectedTab:any;
   expPanelStep = 0;
+  wfmW = '420px';
   config: any = {
     height: 250,
     plugins:
@@ -50,15 +67,60 @@ export class GeneralService {
   }
 
   saveHTML(main:any) {
-    console.log(main.innerHTML);
     var obj = {
       html: main.innerHTML,
     }
+    console.log(obj);
     this.fileUploadService.createHTMLpage(obj).subscribe(
       (event:any) => {
         console.log(event);
       },
       error=>{console.log(error)})
+  }
+
+  addKeyword(event: any): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.keywords.push(value);
+    }
+    event.chipInput!.clear();
+  }
+
+  removeKeyword(keyword:any): void {
+    const index = this.keywords.indexOf(keyword);
+    if (index >= 0) {
+      this.keywords.splice(index, 1);
+    }
+  }
+
+  selRespDevice(index:number) {
+    this.respToggleDevice = this.respDevices[index];
+  }  
+
+  isAllHide(hide:any): boolean {
+    return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile;
+  }
+
+  someComplete(hide:any): boolean {
+    return (hide.desktop || hide.tablet_h || hide.tablet_v || hide.mobile) && !this.isAllHide(hide);
+  }
+
+  setAll( hide: any, completed: boolean) {
+    hide.desktop = completed;
+    hide.tablet_h = completed;
+    hide.tablet_v = completed;
+    hide.mobile = completed;
+  }
+
+  expandDevList(id:string) {
+    var devList:any = document.getElementById(id);
+    if (devList.style.maxHeight != '0px'){
+      devList.style.maxHeight = '0px';
+    }
+    else {
+      devList.style.maxHeight = devList.scrollHeight + 'px';
+    }
+    this.lastDevList = devList;
   }
 
   expandAll(ele:any, action:boolean) {
@@ -94,15 +156,47 @@ export class GeneralService {
 
   onResizeEnd(event: ResizeEvent ,rect:any): void {
     var rw:any = event.rectangle.width;
-    if(rw < 421 || rw > screen.width/2) {
-      rect.style.width = '420px';
+    if(rw < 420) {
+      this.wfmW = '420px';
     }
     else if( rw > screen.width/2) {
-      rect.style.width = screen.width/2;
+      this.wfmW = screen.width/2 + 'px';
     }
     else {
-      rect.style.width = event.rectangle.width + 'px';
+      this.wfmW = event.rectangle.width + 'px';
     }
+  }
+
+  undoRedoToggle(navtoggle:boolean) {
+    if(!this.undoRedo.toggle) {
+      this.undoRedo.open = true;
+      this.undoRedo.toggle = true;
+    }
+    else {
+      this.undoRedo.close = true;
+    }
+    setTimeout(()=>{
+      this.undoRedo.close ? this.undoRedo.toggle = false : '';
+      this.undoRedo.open = false;
+      this.undoRedo.close = false;
+  },300)
+    navtoggle ? this.showfloatnavtoggle() : '';
+  }
+
+  responsiveToggle(navtoggle:boolean) {
+    if(!this.showResp.toggle) {
+      this.showResp.open = true;
+      this.showResp.toggle = true;
+    }
+    else {
+      this.showResp.close = true;
+    }
+    setTimeout(()=>{
+      this.showResp.close ? this.showResp.toggle = false : '';
+      this.showResp.open = false;
+      this.showResp.close = false;
+  },300)
+    navtoggle ? this.showfloatnavtoggle() : '';
   }
 
   wireframeToggle(navtoggle:any) {
@@ -156,7 +250,7 @@ export class GeneralService {
       }
       this.sideFloatBtnAnim.open = false;
       this.sideFloatBtnAnim.close = false;
-    },200);
+    },300);
   }
  
   setExpPanelStep(index: number) {
@@ -173,6 +267,7 @@ export class GeneralService {
 
   resetInlineEditor() {
       this.selectedBlock.content.editor = false;
+      this.selectedBlock = false;
       this.showInlineEditor = false;
   }
 

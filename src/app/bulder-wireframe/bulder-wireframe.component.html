@@ -1,6 +1,6 @@
 <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<div #wireframe mwlResizable [enableGhostResize]="true" (resizeEnd)="_general.onResizeEnd($event, wireframe)"
-    id="kb-wireframe" style="background-color: #f7f8f9" [class.openWireframe]="_general.wireframe.open"
+<div #wireframe [style.width]="_general.wfmW" mwlResizable [enableGhostResize]="true" (resizeEnd)="_general.onResizeEnd($event, wireframe)"
+    id="kb-wireframe" style="background-color: #f7f8f9" [class.openWireframe]="_general.wireframe.open" 
     [class.closeWireframe]="_general.wireframe.close" class="kb-wfs-contain">
     <div id="kb-wfs-navtimes" [style]="navtimeStyle" (click)="_general.wireframeToggle(false)" [class.kb-wfs-navtimes-btn-open]="_general.wireframe.open"
     [class.kb-wfs-navtimes-btn-close]="_general.wireframe.close" matTooltip="Close" matTooltipPosition="below">
@@ -18,9 +18,19 @@
         [sortablejsOptions]="builderSectionOptions">
         <li *ngFor="let section of _section.sections, index as si"
             (mouseenter)="_row.selectedSectionRows = section.rowArr">
-            <span (mouseleave)="section.chngName = false" class="kb-wfs">
-                <span *ngIf="_section.sections.length > 1" class="kb-setting-icon kb-handle-block kb-handle-section">
-                    <i class="fas fa-arrows-alt-v"></i>
+            <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; section.chngName = false" class="kb-wfs">
+                <span class="kb-setting-icon">
+                    <i *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section fas fa-arrows-alt-v"></i>
+                    <i (click)="_general.expandDevList('devListS-'+si)" class="fa" [class]="_style.getDisplay(section.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    <div [id]="'devListS-'+si" class="dislay-device-list" [style.maxHeight]="'0px'">
+                            <mat-checkbox [checked]="_general.isAllHide(section.hide)"
+                            [indeterminate]="_general.someComplete(section.hide)"
+                            (change)="_general.setAll(section.hide, $event.checked)">All</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="section.hide.desktop">Desktop</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="section.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="section.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="section.hide.mobile">Mobile</mat-checkbox>
+                    </div>
                 </span>
                 <span class="kb-wfs-name">
                     <span *ngIf="!section.chngName else chngInp" matTooltip="Click To Rename" matTooltipPosition="above"
@@ -51,10 +61,19 @@
             <ul #rowUl [style.maxHeight]="'fit-content'" name="row" class="kb-drag-container kb-wfs-row kb-block-shift"
                 [sortablejs]="section.rowArr" [sortablejsOptions]="builderRowOptions">
                 <li *ngFor="let row of section.rowArr, index as ri" (mouseenter)="_row.selectedRow = row;">
-                    <span (mouseleave)="row.chngName = false" class="kb-wfs">
-                        <span *ngIf="_section.sections.length > 1 || section.rowArr.length > 1"
-                            class="kb-setting-icon kb-handle-block kb-handle-row">
-                            <i class="fas fa-arrows-alt-v"></i>
+                    <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; row.chngName = false" class="kb-wfs">
+                        <span class="kb-setting-icon">
+                            <i *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row fas fa-arrows-alt-v"></i>
+                            <i (click)="_general.expandDevList('devListR-'+si+ri)" class="fa" [class]="_style.getDisplay(row.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
+                            <div [id]="'devListR-'+si+ri" class="dislay-device-list" [style.maxHeight]="'0px'">
+                                    <mat-checkbox [checked]="_general.isAllHide(row.hide)"
+                                    [indeterminate]="_general.someComplete(row.hide)"
+                                    (change)="_general.setAll(row.hide, $event.checked)">All</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="row.hide.desktop">Desktop</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="row.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="row.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                                    <mat-checkbox [(ngModel)]="row.hide.mobile">Mobile</mat-checkbox>
+                            </div>
                         </span>
                         <span class="kb-wfs-name">
                             <span *ngIf="!row.chngName else chngInp" matTooltip="Click To Rename"
@@ -89,10 +108,19 @@
                         [sortablejsOptions]="builderColumnOptions">
                         <li class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
                             (mouseenter)="_element.selectedElements = column.elementArr">
-                            <span (mouseleave)="column.chngName = false" class="kb-wfs">
-                                <span *ngIf="row.columnArr.length > 1"
-                                    class="kb-setting-icon kb-handle-block kb-handle-column">
-                                    <i class="fas fa-arrows-alt-v"></i>
+                            <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-wfs">
+                                <span class="kb-setting-icon">
+                                    <i *ngIf="row.columnArr.length > 1" class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>
+                                    <i (click)="_general.expandDevList('devListC-'+si+ri+ci)" class="fa" [class]="_style.getDisplay(column.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    <div [id]="'devListC-'+si+ri+ci" class="dislay-device-list" [style.maxHeight]="'0px'">
+                                            <mat-checkbox [checked]="_general.isAllHide(column.hide)"
+                                            [indeterminate]="_general.someComplete(column.hide)"
+                                            (change)="_general.setAll(column.hide, $event.checked)">All</mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="column.hide.desktop">Desktop</mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="column.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="column.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                                            <mat-checkbox [(ngModel)]="column.hide.mobile">Mobile</mat-checkbox>
+                                    </div>
                                 </span>
                                 <span class="kb-wfs-name">
                                     <span *ngIf="!column.chngName else chngInp" matTooltip="Click To Rename"
@@ -123,9 +151,19 @@
                             <ul name="element" class="kb-drag-container kb-wfs-element" [sortablejs]="column.elementArr"
                                 [sortablejsOptions]="builderElementOptions">
                                 <li *ngFor="let element of column.elementArr, index as ei">
-                                    <span (mouseleave)="element.chngName = false" class="kb-wfs">
-                                        <span class="kb-setting-icon kb-handle-block kb-handle-element">
-                                            <i class="fas fa-arrows-alt-v"></i>
+                                    <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; element.chngName = false" class="kb-wfs">
+                                        <span class="kb-setting-icon">
+                                            <i class="kb-handle-block kb-handle-element fas fa-arrows-alt-v"></i>
+                                            <i (click)="_general.expandDevList('devListE-'+si+ri+ci+ei)" class="fa" [class]="_style.getDisplay(element.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                            <div [id]="'devListE-'+si+ri+ci+ei" class="dislay-device-list" [style.maxHeight]="'0px'">
+                                                    <mat-checkbox [checked]="_general.isAllHide(element.hide)"
+                                                    [indeterminate]="_general.someComplete(element.hide)"
+                                                    (change)="_general.setAll(element.hide, $event.checked)">All</mat-checkbox>
+                                                    <mat-checkbox [(ngModel)]="element.hide.desktop">Desktop</mat-checkbox>
+                                                    <mat-checkbox [(ngModel)]="element.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                                                    <mat-checkbox [(ngModel)]="element.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                                                    <mat-checkbox [(ngModel)]="element.hide.mobile">Mobile</mat-checkbox>
+                                            </div>
                                         </span>
                                         <span class="kb-wfs-name">
                                             <span *ngIf="!element.chngName else chngInp" matTooltip="Click To Rename"
@@ -178,31 +216,3 @@
     </ul>
     <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
 </div>
-<!-- <div
-#rectangle
-class="rectangle"
-mwlResizable
-[enableGhostResize]="true"
-(resizeEnd)="_general.onResizeEnd($event, rectangle)"
->
-<div
-  class="resize-handle-top"
-  mwlResizeHandle
-  [resizeEdges]="{ top: true }"
-></div>
-<div
-  class="resize-handle-left"
-  mwlResizeHandle
-  [resizeEdges]="{ left: true }"
-></div>
-<div
-  class="resize-handle-right"
-  mwlResizeHandle
-  [resizeEdges]="{ right: true }"
-></div>
-<div
-  class="resize-handle-bottom"
-  mwlResizeHandle
-  [resizeEdges]="{ bottom: true }"
-></div>
-</div> -->

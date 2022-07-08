@@ -11,10 +11,10 @@
 
 span.side-floating-btn-group {
     position: absolute;
-    left: -100px;
-    top: -24px;
+    left: -138px;
+    top: -10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
     cursor: default;
     padding: 20px;
@@ -22,6 +22,7 @@ span.side-floating-btn-group {
 
 button.side-floating-btn {
     position: relative;
+    top: 0px;
     padding: 0px;
     border-radius: 50%;
     height: 40px;
@@ -37,76 +38,85 @@ button.side-floating-btn:hover {
 }
 
 button.side-floating-btn:first-child {
-    top: -5px;
+    right: 6px;
+}
+
+button.side-floating-btn:last-child {
+    right: 0px;
+}
+
+.sidefloatOpen button.side-floating-btn {
+    opacity: 1;
+}
+
+.sidefloatClose button.side-floating-btn {
+    opacity: 0;
 }
 
 .sidefloatOpen button.side-floating-btn:first-child {
-    animation: tolefttop 0.2s ease;
+    animation: toleftf 0.3s ease;
 }
 
 .sidefloatOpen button.side-floating-btn:last-child {
-    animation: toleftbottom 0.3s ease;
+    animation: toleftl 0.2s ease;
 }
 
 .sidefloatClose button.side-floating-btn:first-child {
-    animation: tolefttop 0.2s ease;
-    animation-direction: reverse;
+    animation: toleftfrev 0.3s ease;
 }
 
 .sidefloatClose button.side-floating-btn:last-child {
-    animation: toleftbottomreverse 0.3s ease;
-    animation-delay: 0.1s;
+    animation: toleftl 0.2s ease;
+    animation-direction: reverse;
 }
 
-@keyframes tolefttop {
+@keyframes toleftf {
     0% {
         opacity: 0; 
-        left: 60px;
-        top: 15px;
+        right: -90px;
+        transform: scale(0);
+    }
+    33% {
+        opacity: 0; 
+        right: -90px;
+        transform: scale(0);        
+    }
+    100% {
+        opacity: 1;
+        right: 6px;
+        transform: scale(1);
+    }  
+}
+
+@keyframes toleftfrev {
+    0% {
+        opacity: 1; 
+        right: 6px;
+        transform: scale(1);
+    }
+    66% {
+        opacity: 0;
+        right: -90px;
+        transform: scale(0);    
+    }
+    100% {
+        opacity: 0;
+        right: -90px;
+        transform: scale(0);
+    }  
+}
+
+@keyframes toleftl {
+    0% {
+        opacity: 0; 
+        right: -50px;
         transform: scale(0);
     }
     100% {
         opacity: 1;
-        left: 0px;
-        top: -5px;
+        right: 0px;
         transform: scale(1);
-    }  
-}
-
-@keyframes toleftbottom {
-    0% {
-        opacity: 0; 
-        left: 60px;
-        top: -25px;
-        transform: scale(0);
-    }
-    20% {
-        opacity: 0; 
-        left: 60px;
-        top: -25px;
-        transform: scale(0);       
-    }
-    100% {
-        opacity: 1;
-        left: 0px;
-        top: 0px;
-        transform: scale(1);
-    }  
-}
-
-@keyframes toleftbottomreverse {
-    0% {
-        opacity: 1;
-        left: 0px;
-        top: 0px;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0; 
-        left: 60px;
-        top: -25px;
-        transform: scale(0); 
-    }  
+    }   
 }
 
 @keyframes bounce {
@@ -118,4 +128,36 @@ button.side-floating-btn:first-child {
         opacity: 1;
         transform: scale(1);
     }
+}
+
+.dislay-device-list {
+    position: absolute;
+    background: var(--kb-light);
+    color: var(--kb-text-color);
+    box-shadow: 0 0 30px rgb(0 0 0 / 20%);
+    border-radius: 5px;
+    left: 0px;
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0 10px;
+    z-index: 9;
+    transition: 0.2s ease;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox:first-child {
+    padding-top: 5px;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox {
+    padding-bottom: 5px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked {
+    color: var(--section-color);
+}
+
+span.kb-setting-icon .kb-handle-block {
+    cursor: n-resize;
 }

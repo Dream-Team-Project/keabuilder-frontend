@@ -61,7 +61,7 @@ export class BulderWireframeComponent implements OnInit {
       scrollSensitivity: 100,
       animation: 300,
       onUpdate: (event: any) => {
-        // console.log(event);
+        this._section.savePageSession();
       },
       onStart: function (/**Event*/evt) {
         // console.log(evt.oldIndex);  // element index within parent
@@ -79,7 +79,7 @@ export class BulderWireframeComponent implements OnInit {
       scrollSensitivity: 100,
       animation: 300,
       onUpdate: (event: any) => {
-        // console.log(event);
+        this._section.savePageSession();
       },
       onStart: function (/**Event*/evt) {
         // console.log(evt.oldIndex);  // element index within parent
@@ -101,7 +101,6 @@ export class BulderWireframeComponent implements OnInit {
       animation: 300,
       onUpdate: (event: any) => {
         this._column.filterCls(this._row.selectedRow);
-        // console.log(event);
       },
       onStart: function (/**Event*/evt) {
         // console.log(evt.oldIndex);  // element index within parent
@@ -119,7 +118,7 @@ export class BulderWireframeComponent implements OnInit {
       scrollSensitivity: 100,
       animation: 300,
       onUpdate: (event: any) => {
-        // console.log(event);
+        this._section.savePageSession();
       },
       onStart: function (/**Event*/evt) {
         // console.log(evt.oldIndex);  // element index within parent

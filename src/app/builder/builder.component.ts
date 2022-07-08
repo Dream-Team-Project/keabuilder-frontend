@@ -26,6 +26,7 @@ DialogParentToggle:boolean = false;
 
   showNavFrom:string = 'bottom';
 
+
   constructor(
     private _nav: NavbarService,
     // builder services start
@@ -66,8 +67,6 @@ DialogParentToggle:boolean = false;
     else {
       this.showNavFrom = 'below';
     }
-    console.log(y);
-    console.log(screen.height/2);
     // console.log('x: ' + x, 'y: ' + y);     
     // console.log('width: ' + screen.width, 'height: ' + screen.height);
   }
@@ -122,7 +121,7 @@ DialogParentToggle:boolean = false;
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      // console.log(event);
+      this._section.savePageSession();
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
@@ -140,7 +139,7 @@ DialogParentToggle:boolean = false;
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      // console.log(event);
+      this._section.savePageSession();
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
@@ -158,7 +157,7 @@ DialogParentToggle:boolean = false;
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      // console.log(event);
+      this._section.savePageSession();
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef, OnChanges, SimpleChanges} from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Options } from 'sortablejs';
@@ -21,14 +21,14 @@ import { ImageService } from '../_services/image.service';
 
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
-  connectWParent:boolean = false;
+  connectWtParent:boolean = false;
 
   @Input()
   set DialogToggle(val: any) {
-    if(this.connectWParent) {
+    if(this.connectWtParent) {
       this.openDialog();
     }
-    else this.connectWParent = true;
+    else this.connectWtParent = true;
   }   
 
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
@@ -72,7 +72,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      this.overlayRefDetach(true);
+      this.overlayRefDetach(!this._general.blockSelection);
     });
   }
 
@@ -111,7 +111,9 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   resetDialog(update: boolean) {
     this._overlayRef.detach();
-    if(update && this._general.selectedBlock) this._style.updateStyle();
+    if(update && this._general.selectedBlock) {
+      this._style.updateStyle();
+    }
     else if(this.backToRow) {
       this._general.selectedBlock = this._row.selectedRow;
       this._style.blockSetting(this._general.selectedBlock);
@@ -121,6 +123,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.showEditor = false;
     this._general.selectedTab = '';
     this._general.setExpPanelStep(0);
+    if(this._general.blockSelection == '') this._section.savePageSession();
   }
   
   ngOnDestroy() {
@@ -144,7 +147,9 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this.backToRow = true;
     this.dragBoxAnime.open = false;
     this._general.showBackToRowOption=false;
-    savecolumn ? this._style.updateStyle() : '';
+    if(savecolumn) {
+      this._style.updateStyle();
+    };
     this.overlayRefDetach(false);
   }
 
@@ -159,7 +164,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     animation: 300,
     onUpdate: (event: any) => {
       this._column.filterCls(this._row.selectedRow);
-      // console.log(event);
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
@@ -170,6 +174,27 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   };  
 
   // builder options
+
+  // menu options
+
+  builderMenuOptions: Options = {
+    group: 'menu',
+    scroll: true,
+    sort: true,
+    handle: '.kb-handle-menu',
+    scrollSensitivity: 100,
+    animation: 300,
+    onUpdate: (event: any) => {
+    },
+    onStart: function (/**Event*/evt) {
+      // console.log(evt.oldIndex);  // element index within parent
+    },
+    onChoose: function (/**Event*/evt) {
+      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
+    },
+  };  
+
+  // menu options
 
 }
 

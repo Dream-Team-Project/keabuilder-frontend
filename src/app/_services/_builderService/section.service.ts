@@ -1,31 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
 import { GeneralService } from './general.service';
+import { StyleService } from './style.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SectionService {
 
-  testObj:any = {id: '', type: 'section', rowArr: [
-    {id: 'kb-row-5419236692', type: 'row', columnArr: [
-      {id: '', type: 'column', elementArr: [
-        { id: '', content: { name: 'text',
-        html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
-        editor: false,
-        style: '',
-      }, style: '', setting: false, type: 'element' }
-      ], name: '', chngName: false, style: '', }
-    ], setting: false, columnSetting: true, rowSize: '', style: ''}], 
-    setting: false, style: ''};
-  sections:Array<any> = [];
-  sectionObj:any = {id: '', type: 'section', rowArr: [], setting: false, style: ''};
+  sections:any = [];
+  sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
 
-  constructor(private _general: GeneralService) { 
+  pageSession:any = {undo: 0, redo: 0}
+  pageSessionArr:any = [];
+  undoToggle:boolean = true;
+
+  constructor(private _general: GeneralService, private _style:StyleService) { 
+    var respS = {padding: '30px 0px'};
+    this.sectionObj.style = {
+      desktop: this._style.defaultStyling(this.sectionObj),
+      tablet_h: '',
+      tablet_v: respS,
+      mobile: respS,
+    }
     this.addSection(0);
   }
+
+  // session storage
+
+  savePageSession() {
+    var sessionStr = JSON.stringify(this.sections).replace(/"setting":true/g, '"setting":false');
+    if(this.pageSessionArr[this.pageSessionArr.length-1] != sessionStr && this.pageSessionArr[this.pageSession.undo] != sessionStr) {
+      this.pageSessionArr.push(sessionStr);
+      this.pageSession.undo = this.pageSessionArr.length-1; 
+      this.pageSession.redo = this.pageSessionArr.length; 
+    }
+  }
+
+  undo() {
+    var sObj = this.pageSessionArr[this.pageSession.undo-1];
+    if(sObj != undefined) {
+      this.sections = JSON.parse(sObj);
+      this.pageSession.undo--;
+      this.pageSession.redo--;
+    }
+  }
+
+  redo() {
+    var sObj = this.pageSessionArr[this.pageSession.redo];
+    if(sObj != undefined) {
+      this.sections = JSON.parse(sObj);
+      this.pageSession.undo++;
+      this.pageSession.redo++;
+    }
+  }
   
+  // session storage
+
   addSection(index: number) {
     this.appendSection(this.sectionObj, index);
   }
@@ -38,6 +69,7 @@ export class SectionService {
 
   deleteSection(index: number) {
     this.sections.splice(index, 1);
+    this.savePageSession();
   }
 
   appendSection(section: { id: number; type: string; rowArr: never[]; setting: boolean; style: string; }, index: number) {
@@ -56,6 +88,7 @@ export class SectionService {
       })
       })
     }
+    this.savePageSession();
   }
 
 }
