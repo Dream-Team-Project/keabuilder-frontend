@@ -14,12 +14,12 @@ export class FileUploadService {
   updateOnDBApi = "./api/updateondb";
   deleteFromDB = "./api/deletefromdb";
   deleteFile = "./api/deletefile";
-  createHTMLApi = "./api/savepage";
+  createPageApi = "./api/savepage";
     
   constructor(private http:HttpClient) { }
 
-  createHTMLpage(page:any):Observable<any> {
-    return this.http.post(this.createHTMLApi, page);
+  createpage(page:any):Observable<any> {
+    return this.http.post(this.createPageApi, page);
   }
 
   // Returns an observable

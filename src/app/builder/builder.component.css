@@ -610,6 +610,7 @@ span.kb-block-hidden-icon {
 /* column structure */
 .kb-column-wrap {
     display: flex;
+    justify-content: center;
     flex-direction: unset;
     flex-wrap: unset;
     width: 100%;
@@ -1405,6 +1406,10 @@ div.kb-element.kb-border-select:before {
     background-color: rgb(216 200 152 / 10%);
 }
 
+div.kb-element-content * {
+    margin: 0!important;
+}
+
 div.kb-element-content {
     width: 100%;
     height: 100%;
@@ -1531,26 +1536,6 @@ div.kb-module-setting {
     width: 60%;
     height: auto;
     padding: 10px 16px;
-}
-
-.sel-tip-icon {
-    width: 0px !important;
-    height: 0px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #fff;
-    float: none !important;
-    top: -8px;
-    position: absolute;
-    transition: 0.2s ease-in-out;
-}
-
-.sel-tip-icon.start {
-    left: calc(50% - 214px);
-}
-
-.sel-tip-icon.end {
-    left: calc(50% + 35px);
 }
 
 span.kb-reverse-icon {
@@ -1991,28 +1976,6 @@ span#mceu_46 {
 
 /* elements */
 
-kb-img-element {
-    max-width: 100%;
-    width: 100%;
-}
-
-.kb-img-element img.dummyImg {
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    opacity: 0.5;
-}
-
-.slider-swatches {
-    margin-top: 0px !important;
-}
-
-color-slider-swatches {
-    background-color: red;
-}
-
 ngx-colors ::ng-deep .app-color-picker .preview .circle {
     height: 28px !important;
     width: 28px !important;
@@ -2065,7 +2028,6 @@ input[type=number] {
 /* responsivness */
 
 .kb-resp-view div.kb-column-wrap {
-    display: flex;
     flex-direction: column;
 }
 

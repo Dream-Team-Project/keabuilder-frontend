@@ -81,8 +81,12 @@ image-cropper {
 }
 
 ::ng-deep .mat-simple-snackbar-action button {
-    color: #fff;
+    color: #fff!important;
     font-weight: 600;
+}
+
+::ng-deep .mat-simple-snackbar .mat-button-wrapper {
+    color: #fff!important;
 }
 
 ::ng-deep .mat-slider.slider {

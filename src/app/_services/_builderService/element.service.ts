@@ -11,7 +11,7 @@ import { SectionService } from './section.service';
 export class ElementService {
 
   distroyDialogue = new Subject<any>();
-  elementObj:any = { id: '', content: {}, setting: false, type: 'element', item_alignment: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
+  elementObj:any = { id: '', content: {}, setting: false, type: 'element', item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
   element_index = 0;
   selectedElements: any = [];
   elementList: Array<any> = [

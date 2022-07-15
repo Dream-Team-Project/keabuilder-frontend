@@ -2,8 +2,8 @@
 <div id="page-container" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
     <div id="kb-block-container" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
-        <div id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
-            <div #main id="kb-main" 
+        <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
+            <div id="kb-main" 
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div name="section" class="kb-drag-container" [sortablejs]="_section.sections"
                     [sortablejsOptions]="builderSectionOptions">
@@ -11,6 +11,7 @@
                     <div *ngFor="let section of _section.sections, index as si"
                         (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
                         (mouseleave)="section.setting = false"
+                        [ngClass]="_style.getHideCls(section.hide)"
                         [class.kb-block-none]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.getDisplay(_style.hide) : _style.getDisplay(section.hide)"
                         [ngStyle]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.currentStyling() : _style.getBlockStyle(section.style)"
                         [id]="section.id" class="kb-section kb-block-container"
@@ -43,6 +44,7 @@
                             <div *ngFor="let row of section.rowArr, index as ri"
                                 (mouseenter)="row.setting = true; _row.selectedRow = row;"
                                 (mouseleave)="row.setting = false"
+                                [ngClass]="_style.getHideCls(row.hide)"
                                 [class.kb-block-none]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getDisplay(_style.hide) : _style.getDisplay(row.hide)"
                                 [ngStyle]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.currentStyling() : _style.getBlockStyle(row.style)"
                                 [id]="row.id"
@@ -64,16 +66,18 @@
                                 </div>
                                 <!-- rows setting navigation end -->
                                 <div name="column" class="kb-column-wrap" 
+                                [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
                                 [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                                 [style.flexDirection]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getColumnReverse(_style.columnRev): _style.getColumnReverse(row.columnRev)"
-                                [style.columnGap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.columnGap : row.columnGap) + '%'">
+                                [style.gap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getBlockParamValue(_style.columnGap) : _style.getBlockParamValue(row.columnGap)) + 'rem'">
                                     <!-- columns start -->
                                     <div *ngFor="let column of row.columnArr, index as ci"
                                         (mouseenter)="_element.selectedElements = column.elementArr"
                                         [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : _style.getBlockStyle(column.style)"
+                                        [ngClass]="_style.getHideCls(column.hide)"
                                         [class.kb-block-none]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.getDisplay(_style.hide) : _style.getDisplay(column.hide)"
                                         [class]="row.rowSize"
-                                        [id]="'kb-column-'+column.id" class="kb-column kb-block-container">
+                                        [id]="column.id" class="kb-column kb-block-container">
                                         <div name="element" class="kb-drag-container" [sortablejs]="column.elementArr"
                                             [sortablejsOptions]="builderElementOptions"
                                             (change)="_element.selectedElements = column.elementArr">
@@ -83,9 +87,11 @@
                                                 (mouseenter)="element.setting = true"
                                                 (mouseleave)="element.setting = false"
                                                 [id]="element.id" class="kb-element kb-block-container"
+                                                [ngClass]="_style.getHideCls(element.hide)"
                                                 [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
                                                 [class.kb-block-disabled]="_general.showInlineEditor"
-                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.item_alignment : element.item_alignment">
+                                                [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
+                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
                                                 <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
                                                     <span class="kb-handle-block kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
                                                     <span
@@ -125,10 +131,10 @@
                                                     <div *ngSwitchCase="'menu'" class="kb-element-content">
                                                         <ul class="kb-menu"
                                                         [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.textStyling() : _style.getElementBlockStyle(element)">
-                                                            <li *ngFor="let item of element.content.items, index as mi" [class.kb-block-none]="_style.getDisplay(item.hide)">
+                                                            <li *ngFor="let item of element.content.items, index as mi" [ngClass]="_style.getHideCls(item.hide)" [class.kb-block-none]="_style.getDisplay(item.hide)">
                                                                 <a [id]="item.id" [href]="item.link">{{item.name}}</a>
                                                                 <ul *ngIf="item.dropdown.length != 0" class="kb-sub-menu">
-                                                                    <li *ngFor="let dp of item.dropdown, index as dpi" [class.kb-block-none]="_style.getDisplay(dp.hide)">
+                                                                    <li *ngFor="let dp of item.dropdown, index as dpi" [ngClass]="_style.getHideCls(dp.hide)" [class.kb-block-none]="_style.getDisplay(dp.hide)">
                                                                         <a [id]="dp.id" [href]="dp.link">{{dp.name}}</a>
                                                                     </li>
                                                                 </ul>
@@ -217,7 +223,7 @@
         <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
             <button mat-button (click)="_general.blockSelection = ''; _general.selectedBlock = _general.main; _style.blockSetting(_general.main); openDialog($event); _general.showfloatnavtoggle()" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
             <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
-            <button mat-button (click)="_general.saveHTML(main)" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
+            <button mat-button (click)="_general.saveHTML(main, _section.sections)" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
             <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button>
             <button mat-button (click)="_general.wireframeToggle(true)" matTooltip="Wireframe" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
         </span>

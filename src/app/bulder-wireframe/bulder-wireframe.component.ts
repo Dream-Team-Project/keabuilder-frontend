@@ -14,7 +14,7 @@ import { ImageService } from '../_services/image.service';
   styleUrls: ['./bulder-wireframe.component.css']
 })
 export class BulderWireframeComponent implements OnInit {
-  
+  get = false
   DialogParentToggle:boolean = false;
   navtimeStyle:any = {
     position: 'absolute',
@@ -92,6 +92,7 @@ export class BulderWireframeComponent implements OnInit {
     builderColumnOptions: Options = {
       group: {
         name: 'column',
+        pull: false,
         put: false,
       },
       scroll: true,
@@ -100,6 +101,9 @@ export class BulderWireframeComponent implements OnInit {
       scrollSensitivity: 100,
       animation: 300,
       onUpdate: (event: any) => {
+        this._column.filterCls(this._row.selectedRow);
+      },
+      onAdd: (event: any) => {
         this._column.filterCls(this._row.selectedRow);
       },
       onStart: function (/**Event*/evt) {
@@ -118,6 +122,9 @@ export class BulderWireframeComponent implements OnInit {
       scrollSensitivity: 100,
       animation: 300,
       onUpdate: (event: any) => {
+        this._section.savePageSession();
+      },
+      onAdd: (event: any) => {
         this._section.savePageSession();
       },
       onStart: function (/**Event*/evt) {

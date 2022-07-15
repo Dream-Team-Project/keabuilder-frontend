@@ -96,10 +96,6 @@ DialogParentToggle:boolean = false;
     }
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
   // drag drop box
 
   openDialog(e:any) {
@@ -157,6 +153,9 @@ DialogParentToggle:boolean = false;
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
+      this._section.savePageSession();
+    },
+    onAdd: (event: any) => {
       this._section.savePageSession();
     },
     onStart: function (/**Event*/evt) {
