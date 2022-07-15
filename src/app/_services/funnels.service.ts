@@ -166,6 +166,19 @@ export class FunnelService {
       }, httpOptions);
     }
 
+    funnelandstepshorting(data:string, type:string):Observable<any> {
+      return this.http.post("/api/funnelandstepshorting", {
+        data,
+        type
+      }, httpOptions);
+    }
+
+    funneltemplates():Observable<any> {
+      return this.http.post("/api/funneltemplates", {
+      }, httpOptions);
+    }
+
+    
     
     
     

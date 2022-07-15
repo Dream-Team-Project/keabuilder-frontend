@@ -707,12 +707,13 @@ input[type=range]::-webkit-slider-runnable-track {
 
 .kb-temp-ul li {
   display: block;
-  padding: 8px 20px;
-  box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%);
+  /* padding: 8px 20px; */
+  /* box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%); */
   margin-right: 10px;
   float: left;
   font-size: 14px;
   position: relative;
+  z-index: 9;
 }
 
 .kb-temp-ul li a {
@@ -739,7 +740,7 @@ input[type=range]::-webkit-slider-runnable-track {
   transition: .5s ease;
 }
 
-.kb-temp-ul ul li:hover {
+.kb-temp-ul ul li button:hover {
   background: #e2e2e2;
 }
 
@@ -775,9 +776,13 @@ input[type=range]::-webkit-slider-runnable-track {
   background: #fff;
 }
 
-.kb-showtemplates li a.active {
+.kb-showtemplates li button.active {
   background: #d8c898;
   color: #fff;
+}
+
+.kb-showtemplates li button {
+  width: 100%;
 }
 
 #secondwizard .wizard-number {

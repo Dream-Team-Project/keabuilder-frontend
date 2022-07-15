@@ -24,7 +24,7 @@
                     <h6><b>Copy Step URL</b></h6>
                     <hr>
                     <mat-form-field class="kb-full-width" appearance="fill">
-                      <mat-label>Funnel Url</mat-label>
+                      <mat-label>Step Url</mat-label>
                       <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
                     </mat-form-field>
                     
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div *ngIf="!firstpart">
+            <div *ngIf="!firstpart && !colortheme">
                 <h6><b>Archive</b></h6>
                 <hr>
                 
@@ -66,6 +66,27 @@
                 <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" *ngIf="!shwobtnfirst" >
                     <i class="fas fa-archive"></i> Archive Funnel Step
                 </button>
+            </div>
+
+            <div *ngIf="colortheme">
+                <h6><b>Change Color Badge</b></h6>
+                <hr>
+
+                <mat-form-field appearance="fill" class="kb-full-width" >
+                    <mat-label>Badge Color</mat-label>
+                    <mat-select name="badgecolor" [(ngModel)]="badgecolor">
+                      <mat-option value="">None</mat-option>
+                      <mat-option value="primary">Primary</mat-option>
+                      <mat-option value="secondary">Secondary</mat-option>
+                      <mat-option value="success">Success</mat-option>
+                      <mat-option value="warning">Warning</mat-option>
+                      <mat-option value="info">Info</mat-option>
+                      <mat-option value="danger">Danger</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
+
             </div>
 
             <img src="/assets/images/funnel/funnel1.png" class="img-fluid" alt="">
@@ -184,6 +205,9 @@
                                             <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'duplicate')">
                                                 <i class="far fa-clone mr-2"></i> Duplicate
                                             </button>
+                                            <button mat-menu-item (click)="funnelstepedit(funnels[i]['steps'][j].color,funnels[i]['steps'][j].uniqueid,'colortheme')">
+                                                <i class="far fa-check-circle mr-2"></i> Change Color Badge
+                                            </button>
                                             <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnels[i].id,funnels[i]['steps'][j].uniqueid,'archive')">
                                                 <i class="far fa-trash-alt mr-2"></i> Archive
                                             </button>
@@ -200,10 +224,12 @@
 
         <div class="row">
             <div class="col-md-12">
-                <mat-paginator [length]="100"
-                    [pageSize]="8"
-                    [pageSizeOptions]="[8, 16, 24, 100]"
-                    aria-label="Select page">
+                <mat-paginator 
+                    [length]="length"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="getServerData($event)"
+                    >
                 </mat-paginator>
             </div>
         </div>
