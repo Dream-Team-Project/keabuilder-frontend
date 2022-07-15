@@ -3,6 +3,8 @@ import { Options } from 'sortablejs';
 import { FunnelService } from '../_services/funnels.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {PageEvent} from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-funnel',
@@ -26,6 +28,26 @@ export class FunnelComponent implements OnInit {
   shwobtnfirst = true;
   funneltostep = true;
   pageurl = '';
+  colortheme = false;
+  badgecolor = '';
+
+  // MatPaginator Inputs
+  length = 100;
+  pageSize = 8;
+  pageSizeOptions: number[] = [8, 16, 24, 100];
+
+  // MatPaginator Output
+  pageEvent!: PageEvent;
+
+  getServerData(event?:PageEvent){
+      var length = event?.length;
+      var pageindex = event?.pageIndex;
+      var pageSize = event?.pageSize;
+      var previousPageIndex = event?.previousPageIndex;
+      // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+
+      
+  }
 
   ngOnInit(): void {
 
@@ -44,9 +66,19 @@ export class FunnelComponent implements OnInit {
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      // console.log(event);
+      var filterdrag:any = [];
+      this.funnels.forEach((element: any) => {
+        filterdrag.push(element.id);
+      });
+      // console.log(filterdrag);
+
+      this.funnelService.funnelandstepshorting(filterdrag,'funnels').subscribe({
+        next: data => {
+          // console.log(data);
+        }
+      });
     },
-    onStart: function (/**Event*/evt) {
+    onStart: function (/**Event*/evt) {      
       // console.log(evt.oldIndex);  // element index within parent
     },
     onChoose: function (/**Event*/evt) {
@@ -65,12 +97,66 @@ export class FunnelComponent implements OnInit {
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      // console.log(event);
+      console.log('update');
+      console.log(this.funnels);
+
+      var filterdragobj:any = {};
+      var filterdrag:any = [];
+      this.funnels.forEach((element: any) => {
+        filterdragobj = {id:element.id, steps:[]};
+        element.steps.forEach((element2: any) => {
+          var stepelem = {name:element2.title, id:element2.id};
+          filterdragobj.steps.push(stepelem);
+        });
+        filterdragobj.steps.reverse();
+        filterdrag.push(filterdragobj);
+      });
+      console.log(filterdrag);
+      // console.log(filterdrag.reverse());
+
+      this.funnelService.funnelandstepshorting(filterdrag,'steps_update').subscribe({
+        next: data => {
+          console.log(data);
+          if(data.success==1){
+            // this.showfunnels();
+          }
+        }
+      });
+
+    },
+    onAdd: () => {
+      console.log('added');
+      console.log(this.funnels);
+
+      var filterdragobj:any = {};
+      var filterdrag:any = [];
+      this.funnels.forEach((element: any) => {
+        filterdragobj = {id:element.id, steps:[]};
+        element.steps.forEach((element2: any) => {
+          var stepelem = {name:element2.title, id:element2.id};
+          filterdragobj.steps.push(stepelem);
+        });
+        filterdragobj.steps.reverse();
+        filterdrag.push(filterdragobj);
+      });
+
+      console.log(filterdrag);
+
+      this.funnelService.funnelandstepshorting(filterdrag,'steps').subscribe({
+        next: data => {
+          console.log(data);
+          if(data.success==1){
+            this.showfunnels();
+          }
+        }
+      });
+
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
     },
-    onChoose: function (/**Event*/evt) {
+    onChoose: function (/**Event*/evt) {      
+      // console.log('choose');
       // console.log(evt);
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
@@ -83,6 +169,7 @@ export class FunnelComponent implements OnInit {
       this.poupsidebar = true;
       this.firstpart = false;
       this.shwobtnfirst = true;
+      this.colortheme = false;
     }else if(type=='duplicate'){
       // console.log(uniqueid+'--'+id);
       this._snackBar.open('Duplicate In Progress!', 'Close');
@@ -107,6 +194,7 @@ export class FunnelComponent implements OnInit {
             this.firstpart = true;
             this.poupsidebar = true;
             this.funneltostep = true;
+            this.colortheme = false;
             this.funnelurl = 'http://localhost:4200/create-funnel/'+uniqueid+'/'+data.data[0].uniqueid;
           }
           
@@ -136,12 +224,13 @@ export class FunnelComponent implements OnInit {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
+    this._snackBar.open('Successfully Copied!', 'Close');
   }
 
   showfunnels(){
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.funnels = [];
         if(data.data2.length!=0){
           this.funnelnotfound = false;
@@ -154,18 +243,19 @@ export class FunnelComponent implements OnInit {
               newob.grouptags = element.grouptags;
 
                 data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',title:'',updatedat:'',variation:'',tag:'',color:'',img:''};
+                  var newob2 = {id:'',uniqueid:'',title:'',updatedat:'',variation:'',tag:'',color:'',img:'',funnelid:''};
                   if(element2.funnelid==newob.id){
                     newob2.id = element2.id;
                     newob2.title = element2.title;
                     newob2.uniqueid = element2.uniqueid;
 
-                  var subdate = (new Date(element2.updatedAt).toDateString()).substr(3, 7);
+                    var subdate = (new Date(element2.updatedAt).toDateString()).substr(3, 7);
                     newob2.updatedat = subdate;
                     newob2.variation = element2.variation;
                     newob2.tag = element2.tags;
                     newob2.color = element2.color;
                     newob2.img = element2.img;
+                    newob2.funnelid = element2.funnelid;
                     newob.steps.push(newob2);
                   }
                 });
@@ -196,6 +286,7 @@ export class FunnelComponent implements OnInit {
       this.firstpart = true;
       this.poupsidebar = true;
       this.funneltostep = false;
+      this.colortheme = false;
       this.funnelurl = 'http://localhost:4200/create-funnel/'+unique1+'/'+unique2;
       this.pageurl = '';
 
@@ -210,6 +301,7 @@ export class FunnelComponent implements OnInit {
       this.poupsidebar = true;
       this.firstpart = false;
       this.shwobtnfirst = false;
+      this.colortheme = false;
     }else if(type=='duplicate'){
         // console.log(unique1+' - '+unique2);
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
@@ -220,6 +312,12 @@ export class FunnelComponent implements OnInit {
             }
           }
         });
+    }else if(type=='colortheme'){
+      this.forarchiveid = unique2;
+      this.badgecolor = unique1;
+      this.poupsidebar = true;
+      this.firstpart = false;
+      this.colortheme = true;
     } 
 
   }
@@ -257,6 +355,22 @@ export class FunnelComponent implements OnInit {
       }
     });
 
+  }
+
+  savesteptheme(){
+   
+    this.funnelService.makefunnelsettings(this.badgecolor, this.forarchiveid, 'colorbadge').subscribe({
+      next: data => {
+        console.log(data);
+
+        if(data.status==1){
+          this.poupsidebar = false;
+          this.showfunnels();
+          this._snackBar.open('Color Successfully Updated!', 'Close');
+        }
+
+      }
+    });
   }
 
 

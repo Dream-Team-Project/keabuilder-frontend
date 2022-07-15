@@ -1,122 +1,145 @@
 <div id="createfunnel">
 
   <div id="kb-automation-actions" *ngIf="poupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewaction">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" >
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-      <h6><b>NEW FUNNEL STEPS</b></h6>
-      <p><i class="fas fa-cogs"></i> Action Settings</p>
-      <hr>
-      <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Name</mat-label>
-        <input type="text" matInput placeholder="Give your action a name" value="">
-      </mat-form-field>
 
-      <mat-form-field appearance="fill" class="kb-full-width">
-        <mat-label>Condition</mat-label>
-        <mat-select>
-          <mat-option value="everyone">Everyone</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div *ngIf="automationaddnewaction" > 
 
-      <mat-form-field appearance="fill" class="kb-full-width">
-        <mat-label>Integration</mat-label>
-        <mat-select>
-          <mat-option value="keabuilderintegration">Keabuilder Integration</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="kb-full-width">
-        <mat-label>Action To Do</mat-label>
-        <mat-select>
-          <mat-option value="">Add To List</mat-option>
-          <mat-option value="">Remove From List</mat-option>
-          <mat-option value="">Email Notification</mat-option>
-          <mat-option value="">Add Tag</mat-option>
-          <mat-option value="">Remove Tag</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <br>
-      <p><i class="far fa-clock"></i> Action Delay</p>
-      <hr>
-      <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Delay Days</mat-label>
-        <input type="number" matInput placeholder="# Of Days Before Action Happens..." value="">
-      </mat-form-field>
-
-      <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Delay Hours</mat-label>
-        <input type="number" matInput placeholder="# Of Hours Before Action Happens..." value="">
-      </mat-form-field>
-
-      <br>
-      <button mat-raised-button color="primary"><i class="fas fa-plus"></i> Create Funnel Action</button>
-
-    </div>
-
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewemail">
-      <h6><b>CREATE NEW EMAIL</b></h6>
-      <p>Provide your <a href="#">Account SMTP Settings</a> to customize outgoing emails from Keabuilder</p>
-    </div>
-
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="automationaddnewtext">
-      <h6><b>CREATE NEW TEXT</b></h6>
-      <p>Create a <a href="#">Twilio SMS Integration</a> first to customize outgoing text messages from
-        Keabuilder</p>
-    </div>
-
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" *ngIf="copylink">
-
-      <div *ngIf="firstpart">
-
-        <h6><b>Copy Step URL</b></h6>
+        <h6><b>NEW FUNNEL STEPS</b></h6>
+        <p><i class="fas fa-cogs"></i> Action Settings</p>
         <hr>
         <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Funnel Url</mat-label>
-          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
+          <mat-label>Name</mat-label>
+          <input type="text" matInput placeholder="Give your action a name" value="">
         </mat-form-field>
-        
-        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-            <i class="fas fa-copy"></i> Copy Step Url
-        </button>
-          
-        <hr>
-          
-        <h6><b>Copy Page URL</b></h6>
+
+        <mat-form-field appearance="fill" class="kb-full-width">
+          <mat-label>Condition</mat-label>
+          <mat-select>
+            <mat-option value="everyone">Everyone</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="kb-full-width">
+          <mat-label>Integration</mat-label>
+          <mat-select>
+            <mat-option value="keabuilderintegration">Keabuilder Integration</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="kb-full-width">
+          <mat-label>Action To Do</mat-label>
+          <mat-select>
+            <mat-option value="">Add To List</mat-option>
+            <mat-option value="">Remove From List</mat-option>
+            <mat-option value="">Email Notification</mat-option>
+            <mat-option value="">Add Tag</mat-option>
+            <mat-option value="">Remove Tag</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <br>
+        <p><i class="far fa-clock"></i> Action Delay</p>
         <hr>
         <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Url</mat-label>
-          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+          <mat-label>Delay Days</mat-label>
+          <input type="number" matInput placeholder="# Of Days Before Action Happens..." value="">
         </mat-form-field>
-        
-        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-            <i class="fas fa-copy"></i> Copy Url
-        </button>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Delay Hours</mat-label>
+          <input type="number" matInput placeholder="# Of Hours Before Action Happens..." value="">
+        </mat-form-field>
+
+        <br>
+        <button mat-raised-button color="primary"><i class="fas fa-plus"></i> Create Funnel Action</button>
 
       </div>
 
-      <div *ngIf="!firstpart">
-          <h6><b>Archive</b></h6>
+      <div *ngIf="automationaddnewemail" >
+        <h6><b>CREATE NEW EMAIL</b></h6>
+        <p>Provide your <a href="#">Account SMTP Settings</a> to customize outgoing emails from Keabuilder</p>
+      </div>
+       
+      <div *ngIf="automationaddnewtext">
+         <h6><b>CREATE NEW TEXT</b></h6>
+         <p>Create a <a href="#">Twilio SMS Integration</a> first to customize outgoing text messages from
+           Keabuilder</p>
+      </div>
+
+      <div *ngIf="copylink">
+
+        <div *ngIf="firstpart">
+
+          <h6><b>Copy Step URL</b></h6>
           <hr>
-          
           <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Archive Reason</mat-label>
-              <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
-              <small>Optional</small>
+            <mat-label>Funnel Url</mat-label>
+            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
           </mat-form-field>
-
-          <p>It will help you remember why you archive it!</p>
           
-          <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" >
-              <i class="fas fa-archive"></i> Archive Funnel Step
+          <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+              <i class="fas fa-copy"></i> Copy Step Url
           </button>
+            
+          <hr>
+            
+          <h6><b>Copy Page URL</b></h6>
+          <hr>
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Page Url</mat-label>
+            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+          </mat-form-field>
+          
+          <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+              <i class="fas fa-copy"></i> Copy Url
+          </button>
+
+        </div>
+
+        <div *ngIf="!firstpart">
+            <h6><b>Archive</b></h6>
+            <hr>
+            
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Archive Reason</mat-label>
+                <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
+                <small>Optional</small>
+            </mat-form-field>
+
+            <p>It will help you remember why you archive it!</p>
+            
+            <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" >
+                <i class="fas fa-archive"></i> Archive Funnel Step
+            </button>
+        </div>
+
+        <img src="/assets/images/funnel/funnel1.png" class="img-fluid" alt="">
+
       </div>
 
-      <img src="/assets/images/funnel/funnel1.png" class="img-fluid" alt="">
+      <div *ngIf="colortheme">
+        <h6><b>Change Color Badge</b></h6>
+        <hr>
 
+        <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Badge Color</mat-label>
+            <mat-select name="badgecolor" [(ngModel)]="badgecolor">
+              <mat-option value="">None</mat-option>
+              <mat-option value="primary">Primary</mat-option>
+              <mat-option value="secondary">Secondary</mat-option>
+              <mat-option value="success">Success</mat-option>
+              <mat-option value="warning">Warning</mat-option>
+              <mat-option value="info">Info</mat-option>
+              <mat-option value="danger">Danger</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
+      </div>
 
     </div>
-
   </div>
   <div class="offcanvas-overlay" *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
 
@@ -213,6 +236,9 @@
                     <button mat-menu-item (click)="funnelstepedit(steps[i].funnelid, steps[i].uniqueid, 'duplicate')">
                         <i class="far fa-clone mr-2" ></i> Duplicate
                     </button>
+                    <button mat-menu-item (click)="funnelstepedit(steps[i].color,steps[i].uniqueid,'colortheme')">
+                        <i class="far fa-check-circle mr-2"></i> Change Color Badge
+                    </button>
                     <button mat-menu-item (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
                         <i class="far fa-trash-alt mr-2"></i> Archive
                     </button>
@@ -234,10 +260,10 @@
 
                   <div class="Keabuilder-item infome" [class]="element.color" [class.selectedstep]="selectedstep==element.id" *ngFor="let element of archivesteps; index as i;" >
   
-                    <div class="keabuilder-title-board-archived">
+                    <div class="keabuilder-title-board-archived" [matTooltip]="'Archive Reason: '+(element.archive_reason==''?'No Reason Found!':element.archive_reason)" matTooltipPosition="above" >
                       <span>{{ element.title }}</span>
                     </div>
-      
+                            
                     <div class="btn-group float-right mr-1 mt-lg-n2">
       
                       <div class="kb-archivebtn" matTooltip="UnArchive It" (click)="archivepanel('unarchiveit',element.id)" matTooltipPosition="above">
@@ -300,96 +326,127 @@
           <div class="kb-templates loadEffectFromLeft" *ngIf="tabOpen == 'overview'">
             <ul class="kb-temp-ul">
               <li>
-                <a href="">
+                <button mat-raised-button color="accent" >
                   <i class="fas fa-envelope"></i> OPTIN
-                  <i class="fas fa-chevron-down"></i></a>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
                 <ul>
                   <li>
-                    <a href=""><i class="fas fa-envelope"></i> Email Optin</a>
+                    <button mat-raised-button (click)="changetemplate('emailoptin')" >
+                      <i class="fas fa-envelope"></i> Email Optin
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-download"></i> Thank you</a>
+                    <button mat-raised-button (click)="changetemplate('thankyou')" >
+                      <i class="fas fa-download"></i> Thank you
+                    </button>
                   </li>
                 </ul>
               </li>
               <li>
-                <a href=""><i class="fas fa-shopping-cart"></i> SALES <i class="fas fa-chevron-down"></i></a>
+                <button mat-raised-button color="accent">
+                  <i class="fas fa-shopping-cart"></i> SALES <i class="fas fa-chevron-down"></i>
+                </button>
                 <ul>
                   <li>
-                    <a href=""><i class="fas fa-search-dollar"></i> Sales Page</a>
+                    <button mat-raised-button (click)="changetemplate('salespage')">
+                      <i class="fas fa-search-dollar"></i> Sales Page
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-rocket"></i> Product Launch</a>
+                    <button mat-raised-button (click)="changetemplate('productlaunch')">
+                      <i class="fas fa-rocket"></i> Product Launch
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-shopping-cart"></i> Order Form</a>
+                    <button mat-raised-button (click)="changetemplate('orderform')">
+                      <i class="fas fa-shopping-cart"></i> Order Form
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-level-up-alt"></i> One Click Upsell (OTO)</a>
+                    <button mat-raised-button (click)="changetemplate('oneclickupsell')">
+                      <i class="fas fa-level-up-alt"></i> One Click Upsell (OTO)
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-level-down-alt"></i> One Click Downsell</a>
+                    <button mat-raised-button (click)="changetemplate('oneclickdownsell')">
+                      <i class="fas fa-level-down-alt"></i> One Click Downsell
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-check-circle"></i> Order Confirmation</a>
+                    <button mat-raised-button (click)="changetemplate('orderconfirmation')">
+                      <i class="fas fa-check-circle"></i> Order Confirmation
+                    </button>
                   </li>
                 </ul>
               </li>
               <li>
-                <a href=""><i class="fas fa-microphone-alt"></i> WEBINAR <i class="fas fa-chevron-down"></i></a>
+                 <button mat-raised-button color="accent">
+                  <i class="fas fa-microphone-alt"></i> WEBINAR <i class="fas fa-chevron-down"></i>
+                 </button>
                 <ul>
                   <li>
-                    <a href=""><i class="fas fa-mail-bulk"></i> Registration</a>
+                    <button mat-raised-button (click)="changetemplate('webinarregistration')">
+                      <i class="fas fa-mail-bulk"></i> Registration
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-download"></i> Thank you</a>
+                    <button mat-raised-button (click)="changetemplate('webinarthankyou')">
+                      <i class="fas fa-download"></i> Thank you
+                    </button>
                   </li>
                   <li>
-                    <a href=""><i class="fas fa-microphone"></i> Boadcast Room</a>
+                    <button mat-raised-button (click)="changetemplate('bodcastroom')">
+                      <i class="fas fa-microphone"></i> Boadcast Room
+                    </button>
                   </li>
                 </ul>
               </li>
               <li>
-                <a href=""><i class="fas fa-graduation-cap"></i> MEMBERSHIP <i class="fas fa-chevron-down"></i></a>
-                <ul>
-                  <li>
-                    <a href=""><i class="fas fa-sign-in-alt"></i> Membership Access</a>
-                  </li>
-                  <li>
-                    <a href=""><i class="fas fa-tachometer-alt"></i> Membership Area</a>
-                  </li>
-                </ul>
+                <button mat-raised-button color="accent" (click)="changetemplate('clickpopup')">
+                  <i class="fas fa-external-link-square-alt"></i> CLICKPOPUP
+                </button>
               </li>
-              <li><a href=""><i class="fas fa-external-link-square-alt"></i> CLICKPOPUP</a></li>
-              <li><a href=""><i class="fas fa-bars"></i> OTHER</a></li>
+              <li>
+                <button mat-raised-button color="accent" (click)="changetemplate('other')">
+                  <i class="fas fa-bars"></i> OTHER
+                </button>
+              </li>
             </ul>
 
             <ul class="kb-showtemplates">
               <li>
-                <a href=""><i class="fas fa-file-alt"></i> SHOW MY TEMPLATES</a>
+                <button mat-raised-button >
+                  <i class="fas fa-file-alt"></i> SHOW MY TEMPLATES
+                </button>
               </li>
               <li>
-                <a href="" class="active"><i class="fas fa-envelope"></i> EMAIL OPTIN TEMPLATES</a>
+                <button mat-raised-button class="active" >
+                  <i [class]="selectedcampicon"></i> {{selectedcampaignname}} TEMPLATES
+                </button>
               </li>
               <li>
-                <a [routerLink]="['/builder']">
+                <button mat-raised-button [routerLink]="['/builder']">
                   <i class="fas fa-plus"></i> BUILD FROM SCRATCH
-                </a>
+                </button>
               </li>
             </ul>
 
             <ul class="kb-alltemplates mb-5">
-              <li *ngFor="let item of emailoptintemps; index as i;">
-                <div class="kb-showtemp-header">
-                  <img [src]="emailoptintemps[i].imgthumb" class="img-fluid" alt="">
-                </div>
-                <div class="kb-showtemp-footer">
-                  <p>{{emailoptintemps[i].name}}</p>
-                  <button mat-raised-button (click)="usertemplateselected(emailoptintemps[i].name)" color="primary" class="mr-2"><i class="fas fa-plus-square"></i> Select Template</button>
-                  <button mat-raised-button color="accent"><i class="fas fa-eye"></i> Preview</button>
-                </div>
-              </li>
-             
+              <ng-container *ngFor="let item of emailoptintemps; index as i;">
+                <li *ngIf="item.templatefor==selectedcampaign" >
+                    <div class="kb-showtemp-header">
+                      <img [src]="item.thumbnail" class="img-fluid" alt="">
+                    </div>
+                    <div class="kb-showtemp-footer">
+                      <p>{{item.title}}</p>
+                      <button mat-raised-button (click)="usertemplateselected(item.title)" color="primary" class="mr-2">
+                        <i class="fas fa-plus-square"></i> Select Template
+                      </button>
+                      <button mat-raised-button color="accent"><i class="fas fa-eye"></i> Preview</button>
+                    </div>
+                </li>
+              </ng-container>
             </ul>
           </div>
           <!-- templates -->

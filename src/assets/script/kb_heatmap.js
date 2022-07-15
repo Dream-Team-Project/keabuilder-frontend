@@ -2851,7 +2851,7 @@ if(window.location.hash=='#kb-heatmaps'){
 {/* <script>
 (function() {
     var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-    wa.src = 'http://127.0.0.1:4200/assets/js/kb_heatmap.js';
+    wa.src = 'http://127.0.0.1:4200/assets/script/kb_heatmap.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
   })();
 </script> */}

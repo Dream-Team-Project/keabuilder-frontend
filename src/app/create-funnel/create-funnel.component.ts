@@ -1,10 +1,11 @@
-import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
 import { Options } from 'sortablejs';
 import { Router, ActivatedRoute } from '@angular/router';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { FunnelService } from '../_services/funnels.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatAccordion} from '@angular/material/expansion';
 
 
 @Component({
@@ -13,6 +14,9 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./create-funnel.component.css']
 })
 export class CreateFunnelComponent implements OnInit {
+
+  @ViewChild(MatAccordion)
+  accordion!: MatAccordion;
     
   constructor(private funnelService: FunnelService,
               private router: Router,
@@ -27,27 +31,7 @@ export class CreateFunnelComponent implements OnInit {
   tabOpen = 'overview';
   enabled = true;
   steps:any[] = [];
-  emailoptintemps = [{
-      name:"Step 1",
-      imgthumb:"/assets/images/funnelpreviewimg/preview1.jpg"
-    },
-    {
-      name:"Blog Render",
-      imgthumb:"/assets/images/funnelpreviewimg/preview1.jpg"
-    },
-    {
-      name:"Creative Blog",
-      imgthumb:"/assets/images/funnelpreviewimg/preview1.jpg"
-    },
-    {
-      name:"Clean Leanding",
-      imgthumb:"/assets/images/funnelpreviewimg/preview1.jpg"
-    },
-    {
-      name:"Big Sale",
-      imgthumb:"/assets/images/funnelpreviewimg/preview1.jpg"
-    }
-  ];
+  emailoptintemps:any[] = [];
   id = 2;
   funnelselected:any = 0;
   funnelvariation = 0;
@@ -81,12 +65,25 @@ export class CreateFunnelComponent implements OnInit {
   panelOpenState = false;
 
   archivesteps:any[] = [];
-
+  colortheme = false;
+  badgecolor = '';
+  selectedcampaign = 'email-optin';
+  selectedcampaignname = 'EMAIL OPTIN';
+  selectedcampicon = 'fas fa-envelope';
 
 
   ngOnInit(): void {
 
     this.showfunnelsteps();
+
+    this.funnelService.funneltemplates().subscribe({
+      next: data => {
+        // console.log(data);
+        this.emailoptintemps = data.data;
+
+        // console.log(this.emailoptintemps);
+      }
+    });
 
   }
   add(event: MatChipInputEvent): void {
@@ -139,6 +136,21 @@ export class CreateFunnelComponent implements OnInit {
     animation: 300,
     onUpdate: (event: any) => {
       // console.log(event);
+
+      var filterdrag:any = [];
+      this.steps.forEach((element: any) => {
+        filterdrag.push(element.id);
+      });
+
+      // console.log(filterdrag);
+
+      this.funnelService.funnelandstepshorting(filterdrag,'funnelsteponly').subscribe({
+        next: data => {
+          console.log(data);
+        }
+      });
+
+
     },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
@@ -265,7 +277,6 @@ export class CreateFunnelComponent implements OnInit {
         //   this.createvariation = false;
         //   this.funnelvariation = 1;
         // }
-
       },
       error: err => {
         console.log(err);
@@ -353,11 +364,13 @@ export class CreateFunnelComponent implements OnInit {
     this.funnelService.namepathchanges(id,title,'stepname').subscribe({
       next: data => {
         // console.log(data);
+        // console.log('--data');
         // console.log(this.selectedstep);
         this._snackBar.open('Successfully Name Changed!', 'Close');
         if(this.selectedstep==data.data[0].id){
           this.funnelstepname = data.data[0].title;
         }
+        this.showfunnelsteps();
       }
     });
 
@@ -368,9 +381,13 @@ export class CreateFunnelComponent implements OnInit {
         
         this.steps = data.data;
         
-        // console.log(this.steps);
-        
-        this.firstselectedid = data.data[1].id;
+        console.log(data);
+        console.log('-- showfunnelsteps');
+        // if(data.data.length>1){
+        //   this.firstselectedid = data.data[1].id;
+        // }else if(data.data.length==1){
+        // }
+        this.firstselectedid = data.data[0].id;
         this.nextstepid = data.data[0].uniqueid;
 
         // console.log(this.firstselectedid +' selectid');
@@ -423,13 +440,16 @@ export class CreateFunnelComponent implements OnInit {
 
                   // console.log(element.updatedAt);
                   this.splitvalue = element.splittestper;
-                  if(element.splittestper!=null && element.splittestper!=''){
-                    setTimeout(() => {
-                      (<HTMLInputElement>document.getElementById('kb-splittestmake')).setAttribute('value',element.splittestper);
-                      (<HTMLInputElement>document.getElementById('kb-changemyprogress')).style.width = this.splitvalue + '%';
-                      (<HTMLElement>document.getElementById('kb-control')).innerHTML = this.splitvalue + '%';
-                      (<HTMLElement>document.getElementById('kb-variation')).innerHTML = (100 - parseInt(this.splitvalue)) + '%';
-                    }, 500);
+
+                  if(element.variation==1){
+                    if(element.splittestper!=null && element.splittestper!=''){
+                      setTimeout(() => {
+                        (<HTMLInputElement>document.getElementById('kb-splittestmake')).setAttribute('value',element.splittestper);
+                        (<HTMLInputElement>document.getElementById('kb-changemyprogress')).style.width = this.splitvalue + '%';
+                        (<HTMLElement>document.getElementById('kb-control')).innerHTML = this.splitvalue + '%';
+                        (<HTMLElement>document.getElementById('kb-variation')).innerHTML = (100 - parseInt(this.splitvalue)) + '%';
+                      }, 500);
+                    }
                   }
 
 
@@ -483,6 +503,7 @@ export class CreateFunnelComponent implements OnInit {
       this.copylink = true;
       this.poupsidebar = true;
       this.firstpart = true;
+      this.colortheme = false;
       this.funnelurl = 'http://localhost:4200/create-funnel/'+this.uniqueid+'/'+unique2;
       this.pageurl = 'http://localhost:4200/'+unique1;
     }else if(type=='duplicate'){
@@ -501,35 +522,46 @@ export class CreateFunnelComponent implements OnInit {
       this.firstpart = false;
       this.poupsidebar = true;
       this.copylink = true;
-    }
+      this.colortheme = false;
+      // console.log(this.panelOpenState);
+      // console.log(this.panelOpenState);
+    }else if(type=='colortheme'){
+      this.forarchiveid = unique2;
+      this.badgecolor = unique1;
+      this.poupsidebar = true;
+      this.firstpart = false;
+      this.colortheme = true;
+    } 
 
   }
   makearchivestep(){
     this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
 
         if(data.status==1){
+          this.accordion.closeAll();
           this.reason = '';
           this.poupsidebar = false;
           this.showfunnelsteps();
           this._snackBar.open('Successfully Archived!', 'Close');
 
-          // console.log(this.nextstepid+'  --1');
-          // console.log(this.uniqueidstep+'  --2');
-          // console.log(this.firstselectedid+' --id');
-
-          if(this.nextstepid==this.uniqueidstep){
-            // console.log('work -'+this.nextstepid);
-            this.kb_substeps2(this.firstselectedid);
-          }
+          setTimeout(() => {
+            
+            console.log(this.nextstepid+'  --1');
+            console.log(this.uniqueidstep+'  --2');
+            console.log(this.firstselectedid+' --id');
+            // if(this.nextstepid==this.uniqueidstep){
+              // console.log('work -'+this.nextstepid);
+              this.kb_substeps2(this.firstselectedid);
+              // }
+            }, 500);
 
         }else if(data.status==0){
           if(data.notallow==1){
             this._snackBar.open('Single Step Can not be Archived!', 'Close');
           }
         }
-
 
       }
     });
@@ -617,6 +649,7 @@ export class CreateFunnelComponent implements OnInit {
         this.funnelService.getuniquefunnelstep(this.uniqueid, value).subscribe({
           next: data => {
             this.archivesteps = data.data;
+            // console.log(this.archivesteps);
           }
         });
       }
@@ -625,14 +658,106 @@ export class CreateFunnelComponent implements OnInit {
         this.funnelService.getuniquefunnelstep(selectedid, value).subscribe({
           next: data => {
             console.log(data);
-            // this.archivesteps = data.data;
+            console.log('--unarchiveit')
+            this.steps = data.data;
+            this.archivesteps = data.data2;
+            this.kb_substeps2(this.firstselectedid);
+
+            if(data.data2.length==0){
+               this.accordion.closeAll();
+            }
+
           }
         });
+    }else if(value=='deleteit'){
+      this.funnelService.getuniquefunnelstep(selectedid, value).subscribe({
+        next: data => {
+          console.log(data);
+          if(data.status==1){
+              this.archivesteps = data.data;
+              this._snackBar.open('Successfully Deleted!', 'Close');
+
+          }
+        }
+      });
     }
 
 
   }
+  savesteptheme(){
+   
+    this.funnelService.makefunnelsettings(this.badgecolor, this.forarchiveid, 'colorbadge').subscribe({
+      next: data => {
+        console.log(data);
 
+        if(data.status==1){
+          this.poupsidebar = false;
+          this.showfunnelsteps();
+          this._snackBar.open('Color Successfully Updated!', 'Close');
+        }
+
+      }
+    });
+
+  }
+  changetemplate(value:any){
+    if(value=='emailoptin'){
+      this.selectedcampaign = 'email-optin';
+      this.selectedcampaignname = 'EMAIL OPTIN';
+      this.selectedcampicon = 'fas fa-envelope';
+    }else  if(value=='thankyou'){
+      this.selectedcampaign = 'thankyou-optin';
+      this.selectedcampaignname = 'THANK YOU';
+      this.selectedcampicon = 'fas fa-download';
+    }else if(value=='salespage'){
+      this.selectedcampaign = 'sales-page';
+      this.selectedcampaignname = 'SALES PAGE';
+      this.selectedcampicon = 'fas fa-search-dollar';
+    }else if(value=='productlaunch'){
+      this.selectedcampaign = 'product-launch-sales-page';
+      this.selectedcampaignname = 'PRODUCT LAUNCH';
+      this.selectedcampicon = 'fas fa-rocket';
+    }else if(value=='orderform'){
+      this.selectedcampaign = 'order-form-sales-page';
+      this.selectedcampaignname = 'ORDER FORM';
+      this.selectedcampicon = 'fas fa-shopping-cart';
+    }else if(value=='oneclickupsell'){
+      this.selectedcampaign = 'upsell-sales-page';
+      this.selectedcampaignname = 'ONE-CLICK UPSELL (OTO)';
+      this.selectedcampicon = 'fas fa-download';
+    }else if(value=='oneclickdownsell'){
+      this.selectedcampaign = 'downsell-sales-page';
+      this.selectedcampaignname = 'ONE-CLICK DOWNSELL';
+      this.selectedcampicon = 'fas fa-level-up-alt';
+    }else if(value=='orderconfirmation'){
+      this.selectedcampaign = 'order-confirm-sales-page';
+      this.selectedcampaignname = 'ORDER CONFIRMATION';
+      this.selectedcampicon = 'fas fa-check-circle';
+    }else if(value=='webinarregistration'){
+      this.selectedcampaign = 'registration-webinar';
+      this.selectedcampaignname = 'WEBINAR REGISTRATION';
+      this.selectedcampicon = 'fas fa-mail-bulk';
+    }else if(value=='webinarthankyou'){
+      this.selectedcampaign = 'thank-you-webinar';
+      this.selectedcampaignname = 'WEBINAR THANK YOU';
+      this.selectedcampicon = 'fas fa-download';
+    }else if(value=='bodcastroom'){
+      this.selectedcampaign = 'boadcast-room-webinar';
+      this.selectedcampaignname = 'WEBINAR BOADCAST ROOM';
+      this.selectedcampicon = 'fas fa-microphone';
+    }else if(value=='clickpopup'){
+      this.selectedcampaign = 'clickpop';
+      this.selectedcampaignname = 'CLICKPOPUP';
+      this.selectedcampicon = 'fas fa-external-link-square-alt';
+    }else if(value=='other'){
+      this.selectedcampaign = 'misc';
+      this.selectedcampaignname = 'OTHER';
+      this.selectedcampicon = 'fas fa-bars';
+    }
+
+  }
+  
+ 
 
 
 }
