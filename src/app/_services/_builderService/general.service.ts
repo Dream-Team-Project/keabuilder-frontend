@@ -107,6 +107,7 @@ export class GeneralService {
       body: this.pagehtml.querySelector('body').outerHTML,
       style: this.getAllStyle(),
       folder: this.main.path,
+      prevFolder: 'update-me'
     }
     this.fileUploadService.createpage(page).subscribe(
       (event:any) => {

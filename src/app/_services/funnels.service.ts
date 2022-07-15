@@ -14,13 +14,13 @@ export class FunnelService {
 
     constructor(private http:HttpClient) { }
 
-    saveondb(funnelname: any, funnelfirststep: any, badgecolor: any):Observable<any> {
-        return this.http.post("/api/savefunnel", {
-            funnelname,
-            funnelfirststep,
-            badgecolor
-        }, httpOptions);
-      }
+  saveondb(funnelname: any, funnelfirststep: any, badgecolor: any):Observable<any> {
+      return this.http.post("/api/savefunnel", {
+          funnelname,
+          funnelfirststep,
+          badgecolor
+      }, httpOptions);
+    }
 
     getuniquefunnelstep(id:string, method:string): Observable<any> {
       return this.http.post('/api/getuniquefunnelstep',{
