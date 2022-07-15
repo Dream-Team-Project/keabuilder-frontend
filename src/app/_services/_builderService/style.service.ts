@@ -8,7 +8,7 @@ import { ImageService } from '../image.service';
 
 export class StyleService {
   // content/element styling
-  item_alignment = '';
+  item_alignment:any = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
   // text
   edit_html:any;
   font_size = { value: '16px' };
@@ -78,7 +78,7 @@ export class StyleService {
   margin = { top: '0px', bottom: '0px', left: '0px', right: '0px' };
   p_link = { tb: false, lr: false, a: false };
   padding = { top: '0px', bottom: '0px', left: '0px', right: '0px' };
-  columnGap = 0;
+  columnGap = { desktop: 0, tablet_h: 0, tablet_v: 0, mobile: 0 };
   columnRev = { desktop: false, tablet_h: false, tablet_v: false, mobile: false };
   hide = { desktop: false, tablet_h: false, tablet_v: false, mobile: false };
   // general
@@ -102,7 +102,6 @@ export class StyleService {
   background_image_repeats = [{ name: 'no repeat', value: 'no-repeat' }, { name: 'repeat', value: 'repeat' }, { name: 'repeat x (horizontal)', value: 'repeat-x' }, { name: 'repeat y (vertical)', value: 'repeat-y' }, { name: 'space', value: 'sapce' }, { name: 'round', value: 'round' }];
   background_image_attachments = ['scroll','fixed','local'];
   background_type:string = 'color';
-  block_background_type: any = {all: 'color', desktop:'color', tablet_h:'color', tablet_v:'color', mobile:'color'};
   // background
   // box shadow
   box_shadow_hp = { value: '0px' };
@@ -123,6 +122,7 @@ export class StyleService {
   styleSessionArr:any = [];
   styleContentArr:any = [];
   styleColumnSArr:any = [];
+  eleItemAlignArr:any = [];
   hideBlockSessionArr:any = [];
   resetSession:boolean = true;
 
@@ -135,6 +135,7 @@ export class StyleService {
     this.styleSessionArr = [];
     this.styleContentArr = [];
     this.styleColumnSArr = [];
+    this.eleItemAlignArr = [];
     this.hideBlockSessionArr = [];
     this.saveStyleSession();
   }
@@ -158,17 +159,24 @@ export class StyleService {
     }
   }
 
-  setRespStyle(block:any, cObj:object) {
+  getRespDevice() {
     if (this._general.showResp.toggle) {
-      if (this._general.respToggleDevice.name == 'tablet-h') {
-        block.style.tablet_h = cObj;
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
-        block.style.tablet_v = cObj;
-      }
-      else {
-        block.style.mobile = cObj;
-      }
+      return this._general.respToggleDevice.name;
+    }
+    else {
+      return 'desktop';
+    }  
+  }
+
+  setRespStyle(block:any, cObj:object) {
+    if (this.getRespDevice() == 'tablet-h') {
+      block.style.tablet_h = cObj;
+    }
+    else if (this.getRespDevice() == 'tablet-v') {
+      block.style.tablet_v = cObj;
+    }
+    else if(this.getRespDevice() == 'mobile') {
+      block.style.mobile = cObj;
     }
     else {
       block.style.desktop = cObj;
@@ -178,12 +186,15 @@ export class StyleService {
 
   // session storage
 
-  applySession(sStr:any, cStr:any, csStr:any, hideStr:any) {
+  applySession(sStr:any, cStr:any, csStr:any, eitmaStr:any, hideStr:any) {
     var sObj = JSON.parse(sStr);
     var selB = JSON.parse(JSON.stringify(this._general.selectedBlock));
     selB = this.setRespStyle(selB, sObj);
     selB.hide = JSON.parse(hideStr);
     if(selB.type == 'element' && cStr != undefined) {
+      console.log(eitmaStr);
+      var eiaObj = JSON.parse(eitmaStr);
+      selB.item_alignment = eiaObj;
       var cObj = JSON.parse(cStr);
       selB.content = this.setRespStyle(selB.content, cObj);
     }
@@ -202,11 +213,13 @@ export class StyleService {
     if((this.styleSessionArr[this.styleSessionArr.length-1] != JSON.stringify(this.currentStyling()) && this.styleSessionArr[this.styleSession.undo] != JSON.stringify(this.currentStyling()))
     || (this.hideBlockSessionArr[this.hideBlockSessionArr.length-1] != JSON.stringify(this.hide) && this.hideBlockSessionArr[this.styleSession.undo] != JSON.stringify(this.hide))
     || (selB.type == 'element' && this.styleContentArr[this.styleContentArr.length-1] != JSON.stringify(this.getContentStyling(selB.content)) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.getContentStyling(selB.content)))
-    || (selB.type == 'row' && this.styleColumnSArr[this.styleColumnSArr.length-1] != JSON.stringify(this.getColumnStructureStyling()) && selB.type == 'row' && this.styleColumnSArr[this.styleSession.undo] != JSON.stringify(this.getColumnStructureStyling()))) {
+    || (selB.type == 'element' && this.eleItemAlignArr[this.eleItemAlignArr.length-1] != JSON.stringify(this.item_alignment) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.item_alignment))
+    || (selB.type == 'row' && this.styleColumnSArr[this.styleColumnSArr.length-1] != JSON.stringify(this.getColumnStructureStyling()) && this.styleColumnSArr[this.styleSession.undo] != JSON.stringify(this.getColumnStructureStyling()))) {
       this.styleSessionArr.push(JSON.stringify(this.currentStyling()));
       this.hideBlockSessionArr.push(JSON.stringify(this.hide));
       if(selB.type == 'element') {
         this.styleContentArr.push(JSON.stringify(this.getContentStyling(selB.content)));
+        this.eleItemAlignArr.push(JSON.stringify(this.item_alignment));
       }
       else if(selB.type == 'row') {
         this.styleColumnSArr.push(JSON.stringify(this.getColumnStructureStyling()));
@@ -220,9 +233,10 @@ export class StyleService {
     var sStr = this.styleSessionArr[this.styleSession.undo-1];
     var cStr = this.styleContentArr[this.styleSession.undo-1];
     var csStr = this.styleColumnSArr[this.styleSession.undo-1];
+    var eitmaStr = this.eleItemAlignArr[this.styleSession.undo-1];
     var hideStr = this.hideBlockSessionArr[this.styleSession.undo-1];
     if(sStr != undefined) {
-      this.applySession(sStr, cStr, csStr, hideStr);
+      this.applySession(sStr, cStr, csStr, eitmaStr, hideStr);
       this.styleSession.undo--;
       this.styleSession.redo--;
     }
@@ -232,9 +246,12 @@ export class StyleService {
     var sStr = this.styleSessionArr[this.styleSession.redo];
     var cStr = this.styleContentArr[this.styleSession.redo];
     var csStr = this.styleColumnSArr[this.styleSession.redo];
+    var eitmaStr = this.eleItemAlignArr[this.styleSession.redo];
     var hideStr = this.hideBlockSessionArr[this.styleSession.redo];
+    console.log(sStr);
+    console.log(this.styleSessionArr);
     if(sStr != undefined) {
-      this.applySession(sStr, cStr, csStr, hideStr);
+      this.applySession(sStr, cStr, csStr, eitmaStr, hideStr);
       this.styleSession.undo++;
       this.styleSession.redo++;
     }
@@ -242,17 +259,24 @@ export class StyleService {
 
   // session storage
 
+  getHideCls(hide:any) {
+    return {
+      'kb-d-desk-none': hide.desktop,
+      'kb-d-tab-h-none': hide.tablet_h,
+      'kb-d-tab-v-none': hide.tablet_v,
+      'kb-d-mob-none': hide.mobile
+    }
+  }
+
   getDisplay(hide:any) {
-    if (this._general.showResp.toggle) {
-      if (this._general.respToggleDevice.name == 'tablet-h') {
-        return hide.tablet_h;
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
-        return hide.tablet_v;
-      }
-      else {
-        return hide.mobile;
-      }
+    if (this.getRespDevice() == 'tablet-h') {
+      return hide.tablet_h;
+    }
+    else if (this.getRespDevice() == 'tablet-v') {
+      return hide.tablet_v;
+    }
+    else if(this.getRespDevice() == 'mobile') {
+      return hide.mobile;
     }
     else {
       return hide.desktop;
@@ -260,40 +284,50 @@ export class StyleService {
   }
 
   getColumnReverse(rowColumnRev: any) {
-    if (this._general.showResp.toggle) {
-      if (this._general.respToggleDevice.name == 'tablet-h') {
-        return rowColumnRev.tablet_h ? 'row-reverse' : '';
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
-        return rowColumnRev.tablet_v ? 'column-reverse' : '';
-      }
-      else {
-        return rowColumnRev.mobile ? 'column-reverse' : '';
-      }
+    if (this.getRespDevice() == 'tablet-h') {
+      return rowColumnRev.tablet_h ? 'row-reverse' : '';
+    }
+    else if (this.getRespDevice() == 'tablet-v') {
+      return rowColumnRev.tablet_v ? 'column-reverse' : '';
+    }
+    else if(this.getRespDevice() == 'mobile') {
+      return rowColumnRev.mobile ? 'column-reverse' : '';
     }
     else {
       return rowColumnRev.desktop ? 'row-reverse' : '';
     }
   }
 
-  setBgType() {
-    if (this._general.showResp.toggle) {
-      if (this._general.respToggleDevice.name == 'desktop') {
-        this.background_type = this.block_background_type.desktop;
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-h') {
-        this.background_type = this.block_background_type.tablet_h;
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
-        this.background_type = this.block_background_type.tablet_v;
-      }
-      else if (this._general.respToggleDevice.name == 'mobile') {
-        this.background_type = this.block_background_type.mobile;
-      }
+  getBlockParamValue(blockparam: any) {
+    if (this.getRespDevice() == 'tablet-h' && blockparam.tablet_h != 'auto') {
+      return blockparam.tablet_h;
+    }
+    else if (this.getRespDevice() == 'tablet-v' && blockparam.tablet_v != 'auto') {
+      return blockparam.tablet_v;
+    }
+    else if (this.getRespDevice() == 'mobile' && blockparam.mobile != 'auto') {
+      return blockparam.mobile;
     }
     else {
-      this.background_type = this.block_background_type.all;
+      return blockparam.desktop;
     }
+  }
+
+  // set
+
+  setElementAlignment(val:string) {
+    if (this.getRespDevice() == 'tablet-h') {
+      this.item_alignment.tablet_h = (val == '') ? 'flex-start' : val;
+    }
+    else if (this.getRespDevice() == 'tablet-v') {
+      this.item_alignment.tablet_v = (val == '') ? 'flex-start' : val;
+    }
+    else if (this.getRespDevice() == 'mobile') {
+      this.item_alignment.mobile = (val == '') ? 'flex-start' : val;
+    }
+    else {
+      this.item_alignment.desktop = val;
+    }   
   }
 
   getElementBlockStyle(block:any) {
@@ -302,16 +336,14 @@ export class StyleService {
 
   getBlockStyle(blockS: any) {
     var objS = {};
-    if (this._general.showResp.toggle) {
-      if (this._general.respToggleDevice.name == 'tablet-h') {
-        objS = blockS.tablet_h;
-      }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
-        objS = blockS.tablet_v;
-      }
-      else {
-        objS = blockS.mobile;
-      }
+    if (this.getRespDevice() == 'tablet-h') {
+      objS = blockS.tablet_h;
+    }
+    else if (this.getRespDevice() == 'tablet-v') {
+      objS = blockS.tablet_v;
+    }
+    else if(this.getRespDevice() == 'mobile') {
+      objS = blockS.mobile;
     }
     return {...blockS.desktop, ...objS};
   }
@@ -325,7 +357,6 @@ export class StyleService {
       'border-color': this.border_color,
       'border-style': this.border_style,
       'background-color': this.background_color,
-      'box-shadow': this.getBoxShadow(),
       'width': this.width.value,
       'height': this.height.value,
       'z-index': this.zindex == 0 ? 'auto' : this.zindex,
@@ -342,6 +373,12 @@ export class StyleService {
     }
     var objBgNone = {
       'background-image': 'none',
+    }
+    var objBoxS = {
+      'box-shadow': this.getBoxShadow(),
+    }
+    if(objBoxS['box-shadow']) {
+      objAllS = {...objAllS, ...objBoxS}
     }
     if(this.background_type == 'color' && this._general.showResp.toggle) {
       return {...objAllS, ...objBgNone};
@@ -369,9 +406,14 @@ export class StyleService {
       'text-decoration-line': this.text_decoration_line,
       'text-decoration-style': this.text_decoration_style,
       'text-decoration-color': this.text_decoration_color,
-      'text-shadow': this.getTextShadow(),
       'line-height': this.line_height.value,
       'letter-spacing': this.letter_spacing.value,
+    }
+    var objTextShadow = {
+      'text-shadow': this.getTextShadow(),
+    }
+    if(objTextShadow['text-shadow']) {
+      textS = {...textS, ...objTextShadow}
     }
     return { ...textS, ...this.currentStyling() }
   }
@@ -798,38 +840,6 @@ export class StyleService {
     val.bottom_right = this.updateRexVal(val.bottom_right);
   }
 
-  // important functions will be used in future
-
-  strToObjCss(css: any) {
-    var cssStr = '';
-    css.split(';').forEach((val: any) => {
-      var attr = val.split(':');
-      cssStr += '"' + attr[0] + '":"' + attr[1] + '",';
-    });
-    return JSON.parse('{' + cssStr.slice(0, -1) + '}');
-  }
-
-  curS() {
-    var css = this.currentStyling();
-  //   if(css['background-image'] != undefined) {
-  //   var objBgImg = (css['background-image'] != 'none' ? ';background-image:' + css['background-image'] : '') +
-  //   (css['background-size'] ? ';background-size:' + css['background-size'] : '') +
-  //   (css['background-position'] ? ';background-position:' + css['background-position'] : '') +
-  //   (css['background-repeat'] ? ';background-repeat:' + css['background-repeat'] : '') +
-  // (css['background-attachment'] ? ';background-attachment:' + css['background-attachment'] : '')
-  // }
-    return 'margin:' + css['margin'] +
-      ';padding:' + css['padding'] +
-      ';border-width:' + css['border-width'] +
-      ';border-radius:' + css['border-radius'] +
-      ';border-color:' + css['border-color'] +
-      ';border-style:' + css['border-style'] +
-      ';background-color:' + css['background-color'] +
-      ';width:' + css['width'] +
-      ';height:' + css['height'] +
-      ';z-index:' + css['z-index'] + ';';
-  }
-
   filterStyle(cs:any, ds:any) {
     var ns:any = new Object();
     if(cs['margin'] != ds['margin']) ns['margin'] = cs['margin'];
@@ -853,19 +863,27 @@ export class StyleService {
 
   updateStyle() {
     if(this._general.selectedBlock.type != 'main') this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
+    else {
+      this._general.main.title = this._general.page_title;
+      this._general.main.path = this._general.page_path;
+      this._general.main.description = this._general.description;
+      this._general.main.keywords = JSON.parse(JSON.stringify(this._general.keywords));
+      this._general.main.author = this._general.author;
+      this._general.main.meta_img = this._general.meta_img;
+    }
     if (this._general.selectedBlock.type == 'row') {
-      this._general.selectedBlock.columnGap = this.columnGap;
+      this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
     }
     if (this._general.showResp.toggle) {
       var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
-      if (this._general.respToggleDevice.name == 'tablet-h') {
+      if (this.getRespDevice() == 'tablet-h') {
         this._general.selectedBlock.style.tablet_h = newS;
       }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
+      else if (this.getRespDevice() == 'tablet-v') {
         this._general.selectedBlock.style.tablet_v = newS;
       }
-      else {
+      else if (this.getRespDevice() == 'mobile') {
         this._general.selectedBlock.style.mobile = newS;
       }
     }
@@ -873,7 +891,7 @@ export class StyleService {
       this._general.selectedBlock.style.desktop = this.currentStyling();
     }
     if (this._general.selectedBlock.type == 'element') {
-      this._general.selectedBlock.item_alignment = this.item_alignment;
+      this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
       if (this._general.selectedBlock.content.name == 'button') {
         this.setElementStyle(this.buttonStyling());
         this._general.selectedBlock.content.text = this.button_text;
@@ -917,13 +935,13 @@ export class StyleService {
   setElementStyle(contentStyle: any) {
     if (this._general.showResp.toggle) {
       var newS = this.filterElementStyle(contentStyle, this._general.selectedBlock.content.style.desktop);
-      if (this._general.respToggleDevice.name == 'tablet-h') {
+      if (this.getRespDevice() == 'tablet-h') {
         this._general.selectedBlock.content.style.tablet_h = newS;
       }
-      else if (this._general.respToggleDevice.name == 'tablet-v') {
+      else if (this.getRespDevice() == 'tablet-v') {
         this._general.selectedBlock.content.style.tablet_v = newS;
       }
-      else {
+      else if (this.getRespDevice() == 'mobile') {
         this._general.selectedBlock.content.style.mobile = newS;
       }
     }
@@ -999,7 +1017,7 @@ export class StyleService {
       this.widthRange.value = 100;
     }
 
-    this.height.value = 'auto';
+    this.height.value = block.type == 'main' ? '100%' : 'auto';
     this.heightRange.value = 100;
 
     this.zindex = 0;
@@ -1018,7 +1036,7 @@ export class StyleService {
 
     this.br_link = true;
 
-    this.columnGap = 0;
+    this.columnGap = { desktop: 0, tablet_h: 0, tablet_v: 0, mobile: 0 };
     this.columnRev = { desktop: false, tablet_h: false, tablet_v: false, mobile: false };
     this.hide = { desktop: false, tablet_h: false, tablet_v: false, mobile: false };
 
@@ -1030,6 +1048,7 @@ export class StyleService {
   }
 
   defaultElementStyling(block:any) {
+    this.defaultStyling(block);
     // text
     var fsv, fsr, fwn, fwv, tc, ta;
     if (block.content.name == 'button') {
@@ -1087,7 +1106,7 @@ export class StyleService {
     ;
     // button
     // menu
-    this.item_alignment = '';
+    this.item_alignment = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
     // menu
     if(block.content.name == 'button') {
       return this.buttonStyling();
@@ -1154,7 +1173,7 @@ export class StyleService {
   blockSetting(block: any) {
       var obj = this.getBlockStyle(block.style);
       if (block.type == 'element') {
-        this.item_alignment = block.item_alignment;
+        this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         this.elementSetting(block.content);
       }
       if(obj['box-shadow'] && obj['box-shadow'] != 'none') {
@@ -1402,8 +1421,17 @@ export class StyleService {
       this.border_color = obj['border-color'];
 
       if (block.type == 'row') {
-        this.columnGap = block.columnGap;
+        this.columnGap = JSON.parse(JSON.stringify(block.columnGap));
         this.columnRev =  JSON.parse(JSON.stringify(block.columnRev));
+      }
+
+      else if (block.type == 'main') {
+        this._general.page_title = block.title;
+        this._general.page_path = block.path;
+        this._general.description = block.description;
+        this._general.keywords = JSON.parse(JSON.stringify(block.keywords));
+        this._general.author = block.author;
+        this._general.meta_img = block.meta_img;
       }
 
       this.hide = block.hide;
@@ -1473,6 +1501,5 @@ export class StyleService {
     if (this._general.selectedTab == 'Background') this.background_image.name = src;
     else this._general.selectedBlock.type == 'main' ? this._general.meta_img = src : this.image_src = src;
   }
-
 }
 

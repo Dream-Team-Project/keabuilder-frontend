@@ -161,3 +161,10 @@ button.side-floating-btn:last-child {
 span.kb-setting-icon .kb-handle-block {
     cursor: n-resize;
 }
+
+.kb-tab-content span.highlight {
+    width: 100%!important;
+    color: var(--section-color);
+    text-align: right;
+    padding-right: 5px;
+}

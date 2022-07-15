@@ -2,17 +2,21 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
+import { TokenStorageService } from '../token-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralService {
-  main:any = {type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
-  page_title = 'New Page';
-  description = 'This is the first builder page.';
+  username:string = '';
+  subdomain:string = '';
+  main:any = {id: 'kb-main', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  page_title = '';
+  page_path = '';
+  description = '';
   keywords:any = [];
-  author = 'Abhi Tiwari';
+  author = '';
   meta_img = '';
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -60,22 +64,125 @@ export class GeneralService {
       // console.log(editor.ui);
     },
   };
+  pagehtml:any;
+  pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
 
-  constructor(private _snackBar: MatSnackBar, private fileUploadService: FileUploadService) {
+  constructor(private _snackBar: MatSnackBar, private fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService) {
+    this.username = this.tokenStorageService.getUser().username;
+    this.main.author = this.username;
+    this.subdomain = this.joinWthDash(this.username);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
   }
 
-  saveHTML(main:any) {
-    var obj = {
-      html: main.innerHTML,
+  joinWthDash(item:string) {
+    return item.toLowerCase().replace(/ /g, '-');
+  }
+
+  saveHTML(main:any, sections:any) {
+    var parser = new DOMParser();
+    this.pagehtml = parser.parseFromString(main.innerHTML, 'text/html');
+
+    this.removeStyle('#kb-main');
+    this.removeStyle('.kb-section');
+    this.removeStyle('.kb-row');
+    this.removeStyle('.kb-column');
+    this.removeStyle('.kb-column-wrap');
+    this.removeStyle('.kb-element');
+    this.removeStyle('.kb-element-content');
+
+    this.pagehtml.querySelector('head').innerHTML = 
+    '<meta charset="UTF-8">' +
+    '<meta name="description" content="'+this.main.description+'">' +
+    '<meta name="keywords" content="'+this.main.keywords+'">' +
+    '<meta name="author" content="'+this.main.author+'">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+    '<title>'+this.main.title+'</title>' +        
+    '<link rel="stylesheet" href="./'+this.main.path+'/index.css"><link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">';
+
+    this.setPageStyle(sections);
+
+    var page = {
+      head: this.pagehtml.querySelector('head').outerHTML,
+      body: this.pagehtml.querySelector('body').outerHTML,
+      style: this.getAllStyle(),
+      folder: this.main.path,
     }
-    console.log(obj);
-    this.fileUploadService.createHTMLpage(obj).subscribe(
+    this.fileUploadService.createpage(page).subscribe(
       (event:any) => {
         console.log(event);
       },
-      error=>{console.log(error)})
+    error=>{console.log(error)})
+  }
+
+  removeStyle(blockcls:string) {
+    this.pagehtml.querySelectorAll(blockcls).forEach((item:any)=>{
+      item.removeAttribute('style');
+      if(blockcls == '.kb-element-content') {
+        item.children[0].removeAttribute('style');
+      }
+    })
+  }
+
+  getAllStyle() {
+    var querry = ' @media only screen and (max-width:';
+    return this.pagestyling.desktop +
+    querry + '1024px) {'+this.pagestyling.tablet_h+'}' +
+    querry + '768px) {'+this.pagestyling.tablet_v+'}' +
+    querry + '426px) {'+this.pagestyling.mobile+'}';
+  }
+
+  setPageStyle(sections:any) {
+    this.blockStyling(this.main);
+    sections.forEach((sec:any)=>{
+      this.blockStyling(sec);
+      sec.rowArr.forEach((row:any)=>{
+        this.blockStyling(row);
+        row.columnArr.forEach((col:any)=>{
+          this.blockStyling(col);
+          col.elementArr.forEach((ele:any)=>{
+            this.elementStyling(ele);
+          })
+        })
+      })
+    })
+  }
+
+  blockStyling(block:any) {
+    this.pagestyling.desktop = this.pagestyling.desktop + '#' + block.id + '{' + Object.entries(block.style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(block.style.tablet_h) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(block.style.tablet_v) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(block.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(block.type == 'row') {
+      var clmwrp = ['#' + block.id + ' .kb-column-wrap {gap:', 'rem;}']
+      this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
+      if(block.columnGap.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + clmwrp.join(block.columnGap.tablet_h);
+      if(block.columnGap.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + clmwrp.join(block.columnGap.tablet_v);
+      if(block.columnGap.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + clmwrp.join(block.columnGap.mobile);
+    }
+  }
+
+  elementStyling(ele:any) {
+    var pseudoEle:string = '';
+    if(ele.content.name == 'text' || ele.content.name == 'heading') {
+      pseudoEle = 'div';
+    }
+    else if(ele.content.name == 'image') {
+      pseudoEle = 'img';
+    }
+    else if(ele.content.name == 'button') {
+      pseudoEle = 'a';
+    }
+    this.pagestyling.desktop = this.pagestyling.desktop + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.desktop, ...ele.style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(ele.style.tablet_h || ele.content.style.tablet_h) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.tablet_h, ...ele.style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(ele.style.tablet_v || ele.content.style.tablet_v) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.tablet_v, ...ele.style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(ele.style.mobile || ele.content.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.mobile, ...ele.style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    
+    var eleitma = ['#' + ele.id + '{justify-content:', ';}']
+    this.pagestyling.desktop = this.pagestyling.desktop + eleitma.join(ele.item_alignment.desktop);
+    if(ele.item_alignment.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + eleitma.join(ele.item_alignment.tablet_h);
+    if(ele.item_alignment.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + eleitma.join(ele.item_alignment.tablet_v);
+    if(ele.item_alignment.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + eleitma.join(ele.item_alignment.mobile);
   }
 
   addKeyword(event: any): void {

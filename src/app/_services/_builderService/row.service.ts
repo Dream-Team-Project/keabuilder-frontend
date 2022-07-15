@@ -11,7 +11,7 @@ export class RowService {
 
   distroyDialogue = new Subject<any>();
   selectedRow:any = '';
-  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, columnGap: 0, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
+  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, columnGap: {desktop:0, tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
   row_index:number = 0;
   columnObj:any = {id: '', type: 'column', elementArr: [], name: '', chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};

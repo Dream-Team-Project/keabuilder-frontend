@@ -203,7 +203,7 @@
                             class="side-arrow" (click)="_general.sidefloatbtnopen(!_general.showBackToRowOption)"><i
                                 class="fa fa-arrow-left"></i></button>
                     </div>
-                        {{_general.selectedBlock.type != 'element' ? _general.selectedBlock.type+' Setting' : _general.selectedBlock.content.name+' Styling'}}
+                        {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' : _general.selectedBlock.type)+' Setting' : _general.selectedBlock.content.name+' Styling'}}
                 </div>
                 <mat-tab-group (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component" (animationDone)="_general.detectTabChange()" (selectedTabChange)="_general.selectTabChange($event)">
                     <mat-tab label="Structure" *ngIf="_general.selectedBlock.content?.name == 'menu'">
@@ -1136,17 +1136,25 @@
                         <div *ngIf="_general.selectedBlock.columnArr.length > 1">
                             <div class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Column Spacing
-                                    <span matTooltip="Auto" matTooltipPosition="above"
-                                        (click)="_style.iconMotion($event.target); _style.columnGap = 0"
-                                        [class]="_style.columnGap != 0 ? 'active' : ''" class="kb-reverse-icon"><i
-                                            class="fa fa-sync"></i></span>
-                                    <strong style="margin-left: auto;">{{_style.columnGap != 0 ? _style.columnGap+'%' : 'Auto'}}</strong>
+                                    <strong style="margin-left: auto;">{{_style.getBlockParamValue(_style.columnGap)}}</strong>
                                 </div>
                                 <div class="kb-tab-content">
-                                    <div class="kb-rangeInp">
-                                        <mat-slider thumbLabel [(ngModel)]="_style.columnGap"
-                                            [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="0"
-                                            max="100" class="slider" aria-label="units">
+                                    <div [ngSwitch]="_style.getRespDevice()" class="kb-rangeInp">
+                                        <mat-slider *ngSwitchCase="'desktop'" thumbLabel [(ngModel)]="_style.columnGap.desktop"
+                                            [displayWith]="_style.formatLabel" tickInterval="0" step="0.1" min="0"
+                                            max="6" class="slider" aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchCase="'tablet-h'" thumbLabel [(ngModel)]="_style.columnGap.tablet_h"
+                                            [displayWith]="_style.formatLabel" tickInterval="0" step="0.1" min="0"
+                                            max="6" class="slider" aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchCase="'tablet-v'" thumbLabel [(ngModel)]="_style.columnGap.tablet_v"
+                                            [displayWith]="_style.formatLabel" tickInterval="0" step="0.1" min="0"
+                                            max="6" class="slider" aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchCase="'mobile'" thumbLabel [(ngModel)]="_style.columnGap.mobile"
+                                            [displayWith]="_style.formatLabel" tickInterval="0" step="0.1" min="0"
+                                            max="6" class="slider" aria-label="units">
                                         </mat-slider>
                                     </div>
                                 </div>
@@ -1171,6 +1179,12 @@
                             <div class="kb-tab-head">Page/SEO Title</div>
                             <div class="kb-tab-content kb-inp-left">
                                 <input type="text" name="page-title" placeholder="Page title" [(ngModel)]="_general.page_title">
+                            </div>
+                        </div>
+                        <div class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Path</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <span class="highlight">{{_general.subdomain}}.keapages.com/</span><input type="text" name="page-path" placeholder="Page path" (keydown)="_general.page_path = _general.joinWthDash(_general.page_path)" [(ngModel)]="_general.page_path">
                             </div>
                         </div>
                         <div class="kb-inner-tab-component">
@@ -1493,16 +1507,16 @@
                                 <div class="kb-tab-head">Alignment</div>
                                 <div class="kb-tab-content">
                                     <div class="kb-align-btn-group">
-                                        <span (click)="_style.item_alignment = ''"
-                                            [class]="_style.item_alignment == '' ? 'kb-active-brd' : ''"
+                                        <span (click)="_style.setElementAlignment('')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == '' ? 'kb-active-brd' : ''"
                                             class="kb-align-btn icon-border" matTooltip="Left" matTooltipPosition="above"><i
                                                 class="fa fa-arrow-left"></i></span>
-                                        <span (click)="_style.item_alignment = 'center'"
-                                            [class]="_style.item_alignment == 'center' ? 'kb-active-brd' : ''"
+                                        <span (click)="_style.setElementAlignment('center')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == 'center' ? 'kb-active-brd' : ''"
                                             class="kb-align-btn icon-border" matTooltip="Center" matTooltipPosition="above"><i
                                                 class="fa fa-arrow-right"></i><i class="fa fa-arrow-left"></i></span>
-                                        <span (click)="_style.item_alignment = 'flex-end'"
-                                            [class]="_style.item_alignment == 'flex-end' ? 'kb-active-brd' : ''"
+                                        <span (click)="_style.setElementAlignment('flex-end')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == 'flex-end' ? 'kb-active-brd' : ''"
                                             class="kb-align-btn icon-border" matTooltip="Right" matTooltipPosition="above"><i
                                                 class="fa fa-arrow-right"></i></span>
                                     </div>

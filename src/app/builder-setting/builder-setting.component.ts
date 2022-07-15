@@ -165,6 +165,9 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     onUpdate: (event: any) => {
       this._column.filterCls(this._row.selectedRow);
     },
+    onAdd: (event: any) => {
+      this._column.filterCls(this._row.selectedRow);
+    },
     onStart: function (/**Event*/evt) {
       // console.log(evt.oldIndex);  // element index within parent
     },
