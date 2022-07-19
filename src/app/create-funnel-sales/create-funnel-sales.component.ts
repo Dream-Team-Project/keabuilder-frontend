@@ -11,8 +11,8 @@ export interface UserData {
   amount:string;
   customer:string;
   status:string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 @Component({
@@ -22,7 +22,7 @@ export interface UserData {
 })
 export class CreateFunnelSalesComponent implements OnInit {
  
-  displayedColumns: string[] = ['product_name', 'amount', 'customer', 'status','createdAt', 'updatedAt'];
+  displayedColumns: string[] = ['product_name', 'amount', 'customer', 'status','created_at', 'updated_at'];
   selection = new SelectionModel<UserData>(true, []);
   dataSource: MatTableDataSource<UserData>;
   

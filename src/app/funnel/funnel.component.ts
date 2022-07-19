@@ -243,14 +243,14 @@ export class FunnelComponent implements OnInit {
               newob.grouptags = element.grouptags;
 
                 data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',title:'',updatedat:'',variation:'',tag:'',color:'',img:'',funnelid:''};
+                  var newob2 = {id:'',uniqueid:'',title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:''};
                   if(element2.funnelid==newob.id){
                     newob2.id = element2.id;
                     newob2.title = element2.title;
                     newob2.uniqueid = element2.uniqueid;
 
-                    var subdate = (new Date(element2.updatedAt).toDateString()).substr(3, 7);
-                    newob2.updatedat = subdate;
+                    var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);
+                    newob2.updated_at = subdate;
                     newob2.variation = element2.variation;
                     newob2.tag = element2.tags;
                     newob2.color = element2.color;

@@ -432,13 +432,13 @@ export class CreateFunnelComponent implements OnInit {
                     this.tags = crtag; 
                   }
 
-                  this.maintime = this.fromNow(new Date(element.updatedAt));
+                  this.maintime = this.fromNow(new Date(element.updated_at));
 
-                  this.variationtime =  this.fromNow(new Date(element.variation_updatedate));
+                  this.variationtime =  this.fromNow(new Date(element.variation_updated_ate));
 
                   this.funnelstepvariationurl = element.variationlink;
 
-                  // console.log(element.updatedAt);
+                  // console.log(element.updated_at);
                   this.splitvalue = element.splittestper;
 
                   if(element.variation==1){

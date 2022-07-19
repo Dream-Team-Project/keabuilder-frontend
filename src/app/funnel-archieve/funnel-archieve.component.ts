@@ -7,9 +7,9 @@ import { FunnelService } from '../_services/funnels.service';
 
 export interface UserData {
   name:string;
-  createdAt:string;
+  created_at:string;
   archive_reason:string;
-  updatedAt:string;
+  updated_at:string;
 }
 
 @Component({
@@ -20,7 +20,7 @@ export interface UserData {
 export class FunnelArchieveComponent implements OnInit {
 
   
-  displayedColumns: string[] = ['name', 'createdAt','archive_reason', 'updatedAt'];
+  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'updated_at'];
   selection = new SelectionModel<UserData>(true, []);
   dataSource: MatTableDataSource<UserData>;
   
