@@ -76,13 +76,6 @@ export class SidebarComponent implements OnInit {
       },
       {
         0:true,
-        routerlink: '/website-landingpages',
-        img: 'browser.gif',
-        icon: 'fas fa-file-alt',
-        title: 'Landing Pages'
-      },
-      {
-        0:true,
         routerlink: '/website-details',
         img: 'browser.gif',
         icon: 'fas fa-pencil-alt',

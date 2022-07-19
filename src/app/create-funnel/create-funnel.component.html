@@ -658,7 +658,7 @@
 
                 <mat-form-field class="kb-chip-list" appearance="fill">
                   <mat-label>Add Tags</mat-label>
-                  <mat-chip-list #chipList aria-label="Fruit selection">
+                  <mat-chip-list #chipList>
                     <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
                       {{tag}}
                       <button matChipRemove>

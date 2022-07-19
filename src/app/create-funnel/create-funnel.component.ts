@@ -336,6 +336,7 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   changestepnames(value:any){
+    console.log('check it');
     var mainvalue = '';
     if(value=='stepname'){
       mainvalue = this.funnelstepname;

@@ -45,8 +45,6 @@ export class FunnelComponent implements OnInit {
       var pageSize = event?.pageSize;
       var previousPageIndex = event?.previousPageIndex;
       // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
-
-      
   }
 
   ngOnInit(): void {

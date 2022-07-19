@@ -52,7 +52,6 @@ import { AffiliateExportsComponent } from './affiliate-exports/affiliate-exports
 import { AffiliateSettingsComponent } from './affiliate-settings/affiliate-settings.component';
 import { WebsiteDesignComponent } from './website-design/website-design.component';
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
-import { WebsiteLandingpageComponent } from './website-landingpage/website-landingpage.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 
 const routes: Routes = [
@@ -102,7 +101,6 @@ const routes: Routes = [
   { path: 'website-pages', component: WebsiteComponent, canActivate: [AuthGuard] },
   { path: 'website-design', component: WebsiteDesignComponent, canActivate: [AuthGuard] },
   { path: 'website-details', component: WebsiteDetailsComponent, canActivate: [AuthGuard] },
-  { path: 'website-landingpages', component: WebsiteLandingpageComponent, canActivate: [AuthGuard] },
   { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
   
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
@@ -167,7 +165,6 @@ export const RoutingComponents =
     AffiliateSettingsComponent,
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
-    WebsiteLandingpageComponent,
     IntegrationsComponent,
   ];
 
