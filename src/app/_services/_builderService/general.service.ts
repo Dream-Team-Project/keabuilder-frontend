@@ -115,15 +115,24 @@ export class GeneralService {
 
   setBuilder() {
     var build = this.file.html.getElementsByTagName('BODY')[0];
-    var style = this.file.css.trim();
-    var id = '#kb-main{';
-    var styleArr = style.substring(style.indexOf(id)+id.length, style.indexOf('}')).split(';');
+    var style = this.file.css;
+
+    // build.querySelectorAll('.kb-section').forEach((ele:any)=>{
+    //   var styleArr = style.substring(style.indexOf(ele.id)+ele.id.length, style.indexOf('}')).split(';');
+    //   styleArr.pop();
+    //   for(var i = 0; i < styleArr.length; i++) {
+    //     styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
+    //   }   
+    // })
+
+    var ele = '#kb-main{';
+    var styleArr = style.substring(style.indexOf(ele)+ele.length, style.indexOf('}')).split(';');
     styleArr.pop();
     for(var i = 0; i < styleArr.length; i++) {
       styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
     }
     this.main.style.desktop = JSON.parse('{'+styleArr.join(',')+'}');
-    console.log(this.main.style);
+
     // console.log(JSON.parse(str));
     // console.log(Object.entries(style).map(([a, b]) => `${a}:${b}`).join(';'));
     // build.forEach((item:any)=>{
