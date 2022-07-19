@@ -44,10 +44,10 @@ export class WebsiteComponent implements OnInit {
 
         data.data.forEach((element:any) => {
           
-          var mycustomdate =  new Date(element.updatedAt);
+          var mycustomdate =  new Date(element.updated_at);
           var text1 = mycustomdate.toDateString();    
           var text2 = mycustomdate.toLocaleTimeString();
-          element.updatedAt = text1+' '+text2;
+          element.updated_at = text1+' '+text2;
 
           this.kbpages.push(element);
           element.updated_at = text1+' '+text2;
