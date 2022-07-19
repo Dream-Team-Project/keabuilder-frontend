@@ -10,8 +10,8 @@ export interface UserData {
   fullname: string;
   email: string;
   phone:string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 @Component({
@@ -22,7 +22,7 @@ export interface UserData {
 
 export class CreateFunnelContactsComponent implements OnInit {
   
-  displayedColumns: string[] = ['fullname', 'email','phone', 'createdAt', 'updatedAt'];
+  displayedColumns: string[] = ['fullname', 'email','phone', 'created_at', 'updated_at'];
   selection = new SelectionModel<UserData>(true, []);
   dataSource: MatTableDataSource<UserData>;
   
