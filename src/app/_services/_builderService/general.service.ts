@@ -4,6 +4,8 @@ import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
 import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
+import { WebpagesService } from '../webpages.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ import { TokenStorageService } from '../token-storage.service';
 export class GeneralService {
   username:string = '';
   subdomain:string = '';
-  main:any = {id: 'kb-main', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  webpage:any = {uniqueid: ''};
+  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  page_name = '';
   page_title = '';
   page_path = '';
   description = '';
@@ -66,22 +70,80 @@ export class GeneralService {
   };
   pagehtml:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+  parser = new DOMParser();
+  file:any = {
+    html: '',
+    css: ''
+  };
 
-  constructor(private _snackBar: MatSnackBar, private fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService) {
+  interval = setInterval((e:any)=>{
+    if(this.webpage.uniqueid) {
+      this.getWebPageDetails();
+      clearInterval(this.interval);
+    }
+  })
+
+  constructor(private _snackBar: MatSnackBar, private fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService, private webPageService: WebpagesService) {
     this.username = this.tokenStorageService.getUser().username;
     this.main.author = this.username;
     this.subdomain = this.joinWthDash(this.username);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
+    this.interval;
   }
 
-  joinWthDash(item:string) {
-    return item.toLowerCase().replace(/ /g, '-');
+  getWebPageDetails() {
+    this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
+      (e:any)=>{
+        this.webpage = e.data[0];
+        this.main.name = this.webpage.page_name;
+        this.main.title = this.webpage.page_title;
+        this.main.path = this.webpage.page_path;
+        if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+        if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+        this.main.author = this.webpage.page_author;
+        this.fileUploadService.getfile(this.webpage).subscribe(
+          (file:any)=>{
+            this.file.html = this.parser.parseFromString(file.html, 'text/html');
+            this.file.css = file.css;
+            this.setBuilder();
+          }
+        )
+      }
+    )
+  }
+
+  setBuilder() {
+    var build = this.file.html.getElementsByTagName('BODY')[0];
+    var style = this.file.css.trim();
+    var id = '#kb-main{';
+    var styleArr = style.substring(style.indexOf(id)+id.length, style.indexOf('}')).split(';');
+    styleArr.pop();
+    for(var i = 0; i < styleArr.length; i++) {
+      styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
+    }
+    this.main.style.desktop = JSON.parse('{'+styleArr.join(',')+'}');
+    console.log(this.main.style);
+    // console.log(JSON.parse(str));
+    // console.log(Object.entries(style).map(([a, b]) => `${a}:${b}`).join(';'));
+    // build.forEach((item:any)=>{
+    //   console.log(item);
+    // })
   }
 
   saveHTML(main:any, sections:any) {
-    var parser = new DOMParser();
-    this.pagehtml = parser.parseFromString(main.innerHTML, 'text/html');
+    // this.webPageService.getWebpages().subscribe(
+    //   (e)=>{
+    //     e.data.every((d:any)=>{
+    //       if(d.page_path == this.main.path) {
+    //         this.main.path = this.main.path + Math.random().toString(9).slice(2);
+    //         return false;
+    //       }
+    //       else return true;
+    //     })
+    //   }
+    // )
+    this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
     this.removeStyle('#kb-main');
     this.removeStyle('.kb-section');
@@ -98,7 +160,7 @@ export class GeneralService {
     '<meta name="author" content="'+this.main.author+'">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<title>'+this.main.title+'</title>' +        
-    '<link rel="stylesheet" href="./'+this.main.path+'/index.css"><link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">';
+    '<link rel="stylesheet" href="./'+this.main.path+'/style.css"><link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">';
 
     this.setPageStyle(sections);
 
@@ -107,11 +169,28 @@ export class GeneralService {
       body: this.pagehtml.querySelector('body').outerHTML,
       style: this.getAllStyle(),
       folder: this.main.path,
-      prevFolder: 'update-me'
+      prevFolder: this.webpage.page_path
     }
     this.fileUploadService.createpage(page).subscribe(
       (event:any) => {
-        console.log(event);
+        var pagedata = {
+          id: this.webpage.id,
+          uniqueid: Math.random().toString(20).slice(2),
+          page_name: this.main.name,
+          page_title: this.main.title,
+          page_path: this.main.path,
+          page_description: this.main.description,
+          page_keywords: this.main.keywords.join(','),
+          page_author: this.main.author,
+          page_status: 1,
+          thumbnail: '',
+          tracking_code: '',
+        }
+        console.log(pagedata);
+        this.webPageService.updateWebpage(pagedata).subscribe(
+          (e:any)=>{
+            this.getWebPageDetails();
+        });
       },
     error=>{console.log(error)})
   }
@@ -186,6 +265,10 @@ export class GeneralService {
     if(ele.item_alignment.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + eleitma.join(ele.item_alignment.mobile);
   }
 
+  joinWthDash(item:string) {
+    return item.toLowerCase().replace(/ /g, '-');
+  }
+
   addKeyword(event: any): void {
     const value = (event.value || '').trim();
     if (value) {
@@ -239,7 +322,6 @@ export class GeneralService {
         setTimeout(()=>{
           if(!action) ele.classList.remove('kb-hidden');
         },300)
-        // console.log(row.getAttribute('NAME'));
       })
     }
   }

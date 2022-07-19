@@ -12,7 +12,7 @@ export class MembershipComponent implements OnInit {
     {
         "id": 1,
         "page_name": "Online Course",
-        "page_url": "online-course",
+        "page_path": "online-course",
         "type": "course",
         "domain": null,
         "publish_status": 1,
@@ -26,7 +26,7 @@ export class MembershipComponent implements OnInit {
     {
         "id": 2,
         "page_name": "Childcare Success",
-        "page_url": "childcare-success",
+        "page_path": "childcare-success",
         "type": "page",
         "domain": null,
         "publish_status": 0,
@@ -40,7 +40,7 @@ export class MembershipComponent implements OnInit {
     {
         "id": 2,
         "page_name": "Master Motion",
-        "page_url": "master-motion",
+        "page_path": "master-motion",
         "type": "page",
         "domain": null,
         "publish_status": 0,

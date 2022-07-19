@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WebpagesService } from '../_services/webpages.service';
+import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-website',
@@ -8,8 +9,7 @@ import { WebpagesService } from '../_services/webpages.service';
 })
 export class WebsiteComponent implements OnInit {
 
-  constructor(private webpagesService: WebpagesService,
-              ) { }
+  constructor(private router: Router, private route: ActivatedRoute, private webpagesService: WebpagesService) { }
 
   kbpages:any[] = [];
   kblandingpages:any[] = [];
@@ -17,10 +17,8 @@ export class WebsiteComponent implements OnInit {
   ngOnInit(): void {
 
     // Get Pages & landing page
-    this.webpagesService.getWebpage().subscribe({
+    this.webpagesService.getWebpages().subscribe({
       next: data => {
-        // console.log(data);
-
         data.data.forEach((element:any) => {
           element.itemshow = false;
           element.dropdownstatus = false;
@@ -29,10 +27,9 @@ export class WebsiteComponent implements OnInit {
           var text1 = mycustomdate.toDateString();    
           var text2 = mycustomdate.toLocaleTimeString();
           element.updated_at = text1+' '+text2;
-
-           if(element.type=='page'){
              this.kbpages.push(element);
-           }else if(element.type=='landing_page'){
+
+          if(element.type=='landing_page'){
              this.kblandingpages.push(element);
           }
           // console.log(this.kbpages);
@@ -47,5 +44,8 @@ export class WebsiteComponent implements OnInit {
 
   }
 
+  redirectToBuilder(id:any) {
+      this.router.navigate(['/builder/website',id])
+  }
 
 }

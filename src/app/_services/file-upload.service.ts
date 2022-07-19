@@ -15,11 +15,16 @@ export class FileUploadService {
   deleteFromDB = "./api/deletefromdb";
   deleteFile = "./api/deletefile";
   createPageApi = "./api/savepage";
+  getFileApi = "./api/getpage";
     
   constructor(private http:HttpClient) { }
 
   createpage(page:any):Observable<any> {
     return this.http.post(this.createPageApi, page);
+  }
+
+  getfile(page:any):Observable<any> {
+    return this.http.post(this.getFileApi, page);
   }
 
   // Returns an observable

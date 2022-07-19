@@ -864,6 +864,7 @@ export class StyleService {
   updateStyle() {
     if(this._general.selectedBlock.type != 'main') this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     else {
+      this._general.main.name = this._general.page_name;
       this._general.main.title = this._general.page_title;
       this._general.main.path = this._general.page_path;
       this._general.main.description = this._general.description;
@@ -1426,6 +1427,7 @@ export class StyleService {
       }
 
       else if (block.type == 'main') {
+        this._general.page_name = block.name;
         this._general.page_title = block.title;
         this._general.page_path = block.path;
         this._general.description = block.description;

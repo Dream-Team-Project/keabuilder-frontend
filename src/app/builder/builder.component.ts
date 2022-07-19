@@ -10,6 +10,7 @@ import { StyleService } from '../_services/_builderService/style.service';
 import { GeneralService } from '../_services/_builderService/general.service';
 import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
+import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-builder',
@@ -28,6 +29,8 @@ DialogParentToggle:boolean = false;
 
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private _nav: NavbarService,
     // builder services start
     public _style: StyleService,
@@ -39,11 +42,12 @@ DialogParentToggle:boolean = false;
     public _image: ImageService,
     // builder services end
     private _snackBar: MatSnackBar) {
-      this._nav.hide();
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        _general.webpage.uniqueid = params.get('id');
+      })
    }
 
   ngOnInit(): void {
-    document.getElementById('kb-bootstrap-stylesheet')?.remove();
   }
 
   ngAfterViewInit() {

@@ -104,9 +104,9 @@ const routes: Routes = [
   { path: 'website-details', component: WebsiteDetailsComponent, canActivate: [AuthGuard] },
   { path: 'website-landingpages', component: WebsiteLandingpageComponent, canActivate: [AuthGuard] },
   { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
-  
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'builder', component: BuilderComponent },
+  { path: 'builder/website/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  { path: 'builder/funnel/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent },
 ];
 
