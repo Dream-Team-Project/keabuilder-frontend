@@ -68,6 +68,9 @@
       </div>
       <div class="col-md-6 pagemainlink float-right">        
         <button mat-raised-button class="ml-2" >Add New Pages <i class="fas fa-plus"></i></button>
+      <div class="col-md-6 pagemainlink float-right">
+        <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website-landingpages']">Landing Pages <i class="fas fa-file-alt"></i></button> -->
+        <button mat-raised-button class="ml-2" [routerLink]="['/builder/website/new']">Add New Page <i class="fas fa-plus"></i></button>
         <button mat-raised-button class="ml-2" [routerLink]="['/website-pages']" color="primary">Pages <i class="far fa-window-restore"></i></button>
         <button mat-raised-button [routerLink]="['/website-design']" >Website Design
         <i class="fas fa-palette"></i></button>
@@ -126,6 +129,8 @@
               <i class="fas fa-trash mr-2"></i> Delete
             </button>
           </mat-menu>
+          <button class="btn btn-secondary" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+          <button class="btn btn-primary" (click)="redirectToBuilder(kbpage.uniqueid)" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
         </div>
       </div>

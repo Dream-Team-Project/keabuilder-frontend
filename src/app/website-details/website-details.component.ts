@@ -27,7 +27,7 @@ export class WebsiteDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     // Get Pages & landing page
-    this.webpagesService.getWebpage().subscribe({
+    this.webpagesService.getWebpages().subscribe({
       next: data => {
         // console.log(data);
 

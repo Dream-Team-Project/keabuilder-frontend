@@ -24,12 +24,20 @@ export class AppComponent {
     public _nav: NavbarService,
     public _auth: AuthService,
     ) { 
-      this._nav.show();
       this.router.events
       .subscribe(
         (event: NavigationEvent) => {
             switch (true) {
               case event instanceof NavigationStart: {
+                var e:any = event;
+                if(e.url.split('/')[1] == 'builder') {
+                  this._nav.hide();
+                  document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
+                }
+                else {
+                  this._nav.show();
+                  document.getElementById('kb-bootstrap-stylesheet')?.setAttribute('href', 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css');
+                }
                 this.loading = true;
                 break;
               }

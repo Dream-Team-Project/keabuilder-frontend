@@ -62,10 +62,10 @@ export class SidebarComponent implements OnInit {
       title: 'Website',
       submenu:[{
         0:true,
-        routerlink: '/nolink',
+        routerlink: '/builder',
         img: 'browser.gif',
         icon: 'fas fa-plus',
-        title: 'Add New Pages'
+        title: 'Add New Page'
       },
       {
         0:true,

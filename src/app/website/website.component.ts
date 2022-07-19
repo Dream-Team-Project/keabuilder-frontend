@@ -3,6 +3,7 @@ import { WebpagesService } from '../_services/webpages.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
+import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-website',
@@ -12,7 +13,9 @@ import {MatChipInputEvent} from '@angular/material/chips';
 export class WebsiteComponent implements OnInit {
 
   constructor(private webpagesService: WebpagesService,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              private router: Router, 
+              private route: ActivatedRoute, ) { }
 
   kbpages:any[] = [];
   poupsidebar = false;
@@ -34,7 +37,7 @@ export class WebsiteComponent implements OnInit {
   }
 
   showwebpages(){
-    this.webpagesService.getWebpage().subscribe({
+    this.webpagesService.getWebpages().subscribe({
       next: data => {
         console.log(data);
         this.kbpages = [];
@@ -47,6 +50,9 @@ export class WebsiteComponent implements OnInit {
           element.updatedAt = text1+' '+text2;
 
           this.kbpages.push(element);
+          element.updated_at = text1+' '+text2;
+             this.kbpages.push(element);
+
           // console.log(this.kbpages);
 
         });
@@ -152,7 +158,9 @@ export class WebsiteComponent implements OnInit {
 
     //   }
     // });
-
+  }
+  redirectToBuilder(id:any) {
+      this.router.navigate(['/builder/website',id])
   }
 
 }

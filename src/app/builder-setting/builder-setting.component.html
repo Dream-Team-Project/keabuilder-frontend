@@ -1176,7 +1176,13 @@
                     </mat-tab>
                     <mat-tab label="General" *ngIf="_general.selectedBlock.type == 'main'">
                         <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Page/SEO Title</div>
+                            <div class="kb-tab-head">Page Name</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <input type="text" name="page-name" placeholder="Page name" [(ngModel)]="_general.page_name">
+                            </div>
+                        </div>
+                        <div class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Page Title</div>
                             <div class="kb-tab-content kb-inp-left">
                                 <input type="text" name="page-title" placeholder="Page title" [(ngModel)]="_general.page_title">
                             </div>
@@ -1184,7 +1190,7 @@
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Path</div>
                             <div class="kb-tab-content kb-inp-left">
-                                <span class="highlight">{{_general.subdomain}}.keapages.com/</span><input type="text" name="page-path" placeholder="Page path" (keydown)="_general.page_path = _general.joinWthDash(_general.page_path)" [(ngModel)]="_general.page_path">
+                                <span class="highlight">{{_general.subdomain}}.keapages.com/</span><input type="text" name="page-path" placeholder="Page path" (input)="_general.page_path = _general.joinWthDash(_general.page_path)" [(ngModel)]="_general.page_path">
                             </div>
                         </div>
                         <div class="kb-inner-tab-component">
