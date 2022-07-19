@@ -1,5 +1,61 @@
 <div id="pagesinsidepage">
 
+  <div id="kb-offcanvas-actions" *ngIf="poupsidebar">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+        
+        <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+
+        <div *ngIf="firstpart">
+            <h6><b>Quick Edit</b></h6>
+            <hr>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Page Url</mat-label>
+              <input matInput [(ngModel)]="pageurl" name="pageurl">
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>SEO Title</mat-label>
+              <input matInput [(ngModel)]="seotitle" name="seotitle">
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>SEO Description</mat-label>
+              <textarea matInput name="seodescr">{{seodescr}}</textarea>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Add Keywords</mat-label>
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let keyword of keywords" (removed)="remove(keyword)">
+                  {{keyword}}
+                  <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input placeholder="New Keywords..."
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="addOnBlur"
+                       (matChipInputTokenEnd)="add($event)">
+              </mat-chip-list>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Seo Author</mat-label>
+              <input matInput name="seoauthor" [(ngModel)]="seoauthor">
+            </mat-form-field>
+
+            <button mat-raised-button color="primary"  >
+                <i class="fas fa-save"></i> Save Details
+            </button>
+        </div>
+
+    </div>
+  </div>
+  <div class="offcanvas-overlay " *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
+
+
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6">
@@ -10,6 +66,8 @@
           </div>
         </fieldset>
       </div>
+      <div class="col-md-6 pagemainlink float-right">        
+        <button mat-raised-button class="ml-2" >Add New Pages <i class="fas fa-plus"></i></button>
       <div class="col-md-6 pagemainlink float-right">
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website-landingpages']">Landing Pages <i class="fas fa-file-alt"></i></button> -->
         <button mat-raised-button class="ml-2" [routerLink]="['/builder/website/new']">Add New Page <i class="fas fa-plus"></i></button>
@@ -22,47 +80,58 @@
 
     <!-- Pages -->
     <div class="row mt-4">
-      <div class="col-md-4 cardpage mt-10 " *ngFor="let kbpage of kbpages; index as i;" >
+      <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
         <div>
-          <img [src]="kbpages[i]['thumbnail']" alt="" class="img-fluid img-fit">
+          <img [src]="kbpage.thumbnail" alt="" class="img-fluid img-fit">
 
           <div class="keabuilder-title-board line-ellipsis">
-            <span>{{kbpages[i]['page_name']}}</span>
-            <input type="text" [(ngModel)]="kbpages[i]['page_name']">
+            <span>{{kbpage.page_name}}</span>
+            <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
           </div>
           <div class="statbadg">
 
-            <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpages[i]['publish_status']==1 ? 'active1':'active2'">
+            <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
               <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
               {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
             </span>
 
             <mat-menu #menu="matMenu">
-              <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
-              <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
+              <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate')" ><i class="fa fa-check pr-2"></i> Publish</button>
+              <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate')"><i class="fa fa-file pr-2"></i> Draft</button>
             </mat-menu>
 
           </div>
 
 
-          <p class="kb-pagedate"><i class="fa fa-calendar" aria-hidden="true"></i> {{kbpages[i]['updated_at']}}</p>
+          <p class="kb-pagedate" matTooltip="Last Update" matTooltipPosition="above">
+            <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updatedAt}}
+          </p>
 
+          <button mat-raised-button color="accent" class="mr-2" (click)="checkpagesettings('preview',kbpage.page_url)" > Preview <i class="far fa-eye"></i></button>
+          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+          <div class="kb-page-settting" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"><i
+            class="fas fa-cog"></i></div>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                <i class="fas fa-pen mr-2"></i> Quick Edit
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-chart-pie mr-2"></i> View Analytics
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-copy mr-2"></i> Duplicate
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-link mr-2"></i> Copy URL
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-trash mr-2"></i> Delete
+            </button>
+          </mat-menu>
           <button class="btn btn-secondary" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
           <button class="btn btn-primary" (click)="redirectToBuilder(kbpage.uniqueid)" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
-          <div class="kb-page-settting" (click)="kbpages[i].itemshow = !kbpages[i].itemshow"><i
-              class="fas fa-cog"></i></div>
-          <div *ngIf="kbpages[i].itemshow" class="kb-dropdown__panel">
-            <ul class="kb-dropdown__menu">
-              <li class=""><a href="#" class=""><i class="fas fa-pen pr-2"></i>Edit details </a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-file-import pr-2"></i>Copy page to Landing </a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-chart-pie pr-2"></i>View Analytics</a></li>
-              <li class=""><a href="#" class=""><i class="far fa-copy pr-2"></i>Duplicate</a></li>
-              <li class=""><a href="#" class=""><i class="fas fa-link pr-2"></i>Copy URL</a></li>
-              <li class="kb-border-before"><a href="#" class="text-danger"><i class="fas fa-trash pr-2"></i>Delete
-                  page</a></li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
