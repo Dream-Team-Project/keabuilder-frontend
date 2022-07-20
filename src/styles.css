@@ -437,3 +437,11 @@ main.insidecont .box {
 .mat-simple-snackbar .mat-button-wrapper {
   color: var(--clr-primay); 
 }
+
+.mat-tooltip {
+  font-size: 12px;
+}
+
+.mat-simple-snackbar-action {
+    color: var(--clr-primay)!important;
+}

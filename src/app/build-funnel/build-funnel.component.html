@@ -11,7 +11,7 @@
 
           <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Funnel Name</mat-label>
-            <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" maxlength="140" >
+            <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
             <mat-error *ngIf="userFormControl.hasError('required')">
               Funnel Name is <strong>required</strong>
             </mat-error>

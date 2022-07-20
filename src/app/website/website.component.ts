@@ -4,6 +4,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-website',
@@ -17,9 +18,17 @@ export class WebsiteComponent implements OnInit {
               private router: Router, 
               private route: ActivatedRoute, ) { }
 
+  form: any = {
+    pagename: null,
+    pagepath:null,
+  };
+  userFormControl = new FormControl('',[Validators.required ]);
+  userFormControl2 = new FormControl('',[Validators.required ]);
+
   kbpages:any[] = [];
   poupsidebar = false;
-  firstpart = true;
+  quickeditpopup = true;
+  addnewpagepopup = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   keywords:any[] = [];
   addOnBlur = true;
@@ -28,12 +37,38 @@ export class WebsiteComponent implements OnInit {
   seodescr = '';
   seoauthor = '';
   quickeditid = '';
-
+  errorMessage = '';
+  pathcheck = false;
 
   ngOnInit(): void {
 
     this.showwebpages();
 
+  }
+
+  onSubmit(): void {
+    const { pagename, pagepath } = this.form;
+
+    if(this.userFormControl.status=='VALID'){
+
+      //   this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor).subscribe({
+      //       next: data => {
+      //           // console.log(data);
+      //           this.router.navigate(['/create-funnel/'+data.data.hash+'/'+data.data.hash2],{relativeTo: this.route});
+            
+      //       },
+      //       error: err => {
+      //       this.errorMessage = err.error.message;
+      //       }
+      // });
+      
+    }
+
+  }
+
+  changemyname(event:any){
+    // console.log(event.target.value);
+    this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
   }
 
   showwebpages(){
@@ -50,8 +85,6 @@ export class WebsiteComponent implements OnInit {
           element.updated_at = text1+' '+text2;
 
           this.kbpages.push(element);
-          element.updated_at = text1+' '+text2;
-             this.kbpages.push(element);
 
           // console.log(this.kbpages);
 
@@ -69,6 +102,12 @@ export class WebsiteComponent implements OnInit {
       var url = 'http://localhost:4200/'+data;
       window.open(url, '_blank')
     }
+  }
+
+  addnewpage(){
+    this.poupsidebar = true;
+    this.quickeditpopup = false;
+    this.addnewpagepopup = true;
   }
 
   changepagename(id:any, title:any, type:any){
@@ -96,7 +135,7 @@ export class WebsiteComponent implements OnInit {
                 this.seoauthor = data.data[0].seo_author;
 
                 var gettag = data.data[0].seo_keywords;
-                  if(gettag!=''){
+                  if(gettag!='' && gettag!=null){
                     var crtag = gettag.split(',');
                     this.keywords = crtag; 
                   }
@@ -143,6 +182,7 @@ export class WebsiteComponent implements OnInit {
     // Clear the input value
     event.chipInput!.clear();
   }
+
   remove(tags: any): void {
     const index = this.keywords.indexOf(tags);
 
@@ -159,6 +199,7 @@ export class WebsiteComponent implements OnInit {
     //   }
     // });
   }
+
   redirectToBuilder(id:any) {
       this.router.navigate(['/builder/website',id])
   }

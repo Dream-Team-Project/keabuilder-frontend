@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
       submenu:null
     },{
       0:true,
-      routerlink: '/funnel',
+      routerlink: '/funnels',
       img: 'funnel.gif',
       icon: 'fa fa-filter',
       title: 'Funnels',
@@ -322,7 +322,7 @@ export class SidebarComponent implements OnInit {
 
     var myhref = event.currentTarget.attributes["href"].nodeValue;
 
-    if(myhref=='/funnel'){
+    if(myhref=='/funnels'){
 
       this.extramenus = false;
       
@@ -391,7 +391,7 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnel' && myhref!='/website-design' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/website-design' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
       this.backme = false;
     }
 
