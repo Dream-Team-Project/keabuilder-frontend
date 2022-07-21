@@ -76,7 +76,7 @@
     <div class="row mt-4">
       <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
         <div>
-          <img [src]="kbpage.thumbnail" alt="" class="img-fluid img-fit">
+          <img [src]="_image.uploadImgPath+'keaimage-'+kbpage.uniqueid+'-screenshot.png'" alt="" class="img-fluid img-fit">
 
           <div class="keabuilder-title-board line-ellipsis">
             <span>{{kbpage.page_name}}</span>

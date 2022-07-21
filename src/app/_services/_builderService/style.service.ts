@@ -853,7 +853,7 @@ export class StyleService {
     if(cs['z-index'] != ds['z-index']) ns['z-index'] = cs['z-index'];
     if(cs['box-shadow'] != ds['box-shadow']) ns['box-shadow'] = cs['box-shadow'];
     if(cs['background-color'] != ds['background-color']) ns['background-color'] = cs['background-color'];
-    if(cs['background-image'] != ds['background-image'] && cs['background-image'] != undefined && cs['background-image'] != 'none') ns['background-image'] = cs['background-image'];
+    if(cs['background-image'] != ds['background-image'] && cs['background-image'] != undefined) ns['background-image'] = cs['background-image'];
     if(cs['background-size'] != ds['background-size'] && cs['background-size'] != undefined) ns['background-size'] = cs['background-size']
     if(cs['background-position'] != ds['background-position'] && cs['background-position'] != undefined) ns['background-position'] = cs['background-position']
     if(cs['background-repeat'] != ds['background-repeat'] && cs['background-repeat'] != undefined) ns['background-repeat'] = cs['background-repeat']

@@ -24,7 +24,8 @@ export class FileUploadService {
   }
 
   getfile(page:any):Observable<any> {
-    return this.http.post(this.getFileApi, page);
+    return this.http.post(this.getFileApi, page)
+    .pipe(catchError(this.errorHandler));
   }
 
   // Returns an observable
@@ -34,11 +35,13 @@ export class FileUploadService {
     formData.append('uploadedImage', file, file.name);
     // Make http post request over api
     // with formData as req
-    return this.http.post(this.uploadApi, formData);
+    return this.http.post(this.uploadApi, formData)
+    .pipe(catchError(this.errorHandler));
   }
 
   getAllImgs():Observable<any> {
-    return this.http.get(this.getAllImgsApi);
+    return this.http.get(this.getAllImgsApi)
+    .pipe(catchError(this.errorHandler));
   }
 
   saveondb(imagedata: any):Observable<any> {

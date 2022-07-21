@@ -4,6 +4,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
+import { ImageService } from '../_services/image.service';
 
 @Component({
   selector: 'app-website',
@@ -15,7 +16,8 @@ export class WebsiteComponent implements OnInit {
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               private router: Router, 
-              private route: ActivatedRoute, ) { }
+              private route: ActivatedRoute,
+              public _image: ImageService ) { }
 
   kbpages:any[] = [];
   poupsidebar = false;

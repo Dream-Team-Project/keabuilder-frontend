@@ -73,85 +73,53 @@ export class GeneralService {
   parser = new DOMParser();
   file:any = {
     html: '',
-    css: ''
+    css: '',
+    load: false
   };
+  loading = {
+    success: false,
+    error: false
+  };
+  saveDisabled:boolean = false;
 
-  interval = setInterval((e:any)=>{
-    if(this.webpage.uniqueid) {
-      this.getWebPageDetails();
-      clearInterval(this.interval);
-    }
-  })
-
-  constructor(private _snackBar: MatSnackBar, private fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService, private webPageService: WebpagesService) {
+  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService, public webPageService: WebpagesService) {
     this.username = this.tokenStorageService.getUser().username;
+    this.username = 'Abhi';
     this.main.author = this.username;
     this.subdomain = this.joinWthDash(this.username);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
-    this.interval;
   }
 
-  getWebPageDetails() {
+  getWebPageDetails(uniqueid:any) {
+    this.webpage.uniqueid = uniqueid;
     this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
       (e:any)=>{
-        this.webpage = e.data[0];
-        this.main.name = this.webpage.page_name;
-        this.main.title = this.webpage.page_title;
-        this.main.path = this.webpage.page_path;
-        if(this.webpage.page_description) this.main.description = this.webpage.page_description;
-        if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
-        this.main.author = this.webpage.page_author;
-        this.fileUploadService.getfile(this.webpage).subscribe(
-          (file:any)=>{
-            this.file.html = this.parser.parseFromString(file.html, 'text/html');
-            this.file.css = file.css;
-            this.setBuilder();
-          }
-        )
+          if(e.data.length == 0) window.location.replace(window.location.origin);
+          this.webpage = e.data[0];
+          this.main.name = this.webpage.page_name;
+          this.main.title = this.webpage.page_title;
+          this.main.path = this.webpage.page_path;
+          if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+          if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+          this.main.author = this.webpage.page_author;
+          this.fileUploadService.getfile(this.webpage).subscribe({
+            next: (file:any)=>{
+              this.file.html = this.parser.parseFromString(file.html, 'text/html');
+              this.file.css = file.css;
+              this.file.load = true;
+            },
+            error: (err:any) => {
+              this.loading.error = true;
+            }
+          });
       }
     )
   }
 
-  setBuilder() {
-    var build = this.file.html.getElementsByTagName('BODY')[0];
-    var style = this.file.css;
-
-    // build.querySelectorAll('.kb-section').forEach((ele:any)=>{
-    //   var styleArr = style.substring(style.indexOf(ele.id)+ele.id.length, style.indexOf('}')).split(';');
-    //   styleArr.pop();
-    //   for(var i = 0; i < styleArr.length; i++) {
-    //     styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
-    //   }   
-    // })
-
-    var ele = '#kb-main{';
-    var styleArr = style.substring(style.indexOf(ele)+ele.length, style.indexOf('}')).split(';');
-    styleArr.pop();
-    for(var i = 0; i < styleArr.length; i++) {
-      styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
-    }
-    this.main.style.desktop = JSON.parse('{'+styleArr.join(',')+'}');
-
-    // console.log(JSON.parse(str));
-    // console.log(Object.entries(style).map(([a, b]) => `${a}:${b}`).join(';'));
-    // build.forEach((item:any)=>{
-    //   console.log(item);
-    // })
-  }
-
   saveHTML(main:any, sections:any) {
-    // this.webPageService.getWebpages().subscribe(
-    //   (e)=>{
-    //     e.data.every((d:any)=>{
-    //       if(d.page_path == this.main.path) {
-    //         this.main.path = this.main.path + Math.random().toString(9).slice(2);
-    //         return false;
-    //       }
-    //       else return true;
-    //     })
-    //   }
-    // )
+    
+    this.saveDisabled = true;
     this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
     this.removeStyle('#kb-main');
@@ -195,10 +163,13 @@ export class GeneralService {
           thumbnail: '',
           tracking_code: '',
         }
-        console.log(pagedata);
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
-            this.getWebPageDetails();
+            this.showfloatnavtoggle();
+            this.saveDisabled = false;
+            this.openSnackBar('Page has been saved', 'X');
+            this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+            this.getWebPageDetails(this.webpage.uniqueid);
         });
       },
     error=>{console.log(error)})
@@ -214,11 +185,11 @@ export class GeneralService {
   }
 
   getAllStyle() {
-    var querry = ' @media only screen and (max-width:';
+    var querry = '@media only screen and (max-width:';
     return this.pagestyling.desktop +
-    querry + '1024px) {'+this.pagestyling.tablet_h+'}' +
-    querry + '768px) {'+this.pagestyling.tablet_v+'}' +
-    querry + '426px) {'+this.pagestyling.mobile+'}';
+    querry + '1024px) and (min-width:769px){'+this.pagestyling.tablet_h+'}' +
+    querry + '768px) and (min-width:426px){'+this.pagestyling.tablet_v+'}' +
+    querry + '426px){'+this.pagestyling.mobile+'}';
   }
 
   setPageStyle(sections:any) {
@@ -243,7 +214,7 @@ export class GeneralService {
     if(block.style.tablet_v) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.type == 'row') {
-      var clmwrp = ['#' + block.id + ' .kb-column-wrap {gap:', 'rem;}']
+      var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}']
       this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
       if(block.columnGap.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + clmwrp.join(block.columnGap.tablet_h);
       if(block.columnGap.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + clmwrp.join(block.columnGap.tablet_v);
@@ -268,7 +239,7 @@ export class GeneralService {
     if(ele.style.mobile || ele.content.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.mobile, ...ele.style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     
     var eleitma = ['#' + ele.id + '{justify-content:', ';}']
-    this.pagestyling.desktop = this.pagestyling.desktop + eleitma.join(ele.item_alignment.desktop);
+    if(ele.item_alignment.desktop != '') this.pagestyling.desktop = this.pagestyling.desktop + eleitma.join(ele.item_alignment.desktop);
     if(ele.item_alignment.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + eleitma.join(ele.item_alignment.tablet_h);
     if(ele.item_alignment.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + eleitma.join(ele.item_alignment.tablet_v);
     if(ele.item_alignment.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + eleitma.join(ele.item_alignment.mobile);

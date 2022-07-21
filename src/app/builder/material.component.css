@@ -44,7 +44,6 @@ image-cropper {
 ::ng-deep .mat-tooltip {
     position: relative;
     font-size: 13px;
-    border-radius: 10px;
     background: rgba(37, 36, 36, 0.8);
     overflow: visible;
     /* z-index: 99999; */

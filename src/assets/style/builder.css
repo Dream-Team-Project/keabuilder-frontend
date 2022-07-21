@@ -317,3 +317,19 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* scrolling */
+
+* ::-webkit-scrollbar, .kb-scroll ::-webkit-scrollbar {
+    width: 6px;
+    transition: 2s ease-in-out;
+    z-index: 9999;
+}
+
+.kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
+    width: 6px!important;
+}
+
+*:hover ::-webkit-scrollbar {
+    width: 6px;
+}
