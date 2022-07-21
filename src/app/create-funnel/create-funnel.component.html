@@ -436,7 +436,7 @@
               <ng-container *ngFor="let item of emailoptintemps; index as i;">
                 <li *ngIf="item.templatefor==selectedcampaign" >
                     <div class="kb-showtemp-header">
-                      <img [src]="item.thumbnail" class="img-fluid" alt="">
+                      <img [src]="'/assets/'+item.thumbnail" class="img-fluid" alt="">
                     </div>
                     <div class="kb-showtemp-footer">
                       <p>{{item.title}}</p>

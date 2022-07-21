@@ -7,7 +7,7 @@
     height: 265px;
     object-fit: cover;
 }
-.keabuilder-title-board {
+.keabuilder-title-board, .keabuilder-title {
   padding: 15px 0px;
 }
 .keabuilder-title-board input {
@@ -27,7 +27,7 @@
  display: block;
 }
 .statbadg{
-  position: absolute;
+    position: absolute;
     top: 0px;
     right: 13px;
 }
@@ -144,3 +144,9 @@
     font-size: 13px;
     padding: 20px 10px 20px 30px;
 }
+
+#kb-offcanvas-actions .offcanvas.fulltemplate{
+    width:96%;
+}
+
+

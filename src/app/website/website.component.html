@@ -1,17 +1,20 @@
 <div id="pagesinsidepage">
 
   <div id="kb-offcanvas-actions" *ngIf="poupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" [class.fulltemplate] = "selecttemplate" >
         
         <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
-        <div *ngIf="firstpart">
+        <div *ngIf="quickeditpopup">
             <h6><b>Quick Edit</b></h6>
             <hr>
 
             <mat-form-field class="kb-full-width" appearance="fill">
               <mat-label>Page Url</mat-label>
               <input matInput [(ngModel)]="pageurl" name="pageurl">
+              <small class="text-danger" *ngIf="pathcheck2">
+                Path must be <strong>unique</strong>
+              </small>
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
@@ -21,7 +24,7 @@
 
             <mat-form-field class="kb-full-width" appearance="fill">
               <mat-label>SEO Description</mat-label>
-              <textarea matInput name="seodescr">{{seodescr}}</textarea>
+              <textarea [(ngModel)]="seodescr" matInput name="seodescr">{{seodescr}}</textarea>
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
@@ -42,13 +45,113 @@
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Seo Author</mat-label>
+              <mat-label>SEO Author</mat-label>
               <input matInput name="seoauthor" [(ngModel)]="seoauthor">
             </mat-form-field>
 
-            <button mat-raised-button color="primary"  >
+            <button mat-raised-button color="primary" (click)="savequickdetails()" >
                 <i class="fas fa-save"></i> Save Details
             </button>
+        </div>
+
+        <div *ngIf="addnewpagepopup">
+
+          <h6><b>Create A Page</b></h6>
+          <hr>
+
+          <div *ngIf="insidepagefirst">
+
+            <button mat-raised-button color="accent" class="btn-block mb-2" (click)="createfromscratch()" ><i class="fas fa-plus"></i> Create From Scratch</button>
+            <button mat-raised-button color="accent" class="btn-block mb-2" (click)="selectfromtemplate()" ><i class="fab fa-angellist"></i> Select From Template</button>
+            
+          </div>
+
+          <div *ngIf="insidepagesecond">
+
+            <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
+
+              <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Page Name</mat-label>
+                <input type="text" matInput [(ngModel)]="form.pagename" (blur)="changemyname($event)" name="pagename" [formControl]="userFormControl" placeholder="Ex. Home" required minlength="3">
+                <mat-error *ngIf="userFormControl.hasError('required')">
+                  Page Name is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="userFormControl.hasError('minlength')">
+                  Page Name must be at least <strong>3</strong> characters
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Page Path</mat-label>
+                <input type="text" matInput [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home" required minlength="3" (blur)="pathuniqueremove()" >
+                <mat-error *ngIf="userFormControl2.hasError('required')">
+                  Path Name is <strong>required</strong>
+                </mat-error>
+                <small class="text-danger" *ngIf="pathcheck">
+                  Path must be <strong>unique</strong>
+                </small>
+                <mat-error *ngIf="userFormControl2.hasError('minlength')">
+                  Page Name must be at least <strong>3</strong> characters
+                </mat-error>
+              </mat-form-field>
+    
+              <button mat-raised-button color="primary" type="submit" class="mt-2" ><i class="fas fa-plus"></i> Create Page</button>
+    
+            </form>
+
+          </div>
+
+          <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
+
+        </div>
+
+        <div *ngIf="showmytemplates">
+
+          <div class="container-fluid">
+
+            <div class="row">
+              <div class="col-md-2">
+                <button mat-raised-button color="accent" (click)="createfromscratch()">
+                  <i class="fas fa-plus"></i> Create From Scratch
+                </button>
+              </div>
+              <div class="col-md-6">
+                <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
+                  <input type="text" class="form-control" id="template-search" placeholder="Search Page Templates">
+                  <div class="form-control-position">
+                      <i class="fab fa-searchengin"></i>                        
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-4 cardpage mt-2 " *ngFor="let pagetemplate of pagetemplates; index as i;" >
+                <div>
+                  <img [src]="pagetemplate.thumbnail" alt="" class="img-fluid img-fit">
+        
+                  <div class="keabuilder-title line-ellipsis">
+                    <span>{{pagetemplate.title}}</span>
+                  </div>
+        
+                  <button mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+                  <button mat-raised-button color="primary" (click)="usetemplate(pagetemplate.id)" >Use This Template <i class="fas fa-check"></i></button>
+        
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <mat-paginator [length]="100"
+                  [pageSize]="10"
+                  [pageSizeOptions]="[5, 10, 25, 100]"
+                  aria-label="Select page">
+                </mat-paginator>
+              </div>
+            </div>
+
+          </div>
         </div>
 
     </div>
@@ -59,14 +162,14 @@
     <div class="row">
       <div class="col-md-6">
         <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
-          <input type="text" class="form-control" id="email-search" placeholder="Search Pages">
+          <input type="text" class="form-control" id="page-search" placeholder="Search Pages">
           <div class="form-control-position">
               <i class="fab fa-searchengin"></i>                        
           </div>
         </fieldset>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button class="ml-2" [routerLink]="['/builder/website/new']">Add New Page <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="ml-2" (click)="addnewpage()" >Add New Page <i class="fas fa-plus"></i></button>
         <button mat-raised-button class="ml-2" [routerLink]="['/website-pages']" color="primary">Pages <i class="far fa-window-restore"></i></button>
         <button mat-raised-button [routerLink]="['/website-design']" >Website Design
         <i class="fas fa-palette"></i></button>
@@ -96,7 +199,7 @@
 
           </div>
 
-          <p class="kb-pagedate" matTooltip="Last Update" matTooltipPosition="above">
+          <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
             <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
           </p>
 
@@ -119,8 +222,8 @@
               <i class="fas fa-trash mr-2"></i> Delete
             </button>
           </mat-menu>
-          <button class="btn btn-secondary" (click)="checkpagesettings('preview',kbpage.page_url)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-          <button class="btn btn-primary" (click)="redirectToBuilder(kbpage.uniqueid)" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+          <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+          <button (click)="redirectToBuilder(kbpage.uniqueid)" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
 
         </div>
       </div>
