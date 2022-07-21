@@ -140,6 +140,7 @@ export class WebsiteComponent implements OnInit {
           }
 
           if(data.found==0){
+            
             this.redirectToBuilder(data.uniqueid);
           }
 
