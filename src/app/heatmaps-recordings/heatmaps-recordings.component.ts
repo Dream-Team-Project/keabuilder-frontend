@@ -30,7 +30,7 @@ export class HeatmapsRecordingsComponent implements OnInit {
         });
 
         this.video_player = document.getElementById("kb-heatmapvideo");
-        this.video_player.setAttribute("src", '/assets/videos_heatmaps/'+this.video_list[this.video_index]);
+        this.video_player.setAttribute("src", '/assets/uploads/videos_heatmaps/'+this.video_list[this.video_index]);
         this.video_player.play();
         (<HTMLElement>document.getElementById('playback_activity')).innerText = 'Viewing...';
         (<HTMLElement>document.getElementById('kb-progressbar')).classList.add('active');
@@ -88,12 +88,12 @@ onVideoEnded(){
     else{
         this.video_index = 0;
     }
-    this.video_player.setAttribute("src", '/assets/videos_heatmaps/'+this.video_list[this.video_index]);
+    this.video_player.setAttribute("src", '/assets/uploads/videos_heatmaps/'+this.video_list[this.video_index]);
     this.video_player.play();
 }
 repeat_record(){
      this.video_player.pause();
-     this.video_player.setAttribute("src", '/assets/videos_heatmaps/'+this.video_list[0]);
+     this.video_player.setAttribute("src", '/assets/uploads/videos_heatmaps/'+this.video_list[0]);
      this.video_index = 0;
      this.video_player.defaultPlaybackRate = 1;
      (<HTMLInputElement>document.getElementById('play_speed_selector')).value = '2';

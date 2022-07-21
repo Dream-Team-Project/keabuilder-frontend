@@ -5,6 +5,7 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-website',
@@ -16,7 +17,8 @@ export class WebsiteComponent implements OnInit {
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               private router: Router, 
-              private route: ActivatedRoute, ) { }
+              private route: ActivatedRoute,
+              private tokenStorage: TokenStorageService ) { }
 
   form: any = {
     pagename: null,
@@ -39,6 +41,37 @@ export class WebsiteComponent implements OnInit {
   quickeditid = '';
   errorMessage = '';
   pathcheck = false;
+  pathcheck2 = false;
+  insidepagefirst = true;
+  insidepagesecond = false;
+  selecttemplate = false;
+  showmytemplates = false;
+  pagetemplates:any[] = [{
+    id:1,
+    title:'The Real Work',
+    thumbnail:'https://themewagon.com/wp-content/uploads/2020/12/eflyer.jpg'
+  },
+  {
+    id:2,
+    title:'Creation Work',
+    thumbnail:'https://assets-global.website-files.com/5e593fb060cf877cf875dd1f/60b6b54cca1a1af1b2a9acea_gallery01.jpeg'
+  },
+  {
+    id:3,
+    title:'Home Page',
+    thumbnail:'https://freshdesignweb.com/wp-content/uploads/Personal-Website-Templates.jpg'
+  },
+  {
+    id:4,
+    title:'About',
+    thumbnail:'https://www.theme-junkie.com/wp-content/uploads/Ober-wp-theme.jpg'
+  },
+  {
+    id:5,
+    title:'Survey',
+    thumbnail:'https://themewagon.com/wp-content/uploads/2020/12/eflyer.jpg'
+  }
+  ];
 
   ngOnInit(): void {
 
@@ -46,21 +79,70 @@ export class WebsiteComponent implements OnInit {
 
   }
 
+  pathuniqueremove(){
+    this.pathcheck = false;
+  }
+
+  selectfromtemplate(){
+    this.selecttemplate = true;
+    
+    this.insidepagefirst = false;
+    this.insidepagesecond = true;
+
+    this.quickeditpopup = false;
+    this.addnewpagepopup = false;
+
+    this.showmytemplates = true;
+  }
+
+  usetemplate(id:any){
+
+  }
+
+  createfromscratch(){
+    this.showmytemplates = false;
+    this.addnewpagepopup = true;
+      this.insidepagefirst = false;
+      this.insidepagesecond = true;
+    this.quickeditpopup = false;
+    this.selecttemplate = false;
+  }
+  
+  addnewpage(){
+    this.poupsidebar = true;
+    this.showmytemplates = false;
+    this.addnewpagepopup = true;
+      this.insidepagefirst = true;
+      this.insidepagesecond = false;
+    this.quickeditpopup = false;
+    this.selecttemplate = false;
+
+  }
+
   onSubmit(): void {
     const { pagename, pagepath } = this.form;
+    
+    var author = '';
+    if (this.tokenStorage.getToken()) {
+      author = this.tokenStorage.getUser().username;
+    }
 
     if(this.userFormControl.status=='VALID'){
 
-      //   this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor).subscribe({
-      //       next: data => {
-      //           // console.log(data);
-      //           this.router.navigate(['/create-funnel/'+data.data.hash+'/'+data.data.hash2],{relativeTo: this.route});
-            
-      //       },
-      //       error: err => {
-      //       this.errorMessage = err.error.message;
-      //       }
-      // });
+      this.webpagesService.validatepages(pagename, pagepath, author).subscribe({
+        next: data => {
+          console.log(data);
+
+          if(data.found==1){
+            this.pathcheck = true;
+          }
+
+          if(data.found==0){
+            this.redirectToBuilder(data.uniqueid);
+          }
+
+        }
+      });
       
     }
 
@@ -103,13 +185,13 @@ export class WebsiteComponent implements OnInit {
     }
   }
 
-  addnewpage(){
-    this.poupsidebar = true;
-    this.quickeditpopup = false;
-    this.addnewpagepopup = true;
-  }
-
   changepagename(id:any, title:any, type:any){
+
+      this.pageurl = '';
+      this.seotitle = '';
+      this.seodescr = '';
+      this.seoauthor = '';
+      this.keywords = [];
 
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
@@ -128,12 +210,12 @@ export class WebsiteComponent implements OnInit {
 
               }else if(type=='quickedit'){
                 
-                this.pageurl = data.data[0].page_url;
+                this.pageurl = data.data[0].page_path;
                 this.seotitle = data.data[0].page_title;
-                this.seodescr = data.data[0].seo_descr;
-                this.seoauthor = data.data[0].seo_author;
+                this.seodescr = data.data[0].page_description;
+                this.seoauthor = data.data[0].page_author;
 
-                var gettag = data.data[0].seo_keywords;
+                var gettag = data.data[0].page_keywords;
                   if(gettag!='' && gettag!=null){
                     var crtag = gettag.split(',');
                     this.keywords = crtag; 
@@ -144,15 +226,27 @@ export class WebsiteComponent implements OnInit {
                 this.poupsidebar = true;
 
               }
-
-            }else{
-              this._snackBar.open('Something Went Wrong!!', 'Close');
-            }
-         
-
+          }else{
+            this._snackBar.open('Something Went Wrong!!', 'Close');
+          }
 
         }
       });
+
+  }
+
+  savequickdetails(){
+
+    var gentags = this.keywords.toString();
+    this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
+      next: data => {
+        console.log(data);
+        if(data.found==1){
+          this.pathcheck2 = true;
+        }
+
+      }
+    });
 
   }
 
@@ -167,7 +261,7 @@ export class WebsiteComponent implements OnInit {
     if (value) {
       this.keywords.push(value);
 
-      var gentags = this.keywords.toString();
+      // var gentags = this.keywords.toString();
       // this.funnelService.addnewtags(this.selectedstep,gentags).subscribe({
       //   next: data => {
       //     console.log(data);
@@ -189,7 +283,7 @@ export class WebsiteComponent implements OnInit {
       this.keywords.splice(index, 1);
     }
 
-    var gentags = this.keywords.toString();
+    // var gentags = this.keywords.toString();
     // this.funnelService.addnewtags(this.selectedstep,gentags).subscribe({
     //   next: data => {
     //     console.log(data);

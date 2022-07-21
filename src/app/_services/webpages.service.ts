@@ -43,6 +43,27 @@ export class WebpagesService {
     }, httpOptions);
   }
 
+  validatepages(name: string, path:string, author:string):Observable<any> {
+    return this.http.post("/api/validatepage", {
+      name,
+      path,
+      author,
+    }, httpOptions);
+  }
+
+  savequickpagesdetails(pageurl: string, seotitle:string, seodescr:string, gentags:string, seoauthor:string, quickeditid:string):Observable<any> {
+    return this.http.post("/api/savequickpagesdetails", {
+      pageurl,
+      seotitle,
+      seodescr,
+      gentags,
+      seoauthor,
+      quickeditid,
+    }, httpOptions);
+  }
+
+  
+
 
 
 
