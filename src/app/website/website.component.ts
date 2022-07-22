@@ -155,6 +155,7 @@ export class WebsiteComponent implements OnInit {
             error=>{console.log(error)});
             // create page/folder
 
+            
             this.redirectToBuilder(data.uniqueid);
           }
 
