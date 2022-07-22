@@ -94,6 +94,15 @@ main {
     position: relative;
 }
 
+.kb-danger {
+  color: var(--kb-danger);
+}
+
+i.kb-danger {
+  margin-left: 5px;
+}
+
+
 .kb-alert-danger {
     color: #721c24;
     background-color: #f8d7da;

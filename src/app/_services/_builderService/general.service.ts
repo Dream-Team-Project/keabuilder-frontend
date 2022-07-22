@@ -81,12 +81,13 @@ export class GeneralService {
     error: false
   };
   saveDisabled:boolean = false;
+  pathError = false;
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService, public webPageService: WebpagesService) {
     this.username = this.tokenStorageService.getUser().username;
     this.username = 'Abhi';
     this.main.author = this.username;
-    this.subdomain = this.joinWthDash(this.username);
+    this.subdomain = 'https://'+this.joinWthDash(this.username);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
   }
@@ -118,25 +119,24 @@ export class GeneralService {
   }
 
   checkExstingPath(main:any, sections:any) {
-    var data = {
-      path: this.main.path
-    }
-    this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
-      console.log(e);
-      console.log(this.main.path);
-      console.log(this.webpage.page_path);
-      if(this.main.path == this.webpage.page_path || e.data.length == 0) {
-          this.saveHTML(main, sections);
-          console.log('save');
-          return true;
+    return new Promise<any>((resolve, reject) => {
+      var data = {
+        path: this.main.path
       }
-      else {
-        return false;
-      }
+      this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
+        if(this.main.path == this.webpage.page_path || e.data.length == 0) {
+            this.saveHTML(main, sections);
+            resolve(true);
+        }
+        else {
+            resolve(false);
+        }
+      })
     })
   }
 
   saveHTML(main:any, sections:any) {
+    return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
       this.removeStyle('#kb-main');
@@ -182,14 +182,13 @@ export class GeneralService {
           }
           this.webPageService.updateWebpage(pagedata).subscribe(
             (e:any)=>{
-              this.showfloatnavtoggle();
-              this.saveDisabled = false;
-              this.openSnackBar('Page has been saved', 'X');
               this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
               this.getWebPageDetails(this.webpage.uniqueid);
+              resolve(e);
           });
         },
       error=>{console.log(error)})
+    });
   }
 
   removeStyle(blockcls:string) {
@@ -283,6 +282,8 @@ export class GeneralService {
 
   selRespDevice(index:number) {
     this.respToggleDevice = this.respDevices[index];
+    this.showResp.toggle = true;
+    console.log(this.respToggleDevice);
   }  
 
   isAllHide(hide:any): boolean {
@@ -481,5 +482,9 @@ export class GeneralService {
     }
     this.allBlocksIds.push(temp.id);
     return 'kb-'+temp.type+'-'+temp.id;
+  }
+
+  redirectToWebsite() {
+    return window.location.replace('https:/keabuilder.com');
   }
 }

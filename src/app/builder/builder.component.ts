@@ -38,6 +38,38 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     }
   })
 
+  topBarLinks = [
+    {
+      name: 'Dashboard',
+      link: '/dashboard',
+      icon: 'fa-home'
+    },
+    {
+      name: 'Website',
+      link: '/website-design',
+      icon: 'fa-desktop'
+    },
+    {
+      name: 'Funnels',
+      link: '/funnels',
+      icon: 'fa-filter'
+    },
+    {
+      name: 'Membership',
+      link: '/membership',
+      icon: 'fa-shield-alt'
+    },
+    {
+      name: 'Form',
+      link: '/forms',
+      icon: 'fa-address-card'
+    },
+    {
+      name: 'Navigation',
+      link: '/navigation',
+      icon: 'fa-bars'
+    },
+  ]
 
   constructor(
     private router: Router,
@@ -65,23 +97,28 @@ export class BuilderComponent implements OnInit, AfterViewInit {
 
    takePageSS(main:any) {
     this._general.saveDisabled = true;
-    var checkPath:any = this._general.checkExstingPath(main, this._section.sections);
-    if(checkPath) {
-      this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-        var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
-        this.fileUploadService.upload(file).subscribe(
-          (event: any) => {
-              if (typeof (event) === 'object') {
-                  console.log(event);
-              }
-          });
-      })
-    }
-    else {
-      this._general.saveDisabled = false;
-      this.openPageSetting(null);
-      console.log('dont save');
-    }
+    this._general.showfloatnavtoggle();
+    this._general.checkExstingPath(main, this._section.sections).then(res =>{
+      if(res) {
+        this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+          var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
+          this.fileUploadService.upload(file).subscribe(
+            (event: any) => {
+                if (typeof (event) === 'object') {
+                  this._general.saveDisabled = false;
+                  this._general.pathError = false;
+                  this._general.openSnackBar('Page has been saved', 'X');
+                }
+            });
+        })
+      }
+      else {
+        this._general.saveDisabled = false;
+        this.openPageSetting(null);
+        this._general.pathError = true;
+      }
+    });
+
   }
 
   openPageSetting(event:any) {
@@ -199,7 +236,10 @@ export class BuilderComponent implements OnInit, AfterViewInit {
           secObj.rowArr.push(rowObj);          
         })
         this._section.sections.push(secObj);
-        if(html.querySelectorAll('.kb-section').length == this._section.sections.length) this._general.loading.success = true;
+        if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
+          this._section.savePageSession();
+          this._general.loading.success = true;
+        }
       })
     }
     else {
