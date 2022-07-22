@@ -8,6 +8,7 @@ import { ImageService } from '../_services/image.service';
 import {FormControl, Validators} from '@angular/forms';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { GeneralService } from '../_services/_builderService/general.service';
+import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
   selector: 'app-website',
@@ -22,7 +23,8 @@ export class WebsiteComponent implements OnInit {
               private route: ActivatedRoute,
               public _image: ImageService,
               private tokenStorage: TokenStorageService,
-              public _general: GeneralService) { }
+              public _general: GeneralService,
+              private fileuploadService: FileUploadService ) { }
 
   form: any = {
     pagename: null,
@@ -76,15 +78,21 @@ export class WebsiteComponent implements OnInit {
     thumbnail:'https://themewagon.com/wp-content/uploads/2020/12/eflyer.jpg'
   }
   ];
+  shortwaiting = true;
 
   ngOnInit(): void {
 
     this.showwebpages();
 
+    setTimeout(() => {
+        this.shortwaiting = false;
+    }, 1500);
+
   }
 
   pathuniqueremove(){
     this.pathcheck = false;
+    this.pathcheck2 = false;
   }
 
   selectfromtemplate(){
@@ -185,8 +193,20 @@ export class WebsiteComponent implements OnInit {
           element.updated_at = text1+' '+text2;
           this.kbpages.push(element);
 
-          // console.log(this.kbpages);
+          var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
 
+            this.fileuploadService.validateimg(genscrn).subscribe({
+              next: data => {
+  
+                if(data.data==0){
+                  element.thumbnail = 'webpage_thumbnail.jpg';
+                }else if(data.data==1){
+                  element.thumbnail = genscrn;
+                }
+  
+              }
+            });
+  
         });
 
       },
@@ -204,6 +224,14 @@ export class WebsiteComponent implements OnInit {
   }
 
   changepagename(id:any, title:any, type:any){
+
+      this.poupsidebar = true;
+      this.showmytemplates = false;
+      this.addnewpagepopup = false;
+        this.insidepagefirst = true;
+        this.insidepagesecond = false;
+      this.quickeditpopup = true;
+      this.selecttemplate = false;
 
       this.pageurl = '';
       this.seotitle = '';
@@ -230,8 +258,8 @@ export class WebsiteComponent implements OnInit {
                 
                 this.pageurl = data.data[0].page_path;
                 this.seotitle = data.data[0].page_title;
-                this.seodescr = data.data[0].page_description;
-                this.seoauthor = data.data[0].page_author;
+                this.seodescr = data.data[0].page_description == null ? '' : data.data[0].page_description;
+                this.seoauthor = data.data[0].page_author == null ? '' : data.data[0].page_author;
 
                 var gettag = data.data[0].page_keywords;
                   if(gettag!='' && gettag!=null){
@@ -258,9 +286,13 @@ export class WebsiteComponent implements OnInit {
     var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
+
         console.log(data);
         if(data.found==1){
           this.pathcheck2 = true;
+        }else if(data.found==0){
+          this.poupsidebar = false;
+          this.showwebpages();
         }
 
       }
@@ -275,22 +307,11 @@ export class WebsiteComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
     if (value) {
       this.keywords.push(value);
 
-      // var gentags = this.keywords.toString();
-      // this.funnelService.addnewtags(this.selectedstep,gentags).subscribe({
-      //   next: data => {
-      //     console.log(data);
-      //     this._snackBar.open('Successfully Tag Added!', 'Close');
-
-      //   }
-      // });
-
     }
   
-    // Clear the input value
     event.chipInput!.clear();
   }
 
@@ -301,14 +322,6 @@ export class WebsiteComponent implements OnInit {
       this.keywords.splice(index, 1);
     }
 
-    // var gentags = this.keywords.toString();
-    // this.funnelService.addnewtags(this.selectedstep,gentags).subscribe({
-    //   next: data => {
-    //     console.log(data);
-    //     this._snackBar.open('Successfully Tag removed!', 'Close');
-
-    //   }
-    // });
   }
 
   redirectToBuilder(id:any) {

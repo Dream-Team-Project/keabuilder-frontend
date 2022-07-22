@@ -221,7 +221,7 @@
     </div>
     <div *ngIf="_general.loading.success else loading" id="kb-bulder-nav" cdkDrag cdkDragBoundary="#page-container" (cdkDragEnded)="onDragEnded($event)">
         <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
-            <button mat-button (click)="_general.blockSelection = ''; _general.selectedBlock = _general.main; _style.blockSetting(_general.main); openDialog($event); _general.showfloatnavtoggle()" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
+            <button mat-button (click)="openPageSetting($event)" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
             <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
             <button mat-button [disabled]="_general.saveDisabled" (click)="takePageSS(main);" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
             <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button>

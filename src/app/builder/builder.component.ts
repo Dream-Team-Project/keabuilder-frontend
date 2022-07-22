@@ -79,7 +79,17 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     }
     else {
       this._general.saveDisabled = false;
+      this.openPageSetting(null);
+      console.log('dont save');
     }
+  }
+
+  openPageSetting(event:any) {
+    this._general.blockSelection = '';
+    this._general.selectedBlock = this._general.main;
+    this._style.blockSetting(this._general.main);
+    this.openDialog(event);
+    this._general.showfloatnavtoggle();
   }
 
   ngOnInit(): void {

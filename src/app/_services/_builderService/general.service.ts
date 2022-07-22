@@ -122,12 +122,15 @@ export class GeneralService {
       path: this.main.path
     }
     this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
+      console.log(e);
+      console.log(this.main.path);
+      console.log(this.webpage.page_path);
       if(this.main.path == this.webpage.page_path || e.data.length == 0) {
           this.saveHTML(main, sections);
+          console.log('save');
           return true;
       }
       else {
-        console.log('dont save');
         return false;
       }
     })

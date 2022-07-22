@@ -419,8 +419,8 @@ main.insidecont .box {
     right: 0;
     overflow: hidden;
     z-index: 999;
-    -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
-    animation: animation-offcanvas-fade-in 0.6s ease 1;    
+    -webkit-animation: animation-offcanvas-fade-in 0.6s ease-out 1;
+    animation: animation-offcanvas-fade-in 0.6s ease-out 1;    
     background: rgba(0, 0, 0, 0.1);
   }
   @keyframes animation-offcanvas-fade-in {
