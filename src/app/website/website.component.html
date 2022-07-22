@@ -83,7 +83,7 @@
 
               <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Page Path</mat-label>
-                <input type="text" matInput [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home" required minlength="3" (blur)="pathuniqueremove()" >
+                <input type="text" matInput (input)="form.pagepath = _general.joinWthDash(form.pagepath)" [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home" required minlength="3" (blur)="pathuniqueremove()" >
                 <mat-error *ngIf="userFormControl2.hasError('required')">
                   Path Name is <strong>required</strong>
                 </mat-error>

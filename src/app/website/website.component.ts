@@ -7,6 +7,7 @@ import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { ImageService } from '../_services/image.service';
 import {FormControl, Validators} from '@angular/forms';
 import { TokenStorageService } from '../_services/token-storage.service';
+import { GeneralService } from '../_services/_builderService/general.service';
 
 @Component({
   selector: 'app-website',
@@ -20,7 +21,8 @@ export class WebsiteComponent implements OnInit {
               private router: Router, 
               private route: ActivatedRoute,
               public _image: ImageService,
-              private tokenStorage: TokenStorageService ) { }
+              private tokenStorage: TokenStorageService,
+              public _general: GeneralService) { }
 
   form: any = {
     pagename: null,
@@ -140,6 +142,19 @@ export class WebsiteComponent implements OnInit {
           }
 
           if(data.found==0){
+            var page = {
+              head: '',
+              body: '',
+              style: '',
+              folder: pagepath,
+              prevFolder: pagepath
+            }
+            this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+              console.log(event);
+            },
+            error=>{console.log(error)});
+            // create page/folder
+
             this.redirectToBuilder(data.uniqueid);
           }
 

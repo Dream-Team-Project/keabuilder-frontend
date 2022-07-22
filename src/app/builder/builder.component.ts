@@ -63,16 +63,23 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       })
    }
 
-   takePageSS() {
-    this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-      var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
-      this.fileUploadService.upload(file).subscribe(
-        (event: any) => {
-            if (typeof (event) === 'object') {
-                console.log(event);
-            }
-        });
-    })
+   takePageSS(main:any) {
+    this._general.saveDisabled = true;
+    var checkPath:any = this._general.checkExstingPath(main, this._section.sections);
+    if(checkPath) {
+      this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+        var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
+        this.fileUploadService.upload(file).subscribe(
+          (event: any) => {
+              if (typeof (event) === 'object') {
+                  console.log(event);
+              }
+          });
+      })
+    }
+    else {
+      this._general.saveDisabled = false;
+    }
   }
 
   ngOnInit(): void {
@@ -184,6 +191,10 @@ export class BuilderComponent implements OnInit, AfterViewInit {
         this._section.sections.push(secObj);
         if(html.querySelectorAll('.kb-section').length == this._section.sections.length) this._general.loading.success = true;
       })
+    }
+    else {
+      this._general.loading.success = true;
+      this._section.addSection(0);
     }
   }
 

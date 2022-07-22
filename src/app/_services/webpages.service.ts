@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 const httpOptions = {
@@ -13,6 +13,7 @@ const httpOptions = {
 export class WebpagesService {
 
   allwebpagesApi = '/api/allwebpagesdata';
+  getwebpagebypathApi = '/api/getwebpagebypath';
   createwebpagesApi = '/api/createwebpage';
   updatewebpagesApi = '/api/updatewebpage';
   getsinglewebpageApi = '/api/singlewebpagedata';
@@ -21,6 +22,11 @@ export class WebpagesService {
 
   getWebpages(): Observable<any> {
     return this.http.get(this.allwebpagesApi);
+  }
+
+  getWebPageByPath(data:any): Observable<any> {
+    return this.http.post(this.getwebpagebypathApi, data)
+    .pipe(catchError(this.errorHandler));;
   }
 
   getSingleWebpage(uniqueid:string): Observable<any> {
@@ -62,9 +68,8 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  
-
-
-
+  errorHandler(error: HttpErrorResponse) {
+    return throwError(()=>error.message || "Sever Error")
+  }
 
 }
