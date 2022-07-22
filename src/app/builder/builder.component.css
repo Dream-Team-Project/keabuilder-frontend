@@ -11,12 +11,50 @@
     margin: 0 !important;
 }
 
+#topBar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    height: 25px;
+    padding: 0px 12px;
+    background-color: #000;
+    z-index: 99;
+    justify-content: space-between;
+}
+
+#topBar button.mat-button:hover, #topBar button.mat-button.resp-active  {
+    color: var(--primary-color);
+}
+
+::ng-deep #topBar button.mat-button {
+    padding: 0 10px;
+    transition: 0.2s ease-in-out;
+}
+
+::ng-deep #topBar .mat-button i, ::ng-deep #topBar .mat-button span{
+    font-size: 12px;
+}
+
+::ng-deep #topBar .innerLinks:last-child .mat-button span>span{
+    padding-right: 8px;
+}
+
+::ng-deep #topBar .mat-button img{
+    width: 13px;
+}
+
 #kb-main-conteiner {
     width: 100%;
     min-height: 100vh;
     height: auto;
     position: relative;
-    margin: 0 auto;
+    margin: 25px 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     transition: width 0.3s ease-out;
 }
 
@@ -29,6 +67,7 @@
 
 app-bulder-wireframe {
     z-index: 999;
+    margin-top: 25px;
 }
 
 .navdots {
@@ -193,7 +232,7 @@ div#kb-responsive-option.hide-btn button:nth-child(2), div#kb-undo-redo-option.h
     }
 }
 
-div#kb-responsive-option button:nth-child(1) i {
+.rotate-90 {
     transform: rotate(-90deg);
 }
 
@@ -222,7 +261,7 @@ div#kb-responsive-option.hide-btn button:nth-child(3), div#kb-undo-redo-option.h
     }
 }
 
-#kb-bulder-nav {
+#kb-builder-nav {
     position: fixed;
     left: 50%;
     bottom: 10px;
@@ -230,14 +269,14 @@ div#kb-responsive-option.hide-btn button:nth-child(3), div#kb-undo-redo-option.h
     transform: translateX(-50%);
 }
 
-#kb-bulder-nav span.nav-floating-btn-group {
+#kb-builder-nav span.nav-floating-btn-group {
     position: relative;
     left: 0px;
     top: 5px;
     display: block;
 }
 
-#kb-bulder-nav .nav-floating-btn-host {
+#kb-builder-nav .nav-floating-btn-host {
     position: relative;
     background: var(--row-color);
 }
@@ -260,7 +299,7 @@ button.nav-floating-btn,
     transition: 0.2s ease;
 }
 
-#kb-bulder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(1) {
+#kb-builder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(1) {
     left: -70px;
     top: 0px;
 }
@@ -320,7 +359,7 @@ button.nav-floating-btn,
     }
 }
 
-#kb-bulder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(2) {
+#kb-builder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(2) {
     left: -50px;
     top: -50px;
 }
@@ -380,7 +419,7 @@ button.nav-floating-btn,
     }
 }
 
-#kb-bulder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(3) {
+#kb-builder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(3) {
     left: 0px;
     top: -70px;
 }
@@ -440,7 +479,7 @@ button.nav-floating-btn,
     }
 }
 
-#kb-bulder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(4) {
+#kb-builder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(4) {
     left: 50px;
     top: -50px;
 }
@@ -500,7 +539,7 @@ button.nav-floating-btn,
     }
 }
 
-#kb-bulder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(5) {
+#kb-builder-nav .nav-floating-btn-group button.nav-floating-btn:nth-child(5) {
     left: 70px;
     top: 0px;
 }
@@ -560,7 +599,7 @@ button.nav-floating-btn,
     }
 }
 
-#kb-bulder-nav button.nav-floating-btn:hover,
+#kb-builder-nav button.nav-floating-btn:hover,
 .nav-floating-btn-host:hover,
 div#kb-responsive-option button:hover,
 div#kb-undo-redo-option button:hover {
@@ -765,7 +804,7 @@ div#kb-img-group .kb-img-inner-group {
     padding: 4.5px !important;
 }
 
-.kb-imgUploadPreview button {
+button.mat-button  {
     min-width: auto !important;
 }
 
@@ -2171,5 +2210,44 @@ ul.kb-sub-menu a:hover {
     width: 100%;
     height: 100%;
   }
+
+  div#kb-save-loader {
+        position: fixed;
+        left: 0;
+        top: 28px;
+        width: 100%;
+    }
+
+  #kb-save-loader div {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    background-color: #ccc;
+    top: 45%;
+    border-radius: 50%;
+  }
+  
+  #kb-save-loader div:nth-child(1) {
+    background-color: var(--section-color);
+    animation: move 2s infinite cubic-bezier(.2,.64,.81,.23);
+  }
+  #kb-save-loader div:nth-child(2) {
+    background-color: var(--row-color);
+    animation: move 2s 150ms infinite cubic-bezier(.2,.64,.81,.23);
+  }
+  #kb-save-loader div:nth-child(3) {
+    background-color: var(--primary-color);
+    animation: move 2s 300ms infinite cubic-bezier(.2,.64,.81,.23);
+  }
+  #kb-save-loader div:nth-child(4) {
+    background-color: var(--section-color);
+    animation: move 2s 450ms infinite cubic-bezier(.2,.64,.81,.23);
+  }
+  
+  @keyframes move {
+    0% {left: 0%;}
+    100% {left:100%;}
+  }
+
 
   /* loader */

@@ -1,7 +1,22 @@
 
 <div id="page-container" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
+    <div *ngIf="_section.sections.length != 0" id="topBar" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
+        <div class="innerLinks">
+            <button mat-button (click)="_general.redirectToWebsite()"><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
+            <button  mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
+        </div>
+        <div class="innerLinks">
+            <button mat-button [class.resp-active]="!_general.showResp.toggle" (click)="_general.showResp.toggle =  false" matTooltip="Desktop" matTooltipPosition="below"><i class="fa fa-desktop"></i></button>
+            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'tablet-h'" (click)="_general.selRespDevice(0)" matTooltip="Tablet Horizontal" matTooltipPosition="below"><i class="fas fa-tablet-alt rotate-90"></i></button>
+            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'tablet-v'" (click)="_general.selRespDevice(1)" matTooltip="Tablet Vertical" matTooltipPosition="below"><i class="fas fa-tablet-alt"></i></button>
+            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'mobile'" (click)="_general.selRespDevice(2)" matTooltip="Mobile" matTooltipPosition="below"><i class="fas fa-mobile-alt"></i></button>
+            <button mat-button matTooltip="Redo" matTooltipPosition="below" (click)="_section.redo()"><i class="fas fa-redo"></i></button>
+            <button mat-button matTooltip="Undo" matTooltipPosition="below" (click)="_section.undo()"><i class="fas fa-undo"></i></button>
+            <button mat-button [routerLink]="'/profile'"><span>{{_general.username}}</span><img [src]="_image.imgPath+'profile/avatar.png'"></button>
+        </div>
+    </div>
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
-    <div id="kb-block-container" [class.loading]="!_general.loading.success"  (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
+    <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
             <div id="kb-main" 
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
@@ -197,7 +212,7 @@
         <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
     </div>
     <div id="kb-responsive-option" *ngIf="_general.showResp.toggle" [class.show-btn]="_general.showResp.open" [class.hide-btn]="_general.showResp.close">
-        <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'tablet-h'" (click)="_general.selRespDevice(0)" matTooltip="Tablet Horizontal" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-tablet-alt"></i></button>
+        <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'tablet-h'" (click)="_general.selRespDevice(0)" matTooltip="Tablet Horizontal" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-tablet-alt rotate-90"></i></button>
         <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'tablet-v'" (click)="_general.selRespDevice(1)" matTooltip="Tablet Vertical" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-tablet-alt"></i></button>
         <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'mobile'" (click)="_general.selRespDevice(2)" matTooltip="Mobile" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
         <button mat-button (click)="_general.responsiveToggle(false)" [disabled]="_general.showResp.open || _general.showResp.close" class="nav-floating-btn-host">
@@ -219,9 +234,9 @@
                 </div>
         </button>
     </div>
-    <div *ngIf="_general.loading.success else loading" id="kb-bulder-nav" cdkDrag cdkDragBoundary="#page-container" (cdkDragEnded)="onDragEnded($event)">
+    <div *ngIf="_general.loading.success else loading" id="kb-builder-nav" cdkDrag cdkDragBoundary="#page-container" (cdkDragEnded)="onDragEnded($event)">
         <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
-            <button mat-button (click)="_general.blockSelection = ''; _general.selectedBlock = _general.main; _style.blockSetting(_general.main); openDialog($event); _general.showfloatnavtoggle()" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
+            <button mat-button (click)="openPageSetting($event)" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
             <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
             <button mat-button [disabled]="_general.saveDisabled" (click)="takePageSS(main);" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
             <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button>
@@ -249,4 +264,10 @@
             <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
         </div>
     </ng-template>
+    <div *ngIf="_general.saveDisabled" id="kb-save-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
 </div>

@@ -168,3 +168,21 @@ span.kb-setting-icon .kb-handle-block {
     text-align: right;
     padding-right: 5px;
 }
+
+input.errorInp {
+    border: 2px solid var(--kb-danger)!important;
+    animation: bounceBack 0.3s ease;
+    animation-delay: 0.2s;
+}
+
+@keyframes bounceBack {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
