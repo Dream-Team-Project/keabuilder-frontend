@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse,HttpHeaders} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
 providedIn: 'root'
@@ -67,4 +71,12 @@ export class FileUploadService {
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
+
+  validateimg(path:any):Observable<any> {
+    return this.http.post("/api/checkvalidimg", {
+      path,
+    }, httpOptions);
+  }
+
+
 }

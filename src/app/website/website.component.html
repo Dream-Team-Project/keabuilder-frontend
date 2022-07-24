@@ -11,7 +11,7 @@
 
             <mat-form-field class="kb-full-width" appearance="fill">
               <mat-label>Page Url</mat-label>
-              <input matInput [(ngModel)]="pageurl" name="pageurl">
+              <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()">
               <small class="text-danger" *ngIf="pathcheck2">
                 Path must be <strong>unique</strong>
               </small>
@@ -179,7 +179,13 @@
     <div class="row mt-4">
       <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
         <div>
-          <img [src]="_image.uploadImgPath+'keaimage-'+kbpage.uniqueid+'-screenshot.png'" alt="" class="img-fluid img-fit">
+          <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}">
+            <div id="loader" *ngIf="shortwaiting">
+              <div id="shadow"></div>
+              <div id="box"></div>
+              <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+            </div>
+          </div>
 
           <div class="keabuilder-title-board line-ellipsis">
             <span>{{kbpage.page_name}}</span>
