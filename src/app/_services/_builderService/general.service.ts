@@ -487,4 +487,8 @@ export class GeneralService {
   redirectToWebsite() {
     return window.location.replace('https:/keabuilder.com');
   }
+
+  redirectToBuilder(id:any) {
+    return window.location.replace('/builder/website/'+id);
+  }
 }

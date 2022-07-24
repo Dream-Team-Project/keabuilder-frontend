@@ -32,7 +32,7 @@
                         [id]="section.id" class="kb-section kb-block-container"
                         [class.kb-block-disabled]="_general.showInlineEditor">
                         <!-- sections setting navigation start -->
-                        <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
+                        <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor && !_general.saveDisabled">
                             <span *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
                             <span
                                 (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
@@ -66,7 +66,7 @@
                                 [class.kb-block-disabled]="_general.showInlineEditor"
                                 class="kb-row kb-block-container">
                                 <!-- rows setting navigation start -->
-                                <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
+                                <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor && !_general.saveDisabled">
                                     <span *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
                                     <span *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
                                         matTooltip="Column Structure" matTooltipPosition="above"><i
@@ -107,7 +107,7 @@
                                                 [class.kb-block-disabled]="_general.showInlineEditor"
                                                 [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
                                                 [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
-                                                <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
+                                                <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor && !_general.saveDisabled">
                                                     <span class="kb-handle-block kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
                                                     <span
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"

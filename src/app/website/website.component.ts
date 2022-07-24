@@ -156,7 +156,7 @@ export class WebsiteComponent implements OnInit {
             // create page/folder
 
             
-            this.redirectToBuilder(data.uniqueid);
+            this._general.redirectToBuilder(data.uniqueid);
           }
 
         }
@@ -309,10 +309,6 @@ export class WebsiteComponent implements OnInit {
 
     //   }
     // });
-  }
-
-  redirectToBuilder(id:any) {
-      this.router.navigate(['/builder/website',id])
   }
 
 }
