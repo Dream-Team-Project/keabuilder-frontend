@@ -11,7 +11,7 @@ import { GeneralService } from '../_services/_builderService/general.service';
 import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
-  selector: 'app-website',
+  selector: 'app-website-pages',
   templateUrl: './website-pages.component.html',
   styleUrls: ['./website-pages.component.css']
 })
