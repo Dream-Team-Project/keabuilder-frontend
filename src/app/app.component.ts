@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
 import { NavbarService } from './_services/navbar.service';
 import { AuthService } from './_services/auth.service';
-import { Router, RouterOutlet,NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
+import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +30,7 @@ export class AppComponent {
             switch (true) {
               case event instanceof NavigationStart: {
                 var e:any = event;
-                if(e.url.split('/')[1] == 'builder') {
+                if(e.url.split('/')[1] == 'builder' || e.url.split('/')[1] == 'preview') {
                   this._nav.hide();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }

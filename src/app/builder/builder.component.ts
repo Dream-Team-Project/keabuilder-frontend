@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectionStrategy, ElementRef} from '@angular/core';
 import { Options } from 'sortablejs';
-import { NavbarService } from '../_services/navbar.service';
 import { SectionService } from '../_services/_builderService/section.service';
 import { RowService } from '../_services/_builderService/row.service';
 import { ColumnService } from '../_services/_builderService/column.service';
@@ -10,7 +9,6 @@ import { GeneralService } from '../_services/_builderService/general.service';
 import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-import { WebpagesService } from '../_services/webpages.service';
 import { NgxCaptureService } from 'ngx-capture';
 import { FileUploadService } from '../_services/file-upload.service';
 
@@ -29,14 +27,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
 
   showNavFrom:string = 'bottom';
-  interval = setInterval((e:any)=>{
-    if(this._general.file.load) {
-      this._general.loading.success = false; 
-      clearInterval(this.interval);
-      this.setBuilder(this._general.file.html, this._general.file.css);
-      this._general.file.load = false;
-    }
-  })
 
   topBarLinks = [
     {
@@ -74,8 +64,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private _nav: NavbarService,
-    private webPageService: WebpagesService,
     // builder services start
     public _style: StyleService,
     public _section: SectionService,
@@ -91,12 +79,17 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     _general.loading.success = false;
     _general.loading.error = false;
       this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.getWebPageDetails(params.get('id'));
+        _general.getWebPageDetails(params.get('id')).then(e=> {
+          this._general.loading.success = false; 
+          this.setBuilder(this._general.file.html, this._general.file.css);
+          this._general.file.load = false;
+        });
       })
    }
 
-   takePageSS(main:any) {
+  takePageSS(main:any) {
     this._general.saveDisabled = true;
+    this._general.pathError = false;
     this._general.showfloatnavtoggle();
     this._general.checkExstingPath(main, this._section.sections).then(res =>{
       if(res) {
@@ -106,8 +99,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             (event: any) => {
                 if (typeof (event) === 'object') {
                   this._general.saveDisabled = false;
-                  this._general.pathError = false;
-                  this._general.openSnackBar('Page has been saved', 'X');
+                  this._general.openSnackBar('Page has been done', 'X');
                 }
             });
         })
@@ -118,7 +110,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
         this._general.pathError = true;
       }
     });
-
   }
 
   openPageSetting(event:any) {
@@ -186,6 +177,13 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             tablet_v: this.filterStyle(row.id+cw,css,'768,426'),
             mobile: this.filterStyle(row.id+cw,css,'426')            
           }
+          var colWrap = row.querySelector('.kb-column-wrap');
+          rowObj.columnRev = {
+            desktop: colWrap.classList.contains('kb-desk-flex-rev'),
+            tablet_h: colWrap.classList.contains('kb-tab-h-flex-rev'),
+            tablet_v: colWrap.classList.contains('kb-tab-v-flex-rev'),
+            mobile: colWrap.classList.contains('kb-mob-flex-rev')  
+          }
           rowObj.columnGap.desktop = rowObj.columnGap.desktop ? rowObj.columnGap.desktop.gap.split('rem')[0] : 0;
           rowObj.columnGap.tablet_h = rowObj.columnGap.tablet_h ? rowObj.columnGap.tablet_h.gap.split('rem')[0] : 'auto';
           rowObj.columnGap.tablet_v = rowObj.columnGap.tablet_v ? rowObj.columnGap.tablet_v.gap.split('rem')[0] : 'auto';
@@ -229,12 +227,36 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'426')
               } 
               eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
+              eleObj.hide = {
+                desktop: ele.classList.contains('kb-d-desk-none'),
+                tablet_h: ele.classList.contains('kb-d-tab-h-none'),
+                tablet_v: ele.classList.contains('kb-d-tab-v-none'),
+                mobile: ele.classList.contains('kb-d-mob-none')  
+              }
               colObj.elementArr.push(eleObj);
             })
+            colObj.hide = {
+              desktop: col.classList.contains('kb-d-desk-none'),
+              tablet_h: col.classList.contains('kb-d-tab-h-none'),
+              tablet_v: col.classList.contains('kb-d-tab-v-none'),
+              mobile: col.classList.contains('kb-d-mob-none')  
+            }
             rowObj.columnArr.push(colObj);
           })
+          rowObj.hide = {
+            desktop: row.classList.contains('kb-d-desk-none'),
+            tablet_h: row.classList.contains('kb-d-tab-h-none'),
+            tablet_v: row.classList.contains('kb-d-tab-v-none'),
+            mobile: row.classList.contains('kb-d-mob-none')  
+          }
           secObj.rowArr.push(rowObj);          
         })
+        secObj.hide = {
+          desktop: sec.classList.contains('kb-d-desk-none'),
+          tablet_h: sec.classList.contains('kb-d-tab-h-none'),
+          tablet_v: sec.classList.contains('kb-d-tab-v-none'),
+          mobile: sec.classList.contains('kb-d-mob-none')  
+        }
         this._section.sections.push(secObj);
         if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
           this._section.savePageSession();

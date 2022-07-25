@@ -10,6 +10,7 @@ import { WebpagesService } from '../webpages.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class GeneralService {
   username:string = '';
   subdomain:string = '';
@@ -93,29 +94,37 @@ export class GeneralService {
   }
 
   getWebPageDetails(uniqueid:any) {
-    this.webpage.uniqueid = uniqueid;
-    this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
-      (e:any)=>{
-          if(e.data.length == 0) window.location.replace(window.location.origin);
-          this.webpage = e.data[0];
-          this.main.name = this.webpage.page_name;
-          this.main.title = this.webpage.page_title;
-          this.main.path = this.webpage.page_path;
-          if(this.webpage.page_description) this.main.description = this.webpage.page_description;
-          if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
-          this.main.author = this.webpage.page_author;
-          this.fileUploadService.getfile(this.webpage).subscribe({
-            next: (file:any)=>{
-              this.file.html = this.parser.parseFromString(file.html, 'text/html');
-              this.file.css = file.css;
-              this.file.load = true;
-            },
-            error: (err:any) => {
-              this.loading.error = true;
-            }
-          });
-      }
-    )
+    return new Promise<any>((resolve, reject) => {
+      this.webpage.uniqueid = uniqueid;
+      this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
+        (e:any)=>{
+            if(e.data.length == 0) window.location.replace(window.location.origin);
+            this.webpage = e.data[0];
+            this.main.name = this.webpage.page_name;
+            this.main.title = this.webpage.page_title;
+            this.main.path = this.webpage.page_path;
+            if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+            if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+            this.main.author = this.webpage.page_author;
+            this.fileUploadService.getfile(this.webpage).subscribe({
+              next: (file:any)=>{
+                this.file.html = this.parser.parseFromString(file.html, 'text/html');
+                this.file.css = file.css;
+                this.file.load = true;
+                resolve(true);
+              },
+              error: (err:any) => {
+                this.loading.error = true;
+                resolve(false);
+              }
+            });
+        },
+        (err:any) => {
+          this.loading.error = true;
+          resolve(false);
+        }
+      )
+    })
   }
 
   checkExstingPath(main:any, sections:any) {
@@ -125,7 +134,7 @@ export class GeneralService {
       }
       this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
         if(this.main.path == this.webpage.page_path || e.data.length == 0) {
-            this.saveHTML(main, sections);
+            this.saveHTML(main, sections, false);
             resolve(true);
         }
         else {
@@ -135,7 +144,11 @@ export class GeneralService {
     })
   }
 
-  saveHTML(main:any, sections:any) {
+  preview(main:any, sections:any) {
+    this.saveHTML(main, sections, true);
+  }
+
+  saveHTML(main:any, sections:any, preview:boolean) {
     return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
@@ -154,10 +167,9 @@ export class GeneralService {
       '<meta name="author" content="'+this.main.author+'">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       '<title>'+this.main.title+'</title>' +        
-      '<link rel="stylesheet" href="./'+this.main.path+'/style.css"><link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">';
-
+      '<link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">' +
+      (!preview ? '<link rel="stylesheet" href="./'+this.main.path+'/style.css">' : '');
       this.setPageStyle(sections);
-
       var page = {
         head: this.pagehtml.querySelector('head').outerHTML,
         body: this.pagehtml.querySelector('body').outerHTML,
@@ -165,29 +177,37 @@ export class GeneralService {
         folder: this.main.path,
         prevFolder: this.webpage.page_path
       }
-      this.fileUploadService.createpage(page).subscribe(
-        (event:any) => {
-          var pagedata = {
-            id: this.webpage.id,
-            uniqueid: Math.random().toString(20).slice(2),
-            page_name: this.main.name,
-            page_title: this.main.title,
-            page_path: this.main.path,
-            page_description: this.main.description,
-            page_keywords: this.main.keywords.join(','),
-            page_author: this.main.author,
-            page_status: 1,
-            thumbnail: '',
-            tracking_code: '',
-          }
-          this.webPageService.updateWebpage(pagedata).subscribe(
-            (e:any)=>{
-              this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-              this.getWebPageDetails(this.webpage.uniqueid);
-              resolve(e);
-          });
-        },
-      error=>{console.log(error)})
+      if(preview) {
+        localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
+        window.open(window.location.protocol+'//'+window.location.host+'/preview/website/'+this.webpage.uniqueid, '_blank');
+      }
+      else {
+        this.fileUploadService.createpage(page).subscribe(
+          (event:any) => {
+            var pagedata = {
+              id: this.webpage.id,
+              uniqueid: Math.random().toString(20).slice(2),
+              page_name: this.main.name,
+              page_title: this.main.title,
+              page_path: this.main.path,
+              page_description: this.main.description,
+              page_keywords: this.main.keywords.join(','),
+              page_author: this.main.author,
+              page_status: 1,
+              thumbnail: '',
+              tracking_code: '',
+            }
+            this.webPageService.updateWebpage(pagedata).subscribe(
+              (e:any)=>{
+                this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+                this.getWebPageDetails(this.webpage.uniqueid);
+                resolve(e);
+            });
+          },
+        error=>{
+          resolve(error);
+        })
+      }
     });
   }
 
@@ -461,7 +481,8 @@ export class GeneralService {
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 3000
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 
@@ -486,5 +507,9 @@ export class GeneralService {
 
   redirectToWebsite() {
     return window.location.replace('https:/keabuilder.com');
+  }
+
+  redirectToBuilder(id:any) {
+    return window.location.replace('/builder/website/'+id);
   }
 }

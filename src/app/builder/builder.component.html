@@ -1,6 +1,6 @@
 
-<div id="page-container" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
-    <div *ngIf="_section.sections.length != 0" id="topBar" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
+<div id="page-container" [class.hovernone]="_general.saveDisabled" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
+    <div *ngIf="_section.sections.length != 0" id="topBar" [class.loaderShadow]="_general.saveDisabled" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div class="innerLinks">
             <button mat-button (click)="_general.redirectToWebsite()"><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
             <button  mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
@@ -18,7 +18,7 @@
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
-            <div id="kb-main" 
+            <div id="kb-main"
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div name="section" class="kb-drag-container" [sortablejs]="_section.sections"
                     [sortablejsOptions]="builderSectionOptions">
@@ -239,7 +239,8 @@
             <button mat-button (click)="openPageSetting($event)" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
             <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
             <button mat-button [disabled]="_general.saveDisabled" (click)="takePageSS(main);" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
-            <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button>
+            <button mat-button (click)="_general.preview(main, _section.sections)" matTooltip="Preview" matTooltipPosition="above" class="nav-floating-btn"><i class="fa fa-external-link-alt"></i></button>
+            <!-- <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button> -->
             <button mat-button (click)="_general.wireframeToggle(true)" matTooltip="Wireframe" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
         </span>
         <button mat-button cdkDragHandle (click)="_general.showfloatnavtoggle()" [disabled]="_general.showNavAnim.open || _general.showNavAnim.close" class="nav-floating-btn-host">

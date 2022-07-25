@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
+import { PagePreviewComponent } from './page-preview/page-preview.component';
 import { BuilderComponent } from './builder/builder.component';
 import { BuilderSettingComponent } from './builder-setting/builder-setting.component';
 import { BulderWireframeComponent } from './bulder-wireframe/bulder-wireframe.component';
@@ -105,6 +106,8 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder/website/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/funnel/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  { path: 'preview/website/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'preview/funnel/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -133,6 +136,7 @@ export const RoutingComponents =
     CreateFunnelSalesComponent,
     CreateFunnelSettingsComponent,
     ProfileComponent,
+    PagePreviewComponent,
     BuilderComponent,
     BuilderSettingComponent,
     BulderWireframeComponent, 

@@ -19,12 +19,17 @@ export class FileUploadService {
   deleteFromDB = "./api/deletefromdb";
   deleteFile = "./api/deletefile";
   createPageApi = "./api/savepage";
+  renamePageApi = "./api/renamepage";
   getFileApi = "./api/getpage";
     
   constructor(private http:HttpClient) { }
 
   createpage(page:any):Observable<any> {
     return this.http.post(this.createPageApi, page);
+  }
+
+  renamepage(pagename:any):Observable<any> {
+    return this.http.post(this.renamePageApi, pagename);
   }
 
   getfile(page:any):Observable<any> {

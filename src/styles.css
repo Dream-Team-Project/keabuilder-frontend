@@ -145,6 +145,7 @@ input:focus, textarea:focus, button:focus{
 }
 a{
   text-decoration: none!important;
+  display: block;
 }
 .btn {
     margin-right: 5px;
