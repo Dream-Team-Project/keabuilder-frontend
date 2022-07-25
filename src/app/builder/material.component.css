@@ -77,6 +77,7 @@ image-cropper {
 ::ng-deep .mat-snack-bar-container {
     background-color: var(--opacity-blue);
     color: #fff;
+    margin-top: 30px!important;
 }
 
 ::ng-deep .mat-simple-snackbar-action button {

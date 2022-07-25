@@ -916,7 +916,7 @@ export class StyleService {
     if (this._general.selectedBlock.type != "column") {
       this._general.selectedBlock = '';
     }
-    this._general.openSnackBar('Changes has been saved', 'X');
+    // this._general.openSnackBar('Changes has been done', 'X');
   }
 
   filterElementStyle(cs:any, ds:any) {
