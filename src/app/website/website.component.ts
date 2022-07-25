@@ -81,6 +81,7 @@ export class WebsiteComponent implements OnInit {
   ];
   shortwaiting = true;
   showpageurl = false;
+  oldpagepath = '';
 
   ngOnInit(): void {
 
@@ -227,7 +228,6 @@ export class WebsiteComponent implements OnInit {
   }
 
   changepagename(id:any, title:any, type:any){
-
       this.pageurl = '';
       this.seotitle = '';
       this.seodescr = '';
@@ -250,12 +250,6 @@ export class WebsiteComponent implements OnInit {
                 this.showwebpages();
 
               }else if(type=='quickedit'){
-
-                this.webpagesService.namepathchanges(id,title,type).subscribe({
-                  next: data => {
-
-                  }
-                });
 
                 this.poupsidebar = true;
                 this.showmytemplates = false;
@@ -280,6 +274,7 @@ export class WebsiteComponent implements OnInit {
                   this.quickeditid = data.data[0].id;
                 
                 this.poupsidebar = true;
+                this.oldpagepath = this.pageurl;
 
               }
           }else{
@@ -301,6 +296,15 @@ export class WebsiteComponent implements OnInit {
         if(data.found==1){
           this.pathcheck2 = true;
         }else if(data.found==0){
+
+          
+          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
+          this.fileuploadService.renamepage(pathobj).subscribe({
+            next: data => {
+              console.log(data);
+            }
+          });
+
           this.poupsidebar = false;
           this.showwebpages();
         }
