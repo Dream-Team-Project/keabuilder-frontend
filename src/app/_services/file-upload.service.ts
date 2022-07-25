@@ -22,15 +22,20 @@ export class FileUploadService {
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
+  createHomeApi = '/api/createhome';
     
   constructor(private http:HttpClient) { }
 
-  createpage(page:any):Observable<any> {
-    return this.http.post(this.createPageApi, page);
+  createhome(path:any):Observable<any> {
+    return this.http.post(this.createHomeApi, path);
   }
 
-  renamepage(pagename:any):Observable<any> {
-    return this.http.post(this.renamePageApi, pagename);
+  createpage(path:any):Observable<any> {
+    return this.http.post(this.createPageApi, path);
+  }
+
+  renamepage(path:any):Observable<any> {
+    return this.http.post(this.renamePageApi, path);
   }
 
   copypage(pagename:any):Observable<any> {
