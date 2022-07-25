@@ -243,11 +243,11 @@ export class WebsiteComponent implements OnInit {
 
                 if(data.type=='name'){
                   this._snackBar.open('Name Changed Successfully!', 'Close');
+                  this.showwebpages();
                 }else if(data.type=='status'){
                   this._snackBar.open('Status Changed Successfully!', 'Close');
                 }
     
-                this.showwebpages();
 
               }else if(type=='quickedit'){
 
@@ -297,16 +297,15 @@ export class WebsiteComponent implements OnInit {
           this.pathcheck2 = true;
         }else if(data.found==0){
 
-          
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
           this.fileuploadService.renamepage(pathobj).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
             }
           });
-
           this.poupsidebar = false;
           this.showwebpages();
+
         }
 
       }
@@ -342,7 +341,7 @@ export class WebsiteComponent implements OnInit {
       this.router.navigate(['/builder/website',id])
   }
 
-  shortsettings(id:any, type:any){
+  shortsettings(id:any, type:any, oldpath:string){
 
     if(type=='duplicate'){
       // console.log(id);
@@ -351,6 +350,17 @@ export class WebsiteComponent implements OnInit {
           console.log(data);
 
           if(data.success==1){
+
+            console.log(oldpath);
+            console.log(data.newpath);
+
+            var pathobj  = {oldpath:oldpath, newpath:data.newpath};
+            this.fileuploadService.copypage(pathobj).subscribe({
+              next: data => {
+                // console.log(data);
+              }
+            });
+            
             this._snackBar.open('Page Duplicate Successfully!', 'Close');
             this.showwebpages();
 

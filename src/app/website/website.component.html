@@ -244,13 +244,13 @@
             <button mat-menu-item>
               <i class="fas fa-chart-pie mr-2"></i> View Analytics
             </button>
-            <button mat-menu-item (click)="shortsettings(kbpage.id,'duplicate')" >
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'duplicate',kbpage.page_path)" >
               <i class="fas fa-copy mr-2"></i> Duplicate
             </button>
-            <button mat-menu-item (click)="shortsettings(kbpage.id,'copyurl')" >
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'copyurl','')" >
               <i class="fas fa-link mr-2"></i> Copy URL
             </button>
-            <button mat-menu-item (click)="shortsettings(kbpage.id,'delete')">
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'delete','')">
               <i class="fas fa-trash mr-2"></i> Delete
             </button>
           </mat-menu>
