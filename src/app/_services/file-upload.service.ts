@@ -20,6 +20,7 @@ export class FileUploadService {
   deleteFile = "./api/deletefile";
   createPageApi = "./api/savepage";
   renamePageApi = "./api/renamepage";
+  copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
     
   constructor(private http:HttpClient) { }
@@ -30,6 +31,10 @@ export class FileUploadService {
 
   renamepage(pagename:any):Observable<any> {
     return this.http.post(this.renamePageApi, pagename);
+  }
+
+  copypage(pagename:any):Observable<any> {
+    return this.http.post(this.copyPageApi, pagename);
   }
 
   getfile(page:any):Observable<any> {
