@@ -17,6 +17,14 @@ export class WebsiteService {
     return this.http.get('/api/allwebsitedata');
   }
 
+  updatesiteDetails(id: string, type:string, scriptfooter:string):Observable<any> {
+    return this.http.post("/api/dupldelpage", {
+      id,
+      type,
+      scriptfooter,
+    }, httpOptions);
+  }
+
 
 
 }

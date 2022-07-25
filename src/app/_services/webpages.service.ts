@@ -72,4 +72,12 @@ export class WebpagesService {
     return throwError(()=>error.message || "Sever Error")
   }
 
+  dupldelpage(id: string, type:string):Observable<any> {
+    return this.http.post("/api/dupldelpage", {
+      id,
+      type,
+    }, httpOptions);
+  }
+
+
 }

@@ -125,7 +125,7 @@
               </div>
             </div>
 
-            <div class="row mt-4">
+            <div class="row mt-4 mb-5">
               <div class="col-md-4 cardpage mt-2 " *ngFor="let pagetemplate of pagetemplates; index as i;" >
                 <div>
                   <img [src]="pagetemplate.thumbnail" alt="" class="img-fluid img-fit">
@@ -152,6 +152,32 @@
             </div>
 
           </div>
+        </div>
+
+        <div *ngIf="showpageurl">
+            <h6><b>Copy Page Builder URL</b></h6>
+            <hr>
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Step Url</mat-label>
+              <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{pagebuilderurl}}</textarea>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+                <i class="fas fa-copy"></i> Copy Url
+            </button>
+              
+            <hr>
+              
+            <h6><b>Copy Page URL</b></h6>
+            <hr>
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Page Url</mat-label>
+              <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+                <i class="fas fa-copy"></i> Copy Url
+            </button>
         </div>
 
     </div>
@@ -218,13 +244,13 @@
             <button mat-menu-item>
               <i class="fas fa-chart-pie mr-2"></i> View Analytics
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'duplicate')" >
               <i class="fas fa-copy mr-2"></i> Duplicate
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'copyurl')" >
               <i class="fas fa-link mr-2"></i> Copy URL
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item (click)="shortsettings(kbpage.id,'delete')">
               <i class="fas fa-trash mr-2"></i> Delete
             </button>
           </mat-menu>

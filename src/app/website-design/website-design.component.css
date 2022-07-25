@@ -95,3 +95,45 @@
 .pagemainlink button {
     float: right;
 }
+
+
+.kea-barfieldset{
+  width: 100%;
+}
+.form-control-position {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  text-align: center;
+  color: rgba(0,0,0,.4);
+  cursor: pointer;
+}
+.has-icon-left .form-control-position {
+  right: auto;
+}
+.has-icon-left .form-control {
+  border-color: #DFE3E7;
+  font-size: 13px;
+  padding: 20px 10px 20px 30px;
+}
+
+.cardpage >div{
+  box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+  padding: 20px;
+  border-radius: 8px;
+}
+.img-fit{
+  height: 265px;
+  object-fit: cover;
+}
+
+#kb-offcanvas-actions .offcanvas.fulltemplate{
+  width:96%;
+}
+.keabuilder-title {
+  padding: 15px 0px;
+}

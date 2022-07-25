@@ -12,14 +12,9 @@ export class WebsiteDetailsComponent implements OnInit {
   kbpages:any[] = [];
   kblandingpages:any[] = [];
   kbwebsite:any[] = [];
-  colortheme:any[] = [];
-  navmenu_footer:any[] = [];
-  navmenu_header:any[] = [];
-  navmainmenu_add = false;
-  navfootermenu_add = false;
-  branding_logo = false;
-  branding_favicon = false;
-  branding_social = false;
+  pathselected = '';
+  pagescriptheader = '';
+  pagescriptfooter = '';
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,) { }
@@ -29,25 +24,22 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
 
-        data.data.forEach((element:any) => {
-          element.itemshow = false;
-          element.dropdownstatus = false;
+        this.kbpages = data.data;
+
+        // data.data.forEach((element:any) => {
           
-          var mycustomdate =  new Date(element.updated_at);
-          var text1 = mycustomdate.toDateString();    
-          var text2 = mycustomdate.toLocaleTimeString();
-          element.updated_at = text1+' '+text2;
+        //   var mycustomdate =  new Date(element.updated_at);
+        //   var text1 = mycustomdate.toDateString();    
+        //   var text2 = mycustomdate.toLocaleTimeString();
+        //   element.updated_at = text1+' '+text2;
 
-           if(element.type=='page'){
-             this.kbpages.push(element);
-           }else if(element.type=='landing_page'){
-             this.kblandingpages.push(element);
-          }
-          console.log(this.kbpages);
+        //   this.kbpages.push(element);
+          
+        //   console.log(this.kbpages);
 
-        });
+        // });
 
       },
       error: err => {
@@ -55,37 +47,14 @@ export class WebsiteDetailsComponent implements OnInit {
       }
     });
 
-    // Get website
-    var ftmenu:any = {};
-    var ftmenu2:any = {};
-
     this.websiteService.getWebsite().subscribe({
       next: data => {
         // console.log(data);
           data.data.forEach((element:any) => {
             this.kbwebsite.push(element);
 
-            // colortheme
-            this.colortheme = element.color_theme.split(',');
-
-            // navmenu header
-            var ttl2 = element.header.split(',');
-            ttl2.forEach((element3: any) => {
-              ftmenu2 = {};
-              ftmenu2.title = element3;
-              ftmenu2.pageorpost = 'page';
-              this.navmenu_header.push(ftmenu2);
-            });
-
-            // navmenu footer
-            var ttl = element.footer.split(',');
-            ttl.forEach((element2: any) => {
-              ftmenu = {};
-              ftmenu.title = element2;
-              ftmenu.pageorpost = 'page';
-              this.navmenu_footer.push(ftmenu);
-            });
-
+            this.pagescriptheader = element.tracking_header;
+            this.pagescriptfooter = element.tracking_footer;
 
           });
       },
@@ -96,21 +65,20 @@ export class WebsiteDetailsComponent implements OnInit {
 
   }
 
-  navmainmenu_fun(){
-    this.navmainmenu_add = !this.navmainmenu_add;
+  updatepage(){
+    // console.log(this.pathselected);
+    // console.log(this.pagescriptheader);
+    // console.log(this.pagescriptfooter);
+
+    this.websiteService.updatesiteDetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter).subscribe({
+      next: data => {
+        console.log(data);
+        
+      }
+    });
+
   }
-  navfootermenu_fun(){
-    this.navfootermenu_add = !this.navfootermenu_add;
-  }
-  kb_brandinglogo(){
-    this.branding_logo = !this.branding_logo;
-  }
-  kb_brandingfavicon(){
-    this.branding_favicon = !this.branding_favicon;
-  }
-  kb_brandingsocial(){
-    this.branding_social = !this.branding_social;
-  }
+
 
 
 }

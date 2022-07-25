@@ -60,13 +60,7 @@ export class SidebarComponent implements OnInit {
       img: 'browser.gif',
       icon: 'fas fa-desktop',
       title: 'Website',
-      submenu:[{
-        0:true,
-        routerlink: '/builder',
-        img: 'browser.gif',
-        icon: 'fas fa-plus',
-        title: 'Add New Page'
-      },
+      submenu:[
       {
         0:true,
         routerlink: '/website-pages',
@@ -80,20 +74,6 @@ export class SidebarComponent implements OnInit {
         img: 'browser.gif',
         icon: 'fas fa-pencil-alt',
         title: 'Site Details'
-      },
-      {
-        0:true,
-        routerlink: '/nolink',
-        img: 'browser.gif',
-        icon: 'far fa-eye',
-        title: 'Preview'
-      },
-      {
-        0:true,
-        routerlink: '/nolink',
-        img: 'browser.gif',
-        icon: 'fas fa-palette',
-        title: 'Customize'
       }
       ]
     },{
