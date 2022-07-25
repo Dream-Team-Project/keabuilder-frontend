@@ -17,8 +17,8 @@ export class WebsiteService {
     return this.http.get('/api/allwebsitedata');
   }
 
-  updatesiteDetails(homepage: string, scriptheader:string, scriptfooter:string):Observable<any> {
-    return this.http.post("/api/updatesitedetails", {
+  updatesitedetails(homepage: any, scriptheader:any, scriptfooter:any):Observable<any> {
+    return this.http.post("./api/updatesitedetails", {
       homepage,
       scriptheader,
       scriptfooter,

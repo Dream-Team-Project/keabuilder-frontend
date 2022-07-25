@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsiteService } from '../_services/website.service';
 import { WebpagesService } from '../_services/webpages.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
   selector: 'app-website-details',
@@ -17,7 +19,9 @@ export class WebsiteDetailsComponent implements OnInit {
   pagescriptfooter = '';
 
   constructor(private websiteService: WebsiteService,
-              private webpagesService: WebpagesService,) { }
+              private webpagesService: WebpagesService,
+              private _snackBar: MatSnackBar,
+              private fileUploadService:FileUploadService,) { }
 
   ngOnInit(): void {
 
@@ -53,8 +57,17 @@ export class WebsiteDetailsComponent implements OnInit {
           data.data.forEach((element:any) => {
             this.kbwebsite.push(element);
 
-            this.pagescriptheader = element.tracking_header;
-            this.pagescriptfooter = element.tracking_footer;
+            if(element.tracking_header!=null && element.tracking_header!=''){
+              this.pagescriptheader = decodeURIComponent(element.tracking_header);
+            }
+
+            if(element.tracking_footer!=null && element.tracking_footer!=''){
+              this.pagescriptfooter = decodeURIComponent(element.tracking_footer);
+            }
+
+            if(element.homepage!=null && element.homepage!=''){
+              this.pathselected = element.homepage;
+            }
 
           });
       },
@@ -66,14 +79,23 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
-    // console.log(this.pathselected);
-    // console.log(this.pagescriptheader);
-    // console.log(this.pagescriptfooter);
+    console.log(this.pathselected);
+    console.log(this.pagescriptheader);
+    console.log(this.pagescriptfooter);
 
-    this.websiteService.updatesiteDetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter).subscribe({
+    this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter).subscribe({
       next: data => {
         console.log(data);
+
         
+        if(this.pathselected!=''){
+          console.log(this.pathselected);
+          this.fileUploadService.createhome(this.pathselected).subscribe({
+            next: data => {}
+          });
+        }
+
+        this._snackBar.open('Data Updated Successfully!!', 'Close');
       }
     });
 
