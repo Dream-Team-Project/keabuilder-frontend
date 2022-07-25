@@ -41,6 +41,7 @@ export class WebsiteComponent implements OnInit {
   keywords:any[] = [];
   addOnBlur = true;
   pageurl = '';
+  pagebuilderurl = '';
   seotitle = '';
   seodescr = '';
   seoauthor = '';
@@ -79,6 +80,7 @@ export class WebsiteComponent implements OnInit {
   }
   ];
   shortwaiting = true;
+  showpageurl = false;
 
   ngOnInit(): void {
 
@@ -128,6 +130,7 @@ export class WebsiteComponent implements OnInit {
       this.insidepagesecond = false;
     this.quickeditpopup = false;
     this.selecttemplate = false;
+    this.showpageurl = false;
 
   }
 
@@ -218,20 +221,12 @@ export class WebsiteComponent implements OnInit {
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = 'http://localhost:4200/'+data;
+      var url = 'http://localhost:4200/assets/keapages/'+data;
       window.open(url, '_blank')
     }
   }
 
   changepagename(id:any, title:any, type:any){
-
-      this.poupsidebar = true;
-      this.showmytemplates = false;
-      this.addnewpagepopup = false;
-        this.insidepagefirst = true;
-        this.insidepagesecond = false;
-      this.quickeditpopup = true;
-      this.selecttemplate = false;
 
       this.pageurl = '';
       this.seotitle = '';
@@ -255,6 +250,21 @@ export class WebsiteComponent implements OnInit {
                 this.showwebpages();
 
               }else if(type=='quickedit'){
+
+                this.webpagesService.namepathchanges(id,title,type).subscribe({
+                  next: data => {
+
+                  }
+                });
+
+                this.poupsidebar = true;
+                this.showmytemplates = false;
+                this.addnewpagepopup = false;
+                  this.insidepagefirst = true;
+                  this.insidepagesecond = false;
+                this.quickeditpopup = true;
+                this.selecttemplate = false;
+                this.showpageurl = false;
                 
                 this.pageurl = data.data[0].page_path;
                 this.seotitle = data.data[0].page_title;
@@ -326,6 +336,75 @@ export class WebsiteComponent implements OnInit {
 
   redirectToBuilder(id:any) {
       this.router.navigate(['/builder/website',id])
+  }
+
+  shortsettings(id:any, type:any){
+
+    if(type=='duplicate'){
+      // console.log(id);
+      this.webpagesService.dupldelpage(id,type).subscribe({
+        next: data => {
+          console.log(data);
+
+          if(data.success==1){
+            this._snackBar.open('Page Duplicate Successfully!', 'Close');
+            this.showwebpages();
+
+          }else{
+            this._snackBar.open('Something Went Wrong!!', 'Close');
+          }
+
+        }
+      });
+    }else if(type=='delete'){
+      this.webpagesService.dupldelpage(id,type).subscribe({
+        next: data => {
+          // console.log(data);
+
+          if(data.success==1){
+            this._snackBar.open('Page Delete Successfully!', 'Close');
+            this.showwebpages();
+
+          }else{
+            this._snackBar.open('Something Went Wrong!!', 'Close');
+          }
+
+        }
+      });
+    }else if(type=='copyurl'){
+      this.webpagesService.dupldelpage(id,type).subscribe({
+        next: data => {
+          // console.log(data);
+
+          if(data.success==1){
+
+            this.poupsidebar = true;
+            this.showmytemplates = false;
+            this.addnewpagepopup = false;
+              this.insidepagefirst = true;
+              this.insidepagesecond = false;
+            this.quickeditpopup = false;
+            this.selecttemplate = false;
+            this.showpageurl = true;
+            
+            this.pagebuilderurl = 'http://localhost:4200/builder/website/'+data.data[0].uniqueid;
+            this.pageurl = 'http://localhost:4200/'+data.data[0].page_path;
+
+          }else{
+            this._snackBar.open('Something Went Wrong!!', 'Close');
+          }
+
+        }
+      });
+    }
+
+  }
+
+  copyInputMessage(inputElement:any){
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+    this._snackBar.open('Successfully Copied!', 'Close');
   }
 
 }
