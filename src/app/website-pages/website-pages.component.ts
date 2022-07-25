@@ -12,10 +12,10 @@ import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
   selector: 'app-website',
-  templateUrl: './website.component.html',
-  styleUrls: ['./website.component.css']
+  templateUrl: './website-pages.component.html',
+  styleUrls: ['./website-pages.component.css']
 })
-export class WebsiteComponent implements OnInit {
+export class WebsitePagesComponent implements OnInit {
 
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,

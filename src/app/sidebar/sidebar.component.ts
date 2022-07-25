@@ -56,21 +56,21 @@ export class SidebarComponent implements OnInit {
         }]
     },{
       0:true,
-      routerlink: '/website-design',
+      routerlink: '/website',
       img: 'browser.gif',
       icon: 'fas fa-desktop',
       title: 'Website',
       submenu:[
       {
         0:true,
-        routerlink: '/website-pages',
+        routerlink: '/website/pages',
         img: 'browser.gif',
         icon: 'far fa-window-restore',
         title: 'Pages'
       },
       {
         0:true,
-        routerlink: '/website-details',
+        routerlink: '/website/details',
         img: 'browser.gif',
         icon: 'fas fa-pencil-alt',
         title: 'Site Details'
@@ -315,7 +315,7 @@ export class SidebarComponent implements OnInit {
       this.allmenu[1].submenu.forEach((element: any) => {
         element[0] = false;
       });
-    }else if(myhref=='/website-design'){
+    }else if(myhref=='/website'){
 
       this.extramenus = false;
       
@@ -371,7 +371,7 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/website-design' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/website' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
       this.backme = false;
     }
 

@@ -15,7 +15,7 @@ import { BulderWireframeComponent } from './bulder-wireframe/bulder-wireframe.co
 import { FunnelComponent } from './funnel/funnel.component';
 import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
 import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
-import { WebsiteComponent } from './website/website.component';
+import { WebsitePagesComponent } from './website-pages/website-pages.component';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { HeatmapsComponent } from './heatmaps/heatmaps.component';
@@ -99,9 +99,16 @@ const routes: Routes = [
   { path: 'affiliates-announcements', component: AffiliateAnnouncementsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
-  { path: 'website-pages', component: WebsiteComponent, canActivate: [AuthGuard] },
-  { path: 'website-design', component: WebsiteDesignComponent, canActivate: [AuthGuard] },
-  { path: 'website-details', component: WebsiteDetailsComponent, canActivate: [AuthGuard] },
+
+  { path: 'website', component: WebsiteDesignComponent,
+  children: [{path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+  {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}
+],
+  canActivate: [AuthGuard] },
+
+  // { path: 'website-pages', component: WebsiteComponent, canActivate: [AuthGuard] },
+  // { path: 'website-design', component: WebsiteDesignComponent, canActivate: [AuthGuard] },
+  // { path: 'website-details', component: WebsiteDetailsComponent, canActivate: [AuthGuard] },
   { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder/website/:id', component: BuilderComponent, canActivate: [AuthGuard] },
@@ -125,7 +132,7 @@ export const RoutingComponents =
     FunnelComponent,
     FunnelArchieveComponent,
     FunnelMarketplaceComponent,
-    WebsiteComponent,
+    WebsitePagesComponent,
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,

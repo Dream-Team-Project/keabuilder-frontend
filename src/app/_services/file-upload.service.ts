@@ -23,8 +23,14 @@ export class FileUploadService {
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
   createHomeApi = '/api/createhome';
-    
+  deletePageApi = '/api/deletepage/:path';
+
   constructor(private http:HttpClient) { }
+
+  deletepage(path:any):Observable<any> {
+    return this.http.delete(this.deletePageApi + '/' + path)
+    .pipe(catchError(this.errorHandler));
+  }
 
   createhome(path:any):Observable<any> {
     return this.http.post(this.createHomeApi, path);

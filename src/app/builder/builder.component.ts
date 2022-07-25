@@ -36,7 +36,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'Website',
-      link: '/website-design',
+      link: '/website',
       icon: 'fa-desktop'
     },
     {
