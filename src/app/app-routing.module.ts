@@ -100,13 +100,11 @@ const routes: Routes = [
   { path: 'affiliates-announcements', component: AffiliateAnnouncementsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
-
   { path: 'website', component: WebsiteComponent,
   children: [{path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
   {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
   {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}],
   canActivate: [AuthGuard] },
-
   { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'builder/website/:id', component: BuilderComponent, canActivate: [AuthGuard] },
