@@ -11,11 +11,11 @@
     margin: 0 !important;
 }
 
-#page-container.hovernone {
+#page-container.hovernone{
     pointer-events: none;
 }
 
-#page-container.hovernone .kb-d-desk-none {
+#page-container.hovernone .kb-d-desk-none, #page-container.hovernone .kb-ispan-add {
     display: none;
 }
 
