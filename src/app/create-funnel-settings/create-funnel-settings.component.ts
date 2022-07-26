@@ -49,7 +49,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
 
-        this.funnelpath = '/create-funnel/'+data.data2[0].uniqueid;
+        this.funnelpath = '/funnels/create/'+data.data2[0].uniqueid;
       },
       error: err => {
         console.log(err);
@@ -132,7 +132,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   }
 
   viewarchivefunnel(){
-    this.router.navigate(['/archieve-steps'],{relativeTo: this.route});
+    this.router.navigate(['/funnels/archieve'],{relativeTo: this.route});
   }
 
   showpopup(){

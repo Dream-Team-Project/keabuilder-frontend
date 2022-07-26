@@ -213,7 +213,7 @@ export class CreateFunnelComponent implements OnInit {
           console.log(data);
           this.uniqueidstep = data.data[0].uniqueid;
 
-          this.router.navigate(['/create-funnel/'+this.uniqueid+'/'+data.data[0].uniqueid],{relativeTo: this.route});
+          this.router.navigate(['/funnels/create/'+this.uniqueid+'/'+data.data[0].uniqueid],{relativeTo: this.route});
 
           if(data.data[0].funnelselected==1){
             this.tabOpen = 'overviewstep';
@@ -505,7 +505,7 @@ export class CreateFunnelComponent implements OnInit {
       this.poupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
-      this.funnelurl = 'http://localhost:4200/create-funnel/'+this.uniqueid+'/'+unique2;
+      this.funnelurl = 'http://localhost:4200/funnels/create/'+this.uniqueid+'/'+unique2;
       this.pageurl = 'http://localhost:4200/'+unique1;
     }else if(type=='duplicate'){
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({

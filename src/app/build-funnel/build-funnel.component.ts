@@ -135,7 +135,7 @@ export class BuildFunnelComponent implements OnInit {
         this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor).subscribe({
             next: data => {
                 // console.log(data);
-                this.router.navigate(['/create-funnel/'+data.data.hash+'/'+data.data.hash2],{relativeTo: this.route});
+                this.router.navigate(['/funnels/create/'+data.data.hash+'/'+data.data.hash2],{relativeTo: this.route});
             
             },
             error: err => {
