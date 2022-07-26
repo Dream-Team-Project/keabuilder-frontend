@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -22,8 +22,8 @@ export class CreateFunnelSettingsComponent implements OnInit {
   };
   userFormControl = new FormControl('',[Validators.required ]);
 
-  uniqueid = '';
-  uniqueidstep = '';
+  uniqueid:any = '';
+  uniqueidstep:any = '';
   funnelpath = '';
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -39,17 +39,19 @@ export class CreateFunnelSettingsComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    var geta = window.location.href.split('/'); geta[geta.length];
-    this.uniqueid = geta[geta.length-1];
+    this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
+      this.uniqueid = params.get('funnel_id');
+    })
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.uniqueidstep = params.get('step_id');
+    });
 
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        console.log(data); 
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
 
-        this.funnelpath = '/funnels/create/'+data.data2[0].uniqueid;
+        this.funnelpath = '/funnels/'+this.uniqueid+'/steps/'+data.data2[0].uniqueid;
       },
       error: err => {
         console.log(err);

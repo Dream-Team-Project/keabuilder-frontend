@@ -1,12 +1,11 @@
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
 import { Options } from 'sortablejs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { FunnelService } from '../_services/funnels.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatAccordion} from '@angular/material/expansion';
-
 
 @Component({
   selector: 'app-create-funnel',
@@ -17,11 +16,22 @@ export class CreateFunnelComponent implements OnInit {
 
   @ViewChild(MatAccordion)
   accordion!: MatAccordion;
+
+  uniqueid:any;
+  uniqueidstep:any;
     
   constructor(private funnelService: FunnelService,
               private router: Router,
               private route: ActivatedRoute,
-              private _snackBar: MatSnackBar ) {}
+              private _snackBar: MatSnackBar ) {
+                this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
+                  this.uniqueid = params.get('funnel_id');
+                })
+                this.route.paramMap.subscribe((params: ParamMap) => {
+                  this.uniqueidstep = params.get('step_id');
+                  this.funnelService.uniquestepId = params.get('step_id');
+                });
+              }
 
   createvariation = false;
   automationaddnewaction = true;
@@ -43,9 +53,6 @@ export class CreateFunnelComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags:any[] = [];
-  geta = window.location.href.split('/'); 
-  uniqueid = this.geta[this.geta.length-2];
-  uniqueidstep = this.geta[this.geta.length-1];
 
   firstpart = true;
   funnelurl = '';
@@ -210,10 +217,9 @@ export class CreateFunnelComponent implements OnInit {
 
       this.funnelService.setfunnelselect(value).subscribe({
         next: data => {
-          console.log(data);
           this.uniqueidstep = data.data[0].uniqueid;
-
-          this.router.navigate(['/funnels/create/'+this.uniqueid+'/'+data.data[0].uniqueid],{relativeTo: this.route});
+          this.funnelService.uniquestepId = data.data[0].uniqueid;
+          this.router.navigate(['/funnels/'+this.uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
 
           if(data.data[0].funnelselected==1){
             this.tabOpen = 'overviewstep';
@@ -379,11 +385,7 @@ export class CreateFunnelComponent implements OnInit {
   showfunnelsteps(){
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        
         this.steps = data.data;
-        
-        console.log(data);
-        console.log('-- showfunnelsteps');
         // if(data.data.length>1){
         //   this.firstselectedid = data.data[1].id;
         // }else if(data.data.length==1){
@@ -505,7 +507,7 @@ export class CreateFunnelComponent implements OnInit {
       this.poupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
-      this.funnelurl = 'http://localhost:4200/funnels/create/'+this.uniqueid+'/'+unique2;
+      this.funnelurl = 'http://localhost:4200/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
       this.pageurl = 'http://localhost:4200/'+unique1;
     }else if(type=='duplicate'){
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({

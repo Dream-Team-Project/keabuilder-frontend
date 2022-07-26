@@ -52,6 +52,7 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
+import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { NgxCaptureModule } from 'ngx-capture';
     SidebarComponent,
     NavbarComponent,
     SafeHtmlPipe,
+    FunnelWizardNavComponent,
   ],
   imports: [
     BrowserModule,

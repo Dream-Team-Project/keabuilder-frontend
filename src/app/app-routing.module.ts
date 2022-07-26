@@ -56,6 +56,7 @@ import { WebsitePagesComponent } from './website-pages/website-pages.component';
 import { WebsiteDesignComponent } from './website-design/website-design.component';
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
+import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -79,12 +80,16 @@ const routes: Routes = [
   { path: 'funnels', component: FunnelComponent,
   children: [
     { path: '', component: AllFunnelsComponent, canActivate: [AuthGuard] },
+    { path: ':funnel_id', component: FunnelWizardNavComponent, 
+    children: [
+      { path: 'steps/:step_id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
+      { path: 'stats', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
+      { path: 'contacts', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
+      { path: 'sales', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
+      { path: 'settings', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] }
+    ],
+    canActivate: [AuthGuard]},
     { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-    { path: 'create/:id/:id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
-    { path: 'stats/:id', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
-    { path: 'contacts/:id', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
-    { path: 'sales/:id', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
-    { path: 'settings/:id', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] },
     { path: 'archieve', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
     { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
   ],

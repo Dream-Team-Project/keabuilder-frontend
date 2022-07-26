@@ -12,10 +12,12 @@ providedIn: 'root'
 
 export class FunnelService {
 
+  uniquestepId:any;
+
     constructor(private http:HttpClient) { }
 
   saveondb(funnelname: any, funnelfirststep: any, badgecolor: any):Observable<any> {
-      return this.http.post("/api/savefunnel", {
+      return this.http.post("./api/savefunnel", {
           funnelname,
           funnelfirststep,
           badgecolor
@@ -23,51 +25,51 @@ export class FunnelService {
     }
 
     getuniquefunnelstep(id:string, method:string): Observable<any> {
-      return this.http.post('/api/getuniquefunnelstep',{
+      return this.http.post('./api/getuniquefunnelstep',{
         id,
         method
       });
     }
 
     setfunnelstep(id:string):Observable<any> {
-      return this.http.post("/api/selectedtemplate", {
+      return this.http.post("./api/selectedtemplate", {
         id
       }, httpOptions);
     }
 
     setfunnelvariation(id:string):Observable<any> {
-      return this.http.post("/api/selectedvariation", {
+      return this.http.post("./api/selectedvariation", {
         id
       }, httpOptions);
     }
 
     setfunnelvariationdeclare(id:string):Observable<any> {
-      return this.http.post("/api/selectedvariationdeclare", {
+      return this.http.post("./api/selectedvariationdeclare", {
         id
       }, httpOptions);
     }
 
     setfunneladd(id:string):Observable<any> {
-      return this.http.post("/api/createnewstep", {
+      return this.http.post("./api/createnewstep", {
         id
       }, httpOptions);
     }
 
     setfunnelselect(id:string):Observable<any> {
-      return this.http.post("/api/selectnewstep", {
+      return this.http.post("./api/selectnewstep", {
         id
       }, httpOptions);
     }
 
     addnewtags(id:string,tags:string):Observable<any> {
-      return this.http.post("/api/addnewtags", {
+      return this.http.post("./api/addnewtags", {
         id,
         tags
       }, httpOptions);
     }
 
     namepathchanges(id:string,name:string,which:string):Observable<any> {
-      return this.http.post("/api/namepathchanges", {
+      return this.http.post("./api/namepathchanges", {
         id,
         name,
         which
@@ -75,7 +77,7 @@ export class FunnelService {
     }
 
     getfunnelcontacts(id:string, showing:string, steps:string):Observable<any> {
-      return this.http.post("/api/selectfunnelcontacts", {
+      return this.http.post("./api/selectfunnelcontacts", {
         id,
         showing,
         steps,
@@ -83,19 +85,19 @@ export class FunnelService {
     }
 
     getfunnelexportcontacts(id:string):Observable<any> {
-      return this.http.post("/api/selectfunnelexportcontacts", {
+      return this.http.post("./api/selectfunnelexportcontacts", {
         id
       }, httpOptions);
     }
 
     deletefunnelcontacts(id:string):Observable<any> {
-      return this.http.post("/api/deletefunnelcontacts", {
+      return this.http.post("./api/deletefunnelcontacts", {
         id
       }, httpOptions);
     }
 
     getfunnelsales(id:string, showing:string, steps:string):Observable<any> {
-      return this.http.post("/api/selectfunnelsales", {
+      return this.http.post("./api/selectfunnelsales", {
         id,
         showing,
         steps,
@@ -103,13 +105,13 @@ export class FunnelService {
     }
 
     getfunnelexportsale(id:string):Observable<any> {
-      return this.http.post("/api/selectfunnelexportsale", {
+      return this.http.post("./api/selectfunnelexportsale", {
         id
       }, httpOptions);
     }
 
     updatebasicdetails(id:string, funnelname:string,domain:string ,tags:string ,faviconurl:string ,headertracking:string ,bodytracking:string):Observable<any> {
-      return this.http.post("/api/updatefunnelsetting", {
+      return this.http.post("./api/updatefunnelsetting", {
         id,
         funnelname,
         domain,
@@ -121,31 +123,31 @@ export class FunnelService {
     }
 
     getfunnelsetting(id:string):Observable<any> {
-      return this.http.post("/api/selectfunnelsetting", {
+      return this.http.post("./api/selectfunnelsetting", {
         id
       }, httpOptions);
     }
 
     archivefunnelstep(id:string, reason:string):Observable<any> {
-      return this.http.post("/api/archivefunnelstep", {
+      return this.http.post("./api/archivefunnelstep", {
         id,
         reason
       }, httpOptions);
     }
 
     getarchivefunnel(showing:string):Observable<any> {
-      return this.http.post("/api/getarchivefunnel", {
+      return this.http.post("./api/getarchivefunnel", {
         showing,
       }, httpOptions);
     }
 
     getallfunnelandstep():Observable<any> {
-      return this.http.post("/api/getallfunnelandstep", {
+      return this.http.post("./api/getallfunnelandstep", {
       }, httpOptions);
     }
 
     makefunnelsettings(value:string, id:string, type:string):Observable<any> {
-      return this.http.post("/api/makefunnelsettings", {
+      return this.http.post("./api/makefunnelsettings", {
         value,
         id,
         type
@@ -153,28 +155,28 @@ export class FunnelService {
     }
 
     restoredeletefunnel(id:string, type:string):Observable<any> {
-      return this.http.post("/api/restoredeletefunnel", {
+      return this.http.post("./api/restoredeletefunnel", {
         id,
         type
       }, httpOptions);
     }
 
     makefunnelstepduplicate(id:string, type:string):Observable<any> {
-      return this.http.post("/api/makefunnelstepduplicate", {
+      return this.http.post("./api/makefunnelstepduplicate", {
         id,
         type
       }, httpOptions);
     }
 
     funnelandstepshorting(data:string, type:string):Observable<any> {
-      return this.http.post("/api/funnelandstepshorting", {
+      return this.http.post("./api/funnelandstepshorting", {
         data,
         type
       }, httpOptions);
     }
 
     funneltemplates():Observable<any> {
-      return this.http.post("/api/funneltemplates", {
+      return this.http.post("./api/funneltemplates", {
       }, httpOptions);
     }
 

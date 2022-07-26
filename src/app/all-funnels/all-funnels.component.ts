@@ -187,13 +187,13 @@ export class AllFunnelsComponent implements OnInit {
           console.log(data); 
           
           if(type=='edit'){
-            this.router.navigate(['/funnels/create/'+uniqueid+'/'+data.data[0].uniqueid],{relativeTo: this.route});
+            this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
           }else if(type=='copy'){
             this.firstpart = true;
             this.poupsidebar = true;
             this.funneltostep = true;
             this.colortheme = false;
-            this.funnelurl = 'http://localhost:4200/funnels/create/'+uniqueid+'/'+data.data[0].uniqueid;
+            this.funnelurl = 'http://localhost:4200/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
           }
           
         }
@@ -279,13 +279,13 @@ export class AllFunnelsComponent implements OnInit {
     console.log(unique1+' - '+unique2+' - '+type);
 
     if(type=='edit'){
-      this.router.navigate(['/funnels/create/'+unique1+'/'+unique2],{relativeTo: this.route});
+      this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
     }else if(type=='copy'){
       this.firstpart = true;
       this.poupsidebar = true;
       this.funneltostep = false;
       this.colortheme = false;
-      this.funnelurl = 'http://localhost:4200/funnels/create/'+unique1+'/'+unique2;
+      this.funnelurl = 'http://localhost:4200/funnels/'+unique1+'/steps/'+unique2;
       this.pageurl = '';
 
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({

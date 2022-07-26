@@ -143,66 +143,7 @@
   </div>
   <div class="offcanvas-overlay" *ngIf="poupsidebar" (click)="hidepopupsidebar()"></div>
 
-  <header class="wizard-nav">
-    <div class="wizard-steps">
-      <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" [routerLink]="['/funnels/create/'+uniqueid+'/'+uniqueidstep]" data-wizard-state="current">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-filter"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">{{funnelname}}</div>
-            <div class="wizard-desc">Steps</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 1 Nav-->
-      <!--begin::Wizard Step 2 Nav-->
-      <div class="wizard-step" [routerLink]="['/funnels/stats',uniqueid]">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="far fa-chart-bar"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">STATS</div>
-            <div class="wizard-desc">View Your Stats</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 2 Nav-->
-      <!--begin::Wizard Step 3 Nav-->
-      <div class="wizard-step" [routerLink]="['/funnels/contacts',uniqueid]">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-users"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">CONTACTS</div>
-            <div class="wizard-desc">Check Your Contacts</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 3 Nav-->
-      <!--begin::Wizard Step 4 Nav-->
-      <div class="wizard-step" [routerLink]="['funnels/sales',uniqueid]">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-money-check-alt"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">SALES</div>
-            <div class="wizard-desc">See Your Sales</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 4 Nav-->
-      <!--begin::Wizard Step 5 Nav-->
-      <div class="wizard-step" [routerLink]="['funnels/settings',uniqueid]">
-        <div class="wizard-wrapper">
-          <div class="wizard-number"><i class="fas fa-sliders-h"></i></div>
-          <div class="wizard-label">
-            <div class="wizard-title">SETTINGS</div>
-            <div class="wizard-desc">Review Your Settings</div>
-          </div>
-        </div>
-      </div>
-      <!--end::Wizard Step 5 Nav-->
-
-    </div>
-  </header>
+  <!-- <app-funnel-wizard-nav></app-funnel-wizard-nav> -->
 
   <div class="container-fluid" *ngIf="steps.length>0">
     <div class="row whitefunnel loadEffect" >

@@ -10,6 +10,7 @@ import {
     ApexGrid
   } from "ng-apexcharts";
 import { FunnelService } from '../_services/funnels.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 export type ChartOptions = {
 series: ApexAxisChartSeries;
@@ -36,7 +37,9 @@ export class CreateFunnelStatsComponent implements OnInit {
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
 
-  constructor(private funnelService: FunnelService,) { 
+  constructor(private funnelService: FunnelService,
+    private router: Router,
+    private route: ActivatedRoute,) { 
 
     this.chartOptions = {
         series: [
@@ -357,13 +360,17 @@ export class CreateFunnelStatsComponent implements OnInit {
     };
     
   }
-  uniqueid = '';
-  uniqueidstep = '';
+  uniqueid:any = '';
+  uniqueidstep:any = '';
   funnelname = '';
 
   ngOnInit(): void {
-    var geta = window.location.href.split('/'); geta[geta.length];
-    this.uniqueid = geta[geta.length-1];
+    this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
+      this.uniqueid = params.get('funnel_id');
+    })
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.uniqueidstep = params.get('step_id');
+    });
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
         this.funnelname = data.data2[0].name;

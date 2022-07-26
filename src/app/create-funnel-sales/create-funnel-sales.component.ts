@@ -4,6 +4,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import { FunnelService } from '../_services/funnels.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import * as XLSX from 'xlsx';
 
 export interface UserData {
@@ -30,8 +31,8 @@ export class CreateFunnelSalesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   mainOpen = 'sales';
-  uniqueid = '';
-  uniqueidstep = '';
+  uniqueid:any = '';
+  uniqueidstep:any = '';
   funnelname = '';
   users:any = [];
   funnelsteps: any = [];
@@ -40,16 +41,21 @@ export class CreateFunnelSalesComponent implements OnInit {
   selectedfunnelsteps:any = 'all';
   selecteddelete = false;
 
-  constructor(private funnelService: FunnelService,) { 
+  constructor(private funnelService: FunnelService,
+    private router: Router,
+    private route: ActivatedRoute) { 
 
     this.dataSource = new MatTableDataSource(this.users);
 
   }
 
   ngOnInit(): void {
-    var geta = window.location.href.split('/'); geta[geta.length];
-    this.uniqueid = geta[geta.length-1];
-
+    this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
+      this.uniqueid = params.get('funnel_id');
+    })
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.uniqueidstep = params.get('step_id');
+    });
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
         this.funnelname = data.data2[0].name;
