@@ -35,21 +35,21 @@ export class SidebarComponent implements OnInit {
       title: 'Funnels',
       submenu:[{
           0:true,
-          routerlink: '/build-funnel',
+          routerlink: '/funnels/build',
           img: 'funnel.gif',
           icon: 'far fa-plus-square',
           title: 'Build A Funnel'
         },
         {
           0:true,
-          routerlink: '/archieve-steps',
+          routerlink: '/funnels/archieve',
           img: 'funnel.gif',
           icon: 'fas fa-archive',
           title: 'Archived'
         },
         {
           0:true,
-          routerlink: '/marketplace',
+          routerlink: '/funnels/marketplace',
           img: 'funnel.gif',
           icon: 'fas fa-store',
           title: 'Marketplace'

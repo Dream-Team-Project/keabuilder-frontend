@@ -39,6 +39,7 @@ export class AppComponent {
                   document.getElementById('kb-bootstrap-stylesheet')?.setAttribute('href', 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css');
                 }
                 this.loading = true;
+                this.changeOfRoutes();
                 break;
               }
               case event instanceof NavigationEnd: {
@@ -61,7 +62,6 @@ export class AppComponent {
     }
 
   ngBeforeOnInit(): void {
-    this.changeOfRoutes();
   }
 
   ngOnInit(): void {

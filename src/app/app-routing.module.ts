@@ -18,6 +18,7 @@ import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketpl
 import { StrategiesComponent } from './strategies/strategies.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { HeatmapsComponent } from './heatmaps/heatmaps.component';
+import { AllFunnelsComponent } from './all-funnels/all-funnels.component';
 import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
 import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
 import { CreateFunnelStatsComponent } from './create-funnel-stats/create-funnel-stats.component';
@@ -62,19 +63,33 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'funnels', component: FunnelComponent, canActivate: [AuthGuard] },
-  { path: 'archieve-steps', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
-  { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
   { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
-  { path: 'build-funnel', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-  { path: 'create-funnel/:id/:id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
-  { path: 'create-funnel-stats/:id', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
-  { path: 'create-funnel-contacts/:id', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
-  { path: 'create-funnel-sales/:id', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
-  { path: 'create-funnel-settings/:id', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+
+  // website 
+  { path: 'website', component: WebsiteComponent,
+  children: [{path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+  {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+  {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}],
+  canActivate: [AuthGuard] },
+
+  // funnels
+  { path: 'funnels', component: FunnelComponent,
+  children: [
+    { path: '', component: AllFunnelsComponent, canActivate: [AuthGuard] },
+    { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
+    { path: 'create/:id/:id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
+    { path: 'stats/:id', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
+    { path: 'contacts/:id', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
+    { path: 'sales/:id', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
+    { path: 'settings/:id', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'archieve', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
+    { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
+  ],
+  canActivate: [AuthGuard] },
+
   { path: 'membership', component: MembershipComponent, canActivate: [AuthGuard] },
   { path: 'membership-product', component: MembershipProductComponent, canActivate: [AuthGuard] },
   { path: 'membership-offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
@@ -100,17 +115,17 @@ const routes: Routes = [
   { path: 'affiliates-announcements', component: AffiliateAnnouncementsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
-  { path: 'website', component: WebsiteComponent,
-  children: [{path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
-  {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-  {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}],
-  canActivate: [AuthGuard] },
+
   { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
+  // builder routes
   { path: 'builder/website/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/funnel/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'preview/website/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'preview/funnel/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+
+  // page not found
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -131,6 +146,7 @@ export const RoutingComponents =
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
+    AllFunnelsComponent,
     BuildFunnelComponent,
     CreateFunnelComponent,
     CreateFunnelStatsComponent,
