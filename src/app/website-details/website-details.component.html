@@ -66,28 +66,28 @@
           <div class="form-group">
             <label for="">Logo</label>
 
+            <input type="file" name="" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg" class="drop-zone__input">
+
             <div class="kb-upload-card_dropzone">
               <div class="kb-upload-card_preview">
                 <img alt="" class="kb-thumbnail img-fluid" style="border: none; padding: 0;"
-                  [src]="kbwebsite[0].logo==null?'/assets/images/website/default-file-upload-image.png':kbwebsite[0].logo">
+                  [src]="logoimg">
               </div>
               <div class="kb-upload-card_body">
+
                 <div class="kb-btn-group">
                   <div class="kb-dropdown">
-
                     <div class="kb-dropdown_trigger">
-
-                      <button type="button" class="kb-btn">
+                      <button type="button" class="kb-btn" (click)="OnOpen()" >
                         <span class="kb-btn_truncate-text">
                           Choose a social image
                         </span>
                       </button>
-
                     </div>
-
                   </div>
-
                 </div>
+
+                <p class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
 
                 <p class="t-kb-body">Recommended dimensions of <strong>640x640</strong></p>
               </div>
@@ -104,17 +104,19 @@
           
           <label for="" class="mt-4">Favicon</label>
 
+          <input type="file" name="" (change)="changeme2($event)" id="fileElemfavicon" accept=".png, .jpg, .jpeg" class="drop-zone__input">
+
           <div class="kb-upload-card_dropzone">
             <div class="kb-upload-card_preview">
               <img alt="" class="kb-thumbnail img-fluid" style="border: none; padding: 0;"
-                [src]="kbwebsite[0].favicon==null?'/assets/images/website/default-file-upload-image.png':kbwebsite[0].favicon">
+                [src]="faviconimg">
             </div>
             <div class="kb-upload-card_body">
               <div class="kb-btn-group">
                 <div class="kb-dropdown">
                   <div class="kb-dropdown_trigger">
 
-                    <button type="button" class="kb-btn">
+                    <button type="button" class="kb-btn" (click)="OnOpen2()">
                       <span class="kb-btn_truncate-text">
                         Choose a social image
                       </span>
@@ -124,6 +126,7 @@
                 </div>
 
               </div>
+              <p class="mt-2"><small class="text-danger">{{typeerror2}}</small></p>
 
               <p class="t-kb-body">Recommended dimensions of <strong>32x32</strong></p>
             </div>

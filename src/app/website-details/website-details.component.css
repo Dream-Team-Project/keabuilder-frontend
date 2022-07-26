@@ -25,7 +25,7 @@ hr {
     border-top: 0.0625rem solid #e0e7f1;
 }
 .kb-upload-card_preview {
-    width: 2rem;
+    width: 4rem;
     max-width: 11.875rem;
     margin-right: 0;
     text-align: center;
@@ -226,4 +226,7 @@ hr {
 }
 .kb-full-width{
     width: 100%;
+}
+.drop-zone__input {
+    display: none;
 }

@@ -17,6 +17,14 @@ export class WebsiteDetailsComponent implements OnInit {
   pathselected = '';
   pagescriptheader = '';
   pagescriptfooter = '';
+  file = null;
+  typeerror = '';
+  typeerror2 = '';
+  logoimg = '/assets/images/website/default-file-upload-image.png';
+  faviconimg = '/assets/images/website/default-file-upload-image.png';
+  logoimgname = '';
+  faviconimgname = '';
+
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
@@ -69,6 +77,14 @@ export class WebsiteDetailsComponent implements OnInit {
               this.pathselected = element.homepage;
             }
 
+            if(element.logo!=null && element.logo!=''){
+              this.pathselected = element.logo;
+            }
+
+            if(element.favicon!=null && element.favicon!=''){
+              this.pathselected = element.favicon;
+            }
+
           });
       },
       error: err => {
@@ -89,8 +105,8 @@ export class WebsiteDetailsComponent implements OnInit {
 
         
         if(this.pathselected!=''){
-          console.log(this.pathselected);
-          this.fileUploadService.createhome(this.pathselected).subscribe({
+          var pathobj = {path:this.pathselected};
+          this.fileUploadService.createhome(pathobj).subscribe({
             next: data => {}
           });
         }
@@ -101,6 +117,60 @@ export class WebsiteDetailsComponent implements OnInit {
 
   }
 
+  changeme (event:any) {
+    var outsidethis:any = this;
+    this.file = event.target.files[0];
+    var chktype = event.target.files[0].type;
+    var getname = (event.target.files[0].name).split('.png');
+    var setname = (getname[0].toLowerCase()).replaceAll(" ","-");
+    var unqueid = Math.floor(Math.random()*8);
+    var finalval = setname+'-'+unqueid;
+    this.logoimgname = finalval;
+
+    console.log(this.logoimgname);
+
+    if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
+      this.typeerror = '';
+      var fileReader = new FileReader();
+      
+      fileReader.readAsDataURL(this.file);
+      fileReader.addEventListener("load", function (readerEvt:any) {
+        outsidethis.logoimg = this.result;
+      });    
+    }else{
+      this.logoimg = '/assets/images/website/default-file-upload-image.png';
+      this.typeerror = 'File Type Not Allow';
+    }
+
+  }
+
+  OnOpen(){
+    (<HTMLInputElement>document.getElementById('fileElemlogo')).click();
+  }
+
+  changeme2 (event:any) {
+    var outsidethis:any = this;
+    this.file = event.target.files[0];
+    var chktype = event.target.files[0].type;
+
+    if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
+      this.typeerror = '';
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(this.file);
+      fileReader.addEventListener("load", function () {
+        // console.log(this.result);
+        outsidethis.faviconimg = this.result;
+      });    
+    }else{
+      this.faviconimg = '/assets/images/website/default-file-upload-image.png';
+      this.typeerror2 = 'File Type Not Allow';
+    }
+
+  }
+
+  OnOpen2(){
+    (<HTMLInputElement>document.getElementById('fileElemfavicon')).click();
+  }
 
 
 }

@@ -74,6 +74,17 @@ export class ImageService {
         );
     }
 
+    onImageFileUpload(data:any) {
+        this.file = this.base64ToFile(data.path, data.name)
+        this.fileUploadService.upload(this.file).subscribe(
+            (event: any) => {
+                if (typeof (event) === 'object') {
+                    return event;
+                }
+            }
+        );
+    }
+
     saveImageOnDb(data: any) {
         this.selectedImg.title = this.croppedEvent ? this.selectedImg.title : data.originalname.split('.')[0];
         this.selectedImg.alt = this.selectedImg.alt ? this.selectedImg.alt : this.selectedImg.title;
@@ -198,7 +209,6 @@ export class ImageService {
             const reader = new FileReader();
             reader.onload = e => this.selectedImg.path = reader.result;
             reader.readAsDataURL(this.file);
-            console.log(this.file);
             if(directUpload) this.onUpload();
         }
     }
