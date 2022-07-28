@@ -57,6 +57,7 @@ import { WebsiteDesignComponent } from './website-design/website-design.componen
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
+import { FormBuilderComponent } from './form-builder/form-builder.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -80,6 +81,9 @@ const routes: Routes = [
   { path: 'funnels', component: FunnelComponent,
   children: [
     { path: '', component: AllFunnelsComponent, canActivate: [AuthGuard] },
+    { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
+    { path: 'archieve', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
+    { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
     { path: ':funnel_id', component: FunnelWizardNavComponent, 
     children: [
       { path: 'steps/:step_id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
@@ -89,9 +93,6 @@ const routes: Routes = [
       { path: 'settings', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] }
     ],
     canActivate: [AuthGuard]},
-    { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-    { path: 'archieve', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
-    { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
 
@@ -129,6 +130,7 @@ const routes: Routes = [
   { path: 'builder/funnel/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'preview/website/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'preview/funnel/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'form-builder', component: FormBuilderComponent, canActivate: [AuthGuard] },
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -148,6 +150,7 @@ export const RoutingComponents =
     FunnelComponent,
     FunnelArchieveComponent,
     FunnelMarketplaceComponent,
+    FunnelWizardNavComponent,
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
@@ -195,5 +198,6 @@ export const RoutingComponents =
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
     IntegrationsComponent,
+    FormBuilderComponent,
   ];
 

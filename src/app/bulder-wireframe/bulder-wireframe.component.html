@@ -1,6 +1,6 @@
 <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
 <div #wireframe [style.width]="_general.wfmW" mwlResizable [enableGhostResize]="true" (resizeEnd)="_general.onResizeEnd($event, wireframe)"
-    id="kb-wireframe" style="background-color: #f7f8f9" [class.openWireframe]="_general.wireframe.open" 
+    id="kb-wireframe" style="background-color: var(--kb-gray)" [class.openWireframe]="_general.wireframe.open" 
     [class.closeWireframe]="_general.wireframe.close" class="kb-wfs-contain">
     <div id="kb-wfs-navtimes" [style]="navtimeStyle" (click)="_general.wireframeToggle(false)" [class.kb-wfs-navtimes-btn-open]="_general.wireframe.open"
     [class.kb-wfs-navtimes-btn-close]="_general.wireframe.close" matTooltip="Close" matTooltipPosition="below">

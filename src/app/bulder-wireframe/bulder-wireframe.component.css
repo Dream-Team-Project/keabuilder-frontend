@@ -245,7 +245,7 @@ span.kb-setting-icon .kb-handle-block {
 .kb-wfs-contain .kb-wfs {
     width: 100%;
     height: 36px;
-    background-color: var(--kb-gray);
+    background-color: var(--clr-light);
     border-radius: 5px;
     font-size: 14px;
     margin: 5px 0px;
@@ -281,7 +281,7 @@ span.kb-setting-icon.kb-handle-column {
 
 span.kb-wfs-name {
     display: block;
-    width: 66%;
+    width: 46%;
     text-align: center;
     position: absolute;
     left: 50px;
@@ -314,7 +314,7 @@ span.kb-chngName {
 input.kb-chngname-inp {
     background: transparent;
     border: none;
-    width: 70%;
+    width: 80%;
     color: var(--kb-light);
 }
 
