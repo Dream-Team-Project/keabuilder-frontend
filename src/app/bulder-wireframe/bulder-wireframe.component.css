@@ -6,8 +6,28 @@
     padding: 0;
     width: 100%;
     list-style: none;
-    transition: 0.2s ease-out;
 }
+
+.blockFocus .kb-drag-container:hover .kb-ispan-add {
+    display: none;
+}
+
+.custom-preview {
+    height: 36px;
+  }
+  
+  .custom-placeholder {
+    min-height: 36px;
+  }
+
+  .custom-placeholder:not(.kb-wfs-element .custom-placeholder) {
+    max-width: 90%;
+  }
+
+  .kb-wfs-row>.custom-placeholder {
+    position: relative;
+    left: 5%;
+  }
 
 .dislay-device-list {
     position: absolute;

@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectionStrategy, ElementRef} from '@angular/core';
-import { Options } from 'sortablejs';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import { SectionService } from '../_services/_builderService/section.service';
 import { RowService } from '../_services/_builderService/row.service';
 import { ColumnService } from '../_services/_builderService/column.service';
@@ -11,6 +10,8 @@ import { NgxMatColorPickerInput } from '@angular-material-components/color-picke
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { NgxCaptureService } from 'ngx-capture';
 import { FileUploadService } from '../_services/file-upload.service';
+import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { asapScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-builder',
@@ -18,8 +19,14 @@ import { FileUploadService } from '../_services/file-upload.service';
   styleUrls: ['./builder.component.css','./material.component.css'],
 })
 
-
 export class BuilderComponent implements OnInit, AfterViewInit {
+
+  @ViewChildren(CdkDropList)
+  public dlq: QueryList<CdkDropList>[] = [];
+  
+  public secdls: CdkDropList[] = [];
+  public rowdls: CdkDropList[] = [];
+  public eledls: CdkDropList[] = [];
 
   DialogParentToggle:boolean = false;
 
@@ -50,9 +57,59 @@ export class BuilderComponent implements OnInit, AfterViewInit {
           this._general.loading.success = false; 
           this.setBuilder(this._general.file.html, this._general.file.css);
           this._general.file.load = false;
-        });
+        })
       })
+      _section.builderCDKMethodCalled$.subscribe(() => {
+        setTimeout((e:any)=>{
+          this.setDragDrop();
+        })
+      });
    }
+
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+    this._section.savePageSession();
+  }  
+
+  setDragDrop() {
+    let secldls: CdkDropList[] = [];
+    let rowldls: CdkDropList[] = [];
+    let eleldls: CdkDropList[] = [];
+    this.dlq.forEach((dl:any) => {
+      if(dl.id.split('-')[0] == 'elegroup') {
+        eleldls.push(dl);
+      }
+      else if(dl.id.split('-')[0] == 'rowgroup') {
+        rowldls.push(dl);
+      }
+      else {
+        secldls.push(dl);
+      }
+    });
+
+    secldls = secldls.reverse();
+    rowldls = rowldls.reverse();
+    eleldls = eleldls.reverse();
+
+    asapScheduler.schedule(() => { this.secdls = secldls; });
+    asapScheduler.schedule(() => { this.rowdls = rowldls; });
+    asapScheduler.schedule(() => { this.eledls = eleldls; });
+  }
 
   takePageSS(main:any) {
     this._general.saveDisabled = true;
@@ -66,7 +123,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             (event: any) => {
                 if (typeof (event) === 'object') {
                   this._general.saveDisabled = false;
-                  this._general.openSnackBar('Page has been done', 'X');
+                  this._general.openSnackBar('Page has been saved', 'X');
                 }
             });
         })
@@ -85,12 +142,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     this._style.blockSetting(this._general.main);
     this.openDialog(event);
     this._general.showfloatnavtoggle();
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
   }
 
   filterStyle(id:any, css:any, media:string) {
@@ -294,68 +345,5 @@ export class BuilderComponent implements OnInit, AfterViewInit {
 
   // drag drop box
 
-  // builder options
-
-  builderSectionOptions: Options = {
-    group: 'section',
-    scroll: true,
-    sort: true,
-    handle: '.kb-handle-section',
-    // dragoverBubble: false,
-    // fallbackOnBody: false,
-    // draggable: ".class",
-    scrollSensitivity: 100,
-    animation: 300,
-    onUpdate: (event: any) => {
-      this._section.savePageSession();
-    },
-    onStart: function (/**Event*/evt) {
-      // console.log(evt.oldIndex);  // element index within parent
-    },
-    onChoose: function (/**Event*/evt) {
-      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-    },
-  };  
-
-  builderRowOptions: Options = {
-    group: 'row',
-    scroll: true,
-    sort: true,
-    handle: '.kb-handle-row',
-    scrollSensitivity: 100,
-    animation: 300,
-    onUpdate: (event: any) => {
-      this._section.savePageSession();
-    },
-    onStart: function (/**Event*/evt) {
-      // console.log(evt.oldIndex);  // element index within parent
-    },
-    onChoose: function (/**Event*/evt) {
-      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-    },
-  };  
-
-  builderElementOptions: Options = {
-    group: 'element',
-    scroll: true,
-    sort: true,
-    handle: '.kb-handle-element',
-    scrollSensitivity: 100,
-    animation: 300,
-    onUpdate: (event: any) => {
-      this._section.savePageSession();
-    },
-    onAdd: (event: any) => {
-      this._section.savePageSession();
-    },
-    onStart: function (/**Event*/evt) {
-      // console.log(evt.oldIndex);  // element index within parent
-    },
-    onChoose: function (/**Event*/evt) {
-      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-    },
-  };  
-
-  // builder options
-
 }
+

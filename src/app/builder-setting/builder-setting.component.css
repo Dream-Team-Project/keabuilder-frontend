@@ -186,3 +186,13 @@ input.errorInp {
         transform: scale(1);
     }
 }
+
+.custom-preview {
+    height: 36px;
+    background-color: var(--row-color);
+  }
+  
+  .custom-placeholder {
+    background-color: var(--kb-gray);
+    min-height: 36px;
+  }

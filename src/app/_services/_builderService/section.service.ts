@@ -1,11 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { StyleService } from './style.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class SectionService {
+
+    // Observable string sources
+    private builderCDKMethodCallSource = new Subject<any>();
+  
+    // Observable string streams
+    builderCDKMethodCalled$ = this.builderCDKMethodCallSource.asObservable();
+  
+    // Service message commands
+    callbuilderCDKMethod() {
+      this.builderCDKMethodCallSource.next('');
+    }
 
   sections:any = [];
   sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
@@ -35,6 +48,7 @@ export class SectionService {
       this.pageSession.undo = this.pageSessionArr.length-1; 
       this.pageSession.redo = this.pageSessionArr.length; 
     }
+    this.callbuilderCDKMethod();
   }
 
   undo() {

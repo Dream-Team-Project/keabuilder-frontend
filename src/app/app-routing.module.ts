@@ -58,6 +58,7 @@ import { WebsiteDetailsComponent } from './website-details/website-details.compo
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
+import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -199,5 +200,6 @@ export const RoutingComponents =
     WebsiteDetailsComponent,
     IntegrationsComponent,
     FormBuilderComponent,
+    BuilderTopbarComponent
   ];
 

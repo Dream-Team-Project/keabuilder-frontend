@@ -11,6 +11,7 @@ import { StyleService } from '../_services/_builderService/style.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { GeneralService } from '../_services/_builderService/general.service';
 import { ImageService } from '../_services/image.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-builder-setting',
@@ -63,6 +64,11 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       this.overlayRefDetach(false);
       })
    }
+
+   drop(event: CdkDragDrop<any>) {
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    this._section.savePageSession();
+  }  
 
   ngAfterViewInit() {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
@@ -151,31 +157,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     };
     this.overlayRefDetach(false);
   }
-
-  // builder options
-
-  builderColumnOptions: Options = {
-    group: 'column',
-    scroll: true,
-    sort: true,
-    handle: '.kb-handle-column',
-    scrollSensitivity: 100,
-    animation: 300,
-    onUpdate: (event: any) => {
-      this._column.filterCls(this._row.selectedRow);
-    },
-    onAdd: (event: any) => {
-      this._column.filterCls(this._row.selectedRow);
-    },
-    onStart: function (/**Event*/evt) {
-      // console.log(evt.oldIndex);  // element index within parent
-    },
-    onChoose: function (/**Event*/evt) {
-      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-    },
-  };  
-
-  // builder options
 
   // menu options
 

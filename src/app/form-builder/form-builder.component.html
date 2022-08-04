@@ -1,21 +1,48 @@
 <app-builder-topbar></app-builder-topbar>
 <div id="kb-main">
     <div id="kb-form-cont">
-        <form id="kb-form">
-            <div id="kb-form-title">
-                <div class="kb-heading"><h2>FORM TITLE</h2></div>
-                <div class="kb-subheading"><span>Form subtitile</span></div>
-            </div>
+        <form id="kb-form" name="form-opt" cdkDropList (cdkDropListDropped)="itemDropped($event)">
+                <div cdkDrag class="kb-form-element" *ngFor="let fe of _formS.formOpt, index as fei, odd as o" [ngSwitch]="fe.name">
+                        <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'"><i [class]="fe.icls"></i></div>
+                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
+                        <div class="kb-form-setting">
+                            <span *ngIf="_formS.formOpt.length > 1" class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
+                            <span
+                                matTooltip="Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
+                            <span matTooltip="Duplicate"
+                                matTooltipPosition="above"><i class="far fa-copy"></i></span>
+                            <span *ngIf="_formS.formOpt.length != 1"
+                                matTooltip="Remove" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+                        </div>
+                        <div *ngSwitchCase="'heading'" class="kb-form-heading">{{fe.content}}</div>
+                        <div *ngSwitchCase="'sub heading'" class="kb-form-subheading">{{fe.content}}</div>
+                        <div *ngSwitchCase="'paragraph'" class="kb-form-para">{{fe.content}}</div>
+                        <div *ngSwitchDefault  class="kb-form-subheading"><input [type]="fe.type"></div>
+                </div>
         </form>
     </div>
     <div id="kb-sidebar">
         <div id="form-elements">
-            <ul class="form-ele-list">
+            <mat-list class="form-ele-list"
+            cdkDropList cdkDropListConnectedTo="kb-form" [cdkDropListData]="_formS.formEle"> 
+                <mat-list-item
+                      cdkDrag
+                      *ngFor="let fe of _formS.formEle, index as fei, odd as o"
+                      [cdkDragData]="fe"
+                      >
+                        <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'"><i [class]="fe.icls"></i></div>
+                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
+                      <i [class]="fe.icls"></i>
+                      <span>{{fe.name | titlecase}}</span>
+                </mat-list-item>
+            </mat-list>
+            <!-- <ul class="form-ele-list" [sortablejs]="_formS.formEle"
+            [sortablejsOptions]="builderFormElementOptions">
                 <li *ngFor="let fe of _formS.formEle, index as fei">
                     <i [class]="fe.icls"></i>
                     <span>{{fe.name | titlecase}}</span>
                 </li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 </div>

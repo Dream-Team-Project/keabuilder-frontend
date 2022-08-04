@@ -14,13 +14,14 @@
         <button (click)="_general.expandAll(sectionUl, false)" mat-raised-button class="kb-btn kb-btn-primary">Collapse
             All</button>
     </div>
-    <ul #sectionUl class="kb-drag-container kb-wfs-section" [sortablejs]="_section.sections"
-        [sortablejsOptions]="builderSectionOptions">
-        <li *ngFor="let section of _section.sections, index as si"
+    <ul #sectionUl class="kb-drag-container kb-wfs-section" cdkDropList [cdkDropListConnectedTo]="secdls" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
+        <li cdkDrag *ngFor="let section of _section.sections, index as si"
             (mouseenter)="_row.selectedSectionRows = section.rowArr">
+            <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">{{section.name ? section.name : 'Section'}}</div>
+            <div *cdkDragPlaceholder class="kb-wfs custom-placeholder" [style.backgroundColor]="'var(--section-color)'"></div>
             <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; section.chngName = false" class="kb-wfs">
                 <span class="kb-setting-icon">
-                    <i *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section fas fa-arrows-alt-v"></i>
+                    <i cdkDragHandle *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section fas fa-arrows-alt-v"></i>
                     <i (click)="_general.expandDevList('devListS-'+si)" class="fa" [class]="_style.getDisplay(section.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                     <div [id]="'devListS-'+si" class="dislay-device-list" [style.maxHeight]="'0px'">
                             <mat-checkbox [checked]="_general.isAllHide(section.hide)"
@@ -59,8 +60,10 @@
                 </span>
             </span>
             <ul #rowUl [style.maxHeight]="'fit-content'" name="row" class="kb-drag-container kb-wfs-row kb-block-shift"
-                [sortablejs]="section.rowArr" [sortablejsOptions]="builderRowOptions">
-                <li *ngFor="let row of section.rowArr, index as ri" (mouseenter)="_row.selectedRow = row;">
+            cdkDropList [id]="'rowgroup-'+si" [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="rowdls" (cdkDropListDropped)="drop($event)">
+                <li cdkDrag *ngFor="let row of section.rowArr, index as ri" (mouseenter)="_row.selectedRow = row;">
+                    <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
+                    <div *cdkDragPlaceholder class="kb-wfs custom-placeholder" [style.backgroundColor]="'var(--row-color)'"></div>
                     <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; row.chngName = false" class="kb-wfs">
                         <span class="kb-setting-icon">
                             <i *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row fas fa-arrows-alt-v"></i>
@@ -104,10 +107,12 @@
                         </span>
                     </span>
                     <ul #columnUl [style.maxHeight]="'fit-content'" name="column"
-                        class="kb-drag-container kb-wfs-column" [sortablejs]="row.columnArr"
-                        [sortablejsOptions]="builderColumnOptions">
-                        <li class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
+                        class="kb-drag-container kb-wfs-column" [cdkDropListEnterPredicate]="verifyDrop"
+                            cdkDropList [id]="'colgroup-'+ri" [cdkDropListData]="row.columnArr" [cdkDropListConnectedTo]="coldls" (cdkDropListDropped)="drop($event)">
+                        <li cdkDrag class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
                             (mouseenter)="_element.selectedElements = column.elementArr">
+                            <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--kb-text-color)', 'background-color':'var(--clr-light)'}">{{column.name ? column.name : 'Column'}}</div>
+                            <div *cdkDragPlaceholder class="kb-wfs custom-placeholder" [style.backgroundColor]="'var(--clr-light)'"></div>
                             <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-wfs">
                                 <span class="kb-setting-icon">
                                     <i *ngIf="row.columnArr.length > 1" class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>
@@ -148,12 +153,13 @@
                                         class="far fa-trash-alt"></i>
                                 </span>
                             </span>
-                            <ul name="element" class="kb-drag-container kb-wfs-element" [sortablejs]="column.elementArr"
-                                [sortablejsOptions]="builderElementOptions">
-                                <li *ngFor="let element of column.elementArr, index as ei">
+                            <ul name="element" class="kb-drag-container kb-wfs-element" cdkDropList [id]="'elegroup-'+ci" [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="eledls" (cdkDropListDropped)="drop($event)">
+                                <li cdkDrag *ngFor="let element of column.elementArr, index as ei">
+                                    <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">{{element.name ? element.name : element.content.name}}</div>
+                                    <div *cdkDragPlaceholder class="kb-wfs custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
                                     <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; element.chngName = false" class="kb-wfs">
                                         <span class="kb-setting-icon">
-                                            <i class="kb-handle-block kb-handle-element fas fa-arrows-alt-v"></i>
+                                            <i cdkDragHandle class="kb-handle-block kb-handle-element fas fa-arrows-alt-v"></i>
                                             <i (click)="_general.expandDevList('devListE-'+si+ri+ci+ei)" class="fa" [class]="_style.getDisplay(element.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                                             <div [id]="'devListE-'+si+ri+ci+ei" class="dislay-device-list" [style.maxHeight]="'0px'">
                                                     <mat-checkbox [checked]="_general.isAllHide(element.hide)"
@@ -196,16 +202,16 @@
                                         </span>
                                     </span>
                                 </li>
-                            </ul>
-                            <div *ngIf="column.elementArr == 0" class="kb-wfs-add-block" matTooltip="Add New Element"
+                                <li cdkDrag *ngIf="column.elementArr == 0" class="kb-wfs-add-block" matTooltip="Add New Element"
                                 matTooltipPosition="above"
                                 (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)">
                                 <span class="kb-wfs-addnew"><i class="fa fa-plus"></i></span>
-                            </div>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
-                <li *ngIf="section.rowArr.length == 0" class="kb-wfs">
+                <li cdkDrag *ngIf="section.rowArr.length == 0" class="kb-wfs">
                     <div class="kb-wfs-add-block"
                         (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
                         matTooltip="Add New Row" matTooltipPosition="below"><span class="kb-wfs-addnew"><i

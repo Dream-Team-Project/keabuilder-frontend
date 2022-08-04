@@ -210,13 +210,14 @@
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Menu Items</div>
                             <div class="kb-cs-contain">
-                                <ul class="kb-drag-container" [sortablejs]="_general.selectedBlock.content.items"
-                                    [sortablejsOptions]="builderMenuOptions">
-                                    <li *ngFor="let item of _general.selectedBlock.content.items, index as mi"
-                                    (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; item.chngName = false" class="kb-cs">
-                                        <span *ngIf="_general.selectedBlock.content.items.length > 1"
+                                <ul class="kb-drag-container" cdkDropList [cdkDropListData]="_general.selectedBlock.content.items" (cdkDropListDropped)="drop($event)">
+                                    <li cdkDrag *ngFor="let item of _general.selectedBlock.content.items, index as mi"
+                                    (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; item.chngName = false" class="kb-cs kb-block-container">
+                                        <div *cdkDragPreview class="custom-preview">{{item.name ? item.name : 'Menu Item'}}</div>
+                                        <div *cdkDragPlaceholder class="custom-placeholder kb-cs"></div>        
+                                        <span
                                             class="kb-setting-icon">
-                                            <i class="kb-handle-menu kb-handle-block fas fa-arrows-alt-v"></i>
+                                            <i cdkDragHandle *ngIf="_general.selectedBlock.content.items.length > 1" class="kb-handle-menu kb-handle-block fas fa-arrows-alt-v"></i>
                                             <i (click)="_general.expandDevList('menu-item-'+mi)" class="fa" [class]="_style.getDisplay(item.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                                             <div [id]="'menu-item-'+mi" class="dislay-device-list" [style.maxHeight]="'0px'">
                                                     <mat-checkbox [checked]="_general.isAllHide(item.hide)"
@@ -1080,13 +1081,15 @@
                                 </div>
                             </div>
                             <div class="kb-cs-contain">
-                                <ul class="kb-drag-container" [sortablejs]="_general.selectedBlock.columnArr"
-                                    [sortablejsOptions]="builderColumnOptions">
-                                    <li *ngFor="let column of _general.selectedBlock.columnArr, index as index"
-                                    (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-cs">
-                                        <span *ngIf="_general.selectedBlock.columnArr.length > 1"
+                                <ul class="kb-drag-container"
+                                cdkDropList [cdkDropListData]="_general.selectedBlock.columnArr" (cdkDropListDropped)="drop($event)">
+                                    <li cdkDrag *ngFor="let column of _general.selectedBlock.columnArr, index as index"
+                                    (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-cs kb-block-container">
+                                        <div *cdkDragPreview class="custom-preview">{{column.name ? column.name : 'column'}}</div>
+                                        <div *cdkDragPlaceholder class="custom-placeholder kb-cs"></div>    
+                                        <span
                                             class="kb-setting-icon">
-                                            <i class="kb-handle-column kb-handle-block fas fa-arrows-alt-v"></i>
+                                            <i cdkDragHandle *ngIf="_general.selectedBlock.columnArr.length > 1" class="kb-handle-column kb-handle-block fas fa-arrows-alt-v"></i>
                                             <i (click)="_general.expandDevList('column-'+index)" class="fa" [class]="_style.getDisplay(column.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                                             <div [id]="'column-'+index" class="dislay-device-list" [style.maxHeight]="'0px'">
                                                     <mat-checkbox [checked]="_general.isAllHide(column.hide)"

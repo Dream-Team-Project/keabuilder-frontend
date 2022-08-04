@@ -6,10 +6,10 @@
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
             <div id="kb-main"
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
-                <div name="section" class="kb-drag-container" [sortablejs]="_section.sections"
-                    [sortablejsOptions]="builderSectionOptions">
+                <div class="kb-drag-container"
+                cdkDropList [cdkDropListConnectedTo]="secdls" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
                     <!-- sections start -->
-                    <div *ngFor="let section of _section.sections, index as si"
+                    <div cdkDrag *ngFor="let section of _section.sections, index as si"
                         [title]="section.name ? section.name : ''"
                         (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
                         (mouseleave)="section.setting = false"
@@ -19,8 +19,10 @@
                         [id]="section.id" class="kb-section kb-block-container"
                         [class.kb-block-disabled]="_general.showInlineEditor">
                         <!-- sections setting navigation start -->
+                        <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">{{section.name ? section.name : 'Section'}}</div>
+                        <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--section-color)'"></div>
                         <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
-                            <span *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
+                            <span cdkDragHandle *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
                             <span
                                 (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
                                 matTooltip="Section Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
@@ -40,10 +42,10 @@
                             class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
                             matTooltipPosition="below"><i class="fa fa-plus"></i></span>
                         <!-- add new section option end -->
-                        <div name="row" class="kb-drag-container" [sortablejs]="section.rowArr"
-                            [sortablejsOptions]="builderRowOptions">
+                        <div class="kb-drag-container"
+                        cdkDropList [id]="'rowgroup-'+si" [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="rowdls" (cdkDropListDropped)="drop($event)">
                             <!-- rows start -->
-                            <div *ngFor="let row of section.rowArr, index as ri"
+                            <div cdkDrag *ngFor="let row of section.rowArr, index as ri"
                                 [title]="row.name ? row.name : ''"
                                 (mouseenter)="row.setting = true; _row.selectedRow = row;"
                                 (mouseleave)="row.setting = false"
@@ -54,8 +56,10 @@
                                 [class.kb-block-disabled]="_general.showInlineEditor"
                                 class="kb-row kb-block-container">
                                 <!-- rows setting navigation start -->
+                                <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
+                                <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--row-color)'"></div>
                                 <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
-                                    <span *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
+                                    <span cdkDragHandle *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
                                     <span *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
                                         matTooltip="Column Structure" matTooltipPosition="above"><i
                                             class="fa fa-columns"></i></span>
@@ -68,7 +72,7 @@
                                         matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
                                 </div>
                                 <!-- rows setting navigation end -->
-                                <div name="column" class="kb-column-wrap" 
+                                <div class="kb-column-wrap" 
                                 [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
                                 [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                                 [style.flexDirection]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getColumnReverse(_style.columnRev): _style.getColumnReverse(row.columnRev)"
@@ -82,11 +86,11 @@
                                         [class.kb-block-none]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.getDisplay(_style.hide) : _style.getDisplay(column.hide)"
                                         [class]="row.rowSize"
                                         [id]="column.id" class="kb-column kb-block-container">
-                                        <div name="element" class="kb-drag-container" [sortablejs]="column.elementArr"
-                                            [sortablejsOptions]="builderElementOptions"
+                                        <div class="kb-drag-container"
+                                        cdkDropList [id]="'elegroup-'+ci" [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="eledls" (cdkDropListDropped)="drop($event)"
                                             (change)="_element.selectedElements = column.elementArr">
                                             <!-- elements start -->
-                                            <div *ngFor="let element of column.elementArr, index as ei"
+                                            <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
                                                 [title]="element.name ? element.name : ''"
                                                 (dblclick)="elementDblClk(element, $event)"
                                                 (mouseenter)="element.setting = true"
@@ -97,8 +101,10 @@
                                                 [class.kb-block-disabled]="_general.showInlineEditor"
                                                 [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
                                                 [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
+                                                <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">{{element.name ? element.name : element.content.name}}</div>
+                                                <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
-                                                    <span class="kb-handle-block kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
+                                                    <span cdkDragHandle class="kb-handle-block kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
                                                     <span
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i

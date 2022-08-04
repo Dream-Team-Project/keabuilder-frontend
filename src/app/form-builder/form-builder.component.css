@@ -37,7 +37,7 @@ div#kb-sidebar {
     overflow-y: scroll;
 }
 
-div#form-elements .form-ele-list li {
+div#form-elements .form-ele-list mat-list-item {
     background-color: var(--kb-light);
     color: var(--kb-dark);
     font-weight: 600;
@@ -50,47 +50,55 @@ div#form-elements .form-ele-list li {
     cursor: all-scroll;
     overflow: hidden;
     font-size: 16px;
+    box-shadow: 0px 1px 1px 1px rgb(0 0 0 / 5%);
+    /* transition: 0.2s ease-in-out; */
 }
 
-i.fa-submit:before {
-    content: 'Send';
-    font-style: normal;
-    font-size: 10px;
-    position: relative;
+div#form-elements .form-ele-list mat-list-item:hover {
+    box-shadow: 1px 2px 10px 4px rgb(0 0 0 / 15%);
 }
 
-i.fa-submit {
-    padding: 0px 7px!important;   
-}
-
-div#form-elements .form-ele-list li:nth-child(odd) i{
+div#form-elements .form-ele-list mat-list-item:nth-child(odd) i, div.kb-form-element:nth-child(odd) div.kb-form-setting {
     background-color: var(--section-color);
 }
 
-div#form-elements .form-ele-list li:nth-child(even) i{
+div#form-elements .form-ele-list mat-list-item:nth-child(even) i, div.kb-form-element:nth-child(even) div.kb-form-setting {
     background-color: var(--row-color);
 }
 
-div#form-elements .form-ele-list li i{
+div#form-elements .form-ele-list mat-list-item i, .custom-preview-icon{
     color: var(--clr-light);
     padding: 14px;
-    display: block;
     margin-right: 10px;
     font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 48px;   
+    min-height: 48px;   
 }
 
-div#form-elements .form-ele-list li:last-child {
+.custom-preview-icon {
+    border-radius: 3px;
+}
+
+div#form-elements .form-ele-list mat-list-item:last-child {
     margin-bottom: 20px;
 }
 
-div#form-elements .form-ele-list li:not(:last-child) {
+div#form-elements .form-ele-list mat-list-item:not(:last-child) {
     margin-bottom: 10px;
 }
 
-ul.form-ele-list {
+.form-ele-list {
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+::ng-deep span.mat-list-item-content {
+    padding: 0px!important;
+    width: 100%;
 }
 
 ::ng-deep h1,
@@ -106,15 +114,87 @@ ul.form-ele-list {
     margin: 0 !important;
 }
 
-#kb-form-title .kb-subheading{
+div.kb-form-element {
+    position: relative;
+    min-height: 20px;
+    padding: 8px;
+}
+
+div.kb-form-element:before {
+    content: '';
+    border: 3px solid transparent;
+    position: absolute;
+    transition: 0.2s ease;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+div.kb-form-element:nth-child(odd):hover:before {
+    border-color: var(--section-color);
+}
+
+div.kb-form-element:nth-child(even):hover:before {
+    border-color: var(--row-color);
+}
+
+div.kb-form-element:hover .kb-form-setting {
+    opacity: 1;
+}
+
+div.kb-form-setting span {
+    padding: 6px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+    display: inline-block;
+}
+
+div.kb-form-setting span:hover {
+    color: var(--kb-gray);
+}
+
+div.kb-form-setting i {
+    font-size: 14px;
+}
+
+div.kb-form-setting span.kb-handle-element {
+    cursor: move;
+}
+
+div.kb-form-setting {
+    color: var(--kb-light);
+    position: absolute;
+    top: -33px;
+    right: 0px;
+    padding: 0 8px;
+    border-radius: 3px 3px 0px 0px;
+    animation: show 0.2s ease;
+    z-index: 99;
+    background-color: var(--section-color);
+    opacity: 0;
+}
+
+.kb-form-para {
     font-size: 14px;
     font-weight: 400;
     color: var(--secondary-color);
 }
 
+.kb-form-subheading {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
 
-#kb-form-title .kb-heading {
+.kb-form-heading {
     font-size: 24px;
     font-weight: 600;
     color: var(--kb-text-color);
+}
+
+i.fa-subh:before {
+    content: 'S';
+    font-size: 28px;
 }

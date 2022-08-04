@@ -32,8 +32,8 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,7 +52,6 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
-import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
 
 @NgModule({
   declarations: [
@@ -60,8 +59,7 @@ import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.componen
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    SafeHtmlPipe,
-    BuilderTopbarComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -119,6 +117,6 @@ import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.componen
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
     MatTableModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -1,19 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { Options } from 'sortablejs';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { SectionService } from '../_services/_builderService/section.service';
 import { RowService } from '../_services/_builderService/row.service';
 import { ColumnService } from '../_services/_builderService/column.service';
 import { ElementService } from '../_services/_builderService/element.service';
 import { StyleService } from '../_services/_builderService/style.service';
 import { GeneralService } from '../_services/_builderService/general.service';
-import { ImageService } from '../_services/image.service';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { asapScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-bulder-wireframe',
   templateUrl: './bulder-wireframe.component.html',
   styleUrls: ['./bulder-wireframe.component.css']
 })
-export class BulderWireframeComponent implements OnInit {
+export class BulderWireframeComponent implements OnInit, AfterViewInit {
+
+  @ViewChildren(CdkDropList)
+  public dlq: QueryList<CdkDropList>[] = [];
+  
+  public secdls: CdkDropList[] = [];
+  public coldls: CdkDropList[] = [];
+  public rowdls: CdkDropList[] = [];
+  public eledls: CdkDropList[] = [];
+
   get = false
   DialogParentToggle:boolean = false;
   navtimeStyle:any = {
@@ -36,10 +45,66 @@ export class BulderWireframeComponent implements OnInit {
         public _column: ColumnService,
         public _element: ElementService,
         public _general: GeneralService,
-        public _image: ImageService,
         // builder services end
   ) {
+    _section.builderCDKMethodCalled$.subscribe(() => {
+      setTimeout((e:any)=>{
+        this.setDragDrop();
+      })
+    });
    }
+
+  ngAfterViewInit(): void {
+  }
+
+  verifyDrop(drag?: CdkDrag, drop?: CdkDropList) {
+    return drop?.data.length != 6;
+  };
+
+  setDragDrop() {
+    let secldls: CdkDropList[] = [];
+    let colldls: CdkDropList[] = [];
+    let rowldls: CdkDropList[] = [];
+    let eleldls: CdkDropList[] = [];
+    this.dlq.forEach((dl:any) => {
+      if(dl.id.split('-')[0] == 'elegroup') {
+        eleldls.push(dl);
+      }
+      else if(dl.id.split('-')[0] == 'colgroup') {
+        colldls.push(dl);
+      }
+      else if(dl.id.split('-')[0] == 'rowgroup') {
+        rowldls.push(dl);
+      }
+      else {
+        secldls.push(dl);
+      }
+    });
+
+    secldls = secldls.reverse();
+    colldls = colldls.reverse();
+    rowldls = rowldls.reverse();
+    eleldls = eleldls.reverse();
+
+    asapScheduler.schedule(() => { this.secdls = secldls; });
+    asapScheduler.schedule(() => { this.coldls = colldls; });
+    asapScheduler.schedule(() => { this.rowdls = rowldls; });
+    asapScheduler.schedule(() => { this.eledls = eleldls; });
+  }
+
+  drop(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+    this._section.savePageSession();
+  }  
 
   ngOnInit(): void {
   }
@@ -47,94 +112,4 @@ export class BulderWireframeComponent implements OnInit {
   openDialog(e:any) {
     this.DialogParentToggle = !this.DialogParentToggle;
   }
-
-    // builder options
-
-    builderSectionOptions: Options = {
-      group: 'wf-section',
-      scroll: true,
-      sort: true,
-      handle: '.kb-handle-section',
-      // dragoverBubble: false,
-      // fallbackOnBody: false,
-      // draggable: ".class",
-      scrollSensitivity: 100,
-      animation: 300,
-      onUpdate: (event: any) => {
-        this._section.savePageSession();
-      },
-      onStart: function (/**Event*/evt) {
-        // console.log(evt.oldIndex);  // element index within parent
-      },
-      onChoose: function (/**Event*/evt) {
-        // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-      },
-    };  
-  
-    builderRowOptions: Options = {
-      group: 'wf-row',
-      scroll: true,
-      sort: true,
-      handle: '.kb-handle-row',
-      scrollSensitivity: 100,
-      animation: 300,
-      onUpdate: (event: any) => {
-        this._section.savePageSession();
-      },
-      onStart: function (/**Event*/evt) {
-        // console.log(evt.oldIndex);  // element index within parent
-      },
-      onChoose: function (/**Event*/evt) {
-        // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-      },
-    };  
-
-    builderColumnOptions: Options = {
-      group: {
-        name: 'wf-column',
-        pull: false,
-        put: false,
-      },
-      scroll: true,
-      sort: true,
-      handle: '.kb-handle-column',
-      scrollSensitivity: 100,
-      animation: 300,
-      onUpdate: (event: any) => {
-        this._column.filterCls(this._row.selectedRow);
-      },
-      onAdd: (event: any) => {
-        this._column.filterCls(this._row.selectedRow);
-      },
-      onStart: function (/**Event*/evt) {
-        // console.log(evt.oldIndex);  // element index within parent
-      },
-      onChoose: function (/**Event*/evt) {
-        // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-      },
-    };  
-  
-    builderElementOptions: Options = {
-      group: 'element',
-      scroll: true,
-      sort: true,
-      handle: '.kb-handle-element',
-      scrollSensitivity: 100,
-      animation: 300,
-      onUpdate: (event: any) => {
-        this._section.savePageSession();
-      },
-      onAdd: (event: any) => {
-        this._section.savePageSession();
-      },
-      onStart: function (/**Event*/evt) {
-        // console.log(evt.oldIndex);  // element index within parent
-      },
-      onChoose: function (/**Event*/evt) {
-        // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-      },
-    };  
-  
-    // builder options
-
 }

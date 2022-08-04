@@ -23,7 +23,7 @@ export class FileUploadService {
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
   createHomeApi = '/api/createhome';
-  deletePageApi = '/api/deletepage/:path';
+  deletePageApi = '/api/deletepage';
 
   constructor(private http:HttpClient) { }
 
