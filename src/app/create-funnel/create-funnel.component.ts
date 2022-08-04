@@ -6,6 +6,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import { FunnelService } from '../_services/funnels.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatAccordion} from '@angular/material/expansion';
+import { GeneralService } from '../_services/_builderService/general.service';
 
 @Component({
   selector: 'app-create-funnel',
@@ -23,7 +24,8 @@ export class CreateFunnelComponent implements OnInit {
   constructor(private funnelService: FunnelService,
               private router: Router,
               private route: ActivatedRoute,
-              private _snackBar: MatSnackBar ) {
+              private _snackBar: MatSnackBar,
+              public _general: GeneralService, ) {
                 this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
                   this.uniqueid = params.get('funnel_id');
                 })

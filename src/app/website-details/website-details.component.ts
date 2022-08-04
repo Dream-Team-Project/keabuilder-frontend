@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsiteService } from '../_services/website.service';
 import { WebpagesService } from '../_services/webpages.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';
+import { ImageService } from '../_services/image.service';
 
 @Component({
   selector: 'app-website-details',
@@ -20,38 +21,28 @@ export class WebsiteDetailsComponent implements OnInit {
   file = null;
   typeerror = '';
   typeerror2 = '';
-  logoimg = '/assets/images/website/default-file-upload-image.png';
-  faviconimg = '/assets/images/website/default-file-upload-image.png';
+  defaultimgpath = '/assets/images/website/default-file-upload-image.png';
+  logoimg:any = this.defaultimgpath;
+  faviconimg:any = this.defaultimgpath;
   logoimgname = '';
   faviconimgname = '';
-
+  imagelogorequest = false;
+  imagefaviconrequest = false;
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
-              private fileUploadService:FileUploadService,) { }
+              private fileUploadService: FileUploadService,
+              private imageService: ImageService) { }
 
   ngOnInit(): void {
 
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         this.kbpages = data.data;
-
-        // data.data.forEach((element:any) => {
-          
-        //   var mycustomdate =  new Date(element.updated_at);
-        //   var text1 = mycustomdate.toDateString();    
-        //   var text2 = mycustomdate.toLocaleTimeString();
-        //   element.updated_at = text1+' '+text2;
-
-        //   this.kbpages.push(element);
-          
-        //   console.log(this.kbpages);
-
-        // });
 
       },
       error: err => {
@@ -61,7 +52,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
           data.data.forEach((element:any) => {
             this.kbwebsite.push(element);
 
@@ -78,11 +69,34 @@ export class WebsiteDetailsComponent implements OnInit {
             }
 
             if(element.logo!=null && element.logo!=''){
-              this.pathselected = element.logo;
+              this.logoimgname = element.logo;
+              this.fileUploadService.validateimg(element.logo).subscribe({
+                next: data => {
+    
+                  if(data.data==0){
+                    this.logoimg = this.defaultimgpath;
+                  }else if(data.data==1){
+                    this.logoimg = '/assets/uploads/images/'+element.logo;
+                  }
+    
+                }
+              });
             }
 
             if(element.favicon!=null && element.favicon!=''){
-              this.pathselected = element.favicon;
+              this.faviconimgname = element.favicon;
+              this.fileUploadService.validateimg(element.favicon).subscribe({
+                next: data => {
+    
+                  if(data.data==0){
+                    this.faviconimg = this.defaultimgpath;
+                  }else if(data.data==1){
+                    this.faviconimg = '/assets/uploads/images/'+element.favicon;
+                  }
+    
+                }
+              });
+
             }
 
           });
@@ -95,14 +109,20 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
-    console.log(this.pathselected);
-    console.log(this.pagescriptheader);
-    console.log(this.pagescriptfooter);
+ 
+    var genobjlogo:any = {path:this.logoimg, name:this.logoimgname};
+    var genobjfavicon:any = {path:this.faviconimg, name:this.faviconimgname};
+    if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+      this.imageService.onImageFileUpload(genobjlogo);
+    }
 
-    this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter).subscribe({
+    if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+      this.imageService.onImageFileUpload(genobjfavicon);
+    }
+
+    this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter, this.logoimgname, this.faviconimgname, this.imagelogorequest, this.imagefaviconrequest).subscribe({
       next: data => {
-        console.log(data);
-
+        // console.log(data);
         
         if(this.pathselected!=''){
           var pathobj = {path:this.pathselected};
@@ -121,13 +141,11 @@ export class WebsiteDetailsComponent implements OnInit {
     var outsidethis:any = this;
     this.file = event.target.files[0];
     var chktype = event.target.files[0].type;
-    var getname = (event.target.files[0].name).split('.png');
-    var setname = (getname[0].toLowerCase()).replaceAll(" ","-");
-    var unqueid = Math.floor(Math.random()*8);
-    var finalval = setname+'-'+unqueid;
-    this.logoimgname = finalval;
 
-    console.log(this.logoimgname);
+    var getname = (event.target.files[0].name);
+    this.logoimgname = this.generatename(getname);
+
+    // console.log(this.logoimgname);
 
     if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
       this.typeerror = '';
@@ -137,11 +155,21 @@ export class WebsiteDetailsComponent implements OnInit {
       fileReader.addEventListener("load", function (readerEvt:any) {
         outsidethis.logoimg = this.result;
       });    
+      this.imagelogorequest = true;
     }else{
-      this.logoimg = '/assets/images/website/default-file-upload-image.png';
+      this.logoimg = this.defaultimgpath;
       this.typeerror = 'File Type Not Allow';
+      this.imagelogorequest = false;
     }
 
+  }
+
+  generatename(value:any){
+    var extn = value.split(/[. ]+/).pop();
+    var newvl = value.split('.'+extn)
+    var setname = (newvl[0].toLowerCase()).replaceAll(" ","-");
+    var unqueid = Math.random().toString(20).slice(2);
+    return setname+'-'+unqueid+'.'+extn;
   }
 
   OnOpen(){
@@ -153,17 +181,21 @@ export class WebsiteDetailsComponent implements OnInit {
     this.file = event.target.files[0];
     var chktype = event.target.files[0].type;
 
+    var getname = (event.target.files[0].name);
+    this.faviconimgname = this.generatename(getname);
+
     if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
       this.typeerror = '';
       var fileReader = new FileReader();
       fileReader.readAsDataURL(this.file);
       fileReader.addEventListener("load", function () {
-        // console.log(this.result);
         outsidethis.faviconimg = this.result;
       });    
+      this.imagefaviconrequest = true;
     }else{
-      this.faviconimg = '/assets/images/website/default-file-upload-image.png';
+      this.faviconimg = this.defaultimgpath;
       this.typeerror2 = 'File Type Not Allow';
+      this.imagefaviconrequest = false;
     }
 
   }

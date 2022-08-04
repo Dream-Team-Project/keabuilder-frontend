@@ -180,7 +180,7 @@
                     <button mat-menu-item (click)="funnelstepedit(steps[i].color,steps[i].uniqueid,'colortheme')">
                         <i class="far fa-check-circle mr-2"></i> Change Color Badge
                     </button>
-                    <button mat-menu-item (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
+                    <button mat-menu-item class="text-danger" (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
                         <i class="far fa-trash-alt mr-2"></i> Archive
                     </button>
                 </mat-menu>
@@ -581,7 +581,7 @@
                 
                 <mat-form-field class="kb-full-width" appearance="fill">
                   <mat-label>PATH</mat-label>
-                  <input type="text" matInput name="funnelpath" (blur)="changestepnames('steppath')" [(ngModel)]="funnelstepurl">
+                  <input type="text" (input)="funnelstepurl = _general.joinWthDash(funnelstepurl)" matInput name="funnelpath" (blur)="changestepnames('steppath')" [(ngModel)]="funnelstepurl">
                 </mat-form-field>
                
               </div>

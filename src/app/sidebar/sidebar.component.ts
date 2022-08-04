@@ -70,11 +70,24 @@ export class SidebarComponent implements OnInit {
       },
       {
         0:true,
+        routerlink: '/nolink',
+        img: 'browser.gif',
+        icon: 'far fa-file-alt',
+        title: 'Blog'
+      },
+      {
+        0:true,
         routerlink: '/website/details',
         img: 'browser.gif',
         icon: 'fas fa-pencil-alt',
         title: 'Site Details'
-      }
+      },{
+        0:true,
+        routerlink: '/nolink',
+        img: 'browser.gif',
+        icon: 'fas fa-store',
+        title: 'Marketplace'
+      },
       ]
     },{
       0:true,
@@ -83,13 +96,6 @@ export class SidebarComponent implements OnInit {
       icon: 'fas fa-shield-alt',
       title: 'Membership',
       submenu:[{
-        0:true,
-        routerlink: '/nolink',
-        img: 'shield.gif',
-        icon: 'fa fa-paper-plane',
-        title: 'Add New Course'
-      },
-      {
         0:true,
         routerlink: '/nolink',
         img: 'browser.gif',
@@ -105,28 +111,28 @@ export class SidebarComponent implements OnInit {
       },
       {
         0:true,
-        routerlink: '/membership-offers',
+        routerlink: '/membership/offers',
         img: 'browser.gif',
         icon: 'fa fa-percentage',
         title: 'Offers'
       },
       {
         0:true,
-        routerlink: '/membership-coupons',
+        routerlink: '/membership/coupons',
         img: 'browser.gif',
         icon: 'fa fa-percent',
         title: 'Coupons'
       },
       {
         0:true,
-        routerlink: '/membership-payments',
+        routerlink: '/membership/payments',
         img: 'browser.gif',
         icon: 'fa fa-dollar-sign',
         title: 'Payments'
       },
       {
         0:true,
-        routerlink: '/membership-members',
+        routerlink: '/membership/members',
         img: 'browser.gif',
         icon: 'fa fa-users',
         title: 'Members'
@@ -159,25 +165,32 @@ export class SidebarComponent implements OnInit {
       img: 'hacker.gif',
       icon: 'fas fa-user-secret',
       title: 'CRM',
-      submenu:[
+      submenu:[{
+          0:true,
+          routerlink: '/crm',
+          img: 'hacker.gif',
+          icon: 'fa fa-random',
+          title: 'Automations'
+        },
         {
           0:true,
           routerlink: '/crm-campaigns',
           img: 'hacker.gif',
           icon: 'fa fa-envelope',
           title: 'Campaigns'
+        },
+        {
+          0:true,
+          routerlink: '/no-link',
+          img: 'hacker.gif',
+          icon: 'fa fa-bars',
+          title: 'Pipelines'
         },{
           0:true,
           routerlink: '/crm-contacts',
           img: 'hacker.gif',
           icon: 'fa fa-users',
           title: 'Contacts'
-        },{
-          0:true,
-          routerlink: '/forms',
-          img: 'hacker.gif',
-          icon: 'fa fa-id-card',
-          title: 'Forms'
         },{
           0:true,
           routerlink: '/crm-lists',
@@ -196,12 +209,6 @@ export class SidebarComponent implements OnInit {
           img: 'hacker.gif',
           icon: 'fa fa-chart-bar',
           title: 'Reports'
-        },{
-          0:true,
-          routerlink: '/crm-settings',
-          img: 'hacker.gif',
-          icon: 'fa fa-mail-bulk',
-          title: 'SMTP'
         }
       ]
     },{

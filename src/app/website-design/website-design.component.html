@@ -122,9 +122,9 @@
   </div>
 
   <div class="container-fluid">
-    <div class="row mt-4" *ngIf="kbwebsite[0]!=null">
+    <div class="row mt-4">
       <div class="col-md-12 mt-4">
-        <div class="kb-webpreviewer">
+        <div class="kb-webpreviewer" [ngStyle]="{'background-image': 'url(' + getthumbnail + ')'}">
           <div class="kb-dropdown_livestatus">
             <span class="kb-weblive" [matMenuTriggerFor]="menu" matTooltip="Status" matTooltipPosition="above">
               <i [class]="webicon"></i> {{webstatus}} <i class="fas fa-chevron-down drpdwnfa"></i></span>
@@ -137,11 +137,11 @@
               </button>
             </mat-menu>
           </div>
-          <img [src]="kbwebsite[0].thumbnail" class="img-fluid" alt="">
+          <!-- <img [src]="getthumbnail" class="img-fluid" alt=""> -->
           <div class="kb-webpreviewinside">
-            <button mat-raised-button color="accent" class="mr-2" [routerLink]="['/website/details']">Site Details <i
+            <button mat-raised-button color="accent" class="mr-2" matTooltip="Edit Site Details" matTooltipPosition="above" [routerLink]="['/website/details']">Site Details <i
                 class="fas fa-pencil-alt"></i></button>
-            <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+            <button mat-raised-button color="accent" class="mr-2" matTooltip="Preview Your Homepage" matTooltipPosition="above" (click)="webpreview()" >Preview <i class="far fa-eye"></i></button>
           </div>
         </div>
       </div>
