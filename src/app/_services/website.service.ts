@@ -17,11 +17,21 @@ export class WebsiteService {
     return this.http.get('/api/allwebsitedata');
   }
 
-  updatesitedetails(homepage: any, scriptheader:any, scriptfooter:any):Observable<any> {
+  updatesitedetails(homepage: any, scriptheader:any, scriptfooter:any, logo:any, favicon:any, checkimginput1:any, checkimginput2:any):Observable<any> {
     return this.http.post("./api/updatesitedetails", {
       homepage,
       scriptheader,
       scriptfooter,
+      logo,
+      favicon,
+      checkimginput1,
+      checkimginput2,
+    }, httpOptions);
+  }
+
+  setpublishstatus(status: any):Observable<any> {
+    return this.http.post("./api/setPublishstatus", {
+      status,
     }, httpOptions);
   }
 

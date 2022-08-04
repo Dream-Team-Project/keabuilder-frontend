@@ -215,3 +215,11 @@
       transform: scale(1.2,1);
     }
   }
+
+  .kb-imgviewchange{
+    height: 90px;
+  }
+  
+ table {
+    width: 100%;
+  }

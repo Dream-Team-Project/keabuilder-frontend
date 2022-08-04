@@ -5,7 +5,8 @@ import {FormControl, Validators} from '@angular/forms';
 import { WebpagesService } from '../_services/webpages.service';
 import { GeneralService } from '../_services/_builderService/general.service';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-
+import { FileUploadService } from '../_services/file-upload.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-website-design',
@@ -52,21 +53,23 @@ export class WebsiteDesignComponent implements OnInit {
   ];
   pathcheck = false;
   pathcheck2 = false;
-
+  getthumbnail = '/assets/uploads/images/webpage_thumbnail.jpg';
 
   constructor(private websiteService: WebsiteService,
               private tokenStorage: TokenStorageService,
               private webpagesService: WebpagesService,
               public _general: GeneralService,
               private router: Router, 
-              private route: ActivatedRoute,) { }
+              private route: ActivatedRoute,
+              private fileuploadService: FileUploadService,
+              private _snackBar: MatSnackBar,) { }
 
   form: any = {
     pagename: null,
     pagepath:null,
   };
-  userFormControl = new FormControl('',[Validators.required ]);
-  userFormControl2 = new FormControl('',[Validators.required ]);
+  userFormControl = new FormControl('',[Validators.required]);
+  userFormControl2 = new FormControl('',[Validators.required]);
 
 
   ngOnInit(): void {
@@ -74,9 +77,37 @@ export class WebsiteDesignComponent implements OnInit {
     this.websiteService.getWebsite().subscribe({
       next: data => {
         // console.log(data);
-          data.data.forEach((element:any) => {
-            this.kbwebsite.push(element);
-          });
+
+        if(data.data[0].publish_status==1){
+          this.webstatus = 'Publish';
+          this.webicon = 'fas fa-check';
+        }else{
+          this.webstatus = 'Draft';
+          this.webicon = 'fas fa-file';
+        }
+
+          if(data.data[0].homepage!=null && data.data[0].homepage!=''){
+            var pathdata = {path:data.data[0].homepage};
+            this.webpagesService.getWebPageByPath(pathdata).subscribe({
+              next: data => {
+                  console.log(data);
+        
+                  var genscrn = 'keaimage-'+data.data[0].uniqueid+'-screenshot.png';
+
+                  this.fileuploadService.validateimg(genscrn).subscribe({
+                    next: data => {
+        
+                     if(data.data==1){
+                        this.getthumbnail = '/assets/uploads/images/'+genscrn;
+                      }
+        
+                    }
+                  });
+
+                }
+              });
+          }
+
 
       },
       error: err => {
@@ -87,6 +118,16 @@ export class WebsiteDesignComponent implements OnInit {
   }
 
   pubstatus(value:any){
+
+    this.websiteService.setpublishstatus(value).subscribe({
+      next: data => {
+          console.log(data);
+          if(data.status==1){
+            this._snackBar.open('Status Updated Successfully!', 'Close');
+          }
+      }
+    });
+
       if(value=='publish'){
           this.webstatus = 'Publish';
           this.webicon = 'fas fa-check';
@@ -186,5 +227,10 @@ export class WebsiteDesignComponent implements OnInit {
   usetemplate(id:any){
 
   } 
+
+  webpreview(){
+    var weblink = 'http://localhost:4200/assets/keapages/';
+    window.open(weblink, '_blank')
+  }
 
 }

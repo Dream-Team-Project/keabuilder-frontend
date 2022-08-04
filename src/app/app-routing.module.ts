@@ -27,6 +27,7 @@ import { CreateFunnelSalesComponent } from './create-funnel-sales/create-funnel-
 import { CreateFunnelSettingsComponent } from './create-funnel-settings/create-funnel-settings.component';
 import { HeatmapsRecordingsComponent } from './heatmaps-recordings/heatmaps-recordings.component';
 import { MembershipComponent } from './membership/membership.component';
+import { AllMembershipComponent } from './all-membership/all-membership.component';
 import { MembershipProductComponent } from './membership-product/membership-product.component';
 import { MembershipOffersComponent } from './membership-offers/membership-offers.component';
 import { MembershipCouponsComponent } from './membership-coupons/membership-coupons.component';
@@ -73,9 +74,11 @@ const routes: Routes = [
 
   // website 
   { path: 'website', component: WebsiteComponent,
-  children: [{path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
-  {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-  {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}],
+    children: [
+      {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+      {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+      {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}
+    ],
   canActivate: [AuthGuard] },
 
   // funnels
@@ -97,13 +100,25 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
 
-  { path: 'membership', component: MembershipComponent, canActivate: [AuthGuard] },
-  { path: 'membership-product', component: MembershipProductComponent, canActivate: [AuthGuard] },
-  { path: 'membership-offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-  { path: 'membership-coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-  { path: 'membership-payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
-  { path: 'membership-members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-  { path: 'membership-tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+  // Membership
+
+  { path: 'membership', component: MembershipComponent,
+    children:[
+      { path: '', component: AllMembershipComponent, canActivate: [AuthGuard] },
+      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] },
+      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+      { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+  ],
+   canActivate: [AuthGuard] },
+  // { path: 'membership-product', component: MembershipProductComponent, canActivate: [AuthGuard] },
+  // { path: 'membership-offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+  // { path: 'membership-coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+  // { path: 'membership-payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+  // { path: 'membership-members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+  // { path: 'membership-tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
   { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
@@ -170,6 +185,7 @@ export const RoutingComponents =
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
     MembershipComponent,
+    AllMembershipComponent,
     MembershipProductComponent,
     MembershipOffersComponent,
     MembershipCouponsComponent,

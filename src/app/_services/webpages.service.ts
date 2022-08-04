@@ -79,5 +79,39 @@ export class WebpagesService {
     }, httpOptions);
   }
 
+  getarchivepages(showing:string):Observable<any> {
+    return this.http.post("./api/getarchivepages", {
+      showing,
+    }, httpOptions);
+  }
+
+  restoredeletepage(data:any):Observable<any> {
+    return this.http.post("./api/restoredeletepage", {
+      data
+    }, httpOptions);
+  }
+
+  pagevisibility(data:any):Observable<any> {
+    return this.http.post("./api/pagevisibility", {
+      data
+    }, httpOptions);
+  }
+
+  querystringmanage(data:any):Observable<any> {
+    return this.http.post("./api/querystringmanage", {
+      data
+    }, httpOptions);
+  }
+
+  shortbypaginator(data:any):Observable<any> {
+    return this.http.post("./api/shortbypaginator", {
+      data
+    }, httpOptions);
+  }
+
+  
+
+  
+
 
 }

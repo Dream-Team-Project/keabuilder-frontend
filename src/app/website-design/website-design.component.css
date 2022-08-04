@@ -1,11 +1,4 @@
 .kb-webpreviewer {
-  box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 2px rgb(0 0 0 / 8%);
-  margin: 20px;
-  text-align: center;
-  width: 80%;
-}
-
-.kb-webpreviewer {
   margin: auto;
   box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 2px rgb(0 0 0 / 8%);
   text-align: center;
@@ -13,6 +6,8 @@
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  background-size: cover;
+  height: 450px;
 }
 
 .kb-webpreviewinside {

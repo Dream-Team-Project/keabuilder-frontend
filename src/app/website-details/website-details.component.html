@@ -20,7 +20,7 @@
           <div class="form-group">
 
             <mat-form-field appearance="fill" class="kb-full-width">
-                <mat-label>Homepage</mat-label>
+                <mat-label>Select Homepage</mat-label>
                 <mat-select [(value)]="pathselected" >
                   <mat-option [value]="kbpages[i].page_path" *ngFor="let kbpage of kbpages; index as i;">
                     {{kbpages[i]['page_name']}}

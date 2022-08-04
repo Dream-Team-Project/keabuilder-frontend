@@ -1,14 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { WebpagesService } from '../_services/webpages.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { ImageService } from '../_services/image.service';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { GeneralService } from '../_services/_builderService/general.service';
 import { FileUploadService } from '../_services/file-upload.service';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import { WebsiteService } from '../_services/website.service';
+import {PageEvent} from '@angular/material/paginator';
+
+export interface WebpageData {
+  page_name:string;
+  created_at:string;
+  archive_reason:string;
+  updated_at:string;
+}
 
 @Component({
   selector: 'app-website-pages',
@@ -16,6 +29,15 @@ import { FileUploadService } from '../_services/file-upload.service';
   styleUrls: ['./website-pages.component.css']
 })
 export class WebsitePagesComponent implements OnInit {
+  
+  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'updated_at'];
+  selection = new SelectionModel<WebpageData>(true, []);
+  dataSource: MatTableDataSource<WebpageData>;
+  users:any = [];
+  showingcontacts = '7 DAY';
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator; 
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -24,14 +46,17 @@ export class WebsitePagesComponent implements OnInit {
               public _image: ImageService,
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
-              private fileuploadService: FileUploadService ) { }
+              private fileuploadService: FileUploadService,
+              private websiteService: WebsiteService ) {
+                this.dataSource = new MatTableDataSource(this.users);
+               }
 
   form: any = {
     pagename: null,
     pagepath:null,
   };
-  userFormControl = new FormControl('',[Validators.required ]);
-  userFormControl2 = new FormControl('',[Validators.required ]);
+  userFormControl = new FormControl('',[Validators.required]);
+  userFormControl2 = new FormControl('',[Validators.required]);
 
   kbpages:any[] = [];
   poupsidebar = false;
@@ -82,6 +107,48 @@ export class WebsitePagesComponent implements OnInit {
   shortwaiting = true;
   showpageurl = false;
   oldpagepath = '';
+  selstatusshow = 'all';
+  toggleview1 = true;
+  toggleview2 = true;
+  reason = '';
+  confirmarchivepage = false;
+  archive_id = 0;
+  showarchivemode = false;
+  pagenotfound = false;
+  pagegetdata = false;
+  fetchdatastatus = false;
+
+  
+  // MatPaginator Inputs
+  length = 100;
+  pageSize = 20;
+  pageSizeOptions: number[] = [6, 12, 24, 100];
+
+  // MatPaginator Output
+  pageEvent!: PageEvent;  
+
+  getServerData(event?:PageEvent){
+    var length = event?.length;
+    var pageindex = event?.pageIndex;
+    var pageSize = event?.pageSize;
+    var previousPageIndex = event?.previousPageIndex;
+    console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+
+    this.pageSize = 20;
+    var data = {pagesize:pageSize};
+    // this.webpagesService.shortbypaginator(data).subscribe({
+    //   next: data => {
+    //     console.log(data);
+    //     // this.kbpages = [];
+    //     // this.shortdata(data);
+
+    //   },
+    //   error: err => {
+    //     console.log(err);
+    //   }
+    // });
+
+}
 
   ngOnInit(): void {
 
@@ -90,6 +157,24 @@ export class WebsitePagesComponent implements OnInit {
     setTimeout(() => {
         this.shortwaiting = false;
     }, 1500);
+
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }, 500);
+
+    this.applykbfilter();
+
+    this.websiteService.getWebsite().subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.data[0].toggleview==1){
+          this.toggleview1 = true;
+        }else{
+          this.toggleview1 = false;
+        }
+      }
+    });
 
   }
 
@@ -132,6 +217,7 @@ export class WebsitePagesComponent implements OnInit {
     this.quickeditpopup = false;
     this.selecttemplate = false;
     this.showpageurl = false;
+    this.confirmarchivepage = false;
 
   }
 
@@ -186,38 +272,62 @@ export class WebsitePagesComponent implements OnInit {
   showwebpages(){
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.kbpages = [];
-
-        data.data.forEach((element:any) => {
-          
-          var mycustomdate =  new Date(element.updated_at);
-          var text1 = mycustomdate.toDateString();    
-          var text2 = mycustomdate.toLocaleTimeString();
-          element.updated_at = text1+' '+text2;
-          this.kbpages.push(element);
-
-          var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
-
-            this.fileuploadService.validateimg(genscrn).subscribe({
-              next: data => {
-  
-                if(data.data==0){
-                  element.thumbnail = 'webpage_thumbnail.jpg';
-                }else if(data.data==1){
-                  element.thumbnail = genscrn;
-                }
-  
-              }
-            });
-  
-        });
+        this.shortdata(data);
 
       },
       error: err => {
         console.log(err);
       }
     });
+  }
+
+  shortdata(dataA:any){
+    // console.log('---chek');
+    // console.log(dataA.data.length);
+
+    if(dataA.data.length!=0){
+      // console.log('--works');
+      this.pagegetdata = false;
+      if(this.toggleview2==true ){
+        this.pagenotfound = false;
+      }
+      this.fetchdatastatus = true;
+      dataA.data.forEach((element:any) => {
+            
+        var mycustomdate =  new Date(element.updated_at);
+        var text1 = mycustomdate.toDateString();    
+        var text2 = mycustomdate.toLocaleTimeString();
+        element.updated_at = text1+' '+text2;
+        this.kbpages.push(element);
+
+        var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
+
+          this.fileuploadService.validateimg(genscrn).subscribe({
+            next: data => {
+
+              if(data.data==0){
+                element.thumbnail = 'webpage_thumbnail.jpg';
+              }else if(data.data==1){
+                element.thumbnail = genscrn;
+              }
+
+            }
+          });
+
+      });
+
+    }else{
+      this.fetchdatastatus = false;
+      this.pagegetdata = true;
+      // console.log(this.toggleview2);
+      if(this.toggleview2==true ){
+        this.pagenotfound = true;
+      }
+    }
+
+  
   }
 
   checkpagesettings(value:any,data:any){
@@ -243,7 +353,7 @@ export class WebsitePagesComponent implements OnInit {
 
                 if(data.type=='name'){
                   this._snackBar.open('Name Changed Successfully!', 'Close');
-                  this.showwebpages();
+                  // this.showwebpages();
                 }else if(data.type=='status'){
                   this._snackBar.open('Status Changed Successfully!', 'Close');
                 }
@@ -259,6 +369,7 @@ export class WebsitePagesComponent implements OnInit {
                 this.quickeditpopup = true;
                 this.selecttemplate = false;
                 this.showpageurl = false;
+                this.confirmarchivepage = false;
                 
                 this.pageurl = data.data[0].page_path;
                 this.seotitle = data.data[0].page_title;
@@ -370,21 +481,6 @@ export class WebsitePagesComponent implements OnInit {
 
         }
       });
-    }else if(type=='delete'){
-      this.webpagesService.dupldelpage(id,type).subscribe({
-        next: data => {
-          // console.log(data);
-
-          if(data.success==1){
-            this._snackBar.open('Page Delete Successfully!', 'Close');
-            this.showwebpages();
-
-          }else{
-            this._snackBar.open('Something Went Wrong!!', 'Close');
-          }
-
-        }
-      });
     }else if(type=='copyurl'){
       this.webpagesService.dupldelpage(id,type).subscribe({
         next: data => {
@@ -400,7 +496,8 @@ export class WebsitePagesComponent implements OnInit {
             this.quickeditpopup = false;
             this.selecttemplate = false;
             this.showpageurl = true;
-            
+            this.confirmarchivepage = false;
+
             this.pagebuilderurl = 'http://localhost:4200/builder/website/'+data.data[0].uniqueid;
             this.pageurl = 'http://localhost:4200/'+data.data[0].page_path;
 
@@ -420,5 +517,125 @@ export class WebsitePagesComponent implements OnInit {
     inputElement.setSelectionRange(0, 0);
     this._snackBar.open('Successfully Copied!', 'Close');
   }
+
+  togglepageview(){
+    this.toggleview1 = !this.toggleview1;
+    this.restoredeleteme('1','toggleview')
+  }
+
+  archivepages(){
+    this.toggleview2 = !this.toggleview2;
+    this.showarchivemode = !this.showarchivemode;
+    
+    if(this.fetchdatastatus==false){
+      this.pagegetdata = !this.pagegetdata;
+    }else{
+      this.pagenotfound = !this.pagenotfound;
+    }
+  }
+
+  changevisibility(value:any){
+    this.webpagesService.pagevisibility(value).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbpages = [];
+        this.shortdata(data);
+      }
+    });
+  }
+
+  archive_popup(id:any){
+    this.poupsidebar = true;
+    this.showmytemplates = false;
+    this.addnewpagepopup = false;
+      this.insidepagefirst = true;
+      this.insidepagesecond = false;
+    this.quickeditpopup = false;
+    this.selecttemplate = false;
+    this.showpageurl = false;
+
+    this.confirmarchivepage = true;
+    this.archive_id = id;
+  }
+
+  applykbfilter(){
+
+    this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
+      next: data => {
+        console.log(data); 
+        this.users = data.data;
+        this.dataSource = new MatTableDataSource(this.users);
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+  }
+
+  datecusfilter(value:any){
+    return new Date(value).toDateString();
+  }
+
+  restoredeleteme(id:any,type:any){
+ 
+    var gendata:any = {id:id,type:type,reason:''};
+    if(type=='archived'){
+      gendata = {id:this.archive_id,type:type,reason:this.reason};
+    }
+    if(type=='toggleview'){
+      gendata = {id:id,type:type,reason:this.toggleview1};
+    }
+    
+    // console.log(gendata);
+    this.webpagesService.restoredeletepage(gendata).subscribe({
+      next: data => {
+        console.log(data);
+        if(data.success==1){
+
+          this.fileuploadService.deletepage(data.path).subscribe({
+            next: data => {
+              console.log(data);
+            }
+          });
+
+          this.poupsidebar = false;
+          this.showwebpages();
+          this.applykbfilter();
+        }
+
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  searchpage(event: Event) {
+    var SearchValue = (event.target as HTMLInputElement).value;
+    console.log(SearchValue);
+    this.selstatusshow = 'all';
+
+    this.webpagesService.querystringmanage(SearchValue).subscribe({
+      next: data => {
+        console.log(data);
+        this.kbpages = [];
+        this.shortdata(data);
+      }
+    });
+
+  }
+
+
 
 }
