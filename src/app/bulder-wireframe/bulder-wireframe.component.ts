@@ -51,7 +51,7 @@ export class BulderWireframeComponent implements OnInit {
     // builder options
 
     builderSectionOptions: Options = {
-      group: 'section',
+      group: 'wf-section',
       scroll: true,
       sort: true,
       handle: '.kb-handle-section',
@@ -72,7 +72,7 @@ export class BulderWireframeComponent implements OnInit {
     };  
   
     builderRowOptions: Options = {
-      group: 'row',
+      group: 'wf-row',
       scroll: true,
       sort: true,
       handle: '.kb-handle-row',
@@ -91,7 +91,7 @@ export class BulderWireframeComponent implements OnInit {
 
     builderColumnOptions: Options = {
       group: {
-        name: 'column',
+        name: 'wf-column',
         pull: false,
         put: false,
       },

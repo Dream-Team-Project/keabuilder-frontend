@@ -1,0 +1,42 @@
+#topBar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    height: 25px;
+    padding: 0px 12px;
+    background-color: var(--kb-dark);
+    z-index: 99;
+    justify-content: space-between;
+    box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px; 
+    transition: 0.2s ease-in-out;
+    z-index: 9999;
+}
+
+#topBar.loaderShadow {
+    box-shadow: rgb(0 0 0 / 25%) 0px 16px 25px 10px;
+}
+
+#topBar button.mat-button:hover, #topBar button.mat-button.resp-active  {
+    color: var(--primary-color);
+}
+
+::ng-deep #topBar button.mat-button {
+    padding: 0 10px;
+    transition: 0.2s ease-in-out;
+}
+
+::ng-deep #topBar .mat-button i, ::ng-deep #topBar .mat-button span{
+    font-size: 12px;
+}
+
+::ng-deep #topBar .innerLinks:last-child .mat-button span>span{
+    padding-right: 8px;
+}
+
+::ng-deep #topBar .mat-button img{
+    width: 13px;
+}

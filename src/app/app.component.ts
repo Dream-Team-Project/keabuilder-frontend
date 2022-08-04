@@ -30,7 +30,7 @@ export class AppComponent {
             switch (true) {
               case event instanceof NavigationStart: {
                 var e:any = event;
-                if(e.url.split('/')[1] == 'builder' || e.url.split('/')[1] == 'preview') {
+                if(e.url.split('/')[1] == 'form-builder' || e.url.split('/')[1] == 'builder' || e.url.split('/')[1] == 'preview') {
                   this._nav.hide();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }

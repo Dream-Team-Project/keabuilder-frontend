@@ -58,6 +58,7 @@ import { WebsiteDesignComponent } from './website-design/website-design.componen
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
+import { FormBuilderComponent } from './form-builder/form-builder.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -144,6 +145,7 @@ const routes: Routes = [
   { path: 'builder/funnel/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'preview/website/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'preview/funnel/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'form-builder', component: FormBuilderComponent, canActivate: [AuthGuard] },
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -163,6 +165,7 @@ export const RoutingComponents =
     FunnelComponent,
     FunnelArchieveComponent,
     FunnelMarketplaceComponent,
+    FunnelWizardNavComponent,
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
@@ -211,5 +214,6 @@ export const RoutingComponents =
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
     IntegrationsComponent,
+    FormBuilderComponent,
   ];
 

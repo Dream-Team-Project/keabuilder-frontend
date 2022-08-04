@@ -260,3 +260,7 @@ image-cropper {
     color: var(--kb-text-color);
     background: var(--kb-gray);
 }
+
+button.mat-button  {
+    min-width: auto !important;
+}

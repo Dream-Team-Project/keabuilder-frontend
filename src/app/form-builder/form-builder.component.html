@@ -1,0 +1,21 @@
+<app-builder-topbar></app-builder-topbar>
+<div id="kb-main">
+    <div id="kb-form-cont">
+        <form id="kb-form">
+            <div id="kb-form-title">
+                <div class="kb-heading"><h2>FORM TITLE</h2></div>
+                <div class="kb-subheading"><span>Form subtitile</span></div>
+            </div>
+        </form>
+    </div>
+    <div id="kb-sidebar">
+        <div id="form-elements">
+            <ul class="form-ele-list">
+                <li *ngFor="let fe of _formS.formEle, index as fei">
+                    <i [class]="fe.icls"></i>
+                    <span>{{fe.name | titlecase}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

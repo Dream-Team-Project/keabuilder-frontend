@@ -28,39 +28,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
 
   showNavFrom:string = 'bottom';
 
-  topBarLinks = [
-    {
-      name: 'Dashboard',
-      link: '/dashboard',
-      icon: 'fa-home'
-    },
-    {
-      name: 'Website',
-      link: '/website',
-      icon: 'fa-desktop'
-    },
-    {
-      name: 'Funnels',
-      link: '/funnels',
-      icon: 'fa-filter'
-    },
-    {
-      name: 'Membership',
-      link: '/membership',
-      icon: 'fa-shield-alt'
-    },
-    {
-      name: 'Form',
-      link: '/forms',
-      icon: 'fa-address-card'
-    },
-    {
-      name: 'Navigation',
-      link: '/navigation',
-      icon: 'fa-bars'
-    },
-  ]
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -233,6 +200,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 tablet_v: ele.classList.contains('kb-d-tab-v-none'),
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
+              eleObj.name = ele.title;
               colObj.elementArr.push(eleObj);
             })
             colObj.hide = {
@@ -241,6 +209,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               tablet_v: col.classList.contains('kb-d-tab-v-none'),
               mobile: col.classList.contains('kb-d-mob-none')  
             }
+            colObj.name = col.title;
             rowObj.columnArr.push(colObj);
           })
           rowObj.hide = {
@@ -249,6 +218,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             tablet_v: row.classList.contains('kb-d-tab-v-none'),
             mobile: row.classList.contains('kb-d-mob-none')  
           }
+          rowObj.name = row.title;
           secObj.rowArr.push(rowObj);          
         })
         secObj.hide = {
@@ -257,6 +227,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
           tablet_v: sec.classList.contains('kb-d-tab-v-none'),
           mobile: sec.classList.contains('kb-d-mob-none')  
         }
+        secObj.name = sec.title;
         this._section.sections.push(secObj);
         if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
           this._section.savePageSession();

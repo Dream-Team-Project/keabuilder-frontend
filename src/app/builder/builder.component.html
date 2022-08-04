@@ -1,20 +1,6 @@
 
 <div id="page-container" [class.hovernone]="_general.saveDisabled" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
-    <div *ngIf="_section.sections.length != 0" id="topBar" [class.loaderShadow]="_general.saveDisabled" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
-        <div class="innerLinks">
-            <button mat-button (click)="_general.redirectToWebsite()"><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
-            <button  mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
-        </div>
-        <div class="innerLinks">
-            <button mat-button [class.resp-active]="!_general.showResp.toggle" (click)="_general.showResp.toggle =  false" matTooltip="Desktop" matTooltipPosition="below"><i class="fa fa-desktop"></i></button>
-            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'tablet-h'" (click)="_general.selRespDevice(0)" matTooltip="Tablet Horizontal" matTooltipPosition="below"><i class="fas fa-tablet-alt rotate-90"></i></button>
-            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'tablet-v'" (click)="_general.selRespDevice(1)" matTooltip="Tablet Vertical" matTooltipPosition="below"><i class="fas fa-tablet-alt"></i></button>
-            <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'mobile'" (click)="_general.selRespDevice(2)" matTooltip="Mobile" matTooltipPosition="below"><i class="fas fa-mobile-alt"></i></button>
-            <button mat-button matTooltip="Redo" matTooltipPosition="below" (click)="_section.redo()"><i class="fas fa-redo"></i></button>
-            <button mat-button matTooltip="Undo" matTooltipPosition="below" (click)="_section.undo()"><i class="fas fa-undo"></i></button>
-            <button mat-button [routerLink]="'/profile'"><span>{{_general.username}}</span><img [src]="_image.imgPath+'profile/avatar.png'"></button>
-        </div>
-    </div>
+    <app-builder-topbar *ngIf="_section.sections.length != 0"></app-builder-topbar>
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
@@ -24,6 +10,7 @@
                     [sortablejsOptions]="builderSectionOptions">
                     <!-- sections start -->
                     <div *ngFor="let section of _section.sections, index as si"
+                        [title]="section.name ? section.name : ''"
                         (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
                         (mouseleave)="section.setting = false"
                         [ngClass]="_style.getHideCls(section.hide)"
@@ -57,6 +44,7 @@
                             [sortablejsOptions]="builderRowOptions">
                             <!-- rows start -->
                             <div *ngFor="let row of section.rowArr, index as ri"
+                                [title]="row.name ? row.name : ''"
                                 (mouseenter)="row.setting = true; _row.selectedRow = row;"
                                 (mouseleave)="row.setting = false"
                                 [ngClass]="_style.getHideCls(row.hide)"
@@ -87,6 +75,7 @@
                                 [style.gap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getBlockParamValue(_style.columnGap) : _style.getBlockParamValue(row.columnGap)) + 'rem'">
                                     <!-- columns start -->
                                     <div *ngFor="let column of row.columnArr, index as ci"
+                                        [title]="column.name ? column.name : ''"
                                         (mouseenter)="_element.selectedElements = column.elementArr"
                                         [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : _style.getBlockStyle(column.style)"
                                         [ngClass]="_style.getHideCls(column.hide)"
@@ -98,6 +87,7 @@
                                             (change)="_element.selectedElements = column.elementArr">
                                             <!-- elements start -->
                                             <div *ngFor="let element of column.elementArr, index as ei"
+                                                [title]="element.name ? element.name : ''"
                                                 (dblclick)="elementDblClk(element, $event)"
                                                 (mouseenter)="element.setting = true"
                                                 (mouseleave)="element.setting = false"
