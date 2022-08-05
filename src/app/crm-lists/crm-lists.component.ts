@@ -30,7 +30,7 @@ export class CrmListsComponent implements OnInit {
   currencytype = '';
   kbduration = '';
 
-  poupsidebar = false;
+  popupsidebar = false;
   
   constructor() {
     
@@ -45,11 +45,11 @@ export class CrmListsComponent implements OnInit {
   }
 
   addnewconnect(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   ngOnInit(): void {

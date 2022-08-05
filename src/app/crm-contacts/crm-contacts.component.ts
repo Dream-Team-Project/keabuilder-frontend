@@ -32,7 +32,7 @@ export class CrmContactsComponent implements OnInit {
   currencytype = '';
   kbduration = '';
 
-  poupsidebar = false;
+  popupsidebar = false;
   
   constructor() {
     
@@ -52,11 +52,11 @@ export class CrmContactsComponent implements OnInit {
   }
 
   addnewconnect(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
   
   applyFilter(event: Event) {

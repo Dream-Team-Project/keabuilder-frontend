@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef, OnChanges, SimpleChanges} from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { Options } from 'sortablejs';
 import { NavbarService } from '../_services/navbar.service';
 import { SectionService } from '../_services/_builderService/section.service';
 import { RowService } from '../_services/_builderService/row.service';
@@ -41,7 +40,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   private _portal!: TemplatePortal;
 
   dragBoxAnime:any = {open: false, close: false};
-  imgBoxAnime:any = {open: false, close: false};
   backToRow:boolean = false;
 
   constructor(
@@ -81,28 +79,13 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  openImgSelBox() {
-      this.imgBoxAnime.open = true;
-      this._general.imgSelection = true;
-    setTimeout(()=>{
-      this.imgBoxAnime.open = false;
-    },200)
-  }
-
-  closeImgSelBox() {
-      this.imgBoxAnime.close = true;
-    setTimeout(()=>{
-      this._general.imgSelection = false;
-      this.imgBoxAnime.close = false;
-      this._image.showEditImgContainer = false;
-      this._image.imgMatTabIndex = 1;
-    },200)
-  }
-
   // drag drop box
 
   overlayRefDetach(update: boolean) {
-    if(this.backToRow) {
+    if(this._general.imgSelection) {
+      this._image.closeImgSelBox();
+    }
+    else if(this.backToRow) {
         this.resetDialog(update);
         this.openDialog();
     }
@@ -157,27 +140,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     };
     this.overlayRefDetach(false);
   }
-
-  // menu options
-
-  builderMenuOptions: Options = {
-    group: 'menu',
-    scroll: true,
-    sort: true,
-    handle: '.kb-handle-menu',
-    scrollSensitivity: 100,
-    animation: 300,
-    onUpdate: (event: any) => {
-    },
-    onStart: function (/**Event*/evt) {
-      // console.log(evt.oldIndex);  // element index within parent
-    },
-    onChoose: function (/**Event*/evt) {
-      // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
-    },
-  };  
-
-  // menu options
 
 }
 

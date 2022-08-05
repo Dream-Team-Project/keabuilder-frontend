@@ -59,7 +59,7 @@ import { NgxCaptureModule } from 'ngx-capture';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,

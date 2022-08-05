@@ -59,7 +59,7 @@ export class WebsitePagesComponent implements OnInit {
   userFormControl2 = new FormControl('',[Validators.required]);
 
   kbpages:any[] = [];
-  poupsidebar = false;
+  popupsidebar = false;
   quickeditpopup = true;
   addnewpagepopup = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -209,7 +209,7 @@ export class WebsitePagesComponent implements OnInit {
   }
   
   addnewpage(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = true;
       this.insidepagefirst = true;
@@ -285,9 +285,9 @@ export class WebsitePagesComponent implements OnInit {
 
   shortdata(dataA:any){
     // console.log('---chek');
-    // console.log(dataA.data.length);
+    console.log(dataA);
 
-    if(dataA.data.length!=0){
+    if(dataA.success !=0){
       // console.log('--works');
       this.pagegetdata = false;
       if(this.toggleview2==true ){
@@ -361,7 +361,7 @@ export class WebsitePagesComponent implements OnInit {
 
               }else if(type=='quickedit'){
 
-                this.poupsidebar = true;
+                this.popupsidebar = true;
                 this.showmytemplates = false;
                 this.addnewpagepopup = false;
                   this.insidepagefirst = true;
@@ -384,7 +384,7 @@ export class WebsitePagesComponent implements OnInit {
 
                   this.quickeditid = data.data[0].id;
                 
-                this.poupsidebar = true;
+                this.popupsidebar = true;
                 this.oldpagepath = this.pageurl;
 
               }
@@ -414,7 +414,7 @@ export class WebsitePagesComponent implements OnInit {
               // console.log(data);
             }
           });
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showwebpages();
 
         }
@@ -425,7 +425,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   add(event: MatChipInputEvent): void {
@@ -488,7 +488,7 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.success==1){
 
-            this.poupsidebar = true;
+            this.popupsidebar = true;
             this.showmytemplates = false;
             this.addnewpagepopup = false;
               this.insidepagefirst = true;
@@ -545,7 +545,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   archive_popup(id:any){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = false;
       this.insidepagefirst = true;
@@ -600,7 +600,7 @@ export class WebsitePagesComponent implements OnInit {
             }
           });
 
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showwebpages();
           this.applykbfilter();
         }

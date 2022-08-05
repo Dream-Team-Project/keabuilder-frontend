@@ -9,6 +9,7 @@ import { FileUploadService } from './file-upload.service';
   providedIn: 'root'
 })
 export class ImageService {
+    imgBoxAnime:any = {open: true, close: false};
     snackBarMsg:string = '';
     croppedEvent:boolean = false;
     saveasnew:boolean = true;
@@ -298,5 +299,23 @@ export class ImageService {
             ...this.transform,
             rotate: this.rotation
         };
-    }    
+    } 
+    
+    openImgSelBox() {
+        this._general.imgSelection = true;
+        this.imgBoxAnime.open = true;
+        setTimeout(()=>{
+          this.imgBoxAnime.open = false;
+        },200)
+    }
+
+    closeImgSelBox() {
+        this.imgBoxAnime.close = true;
+        setTimeout(()=>{
+            this._general.imgSelection = false;
+            this.imgBoxAnime.close = false;
+            this.showEditImgContainer = false;
+            this.imgMatTabIndex = 1;
+        },200)
+    }
 }

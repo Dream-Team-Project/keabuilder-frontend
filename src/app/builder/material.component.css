@@ -189,7 +189,7 @@ image-cropper {
     font-weight: 600;
     line-height: 36px;
     transition: background .2s ease, transform .2s ease, opacity .2s;
-    min-width: 100px;
+    min-width: auto;
     user-select: none;
     transform: translateY(2px);
     opacity: 1;
@@ -259,8 +259,4 @@ image-cropper {
 ::ng-deep .mat-chip.mat-standard-chip {
     color: var(--kb-text-color);
     background: var(--kb-gray);
-}
-
-button.mat-button  {
-    min-width: auto !important;
 }

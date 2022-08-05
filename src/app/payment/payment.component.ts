@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaymentComponent implements OnInit {
 
-  poupsidebar = false;
+  popupsidebar = false;
   paymentaction = false;
   stripecontentactive = true;
   paypalcontentactive = false;
@@ -26,12 +26,12 @@ export class PaymentComponent implements OnInit {
       this.stripecontentactive = false;
       this.paypalcontentactive = true;
     }
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.paymentaction = true;
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 }

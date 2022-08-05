@@ -15,7 +15,7 @@ export class AffiliateShareComponent implements OnInit {
   ]
 
   redirectto = '';
-  poupsidebar = false;
+  popupsidebar = false;
   affiliatesharenewaction = false;
 
   constructor() { }
@@ -24,12 +24,12 @@ export class AffiliateShareComponent implements OnInit {
   }
   
   addnewcourse(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.affiliatesharenewaction = true;
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 }

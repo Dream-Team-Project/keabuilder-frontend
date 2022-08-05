@@ -19,7 +19,7 @@ export class WebsiteDesignComponent implements OnInit {
   webstatus:any = 'Publish';
   webicon:any = 'fas fa-check mr-2';
 
-  poupsidebar = false;
+  popupsidebar = false;
   addnewpagepopup = false; 
   insidepagefirst = true;
   insidepagesecond = false;
@@ -90,8 +90,7 @@ export class WebsiteDesignComponent implements OnInit {
             var pathdata = {path:data.data[0].homepage};
             this.webpagesService.getWebPageByPath(pathdata).subscribe({
               next: data => {
-                  console.log(data);
-        
+                if(data.data.length != 0){
                   var genscrn = 'keaimage-'+data.data[0].uniqueid+'-screenshot.png';
 
                   this.fileuploadService.validateimg(genscrn).subscribe({
@@ -103,7 +102,7 @@ export class WebsiteDesignComponent implements OnInit {
         
                     }
                   });
-
+                }
                 }
               });
           }
@@ -138,7 +137,7 @@ export class WebsiteDesignComponent implements OnInit {
   }
 
   addnewpage(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = true;
       this.insidepagefirst = true;
@@ -148,7 +147,7 @@ export class WebsiteDesignComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   onSubmit(): void {

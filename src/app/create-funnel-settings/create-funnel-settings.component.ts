@@ -35,7 +35,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   bodytracking = '';
   processon = false;
   processondata = 'Update Settings';
-  poupsidebar = false;
+  popupsidebar = false;
 
 
   ngOnInit(): void {
@@ -138,7 +138,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   }
 
   showpopup(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
   }
 
   onSubmit(): void {
@@ -159,7 +159,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 

@@ -2,6 +2,7 @@
 <div id="page-container" [class.hovernone]="_general.saveDisabled" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
     <app-builder-topbar *ngIf="_section.sections.length != 0"></app-builder-topbar>
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
+    <app-image *ngIf="_general.imgSelection"></app-image>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
             <div id="kb-main"
