@@ -121,7 +121,7 @@ export class WebsitePagesComponent implements OnInit {
   
   // MatPaginator Inputs
   length = 100;
-  pageSize = 20;
+  pageSize = 6;
   pageSizeOptions: number[] = [6, 12, 24, 100];
 
   // MatPaginator Output
