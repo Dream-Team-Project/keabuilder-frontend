@@ -39,7 +39,7 @@ export class CreateFunnelComponent implements OnInit {
   automationaddnewaction = true;
   automationaddnewemail = false;
   automationaddnewtext = false;
-  poupsidebar = false;
+  popupsidebar = false;
   tabOpen = 'overview';
   enabled = true;
   steps:any[] = [];
@@ -197,10 +197,10 @@ export class CreateFunnelComponent implements OnInit {
           this.automationaddnewtext = true;
           this.copylink = false;
       }
-      this.poupsidebar = true;
+      this.popupsidebar = true;
   }
   hidepopupsidebar() {
-      this.poupsidebar = false;
+      this.popupsidebar = false;
   }
   kb_substeps(value: string) {
       this.tabOpen = value;
@@ -506,7 +506,7 @@ export class CreateFunnelComponent implements OnInit {
 
     if(type=='copy'){
       this.copylink = true;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
       this.funnelurl = 'http://localhost:4200/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
@@ -525,7 +525,7 @@ export class CreateFunnelComponent implements OnInit {
     }else if(type=='archive'){
       this.forarchiveid = unique2;
       this.firstpart = false;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.copylink = true;
       this.colortheme = false;
       // console.log(this.panelOpenState);
@@ -533,7 +533,7 @@ export class CreateFunnelComponent implements OnInit {
     }else if(type=='colortheme'){
       this.forarchiveid = unique2;
       this.badgecolor = unique1;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.firstpart = false;
       this.colortheme = true;
     } 
@@ -547,7 +547,7 @@ export class CreateFunnelComponent implements OnInit {
         if(data.status==1){
           this.accordion.closeAll();
           this.reason = '';
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showfunnelsteps();
           this._snackBar.open('Successfully Archived!', 'Close');
 
@@ -593,7 +593,7 @@ export class CreateFunnelComponent implements OnInit {
     }else if(value=='archivefunnelstep'){
         this.forarchiveid = this.uniqueidstep;
         this.firstpart = false;
-        this.poupsidebar = true;
+        this.popupsidebar = true;
         this.copylink = true;
     }else if(value=='deletefunnelstep'){
 
@@ -696,7 +696,7 @@ export class CreateFunnelComponent implements OnInit {
         console.log(data);
 
         if(data.status==1){
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showfunnelsteps();
           this._snackBar.open('Color Successfully Updated!', 'Close');
         }

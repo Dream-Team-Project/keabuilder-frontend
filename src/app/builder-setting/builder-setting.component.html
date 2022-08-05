@@ -1,151 +1,4 @@
 <ng-template>
-    <!-- image selection box -->
-    <div *ngIf="_general.imgSelection" id="kb-img-group">
-        <div class="kb-img-inner-group kb-scroll" [class.dragBox]="imgBoxAnime.open" [class.dragBoxClose]="imgBoxAnime.close">
-            <div class="kb-head">
-                <div *ngIf="!_image.showEditImgContainer else editImgHead">{{_image.imgMatTabIndex == 0 ? 'Upload' : 'Choose'}} Image</div>
-                <ng-template #editImgHead><div><button mat-button class="side-arrow" (click)="_image.showEditImgContainer=false" matTooltip="Back To Gallery"
-                    matTooltipPosition="above"><i
-                        class="fa fa-arrow-left"></i></button>Edit Image</div></ng-template>
-                <span (click)="closeImgSelBox()" class="kb-cut"><i class="fa fa-times"></i></span>
-            </div>
-            <mat-divider></mat-divider>
-            <mat-tab-group *ngIf="!_image.showEditImgContainer else editImgContainer" [(selectedIndex)]="_image.imgMatTabIndex" (selectedTabChange)="_image.extImgLinkInp.reset()">
-                <mat-tab label="Upload">
-                    <div class="kb-img-btn-group">
-                        <div *ngIf="!_image.loading else loading">
-                            <div>
-                            <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)">
-                            <button mat-raised-button (click)="imgInp.click();" class="kb-btn kb-btn-primary">
-                                <span>Upload a new image</span></button><br><br>
-                            <span>File suported png, jpg, jpeg only</span>    
-                            </div>
-                            <div class="kb-or-divider">OR</div>
-                            <div>
-                            <mat-form-field appearance="fill">
-                                <mat-label>Paste Image Link</mat-label>
-                                <input matInput name="imgLink" [formControl]="_image.extImgLinkInp" placeholder="Paste your image link here" type="text"
-                                    [(ngModel)]="_image.extImgLink.filename" required/>
-                            </mat-form-field>  
-                            <div *ngIf="_image.extImgLinkInp.touched && _image.extImgLinkInp.invalid && _image.extImgLinkInp.dirty" class="kb-alert kb-alert-danger">
-                                <mat-error *ngIf="_image.extImgLinkInp.errors?.['required']">
-                                    Please paste a image link
-                                </mat-error>
-                                <mat-error *ngIf="_image.extImgLinkInp.errors?.['pattern']">
-                                    Please paste a valid image link
-                                </mat-error>
-                            </div>
-                            <button mat-raised-button [disabled]="_image.extImgLinkInp.invalid" (click)="_image.loading = true; _image.saveImageOnDb(_image.extImgLink)" class="kb-btn kb-btn-primary">
-                                <span>Add as external path</span></button> 
-                            </div>                         
-                        </div>
-                        <ng-template #loading><mat-spinner></mat-spinner></ng-template>  
-                    </div>  
-                </mat-tab>
-                <mat-tab label="Choose">
-                    <div class="kb-img-thumbnail-group">
-                        <ul *ngIf="_image.galleryImg.length != 0 else noImg" class="kb-img-list">
-                            <li *ngFor="let img of _image.galleryImg"><span (click)="_style.addImage(img); closeImgSelBox()" [class.showImg]="img.loaded">
-                                    <img [src]="!img.ext_link ? _image.uploadImgPath+img.path : img.path" (load)="img.loaded = true"></span>
-                                <div class="imgSettingIcons">
-                                    <i (click)="_image.editImage(img)" class="far fa-edit" matTooltip="Image Setting" matTooltipPosition="above"></i>
-                                    <i  (click)="_image.deleteImage(img)" class="far fa-trash-alt" matTooltip="Delete Image" matTooltipPosition="above"></i>
-                                </div>
-                            </li>
-                        </ul>
-                        <ng-template #noImg>
-                            <div class="kb-img-thumbnail-group" style="height: 500px;">Upload the first image</div>
-                        </ng-template>
-                    </div>
-                </mat-tab>
-            </mat-tab-group>
-            <ng-template #editImgContainer>
-                <div class="kb-imgUploadPreviewGroup" *ngIf="!_image.loading else loading">
-                    <div class="kb-imgUploadPreview">
-                        <div *ngIf="!_image.selectedImg.ext_link else showImgOnly">
-                            <div class="kb-img-inp-group">
-                                <button mat-button (click)="_image.rotateLeft()" matTooltip="Rotate Left"
-                                    matTooltipPosition="above"><i class="fa fa-undo"></i></button>
-                                <button mat-button (click)="_image.rotateRight()" matTooltip="Rotate Right"
-                                    matTooltipPosition="above"><i class="fa fa-redo"></i></button>
-                                <button mat-button (click)="_image.flipHorizontal()" matTooltip="Flip horizontal"
-                                    matTooltipPosition="above"><i class="fa fa-undo"></i></button>
-                                <button mat-button (click)="_image.flipVertical()" matTooltip="Flip vertical"
-                                    matTooltipPosition="above"><i class="fa fa-redo"></i></button>
-                                <button mat-button (click)="_image.zoomOut()" matTooltip="Zoom Out"
-                                    matTooltipPosition="above"><i class="fa fa-search-minus"></i></button>
-                                <button mat-button (click)="_image.zoomIn()" matTooltip="Zoom In"
-                                    matTooltipPosition="above"><i class="fa fa-search-plus"></i></button>
-                                <mat-slide-toggle [(ngModel)]="_image.aspRatio.toggle"
-                                    [disabled]="!_image.aspRatio.w || !_image.aspRatio.h">Aspect Ratio
-                                </mat-slide-toggle>
-                                <span>
-                                    <input [(ngModel)]="_image.aspRatio.w" matTooltip="Use Up & Down Key" matTooltipPosition="above" placeholder="auto" type="number" min="1"
-                                        (input)="_image.checkAspVal(_image.aspRatio.w)">/
-                                    <input [(ngModel)]="_image.aspRatio.h" matTooltip="Use Up & Down Key" matTooltipPosition="above" placeholder="auto" type="number" min="1"
-                                        (input)="_image.checkAspVal(_image.aspRatio.h)">
-                                </span>
-                                <button mat-button *ngIf="_image.aspRatio.toggle" [matTooltip]="!_image.containWithinAspectRatio ? 'Contain Within' : 'Fill'" matTooltipPosition="above"
-                                (click)="_image.containWithinAspectRatio = !_image.containWithinAspectRatio;">
-                                    <i *ngIf="!_image.containWithinAspectRatio else fill" class="fa fa-expand"></i>
-                                    <ng-template #fill><i class="fa fa-compress"></i></ng-template>
-                                </button>
-                                <button mat-button (click)="_image.resetImage()" matTooltip="Reset"
-                                matTooltipPosition="above"><i class="fa fa-sync"></i></button>
-                            </div>
-                            <image-cropper [imageChangedEvent]="_image.imageChangedEvent"
-                                [imageBase64]="_image.imageBase64String"
-                                [maintainAspectRatio]="_image.aspRatio.toggle"
-                                [containWithinAspectRatio]="_image.containWithinAspectRatio"
-                                [aspectRatio]="_image.aspRatio.w / _image.aspRatio.h"
-                                [onlyScaleDown]="true" [roundCropper]="false"
-                                [canvasRotation]="_image.canvasRotation" [transform]="_image.transform"
-                                [alignImage]="'left'" [style.display]="_image.showCropper ? null : 'none'" format="png"
-                                (imageCropped)="_image.imageCropped($event)" (imageLoaded)="_image.imageLoaded()"
-                                (cropperReady)="_image.cropperReady($event)" (loadImageFailed)="_image.loadImageFailed()">
-                            </image-cropper>
-                        </div>
-                        <ng-template #showImgOnly>
-                            <img [src]="_image.croppedImage" height="300" width="auto" style="
-                            margin: auto;
-                            display: flex;
-                            margin-top: 20px;
-                        ">
-                        </ng-template>
-                    </div>
-                    <div class="mat-form">
-                        <img [src]="_image.croppedImage">
-                        <mat-form-field appearance="fill">
-                            <mat-label for="imgName">Title</mat-label>
-                            <input matInput id="imgName" placeholder="Give your image a title" type="text"
-                                [(ngModel)]="_image.selectedImg.title" />
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label for="imgAlt">Alt</mat-label>
-                            <input matInput id="imgAlt" placeholder="Give your image an alt" type="text"
-                                [(ngModel)]="_image.selectedImg.alt" />
-                        </mat-form-field>
-                        <mat-form-field appearance="fill">
-                            <mat-label for="imgDiscription">Discription</mat-label>
-                            <textarea matInput id="imgDiscription" placeholder="Give your image a discription"
-                                type="text" [(ngModel)]="_image.selectedImg.discription"></textarea>
-                        </mat-form-field>
-                        <div>
-                            <button mat-button (click)="_image.saveasnew = true; _image.onUpload()" class="kb-btn-secondry"
-                            matTooltipPosition="above" style="margin-right: 10px">Copy Changes</button>
-                            <button mat-button (click)="_image.saveasnew = false; _image.onUpload()" class="kb-btn-primary"
-                            matTooltipPosition="above">Save Changes</button>
-                        </div>
-                    </div>
-                </div>
-                <ng-template #loading>
-                    <div class="kb-img-thumbnail-group" style="height: 500px;"><mat-spinner></mat-spinner></div>
-                </ng-template>  
-            </ng-template>
-        </div>
-        <div class="offcanvas-overlay" (click)="closeImgSelBox()"></div>
-    </div>
-    <!-- image selection box -->
     <div id="kb-selection-ask" class="kb-outer-selection-container kb-scroll" [class.dragBox]="dragBoxAnime.open" [class.dragBoxClose]="dragBoxAnime.close"
         [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''" cdkDragBoundary=".cdk-overlay-container"
         cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
@@ -631,7 +484,7 @@
                             <div class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Choose Image</div>
                                 <div class="kb-tab-content">
-                                    <div (click)="_general.imgSelection = !_general.imgSelection"
+                                    <div (click)="_image.openImgSelBox()"
                                         [class]="!_style.image_src ? 'kb-noImgSel' : ''"
                                         class="kb-dummy-bg">
                                         <img *ngIf="_style.image_src else noimg"
@@ -1229,7 +1082,7 @@
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Image</div>
                             <div class="kb-tab-content">
-                                <div (click)="_general.imgSelection = !_general.imgSelection"
+                                <div (click)="_image.openImgSelBox()"
                                     [class]="!_general.meta_img ? 'kb-noImgSel' : ''"
                                     class="kb-dummy-bg">
                                     <img *ngIf="_general.meta_img else noimg"
@@ -1567,7 +1420,7 @@
                                 <div class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Background Image</div>
                                     <div class="kb-tab-content">
-                                        <div (click)="openImgSelBox()"
+                                        <div (click)="_image.openImgSelBox()"
                                             [class]="!_style.background_image.name ? 'kb-noImgSel' : ''"
                                             class="kb-dummy-bg">
                                             <img *ngIf="_style.background_image.name else nobgimg"

@@ -19,7 +19,7 @@ export class AllFunnelsComponent implements OnInit {
               private _snackBar: MatSnackBar) { }
 
   funnels:any = [];
-  poupsidebar = false;
+  popupsidebar = false;
   funnelurl = '';
   reason = '';
   firstpart = true;
@@ -164,7 +164,7 @@ export class AllFunnelsComponent implements OnInit {
 
     if(type=='archive'){
       this.forarchiveid = id;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.firstpart = false;
       this.shwobtnfirst = true;
       this.colortheme = false;
@@ -190,7 +190,7 @@ export class AllFunnelsComponent implements OnInit {
             this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
           }else if(type=='copy'){
             this.firstpart = true;
-            this.poupsidebar = true;
+            this.popupsidebar = true;
             this.funneltostep = true;
             this.colortheme = false;
             this.funnelurl = 'http://localhost:4200/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
@@ -207,7 +207,7 @@ export class AllFunnelsComponent implements OnInit {
       next: data => {
         if(data.status==1){
             this.reason = '';
-            this.poupsidebar = false;
+            this.popupsidebar = false;
             this.showfunnels();
         }
       }
@@ -215,7 +215,7 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   copyInputMessage(inputElement:any){
@@ -282,7 +282,7 @@ export class AllFunnelsComponent implements OnInit {
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
     }else if(type=='copy'){
       this.firstpart = true;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.funneltostep = false;
       this.colortheme = false;
       this.funnelurl = 'http://localhost:4200/funnels/'+unique1+'/steps/'+unique2;
@@ -296,7 +296,7 @@ export class AllFunnelsComponent implements OnInit {
       });
     }else if(type=='archive'){
       this.forarchiveid = unique2;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.firstpart = false;
       this.shwobtnfirst = false;
       this.colortheme = false;
@@ -313,7 +313,7 @@ export class AllFunnelsComponent implements OnInit {
     }else if(type=='colortheme'){
       this.forarchiveid = unique2;
       this.badgecolor = unique1;
-      this.poupsidebar = true;
+      this.popupsidebar = true;
       this.firstpart = false;
       this.colortheme = true;
     } 
@@ -327,7 +327,7 @@ export class AllFunnelsComponent implements OnInit {
 
         if(data.status==1){
           this.reason = '';
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showfunnels();
           this._snackBar.open('Successfully Archived!', 'Close');
         }else if(data.status==0){
@@ -362,7 +362,7 @@ export class AllFunnelsComponent implements OnInit {
         console.log(data);
 
         if(data.status==1){
-          this.poupsidebar = false;
+          this.popupsidebar = false;
           this.showfunnels();
           this._snackBar.open('Color Successfully Updated!', 'Close');
         }

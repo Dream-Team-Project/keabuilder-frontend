@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CrmSettingsComponent implements OnInit {
 
   addnewpages = true;
-  poupsidebar = false;
+  popupsidebar = false;
   automationaddnewaction = false;
   kbforsmtp = false;
 
@@ -18,11 +18,11 @@ export class CrmSettingsComponent implements OnInit {
   }
   
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   addnewcourse(value:string){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.automationaddnewaction = true;
     if(value=='transactional'){
       this.kbforsmtp = false;

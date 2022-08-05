@@ -1,0 +1,145 @@
+<div class="container-fluid">
+
+  <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+
+      <i class="fas fa-times" (click)="closeSidebar()"></i>
+      <h6><b>NEW COURSE STEPS</b></h6>
+      <hr>
+      <mat-form-field #title class="kb-full-width" appearance="fill">
+        <mat-label>Title</mat-label>
+        <input [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
+          minlength="3" maxlength="140">
+      </mat-form-field>
+
+      <mat-form-field #description class="kb-full-width" appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea [(ngModel)]="course.description" matInput></textarea>
+      </mat-form-field>
+
+      <p>Product Thumbnail</p>
+      <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+        <img class="img-fluid" [src]="thumbnail.path"/>
+      </div>
+      <input type="file" name="thumbnail" (change)="changeme($event)" id="fileElem" accept=".png, .jpg, .jpeg"
+        class="drop-zone__input">
+      <div id="imgdiv" (click)="onOpen()"><span class="drop-zone__prompt">Click to upload</span></div>
+      <p class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
+
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Offers</mat-label>
+        <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
+          <mat-select-trigger>
+            {{offers.value ? offers.value[0] : ''}}
+            <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
+              (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
+            </span>
+          </mat-select-trigger>
+          <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()"><i class="far fa-edit"></i>
+        Update Course</button>
+        <ng-template #create>
+          <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
+            Create Course</button>
+        </ng-template>
+    </div>
+  </div>
+  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+
+  <div class="row">
+    <div class="col-md-12 mb-4 text-right">
+      <button mat-raised-button class="mr-2 outer-card-add" (click)="openSidebar()">Add New Course <i
+          class="fa fa-paper-plane" aria-hidden="true"></i></button>
+      <button mat-raised-button class="mr-2 btnul">Pages
+        <i class="fa fa-file-alt" aria-hidden="true"></i>
+        <ul class="kb-ul">
+          <li> <button mat-raised-button class="mr-2"><i class="fa fa-file"></i> Landing Page</button> </li>
+          <li> <button mat-raised-button class="mr-2"><i class="fa fa-file" aria-hidden="true"></i> Library
+              Page</button> </li>
+        </ul>
+      </button>
+      <button mat-raised-button class="mr-2 btnul">Sales
+        <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+        <ul class="kb-ul">
+          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/offers']"> <i class="fa fa-percentage"
+                aria-hidden="true"></i> Offers</button> </li>
+          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/coupons']"> <i class="fa fa-percent"
+                aria-hidden="true"></i> Coupons</button> </li>
+          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/payments']"> <i
+                class="fa fa-dollar-sign" aria-hidden="true"></i> Payments</button> </li>
+        </ul>
+      </button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/membership/members']">Members <i class="fa fa-users"
+          aria-hidden="true"></i></button>
+      <button mat-raised-button class="mr-2">Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+    </div>
+    <div *ngIf="allcoursesarr.length != 0 else nodata" class="row col-12">
+      <div class="col-md-4 cardpage loadEffect mt-4" *ngFor="let acourse of allcoursesarr; index as i;">
+        <div>
+          <img [src]="getImgPath(acourse.thumbnail)" alt="" class="img-fluid img-fit">
+          <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+            <span mat-button [matMenuTriggerFor]="menu" class="statusbadge"
+              [class]="acourse.publish_status==1 ? 'active1':'active2'">
+              <i class="fas" [class]="acourse.publish_status==1 ? 'fa-check':'fa-file'"></i>
+              {{acourse.publish_status==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+            </span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="toggleStatus(acourse, 1)"><i class="fa fa-check pr-2"></i> Publish</button>
+              <button mat-menu-item (click)="toggleStatus(acourse, 0)"><i class="fa fa-file pr-2"></i> Draft</button>
+            </mat-menu>
+          </div>
+          <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
+            <span>{{acourse.title}}</span>
+            <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)">
+          </div>
+          <p class="kb-pagedate"><span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
+                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar"
+              aria-hidden="true"></i> {{acourse.updated_at}}</p>
+
+          <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+          <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu2" matTooltip="Settings"
+            matTooltipPosition="above">
+            <i class="fas fa-cog"></i>
+          </button>
+          <mat-menu #menu2="matMenu">
+            <button mat-menu-item (click)="editDetails(acourse)">
+              <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> Edit Details
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-chart-pie pr-2"></i>View Analytics
+            </button>
+            <button mat-menu-item (click)="duplicateCourse(acourse)">
+              <i class="far fa-copy pr-2"></i>Duplicate
+            </button>
+            <button mat-menu-item>
+              <i class="fas fa-link pr-2"></i>Copy URL
+            </button>
+            <button mat-menu-item class="text-danger" (click)="deleteCourse(acourse)">
+              <i class="far fa-trash-alt pr-2"></i>Delete
+            </button>
+          </mat-menu>
+
+        </div>
+      </div>
+    </div>
+    <ng-template #nodata>
+      <div class="col-12 text-center mt-5">
+        Ready to create your first course!<br><br>
+        <button mat-raised-button color="primary" (click)="openSidebar()">Click Here</button>
+      </div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="allcoursesarr.length != 0" class="row mt-4">
+    <div class="col-md-12 mt-4">
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>
+
+</div>

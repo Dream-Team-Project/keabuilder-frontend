@@ -1,3 +1,12 @@
+::ng-deep button.mat-menu-item {
+    height: 36px;
+    line-height: 36px;
+}
+
+::ng-deep .mat-simple-snackbar-action button {
+    font-weight: 600;
+  }
+
 .outer-card-add {
     padding: 0px 80px;
     border: 1px dashed #444;
@@ -181,32 +190,6 @@
     width: 100%;
   }
 
-#kb-automation-actions>div {
-    overflow-y: scroll;
-}
-
-/* width */
-#kb-automation-actions>div::-webkit-scrollbar {
-    width: 5px;
-}
-
-/* Track */
-#kb-automation-actions>div::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-/* Handle */
-#kb-automation-actions>div::-webkit-scrollbar-thumb {
-    background: #e2e2e2;
-}
-
-#kb-automation-actions .fa-times {
-    position: absolute;
-    right: 24px;
-    z-index: 99999;
-    cursor: pointer;
-    top:20px;
-}
 /* Userprofile css start */
 .offcanvas, .offcanvas-mobile {
     -ms-flex-negative: 0 !important;
@@ -226,12 +209,6 @@
     background: #ffffff;
     -webkit-box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
     box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
-}
-.offcanvas.offcanvas-right.offcanvas-on {
-    -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
-    transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
-    right: 7px;
-    left: auto;
 }
 .offcanvas h3{
    font-size: 19px;
@@ -342,8 +319,7 @@
     right: 0;
     overflow: hidden;
     z-index: 999;
-    -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
-    animation: animation-offcanvas-fade-in 0.6s ease 1;    
+    transition: 0.3s ease;
     background: rgba(0, 0, 0, 0.1);
 }
 
@@ -410,4 +386,7 @@
 .kb-ul li button {
     width: 100%;
     text-align: left;
+}
+.mat-select {
+    background-color: transparent;
 }

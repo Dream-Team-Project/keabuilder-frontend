@@ -24,7 +24,7 @@ export class MembershipTagsComponent implements OnInit {
   selection = new SelectionModel<UserData>(true, []);
   currencytype = '';
   kbduration = '';
-  poupsidebar = false;
+  popupsidebar = false;
   automationaddnewaction = false;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
@@ -58,12 +58,12 @@ export class MembershipTagsComponent implements OnInit {
   }
 
   addnewcontact(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.automationaddnewaction = true;
   }
   
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 

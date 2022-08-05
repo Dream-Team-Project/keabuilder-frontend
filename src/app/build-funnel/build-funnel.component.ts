@@ -122,7 +122,7 @@ export class BuildFunnelComponent implements OnInit {
     sellaproduct = false;
     createaevent = false;
     other2 = false;
-    poupsidebar = false;
+    popupsidebar = false;
     errorMessage = '';
 
   ngOnInit(): void {
@@ -180,11 +180,11 @@ export class BuildFunnelComponent implements OnInit {
   }
 
   createfunnel(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
   }
   
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 

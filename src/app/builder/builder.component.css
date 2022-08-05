@@ -1042,9 +1042,9 @@ div#kb-row-selection ul.kb-row-list,
     position: absolute;
     top: 0px;
     right: 0px;
-    padding: 5px 3px;
+    padding: 0px 2px;
     width: auto;
-    height: 20px;
+    height: auto;
     justify-content: center;
     align-items: center;
     color: var(--kb-light);
@@ -1058,7 +1058,7 @@ div#kb-row-selection ul.kb-row-list,
 }
 
 .imgSettingIcons i {
-    padding: 4px;
+    padding: 6px;
 }
 
 .imgSettingIcons:hover {
@@ -2220,6 +2220,29 @@ ul.kb-sub-menu a:hover {
     0% {left: 0%;}
     100% {left:100%;}
   }
+
+
+  .dragBox {
+    animation: bounce 0.2s ease-out;
+}
+
+.dragBoxClose {
+    opacity: 0!important;
+    transform: scale(0)!important;
+    animation: bounce 0.2s ease-in;
+    animation-direction: reverse;
+}
+
+@keyframes bounce {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 
   /* loader */

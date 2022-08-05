@@ -30,7 +30,7 @@ export class MembershipCouponsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
   
-  poupsidebar = false;
+  popupsidebar = false;
   automationaddnewaction = false;
   itemshow = false;
   pricetype = 'USD';
@@ -61,7 +61,7 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   addnewcourse(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.automationaddnewaction = true;
   }
 
@@ -70,7 +70,7 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
   applyFilter(event: Event) {

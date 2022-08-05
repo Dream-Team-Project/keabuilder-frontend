@@ -257,7 +257,7 @@ main.insidecont .box {
 }
 .loadEffectFromLeftsidebar{
     animation-name: slideRightsidebar;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     animation-timing-function: ease;
     animation-iteration-count: 1;
     transform-origin: center;
@@ -272,6 +272,14 @@ main.insidecont .box {
         opacity: 1;
         right: 7px;            
     }
+}
+
+.loadEffectFromLeftsidebarClose{
+  animation: slideRightsidebar 0.3s ease;
+  animation-direction: reverse;
+  animation-iteration-count: 1;
+  transform-origin: center;
+  position: relative;
 }
 /*  animation  */
 
@@ -349,7 +357,6 @@ main.insidecont .box {
         height: 50px;
     }
 }
-  
 
 
 .kb-full-width{
@@ -362,13 +369,13 @@ main.insidecont .box {
     overflow-y: scroll;
   }
   #kb-offcanvas-actions>div::-webkit-scrollbar {
-    width: 5px;
+    width: 8px;
   }
   #kb-offcanvas-actions>div::-webkit-scrollbar-track {
     background: transparent;
   }
   #kb-offcanvas-actions>div::-webkit-scrollbar-thumb {
-    background: #e2e2e2;
+    background: var(--primary-color);
   }
   #kb-offcanvas-actions .fa-times {
     position: absolute;
@@ -399,7 +406,7 @@ main.insidecont .box {
   .offcanvas.offcanvas-right.offcanvas-on {
     -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease, width 0.3s ease;
     transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease, width 0.3s ease;
-    right: 7px;
+    right: 0px;
     left: auto;
   }
   .offcanvas h3{
@@ -494,6 +501,19 @@ main.insidecont .box {
 
 .kb-drag-container.cdk-drop-list-dragging .kb-block-container:not(.cdk-drag-placeholder), .kb-drag-container.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.slowVisible {
+    transition: 0.3s ease;
+}
+
+.slowHide {
+  animation: slowHide 0.3s ease;
+}
+
+@keyframes slowHide {
+  from { opacity: 1;}
+  to { opacity: 0;}
 }
 
 /* cdk drag drop */

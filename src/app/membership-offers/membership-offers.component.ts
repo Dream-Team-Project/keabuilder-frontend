@@ -80,7 +80,7 @@ export class MembershipOffersComponent implements OnInit {
     }
   ];
   addnewpages = true;
-  poupsidebar = false;
+  popupsidebar = false;
   automationaddnewaction = false;
   itemshow = false;
   activeoffer = 'all';
@@ -168,7 +168,7 @@ export class MembershipOffersComponent implements OnInit {
   }
 
   addnewcourse(){
-    this.poupsidebar = true;
+    this.popupsidebar = true;
     this.automationaddnewaction = true;
   }
 
@@ -181,7 +181,7 @@ export class MembershipOffersComponent implements OnInit {
   }
 
   hidepopupsidebar(){
-    this.poupsidebar = false;
+    this.popupsidebar = false;
   }
 
 
