@@ -52,10 +52,13 @@ export class MembershipCouponsComponent implements OnInit {
   kbduration = '';
   
   productoptionals = new FormControl();
-  productoptionalList: string[] = ['For testing', 'Small Option Big Profits','Weekly Options Income Academy'];
+  productoptionalList: string[] = [];
 
   newcoupon = {name:'', discount_type:'', percent_off:'', amount_off:'', currency_type:'', duration:'', expiration_date:'', duration_in_month:'', included_offers:''};
   nameFormControl = new FormControl('', [Validators.required]);
+
+  createme = true;
+  updateid = 0;
   
   constructor(private courseService:CourseService,
               private _snackBar: MatSnackBar,
@@ -63,6 +66,17 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.courseService.getalloffers().subscribe({
+      next: data => {
+
+       data.data.forEach((element: any) => {
+          this.productoptionalList.push(element.title);
+       });
+
+      }
+    });
+
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -120,6 +134,7 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   addnewcourse(){
+    this.createme = true;
     this.popupsidebar = true;
     this.automationaddnewaction = true;
   }
@@ -130,6 +145,11 @@ export class MembershipCouponsComponent implements OnInit {
 
   hidepopupsidebar(){
     this.popupsidebar = false;
+    this.newcoupon = {name:'', discount_type:'', percent_off:'', amount_off:'', currency_type:'', duration:'', expiration_date:'', duration_in_month:'', included_offers:''};
+
+    this.discountselected = "none";
+    this.currencytype = "none";
+    this.kbduration = "none";
   }
 
   applyFilter(event: Event) {
@@ -141,13 +161,14 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   createmycoupon(){
+    
     this.newcoupon.discount_type = this.discountselected;
     this.newcoupon.currency_type = this.currencytype;
     this.newcoupon.duration = this.kbduration;
     var settags = this.productoptionals.value == null ? '' : this.productoptionals.value;
     this.newcoupon.included_offers = settags;
     
-    console.log(this.newcoupon);
+    // console.log(this.newcoupon);
     if(this.nameFormControl.status=='VALID'){
 
       this.courseService.addnewcoupon(this.newcoupon).subscribe({
@@ -157,7 +178,6 @@ export class MembershipCouponsComponent implements OnInit {
             this._snackBar.open('Coupon Already Exist!', 'Close');
           }else{
               this.getallmycoupons();
-
               this._snackBar.open('Coupon Added Successfully!', 'Close');
           }
         }
@@ -168,6 +188,9 @@ export class MembershipCouponsComponent implements OnInit {
   }
 
   editcouponstep(id:any){
+    this.createme = false;
+    this.updateid = id;
+
     var data = {id:id,name:'',type:'geteditdata'};
     this.courseService.updatedelcoupon(data).subscribe({
       next: data => {
@@ -179,6 +202,9 @@ export class MembershipCouponsComponent implements OnInit {
           this.discountselected = element.discount_type;
           this.currencytype = element.currency_type;
           this.kbduration = element.duration;
+
+          var arselmult = (element.include_offers).split(',');
+          this.productoptionals.setValue(arselmult); 
 
           this.popupsidebar = true;
           this.automationaddnewaction = true;
@@ -207,10 +233,29 @@ export class MembershipCouponsComponent implements OnInit {
           }
         });
       }
+      
     });
 
   }
 
+  updatemycoupon(){
+    
+    this.newcoupon.discount_type = this.discountselected;
+    this.newcoupon.currency_type = this.currencytype;
+    this.newcoupon.duration = this.kbduration;
+    var settags = this.productoptionals.value == null ? '' : this.productoptionals.value;
+    this.newcoupon.included_offers = settags;
+
+    var data = {id:this.updateid, name:'', type:'update', update:this.newcoupon};
+    this.courseService.updatedelcoupon(data).subscribe({
+      next: data => {
+        console.log(data);
+        this.getallmycoupons();
+        this._snackBar.open('Coupon Updated Successfully!', 'Close');
+      }
+    });
+
+  }
 
 
 }

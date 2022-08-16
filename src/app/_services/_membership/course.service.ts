@@ -83,6 +83,28 @@ export class CourseService {
   }
   // coupon
 
+   // offers
+  addnewoffer(data:any):Observable<any> {
+    return this.http.post("./api/membership_addnewoffer", {data});
+  }
+
+  getalloffers():Observable<any> {
+    return this.http.get("./api/membership_alloffers");
+  }
+
+  updatedeloffer(data:any):Observable<any> {
+    return this.http.post("./api/membership_updatedeloffer", {data});
+  }
+
+  filteroffer(data:any):Observable<any> {
+    return this.http.post("./api/membership_filteroffer", {data});
+  }
+  querystringmanage(data:any):Observable<any> {
+    return this.http.post("./api/membership_queryoffer", {data});
+  }
+
+  // offers
+
 
 
 }
