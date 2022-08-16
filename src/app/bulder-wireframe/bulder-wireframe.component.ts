@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { SectionService } from '../_services/_builderService/section.service';
-import { RowService } from '../_services/_builderService/row.service';
-import { ColumnService } from '../_services/_builderService/column.service';
-import { ElementService } from '../_services/_builderService/element.service';
-import { StyleService } from '../_services/_builderService/style.service';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { SectionService } from '../_services/_builder/section.service';
+import { RowService } from '../_services/_builder/row.service';
+import { ColumnService } from '../_services/_builder/column.service';
+import { ElementService } from '../_services/_builder/element.service';
+import { StyleService } from '../_services/_builder/style.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { asapScheduler } from 'rxjs';
 

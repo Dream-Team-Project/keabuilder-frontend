@@ -11,8 +11,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private tokenStorage: TokenStorageService) {
-    }
+    private tokenStorage: TokenStorageService) {  }
 
   scrollPosition:any = null;
   issearch = false;

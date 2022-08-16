@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainer
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { NavbarService } from '../_services/navbar.service';
-import { SectionService } from '../_services/_builderService/section.service';
-import { RowService } from '../_services/_builderService/row.service';
-import { ColumnService } from '../_services/_builderService/column.service';
-import { ElementService } from '../_services/_builderService/element.service';
-import { StyleService } from '../_services/_builderService/style.service';
+import { SectionService } from '../_services/_builder/section.service';
+import { RowService } from '../_services/_builder/row.service';
+import { ColumnService } from '../_services/_builder/column.service';
+import { ElementService } from '../_services/_builder/element.service';
+import { StyleService } from '../_services/_builder/style.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -56,10 +56,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef) {
       this._row.getDialogueEvent().subscribe(()=>{
-      this.overlayRefDetach(false);
+        this.overlayRefDetach(false);
       })
       this._element.getDialogueEvent().subscribe(()=>{
-      this.overlayRefDetach(false);
+        this.overlayRefDetach(false);
       })
    }
 

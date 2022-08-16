@@ -355,10 +355,13 @@ export class GeneralService {
     if (ele.style.maxHeight != '0px'){
       ele.style.maxHeight = '0px';
     } else {
-      ele.style.maxHeight = ele.scrollHeight + 'px';
+      ele.style.maxHeight = ele.scrollHeight * 2 + 'px';
     } 
     setTimeout(()=>{
-      if(ele.style.maxHeight != '0px') ele.classList.remove('kb-hidden');
+      if(ele.style.maxHeight != '0px') { 
+        ele.classList.remove('kb-hidden');
+        ele.style.maxHeight = '';
+      }
     },300)
   }
 

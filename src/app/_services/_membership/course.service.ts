@@ -21,7 +21,7 @@ export class CourseService {
   }
 
   single(param:any):Observable<any> {
-    return this.http.post(this.createApi, param);
+    return this.http.get(this.singleApi+'/'+param);
   }
 
   create(req:any):Observable<any> {

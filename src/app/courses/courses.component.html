@@ -1,30 +1,31 @@
 <div class="container-fluid">
 
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-
+    <form class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
       <i class="fas fa-times" (click)="closeSidebar()"></i>
       <h6><b>NEW COURSE STEPS</b></h6>
       <hr>
       <mat-form-field #title class="kb-full-width" appearance="fill">
         <mat-label>Title</mat-label>
-        <input [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
+        <input name="title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
           minlength="3" maxlength="140">
       </mat-form-field>
 
       <mat-form-field #description class="kb-full-width" appearance="fill">
         <mat-label>Description</mat-label>
-        <textarea [(ngModel)]="course.description" matInput></textarea>
+        <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
       </mat-form-field>
 
-      <p>Product Thumbnail</p>
-      <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
-        <img class="img-fluid" [src]="thumbnail.path"/>
+      <div class="imgFormField p-3 inpfill">
+        <label>Product Thumbnail</label>
+        <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+          <img class="img-fluid" [src]="thumbnail.path"/>
+        </div>
+        <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
+          class="drop-zone__input">
+        <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+        <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
       </div>
-      <input type="file" name="thumbnail" (change)="changeme($event)" id="fileElem" accept=".png, .jpg, .jpeg"
-        class="drop-zone__input">
-      <div id="imgdiv" (click)="onOpen()"><span class="drop-zone__prompt">Click to upload</span></div>
-      <p class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
 
       <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Offers</mat-label>
@@ -45,7 +46,7 @@
           <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
             Create Course</button>
         </ng-template>
-    </div>
+      </form>
   </div>
   <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
 
@@ -93,14 +94,14 @@
           </div>
           <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
             <span>{{acourse.title}}</span>
-            <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)">
+            <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)" (click)="prevTitle = acourse.title">
           </div>
           <p class="kb-pagedate"><span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
                 class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar"
               aria-hidden="true"></i> {{acourse.updated_at}}</p>
 
           <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
-          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+          <button mat-raised-button color="primary" [routerLink]="'./course/'+acourse.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>
 
           <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu2" matTooltip="Settings"
             matTooltipPosition="above">

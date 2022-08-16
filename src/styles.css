@@ -6,8 +6,9 @@
 
 :root {
     /* builder root */
-    
-        --opacity-blue: rgb(24 103 192 / 80%);
+        --opacity-primary: rgb(216 200 152 / 70%);        ;
+        --opacity-success: rgb(27 197 189 / 70%);
+        --opacity-section: rgb(24 103 192 / 80%);
         --primary-color: #d8c898;
         --secondary-color: #6c757d;
         --section-color: #1867c0;
@@ -469,24 +470,40 @@ main.insidecont .box {
 
 /* cdk drag drop */
 
+.cdk-overlay-container {
+    z-index: 99999;
+}
+
+.cdk-overlay-container .cdk-drag-handle {
+  cursor: all-scroll;
+}
+
 .custom-preview {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
-  height: 40px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  min-width: 200px;
+  max-width: 750px;
+  height: 36px;
+  padding: 0 8px;
   color: #fff;
   border-radius: 3px;
   text-transform: capitalize;
   font-weight: 500;
+  -webkit-box-shadow: 0 0 30px rgb(0 0 0 / 20%);
+  box-shadow: 0 0 30px rgb(0 0 0 / 20%);
 }
 
 .custom-placeholder {
   background: #e2e2e2;
   border: dotted 2px #999;
-  min-height: 40px;
+  min-height: 28px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   border-radius: 3px;
+  width: 100%;
 }
 
 .custom-placeholder:before {
@@ -517,3 +534,52 @@ main.insidecont .box {
 }
 
 /* cdk drag drop */
+
+.drop-zone__input {
+  display: none!important;
+}
+
+#img-preview {
+  text-align: center;
+}
+
+#imginp {
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  color: #cccccc;
+  border: 3px dashed var(--clr-primay);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.imgFormField.inpfill {
+  background-color: rgba(0,0,0,.04);
+}
+
+.imgFormField{
+  border-radius: 5px;
+  margin-bottom: 1.34375em;
+}
+
+.imgFormField label {
+  color: var(--kb-text-color);
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--primary-color);
+}
+
+.mat-spinner, .mat-progress-spinner, .mat-progress-spinner svg, .mat-spinner svg {
+  height: 80px!important;
+  width: 80px!important;
+}
+
+.kb-hidden {
+  overflow: hidden;
+}

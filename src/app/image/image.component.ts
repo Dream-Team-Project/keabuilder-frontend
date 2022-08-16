@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
-import { StyleService } from '../_services/_builderService/style.service';
+import { StyleService } from '../_services/_builder/style.service';
 
 @Component({
   selector: 'app-image',

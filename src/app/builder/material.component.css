@@ -38,7 +38,7 @@ image-cropper {
 }
 
 ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: var(--opacity-blue);
+    background-color: var(--opacity-section);
 }
 
 ::ng-deep .mat-tooltip {
@@ -75,7 +75,7 @@ image-cropper {
 }
 
 ::ng-deep .mat-snack-bar-container {
-    background-color: var(--opacity-blue);
+    background-color: var(--opacity-section);
     color: #fff;
     margin-top: 30px!important;
 }

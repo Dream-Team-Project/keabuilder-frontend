@@ -1,18 +1,18 @@
 import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { CourseService } from '../_services/course.service';
+import { CourseService } from '../_services/_membership/course.service';
 import { ImageService } from '../_services/image.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-all-courses',
-  templateUrl: './all-courses.component.html',
-  styleUrls: ['./all-courses.component.css']
+  selector: 'app-courses',
+  templateUrl: './courses.component.html',
+  styleUrls: ['./courses.component.css']
 })
 
-export class AllCoursesComponent implements OnInit {
+export class CoursesComponent implements OnInit {
 
   allcoursesarr:any[] = [
     // dummy data
@@ -44,7 +44,7 @@ export class AllCoursesComponent implements OnInit {
   course:any;
   update:boolean = false;
   timeStamp:any;
-
+  prevTitle:string = '';
 
   constructor(private _course: CourseService, public _image: ImageService, private _snackbar: MatSnackBar,  private _file: FileUploadService) { }
 
@@ -54,7 +54,7 @@ export class AllCoursesComponent implements OnInit {
   }
 
   resetCourseData() {
-    this.course = {uniqueid: '', title: '', description: '', thumbnail: '', offers: ''}
+    this.course = {uniqueid: '', title: '', description: '', thumbnail: '', offers: ''};
     this.offersToAdd = [];
     this.thumbnail = {name: '', path: '', type: ''};
     this.update = false;
@@ -75,14 +75,16 @@ export class AllCoursesComponent implements OnInit {
   toggleStatus(course:any, status:number) {
     course.publish_status = status;
     this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course has been '+(status == 1 ? 'published' : 'drafted'), 'X');
+      this._snackbar.open('Course has been '+(status == 1 ? 'published' : 'drafted'), 'OK');
     });
   }
 
   updateTitle(course:any) {
-    this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course title updated', 'X');
-    });
+    if(this.prevTitle != course.title) {
+      this._course.update(course).subscribe((res:any)=>{
+        this._snackbar.open('Course title updated', 'OK');
+      });
+    }
   }
 
   createCourse() {
@@ -113,7 +115,7 @@ export class AllCoursesComponent implements OnInit {
 
   deleteCourse(course:any) {
     this._course.delete(course.id).subscribe((res:any)=>{
-      this._file.deletefile(course.thumbnail).subscribe((res:any)=>{
+      if(course.thumbnail) this._file.deletefile(course.thumbnail).subscribe((res:any)=>{
         console.log(res);
       });
       this.allCourses(true);
@@ -148,20 +150,16 @@ export class AllCoursesComponent implements OnInit {
   editDetails(course:any) {
     this.course = JSON.parse(JSON.stringify(course));
     this.offersToAdd = this.course.offers.split(',');
-    this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
+    if(this.course.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
     this.update = true;
     this.openSidebar();
-  }
-
-  onOpen(){
-    (<HTMLInputElement>document.getElementById('fileElem')).click();
   }
 
   compareImgRepeat(imgR1:any, imgR2:any) {
     return imgR1.value === imgR2.value && imgR1.viewValue === imgR2.viewValue;
   }
   
-  changeme (event:any) {
+  changeImg (event:any) {
     this.file = event.target.files[0];
     var chktype = event.target.files[0].type;
     if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {

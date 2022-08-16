@@ -6,7 +6,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import { FunnelService } from '../_services/funnels.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatAccordion} from '@angular/material/expansion';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-create-funnel',

@@ -17,6 +17,7 @@ export class FileUploadService {
   saveOnDBApi = "./api/saveondb";
   updateOnDBApi = "./api/updateondb";
   deleteFromDB = "./api/deletefromdb";
+  copyImgApi = "./api/copyimage"
   deleteFile = "./api/deletefile";
   createPageApi = "./api/savepage";
   renamePageApi = "./api/renamepage";
@@ -42,6 +43,10 @@ export class FileUploadService {
 
   renamepage(path:any):Observable<any> {
     return this.http.post(this.renamePageApi, path);
+  }
+
+  copyimage(imgname:any):Observable<any> {
+    return this.http.post(this.copyImgApi, imgname);
   }
 
   copypage(pagename:any):Observable<any> {
