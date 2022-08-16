@@ -64,6 +64,7 @@ import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.
 import { FormBuilderComponent } from './form-builder/form-builder.component';
 import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
 import { ImageComponent } from './image/image.component';
+import { CourseUserDashboardComponent } from './course-user-dashboard/course-user-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -149,6 +150,9 @@ const routes: Routes = [
   { path: 'preview/website/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'preview/funnel/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'form-builder', component: FormBuilderComponent, canActivate: [AuthGuard] },
+  
+  // User Course
+  { path: 'course/dashboard', component: CourseUserDashboardComponent,},
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -223,5 +227,6 @@ export const RoutingComponents =
     FormBuilderComponent,
     BuilderTopbarComponent,
     ImageComponent,
+    CourseUserDashboardComponent,
   ];
 

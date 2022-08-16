@@ -132,7 +132,7 @@ export class WebsitePagesComponent implements OnInit {
     var pageindex = event?.pageIndex;
     var pageSize = event?.pageSize;
     var previousPageIndex = event?.previousPageIndex;
-    console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
 
     this.pageSize = 20;
     var data = {pagesize:pageSize};
