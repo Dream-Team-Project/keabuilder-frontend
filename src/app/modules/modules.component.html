@@ -2,7 +2,7 @@
    <div [ngSwitch]="popask" class="container-fluid kb-details-container kb-scroll" [class.dragBox]="dragBoxAnime.open" [class.dragBoxClose]="dragBoxAnime.close"
    [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''" cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
         <div *ngSwitchCase="'details'" class="row pb-4">
-            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom" cdkDragHandle>
+            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
                 <h4>{{post.id+1 ? 'Edit' : 'Add New'}} {{post.type | titlecase}}</h4>
             </div> 
             <div class="col-12 py-3 px-4 inp-contain">
@@ -28,18 +28,37 @@
             </div>
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Cancel</button>
-                <button *ngIf="post.id+1 else add" (click)="editPost()" mat-raised-button color="primary">Edit {{post.type | titlecase}}</button>
+                <button *ngIf="post.id+1 else add" (click)="updatePost()" mat-raised-button color="primary">Update {{post.type | titlecase}}</button>
                 <ng-template #add>
                     <button (click)="addPost()" mat-raised-button color="primary">Create {{post.type | titlecase}}</button>
                 </ng-template>
             </div>
         </div>
+        <div *ngSwitchCase="'delete'" class="row pb-4">
+            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+                <h4>Are you indeed want to delete this {{post.type | titlecase}}: <span class="text-danger">{{post.title | uppercase}}</span>?</h4>
+                <h6 *ngIf="post.type == 'module'" class="text-info">It will delete all the module lessons too.</h6>
+                <div class="text-right">
+                    <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">I agree!</mat-checkbox>
+                </div>
+            </div> 
+            <div class="col-12 pt-3 px-4 text-right border-top">
+                <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
+                <button [disabled]="!delAgree" (click)="respWaiting = true; post.type == 'module' ? deleteModule(post, index.module) : deleteLesson(modules[index.module], post, index.module, index.lesson, 0)" mat-raised-button color="danger">Yes, do it!</button>
+            </div>
+        </div>
+        <div *ngSwitchCase="'duplicate'" class="row pb-4">
+            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+                <h4>Are you indeed want to duplicate this {{post.type | titlecase}}: <span class="text-info">{{post.title | uppercase}}</span>?</h4>
+            </div> 
+            <div class="col-12 pt-3 px-4 text-right border-top">
+                <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Cancel</button>
+                <button (click)="respWaiting = true; post.type == 'module' ? duplicateModule(post) : duplicateLesson(post)" mat-raised-button color="primary">Duplicate</button>
+            </div>
+        </div>
         <div *ngIf="respWaiting">
-            <div id="kb-save-loader">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div id="kb-mat-loader">
+                <mat-spinner color="secondary"></mat-spinner>
             </div>
             <div class="cdk-overlay-backdrop cdk-overlay-dark-backdrop cdk-overlay-backdrop-showing"></div>
         </div>
@@ -92,11 +111,11 @@
                             <span class="kbc-qs-icons">
                                 <mat-slide-toggle [color]="'primary'" [matTooltip]="module.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
                                 <i matTooltip="Add New Module" matTooltipPosition="above"
-                                    (click)="openDialog(post,'module')" class="fa fa-plus"></i>
+                                    (click)="openDialog(post, 'module')" class="fa fa-plus"></i>
                                 <i matTooltip="Module Setting" (click)="openDialog(module, 'module')" matTooltipPosition="above" class="far fa-edit"></i>
                                 <i matTooltip="Duplicate Module"
-                                    (click)="duplicateModule(module)" matTooltipPosition="above" class="far fa-copy"></i>
-                                <i (click)="deleteModule(module, mi)" 
+                                    (click)="duplicatePost(module, 'module')" matTooltipPosition="above" class="far fa-copy"></i>
+                                <i (click)="deletePost(module, 'module', mi, -1);" 
                                     matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt"></i>
                             </span>
                         </span>
@@ -132,9 +151,9 @@
                                         <i matTooltip="Lesson Setting" matTooltipPosition="above" 
                                             (click)="openDialog(lesson, 'lesson')" class="far fa-edit"></i>
                                         <i matTooltip="Duplicate Lessson" matTooltipPosition="above" 
-                                            (click)="duplicateLesson(lesson)" class="far fa-copy"></i>
+                                            (click)="duplicatePost(lesson, 'lesson')"  class="far fa-copy"></i>
                                         <i matTooltip="Delete Lesson" matTooltipPosition="above" 
-                                            (click)="deleteLesson(module, lesson, li, mi, 0)" class="far fa-trash-alt"></i>
+                                        (click)="deletePost(lesson, 'lesson', mi, li)" class="far fa-trash-alt"></i>
                                     </span>    
                                 </span>
                             </div>
@@ -151,7 +170,7 @@
         </div>
         <ng-template #postloader>
             <div class="d-flex justify-content-center py-5">
-                <mat-spinner [color]="'primary'"></mat-spinner>
+                <mat-spinner color="primary"></mat-spinner>
             </div>
         </ng-template>
     </div>

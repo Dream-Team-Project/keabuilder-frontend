@@ -26,9 +26,10 @@ import { CreateFunnelContactsComponent } from './create-funnel-contacts/create-f
 import { CreateFunnelSalesComponent } from './create-funnel-sales/create-funnel-sales.component';
 import { CreateFunnelSettingsComponent } from './create-funnel-settings/create-funnel-settings.component';
 import { HeatmapsRecordingsComponent } from './heatmaps-recordings/heatmaps-recordings.component';
-import { MembershipComponent } from './membership/membership.component';
-import { ModulesComponent } from './modules/modules.component';
 import { CoursesComponent } from './courses/courses.component';
+import { ModulesComponent } from './modules/modules.component';
+import { LessonComponent } from './lesson/lesson.component';
+import { MembershipComponent } from './membership/membership.component';
 import { MembershipProductComponent } from './membership-product/membership-product.component';
 import { MembershipOffersComponent } from './membership-offers/membership-offers.component';
 import { MembershipCouponsComponent } from './membership-coupons/membership-coupons.component';
@@ -190,9 +191,10 @@ export const RoutingComponents =
     BulderWireframeComponent, 
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
-    MembershipComponent,
-    ModulesComponent,
     CoursesComponent,
+    ModulesComponent,
+    LessonComponent,
+    MembershipComponent,
     MembershipProductComponent,
     MembershipOffersComponent,
     MembershipCouponsComponent,
