@@ -17,7 +17,7 @@
             <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Discount Type</mat-label>
                 <mat-select [(value)]="discountselected">
-                  <mat-option>None</mat-option>
+                  <mat-option value="none">None</mat-option>
                   <mat-option value="percentoff">Percent Off</mat-option>
                   <mat-option value="amountoff">Amount Off</mat-option>
                 </mat-select>
@@ -184,7 +184,7 @@
             <mat-form-field class="kb-full-width" appearance="fill">
               <mat-label>Duration</mat-label>
               <mat-select [(value)]="kbduration">
-                <mat-option>None</mat-option>
+                <mat-option value="none">None</mat-option>
                 <mat-option value="once">Once</mat-option>
                 <mat-option value="repeating">Repeating</mat-option>
                 <mat-option value="forever">Forever</mat-option>
@@ -213,11 +213,11 @@
                 <mat-option *ngFor="let productoptional of productoptionalList" [value]="productoptional">{{productoptional}}</mat-option>
               </mat-select>
               <small>Select the offer(s) you would like this coupon to be active for.</small>
-          </mat-form-field>
+            </mat-form-field>
 
+            <button mat-raised-button color="primary" class="mt-4" (click)="createmycoupon()" *ngIf="createme" ><i class="fas fa-plus"></i> Create Coupon</button>
 
-
-            <button mat-raised-button color="primary" class="mt-4" (click)="createmycoupon()" ><i class="fas fa-plus"></i> Create Coupon</button>
+            <button mat-raised-button color="primary" class="mt-4" (click)="updatemycoupon()" *ngIf="!createme" ><i class="fas fa-check"></i> Update Coupon</button>
 
         </div>
     </div>

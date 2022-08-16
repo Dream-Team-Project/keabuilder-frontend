@@ -40,7 +40,7 @@ export class MembershipMembersComponent implements OnInit {
   popupsidebar = false;
   automationaddnewaction = false;
   productoptionals = new FormControl();
-  productoptionalList: string[] = ['For testing', 'Small Option Big Profits','Weekly Options Income Academy'];
+  productoptionalList: string[] = [];
   tagoptionals = new FormControl();
   tagoptionalList: string[] = [];
   addmemberobj = {firstname:'',lastname:'',email:'',marketing:false,tags:''};
@@ -57,6 +57,16 @@ export class MembershipMembersComponent implements OnInit {
   constructor( private _snackBar: MatSnackBar,
                 private courseService:CourseService,
                 public dialog: MatDialog) {
+
+    this.courseService.getalloffers().subscribe({
+      next: data => {
+
+        data.data.forEach((element: any) => {
+          this.productoptionalList.push(element.title);
+        });
+
+      }
+    });
     
     this.dataSource = new MatTableDataSource(this.users);
 
