@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService } from '../_services/_builderService/general.service';
-import { SectionService } from '../_services/_builderService/section.service';
+import { GeneralService } from '../_services/_builder/general.service';
+import { SectionService } from '../_services/_builder/section.service';
 import { ImageService } from '../_services/image.service';
 
 @Component({

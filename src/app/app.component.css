@@ -10,3 +10,24 @@ main {
     position: relative;
 }
 
+::ng-deep button.mat-menu-item {
+    height: 36px;
+    line-height: 36px;
+}
+
+::ng-deep .mat-simple-snackbar-action button {
+    font-weight: 600;
+  }
+
+  ::ng-deep .mat-slide-toggle.mat-primary .mat-slide-toggle-bar{
+    background-color: var(--kb-gray);
+} 
+
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb,
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-ripple-element {
+    background-color: var(--kb-success);
+}
+
+::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+    background-color: var(--opacity-success);
+}

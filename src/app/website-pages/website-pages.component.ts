@@ -7,7 +7,7 @@ import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { ImageService } from '../_services/image.service';
 import { FormControl, Validators } from '@angular/forms';
 import { TokenStorageService } from '../_services/token-storage.service';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
@@ -352,10 +352,10 @@ export class WebsitePagesComponent implements OnInit {
               if(type!='quickedit'){
 
                 if(data.type=='name'){
-                  this._snackBar.open('Name Changed Successfully!', 'Close');
+                  this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
                 }else if(data.type=='status'){
-                  this._snackBar.open('Status Changed Successfully!', 'Close');
+                  this._snackBar.open('Status Changed Successfully!', 'OK');
                 }
     
 
@@ -389,7 +389,7 @@ export class WebsitePagesComponent implements OnInit {
 
               }
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'Close');
+            this._snackBar.open('Something Went Wrong!!', 'OK');
           }
 
         }
@@ -472,11 +472,11 @@ export class WebsitePagesComponent implements OnInit {
               }
             });
             
-            this._snackBar.open('Page Duplicate Successfully!', 'Close');
+            this._snackBar.open('Page Duplicate Successfully!', 'OK');
             this.showwebpages();
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'Close');
+            this._snackBar.open('Something Went Wrong!!', 'OK');
           }
 
         }
@@ -502,7 +502,7 @@ export class WebsitePagesComponent implements OnInit {
             this.pageurl = 'http://localhost:4200/'+data.data[0].page_path;
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'Close');
+            this._snackBar.open('Something Went Wrong!!', 'OK');
           }
 
         }
@@ -515,7 +515,7 @@ export class WebsitePagesComponent implements OnInit {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Successfully Copied!', 'Close');
+    this._snackBar.open('Successfully Copied!', 'OK');
   }
 
   togglepageview(){

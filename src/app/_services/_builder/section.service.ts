@@ -91,6 +91,7 @@ export class SectionService {
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj.setting = false;
     this.sections.splice(index+1, 0, tempObj);
+    console.log(this.sections[index+1]);
     if(this.sections[index+1] != undefined) {
       this.sections[index+1].rowArr.forEach((item1: { id: any; columnArr?: any; })=>{
       item1.id = this._general.createBlockId(item1);

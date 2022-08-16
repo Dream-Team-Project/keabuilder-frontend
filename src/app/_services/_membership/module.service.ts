@@ -5,23 +5,28 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CourseService {
+export class ModuleService {
 
   // API url
-  allApi = './api/allcourses';
-  singleApi = './api/singlecourse';
-  createApi = './api/createcourse';
-  updateApi = './api/updatecourse';
-  deleteApi = './api/deletecourse';
+  bycourseidApi = './api/modulebycourseid';
+  allApi = './api/allmodules';
+  singleApi = './api/singlemodule';
+  createApi = './api/createmodule';
+  updateApi = './api/updatemodule';
+  deleteApi = './api/deletemodule';
 
   constructor(private http:HttpClient) { }
+
+  bycourseid(param:any):Observable<any> {
+    return this.http.get(this.bycourseidApi+'/'+param);
+  }
 
   all():Observable<any> {
     return this.http.get(this.allApi);
   }
 
   single(param:any):Observable<any> {
-    return this.http.post(this.createApi, param);
+    return this.http.get(this.singleApi+'/'+param);
   }
 
   create(req:any):Observable<any> {

@@ -1,12 +1,3 @@
-::ng-deep button.mat-menu-item {
-    height: 36px;
-    line-height: 36px;
-}
-
-::ng-deep .mat-simple-snackbar-action button {
-    font-weight: 600;
-  }
-
 .outer-card-add {
     padding: 0px 80px;
     border: 1px dashed #444;
@@ -341,24 +332,6 @@
 
 /* Userprofile css end */
 
-.drop-zone__input {
-    display: none;
-}
-#imgdiv {
-    background: #fff;
-    /* height: 200px; */
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-weight: 500;
-    /* font-size: 20px; */
-    cursor: pointer;
-    color: #cccccc;
-    border: 3px dashed var(--clr-primay);
-    border-radius: 10px;
-}
 .kea-barfieldset{
     width: 50%;
     float: right;

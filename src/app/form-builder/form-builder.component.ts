@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormService } from '../_services/_builderService/form.service';
+import { FormService } from '../_services/_builder/form.service';
 import { CdkDragStart, CdkDragMove, CdkDragDrop, moveItemInArray, copyArrayItem, CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({

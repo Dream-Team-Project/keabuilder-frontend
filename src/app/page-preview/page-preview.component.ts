@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-import { GeneralService } from '../_services/_builderService/general.service';
-import { SectionService } from '../_services/_builderService/section.service';
+import { GeneralService } from '../_services/_builder/general.service';
+import { SectionService } from '../_services/_builder/section.service';
 
 @Component({
   selector: 'app-page-preview',

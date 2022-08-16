@@ -3,8 +3,8 @@
 }
 
 .dragBoxClose {
-    opacity: 0!important;
-    transform: scale(0)!important;
+    opacity: 0;
+    transform: scale(0);
     animation: bounce 0.2s ease-in;
     animation-direction: reverse;
 }
@@ -188,11 +188,9 @@ input.errorInp {
 }
 
 .custom-preview {
-    height: 36px;
     background-color: var(--row-color);
   }
   
   .custom-placeholder {
     background-color: var(--kb-gray);
-    min-height: 36px;
   }

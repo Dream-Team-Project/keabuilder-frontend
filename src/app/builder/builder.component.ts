@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
-import { SectionService } from '../_services/_builderService/section.service';
-import { RowService } from '../_services/_builderService/row.service';
-import { ColumnService } from '../_services/_builderService/column.service';
-import { ElementService } from '../_services/_builderService/element.service';
-import { StyleService } from '../_services/_builderService/style.service';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { SectionService } from '../_services/_builder/section.service';
+import { RowService } from '../_services/_builder/row.service';
+import { ColumnService } from '../_services/_builder/column.service';
+import { ElementService } from '../_services/_builder/element.service';
+import { StyleService } from '../_services/_builder/style.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
@@ -123,7 +123,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             (event: any) => {
                 if (typeof (event) === 'object') {
                   this._general.saveDisabled = false;
-                  this._general.openSnackBar('Page has been saved', 'X');
+                  this._general.openSnackBar('Page has been saved', 'OK');
                 }
             });
         })

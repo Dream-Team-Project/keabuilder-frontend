@@ -6,19 +6,12 @@
     padding: 0;
     width: 100%;
     list-style: none;
+    transition: 0.2s ease;
 }
 
 .blockFocus .kb-drag-container:hover .kb-ispan-add {
     display: none;
 }
-
-.custom-preview {
-    height: 36px;
-  }
-  
-  .custom-placeholder {
-    min-height: 36px;
-  }
 
   .custom-placeholder:not(.kb-wfs-element .custom-placeholder) {
     max-width: 90%;
@@ -55,10 +48,6 @@
 
 .dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked {
     color: var(--section-color);
-}
-
-.kb-hidden {
-    overflow: hidden;
 }
 
 .wireframe-head {

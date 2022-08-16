@@ -3,7 +3,7 @@ import { WebsiteService } from '../_services/website.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import {FormControl, Validators} from '@angular/forms';
 import { WebpagesService } from '../_services/webpages.service';
-import { GeneralService } from '../_services/_builderService/general.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { FileUploadService } from '../_services/file-upload.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -122,7 +122,7 @@ export class WebsiteDesignComponent implements OnInit {
       next: data => {
           console.log(data);
           if(data.status==1){
-            this._snackBar.open('Status Updated Successfully!', 'Close');
+            this._snackBar.open('Status Updated Successfully!', 'OK');
           }
       }
     });

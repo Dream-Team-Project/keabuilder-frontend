@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneralService } from './_builderService/general.service';
+import { GeneralService } from './_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
 import { base64ToFile, Dimensions, ImageCroppedEvent, ImageTransform, LoadedImage } from 'ngx-image-cropper';
 import { FileUploadService } from './file-upload.service';
@@ -76,14 +76,16 @@ export class ImageService {
     }
 
     onImageFileUpload(data:any) {
-        this.file = this.base64ToFile(data.path, data.name)
-        this.fileUploadService.upload(this.file).subscribe(
-            (event: any) => {
-                if (typeof (event) === 'object') {
-                    return event;
+        return new Promise<any>((resolve, reject) => {
+            this.file = this.base64ToFile(data.path, data.name)
+            this.fileUploadService.upload(this.file).subscribe(
+                (event: any) => {
+                    if (typeof (event) === 'object') {
+                        resolve(event);
+                    }
                 }
-            }
-        );
+            );
+        })
     }
 
     saveImageOnDb(data: any) {
@@ -146,7 +148,7 @@ export class ImageService {
                 this.saveasnew = true;
                 this.croppedEvent = false;
                 this.imgMatTabIndex = 1;
-                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'X');
+                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'OK');
             })
     }
 
