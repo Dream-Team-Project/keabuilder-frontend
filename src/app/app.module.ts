@@ -52,6 +52,8 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -109,6 +111,7 @@ import { NgxCaptureModule } from 'ngx-capture';
     MatChipsModule,
     MatMenuModule,
     NgxCaptureModule,  
+    MatDialogModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     AngularSvgIconModule.forRoot()
   ],

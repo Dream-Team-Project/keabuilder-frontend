@@ -70,7 +70,7 @@ export class SidebarComponent implements OnInit {
       },
       {
         0:true,
-        routerlink: '/nolink',
+        routerlink: '/website/blog',
         img: 'browser.gif',
         icon: 'far fa-file-alt',
         title: 'Blog'
@@ -83,7 +83,7 @@ export class SidebarComponent implements OnInit {
         title: 'Site Details'
       },{
         0:true,
-        routerlink: '/nolink',
+        routerlink: '/website/marketplace',
         img: 'browser.gif',
         icon: 'fas fa-store',
         title: 'Marketplace'
@@ -98,49 +98,56 @@ export class SidebarComponent implements OnInit {
       submenu:[{
         0:true,
         routerlink: '/nolink',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-file-alt',
         title: 'Landing Page'
       },
       {
         0:true,
         routerlink: '/nolink',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-file-alt',
         title: 'Library Page'
       },
       {
         0:true,
         routerlink: '/membership/offers',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-percentage',
         title: 'Offers'
       },
       {
         0:true,
         routerlink: '/membership/coupons',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-percent',
         title: 'Coupons'
       },
       {
         0:true,
         routerlink: '/membership/payments',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-dollar-sign',
         title: 'Payments'
       },
       {
         0:true,
         routerlink: '/membership/members',
-        img: 'browser.gif',
+        img: 'shield.gif',
         icon: 'fa fa-users',
         title: 'Members'
       },
       {
         0:true,
-        routerlink: '/nolink',
-        img: 'browser.gif',
+        routerlink: '/membership/tags',
+        img: 'shield.gif',
+        icon: 'fa fa-tags',
+        title: 'Tags'
+      },
+      {
+        0:true,
+        routerlink: '/membership/marketplace',
+        img: 'shield.gif',
         icon: 'fa fa-shopping-cart',
         title: 'Marketplace'
       }

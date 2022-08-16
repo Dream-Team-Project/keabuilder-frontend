@@ -1,0 +1,36 @@
+<style>
+    .mat-raised-button:not([class*=mat-elevation-z]) {
+        box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    }
+    .mat-raised-button {
+        box-sizing: border-box;
+        position: relative;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        -webkit-tap-highlight-color: transparent;
+        display: inline-block;
+        white-space: nowrap;
+        text-decoration: none;
+        vertical-align: baseline;
+        text-align: center;
+        margin: 0;
+        min-width: 64px;
+        line-height: 36px;
+        padding: 0 16px;
+        border-radius: 4px;
+        overflow: visible;
+        transform: translate3d(0, 0, 0);
+        transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1),box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+</style>
+<h3>Delete {{data.name}}</h3>
+<div mat-dialog-content>
+  <p>Are You Sure!!</p>
+</div>
+<div mat-dialog-actions>
+  <button class="mat-raised-button" style=" margin-right: 30px;" (click)="onNoClick()">No Thanks</button>
+  <button class="mat-raised-button" (click)="onClick()" cdkFocusInitial>Ok <i class="fa fa-trash" aria-hidden="true"></i></button>
+</div>

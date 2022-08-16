@@ -75,7 +75,7 @@
       </button>
       <button mat-raised-button class="mr-2" [routerLink]="['/membership/members']">Members <i class="fa fa-users"
           aria-hidden="true"></i></button>
-      <button mat-raised-button class="mr-2">Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/membership/marketplace']">Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
     </div>
     <div *ngIf="allcoursesarr.length != 0 else nodata" class="row col-12">
       <div class="col-md-4 cardpage loadEffect mt-4" *ngFor="let acourse of allcoursesarr; index as i;">

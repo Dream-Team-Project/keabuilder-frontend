@@ -37,9 +37,52 @@ export class CourseService {
     .pipe(catchError(this.errorHandler));
   }
 
-    
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
+
+  // tags
+  addnewtags(tags:any):Observable<any> {
+    return this.http.post("./api/membership_addnewtags", {tags});
+  }
+
+  getalltags():Observable<any> {
+    return this.http.get("./api/membership_alltags");
+  }
+
+  updatedeltag(data:any):Observable<any> {
+    return this.http.post("./api/membership_updatedeltag", {data});
+  }
+  // tags
+
+  // member
+  addnewmember(data:any):Observable<any> {
+    return this.http.post("./api/membership_addnewmember", {data});
+  }
+
+  getallmembers():Observable<any> {
+    return this.http.get("./api/membership_allmembers");
+  }
+
+  updatedelmember(data:any):Observable<any> {
+    return this.http.post("./api/membership_updatedelmember", {data});
+  }
+  // member
+  
+  // coupon
+  addnewcoupon(data:any):Observable<any> {
+    return this.http.post("./api/membership_addnewcoupon", {data});
+  }
+
+  getallcoupons():Observable<any> {
+    return this.http.get("./api/membership_allcoupons");
+  }
+
+  updatedelcoupon(data:any):Observable<any> {
+    return this.http.post("./api/membership_updatedelcoupon", {data});
+  }
+  // coupon
+
+
 
 }

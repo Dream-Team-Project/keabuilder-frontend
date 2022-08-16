@@ -35,6 +35,7 @@ import { MembershipCouponsComponent } from './membership-coupons/membership-coup
 import { MembershipPaymentComponent } from './membership-payment/membership-payment.component';
 import { MembershipMembersComponent } from './membership-members/membership-members.component';
 import { MembershipTagsComponent } from './membership-tags/membership-tags.component';
+import { MembershipMarketplaceComponent } from './membership-marketplace/membership-marketplace.component';
 import { FormsComponent } from './forms/forms.component';
 import { DomainComponent } from './domain/domain.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -57,6 +58,7 @@ import { WebsiteComponent } from './website/website.component';
 import { WebsitePagesComponent } from './website-pages/website-pages.component';
 import { WebsiteDesignComponent } from './website-design/website-design.component';
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
+import { WebsiteMarketplaceComponent } from './website-marketplace/website-marketplace.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
@@ -79,7 +81,8 @@ const routes: Routes = [
     children: [
       {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-      {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]}
+      {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+      {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]}
     ],
   canActivate: [AuthGuard] },
 
@@ -114,6 +117,7 @@ const routes: Routes = [
       { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
       { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
       { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+      { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
   ],
    canActivate: [AuthGuard] },
 
@@ -191,6 +195,7 @@ export const RoutingComponents =
     MembershipPaymentComponent,
     MembershipMembersComponent,
     MembershipTagsComponent,
+    MembershipMarketplaceComponent,
     FormsComponent,
     DomainComponent,
     PaymentComponent,
@@ -213,6 +218,7 @@ export const RoutingComponents =
     WebsitePagesComponent,
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
+    WebsiteMarketplaceComponent,
     IntegrationsComponent,
     FormBuilderComponent,
     BuilderTopbarComponent,

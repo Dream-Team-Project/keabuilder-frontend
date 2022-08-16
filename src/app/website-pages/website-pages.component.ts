@@ -300,6 +300,7 @@ export class WebsitePagesComponent implements OnInit {
         var text1 = mycustomdate.toDateString();    
         var text2 = mycustomdate.toLocaleTimeString();
         element.updated_at = text1+' '+text2;
+        
         this.kbpages.push(element);
 
         var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
