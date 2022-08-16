@@ -4,7 +4,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource,MatTable} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import { FormControl,Validators } from '@angular/forms';
-import { CourseService } from '../_services/course.service';
+import { CourseService } from '../_services/_membership/course.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 

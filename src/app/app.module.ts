@@ -52,8 +52,7 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
-import {MatDialogModule} from '@angular/material/dialog';
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -61,7 +60,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    SafeHtmlPipe,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,

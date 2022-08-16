@@ -54,6 +54,8 @@ export class ModulesComponent implements OnInit {
 
   popask = 'details';
 
+  delAgree = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -84,7 +86,7 @@ export class ModulesComponent implements OnInit {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
     this._overlayRef = this._overlay.create({
       positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: true,
+      hasBackdrop: !this.respWaiting,
     });
     this._overlayRef.backdropClick().subscribe(() => {
       this.overlayRefDetach();
@@ -149,7 +151,7 @@ export class ModulesComponent implements OnInit {
     }
   }
 
-  editPost() {
+  updatePost() {
     this.respWaiting = true;
     if(this.post.type == 'module') {
       this.updateModule(this.post, 'details');
@@ -160,6 +162,20 @@ export class ModulesComponent implements OnInit {
       this.modules[this.index.module].lessons[this.index.lesson] = JSON.parse(JSON.stringify(this.post));
     }
     else this.overlayRefDetach();
+  }
+
+  deletePost(post:any, type:string, mi:number, li:number) {
+    this.popask = 'delete';
+    this.index = {
+      module: mi,
+      lesson: li,
+    }
+    this.openDialog(post, type);
+  }
+
+  duplicatePost(post:any, type:string) {
+    this.popask = 'duplicate';
+    this.openDialog(post, type);
   }
 
   // post methods
@@ -264,7 +280,7 @@ export class ModulesComponent implements OnInit {
             lesson.id = res.data.insertId;
             if(request == lessons.length - 1) {
               this.appendModule(module, this.index.module);
-              this.respWaiting = false;
+              this.overlayRefDetach();
               this._snackbar.open('Module has been duplicated','OK');
             }
             request++;
@@ -273,7 +289,7 @@ export class ModulesComponent implements OnInit {
         })
         if(lessons.length == 0) {
           this.appendModule(module, this.index.module);
-          this.respWaiting = false;
+          this.overlayRefDetach();
           this._snackbar.open('Module has been duplicated','OK');  
         }
       }
@@ -290,11 +306,12 @@ export class ModulesComponent implements OnInit {
           if(module.thumbnail) this._file.deletefile(module.thumbnail);
           var lessons = module.lessons;
           lessons.forEach((lesson:any)=>{
-            this.deleteLesson(module, lesson, -1, mi, lessons.length);
+            this.deleteLesson(module, lesson, mi, -1, lessons.length);
           })
           if(lessons.length == 0) {
             this.modules.splice(mi, 1);
             this.sortModules();
+            this.overlayRefDetach();
             this._snackbar.open('Module has been deleted','OK');            
           }
         }
@@ -407,21 +424,21 @@ export class ModulesComponent implements OnInit {
     this.addLesson();
   }
 
-  deleteLesson(module:any, lesson:any, li:number, mi:number, len:number) {
+  deleteLesson(module:any, lesson:any, mi:number, li:number, len:number) {
     this._lesson.delete(lesson.id).subscribe(res=>{
       if(res.success) {
-        console.log(li);
-        console.log(this.delReq);
         if(lesson.thumbnail) this._file.deletefile(lesson.thumbnail);
         if(li > -1) {
           module.lessons.splice(li, 1);
           this.sortLessons();
+          this.overlayRefDetach();
           this._snackbar.open('Lesson has been deleted','OK');
         }
         else if(this.delReq == len-1) {
           this.modules.splice(mi, 1);
           this.sortModules();
           this.delReq = 0;
+          this.overlayRefDetach();
           this._snackbar.open('Module has been deleted','OK');
         }
         else this.delReq++;
@@ -449,6 +466,8 @@ export class ModulesComponent implements OnInit {
       this.dragBoxAnime.close = true;
       setTimeout(()=>{
         this._overlayRef.detach();
+        this.popask = 'details';
+        this.delAgree = false;
         this.resetPostData();
         this.dragBoxAnime.close = false;
       },200);
