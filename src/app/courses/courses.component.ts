@@ -14,22 +14,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 export class CoursesComponent implements OnInit {
 
-  allcoursesarr:any[] = [
-    // dummy data
-    // {
-    //     "id": 1,
-    //     "uniqueid": 1,
-    //     "title": "Online Course",
-    //     "type": "course",
-    //     "domain": null,
-    //     "publish_status": 1,
-    //     "thumbnail": "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/themes/1787228/settings_images/LIp27aPmRDqDOh5iXGtw_maxresdefault_2.jpg",
-    //     "tracking_code": null,
-    //     "updated_at": "Thu Jan 06 2022 5:09:57 PM",
-    //     "members":'1678',
-    // },
-    // dummy data
-  ];
+  allcoursesarr:any[] = [];
   sidebar = {
     open: false,
     anim: {open: false, close: false, time: 500},
@@ -38,7 +23,7 @@ export class CoursesComponent implements OnInit {
   file = null;
   typeerror = '';
   offers = new FormControl();
-  offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
+  offersList: string[] = [];
   thumbnail:any;
   offersToAdd:Array<string> = [];
   course:any;
@@ -46,9 +31,21 @@ export class CoursesComponent implements OnInit {
   timeStamp:any;
   prevTitle:string = '';
 
-  constructor(private _course: CourseService, public _image: ImageService, private _snackbar: MatSnackBar,  private _file: FileUploadService) { }
+  constructor(private _course: CourseService,
+             public _image: ImageService, 
+             private _snackbar: MatSnackBar,  
+             private _file: FileUploadService) { }
 
   ngOnInit(): void {
+    this._course.getalloffers().subscribe({
+      next: data => {
+
+       data.data.forEach((element: any) => {
+          this.offersList.push(element.title);
+       });
+
+      }
+    });
     this.allCourses(false);
     this.resetCourseData();
   }
@@ -173,4 +170,17 @@ export class CoursesComponent implements OnInit {
     }
 
   }
+
+  modifydate(value:any){
+    if(value!=''){
+      var mycustomdate =  new Date(value);
+      var text1 = mycustomdate.toDateString();    
+      var text2 = mycustomdate.toLocaleTimeString();
+      return text1+' '+text2;
+    }else{
+      return '';
+    }
+  }
+
+
 }

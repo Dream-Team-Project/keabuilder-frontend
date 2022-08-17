@@ -97,8 +97,7 @@
             <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)" (click)="prevTitle = acourse.title">
           </div>
           <p class="kb-pagedate"><span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
-                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar"
-              aria-hidden="true"></i> {{acourse.updated_at}}</p>
+                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{modifydate(acourse.updated_at)}}</p>
 
           <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
           <button mat-raised-button color="primary" [routerLink]="'./course/'+acourse.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>
