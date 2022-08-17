@@ -3,22 +3,34 @@
    [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''" cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
         <div *ngSwitchCase="'details'" class="row pb-4">
             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
-                <h4>{{post.id+1 ? 'Edit' : 'Add New'}} {{post.type | titlecase}}</h4>
+                <h5>{{post.id+1 ? 'Edit' : 'Add New'}} {{post.type | titlecase}}</h5>
             </div> 
             <div class="col-12 py-3 px-4 inp-contain">
-                <mat-form-field #title class="kb-full-width" appearance="outline">
+                <mat-form-field class="kb-full-width" appearance="outline">
                     <mat-label>Title</mat-label>
                     <input name="title" [(ngModel)]="post.title" type="text" matInput placeholder="Ex. Features of Kea" required
                         minlength="3" maxlength="140">
                 </mat-form-field>
-                <mat-form-field #description class="kb-full-width" appearance="outline">
+                <mat-form-field class="kb-full-width" appearance="outline">
                     <mat-label>Description</mat-label>
                     <textarea name="description" [(ngModel)]="post.description" matInput placeholder="Ex. Kea is one of the smartest bird in the planet"></textarea>
+                </mat-form-field>
+                <mat-form-field *ngIf="post.type == 'course'" class="kb-full-width" appearance="outline">
+                    <mat-label>Offers</mat-label>
+                    <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
+                      <mat-select-trigger>
+                        {{offers.value ? offers.value[0] : ''}}
+                        <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
+                          (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <div class="imgFormField p-3 border">
                     <label>Product Thumbnail</label>
                     <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
-                        <img class="img-fluid" [src]="thumbnail.path"/>
+                        <img class="img-fluid" [src]="timeStamp && !thumbnail.type  ? thumbnail.path + '?' + timeStamp : thumbnail.path"/>
                     </div>
                     <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
                     class="drop-zone__input">
@@ -36,7 +48,7 @@
         </div>
         <div *ngSwitchCase="'delete'" class="row pb-4">
             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
-                <h4>Are you indeed want to delete this {{post.type | titlecase}}: <span class="text-danger">{{post.title | uppercase}}</span>?</h4>
+                <h5>Are you indeed want to delete this {{post.type | titlecase}}: <span class="text-danger">{{post.title | uppercase}}</span>?</h5>
                 <h6 *ngIf="post.type == 'module'" class="text-info">It will delete all the module lessons too.</h6>
                 <div class="text-right">
                     <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">I agree!</mat-checkbox>
@@ -49,7 +61,7 @@
         </div>
         <div *ngSwitchCase="'duplicate'" class="row pb-4">
             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
-                <h4>Are you indeed want to duplicate this {{post.type | titlecase}}: <span class="text-info">{{post.title | uppercase}}</span>?</h4>
+                <h5>Are you indeed want to duplicate this {{post.type | titlecase}}: <span class="text-info">{{post.title | uppercase}}</span>?</h5>
             </div> 
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Cancel</button>
@@ -65,9 +77,19 @@
     </div> 
 </ng-template>
 <div *ngIf="course.title" class="container-fluid px-md-5 py-3">
-    <div id="kbc-topbar" class="row mb-4">
-        <div class="kbc-thumbnail col-md-2"><img [src]="_image.uploadImgPath + course.thumbnail" class="img-fluid"></div>
-        <div class="col-md-6"><h3>{{course.title}}</h3></div>
+    <div id="kbc-topbar" class="row align-items-center mb-4">
+        <div class="kbc-thumbnail col-md-2"><img [src]="getImgPath(course.thumbnail)" class="img-fluid"></div>
+        <div class="col-md-6">
+            <h3>
+                {{course.title}}
+                <i matTooltip="Course Setting" matTooltipPosition="above" (click)="openDialog(course, 'course')" class="kb-edit-pencil fa fa-pencil-alt ml-2 p-2"></i>
+                <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle>
+            </h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <button mat-raised-button color="accent" class="mr-3">Preview <i class="fa fa-eye"></i></button>
+            <button mat-raised-button color="primary">Customize <i class="fa fa-pencil-alt"></i></button>
+        </div>
     </div>
     <div id="kbc-outline" class="container-fluid p-0 border">
         <div *ngIf="!postLoading else postloader">
@@ -82,7 +104,12 @@
             </div>
             <ul #moduleUl class="kb-drag-container row m-0 p-3" cdkDropList [cdkDropListData]="modules" [cdkDropListConnectedTo]="moddls" (cdkDropListDropped)="drop($event)">
                 <li cdkDrag class="kbc-block col-12" *ngFor="let module of modules, index as mi" (mouseenter)="index.module = mi">
-                    <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--secondary-color)'">{{module.title ? module.title : 'Module'}}</div>
+                    <div *cdkDragPreview class="custom-preview p-0"  [style.backgroundColor]="'var(--secondary-color)'">
+                        <div *ngIf="module.thumbnail">
+                            <img class="img-fluid" [src]="getImgPath(module.thumbnail)" width="200px">
+                        </div>
+                        <div class="p-2">{{module.title ? module.title : 'Module'}}</div>
+                    </div>
                     <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--secondary-color)'"></div>
                     <div class="kbc-block-inner kbc-module d-flex">
                         <span class="kbc-qs col-2">
@@ -109,7 +136,7 @@
                                 <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive"></span></ng-template>
                             </span>
                             <span class="kbc-qs-icons">
-                                <mat-slide-toggle [color]="'primary'" [matTooltip]="module.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
+                                <mat-slide-toggle color="success" [matTooltip]="module.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
                                 <i matTooltip="Add New Module" matTooltipPosition="above"
                                     (click)="openDialog(post, 'module')" class="fa fa-plus"></i>
                                 <i matTooltip="Module Setting" (click)="openDialog(module, 'module')" matTooltipPosition="above" class="far fa-edit"></i>
@@ -122,7 +149,12 @@
                     </div>
                     <ul #lessonUl [style.minHeight]="module.lessons.length == 0 ? '40px' : ''"  [id]="'lessongroup-'+mi" class="kb-drag-container pl-5" [style.maxHeight]="'fit-content'" cdkDropList [cdkDropListData]="module.lessons" [cdkDropListConnectedTo]="lesdls" (cdkDropListDropped)="drop($event)">
                         <li cdkDrag class="kbc-block col-12" *ngFor="let lesson of module.lessons, index as li" (mouseenter)="index.lesson = li">
-                            <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">{{lesson.title ? lesson.title : 'Lesson'}}</div>
+                            <div *cdkDragPreview class="custom-preview p-0" [style.backgroundColor]="'var(--primary-color)'">
+                                <div *ngIf="lesson.thumbnail">
+                                    <img class="img-fluid" [src]="getImgPath(lesson.thumbnail)" width="200px">
+                                </div>
+                                <div class="p-2">{{lesson.title ? lesson.title : 'Lesson'}}</div>
+                            </div>
                             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
                             <div class="kbc-block-inner kbc-lesson d-flex">
                                 <span class="kbc-qs col-2">
@@ -145,11 +177,13 @@
                                         <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive"></span></ng-template>
                                     </span>
                                     <span class="kbc-qs-icons">
-                                        <mat-slide-toggle [color]="'primary'" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
+                                        <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
                                         <i matTooltip="Add New Lesson" matTooltipPosition="above"
                                             (click)="openDialog(post,'lesson')" class="fa fa-plus"></i>
                                         <i matTooltip="Lesson Setting" matTooltipPosition="above" 
                                             (click)="openDialog(lesson, 'lesson')" class="far fa-edit"></i>
+                                        <i [routerLink]="'./module/'+module.uniqueid+'/lesson/'+lesson.uniqueid" matTooltip="Go To Content" matTooltipPosition="above" 
+                                            class="fa fa-photo-video"></i>
                                         <i matTooltip="Duplicate Lessson" matTooltipPosition="above" 
                                             (click)="duplicatePost(lesson, 'lesson')"  class="far fa-copy"></i>
                                         <i matTooltip="Delete Lesson" matTooltipPosition="above" 

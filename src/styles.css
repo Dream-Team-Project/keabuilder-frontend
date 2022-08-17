@@ -501,14 +501,16 @@ main.insidecont .box {
 
 .custom-preview {
   display: inline-flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis; 
   min-width: 200px;
   max-width: 750px;
-  height: 36px;
+  min-height: 36px;
   padding: 0 8px;
   color: #fff;
   border-radius: 3px;

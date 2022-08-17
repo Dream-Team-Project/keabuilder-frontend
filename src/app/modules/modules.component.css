@@ -167,3 +167,20 @@ div#kb-mat-loader {
     z-index: 999;
     height: 100%;
 }
+
+#kbc-topbar .kb-edit-pencil {
+    cursor: pointer;
+    font-size: 65%;
+    color: var(--secondary-color);
+}
+
+#kbc-topbar .mat-slide-toggle, #kbc-topbar .kb-edit-pencil  {
+    opacity: 0;
+    transform: scale(0);
+    transition: 0.2s ease;
+}
+
+#kbc-topbar:hover .kb-edit-pencil, #kbc-topbar:hover .mat-slide-toggle  {
+    opacity: 1;
+    transform: scale(1);
+}
