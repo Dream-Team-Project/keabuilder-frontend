@@ -193,3 +193,12 @@ div#kb-mat-loader {
     FONT-WEIGHT: 600;
     transition: 0.2s ease;
 }
+
+::ng-deep .mat-tab-body-wrapper {
+    border: 1px solid #dee2e6!important;
+    border-radius: 5px;
+}
+
+::ng-deep .mat-tab-header{
+    border: 0px;
+}
