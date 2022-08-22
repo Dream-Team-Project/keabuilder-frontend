@@ -5,6 +5,7 @@ import { FileUploadService } from '../file-upload.service';
 import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
 import { WebpagesService } from '../webpages.service';
+import { FormControl, Validators } from '@angular/forms';
 
 
 @Injectable({
@@ -53,14 +54,27 @@ export class GeneralService {
   config: any = {
     height: 250,
     plugins:
-      'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars',
+      'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars',
     toolbar:
-      'undo redo | bold italic underline strikethrough link blockquote | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | formatselect fontselect fontsizeselect | code fullscreen',
+      'undo redo | bold italic underline strikethrough link blockquote image | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | formatselect fontselect fontsizeselect | code fullscreen',
     content_css: [
       // '../builder/material.component.css',
       // '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
       // '//www.tinymce.com/css/codepen.min.css',
     ],
+    images_upload_base_path: '/some/basepath',
+    images_upload_credentials: true,
+      /* without images_upload_url set, Upload tab won't show up*/
+  images_upload_url: './api/uploadfile',
+  /* we override default upload handler to simulate successful upload*/
+  images_upload_handler: function (blobInfo:any, success:any, failure:any) {
+    setTimeout(function () {
+      /* no matter what you upload, we will turn it into TinyMCE logo :)*/
+      console.log(blobInfo);
+      console.log(success);
+      success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+    }, 2000);
+  },
     importcss_append: true,
     menubar: false,
     statusbar: false,

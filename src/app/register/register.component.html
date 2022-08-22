@@ -59,7 +59,7 @@
                   <mat-label>Password</mat-label>
                   <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
                   <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
-                    <i class="fa fa-eye" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+                    <i class="far fa-eye" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
                     <!-- <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon> -->
                   </button>
                   <mat-error *ngIf="passwordFormControl.hasError('required')">

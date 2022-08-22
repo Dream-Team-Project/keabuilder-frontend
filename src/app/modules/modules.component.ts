@@ -40,7 +40,7 @@ export class ModulesComponent implements OnInit {
   modules:any = []
   thumbnail:any;
   file = null;
-  typeerror = '';
+  typeerror:string = '';
   index:any = {
     module: 0,
     lesson: 0,
@@ -53,7 +53,7 @@ export class ModulesComponent implements OnInit {
   delReq = 0;
   respWaiting = false;
   popask = 'details';
-  delAgree = false;
+  delAgree:boolean = false;
   timeStamp:any; 
   offers = new FormControl();
   offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
@@ -136,7 +136,7 @@ export class ModulesComponent implements OnInit {
       })
     }
 
-  //  data fetchingq
+  //  data fetching
 
   // post methods
 
@@ -217,6 +217,8 @@ export class ModulesComponent implements OnInit {
       }
       return path;
   }
+
+  // course methods
 
     // module methods
 

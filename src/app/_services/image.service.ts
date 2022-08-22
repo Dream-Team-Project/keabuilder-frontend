@@ -119,12 +119,15 @@ export class ImageService {
                     this.fileUploadService.deletefile(img.path).subscribe(
                         (event:any) => {
                             this.snackBarMsg = 'Image has been deleted';
-                            this. getAllImgs();
+                            this.getAllImgs();
                         },
-                        error=>{console.log(error)}
+                        error=>{
+                            this.snackBarMsg = 'Image has been deleted';
+                            this.getAllImgs();
+                        }
                     )
                 }
-                else this. getAllImgs();
+                else this.getAllImgs();
             },
             error=>{console.log(error)}
         )

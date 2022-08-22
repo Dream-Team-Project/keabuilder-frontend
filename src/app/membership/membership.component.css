@@ -1,0 +1,21 @@
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar, ::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: var(--kb-info);
+}
+
+::ng-deep div.mat-tab-label-active .mat-tab-label-content {
+    color: var(--kb-info);
+}
+
+::ng-deep .mat-tab-label-content {
+    FONT-WEIGHT: 600;
+    transition: 0.2s ease;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+    border: 1px solid #dee2e6!important;
+    border-radius: 5px;
+}
+
+::ng-deep .mat-tab-header{
+    border: 0px;
+}
