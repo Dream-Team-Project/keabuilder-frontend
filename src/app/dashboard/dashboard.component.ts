@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   username= '';
+  greeting:any = '';
 
   constructor(private userService: UserService,
               private tokenStorage: TokenStorageService,
@@ -589,6 +590,8 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    this.greetings();
+
   }
 
   public generateData(count:any, yrange:any) {
@@ -603,5 +606,24 @@ export class DashboardComponent implements OnInit {
     }
     return series;
   }
+  
+
+  greetings(){
+    var myDate = new Date();
+    var hrs = myDate.getHours();
+
+    var greet;
+
+    if (hrs < 12)
+      greet = 'Morning';
+    else if (hrs >= 12 && hrs <= 17)
+      greet = 'Afternoon';
+    else if (hrs >= 17 && hrs <= 24)
+      greet = 'Evening';
+
+      this.greeting =  greet;
+  }
+
+
 
 }

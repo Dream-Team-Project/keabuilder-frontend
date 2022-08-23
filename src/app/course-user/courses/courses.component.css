@@ -1,0 +1,19 @@
+.section1{
+    height: 19rem;
+    background-size: cover;
+    background-position: center;
+}
+.kbmodule-img {
+    box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+    border-radius: 8px;
+}
+.container {
+    max-width: calc(1340px);
+}
+.kbmodule-img a{
+    color: #444;
+    text-decoration: none;
+}
+
+
+

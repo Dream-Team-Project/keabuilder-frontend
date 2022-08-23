@@ -10,6 +10,7 @@ export class LessonService {
   // API url
   bycourse_moduleidApi = './api/bycourse-moduleid';
   bycourseidApi = './api/lessonbycourseid';
+  onlybycourseidApi = './api/onlymodulebyid';
   allApi = './api/alllessons';
   singleApi = './api/singlelesson';
   createApi = './api/createlesson';
@@ -20,6 +21,10 @@ export class LessonService {
 
   bycourse_moduleid(paramObj:any):Observable<any> {
     return this.http.get(this.bycourse_moduleidApi+'/'+paramObj.course_id+'/'+paramObj.module_id);
+  }
+  
+  onlymodulebyid(param:any):Observable<any> {
+    return this.http.get(this.onlybycourseidApi+'/'+param);
   }
 
   bycourseid(param:any):Observable<any> {

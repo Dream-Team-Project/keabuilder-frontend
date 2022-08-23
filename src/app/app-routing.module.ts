@@ -65,7 +65,12 @@ import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.
 import { FormBuilderComponent } from './form-builder/form-builder.component';
 import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
 import { ImageComponent } from './image/image.component';
-import { CourseUserDashboardComponent } from './course-user-dashboard/course-user-dashboard.component';
+import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
+import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
+import { CourseUserModulesComponent } from './course-user/modules/modules.component';
+import { CourseUserModulesSidebarComponent } from './course-user/modules-sidebar/modules-sidebar.component';
+import { CourseUserModulesBoardComponent } from './course-user/modules-board/modules-board.component';
+import { CourseUserModulesPostComponent } from './course-user/modules-post/modules-post.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -153,7 +158,10 @@ const routes: Routes = [
   { path: 'form-builder', component: FormBuilderComponent, canActivate: [AuthGuard] },
   
   // User Course
-  { path: 'course/dashboard', component: CourseUserDashboardComponent,},
+  { path: 'course/dashboard', component: CourseUserDashboardComponent},
+  { path: 'course/:name', component: CourseUserCoursesComponent},
+  { path: 'course/:name/:id', component: CourseUserModulesComponent},
+  { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -230,5 +238,10 @@ export const RoutingComponents =
     BuilderTopbarComponent,
     ImageComponent,
     CourseUserDashboardComponent,
+    CourseUserCoursesComponent,
+    CourseUserModulesComponent,
+    CourseUserModulesSidebarComponent,
+    CourseUserModulesBoardComponent,
+    CourseUserModulesPostComponent,
   ];
 

@@ -1,0 +1,25 @@
+
+.kbmodule-category {
+    background: #fff;
+    padding: 30px 20px 5px;
+}
+.kbmodule-section{
+    margin-bottom: 30px;
+}
+.kbmodule-section h5{
+    font-weight: bold;
+}
+.kbmodule-section ul{
+    margin: 0;
+    padding: 0;
+}
+.kbmodule-section ul li {
+    font-size: 15px;
+    list-style: none;
+    margin-bottom: 10px;
+}
+.kbmodule-section ul li a, .kbmodule-section a{
+    text-decoration: none;
+    color: #444;
+}
+

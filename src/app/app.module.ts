@@ -60,7 +60,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,

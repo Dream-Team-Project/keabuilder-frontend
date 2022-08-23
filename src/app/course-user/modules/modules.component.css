@@ -1,0 +1,11 @@
+.section1{
+    height: 19rem;
+    background-size: cover;
+    background-position: center;
+}
+.container {
+    max-width: calc(1340px);
+}
+#mainmodule-kea{
+    background: #f4f4f4;
+}
