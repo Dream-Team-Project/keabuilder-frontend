@@ -1,11 +1,3 @@
-#kbc-topbar .kbc-thumbnail img {
-    border-radius: 5px;
-}
-
-div#kbc-outline {
-    border-radius: 5px;
-}
-
 .kbc-block {
     padding: 0px;
 }
@@ -98,23 +90,6 @@ input.kb-chngname-inp::placeholder {
     color: var(--kb-light);
   }
 
-  .kb-details-container {
-    position: relative;
-    z-index: 99;
-    margin: auto;
-    box-shadow: 0 0 30px rgb(0 0 0 / 20%);
-    width: 750px;
-    height: auto;
-    background: var(--kb-light);
-    border-radius: 5px;
-    color: initial;
-  }
-
-.inp-contain {
-    max-height: 450px;
-    overflow-y: scroll;
-}
-
 span.kbc-qs-status span {
     display: inline-block;
     border-radius: 20px;
@@ -152,18 +127,19 @@ span.kb-ispan-add:hover {
     transform: scale(1.1);
 }
 
-.kb-details-container .cdk-overlay-dark-backdrop {
-    background: rgba(0,0,0,.2);
+#kbc-topbar .kb-edit-pencil {
+    cursor: pointer;
+    font-size: 65%;
+    color: var(--secondary-color);
 }
 
-div#kb-mat-loader {
-    width: 100%;
-    align-items: center;
-    position: absolute;
-    left: 0;
-    top: 0px;
-    display: flex;
-    justify-content: center;
-    z-index: 999;
-    height: 100%;
+#kbc-topbar .mat-slide-toggle, #kbc-topbar .kb-edit-pencil  {
+    opacity: 0;
+    transform: scale(0);
+    transition: 0.2s ease;
+}
+
+#kbc-topbar:hover .kb-edit-pencil, #kbc-topbar:hover .mat-slide-toggle  {
+    opacity: 1;
+    transform: scale(1);
 }

@@ -7,7 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class LessonService {
 
-  // API url
+  // lesson API url
   bycourse_moduleidApi = './api/bycourse-moduleid';
   bycourseidApi = './api/lessonbycourseid';
   onlybycourseidApi = './api/onlymodulebyid';
@@ -17,7 +17,9 @@ export class LessonService {
   updateApi = './api/updatelesson';
   deleteApi = './api/deletelesson';
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {   }
+
+  // lesson apis
 
   bycourse_moduleid(paramObj:any):Observable<any> {
     return this.http.get(this.bycourse_moduleidApi+'/'+paramObj.course_id+'/'+paramObj.module_id);
@@ -52,9 +54,21 @@ export class LessonService {
     .pipe(catchError(this.errorHandler));
   }
 
-    
+  // lesson apis
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
+  }
+
+  // encode/decode
+
+  encodeContent(html:any) {
+    return btoa(html);
+  }
+
+  decodeContent(blob:any) {
+    return atob(blob);
+
   }
 
 }

@@ -6,7 +6,7 @@ import { StyleService } from '../_services/_builder/style.service';
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
-  styleUrls: ['./image.component.css', '../builder/builder.component.css']
+  styleUrls: ['./image.component.css', '../builder/builder.component.css', '../builder/material.component.css']
 })
 export class ImageComponent implements OnInit {
 

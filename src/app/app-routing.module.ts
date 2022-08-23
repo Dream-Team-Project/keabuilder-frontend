@@ -118,7 +118,8 @@ const routes: Routes = [
     children:[
       { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
       { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
-      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
+      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
       { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
       { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
       { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },

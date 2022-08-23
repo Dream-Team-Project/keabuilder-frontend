@@ -2,7 +2,6 @@
 <div id="page-container" [class.hovernone]="_general.saveDisabled" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
     <app-builder-topbar *ngIf="_section.sections.length != 0"></app-builder-topbar>
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
-    <app-image *ngIf="_general.imgSelection"></app-image>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
             <div id="kb-main"
@@ -154,7 +153,22 @@
                                                         </ul>
                                                     </div>
                                                     <div *ngSwitchDefault class="kb-element-content">
-                                                        <div *ngIf="element.content.editor else text">
+                                                        <div *ngIf="!element.content.editor else editor">
+                                                            <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
+                                                            [ngStyle]="_style.textStyling()"
+                                                            [innerHTML]="_style.edit_html | safeHtml"></div>
+                                                            <ng-template #originalText>
+                                                                <div
+                                                                [ngStyle]="_style.getElementBlockStyle(element)"
+                                                                [innerHTML]="element.content.html | safeHtml"></div>
+                                                            </ng-template>
+                                                        </div>
+                                                        <ng-template #editor>
+                                                            <tinymce [ngStyle]="_style.getBlockStyle(element.content.style)" [inline]="true" (mouseenter)="_general.insideEditor = true" (mouseleave)="_general.insideEditor = false;" [(ngModel)]="element.content.html"
+                                                                [config]="_general.config"></tinymce>
+                                                        </ng-template>
+
+                                                        <!-- <div *ngIf="element.content.editor else text">
                                                             <tinymce [ngStyle]="_style.getBlockStyle(element.content.style)" [inline]="true" (mouseenter)="_general.insideEditor = true" (mouseleave)="_general.insideEditor = false;" [(ngModel)]="element.content.html"
                                                                 [config]="_general.config"></tinymce>
                                                         </div>
@@ -167,7 +181,7 @@
                                                                 [ngStyle]="_style.getElementBlockStyle(element)"
                                                                 [innerHTML]="element.content.html | safeHtml"></div>
                                                             </ng-template>
-                                                        </ng-template>
+                                                        </ng-template> -->
                                                     </div>
                                                 </div>
                                                 <span
@@ -175,7 +189,7 @@
                                                     *ngIf="element.setting && !_general.showInlineEditor" matTooltip="Add New Element" matTooltipPosition="above"
                                                     class="kb-ispan-add add-element bottom-add-btn"><i
                                                         class="fa fa-plus"></i></span>
-                                                <span *ngIf="_style.getDisplay(element.hide)" class="kb-block-hidden-icon"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                <span *ngIf="_style.getDisplay(element.hide)" class="kb-block-hidden-icon"><i class="far fa-eye-slash" aria-hidden="true"></i></span>
                                             </div>
                                             <!-- elements end -->
                                         </div>
@@ -186,7 +200,7 @@
                                             matTooltipPosition="right" class="kb-ispan-add add-element"><i
                                                 class="fa fa-plus"></i></span>
                                         <!-- add new column option end -->
-                                        <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                        <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i class="far fa-eye-slash" aria-hidden="true"></i></span>
                                     </div>
                                     <!-- columns end -->
                                 </div>
@@ -196,11 +210,11 @@
                                     matTooltip="Add New Row" matTooltipPosition="below"
                                     class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
                                 <!-- add new row option end -->
-                                <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i class="far fa-eye-slash" aria-hidden="true"></i></span>
                             </div>
                             <!-- rows end -->
                         </div>
-                        <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                        <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i class="far fa-eye-slash" aria-hidden="true"></i></span>
                     </div>
                     <!-- sections end -->
                 </div>

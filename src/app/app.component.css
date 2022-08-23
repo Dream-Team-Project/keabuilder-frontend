@@ -10,6 +10,25 @@ main {
     position: relative;
 }
 
+::ng-deep .mat-tab-header-pagination {
+    z-index: 1!important;
+}
+
+::ng-deep .tox-shadowhost.tox-fullscreen, ::ng-deep .tox.tox-tinymce.tox-fullscreen {
+    top: 50%!important;
+    max-width: 90%;
+    left: 50%!important;
+    transform: translate(-50%, -50%);
+}
+
+::ng-deep .tox.tox-tinymce {
+    border-radius: 5px;
+}
+
+::ng-deep .tox-tinymce-aux {
+    z-index: 100000!important;
+}
+
 ::ng-deep button.mat-menu-item {
     height: 36px;
     line-height: 36px;
@@ -19,15 +38,15 @@ main {
     font-weight: 600;
   }
 
-  ::ng-deep .mat-slide-toggle.mat-primary .mat-slide-toggle-bar{
+::ng-deep .mat-slide-toggle .mat-slide-toggle-bar{
     background-color: var(--kb-gray);
 } 
 
-::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb,
-::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-ripple-element {
+::ng-deep .mat-slide-toggle.mat-success.mat-checked .mat-slide-toggle-thumb,
+::ng-deep .mat-slide-toggle.mat-success.mat-checked .mat-ripple-element {
     background-color: var(--kb-success);
 }
 
-::ng-deep .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+::ng-deep .mat-slide-toggle.mat-success.mat-checked .mat-slide-toggle-bar {
     background-color: var(--opacity-success);
 }

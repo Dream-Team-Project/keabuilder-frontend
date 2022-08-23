@@ -12,13 +12,25 @@ providedIn: 'root'
 
 export class FileUploadService {
   // API url
+  // audio
+  uploadAudioApi = "./api/uploadaudiofile"
+  allaudiofilesApi = './api/allaudiofiles';
+  deleteAudioApi = "./api/deleteaudio";
+  uploadAudioPath = '/assets/uploads/audios/';
+  // audio
+  // video
+  uploadVideoApi = "./api/uploadvideofile"
+  allvideofilesApi = './api/allvideofiles';
+  deleteVideoApi = "./api/deletevideo";
+  uploadVideoPath = '/assets/uploads/videos/';
+  // video
   uploadApi = "./api/uploadfile";
   getAllImgsApi = "./api/getallimgs";
   saveOnDBApi = "./api/saveondb";
   updateOnDBApi = "./api/updateondb";
   deleteFromDB = "./api/deletefromdb";
   copyImgApi = "./api/copyimage"
-  deleteFile = "./api/deletefile";
+  deleteFileApi = "./api/deletefile";
   createPageApi = "./api/savepage";
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
@@ -58,6 +70,52 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
+  // audio
+
+  uploadaudio(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedAudio', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadAudioApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  allaudiofiles() {
+    return this.http.get(this.allaudiofilesApi);
+  }
+
+  deleteaudio(path:any) {
+    return this.http.delete(this.deleteAudioApi + '/' + path)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // audio
+
+  // video
+
+  uploadvideo(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedVideo', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadVideoApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  allvideofiles() {
+    return this.http.get(this.allvideofilesApi);
+  }
+
+  deletevideo(path:any) {
+    return this.http.delete(this.deleteVideoApi + '/' + path)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // video
+
   // Returns an observable
   upload(file: any):Observable<any> {
     // Create form data
@@ -90,7 +148,7 @@ export class FileUploadService {
   }
 
   deletefile(path:any) {
-    return this.http.delete(this.deleteFile + '/' + path)
+    return this.http.delete(this.deleteFileApi + '/' + path)
     .pipe(catchError(this.errorHandler));
   }
   

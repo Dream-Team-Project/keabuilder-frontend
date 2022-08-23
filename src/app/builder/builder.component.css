@@ -1931,30 +1931,6 @@ div.kb-rangeInp {
     margin: auto;
 }
 
-.kb-or-divider {
-    padding: 20px;
-    position: relative;
-}
-
-.kb-or-divider:before,
-.kb-or-divider:after {
-    content: '';
-    position: absolute;
-    border-top: 2px solid var(--kb-gray);
-    height: 100%;
-    width: 40%;
-    bottom: -50%;
-    margin: 0 40px;
-}
-
-.kb-or-divider:before {
-    left: 0;
-}
-
-.kb-or-divider:after {
-    right: 0;
-}
-
 .kb-img-thumbnail-group ul.kb-img-list li:hover span {
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
     transform: scale(1.1);
@@ -2227,8 +2203,8 @@ ul.kb-sub-menu a:hover {
 }
 
 .dragBoxClose {
-    opacity: 0!important;
-    transform: scale(0)!important;
+    opacity: 0;
+    transform: scale(0);
     animation: bounce 0.2s ease-in;
     animation-direction: reverse;
 }

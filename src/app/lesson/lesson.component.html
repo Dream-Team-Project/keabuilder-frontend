@@ -1,1 +1,245 @@
-<p>lesson works!</p>
+<ng-template>
+    <div [ngSwitch]="popask" class="container-fluid kb-details-container kb-scroll" [class.dragBox]="dragBoxAnime.open" [class.dragBoxClose]="dragBoxAnime.close"
+    [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''" cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
+         <div *ngSwitchCase="'details'" class="row pb-4">
+             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+                 <h5>Edit Lesson</h5>
+             </div> 
+             <div class="col-12 py-3 px-4 inp-contain">
+                 <mat-form-field class="kb-full-width" appearance="outline">
+                     <mat-label>Title</mat-label>
+                     <input name="title" [(ngModel)]="post.title" type="text" matInput placeholder="Ex. Features of Kea" required
+                         minlength="3" maxlength="140">
+                 </mat-form-field>
+                 <mat-form-field class="kb-full-width" appearance="outline">
+                     <mat-label>Description</mat-label>
+                     <textarea name="description" [(ngModel)]="post.description" matInput placeholder="Ex. Kea is one of the smartest bird in the planet"></textarea>
+                 </mat-form-field>
+                 <div class="imgFormField p-3 border">
+                     <label>Thumbnail</label>
+                     <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+                         <img class="img-fluid" [src]="timeStamp && !thumbnail.type  ? thumbnail.path + '?' + timeStamp : thumbnail.path"/>
+                     </div>
+                     <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
+                     class="drop-zone__input">
+                     <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+                     <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
+                 </div>
+             </div>
+             <div class="col-12 pt-3 px-4 text-right border-top">
+                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Cancel</button>
+                 <button (click)="updateLesson()" mat-raised-button color="primary">Update</button>
+             </div>
+         </div>
+         <div *ngSwitchCase="'deleteVideo'" class="row pb-4">
+            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+               <h5>This is an active video do you really wanna to delete this?</h5>
+               <h6 class="text-info">It will also be removed from the lesson.</h6>
+               <div class="text-right">
+                   <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+               </div>
+            </div> 
+            <div class="col-12 pt-3 px-4 text-right border-top">
+                <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
+                <button [disabled]="!delAgree" (click)="deleteVideo(lesson.video)" mat-raised-button color="danger">Yes, do it!</button>
+            </div>
+        </div>
+         <div *ngSwitchCase="'deleteAudio'" class="row pb-4">
+             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+                <h5>This is an active audio do you really wanna to delete this?</h5>
+                <h6 class="text-info">It will also be removed from the lesson.</h6>
+                <div class="text-right">
+                    <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+                </div>
+             </div> 
+             <div class="col-12 pt-3 px-4 text-right border-top">
+                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
+                 <button [disabled]="!delAgree" (click)="deleteAudio(lesson.audio)" mat-raised-button color="danger">Yes, do it!</button>
+             </div>
+         </div>
+         <div *ngIf="respWaiting">
+             <div id="kb-mat-loader">
+                 <mat-spinner color="secondary"></mat-spinner>
+             </div>
+             <div class="cdk-overlay-backdrop cdk-overlay-dark-backdrop cdk-overlay-backdrop-showing"></div>
+         </div>
+     </div> 
+ </ng-template>
+<div *ngIf="lesson.title" class="container-fluid px-md-5 py-3">
+    <div id="kbl-topbar" class="row align-items-center mb-4">
+        <div class="kbl-thumbnail col-md-2">
+            <img *ngIf="lesson.thumbnail else default" [src]="getImgPath(lesson.thumbnail)" class="img-fluid rounded">
+            <ng-template #default><img [src]="getImgPath('webpage_thumbnail.jpg')" class="img-fluid rounded"></ng-template>
+        </div>
+        <div class="col-md-6">
+            <h3>
+                {{lesson.title}}
+                <i matTooltip="Lesson Setting" matTooltipPosition="above" (click)="openDialog(lesson, 'details')" class="kb-edit-pencil fa fa-pencil-alt ml-2 p-2"></i>
+                <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="toggleStatus(lesson)"></mat-slide-toggle>
+            </h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <button mat-raised-button color="accent" class="mr-3">Preview <i class="far fa-eye"></i></button>
+            <button mat-raised-button color="primary">Customize <i class="far fa-edit"></i></button>
+        </div>
+    </div>
+    <mat-tab-group [selectedIndex]="0">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="mr-1">sort</mat-icon>
+                Content
+            </ng-template>
+            <ng-template matTabContent>
+                <div id="kbl-content" class="container-fluid">
+                    <div class="kbl-content" class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <span>Content</span>
+                        </div>
+                        <div class="kbl-summary col-md-6 text-right">
+                            <button mat-raised-button color="accent" (click)="addContent()">Save <i class="far fa-save"></i></button>
+                        </div>
+                    </div>
+                    <editor [(ngModel)]="content_html" [init]="_general.config" class="py-3"></editor>
+                </div>
+            </ng-template>
+        </mat-tab>
+      
+        <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mr-1">videocam</mat-icon>
+              Video
+            </ng-template>
+            <ng-template matTabContent>
+                <div id="kbl-video" class="container-fluid">
+                    <div class="kbl-video-top" class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <span>Video</span>
+                        </div>
+                    </div>
+                    <div class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <div *ngIf="!videoadding else adding">
+                                <span *ngIf="lesson.video else selvideobox">
+                                    <video width="300px" controls>
+                                        <source [src]="_file.uploadVideoPath+lesson.video" type="video/mp4">
+                                    </video>
+                                </span>
+                                <ng-template #selvideobox>
+                                    <span>Selected video will be shown here</span>
+                                </ng-template>
+                            </div>
+                            <ng-template #adding>
+                                <mat-spinner class="kbl-media-spinner" color="secondary"></mat-spinner>
+                            </ng-template> 
+                        </div>
+                        <div class="kbl-summary col-md-6 text-right">
+                            <button *ngIf="lesson.video" class="mr-3" matTooltip="File suported mp4 only" matTooltipPosition="above" mat-raised-button color="accent" (click)="addVideo('')">
+                                <span>Remove video <i class="far fa-trash-alt"></i></span>
+                            </button>
+                            <input #videoInp class="kb-d-none" name="video" type="file" accept="video/mp4" (change)="videoChangeEvent($event)">
+                            <button matTooltip="File suported mp4 only" matTooltipPosition="above" mat-raised-button color="primary" (click)="videoInp.click()">
+                                <span>Upload a new video <i class="fa fa-upload"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row p-3">
+                        <div class="col-12 p-0 kbl-media-list" *ngIf="!videofetching else fetching">
+                            <div class="col-lg-3 col-md-6 py-2" *ngFor="let video of videos">
+                                <div *ngIf="video == lesson.video" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
+                                <div class="kbl-media-actions">
+                                    <i (click)="addVideo(video)" class="far fa-save" matTooltip="Use Video" matTooltipPosition="above"></i>|
+                                    <i (click)="video != lesson.video ? deleteVideo(video) : openDialog(lesson, 'deleteVideo');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
+                                </div>
+                                <video width="100%" controls>
+                                    <source [src]="_file.uploadVideoPath+video" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>     
+                        <ng-template #fetching>
+                            <div class="col-12 d-flex justify-content-center">
+                                <mat-spinner color="secondary"></mat-spinner>
+                            </div>
+                        </ng-template> 
+                    </div> 
+                </div>
+            </ng-template>
+        </mat-tab>
+        
+        <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="mr-1">audiotrack</mat-icon>
+              Audio
+            </ng-template>
+            <ng-template matTabContent>
+                <div id="kbl-audio" class="container-fluid">
+                    <div class="kbl-audio-top" class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <span>Audio</span>
+                        </div>
+                    </div>
+                    <div class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <div *ngIf="!audioadding else adding">
+                                <span *ngIf="lesson.audio else selaudiobox">
+                                    <audio controls>
+                                        <source [src]="_file.uploadAudioPath+lesson.audio" type="audio/mp3">
+                                    </audio>
+                                </span>
+                                <ng-template #selaudiobox>
+                                    <span>Selected audio will be shown here</span>
+                                </ng-template>
+                            </div>
+                            <ng-template #adding>
+                                <mat-spinner class="kbl-media-spinner" color="secondary"></mat-spinner>
+                            </ng-template> 
+                        </div>
+                        <div class="kbl-summary col-md-6 text-right">
+                            <button *ngIf="lesson.audio" class="mr-3" matTooltip="File suported mp3 only" matTooltipPosition="above" mat-raised-button color="accent" (click)="addAudio('')">
+                                <span>Remove audio <i class="far fa-trash-alt"></i></span>
+                            </button>
+                            <input #audioInp class="kb-d-none" name="audio" type="file" accept="audio/mp3" (change)="audioChangeEvent($event)">
+                            <button matTooltip="File suported mp3 only" matTooltipPosition="above" mat-raised-button color="primary" (click)="audioInp.click()">
+                                <span>Upload a new audio <i class="fa fa-upload"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row p-3">
+                        <div class="col-12 p-0 kbl-media-list" *ngIf="!audiofetching else fetching">
+                            <div class="col-lg-3 col-md-6 py-2" *ngFor="let audio of audios">
+                                <div *ngIf="audio == lesson.audio" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
+                                <div class="kbl-media-actions">
+                                    <i (click)="addAudio(audio)" class="far fa-save" matTooltip="Use Audio" matTooltipPosition="above"></i>|
+                                    <i (click)="audio != lesson.audio ? deleteAudio(audio) : openDialog(lesson, 'deleteAudio');" class="far fa-trash-alt" matTooltip="Delete Audio" matTooltipPosition="above"></i>
+                                </div>
+                                <audio  width="100%" controls>
+                                    <source [src]="_file.uploadAudioPath+audio" type="audio/mp3">
+                                </audio>
+                            </div>
+                        </div>     
+                        <ng-template #fetching>
+                            <div class="col-12 d-flex justify-content-center">
+                                <mat-spinner color="secondary"></mat-spinner>
+                            </div>
+                        </ng-template> 
+                    </div> 
+                </div>
+            </ng-template>
+        </mat-tab>
+      
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <i class="fas fa-file-download mr-2"></i>
+            Downloads
+          </ng-template>
+          <ng-template matTabContent>
+            <div id="kbl-downloads" class="container-fluid">
+                <div class="kbl-downloads-top" class="row p-3 border-bottom">
+                    <div class="kbl-summary col-md-6">
+                        <span>Downloads</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>    
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -11,6 +11,7 @@ import { asapScheduler } from 'rxjs';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-module',
@@ -39,7 +40,7 @@ export class ModulesComponent implements OnInit {
   modules:any = []
   thumbnail:any;
   file = null;
-  typeerror = '';
+  typeerror:string = '';
   index:any = {
     module: 0,
     lesson: 0,
@@ -51,10 +52,12 @@ export class ModulesComponent implements OnInit {
   action:string = 'add';
   delReq = 0;
   respWaiting = false;
-
   popask = 'details';
-
-  delAgree = false;
+  delAgree:boolean = false;
+  timeStamp:any; 
+  offers = new FormControl();
+  offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
+  offersToAdd:Array<string> = [];
 
   constructor(
     private router: Router,
@@ -104,6 +107,7 @@ export class ModulesComponent implements OnInit {
    fetchCourse() {
       this._course.single(this.course.uniqueid).subscribe(res=>{
         this.course = res.data[0];
+        this.overlayRefDetach();
       })
    }
 
@@ -132,7 +136,7 @@ export class ModulesComponent implements OnInit {
       })
     }
 
-  //  data fetchingq
+  //  data fetching
 
   // post methods
 
@@ -161,6 +165,9 @@ export class ModulesComponent implements OnInit {
       this.updateLesson(this.post, 'details');
       this.modules[this.index.module].lessons[this.index.lesson] = JSON.parse(JSON.stringify(this.post));
     }
+    else if(this.post.type == 'course') {
+      this.updateCourse(this.post);
+    }
     else this.overlayRefDetach();
   }
 
@@ -179,6 +186,39 @@ export class ModulesComponent implements OnInit {
   }
 
   // post methods
+
+  // course methods
+
+  toggleStatus(course:any) {
+    course.publish_status = course.publish_status ? 1: 0;
+    this._course.update(course).subscribe((res:any)=>{
+      this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'drafted'), 'OK');
+    });
+  }
+
+  updateCourse(course:any) {
+    if(this.thumbnail.type) {
+      this.thumbnail.name = 'course-thumbnail-'+course.uniqueid+'.'+this.thumbnail.type;
+      course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      this.timeStamp = (new Date()).getTime();
+    }
+    course.offers = this.offersToAdd.join(',');
+    this._course.update(course).subscribe((res:any)=>{
+      if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
+      this._snackbar.open('Course has been updated', 'OK');
+      this.fetchCourse();
+    })
+  }
+
+  getImgPath(thumbnail:string) {
+    var path = this._image.uploadImgPath + thumbnail;
+      if(this.timeStamp) {
+        return path + '?' + this.timeStamp;
+      }
+      return path;
+  }
+
+  // course methods
 
     // module methods
 
@@ -462,21 +502,23 @@ export class ModulesComponent implements OnInit {
   // dialog methods
 
   overlayRefDetach() {
-      this.respWaiting = false;
-      this.dragBoxAnime.close = true;
-      setTimeout(()=>{
-        this._overlayRef.detach();
-        this.popask = 'details';
-        this.delAgree = false;
-        this.resetPostData();
-        this.dragBoxAnime.close = false;
-      },200);
+    this.timeStamp = (new Date()).getTime();
+    this.respWaiting = false;
+    this.dragBoxAnime.close = true;
+    setTimeout(()=>{
+      this._overlayRef.detach();
+      this.popask = 'details';
+      this.delAgree = false;
+      this.resetPostData();
+      this.dragBoxAnime.close = false;
+    },200);
   }
 
   openDialog(post:any, type:string) {
     this.post = JSON.parse(JSON.stringify(post));
     if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
     this.post.type = type;
+    if(this.post.offers) this.offersToAdd = this.post.offers.split(',');
     this.dragBoxAnime.open = true;
     this._overlayRef.attach(this._portal);
     setTimeout(()=>{
