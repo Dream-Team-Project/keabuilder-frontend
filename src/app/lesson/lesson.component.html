@@ -33,28 +33,28 @@
          </div>
          <div *ngSwitchCase="'deleteVideo'" class="row pb-4">
             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
-               <h5>This is an active video do you really wanna to delete this?</h5>
-               <h6 class="text-info">It will also be removed from the lesson.</h6>
+               <h5>Are you indeed want to delete this Video?</h5>
+               <h6 *ngIf="lesson.video == calDelVideo" class="text-info">This is an active video.</h6>
                <div class="text-right">
                    <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
                </div>
             </div> 
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
-                <button [disabled]="!delAgree" (click)="deleteVideo(lesson.video)" mat-raised-button color="danger">Yes, do it!</button>
+                <button [disabled]="!delAgree" (click)="deleteVideo(calDelVideo)" mat-raised-button color="danger">Yes, do it!</button>
             </div>
         </div>
          <div *ngSwitchCase="'deleteAudio'" class="row pb-4">
              <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
-                <h5>This is an active audio do you really wanna to delete this?</h5>
-                <h6 class="text-info">It will also be removed from the lesson.</h6>
+                <h5>Are you indeed want to delete this Audio?</h5>
+                <h6 *ngIf="lesson.video == calDelAudio" class="text-info">This is an active audio.</h6>
                 <div class="text-right">
                     <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
                 </div>
              </div> 
              <div class="col-12 pt-3 px-4 text-right border-top">
                  <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
-                 <button [disabled]="!delAgree" (click)="deleteAudio(lesson.audio)" mat-raised-button color="danger">Yes, do it!</button>
+                 <button [disabled]="!delAgree" (click)="deleteAudio(calDelAudio)" mat-raised-button color="danger">Yes, do it!</button>
              </div>
          </div>
          <div *ngIf="respWaiting">
@@ -113,14 +113,14 @@
                 <div id="kbl-video" class="container-fluid">
                     <div class="kbl-video-top" class="row p-3 border-bottom">
                         <div class="kbl-summary col-md-6">
-                            <span>Video</span>
+                            <span>{{videos.length}} Video{{videos.length != 1 ? 's' : ''}}</span>
                         </div>
                     </div>
                     <div class="row p-3 border-bottom">
-                        <div class="kbl-summary col-md-6">
+                        <div class="kbl-summary col-md-6" [style.minHeight]="lesson.video ? '160px' : ''">
                             <div *ngIf="!videoadding else adding">
                                 <span *ngIf="lesson.video else selvideobox">
-                                    <video width="300px" controls>
+                                    <video height="160px" controls>
                                         <source [src]="_file.uploadVideoPath+lesson.video" type="video/mp4">
                                     </video>
                                 </span>
@@ -133,7 +133,7 @@
                             </ng-template> 
                         </div>
                         <div class="kbl-summary col-md-6 text-right">
-                            <button *ngIf="lesson.video" class="mr-3" matTooltip="File suported mp4 only" matTooltipPosition="above" mat-raised-button color="accent" (click)="addVideo('')">
+                            <button *ngIf="lesson.video" class="mr-3" matTooltip="It will only remove it not delete" matTooltipPosition="above" mat-raised-button color="accent" (click)="addVideo('')">
                                 <span>Remove video <i class="far fa-trash-alt"></i></span>
                             </button>
                             <input #videoInp class="kb-d-none" name="video" type="file" accept="video/mp4" (change)="videoChangeEvent($event)">
@@ -148,7 +148,7 @@
                                 <div *ngIf="video == lesson.video" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
                                 <div class="kbl-media-actions">
                                     <i (click)="addVideo(video)" class="far fa-save" matTooltip="Use Video" matTooltipPosition="above"></i>|
-                                    <i (click)="video != lesson.video ? deleteVideo(video) : openDialog(lesson, 'deleteVideo');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
+                                    <i (click)="calDelVideo = video; openDialog(lesson, 'deleteVideo');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
                                 </div>
                                 <video width="100%" controls>
                                     <source [src]="_file.uploadVideoPath+video" type="video/mp4">
@@ -174,7 +174,7 @@
                 <div id="kbl-audio" class="container-fluid">
                     <div class="kbl-audio-top" class="row p-3 border-bottom">
                         <div class="kbl-summary col-md-6">
-                            <span>Audio</span>
+                            <!-- <span>{{audios.length}} Audio{{audios.length != 1 ? 's' : ''}}</span> -->
                         </div>
                     </div>
                     <div class="row p-3 border-bottom">
@@ -194,7 +194,7 @@
                             </ng-template> 
                         </div>
                         <div class="kbl-summary col-md-6 text-right">
-                            <button *ngIf="lesson.audio" class="mr-3" matTooltip="File suported mp3 only" matTooltipPosition="above" mat-raised-button color="accent" (click)="addAudio('')">
+                            <button *ngIf="lesson.audio" class="mr-3" matTooltip="It will only remove it not delete" matTooltipPosition="above" mat-raised-button color="accent" (click)="addAudio('')">
                                 <span>Remove audio <i class="far fa-trash-alt"></i></span>
                             </button>
                             <input #audioInp class="kb-d-none" name="audio" type="file" accept="audio/mp3" (change)="audioChangeEvent($event)">
@@ -209,7 +209,7 @@
                                 <div *ngIf="audio == lesson.audio" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
                                 <div class="kbl-media-actions">
                                     <i (click)="addAudio(audio)" class="far fa-save" matTooltip="Use Audio" matTooltipPosition="above"></i>|
-                                    <i (click)="audio != lesson.audio ? deleteAudio(audio) : openDialog(lesson, 'deleteAudio');" class="far fa-trash-alt" matTooltip="Delete Audio" matTooltipPosition="above"></i>
+                                    <i (click)="calDelAudio = audio;  openDialog(lesson, 'deleteAudio');" class="far fa-trash-alt" matTooltip="Delete Audio" matTooltipPosition="above"></i>
                                 </div>
                                 <audio  width="100%" controls>
                                     <source [src]="_file.uploadAudioPath+audio" type="audio/mp3">
@@ -235,11 +235,82 @@
             <div id="kbl-downloads" class="container-fluid">
                 <div class="kbl-downloads-top" class="row p-3 border-bottom">
                     <div class="kbl-summary col-md-6">
-                        <span>Downloads</span>
+                        <span>{{downloads.length}} Download{{downloads.length != 1 ? 's' : ''}}</span>
+                    </div>
+                </div>
+                <div class="row p-3 border-bottom">
+                    <div class="kbl-summary col-md-12 text-right">
+                        <button *ngIf="lesson.audio" class="mr-3" matTooltip="It will only remove it not delete" matTooltipPosition="above" mat-raised-button color="accent">
+                            <span>Remove active documents <i class="far fa-trash-alt"></i></span>
+                        </button>
+                        <input #audioInp class="kb-d-none" name="audio" type="file" (change)="audioChangeEvent($event)">
+                        <button matTooltip="File suported mp3 only" matTooltipPosition="above" mat-raised-button color="primary" (click)="audioInp.click()">
+                            <span>Upload a new document <i class="fa fa-upload"></i></span>
+                        </button>
+                    </div>
+                </div>
+                <div cdkDropListGroup class="row px-4">
+                    <div class="col-md-6 p-4 border-right">
+                        <h6 class="download-active-title">Active Downloads <span>{{activeDownloads.length}}</span></h6>   
+                        <div
+                        cdkDropList
+                        [cdkDropListData]="activeDownloads"
+                        class="download-active-list download-list"
+                        (cdkDropListDropped)="drop($event)">
+                            <div class="download-box" *ngFor="let item of activeDownloads" cdkDrag>
+                                {{item}}
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="col-md-6 p-4">
+                        <h6 class="download-inactive-title">Inactive Downloads <span>{{downloads.length}}</span></h6>
+                        <div
+                        cdkDropList
+                        [cdkDropListData]="downloads"
+                        class="download-inactive-list download-list"
+                        cdkDropListSortingDisabled
+                        (cdkDropListDropped)="drop($event)">
+                            <div class="download-box" *ngFor="let item of downloads" cdkDrag>
+                                {{item}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </ng-template>    
         </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+              <i class="fas fa-random mr-2"></i>
+              Automation
+            </ng-template>
+            <ng-template matTabContent>
+              <div id="kbl-automation" class="container-fluid">
+                  <div class="kbl-automation-top" class="row p-3 border-bottom">
+                        <div class="kbl-summary col-md-6">
+                            <span>Automation <mat-slide-toggle class="ml-2" color="success" [matTooltip]="lesson.automation ? 'Active' : 'Inactive'" matTooltipPosition="above" [(ngModel)]="lesson.automation" (ngModelChange)="toggleAutomation(lesson)"></mat-slide-toggle></span>
+                        </div>
+                        <div class="kbl-summary col-md-6 text-right">
+                            <button mat-raised-button color="accent" (click)="addEmail()">Save <i class="far fa-save"></i></button>
+                        </div>
+                  </div>
+                  <div class="row p-4">
+                    <div class="col-12">
+                        <h6>Subject</h6>
+                        <mat-form-field class="kb-full-width" appearance="outline">
+                            <mat-label>Subject</mat-label>
+                            <input name="title" [(ngModel)]="lesson.email_subject" type="text" matInput placeholder="Ex. Features of Kea"
+                                minlength="3" maxlength="140">
+                        </mat-form-field> 
+                    </div>   
+                    <div class="col-12">
+                        <h6>Body</h6>
+                        <editor [(ngModel)]="email_body" [init]="_general.config"></editor>
+                    </div>
+                  </div>
+              </div>
+          </ng-template>    
+          </mat-tab>   
     </mat-tab-group>
 </div>

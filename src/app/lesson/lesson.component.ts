@@ -5,14 +5,13 @@ import { ModuleService } from '../_services/_membership/module.service';
 import { LessonService } from '../_services/_membership/lesson.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
-import { MultimediaService } from '../_services/multimedia.service';
+import { WistiaService } from '../_services/wistia.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { throwIfEmpty } from 'rxjs';
-import { P } from '@angular/cdk/keycodes';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ReadVarExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-lesson',
@@ -44,11 +43,18 @@ export class LessonComponent implements OnInit {
   videoadding:boolean = false;
   videofetching:boolean = false;
   videofile:any;
-  videos:any;
+  videos:any = [];
   audioadding:boolean = false;
   audiofetching:boolean = false;
   audiofile:any;
-  audios:any;
+  audios:any = [];
+  downloads = ['Carrots', 'Tomatoes', 'Onions', 'Apples', 'Avocados'];
+  activeDownloads = ['Oranges', 'Bananas', 'Cucumbers'];
+  calDelAudio:any;
+  calDelVideo:any;
+  medias:any;
+  email_body:any = '<p>Your message goes here</p>';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -60,7 +66,7 @@ export class LessonComponent implements OnInit {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     public _image: ImageService,
-    public _media: MultimediaService,
+    public _wistia: WistiaService,
     public _general: GeneralService,
   ) {
     route.paramMap.subscribe((params: ParamMap) => {
@@ -72,6 +78,7 @@ export class LessonComponent implements OnInit {
       this.fetchLesson();
       this.fetchVideos();
       this.fetchAudios();
+      // this.fetchMedias();
       this.resetPostData();
     })
    }
@@ -110,7 +117,24 @@ export class LessonComponent implements OnInit {
     this._lesson.single(this.lesson.uniqueid).subscribe(res=>{
       this.lesson = res.data[0];
       if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
+      if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
       this.overlayRefDetach();
+    })
+  }
+
+  fetchMedias() {
+    this._wistia.getAllMedia().subscribe(res=>{
+      this.medias = JSON.parse(res.data);
+      this.medias.forEach((item:any)=>{
+        if(item.type == 'Video') {
+          this.videos = [];
+          this.videos.push(item.assets[0]);
+        }
+        else if(item.type == 'Audio') {
+          this.audios = [];
+          this.audios.push(item.assets[0]);
+        }
+      })
     })
   }
 
@@ -175,10 +199,28 @@ export class LessonComponent implements OnInit {
 
   // content methods
 
+    // automation methods
+
+    toggleAutomation(lesson:any) {
+      lesson.automation = lesson.automation ? 1: 0;
+      this._lesson.update(lesson).subscribe((res:any)=>{
+        this._snackbar.open('Automation has been '+(lesson.automation == 1 ? 'activated' : 'deactivated'), 'OK');
+      });
+    }
+
+    addEmail() {
+      this.lesson.email_body = this._lesson.encodeContent(this.email_body);
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        this._snackbar.open('Automation has been updated', 'OK');
+        this.fetchLesson();
+      })
+    }
+  
+    // automation methods
+
   // video methods
 
   addVideo(video:any) {
-    console.log(video);
     this.videoadding = true;
     this.lesson.video = video;
     this._lesson.update(this.lesson).subscribe((res:any)=>{
@@ -200,15 +242,20 @@ export class LessonComponent implements OnInit {
 
   videoChangeEvent(event: any): void {
     if(event.target.files && event.target.files[0]) {
-        this.videoadding = true;
+        // this.videoadding = true;
         this.videofile = event.target.files[0];
         const reader = new FileReader();
+        reader.onload = e => {reader.result;}
         reader.readAsDataURL(this.videofile);
         this._file.uploadvideo(this.videofile).subscribe(
           (event: any) => {
               if (typeof (event) === 'object') {
-                this.addVideo('keavideo-'+event.originalname);
-                this.fetchVideos();
+                // var file = {path: 'keavideo-'+event.originalname};
+                // this._wistia.uploadMedia(file).subscribe((e:any)=>{
+                //   console.log(JSON.parse(e.data));
+                  this.addVideo('keavideo-'+event.originalname);
+                  this.fetchVideos();
+                // });
               }
           }
       );
@@ -267,6 +314,8 @@ export class LessonComponent implements OnInit {
       setTimeout(()=>{
         this._overlayRef.detach();
         this.popask = 'details';
+        this.calDelVideo = '';
+        this.calDelAudio = '';
         this.delAgree = false;
         this.resetPostData();
         this.dragBoxAnime.close = false;
@@ -312,6 +361,19 @@ export class LessonComponent implements OnInit {
   }
 
   // image input method
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+  }
 
   getUID() {
     return Math.random().toString(20).slice(2);

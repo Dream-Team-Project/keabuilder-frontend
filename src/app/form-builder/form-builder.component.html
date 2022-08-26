@@ -24,14 +24,13 @@
     <div id="kb-sidebar">
         <div id="form-elements">
             <mat-list class="form-ele-list"
-            cdkDropList cdkDropListConnectedTo="kb-form" [cdkDropListData]="_formS.formEle"> 
+            cdkDropList cdkDropListConnectedTo="kb-form" [cdkDropListData]="_formS.formEle" cdkDropListSortingDisabled> 
                 <mat-list-item
                       cdkDrag
                       *ngFor="let fe of _formS.formEle, index as fei, odd as o"
                       [cdkDragData]="fe"
                       >
                         <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'"><i [class]="fe.icls"></i></div>
-                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
                       <i [class]="fe.icls"></i>
                       <span>{{fe.name | titlecase}}</span>
                 </mat-list-item>
