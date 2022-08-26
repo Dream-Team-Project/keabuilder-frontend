@@ -3,7 +3,7 @@ import { FormControl,Validators } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource,MatTable} from '@angular/material/table';
-import { CourseService } from '../_services/_membership//course.service';
+import { CourseService } from '../_services/_membership/course.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 

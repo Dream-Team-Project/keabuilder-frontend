@@ -1,0 +1,33 @@
+<div id="maincoursemodule-kea">
+
+    <div class="container-fluid section1"
+      style="background-image: url('https://img.freepik.com/free-vector/blue-technology-digital-banner-design_1017-32257.jpg?w=2000');">
+    </div>
+  
+    <div class="container section2 mb-5">
+      <div class="row">
+        <div class="col-md-12 mt-5 mb-5 text-center">
+          <h2>Welcome to the Innovation Technology Design. You'll find the modules below. Select a module to be taken to the course information.</h2>
+        </div>
+      </div>
+      <div class="row">
+  
+        <div class="col-md-6 mb-5" *ngFor="let moduledata of moduledatas;" >
+          <div class="kbmodule-img text-center pb-2">
+            <a [routerLink]="'/course/'+coursename+'/'+moduledata.uniqueid" >
+              <img [src]="'/assets/uploads/images/'+moduledata.thumbnail" *ngIf="moduledata.thumbnail" class="img-fluid" alt="">
+              <h4 class="m-0 p-3" *ngIf="moduledata.title" >
+                {{moduledata.title}}
+              </h4>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-md-12 text-center">
+            <button mat-raised-button color="accent" routerLink="/course/dashboard/" >Back To Course</button>
+        </div>
+        
+      </div>
+    </div>
+  
+  </div>

@@ -31,9 +31,11 @@ export class AppComponent {
               case event instanceof NavigationStart: {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
-                if( geturl == 'form-builder' || geturl == 'builder' || geturl == 'preview' || geturl == 'course') {
+                if( geturl == 'form-builder' || geturl == 'builder' || geturl == 'preview') {
                   this._nav.hide();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
+                }else if( geturl == 'course'){
+                  this._nav.hide();
                 }
                 else {
                   this._nav.show();

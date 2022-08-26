@@ -1,0 +1,20 @@
+<div class="kbmodule-category">
+
+    <div class="kbmodule-section" *ngFor="let course_module of course_modules;">
+        <h5>
+            <a [routerLink]="'/course/'+coursename+'/'+course_module.uniqueid">
+                {{course_module.title}}
+            </a>
+        </h5>
+        <ul>
+            <li *ngFor="let course_lesson of course_lessons">
+                <a [routerLink]="'/course/'+coursename+'/'+course_module.uniqueid+'/posts/'+course_lesson.uniqueid" *ngIf="course_module.uniqueid==course_lesson.module_id">
+                    <i class="fas fa-file-alt"></i> {{ course_lesson.title }}
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+</div>
+
+
