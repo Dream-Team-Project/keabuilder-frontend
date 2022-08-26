@@ -71,6 +71,9 @@ import { CourseUserModulesComponent } from './course-user/modules/modules.compon
 import { CourseUserModulesSidebarComponent } from './course-user/modules-sidebar/modules-sidebar.component';
 import { CourseUserModulesBoardComponent } from './course-user/modules-board/modules-board.component';
 import { CourseUserModulesPostComponent } from './course-user/modules-post/modules-post.component';
+import { CourseUserCourseLoginComponent } from './course-user/course-login/course-login.component';
+import { CourseUserCourseHeaderComponent } from './course-user/course-header/course-header.component';
+import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -160,9 +163,13 @@ const routes: Routes = [
   
   // User Course
   { path: 'course/dashboard', component: CourseUserDashboardComponent},
+  { path: 'course/login', component: CourseUserCourseLoginComponent},
+  { path: 'course/forgot', component: CourseUserCourseForgotpassComponent},
   { path: 'course/:name', component: CourseUserCoursesComponent},
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
+
+  
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -244,5 +251,8 @@ export const RoutingComponents =
     CourseUserModulesSidebarComponent,
     CourseUserModulesBoardComponent,
     CourseUserModulesPostComponent,
+    CourseUserCourseLoginComponent,
+    CourseUserCourseHeaderComponent,
+    CourseUserCourseForgotpassComponent,
   ];
 

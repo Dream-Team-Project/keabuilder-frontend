@@ -10,6 +10,7 @@ export class CourseService {
   // API url
   allApi = './api/allcourses';
   singleApi = './api/singlecourse';
+  multipleApi = './api/multiplecourse';
   singlebyurlApi = './api/singlebyurlcourse';
   createApi = './api/createcourse';
   updateApi = './api/updatecourse';
@@ -23,6 +24,10 @@ export class CourseService {
 
   single(param:any):Observable<any> {
     return this.http.get(this.singleApi+'/'+param);
+  }
+
+  multiple(req:any):Observable<any> {
+    return this.http.post(this.multipleApi, req);
   }
 
   singlebyurl(param:any):Observable<any> {
@@ -72,6 +77,11 @@ export class CourseService {
   updatedelmember(data:any):Observable<any> {
     return this.http.post("./api/membership_updatedelmember", {data});
   }
+
+  validatecourseemail(data:any):Observable<any> {
+    return this.http.post("./api/membership_validatecourseemail", {data});
+  }
+
   // member
   
   // coupon
@@ -104,11 +114,20 @@ export class CourseService {
   filteroffer(data:any):Observable<any> {
     return this.http.post("./api/membership_filteroffer", {data});
   }
+
   querystringmanage(data:any):Observable<any> {
     return this.http.post("./api/membership_queryoffer", {data});
   }
 
   // offers
+
+  // login
+
+  verifyuserlogin(data:any):Observable<any> {
+    return this.http.post("./api/verifyuserlogin", {data});
+  }
+
+  // login
 
 
 

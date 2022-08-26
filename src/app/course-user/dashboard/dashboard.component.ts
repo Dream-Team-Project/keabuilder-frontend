@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/_services/_membership/course.service';
+import { Router, ParamMap, ActivatedRoute,NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-course-user-dashboard',
@@ -8,14 +9,27 @@ import { CourseService } from 'src/app/_services/_membership/course.service';
 })
 export class CourseUserDashboardComponent implements OnInit {
 
-  constructor(private _course: CourseService,) { }
+  constructor(private _course: CourseService,
+              private router: Router,
+              private route: ActivatedRoute,) { }
 
   allcourses:any = [];
+  userselectedcourse:any = [];
+  nocoursefound = '';
 
   ngOnInit(): void {
 
-    this._course.all().subscribe((res:any)=>{
-      console.log(res);
+    var courselogincheck:any = localStorage.getItem("kbcourselogin");
+    if(courselogincheck==null){
+      this.router.navigate(['/course/login'],{relativeTo: this.route});
+    }else{
+      var cnvrtobj = JSON.parse(courselogincheck);
+      this.userselectedcourse = cnvrtobj.courseassign;
+    }
+
+    var sendobj = {data:this.userselectedcourse};
+    this._course.multiple(sendobj).subscribe((res:any)=>{
+      // console.log(res);
       res.data.forEach((element:any) => {
           this.allcourses.push(element);
       });

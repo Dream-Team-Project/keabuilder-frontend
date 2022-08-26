@@ -33,12 +33,18 @@ export class CourseUserModulesBoardComponent implements OnInit {
   totalstart = 0;
   totalprogress = 0;
   coursename:any = '';  
-
+  showcategory = true;
 
   ngOnInit(): void {
     this.coursename = this.route.snapshot.paramMap.get('name');
     this.moduleid = this.route.snapshot.paramMap.get('id');
     this.showlessons(this.moduleid);
+
+    if(this.route.snapshot.paramMap.get('postid')!=null){
+      this.showcategory = false;
+    }
+    
+
   }
 
   showlessons(id:any){

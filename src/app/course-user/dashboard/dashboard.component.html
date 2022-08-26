@@ -1,8 +1,5 @@
 <div id="maincourse-kea">
-
-  <div class="container-fluid section1"
-    style="background-image: url('https://img.freepik.com/free-vector/blue-technology-digital-banner-design_1017-32257.jpg?w=2000');">
-  </div>
+  <app-course-user-header></app-course-user-header>
 
   <div class="container section2 mb-5">
     <div class="row">
@@ -11,6 +8,10 @@
       </div>
     </div>
     <div class="row">
+
+      <div class="col-md-12 text-center" *ngIf="allcourses.length==0" >
+          <p>You have not purchased any course Yet!</p>
+      </div>  
 
       <div class="col-md-6 mb-5" *ngFor="let allcourse of allcourses;" >
         <div class="kbcourse-img text-center pb-2">

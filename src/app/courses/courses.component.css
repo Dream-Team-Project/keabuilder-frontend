@@ -363,3 +363,8 @@
 .mat-select {
     background-color: transparent;
 }
+#kb-offcanvas-actions >form{
+    overflow-y: scroll;
+}
+
+
