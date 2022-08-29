@@ -103,6 +103,10 @@
 .kb-d-none {
     display: none;
 }
+
+.kbl-summary .download-box {
+    cursor: default!important;
+}
   
   .download-box {
     height: 46px;

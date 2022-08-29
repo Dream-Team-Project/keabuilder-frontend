@@ -370,7 +370,7 @@ export class LessonComponent implements OnInit {
         this._file.uploaddownload(this.downloadfile).subscribe(
           (event: any) => {
               if (typeof (event) === 'object') {
-                this.addDownload('keadownload-'+event.originalname);
+                this.addDownload(event.originalname);
                 this.fetchDownloads();
               }
           }
