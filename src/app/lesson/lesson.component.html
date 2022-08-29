@@ -31,6 +31,19 @@
                  <button (click)="updateLesson()" mat-raised-button color="primary">Update</button>
              </div>
          </div>
+         <div *ngSwitchCase="'deleteDownload'" class="row pb-4">
+            <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
+               <h5>Are you indeed want to delete this Download?</h5>
+               <h6 *ngIf="checkItem(calDelDownload)" class="text-info">This is an active download.</h6>
+               <div class="text-right">
+                   <mat-checkbox color="info" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+               </div>
+            </div> 
+            <div class="col-12 pt-3 px-4 text-right border-top">
+                <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
+                <button [disabled]="!delAgree" (click)="deleteDownload(calDelDownload)" mat-raised-button color="danger">Yes, do it!</button>
+            </div>
+        </div>
          <div *ngSwitchCase="'deleteVideo'" class="row pb-4">
             <div class="kb-details-head col-12 pb-2 px-4 pt-4 border-bottom">
                <h5>Are you indeed want to delete this Video?</h5>
@@ -83,7 +96,7 @@
             <button mat-raised-button color="primary">Customize <i class="far fa-edit"></i></button>
         </div>
     </div>
-    <mat-tab-group [selectedIndex]="0">
+    <mat-tab-group [selectedIndex]="3">
         <mat-tab>
             <ng-template mat-tab-label>
                 <mat-icon class="mr-1">sort</mat-icon>
@@ -174,7 +187,7 @@
                 <div id="kbl-audio" class="container-fluid">
                     <div class="kbl-audio-top" class="row p-3 border-bottom">
                         <div class="kbl-summary col-md-6">
-                            <!-- <span>{{audios.length}} Audio{{audios.length != 1 ? 's' : ''}}</span> -->
+                            <span>{{audios.length}} Audio{{audios.length != 1 ? 's' : ''}}</span>
                         </div>
                     </div>
                     <div class="row p-3 border-bottom">
@@ -238,43 +251,63 @@
                         <span>{{downloads.length}} Download{{downloads.length != 1 ? 's' : ''}}</span>
                     </div>
                 </div>
-                <div class="row p-3 border-bottom">
-                    <div class="kbl-summary col-md-12 text-right">
-                        <button *ngIf="lesson.audio" class="mr-3" matTooltip="It will only remove it not delete" matTooltipPosition="above" mat-raised-button color="accent">
-                            <span>Remove active documents <i class="far fa-trash-alt"></i></span>
-                        </button>
-                        <input #audioInp class="kb-d-none" name="audio" type="file" (change)="audioChangeEvent($event)">
-                        <button matTooltip="File suported mp3 only" matTooltipPosition="above" mat-raised-button color="primary" (click)="audioInp.click()">
-                            <span>Upload a new document <i class="fa fa-upload"></i></span>
-                        </button>
-                    </div>
-                </div>
-                <div cdkDropListGroup class="row px-4">
-                    <div class="col-md-6 p-4 border-right">
-                        <h6 class="download-active-title">Active Downloads <span>{{activeDownloads.length}}</span></h6>   
+                <div cdkDropListGroup>
+                    <div class="row p-3 border-bottom">
                         <div
+                        *ngIf="!downloadadding else adding"
                         cdkDropList
                         [cdkDropListData]="activeDownloads"
-                        class="download-active-list download-list"
-                        (cdkDropListDropped)="drop($event)">
-                            <div class="download-box" *ngFor="let item of activeDownloads" cdkDrag>
-                                {{item}}
+                        class="kbl-summary row col-md-6"
+                        (cdkDropListDropped)="dropCopy($event)">
+                            <div class="col-4 p-2" *ngFor="let item of activeDownloads, index as i">
+                                <div class="download-box">
+                                    <span class="pl-3">{{item}}</span>
+                                    <div class="kbl-download-actions">
+                                        <i (click)="removeActiveDownload(i)" class="fa fa-times" matTooltip="Remove" matTooltipPosition="above"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>        
+                            <div class="custom-placeholder" *ngIf="activeDownloads.length == 0">
+                                Drag Here Or Choose
+                            </div>
+                        </div>    
+                        <ng-template #adding>
+                            <div class="kbl-summary col-md-6"> 
+                                    <mat-spinner class="kbl-media-spinner" color="secondary"></mat-spinner>
+                            </div>
+                        </ng-template> 
+                        <div class="kbl-summary col-md-6 text-right">
+                            <button *ngIf="lesson.download" class="mr-3" matTooltip="It will only remove it not delete" matTooltipPosition="above" mat-raised-button color="accent"  (click)="addDownload('')">
+                                <span>Remove active documents <i class="far fa-trash-alt"></i></span>
+                            </button>
+                            <input #downloadInp class="kb-d-none" name="download" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="downloadChangeEvent($event)">
+                            <button matTooltip="File suported documents only" matTooltipPosition="above" mat-raised-button color="primary" (click)="downloadInp.click()">
+                                <span>Upload a new document <i class="fa fa-upload"></i></span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-6 p-4">
-                        <h6 class="download-inactive-title">Inactive Downloads <span>{{downloads.length}}</span></h6>
-                        <div
-                        cdkDropList
-                        [cdkDropListData]="downloads"
-                        class="download-inactive-list download-list"
-                        cdkDropListSortingDisabled
-                        (cdkDropListDropped)="drop($event)">
-                            <div class="download-box" *ngFor="let item of downloads" cdkDrag>
-                                {{item}}
+                    <div
+                    *ngIf="!downloadfetching else fetching"
+                    cdkDropList
+                    [cdkDropListData]="downloads"
+                    class="row p-3"
+                    cdkDropListSortingDisabled>
+                        <div class="col-3 p-2" *ngFor="let item of downloads">
+                            <div *ngIf="checkItem(item)" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
+                            <div class="download-box" cdkDrag [cdkDragDisabled]="checkItem(item)">
+                                <span class="pl-3">{{item}}</span>
+                                <div class="kbl-download-actions">
+                                    <i (click)="addDownload(item)" class="far fa-save" matTooltip="Use Download" matTooltipPosition="above"></i>
+                                    <i (click)="calDelDownload = item; openDialog(lesson, 'deleteDownload');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <ng-template #fetching>
+                        <div class="row p-3 d-flex justify-content-center">
+                            <mat-spinner color="secondary"></mat-spinner>
+                        </div>
+                    </ng-template> 
                 </div>
             </div>
         </ng-template>    
