@@ -24,6 +24,12 @@ export class FileUploadService {
   deleteVideoApi = "./api/deletevideo";
   uploadVideoPath = '/assets/uploads/videos/';
   // video
+  // download
+  uploadDownloadApi = "./api/uploaddownloadfile"
+  alldownloadfilesApi = './api/alldownloadfiles';
+  deleteDownloadApi = "./api/deletedownload";
+  uploadDownloadPath = '/assets/uploads/downloads/';
+// download
   uploadApi = "./api/uploadfile";
   getAllImgsApi = "./api/getallimgs";
   saveOnDBApi = "./api/saveondb";
@@ -115,6 +121,29 @@ export class FileUploadService {
   }
 
   // video
+
+  // download
+
+  uploaddownload(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedDownload', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadDownloadApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  alldownloadfiles() {
+    return this.http.get(this.alldownloadfilesApi);
+  }
+
+  deletedownload(path:any) {
+    return this.http.delete(this.deleteDownloadApi + '/' + path)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // download
 
   // Returns an observable
   upload(file: any):Observable<any> {

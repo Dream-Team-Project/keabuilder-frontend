@@ -10,7 +10,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ReadVarExpr } from '@angular/compiler';
 
 @Component({
@@ -48,10 +48,14 @@ export class LessonComponent implements OnInit {
   audiofetching:boolean = false;
   audiofile:any;
   audios:any = [];
-  downloads = ['Carrots', 'Tomatoes', 'Onions', 'Apples', 'Avocados'];
-  activeDownloads = ['Oranges', 'Bananas', 'Cucumbers'];
+  downloadadding:boolean = false;
+  downloadfetching:boolean = false;
+  downloadfile:any;
+  downloads:any = [];
+  activeDownloads:any = [];
   calDelAudio:any;
   calDelVideo:any;
+  calDelDownload:any;
   medias:any;
   email_body:any = '<p>Your message goes here</p>';
 
@@ -76,6 +80,7 @@ export class LessonComponent implements OnInit {
       this.fetchCourse();
       this.fetchModule();
       this.fetchLesson();
+      this.fetchDownloads();
       this.fetchVideos();
       this.fetchAudios();
       // this.fetchMedias();
@@ -118,24 +123,34 @@ export class LessonComponent implements OnInit {
       this.lesson = res.data[0];
       if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
       if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
+      if(this.lesson.download) this.activeDownloads = this.lesson.download.split(',-,');
       this.overlayRefDetach();
     })
   }
 
-  fetchMedias() {
-    this._wistia.getAllMedia().subscribe(res=>{
-      this.medias = JSON.parse(res.data);
-      this.medias.forEach((item:any)=>{
-        if(item.type == 'Video') {
-          this.videos = [];
-          this.videos.push(item.assets[0]);
-        }
-        else if(item.type == 'Audio') {
-          this.audios = [];
-          this.audios.push(item.assets[0]);
-        }
-      })
-    })
+  // fetchMedias() {
+  //   this._wistia.getAllMedia().subscribe(res=>{
+  //     this.medias = JSON.parse(res.data);
+  //     this.medias.forEach((item:any)=>{
+  //       if(item.type == 'Video') {
+  //         this.videos = [];
+  //         this.videos.push(item.assets[0]);
+  //       }
+  //       else if(item.type == 'Audio') {
+  //         this.audios = [];
+  //         this.audios.push(item.assets[0]);
+  //       }
+  //     })
+  //   })
+  // }
+
+  fetchDownloads() {
+    this.downloadfetching = true;
+    this._file.alldownloadfiles().subscribe((res:any)=>{
+      this.downloads = res.data;
+      console.log(res.data);
+      this.downloadfetching = false;
+    });
   }
 
   fetchVideos() {
@@ -305,45 +320,106 @@ export class LessonComponent implements OnInit {
 
   // audio methods  
 
-    // dialog methods
+  // download methods
 
-    overlayRefDetach() {
-      this.timeStamp = (new Date()).getTime();
-      this.respWaiting = false;
-      this.dragBoxAnime.close = true;
-      setTimeout(()=>{
-        this._overlayRef.detach();
-        this.popask = 'details';
-        this.calDelVideo = '';
-        this.calDelAudio = '';
-        this.delAgree = false;
-        this.resetPostData();
-        this.dragBoxAnime.close = false;
-      },200);
-    }
-  
-    openDialog(post:any, popask:string) {
-      this.popask = popask;
-      this.post = JSON.parse(JSON.stringify(post));
-      if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
-      this.dragBoxAnime.open = true;
-      this._overlayRef.attach(this._portal);
-      setTimeout(()=>{
-        this.dragBoxAnime.open = false;
-      },200)
-    }
-  
-    // dialog methods
+  removeActiveDownload(index:any) {
+    this.activeDownloads.splice(index,1);
+    this.addDownload('remove');
+  }
 
-    getImgPath(thumbnail:string) {
-      var path = this._image.uploadImgPath + thumbnail;
-        if(this.timeStamp) {
-          return path + '?' + this.timeStamp;
+  addDownload(download:any) {
+    if(!this.checkItem(download)) {
+      this.downloadadding = true;
+      if(download) {
+        if(download != 'remove') {
+          this.activeDownloads.push(download);
         }
-        return path;
+      }
+      else {
+        this.activeDownloads = [];
+      }
+      this.lesson.download = this.activeDownloads.join(',-,');
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        var act = download ? 'updated' : 'removed';
+        this.downloadadding = false;
+        this._snackbar.open('Download has been '+act, 'OK');
+        this.fetchLesson();
+      })
     }
+    else {
+      this._snackbar.open('Download has already been added', 'OK');
+    }
+  }
 
-      // image input method
+  deleteDownload(download:any) {
+    this.overlayRefDetach();
+    this._file.deletedownload(download).subscribe(res=>{
+      var index = this.activeDownloads.indexOf(download);
+      if(this.checkItem(download)) this.removeActiveDownload(index);
+      this._snackbar.open('Download has been deleted', 'OK');
+      this.fetchDownloads();
+    });
+  }
+
+  downloadChangeEvent(event: any): void {
+    if(event.target.files && event.target.files[0]) {
+        this.downloadadding = true;
+        this.downloadfile = event.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(this.downloadfile);
+        this._file.uploaddownload(this.downloadfile).subscribe(
+          (event: any) => {
+              if (typeof (event) === 'object') {
+                this.addDownload('keadownload-'+event.originalname);
+                this.fetchDownloads();
+              }
+          }
+      );
+    }
+  }
+
+  // download methods
+
+  // dialog methods
+
+  overlayRefDetach() {
+    this.timeStamp = (new Date()).getTime();
+    this.respWaiting = false;
+    this.dragBoxAnime.close = true;
+    setTimeout(()=>{
+      this._overlayRef.detach();
+      this.popask = 'details';
+      this.calDelVideo = '';
+      this.calDelAudio = '';
+      this.calDelDownload = '';
+      this.delAgree = false;
+      this.resetPostData();
+      this.dragBoxAnime.close = false;
+    },200);
+  }
+
+  openDialog(post:any, popask:string) {
+    this.popask = popask;
+    this.post = JSON.parse(JSON.stringify(post));
+    if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
+    this.dragBoxAnime.open = true;
+    this._overlayRef.attach(this._portal);
+    setTimeout(()=>{
+      this.dragBoxAnime.open = false;
+    },200)
+  }
+
+  // dialog methods
+
+  getImgPath(thumbnail:string) {
+    var path = this._image.uploadImgPath + thumbnail;
+      if(this.timeStamp) {
+        return path + '?' + this.timeStamp;
+      }
+      return path;
+  }
+
+  // image input method
 
   changeImg (event:any) {
     this.file = event.target.files[0];
@@ -362,17 +438,25 @@ export class LessonComponent implements OnInit {
 
   // image input method
 
-  drop(event: CdkDragDrop<string[]>) {
+  dropCopy(event: any) {
+    var data = event.previousContainer.data[event.previousIndex];
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+      if(!this.checkItem(data)) {
+        this.addDownload(data);
+        // copyArrayItem(
+        //   event.previousContainer.data,
+        //   event.container.data,
+        //   event.previousIndex,
+        //   event.container.data.length,
+        // );
+      }
     }
+  }
+
+  checkItem(item:any) {
+    return this.activeDownloads.includes(item);
   }
 
   getUID() {
