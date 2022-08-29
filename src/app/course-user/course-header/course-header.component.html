@@ -2,7 +2,7 @@
     <button mat-button [matMenuTriggerFor]="menu" class="text-uppercase">{{shortname}}</button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/course/dashboard">Dashboard</button>
-        <button mat-menu-item (click)="logoutuser()">Logout</button>
+        <button mat-menu-item (click)="logoutuser()" *ngIf="adminlogged" >Logout</button>
     </mat-menu>
 </div>
 

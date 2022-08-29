@@ -59,6 +59,9 @@ export class NavbarComponent implements OnInit {
 
   logout(): void {
     this.tokenStorage.signOut();
+
+    localStorage.removeItem("kbcourselogin");
+
     this.offcanvasoverlay=false;
     this.router.navigate(['/'],{relativeTo: this.route});
   }

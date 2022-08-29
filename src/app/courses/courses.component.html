@@ -1,55 +1,70 @@
 <div class="container-fluid">
 
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-    
-    <form class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-      <i class="fas fa-times" (click)="closeSidebar()"></i>
-      <h6><b>NEW COURSE STEPS</b></h6>
-      <hr>
-      <mat-form-field #title class="kb-full-width" appearance="fill">
-        <mat-label>Title</mat-label>
-        <input name="title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
-          minlength="3" maxlength="140">
-      </mat-form-field>
 
-      <mat-form-field #description class="kb-full-width" appearance="fill">
-        <mat-label>Description</mat-label>
-        <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
-      </mat-form-field>
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
 
-      <div class="imgFormField p-3 inpfill">
-        <label>Product Thumbnail</label>
-        <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
-          <img class="img-fluid" [src]="thumbnail.path"/>
+      <form *ngIf="firstquickedit" >
+        <i class="fas fa-times" (click)="closeSidebar()"></i>
+        <h6><b>NEW COURSE STEPS</b></h6>
+        <hr>
+        <mat-form-field #title class="kb-full-width" appearance="fill">
+          <mat-label>Title</mat-label>
+          <input name="title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
+            minlength="3" maxlength="140">
+        </mat-form-field>
+
+        <mat-form-field #description class="kb-full-width" appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
+        </mat-form-field>
+
+        <div class="imgFormField p-3 inpfill">
+          <label>Product Thumbnail</label>
+          <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+            <img class="img-fluid" [src]="thumbnail.path"/>
+          </div>
+          <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
+            class="drop-zone__input">
+          <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+          <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
         </div>
-        <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
-          class="drop-zone__input">
-        <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
-        <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Offers</mat-label>
+          <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
+            <mat-select-trigger>
+              {{offers.value ? offers.value[0] : ''}}
+              <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
+                (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()"><i class="far fa-edit"></i>
+          Update Course</button>
+          <ng-template #create>
+            <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
+              Create Course</button>
+          </ng-template>
+      </form>
+
+      <div *ngIf="showpageurl">
+        <h6><b>Copy Course URL</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Course Url</mat-label>
+          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+            <i class="fas fa-copy"></i> Copy Url
+        </button>
       </div>
 
-      <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Offers</mat-label>
-        <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
-          <mat-select-trigger>
-            {{offers.value ? offers.value[0] : ''}}
-            <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
-              (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
-            </span>
-          </mat-select-trigger>
-          <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()"><i class="far fa-edit"></i>
-        Update Course</button>
-        <ng-template #create>
-          <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
-            Create Course</button>
-        </ng-template>
-    </form>
-
-    
+    </div>
 
   </div>
 
@@ -121,7 +136,7 @@
             <button mat-menu-item (click)="duplicateCourse(acourse)">
               <i class="far fa-copy pr-2"></i>Duplicate
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item  (click)="copyurl(acourse.url)" >
               <i class="fas fa-link pr-2"></i>Copy URL
             </button>
             <button mat-menu-item class="text-danger" (click)="deleteCourse(acourse)">

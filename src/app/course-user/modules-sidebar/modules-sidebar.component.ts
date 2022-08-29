@@ -22,10 +22,10 @@ export class CourseUserModulesSidebarComponent implements OnInit {
   course_lessons:any = [];
 
   ngOnInit(): void {
+    
     this.coursename = this.route.snapshot.paramMap.get('name');
     this.courseid = this.route.snapshot.paramMap.get('id');
 
-    
     this._course.singlebyurl(this.coursename).subscribe((res1:any)=>{
 
       this._module.bycourseid(res1.data[0].uniqueid).subscribe((res:any)=>{
@@ -44,9 +44,12 @@ export class CourseUserModulesSidebarComponent implements OnInit {
         // console.log(this.course_modules);
 
       });
+
     });
 
-
   }
+
+
+
 
 }

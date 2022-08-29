@@ -12,6 +12,7 @@ export class CourseUserCourseHeaderComponent implements OnInit {
                private route: ActivatedRoute,) { }
 
   shortname = 'User';
+  adminlogged = true;
 
   ngOnInit(): void {
 
@@ -21,6 +22,13 @@ export class CourseUserCourseHeaderComponent implements OnInit {
       if(cnvrtobj.username!=''){
         this.shortname = cnvrtobj.username;
       }
+      console.log(cnvrtobj.courseassign);
+      if(cnvrtobj.courseassign=='all'){ 
+          this.adminlogged = false;
+      }else{
+        this.adminlogged = true;
+      }
+
     }
 
   }

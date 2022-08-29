@@ -27,13 +27,22 @@ export class CourseUserDashboardComponent implements OnInit {
       this.userselectedcourse = cnvrtobj.courseassign;
     }
 
-    var sendobj = {data:this.userselectedcourse};
-    this._course.multiple(sendobj).subscribe((res:any)=>{
-      // console.log(res);
-      res.data.forEach((element:any) => {
+    if(this.userselectedcourse!='all'){
+      var sendobj = {data:this.userselectedcourse};
+      this._course.multiple(sendobj).subscribe((res:any)=>{
+        // console.log(res);
+        res.data.forEach((element:any) => {
           this.allcourses.push(element);
-      });
-    }); 
+        });
+      }); 
+    }else if(this.userselectedcourse=='all'){
+      this._course.all().subscribe((res:any)=>{
+        // console.log(res);
+        res.data.forEach((element:any) => {
+          this.allcourses.push(element);
+        });
+      }); 
+    }
 
   }
 

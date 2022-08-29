@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    
+
     const { username, password } = this.form;
     if(this.userFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
       this.authService.login(username, password).subscribe({
@@ -54,6 +54,10 @@ export class LoginComponent implements OnInit {
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
+
+          var loginobj:any = {isloggedIn:true, courseassign:'all', username:'admin'};
+          localStorage.setItem("kbcourselogin", JSON.stringify(loginobj));
+
           this.redirectToDashboard();
         },
         error: err => {

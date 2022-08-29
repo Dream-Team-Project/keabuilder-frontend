@@ -31,10 +31,16 @@ export class CoursesComponent implements OnInit {
   timeStamp:any;
   prevTitle:string = '';
 
+  showpageurl = false;
+  pageurl = '';
+  firstquickedit = true;
+
+
   constructor(private _course: CourseService,
              public _image: ImageService, 
              private _snackbar: MatSnackBar,  
-             private _file: FileUploadService) { }
+             private _file: FileUploadService,
+             private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     this._course.getalloffers().subscribe({
@@ -151,6 +157,8 @@ export class CoursesComponent implements OnInit {
     if(this.course.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
     this.update = true;
     this.openSidebar();
+    this.showpageurl = false;
+    this.firstquickedit = true;
   }
 
   compareImgRepeat(imgR1:any, imgR2:any) {
@@ -181,6 +189,20 @@ export class CoursesComponent implements OnInit {
     }else{
       return '';
     }
+  }
+
+  copyInputMessage(inputElement:any){
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+    this._snackBar.open('Successfully Copied!', 'OK');
+  }
+
+  copyurl(url:any){
+    this.pageurl = url;
+    this.openSidebar();
+    this.showpageurl = true;
+    this.firstquickedit = false;
   }
 
 
