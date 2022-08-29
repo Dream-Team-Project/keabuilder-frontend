@@ -39,7 +39,7 @@ export class CoursesComponent implements OnInit {
   ngOnInit(): void {
     this._course.getalloffers().subscribe({
       next: data => {
-
+        // console.log(data);
        data.data.forEach((element: any) => {
           this.offersList.push(element.title);
        });
@@ -59,6 +59,7 @@ export class CoursesComponent implements OnInit {
 
   allCourses(reset:boolean) {
     this._course.all().subscribe((res:any)=>{
+      console.log(res.data);
       this.allcoursesarr = res.data;
       if(reset) this.closeSidebar();
     }); 

@@ -11,7 +11,7 @@
         </mat-progress-bar>
     </div>
 
-    <div class="kb-categoryprogerss">
+    <div class="kb-categoryprogerss" *ngIf="showcategory" >
         <h6 class="mb-5">Category Progress: {{totalstart}}/{{totalprogress}} Lessons Complete</h6>
 
         <div class="kb-modulesection mt-4" *ngFor="let modulepart of moduleparts;">
@@ -32,9 +32,10 @@
             </a>
         </div>
 
-       
+    </div>
 
-
+    <div class="kb-coursepost" *ngIf="!showcategory">
+        <app-course-user-modules-post></app-course-user-modules-post>
     </div>
 
 </div>

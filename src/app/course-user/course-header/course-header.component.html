@@ -1,0 +1,11 @@
+<div class="kb-courseuserprofile">
+    <button mat-button [matMenuTriggerFor]="menu" class="text-uppercase">{{shortname}}</button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/course/dashboard">Dashboard</button>
+        <button mat-menu-item (click)="logoutuser()">Logout</button>
+    </mat-menu>
+</div>
+
+<div class="container-fluid section1"
+style="background-image: url('https://img.freepik.com/free-vector/blue-technology-digital-banner-design_1017-32257.jpg?w=2000');">
+</div>

@@ -38,9 +38,10 @@ export class CourseUserModulesSidebarComponent implements OnInit {
           
           this.course_lessons = res2.data;
             // console.log(res2)
+            // console.log(this.course_lessons);
         });
 
-        console.log(this.course_modules);
+        // console.log(this.course_modules);
 
       });
     });

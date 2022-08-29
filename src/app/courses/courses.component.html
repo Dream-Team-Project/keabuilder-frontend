@@ -1,6 +1,7 @@
 <div class="container-fluid">
 
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+    
     <form class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
       <i class="fas fa-times" (click)="closeSidebar()"></i>
       <h6><b>NEW COURSE STEPS</b></h6>
@@ -46,9 +47,13 @@
           <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
             Create Course</button>
         </ng-template>
-      </form>
+    </form>
+
+    
+
   </div>
-  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+
+  <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
 
   <div class="row">
     <div class="col-md-12 mb-4 text-right">
@@ -99,7 +104,7 @@
           <p class="kb-pagedate"><span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
                 class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{modifydate(acourse.updated_at)}}</p>
 
-          <button mat-raised-button color="accent" class="mr-2">Preview <i class="far fa-eye"></i></button>
+          <a mat-raised-button color="accent" class="mr-2" [href]="'/course/'+acourse.url" target="_blank" >Preview <i class="far fa-eye"></i></a>
           <button mat-raised-button color="primary" [routerLink]="'./course/'+acourse.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>
 
           <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu2" matTooltip="Settings"

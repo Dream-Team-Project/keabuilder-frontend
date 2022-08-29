@@ -20,6 +20,12 @@ export class CourseUserCoursesComponent implements OnInit {
     courseid:any = '';
 
   ngOnInit(): void {
+
+    var courselogincheck:any = localStorage.getItem("kbcourselogin");
+    if(courselogincheck==null){
+      this.router.navigate(['/course/login'],{relativeTo: this.route});
+    }
+    
     this.coursename = this.route.snapshot.paramMap.get('name');
     this._course.singlebyurl(this.coursename).subscribe((res:any)=>{
       // console.log(res);

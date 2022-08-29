@@ -16,6 +16,7 @@ export class LessonService {
   createApi = './api/createlesson';
   updateApi = './api/updatelesson';
   deleteApi = './api/deletelesson';
+  findnextApi = './api/findlesson';
 
   constructor(private http:HttpClient) {   }
 
@@ -68,7 +69,10 @@ export class LessonService {
 
   decodeContent(blob:any) {
     return atob(blob);
+  }
 
+  findnextprevlesson(req:any):Observable<any> {
+    return this.http.post(this.findnextApi,req);
   }
 
 }

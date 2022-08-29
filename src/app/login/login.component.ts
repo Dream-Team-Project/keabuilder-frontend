@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    
     const { username, password } = this.form;
     if(this.userFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
       this.authService.login(username, password).subscribe({
