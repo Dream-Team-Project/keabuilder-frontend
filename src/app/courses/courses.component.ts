@@ -5,6 +5,7 @@ import { ImageService } from '../_services/image.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup } from '@angular/forms';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-courses',
@@ -23,7 +24,7 @@ export class CoursesComponent implements OnInit {
   file = null;
   typeerror = '';
   offers = new FormControl();
-  offersList: string[] = [];
+  offersList: any[] = [];
   thumbnail:any;
   offersToAdd:Array<string> = [];
   course:any;
@@ -34,20 +35,23 @@ export class CoursesComponent implements OnInit {
   showpageurl = false;
   pageurl = '';
   firstquickedit = true;
+  editshowurl = false;
 
 
   constructor(private _course: CourseService,
              public _image: ImageService, 
              private _snackbar: MatSnackBar,  
              private _file: FileUploadService,
-             private _snackBar: MatSnackBar,) { }
+             private _snackBar: MatSnackBar,
+             public _general: GeneralService,) { }
 
   ngOnInit(): void {
     this._course.getalloffers().subscribe({
       next: data => {
         // console.log(data);
        data.data.forEach((element: any) => {
-          this.offersList.push(element.title);
+          var genobj = {id:element.uniqueid,text:element.title};
+          this.offersList.push(genobj);
        });
 
       }
@@ -57,7 +61,7 @@ export class CoursesComponent implements OnInit {
   }
 
   resetCourseData() {
-    this.course = {uniqueid: '', title: '', description: '', thumbnail: '', offers: ''};
+    this.course = {uniqueid: '', title: '', url:'', description: '', thumbnail: '', offers: ''};
     this.offersToAdd = [];
     this.thumbnail = {name: '', path: '', type: ''};
     this.update = false;
@@ -92,16 +96,20 @@ export class CoursesComponent implements OnInit {
   }
 
   createCourse() {
-    this.course.uniqueid = Math.random().toString(20).slice(2);
-    if(this.thumbnail.type) {
-      this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
-      this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
-      this.course.offers = this.offersToAdd.join(',');
+
+    if(this.course.title!=''){
+      this.course.uniqueid = Math.random().toString(20).slice(2);
+      if(this.thumbnail.type) {
+        this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+        this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+        this.course.offers = this.offersToAdd.join(',');
+      }
+      this._course.create(this.course).subscribe((res:any)=>{
+        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
+        this.allCourses(true);
+      })
     }
-    this._course.create(this.course).subscribe((res:any)=>{
-      if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
-      this.allCourses(true);
-    })
+
   }
 
   updateCourse() {
@@ -111,6 +119,7 @@ export class CoursesComponent implements OnInit {
     }
     this.course.offers = this.offersToAdd.join(',');
     this._course.update(this.course).subscribe((res:any)=>{
+      // console.log(res);
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
       this.timeStamp = (new Date()).getTime();
       this.allCourses(true);
@@ -144,6 +153,7 @@ export class CoursesComponent implements OnInit {
   }
 
   openSidebar(){
+    this.editshowurl = false;
     this.sidebar.open = true;
     this.sidebar.anim.open = true;
     setTimeout((e:any)=>{
@@ -159,6 +169,8 @@ export class CoursesComponent implements OnInit {
     this.openSidebar();
     this.showpageurl = false;
     this.firstquickedit = true;
+    this.editshowurl = true;
+
   }
 
   compareImgRepeat(imgR1:any, imgR2:any) {

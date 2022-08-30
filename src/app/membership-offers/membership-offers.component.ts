@@ -77,6 +77,8 @@ export class MembershipOffersComponent implements OnInit {
             var genobj = {id:element.uniqueid,text:element.title};
             this.productoptionalList.push(genobj);
         });
+        // console.log(this.productoptionalList);
+
       }
 
     });
@@ -150,6 +152,8 @@ export class MembershipOffersComponent implements OnInit {
         horizontalAlign: "left"
       }
     };
+
+
   }
 
   getallmyoffers(){
@@ -167,11 +171,13 @@ export class MembershipOffersComponent implements OnInit {
 
     // console.log(data);
     data.data.forEach((element:any) => {
-      // console.log(element.selected_course);
+      // console.log(element);
+
       var shortcourse = '0';
       if(element.selected_course!=''){
         shortcourse = (element.selected_course).split(',').length;
       }
+
       var newobj:any = {id:element.id, offer_name:element.title, offer_url:'', course_assign:shortcourse, offer_price:element.price, qty_sold:0, net_revenue:0, publish_status:element.publish_status, itemshow:false, dropdownstatus:false,currency:element.currency};
       this.kbcourses.push(newobj);
     });
@@ -376,7 +382,7 @@ export class MembershipOffersComponent implements OnInit {
 
     this.courseService.updatedeloffer(data).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.getallmyoffers();
         this._snackBar.open('Offer Updated Successfully!', 'Close');
       }
