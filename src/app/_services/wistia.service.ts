@@ -16,8 +16,8 @@ export class WistiaService {
 
   constructor(private http:HttpClient) { } 
 
-  getAllMedia(): Observable<any> {
-    return this.http.get(this.allMediaApi);
+  getAllMedia(project_id:string): Observable<any> {
+    return this.http.get(this.allMediaApi + '/' + project_id);
   }
 
   uploadMedia(file:any): Observable<any> {
