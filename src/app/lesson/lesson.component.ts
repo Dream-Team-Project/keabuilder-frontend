@@ -11,7 +11,6 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDrag, CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ReadVarExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-lesson',
@@ -28,6 +27,7 @@ export class LessonComponent implements OnInit {
 
   dragBoxAnime:any = {open: false, close: false};
 
+  wistia_project_id:string = '';
   course:any = {};
   module:any = {};
   lesson:any = {};
@@ -41,11 +41,10 @@ export class LessonComponent implements OnInit {
   file = null;
   typeerror:string = '';
   videoadding:boolean = false;
-  videofetching:boolean = false;
+  mediafetching:boolean = false;
   videofile:any;
   videos:any = [];
   audioadding:boolean = false;
-  audiofetching:boolean = false;
   audiofile:any;
   audios:any = [];
   downloadadding:boolean = false;
@@ -73,6 +72,10 @@ export class LessonComponent implements OnInit {
     public _wistia: WistiaService,
     public _general: GeneralService,
   ) {
+    _general.authService.getActiveUser(_general.tokenStorageService.getUser().id).subscribe((res:any)=>{
+      this.wistia_project_id = res.data[0].wistia_project_id;
+      this.fetchMedias();
+    });
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
       this.module.uniqueid = params.get('module_id');
@@ -81,9 +84,8 @@ export class LessonComponent implements OnInit {
       this.fetchModule();
       this.fetchLesson();
       this.fetchDownloads();
-      this.fetchVideos();
-      this.fetchAudios();
-      // this.fetchMedias();
+      // this.fetchVideos();
+      // this.fetchAudios();
       this.resetPostData();
     })
    }
@@ -128,44 +130,45 @@ export class LessonComponent implements OnInit {
     })
   }
 
-  // fetchMedias() {
-  //   this._wistia.getAllMedia().subscribe(res=>{
-  //     this.medias = JSON.parse(res.data);
-  //     this.medias.forEach((item:any)=>{
-  //       if(item.type == 'Video') {
-  //         this.videos = [];
-  //         this.videos.push(item.assets[0]);
-  //       }
-  //       else if(item.type == 'Audio') {
-  //         this.audios = [];
-  //         this.audios.push(item.assets[0]);
-  //       }
-  //     })
-  //   })
-  // }
+  fetchMedias() {
+    this.mediafetching = true;
+    this._wistia.getAllMedia(this.wistia_project_id).subscribe(res=>{
+      this.medias = JSON.parse(res.data);
+      this.videos = [];
+      this.audios = [];
+      this.medias.forEach((item:any)=>{
+        if(item.type == 'Video') {
+          this.videos.push(item.assets[0]);
+        }
+        else if(item.type == 'Audio') {
+          this.audios.push(item.assets[0]);
+        }
+      })
+      this.mediafetching = false;
+    })
+  }
 
   fetchDownloads() {
     this.downloadfetching = true;
     this._file.alldownloadfiles().subscribe((res:any)=>{
       this.downloads = res.data;
-      console.log(res.data);
       this.downloadfetching = false;
     });
   }
 
   fetchVideos() {
-    this.videofetching = true;
+    this.mediafetching = true;
     this._file.allvideofiles().subscribe((res:any)=>{
       this.videos = res.data;
-      this.videofetching = false;
+      this.mediafetching = false;
     });
   }
 
   fetchAudios() {
-    this.audiofetching = true;
+    this.mediafetching = true;
     this._file.allaudiofiles().subscribe((res:any)=>{
       this.audios = res.data;
-      this.audiofetching = false;
+      this.mediafetching = false;
     });
   }
 

@@ -48,5 +48,8 @@ export class AuthService {
     }, httpOptions);
   }
 
+  getActiveUser(id:number): Observable<any>{
+    return this.http.get('/api/getuser/'+id);
+  }
 
 }

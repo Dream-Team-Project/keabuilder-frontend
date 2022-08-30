@@ -4,6 +4,7 @@ import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
 import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
+import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -98,15 +99,14 @@ export class GeneralService {
   saveDisabled:boolean = false;
   pathError = false;
 
-  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, private tokenStorageService: TokenStorageService, public webPageService: WebpagesService) {
+  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService) {
     this.username = this.tokenStorageService.getUser().username;
-    this.username = 'Abhi';
     this.main.author = this.username;
     this.subdomain = 'https://'+this.joinWthDash(this.username);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
   }
-
+  
   getWebPageDetails(uniqueid:any) {
     return new Promise<any>((resolve, reject) => {
       this.webpage.uniqueid = uniqueid;
