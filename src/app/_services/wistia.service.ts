@@ -11,6 +11,7 @@ export class WistiaService {
 
   allMediaApi = '/api/allmedia';
   uploadMediaApi = '/api/uploadmedia';
+  projectCreateApi = '/api/projectcreate';
 
   constructor(private http:HttpClient) { } 
 
@@ -20,6 +21,10 @@ export class WistiaService {
 
   uploadMedia(file:any): Observable<any> {
     return this.http.post(this.uploadMediaApi, file);
+  }
+
+  projectCreate(req:any): Observable<any> {
+    return this.http.post(this.projectCreateApi, req)
   }
 
 }
