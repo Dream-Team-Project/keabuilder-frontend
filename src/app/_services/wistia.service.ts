@@ -25,10 +25,12 @@ export class WistiaService {
   }
 
   projectCreate(req:any): Observable<any> {
+    // project create - request: {project_name: username}
     return this.http.post(this.projectCreateApi, req)
   }
 
   projectUpdate(req:any): Observable<any> {
+    // project update - request: {project_id: wistia_project_id, project_name: new_username}
     return this.http.post(this.projectUpdateApi, req)
   }
 
