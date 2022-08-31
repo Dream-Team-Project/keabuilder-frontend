@@ -35,7 +35,7 @@
           <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
         </div>
 
-        <mat-form-field class="kb-full-width" appearance="fill">
+        <!-- <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Offers</mat-label>
           <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
             <mat-select-trigger>
@@ -46,16 +46,41 @@
             </mat-select-trigger>
             <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
           </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field class="kb-full-width" appearance="fill" >
+          <mat-label>Offers</mat-label>
+          <mat-select [formControl]="offers" multiple (selectionChange)="changeselectcourse($event.value)">
+            <mat-select-trigger>
+              <span *ngFor="let offer of offersList" >
+                <span *ngIf="offer['id'] == offers.value">
+                  {{offer['text']}}
+                </span>
+              </span>
+
+              <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
+                (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let offer of offersList" [value]="offer['id']">{{offer['text']}}</mat-option>
+          </mat-select>
         </mat-form-field>
-        
+
+        <p *ngIf="selectedcourse && showmyselected.length!=0">
+          Selected Course: 
+            <span *ngFor="let showquickoff of showquickoffer;" class="showsomediff" >
+                {{showquickoff}}
+            </span>
+        </p>
 
         <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()">
           <i class="far fa-edit"></i> Update Course
         </button>
 
         <ng-template #create>
-          <button mat-raised-button color="primary" (click)="createCourse()"><i class="fas fa-plus"></i>
-            Create Course</button>
+          <button mat-raised-button color="primary" (click)="createCourse()">
+            <i class="fas fa-plus"></i>Create Course
+          </button>
         </ng-template>
       </form>
 
@@ -124,8 +149,11 @@
             <span>{{acourse.title}}</span>
             <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)" (click)="prevTitle = acourse.title">
           </div>
-          <p class="kb-pagedate"><span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
-                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; <i class="fa fa-calendar" aria-hidden="true"></i> {{modifydate(acourse.updated_at)}}</p>
+          <p class="kb-pagedate">
+            <span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
+                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; 
+                <span [matTooltip]="'Last Updated At '+modifydate(acourse.updated_at)" matTooltipPosition="above"><i class="fa fa-calendar" aria-hidden="true"></i> {{modifydate(acourse.updated_at)}}</span>
+            </p>
 
           <a mat-raised-button color="accent" class="mr-2" [href]="'/course/'+acourse.url" target="_blank" >Preview <i class="far fa-eye"></i></a>
           <button mat-raised-button color="primary" [routerLink]="'./course/'+acourse.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>

@@ -367,4 +367,11 @@
     overflow-y: scroll;
 }
 
-
+.showsomediff {
+    background: #d8c898;
+    color: #fff;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+    line-height: 40px;
+  }
