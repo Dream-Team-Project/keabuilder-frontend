@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import {FormControl, Validators} from '@angular/forms';
+import { WistiaService } from '../_services/wistia.service';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private _wistia: WistiaService) { }
 
   ngOnInit(): void {
     this.createNewImg();
@@ -40,6 +42,25 @@ export class RegisterComponent implements OnInit {
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
         this.authService.register(username, email, password).subscribe({
           next: data => {
+            console.log(data);
+
+           var userobject = {project_name: username};
+            this._wistia.projectCreate(userobject).subscribe({
+              next: data2 => {
+                console.log(data2);
+
+                var wistiaid = JSON.parse(data2.data);
+                this.authService.onupdateprojectid(data.id, wistiaid.hashedId).subscribe({
+                  next: data3 => {
+                    console.log(data3);
+                  }
+                });
+
+              }
+            });
+            
+
+
             this.isSuccessful = true;
             this.isSignUpFailed = false;
             this.redirectToDashboard();

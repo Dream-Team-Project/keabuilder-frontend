@@ -52,4 +52,12 @@ export class AuthService {
     return this.http.get('/api/getuser/'+id);
   }
 
+  onupdateprojectid(id: string, wistiaid: string): Observable<any>{
+    return this.http.post(this.AUTH_API + 'wistiaprojectidupdate', {
+      id,
+      wistiaid
+    }, httpOptions);
+  }
+
+
 }

@@ -36,6 +36,9 @@ export class CoursesComponent implements OnInit {
   pageurl = '';
   firstquickedit = true;
   editshowurl = false;
+  selectedcourse = false;
+  showmyselected = [];
+  showquickoffer:any = [];
 
 
   constructor(private _course: CourseService,
@@ -48,10 +51,14 @@ export class CoursesComponent implements OnInit {
   ngOnInit(): void {
     this._course.getalloffers().subscribe({
       next: data => {
+
         // console.log(data);
+        // console.log('--data');  
+
        data.data.forEach((element: any) => {
           var genobj = {id:element.uniqueid,text:element.title};
           this.offersList.push(genobj);
+          // console.log(this.offersList);
        });
 
       }
@@ -70,9 +77,16 @@ export class CoursesComponent implements OnInit {
   allCourses(reset:boolean) {
     this._course.all().subscribe((res:any)=>{
       console.log(res.data);
+      res.data.forEach((element:any) => {
+          element.members = 0;
+      });
       this.allcoursesarr = res.data;
       if(reset) this.closeSidebar();
     }); 
+  }
+
+  changeselectcourse(event:any){
+      this.selectedcourse = false;
   }
 
   duplicateCourse(course:any) {
@@ -102,8 +116,9 @@ export class CoursesComponent implements OnInit {
       if(this.thumbnail.type) {
         this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
         this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
-        this.course.offers = this.offersToAdd.join(',');
+        // this.course.offers = this.offersToAdd.join(',');
       }
+      this.course.offers = this.offers.value.join(',');
       this._course.create(this.course).subscribe((res:any)=>{
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
         this.allCourses(true);
@@ -113,17 +128,40 @@ export class CoursesComponent implements OnInit {
   }
 
   updateCourse() {
+
     if(this.thumbnail.type) {
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
     }
-    this.course.offers = this.offersToAdd.join(',');
+
+    console.log(this.course.offers);
+
+    if(this.offers.value!=null){
+      // this.course.offers = this.offersToAdd.join(',');
+      this.course.offers = this.offers.value.join(',');
+    }
+
+    // console.log(this.course);
     this._course.update(this.course).subscribe((res:any)=>{
       // console.log(res);
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
       this.timeStamp = (new Date()).getTime();
       this.allCourses(true);
     })
+
+  }
+
+  findselectedproduct(){
+    this.showquickoffer = [];
+    if(this.showmyselected.length!=0){
+      this.offersList.forEach(element => {
+        this.showmyselected.forEach(element2 => {
+          if(element.id==element2){
+            this.showquickoffer.push(element.text);
+          }
+        });
+      });
+    }
   }
 
   deleteCourse(course:any) {
@@ -144,6 +182,11 @@ export class CoursesComponent implements OnInit {
   }
 
   closeSidebar(){
+    this.selectedcourse = false;
+    this.showmyselected  = [];
+    var arselmult:any = [];
+    this.offers.setValue(arselmult); 
+
     this.sidebar.anim.close = true;
     setTimeout((e:any)=>{
       this.sidebar.anim.close = false;
@@ -163,14 +206,17 @@ export class CoursesComponent implements OnInit {
 
   editDetails(course:any) {
     this.course = JSON.parse(JSON.stringify(course));
-    this.offersToAdd = this.course.offers.split(',');
+    // this.offersToAdd = this.course.offers.split(',');
+    this.selectedcourse = true;
+    this.showmyselected = course.offers.split(',');
+    this.findselectedproduct();
+    // console.log(course);
     if(this.course.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
     this.update = true;
     this.openSidebar();
     this.showpageurl = false;
     this.firstquickedit = true;
     this.editshowurl = true;
-
   }
 
   compareImgRepeat(imgR1:any, imgR2:any) {
