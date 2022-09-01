@@ -15,6 +15,26 @@
     transform: scale(1);
 }
 
+.kbl-media-name:hover span, .kbl-media-name input {
+    display: none;
+}
+
+.kbl-media-name:hover input, .kbl-media-name span {
+    display: block;
+}
+
+.kbl-media-name {
+    background: var(--kb-gray);
+    padding: 8px;
+}
+
+.kbl-media-name span{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 24px;
+}
+
 .kbl-media-list {
     display: flex;
     flex-wrap: wrap;
@@ -23,6 +43,7 @@
 
 .kbl-media-list>div{
     display: flex;
+    flex-direction: column;
     position: relative;
 }
 
@@ -124,7 +145,6 @@
 
   .download-box span{
     display: block;
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
