@@ -34,27 +34,31 @@
         <div *ngSwitchCase="'deleteDocument'" class="row py-4">
             <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
                 <h5>Are you indeed want to delete this Document?</h5>
-                <h6 *ngIf="checkItem(delDocument)" class="text-info">This is an active document.</h6>
-                <div class="text-right">
-                    <mat-checkbox color="info" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+                <div *ngIf="checkItem(delDocument)">
+                    <h6 class="text-info">This is an active document.</h6>
+                    <div class="text-right">
+                        <mat-checkbox color="info" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+                    </div>
                 </div>
             </div> 
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
-                <button [disabled]="!delAgree" (click)="deleteDocument(delDocument)" mat-raised-button color="danger">Yes, do it!</button>
+                <button [disabled]="!delAgree && checkItem(delDocument)" (click)="deleteDocument(delDocument)" mat-raised-button color="danger">Yes, do it!</button>
             </div>
         </div>
         <div *ngSwitchCase="'deleteMedia'" class="row py-4">
             <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
                 <h5>Are you indeed want to delete this {{delMedia.type}}?</h5>
-                <h6 *ngIf="lesson.video == delMedia.url || lesson.audio == delMedia.url" class="text-info">This is an active {{delMedia.type}}.</h6>
-                <div class="text-right">
-                    <mat-checkbox color="info" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+                <div *ngIf="lesson.video == delMedia.url || lesson.audio == delMedia.url">
+                    <h6 class="text-info">This is an active {{delMedia.type}}.</h6>
+                    <div class="text-right">
+                        <mat-checkbox color="info" [(ngModel)]="delAgree">Agree!</mat-checkbox>
+                    </div>
                 </div>
             </div> 
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Ofcourse, Not</button>
-                <button [disabled]="!delAgree" (click)="deleteMedia(delMedia)" mat-raised-button color="danger">Yes, do it!</button>
+                <button [disabled]="!delAgree && (lesson.video == delMedia.url || lesson.audio == delMedia.url)" (click)="deleteMedia(delMedia)" mat-raised-button color="danger">Yes, do it!</button>
             </div>
         </div>
         <div *ngSwitchCase="'uploadVideo'" class="row py-4">
@@ -161,7 +165,7 @@
             <button mat-raised-button color="primary">Customize <i class="far fa-edit"></i></button>
         </div>
     </div>
-    <mat-tab-group [selectedIndex]="3">
+    <mat-tab-group>
         <mat-tab>
             <ng-template mat-tab-label>
                 <mat-icon class="mr-1">sort</mat-icon>
@@ -223,16 +227,18 @@
                         <div class="col-12 p-0 kbl-media-list" *ngIf="!mediafetching else fetching">
                             <div class="col-lg-3 col-md-6 py-2" *ngFor="let video of videos">
                                 <div *ngIf="video.url == lesson.video" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
-                                <div class="kbl-media-actions">
-                                    <i (click)="addVideo(video.url)" class="far fa-save" matTooltip="Use Video" matTooltipPosition="above"></i>|
-                                    <i (click)="delMedia = video; openDialog(lesson, 'deleteMedia');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
-                                </div>
                                 <video class="rounded-top" width="100%" controls>
                                     <source [src]="video.url" type="video/mp4">
                                 </video>
-                                <div class="kbl-media-name rounded-bottom" [matTooltip]="video.name" matTooltipPosition="above">
-                                    <input (blur)="updateMedia(video)" (click)="prevMediaName = video.name" type="text" [(ngModel)]="video.name" class="w-100 border-0 bg-none pl-2 py-0 rounded bg-secondary text-light">
-                                    <span>{{video.name}}</span>
+                                <div class="kbl-media-box rounded-bottom">
+                                    <div class="kbl-media-name" [matTooltip]="video.name" matTooltipPosition="above">
+                                        <input (blur)="updateMedia(video)" (click)="prevMediaName = video.name" type="text" [(ngModel)]="video.name" class="w-100 border-0 bg-none pl-2 py-0 rounded bg-secondary text-light">
+                                        <span>{{video.name}}</span>
+                                    </div>
+                                    <div class="kbl-media-actions">
+                                        <i (click)="addVideo(video.url)" class="far fa-save" matTooltip="Use Video" matTooltipPosition="above"></i>|
+                                        <i (click)="delMedia = video; openDialog(lesson, 'deleteMedia');" class="far fa-trash-alt" matTooltip="Delete Video" matTooltipPosition="above"></i>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="videos.length == 0" class="w-100 text-center justify-content-center">Uploaded videos will be shown here</div>
@@ -289,16 +295,18 @@
                         <div class="col-12 p-0 kbl-media-list" *ngIf="!mediafetching else fetching">
                             <div class="col-lg-3 col-md-6 py-2" *ngFor="let audio of audios">
                                 <div *ngIf="audio.url == lesson.audio" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
-                                <div class="kbl-media-actions">
-                                    <i (click)="addAudio(audio.url)" class="far fa-save" matTooltip="Use Audio" matTooltipPosition="above"></i>|
-                                    <i (click)="delMedia = audio;  openDialog(lesson, 'deleteMedia');" class="far fa-trash-alt" matTooltip="Delete Audio" matTooltipPosition="above"></i>
-                                </div>
                                 <audio class="kbl-media-name rounded-top w-100" controls>
                                     <source [src]="audio.url" type="audio/mp3">
                                 </audio>
-                                <div class="kbl-media-name rounded-bottom border-top" [matTooltip]="audio.name" matTooltipPosition="above">
-                                    <input (blur)="updateMedia(audio)" (click)="prevMediaName = audio.name" type="text" [(ngModel)]="audio.name" class="w-100 border-0 bg-none pl-2 py-0 rounded bg-secondary text-light">
-                                    <span>{{audio.name}}</span>
+                                <div class="kbl-media-box rounded-bottom border-top">
+                                    <div class="kbl-media-name" [matTooltip]="audio.name" matTooltipPosition="above">
+                                        <input (blur)="updateMedia(audio)" (click)="prevMediaName = audio.name" type="text" [(ngModel)]="audio.name" class="w-100 border-0 bg-none pl-2 py-0 rounded bg-secondary text-light">
+                                        <span>{{audio.name}}</span>
+                                    </div>
+                                    <div class="kbl-media-actions">
+                                        <i (click)="addAudio(audio.url)" class="far fa-save" matTooltip="Use Audio" matTooltipPosition="above"></i>|
+                                        <i (click)="delMedia = audio;  openDialog(lesson, 'deleteMedia');" class="far fa-trash-alt" matTooltip="Delete Audio" matTooltipPosition="above"></i>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="audios.length == 0" class="w-100 text-center justify-content-center">Uploaded audios will be shown here</div>
@@ -323,56 +331,59 @@
             <div id="kbl-downloads" class="container-fluid">
                 <div class="kbl-downloads-top" class="row p-3 border-bottom">
                     <div class="kbl-summary col-md-6">
-                        <span>{{documents.length}} Document {{documents.length != 1 ? 's' : ''}}</span>
+                        <span>{{documents.length}} Document{{documents.length != 1 ? 's' : ''}} <span class="px-2">|</span> {{usedDocuments.length}} Active Download{{usedDocuments.length != 1 ? 's' : ''}}</span>
                     </div>
                 </div>
-                <div cdkDropListGroup>
-                    <div class="row p-3 border-bottom">
-                        <div
-                        *ngIf="!documentadding else adding"
-                        cdkDropList
-                        [cdkDropListData]="usedDocuments"
-                        class="kbl-summary row col-md-6"
-                        (cdkDropListDropped)="dropCopy($event)">
-                            <div class="col-4 p-2" *ngFor="let item of usedDocuments, index as i">
-                                <div class="download-box">
-                                    <span class="pl-3">{{item}}</span>
-                                    <div class="kbl-download-actions">
-                                        <i (click)="removeUsedDocument(i)" class="fa fa-times" matTooltip="Remove" matTooltipPosition="above"></i>
-                                    </div>
+                <div class="row p-3 border-bottom">
+                    <div
+                    [sortablejs]="usedDocuments"
+                    [sortablejsOptions]="documentSortOptions"
+                    class="kbl-summary row col-md-6">
+                        <div class="col-6 p-2" *ngFor="let item of usedDocuments, index as i">
+                            <div class="kbl-media-box rounded">
+                                <div class="kbl-media-actions kb-doc-handle">
+                                    <i class="fa fa-arrows-alt"></i>
+                                </div>
+                                <div class="kbl-media-name" [matTooltip]="item.name+item.ext" matTooltipPosition="above">
+                                    {{item.name+item.ext}}
+                                </div>
+                                <div class="kbl-media-actions">
+                                    <i (click)="removeUsedDocument(i)" class="fa fa-times" matTooltip="Remove" matTooltipPosition="above"></i>
                                 </div>
                             </div>
-                            <div class="custom-placeholder" *ngIf="usedDocuments.length == 0">
-                                Drag Here Or Choose
-                            </div>
-                        </div>    
-                        <ng-template #adding>
-                            <div class="kbl-summary col-md-6"> 
-                                    <mat-spinner class="kbl-media-spinner" color="secondary"></mat-spinner>
-                            </div>
-                        </ng-template> 
-                        <div class="kbl-summary col-md-6 text-right">
-                            <button *ngIf="lesson.download" class="mr-3" mat-raised-button color="accent" (click)="addDocument('')">
-                                <span>Remove active documents <i class="fa fa-times"></i></span>
-                            </button>
-                            <input #downloadInp class="kb-d-none" name="download" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="documentChangeEvent($event)">
-                            <button mat-raised-button color="primary" (click)="downloadInp.click()">
-                                <span>Upload a new document <i class="fa fa-upload"></i></span>
-                            </button>
                         </div>
+                        <div class="custom-placeholder" *ngIf="usedDocuments.length == 0">
+                            Drag Here Or Choose
+                        </div>
+                    </div>    
+                    <div class="kbl-summary col-md-6 text-right">
+                        <button *ngIf="lesson.download" class="mr-3" mat-raised-button color="accent" (click)="addDocument('')">
+                            <span>Remove used documents <i class="fa fa-times"></i></span>
+                        </button>
+                        <input #downloadInp class="kb-d-none" name="download" type="file" (change)="documentChangeEvent($event)">
+                        <button mat-raised-button color="primary" (click)="downloadInp.click()">
+                            <span>Upload a new document <i class="fa fa-upload"></i></span>
+                        </button>
                     </div>
+                </div>
+                <div class="row p-3">
                     <div
-                    *ngIf="!mediafetching else fetching"
-                    cdkDropList
-                    [cdkDropListData]="documents"
-                    class="row p-3"
-                    cdkDropListSortingDisabled>
-                        <div class="col-3 p-2" *ngFor="let item of documents">
+                    class="col-12 p-0 kbl-media-list"
+                    *ngIf="!documentfetching else fetching"
+                    [sortablejs]="documents"
+                    [sortablejsOptions]="{group: {name: 'documents', pull: 'clone', put: false}, handle: '.kb-doc-handle', sort: false, animation: 300}">
+                        <div class="col-3 p-2" *ngFor="let item of documents, index as i">
                             <div *ngIf="checkItem(item)" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
-                            <div class="download-box" cdkDrag [cdkDragDisabled]="checkItem(item)">
-                                <span class="pl-3">{{item}}</span>
-                                <div class="kbl-download-actions">
-                                    <a [href]="_file.uploadDocumentPath + item" target="_blank"><i class="fa fa-download text-black-50" matTooltip="Download" matTooltipPosition="above"></i></a>
+                            <div class="kbl-media-box rounded">
+                                <div class="kbl-media-actions" [ngClass]="!checkItem(item) ? 'kb-doc-handle' : 'kb-doc-disbaled'">
+                                    <i class="fa fa-arrows-alt"></i>
+                                </div>
+                                <div class="kbl-media-name" [matTooltip]="item.name+item.ext" matTooltipPosition="above">
+                                    <input #docinp [(ngModel)]="item.name" (blur)="updateDocument(item, i)" (click)="prevMediaName = copyObj(item)" type="text" class="w-100 border-0 bg-none pl-2 py-0 rounded bg-secondary text-light">
+                                    <span>{{item.name+item.ext}}</span>
+                                </div>
+                                <div class="kbl-media-actions">
+                                    <a [href]="_file.uploadDocumentPath + '/' + wistia_project_id + '/' + item.name+item.ext" target="_blank" download><i class="fa fa-download text-black-50" matTooltip="Download" matTooltipPosition="above"></i></a>
                                     <i (click)="addDocument(item)" class="far fa-save" matTooltip="Use Document" matTooltipPosition="above"></i>
                                     <i (click)="delDocument = item; openDialog(lesson, 'deleteDocument');" class="far fa-trash-alt" matTooltip="Delete Document" matTooltipPosition="above"></i>
                                 </div>

@@ -10,7 +10,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CdkDrag, CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Options } from 'sortablejs';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -44,7 +44,7 @@ export class LessonComponent implements OnInit {
   typeerror:string = '';
   videoadding:boolean = false;
   audioadding:boolean = false;
-  documentadding:boolean = false;
+  documentfetching:boolean = false;
   mediafetching:boolean = false;
   mediafile:any;
   videos:any = [];
@@ -77,6 +77,7 @@ export class LessonComponent implements OnInit {
     _general.authService.getActiveUser(_general.tokenStorageService.getUser().id).subscribe((res:any)=>{
       this.wistia_project_id = res.data[0].wistia_project_id;
       this.fetchMedia();
+      this.fetchDocument();
     });
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
@@ -85,7 +86,6 @@ export class LessonComponent implements OnInit {
       this.fetchCourse();
       this.fetchModule();
       this.fetchLesson();
-      this.fetchDocument();
       this.resetPostData();
     })
    }
@@ -125,7 +125,9 @@ export class LessonComponent implements OnInit {
       this.lesson = res.data[0];
       if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
       if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
-      if(this.lesson.download) this.usedDocuments = this.lesson.download.split(',-,');
+      if(this.lesson.download) {
+        this.usedDocuments = JSON.parse(this.lesson.download);
+      }
       this.overlayRefDetach();
     })
   }
@@ -133,29 +135,45 @@ export class LessonComponent implements OnInit {
   fetchMedia() {
     this.mediafetching = true;
     this._wistia.getAllMedia(this.wistia_project_id).subscribe(res=>{
-      this.medias = JSON.parse(res.data);
+      this.medias = res.data;
       this.videos = [];
       this.audios = [];
       this.medias.forEach((item:any)=>{
-        var media = item.assets[0];
-        media.hashed_id = item.hashed_id;
-        media.name = item.name;
-        media.type = item.type;
-        if(item.type == 'Video') {
-          this.videos.push(media);
+        if(item.hashed_id) {
+          var media = item.assets[0];
+          media.hashed_id = item.hashed_id;
+          media.name = item.name;
+          media.type = item.type;
+          if(item.type == 'Video') {
+            this.videos.push(media);
+          }
+          else if(item.type == 'Audio') {
+            this.audios.push(media);
+          }
         }
-        else if(item.type == 'Audio') {
-          this.audios.push(media);
-        }
+        else this.fetchMedia();
       })
       this.mediafetching = false;
     })
   }
 
   fetchDocument() {
-    this._file.getAllDocuments().subscribe(resp=>{
-      this.documents = resp.data;
+    this.documentfetching = true;
+    this._file.getAllDocuments(this.wistia_project_id).subscribe(resp=>{
+      this.documents = [];
+      resp.data.forEach((item:string)=>{
+        this.documents.push(this.getDocObj(item));
+      })
+      this.documentfetching = false;
     })
+  }
+
+  getDocObj(item:string) {
+    var arr = item.split('.');
+    var obj:any = new Object();
+    obj.ext = '.'+arr.pop();
+    obj.name = arr.join('.');
+    return obj;
   }
 
   //  data fetching
@@ -246,8 +264,7 @@ export class LessonComponent implements OnInit {
       this._wistia.uploadMedia(file).subscribe((resp:any)=>{
         this.overlayRefDetach();
         if(resp.success) {
-          var data = JSON.parse(resp.data);
-          this._snackbar.open(data.type+' has been uploaded', 'OK');
+          this._snackbar.open(resp.data.type+' has been uploaded', 'OK');
           this.fetchMedia();
         }
         else {
@@ -280,14 +297,17 @@ export class LessonComponent implements OnInit {
     // video methods
 
   addVideo(video:any) {
-    this.videoadding = true;
-    this.lesson.video = video;
-    this._lesson.update(this.lesson).subscribe((res:any)=>{
-      var act = video ? 'updated' : 'removed';
-      this.videoadding = false;
-      this._snackbar.open('Video has been '+act, 'OK');
-      this.fetchLesson();
-    })
+    if(this.lesson.video != video) {
+      this.videoadding = true;
+      this.lesson.video = video;
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        var act = video ? 'updated' : 'removed';
+        this.videoadding = false;
+        this._snackbar.open('Video has been '+act, 'OK');
+        this.fetchLesson();
+      })
+    }
+    else this._snackbar.open('Video has already in use', 'OK');
   }
 
   // video methods
@@ -295,14 +315,17 @@ export class LessonComponent implements OnInit {
   // audio methods
 
   addAudio(audio:any) {
-    this.audioadding = true;
-    this.lesson.audio = audio;
-    this._lesson.update(this.lesson).subscribe((res:any)=>{
-      var act = audio ? 'updated' : 'removed';
-      this.audioadding = false;
-      this._snackbar.open('Audio has been '+act, 'OK');
-      this.fetchLesson();
-    })
+    if(this.lesson.audio != audio) {
+      this.audioadding = true;
+      this.lesson.audio = audio;
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        var act = audio ? 'updated' : 'removed';
+        this.audioadding = false;
+        this._snackbar.open('Audio has been '+act, 'OK');
+        this.fetchLesson();
+      })
+    }
+    else this._snackbar.open('Audio has already in use', 'OK');
   }
 
   // audio methods  
@@ -311,36 +334,26 @@ export class LessonComponent implements OnInit {
 
   removeUsedDocument(index:any) {
     this.usedDocuments.splice(index,1);
-    this.addDocument('remove');
+    this.addDocument('sort');
   }
-
+  
   addDocument(document:any) {
     if(!this.checkItem(document)) {
-      this.audioadding = true;
-      if(document) {
-        if(document != 'remove') {
-          this.usedDocuments.push(document);
-        }
-      }
-      else {
-        this.usedDocuments = [];
-      }
-      this.lesson.document = this.usedDocuments.join(',-,');
+      if(document == '') this.usedDocuments = [];
+      else if(document != 'sort') this.usedDocuments.push(document);
+      this.lesson.download = JSON.stringify(this.usedDocuments);
       this._lesson.update(this.lesson).subscribe((res:any)=>{
         var act = document ? 'updated' : 'removed';
-        this.audioadding = false;
         this._snackbar.open('Document has been '+act, 'OK');
         this.fetchLesson();
       })
     }
-    else {
-      this._snackbar.open('Document has already been added', 'OK');
-    }
+    else this._snackbar.open('Document has already in use', 'OK');
   }
 
   deleteDocument(document:any) {
     this.respWaiting = true;
-    this._file.deleteDocument(document).subscribe(res=>{
+    this._file.deleteDocument(document.name+document.ext, this.wistia_project_id).subscribe(res=>{
       var index = this.usedDocuments.indexOf(document);
       if(this.checkItem(document)) this.removeUsedDocument(index);
       this.overlayRefDetach();
@@ -351,18 +364,43 @@ export class LessonComponent implements OnInit {
 
   documentChangeEvent(event: any): void {
     if(event.target.files && event.target.files[0]) {
-        this.respWaiting = true;
         var document = event.target.files[0];
         const reader = new FileReader();
         reader.onload = e => {reader.result;}
         reader.readAsDataURL(document);
-        this._file.uploadDocument(document).subscribe(
-          (event: any) => {
-              if (typeof (event) === 'object') {
+        this._file.uploadDocument(document, this.wistia_project_id).subscribe(
+          (resp: any) => {
+              if (typeof (resp) === 'object') {
+                this.addDocument(this.getDocObj(resp.originalname));
                 this.fetchDocument();
               }
           }
       );
+    }
+  }
+
+  updateDocument(doc:any, i:number) {
+    var prevDoc:any = this.copyObj(this.prevMediaName);
+    if(JSON.stringify(prevDoc) != JSON.stringify(doc)) {
+      this._file.checkDocument(doc.name+doc.ext, this.wistia_project_id).subscribe(resp=>{
+        if(!resp.success) {
+          var pathObj = {oldpath: prevDoc.name+prevDoc.ext, path: doc.name+doc.ext};
+          this._file.renameDocument(pathObj, this.wistia_project_id).subscribe(resp=>{
+            var index = 0;
+            this.usedDocuments.find((item:any)=>{
+              if(JSON.stringify(prevDoc) == JSON.stringify(item)) {
+                this.usedDocuments[index] = this.copyObj(doc);
+              }
+              index++;
+            })
+            this.addDocument('sort');
+          });
+        }
+        else {
+          this.documents[i] = this.copyObj(prevDoc);
+          this._snackbar.open('Document name already exist', 'OK');
+        }
+      })
     }
   }
 
@@ -429,28 +467,36 @@ export class LessonComponent implements OnInit {
 
   // image input method
 
-  dropCopy(event: any) {
-    var data = event.previousContainer.data[event.previousIndex];
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      if(!this.checkItem(data)) {
-        this.addDocument(data);
-        // copyArrayItem(
-        //   event.previousContainer.data,
-        //   event.container.data,
-        //   event.previousIndex,
-        //   event.container.data.length,
-        // );
-      }
-    }
-  }
-
   checkItem(item:any) {
-    return this.usedDocuments.includes(item);
+    return this.usedDocuments.some((x:any)=>{
+      return JSON.stringify(x) === JSON.stringify(item);
+    });
   }
 
   getUID() {
     return Math.random().toString(20).slice(2);
   }
+
+  copyObj(item:any) {
+    return JSON.parse(JSON.stringify(item));
+  }
+
+  documentSortOptions: Options = {
+    group: 'documents',
+    scroll: true,
+    sort: true,
+    handle: '.kb-doc-handle',
+    scrollSensitivity: 100,
+    animation: 300,
+    onUpdate: (event: any) => {
+      this.addDocument('sort');
+    },
+    onAdd: (event:any) => {
+      this.addDocument('sort');
+    },
+    onStart: function (/**Event*/) {
+    },
+    onChoose: function (/**Event*/) {      
+    },
+  }; 
 }

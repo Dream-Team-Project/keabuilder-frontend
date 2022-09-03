@@ -13,13 +13,15 @@ providedIn: 'root'
 export class FileUploadService {
   // API url
   // document
-  getAllDocumentsApi = "./api/getalldocuments"
-  uploadDocumentApi = "./api/uploaddocument"
-  deleteDocumentApi = "./api/deletedocument"
+  getAllDocumentsApi = "./api/getalldocuments";
+  uploadDocumentApi = "./api/uploaddocument";
+  deleteDocumentApi = "./api/deletedocument";
+  renameDocumentApi = "./api/renamedocument";
   uploadDocumentPath = '/assets/uploads/documents/';
+  checkDocumentApi = '/api/checkdocuments';
   // document
   // media
-  uploadMediaApi = "./api/uploadmedia"
+  uploadMediaApi = "./api/uploadmedia";
   uploadMediaPath = '/assets/uploads/medias/';
   // media
   uploadApi = "./api/uploadfile";
@@ -81,20 +83,30 @@ export class FileUploadService {
 
   // document
 
-  getAllDocuments():Observable<any> {
-    return this.http.get(this.getAllDocumentsApi)
+  getAllDocuments(folder:string):Observable<any> {
+    return this.http.get(this.getAllDocumentsApi+'/'+folder)
     .pipe(catchError(this.errorHandler));
   }
 
-  uploadDocument(file: any):Observable<any> {
+  uploadDocument(file: any, folder:string):Observable<any> {
     const formData = new FormData();
     formData.append('uploadedDocument', file, file.name);
-    return this.http.post(this.uploadDocumentApi, formData)
+    return this.http.post(this.uploadDocumentApi + '/' + folder, formData)
     .pipe(catchError(this.errorHandler));
   }
 
-  deleteDocument(path:any):Observable<any> {
-    return this.http.delete(this.deleteDocumentApi + '/' + path)
+  deleteDocument(path:string, folder:string):Observable<any> {
+    return this.http.delete(this.deleteDocumentApi + '/' + path + '/' + folder)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  renameDocument(pathObj:any, folder:string):Observable<any> {
+    return this.http.post(this.renameDocumentApi + '/' + folder, pathObj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  checkDocument(path:string, folder:string):Observable<any> {
+    return this.http.get(this.checkDocumentApi + '/' + path + '/' + folder)
     .pipe(catchError(this.errorHandler));
   }
 

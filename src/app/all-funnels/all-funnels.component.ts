@@ -95,9 +95,6 @@ export class AllFunnelsComponent implements OnInit {
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
-      console.log('update');
-      console.log(this.funnels);
-
       var filterdragobj:any = {};
       var filterdrag:any = [];
       this.funnels.forEach((element: any) => {
