@@ -3,12 +3,15 @@
 }
 
 .kbc-block-inner {
-    padding: 6px 0;
+    line-height: 26px;
+    padding: 4px 0;
     align-items: center;
     border-radius: 5px;
     margin: 5px 0px;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 15px;
     transition: 0.2s ease;
+    border: 1px solid var(--kb-dim-black);
 }
 
 .kbc-block-inner:hover {
@@ -16,13 +19,13 @@
 }
 
 .kbc-module {
-    background-color: var(--secondary-color);
-    color: var(--kb-light);
+    background-color: var(--kb-gray);
+    color: var(--kb-text-color);
 }
 
 .kbc-lesson {
-    background-color: var(--primary-color);
-    color: var(--kb-light);
+    background-color: var(--kb-light);
+    color: var(--kb-text-color);
 }
 
 .kb-drag-container {
@@ -46,6 +49,7 @@ span.kbc-qs .kb-handle-block {
 span.kbc-qs i  {
     padding: 6px 10px;
     cursor: pointer;
+    font-size: 90%;
 }
 
 .mat-slide-toggle {
@@ -75,6 +79,10 @@ input.kb-chngname-inp {
     border: none;
     width: 100%;
     color: var(--kb-light);
+    background-color: var(--kb-dim-black);
+    padding: 0px 8px;
+    border-radius: 5px;
+    font-size: inherit;
 }
 
 input.kb-chngname-inp::placeholder {
@@ -91,20 +99,22 @@ input.kb-chngname-inp::placeholder {
   }
 
 span.kbc-qs-status span {
+    padding: 2px 10px;
     display: inline-block;
     border-radius: 20px;
-    margin-left: 20px;
-    height: 20px;
-    width: 20px;
+    line-height: 20px;
+    width: auto;
+    font-size: 75%;
+    color: var(--kb-light);
+    font-weight: 500;
 }
 
 span.kbc-qs-status span.active {
-    background-color: var(--kb-success);
+    background-color: var(--primary-color);
 }
 
 span.kbc-qs-status span.inactive {
-    background-color: var(--clr-light);
-    color: var(--kb-text-color);
+    background-color: var(--kb-dim-black);
 }
 
 span.kb-ispan-add {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ParamMap, ActivatedRoute,NavigationEnd } from '@angular/router';
+import { Router, ParamMap, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { LessonService } from 'src/app/_services/_membership/lesson.service';
 
 @Component({
   selector: 'app-course-user-header',
@@ -19,6 +20,7 @@ export class CourseUserCourseHeaderComponent implements OnInit {
     var courselogincheck:any = localStorage.getItem("kbcourselogin");
     if(courselogincheck!=null){
       var cnvrtobj = JSON.parse(courselogincheck);
+      console.log(cnvrtobj);
       if(cnvrtobj.username!=''){
         this.shortname = cnvrtobj.username;
       }

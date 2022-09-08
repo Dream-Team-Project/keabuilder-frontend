@@ -59,6 +59,7 @@ export class LessonComponent implements OnInit {
   audioLink:any = '';
   videoLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:mov|mpg|avi|flv|f4v|mp4|m4v|asf|wmv|vob|mod|3gp|mkv|divx|xvid|webm)')]);
   audioLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:mp3|wav|aif|au|m4a)')]);
+  selTab:any = 0;
 
   constructor(
     private router: Router,
@@ -80,6 +81,8 @@ export class LessonComponent implements OnInit {
       this.fetchDocument();
     });
     route.paramMap.subscribe((params: ParamMap) => {
+      var tab = params.get('tab');
+      this.selTab = tab ? tab : 0;
       this.course.uniqueid = params.get('course_id');
       this.module.uniqueid = params.get('module_id');
       this.lesson.uniqueid = params.get('lesson_id');
@@ -103,7 +106,7 @@ export class LessonComponent implements OnInit {
       if(!this.respWaiting) this.overlayRefDetach();
     });
   }
-
+  
   //  data fetching
 
   fetchCourse() {
@@ -125,7 +128,7 @@ export class LessonComponent implements OnInit {
       this.lesson = res.data[0];
       if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
       if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
-      if(this.lesson.download) {
+      if(this.lesson.download && this.lesson.download != 'null') {
         this.usedDocuments = JSON.parse(this.lesson.download);
       }
       this.overlayRefDetach();

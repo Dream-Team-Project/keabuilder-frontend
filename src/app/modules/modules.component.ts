@@ -102,6 +102,11 @@ export class ModulesComponent implements OnInit {
 
   // ng events
 
+  redirectToLesson(tab:number, module:any, lesson:any) {
+    var lespath = './module/'+module.uniqueid+'/lesson/'+lesson.uniqueid;
+    this.router.navigate([lespath+'/'+tab], {relativeTo: this.route});
+  }
+
   //  data fetching
 
    fetchCourse() {
