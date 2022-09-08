@@ -153,3 +153,11 @@ span.kb-ispan-add:hover {
     opacity: 1;
     transform: scale(1);
 }
+
+.kbc-title:hover span, .kbc-title input {
+    display: none;
+}
+
+.kbc-title:hover input, .kbc-title span {
+    display: block;
+}
