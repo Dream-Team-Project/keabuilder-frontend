@@ -12,7 +12,8 @@ export class EmailService {
   constructor(private http:HttpClient) { }
 
   sendmail(maildata:any) {
-    // request maildata = {tomailid: 'send to', frommailid: 'send from', subject: 'string', html 'html body'}
+    // request maildata = {tomailid: 'send to', frommailid: 'send from', subject: 'string', html: 'html body'}
+    var maildata:any = {tomailid: 'send to', frommailid: 'send from', subject: 'string', html: 'html body'};
     return this.http.post(this.sendmailApi, maildata)
     .pipe(catchError(this.errorHandler));
   }
