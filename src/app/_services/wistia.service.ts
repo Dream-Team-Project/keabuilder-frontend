@@ -9,8 +9,10 @@ import { catchError, Observable, throwError } from 'rxjs';
 
 export class WistiaService {
 
-  allMediaApi = '/api/allmedia';
-  uploadMediaApi = '/api/uploadmedia';
+  allMediaApi = '/api/wistia/allmedia';
+  uploadMediaApi = '/api/wistia/upload';
+  deleteMediaApi = '/api/wistia/delete'
+  updateMediaApi = '/api/wistia/update'
   projectCreateApi = '/api/projectcreate';
   projectUpdateApi = '/api/projectupdate';
 
@@ -24,8 +26,15 @@ export class WistiaService {
     return this.http.post(this.uploadMediaApi, file);
   }
 
+  deleteMedia(hashed_id:any): Observable<any> {
+    return this.http.delete(this.deleteMediaApi +'/'+hashed_id);
+  }
+
+  updateMedia(media:any): Observable<any> {
+    return this.http.put(this.updateMediaApi, media);
+  }
+
   projectCreate(req:any): Observable<any> {
-    // project create - request: {project_name: username}
     return this.http.post(this.projectCreateApi, req)
   }
 

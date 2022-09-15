@@ -530,6 +530,7 @@ main.insidecont .box {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
 }
 
 .custom-placeholder:before {
@@ -653,9 +654,16 @@ div#kb-mat-loader {
   height: 100%;
 }
 
+.kb-bg-info-line {
+  background: var(--kb-gray);
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
 .kb-or-divider {
   padding: 20px;
   position: relative;
+  text-align: center;
 }
 
 .kb-or-divider:before,

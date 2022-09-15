@@ -10,7 +10,8 @@ import { GeneralService } from '../_services/_builder/general.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CdkDrag, CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Options } from 'sortablejs';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-lesson',
@@ -27,6 +28,7 @@ export class LessonComponent implements OnInit {
 
   dragBoxAnime:any = {open: false, close: false};
 
+  prevMediaName = '';
   wistia_project_id:string = '';
   course:any = {};
   module:any = {};
@@ -41,22 +43,23 @@ export class LessonComponent implements OnInit {
   file = null;
   typeerror:string = '';
   videoadding:boolean = false;
-  mediafetching:boolean = false;
-  videofile:any;
-  videos:any = [];
   audioadding:boolean = false;
-  audiofile:any;
+  documentfetching:boolean = false;
+  mediafetching:boolean = false;
+  mediafile:any;
+  videos:any = [];
   audios:any = [];
-  downloadadding:boolean = false;
-  downloadfetching:boolean = false;
-  downloadfile:any;
-  downloads:any = [];
-  activeDownloads:any = [];
-  calDelAudio:any;
-  calDelVideo:any;
-  calDelDownload:any;
+  documents:any = [];
+  usedDocuments:any = [];
+  delMedia:any;
+  delDocument:any;
   medias:any;
   email_body:any = '<p>Your message goes here</p>';
+  videoLink:any = '';
+  audioLink:any = '';
+  videoLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:mov|mpg|avi|flv|f4v|mp4|m4v|asf|wmv|vob|mod|3gp|mkv|divx|xvid|webm)')]);
+  audioLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:mp3|wav|aif|au|m4a)')]);
+  selTab:any = 0;
 
   constructor(
     private router: Router,
@@ -74,18 +77,18 @@ export class LessonComponent implements OnInit {
   ) {
     _general.authService.getActiveUser(_general.tokenStorageService.getUser().id).subscribe((res:any)=>{
       this.wistia_project_id = res.data[0].wistia_project_id;
-      this.fetchMedias();
+      this.fetchMedia();
+      this.fetchDocument();
     });
     route.paramMap.subscribe((params: ParamMap) => {
+      var tab = params.get('tab');
+      this.selTab = tab ? tab : 0;
       this.course.uniqueid = params.get('course_id');
       this.module.uniqueid = params.get('module_id');
       this.lesson.uniqueid = params.get('lesson_id');
       this.fetchCourse();
       this.fetchModule();
       this.fetchLesson();
-      this.fetchDownloads();
-      // this.fetchVideos();
-      // this.fetchAudios();
       this.resetPostData();
     })
    }
@@ -97,13 +100,13 @@ export class LessonComponent implements OnInit {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
     this._overlayRef = this._overlay.create({
       positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: !this.respWaiting,
+      hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      this.overlayRefDetach();
+      if(!this.respWaiting) this.overlayRefDetach();
     });
   }
-
+  
   //  data fetching
 
   fetchCourse() {
@@ -125,51 +128,55 @@ export class LessonComponent implements OnInit {
       this.lesson = res.data[0];
       if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
       if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
-      if(this.lesson.download) this.activeDownloads = this.lesson.download.split(',-,');
+      if(this.lesson.download && this.lesson.download != 'null') {
+        this.usedDocuments = JSON.parse(this.lesson.download);
+      }
       this.overlayRefDetach();
     })
   }
 
-  fetchMedias() {
+  fetchMedia() {
     this.mediafetching = true;
     this._wistia.getAllMedia(this.wistia_project_id).subscribe(res=>{
-      this.medias = JSON.parse(res.data);
+      this.medias = res.data;
       this.videos = [];
       this.audios = [];
       this.medias.forEach((item:any)=>{
-        if(item.type == 'Video') {
-          this.videos.push(item.assets[0]);
+        if(item.hashed_id) {
+          var media = item.assets[0];
+          media.hashed_id = item.hashed_id;
+          media.name = item.name;
+          media.type = item.type;
+          if(item.type == 'Video') {
+            this.videos.push(media);
+          }
+          else if(item.type == 'Audio') {
+            this.audios.push(media);
+          }
         }
-        else if(item.type == 'Audio') {
-          this.audios.push(item.assets[0]);
-        }
+        else this.fetchMedia();
       })
       this.mediafetching = false;
     })
   }
 
-  fetchDownloads() {
-    this.downloadfetching = true;
-    this._file.alldownloadfiles().subscribe((res:any)=>{
-      this.downloads = res.data;
-      this.downloadfetching = false;
-    });
+  fetchDocument() {
+    this.documentfetching = true;
+    this._file.getAllDocuments(this.wistia_project_id).subscribe(resp=>{
+      this.documents = [];
+      resp.data.forEach((item:string)=>{
+        this.documents.push(this.getDocObj(item));
+      })
+      this.documentfetching = false;
+    })
   }
 
-  fetchVideos() {
-    this.mediafetching = true;
-    this._file.allvideofiles().subscribe((res:any)=>{
-      this.videos = res.data;
-      this.mediafetching = false;
-    });
-  }
-
-  fetchAudios() {
-    this.mediafetching = true;
-    this._file.allaudiofiles().subscribe((res:any)=>{
-      this.audios = res.data;
-      this.mediafetching = false;
-    });
+  getDocObj(item:string) {
+    var arr = item.split('.');
+    var obj:any = new Object();
+    obj.ext = '.'+arr.pop();
+    obj.name = arr.join('.');
+    return obj;
   }
 
   //  data fetching
@@ -207,13 +214,13 @@ export class LessonComponent implements OnInit {
 
   // content methods
 
-  addContent() {
-    this.lesson.content = this._lesson.encodeContent(this.content_html);
-    this._lesson.update(this.lesson).subscribe((res:any)=>{
-      this._snackbar.open('Content has been updated', 'OK');
-      this.fetchLesson();
-    })
-  }
+    addContent() {
+      this.lesson.content = this._lesson.encodeContent(this.content_html);
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        this._snackbar.open('Content has been updated', 'OK');
+        this.fetchLesson();
+      })
+    }
 
   // content methods
 
@@ -236,48 +243,74 @@ export class LessonComponent implements OnInit {
   
     // automation methods
 
-  // video methods
+    // media methods
+    mediaChangeEvent(event: any, type:string): void {
+      if(event.target.files && event.target.files[0]) {
+          this.respWaiting = true;
+          this.mediafile = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = e => {reader.result;}
+          reader.readAsDataURL(this.mediafile);
+          this._file.uploadMedia(this.mediafile).subscribe(
+            (event: any) => {
+                if (typeof (event) === 'object') {
+                  this.uploadMedia(event.originalname, type);
+                }
+            }
+        );
+      }
+    }
+
+    uploadMedia(path:any, type:string) {
+      this.respWaiting = true;
+      var file = {project_id: this.wistia_project_id, path: path, type: type};
+      this._wistia.uploadMedia(file).subscribe((resp:any)=>{
+        this.overlayRefDetach();
+        if(resp.success) {
+          this._snackbar.open(resp.data.type+' has been uploaded', 'OK');
+          this.fetchMedia();
+        }
+        else {
+          this._snackbar.open('An error has been occured while uploading', 'OK');
+        }
+      });
+    }
+
+    deleteMedia(media:any) {
+      this.respWaiting = true;
+      this._wistia.deleteMedia(media.hashed_id).subscribe(res=>{
+        if(media.url == this.lesson.video) this.addVideo('');
+        else if(media.url == this.lesson.audio) this.addAudio('');
+        this.overlayRefDetach();
+        this._snackbar.open(media.type+' has been deleted', 'OK');
+        this.fetchMedia();
+      });
+    }
+
+    updateMedia(media:any) {
+      if(this.prevMediaName != media.name) {
+        this._wistia.updateMedia(media).subscribe(resp=>{
+          this._snackbar.open(media.type+' name has been updated', 'OK');
+        });
+      }
+    }
+
+    // media methods
+
+    // video methods
 
   addVideo(video:any) {
-    this.videoadding = true;
-    this.lesson.video = video;
-    this._lesson.update(this.lesson).subscribe((res:any)=>{
-      var act = video ? 'updated' : 'removed';
-      this.videoadding = false;
-      this._snackbar.open('Video has been '+act, 'OK');
-      this.fetchLesson();
-    })
-  }
-
-  deleteVideo(video:any) {
-    this.overlayRefDetach();
-    this._file.deletevideo(video).subscribe(res=>{
-      if(video == this.lesson.video) this.addVideo('');
-      this._snackbar.open('Video has been deleted', 'OK');
-      this.fetchVideos();
-    });
-  }
-
-  videoChangeEvent(event: any): void {
-    if(event.target.files && event.target.files[0]) {
-        // this.videoadding = true;
-        this.videofile = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = e => {reader.result;}
-        reader.readAsDataURL(this.videofile);
-        this._file.uploadvideo(this.videofile).subscribe(
-          (event: any) => {
-              if (typeof (event) === 'object') {
-                // var file = {path: 'keavideo-'+event.originalname};
-                // this._wistia.uploadMedia(file).subscribe((e:any)=>{
-                //   console.log(JSON.parse(e.data));
-                  this.addVideo('keavideo-'+event.originalname);
-                  this.fetchVideos();
-                // });
-              }
-          }
-      );
+    if(this.lesson.video != video) {
+      this.videoadding = true;
+      this.lesson.video = video;
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        var act = video ? 'updated' : 'removed';
+        this.videoadding = false;
+        this._snackbar.open('Video has been '+act, 'OK');
+        this.fetchLesson();
+      })
     }
+    else this._snackbar.open('Video has already in use', 'OK');
   }
 
   // video methods
@@ -285,99 +318,92 @@ export class LessonComponent implements OnInit {
   // audio methods
 
   addAudio(audio:any) {
-    this.audioadding = true;
-    this.lesson.audio = audio;
-    this._lesson.update(this.lesson).subscribe((res:any)=>{
-      var act = audio ? 'updated' : 'removed';
-      this.audioadding = false;
-      this._snackbar.open('Audio has been '+act, 'OK');
-      this.fetchLesson();
-    })
-  }
-
-  deleteAudio(audio:any) {
-    this.overlayRefDetach();
-    this._file.deleteaudio(audio).subscribe(res=>{
-      if(audio == this.lesson.audio) this.addAudio('');
-      this._snackbar.open('Audio has been deleted', 'OK');
-      this.fetchAudios();
-    });
-  }
-
-  audioChangeEvent(event: any): void {
-    if(event.target.files && event.target.files[0]) {
-        this.audioadding = true;
-        this.audiofile = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(this.audiofile);
-        this._file.uploadaudio(this.audiofile).subscribe(
-          (event: any) => {
-              if (typeof (event) === 'object') {
-                this.addAudio('keaaudio-'+event.originalname);
-                this.fetchAudios();
-              }
-          }
-      );
+    if(this.lesson.audio != audio) {
+      this.audioadding = true;
+      this.lesson.audio = audio;
+      this._lesson.update(this.lesson).subscribe((res:any)=>{
+        var act = audio ? 'updated' : 'removed';
+        this.audioadding = false;
+        this._snackbar.open('Audio has been '+act, 'OK');
+        this.fetchLesson();
+      })
     }
+    else this._snackbar.open('Audio has already in use', 'OK');
   }
 
   // audio methods  
 
   // download methods
 
-  removeActiveDownload(index:any) {
-    this.activeDownloads.splice(index,1);
-    this.addDownload('remove');
+  removeUsedDocument(index:any) {
+    this.usedDocuments.splice(index,1);
+    this.addDocument('sort');
   }
-
-  addDownload(download:any) {
-    if(!this.checkItem(download)) {
-      this.downloadadding = true;
-      if(download) {
-        if(download != 'remove') {
-          this.activeDownloads.push(download);
-        }
-      }
-      else {
-        this.activeDownloads = [];
-      }
-      this.lesson.download = this.activeDownloads.join(',-,');
+  
+  addDocument(document:any) {
+    if(!this.checkItem(document)) {
+      if(document == '') this.usedDocuments = [];
+      else if(document != 'sort') this.usedDocuments.push(document);
+      this.lesson.download = JSON.stringify(this.usedDocuments);
       this._lesson.update(this.lesson).subscribe((res:any)=>{
-        var act = download ? 'updated' : 'removed';
-        this.downloadadding = false;
-        this._snackbar.open('Download has been '+act, 'OK');
+        var act = document ? 'updated' : 'removed';
+        this._snackbar.open('Document has been '+act, 'OK');
         this.fetchLesson();
       })
     }
-    else {
-      this._snackbar.open('Download has already been added', 'OK');
-    }
+    else this._snackbar.open('Document has already in use', 'OK');
   }
 
-  deleteDownload(download:any) {
-    this.overlayRefDetach();
-    this._file.deletedownload(download).subscribe(res=>{
-      var index = this.activeDownloads.indexOf(download);
-      if(this.checkItem(download)) this.removeActiveDownload(index);
-      this._snackbar.open('Download has been deleted', 'OK');
-      this.fetchDownloads();
+  deleteDocument(document:any) {
+    this.respWaiting = true;
+    this._file.deleteDocument(document.name+document.ext, this.wistia_project_id).subscribe(res=>{
+      var index = this.usedDocuments.indexOf(document);
+      if(this.checkItem(document)) this.removeUsedDocument(index);
+      this.overlayRefDetach();
+      this._snackbar.open('Document has been deleted', 'OK');
+      this.fetchDocument();
     });
   }
 
-  downloadChangeEvent(event: any): void {
+  documentChangeEvent(event: any): void {
     if(event.target.files && event.target.files[0]) {
-        this.downloadadding = true;
-        this.downloadfile = event.target.files[0];
+        var document = event.target.files[0];
         const reader = new FileReader();
-        reader.readAsDataURL(this.downloadfile);
-        this._file.uploaddownload(this.downloadfile).subscribe(
-          (event: any) => {
-              if (typeof (event) === 'object') {
-                this.addDownload(event.originalname);
-                this.fetchDownloads();
+        reader.onload = e => {reader.result;}
+        reader.readAsDataURL(document);
+        this._file.uploadDocument(document, this.wistia_project_id).subscribe(
+          (resp: any) => {
+              if (typeof (resp) === 'object') {
+                this.addDocument(this.getDocObj(resp.originalname));
+                this.fetchDocument();
               }
           }
       );
+    }
+  }
+
+  updateDocument(doc:any, i:number) {
+    var prevDoc:any = this.copyObj(this.prevMediaName);
+    if(JSON.stringify(prevDoc) != JSON.stringify(doc)) {
+      this._file.checkDocument(doc.name+doc.ext, this.wistia_project_id).subscribe(resp=>{
+        if(!resp.success) {
+          var pathObj = {oldpath: prevDoc.name+prevDoc.ext, path: doc.name+doc.ext};
+          this._file.renameDocument(pathObj, this.wistia_project_id).subscribe(resp=>{
+            var index = 0;
+            this.usedDocuments.find((item:any)=>{
+              if(JSON.stringify(prevDoc) == JSON.stringify(item)) {
+                this.usedDocuments[index] = this.copyObj(doc);
+              }
+              index++;
+            })
+            this.addDocument('sort');
+          });
+        }
+        else {
+          this.documents[i] = this.copyObj(prevDoc);
+          this._snackbar.open('Document name already exist', 'OK');
+        }
+      })
     }
   }
 
@@ -392,9 +418,12 @@ export class LessonComponent implements OnInit {
     setTimeout(()=>{
       this._overlayRef.detach();
       this.popask = 'details';
-      this.calDelVideo = '';
-      this.calDelAudio = '';
-      this.calDelDownload = '';
+      this.delMedia = '';
+      this.videoLink = '';
+      this.videoLinkInp.reset();
+      this.audioLink = '';
+      this.audioLinkInp.reset();
+      this.delDocument = '';
       this.delAgree = false;
       this.resetPostData();
       this.dragBoxAnime.close = false;
@@ -441,28 +470,36 @@ export class LessonComponent implements OnInit {
 
   // image input method
 
-  dropCopy(event: any) {
-    var data = event.previousContainer.data[event.previousIndex];
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      if(!this.checkItem(data)) {
-        this.addDownload(data);
-        // copyArrayItem(
-        //   event.previousContainer.data,
-        //   event.container.data,
-        //   event.previousIndex,
-        //   event.container.data.length,
-        // );
-      }
-    }
-  }
-
   checkItem(item:any) {
-    return this.activeDownloads.includes(item);
+    return this.usedDocuments.some((x:any)=>{
+      return JSON.stringify(x) === JSON.stringify(item);
+    });
   }
 
   getUID() {
     return Math.random().toString(20).slice(2);
   }
+
+  copyObj(item:any) {
+    return JSON.parse(JSON.stringify(item));
+  }
+
+  documentSortOptions: Options = {
+    group: 'documents',
+    scroll: true,
+    sort: true,
+    handle: '.kb-doc-handle',
+    scrollSensitivity: 100,
+    animation: 300,
+    onUpdate: (event: any) => {
+      this.addDocument('sort');
+    },
+    onAdd: (event:any) => {
+      this.addDocument('sort');
+    },
+    onStart: function (/**Event*/) {
+    },
+    onChoose: function (/**Event*/) {      
+    },
+  }; 
 }

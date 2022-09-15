@@ -47,10 +47,7 @@ export class RegisterComponent implements OnInit {
            var userobject = {project_name: username};
             this._wistia.projectCreate(userobject).subscribe({
               next: data2 => {
-                console.log(data2);
-
-                var wistiaid = JSON.parse(data2.data);
-                this.authService.onupdateprojectid(data.id, wistiaid.hashedId).subscribe({
+                this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
                   next: data3 => {
                     console.log(data3);
                   }

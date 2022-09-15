@@ -12,24 +12,18 @@ providedIn: 'root'
 
 export class FileUploadService {
   // API url
-  // audio
-  uploadAudioApi = "./api/uploadaudiofile"
-  allaudiofilesApi = './api/allaudiofiles';
-  deleteAudioApi = "./api/deleteaudio";
-  uploadAudioPath = '/assets/uploads/audios/';
-  // audio
-  // video
-  uploadVideoApi = "./api/uploadvideofile"
-  allvideofilesApi = './api/allvideofiles';
-  deleteVideoApi = "./api/deletevideo";
-  uploadVideoPath = '/assets/uploads/videos/';
-  // video
-  // download
-  uploadDownloadApi = "./api/uploaddownloadfile"
-  alldownloadfilesApi = './api/alldownloadfiles';
-  deleteDownloadApi = "./api/deletedownload";
-  uploadDownloadPath = '/assets/uploads/downloads/';
-// download
+  // document
+  getAllDocumentsApi = "./api/getalldocuments";
+  uploadDocumentApi = "./api/uploaddocument";
+  deleteDocumentApi = "./api/deletedocument";
+  renameDocumentApi = "./api/renamedocument";
+  uploadDocumentPath = '/assets/uploads/documents/';
+  checkDocumentApi = '/api/checkdocuments';
+  // document
+  // media
+  uploadMediaApi = "./api/uploadmedia";
+  uploadMediaPath = '/assets/uploads/medias/';
+  // media
   uploadApi = "./api/uploadfile";
   getAllImgsApi = "./api/getallimgs";
   saveOnDBApi = "./api/saveondb";
@@ -76,74 +70,47 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  // audio
+  // media
 
-  uploadaudio(file: any):Observable<any> {
-    // Create form data
+  uploadMedia(file: any):Observable<any> {
     const formData = new FormData();
-    formData.append('uploadedAudio', file, file.name);
-    // Make http post request over api
-    // with formData as req
-    return this.http.post(this.uploadAudioApi, formData)
+    formData.append('uploadedMedia', file, file.name);
+    return this.http.post(this.uploadMediaApi, formData)
     .pipe(catchError(this.errorHandler));
   }
 
-  allaudiofiles() {
-    return this.http.get(this.allaudiofilesApi);
-  }
+  // media
 
-  deleteaudio(path:any) {
-    return this.http.delete(this.deleteAudioApi + '/' + path)
+  // document
+
+  getAllDocuments(folder:string):Observable<any> {
+    return this.http.get(this.getAllDocumentsApi+'/'+folder)
     .pipe(catchError(this.errorHandler));
   }
 
-  // audio
-
-  // video
-
-  uploadvideo(file: any):Observable<any> {
-    // Create form data
+  uploadDocument(file: any, folder:string):Observable<any> {
     const formData = new FormData();
-    formData.append('uploadedVideo', file, file.name);
-    // Make http post request over api
-    // with formData as req
-    return this.http.post(this.uploadVideoApi, formData)
+    formData.append('uploadedDocument', file, file.name);
+    return this.http.post(this.uploadDocumentApi + '/' + folder, formData)
     .pipe(catchError(this.errorHandler));
   }
 
-  allvideofiles() {
-    return this.http.get(this.allvideofilesApi);
-  }
-
-  deletevideo(path:any) {
-    return this.http.delete(this.deleteVideoApi + '/' + path)
+  deleteDocument(path:string, folder:string):Observable<any> {
+    return this.http.delete(this.deleteDocumentApi + '/' + path + '/' + folder)
     .pipe(catchError(this.errorHandler));
   }
 
-  // video
-
-  // download
-
-  uploaddownload(file: any):Observable<any> {
-    // Create form data
-    const formData = new FormData();
-    formData.append('uploadedDownload', file, file.name);
-    // Make http post request over api
-    // with formData as req
-    return this.http.post(this.uploadDownloadApi, formData)
+  renameDocument(pathObj:any, folder:string):Observable<any> {
+    return this.http.post(this.renameDocumentApi + '/' + folder, pathObj)
     .pipe(catchError(this.errorHandler));
   }
 
-  alldownloadfiles() {
-    return this.http.get(this.alldownloadfilesApi);
-  }
-
-  deletedownload(path:any) {
-    return this.http.delete(this.deleteDownloadApi + '/' + path)
+  checkDocument(path:string, folder:string):Observable<any> {
+    return this.http.get(this.checkDocumentApi + '/' + path + '/' + folder)
     .pipe(catchError(this.errorHandler));
   }
 
-  // download
+  // document
 
   // Returns an observable
   upload(file: any):Observable<any> {

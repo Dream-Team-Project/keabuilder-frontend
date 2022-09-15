@@ -106,10 +106,10 @@ export class ModulesComponent implements OnInit {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
     this._overlayRef = this._overlay.create({
       positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: !this.respWaiting,
+      hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      this.overlayRefDetach();
+      if(!this.respWaiting) this.overlayRefDetach();
     });
   }
 
@@ -118,6 +118,11 @@ export class ModulesComponent implements OnInit {
   }
 
   // ng events
+
+  redirectToLesson(tab:number, module:any, lesson:any) {
+    var lespath = './module/'+module.uniqueid+'/lesson/'+lesson.uniqueid;
+    this.router.navigate([lespath+'/'+tab], {relativeTo: this.route});
+  }
 
   //  data fetching
 

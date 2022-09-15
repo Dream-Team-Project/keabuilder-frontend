@@ -113,37 +113,32 @@
                             </div>
                         </div>
                         <ul #moduleUl class="kb-drag-container row p-3" cdkDropList [cdkDropListData]="modules" [cdkDropListConnectedTo]="moddls" (cdkDropListDropped)="drop($event)">
-                            <li cdkDrag class="kbc-block col-12" *ngFor="let module of modules, index as mi" (mouseenter)="index.module = mi">
-                                <div *cdkDragPreview class="custom-preview p-0"  [style.backgroundColor]="'var(--secondary-color)'">
+                            <li cdkDrag class="kbc-block col-11" *ngFor="let module of modules, index as mi" (mouseenter)="index.module = mi">
+                                <div *cdkDragPreview class="custom-preview p-0" [style.backgroundColor]="'var(--kb-gray)'">
                                     <div *ngIf="module.thumbnail">
                                         <img class="img-fluid" [src]="getImgPath(module.thumbnail)" width="200px">
                                     </div>
-                                    <div class="p-2">{{module.title ? module.title : 'Module'}}</div>
+                                    <div class="p-2" [style.color]="'var(--kb-text-color)'">{{module.title ? module.title : 'Module'}}</div>
                                 </div>
-                                <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--secondary-color)'"></div>
+                                <div *cdkDragPlaceholder class="custom-placeholder col-11" [style.backgroundColor]="'var(--kb-gray)'"></div>
                                 <div class="kbc-block-inner kbc-module d-flex">
-                                    <span class="kbc-qs col-2">
+                                    <span class="kbc-qs col-3">
                                         <i cdkDragHandle *ngIf="modules.length > 1" class="kb-handle-block fas fa-arrows-alt-v"></i>
                                         <i (click)="_general.expandToggle(lessonUl)" [matTooltip]="lessonUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
                                         matTooltipPosition="above" class="far" [ngClass]="lessonUl.style.maxHeight != '0px' ? 'fa-folder-open' : 'fa-folder'"></i>
                                     </span>
-                                    <span class="kbc-title col-7" (mouseenter)="prevTitle.module = module.title; module.chngName = true" (mouseleave)="updateModuleTitle(module); module.chngName = false;">
-                                        <span *ngIf="!module.chngName else chngInp"
-                                        class="kb-chngName">{{module.title ? module.title : 'module' | titlecase}}</span>
-                                        <ng-template #chngInp>
-                                            <span>
-                                                <input type="text" placeholder="Module title" [(ngModel)]="module.title"
-                                                    (keydown.enter)="module.chngName = !module.chngName" class="kb-chngname-inp">
-                                            </span>
-                                        </ng-template>
+                                    <span class="kbc-title col-6">
+                                        <span class="kb-chngName">{{module.title ? module.title : 'module' | titlecase}}</span>
+                                        <input type="text" placeholder="Module title" (blur)="updateModuleTitle(module)" (click)="prevTitle.module = module.title" [(ngModel)]="module.title"
+                                            class="kb-chngname-inp">
                                     </span>
                                     <span class="kbc-qs col-3">
                                         <span class="kbc-qs-summary px-2">
                                             {{module.lessons.length}} Lesson{{module.lessons.length != 1 ? 's' : ''}}
                                         </span>
                                         <span class="kbc-qs-status px-2">
-                                            <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active"></span>
-                                            <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive"></span></ng-template>
+                                            <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
+                                            <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive">Drafted</span></ng-template>
                                         </span>
                                         <span class="kbc-qs-icons">
                                             <mat-slide-toggle color="success" [matTooltip]="module.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
@@ -157,34 +152,32 @@
                                         </span>
                                     </span>
                                 </div>
-                                <ul #lessonUl [style.minHeight]="module.lessons.length == 0 ? '40px' : ''"  [id]="'lessongroup-'+mi" class="kb-drag-container pl-5" [style.maxHeight]="'fit-content'" cdkDropList [cdkDropListData]="module.lessons" [cdkDropListConnectedTo]="lesdls" (cdkDropListDropped)="drop($event)">
+                                <ul #lessonUl [style.minHeight]="module.lessons.length == 0 ? '40px' : ''"  [id]="'lessongroup-'+mi" class="kb-drag-container pl-4" [style.maxHeight]="'fit-content'" cdkDropList [cdkDropListData]="module.lessons" [cdkDropListConnectedTo]="lesdls" (cdkDropListDropped)="drop($event)">
                                     <li cdkDrag class="kbc-block col-12" *ngFor="let lesson of module.lessons, index as li" (mouseenter)="index.lesson = li">
-                                        <div *cdkDragPreview class="custom-preview p-0" [style.backgroundColor]="'var(--primary-color)'">
+                                        <div *cdkDragPreview class="custom-preview p-0" [style.backgroundColor]="'var(--kb-light)'">
                                             <div *ngIf="lesson.thumbnail">
                                                 <img class="img-fluid" [src]="getImgPath(lesson.thumbnail)" width="200px">
                                             </div>
-                                            <div class="p-2">{{lesson.title ? lesson.title : 'Lesson'}}</div>
+                                            <div class="p-2" [style.color]="'var(--kb-text-color)'">{{lesson.title ? lesson.title : 'Lesson'}}</div>
                                         </div>
-                                        <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
+                                        <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-light)'"></div>
                                         <div class="kbc-block-inner kbc-lesson d-flex">
-                                            <span class="kbc-qs col-2">
+                                            <span class="kbc-qs col-3">
                                                 <i cdkDragHandle class="kb-handle-block fas fa-arrows-alt-v"></i>
-                                                <i class="far fa-file-alt"></i>
+                                                <i (click)="redirectToLesson(0,module,lesson)" matTooltip="Content" matTooltipPosition="above" class="far fa-file-alt"></i>
+                                                <i (click)="redirectToLesson(1,module,lesson)" matTooltip="Video" matTooltipPosition="above" *ngIf="lesson.video" class="fa fa-video"></i>
+                                                <i (click)="redirectToLesson(2,module,lesson)" matTooltip="Audio" matTooltipPosition="above" *ngIf="lesson.audio" class="fa fa-music"></i>
+                                                <i (click)="redirectToLesson(3,module,lesson)" matTooltip="Downloads" matTooltipPosition="above" *ngIf="lesson.download" class="fas fa-file-download"></i>
                                             </span>
-                                            <span class="kbc-title col-7" (mouseenter)="prevTitle.lesson = lesson.title; lesson.chngName = true" (mouseleave)="updateLessonTitle(lesson); lesson.chngName = false">
-                                                <span *ngIf="!lesson.chngName else chngInp"
-                                                class="kb-chngName">{{lesson.title ? lesson.title : 'lesson' | titlecase}}</span>
-                                                <ng-template #chngInp>
-                                                    <span>
-                                                        <input type="text" placeholder="Lesson title" [(ngModel)]="lesson.title"
-                                                            (keydown.enter)="lesson.chngName = !lesson.chngName" class="kb-chngname-inp">
-                                                    </span>
-                                                </ng-template>
+                                            <span class="kbc-title col-6">
+                                                <span class="kb-chngName">{{lesson.title ? lesson.title : 'lesson' | titlecase}}</span>
+                                                <input type="text" placeholder="Lesson title" (blur)="updateLessonTitle(lesson)" (click)="prevTitle.lesson = lesson.title" [(ngModel)]="lesson.title"
+                                                    class="kb-chngname-inp">
                                             </span>
                                             <span class="kbc-qs col-3">
                                                 <span class="kbc-qs-status px-2">
-                                                    <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active"></span>
-                                                    <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive"></span></ng-template>
+                                                    <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
+                                                    <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive">Drafted</span></ng-template>
                                                 </span>
                                                 <span class="kbc-qs-icons">
                                                     <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
@@ -192,7 +185,7 @@
                                                         (click)="openDialog(post,'lesson')" class="fa fa-plus"></i>
                                                     <i matTooltip="Lesson Setting" matTooltipPosition="above" 
                                                         (click)="openDialog(lesson, 'lesson')" class="far fa-edit"></i>
-                                                    <i [routerLink]="'./module/'+module.uniqueid+'/lesson/'+lesson.uniqueid" matTooltip="Go To Content" matTooltipPosition="above" 
+                                                    <i (click)="redirectToLesson(0,module,lesson)" matTooltip="Go To Content" matTooltipPosition="above" 
                                                         class="fa fa-photo-video"></i>
                                                     <i matTooltip="Duplicate Lessson" matTooltipPosition="above" 
                                                         (click)="duplicatePost(lesson, 'lesson')"  class="far fa-copy"></i>
@@ -207,7 +200,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li *ngIf="modules.length == 0" (mouseenter)="index.module = -1">
+                            <li class="kbc-block col-11" *ngIf="modules.length == 0" (mouseenter)="index.module = -1">
                                 <span [style.backgroundColor]="'var(--secondary-color)'" [matTooltip]="'Add First Module'" matTooltipPosition="above" (click)="openDialog(post,'module')" class="kb-ispan-add"><i class="fa fa-plus"></i></span>
                             </li>
                         </ul>
