@@ -99,6 +99,11 @@ export class CourseService {
   // coupon
 
    // offers
+
+  getoffersbyids(data:any):Observable<any> {
+    return this.http.post("./api/membership_getoffersbyids", {data});
+  }
+
   addnewoffer(data:any):Observable<any> {
     return this.http.post("./api/membership_addnewoffer", {data});
   }

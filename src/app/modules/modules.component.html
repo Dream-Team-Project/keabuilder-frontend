@@ -226,6 +226,17 @@
                             <span>2 Offers</span>
                         </div>
                     </div>
+                    <div class="row pt-3 pl-3 pr-3" *ngFor="let showcourseoffer of showcourseoffers">
+                        <div class="col-md-6">
+                            <span>{{showcourseoffer}}</span>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button mat-raised-button color="primary">View</button>
+                        </div>
+                        <div class="col-md-12">
+                            <hr>
+                        </div>
+                    </div>
                 </div>
             </ng-template>
         </mat-tab>

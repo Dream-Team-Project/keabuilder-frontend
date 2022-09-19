@@ -68,13 +68,13 @@ export class SidebarComponent implements OnInit {
         icon: 'far fa-window-restore',
         title: 'Pages'
       },
-      {
-        0:true,
-        routerlink: '/website/blog',
-        img: 'browser.gif',
-        icon: 'far fa-file-alt',
-        title: 'Blog'
-      },
+      // {
+      //   0:true,
+      //   routerlink: '/website/blog',
+      //   img: 'browser.gif',
+      //   icon: 'far fa-file-alt',
+      //   title: 'Blog'
+      // },
       {
         0:true,
         routerlink: '/website/details',

@@ -59,6 +59,8 @@ export class ModulesComponent implements OnInit {
   offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
   offersToAdd:Array<string> = [];
 
+  showcourseoffers:any = [];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -83,6 +85,21 @@ export class ModulesComponent implements OnInit {
   // ng events
 
   ngOnInit(): void {
+
+    this._course.single(this.course.uniqueid).subscribe(res=>{
+      // console.log(res);
+        var getofferid = res.data[0].offers;
+        if(getofferid!=''){
+          var newob = {id:getofferid};
+          this._course.getoffersbyids(newob).subscribe(res=>{
+            // console.log(res);
+            this.showcourseoffers = res.data;
+          });
+          
+        }
+
+    })
+
   }
 
   ngAfterViewInit() {
