@@ -76,16 +76,14 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
-
-        if(data.data[0].publish_status==1){
-          this.webstatus = 'Publish';
-          this.webicon = 'fas fa-check';
-        }else{
-          this.webstatus = 'Draft';
-          this.webicon = 'fas fa-file';
-        }
-
+        if(data?.data) {
+          if(data.data[0].publish_status==1){
+            this.webstatus = 'Publish';
+            this.webicon = 'fas fa-check';
+          }else{
+            this.webstatus = 'Draft';
+            this.webicon = 'fas fa-file';
+          }
           if(data.data[0].homepage!=null && data.data[0].homepage!=''){
             var pathdata = {path:data.data[0].homepage};
             this.webpagesService.getWebPageByPath(pathdata).subscribe({
@@ -106,8 +104,7 @@ export class WebsiteDesignComponent implements OnInit {
                 }
               });
           }
-
-
+        }
       },
       error: err => {
         console.log(err);

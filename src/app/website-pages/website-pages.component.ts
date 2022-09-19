@@ -167,11 +167,12 @@ export class WebsitePagesComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
-        if(data.data[0].toggleview==1){
-          this.toggleview1 = true;
-        }else{
-          this.toggleview1 = false;
+        if(data?.data) {
+          if(data?.data[0].toggleview==1){
+            this.toggleview1 = true;
+          }else{
+            this.toggleview1 = false;
+          }
         }
       }
     });
@@ -285,7 +286,7 @@ export class WebsitePagesComponent implements OnInit {
 
   shortdata(dataA:any){
     // console.log('---chek');
-    console.log(dataA);
+    // console.log(dataA);
 
     if(dataA.success !=0){
       // console.log('--works');
@@ -563,7 +564,7 @@ export class WebsitePagesComponent implements OnInit {
 
     this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 

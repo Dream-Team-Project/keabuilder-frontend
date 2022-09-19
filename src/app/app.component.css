@@ -10,6 +10,10 @@ main {
     position: relative;
 }
 
+::ng-deep div#ngx-colors-overlay.ngx-colors-overlay, .ngx-colors-overlay {
+    z-index: 999999999!important;
+}
+
 ::ng-deep .mat-tab-label {
     opacity: 1!important;
 }

@@ -1160,7 +1160,7 @@ color:#fff!important;
             <a href="http://127.0.0.1:4200/heatmap" target="_blank" id="brand-link"
                 class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img
                     id="brand-wordmark"
-                    src="http://127.0.0.1:4200/assets/images/logo/kblogo.svg"
+                    src="http://127.0.0.1:4200/assets/images/logo/kblogo.png"
                     alt="Kia Builder Logo" /></a>
         </div>
         <div class="ui-panel-manager size-fill">

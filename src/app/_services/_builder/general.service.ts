@@ -181,8 +181,8 @@ export class GeneralService {
       '<meta name="author" content="'+this.main.author+'">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       '<title>'+this.main.title+'</title>' +        
-      '<link rel="stylesheet" href="http://localhost:4200/styles.css"><link rel="stylesheet" href="http://localhost:4200/assets/style/builder.css">' +
-      (!preview ? '<link rel="stylesheet" href="./'+this.main.path+'/style.css">' : '');
+      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
+      (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/keapages/'+this.main.path+'/style.css">' : '');
       this.setPageStyle(sections);
       var page = {
         head: this.pagehtml.querySelector('head').outerHTML,
