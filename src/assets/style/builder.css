@@ -1,3 +1,50 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;500;600;700;800;900&display=swap');
+
+
+:root {
+    /* builder root */
+        --opacity-primary: rgb(216 200 152 / 70%);        ;
+        --opacity-success: rgb(27 197 189 / 70%);
+        --opacity-section: rgb(24 103 192 / 80%);
+        --primary-color: #d8c898;
+        --secondary-color: #6c757d;
+        --section-color: #1867c0;
+        --row-color: #1BC5BD;
+        --kb-light: #f8f9fa;
+        --kb-success: #1BC5BD;
+        --kb-danger: #dc3545;
+        --kb-info: #17a2b8;
+        --kb-gray: #e6eaef;
+        --kb-dim-black: #22262a66;
+        --kb-text-color: #4c5866;
+        --kb-dark: #35363a; 
+    
+    /* builder root */
+    
+        --clr-primay: #d8c898;
+        --clr-light: #fff;
+    }
+    
+    *, ::after, ::before {
+        box-sizing: border-box;
+    }
+
+    * {
+        font-family: Poppins;
+    }
+    
+    body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
+        font-family: Poppins;   
+        font-weight: 400;
+    }
+
+main {
+    position: relative;
+}
+
 body {
     margin: 0;
     padding: 0;

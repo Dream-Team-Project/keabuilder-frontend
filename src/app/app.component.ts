@@ -3,6 +3,7 @@ import { TokenStorageService } from './_services/token-storage.service';
 import { NavbarService } from './_services/navbar.service';
 import { AuthService } from './_services/auth.service';
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
+import { environment } from './../environments/environment';
 
 @Component({
   selector: 'app-root',
