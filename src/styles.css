@@ -9,7 +9,7 @@
         --opacity-primary: rgb(216 200 152 / 70%);        ;
         --opacity-success: rgb(27 197 189 / 70%);
         --opacity-section: rgb(24 103 192 / 80%);
-        --primary-color: #d8c898;
+        --primary-color: #dea641;
         --secondary-color: #6c757d;
         --section-color: #1867c0;
         --row-color: #1BC5BD;
@@ -24,7 +24,7 @@
     
     /* builder root */
     
-        --clr-primay: #d8c898;
+        --clr-primay: var(--primary-color);
         --clr-light: #fff;
     }
     
@@ -77,10 +77,6 @@
 
       * ::-webkit-scrollbar-thumb {
         background-color: var(--kb-dark);
-      }
-
-      * .kb-scroll ::-webkit-scrollbar-thumb {
-        background-color: var(--section-color);
       }
 
       /* Handle on hover */
@@ -396,9 +392,6 @@ main.insidecont .box {
   #kb-offcanvas-actions>div::-webkit-scrollbar-track {
     background: transparent;
   }
-  #kb-offcanvas-actions>div::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-  }
   #kb-offcanvas-actions .fa-times {
     position: absolute;
     right: 24px;
@@ -440,7 +433,7 @@ main.insidecont .box {
   }
   .offcanvas .btn.btn-light-primary {
     color: #000000;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     border-color: transparent;
     display: inline-block;
     font-size: 11px;
@@ -451,9 +444,6 @@ main.insidecont .box {
   }
   .offcanvas-content::-webkit-scrollbar-track {
     background: transparent; 
-  }
-  .offcanvas-content::-webkit-scrollbar-thumb {
-    background: #e2e2e2; 
   }
   .offcanvas-overlay {
     position: fixed;

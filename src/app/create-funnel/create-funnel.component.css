@@ -85,7 +85,7 @@
 }
 
 .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] .wizard-wrapper .wizard-label .wizard-title {
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] {
@@ -110,7 +110,7 @@
   -ms-flex-pack: center;
   justify-content: center;
   background-color: rgb(216 200 152 / 10%);
-  color: #d8c898;
+  color: var(--primary-color);
   margin-right: 1rem;
   border-radius: 0.5rem;
 }
@@ -571,7 +571,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #d8c898;
+  background: var(--primary-color);
   cursor: pointer;
   transition: background .3s ease-in-out;
   box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
@@ -777,7 +777,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 .kb-showtemplates li button.active {
-  background: #d8c898;
+  background: var(--primary-color);
   color: #fff;
 }
 
@@ -786,7 +786,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 #secondwizard .wizard-number {
-  background: #d8c898;
+  background: var(--primary-color);
   color: #fff;
 }
 
@@ -1203,12 +1203,12 @@ select#users-list-verified {
 .svg-icon.svg-icon-primary svg g [fill] {
     -webkit-transition: fill 0.3s ease;
     transition: fill 0.3s ease;
-    fill: #d8c898 !important;
+    fill: var(--primary-color) !important;
 }
 
 .offcanvas .btn.btn-light-primary {
     color: #000000;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     border-color: transparent;
     display: inline-block;
     font-size: 11px;
@@ -1253,7 +1253,7 @@ select#users-list-verified {
 }
 
 .navi .navi-item .navi-link:hover .navi-text {
-    color: #d8c898;
+    color: var(--primary-color);
 }
 
 /* width */
@@ -1330,7 +1330,7 @@ select#users-list-verified {
 }
 
 .selectedstep{
-  background: #d8c898;
+  background: var(--primary-color);
   color:#fff;
 }
 

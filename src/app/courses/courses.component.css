@@ -18,8 +18,8 @@
     transition:.5s ease-in-out;
 }
 .pagemainlink a.active{
-  color:#d8c898;
-  border-bottom: 1px solid #d8c898;
+  color:var(--primary-color);
+  border-bottom: 1px solid var(--primary-color);
 }
 .keabuilder-title-board {
   padding: 15px 0px;
@@ -54,7 +54,7 @@
 
 .statusbadge {
     color: #225d53;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 50px 0px 0px 50px;
@@ -65,7 +65,7 @@
     background-color: #e0e0e0;
 }
 .statusbadge:hover {
-    background-color: #d8c898;
+    background-color: var(--primary-color);
 }
 .img-fit{
     height: 265px;
@@ -85,8 +85,8 @@
     min-width: 156px;
 }
 .pagemainlink a:hover {
-  color: #d8c898;
-  border-bottom: 1px solid #d8c898;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--primary-color);
 }
 .kb-webpreviewer {
     box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 2px rgb(0 0 0 / 8%);
@@ -230,11 +230,11 @@
 .svg-icon.svg-icon-primary svg g [fill] {
     -webkit-transition: fill 0.3s ease;
     transition: fill 0.3s ease;
-    fill: #d8c898 !important;
+    fill: var(--primary-color) !important;
 }
 .offcanvas .btn.btn-light-primary {
     color: #000000;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     border-color: transparent;
     display: inline-block;
     font-size: 11px;
@@ -273,7 +273,7 @@
     color: #3F4254;
 }
 .navi .navi-item .navi-link:hover .navi-text {
-    color: #d8c898;
+    color: var(--primary-color);
 }
 .bg-light-warning {
     background-color: #FFF4DE !important;
@@ -368,7 +368,7 @@
 }
 
 .showsomediff {
-    background: #d8c898;
+    background: var(--primary-color);
     color: #fff;
     padding: 5px 10px;
     margin-right: 5px;

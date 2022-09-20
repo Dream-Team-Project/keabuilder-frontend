@@ -251,7 +251,7 @@
 
 .symbol.symbol-light-primary .symbol-label {
   background-color: #E1F0FF;
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 .font-size-lg {
@@ -320,7 +320,7 @@ div#topbar_notifications_logs {
 }
 
 #topbar_notifications_events .text-primary {
-  color: #d8c898 !important;
+  color: var(--primary-color) !important;
 }
 
 /* user notification */
@@ -446,7 +446,7 @@ div#topbar_notifications_logs {
 
 .router-link-active.router-link-exact-active>.bw-sidebar__item {
   opacity: 1;
-  color: #d8c898 !important;
+  color: var(--primary-color) !important;
 }
 
 .router-link-active.router-link-exact-active>.bw-sidebar__item:after {
@@ -492,7 +492,7 @@ div#topbar_notifications_logs {
   top: 0;
   width: 10px;
   height: 100%;
-  background: #d8c898;
+  background: var(--primary-color);
   border-radius: 0 20px 20px 0;
   -webkit-transform: translate(-6px);
   transform: translate(-6px);
@@ -1236,12 +1236,12 @@ a:hover {
 .svg-icon.svg-icon-primary svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #d8c898 !important;
+  fill: var(--primary-color) !important;
 }
 
 .offcanvas .btn.btn-light-primary {
   color: #000000;
-  background-color: #d8c898;
+  background-color: var(--primary-color);
   border-color: transparent;
   display: inline-block;
   font-size: 11px;
@@ -1286,7 +1286,7 @@ a:hover {
 }
 
 .navi .navi-item .navi-link:hover .navi-text {
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 .bg-light-warning {

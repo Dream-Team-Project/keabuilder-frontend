@@ -1,7 +1,7 @@
 <div id="topBar" [class.loaderShadow]="_general.saveDisabled" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
     <div class="innerLinks">
-        <button mat-button (click)="_general.redirectToWebsite()"><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
-        <button  mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
+        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
+        <button mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
     </div>
     <div class="innerLinks">
         <button mat-button [class.resp-active]="!_general.showResp.toggle" (click)="_general.showResp.toggle =  false" matTooltip="Desktop" matTooltipPosition="below"><i class="fa fa-desktop"></i></button>

@@ -21,7 +21,7 @@
   
   .kb-insidecard i {
     font-size: 30px;
-    color: #d8c898;
+    color: var(--primary-color);
   }
   
   .kb-insidecard:hover {

@@ -11,7 +11,7 @@
     border-color: transparent!important;
 }
 .nav.nav-tabs.nav-tabs-line.nav-tabs-line-3x .nav-link.active{
-    border-bottom: 3px solid #d8c898!important;
+    border-bottom: 3px solid var(--primary-color)!important;
 }
 .nav-tabs {
     border-bottom: transparent!important;
@@ -167,7 +167,7 @@
 .checkbox > input:checked ~ span {
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
 
 }
 .checkbox > input:checked ~ span:after {
@@ -219,7 +219,7 @@
     border-radius: 0.42rem;
 }
 .btn.btn-light-primary {
-    color: #d8c898;
+    color: var(--primary-color);
     background-color: #E1F0FF;
     border-color: transparent;
     font-size: 13px;
@@ -227,7 +227,7 @@
 }
 .btn.btn-light-primary:hover:not(.btn-text):not(:disabled):not(.disabled){   
     color: #FFFFFF;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     border-color: transparent;
 
 }
@@ -338,7 +338,7 @@
 .switch input:checked ~ span:after {
     opacity: 1;
     color: #ffffff;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
 }
 .checkbox.checkbox-success > input:checked ~ span {
     background-color: #1BC5BD;

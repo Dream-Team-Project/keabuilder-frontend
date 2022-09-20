@@ -850,10 +850,10 @@ padding-top: 7px;
     transition:.5s ease-in-out;
 }
 .ui-button:hover {
-    color: #d8c898;
+    color: var(--primary-color);
 }
 .ui-button.active {
-    color: #d8c898;
+    color: var(--primary-color);
 }
 .icon-label {
     font-size: 11px;
@@ -893,12 +893,12 @@ padding-top: 7px;
     margin: 8px;
 }
 #lo-website-iframe-container.tablet {
-    background: #d8c898a3;
+    background: var(--primary-color)a3;
     padding: 30px;
     border-radius: 15px;
 }
 #lo-website-iframe-container.phone{
-    background: #d8c898a3;
+    background: var(--primary-color)a3;
     padding: 30px 10px;
     border-radius: 15px;
 }

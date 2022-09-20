@@ -9,7 +9,7 @@
         --opacity-primary: rgb(216 200 152 / 70%);        ;
         --opacity-success: rgb(27 197 189 / 70%);
         --opacity-section: rgb(24 103 192 / 80%);
-        --primary-color: #d8c898;
+        --primary-color: var(--primary-color);
         --secondary-color: #6c757d;
         --section-color: #1867c0;
         --row-color: #1BC5BD;
@@ -24,7 +24,7 @@
     
     /* builder root */
     
-        --clr-primay: #d8c898;
+        --clr-primay: var(--primary-color);
         --clr-light: #fff;
     }
     

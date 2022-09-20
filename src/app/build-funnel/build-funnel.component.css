@@ -30,7 +30,7 @@
 .list-unstyled li .mat-card.active {
     color: #2c2c28!important;
     font-weight: bold;
-    background: #d8c898;
+    background: var(--primary-color);
 }
 .list-unstyled li .mat-card{
     cursor: pointer;
@@ -150,11 +150,11 @@
 .svg-icon.svg-icon-primary svg g [fill] {
     -webkit-transition: fill 0.3s ease;
     transition: fill 0.3s ease;
-    fill: #d8c898 !important;
+    fill: var(--primary-color) !important;
 }
 .offcanvas .btn.btn-light-primary {
     color: #000000;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     border-color: transparent;
     display: inline-block;
     font-size: 11px;
@@ -193,7 +193,7 @@
     color: #3F4254;
 }
 .navi .navi-item .navi-link:hover .navi-text {
-    color: #d8c898;
+    color: var(--primary-color);
 }
 .bg-light-warning {
     background-color: #FFF4DE !important;

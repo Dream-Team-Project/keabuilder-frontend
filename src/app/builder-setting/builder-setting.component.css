@@ -194,3 +194,18 @@ input.errorInp {
   .custom-placeholder {
     background-color: var(--kb-gray);
   }
+
+  span.kb-trans {
+    border-radius: 21px;
+    height: 21px;
+    width: 21px;
+    background: red;
+    margin-left: 10px;
+    background-image: url(/assets/images/builder/transparent.jpg);
+    background-size: 160%;
+    cursor: pointer;
+}
+
+/* span.kb-trans:after {
+
+} */

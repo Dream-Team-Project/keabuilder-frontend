@@ -34,7 +34,7 @@
 
 .statusbadge {
     color: #225d53;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 50px 0px 0px 50px;
@@ -45,7 +45,7 @@
     background-color: #e0e0e0;
 }
 .statusbadge:hover {
-    background-color: #d8c898;
+    background-color: var(--primary-color);
 }
 .kb-dropdown__status{
     top: 30px;
@@ -182,7 +182,7 @@
   #box {
     width: 60px;
     height: 60px;
-    background: #d8c898;
+    background: var(--primary-color);
     animation: animate .5s linear infinite;
     position: absolute;
     top: 0;
