@@ -1402,7 +1402,7 @@
                         <div [ngSwitch]="_style.background_type">
                             <div *ngSwitchCase="'color'">
                                 <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Background Color <span class="kb-trans"></span></div>
+                                    <div class="kb-tab-head">Background Color <span (click)="_style.background_color = 'transparent'" matTooltip="Transparent" matTooltipPosition="above" class="kb-trans"></span></div>
                                     <div class="kb-tab-contnent kb-transparent-bg">
                                         <div class="kb-dummy-bg" [style.backgroundColor]="_style.background_color">
                                             <div class="kb-selected-color">
@@ -1752,7 +1752,7 @@
                             </div>
                         </div>
                         <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Border Color</div>
+                            <div class="kb-tab-head">Border Color <span (click)="_style.border_color = 'transparent'" matTooltip="Transparent" matTooltipPosition="above" class="kb-trans"></span></div>
                             <div class="kb-tab-content kb-color-picker">
                                 <color-material [(ngModel)]="_style.border_color" [color]="_style.border_color">
                                 </color-material>

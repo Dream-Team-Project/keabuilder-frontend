@@ -1,6 +1,6 @@
 <div id="topBar" [class.loaderShadow]="_general.saveDisabled" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
     <div class="innerLinks">
-        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.svg'"></button>
+        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
         <button mat-button *ngFor="let nav of topBarLinks" [routerLink]="nav.link" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
     </div>
     <div class="innerLinks">
