@@ -204,8 +204,16 @@ input.errorInp {
     background-image: url(/assets/images/builder/transparent.jpg);
     background-size: 160%;
     cursor: pointer;
+    overflow: hidden;
+    position: relative;
 }
 
-/* span.kb-trans:after {
-
-} */
+span.kb-trans:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: var(--kb-danger);
+    position: absolute;
+    transform: rotate(-45deg);
+    top: 10px;
+}
