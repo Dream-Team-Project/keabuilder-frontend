@@ -75,6 +75,7 @@ import { CourseUserCourseLoginComponent } from './course-user/course-login/cours
 import { CourseUserCourseHeaderComponent } from './course-user/course-header/course-header.component';
 import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
 import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
+import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -82,11 +83,9 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
-  { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-  { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
-  { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
 
+
+  
   // website 
   { path: 'website', component: WebsiteComponent,
     children: [
@@ -117,44 +116,40 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
 
-  // Membership
-
-  { path: 'membership', component: MembershipComponent,
-    children:[
-      { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: LessonComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
-      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
-      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
-      { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
-      { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-  ],
-   canActivate: [AuthGuard] },
-
-  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-  { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
-  { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-transactions', component: AffiliateTransactionsComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-share', component: AffiliateShareComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-announcements', component: AffiliateAnnouncementsComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
 
-  { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
+
+
+  // Coming Soon links==>  ComingSoonComponent
+
+  { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+
+
+  { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
+
+  { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] },
+
+  { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contacts', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-lists', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-tags', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-reports', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'crm-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-commission', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-transactions', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-share', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-announcements', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-exports', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'affiliates-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
+
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
   // builder routes
@@ -172,10 +167,55 @@ const routes: Routes = [
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
-  
   { path: 'dashboard-new', component: DashboardNewComponent},
-  
-  
+
+
+  // Coming Soon Features ==>
+
+  // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
+  // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+  // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+
+
+  // { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
+
+  // Membership
+
+  // { path: 'membership', component: MembershipComponent,
+  //   children:[
+  //     { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: LessonComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
+  //     { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
+  //     { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+  //     { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+  //     { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+  //     { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+  //     { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+  //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+  // ],
+  //  canActivate: [AuthGuard] },
+
+  // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-transactions', component: AffiliateTransactionsComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-share', component: AffiliateShareComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-announcements', component: AffiliateAnnouncementsComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
+  // { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
+  // { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
+
+
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -260,5 +300,6 @@ export const RoutingComponents =
     CourseUserCourseLoginComponent,
     CourseUserCourseHeaderComponent,
     CourseUserCourseForgotpassComponent,
+    ComingSoonComponent,
   ];
 

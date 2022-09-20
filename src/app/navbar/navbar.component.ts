@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   alerts = true;
   events = false;
   logs = false;
+  hiderecentnotifi = false;
 
   ngOnInit(): void {
 

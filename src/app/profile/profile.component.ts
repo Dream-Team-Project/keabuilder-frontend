@@ -14,6 +14,8 @@ export class ProfileComponent implements OnInit {
   bwemail = '';
   activem = 'profile';
 
+  hideprofilenow = false;
+
   constructor(private token: TokenStorageService) { }
 
   ngOnInit(): void {

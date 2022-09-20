@@ -62,7 +62,7 @@
           <div *ngIf="insidepagefirst">
 
             <button mat-raised-button color="accent" class="btn-block mb-2" (click)="createfromscratch()" ><i class="fas fa-plus"></i> Create From Scratch</button>
-            <button mat-raised-button color="accent" class="btn-block mb-2" (click)="selectfromtemplate()" ><i class="fab fa-angellist"></i> Select From Template</button>
+            <!-- <button mat-raised-button color="accent" class="btn-block mb-2" (click)="selectfromtemplate()" ><i class="fab fa-angellist"></i> Select From Template</button> -->
             
           </div>
 
@@ -371,9 +371,9 @@
               <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
                   <i class="fas fa-pen mr-2"></i> Quick Edit
               </button>
-              <button mat-menu-item>
+              <!-- <button mat-menu-item>
                 <i class="fas fa-chart-pie mr-2"></i> View Analytics
-              </button>
+              </button> -->
               <button mat-menu-item (click)="shortsettings(kbpage.id,'duplicate',kbpage.page_path)">
                 <i class="fas fa-copy mr-2"></i> Duplicate
               </button>
