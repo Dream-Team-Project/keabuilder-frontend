@@ -90,7 +90,8 @@ const routes: Routes = [
   // website 
   { path: 'website', component: WebsiteComponent,
     children: [
-      {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+      // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+      {path: '', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]}
