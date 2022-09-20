@@ -29,6 +29,41 @@ export class SidebarComponent implements OnInit {
       submenu:null
     },{
       0:true,
+      routerlink: '/website',
+      img: 'browser.gif',
+      icon: 'fas fa-desktop',
+      title: 'Website',
+      submenu:[
+      // {
+      //   0:true,
+      //   routerlink: '/website/pages',
+      //   img: 'browser.gif',
+      //   icon: 'far fa-window-restore',
+      //   title: 'Pages'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/website/blog',
+      //   img: 'browser.gif',
+      //   icon: 'far fa-file-alt',
+      //   title: 'Blog'
+      // },
+      {
+        0:true,
+        routerlink: '/website/details',
+        img: 'browser.gif',
+        icon: 'fas fa-palette',
+        title: 'Site Details'
+      },{
+        0:true,
+        routerlink: '/website/marketplace',
+        img: 'browser.gif',
+        icon: 'fas fa-store',
+        title: 'Marketplace'
+      },
+      ]
+    },{
+      0:true,
       routerlink: '/funnels',
       img: 'funnel.gif',
       icon: 'fa fa-filter',
@@ -54,41 +89,6 @@ export class SidebarComponent implements OnInit {
           icon: 'fas fa-store',
           title: 'Marketplace'
         }]
-    },{
-      0:true,
-      routerlink: '/website',
-      img: 'browser.gif',
-      icon: 'fas fa-desktop',
-      title: 'Website',
-      submenu:[
-      {
-        0:true,
-        routerlink: '/website/pages',
-        img: 'browser.gif',
-        icon: 'far fa-window-restore',
-        title: 'Pages'
-      },
-      // {
-      //   0:true,
-      //   routerlink: '/website/blog',
-      //   img: 'browser.gif',
-      //   icon: 'far fa-file-alt',
-      //   title: 'Blog'
-      // },
-      {
-        0:true,
-        routerlink: '/website/details',
-        img: 'browser.gif',
-        icon: 'fas fa-pencil-alt',
-        title: 'Site Details'
-      },{
-        0:true,
-        routerlink: '/website/marketplace',
-        img: 'browser.gif',
-        icon: 'fas fa-store',
-        title: 'Marketplace'
-      },
-      ]
     },{
       0:true,
       routerlink: '/membership',
@@ -316,7 +316,7 @@ export class SidebarComponent implements OnInit {
 
     var myhref = event.currentTarget.attributes["href"].nodeValue;
 
-    if(myhref=='/funnels'){
+    if(myhref=='/website'){
 
       this.extramenus = false;
       
@@ -329,7 +329,7 @@ export class SidebarComponent implements OnInit {
       this.allmenu[1].submenu.forEach((element: any) => {
         element[0] = false;
       });
-    }else if(myhref=='/website'){
+    }else if(myhref=='/funnels'){
 
       this.extramenus = false;
       

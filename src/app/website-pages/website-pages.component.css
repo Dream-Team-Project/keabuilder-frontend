@@ -33,8 +33,8 @@
 }
 
 .statusbadge {
-    color: #225d53;
-    background-color: var(--primary-color);
+    color: #ffffff;
+    background-color: var(--secondary-color);
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 50px 0px 0px 50px;
@@ -43,10 +43,9 @@
 }
 .statusbadge.active2 {
     background-color: #e0e0e0;
+    color: var(--secondary-color);
 }
-.statusbadge:hover {
-    background-color: var(--primary-color);
-}
+
 .kb-dropdown__status{
     top: 30px;
     min-width: 156px;
