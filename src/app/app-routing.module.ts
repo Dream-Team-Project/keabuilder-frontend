@@ -74,6 +74,7 @@ import { CourseUserModulesPostComponent } from './course-user/modules-post/modul
 import { CourseUserCourseLoginComponent } from './course-user/course-login/course-login.component';
 import { CourseUserCourseHeaderComponent } from './course-user/course-header/course-header.component';
 import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
+import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -169,7 +170,10 @@ const routes: Routes = [
   { path: 'course/:name', component: CourseUserCoursesComponent},
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
-
+  
+  
+  { path: 'dashboard-new', component: DashboardNewComponent},
+  
   
 
   // page not found
