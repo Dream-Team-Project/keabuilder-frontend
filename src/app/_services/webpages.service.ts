@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { TokenStorageService } from './token-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -12,37 +12,50 @@ const httpOptions = {
 })
 export class WebpagesService {
 
-  allwebpagesApi = '/api/allwebpagesdata';
-  getwebpagebypathApi = '/api/getwebpagebypath';
-  createwebpagesApi = '/api/createwebpage';
-  updatewebpagesApi = '/api/updatewebpage';
-  getsinglewebpageApi = '/api/singlewebpagedata';
+  allwebpagesApi = '/api/allwebpagesdata/';
+  getwebpagebypathApi = '/api/getwebpagebypath/';
+  createwebpagesApi = '/api/createwebpage/';
+  updatewebpagesApi = '/api/updatewebpage/';
+  getsinglewebpageApi = '/api/singlewebpagedata/';
+  namepathchangesApi = '/api/namepathchangeswebsite/';
+  validatepagesApi = '/api/validatepage/';
+  savequickpagesdetailsApi = '/api/savequickpagesdetails/';
+  dupldelpageApi = '/api/dupldelpage/';
+  getarchivepagesApi = '/api/getarchivepages/';
+  restoredeletepageApi = '/api/restoredeletepage/';
+  pagevisibilityApi = '/api/pagevisibility/';
+  querystringmanageApi = '/api/querystringmanage/';
+  shortbypaginatorApi = '/api/shortbypaginator/';
+  uniqueuserid:any = '';
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
+      this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+   }
 
   getWebpages(): Observable<any> {
-    return this.http.get(this.allwebpagesApi);
+    return this.http.get(this.allwebpagesApi+this.uniqueuserid);
   }
 
   getWebPageByPath(data:any): Observable<any> {
-    return this.http.post(this.getwebpagebypathApi, data)
-    .pipe(catchError(this.errorHandler));;
+    return this.http.post(this.getwebpagebypathApi+this.uniqueuserid, data)
+    .pipe(catchError(this.errorHandler));
   }
 
   getSingleWebpage(uniqueid:string): Observable<any> {
-    return this.http.get(this.getsinglewebpageApi+'/'+uniqueid);
+    return this.http.get(this.getsinglewebpageApi+this.uniqueuserid+'/'+uniqueid);
   }
 
   createWebpage(pagedata: any): Observable<any> {
-    return this.http.post(this.createwebpagesApi, pagedata);
+    return this.http.post(this.createwebpagesApi+this.uniqueuserid, pagedata);
   }
 
   updateWebpage(pagedata: any): Observable<any> {
-    return this.http.post(this.updatewebpagesApi, pagedata);
+    return this.http.post(this.updatewebpagesApi+this.uniqueuserid, pagedata);
   }
 
   namepathchanges(id:string, name:string, which:string):Observable<any> {
-    return this.http.post("/api/namepathchangeswebsite", {
+    return this.http.post(this.namepathchangesApi+this.uniqueuserid, {
       id,
       name,
       which
@@ -50,7 +63,7 @@ export class WebpagesService {
   }
 
   validatepages(name: string, path:string, author:string):Observable<any> {
-    return this.http.post("/api/validatepage", {
+    return this.http.post(this.validatepagesApi+this.uniqueuserid, {
       name,
       path,
       author,
@@ -58,7 +71,7 @@ export class WebpagesService {
   }
 
   savequickpagesdetails(pageurl: string, seotitle:string, seodescr:string, gentags:string, seoauthor:string, quickeditid:string):Observable<any> {
-    return this.http.post("/api/savequickpagesdetails", {
+    return this.http.post(this.savequickpagesdetailsApi+this.uniqueuserid, {
       pageurl,
       seotitle,
       seodescr,
@@ -68,50 +81,45 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(()=>error.message || "Sever Error")
-  }
-
   dupldelpage(id: string, type:string):Observable<any> {
-    return this.http.post("/api/dupldelpage", {
+    return this.http.post(this.dupldelpageApi+this.uniqueuserid, {
       id,
       type,
     }, httpOptions);
   }
 
   getarchivepages(showing:string):Observable<any> {
-    return this.http.post("./api/getarchivepages", {
+    return this.http.post(this.getarchivepagesApi+this.uniqueuserid, {
       showing,
     }, httpOptions);
   }
 
   restoredeletepage(data:any):Observable<any> {
-    return this.http.post("./api/restoredeletepage", {
+    return this.http.post(this.restoredeletepageApi+this.uniqueuserid, {
       data
     }, httpOptions);
   }
 
   pagevisibility(data:any):Observable<any> {
-    return this.http.post("./api/pagevisibility", {
+    return this.http.post(this.pagevisibilityApi+this.uniqueuserid, {
       data
     }, httpOptions);
   }
 
   querystringmanage(data:any):Observable<any> {
-    return this.http.post("./api/querystringmanage", {
+    return this.http.post(this.querystringmanageApi+this.uniqueuserid, {
       data
     }, httpOptions);
   }
 
   shortbypaginator(data:any):Observable<any> {
-    return this.http.post("./api/shortbypaginator", {
+    return this.http.post(this.shortbypaginatorApi+this.uniqueuserid, {
       data
     }, httpOptions);
   }
 
-  
-
-  
-
+  errorHandler(error: HttpErrorResponse) {
+    return throwError(()=>error.message || "Sever Error")
+  }
 
 }

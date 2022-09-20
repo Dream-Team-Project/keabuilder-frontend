@@ -25,7 +25,7 @@ export class CourseUserCourseLoginComponent implements OnInit {
 
     var courselogincheck:any = localStorage.getItem("kbcourselogin");
     if(courselogincheck!=null){
-      var cnvrtobj = JSON.parse(courselogincheck);
+      var cnvrtobj = JSON.parse(atob(courselogincheck));
       if(cnvrtobj.isloggedIn==true){
         this.router.navigate(['/course/dashboard'],{relativeTo: this.route});
       }
@@ -66,7 +66,7 @@ export class CourseUserCourseLoginComponent implements OnInit {
             var genrtname = firstletter+''+lastletter;
 
             var loginobj:any = {isloggedIn:true, courseassign:getassigncourse, username:genrtname};
-            localStorage.setItem("kbcourselogin", JSON.stringify(loginobj));
+            localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
             this.router.navigate(['/course/dashboard'],{relativeTo: this.route});
 
           }else{

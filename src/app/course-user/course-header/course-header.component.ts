@@ -19,7 +19,7 @@ export class CourseUserCourseHeaderComponent implements OnInit {
 
     var courselogincheck:any = localStorage.getItem("kbcourselogin");
     if(courselogincheck!=null){
-      var cnvrtobj = JSON.parse(courselogincheck);
+      var cnvrtobj = JSON.parse(atob(courselogincheck));
       console.log(cnvrtobj);
       if(cnvrtobj.username!=''){
         this.shortname = cnvrtobj.username;

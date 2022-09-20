@@ -35,7 +35,7 @@ export class WistiaService {
   }
 
   projectCreate(req:any): Observable<any> {
-    return this.http.post(this.projectCreateApi, req)
+    return this.http.post(this.projectCreateApi, req);
   }
 
   projectUpdate(req:any): Observable<any> {

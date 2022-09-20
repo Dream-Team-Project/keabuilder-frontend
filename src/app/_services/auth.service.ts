@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   loggedIn() {
-    return !!sessionStorage.getItem('auth-token');
+    return !!localStorage.getItem('auth-token');
   }
 
   forgetPassword(email: string): Observable<any>{
