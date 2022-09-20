@@ -44,19 +44,18 @@ export class RegisterComponent implements OnInit {
           next: data => {
             console.log(data);
 
-           var userobject = {project_name: username};
-            this._wistia.projectCreate(userobject).subscribe({
-              next: data2 => {
-                this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
-                  next: data3 => {
-                    console.log(data3);
-                  }
-                });
+          // need to pass unique id to the wistia instead of username
+          //  var userobject = {project_name: username};
+          //   this._wistia.projectCreate(userobject).subscribe({
+          //     next: data2 => {
+          //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
+          //         next: data3 => {
+          //           console.log(data3);
+          //         }
+          //       });
 
-              }
-            });
-            
-
+          //     }
+          //   });
 
             this.isSuccessful = true;
             this.isSignUpFailed = false;
