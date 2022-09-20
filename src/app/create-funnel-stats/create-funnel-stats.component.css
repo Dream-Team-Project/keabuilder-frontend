@@ -84,7 +84,7 @@
   }
   
   .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] .wizard-wrapper .wizard-label .wizard-title {
-    color: #d8c898;
+    color: var(--primary-color);
   }
   
   .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] {
@@ -109,7 +109,7 @@
     -ms-flex-pack: center;
     justify-content: center;
     background-color: rgb(216 200 152 / 10%);
-    color: #d8c898;
+    color: var(--primary-color);
     margin-right: 1rem;
     border-radius: 0.5rem;
   }

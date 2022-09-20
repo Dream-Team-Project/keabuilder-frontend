@@ -71,8 +71,8 @@ export class GeneralService {
   images_upload_handler: function (blobInfo:any, success:any, failure:any) {
     setTimeout(function () {
       /* no matter what you upload, we will turn it into TinyMCE logo :)*/
-      console.log(blobInfo);
-      console.log(success);
+      // console.log(blobInfo);
+      // console.log(success);
       success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
     }, 2000);
   },

@@ -334,7 +334,7 @@ export class WebsitePagesComponent implements OnInit {
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = 'http://localhost:4200/assets/keapages/'+data;
+      var url = window.location.origin+'/assets/keapages/'+data;
       window.open(url, '_blank')
     }
   }

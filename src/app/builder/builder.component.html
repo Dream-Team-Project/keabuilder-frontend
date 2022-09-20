@@ -117,7 +117,7 @@
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>
-                                                <div [ngSwitch]="element.content.name">
+                                                <div [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
                                                     <div *ngSwitchCase="'image'" class="kb-element-content">
                                                         <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
                                                             [ngStyle]="_style.imageStyling()"
@@ -167,21 +167,6 @@
                                                             <tinymce [ngStyle]="_style.getBlockStyle(element.content.style)" [inline]="true" (mouseenter)="_general.insideEditor = true" (mouseleave)="_general.insideEditor = false;" [(ngModel)]="element.content.html"
                                                                 [config]="_general.config"></tinymce>
                                                         </ng-template>
-
-                                                        <!-- <div *ngIf="element.content.editor else text">
-                                                            <tinymce [ngStyle]="_style.getBlockStyle(element.content.style)" [inline]="true" (mouseenter)="_general.insideEditor = true" (mouseleave)="_general.insideEditor = false;" [(ngModel)]="element.content.html"
-                                                                [config]="_general.config"></tinymce>
-                                                        </div>
-                                                        <ng-template #text>
-                                                            <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
-                                                                [ngStyle]="_style.textStyling()"
-                                                                [innerHTML]="_style.edit_html | safeHtml"></div>
-                                                            <ng-template #originalText>
-                                                                <div
-                                                                [ngStyle]="_style.getElementBlockStyle(element)"
-                                                                [innerHTML]="element.content.html | safeHtml"></div>
-                                                            </ng-template>
-                                                        </ng-template> -->
                                                     </div>
                                                 </div>
                                                 <span

@@ -215,7 +215,7 @@
 
 .symbol.symbol-light-primary .symbol-label {
   background-color: #E1F0FF;
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 .font-size-lg {
@@ -284,7 +284,7 @@ div#topbar_notifications_logs {
 }
 
 #topbar_notifications_events .text-primary {
-  color: #d8c898 !important;
+  color: var(--primary-color) !important;
 }
 
 /* user notification */
@@ -410,7 +410,7 @@ div#topbar_notifications_logs {
 
 .router-link-active.router-link-exact-active>.bw-sidebar__item {
   opacity: 1;
-  color: #d8c898 !important;
+  color: var(--primary-color) !important;
 }
 
 .router-link-active.router-link-exact-active>.bw-sidebar__item:after {
@@ -456,7 +456,7 @@ div#topbar_notifications_logs {
   top: 0;
   width: 10px;
   height: 100%;
-  background: #d8c898;
+  background: var(--primary-color);
   border-radius: 0 20px 20px 0;
   -webkit-transform: translate(-6px);
   transform: translate(-6px);
@@ -686,16 +686,17 @@ div#topbar_notifications_logs {
   border-radius: inherit;
 }
 
+.bw-sidebar-content:hover .bw-sidebar::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+
 .bw-sidebar-content .bw-sidebar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-  display: block;
-  background: #fff;
+  width: 0px;
 }
 
 .bw-sidebar-content .bw-sidebar::-webkit-scrollbar-thumb {
-  background: #d8c898;
-  border-radius: 5px;
+  background-color: var(--secondary-color);
 }
 
 .hoveropen {
@@ -709,7 +710,7 @@ div#topbar_notifications_logs {
 /* Sidebar css */
 
 .a-active .bw-sidebar__item__text, .a-active i {
-  color: #a99c76;
+  color: var(--primary-color);
 }
 
 .bw-sidebar a:hover img, .bw-sidebar__group__header:hover .bw-sidebar__item__icon img{

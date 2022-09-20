@@ -68,10 +68,6 @@
   background: transparent;
 }
 
-/* Handle */
-.offcanvas-content::-webkit-scrollbar-thumb {
-  background: #e2e2e2;
-}
 
 .offcanvas-overlay {
   position: fixed;

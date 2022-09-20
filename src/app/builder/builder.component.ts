@@ -220,7 +220,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               var eleSel = 'div';
               var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
               var content = ele.querySelector('.kb-element-content');
-              eleObj.content.name = ele.children[0].getAttribute('ng-reflect-ng-switch');
+              eleObj.content.name = ele.children[0].getAttribute('data-name');
               if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
                 eleObj.content.html = content.children[0].innerHTML;
               }
@@ -252,7 +252,8 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
               eleObj.name = ele.title;
-              colObj.elementArr.push(eleObj);
+              console.log(eleObj.content.name);
+              if(eleObj.content.name) colObj.elementArr.push(eleObj);
             })
             colObj.hide = {
               desktop: col.classList.contains('kb-d-desk-none'),

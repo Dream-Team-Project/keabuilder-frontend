@@ -41,7 +41,7 @@
 
 .statusbadge {
   color: #225d53;
-  background-color: #d8c898;
+  background-color: var(--primary-color);
   font-size: 12px;
   padding: 2px 12px;
   border-radius: 50px 0px 0px 50px;
@@ -54,7 +54,7 @@
 }
 
 .statusbadge:hover {
-  background-color: #d8c898;
+  background-color: var(--primary-color);
 }
 
 .keabuilder-title-board {
@@ -270,7 +270,7 @@
 }
 
 .showsomediff {
-  background: #d8c898;
+  background: var(--primary-color);
   color: #fff;
   padding: 5px 10px;
   margin-right: 5px;

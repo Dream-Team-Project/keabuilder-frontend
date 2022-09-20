@@ -21,8 +21,8 @@
   }
   
   .pagemainlink a.active {
-    color: #d8c898;
-    border-bottom: 1px solid #d8c898;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
   }
   
   .keabuilder-title-board {
@@ -64,7 +64,7 @@
   
   .statusbadge {
     color: #225d53;
-    background-color: #d8c898;
+    background-color: var(--primary-color);
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 50px 0px 0px 50px;
@@ -77,7 +77,7 @@
   }
   
   .statusbadge:hover {
-    background-color: #d8c898;
+    background-color: var(--primary-color);
   }
   
   .img-fit {
@@ -102,8 +102,8 @@
   }
   
   .pagemainlink a:hover {
-    color: #d8c898;
-    border-bottom: 1px solid #d8c898;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--primary-color);
   }
   
   .kb-webpreviewer {

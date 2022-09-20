@@ -85,7 +85,7 @@
 }
 
 .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] .wizard-wrapper .wizard-label .wizard-title {
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 .wizard-nav .wizard-steps .wizard-step[data-wizard-state=current] {
@@ -110,7 +110,7 @@
   -ms-flex-pack: center;
   justify-content: center;
   background-color: rgb(216 200 152 / 10%);
-  color: #d8c898;
+  color: var(--primary-color);
   margin-right: 1rem;
   border-radius: 0.5rem;
 }
@@ -136,11 +136,11 @@
 
 .wizard.vertical .steps ul li a i {
   font-size: 40px;
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 #steps-uid-2 .d-block {
-  color: #d8c898;
+  color: var(--primary-color);
 }
 
 #steps-uid-2 ul li a {
@@ -370,11 +370,11 @@ label {
 .svg-icon.svg-icon-primary svg g [fill] {
   -webkit-transition: fill 0.3s ease;
   transition: fill 0.3s ease;
-  fill: #d8c898 !important;
+  fill: var(--primary-color) !important;
 }
 .offcanvas .btn.btn-light-primary {
   color: #000000;
-  background-color: #d8c898;
+  background-color: var(--primary-color);
   border-color: transparent;
   display: inline-block;
   font-size: 11px;
@@ -413,7 +413,7 @@ label {
   color: #3F4254;
 }
 .navi .navi-item .navi-link:hover .navi-text {
-  color: #d8c898;
+  color: var(--primary-color);
 }
 .bg-light-warning {
   background-color: #FFF4DE !important;

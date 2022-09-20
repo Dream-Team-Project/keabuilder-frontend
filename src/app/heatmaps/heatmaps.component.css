@@ -11,10 +11,10 @@
 }
 .kb-heatmapnew span {
     font-size: 22px;
-    color: #d8c898;
+    color: var(--primary-color);
 }
 .kb-findsection > div{
-    background: linear-gradient(to left,#d8c898 ,#2c2c28);
+    background: linear-gradient(to left,var(--primary-color) ,#2c2c28);
     color: #fff;
     padding: 50px;
     border-radius: 6px;
@@ -31,7 +31,7 @@
     border-radius: 0px 64px 64px 0px;
 }
 .kb-mostvisitpage h3 {
-    background: linear-gradient(to left,#d8c898 ,#2c2c28);
+    background: linear-gradient(to left,var(--primary-color) ,#2c2c28);
     color: #fff;
     padding: 10px 30px;
     margin: 0px 33px 0px;
