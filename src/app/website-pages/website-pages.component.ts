@@ -20,7 +20,7 @@ export interface WebpageData {
   page_name:string;
   created_at:string;
   archive_reason:string;
-  updated_at:string;
+  actions:string;
 }
 
 @Component({
@@ -30,7 +30,7 @@ export interface WebpageData {
 })
 export class WebsitePagesComponent implements OnInit {
   
-  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'updated_at'];
+  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
   selection = new SelectionModel<WebpageData>(true, []);
   dataSource: MatTableDataSource<WebpageData>;
   users:any = [];
@@ -273,7 +273,6 @@ export class WebsitePagesComponent implements OnInit {
   showwebpages(){
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        console.log(data);
         this.kbpages = [];
         this.shortdata(data);
 
@@ -460,30 +459,27 @@ export class WebsitePagesComponent implements OnInit {
       this.router.navigate(['/builder/website',id])
   }
 
-  shortsettings(id:any, type:any, oldpath:string){
-
+  shortsettings(page:any, type:any, oldpath:string){
     if(type=='duplicate'){
       // console.log(id);
-      this.webpagesService.dupldelpage(id,type).subscribe({
+      this.webpagesService.dupldelpage(page.id,type).subscribe({
         next: data => {
-          console.log(data);
-
           if(data.success==1){
-
-            console.log(oldpath);
-            console.log(data.newpath);
-
             this._snackBar.open('Processing...', 'OK');
             var pathobj  = {oldpath:oldpath, newpath:data.newpath};
             this.fileuploadService.copypage(pathobj).subscribe({
               next: data => {
                 this._snackBar.open('Page Duplicate Successfully!', 'OK');
-                // console.log(data);
+                this.showwebpages();
+              }
+            });
+            var imgobj  = {oldname:'keaimage-'+page.uniqueid+'-screenshot.png', newname:'keaimage-'+data.uniqueid+'-screenshot.png'};
+            this.fileuploadService.copyimage(imgobj).subscribe({
+              next: data => {
+                console.log(data);
               }
             });
             
-            this.showwebpages();
-
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -491,7 +487,7 @@ export class WebsitePagesComponent implements OnInit {
         }
       });
     }else if(type=='copyurl'){
-      this.webpagesService.dupldelpage(id,type).subscribe({
+      this.webpagesService.dupldelpage(page.id,type).subscribe({
         next: data => {
           // console.log(data);
 
@@ -500,8 +496,8 @@ export class WebsitePagesComponent implements OnInit {
             this.popupsidebar = true;
             this.showmytemplates = false;
             this.addnewpagepopup = false;
-              this.insidepagefirst = true;
-              this.insidepagesecond = false;
+            this.insidepagefirst = true;
+            this.insidepagesecond = false;
             this.quickeditpopup = false;
             this.selecttemplate = false;
             this.showpageurl = true;
@@ -587,14 +583,14 @@ export class WebsitePagesComponent implements OnInit {
     return new Date(value).toDateString();
   }
 
-  restoredeleteme(id:any,type:any){
+  restoredeleteme(page:any,type:any){
  
-    var gendata:any = {id:id,type:type,reason:''};
+    var gendata:any = {id:page.id,type:type,reason:''};
     if(type=='archived'){
       gendata = {id:this.archive_id,type:type,reason:this.reason};
     }
     if(type=='toggleview'){
-      gendata = {id:id,type:type,reason:this.toggleview1};
+      gendata = {id:page.id,type:type,reason:this.toggleview1};
     }
     
     // console.log(gendata);
@@ -602,15 +598,18 @@ export class WebsitePagesComponent implements OnInit {
       next: data => {
         console.log(data);
         if(data.success==1){
-
           if(data.deleteme==1){
             this.fileuploadService.deletepage(data.path).subscribe({
               next: data => {
                 console.log(data);
               }
             });
+            this.fileuploadService.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
+              next: data => {
+                console.log(data);
+              }
+            });
           }
-
           this.popupsidebar = false;
           this.showwebpages();
           this.applykbfilter();

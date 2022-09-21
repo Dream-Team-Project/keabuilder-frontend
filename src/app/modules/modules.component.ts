@@ -365,7 +365,7 @@ export class ModulesComponent implements OnInit {
     deleteModule(module:any, mi:number) {
       this._module.delete(module.id).subscribe(res=>{
         if(res.success) {
-          if(module.thumbnail) this._file.deletefile(module.thumbnail);
+          if(module.thumbnail) this._file.deleteimage(module.thumbnail);
           var lessons = module.lessons;
           lessons.forEach((lesson:any)=>{
             this.deleteLesson(module, lesson, mi, -1, lessons.length);
@@ -489,7 +489,7 @@ export class ModulesComponent implements OnInit {
   deleteLesson(module:any, lesson:any, mi:number, li:number, len:number) {
     this._lesson.delete(lesson.id).subscribe(res=>{
       if(res.success) {
-        if(lesson.thumbnail) this._file.deletefile(lesson.thumbnail);
+        if(lesson.thumbnail) this._file.deleteimage(lesson.thumbnail);
         if(li > -1) {
           module.lessons.splice(li, 1);
           this.sortLessons();

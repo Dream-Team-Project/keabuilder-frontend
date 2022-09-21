@@ -166,7 +166,7 @@ export class CoursesComponent implements OnInit {
 
   deleteCourse(course:any) {
     this._course.delete(course.id).subscribe((res:any)=>{
-      if(course.thumbnail) this._file.deletefile(course.thumbnail).subscribe((res:any)=>{
+      if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
         console.log(res);
       });
       this.allCourses(true);

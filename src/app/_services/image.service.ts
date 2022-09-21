@@ -116,7 +116,7 @@ export class ImageService {
         this.fileUploadService.deletefromdb(img.id).subscribe(
             (event:any) => {
                 if(!img.ext_link) {
-                    this.fileUploadService.deletefile(img.path).subscribe(
+                    this.fileUploadService.deleteimage(img.path).subscribe(
                         (event:any) => {
                             this.snackBarMsg = 'Image has been deleted';
                             this.getAllImgs();
