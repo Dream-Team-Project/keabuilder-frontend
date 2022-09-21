@@ -19,11 +19,11 @@ export class WebsiteService {
   }
 
   getWebsite(): Observable<any> {
-    return this.http.get('/api/allwebsitedata'+this.uniqueuserid);
+    return this.http.get('/api/allwebsitedata/'+this.uniqueuserid);
   }
 
   updatesitedetails(homepage: any, scriptheader:any, scriptfooter:any, logo:any, favicon:any, checkimginput1:any, checkimginput2:any):Observable<any> {
-    return this.http.post("./api/updatesitedetails"+this.uniqueuserid, {
+    return this.http.post("./api/updatesitedetails/"+this.uniqueuserid, {
       homepage,
       scriptheader,
       scriptfooter,
@@ -35,7 +35,7 @@ export class WebsiteService {
   }
 
   setpublishstatus(status: any):Observable<any> {
-    return this.http.post("./api/setPublishstatus"+this.uniqueuserid, {
+    return this.http.post("./api/setPublishstatus/"+this.uniqueuserid, {
       status,
     }, httpOptions);
   }

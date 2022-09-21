@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
   bwname = '';
   bwemail = '';
   activem = 'profile';
+  hideextrafeature = false;
 
   hideprofilenow = false;
 
