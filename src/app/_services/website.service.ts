@@ -40,6 +40,4 @@ export class WebsiteService {
     }, httpOptions);
   }
 
-
-
 }
