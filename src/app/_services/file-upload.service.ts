@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse,HttpHeaders} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
+import { TokenStorageService } from './token-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -30,16 +31,18 @@ export class FileUploadService {
   updateOnDBApi = "./api/updateondb";
   deleteFromDB = "./api/deletefromdb";
   copyImgApi = "./api/copyimage"
-  deleteFileApi = "./api/deletefile";
+  deleteimageApi = "./api/deleteimage";
   createPageApi = "./api/savepage";
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
   createHomeApi = '/api/createhome';
   deletePageApi = '/api/deletepage';
+  uniqueuserid:any = '';
 
-  constructor(private http:HttpClient) { }
-
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
+    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+}
   deletepage(path:any):Observable<any> {
     return this.http.delete(this.deletePageApi + '/' + path)
     .pipe(catchError(this.errorHandler));
@@ -61,8 +64,8 @@ export class FileUploadService {
     return this.http.post(this.copyImgApi, imgname);
   }
 
-  copypage(pagename:any):Observable<any> {
-    return this.http.post(this.copyPageApi, pagename);
+  copypage(pathobj:any):Observable<any> {
+    return this.http.post(this.copyPageApi, pathobj);
   }
 
   getfile(page:any):Observable<any> {
@@ -124,12 +127,12 @@ export class FileUploadService {
   }
 
   getAllImgs():Observable<any> {
-    return this.http.get(this.getAllImgsApi)
+    return this.http.get(this.getAllImgsApi+'/'+this.uniqueuserid)
     .pipe(catchError(this.errorHandler));
   }
 
   saveondb(imagedata: any):Observable<any> {
-    return this.http.post(this.saveOnDBApi, imagedata)
+    return this.http.post(this.saveOnDBApi+'/'+this.uniqueuserid, imagedata)
     .pipe(catchError(this.errorHandler));
   }
 
@@ -143,8 +146,8 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  deletefile(path:any) {
-    return this.http.delete(this.deleteFileApi + '/' + path)
+  deleteimage(path:any) {
+    return this.http.delete(this.deleteimageApi + '/' + path)
     .pipe(catchError(this.errorHandler));
   }
   
