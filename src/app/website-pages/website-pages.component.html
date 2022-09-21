@@ -11,19 +11,19 @@
 
             <mat-form-field class="kb-full-width" appearance="fill">
               <mat-label>Page Url</mat-label>
-              <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()">
+              <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()" (input)="pageurl = _general.joinWthDash(pageurl)">
               <small class="text-danger" *ngIf="pathcheck2">
                 Path must be <strong>unique</strong>
               </small>
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>SEO Title</mat-label>
+              <mat-label>Page Title</mat-label>
               <input matInput [(ngModel)]="seotitle" name="seotitle">
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>SEO Description</mat-label>
+              <mat-label>Page Description</mat-label>
               <textarea [(ngModel)]="seodescr" matInput name="seodescr">{{seodescr}}</textarea>
             </mat-form-field>
 
