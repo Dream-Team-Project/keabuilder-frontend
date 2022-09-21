@@ -290,35 +290,46 @@ export class WebsitePagesComponent implements OnInit {
 
     if(dataA.success !=0){
       // console.log('--works');
-      this.pagegetdata = false;
-      if(this.toggleview2==true ){
-        this.pagenotfound = false;
-      }
-      this.fetchdatastatus = true;
-      dataA.data.forEach((element:any) => {
-            
-        var mycustomdate =  new Date(element.updated_at);
-        var text1 = mycustomdate.toDateString();    
-        var text2 = mycustomdate.toLocaleTimeString();
-        element.updated_at = text1+' '+text2;
-        
-        this.kbpages.push(element);
 
-        var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
+      if(dataA.success ==2){
 
-          this.fileuploadService.validateimg(genscrn).subscribe({
-            next: data => {
+        this.pagegetdata = true;
+       
 
-              if(data.data==0){
-                element.thumbnail = 'webpage_thumbnail.jpg';
-              }else if(data.data==1){
-                element.thumbnail = genscrn;
+      }else{
+
+        this.pagegetdata = false;
+        if(this.toggleview2==true ){
+          this.pagenotfound = false;
+        }
+        this.fetchdatastatus = true;
+        dataA.data.forEach((element:any) => {
+              
+          var mycustomdate =  new Date(element.updated_at);
+          var text1 = mycustomdate.toDateString();    
+          var text2 = mycustomdate.toLocaleTimeString();
+          element.updated_at = text1+' '+text2;
+          
+          this.kbpages.push(element);
+
+          var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
+
+            this.fileuploadService.validateimg(genscrn).subscribe({
+              next: data => {
+
+                if(data.data==0){
+                  element.thumbnail = 'webpage_thumbnail.jpg';
+                }else if(data.data==1){
+                  element.thumbnail = genscrn;
+                }
+
               }
+            });
 
-            }
-          });
+        });
 
-      });
+      }
+
 
     }else{
       this.fetchdatastatus = false;
@@ -467,14 +478,15 @@ export class WebsitePagesComponent implements OnInit {
             console.log(oldpath);
             console.log(data.newpath);
 
+            this._snackBar.open('Processing...', 'OK');
             var pathobj  = {oldpath:oldpath, newpath:data.newpath};
             this.fileuploadService.copypage(pathobj).subscribe({
               next: data => {
+                this._snackBar.open('Page Duplicate Successfully!', 'OK');
                 // console.log(data);
               }
             });
             
-            this._snackBar.open('Page Duplicate Successfully!', 'OK');
             this.showwebpages();
 
           }else{
@@ -500,8 +512,8 @@ export class WebsitePagesComponent implements OnInit {
             this.showpageurl = true;
             this.confirmarchivepage = false;
 
-            this.pagebuilderurl = 'http://localhost:4200/builder/website/'+data.data[0].uniqueid;
-            this.pageurl = 'http://localhost:4200/'+data.data[0].page_path;
+            this.pagebuilderurl = window.origin+'/builder/website/'+data.data[0].uniqueid;
+            this.pageurl = window.origin+'/'+data.data[0].page_path;
 
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
@@ -539,7 +551,7 @@ export class WebsitePagesComponent implements OnInit {
   changevisibility(value:any){
     this.webpagesService.pagevisibility(value).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.kbpages = [];
         this.shortdata(data);
       }

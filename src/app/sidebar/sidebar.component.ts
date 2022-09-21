@@ -91,6 +91,27 @@ export class SidebarComponent implements OnInit {
         }]
     },{
       0:true,
+      routerlink: '/forms',
+      img: 'complete.gif',
+      icon: 'fas fa-address-card',
+      title: 'Forms',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/domain',
+      img: 'worldwide.gif',
+      icon: 'fas fa-globe-americas',
+      title: 'Domains',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/payment',
+      img: 'payment.gif',
+      icon: 'fa fa-dollar-sign',
+      title: 'Payment',
+      submenu:null
+    },{
+      0:true,
       routerlink: '/membership',
       img: 'shield.gif',
       icon: 'fas fa-shield-alt',
@@ -152,20 +173,6 @@ export class SidebarComponent implements OnInit {
         title: 'Marketplace'
       }
       ]
-    },{
-      0:true,
-      routerlink: '/forms',
-      img: 'complete.gif',
-      icon: 'fas fa-address-card',
-      title: 'Forms',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/domain',
-      img: 'worldwide.gif',
-      icon: 'fas fa-globe-americas',
-      title: 'Domains',
-      submenu:null
     },{
       0:true,
       routerlink: '/crm',
@@ -292,13 +299,6 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/payment',
-      img: 'payment.gif',
-      icon: 'fa fa-dollar-sign',
-      title: 'Payment',
-      submenu:null
-    },{
-      0:true,
       routerlink: '/integrations',
       img: 'cloud-network.gif',
       icon: 'fas fa-cogs',
@@ -307,7 +307,7 @@ export class SidebarComponent implements OnInit {
     }
   ];
 
-  extramenus = true;
+  extramenus = false;
   backme = false;
 
   ngOnInit(): void {  }
@@ -342,50 +342,57 @@ export class SidebarComponent implements OnInit {
       this.allmenu[2].submenu.forEach((element: any) => {
         element[0] = false;
       });
-    }else if(myhref=='/membership'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[3][0] = true;
-
-      this.allmenu[3].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }else if(myhref=='/crm'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[6][0] = true;
-
-      this.allmenu[6].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }else if(myhref=='/affiliates'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[10][0] = true;
-
-      this.allmenu[10].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
     }
+    // else if(myhref=='/membership'){
+
+    //   this.extramenus = false;
+      
+    //   this.allmenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+      
+    //   this.allmenu[3][0] = true;
+
+    //   this.allmenu[3].submenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+    // }
+    // else if(myhref=='/crm'){
+
+    //   this.extramenus = false;
+      
+    //   this.allmenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+      
+    //   this.allmenu[6][0] = true;
+
+    //   this.allmenu[6].submenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+    // }
+    // else if(myhref=='/affiliates'){
+
+    //   this.extramenus = false;
+      
+    //   this.allmenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+      
+    //   this.allmenu[10][0] = true;
+
+    //   this.allmenu[10].submenu.forEach((element: any) => {
+    //     element[0] = false;
+    //   });
+    // }
 
     this.backme = true;
     
     if(myhref!='/funnels' && myhref!='/website' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+      this.backme = false;
+    } 
+
+    if(myhref=='/membership' || myhref=='/crm' || myhref=='/affiliates'){
       this.backme = false;
     }
 

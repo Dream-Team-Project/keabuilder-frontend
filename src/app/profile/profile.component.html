@@ -24,7 +24,7 @@
     <!--begin::Card-->
     <div class="card card-custom">
       <!--begin::Card header-->
-      <div class="card-header card-header-tabs-line nav-tabs-line-3x">
+      <div class="card-header card-header-tabs-line nav-tabs-line-3x" *ngIf="hideprofilenow">
         <!--begin::Toolbar-->
         <div class="card-toolbar">
           <ul class="nav nav-tabs nav-bold nav-tabs-line nav-tabs-line-3x">
@@ -138,6 +138,8 @@
               <div class="row">
                 <div class="col-xl-2"></div>
                 <div class="col-xl-7 my-2">
+
+                  
                   <!--begin::Group-->
                   <div class="form-group row">
                     <label class="col-form-label col-3 text-lg-right text-left">Avatar</label>
@@ -149,6 +151,16 @@
                           <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                           <input type="hidden" name="profile_avatar_remove">
                         </label>
+                      </div>
+                    </div>
+                  </div>
+                  <!--end::Group-->
+                   <!--begin::Group-->
+                   <div class="form-group row">
+                    <label class="col-form-label col-3 text-lg-right text-left">Username</label>
+                    <div class="col-9">
+                      <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
+                        <input class="form-control form-control-lg form-control-solid" disabled type="text" [value]="bwname" >
                       </div>
                     </div>
                   </div>
@@ -170,7 +182,7 @@
                   </div>
                   <!--end::Group-->
                   <!--begin::Group-->
-                  <div class="form-group row">
+                  <div class="form-group row" *ngIf="hideprofilenow">
                     <label class="col-form-label col-3 text-lg-right text-left">Company Name</label>
                     <div class="col-9">
                       <input class="form-control form-control-lg form-control-solid" type="text" value="Loop Inc.">
@@ -179,23 +191,7 @@
                     </div>
                   </div>
                   <!--end::Group-->
-                  <!--begin::Group-->
-                  <div class="form-group row">
-                    <label class="col-form-label col-3 text-lg-right text-left">Contact Phone</label>
-                    <div class="col-9">
-                      <div class="input-group input-group-lg input-group-solid">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                            <i class="fas fa-phone"></i>
-                          </span>
-                        </div>
-                        <input type="text" class="form-control form-control-lg form-control-solid" value="+45678967456"
-                          placeholder="Phone">
-                      </div>
-                      <span class="form-text text-muted">We'll never share your email with anyone else.</span>
-                    </div>
-                  </div>
-                  <!--end::Group-->
+                 
                   <!--begin::Group-->
                   <div class="form-group row">
                     <label class="col-form-label col-3 text-lg-right text-left">Email Address</label>
@@ -213,8 +209,25 @@
                     </div>
                   </div>
                   <!--end::Group-->
+                   <!--begin::Group-->
+                   <div class="form-group row" >
+                    <label class="col-form-label col-3 text-lg-right text-left">Contact Phone</label>
+                    <div class="col-9">
+                      <div class="input-group input-group-lg input-group-solid">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="fas fa-phone"></i>
+                          </span>
+                        </div>
+                        <input type="text" class="form-control form-control-lg form-control-solid" value="+45678967456"
+                          placeholder="Phone">
+                      </div>
+                      <span class="form-text text-muted">We'll never share your contact with anyone else.</span>
+                    </div>
+                  </div>
+                  <!--end::Group-->
                   <!--begin::Group-->
-                  <div class="form-group row">
+                  <div class="form-group row" *ngIf="hideprofilenow" >
                     <label class="col-form-label col-3 text-lg-right text-left">Company Site</label>
                     <div class="col-9">
                       <div class="input-group input-group-lg input-group-solid">
