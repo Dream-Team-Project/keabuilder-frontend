@@ -190,7 +190,7 @@ export class AllFunnelsComponent implements OnInit {
             this.popupsidebar = true;
             this.funneltostep = true;
             this.colortheme = false;
-            this.funnelurl = 'http://localhost:4200/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
+            this.funnelurl = window.origin+'/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
           }
           
         }
@@ -282,13 +282,13 @@ export class AllFunnelsComponent implements OnInit {
       this.popupsidebar = true;
       this.funneltostep = false;
       this.colortheme = false;
-      this.funnelurl = 'http://localhost:4200/funnels/'+unique1+'/steps/'+unique2;
+      this.funnelurl = window.origin+'/funnels/'+unique1+'/steps/'+unique2;
       this.pageurl = '';
 
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
           next: data => {
             // console.log(data); 
-            this.pageurl = 'http://localhost:4200/'+data.data[0].steppath;
+            this.pageurl = window.origin+'/'+data.data[0].steppath;
           }
       });
     }else if(type=='archive'){

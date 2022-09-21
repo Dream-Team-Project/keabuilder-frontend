@@ -76,6 +76,7 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
+        console.log(data);
         if(data?.data) {
           if(data.data[0].publish_status==1){
             this.webstatus = 'Publish';
@@ -225,7 +226,7 @@ export class WebsiteDesignComponent implements OnInit {
   } 
 
   webpreview(){
-    var weblink = 'http://localhost:4200/assets/keapages/';
+    var weblink = window.origin+'/assets/keapages/';
     window.open(weblink, '_blank')
   }
 
