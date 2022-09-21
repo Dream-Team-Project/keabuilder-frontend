@@ -44,6 +44,9 @@ export class RegisterComponent implements OnInit {
           next: data => {
             console.log(data);
 
+
+            
+
           // need to pass unique id to the wistia instead of username
           //  var userobject = {project_name: username};
           //   this._wistia.projectCreate(userobject).subscribe({
