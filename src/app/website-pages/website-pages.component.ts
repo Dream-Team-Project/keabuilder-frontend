@@ -350,12 +350,16 @@ export class WebsitePagesComponent implements OnInit {
 
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
+          console.log(this.kbpages);
 
           if(data.success==1){
               if(type!='quickedit'){
 
                 if(data.type=='name'){
+                  if(title==''){
+                    
+                  }
                   this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
                 }else if(data.type=='status'){
@@ -402,7 +406,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   savequickdetails(){
-
+    // console.log(this.quickeditid);
     var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
@@ -599,11 +603,13 @@ export class WebsitePagesComponent implements OnInit {
         console.log(data);
         if(data.success==1){
 
-          this.fileuploadService.deletepage(data.path).subscribe({
-            next: data => {
-              console.log(data);
-            }
-          });
+          if(data.deleteme==1){
+            this.fileuploadService.deletepage(data.path).subscribe({
+              next: data => {
+                console.log(data);
+              }
+            });
+          }
 
           this.popupsidebar = false;
           this.showwebpages();
