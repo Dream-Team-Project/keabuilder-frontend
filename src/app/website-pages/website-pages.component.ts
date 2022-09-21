@@ -255,6 +255,9 @@ export class WebsitePagesComponent implements OnInit {
             // create page/folder
 
             
+
+
+            
             this._general.redirectToBuilder(data.uniqueid);
           }
 
@@ -341,6 +344,10 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   changepagename(id:any, title:any, type:any){
+
+    if(title==''){
+      this.showwebpages();
+    }
       this.pageurl = '';
       this.seotitle = '';
       this.seodescr = '';
@@ -356,9 +363,6 @@ export class WebsitePagesComponent implements OnInit {
               if(type!='quickedit'){
 
                 if(data.type=='name'){
-                  if(title==''){
-                    
-                  }
                   this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
                 }else if(data.type=='status'){

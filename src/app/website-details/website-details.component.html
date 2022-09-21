@@ -22,7 +22,7 @@
             <mat-form-field appearance="fill" class="kb-full-width">
                 <mat-label>Select Homepage</mat-label>
                 <mat-select [(value)]="pathselected" >
-                  <mat-option [value]="kbpages[i].page_path" *ngFor="let kbpage of kbpages; index as i;">
+                  <mat-option [value]="kbpages[i].uniqueid" *ngFor="let kbpage of kbpages; index as i;">
                     {{kbpages[i]['page_name']}}
                   </mat-option>
                 </mat-select>
