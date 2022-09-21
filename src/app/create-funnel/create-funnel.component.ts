@@ -509,8 +509,8 @@ export class CreateFunnelComponent implements OnInit {
       this.popupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
-      this.funnelurl = 'http://localhost:4200/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
-      this.pageurl = 'http://localhost:4200/'+unique1;
+      this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
+      this.pageurl = window.origin+'/'+unique1;
     }else if(type=='duplicate'){
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
@@ -620,7 +620,7 @@ export class CreateFunnelComponent implements OnInit {
   }
   checkpagesettings(value:any){
     if(value=='redirect'){
-      var url = 'http://localhost:4200/'+this.funnelstepurl;
+      var url = window.origin+'/'+this.funnelstepurl;
       window.open(url, '_blank')
     }else if(value=='settings'){
       this.tabOpen = 'publishing';
@@ -629,7 +629,7 @@ export class CreateFunnelComponent implements OnInit {
       this.tabOpen = 'publishing';
       this.isvariationinactive = false;
     }else if(value=='variationnewtab'){
-      var url = 'http://localhost:4200/'+this.funnelstepvariationurl;
+      var url = window.origin+'/'+this.funnelstepvariationurl;
       window.open(url, '_blank')
     }
   }

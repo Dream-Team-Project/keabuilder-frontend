@@ -130,7 +130,7 @@
       <!--end::Card header-->
       <!--begin::Card body-->
       <div class="card-body">
-        <form class="form" id="kt_form">
+        <form class="form" id="kt_form" >
           <div class="tab-content">
             <!--begin::Tab-->
             <div class="tab-pane show px-7" id="kt_user_edit_tab_1" [class]="activem=='profile'?'active':''">
@@ -160,7 +160,7 @@
                     <label class="col-form-label col-3 text-lg-right text-left">Username</label>
                     <div class="col-9">
                       <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
-                        <input class="form-control form-control-lg form-control-solid" disabled type="text" [value]="bwname" >
+                        <input class="form-control form-control-lg form-control-solid" type="text" [value]="bwname" >
                       </div>
                     </div>
                   </div>
@@ -246,7 +246,7 @@
             </div>
             <!--end::Tab-->
             <!--begin::Tab-->
-            <div class="tab-pane px-7" id="kt_user_edit_tab_2" [class]="activem=='account'?'active':''">
+            <div class="tab-pane px-7" id="kt_user_edit_tab_2" [class]="activem=='account'?'active':''" *ngIf="hideextrafeature">
               <!--begin::Row-->
               <div class="row">
                 <div class="col-xl-2"></div>
@@ -377,7 +377,7 @@
             </div>
             <!--end::Tab-->
             <!--begin::Tab-->
-            <div class="tab-pane px-7" id="kt_user_edit_tab_3" [class]="activem=='changepassword'?'active':''">
+            <div class="tab-pane px-7" id="kt_user_edit_tab_3" [class]="activem=='changepassword'?'active':''" *ngIf="hideextrafeature">
               <!--begin::Body-->
               <div class="card-body">
                 <!--begin::Row-->
@@ -444,7 +444,7 @@
             </div>
             <!--end::Tab-->
             <!--begin::Tab-->
-            <div class="tab-pane px-7" id="kt_user_edit_tab_4" [class]="activem=='settings'?'active':''">
+            <div class="tab-pane px-7" id="kt_user_edit_tab_4" [class]="activem=='settings'?'active':''" *ngIf="hideextrafeature">
               <div class="row">
                 <div class="col-xl-2"></div>
                 <div class="col-xl-8">

@@ -273,7 +273,7 @@ export class WebsitePagesComponent implements OnInit {
   showwebpages(){
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.kbpages = [];
         this.shortdata(data);
 
@@ -288,8 +288,8 @@ export class WebsitePagesComponent implements OnInit {
     // console.log('---chek');
     // console.log(dataA);
 
-    if(dataA.success !=0){
-      // console.log('--works');
+    if(dataA.success !=0 && dataA.data.length!=0){
+      console.log('--works');
 
       if(dataA.success ==2){
 
@@ -298,35 +298,35 @@ export class WebsitePagesComponent implements OnInit {
 
       }else{
 
-        this.pagegetdata = false;
-        if(this.toggleview2==true ){
-          this.pagenotfound = false;
-        }
-        this.fetchdatastatus = true;
-        dataA.data.forEach((element:any) => {
-              
-          var mycustomdate =  new Date(element.updated_at);
-          var text1 = mycustomdate.toDateString();    
-          var text2 = mycustomdate.toLocaleTimeString();
-          element.updated_at = text1+' '+text2;
-          
-          this.kbpages.push(element);
+          this.pagegetdata = false;
+          if(this.toggleview2==true ){
+            this.pagenotfound = false;
+          }
+          this.fetchdatastatus = true;
+          dataA.data.forEach((element:any) => {
+                
+            var mycustomdate =  new Date(element.updated_at);
+            var text1 = mycustomdate.toDateString();    
+            var text2 = mycustomdate.toLocaleTimeString();
+            element.updated_at = text1+' '+text2;
+            
+            this.kbpages.push(element);
 
-          var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
+            var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
 
-            this.fileuploadService.validateimg(genscrn).subscribe({
-              next: data => {
+              this.fileuploadService.validateimg(genscrn).subscribe({
+                next: data => {
 
-                if(data.data==0){
-                  element.thumbnail = 'webpage_thumbnail.jpg';
-                }else if(data.data==1){
-                  element.thumbnail = genscrn;
+                  if(data.data==0){
+                    element.thumbnail = 'webpage_thumbnail.jpg';
+                  }else if(data.data==1){
+                    element.thumbnail = genscrn;
+                  }
+
                 }
+              });
 
-              }
-            });
-
-        });
+          });
 
       }
 

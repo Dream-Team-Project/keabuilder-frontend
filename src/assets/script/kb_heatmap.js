@@ -128,6 +128,8 @@ var kb_mousegetlocY = [];
 
 var kb_fulldata = {};
 
+var windoworigin = window.origin;
+
 kb_fulldata['uniqueid'] = kb_unique_id;
 kb_fulldata['created_at'] = kb_created_at;
 kb_fulldata['kb_time_taken'] = kb_time_taken;
@@ -195,7 +197,7 @@ function forclick(e){
 
     console.log(kb_fulldata);
     $.ajax({
-        url: "http://127.0.0.1:4200/api/heat-request",
+        url: windoworigin+"/api/heat-request",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -230,7 +232,7 @@ function formouse(e){
     kb_fulldata['MlocY'] = kb_mousegetlocY;
 
     $.ajax({
-        url: "http://127.0.0.1:4200/api/heat-request",
+        url: windoworigin+"/api/heat-request",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -414,7 +416,7 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
 
 
                 $.ajax({
-                    url: "http://127.0.0.1:4200/api/saverecordheat",
+                    url: windoworigin+"/api/saverecordheat",
                     type: "POST",
                     dataType: 'json',
                     data:  {
@@ -1157,10 +1159,10 @@ color:#fff!important;
                       </button>
                 </span>
             </div> 
-            <a href="http://127.0.0.1:4200/heatmap" target="_blank" id="brand-link"
+            <a href="`+windoworigin+`/heatmap" target="_blank" id="brand-link"
                 class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img
                     id="brand-wordmark"
-                    src="http://127.0.0.1:4200/assets/images/logo/kblogo.png"
+                    src="`+windoworigin+`/assets/images/logo/kblogo.png"
                     alt="Kia Builder Logo" /></a>
         </div>
         <div class="ui-panel-manager size-fill">
@@ -1655,7 +1657,7 @@ if(window.location.hash=='#kb-heatmaps'){
     setTimeout(() => {
         
         $.ajax({
-            url: "http://127.0.0.1:4200/api/heatfetchloc-request",
+            url: windoworigin+"/api/heatfetchloc-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -1857,7 +1859,7 @@ if(window.location.hash=='#kb-heatmaps'){
 
         // fetch all data
         $.ajax({
-            url: "http://127.0.0.1:4200/api/heatall-request",
+            url: windoworigin+"/api/heatall-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -2058,7 +2060,7 @@ if(window.location.hash=='#kb-heatmaps'){
         // get required data
         function getrequireddata(value1,value2){
             $.ajax({
-                url: "http://127.0.0.1:4200/api/heatshome-request",
+                url: windoworigin+"/api/heatshome-request",
                 type: "POST",
                 dataType: 'json',
                 data:  {
@@ -2370,7 +2372,7 @@ if(window.location.hash=='#kb-heatmaps'){
     
     function createheatmpmouse(){
         $.ajax({
-            url: "http://127.0.0.1:4200/api/heatfetchmou-request",
+            url: windoworigin+"/api/heatfetchmou-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -2806,7 +2808,7 @@ if(window.location.hash=='#kb-heatmaps'){
 
    
     $.ajax({
-        url: "http://127.0.0.1:4200/api/showrecordheat",
+        url: windoworigin+"/api/showrecordheat",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -2819,7 +2821,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 if(myArray[0]!=''){
 
                     $.ajax({
-                        url: "http://127.0.0.1:4200/api/getheatdir",
+                        url: windoworigin+"/api/getheatdir",
                         type: "POST",
                         dataType: 'json',
                         data:  {
