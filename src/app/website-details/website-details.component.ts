@@ -4,6 +4,7 @@ import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
+import { ConnectableObservable } from 'rxjs';
 
 @Component({
   selector: 'app-website-details',
@@ -122,10 +123,11 @@ export class WebsiteDetailsComponent implements OnInit {
 
     this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter, this.logoimgname, this.faviconimgname, this.imagelogorequest, this.imagefaviconrequest).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         
-        if(this.pathselected!=''){
-          var pathobj = {path:this.pathselected};
+        if(data.data.length!=0){
+          console.log(data.data[0].page_path);
+          var pathobj = {path:data.data[0].page_path};
           this.fileUploadService.createhome(pathobj).subscribe({
             next: data => {}
           });
