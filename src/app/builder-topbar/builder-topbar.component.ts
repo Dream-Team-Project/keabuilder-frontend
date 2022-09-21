@@ -52,4 +52,8 @@ export class BuilderTopbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  redirectToLink(link:string) {
+    window.location.href = window.origin+link;
+  }
+
 }

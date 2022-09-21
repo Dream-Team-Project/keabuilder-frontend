@@ -55,7 +55,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       this.route.paramMap.subscribe((params: ParamMap) => {
         _general.getWebPageDetails(params.get('id')).then(e=> {
           this._general.loading.success = false; 
-      //     this.setBuilder(this._general.file.html, this._general.file.css);
+          this.setBuilder(this._general.file.html, this._general.file.css);
           this._general.file.load = false;
         })
       })
