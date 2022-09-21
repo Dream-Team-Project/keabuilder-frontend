@@ -864,8 +864,10 @@ export class StyleService {
   updateStyle() {
     if(this._general.selectedBlock.type != 'main') this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     else {
-      this._general.main.name = this._general.page_name;
-      this._general.main.title = this._general.page_title;
+      var pageN = this._general.page_name ? this._general.page_name : 'Page Name';
+      var pageT = this._general.page_title ? this._general.page_title : 'Page Title';
+      this._general.main.name = pageN;
+      this._general.main.title = pageT;
       this._general.main.path = this._general.page_path;
       this._general.main.description = this._general.description;
       this._general.main.keywords = JSON.parse(JSON.stringify(this._general.keywords));

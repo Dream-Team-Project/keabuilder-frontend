@@ -97,7 +97,7 @@ export class GeneralService {
     error: false
   };
   saveDisabled:boolean = false;
-  pathError = false;
+  pathError:boolean = false;
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService) {
     this.username = this.tokenStorageService.getUser().username;
@@ -147,11 +147,12 @@ export class GeneralService {
         path: this.main.path
       }
       this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
-        if(this.main.path == this.webpage.page_path || e.data.length == 0) {
+        if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
             this.saveHTML(main, sections, false);
             resolve(true);
         }
         else {
+            this.pathError = true;
             resolve(false);
         }
       })

@@ -131,7 +131,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       else {
         this._general.saveDisabled = false;
         this.openPageSetting(null);
-        this._general.pathError = true;
       }
     });
   }
@@ -252,7 +251,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
               eleObj.name = ele.title;
-              console.log(eleObj.content.name);
               if(eleObj.content.name) colObj.elementArr.push(eleObj);
             })
             colObj.hide = {
