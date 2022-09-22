@@ -216,7 +216,7 @@ export class GeneralService {
                 page_description: this.main.description,
                 page_keywords: this.main.keywords.join(','),
                 page_author: this.main.author,
-                page_status: 1,
+                publish_status: 1,
                 thumbnail: '',
                 tracking_code: '',
               }
