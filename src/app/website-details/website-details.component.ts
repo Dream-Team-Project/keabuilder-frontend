@@ -123,17 +123,13 @@ export class WebsiteDetailsComponent implements OnInit {
     }
 
     this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter, this.logoimgname, this.faviconimgname, this.imagelogorequest, this.imagefaviconrequest).subscribe({
-      next: data => {
-        console.log(data);
-        
+      next: data => {        
         if(data.data.length!=0){
-          console.log(data.data[0].page_path);
           var pathobj = {path:data.data[0].page_path};
           this.fileUploadService.createhome(pathobj).subscribe({
             next: data => {}
           });
         }
-
         this._snackBar.open('Data Updated Successfully!!', 'OK');
       }
     });

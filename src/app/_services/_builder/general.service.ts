@@ -6,7 +6,7 @@ import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
 import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
-import { FormControl, Validators } from '@angular/forms';
+import { WebsiteService } from '../website.service';
 
 
 @Injectable({
@@ -99,7 +99,7 @@ export class GeneralService {
   saveDisabled:boolean = false;
   pathError:boolean = false;
 
-  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService) {
+  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService) {
     this.username = this.tokenStorageService.getUser().username;
     this.main.author = this.username;
     this.subdomain = 'https://'+this.joinWthDash(this.username);
@@ -199,6 +199,17 @@ export class GeneralService {
       else {
         this.fileUploadService.createpage(page).subscribe(
           (event:any) => {
+            this.websiteService.getWebsite().subscribe((e:any)=>{
+              console.log(event.data.folder);
+              console.log(e.data[0].homepage);
+              console.log(this.webpage.uniqueid == e.data[0].homepage)
+              if(this.webpage.uniqueid == e.data[0].homepage) {
+                var pathobj = {path:event.data.folder};
+                this.fileUploadService.createhome(pathobj).subscribe({
+                  next: data => {}
+                });
+              }
+            })
             var pagedata = {
               id: this.webpage.id,
               uniqueid: Math.random().toString(20).slice(2),
