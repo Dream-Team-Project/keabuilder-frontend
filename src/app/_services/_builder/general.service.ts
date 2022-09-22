@@ -165,75 +165,73 @@ export class GeneralService {
 
   saveHTML(main:any, sections:any, preview:boolean) {
     return new Promise<any>((resolve, reject) => {
-      this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+      this.websiteService.getWebsite().subscribe((web:any)=>{
+        this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
-      this.removeStyle('#kb-main');
-      this.removeStyle('.kb-section');
-      this.removeStyle('.kb-row');
-      this.removeStyle('.kb-column');
-      this.removeStyle('.kb-column-wrap');
-      this.removeStyle('.kb-element');
-      this.removeStyle('.kb-element-content');
+        this.removeStyle('#kb-main');
+        this.removeStyle('.kb-section');
+        this.removeStyle('.kb-row');
+        this.removeStyle('.kb-column');
+        this.removeStyle('.kb-column-wrap');
+        this.removeStyle('.kb-element');
+        this.removeStyle('.kb-element-content');
 
-      this.pagehtml.querySelector('head').innerHTML = 
-      '<meta charset="UTF-8">' +
-      '<meta name="description" content="'+this.main.description+'">' +
-      '<meta name="keywords" content="'+this.main.keywords+'">' +
-      '<meta name="author" content="'+this.main.author+'">' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      '<title>'+this.main.title+'</title>' +        
-      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
-      (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/keapages/'+this.main.path+'/style.css">' : '');
-      this.setPageStyle(sections);
-      var page = {
-        head: this.pagehtml.querySelector('head').outerHTML,
-        body: this.pagehtml.querySelector('body').outerHTML,
-        style: this.getAllStyle(),
-        folder: this.main.path,
-        prevFolder: this.webpage.page_path
-      }
-      if(preview) {
-        localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
-        window.open(window.location.protocol+'//'+window.location.host+'/preview/website/'+this.webpage.uniqueid, '_blank');
-      }
-      else {
-        this.fileUploadService.createpage(page).subscribe(
-          (event:any) => {
-            this.websiteService.getWebsite().subscribe((e:any)=>{
-              console.log(event.data.folder);
-              console.log(e.data[0].homepage);
-              console.log(this.webpage.uniqueid == e.data[0].homepage)
-              if(this.webpage.uniqueid == e.data[0].homepage) {
+        this.pagehtml.querySelector('head').innerHTML = 
+        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.data[0].favicon+'">' +
+        '<meta charset="UTF-8">' +
+        '<meta name="description" content="'+this.main.description+'">' +
+        '<meta name="keywords" content="'+this.main.keywords+'">' +
+        '<meta name="author" content="'+this.main.author+'">' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+        '<title>'+this.main.title+'</title>' +        
+        '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
+        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/keapages/'+this.main.path+'/style.css">' : '');
+        this.setPageStyle(sections);
+        var page = {
+          head: this.pagehtml.querySelector('head').outerHTML,
+          body: this.pagehtml.querySelector('body').outerHTML,
+          style: this.getAllStyle(),
+          folder: this.main.path,
+          prevFolder: this.webpage.page_path
+        }
+        if(preview) {
+          localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
+          window.open(window.location.protocol+'//'+window.location.host+'/preview/website/'+this.webpage.uniqueid, '_blank');
+        }
+        else {
+          this.fileUploadService.createpage(page).subscribe(
+            (event:any) => {
+              if(this.webpage.uniqueid == web.data[0].homepage) {
                 var pathobj = {path:event.data.folder};
                 this.fileUploadService.createhome(pathobj).subscribe({
                   next: data => {}
                 });
               }
-            })
-            var pagedata = {
-              id: this.webpage.id,
-              uniqueid: Math.random().toString(20).slice(2),
-              page_name: this.main.name,
-              page_title: this.main.title,
-              page_path: this.main.path,
-              page_description: this.main.description,
-              page_keywords: this.main.keywords.join(','),
-              page_author: this.main.author,
-              page_status: 1,
-              thumbnail: '',
-              tracking_code: '',
-            }
-            this.webPageService.updateWebpage(pagedata).subscribe(
-              (e:any)=>{
-                this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-                this.getWebPageDetails(this.webpage.uniqueid);
-                resolve(e);
-            });
-          },
-        error=>{
-          resolve(error);
-        })
-      }
+              var pagedata = {
+                id: this.webpage.id,
+                uniqueid: Math.random().toString(20).slice(2),
+                page_name: this.main.name,
+                page_title: this.main.title,
+                page_path: this.main.path,
+                page_description: this.main.description,
+                page_keywords: this.main.keywords.join(','),
+                page_author: this.main.author,
+                page_status: 1,
+                thumbnail: '',
+                tracking_code: '',
+              }
+              this.webPageService.updateWebpage(pagedata).subscribe(
+                (e:any)=>{
+                  this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+                  this.getWebPageDetails(this.webpage.uniqueid);
+                  resolve(e);
+              });
+            },
+          error=>{
+            resolve(error);
+          })
+        }
+      })
     });
   }
 
