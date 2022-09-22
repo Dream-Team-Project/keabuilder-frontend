@@ -47,7 +47,7 @@ export class WebsitePagesComponent implements OnInit {
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
               private fileuploadService: FileUploadService,
-              private websiteService: WebsiteService ) {
+              private websiteService: WebsiteService,) {
                 this.dataSource = new MatTableDataSource(this.users);
                }
 
@@ -357,15 +357,33 @@ export class WebsitePagesComponent implements OnInit {
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
           console.log(data);
-          console.log(this.kbpages);
+          // console.log(this.kbpages);
 
           if(data.success==1){
+
               if(type!='quickedit'){
 
                 if(data.type=='name'){
                   this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
                 }else if(data.type=='status'){
+
+                  if(data.name=='0'){
+
+                    console.log(data.id);
+                    this.webpagesService.checkandmakestatus(data.id).subscribe({
+                      next: data => {
+                        console.log(data);
+                        if(data.success==1){
+                          this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                            console.log(e);
+                          })
+                        }
+                      }
+                    });
+                    
+                  }
+
                   this._snackBar.open('Status Changed Successfully!', 'OK');
                 }
     
@@ -399,6 +417,7 @@ export class WebsitePagesComponent implements OnInit {
                 this.oldpagepath = this.pageurl;
 
               }
+
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -607,6 +626,13 @@ export class WebsitePagesComponent implements OnInit {
             this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
               next: data => {
                 console.log(data);
+
+                if(data.success==1){
+                  this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                    console.log(e);
+                  })
+                }
+
               }
             });
           }
