@@ -197,7 +197,6 @@ export class GeneralService {
         window.open(window.location.protocol+'//'+window.location.host+'/preview/website/'+this.webpage.uniqueid, '_blank');
       }
       else {
-        console.log(page);
         this.fileUploadService.createpage(page).subscribe(
           (event:any) => {
             var pagedata = {
