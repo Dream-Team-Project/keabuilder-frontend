@@ -29,6 +29,7 @@ export class WebsiteDetailsComponent implements OnInit {
   faviconimgname = '';
   imagelogorequest = false;
   imagefaviconrequest = false;
+  windoworigin = window.origin;
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
