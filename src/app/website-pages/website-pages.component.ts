@@ -602,6 +602,15 @@ export class WebsitePagesComponent implements OnInit {
       next: data => {
         console.log(data);
         if(data.success==1){
+
+          if(data.deleteme==0){
+            this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
+              next: data => {
+                console.log(data);
+              }
+            });
+          }
+
           if(data.deleteme==1){
             this.fileuploadService.deletepage(data.path).subscribe({
               next: data => {
@@ -617,6 +626,7 @@ export class WebsitePagesComponent implements OnInit {
           this.popupsidebar = false;
           this.showwebpages();
           this.applykbfilter();
+
         }
 
       },
