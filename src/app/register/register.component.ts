@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import {FormControl, Validators} from '@angular/forms';
 import { WistiaService } from '../_services/wistia.service';
+import { FileUploadService } from '../_services/file-upload.service';
 
 @Component({
   selector: 'app-register',
@@ -31,6 +32,7 @@ export class RegisterComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute,
+              private _file: FileUploadService,
               private _wistia: WistiaService) { }
 
   ngOnInit(): void {
@@ -43,10 +45,9 @@ export class RegisterComponent implements OnInit {
         this.authService.register(username, email, password).subscribe({
           next: data => {
             console.log(data);
-
-
-            
-
+            this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
+              console.log(e);
+            })
           // need to pass unique id to the wistia instead of username
           //  var userobject = {project_name: username};
           //   this._wistia.projectCreate(userobject).subscribe({
