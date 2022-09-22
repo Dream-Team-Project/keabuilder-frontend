@@ -49,8 +49,9 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  createdefaulthome(path:any):Observable<any> {
-    return this.http.post(this.createDefaultHomeApi, path);
+  createdefaulthome(useruniqueid:any):Observable<any> {
+    var obj = {useruniqueid: useruniqueid}
+    return this.http.post(this.createDefaultHomeApi, obj);
   }
 
   createhome(path:any):Observable<any> {
