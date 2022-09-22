@@ -26,6 +26,7 @@ export class WebpagesService {
   pagevisibilityApi = '/api/pagevisibility/';
   querystringmanageApi = '/api/querystringmanage/';
   shortbypaginatorApi = '/api/shortbypaginator/';
+  checkandmakestatusApi = '/api/checkandmakestatus/';
   uniqueuserid:any = '';
 
 
@@ -120,6 +121,12 @@ export class WebpagesService {
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
+  }
+
+  checkandmakestatus(data:any):Observable<any> {
+    return this.http.post(this.checkandmakestatusApi+this.uniqueuserid, {
+      data
+    }, httpOptions);
   }
 
 }
