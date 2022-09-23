@@ -222,3 +222,14 @@
  table {
     width: 100%;
   }
+
+  .statehome {
+    position: absolute;
+    top: 2px;
+    left: 15px;
+    color: #ffffff;
+    background-color: var(--primary-color);
+    font-size: 12px;
+    padding: 2px 12px;
+    border-radius: 0px 50px 50px 0px;
+}

@@ -45,7 +45,7 @@
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>SEO Author</mat-label>
+              <mat-label>Page Author</mat-label>
               <input matInput name="seoauthor" [(ngModel)]="seoauthor">
             </mat-form-field>
 
@@ -356,9 +356,13 @@
 
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
-                <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
               </mat-menu>
 
+            </div>
+
+            <div class="statehome" *ngIf="kbpage.defaulthome==1" >
+              <i class="fas fa-star"></i> Home
             </div>
 
             <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
@@ -407,10 +411,15 @@
 
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
-                  <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                  <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
                 </mat-menu>
 
               </div>
+
+              <div class="statehome" *ngIf="kbpage.defaulthome==1" >
+                <i class="fas fa-star"></i> Home
+              </div>
+
               <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}"></div>
             </div>
             <div class="col-md-6">
@@ -427,9 +436,9 @@
                   <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
                       <i class="fas fa-pen mr-2"></i> Quick Edit
                   </button>
-                  <button mat-menu-item>
+                  <!-- <button mat-menu-item>
                     <i class="fas fa-chart-pie mr-2"></i> View Analytics
-                  </button>
+                  </button> -->
                   <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)" >
                     <i class="fas fa-copy mr-2"></i> Duplicate
                   </button>

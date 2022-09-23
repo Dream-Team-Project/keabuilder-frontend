@@ -47,7 +47,7 @@ export class WebsitePagesComponent implements OnInit {
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
               private fileuploadService: FileUploadService,
-              private websiteService: WebsiteService ) {
+              private websiteService: WebsiteService,) {
                 this.dataSource = new MatTableDataSource(this.users);
                }
 
@@ -287,13 +287,15 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   shortdata(dataA:any){
-    // console.log('---chek');
-    // console.log(dataA);
+    console.log('---chek');
+    console.log(dataA);
 
     if(dataA.success !=0 && dataA?.data?.length!=0){
+
       if(dataA.success == 2){
         this.pagegetdata = true;
       }else{
+
         this.pagegetdata = false;
         if(this.toggleview2==true ){
           this.pagenotfound = false;
@@ -305,25 +307,45 @@ export class WebsitePagesComponent implements OnInit {
           var text1 = mycustomdate.toDateString();    
           var text2 = mycustomdate.toLocaleTimeString();
           element.updated_at = text1+' '+text2;
+
+
+          this.websiteService.getWebsite().subscribe({
+            next: data => {
+              // console.log('--');
+              // console.log(data);
+              // console.log(element);
+
+              if(data.data[0].homepage==element.uniqueid){
+                element.defaulthome = 1;
+              }else{
+                element.defaulthome = 0;
+
+              }
+              // console.log(element);
+              this.kbpages.push(element);
+            }
+          });
+
           
-          this.kbpages.push(element);
 
           var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
 
-            this.fileuploadService.validateimg(genscrn).subscribe({
-              next: data => {
+          this.fileuploadService.validateimg(genscrn).subscribe({
+            next: data => {
 
-                if(data.data==0){
-                  element.thumbnail = 'webpage_thumbnail.jpg';
-                }else if(data.data==1){
-                  element.thumbnail = genscrn;
-                }
-
+              if(data.data==0){
+                element.thumbnail = 'webpage_thumbnail.jpg';
+              }else if(data.data==1){
+                element.thumbnail = genscrn;
               }
-            });
+
+            }
+          });
 
         });
+
       }
+
     }else{
       this.fetchdatastatus = false;
       this.pagegetdata = true;
@@ -357,18 +379,37 @@ export class WebsitePagesComponent implements OnInit {
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
           console.log(data);
-          console.log(this.kbpages);
+          // console.log(this.kbpages);
 
           if(data.success==1){
+
               if(type!='quickedit'){
 
                 if(data.type=='name'){
                   this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
                 }else if(data.type=='status'){
+
+                  if(data.name=='0'){
+
+                    // this.showwebpages();
+                    console.log(data.id);
+                    this.webpagesService.checkandmakestatus(data.id).subscribe({
+                      next: data => {
+                        console.log(data);
+                        if(data.success==1){
+                          this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                            console.log(e);
+                          })
+                        }
+                      }
+                    });
+
+                  }
+
                   this._snackBar.open('Status Changed Successfully!', 'OK');
+
                 }
-    
 
               }else if(type=='quickedit'){
 
@@ -399,6 +440,7 @@ export class WebsitePagesComponent implements OnInit {
                 this.oldpagepath = this.pageurl;
 
               }
+
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -607,6 +649,13 @@ export class WebsitePagesComponent implements OnInit {
             this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
               next: data => {
                 console.log(data);
+
+                if(data.success==1){
+                  this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                    console.log(e);
+                  })
+                }
+
               }
             });
           }
