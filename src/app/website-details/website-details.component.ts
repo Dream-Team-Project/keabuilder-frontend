@@ -59,11 +59,11 @@ export class WebsiteDetailsComponent implements OnInit {
             this.kbwebsite.push(element);
 
             if(element.tracking_header!=null && element.tracking_header!=''){
-              this.pagescriptheader = decodeURIComponent(element.tracking_header);
+              this.pagescriptheader = atob(element.tracking_header);
             }
 
             if(element.tracking_footer!=null && element.tracking_footer!=''){
-              this.pagescriptfooter = decodeURIComponent(element.tracking_footer);
+              this.pagescriptfooter = atob(element.tracking_footer);
             }
 
             if(element.homepage!=null && element.homepage!=''){
@@ -122,11 +122,27 @@ export class WebsiteDetailsComponent implements OnInit {
       this.imageService.onImageFileUpload(genobjfavicon);
     }
 
-    this.websiteService.updatesitedetails(this.pathselected, this.pagescriptheader, this.pagescriptfooter, this.logoimgname, this.faviconimgname, this.imagelogorequest, this.imagefaviconrequest).subscribe({
+    var obj = {
+      homepage: this.pathselected,
+      scriptheader: btoa(this.pagescriptheader),
+      scriptfooter: btoa(this.pagescriptfooter),
+      logo: this.logoimgname,
+      favicon: this.faviconimgname,
+      checkimginput1: this.imagelogorequest,
+      checkimginput2: this.imagefaviconrequest
+    }
+console.log(obj);
+    this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {        
         if(data.data.length!=0){
-          var pathobj = {path:data.data[0].page_path};
-          this.fileUploadService.createhome(pathobj).subscribe({
+          var obj = {
+            script: {
+              header: this.pagescriptheader,
+              footer: this.pagescriptfooter
+            },
+            path: data.data[0].page_path
+          };
+          this.fileUploadService.updateHome(obj).subscribe({
             next: data => {}
           });
         }

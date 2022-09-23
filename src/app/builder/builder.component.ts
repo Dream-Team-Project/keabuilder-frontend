@@ -221,7 +221,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               var content = ele.querySelector('.kb-element-content');
               eleObj.content.name = ele.children[0].getAttribute('data-name');
               if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
-                eleObj.content.html = content.children[0].innerHTML;
+                eleObj.content.html = content.children[0].children[0].innerHTML;
               }
               else if(eleObj.content.name == 'image') {
                 eleSel = 'img';

@@ -165,7 +165,8 @@ export class GeneralService {
 
   saveHTML(main:any, sections:any, preview:boolean) {
     return new Promise<any>((resolve, reject) => {
-      this.websiteService.getWebsite().subscribe((web:any)=>{
+      this.websiteService.getWebsite().subscribe((e:any)=>{
+        var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
 
         this.removeStyle('#kb-main');
@@ -177,7 +178,7 @@ export class GeneralService {
         this.removeStyle('.kb-element-content');
 
         this.pagehtml.querySelector('head').innerHTML = 
-        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.data[0].favicon+'">' +
+        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
         '<meta charset="UTF-8">' +
         '<meta name="description" content="'+this.main.description+'">' +
         '<meta name="keywords" content="'+this.main.keywords+'">' +
@@ -185,7 +186,8 @@ export class GeneralService {
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
         '<title>'+this.main.title+'</title>' +        
         '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
-        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/keapages/'+this.main.path+'/style.css">' : '');
+        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/keapages/'+this.main.path+'/style.css">' : '') +
+        '<script src="'+window.location.origin+'/assets/keapages/script-header.js"></script>';
         this.setPageStyle(sections);
         var page = {
           head: this.pagehtml.querySelector('head').outerHTML,
@@ -201,9 +203,15 @@ export class GeneralService {
         else {
           this.fileUploadService.createpage(page).subscribe(
             (event:any) => {
-              if(this.webpage.uniqueid == web.data[0].homepage) {
-                var pathobj = {path:event.data.folder};
-                this.fileUploadService.createhome(pathobj).subscribe({
+              if(this.webpage.uniqueid ==  web.homepage) {
+                var obj = {
+                  script: {
+                    header: web.tracking_header,
+                    footer: web.tracking_footer
+                  },
+                  path:event.data.folder
+                };
+                this.fileUploadService.updateHome(obj).subscribe({
                   next: data => {}
                 });
               }
@@ -216,7 +224,7 @@ export class GeneralService {
                 page_description: this.main.description,
                 page_keywords: this.main.keywords.join(','),
                 page_author: this.main.author,
-                publish_status: 1,
+                publish_status: this.webpage.publish_status,
                 thumbnail: '',
                 tracking_code: '',
               }
@@ -239,7 +247,9 @@ export class GeneralService {
     this.pagehtml.querySelectorAll(blockcls).forEach((item:any)=>{
       item.removeAttribute('style');
       if(blockcls == '.kb-element-content') {
-        item.children[0].removeAttribute('style');
+        item.querySelectorAll('*').forEach((ele:any)=>{
+          ele.removeAttribute('style');
+        });
       }
     })
   }

@@ -37,7 +37,7 @@ export class FileUploadService {
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
   createDefaultHomeApi = '/api/default-home';
-  createHomeApi = '/api/createhome';
+  updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
   uniqueuserid:any = '';
 
@@ -54,8 +54,8 @@ export class FileUploadService {
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
-  createhome(path:any):Observable<any> {
-    return this.http.post(this.createHomeApi, path);
+  updateHome(obj:any):Observable<any> {
+    return this.http.post(this.updateHomeApi, obj);
   }
 
   createpage(path:any):Observable<any> {

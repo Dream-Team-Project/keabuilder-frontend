@@ -139,33 +139,38 @@
 
       <div class="col-md-6 mt-4">
         <div class="insideshdw">
-
-          <h5>Page Scripts</h5>
+          <h5>Scripts</h5>
           <p>Add custom javascript to be placed on all site Pages. The code will be placed in the <b>head</b> and
             <b>Footer</b> section of every page.</p>
-
           <div class="form-group">
             <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Page Script Header</mat-label>
+                <mat-label>Script Header</mat-label>
                 <textarea matInput [(ngModel)]="pagescriptheader" rows="6"></textarea>
             </mat-form-field>
 
             <small>This code will be placed in the head section of every page.</small>
           </div>
-
+          <div class="form-group">
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Script Footer</mat-label>
+                <textarea matInput [(ngModel)]="pagescriptfooter" rows="6"></textarea>
+              </mat-form-field>
+            <small>This code will be placed in the footer section of every page.</small>
+          </div>
         </div>
       </div>
 
       <div class="col-md-6 mt-4">
         <div class="insideshdw">
+          <h5>Style</h5>
+          <p>Add custom css to be placed on all site Pages.</p>
           <div class="form-group">
             <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Page Script Footer</mat-label>
-                <textarea matInput [(ngModel)]="pagescriptfooter" rows="11"></textarea>
-              </mat-form-field>
-            <small>This code will be placed in the footer section of every page.</small>
+                <mat-label>CSS</mat-label>
+                <textarea matInput [(ngModel)]="pagescriptheader" rows="6"></textarea>
+            </mat-form-field>
+            <small>This code will be placed in the head section of every page.</small>
           </div>
-
         </div>
       </div>
 
