@@ -151,9 +151,8 @@ export class WebsiteDetailsComponent implements OnInit {
         if(data.data.length!=0){
           var obj = {
             tracking: {
-              header: this.pagescriptheader,
+              header: this.pagetrackingstyle+'\n'+this.pagescriptheader,
               footer: this.pagescriptfooter,
-              style: this.pagetrackingstyle
             },
             path: data.data[0].page_path
           };
