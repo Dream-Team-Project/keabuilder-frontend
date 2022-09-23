@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script id="kb-header-tracking">
+        console.log('Header');
+    </script>
+    <style id="kb-global-style">
+        #kb-header {
+            background: greenyellow!important;
+        }
+    </style>
+    <style id="kb-header-style">
+        #kb-header {
+            background: #e2e2e2;
+            padding: 10px 30px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        #kb-header>div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        div#menu ul {
+            display: flex;
+            flex-direction: row;
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+        }
+        div#menu ul li{
+            padding: 10px;
+        }
+    </style>
+    <style id="kb-footer-style">
+        #kb-footer {
+            background: #000;
+            padding: 10px 30px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: center;
+            position: relative;
+            width: auto;
+        }
+        #kb-footer>div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header id="kb-header">
+        <div><img src="http://localhost:4200/assets/images/logo/kblogo.png" width="36px"></div>
+        <div id="menu">
+            <ul>
+                <li><a href="https://google.com">Menu 1</a></li>
+                <li><a href="https://google.com">Menu 2</a></li>
+                <li><a href="https://google.com">Menu 3</a></li>
+                <li><a href="https://google.com">Menu 4</a></li>
+            </ul>
+        </div>
+    </header>
+    <footer id="kb-footer">
+        <div><img src="http://localhost:4200/assets/images/logo/kblogo.png" width="40px"></div>
+    </footer>
+    <script id="kb-footer-tracking">
+        console.log('Footer');
+    </script>
+</body>
+</html>
