@@ -111,16 +111,6 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
- 
-    var genobjlogo:any = {path:this.logoimg, name:this.logoimgname};
-    var genobjfavicon:any = {path:this.faviconimg, name:this.faviconimgname};
-    if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
-      this.imageService.onImageFileUpload(genobjlogo);
-    }
-
-    if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-      this.imageService.onImageFileUpload(genobjfavicon);
-    }
 
     var obj = {
       homepage: this.pathselected,
@@ -131,9 +121,27 @@ export class WebsiteDetailsComponent implements OnInit {
       checkimginput1: this.imagelogorequest,
       checkimginput2: this.imagefaviconrequest
     }
-console.log(obj);
+    console.log(obj);
     this.websiteService.updatesitedetails(obj).subscribe({
-      next: data => {        
+      next: data => {     
+        // console.log('-->');
+        // console.log(data);
+
+        var splnmlogo = data.genlogo.split('keaimage-');  
+        var splnmfavi = data.genfavicon.split('keaimage-');  
+        
+        var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
+        var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi[1]};
+        // console.log(genobjlogo);
+        // console.log(genobjfavicon);
+        if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+          this.imageService.onImageFileUpload(genobjlogo);
+        }
+    
+        if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+          this.imageService.onImageFileUpload(genobjfavicon);
+        }
+
         if(data.data.length!=0){
           var obj = {
             script: {
