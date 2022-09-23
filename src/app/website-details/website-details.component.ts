@@ -19,6 +19,7 @@ export class WebsiteDetailsComponent implements OnInit {
   pathselected = '';
   pagescriptheader = '';
   pagescriptfooter = '';
+  pagetrackingstyle = '';
   file = null;
   typeerror = '';
   typeerror2 = '';
@@ -64,6 +65,10 @@ export class WebsiteDetailsComponent implements OnInit {
 
             if(element.tracking_footer!=null && element.tracking_footer!=''){
               this.pagescriptfooter = atob(element.tracking_footer);
+            }
+
+            if(element.tracking_style!=null && element.tracking_style!=''){
+              this.pagetrackingstyle = atob(element.tracking_style);
             }
 
             if(element.homepage!=null && element.homepage!=''){
@@ -116,6 +121,7 @@ export class WebsiteDetailsComponent implements OnInit {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
       scriptfooter: btoa(this.pagescriptfooter),
+      trackingstyle: btoa(this.pagetrackingstyle),
       logo: this.logoimgname,
       favicon: this.faviconimgname,
       checkimginput1: this.imagelogorequest,
