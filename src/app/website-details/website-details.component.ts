@@ -19,6 +19,7 @@ export class WebsiteDetailsComponent implements OnInit {
   pathselected = '';
   pagescriptheader = '';
   pagescriptfooter = '';
+  pagetrackingstyle = '';
   file = null;
   typeerror = '';
   typeerror2 = '';
@@ -66,6 +67,10 @@ export class WebsiteDetailsComponent implements OnInit {
               this.pagescriptfooter = atob(element.tracking_footer);
             }
 
+            if(element.tracking_style!=null && element.tracking_style!=''){
+              this.pagetrackingstyle = atob(element.tracking_style);
+            }
+
             if(element.homepage!=null && element.homepage!=''){
               this.pathselected = element.homepage;
             }
@@ -111,34 +116,44 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
- 
-    var genobjlogo:any = {path:this.logoimg, name:this.logoimgname};
-    var genobjfavicon:any = {path:this.faviconimg, name:this.faviconimgname};
-    if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
-      this.imageService.onImageFileUpload(genobjlogo);
-    }
-
-    if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-      this.imageService.onImageFileUpload(genobjfavicon);
-    }
 
     var obj = {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
       scriptfooter: btoa(this.pagescriptfooter),
+      trackingstyle: btoa(this.pagetrackingstyle),
       logo: this.logoimgname,
       favicon: this.faviconimgname,
       checkimginput1: this.imagelogorequest,
       checkimginput2: this.imagefaviconrequest
     }
-console.log(obj);
+    console.log(obj);
     this.websiteService.updatesitedetails(obj).subscribe({
-      next: data => {        
+      next: data => {     
+        // console.log('-->');
+        // console.log(data);
+
+        var splnmlogo = data.genlogo.split('keaimage-');  
+        var splnmfavi = data.genfavicon.split('keaimage-');  
+        
+        var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
+        var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi[1]};
+        // console.log(genobjlogo);
+        // console.log(genobjfavicon);
+        if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+          this.imageService.onImageFileUpload(genobjlogo);
+        }
+    
+        if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+          this.imageService.onImageFileUpload(genobjfavicon);
+        }
+
         if(data.data.length!=0){
           var obj = {
-            script: {
+            tracking: {
               header: this.pagescriptheader,
-              footer: this.pagescriptfooter
+              footer: this.pagescriptfooter,
+              style: this.pagetrackingstyle
             },
             path: data.data[0].page_path
           };
