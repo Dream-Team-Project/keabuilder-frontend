@@ -1,8 +1,6 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;500;600;700;800;900&display=swap');
-
 
 :root {
     /* builder root */
@@ -39,6 +37,10 @@
     body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
         font-family: Poppins;   
         font-weight: 400;
+    }
+
+    div#kb-main {
+        height: fit-content!important;
     }
 
 main {
@@ -105,14 +107,14 @@ div#page-container {
     padding: 0px 20px;
 }
 
-.kb-drag-container {
+/* .kb-drag-container {
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-}
+} */
 
 div#kb-row-selection   ul.kb-row-list   span.block {
     width: 100%;
@@ -363,20 +365,4 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
-}
-
-/* scrolling */
-
-* ::-webkit-scrollbar, .kb-scroll ::-webkit-scrollbar {
-    width: 6px;
-    transition: 2s ease-in-out;
-    z-index: 9999;
-}
-
-.kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
-    width: 6px!important;
-}
-
-*:hover ::-webkit-scrollbar {
-    width: 6px;
 }
