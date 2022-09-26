@@ -4,6 +4,7 @@ import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ConnectableObservable } from 'rxjs';
 
 @Component({
@@ -32,12 +33,15 @@ export class WebsiteDetailsComponent implements OnInit {
   windoworigin = window.origin;
   tagstyle = 'Place CSS inside the style tag <style></style>.';
   tagscript = 'Place JS inside the script tag <script></script>.';
+  userid = '';
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               private fileUploadService: FileUploadService,
-              private imageService: ImageService) { }
+              private imageService: ImageService,
+              private router: Router,
+              private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
 
@@ -59,6 +63,8 @@ export class WebsiteDetailsComponent implements OnInit {
         console.log(data);
         if(data.message != 'Error') {
           data.data.forEach((element:any) => {
+
+            this.userid = element.user_id;
             this.kbwebsite.push(element);
 
             if(element.tracking_header!=null && element.tracking_header!=''){
@@ -233,7 +239,9 @@ export class WebsiteDetailsComponent implements OnInit {
 
   editglobal(val:any){
     if(val=='header'){
-      
+      this.router.navigate(['/builder/header/'+this.userid],{relativeTo: this.route});
+    }else if(val=='footer'){
+      this.router.navigate(['/builder/footer/'+this.userid],{relativeTo: this.route});
     }
   }
 
