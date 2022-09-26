@@ -230,3 +230,7 @@ hr {
 .drop-zone__input {
     display: none;
 }
+.keanavmenu{
+    height: 311px;
+    overflow-y: scroll;
+}

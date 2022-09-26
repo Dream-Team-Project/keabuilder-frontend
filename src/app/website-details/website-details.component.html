@@ -9,7 +9,7 @@
       <div class="col-md-6">
         <button mat-raised-button color="accent" class="float-right" [routerLink]="['/website']" ><i class="fas fa-arrow-left"></i> Back</button>
         <a mat-raised-button color="accent" class="float-right mr-2" [href]="windoworigin+'//assets/sites/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
-        <button mat-raised-button color="accent" class="float-right mr-2" (click)="updatepage()" >Update <i class="fas fa-check"></i></button>
+        <button mat-raised-button color="accent" class="float-right mr-2" (click)="updatepage()" ><i class="fas fa-check"></i> Update</button>
       </div>
 
       <div class="col-md-6 mt-4">
@@ -51,10 +51,44 @@
 
       <div class="col-md-6 mt-4">
 
+        <div class="insideshdw keanavmenu">
+
+          <app-navigation></app-navigation>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6 mt-4">
+
         <div class="insideshdw">
 
-          <h5>Navigation Menus</h5>
-          <app-navigation></app-navigation>
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Global Header</h5>
+            </div>
+            <div class="col-md-6">
+              <button mat-raised-button color="accent" class="float-right" (click)="editglobal('header')">Edit Header <i class="fas fa-pencil"></i></button>
+              <button mat-raised-button color="accent" class="float-right mr-2">Choose A Template <i class="fas fa-pencil"></i></button>
+            </div>
+        </div>
+
+        </div>
+
+      </div>
+      
+      <div class="col-md-6 mt-4">
+
+        <div class="insideshdw">
+
+          <div class="row">
+              <div class="col-md-6">
+                <h5>Global Footer</h5>
+              </div>
+              <div class="col-md-6">
+                <button mat-raised-button color="accent" class="float-right" (click)="editglobal('footer')">Edit Footer <i class="fas fa-pencil"></i></button>
+              </div>
+          </div>
 
         </div>
 
@@ -175,7 +209,7 @@
       </div>
 
       <div class="col-md-12 text-center mt-5">
-        <button mat-raised-button color="accent" (click)="updatepage()" >Update <i class="fas fa-check"></i></button>
+        <button mat-raised-button color="accent" (click)="updatepage()" ><i class="fas fa-check"></i> Update</button>
       </div>
 
     </div>

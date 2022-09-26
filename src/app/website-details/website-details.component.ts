@@ -231,5 +231,11 @@ export class WebsiteDetailsComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fileElemfavicon')).click();
   }
 
+  editglobal(val:any){
+    if(val=='header'){
+      
+    }
+  }
+
 
 }
