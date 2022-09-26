@@ -50,6 +50,13 @@ export class SidebarComponent implements OnInit {
       // },
       {
         0:true,
+        routerlink: '/website/layout',
+        img: 'browser.gif',
+        icon: 'fas fa-columns',
+        title: 'Layout'
+      },
+      {
+        0:true,
         routerlink: '/website/details',
         img: 'browser.gif',
         icon: 'fas fa-palette',

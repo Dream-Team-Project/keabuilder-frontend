@@ -10,6 +10,6 @@
         <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'mobile'" (click)="_general.selRespDevice(2)" matTooltip="Mobile" matTooltipPosition="below"><i class="fas fa-mobile-alt"></i></button>
         <button mat-button matTooltip="Redo" matTooltipPosition="below" (click)="_section.redo()"><i class="fas fa-redo"></i></button>
         <button mat-button matTooltip="Undo" matTooltipPosition="below" (click)="_section.undo()"><i class="fas fa-undo"></i></button>
-        <button mat-button [routerLink]="'/profile'"><span>{{_general.username}}</span><img [src]="_image.imgPath+'profile/avatar.png'"></button>
+        <button mat-button [routerLink]="'/profile'"><span>{{_general.user.name}}</span><img [src]="_image.imgPath+'profile/avatar.png'"></button>
     </div>
 </div>

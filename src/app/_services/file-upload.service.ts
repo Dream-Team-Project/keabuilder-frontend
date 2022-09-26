@@ -36,6 +36,9 @@ export class FileUploadService {
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
+  saveHeaderApi = "./api/saveheader";
+  saveFooterApi = "./api/savefooter";
+  getTrackingHTMLApi = "./api/tracking";
   createDefaultHomeApi = '/api/default-home';
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
@@ -76,6 +79,21 @@ export class FileUploadService {
 
   getfile(page:any):Observable<any> {
     return this.http.post(this.getFileApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  saveHeader(header:any):Observable<any> {
+    return this.http.post(this.saveHeaderApi, header)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  saveFooter(footer:any):Observable<any> {
+    return this.http.post(this.saveFooterApi, footer)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  gettrackingHTML(page:any):Observable<any> {
+    return this.http.post(this.getTrackingHTMLApi, page)
     .pipe(catchError(this.errorHandler));
   }
 

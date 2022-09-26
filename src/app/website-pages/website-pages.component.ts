@@ -360,7 +360,7 @@ export class WebsitePagesComponent implements OnInit {
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = window.location.origin+'/assets/keapages/'+data;
+      var url = window.location.origin+'/assets/sites/pages/'+data;
       window.open(url, '_blank')
     }
   }

@@ -128,7 +128,7 @@ span.kb-ispan-add {
     transition: 0.2s ease;
     margin: auto;
     z-index: 9;
-    color: var(--clr-light);
+    color: var(--kb-white);
     font-size: 14px;
     font-weight: 400;
 }

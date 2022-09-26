@@ -9,7 +9,6 @@ import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { NgxCaptureService } from 'ngx-capture';
-import { FileUploadService } from '../_services/file-upload.service';
 import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { asapScheduler } from 'rxjs';
 
@@ -46,25 +45,46 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     public _element: ElementService,
     public _general: GeneralService,
     public _image: ImageService,
-    private fileUploadService: FileUploadService,
     // builder services end
     private captureService: NgxCaptureService) {
     _section.sections = [];
     _general.loading.success = false;
     _general.loading.error = false;
       this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.getWebPageDetails(params.get('id')).then(e=> {
-          this._general.loading.success = false; 
-          this.setBuilder(this._general.file.html, this._general.file.css);
-          this._general.file.load = false;
+        _general.layout = params.get('layout');
+        if(_general.layout == 'website' || _general.layout == 'funnel') {
+            _general.getWebPageDetails(params.get('id')).then(e=> {
+              this._general.loading.success = false; 
+              this.setBuilder(this._general.file.html, this._general.file.css);
+              this._general.file.load = false;
+            })
+        }
+        else {
+          if(params.get('id') == _general.user.uniqueid) {
+            this._general.fileUploadService.gettrackingHTML('path').subscribe(data=>{
+              var parser = new DOMParser();
+              var doc = parser.parseFromString(data.html, 'text/html');
+              var obj:any = {};
+              if(_general.layout == 'header') {
+                obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
+                obj.html = doc.querySelector('#kb-header');
+              }
+              else if(_general.layout == 'footer') {
+                obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
+                obj.html = doc.querySelector('#kb-footer');
+              }
+              this.setBuilder(obj.html, obj.css);
+            })
+          }
+          else window.location.replace(window.location.origin);
+        }
+        _section.builderCDKMethodCalled$.subscribe(() => {
+          setTimeout((e:any)=>{
+            this.setDragDrop();
+          })
         })
-      })
-      _section.builderCDKMethodCalled$.subscribe(() => {
-        setTimeout((e:any)=>{
-          this.setDragDrop();
-        })
-      });
-   }
+   })
+  }
 
   ngOnInit(): void {
   }
@@ -119,7 +139,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       if(res) {
         this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
           var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
-          this.fileUploadService.upload(file).subscribe(
+          this._general.fileUploadService.upload(file).subscribe(
             (event: any) => {
                 if (typeof (event) === 'object') {
                   this._general.saveDisabled = false;
@@ -216,7 +236,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               mobile: this.filterStyle(col.id,css,'426')
             }
             col.querySelectorAll('.kb-element').forEach((ele:any)=>{
-              var eleSel = 'div';
+              var eleSel = 'div>div';
               var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
               var content = ele.querySelector('.kb-element-content');
               eleObj.content.name = ele.children[0].getAttribute('data-name');
@@ -243,6 +263,18 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 tablet_v: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'768,426'),
                 mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'426')
               } 
+              var aling = {
+                desktop: this.filterStyle(ele.id,css,''),
+                tablet_h: this.filterStyle(ele.id,css,'1024,769'),
+                tablet_v: this.filterStyle(ele.id,css,'768,426'),
+                mobile: this.filterStyle(ele.id,css,'426')
+              }
+              eleObj.item_alignment = {
+                desktop: aling.desktop ? aling.desktop['justify-content'] : '',
+                tablet_h: aling.tablet_h ? aling.tablet_h['justify-content'] : 'auto',
+                tablet_v: aling.tablet_v ? aling.tablet_v['justify-content'] : 'auto',
+                mobile: aling.mobile ? aling.mobile['justify-content'] : 'auto',
+              }
               eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
               eleObj.hide = {
                 desktop: ele.classList.contains('kb-d-desk-none'),

@@ -123,11 +123,11 @@
 }
 
 .active-primary {
-  background-color: var(--clr-primay);
-  border-color: var(--clr-primay);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
   font-size: 14px;
-  color: var(--clr-light);
+  color: var(--kb-white);
   transition: .5s ease;
 }
 
