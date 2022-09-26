@@ -35,35 +35,22 @@ export class ElementService {
     // button
     { content: { name: 'button', text: 'Read More', subtext: 'Sub Text', subfont_size:'80%', link: '#', target: '_self' }, iconCls: 'fas fa-font' },
     // button
-    // menu
-    { content: { name: 'menu', items:[]}, iconCls: 'fas fa-font' },
-    // menu
     // form
-    { content: { name: 'form', items:[]}, iconCls: 'fab fa-wpforms' }
+    { content: { name: 'form', items:[]}, iconCls: 'fab fa-wpforms' },
     // form
+    // menu
+    // { content: { name: 'menu', items:[]}, iconCls: 'fas fa-font' }, // it should be on the first position
+    // menu
   ];
   menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   preMenuItems:any = ['Home','About','Blog','Contact'];
   constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
-    this.elementList.filter(item=>{
-      if(item.content.name == 'menu') {
-        for(var i=0; i<=3; i++) {
-          this.menuItemObj.name = this.preMenuItems[i];
-          // if(i == 0) {
-          //     var obj = JSON.parse(JSON.stringify(this.menuItemObj));
-          //     this.menuItemObj.dropdown.push(obj);
-          //     this.menuItemObj.dropdown.push(obj);
-          //     this.menuItemObj.dropdown.push(obj);
-          //     this.menuItemObj.dropdown.push(obj);
-          // }
-          // else {
-          //   this.menuItemObj.dropdown = [];
-          // }
-          this.addMenuItem(item.content.items, this.menuItemObj, i);
-        }
-        this.menuItemObj.name = 'Item';
-      }
-    })
+    // var item = this.elementList[0];
+    // for(var i=0; i<=3; i++) {
+    //   this.menuItemObj.name = this.preMenuItems[i];
+    //   this.addMenuItem(item.content.items, this.menuItemObj, i);
+    // }
+    // this.menuItemObj.name = 'Item';
   }
 
   getDialogueEvent(): Observable<any> {
@@ -104,8 +91,6 @@ export class ElementService {
   }
 
   // menu
-
-  // session storage
 
   addMenuItem(menu:any, item:any, mi: number) {
     this.appendMenuItem(menu, item, mi);

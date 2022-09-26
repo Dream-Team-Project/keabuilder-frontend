@@ -29,7 +29,7 @@
                 <div class="kb-ask-head" cdkDragHandle>Element Selection</div>
                 <div class="kb-element-inner-group">
                     <ul class="kb-element-list">
-                        <li *ngFor="let element of _element.elementList" :key="element.content.name"
+                        <li *ngFor="let element of _element.elementList"
                             class="kb-element-box"><span (click)="_element.addElement(element.content)"><i
                                     [class]="element.iconCls"></i>
                                 <div>{{element.content.name | titlecase}}</div>

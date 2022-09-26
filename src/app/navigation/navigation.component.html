@@ -1,0 +1,76 @@
+<ng-template>
+    <div class="container-fluid kb-details-container kb-scroll" [class.dragBox]="dragBoxAnime.open" [class.dragBoxClose]="dragBoxAnime.close"
+    [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''" cdkDragBoundary=".cdk-overlay-container"
+    cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
+        <span class="kb-selection-top-actions">
+            <button mat-button (click)="overlayRefDetach()">
+                <i class="fa fa-times"></i>
+            </button>
+        </span>
+        <ul class="kb-drag-container" cdkDropList>
+            <li cdkDrag *ngFor="let item of selectedMenu.items, index as mi"
+            (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; item.chngName = false" class="kb-cs kb-block-container">
+                <div *cdkDragPreview class="custom-preview">{{item.name ? item.name : 'Menu Item'}}</div>
+                <div *cdkDragPlaceholder class="custom-placeholder kb-cs"></div>        
+                <span
+                    class="kb-setting-icon">
+                    <i cdkDragHandle *ngIf="selectedMenu.items.length > 1" class="kb-handle-menu kb-handle-block fas fa-arrows-alt-v"></i>
+                    <i (click)="_general.expandDevList('menu-item-'+mi)" class="fa" [class]="_style.getDisplay(item.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    <div [id]="'menu-item-'+mi" class="dislay-device-list" [style.maxHeight]="'0px'">
+                            <mat-checkbox [checked]="_general.isAllHide(item.hide)"
+                            [indeterminate]="_general.someComplete(item.hide)"
+                            (change)="_general.setAll(item.hide, $event.checked)">All</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="item.hide.desktop">Desktop</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="item.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="item.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="item.hide.mobile">Mobile</mat-checkbox>
+                    </div>
+                </span>
+                <span class="kb-block-name">
+                    <span *ngIf="!item.chngName else chngInp" matTooltip="Click To Rename"
+                        matTooltipPosition="above" (mouseover)="item.chngName = !item.chngName"
+                        class="kb-chngName">{{item.name ? item.name : 'Menu Item'}}</span>
+                    <ng-template #chngInp>
+                        <span>
+                            <input type="text" placeholder="Menu Item Name"
+                                [(ngModel)]="item.name"
+                                (keydown.enter)="item.chngName = !item.chngName"
+                                class="kb-chngname-inp">
+                        </span>
+                    </ng-template>
+                </span>
+                <span class="kb-setting-icon">
+                    <i (click)="addMenuItem(selectedMenu.items, menuItemObj, mi)"
+                        matTooltip="Add New Item" matTooltipPosition="above"
+                        class="fa fa-plus"></i>
+                    <i (click)="duplicateMenuItem(selectedMenu.items, item, mi)"
+                        matTooltip="Duplicate Item" matTooltipPosition="above"ś
+                        class="far fa-copy"></i>
+                    <i *ngIf="selectedMenu.items.length > 1"
+                        (click)="deleteMenuItem(selectedMenu.items,mi)"
+                        matTooltip="Delete Item" matTooltipPosition="above"
+                        class="far fa-trash-alt"></i>
+                </span>
+            </li>
+            <li></li>
+        </ul>
+    </div>
+</ng-template>
+
+<div id="kb-navigation">
+    <ul id="menu-list">
+        <li *ngFor="let menu of menus">
+            <div class="kb-menu-title">
+                <span>{{menu.name}}</span>
+                <input type="text" placeholder="Menu Item Name"
+                [(ngModel)]="menu.name"
+                class="kb-chngname-inp">
+            </div>
+            <div class="kb-menu-option">                
+                <i (click)="openDialog(menu)" matTooltip="Customize" matTooltipPosition="above" class="far fa-edit"></i>
+                <i matTooltip="Duplicate" matTooltipPosition="above" class="far fa-copy"></i>
+                <i matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
+            </div>
+        </li>
+    </ul>
+</div>

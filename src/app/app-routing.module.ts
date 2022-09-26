@@ -63,6 +63,7 @@ import { WebsiteDetailsComponent } from './website-details/website-details.compo
 import { WebsiteMarketplaceComponent } from './website-marketplace/website-marketplace.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
+import { NavigationComponent } from './navigation/navigation.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
 import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
 import { ImageComponent } from './image/image.component';
@@ -94,6 +95,7 @@ const routes: Routes = [
       {path: '', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'layout', component: WebsiteLayoutComponent, canActivate: [AuthGuard]},
+      {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
       {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]}
     ],
@@ -288,6 +290,7 @@ export const RoutingComponents =
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
     WebsiteMarketplaceComponent,
+    NavigationComponent,
     IntegrationsComponent,
     FormBuilderComponent,
     BuilderTopbarComponent,
