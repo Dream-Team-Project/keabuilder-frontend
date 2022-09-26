@@ -149,6 +149,14 @@
             </mat-form-field>
             <small>This code will be placed in the head section of every page.</small>
           </div>
+          <div class="form-group">
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Script Footer</mat-label>
+                <textarea matInput [(ngModel)]="pagescriptfooter" rows="6"></textarea>
+              </mat-form-field>
+            <small>This code will be placed in the footer section of every page.</small>
+            <small>This code will be placed in the head section of every page. <br><strong>NOTE: </strong> {{tagscript}}</small>
+          </div>
         </div>
       </div>
 
@@ -161,7 +169,7 @@
                 <mat-label>Footer Code</mat-label>
                 <textarea matInput [(ngModel)]="pagescriptfooter" rows="6"></textarea>
             </mat-form-field>
-            <small>This code will be placed in the footer section of every page.</small>
+            <small>This code will be placed in the head section of every page. <br><strong>NOTE: </strong> {{tagstyle}}</small>
           </div>
         </div>
       </div>

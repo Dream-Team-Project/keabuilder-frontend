@@ -30,6 +30,8 @@ export class WebsiteDetailsComponent implements OnInit {
   imagelogorequest = false;
   imagefaviconrequest = false;
   windoworigin = window.origin;
+  tagstyle = 'Place CSS inside the style tag <style></style>.';
+  tagscript = 'Place JS inside the script tag <script></script>.';
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
