@@ -65,3 +65,7 @@ ul#menu-list li>div {
 .kb-menu-title:hover .kb-chngname-inp {
     display: block;
 }
+
+.kb-add-menu {
+    cursor: pointer;
+}
