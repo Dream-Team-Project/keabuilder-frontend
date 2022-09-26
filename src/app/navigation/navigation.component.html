@@ -58,7 +58,7 @@
 </ng-template>
 
 <div id="kb-navigation">
-    <h5>Navigation Menu</h5>
+    <div class="d-flex justify-content-between"><h5>Navigation Menus</h5><button mat-raised-button color="primary" class="pull-right">Add new menu <i class="fa fa-plus"></i></button></div>
     <ul id="menu-list">
         <li *ngFor="let menu of menus">
             <div class="kb-menu-title">
@@ -74,5 +74,4 @@
             </div>
         </li>
     </ul>
-    <div class="text-right"><button mat-raised-button color="primary">Add new menu <i class="fa fa-plus"></i></button></div>
 </div>
