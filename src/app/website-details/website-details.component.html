@@ -158,6 +158,7 @@
                 <textarea matInput [(ngModel)]="pagescriptfooter" rows="6"></textarea>
               </mat-form-field>
             <small>This code will be placed in the footer section of every page.</small>
+            <small>This code will be placed in the head section of every page. <br><strong>NOTE: </strong> {{tagscript}}</small>
           </div>
         </div>
       </div>
@@ -171,7 +172,7 @@
                 <mat-label>CSS</mat-label>
                 <textarea matInput [(ngModel)]="pagetrackingstyle" rows="6"></textarea>
             </mat-form-field>
-            <small>This code will be placed in the head section of every page.</small>
+            <small>This code will be placed in the head section of every page. <br><strong>NOTE: </strong> {{tagstyle}}</small>
           </div>
         </div>
       </div>
