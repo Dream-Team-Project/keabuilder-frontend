@@ -15,10 +15,7 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   private _overlayRef!: OverlayRef;
   private _portal!: TemplatePortal;
 
-  menus = [
-    {name: 'Menu 1', items: []},
-    {name: 'Menu 2', items: []},
-  ]
+  menus:any = []
   menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   dragBoxAnime:any = {open: false, close: false};
   selectedMenu:any;
@@ -43,9 +40,9 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
     this.selectedMenu = menu;
     this.dragBoxAnime.open = true;
     this._overlayRef.attach(this._portal);
-    // setTimeout(()=>{
-    //   this.dragBoxAnime.open = false;
-    // },200)
+    setTimeout(()=>{
+      this.dragBoxAnime.open = false;
+    },200)
   }
   overlayRefDetach() {
     this.dragBoxAnime.close = true;
