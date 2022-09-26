@@ -226,7 +226,7 @@ export class WebsiteDesignComponent implements OnInit {
   } 
 
   webpreview(){
-    var weblink = window.origin+'/assets/keapages/';
+    var weblink = window.origin+'/assets/sites/pages/';
     window.open(weblink, '_blank')
   }
 

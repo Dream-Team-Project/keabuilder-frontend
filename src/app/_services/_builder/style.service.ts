@@ -1263,46 +1263,86 @@ export class StyleService {
 
       if(obj.margin) {
         var mg = obj.margin.split(' ');
-
         if (mg.length == 1) {
-          this.margin.top = mg[0];
-          this.margin.bottom = mg[0];
-          this.margin.right = mg[0] != 'auto' ? mg[0] : '0px';
-          this.margin.left = mg[0] != 'auto' ? mg[0] : '0px';
+          var value:any;
+          if(mg[0] == 'auto') {
+            value = '0px';
+            this.blockAlign = 'center';
+          }
+          else value = mg[0];
+          this.margin.top = value;
+          this.margin.bottom = value;
+          this.margin.right = value;
+          this.margin.left = value;
           this.m_link.a = true;
         }
   
         else if (mg.length == 2) {
-          this.margin.top = mg[0];
-          this.margin.bottom = mg[0];
-          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
-          this.margin.left = mg[1] != 'auto' ? mg[1] : '0px';
+          var my:any;
+          var mx:any;
+          if(mg[0] == 'auto') my = '0px';
+          else my = mg[0];
+          if(mg[1] == 'auto') {
+            mx = '0px';
+            this.blockAlign = 'center';
+          }
+          else mx = mg[1];
+          this.margin.top = my;
+          this.margin.bottom = my;
+          this.margin.right = mx;
+          this.margin.left = mx;
           this.m_link.a = false;
         }
   
         else if (mg.length == 3) {
-          this.margin.top = mg[0];
-          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
-          this.margin.left = mg[1] != 'auto' ? mg[1] : '0px';
-          this.margin.bottom = mg[2];
+          var mt:any;
+          var mx:any;
+          var mb:any;
+          if(mg[0] == 'auto') mt = '0px';
+          else mt = mg[0];
+          if(mg[1] == 'auto') {
+            mx = '0px';
+            this.blockAlign = 'center';
+          }
+          else mx = mg[1];
+          if(mg[2] == 'auto') mb = '0px';
+          else mb = mg[2];
+          this.margin.top = mt;
+          this.margin.right = mx;
+          this.margin.left = mx;
+          this.margin.bottom = mb;
           this.m_link.a = false;
         }
   
         else {
-          this.margin.top = mg[0];
-          this.margin.right = mg[1] != 'auto' ? mg[1] : '0px';
-          this.margin.bottom = mg[2];
-          this.margin.left = mg[3] != 'auto' ? mg[3] : '0px';
+          var mt:any;
+          var mr:any;
+          var mb:any;
+          var ml:any;
+          if(mg[0] == 'auto') mt = '0px';
+          else mt = mg[0];
+          if(mg[1] == 'auto') {
+            mr = '0px';
+            this.blockAlign = 'left';
+          }
+          else mr = mg[1];
+          if(mg[2] == 'auto') mb = '0px';
+          else mb = mg[2];
+          if(mg[3] == 'auto') {
+            ml = '0px';
+            this.blockAlign = 'right';
+          }
+          else ml = mg[3];
+          if(mg[1] == 'auto' && mg[3] == 'auto') this.blockAlign = 'center';
+          this.margin.top = mt;
+          this.margin.right = mr;
+          this.margin.bottom = mb;
+          this.margin.left = ml;
           this.m_link.a = false;
         }
   
         this.m_link.tb = this.margin.top == this.margin.bottom;
         this.m_link.lr = this.margin.right == this.margin.left;
-  
-        this.blockAlign = this.margin.right == 'auto' ? 'left' : '';
-        this.blockAlign = this.margin.left == 'auto' ? 'right' : '';
-        this.blockAlign = this.margin.right == 'auto' && this.margin.left == 'auto' ? 'center' : '';
-  
       }
 
       if(obj.padding) {

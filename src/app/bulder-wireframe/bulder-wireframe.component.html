@@ -111,8 +111,8 @@
                             cdkDropList [id]="'colgroup-'+ri" [cdkDropListData]="row.columnArr" [cdkDropListConnectedTo]="coldls" (cdkDropListDropped)="drop($event)">
                         <li cdkDrag class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
                             (mouseenter)="_element.selectedElements = column.elementArr">
-                            <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--kb-text-color)', 'background-color':'var(--clr-light)'}">{{column.name ? column.name : 'Column'}}</div>
-                            <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--clr-light)'"></div>
+                            <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--kb-text-color)', 'background-color':'var(--kb-white)'}">{{column.name ? column.name : 'Column'}}</div>
+                            <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-white)'"></div>
                             <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-wfs">
                                 <span class="kb-setting-icon">
                                     <i *ngIf="row.columnArr.length > 1" class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>

@@ -47,6 +47,7 @@ main {
 }
 
 ::ng-deep .mat-simple-snackbar-action button {
+    color: #ffffff;
     font-weight: 600;
   }
 

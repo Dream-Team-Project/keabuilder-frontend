@@ -254,7 +254,7 @@ span.kb-setting-icon .kb-handle-block {
 .kb-wfs-contain .kb-wfs {
     width: 100%;
     height: 36px;
-    background-color: var(--clr-light);
+    background-color: var(--kb-white);
     border-radius: 5px;
     font-size: 14px;
     margin: 5px 0px;

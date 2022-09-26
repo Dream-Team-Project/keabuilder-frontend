@@ -2,8 +2,13 @@
 <div id="page-container" [class.hovernone]="_general.saveDisabled" (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
     <app-builder-topbar *ngIf="_section.sections.length != 0"></app-builder-topbar>
     <app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
+    <div id="kb-layout-saveopt" *ngIf="_general.loading.success && (_general.layout == 'header' || _general.layout == 'footer')">
+        <div class="kb-layout-title">Global {{_general.layout | titlecase}}</div>
+        <div><button mat-raised-button (click)="_general.saveLayout(main, _section.sections)" class="kb-btn-primary">Save <i class="fas fa-save"></i></button></div>
+    </div>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
+            <header *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" kb-include-html="true"></header>
             <div id="kb-main"
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div class="kb-drag-container"
@@ -117,7 +122,7 @@
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>
-                                                <div [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
+                                                <div [style.width]="element.content.name == 'heading' || element.content.name == 'text' ? '100%' : ''" [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
                                                     <div *ngSwitchCase="'image'" class="kb-element-content">
                                                         <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
                                                             [ngStyle]="_style.imageStyling()"
@@ -204,6 +209,7 @@
                     <!-- sections end -->
                 </div>
             </div>
+            <footer *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" kb-include-html="true"></footer>
         </div>
         <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
     </div>
@@ -231,28 +237,30 @@
         </button>
     </div>
     <div *ngIf="_general.loading.success else loading" id="kb-builder-nav" cdkDrag cdkDragBoundary="#page-container" (cdkDragEnded)="onDragEnded($event)">
-        <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
-            <button mat-button (click)="openPageSetting($event)" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
-            <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
-            <button mat-button [disabled]="_general.saveDisabled" (click)="takePageSS(main);" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
-            <button mat-button (click)="_general.preview(main, _section.sections)" matTooltip="Preview" matTooltipPosition="above" class="nav-floating-btn"><i class="fa fa-external-link-alt"></i></button>
-            <!-- <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button> -->
-            <button mat-button (click)="_general.wireframeToggle(true)" matTooltip="Wireframe" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
-        </span>
-        <button mat-button cdkDragHandle (click)="_general.showfloatnavtoggle()" [disabled]="_general.showNavAnim.open || _general.showNavAnim.close" class="nav-floating-btn-host">
-            <div *ngIf="!_general.showNavAnim.navopen else navtimes" class="navdots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ng-template #navtimes>
-                <div id="navtimes" [class.navtimes-btn-open]="_general.showNavAnim.open" [class.navtimes-btn-close]="_general.showNavAnim.close">
-                    <div class="navtimes">
-                    <div class="navtime"></div>
-                    </div>
+        <div *ngIf="_general.layout == 'website' || _general.layout == 'funnel'">
+            <span [ngClass]="'show-nav-animfrom-'+showNavFrom" [class.show-nav-anim]="_general.showNavAnim.open" [class.hide-nav-anim]="_general.showNavAnim.close" class="nav-floating-btn-group" *ngIf="_general.showNavAnim.show">
+                <button mat-button (click)="openPageSetting($event)" matTooltip="Page Setting" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-cogs"></i></button>
+                <button mat-button (click)="_general.responsiveToggle(true)" matTooltip="Responsive Mode" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-mobile-alt"></i></button>
+                <button mat-button [disabled]="_general.saveDisabled" (click)="takePageSS(main);" matTooltip="Save" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-save"></i></button>
+                <button mat-button (click)="_general.preview(main, _section.sections)" matTooltip="Preview" matTooltipPosition="above" class="nav-floating-btn"><i class="fa fa-external-link-alt"></i></button>
+                <!-- <button mat-button (click)="_general.undoRedoToggle(true)" matTooltip="Undo/Redo" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-sync"></i></button> -->
+                <button mat-button (click)="_general.wireframeToggle(true)" matTooltip="Wireframe" matTooltipPosition="above" class="nav-floating-btn"><i class="fas fa-network-wired"></i></button>
+            </span>
+            <button mat-button cdkDragHandle (click)="_general.showfloatnavtoggle()" [disabled]="_general.showNavAnim.open || _general.showNavAnim.close" class="nav-floating-btn-host">
+                <div *ngIf="!_general.showNavAnim.navopen else navtimes" class="navdots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </ng-template>
-        </button>
+                <ng-template #navtimes>
+                    <div id="navtimes" [class.navtimes-btn-open]="_general.showNavAnim.open" [class.navtimes-btn-close]="_general.showNavAnim.close">
+                        <div class="navtimes">
+                        <div class="navtime"></div>
+                        </div>
+                    </div>
+                </ng-template>
+            </button>
+        </div>
     </div>
     <ng-template #loading>
         <div id="loader">

@@ -21,12 +21,11 @@
         --kb-dim-black: #22262a66;
         --kb-text-color: #4c5866;
         --kb-dark: #35363a; 
+        --kb-white: #fff;
+        --kb-black: #000;
     
     /* builder root */
-    
-        --clr-primay: var(--primary-color);
-        --clr-light: #fff;
-    }
+      }
     
     *, ::after, ::before {
         box-sizing: border-box;
@@ -88,8 +87,10 @@
     
 
 .mat-snack-bar-container {
-    color: #000;
-    background-color: var(--light);
+    color: #ffffff;
+    background-color: var(--primary-color);
+    font-weight: 500;
+    font-size: 16px;
 }
 
 main {
@@ -119,11 +120,11 @@ i.kb-danger {
 }
 
 .btn-primary{
-    background-color: var(--clr-primay);  
-    border-color: var(--clr-primay);
+    background-color: var(--primary-color);  
+    border-color: var(--primary-color);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     font-size: 14px;
-    color: var(--clr-light);
+    color: var(--kb-white);
 }
 .btn-primary:hover{
     opacity: 0.8;
@@ -131,7 +132,7 @@ i.kb-danger {
 .btn-secondary {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-    color: var(--clr-light);
+    color: var(--kb-white);
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -146,11 +147,11 @@ i.kb-danger {
 
 .mat-flat-button.mat-info, .mat-raised-button.mat-info, .mat-fab.mat-info, .mat-mini-fab.mat-info, .mat-checkbox-indeterminate.mat-info .mat-checkbox-background, .mat-checkbox-checked.mat-info .mat-checkbox-background{
   background-color: var(--kb-info); 
-  color: var(--clr-light);
+  color: var(--kb-white);
 }
 
 .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background{
-    background-color: var(--clr-primay); 
+    background-color: var(--primary-color); 
 }
 
 .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background{
@@ -179,23 +180,23 @@ a{
     font-weight: 500;
 }
 .btn-primary{
-    background-color: var(--clr-primay);  
-    border-color: var(--clr-primay);
+    background-color: var(--primary-color);  
+    border-color: var(--primary-color);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     font-size: 14px;
-    color: var(--clr-light);
+    color: var(--kb-white);
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus{
     opacity: 0.8;
-    background-color: var(--clr-primay)!important;  
-    border-color: var(--clr-primay);
+    background-color: var(--primary-color)!important;  
+    border-color: var(--primary-color);
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-    border-color: var(--clr-primay)!important;
+    border-color: var(--primary-color)!important;
 }
 .btn-secondary {
     font-size: 14px;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
-    color: var(--clr-light);
+    color: var(--kb-white);
 }
 
 main.insidecont .box {
@@ -467,16 +468,12 @@ main.insidecont .box {
 
 /* sidepopup */
 
-.mat-simple-snackbar .mat-button-wrapper {
-  color: var(--clr-primay); 
-}
-
 .mat-tooltip {
   font-size: 12px;
 }
 
-.mat-simple-snackbar-action {
-    color: var(--clr-primay)!important;
+.mat-simple-snackbar-action button, .mat-simple-snackbar .mat-button-wrapper {
+    color: #ffffff!important;
 }
 
 /* cdk drag drop */
@@ -570,7 +567,7 @@ main.insidecont .box {
   font-weight: 500;
   cursor: pointer;
   color: #cccccc;
-  border: 3px dashed var(--clr-primay);
+  border: 3px dashed var(--primary-color);
   border-radius: 10px;
   font-size: 14px;
 }

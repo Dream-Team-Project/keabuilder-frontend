@@ -8,7 +8,7 @@
 
       <div class="col-md-6">
         <button mat-raised-button color="accent" class="float-right" [routerLink]="['/website']" ><i class="fas fa-arrow-left"></i> Back</button>
-        <a mat-raised-button color="accent" class="float-right mr-2" [href]="windoworigin+'/assets/keapages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
+        <a mat-raised-button color="accent" class="float-right mr-2" [href]="windoworigin+'//assets/sites/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
         <button mat-raised-button color="accent" class="float-right mr-2" (click)="updatepage()" >Update <i class="fas fa-check"></i></button>
       </div>
 
@@ -141,15 +141,13 @@
 
       <div class="col-md-6 mt-4">
         <div class="insideshdw">
-          <h5>Scripts</h5>
-          <p>Add custom javascript to be placed on all site Pages. The code will be placed in the <b>head</b> and
-            <b>Footer</b> section of every page.</p>
+          <h5>Header Tracking Code</h5>
+            <p>Add custom javascript or CSS</p>
           <div class="form-group">
             <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Script Header</mat-label>
+                <mat-label>Header Code</mat-label>
                 <textarea matInput [(ngModel)]="pagescriptheader" rows="6"></textarea>
             </mat-form-field>
-
             <small>This code will be placed in the head section of every page.</small>
           </div>
           <div class="form-group">
@@ -165,12 +163,12 @@
 
       <div class="col-md-6 mt-4">
         <div class="insideshdw">
-          <h5>Style</h5>
-          <p>Add custom css to be placed on all site Pages.</p>
+          <h5>Footer Tracking Code</h5>
+            <p>Add custom javascript or CSS</p>
           <div class="form-group">
             <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>CSS</mat-label>
-                <textarea matInput [(ngModel)]="pagetrackingstyle" rows="6"></textarea>
+                <mat-label>Footer Code</mat-label>
+                <textarea matInput [(ngModel)]="pagescriptfooter" rows="6"></textarea>
             </mat-form-field>
             <small>This code will be placed in the head section of every page. <br><strong>NOTE: </strong> {{tagstyle}}</small>
           </div>

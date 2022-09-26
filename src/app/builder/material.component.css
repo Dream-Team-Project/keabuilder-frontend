@@ -75,18 +75,20 @@ image-cropper {
 }
 
 ::ng-deep .mat-snack-bar-container {
-    background-color: var(--opacity-section);
-    color: #fff;
+    color: #ffffff;
+    background-color: var(--primary-color);
     margin-top: 30px!important;
+    font-weight: 500;
+    font-size: 16px;
 }
 
 ::ng-deep .mat-simple-snackbar-action button {
-    color: #fff!important;
+    color: #ffffff;
     font-weight: 600;
 }
 
 ::ng-deep .mat-simple-snackbar .mat-button-wrapper {
-    color: #fff!important;
+    color: #ffffff;
 }
 
 ::ng-deep .mat-slider.slider {
@@ -219,6 +221,10 @@ image-cropper {
 ::ng-deep .tox .tox-toolbar__primary {
     background-color: #f1f5f9!important;
     background-image: none!important;
+}
+
+::ng-deep tinymce {
+    width: 100%!important;
 }
 
 ::ng-deep .tox.tox-tinymce {

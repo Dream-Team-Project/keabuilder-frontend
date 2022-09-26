@@ -67,7 +67,7 @@ div#form-elements .form-ele-list mat-list-item:nth-child(even) i, div.kb-form-el
 }
 
 div#form-elements .form-ele-list mat-list-item i, .custom-preview-icon{
-    color: var(--clr-light);
+    color: var(--kb-white);
     padding: 14px;
     margin-right: 10px;
     font-size: 18px;

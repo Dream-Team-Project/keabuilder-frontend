@@ -19,7 +19,6 @@ export class WebsiteDetailsComponent implements OnInit {
   pathselected = '';
   pagescriptheader = '';
   pagescriptfooter = '';
-  pagetrackingstyle = '';
   file = null;
   typeerror = '';
   typeerror2 = '';
@@ -58,6 +57,7 @@ export class WebsiteDetailsComponent implements OnInit {
     this.websiteService.getWebsite().subscribe({
       next: data => {
         console.log(data);
+        if(data.message != 'Error') {
           data.data.forEach((element:any) => {
             this.kbwebsite.push(element);
 
@@ -67,10 +67,6 @@ export class WebsiteDetailsComponent implements OnInit {
 
             if(element.tracking_footer!=null && element.tracking_footer!=''){
               this.pagescriptfooter = atob(element.tracking_footer);
-            }
-
-            if(element.tracking_style!=null && element.tracking_style!=''){
-              this.pagetrackingstyle = atob(element.tracking_style);
             }
 
             if(element.homepage!=null && element.homepage!=''){
@@ -109,6 +105,7 @@ export class WebsiteDetailsComponent implements OnInit {
             }
 
           });
+        }
       },
       error: err => {
         console.log(err);
@@ -123,7 +120,6 @@ export class WebsiteDetailsComponent implements OnInit {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
       scriptfooter: btoa(this.pagescriptfooter),
-      trackingstyle: btoa(this.pagetrackingstyle),
       logo: this.logoimgname,
       favicon: this.faviconimgname,
       checkimginput1: this.imagelogorequest,
@@ -153,7 +149,7 @@ export class WebsiteDetailsComponent implements OnInit {
         if(data.data.length!=0){
           var obj = {
             tracking: {
-              header: this.pagetrackingstyle+'\n'+this.pagescriptheader,
+              header: this.pagescriptheader,
               footer: this.pagescriptfooter,
             },
             path: data.data[0].page_path
