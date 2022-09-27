@@ -1344,3 +1344,15 @@ select#users-list-verified {
   padding: 8px;
   margin-right: 5px;
 }
+
+.productbox{
+  box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
+  font-weight: bold;
+  background: #f2f4f4;
+  padding: 15px;
+  margin: 10px;
+}
+
+.mklnheight{
+  line-height: 36px;
+}

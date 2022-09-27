@@ -20,6 +20,7 @@ export class BuildFunnelComponent implements OnInit {
         badgecolor:''
     };
     userFormControl = new FormControl('',[Validators.required ]);
+    hidefornow = false;
     
     allcategory = [
         {0:true,

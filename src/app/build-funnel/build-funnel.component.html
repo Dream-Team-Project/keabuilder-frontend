@@ -1,5 +1,5 @@
 <div id="buildfunnelcomp">
-  <div class="container-fluid">
+  <div class="container-fluid pb-5">
 
     <div id="kb-buildfunnel-actions" *ngIf="popupsidebar">
       <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
@@ -48,18 +48,23 @@
     </div>
     <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
 
-    <div class="row">
-      <div class="col-md-12 topfixadjust">
-        <h3 class="d-inline-block">
-           Choose Your Path
-        </h3>
+    <div class="row mt-4">
+      <!-- <div class="col-md-12 topfixadjust text-center mb-4"> -->
+        <div class="col-md-12 text-center mb-4">
+        <h3 class="d-inline-block" *ngIf="hidefornow">Choose Your Path</h3>
 
-            <button [routerLink]="['/funnels']" mat-raised-button color="accent" class="gobackward float-right ml-2"><i class="fas fa-arrow-left fa-2x "></i> Back</button>
+            <button [routerLink]="['/funnels']" mat-raised-button color="accent" class="gobackward mr-2"><i class="fas fa-arrow-left fa-2x "></i> Back</button>
 
-            <button mat-raised-button color="primary"  class="float-right" (click)="createfunnel()" >Or.. Create a Custom Funnel</button>
+            <!-- <button mat-raised-button color="primary"  class="float-right" (click)="createfunnel()" >Or.. Create a Custom Funnel</button> -->
+
+            <button mat-raised-button color="primary" (click)="createfunnel()" >Start Now</button>
 
       </div>
-      <div class="col-md-2 mt-3 fixedcategory loadEffectFromLeft">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <img src="/assets/images/funnel/choose-your-path.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-2 mt-3 fixedcategory loadEffectFromLeft" *ngIf="hidefornow">
         <h6>INDUSTRY</h6>
         <ul class="list-unstyled">
           <li class="mb-1">
@@ -104,8 +109,8 @@
           </li>
         </ul>
       </div>
-      <div class="col-md-2 mt-3"></div>
-      <div class="col-md-10 mt-4">
+      <div class="col-md-2 mt-3" *ngIf="hidefornow"></div>
+      <div class="col-md-10 mt-4" *ngIf="hidefornow">
         <div class="">
           <span *ngFor="let allcategor of allcategory; index as i;" class="adjustloopvfor">
             <div class="clmwithshadow loadEffect" *ngIf="allcategory[i][0]">
