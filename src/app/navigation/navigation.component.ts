@@ -50,8 +50,25 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
       this._overlayRef.detach();
       this.dragBoxAnime.close = false;
     })
-    }
+  }
 
+  // menu
+
+  addMenu() {
+    var obj = {name: 'Menu Name', items: []};
+    this.menus.unshift(obj);
+  }
+
+  duplicateMenu(menu:any) {
+    var obj = JSON.parse((JSON.stringify(menu)));
+    this.menus.unshift(obj);
+  }
+
+  deleteMenu(m:any) {
+    this.menus.splice(m, 1);
+  }
+
+  // menu
     // menu items
 
     addMenuItem(menu:any, item:any, mi: number) {

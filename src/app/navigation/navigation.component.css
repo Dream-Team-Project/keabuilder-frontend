@@ -1,3 +1,7 @@
+div#kb-navigation {
+    padding: 20px;
+}
+
 ul#menu-list {
     list-style: none;
     padding: 0px;

@@ -58,9 +58,9 @@
 </ng-template>
 
 <div id="kb-navigation">
-    <div class="d-flex justify-content-between"><h5>Navigation Menus</h5><button mat-raised-button color="primary" class="pull-right">Add new menu <i class="fa fa-plus"></i></button></div>
+    <div class="d-flex justify-content-between"><h5>Navigation Menus</h5><button (click)="addMenu()" mat-raised-button color="primary" class="pull-right">Add new menu <i class="fa fa-plus"></i></button></div>
     <ul id="menu-list">
-        <li *ngFor="let menu of menus">
+        <li *ngFor="let menu of menus, index as m">
             <div class="kb-menu-title">
                 <span>{{menu.name}}</span>
                 <input type="text" placeholder="Menu Item Name"
@@ -69,8 +69,8 @@
             </div>
             <div class="kb-menu-option">                
                 <i (click)="openDialog(menu)" matTooltip="Customize" matTooltipPosition="above" class="far fa-edit"></i>
-                <i matTooltip="Duplicate" matTooltipPosition="above" class="far fa-copy"></i>
-                <i matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
+                <i (click)="duplicateMenu(menu)" matTooltip="Duplicate" matTooltipPosition="above" class="far fa-copy"></i>
+                <i (click)="deleteMenu(m)" matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
             </div>
         </li>
     </ul>
