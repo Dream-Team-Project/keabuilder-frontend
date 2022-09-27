@@ -48,13 +48,13 @@ export class SidebarComponent implements OnInit {
       //   icon: 'far fa-file-alt',
       //   title: 'Blog'
       // },
-      {
-        0:true,
-        routerlink: '/website/layout',
-        img: 'browser.gif',
-        icon: 'fas fa-columns',
-        title: 'Layout'
-      },
+      // {
+      //   0:true,
+      //   routerlink: '/website/layout',
+      //   img: 'browser.gif',
+      //   icon: 'fas fa-columns',
+      //   title: 'Layout'
+      // },
       {
         0:true,
         routerlink: '/website/details',
@@ -89,13 +89,14 @@ export class SidebarComponent implements OnInit {
           icon: 'fas fa-archive',
           title: 'Archived'
         },
-        {
-          0:true,
-          routerlink: '/funnels/marketplace',
-          img: 'funnel.gif',
-          icon: 'fas fa-store',
-          title: 'Marketplace'
-        }]
+        // {
+        //   0:true,
+        //   routerlink: '/funnels/marketplace',
+        //   img: 'funnel.gif',
+        //   icon: 'fas fa-store',
+        //   title: 'Marketplace'
+        // }
+      ]
     },{
       0:true,
       routerlink: '/forms',

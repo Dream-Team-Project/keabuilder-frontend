@@ -80,6 +80,9 @@ export class CreateFunnelComponent implements OnInit {
   selectedcampaignname = 'EMAIL OPTIN';
   selectedcampicon = 'fas fa-envelope';
 
+  hidefornow = false;
+  addproductpopup = false;
+
 
   ngOnInit(): void {
 
@@ -293,18 +296,23 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   usertemplateselected(value:any){
-    // console.log(this.selectedstep);
+    console.log(this.selectedstep);
     this.funnelService.setfunnelstep(this.selectedstep).subscribe({
       next: data => {
         // console.log(data);
+        console.log(this.uniqueidstep);
 
         if(data.data[0].funnelselected==1){
-          this.tabOpen = 'overviewstep';
-          this.funnelselected = 1;
-        }else{
-          this.tabOpen = 'overview';
-          this.funnelselected = 0;
+          this.router.navigate(['/builder/funnel/'+this.uniqueidstep],{relativeTo: this.route});
         }
+
+        // if(data.data[0].funnelselected==1){
+        //   this.tabOpen = 'overviewstep';
+        //   this.funnelselected = 1;
+        // }else{
+        //   this.tabOpen = 'overview';
+        //   this.funnelselected = 0;
+        // }
 
       },
       error: err => {
@@ -591,6 +599,7 @@ export class CreateFunnelComponent implements OnInit {
         }
       });
     }else if(value=='archivefunnelstep'){
+      this.automationaddnewaction = false;
         this.forarchiveid = this.uniqueidstep;
         this.firstpart = false;
         this.popupsidebar = true;
@@ -760,6 +769,16 @@ export class CreateFunnelComponent implements OnInit {
       this.selectedcampicon = 'fas fa-bars';
     }
 
+  }
+
+  addproduct(){
+    this.popupsidebar = true;
+    this.addproductpopup = true;
+    this.automationaddnewaction = false;
+    this.automationaddnewemail = false;
+    this.automationaddnewtext = false;
+    this.copylink = false;
+    this.colortheme = false;
   }
   
  

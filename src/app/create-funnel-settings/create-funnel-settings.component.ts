@@ -36,6 +36,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   processon = false;
   processondata = 'Update Settings';
   popupsidebar = false;
+  hidefornow = false;
 
 
   ngOnInit(): void {

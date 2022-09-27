@@ -139,6 +139,31 @@
         <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
       </div>
 
+      <div *ngIf="addproductpopup">
+        <h6><b>Add Product</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Product Name</mat-label>
+          <input type="text" matInput placeholder="Product Name" value="">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Product Price</mat-label>
+          <input type="number" matInput placeholder="Product Price" value="">
+          <small>(Minimum Price: $1.00)</small>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Price Display Override</mat-label>
+          <input type="text" matInput placeholder="$25 per 3 months" value="">
+          <small>(Optional) Customize the display of the price on the order form.</small>
+        </mat-form-field>
+
+        <br>
+        <button mat-raised-button color="primary"><i class="fas fa-plus"></i> Save Product</button>
+
+      </div>
+
     </div>
   </div>
   <div class="offcanvas-overlay" *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
@@ -241,7 +266,19 @@
                 </div>
               </div>
             </div>
+
             <div class="wizard-step" data-wizard-type="step"
+            [attr.:data-wizard-state]="tabOpen == 'product' ? 'current' : 'pending'"
+            (click)="kb_substeps('product')">
+            <div class="wizard-wrapper">
+              <div class="wizard-number"><i class="fas fa-bolt"></i></div>
+              <div class="wizard-label">
+                <div class="wizard-title">Products</div>
+              </div>
+            </div>
+          </div>
+
+            <!-- <div class="wizard-step" data-wizard-type="step"
               [attr.:data-wizard-state]="tabOpen == 'automation' ? 'current' : 'pending'"
               (click)="kb_substeps('automation')">
               <div class="wizard-wrapper">
@@ -250,7 +287,8 @@
                   <div class="wizard-title">Automation</div>
                 </div>
               </div>
-            </div>
+            </div> -->
+
             <div class="wizard-step" data-wizard-type="step"
               [attr.:data-wizard-state]="tabOpen == 'publishing' ? 'current' : 'pending'"
               (click)="kb_substeps('publishing')">
@@ -264,8 +302,20 @@
           </div>
 
           <!-- templates -->
-          <div class="kb-templates loadEffectFromLeft" *ngIf="tabOpen == 'overview'">
-            <ul class="kb-temp-ul">
+          <div class="kb-templates loadEffectFromLeft text-center mt-5" *ngIf="tabOpen == 'overview'">
+
+            <button mat-raised-button (click)="usertemplateselected('start')" class="mt-4">
+              <i class="fas fa-plus"></i> Build Funnel With Keabuilder
+            </button>
+
+            <div class="row">
+              <div class="col-md-4"></div>
+                <div class="col-md-4">
+                <img src="/assets/images/funnel/launch.png" class="img-fluid" alt="">
+              </div>
+            </div>
+
+            <ul class="kb-temp-ul" *ngIf="hidefornow">
               <li>
                 <button mat-raised-button color="accent" >
                   <i class="fas fa-envelope"></i> OPTIN
@@ -355,7 +405,7 @@
               </li>
             </ul>
 
-            <ul class="kb-showtemplates">
+            <ul class="kb-showtemplates" *ngIf="hidefornow">
               <li>
                 <button mat-raised-button >
                   <i class="fas fa-file-alt"></i> SHOW MY TEMPLATES
@@ -373,7 +423,7 @@
               </li>
             </ul>
 
-            <ul class="kb-alltemplates mb-5">
+            <ul class="kb-alltemplates mb-5" *ngIf="hidefornow">
               <ng-container *ngFor="let item of emailoptintemps; index as i;">
                 <li *ngIf="item.templatefor==selectedcampaign" >
                     <div class="kb-showtemp-header">
@@ -428,7 +478,7 @@
                 </div>
               </div>
 
-              <div class="kb-insidecard col-md-4 kb-internalshadow mymt-3">
+              <div class="kb-insidecard col-md-4 kb-internalshadow mymt-3" *ngIf="hidefornow">
                 <div class=" kb-internalshadow ">
                   <div class="toast toast-light toast-translucent mr-auto ml-auto pt-2 pb-2" role="alert"
                     aria-live="assertive" aria-atomic="true">
@@ -459,55 +509,55 @@
 
                     </div>
 
-                    <div class="kb-split-text pl-2 pr-2" *ngIf="funnelvariation==0">
-                      <div class="btn-block mb-3">
-                        <div class="svgimg3">
-                          <svg version="1.1" id="Layer_1" class="animation" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100"
-                            enable-background="new 0 0 100 100" xml:space="preserve">
-                            <path fill="#333333" d="M48,67.6c0,0.8-0.6,1.4-1.4,1.4H31.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h15.1
-                                                        c0.8,0,1.4,0.6,1.4,1.4V67.6z" />
-                            <path fill="none" stroke="#333333" stroke-width="2" stroke-miterlimit="10"
-                              d="M50.6,34h10c2.6,0,4.4,1.9,4.4,4.5v16.3
-                                                        c0,3.2,1.1,6.4,2.7,9.1l1.2,1.8l13.3,23.1c2.5,4.4-0.6,10.2-5.6,10.2H50.6H24.3c-5,0-8.2-5.8-5.7-10.2l12.9-22.9l0.8-2.2
-                                                        c1.3-2.5,1.7-5.4,1.7-8.2v-17c0-2.6,2.7-4.5,5.4-4.5h11.1H50.6z" />
-                            <path fill="#333333" d="M44,78.6c0,0.8-0.6,1.4-1.4,1.4H25.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h17.1
-                                                        c0.8,0,1.4,0.6,1.4,1.4V78.6z" />
-                            <path fill="#333333" d="M39,88.6c0,0.8-0.6,1.4-1.4,1.4H20.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h17.1
-                                                        c0.8,0,1.4,0.6,1.4,1.4V88.6z" />
-                            <path fill="#333333" d="M69.7,35.5c0,1.5-1.3,2.5-2.9,2.5H32.3c-1.6,0-2.9-1-2.9-2.5l0,0c0-1.5,1.3-2.5,2.9-2.5h34.4
-                                                        C68.4,33,69.7,34,69.7,35.5L69.7,35.5z" />
-                            <circle id="Bubble-1" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="53.5" cy="51" r="2.4" />
-                            <circle id="Bubble-2" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="42.8" cy="48.9" r="4.9" />
-                            <circle id="Bubble-3" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="56" cy="45.4" r="6" />
-                            <circle id="Bubble-4" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="42.1" cy="38.6" r="3.2" />
-                            <circle id="Bubble-5" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="46.5" cy="47" r="2.4" />
-                            <circle id="Bubble-6" fill="none" stroke="#333333" stroke-width="1.5268"
-                              stroke-miterlimit="10" cx="52.8" cy="38.9" r="4.9" />
-                          </svg>
+                      <div class="kb-split-text pl-2 pr-2" *ngIf="funnelvariation==0">
+                        <div class="btn-block mb-3">
+                          <div class="svgimg3">
+                            <svg version="1.1" id="Layer_1" class="animation" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100"
+                              enable-background="new 0 0 100 100" xml:space="preserve">
+                              <path fill="#333333" d="M48,67.6c0,0.8-0.6,1.4-1.4,1.4H31.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h15.1
+                                                          c0.8,0,1.4,0.6,1.4,1.4V67.6z" />
+                              <path fill="none" stroke="#333333" stroke-width="2" stroke-miterlimit="10"
+                                d="M50.6,34h10c2.6,0,4.4,1.9,4.4,4.5v16.3
+                                                          c0,3.2,1.1,6.4,2.7,9.1l1.2,1.8l13.3,23.1c2.5,4.4-0.6,10.2-5.6,10.2H50.6H24.3c-5,0-8.2-5.8-5.7-10.2l12.9-22.9l0.8-2.2
+                                                          c1.3-2.5,1.7-5.4,1.7-8.2v-17c0-2.6,2.7-4.5,5.4-4.5h11.1H50.6z" />
+                              <path fill="#333333" d="M44,78.6c0,0.8-0.6,1.4-1.4,1.4H25.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h17.1
+                                                          c0.8,0,1.4,0.6,1.4,1.4V78.6z" />
+                              <path fill="#333333" d="M39,88.6c0,0.8-0.6,1.4-1.4,1.4H20.4c-0.8,0-1.4-0.6-1.4-1.4v-0.1c0-0.8,0.6-1.4,1.4-1.4h17.1
+                                                          c0.8,0,1.4,0.6,1.4,1.4V88.6z" />
+                              <path fill="#333333" d="M69.7,35.5c0,1.5-1.3,2.5-2.9,2.5H32.3c-1.6,0-2.9-1-2.9-2.5l0,0c0-1.5,1.3-2.5,2.9-2.5h34.4
+                                                          C68.4,33,69.7,34,69.7,35.5L69.7,35.5z" />
+                              <circle id="Bubble-1" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="53.5" cy="51" r="2.4" />
+                              <circle id="Bubble-2" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="42.8" cy="48.9" r="4.9" />
+                              <circle id="Bubble-3" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="56" cy="45.4" r="6" />
+                              <circle id="Bubble-4" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="42.1" cy="38.6" r="3.2" />
+                              <circle id="Bubble-5" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="46.5" cy="47" r="2.4" />
+                              <circle id="Bubble-6" fill="none" stroke="#333333" stroke-width="1.5268"
+                                stroke-miterlimit="10" cx="52.8" cy="38.9" r="4.9" />
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                      <!-- <center> -->
-                      <p class="text-center">Start Split Test</p>
-                      <!-- </center> -->
-                      <button mat-raised-button color="accent" class="m-auto btn-block" (click)="showvariation()">
-                        <i class="fas fa-plus"></i> Create Variation
-                      </button>
+                        <!-- <center> -->
+                        <p class="text-center">Start Split Test</p>
+                        <!-- </center> -->
+                        <button mat-raised-button color="accent" class="m-auto btn-block" (click)="showvariation()">
+                          <i class="fas fa-plus"></i> Create Variation
+                        </button>
 
-                      <div *ngIf="createvariation">
-                        <div class="kb-createvar">
-                          <button mat-raised-button color="accent" class="btn-block" (click)="duplicatemain()" ><i class="fas fa-plus"></i> Duplicate Variation 1</button>
-                          <br>
-                          <button mat-raised-button color="accent" class="btn-block mt-2"><i class="fas fa-plus"></i> Create from Templates</button>
+                        <div *ngIf="createvariation">
+                          <div class="kb-createvar">
+                            <button mat-raised-button color="accent" class="btn-block" (click)="duplicatemain()" ><i class="fas fa-plus"></i> Duplicate Variation 1</button>
+                            <br>
+                            <button mat-raised-button color="accent" class="btn-block mt-2"><i class="fas fa-plus"></i> Create from Templates</button>
+                          </div>
+                          <div class="kb-bxoverlay" (click)="hidevariation()"></div>
                         </div>
-                        <div class="kb-bxoverlay" (click)="hidevariation()"></div>
                       </div>
-                    </div>
                     
                   </div>
 
@@ -533,7 +583,7 @@
                       </div>
                     </div>
                     <div class="toast-header">
-                      <button mat-raised-button color="accent" matTooltip="Edit with Keabuilder" matTooltipPosition="above" class="btn-block mr-2"><i class="fas fa-pen"></i> Edit Page</button>
+                      <button mat-raised-button color="accent" (click)="usertemplateselected('start')" matTooltip="Edit with Keabuilder" matTooltipPosition="above" class="btn-block mr-2"><i class="fas fa-pen"></i> Edit Page</button>
                       <button mat-raised-button color="accent" matTooltip="View Step" matTooltipPosition="above" (click)="checkpagesettings('variationnewtab')" class="mr-2"><i class="fas fa-external-link-alt"></i></button>
                       <button mat-raised-button color="accent" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('variationsetting')" ><i class="fas fa-cog"></i></button>
                     </div>
@@ -549,6 +599,33 @@
             </div>
           </div>
           <!-- overview end -->
+
+          <div class="kb-automation mt-4 pb-5 loadEffect" *ngIf="tabOpen == 'product'">
+              <div class="row pt-4">
+                <div class="col-md-12">
+                  <h5><strong>Add a New Product to Funnel Step</strong></h5>
+                  <p>Looks like you haven't added any products for this funnel step yet. Begin by selecting 'Add a Product' below and set the price of your product inside of the settings. You can add as many products as you need for this funnel step.</p>
+                </div>
+                <div class="col-md-12">
+                    <div class="row productbox">
+                        <div class="col-md-6 mklnheight">
+                          <i class="fas fa-shopping-cart"></i> Raising Capital for Real Estate
+                        </div>
+                        <div class="col-md-3 mklnheight">
+                            Price: $37.00 
+                        </div>
+                        <div class="col-md-3">
+                          <button mat-raised-button color="accent" class="mr-2"><i class="fas fa-pen"></i> Edit</button>
+                          <button mat-raised-button color="accent" ><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>                  
+                </div>
+                <div class="col-md-12 mt-4">
+                  <button mat-raised-button color="accent" (click)="addproduct()" ><i class="fas fa-plus"></i> Add product</button>
+                </div>
+              </div>
+          </div>
+          <!-- product end -->
 
           <div class="kb-automation mt-4 pb-5 loadEffect" *ngIf="tabOpen == 'automation'">
             <div class="kb-automation-header">

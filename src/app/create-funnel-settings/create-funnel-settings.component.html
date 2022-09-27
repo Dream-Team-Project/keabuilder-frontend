@@ -46,7 +46,7 @@
                               <small class="text-muted">Setup your details here.</small>
                             </span>
                           </a></li>
-                        <li [class]="tabOpen3 == 'smtp' ? 'current' : ''"><a (click)="kb_settingsteps('smtp')">
+                        <li [class]="tabOpen3 == 'smtp' ? 'current' : ''" *ngIf="hidefornow"><a (click)="kb_settingsteps('smtp')">
                             <span class="fonticon-wrap mr-1">
                               <i class="fas fa-mail-bulk"></i>
                             </span>
@@ -216,16 +216,16 @@
                               </small>
                             </div>
                           </div>
-                          <div class="col-md-12">
+                          <div class="col-md-12" *ngIf="hidefornow">
                             <hr>
                           </div>
       
-                          <div class="col-md-2">
+                          <div class="col-md-2" *ngIf="hidefornow">
                             <div class="kb-payment-stripe-i">
                               <i class="fab fa-cc-paypal"></i>
                             </div>
                           </div>
-                          <div class="col-md-10">
+                          <div class="col-md-10" *ngIf="hidefornow">
                             <div class="form-group">
                               <mat-form-field class="kb-full-width" appearance="fill">
                                 <mat-label>Paypal Account</mat-label>
