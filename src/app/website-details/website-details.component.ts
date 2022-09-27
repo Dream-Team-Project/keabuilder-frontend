@@ -164,7 +164,7 @@ export class WebsiteDetailsComponent implements OnInit {
             next: data => {}
           });
         }
-        this._snackBar.open('Data Updated Successfully!!', 'OK');
+        this._snackBar.open('Details Updated Successfully!!', 'OK');
       }
     });
 

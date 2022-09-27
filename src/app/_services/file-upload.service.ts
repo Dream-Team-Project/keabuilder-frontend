@@ -36,6 +36,7 @@ export class FileUploadService {
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
   getFileApi = "./api/getpage";
+  saveMenuApi = "./api/savemenu";
   saveHeaderApi = "./api/saveheader";
   saveFooterApi = "./api/savefooter";
   getTrackingHTMLApi = "./api/tracking";
@@ -79,6 +80,11 @@ export class FileUploadService {
 
   getfile(page:any):Observable<any> {
     return this.http.post(this.getFileApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  saveMenu(menu:any):Observable<any> {
+    return this.http.post(this.saveMenuApi, menu)
     .pipe(catchError(this.errorHandler));
   }
 

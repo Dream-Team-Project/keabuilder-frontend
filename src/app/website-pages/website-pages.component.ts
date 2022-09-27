@@ -278,7 +278,7 @@ export class WebsitePagesComponent implements OnInit {
       next: data => {
         this.kbpages = [];
         this.shortdata(data);
-
+        console.log(data);
       },
       error: err => {
         console.log(err);

@@ -99,6 +99,7 @@ export class GeneralService {
   };
   saveDisabled:boolean = false;
   pathError:boolean = false;
+  menus:Array<any> = [];
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService) {
     this.user = this.tokenStorageService.getUser();
@@ -107,6 +108,10 @@ export class GeneralService {
     this.subdomain = 'https://'+this.joinWthDash(this.user.name);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
+  }
+
+  saveMenu() {
+    console.log(this.menus);
   }
   
   getWebPageDetails(uniqueid:any) {
