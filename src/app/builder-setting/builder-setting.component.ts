@@ -111,6 +111,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.showEditor = false;
     this._general.selectedTab = '';
     this._general.setExpPanelStep(0);
+    this._style.setItemStyle = false;
     if(this._general.blockSelection == '') this._section.savePageSession();
   }
   

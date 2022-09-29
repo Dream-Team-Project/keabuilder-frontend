@@ -3,9 +3,9 @@ import { WebsiteService } from '../_services/website.service';
 import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';
+import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConnectableObservable } from 'rxjs';
 
 @Component({
   selector: 'app-website-details',
@@ -39,6 +39,7 @@ export class WebsiteDetailsComponent implements OnInit {
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               private fileUploadService: FileUploadService,
+              private _general: GeneralService,
               private imageService: ImageService,
               private router: Router,
               private route: ActivatedRoute,) { }
@@ -131,7 +132,6 @@ export class WebsiteDetailsComponent implements OnInit {
       checkimginput1: this.imagelogorequest,
       checkimginput2: this.imagefaviconrequest
     }
-    console.log(obj);
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
         // console.log('-->');
@@ -161,13 +161,19 @@ export class WebsiteDetailsComponent implements OnInit {
             path: data.data[0].page_path
           };
           this.fileUploadService.updateHome(obj).subscribe({
-            next: data => {}
+            next: data => {
+              if(this._general.menus.length == 0) this._snackBar.open('Details Updated Successfully!', 'OK');
+            }
           });
+          this.fileUploadService.saveMenu(this._general.menus).subscribe(data => {
+            this._snackBar.open('Details Updated Successfully!', 'OK');
+          })
+          this.fileUploadService.deleteMenu(this._general.deletedMenuIds).subscribe(data => {
+            console.log(data);
+          })
         }
-        this._snackBar.open('Details Updated Successfully!!', 'OK');
       }
     });
-
   }
 
   changeme (event:any) {
@@ -239,9 +245,9 @@ export class WebsiteDetailsComponent implements OnInit {
 
   editglobal(val:any){
     if(val=='header'){
-      this.router.navigate(['/builder/header/'+this.userid],{relativeTo: this.route});
+      return window.location.replace('/builder/header/'+this.userid);
     }else if(val=='footer'){
-      this.router.navigate(['/builder/footer/'+this.userid],{relativeTo: this.route});
+      return window.location.replace('/builder/footer/'+this.userid);
     }
   }
 

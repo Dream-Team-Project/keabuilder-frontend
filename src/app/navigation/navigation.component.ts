@@ -17,7 +17,7 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   private _portal!: TemplatePortal;
 
   menuObj:any = {id: '', name: 'New Menu', type: 'menu', items: []};
-  menuItemObj:any = {id: '', name: 'New Item', type: 'item', link: '', hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}};
+  menuItemObj:any = {id: '', name: 'New Item', type: 'item', link: ''};
   dragBoxAnime:any = {open: false, close: false};
   selectedMenu:any;
   selectedMenuItem:any;
@@ -26,10 +26,6 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   selWebPage:string = '';
 
   constructor(public _general: GeneralService,  public _style: StyleService,  private _overlay: Overlay, private _viewContainerRef: ViewContainerRef) { 
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
   }
 
   ngAfterViewInit() {
@@ -69,21 +65,23 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   // menu
 
   addMenu() {
-    this.appendMenu(this.menuObj);
+    var menu = JSON.parse((JSON.stringify(this.menuObj)));
+    this.appendMenu(menu, -1);
   }
 
-  duplicateMenu(menu:any) {
-    this.appendMenu(menu);
+  duplicateMenu(menu:any, m:number) {
+    var menu = JSON.parse((JSON.stringify(menu)));
+    this.appendMenu(menu, m);
   }
 
-  deleteMenu(m:any) {
+  deleteMenu(id:any, m:any) {
+    this._general.deletedMenuIds.push(id);
     this._general.menus.splice(m, 1);
   }
 
-  appendMenu(menuobj: any) {
-    var menu = JSON.parse((JSON.stringify(menuobj)));
-    menu.id = this._general.createBlockId(menu);
-    this._general.menus.unshift(menu);
+  appendMenu(menuobj: any, m:number) {
+    menuobj.id = this._general.createBlockId(menuobj);
+    this._general.menus.splice(m+1, 0, menuobj);
   } 
 
   // menu
@@ -103,21 +101,21 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   }
 
   addMenuItem(menu:any, item:any, mi: number) {
-    item.name = 'New Item';
-    this.appendMenuItem(menu, item, mi);
+    var tempObj = JSON.parse(JSON.stringify(item));
+    this.appendMenuItem(menu, tempObj, mi);
   }
 
   duplicateMenuItem(menu:any, item:any, mi: number) {
-    this.appendMenuItem(menu, item, mi);
+    var tempObj = JSON.parse(JSON.stringify(item));
+    this.appendMenuItem(menu, tempObj, mi);
   }
 
   deleteMenuItem(menu:any, mi: number) {
     menu.splice(mi, 1);
   }
 
-  appendMenuItem(menu: any, item:any, mi: number) {
-    var tempObj = JSON.parse(JSON.stringify(item));
-    tempObj.id = this._general.createBlockId(item);
+  appendMenuItem(menu: any, tempObj:any, mi: number) {
+    tempObj.id = this._general.createBlockId(tempObj);
     menu.splice(mi+1, 0, tempObj);
   }
 

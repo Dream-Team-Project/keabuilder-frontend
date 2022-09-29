@@ -13,7 +13,7 @@
         --secondary-color: #6c757d;
         --section-color: #1867c0;
         --row-color: #1BC5BD;
-        --kb-light: #f8f9fa;
+        --kb-light: #f9f9f9;
         --kb-success: #1BC5BD;
         --kb-danger: #dc3545;
         --kb-info: #17a2b8;
@@ -76,6 +76,10 @@
 
       * ::-webkit-scrollbar-thumb {
         background-color: var(--kb-dark);
+      }
+
+      .kb-scroll ::-webkit-scrollbar-thumb {
+        background-color: var(--section-color)!important;
       }
 
       /* Handle on hover */

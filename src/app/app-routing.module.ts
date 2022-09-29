@@ -159,7 +159,7 @@ const routes: Routes = [
   // builder routes
   { path: 'builder/:layout/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'preview/:layout/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
-  { path: 'form-builder', component: FormBuilderComponent, canActivate: [AuthGuard] },
+  { path: 'builder/form', component: FormBuilderComponent, canActivate: [AuthGuard] },
   
   // User Course
   { path: 'course/dashboard', component: CourseUserDashboardComponent},

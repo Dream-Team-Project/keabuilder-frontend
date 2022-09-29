@@ -1,43 +1,106 @@
 <app-builder-topbar></app-builder-topbar>
-<div id="kb-main">
+<div id="kb-main" cdkDropListGroup>
     <div id="kb-form-cont">
-        <form id="kb-form" name="form-opt" cdkDropList (cdkDropListDropped)="itemDropped($event)">
-                <div cdkDrag class="kb-form-element" *ngFor="let fe of _formS.formOpt, index as fei, odd as o" [ngSwitch]="fe.name">
-                        <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'"><i [class]="fe.icls"></i></div>
-                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
-                        <div class="kb-form-setting">
-                            <span *ngIf="_formS.formOpt.length > 1" class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
-                            <span
-                                matTooltip="Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
-                            <span matTooltip="Duplicate"
-                                matTooltipPosition="above"><i class="far fa-copy"></i></span>
-                            <span *ngIf="_formS.formOpt.length != 1"
-                                matTooltip="Remove" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
-                        </div>
-                        <div *ngSwitchCase="'heading'" class="kb-form-heading">{{fe.content}}</div>
-                        <div *ngSwitchCase="'sub heading'" class="kb-form-subheading">{{fe.content}}</div>
-                        <div *ngSwitchCase="'paragraph'" class="kb-form-para">{{fe.content}}</div>
-                        <div *ngSwitchDefault  class="kb-form-subheading"><input [type]="fe.type"></div>
+        <form id="kb-form" name="form-opt" cdkDropList [cdkDropListData]="_form.formOpt" (cdkDropListDropped)="itemDropped($event)">
+            <div cdkDrag *ngFor="let fe of _form.formOpt, index as fei, odd as o" [id]="fe.id" (mouseover)="fe.setting = true" (mouseout)="fe.setting = false" class="kb-form-element" [ngSwitch]="fe.name">
+                <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'">
+                    <i [class]="fe.icls"></i>
                 </div>
+                <div *cdkDragPlaceholder class="custom-placeholder"></div>
+                <div class="kb-form-setting">
+                    <span *ngIf="fe.label" matTooltip="Required" matTooltipPosition="above">
+                        <mat-slide-toggle [name]="fe.id+'-requered'" [(ngModel)]="fe.required"></mat-slide-toggle>
+                    </span>
+                    <!-- <span *ngIf="_form.formOpt.length > 1" class="kb-handle-element"><i class="fa fa-arrows-alt"></i></span> -->
+                    <span
+                        matTooltip="Setting" matTooltipPosition="above"><i class="far fa-edit"></i></span>
+                    <span (click)="_form.deleteField(fei)" matTooltip="Remove" matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+                </div>
+                <div *ngSwitchCase="'heading'" class="kb-form-heading">{{fe.content}}</div>
+                <div *ngSwitchCase="'sub-heading'" class="kb-form-subheading">{{fe.content}}</div>
+                <div *ngSwitchCase="'paragraph'" class="kb-form-para">{{fe.content}}</div>
+                <div *ngSwitchCase="'divider'" class="kb-form-divider"><hr></div>
+                <div *ngSwitchCase="'full-name'" class="kb-form-inp">
+                    <label [for]="fe.id">{{fe.label}}<span *ngIf="fe.required" class="kb-form-inp-reqired">*</span></label>
+                    <div class="kb-from-inp-split">
+                        <span *ngFor="let split of fe.split">
+                            <input [type]="split.type" [name]="split.id" [required]="fe.required" [placeholder]="split.placeholder">
+                        </span>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'address'" class="kb-form-inp">
+                    <label [for]="fe.id">{{fe.label}}<span *ngIf="fe.required" class="kb-form-inp-reqired">*</span></label>
+                    <div *ngFor="let split of fe.split">
+                        <div *ngIf="split.subsplit else nosplit" class="kb-from-inp-split">
+                            <span *ngFor="let subsplit of split.subsplit">
+                                <select *ngIf="subsplit.name == 'country' else inp" [name]="subsplit.id" [required]="fe.required">
+                                    <option value="no value">---Select Country---</option>
+                                    <option *ngFor="let opt of subsplit.options" [value]="opt.name">{{opt.name}}</option>
+                                </select>
+                                <ng-template #inp>
+                                    <input [type]="subsplit.type" [name]="subsplit.id" [required]="fe.required" [placeholder]="subsplit.placeholder">
+                                </ng-template>
+                            </span>
+                        </div>
+                        <ng-template #nosplit>
+                            <textarea [name]="split.id" [required]="fe.required" [placeholder]="split.placeholder"></textarea>
+                        </ng-template>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'single-choice'" class="kb-form-rc">
+                    <label [for]="fe.id">{{fe.label}}<span *ngIf="fe.required" class="kb-form-inp-reqired">*</span></label>
+                    <div *ngFor="let split of fe.split">
+                        <input [type]="split.type" [id]="split.id" [name]="fe.id" [required]="fe.required">
+                        <label [for]="split.id">{{split.label}}</label>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'multiple-choice'" class="kb-form-rc">
+                    <label [for]="fe.id">{{fe.label}}<span *ngIf="fe.required" class="kb-form-inp-reqired">*</span></label>
+                    <div *ngFor="let split of fe.split">
+                        <input [type]="split.type" [id]="split.id" [name]="split.id" [required]="fe.required">
+                        <label [for]="split.id">{{split.label}}</label>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'submit'" class="kb-form-btn">
+                    <button [name]="fe.id" type="submit">{{fe.label}}</button>
+                </div>
+                <div *ngSwitchDefault class="kb-form-inp">
+                    <label [for]="fe.id">{{fe.label}}<span *ngIf="fe.required" class="kb-form-inp-reqired">*</span></label>
+                    <input *ngIf="fe.type != 'textarea' else textarea" [type]="fe.type" [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder">
+                    <ng-template #textarea>
+                        <textarea [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder"></textarea>
+                    </ng-template>
+                </div>
+            </div>
+            <div *ngIf="_form.formOpt.length == 0" id="kb-element-drag"></div>
         </form>
     </div>
     <div id="kb-sidebar">
+        <div id="kb-form-head">
+            <div id="kb-form-title">
+                <span>{{_form.form.name}}</span>
+                <input type="text" name="formname" [(ngModel)]="_form.form.name">
+            </div>
+            <div><button mat-raised-button (click)="_form.saveForm()" class="kb-btn-primary">Save <i class="fas fa-save"></i></button></div>
+        </div>
         <div id="form-elements">
             <mat-list class="form-ele-list"
-            cdkDropList cdkDropListConnectedTo="kb-form" [cdkDropListData]="_formS.formEle" cdkDropListSortingDisabled> 
+            cdkDropList [cdkDropListData]="_form.formEle" cdkDropListSortingDisabled> 
                 <mat-list-item
                       cdkDrag
-                      *ngFor="let fe of _formS.formEle, index as fei, odd as o"
-                      [cdkDragData]="fe"
-                      >
-                        <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'"><i [class]="fe.icls"></i></div>
+                      *ngFor="let fe of _form.formEle, index as fei, odd as o"
+                      [cdkDragData]="fe">
+                        <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'">
+                            <i [class]="fe.icls"></i><br>
+                        </div>
+                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
                       <i [class]="fe.icls"></i>
-                      <span>{{fe.name | titlecase}}</span>
+                      <span>{{fe.name.replace('-', ' ') | titlecase}}</span>
                 </mat-list-item>
             </mat-list>
-            <!-- <ul class="form-ele-list" [sortablejs]="_formS.formEle"
+            <!-- <ul class="form-ele-list" [sortablejs]="_form.formEle"
             [sortablejsOptions]="builderFormElementOptions">
-                <li *ngFor="let fe of _formS.formEle, index as fei">
+                <li *ngFor="let fe of _form.formEle, index as fei">
                     <i [class]="fe.icls"></i>
                     <span>{{fe.name | titlecase}}</span>
                 </li>

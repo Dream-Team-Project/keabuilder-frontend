@@ -1,17 +1,52 @@
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: #e2e2e2!important;
+}
+
+::ng-deep .mat-slide-toggle .mat-slide-toggle-bar{
+    background-color: rgb(255 255 255 / 50%)!important;
+    color: #fff;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb,
+::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element {
+    background-color: var(--kb-light)!important;
+}
+
+
+::ng-deep span.mat-list-item-content {
+    padding: 0px!important;
+    width: 100%;
+}
+
+::ng-deep h1,
+::ng-deep h2,
+::ng-deep h3,
+::ng-deep h4,
+::ng-deep h5,
+::ng-deep h6,
+::ng-deep p {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    margin: 0 !important;
+}
+
 #kb-main {
     min-height: 100vh;
     display: flex;
 }
 
 form#kb-form {
+    position: relative;
+    width: 70%;
     min-height: 80px;
     min-width: 700px;
-    width: 70%;
+    min-height: 500px;
     height: auto;
     box-shadow: 0 0 10px 0px rgb(0 0 0 / 40%);
     margin: 0 auto;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 div#kb-form-cont {
@@ -33,8 +68,19 @@ div#kb-sidebar {
     width: 30%;
     height: 100%;
     min-width: 420px;
-    padding: 20px;
+    padding: 0;
     overflow-y: scroll;
+}
+.custom-placeholder {
+    z-index: 99;
+}
+
+div#form-elements .custom-placeholder {
+    display: none;
+}
+
+div#form-elements {
+    padding: 10px 20px 20px;
 }
 
 div#form-elements .form-ele-list mat-list-item {
@@ -42,7 +88,7 @@ div#form-elements .form-ele-list mat-list-item {
     color: var(--kb-dark);
     font-weight: 600;
     padding: 0;
-    border-radius: 5px;
+    border-radius: 4px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -66,7 +112,7 @@ div#form-elements .form-ele-list mat-list-item:nth-child(even) i, div.kb-form-el
     background-color: var(--row-color);
 }
 
-div#form-elements .form-ele-list mat-list-item i, .custom-preview-icon{
+div#form-elements .form-ele-list mat-list-item i, .custom-preview-icon {
     color: var(--kb-white);
     padding: 14px;
     margin-right: 10px;
@@ -96,32 +142,24 @@ div#form-elements .form-ele-list mat-list-item:not(:last-child) {
     list-style: none;
 }
 
-::ng-deep span.mat-list-item-content {
-    padding: 0px!important;
-    width: 100%;
-}
-
-::ng-deep h1,
-::ng-deep h2,
-::ng-deep h3,
-::ng-deep h4,
-::ng-deep h5,
-::ng-deep h6,
-::ng-deep p {
-    font-family: inherit;
-    font-weight: inherit;
-    font-size: inherit;
-    margin: 0 !important;
-}
-
 div.kb-form-element {
     position: relative;
     min-height: 20px;
-    padding: 8px;
+    padding: 4px 8px;
+    margin: 10px 0;
+}
+
+div.kb-form-element:first-child {
+    margin-top: 0px!important;
+}
+
+div.kb-form-element:last-child {
+    margin-bottom: 0px!important;
 }
 
 div.kb-form-element:before {
-    content: '';
+    /* content: ''; */
+    cursor: all-scroll;
     border: 3px solid transparent;
     position: absolute;
     transition: 0.2s ease;
@@ -171,7 +209,7 @@ div.kb-form-setting {
     padding: 0 8px;
     border-radius: 3px 3px 0px 0px;
     animation: show 0.2s ease;
-    z-index: 99;
+    z-index: 9;
     background-color: var(--section-color);
     opacity: 0;
 }
@@ -182,19 +220,145 @@ div.kb-form-setting {
     color: var(--secondary-color);
 }
 
-.kb-form-subheading {
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--secondary-color);
-}
-
 .kb-form-heading {
     font-size: 24px;
     font-weight: 600;
     color: var(--kb-text-color);
 }
 
-i.fa-subh:before {
-    content: 'S';
-    font-size: 28px;
+div#kb-form-title {
+    font-size: 24px;
+}
+
+div#kb-form-title input, div#kb-form-head:hover span {
+    display: none;
+}
+
+div#kb-form-head:hover input {
+    display: block;
+}
+
+div#kb-form-title input {
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    border-color: #aeaeae;
+    border-width: 0px 0px 2px;
+}
+
+div#kb-form-head {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--kb-gray);
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 9;
+}
+
+.kb-layout-title {
+    font-size: 26px;
+}
+
+.kb-btn-primary {
+    color: #fff !important;
+    background-color: var(--kb-success) !important;
+    border-color: var(--kb-success) !important;
+}
+
+div#kb-element-drag:after {
+    content: 'Drag Form Elements';
+    border: 2px dashed #aeaeae;
+    color: #aeaeae;
+    font-size: 20px;
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    border-radius: 4px;
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*  input styling  */
+
+div.kb-form-inp .kb-form-inp-reqired{
+    color: var(--kb-danger);
+    margin-left: 5px;
+}
+
+div.kb-form-inp label, div.kb-form-rc>label {
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: 500;
+}
+
+div.kb-form-inp input, div.kb-form-inp textarea, div.kb-form-inp select {
+    font-size: 14px;
+    border-radius: 4px;
+    border-width: 1px;
+    border-style: solid;
+    display: block;
+    width: 100%;
+    min-width: 100%;
+    color: var(--kb-text-color);
+    border: 1px solid #b8bdc9;
+    background-color: var(--kb-light);
+    margin-bottom: 16px;
+    padding: 0px 10px;
+    line-height: 36px;
+    text-transform: capitalize;
+}
+
+div.kb-form-inp input:focus, div.kb-form-inp textarea:focus, div.kb-form-inp select:focus, 
+div.kb-form-inp input:focus-visible, div.kb-form-inp textarea:focus-visible, div.kb-form-inp select:focus-visible,
+div.kb-form-inp input:focus-within, div.kb-form-inp textarea:focus-within, div.kb-form-inp select:focus-within {
+    outline: none;
+}
+
+div.kb-form-inp select {
+    min-height: 36px;
+}
+
+div.kb-form-divder {
+    border: 1px solid var(--kb-light);
+}
+
+.kb-from-inp-split>span {
+    width: 48%;
+}
+.kb-from-inp-split {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.kb-form-rc>div{
+    text-transform: capitalize;
+}
+
+.kb-form-rc input {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.kb-form-btn button{
+    font-size: 14px;
+    border: 0px solid;
+    background-color: var(--kb-success);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.kb-form-btn {
+    text-align: right;
 }

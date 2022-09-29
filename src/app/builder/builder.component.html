@@ -8,7 +8,7 @@
     </div>
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
-            <header *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" kb-include-html="true"></header>
+            <header *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" [attr.kb-include-html]="_general.includeHeader"></header>
             <div id="kb-main"
             [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div class="kb-drag-container"
@@ -102,10 +102,10 @@
                                                 (mouseleave)="element.setting = false"
                                                 [id]="element.id" class="kb-element kb-block-container"
                                                 [ngClass]="_style.getHideCls(element.hide)"
-                                                [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
+                                                [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
                                                 [class.kb-block-disabled]="_general.showInlineEditor"
-                                                [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
-                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
+                                                [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
+                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
                                                 <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">{{element.name ? element.name : element.content.name}}</div>
                                                 <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
@@ -114,6 +114,10 @@
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
+                                                    <span *ngIf="element.content.name == 'menu'"
+                                                        (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.setItemStyle = true; _style.blockSetting(element); openDialog($event)"
+                                                        matTooltip="Item Setting" matTooltipPosition="above"><i
+                                                            class="fas fa-tasks"></i></span>
                                                     <span
                                                         (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
                                                         matTooltip="Duplicate Element" matTooltipPosition="above"><i
@@ -145,15 +149,11 @@
                                                         </a></ng-template>
                                                     </div>
                                                     <div *ngSwitchCase="'menu'" class="kb-element-content">
-                                                        <ul class="kb-menu"
-                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.textStyling() : _style.getElementBlockStyle(element)">
-                                                            <li *ngFor="let item of element.content.items, index as mi" [ngClass]="_style.getHideCls(item.hide)" [class.kb-block-none]="_style.getDisplay(item.hide)">
-                                                                <a [id]="item.id" [href]="item.link">{{item.name}}</a>
-                                                                <ul *ngIf="item.dropdown.length != 0" class="kb-sub-menu">
-                                                                    <li *ngFor="let dp of item.dropdown, index as dpi" [ngClass]="_style.getHideCls(dp.hide)" [class.kb-block-none]="_style.getDisplay(dp.hide)">
-                                                                        <a [id]="dp.id" [href]="dp.link">{{dp.name}}</a>
-                                                                    </li>
-                                                                </ul>
+                                                        <ul class="kb-menu" [attr.kb-include-menu]="element.content.data_id"
+                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
+                                                            <li *ngFor="let item of element.content.items, index as mi">
+                                                                <a  class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                                [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -209,7 +209,7 @@
                     <!-- sections end -->
                 </div>
             </div>
-            <footer *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" kb-include-html="true"></footer>
+            <footer *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" [attr.kb-include-html]="_general.includeFooter"></footer>
         </div>
         <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
     </div>

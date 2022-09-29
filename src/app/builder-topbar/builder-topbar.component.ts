@@ -37,9 +37,9 @@ export class BuilderTopbarComponent implements OnInit {
       icon: 'fa-address-card'
     },
     {
-      name: 'Navigation',
-      link: '/navigation',
-      icon: 'fa-bars'
+      name: 'Site Details',
+      link: '/website/details',
+      icon: 'fa fa-palette'
     },
   ]
   

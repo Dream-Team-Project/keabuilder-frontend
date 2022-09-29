@@ -125,6 +125,7 @@ export class StyleService {
   eleItemAlignArr:any = [];
   hideBlockSessionArr:any = [];
   resetSession:boolean = true;
+  setItemStyle:boolean = false;
 
   constructor(private _general: GeneralService, private _image: ImageService) {
     _general.main.style.desktop = this.defaultStyling(_general.main);
@@ -168,18 +169,18 @@ export class StyleService {
     }  
   }
 
-  setRespStyle(block:any, cObj:object) {
+  setRespStyle(block:any, rObj:object) {
     if (this.getRespDevice() == 'tablet-h') {
-      block.style.tablet_h = cObj;
+      block.style.tablet_h = rObj;
     }
     else if (this.getRespDevice() == 'tablet-v') {
-      block.style.tablet_v = cObj;
+      block.style.tablet_v = rObj;
     }
     else if(this.getRespDevice() == 'mobile') {
-      block.style.mobile = cObj;
+      block.style.mobile = rObj;
     }
     else {
-      block.style.desktop = cObj;
+      block.style.desktop = rObj;
     }
     return block;
   }
@@ -189,10 +190,10 @@ export class StyleService {
   applySession(sStr:any, cStr:any, csStr:any, eitmaStr:any, hideStr:any) {
     var sObj = JSON.parse(sStr);
     var selB = JSON.parse(JSON.stringify(this._general.selectedBlock));
-    selB = this.setRespStyle(selB, sObj);
+    if(this.setItemStyle) selB.content.item = this.setRespStyle(selB.content.item, sObj); 
+    else selB = this.setRespStyle(selB, sObj);
     selB.hide = JSON.parse(hideStr);
-    if(selB.type == 'element' && cStr != undefined) {
-      console.log(eitmaStr);
+    if(!this.setItemStyle && selB.type == 'element' && cStr != undefined) {
       var eiaObj = JSON.parse(eitmaStr);
       selB.item_alignment = eiaObj;
       var cObj = JSON.parse(cStr);
@@ -212,12 +213,13 @@ export class StyleService {
     var selB = this._general.selectedBlock;
     if((this.styleSessionArr[this.styleSessionArr.length-1] != JSON.stringify(this.currentStyling()) && this.styleSessionArr[this.styleSession.undo] != JSON.stringify(this.currentStyling()))
     || (this.hideBlockSessionArr[this.hideBlockSessionArr.length-1] != JSON.stringify(this.hide) && this.hideBlockSessionArr[this.styleSession.undo] != JSON.stringify(this.hide))
-    || (selB.type == 'element' && this.styleContentArr[this.styleContentArr.length-1] != JSON.stringify(this.getContentStyling(selB.content)) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.getContentStyling(selB.content)))
-    || (selB.type == 'element' && this.eleItemAlignArr[this.eleItemAlignArr.length-1] != JSON.stringify(this.item_alignment) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.item_alignment))
+    || (this.setItemStyle && (this.styleSessionArr[this.styleSessionArr.length-1] != JSON.stringify(this.currentStyling()) && this.styleSessionArr[this.styleSession.undo] != JSON.stringify(this.currentStyling())))
+    || (!this.setItemStyle && selB.type == 'element' && this.styleContentArr[this.styleContentArr.length-1] != JSON.stringify(this.getContentStyling(selB.content)) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.getContentStyling(selB.content)))
+    || (!this.setItemStyle && selB.type == 'element' && this.eleItemAlignArr[this.eleItemAlignArr.length-1] != JSON.stringify(this.item_alignment) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.item_alignment))
     || (selB.type == 'row' && this.styleColumnSArr[this.styleColumnSArr.length-1] != JSON.stringify(this.getColumnStructureStyling()) && this.styleColumnSArr[this.styleSession.undo] != JSON.stringify(this.getColumnStructureStyling()))) {
       this.styleSessionArr.push(JSON.stringify(this.currentStyling()));
       this.hideBlockSessionArr.push(JSON.stringify(this.hide));
-      if(selB.type == 'element') {
+      if(selB.type == 'element' && !this.setItemStyle) {
         this.styleContentArr.push(JSON.stringify(this.getContentStyling(selB.content)));
         this.eleItemAlignArr.push(JSON.stringify(this.item_alignment));
       }
@@ -248,8 +250,6 @@ export class StyleService {
     var csStr = this.styleColumnSArr[this.styleSession.redo];
     var eitmaStr = this.eleItemAlignArr[this.styleSession.redo];
     var hideStr = this.hideBlockSessionArr[this.styleSession.redo];
-    console.log(sStr);
-    console.log(this.styleSessionArr);
     if(sStr != undefined) {
       this.applySession(sStr, cStr, csStr, eitmaStr, hideStr);
       this.styleSession.undo++;
@@ -461,13 +461,19 @@ export class StyleService {
       tempMar.left = this.margin.left;
       tempMar.right = this.margin.right;
     }
-    return tempMar.top + ' ' + ((this.blockAlign == 'left' || this.blockAlign == 'center'
+    if(this.setItemStyle) {
+      var mar = tempMar.top + ' ' + tempMar.right + ' ' + tempMar.bottom + ' ' + tempMar.left;
+    }
+    else {
+      var mar = tempMar.top + ' ' + ((this.blockAlign == 'left' || this.blockAlign == 'center'
       || (this.blockAlign == '' && tempMar.right == '0px' && tempMar.left != 'auto')
       && this._general.selectedBlock.type != 'element')
       ? 'auto' : tempMar.right) + ' ' + tempMar.bottom + ' '
       + ((this.blockAlign == 'right' || this.blockAlign == 'center'
         || (this.blockAlign == '' && tempMar.left == '0px' && tempMar.right != 'auto')
         && this._general.selectedBlock.type != 'element') ? 'auto' : tempMar.left);
+    }
+    return mar;
   }
 
   getPadding() {
@@ -862,8 +868,7 @@ export class StyleService {
   }
 
   updateStyle() {
-    if(this._general.selectedBlock.type != 'main') this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
-    else {
+    if(this._general.selectedBlock.type == 'main') {
       var pageN = this._general.page_name ? this._general.page_name : 'Page Name';
       var pageT = this._general.page_title ? this._general.page_title : 'Page Title';
       this._general.main.name = pageN;
@@ -874,6 +879,7 @@ export class StyleService {
       this._general.main.author = this._general.author;
       this._general.main.meta_img = this._general.meta_img;
     }
+    else this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     if (this._general.selectedBlock.type == 'row') {
       this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
@@ -891,9 +897,10 @@ export class StyleService {
       }
     }
     else {
-      this._general.selectedBlock.style.desktop = this.currentStyling();
+      if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = this.currentStyling();
+      else this._general.selectedBlock.style.desktop = this.currentStyling();
     }
-    if (this._general.selectedBlock.type == 'element') {
+    if (this._general.selectedBlock.type == 'element' && !this.setItemStyle) {
       this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
       if (this._general.selectedBlock.content.name == 'button') {
         this.setElementStyle(this.buttonStyling());
@@ -955,7 +962,7 @@ export class StyleService {
 
   defaultStyling(block:any) {
     this.margin.top = '0px';
-    if(block.type == 'element') {
+    if(block.type == 'element' && !block.itemstyle) {
       this.margin.right = 'auto';
       this.margin.bottom = '10px';
     }
@@ -964,9 +971,7 @@ export class StyleService {
       this.margin.bottom = '0px';
     }
     this.margin.left = '0px';
-
     var ptb, plr, brw, br, bclr, bgclr;
-
     if (block.content?.name == 'button') {
       ptb = '4px';
       plr = '16px';
@@ -974,7 +979,15 @@ export class StyleService {
       br = '5px';
       bclr = '#1BC5BD';
       bgclr = '#1BC5BD';
-  }
+    }
+    else if (block.itemstyle) {
+      ptb = '6px';
+      plr = '12px';
+      brw = '0px';
+      br = '0px';
+      bclr = 'rgba(0,0,0,1)';
+      bgclr = 'rgba(0,0,0,0)';
+    }
     else {
       ptb = block.type == 'element' || block.type == 'column' || block.type == 'main' ? 
       '0px' : block.type == 'row' ?  '30px' : '60px';
@@ -1174,8 +1187,8 @@ export class StyleService {
   }
 
   blockSetting(block: any) {
-      var obj = this.getBlockStyle(block.style);
-      if (block.type == 'element') {
+      var obj = this.setItemStyle ? this.getBlockStyle(block.content.item.style) : this.getBlockStyle(block.style);
+      if (block.type == 'element' && !this.setItemStyle) {
         this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         this.elementSetting(block.content);
       }
@@ -1485,6 +1498,13 @@ export class StyleService {
 
   elementSetting(element: any) {
     var obj = this.getBlockStyle(element.style);
+    if(element.name == 'menu') {
+      this._general.menus.forEach((menu:any)=>{
+        if(menu.id == element.data_id) {
+          this._general.selectedMenu = menu;
+        }
+      })
+    }
     if (element.name == 'text' || element.name == 'heading' || element.name == 'button' || element.name == 'menu') {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];

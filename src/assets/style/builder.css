@@ -11,7 +11,7 @@
         --secondary-color: #6c757d;
         --section-color: #1867c0;
         --row-color: #1BC5BD;
-        --kb-light: #f8f9fa;
+        --kb-light: #f9f9f9;
         --kb-success: #1BC5BD;
         --kb-danger: #dc3545;
         --kb-info: #17a2b8;
@@ -31,7 +31,10 @@
     * {
         font-family: Poppins;
     }
-    
+    a {
+        text-decoration: none;
+        display: block;
+    }
     body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
         font-family: Poppins;   
         font-weight: 400;
@@ -317,43 +320,10 @@ ul.kb-menu {
     margin: 0px;
 }
 
-ul.kb-menu a, ul.kb-menu li {
+a, ul.kb-menu li {
     font-family: inherit;
     font-weight: inherit;
     color: inherit
-}
-
-ul.kb-menu a {
-    padding: 0 10px;
-    transition: 0.2s ease;
-}
-
-ul.kb-menu a:hover, ul.kb-menu a:active, ul.kb-menu a:focus {
-    color: var(--row-color);
-    text-decoration: underline;
-}
-
-ul.kb-sub-menu {
-    flex-direction: column;
-    background: #fff;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
-    padding: 0px;
-    list-style: none;
-    position: absolute;
-    left: 0px;
-    top: 30px;
-    font-size: 14px;
-    border-radius: 3px;
-    min-width: 100px;
-}
-
-ul.kb-sub-menu a {
-    padding: 2px 14px;
-    display: block;
-}
-
-ul.kb-sub-menu a:hover {
-    background-color: var(--kb-gray);
 }
 
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {

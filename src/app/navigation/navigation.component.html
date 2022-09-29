@@ -107,9 +107,9 @@
                 <i *ngIf="!menu.name" matTooltip="No name" matTooltipPosition="above"
                     class="fa fa-exclamation-circle kb-danger"></i>
                 <i (click)="openDialog(menu)" matTooltip="Customize" matTooltipPosition="above" class="far fa-edit"></i>
-                <i (click)="duplicateMenu(menu)" matTooltip="Duplicate" matTooltipPosition="above"
+                <i (click)="duplicateMenu(menu, m)" matTooltip="Duplicate" matTooltipPosition="above"
                     class="far fa-copy"></i>
-                <i (click)="deleteMenu(m)" matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
+                <i (click)="deleteMenu(menu.id, m)" matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
             </div>
         </li>
     </ul>
