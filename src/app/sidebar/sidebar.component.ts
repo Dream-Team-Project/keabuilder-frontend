@@ -61,13 +61,14 @@ export class SidebarComponent implements OnInit {
         img: 'browser.gif',
         icon: 'fas fa-palette',
         title: 'Site Details'
-      },{
-        0:true,
-        routerlink: '/website/marketplace',
-        img: 'browser.gif',
-        icon: 'fas fa-store',
-        title: 'Marketplace'
       },
+      // {
+      //   0:true,
+      //   routerlink: '/website/marketplace',
+      //   img: 'browser.gif',
+      //   icon: 'fas fa-store',
+      //   title: 'Marketplace'
+      // },
       ]
     },{
       0:true,
