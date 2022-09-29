@@ -54,9 +54,13 @@ export class BuilderComponent implements OnInit, AfterViewInit {
         _general.layout = params.get('layout');
         if(_general.layout == 'website' || _general.layout == 'funnel') {
             _general.getWebPageDetails(params.get('id')).then(e=> {
-              this._general.loading.success = false; 
-              this.setBuilder(this._general.file.html, this._general.file.css);
-              this._general.file.load = false;
+              _general.loading.success = false;
+              var header = _general.file.html.querySelector('HEADER');
+              var footer = _general.file.html.querySelector('FOOTER');
+              if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
+              if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
+              this.setBuilder(_general.file.html, _general.file.css);
+              _general.file.load = false;
             })
         }
         else {
@@ -66,12 +70,12 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               var doc = parser.parseFromString(data.html, 'text/html');
               var obj:any = {};
               if(_general.layout == 'header') {
-                obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
                 obj.html = doc.querySelector('#kb-header');
+                obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
               }
               else if(_general.layout == 'footer') {
-                obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
                 obj.html = doc.querySelector('#kb-footer');
+                obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
               }
               this.setBuilder(obj.html, obj.css);
             })
@@ -236,11 +240,14 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               mobile: this.filterStyle(col.id,css,'426')
             }
             col.querySelectorAll('.kb-element').forEach((ele:any)=>{
-              var eleSel = 'div>div';
-              var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
+              var eleSel = '';
+              var eleSelItem = '';
               var content = ele.querySelector('.kb-element-content');
+              var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
+              eleObj.itemstyle = false;
               eleObj.content.name = ele.children[0].getAttribute('data-name');
               if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
+                eleSel = 'div>div';
                 eleObj.content.html = content.children[0].children[0].innerHTML;
               }
               else if(eleObj.content.name == 'image') {
@@ -256,6 +263,18 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 eleObj.content.link = anchor.href;
                 eleObj.content.target = anchor.target;
               }
+              else if(eleObj.content.name == 'menu') {
+                eleObj.itemstyle = true;
+                eleSel = 'ul';
+                eleSelItem = 'ul a';
+                var id = content.querySelector('ul').getAttribute('kb-include-menu');
+                this._general.menus.forEach((menu:any)=>{
+                  if(menu.id == id) {
+                    var menuObj = JSON.parse(JSON.stringify(menu));
+                    eleObj.content = this._element.setDataId_items(eleObj.content, menuObj);
+                  }
+                })
+              }
               eleObj.id = ele.id;
               eleObj.style = {
                 desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,''),
@@ -263,6 +282,16 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 tablet_v: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'768,426'),
                 mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'426')
               } 
+              if(eleObj.itemstyle) {
+                eleObj.content.item = {
+                  style: {
+                    desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,''),
+                    tablet_h: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'1024,769'),
+                    tablet_v: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'768,426'),
+                    mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'426')
+                  } 
+                }
+              }
               var aling = {
                 desktop: this.filterStyle(ele.id,css,''),
                 tablet_h: this.filterStyle(ele.id,css,'1024,769'),
@@ -275,14 +304,13 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 tablet_v: aling.tablet_v ? aling.tablet_v['justify-content'] : 'auto',
                 mobile: aling.mobile ? aling.mobile['justify-content'] : 'auto',
               }
-              eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
               eleObj.hide = {
                 desktop: ele.classList.contains('kb-d-desk-none'),
                 tablet_h: ele.classList.contains('kb-d-tab-h-none'),
                 tablet_v: ele.classList.contains('kb-d-tab-v-none'),
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
-              eleObj.name = ele.title;
+              eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
               if(eleObj.content.name) colObj.elementArr.push(eleObj);
             })
             colObj.hide = {

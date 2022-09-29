@@ -41,4 +41,8 @@ export class FormsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  redirectToFormBuilder() {
+    return window.location.replace('/builder/form');
+  }
+
 }

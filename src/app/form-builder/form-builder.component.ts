@@ -10,7 +10,7 @@ import { CdkDragStart, CdkDragMove, CdkDragDrop, moveItemInArray, copyArrayItem,
 export class FormBuilderComponent implements OnInit {
 
   constructor(
-    public _formS: FormService
+    public _form: FormService
   ) { }
 
   ngOnInit(): void {
@@ -18,14 +18,22 @@ export class FormBuilderComponent implements OnInit {
 
   itemDropped(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(this._formS.formOpt, event.previousIndex, event.currentIndex);
+      moveItemInArray(this._form.formOpt, event.previousIndex, event.currentIndex);
     } else {
       this.addField(event.item.data, event.currentIndex);
     }
   }
 
-  addField(fieldType: string, index: number) {
-    this._formS.formOpt.splice(index, 0, fieldType)
+  addField(field: any, index: number) {
+    var tempObj = JSON.parse(JSON.stringify(field));
+    tempObj.id = this._form.createBlockId(tempObj);
+    tempObj?.split?.forEach((split:any)=>{
+      split.id = this._form.createBlockId(split);
+      split?.subsplit?.forEach((subsplit:any)=>{
+        subsplit.id = this._form.createBlockId(subsplit);
+      })
+    })
+    this._form.formOpt.splice(index, 0, tempObj)
   }
   
 }

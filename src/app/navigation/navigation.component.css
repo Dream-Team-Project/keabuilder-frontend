@@ -1,14 +1,47 @@
 div#kb-navigation {
+    height: 100%;
+    overflow: hidden;
+}
+
+div#kb-navigation>div {
     padding: 20px;
 }
 
-ul#menu-list {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
+span.kb-selection-top-actions {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: var(--kb-danger);
+    cursor: pointer;
+    z-index: 9;
+    min-width: 100px;
+    display: flex;
+    justify-content: flex-end;
 }
 
-ul#menu-list li {
+span.kb-selection-top-actions button.mat-button {
+    padding: 0px 12px;
+    min-width: auto;
+}
+
+ul.kb-overmenuht {
+    height: 236px;
+    padding-bottom: 10px!important;
+}
+
+.kb-details-container .kb-menu-list {
+    padding: 10px 40px;
+    max-height: 400px;
+}
+
+ul.kb-menu-list {
+    list-style: none;
+    padding: 0 40px;
+    margin: 0px;
+    overflow-y: scroll;
+}
+
+ul.kb-menu-list li {
     background-color: var(--kb-gray);
     margin: 10px 0px;
     padding: 0px 16px;
@@ -25,20 +58,33 @@ ul#menu-list li {
     border-right: 1px solid #aeaeae;
 }
 
+.kb-handle-block {
+    cursor: n-resize;
+    width: 10%;
+}
+
+.kb-details-container ul.kb-menu-list li>div.kb-menu-option {
+    width: 40%;
+}
+
+.kb-handle-block i {
+    border-width: 0px!important;
+}
+
 .kb-menu-option i {
     cursor: pointer;
     padding: 4px 12px;
 }
 
-ul#menu-list li>div.kb-menu-title {
+ul.kb-menu-list li>div.kb-menu-title {
     width: 80%;
 }
 
-ul#menu-list li>div.kb-menu-option {
+ul.kb-menu-list li>div.kb-menu-option {
     width: 20%;
 }
 
-ul#menu-list li>div {
+ul.kb-menu-list li>div {
     font-size: 14px;
     display: flex;
     justify-content: center;
@@ -67,4 +113,50 @@ ul#menu-list li>div {
 
 .kb-add-menu {
     cursor: pointer;
+}
+
+.dislay-device-list {
+    position: absolute;
+    background: var(--kb-light);
+    color: var(--kb-text-color);
+    box-shadow: 0 0 30px rgb(0 0 0 / 20%);
+    border-radius: 5px;
+    left: 0px;
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0 10px;
+    z-index: 9;
+    transition: 0.2s ease;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox:first-child {
+    padding-top: 5px;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox {
+    padding-bottom: 5px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked, ::ng-deep .mat-checkbox-frame {
+    color: var(--primary-color);
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+::ng-deep .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+::ng-deep .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .custom-preview {
+    background-color: var(--primary-color);
+}
+
+
+::ng-deep .mat-option-text small.infoTxt {
+    height: 10px;
+    background-color: rgb(220 53 69 / 20%);
+    margin-left: 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    color: var(--kb-danger);
+    font-size: 70%;
 }

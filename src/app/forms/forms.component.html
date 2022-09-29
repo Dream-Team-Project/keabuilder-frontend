@@ -3,8 +3,7 @@
         <div class="row">
           <div class="col-md-6">
             <h3 class="d-inline-block mr-2">All Forms</h3>
-            <button mat-raised-button [routerLink]="'/form-builder'" color="primary" matTooltip="Add New Form" matTooltipPosition="above" class="mr-2">Create A Form <i class="fa fa-plus" aria-hidden="true"></i></button>
-    
+            <button mat-raised-button (click)="redirectToFormBuilder()" color="primary" matTooltip="Add New Form" matTooltipPosition="above" class="mr-2">Create A Form <i class="fa fa-plus" aria-hidden="true"></i></button>
           </div>
           <div class="col-md-6 text-right">
             <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
-import {B, COMMA, ENTER} from '@angular/cdk/keycodes';
+import {A, B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
 import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
@@ -14,6 +14,8 @@ import { WebsiteService } from '../website.service';
 })
 
 export class GeneralService {
+  includeHeader:boolean = false;
+  includeFooter:boolean = false;
   user:any;
   subdomain:string = '';
   layout:any;
@@ -99,6 +101,9 @@ export class GeneralService {
   };
   saveDisabled:boolean = false;
   pathError:boolean = false;
+  menus:any = [];
+  deletedMenuIds:any = [];
+  selectedMenu:any = {};
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService) {
     this.user = this.tokenStorageService.getUser();
@@ -107,6 +112,24 @@ export class GeneralService {
     this.subdomain = 'https://'+this.joinWthDash(this.user.name);
     this.screenWidth = window.innerWidth;  
     this.screenHeight = window.innerHeight; 
+    this.getMenus();
+  }
+
+  getMenus() {
+    this.fileUploadService.getMenus(this.user.uniqueid).subscribe((data:any)=>{
+      data.data.forEach((html:any)=>{
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var ul = doc.querySelector('ul');
+        var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
+        ul?.querySelectorAll('li').forEach(li => {
+          var anc = li.querySelector('a');
+          var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc?.href != 'https://no-link/' ? anc?.href : '' }
+          menu.items.push(item);
+        })
+        this.menus.push(menu);
+      })
+    })
   }
   
   getWebPageDetails(uniqueid:any) {
@@ -278,6 +301,7 @@ export class GeneralService {
         item.querySelectorAll('*').forEach((ele:any)=>{
           ele.removeAttribute('style');
         });
+        if(item.querySelector('.kb-menu')) item.querySelector('.kb-menu').innerHTML = '';
       }
     })
   }
@@ -300,6 +324,15 @@ export class GeneralService {
           this.blockStyling(col);
           col.elementArr.forEach((ele:any)=>{
             this.elementStyling(ele);
+            if(ele.content?.item) {
+              var tempObj = JSON.parse(JSON.stringify(ele.content.item))
+              var pseudoEle:string = '';
+              if(ele.content.name == 'menu') {
+                pseudoEle = 'ul a';
+              }
+              tempObj.id = ele.id + ' .kb-element-content ' + pseudoEle;
+              this.blockStyling(tempObj);
+            }
           })
         })
       })
@@ -330,6 +363,9 @@ export class GeneralService {
     }
     else if(ele.content.name == 'button') {
       pseudoEle = 'a';
+    }
+    else if(ele.content.name == 'menu') {
+      pseudoEle = 'ul';
     }
     this.pagestyling.desktop = this.pagestyling.desktop + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.desktop, ...ele.style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(ele.style.tablet_h || ele.content.style.tablet_h) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.tablet_h, ...ele.style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';

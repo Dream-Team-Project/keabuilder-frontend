@@ -32,16 +32,27 @@ export class FileUploadService {
   deleteFromDB = "./api/deletefromdb";
   copyImgApi = "./api/copyimage"
   deleteimageApi = "./api/deleteimage";
+  // web pages
   createPageApi = "./api/savepage";
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
-  getFileApi = "./api/getpage";
-  saveHeaderApi = "./api/saveheader";
-  saveFooterApi = "./api/savefooter";
-  getTrackingHTMLApi = "./api/tracking";
   createDefaultHomeApi = '/api/default-home';
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
+  // web pages
+  // file
+  getFileApi = "./api/getpage";
+  // file
+  // menu
+  getMenusApi = "./api/getmenus";
+  saveMenuApi = "./api/savemenu";
+  deleteMenuApi = "./api/deletemenu"
+  // menu
+  // tracking
+  saveHeaderApi = "./api/saveheader";
+  saveFooterApi = "./api/savefooter";
+  getTrackingHTMLApi = "./api/tracking";
+  // tracking
   uniqueuserid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
@@ -82,6 +93,22 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
+  deleteMenu(arr:any):Observable<any> {
+    return this.http.post(this.deleteMenuApi, arr)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  getMenus(userid:any):Observable<any> {
+    var obj = {user_id: userid}
+    return this.http.post(this.getMenusApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  saveMenu(menu:any):Observable<any> {
+    return this.http.post(this.saveMenuApi, menu)
+    .pipe(catchError(this.errorHandler));
+  }
+
   saveHeader(header:any):Observable<any> {
     return this.http.post(this.saveHeaderApi, header)
     .pipe(catchError(this.errorHandler));
@@ -92,8 +119,8 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  gettrackingHTML(page:any):Observable<any> {
-    return this.http.post(this.getTrackingHTMLApi, page)
+  gettrackingHTML(path:any):Observable<any> {
+    return this.http.post(this.getTrackingHTMLApi, path)
     .pipe(catchError(this.errorHandler));
   }
 
