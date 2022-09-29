@@ -35,7 +35,7 @@ export class AppComponent {
                 if( geturl == 'form-builder' || geturl == 'builder' || geturl == 'preview') {
                   this._nav.hide();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
-                }else if( geturl == 'course'){
+                }else if( geturl == 'course'  || geturl == 'checkout'){
                   this._nav.hide();
                 }
                 else {

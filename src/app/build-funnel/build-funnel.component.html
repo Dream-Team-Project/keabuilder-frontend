@@ -40,6 +40,17 @@
             <small>Optional</small>
           </mat-form-field>
 
+          <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Funnel Type</mat-label>
+            <mat-select name="funneltype" required>
+              <mat-option value="regular">Regular Page</mat-option>
+              <mat-option value="order">Order Page</mat-option>
+              <mat-option value="upsell">Upsell Page</mat-option>
+              <mat-option value="downsell">Downsell Page</mat-option>
+              <mat-option value="thankyou">Thank you Page</mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <button mat-raised-button color="primary" type="submit" ><i class="fas fa-plus"></i> Create Funnel</button>
 
         </form>

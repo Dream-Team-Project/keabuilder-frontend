@@ -78,6 +78,7 @@ import { CourseUserCourseHeaderComponent } from './course-user/course-header/cou
 import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
 import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
+import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -170,6 +171,9 @@ const routes: Routes = [
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
   { path: 'dashboard-new', component: DashboardNewComponent},
+  
+  { path: 'checkout', component: FunnelCheckoutComponent},
+  
 
 
   // Coming Soon Features ==>
@@ -305,5 +309,6 @@ export const RoutingComponents =
     CourseUserCourseHeaderComponent,
     CourseUserCourseForgotpassComponent,
     ComingSoonComponent,
+    FunnelCheckoutComponent,
   ];
 
