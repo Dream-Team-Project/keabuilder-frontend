@@ -147,6 +147,7 @@ div.kb-form-element {
     min-height: 20px;
     padding: 4px 8px;
     margin: 10px 0;
+    transition: 0.2s ease;
 }
 
 div.kb-form-element:first-child {
@@ -158,7 +159,7 @@ div.kb-form-element:last-child {
 }
 
 div.kb-form-element:before {
-    /* content: ''; */
+    content: '';
     cursor: all-scroll;
     border: 3px solid transparent;
     position: absolute;
@@ -168,6 +169,7 @@ div.kb-form-element:before {
     height: 100%;
     top: 0;
     left: 0;
+    transition: 0.2s ease;
 }
 
 div.kb-form-element:nth-child(odd):hover:before {
@@ -208,7 +210,7 @@ div.kb-form-setting {
     right: 0px;
     padding: 0 8px;
     border-radius: 3px 3px 0px 0px;
-    animation: show 0.2s ease;
+    transition: 0.2s ease;
     z-index: 9;
     background-color: var(--section-color);
     opacity: 0;
@@ -351,11 +353,11 @@ div.kb-form-divder {
 }
 
 .kb-form-btn button{
-    font-size: 14px;
+    font-size: 15px;
     border: 0px solid;
     background-color: var(--kb-success);
     color: #fff;
-    padding: 8px 16px;
+    padding: 8px 20px;
     border-radius: 4px;
 }
 
