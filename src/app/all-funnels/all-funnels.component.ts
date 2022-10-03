@@ -225,7 +225,7 @@ export class AllFunnelsComponent implements OnInit {
   showfunnels(){
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        // console.log(data); 
+        console.log(data); 
         this.funnels = [];
         if(data.data2.length!=0){
           this.funnelnotfound = false;
