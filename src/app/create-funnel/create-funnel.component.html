@@ -144,24 +144,42 @@
         <hr>
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Product Name</mat-label>
-          <input type="text" matInput placeholder="Product Name" value="">
+          <input type="text" matInput placeholder="Product Name" [(ngModel)]="productname">
         </mat-form-field>
 
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Product Price</mat-label>
-          <input type="number" matInput placeholder="Product Price" value="">
+          <input type="number" matInput placeholder="Product Price" [(ngModel)]="productprice">
           <small>(Minimum Price: $1.00)</small>
         </mat-form-field>
 
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Price Display Override</mat-label>
-          <input type="text" matInput placeholder="$25 per 3 months" value="">
+          <input type="text" matInput placeholder="$25 per 3 months" [(ngModel)]="priceoverride">
           <small>(Optional) Customize the display of the price on the order form.</small>
         </mat-form-field>
 
         <br>
-        <button mat-raised-button color="primary"><i class="fas fa-plus"></i> Save Product</button>
+        <button mat-raised-button color="primary" (click)="saveproduct()"><i class="fas fa-plus"></i> Save Product</button>
 
+      </div>
+
+      <div *ngIf="addstepoption">
+        <h6><b>Step Options</b></h6>
+        <hr>
+
+        <mat-form-field appearance="fill" class="kb-full-width" >
+          <mat-label>Funnel Step Type</mat-label>
+          <mat-select name="funneltype" [(ngModel)]="funneltype" required>
+            <mat-option value="regular">Regular Page</mat-option>
+            <mat-option value="order">Order Page</mat-option>
+            <mat-option value="upsell">Upsell Page</mat-option>
+            <mat-option value="downsell">Downsell Page</mat-option>
+            <mat-option value="thankyou">Thank you Page</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="primary" (click)="updatestep()"><i class="fas fa-plus"></i> Create</button>
       </div>
 
     </div>
@@ -185,7 +203,9 @@
               </div>
 
               <div class="kea-selectarea" (click)="kb_substeps2(element.id)" [attr.key]="element.id"
-              [attr.data-listid]="element.id"></div>
+              [attr.data-listid]="element.id">
+                <span class="funneltypesty">{{element.funneltype}}</span>
+              </div>
 
               <i class="fas fa-grip-lines float-right mt-1"></i>
 
@@ -267,16 +287,16 @@
               </div>
             </div>
 
-            <div class="wizard-step" data-wizard-type="step"
-            [attr.:data-wizard-state]="tabOpen == 'product' ? 'current' : 'pending'"
-            (click)="kb_substeps('product')">
-            <div class="wizard-wrapper">
-              <div class="wizard-number"><i class="fas fa-bolt"></i></div>
-              <div class="wizard-label">
-                <div class="wizard-title">Products</div>
+            <div class="wizard-step" data-wizard-type="step" *ngIf="myproductsshowcase"
+              [attr.:data-wizard-state]="tabOpen == 'product' ? 'current' : 'pending'"
+              (click)="kb_substeps('product')">
+              <div class="wizard-wrapper">
+                <div class="wizard-number"><i class="fas fa-bolt"></i></div>
+                <div class="wizard-label">
+                  <div class="wizard-title">Products</div>
+                </div>
               </div>
             </div>
-          </div>
 
             <!-- <div class="wizard-step" data-wizard-type="step"
               [attr.:data-wizard-state]="tabOpen == 'automation' ? 'current' : 'pending'"
@@ -470,7 +490,7 @@
                       </div>
                     </div>
                     <div class="toast-header">
-                      <button mat-raised-button color="accent" class="btn-block mr-2" matTooltip="Edit with Keabuilder" matTooltipPosition="above" ><i class="fas fa-pen"></i> Edit Page</button>
+                      <button mat-raised-button color="accent" class="btn-block mr-2" matTooltip="Edit with Keabuilder" matTooltipPosition="above" (click)="usertemplateselected('start')" ><i class="fas fa-pen"></i> Edit Page</button>
                       <button mat-raised-button color="accent" matTooltip="View Step" matTooltipPosition="above" (click)="checkpagesettings('redirect')" class="mr-2"><i class="fas fa-external-link-alt"></i></button>
                       <button mat-raised-button color="accent" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('settings')" ><i class="fas fa-cog"></i></button>
                     </div>
@@ -602,26 +622,28 @@
 
           <div class="kb-automation mt-4 pb-5 loadEffect" *ngIf="tabOpen == 'product'">
               <div class="row pt-4">
-                <div class="col-md-12">
+                <div class="col-md-12" *ngIf="myproductsshow.length==0">
                   <h5><strong>Add a New Product to Funnel Step</strong></h5>
                   <p>Looks like you haven't added any products for this funnel step yet. Begin by selecting 'Add a Product' below and set the price of your product inside of the settings. You can add as many products as you need for this funnel step.</p>
                 </div>
                 <div class="col-md-12">
-                    <div class="row productbox">
+                    <div class="row productbox" *ngFor="let productsshow of myproductsshow;">
                         <div class="col-md-6 mklnheight">
-                          <i class="fas fa-shopping-cart"></i> Raising Capital for Real Estate
+                          <i class="fas fa-shopping-cart"></i> {{productsshow.productname}}
                         </div>
                         <div class="col-md-3 mklnheight">
-                            Price: $37.00 
+                            Price: ${{productsshow.productprice}} 
                         </div>
                         <div class="col-md-3">
-                          <button mat-raised-button color="accent" class="mr-2"><i class="fas fa-pen"></i> Edit</button>
-                          <button mat-raised-button color="accent" ><i class="fas fa-trash"></i> Delete</button>
+                          <button mat-raised-button color="accent" class="mr-2" (click)="editproduct(productsshow.id)"><i class="fas fa-pen"></i> Edit</button>
+                          <button mat-raised-button color="accent" (click)="edtdelpro('delete',productsshow.id)" ><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </div>                  
                 </div>
                 <div class="col-md-12 mt-4">
                   <button mat-raised-button color="accent" (click)="addproduct()" ><i class="fas fa-plus"></i> Add product</button>
+
+                  <button mat-raised-button color="accent" (click)="edtdelpro('update','')" *ngIf="editmode" ><i class="fas fa-plus"></i> Edit product</button>
                 </div>
               </div>
           </div>

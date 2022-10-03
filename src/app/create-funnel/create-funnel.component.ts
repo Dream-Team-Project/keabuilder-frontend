@@ -83,6 +83,16 @@ export class CreateFunnelComponent implements OnInit {
   hidefornow = false;
   addproductpopup = false;
 
+  addstepoption = false;
+  funneltype = '';
+  myproductsshowcase = false;
+
+  productname = '';
+  productprice = '';
+  priceoverride = '';
+  myproductsshow:any = [];
+  editproid = '';
+  editmode = false;
 
   ngOnInit(): void {
 
@@ -204,10 +214,18 @@ export class CreateFunnelComponent implements OnInit {
   }
   hidepopupsidebar() {
       this.popupsidebar = false;
+    this.addstepoption = false;
+    this.automationaddnewaction = false;
+    this.automationaddnewemail = false;
+    this.automationaddnewtext = false;
+    this.copylink = false;
+    this.colortheme = false;
+    this.addproductpopup = false;
+
   }
   kb_substeps(value: string) {
       this.tabOpen = value;
-      console.log(this.funnelselected);
+      // console.log(this.funnelselected);
       if(value=='overview' && this.funnelselected==1){
         this.tabOpen = 'overviewstep';
       }
@@ -232,6 +250,14 @@ export class CreateFunnelComponent implements OnInit {
           }else{
             this.tabOpen = 'overview';
             this.funnelselected = 0;
+          }
+
+          if(data.data[0].funneltype!='regular' && data.data[0].funneltype!='thankyou'){
+            this.myproductsshowcase = true;
+            this.showproductset();
+          }else{
+            this.tabOpen = 'overview'
+            this.myproductsshowcase = false;
           }
 
           this.funnelstepname = data.data[0].title;
@@ -280,8 +306,28 @@ export class CreateFunnelComponent implements OnInit {
   }
   addsteps() {
 
-    this.funnelService.setfunneladd(this.uniqueid).subscribe({
+    this.popupsidebar = true;
+    this.addstepoption = true;
+
+    this.automationaddnewaction = false;
+    this.automationaddnewemail = false;
+    this.automationaddnewtext = false;
+    this.copylink = false;
+    this.colortheme = false;
+    this.addproductpopup = false;
+
+  }
+
+  updatestep(){
+
+    // console.log(this.funneltype);
+    var data = {funneltype:this.funneltype};
+    this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
       next: data => {
+        this.popupsidebar = false;
+        this.addstepoption = false;
+        this._snackBar.open('Step Added Successfully!', 'Close');
+
         this.steps = data.data;
         // console.log(data);
         // if(data.success==1){
@@ -295,24 +341,25 @@ export class CreateFunnelComponent implements OnInit {
     });
 
   }
+
   usertemplateselected(value:any){
     console.log(this.selectedstep);
     this.funnelService.setfunnelstep(this.selectedstep).subscribe({
       next: data => {
         // console.log(data);
-        console.log(this.uniqueidstep);
+        // console.log(this.uniqueidstep);
 
         if(data.data[0].funnelselected==1){
           this.router.navigate(['/builder/funnel/'+this.uniqueidstep],{relativeTo: this.route});
         }
 
-        // if(data.data[0].funnelselected==1){
-        //   this.tabOpen = 'overviewstep';
-        //   this.funnelselected = 1;
-        // }else{
-        //   this.tabOpen = 'overview';
-        //   this.funnelselected = 0;
-        // }
+        if(data.data[0].funnelselected==1){
+          this.tabOpen = 'overviewstep';
+          this.funnelselected = 1;
+        }else{
+          this.tabOpen = 'overview';
+          this.funnelselected = 0;
+        }
 
       },
       error: err => {
@@ -320,6 +367,7 @@ export class CreateFunnelComponent implements OnInit {
       }
     });
   }
+
   duplicatemain(){
 
     this.funnelService.setfunnelvariation(this.uniqueidstep).subscribe({
@@ -395,6 +443,7 @@ export class CreateFunnelComponent implements OnInit {
   showfunnelsteps(){
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
+        // console.log(data);
         this.steps = data.data;
         // if(data.data.length>1){
         //   this.firstselectedid = data.data[1].id;
@@ -423,6 +472,16 @@ export class CreateFunnelComponent implements OnInit {
 
           data.data.forEach((element: any) => {
               if(element.uniqueid==this.uniqueidstep){
+                  if(element.funneltype!='regular' && element.funneltype!='thankyou'){
+                    this.myproductsshowcase = true;
+
+                    this.showproductset();
+
+                  }else{
+                    this.tabOpen = 'overview'
+                    this.myproductsshowcase = false;
+                  }
+                  
                   this.selectedstep = element.id;
                   this.funnelstepurl = element.steppath;
 
@@ -770,7 +829,6 @@ export class CreateFunnelComponent implements OnInit {
     }
 
   }
-
   addproduct(){
     this.popupsidebar = true;
     this.addproductpopup = true;
@@ -780,6 +838,89 @@ export class CreateFunnelComponent implements OnInit {
     this.copylink = false;
     this.colortheme = false;
   }
+  saveproduct(){
+    // console.log(this.uniqueidstep);
+    if(this.productname!='' && this.productprice!=''){
+        var dataobj = {stepid: this.uniqueidstep,name: this.productname, price: this.productprice, priceoverride: this.priceoverride,type:'insert'};
+
+        this.funnelService.funneladdeditproduct(dataobj).subscribe({
+          next: data => {
+            // console.log(data);
+            this._snackBar.open('Product Added Successfully!', 'Close');
+
+            this.productname = '';
+            this.priceoverride = '';
+            this.productprice = '';
+
+          }
+        });
+
+    }
+
+  }
+
+  editproduct(id:any){
+    this.editproid = id;
+
+    this.popupsidebar = true;
+    this.addproductpopup = true;
+    this.automationaddnewaction = false;
+    this.automationaddnewemail = false;
+    this.automationaddnewtext = false;
+    this.copylink = false;
+    this.colortheme = false;
+
+    var dataobj = {stepid: this.uniqueidstep,name: '', price: '', priceoverride: '',type:'singleproduct',id:id};
+
+    this.funnelService.funneladdeditproduct(dataobj).subscribe({
+      next: data => {
+
+        console.log(data);
+
+      }
+    });
+
+  }
+
+  showproductset(){
+    var dataobj = {stepid: this.uniqueidstep,name: '', price: '', priceoverride: '',type:'get'};
+
+    this.funnelService.funneladdeditproduct(dataobj).subscribe({
+      next: data => {
+        console.log(data);
+
+        if(data.data.length!=0){
+            this.myproductsshow = data.data;
+        }else{
+          this.myproductsshow = [];
+        }
+
+      }
+    });
+
+  }
+
+  edtdelpro(type:any, id:any){
+
+    if(this.productname!='' && this.productprice!=''){
+      var dataobj = {stepid: this.uniqueidstep,name: this.productname, price: this.productprice, priceoverride: this.priceoverride,type:type, id:id};
+
+      this.funnelService.funneladdeditproduct(dataobj).subscribe({
+        next: data => {
+          console.log(data);
+
+          if(data.status==1){
+            this._snackBar.open('Product Deleted Successfully!', 'Close');
+            this.showproductset();
+          }
+
+        }
+      });
+
+    }
+
+  }
+
   
  
 

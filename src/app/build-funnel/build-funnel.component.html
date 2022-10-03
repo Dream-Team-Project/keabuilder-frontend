@@ -41,8 +41,8 @@
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="kb-full-width" >
-            <mat-label>Funnel Type</mat-label>
-            <mat-select name="funneltype" required>
+            <mat-label>Funnel First Step Type</mat-label>
+            <mat-select name="funneltype"  [(ngModel)]="form.funneltype" required>
               <mat-option value="regular">Regular Page</mat-option>
               <mat-option value="order">Order Page</mat-option>
               <mat-option value="upsell">Upsell Page</mat-option>

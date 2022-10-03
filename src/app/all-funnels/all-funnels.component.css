@@ -273,3 +273,6 @@ opacity: 0;
     word-break: break-all;
 }
 
+.funnelstypekb{
+    text-transform: capitalize;
+}

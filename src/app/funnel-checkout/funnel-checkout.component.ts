@@ -133,8 +133,8 @@ export class FunnelCheckoutComponent implements OnInit {
                 // localStorage.setItem("uniquecustomer", data.customer.id);
 
                 if(window.top!=null){
-                  window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
-                  // window.top.location.href = "http://localhost/upsell/#customerid="+data.customer.id; 
+                  // window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
+                  window.top.location.href = "http://localhost/upsell/#customerid="+data.customer.id; 
                 }
 
               }

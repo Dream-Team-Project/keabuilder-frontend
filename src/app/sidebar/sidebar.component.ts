@@ -107,17 +107,17 @@ export class SidebarComponent implements OnInit {
       submenu:null
     },{
       0:true,
-      routerlink: '/domain',
-      img: 'worldwide.gif',
-      icon: 'fas fa-globe-americas',
-      title: 'Domains',
-      submenu:null
-    },{
-      0:true,
       routerlink: '/payment',
       img: 'payment.gif',
       icon: 'fa fa-dollar-sign',
       title: 'Payment',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/domain',
+      img: 'worldwide.gif',
+      icon: 'fas fa-globe-americas',
+      title: 'Domains',
       submenu:null
     },{
       0:true,

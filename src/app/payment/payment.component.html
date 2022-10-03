@@ -8,12 +8,19 @@
             <hr>
             <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
                 <mat-label>Stripe Key</mat-label>
-                <input type="email" matInput required minlength="3" maxlength="140" >
+                <input type="text" matInput required [formControl]="stripekey" >
+                <mat-error *ngIf="stripekey.hasError('required')">
+                    Stripe Key is <strong>required</strong>
+                  </mat-error>
             </mat-form-field>
+            
             
             <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
             <mat-label>Stripe Secret</mat-label>
-            <input type="text" matInput required minlength="3" maxlength="140" >
+            <input type="text" matInput required [formControl]="stripesecret" >
+            <mat-error *ngIf="stripesecret.hasError('required')">
+                Stripe secret is <strong>required</strong>
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paypalcontentactive">
@@ -31,7 +38,7 @@
                 <input type="text" matInput required >
             </mat-form-field>
 
-            <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Connect</button>
+            <button mat-raised-button color="primary" (click)="connectpayment()" ><i class="fas fa-plus"></i> Connect</button>
 
             <hr>
             <p>Account details</p>
@@ -39,7 +46,7 @@
                 <small>Integrate your Stripe account and allow your customers to use their credit cards during checkout.</small>
                 <br> <br>
                 <small>Before detaching your payment integration, please review this article for the impact this action will have on your account. If you would like to proceed with the detachment, please contact Support. </small>
-                <span matTooltip="Where can i find this?" matTooltipPosition="left" class="wherehelp"><i class="fas fa-question-circle"></i></span>
+                <a href="https://stripe.com/docs/keys" target="_blank" matTooltip="Where can i find this?" matTooltipPosition="left" class="wherehelp d-inline-block"><i class="fas fa-question-circle"></i></a>
             </div>
 
             <div *ngIf="paypalcontentactive">
@@ -61,7 +68,7 @@
                      <ul class="kb-paymentul">
                          <li> <img src="/assets/images/payment/stripe-logo.png" width="20" alt="" srcset=""> Stripe</li>
                          <li>Keabuilder with Stripe to provide you with the easiest way to accept credit cards from your members.</li>
-                         <li><button mat-raised-button (click)="addnewconnect('stripe')">Connect <i class="fa fa-paper-plane" aria-hidden="true"></i></button></li>
+                         <li><button mat-raised-button (click)="addnewconnect('stripe')">{{getstatus}} <i class="fa fa-paper-plane" aria-hidden="true"></i></button></li>
                      </ul>
                  </mat-card>
 

@@ -32,6 +32,7 @@ export class WebpagesService {
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
       this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+      // console.log(this.tokenStorage.getUser());
   }
 
   getWebpages(): Observable<any> {
