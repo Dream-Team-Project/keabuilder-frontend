@@ -60,6 +60,10 @@ export class FormService {
 
   }
 
+  editFormField(field:String) {
+    
+  }
+
   createBlockId(temp: any):any {
     temp.id = Math.floor(Math.random() * 10000000000);
     if(this._general.allBlocksIds.includes(temp.id)) {

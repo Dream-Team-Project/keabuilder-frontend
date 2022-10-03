@@ -42,6 +42,7 @@ export class FileUploadService {
   // web pages
   // file
   getFileApi = "./api/getpage";
+  fileExistApi = "./api/file-exist";
   // file
   // menu
   getMenusApi = "./api/getmenus";
@@ -90,6 +91,12 @@ export class FileUploadService {
 
   getfile(page:any):Observable<any> {
     return this.http.post(this.getFileApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  fileExist(path:any):Observable<any> {
+    var pathobj:Object = {path: path}
+    return this.http.post(this.fileExistApi, pathobj)
     .pipe(catchError(this.errorHandler));
   }
 
