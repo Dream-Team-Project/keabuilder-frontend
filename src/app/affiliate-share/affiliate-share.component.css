@@ -60,7 +60,7 @@
 
 /* width */
 .offcanvas-content::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
 }
 
 /* Track */
@@ -113,7 +113,7 @@
 
 /* Handle */
 #kb-offer-actions>div::-webkit-scrollbar-thumb {
-  background: #e2e2e2;
+  background: #ececec;
 }
 
 #kb-offer-actions .fa-times {

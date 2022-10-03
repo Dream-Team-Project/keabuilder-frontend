@@ -383,17 +383,17 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   }
 
   elementDblClk(element: any, event:any) {
-    if(element.content.name == 'text' || element.content.name == 'heading') {
-      this._general.showInlineEditor = true;
-      element.content.editor = true;
-      this._general.selectedBlock = element;
-    }
-    else {
+    // if(element.content.name == 'text' || element.content.name == 'heading') {
+    //   this._general.showInlineEditor = true;
+    //   element.content.editor = true;
+    //   this._general.selectedBlock = element;
+    // }
+    // else {
       this._general.blockSelection = '';
       this._general.selectedBlock = element;
       this._style.blockSetting(element);
       this.openDialog(event)
-    }
+    // }
   }
 
   // drag drop box

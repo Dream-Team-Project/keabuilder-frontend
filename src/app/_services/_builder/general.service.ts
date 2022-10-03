@@ -86,6 +86,7 @@ export class GeneralService {
     setup: (editor: { ui: any; }) => {
       // console.log(editor.ui);
     },
+    diskCache: true
   };
   pagehtml:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};

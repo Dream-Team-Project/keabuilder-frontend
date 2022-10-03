@@ -69,7 +69,7 @@
 
 /* Handle */
 .offcanvas-content::-webkit-scrollbar-thumb {
-  background: #e2e2e2;
+  background: #ececec;
 }
 
 .offcanvas-overlay {
@@ -116,7 +116,7 @@
 
 /* Handle */
 #kb-offer-actions>div::-webkit-scrollbar-thumb {
-  background: #e2e2e2;
+  background: #ececec;
 }
 
 #kb-offer-actions .fa-times {

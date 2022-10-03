@@ -13,7 +13,7 @@ export class FormService {
     {name:'heading', content: 'Heading', icls: 'fas fa-heading'},
     {name:'paragraph', content: 'Paragraph', icls: 'fas fa-paragraph'},
     {name:'divider', icls:'fas fa-grip-lines'}, 
-    {name:'full-name', label: 'Full name', icls: 'far fa-user', required: true, split: [
+    {name:'name', label: 'Name', icls: 'far fa-user', required: true, split: [
       {name:'first-name', label:'First name', type:'text', placeholder: 'first name'},
       {name:'last-name', label:'Last name',  type:'text', placeholder: 'last name'},
     ]},
@@ -34,6 +34,10 @@ export class FormService {
     ]},
     {name:'short-text', label: 'Short Text', type:'text', placeholder: 'short text', icls: 'fas fa-text-width', required: false},
     {name:'long-text', label:'Long Text', type:'textarea', placeholder: 'long text', icls: 'fas fa-text-height', required: false},
+    {name:'split-text', label: 'Split Text', icls: 'far fa-hand-scissors', required: false, split: [
+      {name:'split-text-1', label:'First Text', type:'text', placeholder: 'first text'},
+      {name:'split-text-2', label:'Last Text',  type:'text', placeholder: 'last text'},
+    ]},
     {name:'number', label:'Number', type:'number', placeholder: 'number', icls: 'fas fa-hashtag', required: false},
     {name:'single-choice', label:'Single choice', icls: 'far fa-dot-circle', required: false, split: [
       {name:'option', label: 'first option', type:'radio'},
