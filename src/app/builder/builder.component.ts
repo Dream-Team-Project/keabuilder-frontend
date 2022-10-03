@@ -53,31 +53,17 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       this.route.paramMap.subscribe((params: ParamMap) => {
         _general.layout = params.get('layout');
         if(_general.layout == 'website' || _general.layout == 'funnel') {
-
-          if(_general.layout == 'website'){
-            _general.getWebPageDetails(params.get('id')).then(e=> {
-              // console.log(e);
+            _general.getPageDetails(params.get('id')).then(e=> {
               _general.loading.success = false;
               var header = _general.file.html.querySelector('HEADER');
               var footer = _general.file.html.querySelector('FOOTER');
-              if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
-              if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
+              if(header && footer) {
+                if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
+                if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
+              }
               this.setBuilder(_general.file.html, _general.file.css);
               _general.file.load = false;
             })
-          }else if(_general.layout == 'funnel'){
-            _general.getWebFunnelDetails(params.get('id')).then(e=> {
-              console.log(e);
-              _general.loading.success = false;
-              var header = _general.file.html.querySelector('HEADER');
-              var footer = _general.file.html.querySelector('FOOTER');
-              if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
-              if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
-              this.setBuilder(_general.file.html, _general.file.css);
-              _general.file.load = false;
-            })
-          }
-
         }
         else {
           if(params.get('id') == _general.user.uniqueid) {
@@ -399,17 +385,17 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   }
 
   elementDblClk(element: any, event:any) {
-    if(element.content.name == 'text' || element.content.name == 'heading') {
-      this._general.showInlineEditor = true;
-      element.content.editor = true;
-      this._general.selectedBlock = element;
-    }
-    else {
+    // if(element.content.name == 'text' || element.content.name == 'heading') {
+    //   this._general.showInlineEditor = true;
+    //   element.content.editor = true;
+    //   this._general.selectedBlock = element;
+    // }
+    // else {
       this._general.blockSelection = '';
       this._general.selectedBlock = element;
       this._style.blockSetting(element);
       this.openDialog(event)
-    }
+    // }
   }
 
   // drag drop box

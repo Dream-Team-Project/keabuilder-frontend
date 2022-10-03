@@ -4,7 +4,7 @@
 }
 
 ::ng-deep *:hover ::-webkit-scrollbar {
-    width: 6px!important;
+    width: 8px!important;
 }
 
 ::ng-deep .mat-option-text {
@@ -153,19 +153,23 @@ image-cropper {
     background-color: var(--section-color);
 }
 
-::ng-deep .mat-tab-body-wrapper .mat-tab-body {
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 14px;
-    overflow-y: auto!important;
-    height: 400px;
-}
+::ng-deep #kb-form-elements .mat-tab-body-wrapper .mat-tab-body {
+    height: 550px!important;
+}  
 
 ::ng-deep .kb-img-inner-group .mat-tab-body-wrapper .mat-tab-body {
     height: 500px!important;
     padding-top: 0px;
     padding-bottom: 0px;
-}   
+} 
+
+::ng-deep .mat-tab-body-wrapper .mat-tab-body {
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    overflow-y: auto!important;
+    height: 400px;
+} 
 
 ::ng-deep .mat-radio-label-content {
     display: flex!important;
@@ -228,9 +232,12 @@ image-cropper {
 }
 
 ::ng-deep .tox.tox-tinymce {
-    box-shadow: 0 2px 10px #0000001f, 0 2px 5px #00000029;
-    border-width: 0px!important;
+    border-color: var(--kb-gray);
     border-radius: 5px;
+}
+
+::ng-deep .tox .tox-edit-area__iframe {
+    background-color: transparent!important;
 }
 
 ::ng-deep .mce-content-body {

@@ -249,7 +249,7 @@
 /* Handle */
 #topbar_notifications_notifications>div::-webkit-scrollbar-thumb,
 #topbar_notifications_events>div::-webkit-scrollbar-thumb {
-  background: #e2e2e2;
+  background: #ececec;
 }
 
 div#topbar_notifications_logs {
