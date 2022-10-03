@@ -225,7 +225,7 @@ export class AllFunnelsComponent implements OnInit {
   showfunnels(){
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        // console.log(data); 
+        console.log(data); 
         this.funnels = [];
         if(data.data2.length!=0){
           this.funnelnotfound = false;
@@ -290,7 +290,7 @@ export class AllFunnelsComponent implements OnInit {
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
           next: data => {
             // console.log(data); 
-            this.pageurl = window.origin+'/'+data.data[0].steppath;
+            this.pageurl = window.origin+'/'+data.data[0].page_path;
           }
       });
     }else if(type=='archive'){

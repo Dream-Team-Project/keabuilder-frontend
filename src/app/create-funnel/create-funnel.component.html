@@ -216,7 +216,7 @@
                 </button>
                 
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="funnelstepedit(steps[i].steppath, steps[i].uniqueid, 'copy')">
+                    <button mat-menu-item (click)="funnelstepedit(steps[i].page_path, steps[i].uniqueid, 'copy')">
                       <i class="fas fa-link" ></i> Copy Link
                     </button>
                     <button mat-menu-item (click)="funnelstepedit(steps[i].funnelid, steps[i].uniqueid, 'duplicate')">
@@ -680,7 +680,7 @@
                 
                 <mat-form-field class="kb-full-width" appearance="fill">
                   <mat-label>PATH</mat-label>
-                  <input type="text" (input)="funnelstepurl = _general.joinWthDash(funnelstepurl)" matInput name="funnelpath" (blur)="changestepnames('steppath')" [(ngModel)]="funnelstepurl">
+                  <input type="text" (input)="funnelstepurl = _general.joinWthDash(funnelstepurl)" matInput name="funnelpath" (blur)="changestepnames('page_path')" [(ngModel)]="funnelstepurl">
                 </mat-form-field>
                
               </div>
@@ -689,7 +689,7 @@
                 
                 <mat-form-field class="kb-full-width" appearance="fill">
                   <mat-label>Variation Path</mat-label>
-                  <input type="text" matInput name="funnelvariationpath" (blur)="changestepnames('variationsteppath')" [(ngModel)]="funnelstepvariationurl">
+                  <input type="text" matInput name="funnelvariationpath" (blur)="changestepnames('variationpage_path')" [(ngModel)]="funnelstepvariationurl">
                 </mat-form-field>
                
               </div>

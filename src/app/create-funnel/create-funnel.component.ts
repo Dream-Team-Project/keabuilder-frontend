@@ -261,7 +261,7 @@ export class CreateFunnelComponent implements OnInit {
           }
 
           this.funnelstepname = data.data[0].title;
-          this.funnelstepurl = data.data[0].steppath;
+          this.funnelstepurl = data.data[0].page_path;
 
           if(data.data[0].variation==1){
             this.funnelvariation = 1;
@@ -404,16 +404,16 @@ export class CreateFunnelComponent implements OnInit {
     var mainvalue = '';
     if(value=='stepname'){
       mainvalue = this.funnelstepname;
-    }else if(value=='steppath'){
+    }else if(value=='page_path'){
       mainvalue = this.funnelstepurl;
-    }else if(value=='variationsteppath'){
+    }else if(value=='variationpage_path'){
       mainvalue = this.funnelstepvariationurl;
     }
     console.log(this.selectedstep)
     this.funnelService.namepathchanges(this.selectedstep,mainvalue,value).subscribe({
       next: data => {
         // console.log(data);
-        this.funnelstepurl = data.data[0].steppath;
+        this.funnelstepurl = data.data[0].page_path;
         this.funnelstepvariationurl = data.data[0].variationlink;
         this._snackBar.open('Successfully Updated!', 'Close');
 
@@ -483,7 +483,7 @@ export class CreateFunnelComponent implements OnInit {
                   }
                   
                   this.selectedstep = element.id;
-                  this.funnelstepurl = element.steppath;
+                  this.funnelstepurl = element.page_path;
 
                   if(element.variation==1){
                     this.funnelvariation = 1;
