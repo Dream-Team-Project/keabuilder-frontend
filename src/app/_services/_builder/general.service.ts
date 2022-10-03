@@ -193,7 +193,7 @@ export class GeneralService {
             this.webpage = e.data[0];
             this.main.name = this.webpage.title;
             this.main.title = this.webpage.title;
-            this.main.path = this.webpage.steppath;
+            this.main.path = this.webpage.page_path;
             // if(this.webpage.page_description) this.main.description = this.webpage.page_description;
             // if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
             // this.main.author = this.webpage.page_author;
