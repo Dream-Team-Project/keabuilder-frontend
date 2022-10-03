@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
 import {FormControl, Validators} from '@angular/forms';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-build-funnel',
@@ -12,12 +13,14 @@ export class BuildFunnelComponent implements OnInit {
 
   constructor(private router: Router, 
               private funnelService: FunnelService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              public _general: GeneralService,) { }
 
     form: any = {
         funnelname: null,
         funnelfirststep: '',
-        badgecolor:''
+        badgecolor:'',
+        funneltype:null
     };
     userFormControl = new FormControl('',[Validators.required ]);
     hidefornow = false;
@@ -130,13 +133,26 @@ export class BuildFunnelComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { funnelname, funnelfirststep, badgecolor } = this.form;
-
+    const { funnelname, funnelfirststep, badgecolor, funneltype } = this.form;
     if(this.userFormControl.status=='VALID'){
-        this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor).subscribe({
+        this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor, funneltype).subscribe({
             next: data => {
                 // console.log(data);
-                this.router.navigate(['/funnels/'+data.data.hash+'/steps/'+data.data.hash2],{relativeTo: this.route});
+                if(data.data.length!=0){
+                    var page = {
+                        head: '',
+                        body: '',
+                        style: '',
+                        folder: data.data.pagepath,
+                        prevFolder: data.data.pagepath
+                      }
+                      this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                        console.log(event);
+                    },
+                    error=>{console.log(error)});
+
+                    this.router.navigate(['/funnels/'+data.data.hash+'/steps/'+data.data.hash2],{relativeTo: this.route});
+                }
             
             },
             error: err => {

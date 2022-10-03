@@ -238,7 +238,7 @@ export class AllFunnelsComponent implements OnInit {
               newob.grouptags = element.grouptags;
 
                 data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:''};
+                  var newob2 = {id:'',uniqueid:'',title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
                   if(element2.funnelid==newob.id){
                     newob2.id = element2.id;
                     newob2.title = element2.title;
@@ -251,6 +251,8 @@ export class AllFunnelsComponent implements OnInit {
                     newob2.color = element2.color;
                     newob2.img = element2.img;
                     newob2.funnelid = element2.funnelid;
+                    newob2.funneltype = element2.funneltype;
+
                     newob.steps.push(newob2);
                   }
                 });

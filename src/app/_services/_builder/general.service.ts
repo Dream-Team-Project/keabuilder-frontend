@@ -7,7 +7,7 @@ import { TokenStorageService } from '../token-storage.service';
 import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
-
+import { FunnelService } from '../funnels.service';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +105,7 @@ export class GeneralService {
   deletedMenuIds:any = [];
   selectedMenu:any = {};
 
-  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService) {
+  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService, private funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
     this.user.name = this.user.username;
     this.main.author = this.user.name;
@@ -145,6 +145,44 @@ export class GeneralService {
             if(this.webpage.page_description) this.main.description = this.webpage.page_description;
             if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
             this.main.author = this.webpage.page_author;
+            this.fileUploadService.getfile(this.webpage).subscribe({
+              next: (file:any)=>{
+                this.file.html = this.parser.parseFromString(file.html, 'text/html');
+                this.file.css = file.css;
+                this.file.load = true;
+                resolve(true);
+              },
+              error: (err:any) => {
+                this.loading.error = true;
+                resolve(false);
+              }
+            });
+        },
+        (err:any) => {
+          this.loading.error = true;
+          resolve(false);
+        }
+      )
+    })
+  }
+
+  getWebFunnelDetails(uniqueid:any) {
+    return new Promise<any>((resolve, reject) => {
+      this.webpage.uniqueid = uniqueid;
+      this.funnelService.getSingleFunnelpage(this.webpage.uniqueid).subscribe(
+        (e:any)=>{
+          console.log(e);
+            if(e.data.length == 0) window.location.replace(window.location.origin);
+            this.webpage = e.data[0];
+            this.main.name = this.webpage.title;
+            this.main.title = this.webpage.title;
+            this.main.path = this.webpage.steppath;
+            // if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+            // if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+            // this.main.author = this.webpage.page_author;
+            this.main.description = '';
+            this.main.keywords = '';
+            this.main.author = '';
             this.fileUploadService.getfile(this.webpage).subscribe({
               next: (file:any)=>{
                 this.file.html = this.parser.parseFromString(file.html, 'text/html');

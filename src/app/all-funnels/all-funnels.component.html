@@ -184,6 +184,12 @@
                                             <i class="fas fa-puzzle-piece"></i> <span
                                                 class="font-size-small">{{funnels[i]['steps'][j]['variation']}}</span>
                                         </div>
+
+                                        <div class="keabuilder-comment d-flex align-items-center mr-50" matTooltip="Step Type" matTooltipPosition="above" >
+                                            <i class="fas fa-check"></i> <span
+                                                class="font-size-small funnelstypekb">{{funnels[i]['steps'][j]['funneltype']}}</span>
+                                        </div>
+
                                         <div class="keabuilder-attachment d-flex align-items-center" *ngIf="funnels[i]['steps'][j]['tag']!=''" matTooltip="Tags" matTooltipPosition="above" >
                                             <i class="fas fa-tags"></i> <span
                                                 class="font-size-small">{{funnels[i]['steps'][j]['tag']}}</span>

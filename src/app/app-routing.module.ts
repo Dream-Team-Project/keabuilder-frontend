@@ -121,9 +121,9 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
 
-  { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
+  { path: 'domain', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
 
 
@@ -202,6 +202,9 @@ const routes: Routes = [
   //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
   // ],
   //  canActivate: [AuthGuard] },
+
+  // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
+
 
   // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
