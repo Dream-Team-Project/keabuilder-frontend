@@ -74,8 +74,6 @@ export class GeneralService {
   images_upload_handler: function (blobInfo:any, success:any, failure:any) {
     setTimeout(function () {
       /* no matter what you upload, we will turn it into TinyMCE logo :)*/
-      // console.log(blobInfo);
-      // console.log(success);
       success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
     }, 2000);
   },
@@ -132,6 +130,25 @@ export class GeneralService {
       })
     })
   }
+
+  getPageDetails(id:any) {
+    return new Promise<any>((resolve, reject) => {
+      if(this.layout == 'website'){
+        this.getWebPageDetails(id).then(e=> {
+          resolve(e);
+        })
+      }
+      else if(this.layout == 'funnel'){
+        this.getFunnelDetails(id).then(e=> {
+          resolve(e);
+        })
+      }
+      else{
+        window.location.replace(window.location.origin);
+        resolve(false);
+      }
+    })
+  }
   
   getWebPageDetails(uniqueid:any) {
     return new Promise<any>((resolve, reject) => {
@@ -167,12 +184,11 @@ export class GeneralService {
     })
   }
 
-  getWebFunnelDetails(uniqueid:any) {
+  getFunnelDetails(uniqueid:any) {
     return new Promise<any>((resolve, reject) => {
       this.webpage.uniqueid = uniqueid;
       this.funnelService.getSingleFunnelpage(this.webpage.uniqueid).subscribe(
         (e:any)=>{
-          console.log(e);
             if(e.data.length == 0) window.location.replace(window.location.origin);
             this.webpage = e.data[0];
             this.main.name = this.webpage.title;
