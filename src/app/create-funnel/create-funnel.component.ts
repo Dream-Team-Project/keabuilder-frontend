@@ -830,6 +830,10 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   addproduct(){
+    this.productname = '';
+    this.productprice = '';
+    this.priceoverride = '';
+    
     this.popupsidebar = true;
     this.addproductpopup = true;
     this.automationaddnewaction = false;
@@ -851,6 +855,7 @@ export class CreateFunnelComponent implements OnInit {
             this.productname = '';
             this.priceoverride = '';
             this.productprice = '';
+            this.showproductset();
 
           }
         });
@@ -861,6 +866,8 @@ export class CreateFunnelComponent implements OnInit {
 
   editproduct(id:any){
     this.editproid = id;
+
+    this.editmode = true;
 
     this.popupsidebar = true;
     this.addproductpopup = true;
@@ -876,6 +883,13 @@ export class CreateFunnelComponent implements OnInit {
       next: data => {
 
         console.log(data);
+        if(data.data.length!=0){
+
+          this.productname = data.data[0].productname;
+          this.productprice = data.data[0].productprice;
+          this.priceoverride = data.data[0].priceoverride;
+
+        }
 
       }
     });

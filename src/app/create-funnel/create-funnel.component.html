@@ -160,7 +160,9 @@
         </mat-form-field>
 
         <br>
-        <button mat-raised-button color="primary" (click)="saveproduct()"><i class="fas fa-plus"></i> Save Product</button>
+        <button mat-raised-button color="primary" (click)="saveproduct()" *ngIf="!editmode"><i class="fas fa-plus"></i> Save Product</button>
+        
+        <button mat-raised-button color="accent" (click)="edtdelpro('update','')" *ngIf="editmode" ><i class="fas fa-plus"></i> Save product</button>
 
       </div>
 
@@ -641,9 +643,8 @@
                     </div>                  
                 </div>
                 <div class="col-md-12 mt-4">
-                  <button mat-raised-button color="accent" (click)="addproduct()" ><i class="fas fa-plus"></i> Add product</button>
+                  <button mat-raised-button color="accent" (click)="addproduct()"  ><i class="fas fa-plus"></i> Add product</button>
 
-                  <button mat-raised-button color="accent" (click)="edtdelpro('update','')" *ngIf="editmode" ><i class="fas fa-plus"></i> Edit product</button>
                 </div>
               </div>
           </div>
