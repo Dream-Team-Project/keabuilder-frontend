@@ -85,12 +85,19 @@ export class FunnelArchieveComponent implements OnInit {
   }
 
   restoredeleteme(id:any,type:any){
-
+  // console.log(id);
     this.funnelService.restoredeletefunnel(id,type).subscribe({
       next: data => {
-        
+        console.log(data);
         if(data.success==1){
           this.applykbfilter();
+
+          // this.fileuploadService.deletepage(data.path).subscribe({
+          //   next: data => {
+          //     console.log(data);
+          //   }
+          // });
+
         }
 
       },

@@ -141,7 +141,6 @@ export class WebsiteDesignComponent implements OnInit {
       this.insidepagefirst = true;
       this.insidepagesecond = false;
     this.selecttemplate = false;
-
   }
 
   hidepopupsidebar(){

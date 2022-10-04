@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild, Inject } from '@angular/core';
 import { Options } from 'sortablejs';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -7,6 +7,12 @@ import { FunnelService } from '../_services/funnels.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatAccordion} from '@angular/material/expansion';
 import { GeneralService } from '../_services/_builder/general.service';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { FileUploadService } from '../_services/file-upload.service';
+
+export interface DialogData {
+  name: string;
+}
 
 @Component({
   selector: 'app-create-funnel',
@@ -25,7 +31,9 @@ export class CreateFunnelComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private _snackBar: MatSnackBar,
-              public _general: GeneralService, ) {
+              public _general: GeneralService,
+              public dialog: MatDialog, 
+              private fileuploadService: FileUploadService) {
                 this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
                   this.uniqueid = params.get('funnel_id');
                 })
@@ -93,7 +101,7 @@ export class CreateFunnelComponent implements OnInit {
   myproductsshow:any = [];
   editproid = '';
   editmode = false;
-
+  getthumbnail = '/assets/uploads/images/webpage_thumbnail.jpg';
   ngOnInit(): void {
 
     this.showfunnelsteps();
@@ -324,11 +332,27 @@ export class CreateFunnelComponent implements OnInit {
     var data = {funneltype:this.funneltype};
     this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
       next: data => {
+        console.log(data);
         this.popupsidebar = false;
         this.addstepoption = false;
         this._snackBar.open('Step Added Successfully!', 'Close');
 
         this.steps = data.data;
+
+        var page = {
+          head: '',
+          body: '',
+          style: '',
+          folder: data.pagepath,
+          prevFolder: data.pagepath
+        };
+        this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+          console.log(event);
+        },
+        error=>{console.log(error)});
+
+
+
         // console.log(data);
         // if(data.success==1){
         //   this.createvariation = false;
@@ -412,10 +436,22 @@ export class CreateFunnelComponent implements OnInit {
     console.log(this.selectedstep)
     this.funnelService.namepathchanges(this.selectedstep,mainvalue,value).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.funnelstepurl = data.data[0].page_path;
         this.funnelstepvariationurl = data.data[0].variationlink;
+        
+        if(data.data.length!=0 && data.oldpath!=''){
+          var pathobj  = {oldpath:data.oldpath,newpath:data.data[0].page_path};
+          this.fileuploadService.renamepage(pathobj).subscribe({
+            next: data => {
+              console.log(data);
+            }
+          });
+        }
+
+
         this._snackBar.open('Successfully Updated!', 'Close');
+
 
         if(value=='stepname'){
             this.steps = data.data2;
@@ -443,7 +479,7 @@ export class CreateFunnelComponent implements OnInit {
   showfunnelsteps(){
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.steps = data.data;
         // if(data.data.length>1){
         //   this.firstselectedid = data.data[1].id;
@@ -492,6 +528,19 @@ export class CreateFunnelComponent implements OnInit {
                   if(element.funnelselected==1){
                     this.tabOpen = 'overviewstep';
                     this.funnelselected = 1;
+
+                    var genscrn = 'keaimage-'+this.uniqueidstep+'-screenshot.png';
+
+                    this.fileuploadService.validateimg(genscrn).subscribe({
+                      next: data => {
+          
+                       if(data.data==1){
+                          this.getthumbnail = '/assets/uploads/images/'+genscrn;
+                        }
+          
+                      }
+                    });
+
                   }else{
                     this.funnelselected = 0;
                   }
@@ -583,6 +632,19 @@ export class CreateFunnelComponent implements OnInit {
           next: data => {
             // console.log(data);
             if(data.success==1){
+
+              var page = {
+                head: '',
+                body: '',
+                style: '',
+                folder: data.pagepath,
+                prevFolder: data.pagepath
+              };
+              this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                console.log(event);
+              },
+              error=>{console.log(error)});
+
               this.showfunnelsteps();
               this._snackBar.open('Successfully Duplicate Step!', 'Close');
               this.kb_substeps2(data.data.insertId);
@@ -651,6 +713,19 @@ export class CreateFunnelComponent implements OnInit {
         next: data => {
           // console.log(data);
           if(data.success==1){
+
+            var page = {
+              head: '',
+              body: '',
+              style: '',
+              folder: data.pagepath,
+              prevFolder: data.pagepath
+            };
+            this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+              console.log(event);
+            },
+            error=>{console.log(error)});
+
             this.showfunnelsteps();
             this._snackBar.open('Successfully Duplicate Step!', 'Close');
             this.kb_substeps2(data.data.insertId);
@@ -670,6 +745,13 @@ export class CreateFunnelComponent implements OnInit {
           // console.log(data);
   
           if(data.status==1){
+
+            this.fileuploadService.deletepage(data.path).subscribe({
+              next: data => {
+                // console.log(data);
+              }
+            });
+
             this.showfunnelsteps();
             this._snackBar.open('Successfully Deleted!', 'Close');
             this.kb_substeps2(data.id);
@@ -688,7 +770,7 @@ export class CreateFunnelComponent implements OnInit {
   }
   checkpagesettings(value:any){
     if(value=='redirect'){
-      var url = window.origin+'/'+this.funnelstepurl;
+      var url = window.origin+'/assets/sites/pages/'+this.funnelstepurl;
       window.open(url, '_blank')
     }else if(value=='settings'){
       this.tabOpen = 'publishing';
@@ -747,8 +829,15 @@ export class CreateFunnelComponent implements OnInit {
         next: data => {
           console.log(data);
           if(data.status==1){
-              this.archivesteps = data.data;
-              this._snackBar.open('Successfully Deleted!', 'Close');
+
+            this.fileuploadService.deletepage(data.path).subscribe({
+              next: data => {
+                console.log(data);
+              }
+            });
+          
+            this.archivesteps = data.data;
+            this._snackBar.open('Successfully Deleted!', 'Close');
 
           }
         }
@@ -830,6 +919,10 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   addproduct(){
+    this.productname = '';
+    this.productprice = '';
+    this.priceoverride = '';
+    
     this.popupsidebar = true;
     this.addproductpopup = true;
     this.automationaddnewaction = false;
@@ -851,6 +944,7 @@ export class CreateFunnelComponent implements OnInit {
             this.productname = '';
             this.priceoverride = '';
             this.productprice = '';
+            this.showproductset();
 
           }
         });
@@ -861,6 +955,8 @@ export class CreateFunnelComponent implements OnInit {
 
   editproduct(id:any){
     this.editproid = id;
+
+    this.editmode = true;
 
     this.popupsidebar = true;
     this.addproductpopup = true;
@@ -876,6 +972,13 @@ export class CreateFunnelComponent implements OnInit {
       next: data => {
 
         console.log(data);
+        if(data.data.length!=0){
+
+          this.productname = data.data[0].productname;
+          this.productprice = data.data[0].productprice;
+          this.priceoverride = data.data[0].priceoverride;
+
+        }
 
       }
     });
@@ -902,17 +1005,23 @@ export class CreateFunnelComponent implements OnInit {
 
   edtdelpro(type:any, id:any){
 
-    if(this.productname!='' && this.productprice!=''){
-      var dataobj = {stepid: this.uniqueidstep,name: this.productname, price: this.productprice, priceoverride: this.priceoverride,type:type, id:id};
+    if(type=='update'){
+      id = this.editproid;
+    }
+
+    if((this.productname!='' && this.productprice!='') || type=='delete'){
+      var dataobj = {stepid: this.uniqueidstep, name: this.productname, price: this.productprice, priceoverride: this.priceoverride, type:type, id:id};
 
       this.funnelService.funneladdeditproduct(dataobj).subscribe({
         next: data => {
           console.log(data);
 
-          if(data.status==1){
-            this._snackBar.open('Product Deleted Successfully!', 'Close');
-            this.showproductset();
+          if(type=='update'){
+            if(data.status==1){
+              this._snackBar.open('Product Updated Successfully!', 'Close');
+            }  
           }
+          this.showproductset();
 
         }
       });
@@ -921,8 +1030,59 @@ export class CreateFunnelComponent implements OnInit {
 
   }
 
+  openDialog(id:any): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '255px',
+      data: {name: 'Product'},
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log(id);
+
+      if(result.event == 'Delete'){
+        
+        var dataobj = {stepid: this.uniqueidstep, name: this.productname, price: this.productprice, priceoverride: this.priceoverride, type:'delete', id:id};
+
+        this.funnelService.funneladdeditproduct(dataobj).subscribe({
+          next: data => {
+            console.log(data);
+
+              if(data.status==1){
+                this._snackBar.open('Product Deleted Successfully!', 'Close');
+                this.showproductset();
+              }
+
+          }
+        });
+
+      }
+      
+    });
+
+  }
+
   
  
 
 
+}
+
+
+
+@Component({
+  selector: 'tags-dialog',
+  templateUrl: '../delete-dialog/delete-dialog.html',
+})
+export class DialogOverviewExampleDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close({event:'nothanks'});
+  }
+  onClick(){
+    this.dialogRef.close({event:'Delete'});
+  }
 }
