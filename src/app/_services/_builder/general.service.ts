@@ -108,6 +108,11 @@ export class GeneralService {
   funnels:any = [];
   step_products:any = [];
   page_code:any = '';
+  menu_target_types = [
+    { name: 'same tab', value: '_self' },
+    { name: 'new tab', value: '_blank' },
+    { name: 'linked new tab', value: 'framename' },
+  ];
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService, private funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
@@ -127,8 +132,10 @@ export class GeneralService {
         var ul = doc.querySelector('ul');
         var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
         ul?.querySelectorAll('li').forEach(li => {
-          var anc = li.querySelector('a');
-          var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc?.href != 'https://no-link/' ? anc?.href : '' }
+          var anc:any = li.querySelector('a');
+          var link = anc?.href.split('#').length > 1 ? '#no-link' : anc?.href;
+          var target = this.menu_target_types.filter((item:any)=>{ if(anc?.target == item.value) return item; })[0];
+          var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: link, target: target }
           menu.items.push(item);
         })
         this.menus.push(menu);
@@ -479,6 +486,22 @@ export class GeneralService {
         })
       })
     })
+  }
+
+  getAllProducts() {
+    var dataobj = {stepid: this.webpage.uniqueid,name: '', price: '', priceoverride: '',type:'get'};
+    this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
+      this.step_products = data.data;
+    })
+  }
+
+  btndata(data:any) {
+    var obj:any = {
+      product_id: data.productid,
+      redirect: data.link,
+      btntype: data.btntype
+    }
+    return btoa(obj);
   }
 
   joinWthDash(item:string) {

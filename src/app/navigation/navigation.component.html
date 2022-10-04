@@ -35,7 +35,7 @@
                 <mat-form-field class="kb-full-width" appearance="fill">
                     <mat-label>Target</mat-label>
                     <mat-select [(ngModel)]="selectedMenuItem.target" [compareWith]="_style.compareOptValue">
-                        <mat-option *ngFor="let btt of _style.button_target_types" [value]="btt">{{btt.name |
+                        <mat-option *ngFor="let btt of _general.menu_target_types" [value]="btt">{{btt.name |
                             titlecase}}</mat-option>
                     </mat-select>
                 </mat-form-field>

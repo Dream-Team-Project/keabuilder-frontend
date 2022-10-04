@@ -67,6 +67,7 @@ export class StyleService {
   ]
   button_subfont_size = {value: '80'};
   button_subfont_sizeRange: any = { value: 80, max: 200, type: '%' };
+  button_product = '';
   // button
   // general
   width = { value: '100%' };
@@ -907,8 +908,10 @@ export class StyleService {
         this._general.selectedBlock.content.text = this.button_text;
         this._general.selectedBlock.content.subtext = this.button_subtext;
         this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
-        this._general.selectedBlock.content.link = this.button_link == '#' ? 'https://no-link/' : this.button_link;
+        this._general.selectedBlock.content.link = this.button_link;
         this._general.selectedBlock.content.target = this.button_target.value;
+        if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.productid = this.button_product;
+        console.log(this._general.selectedBlock.content);
       }
       else if (this._general.selectedBlock.content.name == 'image') {
         this._general.selectedBlock.content.src = this.image_src;
@@ -1554,6 +1557,10 @@ export class StyleService {
     else if (element.name == 'button') {
       this._general.getAllWebPages();
       this._general.getAllFunnels();
+      if(element.btntype != 'regular') {
+        this.button_product = element.productid;
+        this._general.getAllProducts();
+      }
       this.button_text = element.text;
       this.button_subtext = element.subtext;
       this.button_subfont_size.value = element.subfont_size;
