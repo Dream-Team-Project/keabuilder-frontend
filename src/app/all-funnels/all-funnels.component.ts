@@ -4,6 +4,8 @@ import { FunnelService } from '../_services/funnels.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PageEvent} from '@angular/material/paginator';
+import { GeneralService } from '../_services/_builder/general.service';
+import { FileUploadService } from '../_services/file-upload.service';
 
 
 @Component({
@@ -16,7 +18,9 @@ export class AllFunnelsComponent implements OnInit {
   constructor(private funnelService: FunnelService,
               private router: Router, 
               private route: ActivatedRoute,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              public _general: GeneralService,
+              private fileuploadService: FileUploadService) { }
 
   funnels:any = [];
   popupsidebar = false;
@@ -171,8 +175,25 @@ export class AllFunnelsComponent implements OnInit {
 
       this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           if(data.success==1){
+
+            if(data.objpath.length!=0){
+              data.objpath.forEach((element:any) => {
+                var page = {
+                  head: '',
+                  body: '',
+                  style: '',
+                  folder: element,
+                  prevFolder: element
+                };
+                this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                  console.log(event);
+                },
+                error=>{console.log(error)});
+              });
+            }
+
             this.showfunnels();
             this._snackBar.open('Successfully Duplicate Funnel!', 'Close');
           }
@@ -223,6 +244,7 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   showfunnels(){
+
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
         console.log(data); 
@@ -272,10 +294,11 @@ export class AllFunnelsComponent implements OnInit {
         console.log(err);
       }
     });
+
   }
 
   funnelstepedit(unique1:any, unique2:any,type:any){
-    console.log(unique1+' - '+unique2+' - '+type);
+    // console.log(unique1+' - '+unique2+' - '+type);
 
     if(type=='edit'){
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
@@ -303,7 +326,21 @@ export class AllFunnelsComponent implements OnInit {
         // console.log(unique1+' - '+unique2);
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
+            // console.log(data);
             if(data.success==1){
+
+              var page = {
+                head: '',
+                body: '',
+                style: '',
+                folder: data.pagepath,
+                prevFolder: data.pagepath
+              };
+              this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                console.log(event);
+              },
+              error=>{console.log(error)});
+
               this.showfunnels();
               this._snackBar.open('Successfully Duplicate Step!', 'Close');
             }
