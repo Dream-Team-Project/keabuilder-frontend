@@ -17,7 +17,7 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   private _portal!: TemplatePortal;
 
   menuObj:any = {id: '', name: 'New Menu', type: 'menu', items: []};
-  menuItemObj:any = {id: '', name: 'New Item', type: 'item', link: ''};
+  menuItemObj:any = {id: '', name: 'New Item', type: 'item', link: '', target: { name: 'same tab', value: '_self' }};
   dragBoxAnime:any = {open: false, close: false};
   selectedMenu:any;
   selectedMenuItem:any;

@@ -34,6 +34,7 @@
     a {
         text-decoration: none;
         display: block;
+        cursor: pointer;
     }
     body,.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab,.mat-card, .mat-checkbox, .mat-option{
         font-family: Poppins;   

@@ -613,8 +613,8 @@ div#page-container {
 }
 
 textarea {
-    height: 56px;
-    min-height: 20px;
+    min-height: 80px;
+    min-width: 100%;
 }
 
 .kb-block-disabled:before {

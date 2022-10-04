@@ -55,6 +55,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     // builder services end
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef) {
+      this._general.getAllFunnels();
       this._row.getDialogueEvent().subscribe(()=>{
         this.overlayRefDetach(false);
       })

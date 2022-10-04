@@ -53,6 +53,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       this.route.paramMap.subscribe((params: ParamMap) => {
         _general.layout = params.get('layout');
         if(_general.layout == 'website' || _general.layout == 'funnel') {
+            this._general.getAllProducts();
             _general.getPageDetails(params.get('id')).then(e=> {
               _general.loading.success = false;
               var header = _general.file.html.querySelector('HEADER');
@@ -60,6 +61,20 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               if(header && footer) {
                 if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
                 if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
+              }
+              if(_general.webpage.funneltype == 'order') {
+                var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
+                _element.elementList.splice(5, 0, checkout);
+              }
+              else if(_general.webpage.funneltype == 'upsell') {
+                _element.elementList[3].content.btntype = 'upsell';
+                _element.elementList[3].content.productid = '';
+                _element.elementList[3].content.text = 'Upsell';
+              }
+              else if(_general.webpage.funneltype == 'downsell') {
+                _element.elementList[3].content.btntype = 'downsell';
+                _element.elementList[3].content.productid = '';
+                _element.elementList[3].content.text = 'Downsell';
               }
               this.setBuilder(_general.file.html, _general.file.css);
               _general.file.load = false;
@@ -258,12 +273,24 @@ export class BuilderComponent implements OnInit, AfterViewInit {
               }
               else if(eleObj.content.name == 'button') {
                 var anchor = content.querySelector('A');
+                var dataObj = anchor.getAttribute('kb-btn-data');
+                if(anchor.getAttribute('kb-btn-data')) {
+                  console.log(dataObj);
+                  var data:any  = atob(dataObj);
+                  var obj:any = {
+                    product_id: data.productid,
+                    redirect: data.link,
+                    btntype: data.btntype
+                  }
+                  console.log(obj);
+                }
                 eleSel = 'a';
                 eleObj.content.text = anchor.querySelectorAll('DIV')[0].innerText;
                 eleObj.content.subtext = anchor.querySelectorAll('DIV')[1].innerText;
                 eleObj.content.subfont_size = anchor.querySelectorAll('DIV')[1].style['font-size'];
-                eleObj.content.link = anchor.href;
+                eleObj.content.link = anchor.href.split('#').length > 1 ? '#no-link' : anchor.href;
                 eleObj.content.target = anchor.target;
+                // eleObj.content.
               }
               else if(eleObj.content.name == 'menu') {
                 eleObj.itemstyle = true;

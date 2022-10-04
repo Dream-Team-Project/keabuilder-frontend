@@ -176,8 +176,9 @@ input:focus, textarea:focus, button:focus{
   outline: none!important;
 }
 a{
-  text-decoration: none!important;
+  text-decoration: none;
   display: block;
+  cursor: pointer;
 }
 .btn {
     margin-right: 5px;

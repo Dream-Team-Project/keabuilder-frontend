@@ -143,10 +143,18 @@
                                                             <div>{{_style.button_text}}</div>
                                                             <div class="subtext" [style.fontSize]="_style.button_subfont_size.value">{{_style.button_subtext}}</div>
                                                         </a>
-                                                        <ng-template #showBtn><a class="kb-default-btn" [href]="element.content.link" [target]="element.content.target" [ngStyle]="_style.getElementBlockStyle(element)">
-                                                            <div>{{element.content.text}}</div>
-                                                            <div class="subtext" [style.fontSize]="element.content.subfont_size">{{element.content.subtext}}</div>
-                                                        </a></ng-template>
+                                                        <ng-template #showBtn>
+                                                            <a *ngIf="element.content.btntype != 'regular' else regular" class="kb-default-btn kb-product-btn" [attr.kb-btn-data]="_general.btndata(element.content)" href="#no-link" [target]="element.content.target" [ngStyle]="_style.getElementBlockStyle(element)">
+                                                                <div>{{element.content.text}}</div>
+                                                                <div class="subtext" [style.fontSize]="element.content.subfont_size">{{element.content.subtext}}</div>
+                                                            </a>
+                                                            <ng-template #regular>
+                                                                <a class="kb-default-btn" [href]="element.content.link" [target]="element.content.target" [ngStyle]="_style.getElementBlockStyle(element)">
+                                                                    <div>{{element.content.text}}</div>
+                                                                    <div class="subtext" [style.fontSize]="element.content.subfont_size">{{element.content.subtext}}</div>
+                                                                </a>
+                                                            </ng-template>
+                                                        </ng-template>
                                                     </div>
                                                     <div *ngSwitchCase="'menu'" class="kb-element-content">
                                                         <ul class="kb-menu" [attr.kb-include-menu]="element.content.data_id"
@@ -156,6 +164,11 @@
                                                                 [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
                                                             </li>
                                                         </ul>
+                                                    </div>
+                                                    <div *ngSwitchCase="'code'" class="kb-element-content">
+                                                    <div class="kb-code-block" [innerHtml]="element.content.html">
+                                                        <!-- {{code}} -->
+                                                    </div>
                                                     </div>
                                                     <div *ngSwitchDefault class="kb-element-content">
                                                         <div *ngIf="!element.content.editor else editor">

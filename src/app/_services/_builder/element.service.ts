@@ -33,14 +33,20 @@ export class ElementService {
     { content: { name: 'image', src: '' }, iconCls: 'fas fa-image' },
     // image
     // button
-    { content: { name: 'button', text: 'Read More', subtext: 'Sub Text', subfont_size:'80%', link: '#', target: '_self' }, iconCls: 'fas fa-font' },
+    { content: { name: 'button', btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-font' },
     // button
     // menu
-    { content: { name: 'menu', items:[]}, iconCls: 'fas fa-font' }, // it should be on the first position
+    { content: { name: 'menu', items:[]}, iconCls: 'fas fa-external-link-alt' }, // it should be on the first position
     // menu
     // form
-    { content: { name: 'form', items:[]}, iconCls: 'fab fa-wpforms' },
+    // { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
     // form
+    // code block
+    { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
+    // code block
+    // checkout form
+    // append
+    // checkout form
   ];
   menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   preMenuItems:any = ['Home','About','Blog','Contact'];
