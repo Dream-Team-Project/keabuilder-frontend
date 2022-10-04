@@ -401,7 +401,7 @@
                                             Letter Spacing
                                             </mat-panel-title>
                                             <mat-panel-description>
-                                                <i class="fas fa-text-height"></i>
+                                                <i class="fas fa-text-width"></i>
                                             </mat-panel-description>
                                         </mat-expansion-panel-header>
                                         <div class="kb-tab-content">
@@ -466,6 +466,84 @@
                                 <mat-expansion-panel [expanded]="_general.expPanelStep === 0" (opened)="_general.setExpPanelStep(0)" hideToggle>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
+                                        Action
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            <i class="fas fa-link"></i>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div *ngIf="_general.layout == 'funnel' && _general.webpage.funneltype == 'upsell'" class="kb-tab-head kb-inner-tab-component">
+                                        <mat-button-toggle-group name="buttonaction" [(ngModel)]="_general.selectedBlock.content.btntype"
+                                        aria-label="Button Action">
+                                            <mat-button-toggle value="upsell"><i class="fa fa-arrow-up"></i>Upsell</mat-button-toggle>
+                                            <mat-button-toggle value="redirect"><i class="fas fa-link"></i>Redirect</mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                    <div [ngSwitch]="_general.selectedBlock.content.btntype">
+                                        <div *ngSwitchCase="'upsell'">
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-head">Products</div>
+                                                <div class="kb-tab-content kb-inp-left">
+                                                    <mat-select [(ngModel)]="_style.button_link">
+                                                        <mat-option *ngFor="let product of _general.step_products"
+                                                            [value]="product.id">
+                                                            {{product.productname | titlecase}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-head">Link</div>
+                                                <div class="kb-tab-content kb-inp-left">
+                                                    <input type="text" [(ngModel)]="_style.button_link" [style.textTransform]="'lowercase'">
+                                                </div>
+                                            </div>
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-head">Website Pages</div>
+                                                <div class="kb-tab-content kb-inp-left">
+                                                    <mat-select [(ngModel)]="_style.button_link">
+                                                        <mat-option>None</mat-option>
+                                                        <mat-option *ngFor="let page of _general.existwebpages"
+                                                            [value]="'https://'+_general.user.name+'.keabuilder.com/'+page.page_path" [disabled]="page.publish_status == 0">
+                                                            {{page.page_name | titlecase}}<small class="infoTxt" *ngIf="page.publish_status == 0">Drafted</small>
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-head">Funnels</div>
+                                                <div class="kb-tab-content kb-inp-left">
+                                                    <mat-select [(ngModel)]="_style.button_link">
+                                                        <mat-option>None</mat-option>
+                                                        <mat-optgroup *ngFor="let funnel of _general.funnels" [label]="funnel.name | titlecase">
+                                                                <mat-option *ngFor="let step of funnel.steps" [value]="'https://'+_general.user.name+'.keabuilder.com/'+step.page_path" [disabled]="step.archived == 1">
+                                                                    {{step.title | titlecase}}<small class="infoTxt">{{step.funneltype}}</small>
+                                                                </mat-option>
+                                                        </mat-optgroup>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-head">Target</div>
+                                                <div class="kb-tab-content">
+                                                    <mat-select [(ngModel)]="_style.button_target" [compareWith]="_style.compareOptValue">
+                                                        <mat-option *ngFor="let btt of _style.button_target_types" [value]="btt">{{btt.name |
+                                                            titlecase}}</mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <mat-action-row>
+                                        <button mat-button color="primary" (click)="_general.prevExpPanelStep()">Previous</button>
+                                        <button mat-button color="accent" (click)="_general.nextExpPanelStep()">Next</button>
+                                    </mat-action-row>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel [expanded]="_general.expPanelStep === 1" (opened)="_general.setExpPanelStep(1)" hideToggle>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
                                         Text
                                         </mat-panel-title>
                                         <mat-panel-description>
@@ -485,35 +563,6 @@
                                         </div>
                                     </div>
                                     <mat-action-row>
-                                        <button mat-button color="accent" (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 1" (opened)="_general.setExpPanelStep(1)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                        Redirection
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-link"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Link</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.button_link">
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Target</div>
-                                        <div class="kb-tab-content">
-                                            <mat-select [(ngModel)]="_style.button_target" [compareWith]="_style.compareOptValue">
-                                                <mat-option *ngFor="let btt of _style.button_target_types" [value]="btt">{{btt.name |
-                                                    titlecase}}</mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary" (click)="_general.prevExpPanelStep()">Previous</button>
                                         <button mat-button color="accent" (click)="_general.nextExpPanelStep()">Next</button>
                                     </mat-action-row>
                                 </mat-expansion-panel>
@@ -853,7 +902,7 @@
                                         Letter Spacing
                                         </mat-panel-title>
                                         <mat-panel-description>
-                                            <i class="fas fa-text-height"></i>
+                                            <i class="fas fa-text-width"></i>
                                         </mat-panel-description>
                                     </mat-expansion-panel-header>
                                     <div class="kb-tab-content">
@@ -1005,7 +1054,7 @@
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Description</div>
                             <div class="kb-tab-content kb-inp-left">
-                                <textarea type="text" placeholder="Page Description" [(ngModel)]="_general.description" name="meta-description"></textarea>
+                                <textarea placeholder="Page Description" [(ngModel)]="_general.description" name="meta-description"></textarea>
                             </div>
                         </div>
                         <div class="kb-inner-tab-component">
@@ -1356,8 +1405,7 @@
                                 <mat-button-toggle value="color"><i class="fa fa-paint-brush"></i>Colors
                                 </mat-button-toggle>
                                 <mat-button-toggle value="image"><i class="fa fa-image"></i>Image</mat-button-toggle>
-                                <mat-button-toggle value="gradient"><i class="fa fa-palette"></i>Gradient
-                                </mat-button-toggle>
+                                <mat-button-toggle value="gradient"><i class="fa fa-palette"></i>Gradient</mat-button-toggle>
                             </mat-button-toggle-group>
                         </div>
                         <div [ngSwitch]="_style.background_type">
@@ -1852,6 +1900,12 @@
                                         max="999" class="slider" aria-label="units">
                                     </mat-slider>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Code</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <textarea placeholder="<Code/>" [(ngModel)]="_general.page_code" name="page-code"></textarea>
                             </div>
                         </div>
                     </mat-tab>

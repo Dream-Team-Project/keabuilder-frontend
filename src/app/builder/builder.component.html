@@ -157,6 +157,11 @@
                                                             </li>
                                                         </ul>
                                                     </div>
+                                                    <div *ngSwitchCase="'code'" class="kb-element-content">
+                                                    <div class="kb-code-block" [innerHtml]="element.content.html">
+                                                        <!-- {{code}} -->
+                                                    </div>
+                                                    </div>
                                                     <div *ngSwitchDefault class="kb-element-content">
                                                         <div *ngIf="!element.content.editor else editor">
                                                             <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"

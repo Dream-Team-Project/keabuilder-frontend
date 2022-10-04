@@ -53,7 +53,7 @@ export class BuilderTopbarComponent implements OnInit {
   }
 
   redirectToLink(link:string) {
-    window.location.href = window.origin+link;
+    window.open(window.origin+link, '_blank');
   }
 
 }

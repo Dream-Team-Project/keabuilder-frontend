@@ -907,7 +907,7 @@ export class StyleService {
         this._general.selectedBlock.content.text = this.button_text;
         this._general.selectedBlock.content.subtext = this.button_subtext;
         this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
-        this._general.selectedBlock.content.link = this.button_link;
+        this._general.selectedBlock.content.link = this.button_link == '#' ? 'https://no-link/' : this.button_link;
         this._general.selectedBlock.content.target = this.button_target.value;
       }
       else if (this._general.selectedBlock.content.name == 'image') {
@@ -973,7 +973,7 @@ export class StyleService {
     this.margin.left = '0px';
     var ptb, plr, brw, br, bclr, bgclr;
     if (block.content?.name == 'button') {
-      ptb = '4px';
+      ptb = '8px';
       plr = '16px';
       brw = '2px';
       br = '5px';
@@ -1552,6 +1552,8 @@ export class StyleService {
       this.image_objectfit = obj['object-fit'];
     }
     else if (element.name == 'button') {
+      this._general.getAllWebPages();
+      this._general.getAllFunnels();
       this.button_text = element.text;
       this.button_subtext = element.subtext;
       this.button_subfont_size.value = element.subfont_size;

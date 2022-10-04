@@ -61,6 +61,14 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
                 if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
               }
+              if(_general.webpage.funneltype == 'order') {
+                var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
+                _element.elementList.splice(5, 0, checkout);
+              }
+              else if(_general.webpage.funneltype == 'upsell') {
+                _element.elementList[3].content.btntype = 'upsell';
+                _element.elementList[3].content.text = 'Upsell';
+              }
               this.setBuilder(_general.file.html, _general.file.css);
               _general.file.load = false;
             })

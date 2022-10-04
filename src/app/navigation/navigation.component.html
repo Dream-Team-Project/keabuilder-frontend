@@ -18,18 +18,25 @@
             </div>
             <div class="pt-4 pb-2 px-4 ">
                 <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Item Link</mat-label>
+                    <mat-label>Link</mat-label>
                     <input name="link" [(ngModel)]="selectedMenuItem.link" type="text" matInput
-                        placeholder="Paste Menu Link">
+                        placeholder="Paste Menu Link" [style.textTransform]="'lowercase'">
                 </mat-form-field>
                 <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Select A Page</mat-label>
+                    <mat-label>Pages</mat-label>
                     <mat-select [(ngModel)]="selectedMenuItem.link">
                         <mat-option>None</mat-option>
                         <mat-option *ngFor="let page of webpages"
-                            [value]="'https://'+_general.user.name+'.keabuilder.com/'+page.page_path">
-                            {{page.page_name}}<small class="infoTxt" *ngIf="page.publish_status == 0"> Drafted </small>
+                            [value]="'https://'+_general.user.name+'.keabuilder.com/'+page.page_path" [disabled]="page.publish_status == 0">
+                            {{page.page_name}}<small class="infoTxt" *ngIf="page.publish_status == 0">Drafted</small>
                         </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Target</mat-label>
+                    <mat-select [(ngModel)]="selectedMenuItem.target" [compareWith]="_style.compareOptValue">
+                        <mat-option *ngFor="let btt of _style.button_target_types" [value]="btt">{{btt.name |
+                            titlecase}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

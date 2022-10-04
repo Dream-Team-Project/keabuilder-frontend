@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
+import { DomPortal } from '@angular/cdk/portal';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +61,7 @@ export class GeneralService {
     plugins:
       'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars',
     toolbar:
-      'undo redo | bold italic underline strikethrough link blockquote image | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | formatselect fontselect fontsizeselect | code fullscreen',
+      'undo redo | bold italic underline strikethrough link blockquote | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | formatselect fontselect fontsizeselect | code fullscreen',
     content_css: [
       // '../builder/material.component.css',
       // '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
@@ -103,6 +104,10 @@ export class GeneralService {
   menus:any = [];
   deletedMenuIds:any = [];
   selectedMenu:any = {};
+  existwebpages:any = [];
+  funnels:any = [];
+  step_products:any = [];
+  page_code:any = '';
 
   constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService, private funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
@@ -308,12 +313,12 @@ export class GeneralService {
         }
         if(preview) {
           localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
-          window.open(window.location.protocol+'//'+window.location.host+'/preview/website/'+this.webpage.uniqueid, '_blank');
+          window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.layout+'/'+this.webpage.uniqueid, '_blank');
         }
         else {
           this.fileUploadService.createpage(page).subscribe(
             (event:any) => {
-              if(this.webpage.uniqueid ==  web.homepage) {
+              if(this.webpage.uniqueid ==  web.homepage && this.layout == 'website') {
                 var obj = {
                   path:event.data.folder
                 };
@@ -328,25 +333,46 @@ export class GeneralService {
                 page_title: this.main.title,
                 page_path: this.main.path,
                 page_description: this.main.description,
-                page_keywords: this.main.keywords.join(','),
+                page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
                 page_author: this.main.author,
                 publish_status: this.webpage.publish_status,
                 thumbnail: '',
                 tracking_code: '',
               }
-              this.webPageService.updateWebpage(pagedata).subscribe(
-                (e:any)=>{
-                  this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-                  this.getWebPageDetails(this.webpage.uniqueid);
-                  resolve(e);
-              });
+              this.updatePageDB(pagedata).then(e=>{
+                this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+                this.getPageDetails(this.webpage.uniqueid);
+                resolve(e);
+              })
             },
           error=>{
+            this.openSnackBar('Server Error', 'OK');
             resolve(error);
           })
         }
       })
     });
+  }
+
+  updatePageDB(pagedata:any) {
+    return new Promise<any>((resolve, reject) => {
+      if(this.layout == 'website'){
+        this.webPageService.updateWebpage(pagedata).subscribe(
+          (e:any)=>{
+            resolve(e);
+          })
+      }
+      else if(this.layout == 'funnel'){
+        this.webPageService.updateWebpage(pagedata).subscribe(
+          (e:any)=>{
+            resolve(e);
+          })
+      }
+      else{
+        this.openSnackBar('Server Error', 'OK');
+        resolve(false);
+      }
+    })
   }
 
   removeStyle(blockcls:string) {
@@ -432,6 +458,27 @@ export class GeneralService {
     if(ele.item_alignment.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + eleitma.join(ele.item_alignment.tablet_h);
     if(ele.item_alignment.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + eleitma.join(ele.item_alignment.tablet_v);
     if(ele.item_alignment.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + eleitma.join(ele.item_alignment.mobile);
+  }
+
+  getAllWebPages() {
+    this.webPageService.getWebpages().subscribe(pages=>{
+      this.existwebpages = pages.data;
+    });
+  }
+
+  getAllFunnels() {
+    this.funnelService.getallfunnelandstep().subscribe(data=>{
+      var steps = data.data;
+      this.funnels = data.data2;
+      this.funnels.forEach((fp:any)=>{
+        if(!fp.step_pages) fp.steps = [];
+        steps.forEach((s:any)=>{
+          if(fp.id == s.funnelid) {
+            fp.steps.push(s);
+          }
+        })
+      })
+    })
   }
 
   joinWthDash(item:string) {
