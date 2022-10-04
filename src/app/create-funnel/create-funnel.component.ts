@@ -370,7 +370,7 @@ export class CreateFunnelComponent implements OnInit {
     console.log(this.selectedstep);
     this.funnelService.setfunnelstep(this.selectedstep).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         // console.log(this.uniqueidstep);
 
         if(data.data[0].funnelselected==1){
@@ -932,7 +932,7 @@ export class CreateFunnelComponent implements OnInit {
     this.colortheme = false;
   }
   saveproduct(){
-    // console.log(this.uniqueidstep);
+    // console.log(this.productprice);
     if(this.productname!='' && this.productprice!=''){
         var dataobj = {stepid: this.uniqueidstep,name: this.productname, price: this.productprice, priceoverride: this.priceoverride,type:'insert'};
 
@@ -1008,7 +1008,7 @@ export class CreateFunnelComponent implements OnInit {
     if(type=='update'){
       id = this.editproid;
     }
-
+    console.log(this.productprice);
     if((this.productname!='' && this.productprice!='') || type=='delete'){
       var dataobj = {stepid: this.uniqueidstep, name: this.productname, price: this.productprice, priceoverride: this.priceoverride, type:type, id:id};
 
@@ -1031,6 +1031,7 @@ export class CreateFunnelComponent implements OnInit {
   }
 
   openDialog(id:any): void {
+    
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '255px',
       data: {name: 'Product'},

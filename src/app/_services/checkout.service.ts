@@ -25,8 +25,8 @@ export class CheckoutService {
     }, httpOptions);
   }
   
-  stripePaymentkey(): Observable<any>{
-    return this.http.post('/api/paymentkey', {}, httpOptions);
+  stripePaymentkey(data:any): Observable<any>{
+    return this.http.post('/api/paymentkey', {data}, httpOptions);
   }
 
   updatepayment(data:any): Observable<any>{
