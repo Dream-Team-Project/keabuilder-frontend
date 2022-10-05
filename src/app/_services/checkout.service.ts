@@ -39,4 +39,18 @@ export class CheckoutService {
     return this.http.post('/api/getpaymentinteg/'+this.uniqueuserid, {}, httpOptions);
   }
 
+  updatecheckoutstyle(data:any): Observable<any>{
+    return this.http.post('/api/updatecheckoutstyle/'+this.uniqueuserid, {
+      data,
+    }, httpOptions);
+  }
+
+  getallcheckoutdata(data:any): Observable<any>{
+    return this.http.post('/api/getallcheckoutdata', {
+      data,
+    }, httpOptions);
+  }
+
+  
+
 }

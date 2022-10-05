@@ -184,6 +184,62 @@
         <button mat-raised-button color="primary" (click)="updatestep()"><i class="fas fa-plus"></i> Create</button>
       </div>
 
+      <div *ngIf="editcheckoutdetails">
+        <h6><b>Checkout Options</b></h6>
+        <p>All Options are optional leave empty for default option.</p>
+        <hr>
+        <p>Step #1</p>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #1 Headline</mat-label>
+          <input type="text" matInput placeholder="Step #1 Headline" [(ngModel)]="checkoutstyle.step1headline" >
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #1 Sub Headline</mat-label>
+          <input type="text" matInput placeholder="Step #1 Sub Headline" [(ngModel)]="checkoutstyle.step1subheadline">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #1 Btn Text</mat-label>
+          <input type="text" matInput placeholder="Step #1 Btn Text" [(ngModel)]="checkoutstyle.step1btntext">
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #1 Sub Btn Text</mat-label>
+          <input type="text" matInput placeholder="Step #1 Sub Btn Text" [(ngModel)]="checkoutstyle.step1btnsubtext">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #1 Footer Text</mat-label>
+          <input type="text" matInput placeholder="Step #1 Footer Text" [(ngModel)]="checkoutstyle.step1footertext">
+        </mat-form-field>
+        <br>
+        <p>Step #2</p>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #2 Headline</mat-label>
+          <input type="text" matInput placeholder="Step #1 Headline" [(ngModel)]="checkoutstyle.step2headline">
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #2 Sub Headline</mat-label>
+          <input type="text" matInput placeholder="Step #1 Sub Headline" [(ngModel)]="checkoutstyle.step2subheadline">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #2 Btn Text</mat-label>
+          <input type="text" matInput placeholder="Step #2 Btn Text" [(ngModel)]="checkoutstyle.step2btntext">
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #2 Sub Btn Text</mat-label>
+          <input type="text" matInput placeholder="Step #2 Sub Btn Text" [(ngModel)]="checkoutstyle.step2btnsubtext">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step #2 Footer Text</mat-label>
+          <input type="text" matInput placeholder="Step #2 Footer Text" [(ngModel)]="checkoutstyle.step2footertext">
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" (click)="savemycheckout()" ><i class="fas fa-check"></i> Save Checkout</button>
+
+      </div>
+
     </div>
   </div>
   <div class="offcanvas-overlay" *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
@@ -644,7 +700,9 @@
                     </div>                  
                 </div>
                 <div class="col-md-12 mt-4">
-                  <button mat-raised-button color="accent" (click)="addproduct()"  ><i class="fas fa-plus"></i> Add product</button>
+                  <button mat-raised-button color="accent" (click)="addproduct()" class="mr-4" ><i class="fas fa-plus"></i> Add product</button>
+
+                  <button mat-raised-button color="accent" (click)="editcheckout()"  ><i class="fas fa-plus"></i> Edit Checkout</button>
 
                 </div>
               </div>

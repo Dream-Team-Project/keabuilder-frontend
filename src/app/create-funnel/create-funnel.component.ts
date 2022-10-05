@@ -9,6 +9,7 @@ import {MatAccordion} from '@angular/material/expansion';
 import { GeneralService } from '../_services/_builder/general.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FileUploadService } from '../_services/file-upload.service';
+import { CheckoutService } from '../_services/checkout.service';
 
 export interface DialogData {
   name: string;
@@ -33,7 +34,8 @@ export class CreateFunnelComponent implements OnInit {
               private _snackBar: MatSnackBar,
               public _general: GeneralService,
               public dialog: MatDialog, 
-              private fileuploadService: FileUploadService) {
+              private fileuploadService: FileUploadService,
+              private checkoutService: CheckoutService) {
                 this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
                   this.uniqueid = params.get('funnel_id');
                 })
@@ -102,6 +104,12 @@ export class CreateFunnelComponent implements OnInit {
   editproid = '';
   editmode = false;
   getthumbnail = '/assets/uploads/images/webpage_thumbnail.jpg';
+
+  editcheckoutdetails = false;
+  checkoutstyle:any = {step1headline:'',step1subheadline:'',step1btntext:'', step1btnsubtext:'', step1footertext:'',step2headline:'',step2subheadline:'',step2btntext:'', step2btnsubtext:'', step2footertext:''};
+
+
+
   ngOnInit(): void {
 
     this.showfunnelsteps();
@@ -229,6 +237,7 @@ export class CreateFunnelComponent implements OnInit {
     this.copylink = false;
     this.colortheme = false;
     this.addproductpopup = false;
+    this.editcheckoutdetails = false;
 
   }
   kb_substeps(value: string) {
@@ -985,6 +994,33 @@ export class CreateFunnelComponent implements OnInit {
 
   }
 
+  editcheckout(){
+    this.popupsidebar = true;
+   this.editcheckoutdetails = true;
+
+   this.addproductpopup = false;
+   this.automationaddnewaction = false;
+   this.automationaddnewemail = false;
+   this.automationaddnewtext = false;
+   this.copylink = false;
+   this.colortheme = false;
+
+  }
+  
+  savemycheckout(){
+
+    this.checkoutstyle.id = this.uniqueidstep;
+    console.log(this.checkoutstyle);
+
+    this.checkoutService.updatecheckoutstyle(this.checkoutstyle).subscribe({
+      next: data => {
+        console.log(data);
+
+      }
+    });
+
+  }
+
   showproductset(){
     var dataobj = {stepid: this.uniqueidstep,name: '', price: '', priceoverride: '',type:'get'};
 
@@ -1000,6 +1036,22 @@ export class CreateFunnelComponent implements OnInit {
 
       }
     });
+
+    var dataobj2 = {id: this.uniqueidstep};
+    this.checkoutService.getallcheckoutdata(dataobj2).subscribe({
+      next: data => {
+        // console.log(data);
+
+        if(data.data.length!=0){
+          this.checkoutstyle = {step1headline:data.data[0].step1headline,step1subheadline:data.data[0].step1subheadline,step1btntext:data.data[0].step1btntext, step1btnsubtext:data.data[0].step1btnsubtext, step1footertext:data.data[0].step1footertext,step2headline:data.data[0].step2headline,step2subheadline:data.data[0].step2subheadline,step2btntext:data.data[0].step2btntext, step2btnsubtext:data.data[0].step2btnsubtext, step2footertext:data.data[0].step2footertext};
+        }else{
+          this.checkoutstyle = {step1headline:'',step1subheadline:'',step1btntext:'', step1btnsubtext:'', step1footertext:'',step2headline:'',step2subheadline:'',step2btntext:'', step2btnsubtext:'', step2footertext:''};
+        }
+
+      }
+    });
+
+
 
   }
 
