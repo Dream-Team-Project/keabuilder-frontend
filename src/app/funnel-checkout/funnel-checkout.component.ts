@@ -88,6 +88,16 @@ export class FunnelCheckoutComponent implements OnInit {
       }
     });
 
+    var dataobj3 = {id: this.uniqueidstep};
+    this.checkoutService.getnextstepurl(dataobj3).subscribe({
+      next: data => { 
+        // console.log(data);
+        if(data.data.length!=0){
+          this.redirecturi = data.data;
+        }
+      }
+    });
+
 
   }
 
@@ -253,7 +263,7 @@ export class FunnelCheckoutComponent implements OnInit {
                 if(window.top!=null){
                   // window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
                   if(this.redirecturi!=''){
-                     window.top.location.href = this.redirecturi+"/#customerid="+data.customer.id; 
+                     window.top.location.href = '/'+this.redirecturi+"/#customerid="+data.customer.id; 
                   }
                 }
 

@@ -51,6 +51,14 @@ export class CheckoutService {
     }, httpOptions);
   }
 
+  getnextstepurl(data:any): Observable<any>{
+    return this.http.post('/api/getnextstepurl', {
+      data,
+    }, httpOptions);
+  }
+
+
+  
   
 
 }
