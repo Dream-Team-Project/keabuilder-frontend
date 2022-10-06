@@ -10,15 +10,19 @@ main {
     position: relative;
 }
 
-::ng-deep .mat-option-text small.infoTxt {
+::ng-deep .mat-option-text small.infoTxt, ::ng-deep small.infoTxt {
     background-color: rgb(24 103 192 / 20%);
     margin-left: 10px;
     padding: 6px 10px;
     border-radius: 10px;
     color: var(--section-color);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
+}
+
+::ng-deep .mat-option-text small.infoTxt:after {
+    content: attr(data);
 }
 
 ::ng-deep div#ngx-colors-overlay.ngx-colors-overlay, .ngx-colors-overlay {

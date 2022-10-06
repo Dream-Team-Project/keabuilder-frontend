@@ -65,9 +65,9 @@
                                 class="fa fa-arrow-left"></i></button>
                     </div>
                     {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-                    _general.selectedBlock.type)+' Setting' : _general.selectedBlock.content.name+' Styling'}}
+                    _general.selectedBlock.type) : _general.selectedBlock.content.name}}
                 </div>
-                <mat-tab-group (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component"
+                <mat-tab-group *ngIf="_general.selectedBlock?.content?.name != 'code' else code" (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component"
                     (animationDone)="_general.detectTabChange()" (selectedTabChange)="_general.selectTabChange($event)">
                     <mat-tab label="Content" *ngIf="_general.selectedBlock.type == 'element' && !_style.setItemStyle">
                         <!-- text -->
@@ -552,7 +552,7 @@
                                     (opened)="_general.setExpPanelStep(0)" hideToggle>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Action
+                                            Action<small *ngIf="_general.layout == 'funnel'" class="infoTxt">{{_general.selectedBlock.content.btntype}}</small>
                                         </mat-panel-title>
                                         <mat-panel-description>
                                             <i class="fas fa-link"></i>
@@ -569,7 +569,7 @@
                                                 value="downsell"><i class="fa fa-arrow-down"></i>Downsell
                                             </mat-button-toggle>
                                             <mat-button-toggle value="regular"><i
-                                                    class="fas fa-external-link-alt"></i>Redirect</mat-button-toggle>
+                                                    class="fas fa-external-link-alt"></i>Regular</mat-button-toggle>
                                         </mat-button-toggle-group>
                                     </div>
                                     <div *ngIf="_general.layout == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
@@ -578,8 +578,8 @@
                                         <div class="kb-tab-content kb-inp-left">
                                             <mat-select [(ngModel)]="_style.button_product">
                                                 <mat-option *ngFor="let product of _general.step_products"
-                                                    [value]="product.id">
-                                                    {{product | json}}
+                                                    [value]="product.uniqueid">
+                                                    {{product.productname | titlecase}}
                                                 </mat-option>
                                             </mat-select>
                                         </div>
@@ -597,10 +597,10 @@
                                             <mat-select [(ngModel)]="_style.button_link">
                                                 <mat-option>None</mat-option>
                                                 <mat-option *ngFor="let page of _general.existwebpages"
-                                                    [value]="'https://'+_general.user.name+'.keabuilder.com/'+page.page_path"
+                                                    [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+page.page_path"
                                                     [disabled]="page.publish_status == 0">
-                                                    {{page.page_name | titlecase}}<small class="infoTxt"
-                                                        *ngIf="page.publish_status == 0">Drafted</small>
+                                                    {{page.page_name | titlecase}}<small [attr.data]="'Drafted'" class="infoTxt"
+                                                        *ngIf="page.publish_status == 0"></small>
                                                 </mat-option>
                                             </mat-select>
                                         </div>
@@ -613,10 +613,10 @@
                                                 <mat-optgroup *ngFor="let funnel of _general.funnels"
                                                     [label]="funnel.name | titlecase">
                                                     <mat-option *ngFor="let step of funnel.steps"
-                                                        [value]="'https://'+_general.user.name+'.keabuilder.com/'+step.page_path"
+                                                        [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+step.page_path"
                                                         [disabled]="step.archived == 1">
-                                                        {{step.title | titlecase}}<small
-                                                            class="infoTxt">{{step.funneltype}}</small>
+                                                        {{step.title | titlecase}}<small [attr.data]="step.funneltype"
+                                                            class="infoTxt"></small>
                                                     </mat-option>
                                                 </mat-optgroup>
                                             </mat-select>
@@ -1619,7 +1619,7 @@
                     </mat-tab>
                     <mat-tab label="Background">
                         <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Background Type</div>
+                            <div class="kb-tab-head">Background Type<small class="infoTxt">{{_style.background_type}}</small></div>
                             <mat-button-toggle-group name="backgroundType" [(ngModel)]="_style.background_type"
                                 aria-label="Select Background Type">
                                 <mat-button-toggle value="color"><i class="fa fa-paint-brush"></i>Colors
@@ -2100,54 +2100,71 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Advanced" *ngIf="!_style.setItemStyle">
-                        <div *ngIf="_general.selectedBlock.type != 'main'" class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Visibility Off</div>
-                            <div class="kb-tab-content kb-resp-ask">
-                                <div class="kb-resp-ask-inner">
-                                    <mat-slide-toggle [matTooltip]="_style.hide.desktop ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="above" [(ngModel)]="_style.hide.desktop">Desktop
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle [matTooltip]="_style.hide.tablet_h ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_h">Tablet Horizontal
-                                    </mat-slide-toggle>
+                        <div *ngIf="_general.selectedBlock.type != 'main' else mainset" >
+                            <div class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Visibility Off</div>
+                                <div class="kb-tab-content kb-resp-ask">
+                                    <div class="kb-resp-ask-inner">
+                                        <mat-slide-toggle [matTooltip]="_style.hide.desktop ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="above" [(ngModel)]="_style.hide.desktop">Desktop
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle [matTooltip]="_style.hide.tablet_h ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_h">Tablet Horizontal
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="kb-resp-ask-inner">
+                                        <mat-slide-toggle [matTooltip]="_style.hide.mobile ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="above" [(ngModel)]="_style.hide.mobile">Mobile
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle [matTooltip]="_style.hide.tablet_v ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_v">Tablet Vertical
+                                        </mat-slide-toggle>
+                                    </div>
                                 </div>
-                                <div class="kb-resp-ask-inner">
-                                    <mat-slide-toggle [matTooltip]="_style.hide.mobile ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="above" [(ngModel)]="_style.hide.mobile">Mobile
-                                    </mat-slide-toggle>
-                                    <mat-slide-toggle [matTooltip]="_style.hide.tablet_v ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_v">Tablet Vertical
-                                    </mat-slide-toggle>
+                            </div>
+                            <div class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Z Index
+                                    <span matTooltip="Reverse" matTooltipPosition="above"
+                                        (click)="_style.zindex = _style.reverseValue(_style.zindex, $event)"
+                                        [class]="_style.zindex < 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                            class="fa fa-sync"></i></span>
+                                    <strong style="margin-left: auto;">{{_style.zindex == 0 ? 'Auto' :
+                                        _style.zindex}}</strong>
+                                </div>
+                                <div class="kb-tab-content">
+                                    <div class="kb-rangeInp">
+                                        <mat-slider thumbLabel [(ngModel)]="_style.zindex"
+                                            [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="-999"
+                                            max="999" class="slider" aria-label="units">
+                                        </mat-slider>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Z Index
-                                <span matTooltip="Reverse" matTooltipPosition="above"
-                                    (click)="_style.zindex = _style.reverseValue(_style.zindex, $event)"
-                                    [class]="_style.zindex < 0 ? 'active' : ''" class="kb-reverse-icon"><i
-                                        class="fa fa-sync"></i></span>
-                                <strong style="margin-left: auto;">{{_style.zindex == 0 ? 'Auto' :
-                                    _style.zindex}}</strong>
-                            </div>
-                            <div class="kb-tab-content">
-                                <div class="kb-rangeInp">
-                                    <mat-slider thumbLabel [(ngModel)]="_style.zindex"
-                                        [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="-999"
-                                        max="999" class="slider" aria-label="units">
-                                    </mat-slider>
+                        <ng-template #mainset>
+                            <div class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Code</div>
+                                <div class="kb-tab-content kb-inp-left">
+                                    <textarea placeholder="<code/>" [(ngModel)]="_general.page_code"
+                                        name="page-code"></textarea>
                                 </div>
                             </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Code</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <textarea placeholder="<Code/>" [(ngModel)]="_general.page_code"
-                                    name="page-code"></textarea>
-                            </div>
-                        </div>
+                        </ng-template>
                     </mat-tab>
                 </mat-tab-group>
+                <!-- code -->
+                <ng-template #code>
+                    <div class="kb-tabs-component kb-tab-comp-pad" *ngIf="_general.selectedBlock.content.name == 'code'">
+                        <div class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Paste your code here</div>
+                            <div class="kb-tab-content">
+                                <textarea placeholder="<code/>" [(ngModel)]="_general.selectedBlock.content.html"
+                                name="element-code" [style.height]="'200px'"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <!-- code -->
                 <div class="kb-selection-btn-group">
                     <button type="button" mat-stroked-button (click)="overlayRefDetach(false)"
                         class="kb-btn kb-btn-secondry kb-selection-btn"><span><i

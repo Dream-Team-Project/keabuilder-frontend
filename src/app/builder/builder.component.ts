@@ -52,53 +52,61 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     _general.loading.error = false;
       this.route.paramMap.subscribe((params: ParamMap) => {
         _general.layout = params.get('layout');
-        if(_general.layout == 'website' || _general.layout == 'funnel') {
-            this._general.getAllProducts();
-            _general.getPageDetails(params.get('id')).then(e=> {
-              _general.loading.success = false;
-              var header = _general.file.html.querySelector('HEADER');
-              var footer = _general.file.html.querySelector('FOOTER');
-              if(header && footer) {
-                if(header.getAttribute('kb-include-html') == 'true') _general.includeHeader = true;
-                if(footer.getAttribute('kb-include-html') == 'true') _general.includeFooter = true;
-              }
-              if(_general.webpage.funneltype == 'order') {
-                var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
-                _element.elementList.splice(5, 0, checkout);
-              }
-              else if(_general.webpage.funneltype == 'upsell') {
-                _element.elementList[3].content.btntype = 'upsell';
-                _element.elementList[3].content.productid = '';
-                _element.elementList[3].content.text = 'Upsell';
-              }
-              else if(_general.webpage.funneltype == 'downsell') {
-                _element.elementList[3].content.btntype = 'downsell';
-                _element.elementList[3].content.productid = '';
-                _element.elementList[3].content.text = 'Downsell';
-              }
-              this.setBuilder(_general.file.html, _general.file.css);
-              _general.file.load = false;
-            })
-        }
-        else {
-          if(params.get('id') == _general.user.uniqueid) {
-            this._general.fileUploadService.gettrackingHTML('path').subscribe(data=>{
-              var parser = new DOMParser();
-              var doc = parser.parseFromString(data.html, 'text/html');
-              var obj:any = {};
-              if(_general.layout == 'header') {
-                obj.html = doc.querySelector('#kb-header');
-                obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
-              }
-              else if(_general.layout == 'footer') {
-                obj.html = doc.querySelector('#kb-footer');
-                obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
-              }
-              this.setBuilder(obj.html, obj.css);
-            })
+        this._general.fileUploadService.gettrackingHTML('path').subscribe(trackingdata=>{
+          var parser = new DOMParser();
+          const doc = parser.parseFromString(trackingdata.html, 'text/html');
+          if(_general.layout == 'website' || _general.layout == 'funnel') {
+              this._general.getAllProducts();
+              _general.getPageDetails(params.get('id')).then(e=> {
+                _general.loading.success = false;
+                var header = _general.file.html.querySelector('HEADER');
+                var footer = _general.file.html.querySelector('FOOTER');
+                if(header && footer) {
+                  if(header.getAttribute('kb-include-html') == 'true') {
+                    _general.includeHeader = true;
+                    // var ah:any = document.getElementById('kb-append-header');
+                    // ah.innerHTML = doc.querySelector('#kb-header-html')?.innerHTML;
+                  }
+                  if(footer.getAttribute('kb-include-html') == 'true') {
+                    _general.includeFooter = true;
+                    // var af:any = document.getElementById('kb-append-footer');
+                    // af.innerHTML = doc.querySelector('#kb-footer-html')?.innerHTML;
+                  }
+                }
+                if(_general.webpage.funneltype == 'order') {
+                  var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
+                  _element.elementList.splice(5, 0, checkout);
+                }
+                else if(_general.webpage.funneltype == 'upsell') {
+                  _element.elementList[3].content.btntype = 'upsell';
+                  _element.elementList[3].content.productid = '';
+                  _element.elementList[3].content.text = 'Upsell';
+                }
+                else if(_general.webpage.funneltype == 'downsell') {
+                  _element.elementList[3].content.btntype = 'downsell';
+                  _element.elementList[3].content.productid = '';
+                  _element.elementList[3].content.text = 'Downsell';
+                }
+                this.setBuilder(_general.file.html, _general.file.css);
+                _general.file.load = false;
+              })
           }
-          else window.location.replace(window.location.origin);
-        }
+          else {
+            if(params.get('id') == _general.user.uniqueid) {
+                var obj:any = {};
+                if(_general.layout == 'header') {
+                  obj.html = doc.querySelector('#kb-header');
+                  obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
+                }
+                else if(_general.layout == 'footer') {
+                  obj.html = doc.querySelector('#kb-footer');
+                  obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
+                }
+                this.setBuilder(obj.html, obj.css);
+            }
+            else window.location.replace(window.location.origin);
+          }
+        })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
@@ -272,23 +280,18 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 eleObj.content.src = content.querySelector('IMG').src;
               }
               else if(eleObj.content.name == 'button') {
-                var anchor = content.querySelector('A');
-                var dataObj = anchor.getAttribute('kb-btn-data');
-                if(anchor.getAttribute('kb-btn-data')) {
-                  console.log(dataObj);
-                  var data:any  = atob(dataObj);
-                  var obj:any = {
-                    product_id: data.productid,
-                    redirect: data.link,
-                    btntype: data.btntype
-                  }
-                  console.log(obj);
-                }
                 eleSel = 'a';
+                var anchor = content.querySelector('A');
+                var bt = anchor.getAttribute('kb-btn-type');
+                eleObj.content.btntype = bt ? bt : 'regular';
+                if(eleObj.content.btntype != 'regular') {
+                  eleObj.content.link = anchor.getAttribute('kb-redirect-link');
+                  eleObj.content.productid = anchor.getAttribute('kb-product-id');
+                }
+                else eleObj.content.link = anchor.href.split('#').length > 1 ? '#no-link' : anchor.href;
                 eleObj.content.text = anchor.querySelectorAll('DIV')[0].innerText;
                 eleObj.content.subtext = anchor.querySelectorAll('DIV')[1].innerText;
                 eleObj.content.subfont_size = anchor.querySelectorAll('DIV')[1].style['font-size'];
-                eleObj.content.link = anchor.href.split('#').length > 1 ? '#no-link' : anchor.href;
                 eleObj.content.target = anchor.target;
                 // eleObj.content.
               }
@@ -303,6 +306,9 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                     eleObj.content = this._element.setDataId_items(eleObj.content, menuObj);
                   }
                 })
+              }
+              else if(eleObj.content.name == 'code') {
+                eleObj.content.html = content.querySelector('.kb-code-block').innerHTML;
               }
               eleObj.id = ele.id;
               eleObj.style = {

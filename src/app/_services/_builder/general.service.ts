@@ -9,6 +9,7 @@ import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
 import { DomPortal } from '@angular/cdk/portal';
+import { CdkAccordion } from '@angular/cdk/accordion';
 
 @Injectable({
   providedIn: 'root'
@@ -127,8 +128,7 @@ export class GeneralService {
   getMenus() {
     this.fileUploadService.getMenus(this.user.uniqueid).subscribe((data:any)=>{
       data.data.forEach((html:any)=>{
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
+        var doc = this.parser.parseFromString(html, 'text/html');
         var ul = doc.querySelector('ul');
         var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
         ul?.querySelectorAll('li').forEach(li => {
@@ -290,7 +290,6 @@ export class GeneralService {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-
         this.removeStyle('#kb-main');
         this.removeStyle('.kb-section');
         this.removeStyle('.kb-row');
@@ -333,20 +332,7 @@ export class GeneralService {
                   next: data => {}
                 });
               }
-              var pagedata = {
-                id: this.webpage.id,
-                uniqueid: Math.random().toString(20).slice(2),
-                page_name: this.main.name,
-                page_title: this.main.title,
-                page_path: this.main.path,
-                page_description: this.main.description,
-                page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
-                page_author: this.main.author,
-                publish_status: this.webpage.publish_status,
-                thumbnail: '',
-                tracking_code: '',
-              }
-              this.updatePageDB(pagedata).then(e=>{
+              this.updatePageDB().then(e=>{
                 this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
                 this.getPageDetails(this.webpage.uniqueid);
                 resolve(e);
@@ -361,16 +347,44 @@ export class GeneralService {
     });
   }
 
-  updatePageDB(pagedata:any) {
+  updatePageDB() {
     return new Promise<any>((resolve, reject) => {
       if(this.layout == 'website'){
+        var pagedata = {
+          id: this.webpage.id,
+          uniqueid: Math.random().toString(20).slice(2),
+          page_name: this.main.name,
+          page_title: this.main.title,
+          page_path: this.main.path,
+          page_description: this.main.description,
+          page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
+          page_author: this.main.author,
+          publish_status: this.webpage.publish_status,
+          thumbnail: '',
+          tracking_code: '',
+        }
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
             resolve(e);
           })
       }
       else if(this.layout == 'funnel'){
-        this.webPageService.updateWebpage(pagedata).subscribe(
+        var funnelstepdata = {
+          id: this.webpage.id,
+          uniqueid: Math.random().toString(20).slice(2),
+          funnelid: this.webpage.funnelid,
+          funneltype: this.webpage.funneltype,
+          page_name: this.main.name,
+          page_title: this.main.title,
+          page_path: this.main.path,
+          page_description: this.main.description,
+          page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
+          page_author: this.main.author,
+          publish_status: this.webpage.publish_status,
+          thumbnail: '',
+          tracking_code: '',
+        }
+        this.webPageService.updateWebpage(funnelstepdata).subscribe(
           (e:any)=>{
             resolve(e);
           })
@@ -390,6 +404,13 @@ export class GeneralService {
           ele.removeAttribute('style');
         });
         if(item.querySelector('.kb-menu')) item.querySelector('.kb-menu').innerHTML = '';
+        if(item.querySelector('.kb-code-block')) {
+          var cb = item.querySelector('.kb-code-block');
+          var hd = this.decodeData(cb.getAttribute('html-data'));
+          cb.removeAttribute('html-data');
+          var doc = this.parser.parseFromString(hd, 'text/html');
+          cb.innerHTML = doc.body.innerHTML;
+        }
       }
     })
   }
@@ -493,15 +514,6 @@ export class GeneralService {
     this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
       this.step_products = data.data;
     })
-  }
-
-  btndata(data:any) {
-    var obj:any = {
-      product_id: data.productid,
-      redirect: data.link,
-      btntype: data.btntype
-    }
-    return btoa(obj);
   }
 
   joinWthDash(item:string) {
@@ -719,6 +731,14 @@ export class GeneralService {
     if(this.selectedBlock.type == 'element') {
         this.showEditor = false;
     }
+  }
+
+  encodeData(data:any) {
+    return btoa(data);
+  }
+
+  decodeData(data:any) {
+    return atob(data);
   }
   
   createBlockId(temp: any):any {

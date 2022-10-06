@@ -6,6 +6,7 @@
         <div class="kb-layout-title">Global {{_general.layout | titlecase}}</div>
         <div><button mat-raised-button (click)="_general.saveLayout(main, _section.sections)" class="kb-btn-primary">Save <i class="fas fa-save"></i></button></div>
     </div>
+    <!-- <div id="kb-append-header"></div> -->
     <div id="kb-block-container" [class.loading]="!_general.loading.success" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
         <div #main id="kb-main-conteiner" [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'" [class.kb-border]="_general.showResp.toggle" [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
             <header *ngIf="_general.layout == 'website' || _general.layout == 'funnel'" [attr.kb-include-html]="_general.includeHeader"></header>
@@ -126,7 +127,7 @@
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>
-                                                <div [style.width]="element.content.name == 'heading' || element.content.name == 'text' ? '100%' : ''" [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
+                                                <div [style.width]="element.content.name == 'heading' || element.content.name == 'text' || element.content.name == 'code' ? '100%' : ''" [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
                                                     <div *ngSwitchCase="'image'" class="kb-element-content">
                                                         <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
                                                             [ngStyle]="_style.imageStyling()"
@@ -139,12 +140,12 @@
                                                         </ng-template>
                                                     </div>
                                                     <div *ngSwitchCase="'button'" class="kb-element-content">
-                                                        <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn" class="kb-default-btn" [href]="_style.button_link" [target]="_style.button_target" [ngStyle]="_style.buttonStyling()">
+                                                        <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn" class="kb-default-btn" [attr.kb-btn-type]="element.content.btntype" [href]="_style.button_link" [target]="_style.button_target" [ngStyle]="_style.buttonStyling()">
                                                             <div>{{_style.button_text}}</div>
                                                             <div class="subtext" [style.fontSize]="_style.button_subfont_size.value">{{_style.button_subtext}}</div>
                                                         </a>
                                                         <ng-template #showBtn>
-                                                            <a *ngIf="element.content.btntype != 'regular' else regular" class="kb-default-btn kb-product-btn" [attr.kb-btn-data]="_general.btndata(element.content)" href="#no-link" [target]="element.content.target" [ngStyle]="_style.getElementBlockStyle(element)">
+                                                            <a *ngIf="element.content.btntype != 'regular' else regular" class="kb-default-btn kb-product-btn" [attr.kb-btn-type]="element.content.btntype" [attr.kb-redirect-link]="element.content.link" [attr.kb-product-id]="element.content.productid" href="#no-link" [target]="element.content.target" [ngStyle]="_style.getElementBlockStyle(element)">
                                                                 <div>{{element.content.text}}</div>
                                                                 <div class="subtext" [style.fontSize]="element.content.subfont_size">{{element.content.subtext}}</div>
                                                             </a>
@@ -165,10 +166,13 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div *ngSwitchCase="'code'" class="kb-element-content">
-                                                    <div class="kb-code-block" [innerHtml]="element.content.html">
-                                                        <!-- {{code}} -->
+                                                    <div *ngSwitchCase="'code'" class="kb-element-content" [style.justifyContent]="'center'">
+                                                        <div class="kb-code-block" [attr.html-data]="_general.encodeData(element.content.html)">
+                                                            {{'<'+'custom code/>'}}
+                                                        </div>
                                                     </div>
+                                                    <div *ngSwitchCase="'checkout'" class="kb-element-content">
+                                                        <iframe src="http://localhost:4200/checkout/h61jg0jb0971c" style="width:100%;height:140vh; border:0;"></iframe>
                                                     </div>
                                                     <div *ngSwitchDefault class="kb-element-content">
                                                         <div *ngIf="!element.content.editor else editor">
@@ -226,6 +230,7 @@
         </div>
         <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
     </div>
+    <!-- <div id="kb-append-footer"></div> -->
     <div id="kb-responsive-option" *ngIf="_general.showResp.toggle" [class.show-btn]="_general.showResp.open" [class.hide-btn]="_general.showResp.close">
         <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'tablet-h'" (click)="_general.selRespDevice(0)" matTooltip="Tablet Horizontal" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-tablet-alt rotate-90"></i></button>
         <button mat-button [class.resp-active]="_general.respToggleDevice.name == 'tablet-v'" (click)="_general.selRespDevice(1)" matTooltip="Tablet Vertical" matTooltipPosition="right" class="nav-floating-btn"><i class="fas fa-tablet-alt"></i></button>

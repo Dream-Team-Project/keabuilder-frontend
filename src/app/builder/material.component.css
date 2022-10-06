@@ -76,7 +76,7 @@ image-cropper {
 
 ::ng-deep .mat-snack-bar-container {
     color: #ffffff;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color)!important;
     margin-top: 30px!important;
     font-weight: 500;
     font-size: 16px;

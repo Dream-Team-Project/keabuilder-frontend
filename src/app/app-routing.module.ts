@@ -172,7 +172,7 @@ const routes: Routes = [
   
   { path: 'dashboard-new', component: DashboardNewComponent},
   
-  { path: 'checkout', component: FunnelCheckoutComponent},
+  { path: 'checkout/:id', component: FunnelCheckoutComponent},
   
 
 

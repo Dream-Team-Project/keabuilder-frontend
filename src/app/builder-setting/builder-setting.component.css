@@ -195,3 +195,7 @@ span.kb-trans:after {
     transform: rotate(-45deg);
     top: 10px;
 }
+
+.kb-tab-comp-pad {
+    padding: 6px 12px;
+}
