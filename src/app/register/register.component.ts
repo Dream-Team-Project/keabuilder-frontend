@@ -15,12 +15,21 @@ export class RegisterComponent implements OnInit {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
+  fistnameFormControl = new FormControl('',[Validators.required]);
+  lastnameFormControl = new FormControl('');
+  companynameFormControl = new FormControl('',[Validators.required]);
+  phoneFormControl = new FormControl('');
+  
 
   hide = true;
 
   form: any = {
     username: null,
+    firstname:null,
+    lastname:'',
+    company:null,
     email: null,
+    phone:'',
     password: null
   };
   isSuccessful = false;
@@ -42,9 +51,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username, email, password } = this.form;
+    const { username,firstname,lastname,company, email,phone, password } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
-        this.authService.register(username, email, password).subscribe({
+        this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
             console.log(data);
             this._file.createdefaulthome(data.uniqueid).subscribe(e=>{

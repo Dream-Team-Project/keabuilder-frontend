@@ -10,18 +10,6 @@
           <form  name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
               <div class="bu-forregister">
 
-                <!-- <input type="text" class="form-control mb-3" placeholder="Username..." name="username" [(ngModel)]="form.username" required minlength="3"
-                maxlength="20" #username="ngModel" />
-                <div class="alert alert-danger" *ngIf="username.errors && f.submitted">
-                  <div *ngIf="username.errors['required']"><i class="fas fa-exclamation-triangle"></i> Username is required</div>
-                  <div *ngIf="username.errors['minlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Username must be at least 3 characters
-                  </div>
-                  <div *ngIf="username.errors['maxlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Username must be at most 20 characters
-                  </div>
-                </div> -->
-
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Username</mat-label>
                   <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" >
@@ -36,6 +24,32 @@
                   </mat-error>
                 </mat-form-field>
 
+                <div class="row">
+                  <div class="col-sm-6">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label> First Name</mat-label>
+                      <input type="text" matInput [formControl]="fistnameFormControl" placeholder="Ex. Rock" required [(ngModel)]="form.firstname">
+                      <mat-error *ngIf="fistnameFormControl.hasError('required')">
+                        First Name is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-6">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label> Last Name</mat-label>
+                      <input type="text" matInput [formControl]="lastnameFormControl" placeholder="Ex. Rock" [(ngModel)]="form.lastname">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label> Company Name</mat-label>
+                  <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" required [(ngModel)]="form.company">
+                  <mat-error *ngIf="companynameFormControl.hasError('required')">
+                    Company Name is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Email</mat-label>
                   <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" required [(ngModel)]="form.email">
@@ -47,20 +61,16 @@
                   </mat-error>
                 </mat-form-field>
 
-                <!-- <input type="email" class="form-control mb-3" placeholder="Email..." name="email" [(ngModel)]="form.email" required #email="ngModel" />
-                <div class="alert alert-danger" *ngIf="email.errors && f.submitted">
-                  <div *ngIf="email.errors['required']"><i class="fas fa-exclamation-triangle"></i> Email is required</div>
-                  <div *ngIf="email.errors['email']">
-                    <i class="fas fa-exclamation-triangle"></i> Email must be a valid email address
-                  </div>
-                </div> -->
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label> Phone Number</mat-label>
+                  <input type="text" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
+                </mat-form-field>
 
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Password</mat-label>
                   <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
                   <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
                     <i class="far fa-eye" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
-                    <!-- <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon> -->
                   </button>
                   <mat-error *ngIf="passwordFormControl.hasError('required')">
                     Password is <strong>required</strong>
@@ -69,15 +79,6 @@
                     Password must be at least <strong>6</strong> characters
                   </mat-error>
                 </mat-form-field>
-
-                <!-- <input type="password" class="form-control mb-3" placeholder="Password..." name="password" [(ngModel)]="form.password" required minlength="6"
-                  #password="ngModel" />
-                <div class="alert alert-danger" *ngIf="password.errors && f.submitted">
-                  <div *ngIf="password.errors['required']"><i class="fas fa-exclamation-triangle"></i> Password is required</div>
-                  <div *ngIf="password.errors['minlength']">
-                    <i class="fas fa-exclamation-triangle"></i> Password must be at least 6 characters
-                  </div>
-                </div> -->
 
                   <button mat-raised-button type="submit" class="mt-3 registerbtn">Register</button>
 

@@ -205,8 +205,8 @@
 .bw-colside {
   flex: 1;
   -ms-flex: 1 0 0px;
-  height: 99.9vh;
-  overflow: hidden;
+  /* height: 99.9vh;
+  overflow: hidden; */
 }
 
 .example-form {
