@@ -25,8 +25,8 @@ export class CheckoutService {
     }, httpOptions);
   }
   
-  stripePaymentkey(): Observable<any>{
-    return this.http.post('/api/paymentkey', {}, httpOptions);
+  stripePaymentkey(data:any): Observable<any>{
+    return this.http.post('/api/paymentkey', {data}, httpOptions);
   }
 
   updatepayment(data:any): Observable<any>{
@@ -38,5 +38,27 @@ export class CheckoutService {
   getpaymentinteg(): Observable<any>{
     return this.http.post('/api/getpaymentinteg/'+this.uniqueuserid, {}, httpOptions);
   }
+
+  updatecheckoutstyle(data:any): Observable<any>{
+    return this.http.post('/api/updatecheckoutstyle/'+this.uniqueuserid, {
+      data,
+    }, httpOptions);
+  }
+
+  getallcheckoutdata(data:any): Observable<any>{
+    return this.http.post('/api/getallcheckoutdata', {
+      data,
+    }, httpOptions);
+  }
+
+  getnextstepurl(data:any): Observable<any>{
+    return this.http.post('/api/getnextstepurl', {
+      data,
+    }, httpOptions);
+  }
+
+
+  
+  
 
 }

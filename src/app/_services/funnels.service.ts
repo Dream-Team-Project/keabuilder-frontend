@@ -47,6 +47,12 @@ export class FunnelService {
       }, httpOptions);
     }
 
+    updatefunnelpage(data:any):Observable<any> {
+      return this.http.post("./api/updatefunnelpage/"+this.uniqueuserid, {
+        data
+      }, httpOptions);
+    }
+
     setfunnelvariation(id:string):Observable<any> {
       return this.http.post("./api/selectedvariation/"+this.uniqueuserid, {
         id

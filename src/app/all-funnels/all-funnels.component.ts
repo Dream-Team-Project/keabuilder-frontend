@@ -87,7 +87,7 @@ export class AllFunnelsComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   }; 
-  
+
   childrenOptions: Options = {
     group: 'child',
     scroll: true,
@@ -104,7 +104,7 @@ export class AllFunnelsComponent implements OnInit {
       this.funnels.forEach((element: any) => {
         filterdragobj = {id:element.id, steps:[]};
         element.steps.forEach((element2: any) => {
-          var stepelem = {name:element2.title, id:element2.id};
+          var stepelem = {name:element2.page_title, id:element2.id};
           filterdragobj.steps.push(stepelem);
         });
         filterdragobj.steps.reverse();
@@ -132,7 +132,7 @@ export class AllFunnelsComponent implements OnInit {
       this.funnels.forEach((element: any) => {
         filterdragobj = {id:element.id, steps:[]};
         element.steps.forEach((element2: any) => {
-          var stepelem = {name:element2.title, id:element2.id};
+          var stepelem = {name:element2.page_title, id:element2.id};
           filterdragobj.steps.push(stepelem);
         });
         filterdragobj.steps.reverse();
@@ -152,7 +152,31 @@ export class AllFunnelsComponent implements OnInit {
 
     },
     onStart: function (/**Event*/evt) {
+      console.log(evt.item.classList.value);
       // console.log(evt.oldIndex);  // element index within parent
+      var splcls:any = evt.item.classList.value.split(' ');
+      // console.log(splcls[0]);
+      var id = splcls[0].split('kbstep-');
+      
+      var genscrn = '/assets/uploads/images/keaimage-'+id[1]+'-screenshot.png';
+      // console.log(genscrn);
+      (<HTMLStyleElement>document.getElementsByClassName(splcls[0])[0]).style.backgroundImage = "url("+genscrn+")";;
+      
+      // this.fileuploadService.validateimg(genscrn).subscribe({
+      //   next: data => {
+        
+      //      if(data.data==1){
+      //       console.log(genscrn);
+      //           // return '/assets/uploads/images/'+genscrn;
+      //     // (<HTMLStyleElement>document.getElementsByClassName(splcls)[0]).style.background = '';
+      //     }else{
+      //       // return '/assets/uploads/images/webpage_thumbnail.jpg';
+      //     }
+  
+      //   }
+      // });
+
+
     },
     onChoose: function (/**Event*/evt) {      
       // console.log('choose');
@@ -260,10 +284,10 @@ export class AllFunnelsComponent implements OnInit {
               newob.grouptags = element.grouptags;
 
                 data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
+                  var newob2 = {id:'',uniqueid:'',page_title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
                   if(element2.funnelid==newob.id){
                     newob2.id = element2.id;
-                    newob2.title = element2.title;
+                    newob2.page_title = element2.page_title;
                     newob2.uniqueid = element2.uniqueid;
 
                     var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);
@@ -405,6 +429,24 @@ export class AllFunnelsComponent implements OnInit {
 
       }
     });
+  }
+
+  getthumbnail(id:any){
+    var genscrn = '/assets/uploads/images/keaimage-'+id+'-screenshot.png';
+    return genscrn;
+
+    // this.fileuploadService.validateimg(genscrn).subscribe({
+    //   next: data => {
+
+    //    if(data.data==1){
+    //       return '/assets/uploads/images/'+genscrn;
+    //     }else{
+    //       return ' ';
+    //     }
+
+    //   }
+    // });
+
   }
 
 
