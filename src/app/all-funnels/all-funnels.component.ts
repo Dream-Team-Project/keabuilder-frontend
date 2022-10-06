@@ -104,7 +104,7 @@ export class AllFunnelsComponent implements OnInit {
       this.funnels.forEach((element: any) => {
         filterdragobj = {id:element.id, steps:[]};
         element.steps.forEach((element2: any) => {
-          var stepelem = {name:element2.title, id:element2.id};
+          var stepelem = {name:element2.page_title, id:element2.id};
           filterdragobj.steps.push(stepelem);
         });
         filterdragobj.steps.reverse();
@@ -132,7 +132,7 @@ export class AllFunnelsComponent implements OnInit {
       this.funnels.forEach((element: any) => {
         filterdragobj = {id:element.id, steps:[]};
         element.steps.forEach((element2: any) => {
-          var stepelem = {name:element2.title, id:element2.id};
+          var stepelem = {name:element2.page_title, id:element2.id};
           filterdragobj.steps.push(stepelem);
         });
         filterdragobj.steps.reverse();
