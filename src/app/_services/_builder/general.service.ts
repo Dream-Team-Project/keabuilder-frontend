@@ -370,21 +370,21 @@ export class GeneralService {
       }
       else if(this.layout == 'funnel'){
         var funnelstepdata = {
-          id: this.webpage.id,
-          uniqueid: Math.random().toString(20).slice(2),
-          funnelid: this.webpage.funnelid,
-          funneltype: this.webpage.funneltype,
-          page_name: this.main.name,
-          page_title: this.main.title,
-          page_path: this.main.path,
-          page_description: this.main.description,
-          page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
-          page_author: this.main.author,
-          publish_status: this.webpage.publish_status,
-          thumbnail: '',
-          tracking_code: '',
+            id: this.webpage.id,
+            uniqueid: Math.random().toString(20).slice(2),
+            funnelid: this.webpage.funnelid,
+            funneltype: this.webpage.funneltype,
+            page_name: this.main.name,
+            page_title: this.main.title,
+            page_path: this.main.path,
+            page_description: this.main.description,
+            page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
+            page_author: this.main.author,
+            publish_status: this.webpage.publish_status,
+            thumbnail: '',
+            tracking_code: ''
         }
-        this.webPageService.updateWebpage(funnelstepdata).subscribe(
+        this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
             resolve(e);
           })
@@ -522,6 +522,7 @@ export class GeneralService {
 
   addKeyword(event: any): void {
     const value = (event.value || '').trim();
+    console.log(this.keywords);
     if (value) {
       this.keywords.push(value);
     }
