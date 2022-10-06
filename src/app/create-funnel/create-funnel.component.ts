@@ -478,7 +478,7 @@ export class CreateFunnelComponent implements OnInit {
         // console.log(this.selectedstep);
         this._snackBar.open('Successfully Name Changed!', 'Close');
         if(this.selectedstep==data.data[0].id){
-          this.funnelstepname = data.data[0].title;
+          this.funnelstepname = data.data[0].page_title;
         }
         this.showfunnelsteps();
       }
@@ -554,7 +554,7 @@ export class CreateFunnelComponent implements OnInit {
                     this.funnelselected = 0;
                   }
 
-                  this.funnelstepname  = element.title;
+                  this.funnelstepname  = element.page_title;
 
                   var gettag = element.tags;
                   if(gettag!=''){

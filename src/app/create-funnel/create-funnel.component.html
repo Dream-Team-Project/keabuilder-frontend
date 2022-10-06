@@ -256,8 +256,8 @@
                *ngFor="let element of steps; index as i;" >
 
               <div class="keabuilder-title-board">
-                <span>{{ element.title }}</span>
-                <input type="text" [(ngModel)]="element.title" (blur)="changestepnamesoutside(element.id,element.title)" >
+                <span>{{ element.page_title }}</span>
+                <input type="text" [(ngModel)]="element.page_title" (blur)="changestepnamesoutside(element.id,element.page_title)" >
               </div>
 
               <div class="kea-selectarea" (click)="kb_substeps2(element.id)" [attr.key]="element.id"
@@ -305,7 +305,7 @@
                   <div class="Keabuilder-item infome" [class]="element.color" [class.selectedstep]="selectedstep==element.id" *ngFor="let element of archivesteps; index as i;" >
   
                     <div class="keabuilder-title-board-archived" [matTooltip]="'Archive Reason: '+(element.archive_reason==''?'No Reason Found!':element.archive_reason)" matTooltipPosition="above" >
-                      <span>{{ element.title }}</span>
+                      <span>{{ element.page_title }}</span>
                     </div>
                             
                     <div class="btn-group float-right mr-1 mt-lg-n2">
