@@ -27,7 +27,7 @@ export class FunnelCheckoutComponent implements OnInit {
   selectedproduct:any = [];
 
   checkoutstyle:any = {step1headline:'SHIPPING',step1subheadline:'Where Should We Ship It?',step1btntext:'Special Offer Click Here', step1btnsubtext:'', step1footertext:'* 100% Secure & Safe Payments *',step2headline:'YOUR INFO',step2subheadline:'Upgrade Now & Save!',step2btntext:'Buy Now', step2btnsubtext:'', step2footertext:'* 100% Secure & Safe Payments *'};
-
+  user_id:any = '';
 
   constructor(
     private fb: FormBuilder, 
@@ -69,10 +69,12 @@ export class FunnelCheckoutComponent implements OnInit {
           // this.selectedproduct.push(data.data[0].productname);
 
           this.createForm(data.data[0].user_id);
+          this.user_id = data.data[0].user_id;
+          // console.log(this.user_id);
 
           // console.log(this.productdata);
         }else{
-          this.founderror = true;
+          // this.founderror = true;
         }
       }
     });
@@ -91,10 +93,10 @@ export class FunnelCheckoutComponent implements OnInit {
     var dataobj3 = {id: this.uniqueidstep};
     this.checkoutService.getnextstepurl(dataobj3).subscribe({
       next: data => { 
-        // console.log(data);
-        if(data.data.length!=0){
-          this.redirecturi = data.data;
-        }
+        console.log(data);
+        // if(data.data.length!=0){
+        //   this.redirecturi = data.data;
+        // }
       }
     });
 
