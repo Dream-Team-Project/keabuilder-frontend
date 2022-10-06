@@ -59,7 +59,7 @@ export class FunnelCheckoutComponent implements OnInit {
     this.funnelService.funneladdeditproduct(dataobj).subscribe({
       next: data => {
         // console.log(data);
-        if(data.data.length!=0){
+        if(data?.data?.length!=0){
 
           data.data.forEach((element:any) => {
             var convertdata = {name:element.productname, price: element.productprice, priceoverride: element.priceoverride};
@@ -83,7 +83,7 @@ export class FunnelCheckoutComponent implements OnInit {
     this.checkoutService.getallcheckoutdata(dataobj2).subscribe({
       next: data => {
 
-        if(data.data.length!=0){
+        if(data?.data?.length!=0){
           this.checkoutstyle = {step1headline:data.data[0].step1headline,step1subheadline:data.data[0].step1subheadline,step1btntext:data.data[0].step1btntext, step1btnsubtext:data.data[0].step1btnsubtext, step1footertext:data.data[0].step1footertext,step2headline:data.data[0].step2headline,step2subheadline:data.data[0].step2subheadline,step2btntext:data.data[0].step2btntext, step2btnsubtext:data.data[0].step2btnsubtext, step2footertext:data.data[0].step2footertext};
         }
 
@@ -93,10 +93,10 @@ export class FunnelCheckoutComponent implements OnInit {
     var dataobj3 = {id: this.uniqueidstep};
     this.checkoutService.getnextstepurl(dataobj3).subscribe({
       next: data => { 
-        console.log(data);
-        // if(data.data.length!=0){
-        //   this.redirecturi = data.data;
-        // }
+        // console.log(data);
+        if(data?.data?.length!=0){
+          this.redirecturi = data.data;
+        }
       }
     });
 
@@ -111,7 +111,7 @@ export class FunnelCheckoutComponent implements OnInit {
         next: data => {
           console.log(data);
 
-          if(data.data.length!=0){
+          if(data?.data?.length!=0){
               
             let script = this._renderer2.createElement('script');
             script.type = `text/javascript`;

@@ -111,7 +111,7 @@
                                                 <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting" *ngIf="element.setting && !_general.showInlineEditor">
                                                     <span cdkDragHandle class="kb-handle-block kb-handle-element"><i class="fa fa-arrows-alt"></i></span>
-                                                    <span
+                                                    <span *ngIf="element.content.name != 'checkout'"
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
@@ -172,7 +172,7 @@
                                                         </div>
                                                     </div>
                                                     <div *ngSwitchCase="'checkout'" class="kb-element-content">
-                                                        <iframe src="http://localhost:4200/checkout/h61jg0jb0971c" style="width:100%;height:140vh; border:0;"></iframe>
+                                                        <iframe [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl" style="width:100%;height:100%; border:0;"></iframe>
                                                     </div>
                                                     <div *ngSwitchDefault class="kb-element-content">
                                                         <div *ngIf="!element.content.editor else editor">
