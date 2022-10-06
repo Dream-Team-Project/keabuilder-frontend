@@ -593,7 +593,11 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getAllrevenue().subscribe({
       next: data => {
 
-        console.log(data);
+        if(data.data.length!=0){
+          data.data.forEach((element:any) => {
+            this.totalrevenue+=parseFloat(element.amount);
+          });
+        }
 
       }
     });

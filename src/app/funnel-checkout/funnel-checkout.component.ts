@@ -248,6 +248,8 @@ export class FunnelCheckoutComponent implements OnInit {
         this.stripeData['token'] = validatetoken;
         this.stripeData['amount'] = this.totalprice;
         this.stripeData['stepid'] = this.uniqueidstep;
+        this.stripeData['user_id'] = this.user_id;
+        
 
         this.stripeData['productdescr'] = this.selectedproduct.toString();
 
@@ -266,7 +268,7 @@ export class FunnelCheckoutComponent implements OnInit {
                 if(window.top!=null){
                   // window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
                   if(this.redirecturi!=''){
-                     window.top.location.href = '/'+this.redirecturi+"/#customerid="+data.customer.id; 
+                     window.top.location.href = '/'+this.redirecturi+"/#customerid="+data.customer.id+'?userid='+this.user_id; 
                   }
                 }
 
