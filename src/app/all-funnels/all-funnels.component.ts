@@ -87,7 +87,7 @@ export class AllFunnelsComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   }; 
-  
+
   childrenOptions: Options = {
     group: 'child',
     scroll: true,
@@ -152,7 +152,31 @@ export class AllFunnelsComponent implements OnInit {
 
     },
     onStart: function (/**Event*/evt) {
+      console.log(evt.item.classList.value);
       // console.log(evt.oldIndex);  // element index within parent
+      var splcls:any = evt.item.classList.value.split(' ');
+      // console.log(splcls[0]);
+      var id = splcls[0].split('kbstep-');
+      
+      var genscrn = '/assets/uploads/images/keaimage-'+id[1]+'-screenshot.png';
+      // console.log(genscrn);
+      (<HTMLStyleElement>document.getElementsByClassName(splcls[0])[0]).style.backgroundImage = "url("+genscrn+")";;
+      
+      // this.fileuploadService.validateimg(genscrn).subscribe({
+      //   next: data => {
+        
+      //      if(data.data==1){
+      //       console.log(genscrn);
+      //           // return '/assets/uploads/images/'+genscrn;
+      //     // (<HTMLStyleElement>document.getElementsByClassName(splcls)[0]).style.background = '';
+      //     }else{
+      //       // return '/assets/uploads/images/webpage_thumbnail.jpg';
+      //     }
+  
+      //   }
+      // });
+
+
     },
     onChoose: function (/**Event*/evt) {      
       // console.log('choose');
@@ -405,6 +429,24 @@ export class AllFunnelsComponent implements OnInit {
 
       }
     });
+  }
+
+  getthumbnail(id:any){
+    var genscrn = '/assets/uploads/images/keaimage-'+id+'-screenshot.png';
+    return genscrn;
+
+    // this.fileuploadService.validateimg(genscrn).subscribe({
+    //   next: data => {
+
+    //    if(data.data==1){
+    //       return '/assets/uploads/images/'+genscrn;
+    //     }else{
+    //       return ' ';
+    //     }
+
+    //   }
+    // });
+
   }
 
 

@@ -170,7 +170,7 @@
                         </div>
                     </header>
                     <main [sortablejs]="funnels[i]['steps']" [sortablejsOptions]="childrenOptions" >
-                        <div *ngFor="let funnelstep of funnels[i]['steps']; index as j" [style.background-image]="'url('+funnels[i]['steps'][j]['img']+')'" >
+                        <div *ngFor="let funnelstep of funnels[i]['steps']; index as j" [class]="'kbstep-'+funnels[i]['steps'][j]['uniqueid']"  [ngStyle]="{'background-image': 'url(/assets/uploads/images/webpage_thumbnail.jpg)'}" >
                             <div class="keabuilder-item is-moving" [attr.data-border]="funnels[i]['steps'][j]['color']">{{funnels[i]['steps'][j]['title']}}
                                 <div class="keabuilder-footer d-flex justify-content-between mt-3">
                                     <div class="keabuilder-footer-left d-flex">
