@@ -258,8 +258,8 @@ div.kb-row.kb-block-container {
     }   
     
     div.kb-row .kb-column.kb-block-container {
-        width: 100%;
-        max-width: 100%;
+        width: 100%!important;
+        max-width: 100%!important;
     }
     
     div.kb-section.kb-block-container {

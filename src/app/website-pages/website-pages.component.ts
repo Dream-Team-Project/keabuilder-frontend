@@ -168,7 +168,7 @@ export class WebsitePagesComponent implements OnInit {
     this.websiteService.getWebsite().subscribe({
       next: data => {
         if(data?.data) {
-          if(data?.data[0].toggleview==1){
+          if(data?.data[0]?.toggleview==1){
             this.toggleview1 = true;
           }else{
             this.toggleview1 = false;
@@ -312,10 +312,9 @@ export class WebsitePagesComponent implements OnInit {
           this.websiteService.getWebsite().subscribe({
             next: data => {
               // console.log('--');
-              // console.log(data);
-              // console.log(element);
+              console.log(data);
 
-              if(data.data[0].homepage==element.uniqueid){
+              if(data?.data[0]?.homepage==element.uniqueid){
                 element.defaulthome = 1;
               }else{
                 element.defaulthome = 0;
