@@ -911,7 +911,6 @@ export class StyleService {
         this._general.selectedBlock.content.link = this.button_link;
         this._general.selectedBlock.content.target = this.button_target.value;
         if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.productid = this.button_product;
-        console.log(this._general.selectedBlock.content);
       }
       else if (this._general.selectedBlock.content.name == 'image') {
         this._general.selectedBlock.content.src = this.image_src;
@@ -965,7 +964,7 @@ export class StyleService {
 
   defaultStyling(block:any) {
     this.margin.top = '0px';
-    if(block.type == 'element' && !block.itemstyle) {
+    if(block.type == 'element' && !block.itemstyle && block.content?.name != 'code') {
       this.margin.right = 'auto';
       this.margin.bottom = '10px';
     }

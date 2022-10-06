@@ -1783,6 +1783,10 @@ div.kb-align-btn-group span.kb-align-btn,
     height: 100%;
 }
 
+.kb-tabs-component .kb-tab-content textarea {
+    text-align: left!important;
+}
+
 .kb-tab-content.kb-tab-border-radius-group {
     flex-direction: column !important;
 }
@@ -2188,3 +2192,13 @@ ul.kb-menu a, ul.kb-menu li {
   }
 
   /* loader */
+
+  .kb-code-block {
+    padding: 20px 10px;
+    background-color: rgb(24 103 192 / 20%);
+    color: var(--section-color);
+    font-weight: bold;
+    max-width: 200px;
+    text-align: center;
+    border-radius: 5px;
+  }
