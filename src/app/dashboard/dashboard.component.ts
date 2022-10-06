@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Router } from '@angular/router';
-
+import { DashboardService } from '../_services/dashboard.service';
 
 import {
   ChartComponent,
@@ -51,8 +51,12 @@ export class DashboardComponent implements OnInit {
   isLoginFailed = false;
   username= '';
   greeting:any = '';
+  hidefornow = false;
+  totalrevenue:any = 0;
+  totalmembers:any = 0;
 
-  constructor( private tokenStorage: TokenStorageService,
+  constructor( private dashboardService: DashboardService,
+              private tokenStorage: TokenStorageService,
               private router: Router) {
                 this.chartOptions = {
                   series: [
@@ -585,6 +589,14 @@ export class DashboardComponent implements OnInit {
     }
 
     this.greetings();
+
+    this.dashboardService.getAllrevenue().subscribe({
+      next: data => {
+
+        console.log(data);
+
+      }
+    });
 
   }
 

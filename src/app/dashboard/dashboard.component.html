@@ -8,7 +8,7 @@
           <div class="row">
             <div class="col-md-6">
               <h4 class="card-title">Good {{greeting}}! <span class="usernm">{{username}}</span></h4>
-              <p class="card-category">Welcome To Keabuilder! Ask <u>Kea</u> For Your New plan!</p>
+              <p class="card-category">Welcome To Keabuilder!</p>
             </div>
             <div class="col-md-6 ml-auto mr-auto">
               <img src="/assets/images/logo/kblogo.png" alt="" class="img-fluid float-right" width="50">
@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="hidefornow">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -46,42 +46,42 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-4">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-4">
+            <div class="col-5 col-md-3">
               <div class="icon-big text-center icon-warning">
                   <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
                </div>
             </div>
-            <div class="col-7 col-md-8">
+            <div class="col-7 col-md-9">
               <div class="numbers">
                 <p class="card-category">Revenue</p>
-                <p class="card-title">$1,345 </p>
+                <p class="card-title">${{totalrevenue}} </p>
               </div>
             </div>
           </div>
         </div>
         <div class="card-footer ">
           <hr>
-          <div class="stats"><i class="fa fa-calendar-o"></i> Last day <span class="float-right"><i class="fas fa-arrow-up"></i></span></div>
+          <div class="stats"><i class="fa fa-calendar-o"></i> All Time <span class="float-right"><i class="fas fa-arrow-up"></i></span></div>
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-4">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-4">
+            <div class="col-5 col-md-3">
               <div class="icon-big text-center icon-warning">
                   <img src="/assets/images/dashboard/star-product.png" class="img-fluid" alt="">
               </div>
             </div>
-            <div class="col-7 col-md-8">
+            <div class="col-7 col-md-9">
               <div class="numbers">
                 <p class="card-title">Star Product </p>
-                <p class="card-category">7 Day Challange</p>
+                <p class="card-category">Will Appear Here</p>
               </div>
             </div>
           </div>
@@ -92,31 +92,31 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-4 col-md-4 col-sm-4">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-4">
+            <div class="col-5 col-md-3">
               <div class="icon-big text-center icon-warning">
                 <img src="/assets/images/dashboard/members.png" class="img-fluid" alt="">
               </div>
             </div>
-            <div class="col-7 col-md-8">
+            <div class="col-7 col-md-9">
               <div class="numbers">
                 <p class="card-category">Members</p>
-                <p class="card-title">+45K </p>
+                <p class="card-title">{{totalmembers}} </p>
               </div>
             </div>
           </div>
         </div>
         <div class="card-footer ">
           <hr>
-          <div class="stats"><i class="fa fa-refresh"></i> View now <span class="float-right"><i class="fas fa-arrow-up"></i></span> </div>
+          <div class="stats"><i class="fa fa-refresh"></i> All Time <span class="float-right"><i class="fas fa-arrow-up"></i></span> </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hidefornow">
     <div class="col-lg-4 col-sm-6">
       <div class="card">
         <div class="card-header">
@@ -288,7 +288,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hidefornow">
     <div class="col-md-12">
       <div class="card ">
         <div class="card-header ">
@@ -1060,7 +1060,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hidefornow">
     <div class="col-md-6">
       <div class="card  card-tasks">
         <div class="card-header ">
@@ -1164,7 +1164,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hidefornow" >
     <div class="col-md-3">
       <div class="card ">
         <div class="card-header ">
