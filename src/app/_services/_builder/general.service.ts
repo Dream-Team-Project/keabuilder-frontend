@@ -399,7 +399,7 @@ export class GeneralService {
       item.removeAttribute('style');
       if(blockcls == '.kb-element-content') {
         item.querySelectorAll('*').forEach((ele:any)=>{
-          ele.removeAttribute('style');
+          if(ele.tagName.toLowerCase() != 'iframe') ele.removeAttribute('style');
         });
         if(item.querySelector('.kb-menu')) item.querySelector('.kb-menu').innerHTML = '';
         if(item.querySelector('.kb-code-block')) {
