@@ -352,7 +352,6 @@ export class GeneralService {
       if(this.layout == 'website'){
         var pagedata = {
           id: this.webpage.id,
-          uniqueid: Math.random().toString(20).slice(2),
           page_name: this.main.name,
           page_title: this.main.title,
           page_path: this.main.path,
@@ -371,7 +370,6 @@ export class GeneralService {
       else if(this.layout == 'funnel'){
         var funnelstepdata = {
             id: this.webpage.id,
-            uniqueid: Math.random().toString(20).slice(2),
             funnelid: this.webpage.funnelid,
             funneltype: this.webpage.funneltype,
             page_name: this.main.name,
@@ -401,7 +399,7 @@ export class GeneralService {
       item.removeAttribute('style');
       if(blockcls == '.kb-element-content') {
         item.querySelectorAll('*').forEach((ele:any)=>{
-          ele.removeAttribute('style');
+          if(ele.tagName.toLowerCase() != 'iframe') ele.removeAttribute('style');
         });
         if(item.querySelector('.kb-menu')) item.querySelector('.kb-menu').innerHTML = '';
         if(item.querySelector('.kb-code-block')) {
