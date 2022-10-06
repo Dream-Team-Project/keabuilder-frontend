@@ -49,6 +49,7 @@ import { ColorCircleModule } from 'ngx-color/circle';
 import { NgxColorsModule } from 'ngx-colors';
 import { NgxTinymceModule } from 'ngx-tinymce';
 import { SafeHtmlPipe } from './safe-html.pipe';
+import { SafeUrlPipe } from './safe-url.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
@@ -61,6 +62,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     SidebarComponent,
     NavbarComponent,
     SafeHtmlPipe,
+    SafeUrlPipe
   ],
   imports: [
     BrowserModule,
