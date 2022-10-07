@@ -368,6 +368,7 @@ export class GeneralService {
           })
       }
       else if(this.layout == 'funnel'){
+        console.log(this.main);
         var funnelstepdata = {
             id: this.webpage.id,
             funnelid: this.webpage.funnelid,

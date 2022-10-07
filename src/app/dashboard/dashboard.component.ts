@@ -53,73 +53,119 @@ export class DashboardComponent implements OnInit {
   greeting:any = '';
   hidefornow = false;
   totalrevenue:any = 0;
+  totalrevenue7day:any = 0;
   totalmembers:any = 0;
+  data1:any = [];
+  data1date:any = [];
+  data2:any = [];
+  data2date:any = [];
+  totalcontact7day = 0;
 
   constructor( private dashboardService: DashboardService,
               private tokenStorage: TokenStorageService,
               private router: Router) {
+
                 this.chartOptions = {
                   series: [
                     {
-                      name: "Website",
-                      type: "column",
-                      data: [440, 505, 414, 671, 227, 413, 201]
-                    },
-                    {
-                      name: "Funnels",
-                      type: "line",
-                      data: [23, 42, 35, 27, 43, 22, 17]
+                      name: "Earning",
+                      data: this.data1
                     }
                   ],
                   chart: {
                     height: 350,
-                    type: "line"
+                    type: "bar"
                   },
-                  stroke: {
-                    width: [0, 4]
-                  },
-                  title: {
-                    text: "Total Earnings in $"
+                  plotOptions: {
+                    bar: {
+                      dataLabels: {
+                        position: "top" // top, center, bottom
+                      }
+                    }
                   },
                   dataLabels: {
                     enabled: true,
-                    enabledOnSeries: [1]
+                    formatter: function(val:any) {
+                      return val + "$";
+                    },
+                    offsetY: -20,
+                    style: {
+                      fontSize: "12px",
+                      colors: ["#304758"]
+                    }
                   },
-                  labels: [
-                    "2022-08-01",
-                    "2022-08-02",
-                    "2022-08-03",
-                    "2022-08-04",
-                    "2022-08-05",
-                    "2022-08-06",
-                    "2022-08-07"
-                  ],
+            
                   xaxis: {
-                    type: "datetime"
-                  },
-                  yaxis: [
-                    {
-                      title: {
-                        text: "Website"
+                    categories: this.data1date,
+                    position: "top",
+                    labels: {
+                      offsetY: -18
+                    },
+                    axisBorder: {
+                      show: false
+                    },
+                    axisTicks: {
+                      show: false
+                    },
+                    crosshairs: {
+                      fill: {
+                        type: "gradient",
+                        gradient: {
+                          colorFrom: "#D8E3F0",
+                          colorTo: "#BED1E6",
+                          stops: [0, 100],
+                          opacityFrom: 0.4,
+                          opacityTo: 0.5
+                        }
                       }
                     },
-                    {
-                      opposite: true,
-                      title: {
-                        text: "Funnel"
+                    tooltip: {
+                      enabled: true,
+                      offsetY: -35
+                    }
+                  },
+                  fill: {
+                    type: "gradient",
+                    gradient: {
+                      shade: "light",
+                      type: "horizontal",
+                      shadeIntensity: 0.25,
+                      gradientToColors: undefined,
+                      inverseColors: true,
+                      opacityFrom: 1,
+                      opacityTo: 1,
+                      stops: [50, 0, 100, 100]
+                    }
+                  },
+                  yaxis: {
+                    axisBorder: {
+                      show: false
+                    },
+                    axisTicks: {
+                      show: false
+                    },
+                    labels: {
+                      show: false,
+                      formatter: function(val:any) {
+                        return val + "$";
                       }
                     }
-                  ]
+                  },
+                  title: {
+                    text: "Weekly Earning",
+                    floating: 0,
+                    offsetY: 320,
+                    align: "center",
+                    style: {
+                      color: "#444"
+                    }
+                  }
                 };
                 this.chartOptions2 = {
                   series: [
                     {
-                      name: "Website",
-                      data: [31, 40, 28, 51, 42, 109, 100]
-                    },
-                    {
                       name: "Funnels",
-                      data: [11, 32, 45, 32, 34, 52, 41]
+                      data: this.data2
                     }
                   ],
                   chart: {
@@ -134,19 +180,11 @@ export class DashboardComponent implements OnInit {
                   },
                   xaxis: {
                     type: "datetime",
-                    categories: [
-                      "2022-08-01",
-                      "2022-08-02",
-                      "2022-08-03",
-                      "2022-08-04",
-                      "2022-08-05",
-                      "2022-08-06",
-                      "2022-08-07"
-                    ]
+                    categories: this.data2date
                   },
                   tooltip: {
                     x: {
-                      format: "dd/MM/yy"
+                      format: "MM-dd"
                     }
                   }
                 };
@@ -601,6 +639,104 @@ export class DashboardComponent implements OnInit {
 
       }
     });
+    
+    this.dashboardService.getAllcontact().subscribe({
+      next: data => {
+        console.log(data);
+        if(data.data.length!=0){
+          this.totalmembers = data.data[0]['count(*)'];
+        }
+      }
+    });
+
+    // last week revenue
+    var datacondition2 = {type:'lastweekrevenue',option:'7 DAY'}
+    this.dashboardService.getconditionaldata(datacondition2).subscribe({
+      next: data => {
+        console.log(data);
+        
+        var newarr:any = [];
+        if(data.data.length!=0){
+          data.data.forEach((element:any) => {
+            var arr:any = {name:'',value:0};
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+            var d = new Date(element.created_at);
+            var dt = d.getDate();
+            arr.name = months[d.getMonth()]+' '+dt;
+            arr.value = parseFloat(element.amount);
+            newarr.push(arr);
+            this.totalrevenue7day += parseFloat(element.amount);
+          });
+          // console.log(newarr);
+          var output:any = [];
+
+          newarr.forEach(function(item:any) {
+            var existing = output.filter(function(v: any, i: any) {
+              return v.name == item.name;
+            });
+            if (existing.length) {
+              var existingIndex = output.indexOf(existing[0]);
+              output[existingIndex].value = (output[existingIndex].value+item.value);
+            } else {
+              if (typeof item.value == 'string')
+                item.value = [item.value];
+              output.push(item);
+            }
+          });
+
+          output.forEach((element3:any) => {
+            this.data1date.push(element3.name);
+            this.data1.push(element3.value);
+          });
+
+          // console.log(this.data1date);
+
+        }
+
+      }
+    });
+
+    // last week contact
+    var datacondition = {type:'lastweekcontact',option:'7 DAY'}
+    this.dashboardService.getconditionaldata(datacondition).subscribe({
+      next: data => {
+        console.log(data);
+        
+        var newarr:any = [];
+        if(data.data.length!=0){
+          data.data.forEach((element:any) => {
+            var arr:any = {name:'',value:1};
+            arr.name = element.created_at;
+            newarr.push(arr);
+            this.totalcontact7day += 1;
+          });
+          var output:any = [];
+
+          newarr.forEach(function(item:any) {
+            var existing = output.filter(function(v: any, i: any) {
+              return v.name == item.name;
+            });
+            if (existing.length) {
+              var existingIndex = output.indexOf(existing[0]);
+              output[existingIndex].value = (output[existingIndex].value+item.value);
+            } else {
+              if (typeof item.value == 'string')
+                item.value = [item.value];
+              output.push(item);
+            }
+          });
+
+          output.forEach((element3:any) => {
+            this.data2date.push(element3.name);
+            this.data2.push(element3.value);
+          });
+
+        }
+
+      }
+    });
+
+
 
   }
 

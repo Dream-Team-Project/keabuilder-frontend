@@ -66,7 +66,7 @@ export class CreateFunnelSalesComponent implements OnInit {
         data.data.forEach((element: any) => {
           var gennewobj = {id:'',value:''};
           gennewobj.id = element.uniqueid;
-          gennewobj.value = element.title;
+          gennewobj.value = element.page_title;
 
           gensepratestep.push(gennewobj);
         });
@@ -142,7 +142,7 @@ export class CreateFunnelSalesComponent implements OnInit {
 
     this.funnelService.getfunnelsales(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
-        // console.log(data.data); 
+        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
