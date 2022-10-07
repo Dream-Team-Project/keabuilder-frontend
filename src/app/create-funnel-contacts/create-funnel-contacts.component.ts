@@ -58,6 +58,7 @@ export class CreateFunnelContactsComponent implements OnInit {
     });
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
+        // console.log(data);
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
 
@@ -66,7 +67,7 @@ export class CreateFunnelContactsComponent implements OnInit {
         data.data.forEach((element: any) => {
           var gennewobj = {id:'',value:''};
           gennewobj.id = element.uniqueid;
-          gennewobj.value = element.title;
+          gennewobj.value = element.page_title;
 
           gensepratestep.push(gennewobj);
         });
@@ -79,10 +80,11 @@ export class CreateFunnelContactsComponent implements OnInit {
         console.log(err);
       }
     });
+    console.log(this.uniqueidstep );
 
     this.funnelService.getfunnelcontacts(this.uniqueid,'7 DAY','all').subscribe({
       next: data => {
-        // console.log(data.data); 
+        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
@@ -117,7 +119,6 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   exportexcel(): void
   {
-
     this.funnelService.getfunnelexportcontacts(this.uniqueid).subscribe({
       next: data => {
 
@@ -143,7 +144,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
     this.funnelService.getfunnelcontacts(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
-        // console.log(data.data); 
+        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 

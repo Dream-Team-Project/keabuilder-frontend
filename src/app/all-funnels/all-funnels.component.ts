@@ -152,15 +152,15 @@ export class AllFunnelsComponent implements OnInit {
 
     },
     onStart: function (/**Event*/evt) {
-      console.log(evt.item.classList.value);
-      // console.log(evt.oldIndex);  // element index within parent
-      var splcls:any = evt.item.classList.value.split(' ');
-      // console.log(splcls[0]);
-      var id = splcls[0].split('kbstep-');
+    //   console.log(evt.item.classList.value);
+    //   // console.log(evt.oldIndex);  // element index within parent
+    //   var splcls:any = evt.item.classList.value.split(' ');
+    //   // console.log(splcls[0]);
+    //   var id = splcls[0].split('kbstep-');
       
-      var genscrn = '/assets/uploads/images/keaimage-'+id[1]+'-screenshot.png';
+    //   var genscrn = '/assets/uploads/images/keaimage-'+id[1]+'-screenshot.png';
       // console.log(genscrn);
-      (<HTMLStyleElement>document.getElementsByClassName(splcls[0])[0]).style.backgroundImage = "url("+genscrn+")";;
+      // (<HTMLStyleElement>document.getElementsByClassName(splcls[0])[0]).style.backgroundImage = "url("+genscrn+")";
       
       // this.fileuploadService.validateimg(genscrn).subscribe({
       //   next: data => {

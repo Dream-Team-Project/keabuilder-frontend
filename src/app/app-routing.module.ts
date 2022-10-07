@@ -122,13 +122,13 @@ const routes: Routes = [
   canActivate: [AuthGuard] },
 
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
-  { path: 'domain', component: ComingSoonComponent, canActivate: [AuthGuard] },
-
-
-
+  
+  
+  
   // Coming Soon links==>  ComingSoonComponent
-
+  
+  { path: 'domain', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'forms', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -181,6 +181,7 @@ const routes: Routes = [
   // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
   // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+  // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
 
 
   // { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },

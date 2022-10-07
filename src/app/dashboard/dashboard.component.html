@@ -116,15 +116,15 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="hidefornow">
-    <div class="col-lg-4 col-sm-6">
+  <div class="row">
+    <div class="col-lg-4 col-sm-6"  *ngIf="data1.length!=0">
       <div class="card">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-7">
-              <div class="numbers pull-left"> $3,215 </div>
+              <div class="numbers pull-left"> ${{totalrevenue7day}} </div>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-5" *ngIf="hidefornow">
               <div class="pull-right"><span class="badge badge-pill badge-success"> +18% </span></div>
             </div>
           </div>
@@ -153,9 +153,8 @@
               [tooltip]="chartOptions.tooltip"
             ></apx-chart>
           </div>
-
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="hidefornow">
           <hr>
           <div class="row">
             <div class="col-sm-4">
@@ -176,14 +175,14 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-sm-6">
+    <div class="col-lg-4 col-sm-6" *ngIf="data2.length!=0">
       <div class="card">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-7">
-              <div class="numbers pull-left"> 648 </div>
+              <div class="numbers pull-left"> {{totalcontact7day}} </div>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-5" *ngIf="hidefornow">
               <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
             </div>
           </div>
@@ -197,7 +196,7 @@
               <div class=""></div>
             </div>
           </div>
-          <h6 class="big-title">total Traffic in last 7 days</h6>
+          <h6 class="big-title">total Contact in last 7 days</h6>
           <div class="chart1 kbcustmwidthforbox3">
             <apx-chart
               [series]="chartOptions2.series"
@@ -214,7 +213,7 @@
           </div>
 
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="hidefornow">
           <hr>
           <div class="row">
             <div class="col-sm-4">
@@ -238,14 +237,14 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-sm-6">
+    <div class="col-lg-4 col-sm-6" *ngIf="hidefornow">
       <div class="card">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-7">
               <div class="numbers pull-left"> 8,960 </div>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-5" >
               <div class="pull-right"><span class="badge badge-pill badge-warning"> ~51% </span></div>
             </div>
           </div>
@@ -272,7 +271,7 @@
             ></apx-chart>
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" >
           <hr>
           <div class="row">
             <div class="col-sm-6">

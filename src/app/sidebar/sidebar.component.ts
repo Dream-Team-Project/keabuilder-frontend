@@ -100,17 +100,17 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/forms',
-      img: 'complete.gif',
-      icon: 'fas fa-address-card',
-      title: 'Forms',
-      submenu:null
-    },{
-      0:true,
       routerlink: '/payment',
       img: 'payment.gif',
       icon: 'fa fa-dollar-sign',
       title: 'Payment',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/forms',
+      img: 'complete.gif',
+      icon: 'fas fa-address-card',
+      title: 'Forms',
       submenu:null
     },{
       0:true,

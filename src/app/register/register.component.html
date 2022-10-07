@@ -44,10 +44,10 @@
 
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label> Company Name</mat-label>
-                  <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" required [(ngModel)]="form.company">
-                  <mat-error *ngIf="companynameFormControl.hasError('required')">
+                  <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.company">
+                  <!-- <mat-error *ngIf="companynameFormControl.hasError('required')">
                     Company Name is <strong>required</strong>
-                  </mat-error>
+                  </mat-error> -->
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width" appearance="fill">

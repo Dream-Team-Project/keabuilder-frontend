@@ -23,5 +23,15 @@ export class DashboardService {
     return this.http.get('./api/getallrevenue/'+this.uniqueuserid);
   }
 
+  getAllcontact(): Observable<any> {
+    return this.http.get('./api/getallcontact/'+this.uniqueuserid);
+  }
+
+  getconditionaldata(data:any):Observable<any> {
+    return this.http.post("./api/getconditionaldata/"+this.uniqueuserid, {
+      data,
+    }, httpOptions);
+  }
+
 
 }
