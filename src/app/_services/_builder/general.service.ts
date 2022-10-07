@@ -368,7 +368,6 @@ export class GeneralService {
           })
       }
       else if(this.layout == 'funnel'){
-        console.log(this.main);
         var funnelstepdata = {
             id: this.webpage.id,
             funnelid: this.webpage.funnelid,
@@ -383,6 +382,7 @@ export class GeneralService {
             thumbnail: '',
             tracking_code: ''
         }
+        console.log(funnelstepdata);
         this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
             resolve(e);
