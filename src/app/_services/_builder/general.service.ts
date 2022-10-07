@@ -382,6 +382,7 @@ export class GeneralService {
             thumbnail: '',
             tracking_code: ''
         }
+        console.log(funnelstepdata);
         this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
             resolve(e);
