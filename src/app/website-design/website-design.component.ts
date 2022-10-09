@@ -180,7 +180,7 @@ export class WebsiteDesignComponent implements OnInit {
             // create page/folder
 
             
-            this.redirectToBuilder(data.uniqueid);
+            this._general.redirectToBuilder(data.uniqueid, 'website');
           }
 
         }
@@ -188,10 +188,6 @@ export class WebsiteDesignComponent implements OnInit {
       
     }
 
-  }
-  
-  redirectToBuilder(id:any) {
-      this.router.navigate(['/builder/website',id])
   }
 
   createfromscratch(){

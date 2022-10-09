@@ -258,7 +258,7 @@ export class WebsitePagesComponent implements OnInit {
 
 
             
-            this._general.redirectToBuilder(data.uniqueid);
+            this._general.redirectToBuilder(data.uniqueid, 'website');
           }
 
         }
@@ -498,10 +498,6 @@ export class WebsitePagesComponent implements OnInit {
       this.keywords.splice(index, 1);
     }
 
-  }
-
-  redirectToBuilder(id:any) {
-      this.router.navigate(['/builder/website',id])
   }
 
   shortsettings(page:any, type:any, oldpath:string){
