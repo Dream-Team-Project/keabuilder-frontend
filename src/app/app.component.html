@@ -4,5 +4,6 @@
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   <main id="angularApp" [class.insidecont]="isLoggedIn && _nav.visible" [class.loadEffect]="componetLoaded && _nav.visible">
   <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+  <app-feedback-form></app-feedback-form>
   </main>
 </div>

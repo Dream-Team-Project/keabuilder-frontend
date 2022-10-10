@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -238,6 +239,7 @@ const routes: Routes = [
 export class AppRoutingModule { }
 export const RoutingComponents = 
   [
+    FeedbackFormComponent,
     LoginComponent, 
     RegisterComponent, 
     ForgetPasswordComponent,

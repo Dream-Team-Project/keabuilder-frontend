@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
     private route: ActivatedRoute,
     private tokenStorage: TokenStorageService) {  }
 
+  DialogParentToggle:boolean = false;
   scrollPosition:any = null;
   issearch = false;
   notification = false;
@@ -88,6 +89,14 @@ export class NavbarComponent implements OnInit {
       }
       
   }
+
+    // drag drop box
+
+    openDialog() {
+      this.DialogParentToggle = !this.DialogParentToggle;
+  }
+
+  // drag drop box
 
 
 

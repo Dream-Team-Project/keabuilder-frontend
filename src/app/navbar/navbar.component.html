@@ -1,3 +1,4 @@
+<app-feedback-form [DialogToggle]="DialogParentToggle"></app-feedback-form>
 <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top"
   [class.navshadow]="scrollPosition > 100">
   <div class="navbar-wrapper">
@@ -15,17 +16,17 @@
               <ul class="search-list"></ul>
             </div>
           </li> -->
-          <!-- <li class="dropdown dropdown-notification nav-item">
+          <li [matTooltip]="'Any Suggetions?'" class="dropdown dropdown-notification nav-item">
             <div class="bw-avatar-content bw-change-color-badge">
-              <div class="bw-avatar" (click)="shownotification()">
-                <i class="far fa-bell"></i>
+              <div class="bw-avatar" (click)="openDialog()">
+                <i class="far fa-comments"></i>
                 <span class="pulse-ring"></span>
               </div>
-              <div class="bw-avatar__badge isSlot top-right">
+              <!-- <div class="bw-avatar__badge isSlot top-right">
                 28
-              </div>
+              </div> -->
             </div>
-          </li> -->
+          </li>
           <li class="dropdown dropdown-user nav-item">
             <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown"
               aria-expanded="false">
