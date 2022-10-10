@@ -28,7 +28,7 @@
                         <mat-form-field appearance="fill" class="kb-form-field">
                           <mat-label>Steps</mat-label>
                           <mat-select name="steps" [(ngModel)]="selectedfunnelsteps">
-                            <mat-option value="all">All Funnel Steps</mat-option>
+                            <!-- <mat-option value="all">All Funnel Steps</mat-option> -->
                             <mat-optgroup label="Funnel Steps">
                               <mat-option *ngFor="let funnelstep of funnelsteps" [value]="funnelstep.id">
                                 {{funnelstep.value}}
