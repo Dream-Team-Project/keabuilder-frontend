@@ -137,7 +137,7 @@ export class BuildFunnelComponent implements OnInit {
     if(this.userFormControl.status=='VALID'){
         this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor, funneltype).subscribe({
             next: data => {
-                // console.log(data);
+                console.log(data);
                 if(data.data.length!=0){
                     var page = {
                         head: '',

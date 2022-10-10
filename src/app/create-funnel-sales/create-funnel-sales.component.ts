@@ -139,7 +139,7 @@ export class CreateFunnelSalesComponent implements OnInit {
   }
 
   applykbfilter(){
-
+    console.log(this.uniqueid);
     this.funnelService.getfunnelsales(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
         console.log(data); 

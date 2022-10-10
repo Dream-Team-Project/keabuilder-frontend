@@ -635,7 +635,7 @@ export class CreateFunnelComponent implements OnInit {
       this.firstpart = true;
       this.colortheme = false;
       this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
-      this.pageurl = window.origin+'/'+unique1;
+      this.pageurl = window.origin+'/assets/sites/pages/'+unique1;
     }else if(type=='duplicate'){
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {

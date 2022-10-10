@@ -74,7 +74,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
         this.funnelsteps = gensepratestep;
 
-        // console.log(data); 
+        console.log(this.funnelsteps); 
       },
       error: err => {
         console.log(err);

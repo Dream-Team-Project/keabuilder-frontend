@@ -545,7 +545,7 @@ export class WebsitePagesComponent implements OnInit {
             this.confirmarchivepage = false;
 
             this.pagebuilderurl = window.origin+'/builder/website/'+data.data[0].uniqueid;
-            this.pageurl = window.origin+'/'+data.data[0].page_path;
+            this.pageurl = window.origin+'/assets/sites/pages/'+data.data[0].page_path;
 
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
