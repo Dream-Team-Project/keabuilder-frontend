@@ -62,7 +62,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
     this.funnelService.getfunnelsetting(this.uniqueid).subscribe({
       next: data => {
 
-        console.log(data); 
+        // console.log(data); 
 
         if(data.data.length!=0){
           this.funnelname = data.data[0].name;
@@ -118,7 +118,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
     var gentags = this.tags.toString();
     this.funnelService.updatebasicdetails(this.uniqueid, this.funnelname,this.domainname, gentags, this.faviconurl, this.headertracking, this.bodytracking).subscribe({
       next: data => {
-          console.log(data);
+          // console.log(data);
 
           setTimeout(() => {
             this.processondata = 'Done';

@@ -382,7 +382,7 @@ export class GeneralService {
             thumbnail: '',
             tracking_code: ''
         }
-        console.log(funnelstepdata);
+        // console.log(funnelstepdata);
         this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
             resolve(e);
@@ -521,7 +521,7 @@ export class GeneralService {
 
   addKeyword(event: any): void {
     const value = (event.value || '').trim();
-    console.log(this.keywords);
+    // console.log(this.keywords);
     if (value) {
       this.keywords.push(value);
     }

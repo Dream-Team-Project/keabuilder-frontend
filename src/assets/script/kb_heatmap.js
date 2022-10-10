@@ -225,8 +225,8 @@ function formouse(e){
         kb_mousegetlocY.push(e.clientY);
     }
 
-    // console.log(kb_mousegetlocX);
-    // console.log(kb_mousegetlocY);
+    console.log(kb_mousegetlocX);
+    console.log(kb_mousegetlocY);
 
     kb_fulldata['Mlocx'] = kb_mousegetlocX;
     kb_fulldata['MlocY'] = kb_mousegetlocY;
@@ -401,7 +401,7 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
                     processData: false,
                     type: 'GET',
                     success: function(response) {
-                        // console.log(response);
+                        console.log(response);
                     }
                 });
 
@@ -1866,7 +1866,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 url: window.location.href.toString().split('#kb-heatmaps')[0]
             },
             success: function (data) {
-                // console.log(data);
+                console.log(data);
 
                 var browser_segment = [];
                 var os_segment = [];
@@ -2498,7 +2498,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 //     chkmn = [];
                 //     chkmn.push(strng2[kb_main]);
                 //     chkmn.push(strng1[kb_main]);
-                //     // console.log(chkmn);
+                //     console.log(chkmn);
                 //         data2.push(chkmn);
                 //         kb_main++;
                 //     });
@@ -2776,7 +2776,7 @@ if(window.location.hash=='#kb-heatmaps'){
                     canvas.toBlob(function(blob) {
                         //     saveAs(blob, "screenshot.png");
                     var url = URL.createObjectURL(blob);
-                        // console.log(url);
+                        console.log(url);
 
                         document.getElementById('kb-scr-src').src = url;
                         document.getElementById('kb-link1').href = url;
@@ -2815,7 +2815,7 @@ if(window.location.hash=='#kb-heatmaps'){
             url: window.location.href.toString().split('#kb-heatmaps')[0]
         },
         success: function (data) {
-            // console.log(data.data);
+            console.log(data.data);
             data.data.forEach(element => {
                 var myArray = element['created_at'].split("-");
                 if(myArray[0]!=''){

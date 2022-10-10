@@ -76,7 +76,7 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data?.data) {
           if(data.data[0].publish_status==1){
             this.webstatus = 'Publish';
@@ -118,7 +118,7 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.setpublishstatus(value).subscribe({
       next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.status==1){
             this._snackBar.open('Status Updated Successfully!', 'OK');
           }
@@ -159,7 +159,7 @@ export class WebsiteDesignComponent implements OnInit {
 
       this.webpagesService.validatepages(pagename, pagepath, author).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.found==1){
             this.pathcheck = true;
@@ -174,7 +174,7 @@ export class WebsiteDesignComponent implements OnInit {
               prevFolder: pagepath
             }
             this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-              console.log(event);
+              // console.log(event);
             },
             error=>{console.log(error)});
             // create page/folder

@@ -23,7 +23,7 @@ export class HeatmapsRecordingsComponent implements OnInit {
 
     this.heatmapsService.getheatdir(hshvl).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
 
         data.data.forEach((element:any) => {
           this.video_list.push(element);
@@ -43,7 +43,7 @@ export class HeatmapsRecordingsComponent implements OnInit {
 
     this.heatmapsService.visitorinfo(hshvl).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         (<HTMLElement>document.getElementById("kb_visitorinfo1")).innerText = data.data[0].created_at;
         (<HTMLElement>document.getElementById("kb_visitorinfo2")).innerText = data.data[0].os;
         (<HTMLElement>document.getElementById("kb_visitorinfo3")).innerText = data.data[0].location;

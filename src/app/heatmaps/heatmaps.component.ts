@@ -20,7 +20,7 @@ export class HeatmapsComponent implements OnInit {
     
     this.heatmapsService.get().subscribe({
       next: data => {
-        console.log(data.data);
+        // console.log(data.data);
         this.visited = data.data;
         // console.log(this.visited);
       },

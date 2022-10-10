@@ -28,14 +28,14 @@ export class CourseUserCoursesComponent implements OnInit {
     
     this.coursename = this.route.snapshot.paramMap.get('name');
     this._course.singlebyurl(this.coursename).subscribe((res:any)=>{
-      // console.log(res);
+      console.log(res);
       if(res.data.length!=0){
 
         res.data.forEach((element:any) => {
-            // console.log(element);
+            console.log(element);
             this.courseid = element.uniqueid;
             this._module.bycourseid(element.uniqueid).subscribe((res2:any)=>{
-              // console.log(res2);
+              console.log(res2);
               if(res2.data.length!=0){
                 res2.data.forEach((element2:any) => {
                   this.moduledatas.push(element2);

@@ -55,7 +55,7 @@ export class FunnelArchieveComponent implements OnInit {
 
     this.funnelService.getarchivefunnel('7 DAY').subscribe({
       next: data => {
-        console.log(data.data); 
+        // console.log(data.data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 

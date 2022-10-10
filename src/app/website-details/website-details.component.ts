@@ -49,7 +49,7 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         this.kbpages = data.data;
 
@@ -61,7 +61,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.message != 'Error') {
           data.data.forEach((element:any) => {
 
@@ -169,7 +169,7 @@ export class WebsiteDetailsComponent implements OnInit {
             this._snackBar.open('Details Updated Successfully!', 'OK');
           })
           this.fileUploadService.deleteMenu(this._general.deletedMenuIds).subscribe(data => {
-            console.log(data);
+            // console.log(data);
           })
         }
       }

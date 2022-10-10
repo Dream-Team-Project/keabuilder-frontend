@@ -110,12 +110,12 @@ export class AllFunnelsComponent implements OnInit {
         filterdragobj.steps.reverse();
         filterdrag.push(filterdragobj);
       });
-      console.log(filterdrag);
+      // console.log(filterdrag);
       // console.log(filterdrag.reverse());
 
       this.funnelService.funnelandstepshorting(filterdrag,'steps_update').subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.success==1){
             // this.showfunnels();
           }
@@ -124,8 +124,8 @@ export class AllFunnelsComponent implements OnInit {
 
     },
     onAdd: () => {
-      console.log('added');
-      console.log(this.funnels);
+      // console.log('added');
+      // console.log(this.funnels);
 
       var filterdragobj:any = {};
       var filterdrag:any = [];
@@ -139,11 +139,11 @@ export class AllFunnelsComponent implements OnInit {
         filterdrag.push(filterdragobj);
       });
 
-      console.log(filterdrag);
+      // console.log(filterdrag);
 
       this.funnelService.funnelandstepshorting(filterdrag,'steps').subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.success==1){
             this.showfunnels();
           }
@@ -153,9 +153,9 @@ export class AllFunnelsComponent implements OnInit {
     },
     onStart: function (/**Event*/evt) {
     //   console.log(evt.item.classList.value);
-    //   // console.log(evt.oldIndex);  // element index within parent
+    //   console.log(evt.oldIndex);  // element index within parent
     //   var splcls:any = evt.item.classList.value.split(' ');
-    //   // console.log(splcls[0]);
+    //   console.log(splcls[0]);
     //   var id = splcls[0].split('kbstep-');
       
     //   var genscrn = '/assets/uploads/images/keaimage-'+id[1]+'-screenshot.png';
@@ -199,7 +199,7 @@ export class AllFunnelsComponent implements OnInit {
 
       this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.success==1){
 
             if(data.objpath.length!=0){
@@ -212,7 +212,7 @@ export class AllFunnelsComponent implements OnInit {
                   prevFolder: element
                 };
                 this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-                  console.log(event);
+                  // console.log(event);
                 },
                 error=>{console.log(error)});
               });
@@ -226,7 +226,7 @@ export class AllFunnelsComponent implements OnInit {
     }else{
       this.funnelService.makefunnelsettings(uniqueid,id,type).subscribe({
         next: data => {
-          console.log(data); 
+          // console.log(data); 
           
           if(type=='edit'){
             this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
@@ -271,7 +271,7 @@ export class AllFunnelsComponent implements OnInit {
 
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.funnels = [];
         if(data.data2.length!=0){
           this.funnelnotfound = false;
@@ -322,7 +322,7 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   funnelstepedit(unique1:any, unique2:any,type:any){
-    // console.log(unique1+' - '+unique2+' - '+type);
+    console.log(unique1+' - '+unique2+' - '+type);
 
     if(type=='edit'){
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
@@ -336,7 +336,7 @@ export class AllFunnelsComponent implements OnInit {
 
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
           next: data => {
-            // console.log(data); 
+            console.log(data); 
             this.pageurl = window.origin+'/assets/sites/pages/'+data.data[0].page_path;
           }
       });
@@ -347,10 +347,10 @@ export class AllFunnelsComponent implements OnInit {
       this.shwobtnfirst = false;
       this.colortheme = false;
     }else if(type=='duplicate'){
-        // console.log(unique1+' - '+unique2);
+        console.log(unique1+' - '+unique2);
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             if(data.success==1){
 
               var page = {
@@ -405,7 +405,7 @@ export class AllFunnelsComponent implements OnInit {
     console.log(id+''+title);
     this.funnelService.namepathchanges(id,title,'changefunnelname').subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         if(data.success==1){
           this._snackBar.open('Successfully Name Changed!', 'Close');
           this.showfunnels();

@@ -67,7 +67,7 @@ export class PaymentComponent implements OnInit {
           var data = {key:this.stripekey.value, secret: this.stripesecret.value, method:'insert'};
           this.checkoutService.updatepayment(data).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
               if(data.success==1){
                 this.popupsidebar = false;
                 this.getstatus = 'Connected';
@@ -86,7 +86,7 @@ export class PaymentComponent implements OnInit {
           var data = {key:this.stripekey.value, secret: this.stripesecret.value, method: 'update'};
           this.checkoutService.updatepayment(data).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
               if(data.success==1){
                 this.popupsidebar = false;
                 this.getstatus = 'Connected';

@@ -132,7 +132,7 @@ export class WebsitePagesComponent implements OnInit {
     var pageindex = event?.pageIndex;
     var pageSize = event?.pageSize;
     var previousPageIndex = event?.previousPageIndex;
-    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+    console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
 
     this.pageSize = 20;
     var data = {pagesize:pageSize};
@@ -269,7 +269,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   changemyname(event:any){
-    // console.log(event.target.value);
+    console.log(event.target.value);
     this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
   }
 
@@ -311,7 +311,7 @@ export class WebsitePagesComponent implements OnInit {
 
           this.websiteService.getWebsite().subscribe({
             next: data => {
-              // console.log('--');
+              console.log('--');
               console.log(data);
 
               if(data?.data[0]?.homepage==element.uniqueid){
@@ -320,7 +320,7 @@ export class WebsitePagesComponent implements OnInit {
                 element.defaulthome = 0;
 
               }
-              // console.log(element);
+              console.log(element);
               this.kbpages.push(element);
             }
           });
@@ -348,7 +348,7 @@ export class WebsitePagesComponent implements OnInit {
     }else{
       this.fetchdatastatus = false;
       this.pagegetdata = true;
-      // console.log(this.toggleview2);
+      console.log(this.toggleview2);
       if(this.toggleview2==true ){
         this.pagenotfound = true;
       }
@@ -378,7 +378,7 @@ export class WebsitePagesComponent implements OnInit {
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
           console.log(data);
-          // console.log(this.kbpages);
+          console.log(this.kbpages);
 
           if(data.success==1){
 
@@ -450,7 +450,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   savequickdetails(){
-    // console.log(this.quickeditid);
+    console.log(this.quickeditid);
     var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
@@ -463,7 +463,7 @@ export class WebsitePagesComponent implements OnInit {
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
           this.fileuploadService.renamepage(pathobj).subscribe({
             next: data => {
-              // console.log(data);
+              console.log(data);
             }
           });
           this.popupsidebar = false;
@@ -517,7 +517,7 @@ export class WebsitePagesComponent implements OnInit {
             var imgobj  = {oldname:'keaimage-'+page.uniqueid+'-screenshot.png', newname:'keaimage-'+data.uniqueid+'-screenshot.png'};
             this.fileuploadService.copyimage(imgobj).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
             
@@ -583,7 +583,7 @@ export class WebsitePagesComponent implements OnInit {
   changevisibility(value:any){
     this.webpagesService.pagevisibility(value).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.kbpages = [];
         this.shortdata(data);
       }
@@ -637,17 +637,17 @@ export class WebsitePagesComponent implements OnInit {
     // console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.success==1){
 
           if(data.deleteme==0){
             this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
 
                 if(data.success==1){
                   this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
-                    console.log(e);
+                    // console.log(e);
                   })
                 }
 
@@ -658,12 +658,12 @@ export class WebsitePagesComponent implements OnInit {
           if(data.deleteme==1){
             this.fileuploadService.deletepage(data.path).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
             this.fileuploadService.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
           }
@@ -691,12 +691,12 @@ export class WebsitePagesComponent implements OnInit {
 
   searchpage(event: Event) {
     var SearchValue = (event.target as HTMLInputElement).value;
-    console.log(SearchValue);
+    // console.log(SearchValue);
     this.selstatusshow = 'all';
 
     this.webpagesService.querystringmanage(SearchValue).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.kbpages = [];
         this.shortdata(data);
       }

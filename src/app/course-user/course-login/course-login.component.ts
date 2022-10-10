@@ -41,9 +41,9 @@ export class CourseUserCourseLoginComponent implements OnInit {
 
       this.courseService.verifyuserlogin(userdata).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           if(data.data.length!=0){
-            // console.log('Good');
+            console.log('Good');
             this.findfalseinfo = false;
             var getassigncourse:any = [];
 

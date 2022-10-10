@@ -131,14 +131,14 @@ export class MembershipTagsComponent implements OnInit {
   }
 
   createmytags(){
-    // console.log(this.tags);
+    console.log(this.tags);
     if (this.tags.length!=0) {
 
       var gentags = this.tags.toString();
-      // console.log(gentags);
+      console.log(gentags);
       this.courseService.addnewtags(gentags).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           this.tags = [];
           this.getallmytags();
           this._snackBar.open('Successfully Tag Added!', 'Close');
@@ -176,7 +176,7 @@ export class MembershipTagsComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
+      console.log(id);
 
       if(result.event == 'Delete'){
         var data = {id:id,name:'',type:'delete'};

@@ -168,12 +168,12 @@ export class MembershipCouponsComponent implements OnInit {
     var settags = this.productoptionals.value == null ? '' : this.productoptionals.value;
     this.newcoupon.included_offers = settags;
     
-    // console.log(this.newcoupon);
+    console.log(this.newcoupon);
     if(this.nameFormControl.status=='VALID'){
 
       this.courseService.addnewcoupon(this.newcoupon).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           if(data.already==1){
             this._snackBar.open('Coupon Already Exist!', 'Close');
           }else{
@@ -221,13 +221,13 @@ export class MembershipCouponsComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
+      console.log(id);
 
       if(result.event == 'Delete'){
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedelcoupon(data).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             this.getallmycoupons();
             this._snackBar.open('Coupon Deleted Successfully!', 'Close');
           }

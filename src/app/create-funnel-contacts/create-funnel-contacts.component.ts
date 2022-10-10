@@ -74,17 +74,17 @@ export class CreateFunnelContactsComponent implements OnInit {
 
         this.funnelsteps = gensepratestep;
 
-        console.log(this.funnelsteps); 
+        // console.log(this.funnelsteps); 
       },
       error: err => {
         console.log(err);
       }
     });
-    console.log(this.uniqueidstep );
+    // console.log(this.uniqueidstep );
 
     this.funnelService.getfunnelcontacts(this.uniqueid,'7 DAY','all').subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
@@ -144,7 +144,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
     this.funnelService.getfunnelcontacts(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
@@ -161,7 +161,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
     this.funnelService.deletefunnelcontacts(value).subscribe({
       next: data => {
-        console.log(data.data); 
+        // console.log(data.data); 
         if(data.data==1){
           this.applykbfilter();
         }

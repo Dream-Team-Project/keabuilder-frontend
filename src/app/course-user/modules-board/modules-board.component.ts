@@ -50,7 +50,7 @@ export class CourseUserModulesBoardComponent implements OnInit {
   showlessons(id:any){
     if(id!=''){
       this._lesson.onlymodulebyid(id).subscribe((res:any)=>{
-        // console.log(res);
+        console.log(res);
         this.moduleparts = res.data;
         this.totalprogress = res.data.length;
       });

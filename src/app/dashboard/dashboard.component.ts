@@ -642,7 +642,7 @@ export class DashboardComponent implements OnInit {
     
     this.dashboardService.getAllcontact().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.data.length!=0){
           this.totalmembers = data.data[0]['count(*)'];
         }
@@ -653,7 +653,7 @@ export class DashboardComponent implements OnInit {
     var datacondition2 = {type:'lastweekrevenue',option:'7 DAY'}
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         
         var newarr:any = [];
         if(data.data.length!=0){
@@ -700,7 +700,7 @@ export class DashboardComponent implements OnInit {
     var datacondition = {type:'lastweekcontact',option:'7 DAY'}
     this.dashboardService.getconditionaldata(datacondition).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         
         var newarr:any = [];
         if(data.data.length!=0){

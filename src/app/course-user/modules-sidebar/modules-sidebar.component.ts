@@ -30,18 +30,18 @@ export class CourseUserModulesSidebarComponent implements OnInit {
 
       this._module.bycourseid(res1.data[0].uniqueid).subscribe((res:any)=>{
 
-        // console.log(res);
+        console.log(res);
 
         this.course_modules = res.data;
         
         this._lesson.bycourseid(res1.data[0].uniqueid).subscribe((res2:any)=>{
           
           this.course_lessons = res2.data;
-            // console.log(res2)
-            // console.log(this.course_lessons);
+            console.log(res2)
+            console.log(this.course_lessons);
         });
 
-        // console.log(this.course_modules);
+        console.log(this.course_modules);
 
       });
 

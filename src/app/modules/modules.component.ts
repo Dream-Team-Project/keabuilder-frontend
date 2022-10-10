@@ -87,12 +87,12 @@ export class ModulesComponent implements OnInit {
   ngOnInit(): void {
 
     this._course.single(this.course.uniqueid).subscribe(res=>{
-      // console.log(res);
+      console.log(res);
         var getofferid = res.data[0].offers;
         if(getofferid!=''){
           var newob = {id:getofferid};
           this._course.getoffersbyids(newob).subscribe(res=>{
-            // console.log(res);
+            console.log(res);
             this.showcourseoffers = res.data;
           });
           

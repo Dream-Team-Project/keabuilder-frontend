@@ -72,12 +72,12 @@ export class MembershipOffersComponent implements OnInit {
     this.courseService.all().subscribe({
 
       next: data => {
-        // console.log(data);
+        console.log(data);
         data.data.forEach((element:any) => {
             var genobj = {id:element.uniqueid,text:element.title};
             this.productoptionalList.push(genobj);
         });
-        // console.log(this.productoptionalList);
+        console.log(this.productoptionalList);
 
       }
 
@@ -169,9 +169,9 @@ export class MembershipOffersComponent implements OnInit {
   showdataoffer(data:any){
     this.kbcourses = [];
 
-    // console.log(data);
+    console.log(data);
     data.data.forEach((element:any) => {
-      // console.log(element);
+      console.log(element);
 
       var shortcourse = '0';
       if(element.selected_course!=''){
@@ -239,13 +239,13 @@ export class MembershipOffersComponent implements OnInit {
 
     var newoffer = {title:this.title,selected_course:selectcourse,payment_type:this.paymenttype,price:this.price,currency:this.pricetype,no_monthly_payment:this.monthly_payments,bill_every:this.bill_every,offer_interval:this.interval};
 
-    // console.log(newoffer);
+    console.log(newoffer);
 
     if(this.nameFormControl.status=='VALID'){
 
       this.courseService.addnewoffer(newoffer).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           if(data.already==1){
             this._snackBar.open('Offer Already Exist!', 'Close');
           }else{
@@ -266,13 +266,13 @@ export class MembershipOffersComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
+      console.log(id);
 
       if(result.event == 'Delete'){
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedeloffer(data).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             this.getallmyoffers();
             this._snackBar.open('Offer Deleted Successfully!', 'Close');
           }
@@ -292,22 +292,22 @@ export class MembershipOffersComponent implements OnInit {
       var data = {id:id,name:'',type:'geteditdata'};
       this.courseService.updatedeloffer(data).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           data.data.forEach((element:any) => {
 
             
 
             this.title = element.title;
-            // console.log(element.selected_course);
+            console.log(element.selected_course);
             if(element.selected_course!=null && element.selected_course!=''){
               
               var arselmult = (element.selected_course).split(',');
-              // console.log(arselmult);
+              console.log(arselmult);
               this.productoptionals.setValue(arselmult); 
               
               this.showmyselected = arselmult;
             }
-            // console.log(this.productoptionals);
+            console.log(this.productoptionals);
 
             this.paymenttype = element.payment_type;
             this.price = element.price;
@@ -345,7 +345,7 @@ export class MembershipOffersComponent implements OnInit {
     var data = {id:id,name:name,type:type};
     this.courseService.updatedeloffer(data).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         if(data.isrename==true){
           this._snackBar.open('Offer Renamed Successfully!', 'Close');
         }else if(data.isrename==false){
@@ -378,7 +378,7 @@ export class MembershipOffersComponent implements OnInit {
 
     var newoffer = {title:this.title,selected_course:selectcourse,payment_type:this.paymenttype,price:this.price,currency:this.pricetype,no_monthly_payment:this.monthly_payments,bill_every:this.bill_every,offer_interval:this.interval};
     var data = {id:this.updateid, name:'', type:'update', update:newoffer};
-    // console.log(data);
+    console.log(data);
 
     this.courseService.updatedeloffer(data).subscribe({
       next: data => {
@@ -392,7 +392,7 @@ export class MembershipOffersComponent implements OnInit {
 
   searchoffer(event: Event) {
     var SearchValue = (event.target as HTMLInputElement).value;
-    // console.log(SearchValue);
+    console.log(SearchValue);
 
     this.courseService.querystringmanage(SearchValue).subscribe({
       next: data => {

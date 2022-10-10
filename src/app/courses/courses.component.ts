@@ -52,13 +52,13 @@ export class CoursesComponent implements OnInit {
     this._course.getalloffers().subscribe({
       next: data => {
 
-        // console.log(data);
-        // console.log('--data');  
+        console.log(data);
+        console.log('--data');  
 
        data.data.forEach((element: any) => {
           var genobj = {id:element.uniqueid,text:element.title};
           this.offersList.push(genobj);
-          // console.log(this.offersList);
+          console.log(this.offersList);
        });
 
       }
@@ -141,9 +141,9 @@ export class CoursesComponent implements OnInit {
       this.course.offers = this.offers.value.join(',');
     }
 
-    // console.log(this.course);
+    console.log(this.course);
     this._course.update(this.course).subscribe((res:any)=>{
-      // console.log(res);
+      console.log(res);
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
       this.timeStamp = (new Date()).getTime();
       this.allCourses(true);
@@ -210,7 +210,7 @@ export class CoursesComponent implements OnInit {
     this.selectedcourse = true;
     this.showmyselected = course.offers.split(',');
     this.findselectedproduct();
-    // console.log(course);
+    console.log(course);
     if(this.course.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
     this.update = true;
     this.openSidebar();

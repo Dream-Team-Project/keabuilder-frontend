@@ -55,9 +55,9 @@ export class RegisterComponent implements OnInit {
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
         this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
-              console.log(e);
+              // console.log(e);
             });
             var domainpath = window.location.hostname;
             var emailhtml = `Dear `+firstname+`,<br>
@@ -81,14 +81,14 @@ export class RegisterComponent implements OnInit {
             var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome To Kea', html: emailhtml};
             this.emailService.sendmail(maildata).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
 
             var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
             this.emailService.sendmail(maildata).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
             

@@ -109,14 +109,13 @@ export class FunnelCheckoutComponent implements OnInit {
     if(!this.founderror){
       this.checkoutService.stripePaymentkey(uniqueid).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data?.data?.length!=0){
               
             let script = this._renderer2.createElement('script');
             script.type = `text/javascript`;
             script.text = `
-            // console.log('hi');
               var stripe = Stripe('`+data.data[0].publish_key+`');
               
               var elements = stripe.elements();
@@ -151,7 +150,7 @@ export class FunnelCheckoutComponent implements OnInit {
                     var errorElement = document.getElementById('card-errors');
                     errorElement.textContent = result.error.message;
                   } else {
-                    console.log(result.token);
+                    // console.log(result.token);
                     document.getElementById('keatoken').value = result.token.id;
                     // document.getElementById("payment-form").submit();
                   }
@@ -175,7 +174,7 @@ export class FunnelCheckoutComponent implements OnInit {
 
         },
         error: err => {
-          // console.log(err);
+          console.log(err);
         }
 
       });
@@ -259,7 +258,7 @@ export class FunnelCheckoutComponent implements OnInit {
         this.checkoutService.stripePayment(this.stripeData).subscribe({
           next: data => {
 
-            console.log(data);
+            // console.log(data);
             if(data.success==true){
 
               if(data.customer){

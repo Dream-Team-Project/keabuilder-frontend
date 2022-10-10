@@ -72,7 +72,7 @@ export class MembershipMembersComponent implements OnInit {
 
     this.courseService.getalltags().subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         data.data.forEach((element:any) => {
           this.tagoptionalList.push(element.name);
         }); 
@@ -164,7 +164,7 @@ export class MembershipMembersComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
+      console.log(id);
 
       if(result.event == 'Delete'){
         var data = {id:id,name:'',type:'delete'};

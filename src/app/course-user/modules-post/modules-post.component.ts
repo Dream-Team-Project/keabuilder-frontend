@@ -78,7 +78,7 @@ export class CourseUserModulesPostComponent implements OnInit {
   gotonextprev(value:any, navigate:any){
       var objdata = {coursename:this.coursename, lessonid:this.postid, method:value}
       this._lesson.findnextprevlesson(objdata).subscribe((res:any)=>{
-        // console.log(res);
+        console.log(res);
 
           if(res.data[0].findnext==0){
             this.nextlesson = false;
