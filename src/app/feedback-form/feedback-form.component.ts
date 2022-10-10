@@ -2,7 +2,7 @@ import { Component,Input, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewCon
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { EmailService } from '../_services/mailer.service';
-import { TokenStorageService } from '../_services/token-storage.service';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-feedback-form',
@@ -21,10 +21,15 @@ export class FeedbackFormComponent implements OnInit {
   connectWtParent:boolean = false;
 
   feedback:any = {
+    userid: '',
     name: '',
     email: '',
     message: '',
-    body: ''
+  }
+
+  mailStatus:any = {
+    sending: false,
+    error: false,
   }
 
   @Input()
@@ -36,13 +41,15 @@ export class FeedbackFormComponent implements OnInit {
   } 
   
   constructor(
-    private _tokenStorage: TokenStorageService,
+    private _general: GeneralService,
     private _mail: EmailService,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
   ) {
-    this.feedback.name = _tokenStorage.getUser().username;
-    this.feedback.email = _tokenStorage.getUser().email;
+    this.feedback.userid = _general.user.uniqueid;
+    this.feedback.name = _general.user.name;
+    this.feedback.email = _general.user.email;
+    console.log(this.feedback);
    }
 
   ngOnInit(): void {
@@ -74,17 +81,28 @@ export class FeedbackFormComponent implements OnInit {
       setTimeout(()=>{
         this._overlayRef.detach();
         this.dragBoxAnime.close = false;
+      this.mailStatus.sending = false;
+      this.mailStatus.error = false;
+      this.feedback.message = '';
     },200);
   }
 
   sendFeedback() {
-    var body = ''
-    var maildata = {
-      tomailid: 'support@keasolution.com', 
-      frommailid: this.feedback.email, 
-      subject: 'Kea User Feedback', 
-      html: 'html body'}
-    this._mail.sendmail(maildata);
+    if(this.feedback.message) {
+      this.mailStatus.error = false;
+      this.mailStatus.sending = true;
+      var maildata = {
+        tomailid: ['support@keasolution.com', 'keabuilder@gmail.com'], 
+        frommailid: 'support@keasolution.com', 
+        cc: ['abhishek@dreamreflectionmedia.com', 'vikash@dreamreflectionmedia.com'],
+        subject: 'Kea User Feedback', 
+        html: '<div><strong>Userid: </strong>'+ this.feedback.userid +'</div>' + '<div><strong>Username: </strong>'+ this.feedback.name +'</div>' + '<div><strong>Email: </strong>'+ this.feedback.email +'</div>' + this.feedback.message
+      }
+      this._mail.sendmail(maildata).subscribe((data:any)=>{
+        this.overlayRefDetach();
+        this._general.openSnackBar('Thanks for your feedback!', 'OK');
+      });
+    }
+    else this.mailStatus.error = true;
   }
-
 }
