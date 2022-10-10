@@ -383,7 +383,7 @@ export class CreateFunnelComponent implements OnInit {
         // console.log(this.uniqueidstep);
 
         if(data.data[0].funnelselected==1){
-          this.router.navigate(['/builder/funnel/'+this.uniqueidstep],{relativeTo: this.route});
+          this._general.redirectToBuilder(this.uniqueidstep, 'funnel');
         }
 
         if(data.data[0].funnelselected==1){

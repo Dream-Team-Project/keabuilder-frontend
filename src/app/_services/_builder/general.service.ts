@@ -754,7 +754,7 @@ export class GeneralService {
     return window.location.replace('https:/keabuilder.com');
   }
 
-  redirectToBuilder(id:any) {
-    return window.location.replace('/builder/website/'+id);
+  redirectToBuilder(id:any, type:string) {
+    return window.location.replace('/builder/'+type+'/'+id);
   }
 }
