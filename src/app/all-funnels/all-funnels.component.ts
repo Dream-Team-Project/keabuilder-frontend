@@ -322,7 +322,7 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   funnelstepedit(unique1:any, unique2:any,type:any){
-    console.log(unique1+' - '+unique2+' - '+type);
+    // console.log(unique1+' - '+unique2+' - '+type);
 
     if(type=='edit'){
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
@@ -336,7 +336,7 @@ export class AllFunnelsComponent implements OnInit {
 
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
           next: data => {
-            console.log(data); 
+            // console.log(data); 
             this.pageurl = window.origin+'/assets/sites/pages/'+data.data[0].page_path;
           }
       });
@@ -347,10 +347,10 @@ export class AllFunnelsComponent implements OnInit {
       this.shwobtnfirst = false;
       this.colortheme = false;
     }else if(type=='duplicate'){
-        console.log(unique1+' - '+unique2);
+        // console.log(unique1+' - '+unique2);
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success==1){
 
               var page = {
@@ -361,7 +361,7 @@ export class AllFunnelsComponent implements OnInit {
                 prevFolder: data.pagepath
               };
               this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-                console.log(event);
+                // console.log(event);
               },
               error=>{console.log(error)});
 
@@ -383,7 +383,7 @@ export class AllFunnelsComponent implements OnInit {
   makearchivestep(){
     this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.status==1){
           this.reason = '';
@@ -402,10 +402,10 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   changestepnamesoutside(id:any,title:any){
-    console.log(id+''+title);
+    // console.log(id+''+title);
     this.funnelService.namepathchanges(id,title,'changefunnelname').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.success==1){
           this._snackBar.open('Successfully Name Changed!', 'Close');
           this.showfunnels();
@@ -419,7 +419,7 @@ export class AllFunnelsComponent implements OnInit {
    
     this.funnelService.makefunnelsettings(this.badgecolor, this.forarchiveid, 'colorbadge').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.status==1){
           this.popupsidebar = false;

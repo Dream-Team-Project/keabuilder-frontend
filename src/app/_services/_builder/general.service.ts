@@ -516,7 +516,8 @@ export class GeneralService {
   }
 
   joinWthDash(item:string) {
-    return item.toLowerCase().replace(/ /g, '-');
+    if(item) return item.toLowerCase().replace(/ /g, '-');
+    return '';
   }
 
   addKeyword(event: any): void {
