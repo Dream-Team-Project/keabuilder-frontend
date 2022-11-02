@@ -49,7 +49,6 @@ export class FeedbackFormComponent implements OnInit {
     this.feedback.userid = _general.user.uniqueid;
     this.feedback.name = _general.user.name;
     this.feedback.email = _general.user.email;
-    // console.log(this.feedback);
    }
 
   ngOnInit(): void {

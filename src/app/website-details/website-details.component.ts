@@ -49,10 +49,7 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        // console.log(data);
-
         this.kbpages = data.data;
-
       },
       error: err => {
         console.log(err);
@@ -61,7 +58,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         if(data.message != 'Error') {
           data.data.forEach((element:any) => {
 
