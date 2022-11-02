@@ -48,12 +48,12 @@
     /* scrolling */
     
     * ::-webkit-scrollbar, .kb-scroll ::-webkit-scrollbar {
-        width: 0px;
+        width: 8px!important;
         transition: 0.2s ease-in-out;
         z-index: 9999;
     }
 
-    *:hover #bw-sidebar ::-webkit-scrollbar { 
+    * #bw-sidebar ::-webkit-scrollbar, *:hover #bw-sidebar ::-webkit-scrollbar { 
       width: 0px!important;
     }
 
