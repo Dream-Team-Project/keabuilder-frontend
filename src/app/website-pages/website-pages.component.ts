@@ -132,7 +132,7 @@ export class WebsitePagesComponent implements OnInit {
     var pageindex = event?.pageIndex;
     var pageSize = event?.pageSize;
     var previousPageIndex = event?.previousPageIndex;
-    console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
 
     this.pageSize = 20;
     var data = {pagesize:pageSize};
@@ -234,7 +234,7 @@ export class WebsitePagesComponent implements OnInit {
 
       this.webpagesService.validatepages(pagename, pagepath, author).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.found==1){
             this.pathcheck = true;
@@ -249,7 +249,7 @@ export class WebsitePagesComponent implements OnInit {
               prevFolder: pagepath
             }
             this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-              console.log(event);
+              // console.log(event);
             },
             error=>{console.log(error)});
             // create page/folder
@@ -269,7 +269,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   changemyname(event:any){
-    console.log(event.target.value);
+    // console.log(event.target.value);
     this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
   }
 
@@ -278,18 +278,15 @@ export class WebsitePagesComponent implements OnInit {
       next: data => {
         this.kbpages = [];
         this.shortdata(data);
-        console.log(data);
+        // console.log(data);
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
 
   shortdata(dataA:any){
-    console.log('---chek');
-    console.log(dataA);
-
     if(dataA.success !=0 && dataA?.data?.length!=0){
 
       if(dataA.success == 2){
@@ -311,16 +308,12 @@ export class WebsitePagesComponent implements OnInit {
 
           this.websiteService.getWebsite().subscribe({
             next: data => {
-              console.log('--');
-              console.log(data);
-
               if(data?.data[0]?.homepage==element.uniqueid){
                 element.defaulthome = 1;
               }else{
                 element.defaulthome = 0;
 
               }
-              console.log(element);
               this.kbpages.push(element);
             }
           });
@@ -348,7 +341,7 @@ export class WebsitePagesComponent implements OnInit {
     }else{
       this.fetchdatastatus = false;
       this.pagegetdata = true;
-      console.log(this.toggleview2);
+      // console.log(this.toggleview2);
       if(this.toggleview2==true ){
         this.pagenotfound = true;
       }
@@ -377,8 +370,8 @@ export class WebsitePagesComponent implements OnInit {
 
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
-          console.log(data);
-          console.log(this.kbpages);
+          // console.log(data);
+          // console.log(this.kbpages);
 
           if(data.success==1){
 
@@ -392,13 +385,13 @@ export class WebsitePagesComponent implements OnInit {
                   if(data.name=='0'){
 
                     // this.showwebpages();
-                    console.log(data.id);
+                    // console.log(data.id);
                     this.webpagesService.checkandmakestatus(data.id).subscribe({
                       next: data => {
-                        console.log(data);
+                        // console.log(data);
                         if(data.success==1){
                           this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
-                            console.log(e);
+                            // console.log(e);
                           })
                         }
                       }
@@ -450,12 +443,12 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   savequickdetails(){
-    console.log(this.quickeditid);
+    // console.log(this.quickeditid);
     var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
 
-        console.log(data);
+        // console.log(data);
         if(data.found==1){
           this.pathcheck2 = true;
         }else if(data.found==0){
@@ -463,7 +456,7 @@ export class WebsitePagesComponent implements OnInit {
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
           this.fileuploadService.renamepage(pathobj).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
             }
           });
           this.popupsidebar = false;
@@ -675,7 +668,7 @@ export class WebsitePagesComponent implements OnInit {
 
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
 
