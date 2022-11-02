@@ -5,7 +5,7 @@
       <div class="d-flex align-items-center">
         <!--begin::Button-->
 
-        <a [routerLink]="['/dashboard']" mat-button>
+        <a [routerLink]="[userService.prevPath]" mat-button>
           Back
         </a>
         <!--end::Button-->
@@ -595,7 +595,7 @@
 
   <div class="container text-right">
       <div class="btn-group">
-        <a [routerLink]="['/dashboard']" mat-button>
+        <a [routerLink]="[userService.prevPath]" mat-button>
           Back
         </a>
         <button type="button" mat-raised-button color="primary" (click)="kbsavechange()" class="ml-3">Save
