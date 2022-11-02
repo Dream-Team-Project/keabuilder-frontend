@@ -55,13 +55,13 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+console.log('inside');
     const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
 
-      // console.log(this.form);
-        this.authService.register(this.form).subscribe({
+        this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
               // console.log(e);
             });
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
             <br>
             Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
             <br>
-            Your account for domain `+username+`.keabuilder.com has been confirmed and set up.<br>
+            Your account for domain `+subdomain+`.keapages.com has been confirmed and set up.<br>
             <br>
             Your new KEA builder includes 2 FREE hours of BONUS Launch Assist [activated from 1st of November] redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
             <br>
@@ -128,6 +128,11 @@ export class RegisterComponent implements OnInit {
       });
 
     }
+
+    if(this.userFormControl.status!='VALID' || this.emailFormControl.status!='VALID' || this.firstnameFormControl.status!='VALID'){
+      this.changestep = true;
+    }
+
   }
 
   onupdateusername(event:any){

@@ -77,7 +77,7 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem("kbcourselogin");
 
     this.offcanvasoverlay=false;
-    this.router.navigate(['/'],{relativeTo: this.route});
+    this.router.navigate(['/login'],{relativeTo: this.route});
   }
 
   gotouser(){

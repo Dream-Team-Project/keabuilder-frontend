@@ -55,7 +55,7 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <button mat-raised-button type="button" class="mt-3 registerbtn" (click)="fillnext()">Next</button>
+                  <button mat-raised-button class="mt-3 registerbtn" (click)="fillnext()">Next</button>
                   
               </div>
 
@@ -72,7 +72,7 @@
                   <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label> Subdomain</mat-label>
                     <input type="text" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
-                    <span matSuffix>.keabuilder.com</span>
+                    <span matSuffix>.keapages.com</span>
                     <mat-error *ngIf="companynameFormControl.hasError('required')">
                       Subdomain Name is <strong>required</strong>
                     </mat-error>
