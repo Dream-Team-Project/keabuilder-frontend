@@ -5,6 +5,8 @@ import {FormControl, Validators} from '@angular/forms';
 import { WistiaService } from '../_services/wistia.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { EmailService } from '../_services/mailer.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-register',
@@ -44,20 +46,23 @@ export class RegisterComponent implements OnInit {
   changestep = true;
 
   constructor(private authService: AuthService,
+              public _general: GeneralService,
               private router: Router,
               private route: ActivatedRoute,
               private _file: FileUploadService,
               private _wistia: WistiaService,
-              private emailService: EmailService) { }
+              private emailService: EmailService,
+              private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     this.createNewImg();
   }
 
   onSubmit(): void {
-console.log('inside');
     const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
+
+      if(this.form.subdomain!='app' && this.form.subdomain!='test' && this.form.subdomain!='developer'){
 
         this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
           next: data => {
@@ -119,13 +124,20 @@ console.log('inside');
             this.isSignUpFailed = false;
             this.redirectToDashboard();
 
+            this._snackBar.open('Sign Up Successfully!', 'OK');
+
             
         },
         error: err => {
           this.errorMessage = err.error.message;
           this.isSignUpFailed = true;
         }
-      });
+        });
+
+      }else{
+        this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+      }
+
 
     }
 
@@ -136,7 +148,7 @@ console.log('inside');
   }
 
   onupdateusername(event:any){
-    this.form.subdomain = event.target.value;
+    this.form.subdomain = this._general.joinWthDash(event.target.value);
   }
 
   redirectToDashboard(): void {
