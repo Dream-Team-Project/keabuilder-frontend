@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
     username: null,
     firstname:null,
     lastname:'',
-    company:null,
+    company:'',
     email: null,
     phone:'',
     password: null,
@@ -40,6 +40,8 @@ export class RegisterComponent implements OnInit {
   min = 1;
   max = 3;
   bgImg = 'url(./assets/images/login/login-bk1.jpg)';
+
+  changestep = true;
 
   constructor(private authService: AuthService,
               private router: Router,
@@ -53,9 +55,11 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username,firstname,lastname,company, email,phone, password } = this.form;
+    const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
-        this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
+
+      // console.log(this.form);
+        this.authService.register(this.form).subscribe({
           next: data => {
             // console.log(data);
             this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
@@ -122,7 +126,12 @@ export class RegisterComponent implements OnInit {
           this.isSignUpFailed = true;
         }
       });
+
     }
+  }
+
+  onupdateusername(event:any){
+    this.form.subdomain = event.target.value;
   }
 
   redirectToDashboard(): void {
@@ -132,6 +141,10 @@ export class RegisterComponent implements OnInit {
   createNewImg(){
     var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
     this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
+  }
+
+  fillnext(){
+    this.changestep = !this.changestep;
   }
 
 
