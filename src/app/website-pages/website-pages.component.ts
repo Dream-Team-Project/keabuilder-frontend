@@ -114,7 +114,6 @@ export class WebsitePagesComponent implements OnInit {
   archive_id = 0;
   showarchivemode = false;
   nodata = true;
-  fetchdatastatus = false;
 
   
   // MatPaginator Inputs
@@ -288,7 +287,6 @@ export class WebsitePagesComponent implements OnInit {
         this.nodata = true;
       }else{
         this.nodata = false;
-        this.fetchdatastatus = true;
         dataA.data.forEach((element:any) => {
               
           var mycustomdate =  new Date(element.updated_at);
@@ -330,7 +328,6 @@ export class WebsitePagesComponent implements OnInit {
       }
 
     }else{
-      this.fetchdatastatus = false;
       this.nodata = true;
     }
 
@@ -551,9 +548,6 @@ export class WebsitePagesComponent implements OnInit {
 
   archivepages(){
     this.showarchivemode = !this.showarchivemode;
-    if(this.fetchdatastatus==false){
-      this.nodata = !this.nodata;
-    }
   }
 
   changevisibility(value:any){
