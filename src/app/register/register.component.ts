@@ -15,7 +15,8 @@ export class RegisterComponent implements OnInit {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
-  fistnameFormControl = new FormControl('',[Validators.required]);
+  firstnameFormControl = new FormControl('',[Validators.required]);
+  subdomainFormControl = new FormControl('',[Validators.required]);
   lastnameFormControl = new FormControl('');
   companynameFormControl = new FormControl('');
   phoneFormControl = new FormControl('');
@@ -30,7 +31,8 @@ export class RegisterComponent implements OnInit {
     company:null,
     email: null,
     phone:'',
-    password: null
+    password: null,
+    subdomain:null
   };
   isSuccessful = false;
   isSignUpFailed = false;
@@ -52,7 +54,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(): void {
     const { username,firstname,lastname,company, email,phone, password } = this.form;
-    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
+    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
         this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
             // console.log(data);

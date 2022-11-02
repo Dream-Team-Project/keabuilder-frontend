@@ -28,8 +28,8 @@
                   <div class="col-sm-6">
                     <mat-form-field class="example-full-width" appearance="fill">
                       <mat-label> First Name</mat-label>
-                      <input type="text" matInput [formControl]="fistnameFormControl" placeholder="Ex. Rock" required [(ngModel)]="form.firstname">
-                      <mat-error *ngIf="fistnameFormControl.hasError('required')">
+                      <input type="text" matInput [formControl]="firstnameFormControl" placeholder="Ex. Rock" required [(ngModel)]="form.firstname">
+                      <mat-error *ngIf="firstnameFormControl.hasError('required')">
                         First Name is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -43,14 +43,6 @@
                 </div>
 
                 <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label> Company Name</mat-label>
-                  <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.company">
-                  <!-- <mat-error *ngIf="companynameFormControl.hasError('required')">
-                    Company Name is <strong>required</strong>
-                  </mat-error> -->
-                </mat-form-field>
-
-                <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Email</mat-label>
                   <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" required [(ngModel)]="form.email">
                   <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -60,6 +52,25 @@
                     Email is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label> Company Name</mat-label>
+                  <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.company">
+                  <!-- <mat-error *ngIf="companynameFormControl.hasError('required')">
+                    Company Name is <strong>required</strong>
+                  </mat-error> -->
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label> Subdomain</mat-label>
+                  <input type="text" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+                  <span matSuffix>.keabuilder.com</span>
+                  <mat-error *ngIf="companynameFormControl.hasError('required')">
+                    Subdomain Name is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+             
 
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label> Phone Number</mat-label>
