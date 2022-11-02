@@ -58,7 +58,6 @@ export class WebsiteDetailsComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        console.log(data);
         if(data.message != 'Error') {
           data.data.forEach((element:any) => {
 
