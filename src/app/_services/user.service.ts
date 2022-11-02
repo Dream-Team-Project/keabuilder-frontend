@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenStorageService } from './token-storage.service';
 
 const API_URL = 'api/allusers/';
 
@@ -8,7 +9,15 @@ const API_URL = 'api/allusers/';
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private http: HttpClient) { }
+
+  uniqueuserid:any = '';
+  getUsersDetailsApi = '/api/getUsersDetailsdata/';
+  updateuserdetailsApi = '/api/updateUsersDetailsdata/';
+
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
+    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    // console.log(this.tokenStorage.getUser());
+  }
 
   getUsers(): Observable<any> {
     return this.http.get(API_URL)
@@ -29,4 +38,15 @@ export class UserService {
   getAdminBoard(): Observable<any> {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
   }
+
+  getUsersDetails(): Observable<any> {
+    return this.http.post(this.getUsersDetailsApi+this.uniqueuserid,{});
+  }
+
+  updateuserdetails(data: any): Observable<any> {
+    return this.http.post(this.updateuserdetailsApi+this.uniqueuserid, data);
+  }
+
+  
+
 }

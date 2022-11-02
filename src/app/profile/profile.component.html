@@ -11,7 +11,7 @@
         <!--end::Button-->
         <!--begin::Dropdown-->
         <div class="btn-group ml-2">
-          <button type="button" mat-raised-button color="primary">Save
+          <button type="button" mat-raised-button color="primary" (click)="kbsavechange()" >Save
             Changes</button>
         </div>
         <!--end::Dropdown-->
@@ -145,12 +145,16 @@
                     <label class="col-form-label col-3 text-lg-right text-left">Avatar</label>
                     <div class="col-9">
                       <div class="image-input image-input-empty image-input-outline" id="kt_user_edit_avatar">
-                        <div class="image-input-wrapper"></div>
-                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow">
-                          <i class="fa fa-pen icon-sm text-muted"></i>
-                          <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
-                          <input type="hidden" name="profile_avatar_remove">
+                        <div class="image-input-wrapper" [style.backgroundImage]="'url('+getImgPath(defaultimgpath)+')'"></div>
+                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow ml-xl-n3">
+
+                          <input type="file" name="profile_avatar" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg">
+                          <p class="mb-0"><small class="text-danger">{{typeerror}}</small></p>
+
+                          <!-- <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
+                          <input type="hidden" name="profile_avatar_remove"> -->
                         </label>
+
                       </div>
                     </div>
                   </div>
@@ -160,7 +164,8 @@
                     <label class="col-form-label col-3 text-lg-right text-left">Username</label>
                     <div class="col-9">
                       <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
-                        <input class="form-control form-control-lg form-control-solid" type="text" [value]="bwname" >
+                        <input class="form-control form-control-lg form-control-solid" type="text" name="username"  [(ngModel)]="profileobj.username"
+                        [value]="profileobj.username" >
                       </div>
                     </div>
                   </div>
@@ -169,7 +174,8 @@
                   <div class="form-group row">
                     <label class="col-form-label col-3 text-lg-right text-left">First Name</label>
                     <div class="col-9">
-                      <input class="form-control form-control-lg form-control-solid" name="firstname"  type="text">
+                      <input class="form-control form-control-lg form-control-solid" name="firstname"  type="text" [(ngModel)]="profileobj.firstname"
+                      [value]="profileobj.firstname">
                     </div>
                   </div>
                   <!--end::Group-->
@@ -177,15 +183,17 @@
                   <div class="form-group row">
                     <label class="col-form-label col-3 text-lg-right text-left">Last Name</label>
                     <div class="col-9">
-                      <input class="form-control form-control-lg form-control-solid" name="lastname" type="text" value="">
+                      <input class="form-control form-control-lg form-control-solid" name="lastname" type="text" value="" [(ngModel)]="profileobj.lastname"
+                      [value]="profileobj.lastname">
                     </div>
                   </div>
                   <!--end::Group-->
                   <!--begin::Group-->
-                  <div class="form-group row" *ngIf="hideprofilenow">
+                  <div class="form-group row" >
                     <label class="col-form-label col-3 text-lg-right text-left">Company Name</label>
                     <div class="col-9">
-                      <input class="form-control form-control-lg form-control-solid" type="text" value="Loop Inc.">
+                      <input class="form-control form-control-lg form-control-solid" name="company" type="text" [(ngModel)]="profileobj.company"
+                      [value]="profileobj.company">
                       <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank
                         to use your full name.</span>
                     </div>
@@ -202,8 +210,8 @@
                             <i class="fas fa-at"></i>
                           </span>
                         </div>
-                        <input type="text" name="email" class="form-control form-control-lg form-control-solid" [(ngModel)]="bwemail"
-                         [value]="bwemail" placeholder="Email">
+                        <input type="text" name="email" class="form-control form-control-lg form-control-solid" placeholder="Email" [(ngModel)]="profileobj.email"
+                        [value]="profileobj.email">
 
                       </div>
                     </div>
@@ -219,7 +227,8 @@
                             <i class="fas fa-phone"></i>
                           </span>
                         </div>
-                        <input type="text" class="form-control form-control-lg form-control-solid" value="+45678967456"
+                        <input type="text" class="form-control form-control-lg form-control-solid" name="phone" [(ngModel)]="profileobj.phone"
+                        [value]="profileobj.phone"
                           placeholder="Phone">
                       </div>
                       <span class="form-text text-muted">We'll never share your contact with anyone else.</span>
@@ -265,7 +274,7 @@
                       <label class="col-form-label col-3 text-lg-right text-left">Username</label>
                       <div class="col-9">
                         <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
-                          <input class="form-control form-control-lg form-control-solid" disabled type="text" [value]="bwname" >
+                          <input class="form-control form-control-lg form-control-solid" disabled type="text" [value]="" >
                         </div>
                       </div>
                     </div>
@@ -281,7 +290,7 @@
                             </span>
                           </div>
                           <input type="text" class="form-control form-control-lg form-control-solid" name="email"
-                            [(ngModel)]="bwemail" placeholder="Email">
+                             placeholder="Email">
                         </div>
                         <span class="form-text text-muted">Email will not be publicly displayed.
                           <a href="javascript:void(0)">Learn more</a>.</span>
@@ -433,7 +442,7 @@
                     <div class="row">
                       <div class="col-3"></div>
                       <div class="col-9">
-                        <a href="javascript:void(0)" mat-raised-button color="primary" class="mr-2">Save changes</a>
+                        <a href="javascript:void(0)" mat-raised-button color="primary" class="mr-2" >Save changes</a>
                         <a href="javascript:void(0)" mat-button>Cancel</a>
                       </div>
                     </div>

@@ -59,7 +59,7 @@
     border-radius: 0.42rem;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url(/assets/images/profile/avatar.png);
+    /* background-image: url(/assets/images/profile/avatar.png); */
 }
 .image-input.image-input-outline .image-input-wrapper {
     border: 3px solid #ffffff;
