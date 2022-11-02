@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { Router } from '@angular/router';
 import { DashboardService } from '../_services/dashboard.service';
+import { UserService } from '../_services/user.service';
 
 import {
   ChartComponent,
@@ -63,7 +64,9 @@ export class DashboardComponent implements OnInit {
 
   constructor( private dashboardService: DashboardService,
               private tokenStorage: TokenStorageService,
-              private router: Router) {
+              private router: Router,
+              public userService: UserService,
+              ) {
 
                 this.chartOptions = {
                   series: [
@@ -622,9 +625,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.tokenStorage.getToken()) {
-      this.username = this.tokenStorage.getUser().username;
-    }
+    this.userService.getUsersDetails().subscribe({
+      next: data => {        
+        this.username = data.data[0].firstname;
+      }
+    });
+
+    // if (this.tokenStorage.getToken()) {
+    //   this.username = this.tokenStorage.getUser().username;
+    // }
 
     this.greetings();
 
