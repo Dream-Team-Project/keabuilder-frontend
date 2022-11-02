@@ -29,7 +29,6 @@ export class NavbarComponent implements OnInit {
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
 
-
   ngOnInit(): void {
     var th:any = this;
     window.addEventListener('scroll', function(){
@@ -82,6 +81,7 @@ export class NavbarComponent implements OnInit {
   }
 
   gotouser(){
+    this.userService.prevPath = this.router.url
     this.router.navigate(['/profile'],{relativeTo: this.route});
     this.offcanvasoverlay=false;
   }

@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
   logoimg:any = this.userimgpath;
 
   constructor(private token: TokenStorageService,
-              private userService: UserService,
+              public userService: UserService,
               public imageService: ImageService,
               private _snackBar: MatSnackBar,
               ) { }
