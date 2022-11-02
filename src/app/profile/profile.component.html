@@ -10,7 +10,7 @@
         </a>
         <!--end::Button-->
         <!--begin::Dropdown-->
-        <div class="btn-group ml-2">
+        <div class="btn-group ml-3">
           <button type="button" mat-raised-button color="primary" (click)="kbsavechange()" >Save
             Changes</button>
         </div>
@@ -145,7 +145,7 @@
                     <label class="col-form-label col-3 text-lg-right text-left">Avatar</label>
                     <div class="col-9">
                       <div class="image-input image-input-empty image-input-outline" id="kt_user_edit_avatar">
-                        <div class="image-input-wrapper" [style.backgroundImage]="'url('+getImgPath(defaultimgpath)+')'"></div>
+                        <div class="image-input-wrapper" [style.backgroundImage]="'url('+imageService.getImgPath(userimgpath)+')'"></div>
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow ml-xl-n3">
 
                           <input type="file" name="profile_avatar" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg">
@@ -593,4 +593,13 @@
     <!--end::Card-->
   </div>
 
+  <div class="container text-right">
+      <div class="btn-group">
+        <a [routerLink]="['/dashboard']" mat-button>
+          Back
+        </a>
+        <button type="button" mat-raised-button color="primary" (click)="kbsavechange()" class="ml-3">Save
+          Changes</button>
+      </div>
+  </div>
 </div>

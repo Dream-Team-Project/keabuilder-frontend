@@ -54,7 +54,6 @@ export class ModulesComponent implements OnInit {
   respWaiting = false;
   popask = 'details';
   delAgree:boolean = false;
-  timeStamp:any; 
   offers = new FormControl();
   offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
   offersToAdd:Array<string> = [];
@@ -222,7 +221,7 @@ export class ModulesComponent implements OnInit {
     if(this.thumbnail.type) {
       this.thumbnail.name = 'course-thumbnail-'+course.uniqueid+'.'+this.thumbnail.type;
       course.thumbnail = 'keaimage-'+this.thumbnail.name;
-      this.timeStamp = (new Date()).getTime();
+      this._image.timeStamp = (new Date()).getTime();
     }
     course.offers = this.offersToAdd.join(',');
     this._course.update(course).subscribe((res:any)=>{
@@ -230,14 +229,6 @@ export class ModulesComponent implements OnInit {
       this._snackbar.open('Course has been updated', 'OK');
       this.fetchCourse();
     })
-  }
-
-  getImgPath(thumbnail:string) {
-    var path = this._image.uploadImgPath + thumbnail;
-      if(this.timeStamp) {
-        return path + '?' + this.timeStamp;
-      }
-      return path;
   }
 
   // course methods
@@ -524,7 +515,7 @@ export class ModulesComponent implements OnInit {
   // dialog methods
 
   overlayRefDetach() {
-    this.timeStamp = (new Date()).getTime();
+    this._image.timeStamp = (new Date()).getTime();
     this.respWaiting = false;
     this.dragBoxAnime.close = true;
     setTimeout(()=>{

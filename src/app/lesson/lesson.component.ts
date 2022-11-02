@@ -38,7 +38,6 @@ export class LessonComponent implements OnInit {
   respWaiting = false;
   popask = 'details';
   delAgree:boolean = false;
-  timeStamp:any; 
   thumbnail:any;
   file = null;
   typeerror:string = '';
@@ -196,7 +195,7 @@ export class LessonComponent implements OnInit {
       if(this.thumbnail.type) {
         this.thumbnail.name = 'lesson-thumbnail-'+lesson.uniqueid+'.'+this.thumbnail.type;
         lesson.thumbnail = 'keaimage-'+this.thumbnail.name;
-        this.timeStamp = (new Date()).getTime();
+        this._image.timeStamp = (new Date()).getTime();
       }
       this._lesson.update(lesson).subscribe((res:any)=>{
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
@@ -412,7 +411,7 @@ export class LessonComponent implements OnInit {
   // dialog methods
 
   overlayRefDetach() {
-    this.timeStamp = (new Date()).getTime();
+    this._image.timeStamp = (new Date()).getTime();
     this.respWaiting = false;
     this.dragBoxAnime.close = true;
     setTimeout(()=>{
@@ -442,14 +441,6 @@ export class LessonComponent implements OnInit {
   }
 
   // dialog methods
-
-  getImgPath(thumbnail:string) {
-    var path = this._image.uploadImgPath + thumbnail;
-      if(this.timeStamp) {
-        return path + '?' + this.timeStamp;
-      }
-      return path;
-  }
 
   // image input method
 

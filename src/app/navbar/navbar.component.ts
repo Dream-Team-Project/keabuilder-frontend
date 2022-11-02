@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
+import { ImageService } from '../_services/image.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,29 +14,23 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private tokenStorage: TokenStorageService,
-    private userService: UserService,
+    public userService: UserService,
+    public _image: ImageService,
     ) {  }
 
   DialogParentToggle:boolean = false;
   scrollPosition:any = null;
   issearch = false;
   notification = false;
-  bwname = '';
-  bwemail = '';
   offcanvasoverlay = false;
   alerts = true;
   events = false;
   logs = false;
   hiderecentnotifi = false;
-  defaultimgpath = '/assets/images/profile/avatar.png';
+  userimgpath = '/assets/images/profile/avatar.png';
 
 
   ngOnInit(): void {
-
-    // if (this.tokenStorage.getToken()) {
-    //   this.bwname = this.tokenStorage.getUser().username;
-    //   this.bwemail = this.tokenStorage.getUser().email;
-    // }
     var th:any = this;
     window.addEventListener('scroll', function(){
       th.scrollPosition = window.scrollY;
@@ -44,12 +39,12 @@ export class NavbarComponent implements OnInit {
     
     this.userService.getUsersDetails().subscribe({
       next: data => {
-
-        this.bwname = data.data[0].firstname
-        this.bwemail = data.data[0].email;
-
+        this.userService.user = {
+          name: data.data[0].firstname,
+          email: data.data[0].email
+        }
         if(data.data[0].useravatar!='' && data.data[0].useravatar!=null && data.data[0].useravatar!=undefined){
-          this.defaultimgpath = '/assets/uploads/images/'+data.data[0].useravatar;
+          this.userimgpath = '/assets/uploads/images/'+data.data[0].useravatar;
         }
       }
     });

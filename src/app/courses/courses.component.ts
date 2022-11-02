@@ -29,7 +29,6 @@ export class CoursesComponent implements OnInit {
   offersToAdd:Array<string> = [];
   course:any;
   update:boolean = false;
-  timeStamp:any;
   prevTitle:string = '';
 
   showpageurl = false;
@@ -145,7 +144,7 @@ export class CoursesComponent implements OnInit {
     this._course.update(this.course).subscribe((res:any)=>{
       console.log(res);
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
-      this.timeStamp = (new Date()).getTime();
+      this._image.timeStamp = (new Date()).getTime();
       this.allCourses(true);
     })
 
@@ -171,14 +170,6 @@ export class CoursesComponent implements OnInit {
       });
       this.allCourses(true);
     }); 
-  }
-
-  getImgPath(thumbnail:string) {
-    var path = this._image.uploadImgPath + thumbnail;
-      if(this.timeStamp) {
-        return path + '?' + this.timeStamp;
-      }
-      return path;
   }
 
   closeSidebar(){

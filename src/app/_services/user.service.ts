@@ -13,6 +13,10 @@ export class UserService {
   uniqueuserid:any = '';
   getUsersDetailsApi = '/api/getUsersDetailsdata/';
   updateuserdetailsApi = '/api/updateUsersDetailsdata/';
+  user = {
+    name: '',
+    email: ''
+  };
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uniqueuserid = this.tokenStorage.getUser().uniqueid;

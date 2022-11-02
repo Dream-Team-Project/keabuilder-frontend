@@ -24,28 +24,23 @@ export class ProfileComponent implements OnInit {
   logoimgname = '';
   typeerror = '';
   imagelogorequest = false;
-  defaultimgpath = '/assets/images/profile/avatar.png';
-  logoimg:any = this.defaultimgpath;
-  timeStamp = (new Date()).getTime();
+  userimgpath = '/assets/images/profile/avatar.png';
+  logoimg:any = this.userimgpath;
 
   constructor(private token: TokenStorageService,
               private userService: UserService,
-              private imageService: ImageService,
+              public imageService: ImageService,
               private _snackBar: MatSnackBar,
               ) { }
 
   ngOnInit(): void {
     // this.currentUser = this.token.getUser();
-
     this.updateuserdetailsnow();
-
   }
 
   updateuserdetailsnow(){
     this.userService.getUsersDetails().subscribe({
-      next: data => {
-        console.log(data);
-        
+      next: data => {        
         this.profileobj.username = data.data[0].username;
         this.profileobj.firstname = data.data[0].firstname;
         this.profileobj.lastname = data.data[0].lastname;
@@ -53,19 +48,14 @@ export class ProfileComponent implements OnInit {
         this.profileobj.phone = data.data[0].phone;
         this.profileobj.company = data.data[0].company;
         if(data.data[0].useravatar!='' && data.data[0].useravatar!=null && data.data[0].useravatar!=undefined){
-          this.defaultimgpath = '/assets/uploads/images/'+data.data[0].useravatar;
+          this.userimgpath = '/assets/uploads/images/'+data.data[0].useravatar;
         }
-
+        this.userService.user = {
+          name: data.data[0].firstname,
+          email: data.data[0].email
+        }
       }
     });
-  }
-
-  getImgPath(thumbnail:string) {
-    var path = thumbnail;
-      if(this.timeStamp) {
-        return path + '?' + this.timeStamp;
-      }
-      return path;
   }
   
   activeme(value: any){
@@ -93,7 +83,7 @@ export class ProfileComponent implements OnInit {
       });    
       this.imagelogorequest = true;
     }else{
-      this.logoimg = this.defaultimgpath;
+      this.logoimg = this.userimgpath;
       this.typeerror = 'File Type Not Allow';
       this.imagelogorequest = false;
     }
@@ -109,29 +99,21 @@ export class ProfileComponent implements OnInit {
   }
 
   kbsavechange(){
-    console.log(this.profileobj);
-
     var obj = {
       data:this.profileobj,
       logo:this.logoimgname,
       checkimginput1: this.imagelogorequest,
     };
-
     this.userService.updateuserdetails(obj).subscribe({
       next: data => {  
-        console.log(data);
-
         var splnmlogo = data.genlogo.split('keaimage-');  
         var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
-        if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+        if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
           this.imageService.onImageFileUpload(genobjlogo);
-          this.timeStamp = (new Date()).getTime();
+          this.imageService.timeStamp = (new Date()).getTime();
         }
-
         this.updateuserdetailsnow();
-
         this._snackBar.open('Profile Updated Successfully!', 'OK');
-
 
       }
     });

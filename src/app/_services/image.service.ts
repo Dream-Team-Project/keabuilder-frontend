@@ -39,6 +39,7 @@ export class ImageService {
     galleryImgName:string[] = [];
     extImgLink:any = {originalname: '', filename: ''};
     extImgLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:png|jpg|jpeg|svg)')]);
+    timeStamp = (new Date()).getTime();
 
   constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
       this.getAllImgs();
@@ -323,4 +324,11 @@ export class ImageService {
             this.imgMatTabIndex = 1;
         },200)
     }
+
+    getImgPath(path:string) {
+          if(this.timeStamp) {
+            return path + '?' + this.timeStamp;
+          }
+          return path;
+      }
 }

@@ -133,7 +133,7 @@
     <div *ngIf="allcoursesarr.length != 0 else nodata" class="row col-12">
       <div class="col-md-4 cardpage loadEffect mt-4" *ngFor="let acourse of allcoursesarr; index as i;">
         <div>
-          <img [src]="getImgPath(acourse.thumbnail)" alt="" class="img-fluid img-fit">
+          <img [src]="_image.getImgPath(acourse.thumbnail)" alt="" class="img-fluid img-fit">
           <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
             <span mat-button [matMenuTriggerFor]="menu" class="statusbadge"
               [class]="acourse.publish_status==1 ? 'active1':'active2'">
