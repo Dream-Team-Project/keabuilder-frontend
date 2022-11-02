@@ -2,7 +2,7 @@ function includeMenuCode(num) {
     var menus = document.querySelectorAll(".kb-menu");
     var item = menus[num];
     if(item) {
-        fetch("http://localhost:4200/assets/sites/menus/"+item.getAttribute('kb-include-menu')+".html")
+        fetch("https://app.keabuilder.com/assets/sites/menus/"+item.getAttribute('kb-include-menu')+".html")
         .then(response => {
             return response.text();
         })
