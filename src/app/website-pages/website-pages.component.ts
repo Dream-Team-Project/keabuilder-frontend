@@ -109,13 +109,11 @@ export class WebsitePagesComponent implements OnInit {
   oldpagepath = '';
   selstatusshow = 'all';
   toggleview1 = true;
-  toggleview2 = true;
   reason = '';
   confirmarchivepage = false;
   archive_id = 0;
   showarchivemode = false;
-  pagenotfound = false;
-  pagegetdata = false;
+  nodata = true;
   fetchdatastatus = false;
 
   
@@ -141,14 +139,12 @@ export class WebsitePagesComponent implements OnInit {
     //     console.log(data);
     //     // this.kbpages = [];
     //     // this.shortdata(data);
-
     //   },
     //   error: err => {
     //     console.log(err);
     //   }
     // });
-
-}
+  }
 
   ngOnInit(): void {
 
@@ -203,8 +199,8 @@ export class WebsitePagesComponent implements OnInit {
   createfromscratch(){
     this.showmytemplates = false;
     this.addnewpagepopup = true;
-      this.insidepagefirst = false;
-      this.insidepagesecond = true;
+    this.insidepagefirst = false;
+    this.insidepagesecond = true;
     this.quickeditpopup = false;
     this.selecttemplate = false;
   }
@@ -213,13 +209,12 @@ export class WebsitePagesComponent implements OnInit {
     this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = true;
-      this.insidepagefirst = true;
-      this.insidepagesecond = false;
+    this.insidepagefirst = true;
+    this.insidepagesecond = false;
     this.quickeditpopup = false;
     this.selecttemplate = false;
     this.showpageurl = false;
     this.confirmarchivepage = false;
-
   }
 
   onSubmit(): void {
@@ -290,13 +285,9 @@ export class WebsitePagesComponent implements OnInit {
     if(dataA.success !=0 && dataA?.data?.length!=0){
 
       if(dataA.success == 2){
-        this.pagegetdata = true;
+        this.nodata = true;
       }else{
-
-        this.pagegetdata = false;
-        if(this.toggleview2==true ){
-          this.pagenotfound = false;
-        }
+        this.nodata = false;
         this.fetchdatastatus = true;
         dataA.data.forEach((element:any) => {
               
@@ -340,11 +331,7 @@ export class WebsitePagesComponent implements OnInit {
 
     }else{
       this.fetchdatastatus = false;
-      this.pagegetdata = true;
-      // console.log(this.toggleview2);
-      if(this.toggleview2==true ){
-        this.pagenotfound = true;
-      }
+      this.nodata = true;
     }
 
   
@@ -563,13 +550,9 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   archivepages(){
-    this.toggleview2 = !this.toggleview2;
     this.showarchivemode = !this.showarchivemode;
-    
     if(this.fetchdatastatus==false){
-      this.pagegetdata = !this.pagegetdata;
-    }else{
-      this.pagenotfound = !this.pagenotfound;
+      this.nodata = !this.nodata;
     }
   }
 
@@ -696,7 +679,5 @@ export class WebsitePagesComponent implements OnInit {
     });
 
   }
-
-
-
+  
 }

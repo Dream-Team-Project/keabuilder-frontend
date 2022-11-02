@@ -203,7 +203,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6">
-        <fieldset class="position-relative has-icon-left kea-barfieldset" *ngIf="!pagenotfound">
+        <fieldset class="position-relative has-icon-left kea-barfieldset" *ngIf="!nodata">
           <input type="text" class="form-control" id="page-search" (keyup)="searchpage($event)" placeholder="Search Pages">
           <div class="form-control-position">
               <i class="fab fa-searchengin"></i>                        
@@ -217,13 +217,14 @@
         <i class="fas fa-palette"></i></button>
       </div>
       <div class="col-md-12 mt-3 text-right">
-        <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="toggleview2 && !pagenotfound" >Toggle View 
+        <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="!showarchivemode && !nodata">Toggle View 
           <i class="fas" [ngClass]="{'fa-th': toggleview1 == true, 'fa-th-large' : toggleview1 == false }"></i>
         </button>
-        <button mat-raised-button class="mr-2" (click)="archivepages()" >{{showarchivemode==false?'Archive':'View'}} Pages 
-          <i class="fas" [ngClass]="{'fa-archive': showarchivemode == false, 'fa-file' : showarchivemode == true }" ></i>
+        <button mat-raised-button class="mr-2" (click)="archivepages()">
+          {{!showarchivemode ?'Archive':'View'}} Pages 
+          <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'" ></i>
         </button>
-        <mat-form-field appearance="fill" *ngIf="!pagenotfound" >
+        <mat-form-field appearance="fill" *ngIf="!showarchivemode && !nodata">
           <mat-label>Visibility</mat-label>
           <mat-select name="visibility" [(ngModel)]="selstatusshow" >
             <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>
@@ -234,17 +235,8 @@
       </div>
     </div>
 
-    <!-- Show when empty -->
-    <div class="row" *ngIf="pagegetdata" >
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-          <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No webpages found">
-      </div>
-    </div>
-
     <!-- archive -->
-    <div class="row mt-4" *ngIf="showarchivemode">
-
+    <div class="row mt-4" *ngIf="showarchivemode else pages">
       <div class="col-md-12 mt-2">
 
         <section class="users-list-wrapper" id='table-userslist'>
@@ -284,7 +276,6 @@
 
         </section>
       </div>  
-
       <div class="col-md-12">
 
         <div class="mat-elevation-z8">
@@ -326,81 +317,37 @@
         </div>
 
       </div>
-
     </div>
+    <!-- archive -->
 
-    <div *ngIf="toggleview2">
-      <!-- Pages -->
-      <div class="row mt-4" *ngIf="toggleview1" >
-        <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
-          <div>
-            <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}">
-              <div id="loader" *ngIf="shortwaiting">
-                <div id="shadow"></div>
-                <div id="box"></div>
-                <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
-              </div>
-            </div>
-
-            <div class="keabuilder-title-board line-ellipsis">
-              <span>{{kbpage.page_name}}</span>
-              <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
-            </div>
-            <div class="statbadg">
-
-              <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
-                <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
-                {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
-              </span>
-
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
-                <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
-              </mat-menu>
-
-            </div>
-
-            <div class="statehome" *ngIf="kbpage.defaulthome==1" >
-              <i class="fas fa-star"></i> Home
-            </div>
-
-            <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
-              <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
-            </p>
-
-            <div class="kb-page-settting" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"><i
-              class="fas fa-cog"></i></div>
-            <mat-menu #menu2="matMenu">
-              <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
-                  <i class="fas fa-pen mr-2"></i> Quick Edit
-              </button>
-              <!-- <button mat-menu-item>
-                <i class="fas fa-chart-pie mr-2"></i> View Analytics
-              </button> -->
-              <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)">
-                <i class="fas fa-copy mr-2"></i> Duplicate
-              </button>
-              <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')">
-                <i class="fas fa-link mr-2"></i> Copy URL
-              </button>
-              <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
-                <i class="far fa-trash-alt mr-2"></i> Archive
-              </button>
-            </mat-menu>
-            <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-            <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-
-          </div>
+    <!-- pages -->
+    <ng-template #pages>
+      <!-- no pages -->
+      <div class="row" *ngIf="nodata else showpages">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No webpages found">
         </div>
       </div>
+      <!-- no pages -->
+      <!-- pages to show -->
+      <ng-template #showpages>
+        <!-- Pages -->
+        <div class="row mt-4" *ngIf="toggleview1 else toggle" >
+          <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
+            <div>
+              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}">
+                <div id="loader" *ngIf="shortwaiting">
+                  <div id="shadow"></div>
+                  <div id="box"></div>
+                  <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+                </div>
+              </div>
 
-      <!-- toggle view -->
-      <div class="row mt-4 p-4" *ngIf="!toggleview1">
-        <div class="col-md-12 cardpage mt-2 " *ngFor="let kbpage of kbpages; index as i;" >
-          <div class="row">
-
-            <div class="col-md-2">
-                
+              <div class="keabuilder-title-board line-ellipsis">
+                <span>{{kbpage.page_name}}</span>
+                <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
+              </div>
               <div class="statbadg">
 
                 <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
@@ -419,49 +366,107 @@
                 <i class="fas fa-star"></i> Home
               </div>
 
-              <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}"></div>
-            </div>
-            <div class="col-md-6">
-              <div class="keabuilder-title-board line-ellipsis">
-                <span>{{kbpage.page_name}}</span>
-                <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
-              </div>
               <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
                 <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
               </p>
-            </div>
-            <div class="col-md-4 pt-4">
-                <mat-menu #menu2="matMenu">
-                  <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
-                      <i class="fas fa-pen mr-2"></i> Quick Edit
-                  </button>
-                  <!-- <button mat-menu-item>
-                    <i class="fas fa-chart-pie mr-2"></i> View Analytics
-                  </button> -->
-                  <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)" >
-                    <i class="fas fa-copy mr-2"></i> Duplicate
-                  </button>
-                  <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')" >
-                    <i class="fas fa-link mr-2"></i> Copy URL
-                  </button>
-                  <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
-                    <i class="far fa-trash-alt mr-2"></i> Archive
-                  </button>
-                </mat-menu>
-                <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-                <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> Setting <i class="fas fa-cog"></i></button>
-            </div>
-          
 
+              <div class="kb-page-settting" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"><i
+                class="fas fa-cog"></i></div>
+              <mat-menu #menu2="matMenu">
+                <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                    <i class="fas fa-pen mr-2"></i> Quick Edit
+                </button>
+                <!-- <button mat-menu-item>
+                  <i class="fas fa-chart-pie mr-2"></i> View Analytics
+                </button> -->
+                <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)">
+                  <i class="fas fa-copy mr-2"></i> Duplicate
+                </button>
+                <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')">
+                  <i class="fas fa-link mr-2"></i> Copy URL
+                </button>
+                <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
+                  <i class="far fa-trash-alt mr-2"></i> Archive
+                </button>
+              </mat-menu>
+              <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+              <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+
+            </div>
           </div>
         </div>
-      </div>
-
-    </div>
+        <!-- toggle view -->
+        <ng-template #toggle>
+          <div class="row mt-4 p-4">
+            <div class="col-md-12 cardpage mt-2 " *ngFor="let kbpage of kbpages; index as i;" >
+              <div class="row">
+    
+                <div class="col-md-2">
+                    
+                  <div class="statbadg">
+    
+                    <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
+                      <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
+                      {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
+                    </span>
+    
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
+                      <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                    </mat-menu>
+    
+                  </div>
+    
+                  <div class="statehome" *ngIf="kbpage.defaulthome==1" >
+                    <i class="fas fa-star"></i> Home
+                  </div>
+    
+                  <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}"></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="keabuilder-title-board line-ellipsis">
+                    <span>{{kbpage.page_name}}</span>
+                    <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
+                  </div>
+                  <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
+                    <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
+                  </p>
+                </div>
+                <div class="col-md-4 pt-4">
+                    <mat-menu #menu2="matMenu">
+                      <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                          <i class="fas fa-pen mr-2"></i> Quick Edit
+                      </button>
+                      <!-- <button mat-menu-item>
+                        <i class="fas fa-chart-pie mr-2"></i> View Analytics
+                      </button> -->
+                      <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)" >
+                        <i class="fas fa-copy mr-2"></i> Duplicate
+                      </button>
+                      <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')" >
+                        <i class="fas fa-link mr-2"></i> Copy URL
+                      </button>
+                      <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
+                        <i class="far fa-trash-alt mr-2"></i> Archive
+                      </button>
+                    </mat-menu>
+                    <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+                    <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> Setting <i class="fas fa-cog"></i></button>
+                </div>
+              
+    
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+      <!-- pages to show -->
+    </ng-template>
+    <!-- pages -->
 
     <!-- pagination -->
-    <div class="row mt-4" *ngIf="!pagenotfound">
+    <div class="row mt-4" *ngIf="!nodata">
       <div class="col-md-12 mt-4">
         <!-- <mat-paginator 
                     [length]="length"
@@ -472,7 +477,6 @@
         </mat-paginator> -->
       </div>
     </div>
-
   </div>
 
 </div>
