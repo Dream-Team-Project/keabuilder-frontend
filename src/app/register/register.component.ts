@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
             <br>
             Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
             <br>
-            Your account for domain `+username+`.`+domainpath+` has been confirmed and set up.<br>
+            Your account for domain `+username+`.keabuilder.com has been confirmed and set up.<br>
             <br>
             Your new KEA builder includes 2 FREE hours of BONUS Launch Assist [activated from 1st of November] redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
             <br>
@@ -85,12 +85,12 @@ export class RegisterComponent implements OnInit {
               }
             });
 
-            var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
-            this.emailService.sendmail(maildata).subscribe({
-              next: data => {
-                // console.log(data);
-              }
-            });
+            // var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
+            // this.emailService.sendmail(maildata).subscribe({
+            //   next: data => {
+            //     // console.log(data);
+            //   }
+            // });
             
             
             var subdomain = data.subdomain;
