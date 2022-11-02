@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
     const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
 
-      if(this.form.subdomain!='app' && this.form.subdomain!='test' && this.form.subdomain!='developer'){
+      if(this.form.subdomain!='app' && this.form.subdomain!='test' && this.form.subdomain!='developer' && this.form.subdomain!='admin' && this.form.subdomain!='kea'){
 
         this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
           next: data => {

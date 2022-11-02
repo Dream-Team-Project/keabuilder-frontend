@@ -19,6 +19,9 @@
     margin-right: 10px;
     margin-bottom: 0px;
 }
+.mkdecnon a{
+    text-decoration: none;
+}
 hr {
     margin: 21px 0;
     border: 0;

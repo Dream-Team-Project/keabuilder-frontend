@@ -118,7 +118,7 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
-
+    console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
@@ -130,8 +130,8 @@ export class WebsiteDetailsComponent implements OnInit {
     }
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
-        // console.log('-->');
-        // console.log(data);
+        console.log('-->');
+        console.log(data);
 
         var splnmlogo = data.genlogo.split('keaimage-');  
         var splnmfavi = data.genfavicon.split('keaimage-');  
