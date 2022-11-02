@@ -57,7 +57,9 @@ export class ForgetPasswordComponent implements OnInit {
     // console.log(this.emailInp);
     if(this.emailFormControl.status=='VALID'){
     // if(this.emailInp!=''){
-      this._auth.forgetPassword(this.emailInp).subscribe(resp=>{
+      var loctn:any = window.location.origin;
+      // console.log(loctn);
+      this._auth.forgetPassword(this.emailInp, loctn).subscribe(resp=>{
         this.submitShow = true;
         this.submitError = resp[1];
 
