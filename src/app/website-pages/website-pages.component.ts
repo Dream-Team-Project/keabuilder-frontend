@@ -546,10 +546,10 @@ export class WebsitePagesComponent implements OnInit {
 
   togglepageview(){
     this.toggleview1 = !this.toggleview1;
-    this.restoredeleteme('1','toggleview')
   }
 
   archivepages(){
+    // console.log('test'+this.fetchdatastatus);
     this.showarchivemode = !this.showarchivemode;
     if(this.fetchdatastatus==false){
       this.nodata = !this.nodata;
@@ -642,6 +642,8 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
               }
             });
+
+
           }
           this.popupsidebar = false;
           this.showwebpages();
