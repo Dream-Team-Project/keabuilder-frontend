@@ -203,7 +203,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6">
-        <fieldset class="position-relative has-icon-left kea-barfieldset" *ngIf="!nodata">
+        <fieldset class="position-relative has-icon-left kea-barfieldset" *ngIf="!showarchivemode">
           <input type="text" class="form-control" id="page-search" (keyup)="searchpage($event)" placeholder="Search Pages">
           <div class="form-control-position">
               <i class="fab fa-searchengin"></i>                        
@@ -224,7 +224,7 @@
           {{!showarchivemode ?'Archive':'View'}} Pages 
           <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'" ></i>
         </button>
-        <mat-form-field appearance="fill" *ngIf="!showarchivemode && !nodata">
+        <mat-form-field appearance="fill" *ngIf="!showarchivemode">
           <mat-label>Visibility</mat-label>
           <mat-select name="visibility" [(ngModel)]="selstatusshow" >
             <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>

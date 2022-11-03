@@ -247,10 +247,6 @@ export class WebsitePagesComponent implements OnInit {
             },
             error=>{console.log(error)});
             // create page/folder
-
-            
-
-
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
           }
@@ -285,6 +281,7 @@ export class WebsitePagesComponent implements OnInit {
 
       if(dataA.success == 2){
         // this.nodata = true;
+        this.nodata = true;
       }else{
         this.nodata = false;
         dataA.data.forEach((element:any) => {
