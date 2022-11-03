@@ -49,6 +49,7 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
+        console.log(data);
         this.kbpages = data.data;
       },
       error: err => {

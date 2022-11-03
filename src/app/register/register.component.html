@@ -55,6 +55,11 @@
                     </mat-error>
                   </mat-form-field>
 
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label> Phone Number</mat-label>
+                    <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
+                  </mat-form-field>
+
                   <button mat-raised-button class="mt-3 registerbtn" (click)="fillnext()">Next</button>
                   
               </div>
@@ -78,10 +83,7 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label> Phone Number</mat-label>
-                    <input type="text" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
-                  </mat-form-field>
+               
 
                   <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Password</mat-label>
