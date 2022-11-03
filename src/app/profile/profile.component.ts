@@ -4,6 +4,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
 import { ImageService } from '../_services/image.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { E } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +27,8 @@ export class ProfileComponent implements OnInit {
   imagelogorequest = false;
   userimgpath = '/assets/images/profile/avatar.png';
   logoimg:any = this.userimgpath;
+  userchangeerror = false;
+  emailchangeerror = false;
 
   constructor(private token: TokenStorageService,
               public userService: UserService,
@@ -106,13 +109,28 @@ export class ProfileComponent implements OnInit {
     };
     this.userService.updateuserdetails(obj).subscribe({
       next: data => {  
+        console.log(data);
         var splnmlogo = data.genlogo.split('keaimage-');  
         var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
         if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
           this.imageService.onImageFileUpload(genobjlogo);
           this.imageService.timeStamp = (new Date()).getTime();
         }
-        this.updateuserdetailsnow();
+
+        console.log(data.result1[0]['count(*)']);
+        if(data.result1[0]['count(*)']==1){
+          this.userchangeerror = true;
+        }else{
+          this.userchangeerror = false;
+        }
+
+        if(data.result2[0]['count(*)']==1){
+          this.emailchangeerror = true;
+        }else{
+          this.emailchangeerror = false;
+        }
+
+        // this.updateuserdetailsnow();
         this._snackBar.open('Profile Updated Successfully!', 'OK');
 
       }
