@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit {
                 this.chartOptions2 = {
                   series: [
                     {
-                      name: "Funnels",
+                      name: "Contact",
                       data: this.data2
                     }
                   ],
@@ -662,48 +662,60 @@ export class DashboardComponent implements OnInit {
     var datacondition2 = {type:'lastweekrevenue',option:'7 DAY'}
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         
         var newarr:any = [];
-        if(data.data.length!=0){
-          data.data.forEach((element:any) => {
-            var arr:any = {name:'',value:0};
-            var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-            var d = new Date(element.created_at);
-            var dt = d.getDate();
-            arr.name = months[d.getMonth()]+' '+dt;
-            arr.value = parseFloat(element.amount);
-            newarr.push(arr);
-            this.totalrevenue7day += parseFloat(element.amount);
-          });
-          // console.log(newarr);
-          var output:any = [];
 
-          newarr.forEach(function(item:any) {
-            var existing = output.filter(function(v: any, i: any) {
-              return v.name == item.name;
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+        var d = new Date();
+        var dt = d.getDate();
+
+        if(data.data.length==0){
+
+            this.data1date.push(months[d.getMonth()]+' '+dt);
+            this.data1.push(0);
+
+        }else{
+
+            data.data.forEach((element:any) => {
+              var arr:any = {name:'',value:0};
+              arr.name = months[d.getMonth()]+' '+dt;
+              arr.value = parseFloat(element.amount);
+              newarr.push(arr);
+              this.totalrevenue7day += parseFloat(element.amount);
             });
-            if (existing.length) {
-              var existingIndex = output.indexOf(existing[0]);
-              output[existingIndex].value = (output[existingIndex].value+item.value);
-            } else {
-              if (typeof item.value == 'string')
-                item.value = [item.value];
-              output.push(item);
-            }
-          });
+            // console.log(newarr);
+            var output:any = [];
 
-          output.forEach((element3:any) => {
-            this.data1date.push(element3.name);
-            this.data1.push(element3.value);
-          });
+            newarr.forEach(function(item:any) {
+              var existing = output.filter(function(v: any, i: any) {
+                return v.name == item.name;
+              });
+              if (existing.length) {
+                var existingIndex = output.indexOf(existing[0]);
+                output[existingIndex].value = (output[existingIndex].value+item.value);
+              } else {
+                if (typeof item.value == 'string')
+                  item.value = [item.value];
+                output.push(item);
+              }
+            });
 
-          // console.log(this.data1date);
+            output.forEach((element3:any) => {
+              // console.log(element3);
+              this.data1date.push(element3.name);
+              this.data1.push(element3.value);
+            });
+
+            // console.log(this.data1date);
 
         }
 
       }
     });
+
+
+    
 
     // last week contact
     var datacondition = {type:'lastweekcontact',option:'7 DAY'}
@@ -712,7 +724,11 @@ export class DashboardComponent implements OnInit {
         // console.log(data);
         
         var newarr:any = [];
-        if(data.data.length!=0){
+
+        if(data.data.length==0){
+          this.data2date.push(new Date());
+          this.data2.push(0);
+        }else{
           data.data.forEach((element:any) => {
             var arr:any = {name:'',value:1};
             arr.name = element.created_at;
@@ -736,6 +752,7 @@ export class DashboardComponent implements OnInit {
           });
 
           output.forEach((element3:any) => {
+            console.log(element3);
             this.data2date.push(element3.name);
             this.data2.push(element3.value);
           });

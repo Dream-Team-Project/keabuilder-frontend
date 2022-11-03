@@ -166,6 +166,7 @@
                       <div class="spinner spinner-sm spinner-success spinner-right spinner-input">
                         <input class="form-control form-control-lg form-control-solid" type="text" name="username"  [(ngModel)]="profileobj.username"
                         [value]="profileobj.username" >
+                        <span class="text-danger" *ngIf="userchangeerror" ><small>Username can't be changed. Please use a different Username.</small></span>
                       </div>
                     </div>
                   </div>
@@ -212,7 +213,7 @@
                         </div>
                         <input type="text" name="email" class="form-control form-control-lg form-control-solid" placeholder="Email" [(ngModel)]="profileobj.email"
                         [value]="profileobj.email">
-
+                        <span class="text-danger" *ngIf="emailchangeerror" ><small>Email can't be changed. Please use a different Username.</small></span>
                       </div>
                     </div>
                   </div>
