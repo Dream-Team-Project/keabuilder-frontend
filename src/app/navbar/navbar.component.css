@@ -723,7 +723,8 @@ div#topbar_notifications_logs {
 
 .bw-avatar img {
   width: 100%;
-  height: auto;
+  height: 40px;
+  object-fit: cover;
   display: block;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
@@ -1290,6 +1291,9 @@ a:hover {
 
 .navi .navi-item .navi-link:hover .navi-text {
   color: var(--primary-color);
+}
+.brkeml{
+  word-break: break-all;
 }
 
 .bg-light-warning {

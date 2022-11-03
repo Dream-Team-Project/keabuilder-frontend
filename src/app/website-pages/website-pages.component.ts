@@ -284,7 +284,7 @@ export class WebsitePagesComponent implements OnInit {
     if(dataA.success !=0 && dataA?.data?.length!=0){
 
       if(dataA.success == 2){
-        this.nodata = true;
+        // this.nodata = true;
       }else{
         this.nodata = false;
         dataA.data.forEach((element:any) => {
@@ -293,7 +293,6 @@ export class WebsitePagesComponent implements OnInit {
           var text1 = mycustomdate.toDateString();    
           var text2 = mycustomdate.toLocaleTimeString();
           element.updated_at = text1+' '+text2;
-
 
           this.websiteService.getWebsite().subscribe({
             next: data => {
@@ -306,8 +305,6 @@ export class WebsitePagesComponent implements OnInit {
               this.kbpages.push(element);
             }
           });
-
-          
 
           var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
 
@@ -668,7 +665,7 @@ export class WebsitePagesComponent implements OnInit {
 
     this.webpagesService.querystringmanage(SearchValue).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.kbpages = [];
         this.shortdata(data);
       }
