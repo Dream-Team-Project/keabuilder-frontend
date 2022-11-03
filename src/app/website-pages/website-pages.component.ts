@@ -348,7 +348,7 @@ export class WebsitePagesComponent implements OnInit {
 
       this.webpagesService.namepathchanges(id,title,type).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           // console.log(this.kbpages);
 
           if(data.success==1){
@@ -360,13 +360,13 @@ export class WebsitePagesComponent implements OnInit {
                   // this.showwebpages();
                 }else if(data.type=='status'){
 
+                  // this.selstatusshow = 'all';
                   if(data.name=='0'){
-
                     // this.showwebpages();
                     // console.log(data.id);
                     this.webpagesService.checkandmakestatus(data.id).subscribe({
                       next: data => {
-                        // console.log(data);
+                        console.log(data);
                         if(data.success==1){
                           this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
                             // console.log(e);
@@ -374,7 +374,6 @@ export class WebsitePagesComponent implements OnInit {
                         }
                       }
                     });
-
                   }
 
                   this._snackBar.open('Status Changed Successfully!', 'OK');
