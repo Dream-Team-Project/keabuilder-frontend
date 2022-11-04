@@ -448,6 +448,7 @@ export class WebsitePagesComponent implements OnInit {
 
   hidepopupsidebar(){
     this.popupsidebar = false;
+    this.pathcheck2 = false;
   }
 
   add(event: MatChipInputEvent): void {
@@ -571,7 +572,7 @@ export class WebsitePagesComponent implements OnInit {
 
     this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
       next: data => {
-        // console.log(data); 
+        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
@@ -584,7 +585,10 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   datecusfilter(value:any){
-    return new Date(value).toDateString();
+    var dt = new Date(value);
+    var text1 = dt.toDateString();    
+    var text2 = dt.toLocaleTimeString();
+    return text1+' '+text2;
   }
 
   restoredeleteme(page:any,type:any){

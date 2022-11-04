@@ -445,7 +445,7 @@ export class CreateFunnelComponent implements OnInit {
     // console.log(this.selectedstep)
     this.funnelService.namepathchanges(this.selectedstep,mainvalue,value).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.funnelstepurl = data.data[0].page_path;
         this.funnelstepvariationurl = data.data[0].variationlink;
         
