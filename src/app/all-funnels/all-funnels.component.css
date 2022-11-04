@@ -91,43 +91,42 @@
     padding: 13px;
     min-height: auto;
 }
-.keabuilder-item {
+.keatopstep {
     background: #fff;
     padding: 15px;
     margin-bottom: 20px;
     transition: all .3s cubic-bezier(.23,1,.32,1);
-    cursor: pointer;
+    cursor: move;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item {
-    padding: 0.53rem 0.8rem;
+.keabuilder-container .keabuilder-board .keatopstep {
+    padding: 1rem 0.8rem;
     border-radius: 0.267rem;
     margin-bottom: 1rem;
-    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
     position: relative;
     font-size:14px;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=success]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=success]:before {
     background-color: #39DA8A;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=warning]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=warning]:before {
 background-color: #FDAC41;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=info]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=info]:before {
 background-color: #00CFDD;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=primary]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=primary]:before {
 background-color: #5A8DEE;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=secondary]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=secondary]:before {
 background-color: #475F7B;
 }
-.keabuilder-container .keabuilder-board .keabuilder-item[data-border=danger]:before {
+.keabuilder-container .keabuilder-board .keatopstep[data-border=danger]:before {
 background-color: #FF5B5C;
 }
-.keabuilder-item:hover {
+/* .keabuilder-item:hover {
     opacity: 0.7;
-}   
-.keabuilder-container .keabuilder-board .keabuilder-item:before {
+}    */
+.keabuilder-container .keabuilder-board .keatopstep:before {
     content: "";
     width: 3px;
     height: 100%;
@@ -275,4 +274,21 @@ opacity: 0;
 
 .funnelstypekb{
     text-transform: capitalize;
+}
+.kea-footerbar{
+    height: 0px;
+    /* display: none; */
+    transition: all .3s cubic-bezier(.23,1,.32,1);
+    background: #fff;
+    overflow: hidden;
+}
+
+.keatopstep:hover .kea-footerbar{
+    height: 190px;
+    display: block;
+}
+
+.keatopstep{
+    background: #fff;
+    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
 }
