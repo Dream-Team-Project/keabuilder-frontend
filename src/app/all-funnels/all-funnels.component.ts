@@ -65,6 +65,7 @@ export class AllFunnelsComponent implements OnInit {
     // dragoverBubble: false,
     // fallbackOnBody: false,
     // draggable: "."+this.dragCls,
+    // draggable: 'steps-group',
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
@@ -96,9 +97,11 @@ export class AllFunnelsComponent implements OnInit {
     // dragoverBubble: false,
     // fallbackOnBody: false,
     // draggable: "."+this.dragCls,
+    draggable: '.draggable',
     scrollSensitivity: 100,
     animation: 300,
     onUpdate: (event: any) => {
+      // console.log('update');
       var filterdragobj:any = {};
       var filterdrag:any = [];
       this.funnels.forEach((element: any) => {
@@ -152,7 +155,7 @@ export class AllFunnelsComponent implements OnInit {
 
     },
     onStart: function (/**Event*/evt) {
-    //   console.log(evt.item.classList.value);
+      console.log(evt.item.classList.value);
     //   console.log(evt.oldIndex);  // element index within parent
     //   var splcls:any = evt.item.classList.value.split(' ');
     //   console.log(splcls[0]);
@@ -184,6 +187,10 @@ export class AllFunnelsComponent implements OnInit {
       // this.dragClass = evt.target.getAttribute('NAME');  // element index within parent
     },
   }; 
+
+  isDraggable(item: any) {
+      return item != 1;
+  }
 
   funneledit(uniqueid: any, id: any, type:any){
 
@@ -347,10 +354,10 @@ export class AllFunnelsComponent implements OnInit {
       this.shwobtnfirst = false;
       this.colortheme = false;
     }else if(type=='duplicate'){
-        // console.log(unique1+' - '+unique2);
+        console.log(unique1+' - '+unique2);
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             if(data.success==1){
 
               var page = {
