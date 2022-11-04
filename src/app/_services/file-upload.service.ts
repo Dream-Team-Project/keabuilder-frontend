@@ -13,6 +13,7 @@ providedIn: 'root'
 
 export class FileUploadService {
   // API url
+  createuserfolderApi = "./api/create-user-folder";
   // document
   getAllDocumentsApi = "./api/getalldocuments";
   uploadDocumentApi = "./api/uploaddocument";
@@ -59,13 +60,19 @@ export class FileUploadService {
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
 }
+
+  createuserfolder(uniqueuserid:any):Observable<any> {
+    var obj = {uniqueuserid: uniqueuserid};
+    return this.http.post(this.createuserfolderApi, obj);
+  }
+
   deletepage(path:any):Observable<any> {
-    return this.http.delete(this.deletePageApi + '/' + path)
+    return this.http.delete(this.deletePageApi + '/' + this.uniqueuserid + '/' + path)
     .pipe(catchError(this.errorHandler));
   }
 
-  createdefaulthome(useruniqueid:any):Observable<any> {
-    var obj = {useruniqueid: useruniqueid}
+  createdefaulthome(uniqueuserid:any):Observable<any> {
+    var obj = {uniqueuserid: uniqueuserid}
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
