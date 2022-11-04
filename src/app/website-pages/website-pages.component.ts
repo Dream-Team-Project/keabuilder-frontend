@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -15,6 +15,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { WebsiteService } from '../_services/website.service';
 import {PageEvent} from '@angular/material/paginator';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+export interface DialogData {
+  name: string;
+}
 
 export interface WebpageData {
   page_name:string;
@@ -41,6 +46,7 @@ export class WebsitePagesComponent implements OnInit {
 
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
+              public dialog: MatDialog, 
               private router: Router, 
               private route: ActivatedRoute,
               public _image: ImageService,
@@ -672,5 +678,43 @@ export class WebsitePagesComponent implements OnInit {
     });
 
   }
+
+  openDialog(id:any): void {
+    
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '255px',
+      data: {name: ''},
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log(id);
+
+      if(result.event == 'Delete'){
+        this.restoredeleteme(id,'delete');
+      }
+      
+    });
+
+  }
   
+}
+
+
+
+@Component({
+  selector: 'tags-dialog',
+  templateUrl: '../delete-dialog/delete-dialog.html',
+})
+export class DialogOverviewExampleDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close({event:'nothanks'});
+  }
+  onClick(){
+    this.dialogRef.close({event:'Delete'});
+  }
 }
