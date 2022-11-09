@@ -78,3 +78,10 @@ main {
 ::ng-deep .mat-slide-toggle.mat-success.mat-checked .mat-slide-toggle-bar {
     background-color: var(--opacity-primary);
 }
+
+@media only screen and (max-width:500px){
+    .insidecont{
+        padding: 20px 0px;
+        width: 100%;
+    }
+}

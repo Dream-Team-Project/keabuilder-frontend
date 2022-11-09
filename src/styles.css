@@ -414,7 +414,7 @@ main.insidecont .box {
     flex-shrink: 0 !important;
   }
   .offcanvas {
-    z-index: 1000;
+    z-index: 99999;
     position: fixed;
     top: 5px;
     bottom: 5px;

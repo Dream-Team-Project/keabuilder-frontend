@@ -1,12 +1,12 @@
-<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" style="width:50px;" (mouseover)="hoveropen = true" (mouseleave)="hoveropen = false" [class]="{ 'hoveropen' : hoveropen }" >
+<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" (mouseover)="hoveropen = true" (mouseleave)="hoveropen = false" [class]="{ 'hoveropen' : hoveropen }" >
   <div class="bw-sidebar-logo" [style]="hoveropen ? 'padding-left: 20px;': ''">
     <img src="/assets/images/logo/kblogo.png" alt="">
+    <i class="fas fa-bars kbburger"></i>
     <div class="bw-logo__item__text" *ngIf="hoveropen">Keabuilder<div class="fadingEffect"></div>
     </div>
   </div>
   <div class="bw-sidebar">
 
-    
     <a href="javascript:void(0)" (click)="backFn($event)" *ngIf="backme" >
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
@@ -47,7 +47,6 @@
         </span>
 
     </span>
-
 
     <!-- Dropdown2 -->
     <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2" *ngIf="extramenus" >

@@ -148,7 +148,7 @@
                         <div class="image-input-wrapper" [style.backgroundImage]="'url('+imageService.getImgPath(userimgpath)+')'"></div>
                         <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow ml-xl-n3">
 
-                          <input type="file" name="profile_avatar" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg">
+                          <input type="file" class="form-control" name="profile_avatar" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg">
                           <p class="mb-0"><small class="text-danger">{{typeerror}}</small></p>
 
                           <!-- <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">

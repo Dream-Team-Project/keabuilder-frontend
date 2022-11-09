@@ -1,3 +1,6 @@
+#bw-sidebar {
+  width: 50px;
+}
 .bw-logo__item__text {
   position: relative;
   line-height: 2em;
@@ -727,6 +730,23 @@ div#topbar_notifications_logs {
 .bw-sidebar-content a .bw-sidebar__item__text{
   display: none;
 }
-
-
-
+.kbburger{
+  opacity: 0;
+  top: -9px;
+  font-size: 20px;
+  left: 18px;
+  position: relative;
+}
+@media only screen and (max-width:500px){
+  #bw-sidebar {
+    width: 0px;
+  }
+  #bw-sidebar:not(.hoveropen) .bw-sidebar-logo img {
+    left: 9px;
+    position: relative;
+    top: -12px;
+  }
+  #bw-sidebar:not(.hoveropen) .kbburger{
+    opacity: 1;
+  }
+}
