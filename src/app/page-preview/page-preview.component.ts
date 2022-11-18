@@ -21,46 +21,46 @@ export class PagePreviewComponent implements OnInit {
     private _file: FileUploadService,
     private _general: GeneralService
   ) {
-    _file.gettrackingHTML('').subscribe(data=>{
-      var html = _general.parser.parseFromString(data.html, 'text/html');
-      this.header = html.querySelector('#kb-header-html');
-      this.footer = html.querySelector('#kb-footer-html');
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        var pagePrev:any = localStorage.getItem('preview-'+params.get('id'));
-        if(pagePrev) {
-          var ppObj:any = JSON.parse(pagePrev);
-          var head:any = document.querySelector('head');
-          var body:any = document.querySelector('body');
-          var style:any = document.createElement("STYLE");
-          body.setAttribute('style','display:none;');
-          style.innerHTML = ppObj.style;
-          head.innerHTML = ppObj.head;
-          head.append(style);
-          body.innerHTML = ppObj.body;
-          var header = body.querySelector('HEADER');
-          var footer = body.querySelector('FOOTER');
-          if(header && footer) {
-            if(header.getAttribute('kb-include-html') == 'true') {
-              header.innerHTML = this.header.innerHTML;
-            }
-            if(footer.getAttribute('kb-include-html') == 'true') {
-              footer.innerHTML = this.footer.innerHTML;
-            }
-          }
-          var scrs = body.querySelectorAll('script');
-          scrs.forEach((s:any)=>{
-            var as = document.createElement('script');
-            as.innerHTML = s.innerHTML;
-            s.parentElement.append(as);
-            s.remove();
-          })
-          setTimeout((e:any)=>{
-            body.removeAttribute('style','display:none;');
-          },500)
-        }
-        else _general.redirectToWebsite();
-      })
-    })
+    // _file.gettrackingHTML('').subscribe(data=>{
+    //   var html = _general.parser.parseFromString(data.html, 'text/html');
+    //   this.header = html.querySelector('#kb-header-html');
+    //   this.footer = html.querySelector('#kb-footer-html');
+    //   this.route.paramMap.subscribe((params: ParamMap) => {
+    //     var pagePrev:any = localStorage.getItem('preview-'+params.get('id'));
+    //     if(pagePrev) {
+    //       var ppObj:any = JSON.parse(pagePrev);
+    //       var head:any = document.querySelector('head');
+    //       var body:any = document.querySelector('body');
+    //       var style:any = document.createElement("STYLE");
+    //       body.setAttribute('style','display:none;');
+    //       style.innerHTML = ppObj.style;
+    //       head.innerHTML = ppObj.head;
+    //       head.append(style);
+    //       body.innerHTML = ppObj.body;
+    //       var header = body.querySelector('HEADER');
+    //       var footer = body.querySelector('FOOTER');
+    //       if(header && footer) {
+    //         if(header.getAttribute('kb-include-html') == 'true') {
+    //           header.innerHTML = this.header.innerHTML;
+    //         }
+    //         if(footer.getAttribute('kb-include-html') == 'true') {
+    //           footer.innerHTML = this.footer.innerHTML;
+    //         }
+    //       }
+    //       var scrs = body.querySelectorAll('script');
+    //       scrs.forEach((s:any)=>{
+    //         var as = document.createElement('script');
+    //         as.innerHTML = s.innerHTML;
+    //         s.parentElement.append(as);
+    //         s.remove();
+    //       })
+    //       setTimeout((e:any)=>{
+    //         body.removeAttribute('style','display:none;');
+    //       },500)
+    //     }
+    //     else _general.redirectToWebsite();
+    //   })
+    // })
    }
 
   ngOnInit(): void {

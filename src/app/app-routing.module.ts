@@ -58,10 +58,11 @@ import { AffiliateExportsComponent } from './affiliate-exports/affiliate-exports
 import { AffiliateSettingsComponent } from './affiliate-settings/affiliate-settings.component';
 import { WebsiteComponent } from './website/website.component';
 import { WebsitePagesComponent } from './website-pages/website-pages.component';
-import { WebsiteLayoutComponent } from './website-layout/website-layout.component';
 import { WebsiteDesignComponent } from './website-design/website-design.component';
 import { WebsiteDetailsComponent } from './website-details/website-details.component';
 import { WebsiteMarketplaceComponent } from './website-marketplace/website-marketplace.component';
+import { WebsiteHeadersComponent } from './website-headers/website-headers.component';
+import { WebsiteFootersComponent } from './website-footers/website-footers.component';
 import { IntegrationsComponent } from './integrations/integrations.component';
 import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -96,7 +97,8 @@ const routes: Routes = [
       // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
       {path: '', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-      {path:'layout', component: WebsiteLayoutComponent, canActivate: [AuthGuard]},
+      {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
+      {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
       {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
       {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]}
@@ -159,8 +161,8 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
   // builder routes
-  { path: 'builder/:layout/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  { path: 'preview/:layout/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  { path: 'preview/:target/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'builder/form', component: FormBuilderComponent, canActivate: [AuthGuard] },
   
   // User Course
@@ -296,10 +298,11 @@ export const RoutingComponents =
     AffiliateSettingsComponent,
     WebsiteComponent,
     WebsitePagesComponent,
-    WebsiteLayoutComponent,
     WebsiteDesignComponent,
     WebsiteDetailsComponent,
     WebsiteMarketplaceComponent,
+    WebsiteHeadersComponent,
+    WebsiteFootersComponent,
     NavigationComponent,
     IntegrationsComponent,
     FormBuilderComponent,

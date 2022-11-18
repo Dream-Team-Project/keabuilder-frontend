@@ -47,7 +47,9 @@ export class BuilderTopbarComponent implements OnInit {
     public _general:GeneralService,
     public _section:SectionService,
     public _image:ImageService,
-    ) { }
+    ) {
+      console.log(_general.user);
+     }
 
   ngOnInit(): void {
   }

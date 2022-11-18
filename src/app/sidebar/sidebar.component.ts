@@ -48,13 +48,27 @@ export class SidebarComponent implements OnInit {
       //   icon: 'far fa-file-alt',
       //   title: 'Blog'
       // },
-      // {
-      //   0:true,
-      //   routerlink: '/website/layout',
-      //   img: 'browser.gif',
-      //   icon: 'fas fa-columns',
-      //   title: 'Layout'
-      // },
+      {
+        0:true,
+        routerlink: '/website/headers',
+        img: 'browser.gif',
+        icon: 'fas fa-columns',
+        title: 'Headers'
+      },
+      {
+        0:true,
+        routerlink: '/website/footers',
+        img: 'browser.gif',
+        icon: 'fas fa-columns',
+        title: 'Footers'
+      },
+      {
+        0:true,
+        routerlink: '/website/navigation',
+        img: 'browser.gif',
+        icon: 'fas fa-stream',
+        title: 'Navigation'
+      },
       {
         0:true,
         routerlink: '/website/details',

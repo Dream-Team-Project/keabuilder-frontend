@@ -8,8 +8,7 @@ import { AuthService } from '../auth.service';
 import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
-import { DomPortal } from '@angular/cdk/portal';
-import { CdkAccordion } from '@angular/cdk/accordion';
+import { UserService } from '../user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class GeneralService {
   includeFooter:boolean = false;
   user:any;
   subdomain:string = '';
-  layout:any;
+  target:any;
   webpage:any = {uniqueid: ''};
   main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
   page_name = '';
@@ -115,48 +114,62 @@ export class GeneralService {
     { name: 'linked new tab', value: 'framename' },
   ];
 
-  constructor(private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, private websiteService: WebsiteService, private funnelService: FunnelService) {
+  constructor(private UserService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
-    this.user.name = this.user.username;
-    this.main.author = this.user.name;
-    this.subdomain = 'https://'+this.joinWthDash(this.user.name);
-    this.screenWidth = window.innerWidth;  
-    this.screenHeight = window.innerHeight; 
-    this.getMenus();
+    this.UserService.getUsersDetails().subscribe(data=>{
+      this.user = {...this.user, ...data.data[0]};
+      this.user.name = this.user.username;
+      this.main.author = this.user.name;
+      this.subdomain = 'https://'+this.joinWthDash(this.user.name);
+      this.screenWidth = window.innerWidth;  
+      this.screenHeight = window.innerHeight; 
+    })
+  }
+
+  getLayout() {
+    return [];
   }
 
   getMenus() {
-    this.fileUploadService.getMenus(this.user.uniqueid).subscribe((data:any)=>{
-      data.data.forEach((html:any)=>{
-        var doc = this.parser.parseFromString(html, 'text/html');
-        var ul = doc.querySelector('ul');
-        var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
-        ul?.querySelectorAll('li').forEach(li => {
-          var anc:any = li.querySelector('a');
-          var link = anc?.href.split('#').length > 1 ? '#no-link' : anc?.href;
-          var target = this.menu_target_types.filter((item:any)=>{ if(anc?.target == item.value) return item; })[0];
-          var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: link, target: target }
-          menu.items.push(item);
+    // promises
+    return new Promise<any>((resolve, reject) => {
+      this.fileUploadService.getMenus().subscribe((data:any)=>{
+        var int = 0;
+        data.data.forEach((html:any)=>{
+          var doc = this.parser.parseFromString(html, 'text/html');
+          var ul = doc.querySelector('ul');
+          var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
+          ul?.querySelectorAll('li').forEach(li => {
+            var anc:any = li.querySelector('a');
+            var link = anc?.href.split('#').length > 1 ? '#no-link' : anc?.href;
+            var target = this.menu_target_types.filter((item:any)=>{ if(anc?.target == item.value) return item; })[0];
+            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: link, target: target }
+            menu.items.push(item);
+          })
+          this.menus.push(menu);
+          int++;
+          if(int == data.data.length-1) {
+            resolve(this.menus);
+          };
         })
-        this.menus.push(menu);
       })
     })
   }
 
   getPageDetails(id:any) {
     return new Promise<any>((resolve, reject) => {
-      if(this.layout == 'website'){
+      if(this.target == 'website'){
         this.getWebPageDetails(id).then(e=> {
           resolve(e);
         })
       }
-      else if(this.layout == 'funnel'){
+      else if(this.target == 'funnel'){
         this.getFunnelDetails(id).then(e=> {
           resolve(e);
         })
       }
       else{
-        window.location.replace(window.location.origin);
+        this.redirectToPageNotFound();
         resolve(false);
       }
     })
@@ -167,7 +180,7 @@ export class GeneralService {
       this.webpage.uniqueid = uniqueid;
       this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
         (e:any)=>{
-            if(e.data.length == 0) window.location.replace(window.location.origin);
+            if(e.data.length == 0) this.redirectToPageNotFound();
             this.webpage = e.data[0];
             this.main.name = this.webpage.page_name;
             this.main.title = this.webpage.page_title;
@@ -175,7 +188,7 @@ export class GeneralService {
             if(this.webpage.page_description) this.main.description = this.webpage.page_description;
             if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
             this.main.author = this.webpage.page_author;
-            this.fileUploadService.getfile(this.webpage).subscribe({
+            this.fileUploadService.getPage(this.webpage).subscribe({
               next: (file:any)=>{
                 this.file.html = this.parser.parseFromString(file.html, 'text/html');
                 this.file.css = file.css;
@@ -212,7 +225,7 @@ export class GeneralService {
             this.main.description = '';
             this.main.keywords = '';
             this.main.author = '';
-            this.fileUploadService.getfile(this.webpage).subscribe({
+            this.fileUploadService.getPage(this.webpage).subscribe({
               next: (file:any)=>{
                 this.file.html = this.parser.parseFromString(file.html, 'text/html');
                 this.file.css = file.css;
@@ -259,7 +272,7 @@ export class GeneralService {
     return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
   }
 
-  saveLayout(main:any, sections:any) {
+  saveBuild(main:any, sections:any) {
     this.saveDisabled = true;
     this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
     this.removeStyle('.kb-section');
@@ -273,12 +286,12 @@ export class GeneralService {
       style: this.getAllStyle(),
       html: this.removeCommments(this.pagehtml.querySelector('BODY').innerHTML)
     }
-    if(this.layout == 'header') this.fileUploadService.saveHeader(obj).subscribe(e=>{
+    if(this.target == 'header') this.fileUploadService.saveHeader(obj).subscribe(e=>{
       this.saveDisabled = false;
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
       this.openSnackBar('Header has been saved', 'OK');
     });
-    else if(this.layout == 'footer') this.fileUploadService.saveFooter(obj).subscribe(e=>{
+    else if(this.target == 'footer') this.fileUploadService.saveFooter(obj).subscribe(e=>{
       this.saveDisabled = false;
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
       this.openSnackBar('Footer has been saved', 'OK');
@@ -307,24 +320,24 @@ export class GeneralService {
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
         '<title>'+this.main.title+'</title>' +        
         '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
-        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/sites/pages/'+this.main.path+'/style.css">' : '') +
-        '<script id="tracking-js" kb-include-path="'+window.location.origin+'/assets/sites/pages/tracking.html" src="'+window.location.origin+'/assets/script/tracking.js"></script>';
+        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/sites/'+this.user.uniqueid+'/pages/'+this.main.path+'/style.css">' : '') +
+        '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>';
         this.setPageStyle(sections);
         var page = {
-          head: this.pagehtml.querySelector('head').outerHTML,
-          body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+          head: '<?php $path="../../tracking/header-tracking.html"; if(file_exists($path)) include($path); ?>'+this.pagehtml.querySelector('head').outerHTML,
+          body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML)+'<?php $path="../../tracking/footer-tracking.html"; if(file_exists($path)) include($path); ?>',
           style: this.getAllStyle(),
           folder: this.main.path,
           prevFolder: this.webpage.page_path
         }
         if(preview) {
           localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
-          window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.layout+'/'+this.webpage.uniqueid, '_blank');
+          window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target+'/'+this.webpage.uniqueid, '_blank');
         }
         else {
           this.fileUploadService.createpage(page).subscribe(
             (event:any) => {
-              if(this.webpage.uniqueid ==  web.homepage && this.layout == 'website') {
+              if(this.webpage.uniqueid ==  web.homepage && this.target == 'website') {
                 var obj = {
                   path:event.data.folder
                 };
@@ -349,7 +362,7 @@ export class GeneralService {
 
   updatePageDB() {
     return new Promise<any>((resolve, reject) => {
-      if(this.layout == 'website'){
+      if(this.target == 'website'){
         var pagedata = {
           id: this.webpage.id,
           page_name: this.main.name,
@@ -367,7 +380,7 @@ export class GeneralService {
             resolve(e);
           })
       }
-      else if(this.layout == 'funnel'){
+      else if(this.target == 'funnel'){
         var funnelstepdata = {
             id: this.webpage.id,
             funnelid: this.webpage.funnelid,
@@ -423,7 +436,7 @@ export class GeneralService {
   }
 
   setPageStyle(sections:any) {
-    if(this.layout == 'website' || this.layout == 'funnel') this.blockStyling(this.main);
+    if(this.target == 'website' || this.target == 'funnel') this.blockStyling(this.main);
     sections.forEach((sec:any)=>{
       this.blockStyling(sec);
       sec.rowArr.forEach((row:any)=>{
@@ -757,5 +770,9 @@ export class GeneralService {
 
   redirectToBuilder(id:any, type:string) {
     return window.location.replace('/builder/'+type+'/'+id);
+  }
+
+  redirectToPageNotFound() {
+    window.location.href = './page-not-found';
   }
 }

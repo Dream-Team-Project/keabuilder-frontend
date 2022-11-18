@@ -1,5 +1,5 @@
 <div id="pagesinsidepage">
-
+  <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div id="kb-offcanvas-actions" *ngIf="popupsidebar">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" [class.fulltemplate] = "selecttemplate" >
         
@@ -201,7 +201,7 @@
   </div>
   <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
   <div class="container-fluid">
-    <div class="row">
+    <div class="row align-items-center">
       <div class="col-md-6">
         <fieldset class="position-relative has-icon-left kea-barfieldset" *ngIf="!showarchivemode">
           <input type="text" class="form-control" id="page-search" (keyup)="searchpage($event)" placeholder="Search Pages">
@@ -339,7 +339,7 @@
         <div class="row mt-4" *ngIf="toggleview1 else toggle" >
           <div class="col-md-4 cardpage mt-5 " *ngFor="let kbpage of kbpages; index as i;" >
             <div>
-              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}">
+              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
                 <div id="loader" *ngIf="shortwaiting">
                   <div id="shadow"></div>
                   <div id="box"></div>
@@ -424,7 +424,7 @@
                     <i class="fas fa-star"></i> Home
                   </div>
     
-                  <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + ')'}"></div>
+                  <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"></div>
                 </div>
                 <div class="col-md-6">
                   <div class="keabuilder-title-board line-ellipsis">
@@ -481,5 +481,4 @@
       </div>
     </div>
   </div>
-
 </div>

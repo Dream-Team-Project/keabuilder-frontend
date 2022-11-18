@@ -233,3 +233,10 @@
     padding: 2px 12px;
     border-radius: 0px 50px 50px 0px;
 }
+
+mat-spinner {
+    float:left; 
+    width: 24px; 
+    height: 24px; 
+    margin: 5px 10px 0px 0px;
+  }

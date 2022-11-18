@@ -121,6 +121,8 @@ export class WebsitePagesComponent implements OnInit {
   pageSize = 6;
   pageSizeOptions: number[] = [6, 12, 24, 100];
 
+  searching:boolean = false;
+
   // MatPaginator Output
   pageEvent!: PageEvent;  
 
@@ -264,9 +266,9 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   showwebpages(){
+    this.searching = true;
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        this.kbpages = [];
         this.shortdata(data);
         // console.log(data);
       },
@@ -278,51 +280,35 @@ export class WebsitePagesComponent implements OnInit {
 
   shortdata(dataA:any){
     if(dataA.success !=0 && dataA?.data?.length!=0){
-
       if(dataA.success == 2){
         // this.nodata = true;
         this.nodata = true;
+        this.searching = false;
       }else{
         this.nodata = false;
-        dataA.data.forEach((element:any) => {
-              
-          var mycustomdate =  new Date(element.updated_at);
-          var text1 = mycustomdate.toDateString();    
-          var text2 = mycustomdate.toLocaleTimeString();
-          element.updated_at = text1+' '+text2;
-
-          this.websiteService.getWebsite().subscribe({
-            next: data => {
-              if(data?.data[0]?.homepage==element.uniqueid){
-                element.defaulthome = 1;
-              }else{
-                element.defaulthome = 0;
-
-              }
-              this.kbpages.push(element);
+        this.websiteService.getWebsite().subscribe({
+          next: webdata => {
+          var tempsearch = [];
+          for(var i = 0; i < dataA.data.length; i++) {
+            var element = dataA.data[i];
+            var mycustomdate =  new Date(element.updated_at);
+            var text1 = mycustomdate.toDateString();    
+            var text2 = mycustomdate.toLocaleTimeString();
+            element.updated_at = text1+' '+text2;
+            element.defaulthome = webdata?.data[0]?.homepage==element.uniqueid ? 1 : 0;
+            element.thumbnail = 'keaimage-'+element.uniqueid+'-screenshot.png';
+            tempsearch.push(element);
+            if(dataA.data.length-1 == i) {
+              this.kbpages = tempsearch;
+              this.searching = false;
             }
-          });
-
-          var genscrn = 'keaimage-'+element.uniqueid+'-screenshot.png';
-
-          this.fileuploadService.validateimg(genscrn).subscribe({
-            next: data => {
-
-              if(data.data==0){
-                element.thumbnail = 'webpage_thumbnail.jpg';
-              }else if(data.data==1){
-                element.thumbnail = genscrn;
-              }
-
-            }
-          });
-
-        });
-
+          }
+        }
+      });
       }
-
     }else{
       this.nodata = true;
+      this.searching = false;
     }
 
   
@@ -544,10 +530,9 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   changevisibility(value:any){
+    this.searching = true;
     this.webpagesService.pagevisibility(value).subscribe({
       next: data => {
-        // console.log(data);
-        this.kbpages = [];
         this.shortdata(data);
       }
     });
@@ -655,18 +640,15 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   searchpage(event: Event) {
+    this.searching = true;
     var SearchValue = (event.target as HTMLInputElement).value;
     // console.log(SearchValue);
     this.selstatusshow = 'all';
-
     this.webpagesService.querystringmanage(SearchValue).subscribe({
       next: data => {
-        console.log(data);
-        this.kbpages = [];
         this.shortdata(data);
       }
     });
-
   }
   
 }

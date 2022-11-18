@@ -552,13 +552,13 @@
                                     (opened)="_general.setExpPanelStep(0)" hideToggle>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
-                                            Action<small *ngIf="_general.layout == 'funnel'" class="infoTxt">{{_general.selectedBlock.content.btntype}}</small>
+                                            Action<small *ngIf="_general.target == 'funnel'" class="infoTxt">{{_general.selectedBlock.content.btntype}}</small>
                                         </mat-panel-title>
                                         <mat-panel-description>
                                             <i class="fas fa-link"></i>
                                         </mat-panel-description>
                                     </mat-expansion-panel-header>
-                                    <div *ngIf="_general.layout == 'funnel' && (_general.webpage.funneltype == 'upsell' || _general.webpage.funneltype == 'downsell')"
+                                    <div *ngIf="_general.target == 'funnel' && (_general.webpage.funneltype == 'upsell' || _general.webpage.funneltype == 'downsell')"
                                         class="kb-tab-head kb-inner-tab-component">
                                         <mat-button-toggle-group name="buttonaction"
                                             [(ngModel)]="_general.selectedBlock.content.btntype"
@@ -572,7 +572,7 @@
                                                     class="fas fa-external-link-alt"></i>Regular</mat-button-toggle>
                                         </mat-button-toggle-group>
                                     </div>
-                                    <div *ngIf="_general.layout == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
+                                    <div *ngIf="_general.target == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
                                         class="kb-inner-tab-component">
                                         <div class="kb-tab-head">Products</div>
                                         <div class="kb-tab-content kb-inp-left">

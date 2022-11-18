@@ -1,123 +1,41 @@
-<ng-template>
-    <div class="container-fluid kb-details-container kb-scroll p-0" [class.dragBox]="dragBoxAnime.open"
-        [class.dragBoxClose]="dragBoxAnime.close" [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''"
-        cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
-        <div class="kb-top-head pb-0 pt-3 px-4" cdkDragHandle>
-            <span class="kb-selection-top-actions">
-                <button mat-button (click)="overlayRefDetach()">
-                    <i class="fa fa-times"></i>
-                </button>
-            </span>
-            <div class="border-bottom">
-                <h4>{{(selectedMenu.name ? selectedMenu.name : 'Menu') + ' items' | titlecase}} </h4>
+<div id="pagesinsidepage">
+    <!-- <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar> -->
+    <div class="container-fluid">
+        <div class="row align-items-center pt-2 px-4 mb-5">
+            <div class="col-md-6">
+                <h2>Navigation</h2>
+            </div>
+            <div class="col-md-6 text-right">
+                <button (click)="addMenu()" mat-raised-button color="primary">Add
+                    new menu <i class="fa fa-plus"></i></button>
             </div>
         </div>
-        <div *ngIf="putLink else menulist">
-            <div (click)="chngLink('')" class="d-block pt-3 px-4">
-                <button mat-raised-button color="accent"><i class="fa fa-arrow-left pr-2"></i>Back</button>
-            </div>
-            <div class="pt-4 pb-2 px-4 ">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Link</mat-label>
-                    <input name="link" [(ngModel)]="selectedMenuItem.link" type="text" matInput
-                        placeholder="Paste Menu Link" [style.textTransform]="'lowercase'">
-                </mat-form-field>
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Pages</mat-label>
-                    <mat-select [(ngModel)]="selectedMenuItem.link">
-                        <mat-option>None</mat-option>
-                        <mat-option *ngFor="let page of webpages"
-                            [value]="'https://'+_general.user.name+'.keabuilder.com/'+page.page_path" [disabled]="page.publish_status == 0">
-                            {{page.page_name}}<small class="infoTxt" [attr.data]="'Drafted'" *ngIf="page.publish_status == 0"></small>
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Target</mat-label>
-                    <mat-select [(ngModel)]="selectedMenuItem.target" [compareWith]="_style.compareOptValue">
-                        <mat-option *ngFor="let btt of _general.menu_target_types" [value]="btt">{{btt.name |
-                            titlecase}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-        <ng-template #menulist>
-            <ul *ngIf="selectedMenu.items.length != 0 else noitem" class="kb-menu-list kb-drag-container" cdkDropList
-                [cdkDropListData]="selectedMenu.items" (cdkDropListDropped)="drop($event)">
-                <li cdkDrag *ngFor="let item of selectedMenu.items, index as mi"
-                    (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; item.chngName = false"
-                    class="kb-cs kb-block-container">
-                    <div *cdkDragPreview class="custom-preview">{{item.name ? item.name : 'Menu Item'}}</div>
-                    <div *cdkDragPlaceholder class="custom-placeholder"></div>
-                    <div *ngIf="selectedMenu.items.length > 1" cdkDragHandle class="kb-handle-block">
-                        <i class="kb-handle-menu fas fa-arrows-alt-v"></i>
-                        <!-- <i (click)="_general.expandDevList('menu-item-'+mi)" class="fa" [class]="_style.getDisplay(item.hide) ? 'fa-eye-slash' : 'fa-eye'"></i> -->
-                        <!-- <div [id]="'menu-item-'+mi" class="dislay-device-list" [style.maxHeight]="'0px'">
-                                <mat-checkbox [checked]="_general.isAllHide(item.hide)"
-                                [indeterminate]="_general.someComplete(item.hide)"
-                                (change)="_general.setAll(item.hide, $event.checked)">All</mat-checkbox>
-                                <mat-checkbox [(ngModel)]="item.hide.desktop">Desktop</mat-checkbox>
-                                <mat-checkbox [(ngModel)]="item.hide.tablet_h">Tablet Horizontal</mat-checkbox>
-                                <mat-checkbox [(ngModel)]="item.hide.tablet_v">Tablet Vertical</mat-checkbox>
-                                <mat-checkbox [(ngModel)]="item.hide.mobile">Mobile</mat-checkbox>
-                        </div> -->
+        <div class="kb-menu-cards row p-2 m-auto">
+            <div class="col-md-3 kb-menu-card-inner py-3">
+                <h5>Website Pages</h5>
+                <hr>
+                <div *ngFor="let page of webpages, index as m" class="py-1">
+                    <div class="kb-menu px-3 py-2">
+                        {{page.page_name | titlecase}}
                     </div>
-                    <div class="kb-menu-title">
-                        <span>{{item.name ? item.name : 'Menu Item'}}</span>
-                        <input type="text" placeholder="Menu Item Name" [(ngModel)]="item.name" class="kb-chngname-inp">
-                    </div>
-                    <div class="kb-menu-option">
-                        <i *ngIf="!item.name" matTooltip="No name" matTooltipPosition="above"
-                            class="fa fa-exclamation-circle kb-danger"></i>
-                        <i (click)="addMenuItem(selectedMenu.items, menuItemObj, mi)" matTooltip="Add New Item"
-                            matTooltipPosition="above" class="fa fa-plus"></i>
-                        <i (click)="chngLink(item)" matTooltip="Change Link" matTooltipPosition="above"
-                            class="fa fa-link"></i>
-                        <i *ngIf="item.link else nolink" (click)="redirectLink(item.link)" matTooltip="Preview Link"
-                            matTooltipPosition="above" class="fa fa-external-link-alt"></i>
-                        <ng-template #nolink>
-                            <i matTooltip="No Link" matTooltipPosition="above" class="fas fa-unlink kb-danger"></i>
-                        </ng-template>
-                        <i (click)="duplicateMenuItem(selectedMenu.items, item, mi)" matTooltip="Duplicate Item"
-                            matTooltipPosition="above" ś class="far fa-copy"></i>
-                        <i (click)="deleteMenuItem(selectedMenu.items,mi)" matTooltip="Delete Item"
-                            matTooltipPosition="above" class="far fa-trash-alt"></i>
-                    </div>
-                </li>
-            </ul>
-            <ng-template #noitem>
-                <div class="d-flex p-5 justify-content-center text-center d-block">
-                    <button (click)="addMenuItem(selectedMenu.items, menuItemObj, 0)" mat-raised-button color="primary"
-                        class="pull-right">Add a menu item <i class="fa fa-plus"></i></button>
                 </div>
-            </ng-template>
-        </ng-template>
-    </div>
-</ng-template>
-
-<div id="kb-navigation">
-    <div class="d-flex justify-content-between align-items-center">
-        <h5>Navigation Menus</h5>
-        <button (click)="addMenu()" mat-raised-button color="primary" class="pull-right">Add
-            new menu <i class="fa fa-plus"></i></button>   
-    </div>
-    <div *ngIf="_general.menus.length == 0" class="text-center">
-        <img src="/assets/images/website/nav-empty.png" class="img-fluid" alt="No menus found" width="220px">
-    </div>
-    <ul class="kb-menu-list kb-overmenuht">
-        <li *ngFor="let menu of _general.menus, index as m">
-            <div class="kb-menu-title">
-                <span>{{menu.name ? menu.name : 'Menu Name'}}</span>
-                <input type="text" placeholder="Menu Name" [(ngModel)]="menu.name" class="kb-chngname-inp">
             </div>
-            <div class="kb-menu-option">
-                <i *ngIf="!menu.name" matTooltip="No name" matTooltipPosition="above"
-                    class="fa fa-exclamation-circle kb-danger"></i>
-                <i (click)="openDialog(menu)" matTooltip="Customize" matTooltipPosition="above" class="far fa-edit"></i>
-                <i (click)="duplicateMenu(menu, m)" matTooltip="Duplicate" matTooltipPosition="above"
-                    class="far fa-copy"></i>
-                <i (click)="deleteMenu(menu.id, m)" matTooltip="Delete" matTooltipPosition="above" class="far fa-trash-alt"></i>
+            <div class="col-md-6">
+                <mat-tab-group>
+                    <mat-tab [label]="menu.name | titlecase" *ngFor="let menu of menus">
+                        Content
+                    </mat-tab>
+                </mat-tab-group>
             </div>
-        </li>
-    </ul>
+            <div class="col-md-3 kb-menu-card-inner py-3">
+                <h5>Funnel Pages</h5>
+                <hr>
+                <div *ngFor="let page of webpages, index as m" class="py-1">
+                    <div class="kb-menu px-3 py-2">
+                        {{page.page_name | titlecase}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

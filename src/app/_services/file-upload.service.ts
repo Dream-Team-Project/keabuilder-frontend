@@ -35,6 +35,7 @@ export class FileUploadService {
   deleteimageApi = "./api/deleteimage";
   // web pages
   createPageApi = "./api/savepage";
+  getPageApi = "./api/getpage";
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
   createDefaultHomeApi = '/api/default-home';
@@ -42,7 +43,6 @@ export class FileUploadService {
   deletePageApi = '/api/deletepage';
   // web pages
   // file
-  getFileApi = "./api/getpage";
   fileExistApi = "./api/file-exist";
   // file
   // menu
@@ -53,7 +53,8 @@ export class FileUploadService {
   // tracking
   saveHeaderApi = "./api/saveheader";
   saveFooterApi = "./api/savefooter";
-  getTrackingHTMLApi = "./api/tracking";
+  getHeaderApi = "./api/getheader";
+  getFooterApi = "./api/getfooter";
   // tracking
   uniqueuserid:any = '';
 
@@ -66,39 +67,42 @@ export class FileUploadService {
     return this.http.post(this.createuserfolderApi, obj);
   }
 
+  // html pages
+
+  createdefaulthome(uniqueuserid:any):Observable<any> {
+    var obj = {uniqueuserid: uniqueuserid};
+    return this.http.post(this.createDefaultHomeApi, obj);
+  }
+
+  createpage(path:any):Observable<any> {
+    path.uniqueuserid = this.uniqueuserid;
+    return this.http.post(this.createPageApi, path);
+  }
+
+  getPage(page:any):Observable<any> {
+    page.uniqueuserid = this.uniqueuserid;
+    return this.http.post(this.getPageApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
   deletepage(path:any):Observable<any> {
     return this.http.delete(this.deletePageApi + '/' + this.uniqueuserid + '/' + path)
     .pipe(catchError(this.errorHandler));
   }
 
-  createdefaulthome(uniqueuserid:any):Observable<any> {
-    var obj = {uniqueuserid: uniqueuserid}
-    return this.http.post(this.createDefaultHomeApi, obj);
-  }
-
-  updateHome(obj:any):Observable<any> {
-    return this.http.post(this.updateHomeApi, obj);
-  }
-
-  createpage(path:any):Observable<any> {
-    return this.http.post(this.createPageApi, path);
-  }
-
   renamepage(path:any):Observable<any> {
+    path.uniqueuserid = this.uniqueuserid;
     return this.http.post(this.renamePageApi, path);
   }
 
-  copyimage(imgname:any):Observable<any> {
-    return this.http.post(this.copyImgApi, imgname);
+  copypage(path:any):Observable<any> {
+    path.uniqueuserid = this.uniqueuserid;
+    return this.http.post(this.copyPageApi, path);
   }
 
-  copypage(pathobj:any):Observable<any> {
-    return this.http.post(this.copyPageApi, pathobj);
-  }
-
-  getfile(page:any):Observable<any> {
-    return this.http.post(this.getFileApi, page)
-    .pipe(catchError(this.errorHandler));
+  updateHome(obj:any):Observable<any> {
+    obj.uniqueuserid = this.uniqueuserid;
+    return this.http.post(this.updateHomeApi, obj);
   }
 
   fileExist(path:any):Observable<any> {
@@ -107,21 +111,34 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  deleteMenu(arr:any):Observable<any> {
-    return this.http.post(this.deleteMenuApi, arr)
+  // html pages
+
+  // menu
+
+  deleteMenu(menus:any):Observable<any> {
+    var obj = {
+      menus: menus,
+      uniqueuserid: this.uniqueuserid
+    }
+    return this.http.post(this.deleteMenuApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  getMenus(userid:any):Observable<any> {
-    var obj = {user_id: userid}
+  getMenus():Observable<any> {
+    var obj = {uniqueuserid: this.uniqueuserid};
     return this.http.post(this.getMenusApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  saveMenu(menu:any):Observable<any> {
-    return this.http.post(this.saveMenuApi, menu)
+  saveMenu(obj:any):Observable<any> {
+    obj.uniqueuserid = this.uniqueuserid;
+    return this.http.post(this.saveMenuApi, obj)
     .pipe(catchError(this.errorHandler));
   }
+
+  // menu
+
+  // tracking/header/footer
 
   saveHeader(header:any):Observable<any> {
     return this.http.post(this.saveHeaderApi, header)
@@ -133,10 +150,70 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  gettrackingHTML(path:any):Observable<any> {
-    return this.http.post(this.getTrackingHTMLApi, path)
+  getHeader(header:any):Observable<any> {
+    return this.http.post(this.getHeaderApi, header)
     .pipe(catchError(this.errorHandler));
   }
+
+  getFooter(footer:any):Observable<any> {
+    return this.http.post(this.getFooterApi, footer)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  gettrackingHTML(data:any):Observable<any> {
+    return data;
+  }
+  // tracking/header/footer
+
+  // image 
+
+  // Returns an observable
+  upload(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedImage', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  getAllImgs():Observable<any> {
+    return this.http.get(this.getAllImgsApi+'/'+this.uniqueuserid)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  saveondb(imagedata: any):Observable<any> {
+    return this.http.post(this.saveOnDBApi+'/'+this.uniqueuserid, imagedata)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updateondb(imagedata: any):Observable<any> {
+    return this.http.put(this.updateOnDBApi, imagedata)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  copyimage(imgname:any):Observable<any> {
+    return this.http.post(this.copyImgApi, imgname);
+  }
+
+  deletefromdb(id:any) {
+    return this.http.delete(this.deleteFromDB+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteimage(path:any) {
+    return this.http.delete(this.deleteimageApi + '/' + path)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  validateimg(path:any):Observable<any> {
+    return this.http.post("/api/checkvalidimg", {
+      path,
+    }, httpOptions);
+  }
+
+  // image 
 
   // media
 
@@ -180,51 +257,8 @@ export class FileUploadService {
 
   // document
 
-  // Returns an observable
-  upload(file: any):Observable<any> {
-    // Create form data
-    const formData = new FormData();
-    formData.append('uploadedImage', file, file.name);
-    // Make http post request over api
-    // with formData as req
-    return this.http.post(this.uploadApi, formData)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  getAllImgs():Observable<any> {
-    return this.http.get(this.getAllImgsApi+'/'+this.uniqueuserid)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  saveondb(imagedata: any):Observable<any> {
-    return this.http.post(this.saveOnDBApi+'/'+this.uniqueuserid, imagedata)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  updateondb(imagedata: any):Observable<any> {
-    return this.http.put(this.updateOnDBApi, imagedata)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  deletefromdb(id:any) {
-    return this.http.delete(this.deleteFromDB+'/'+id)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  deleteimage(path:any) {
-    return this.http.delete(this.deleteimageApi + '/' + path)
-    .pipe(catchError(this.errorHandler));
-  }
-  
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
-
-  validateimg(path:any):Observable<any> {
-    return this.http.post("/api/checkvalidimg", {
-      path,
-    }, httpOptions);
-  }
-
 
 }

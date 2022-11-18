@@ -51,11 +51,10 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     _general.loading.success = false;
     _general.loading.error = false;
       this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.layout = params.get('layout');
-        this._general.fileUploadService.gettrackingHTML('path').subscribe(trackingdata=>{
+        _general.target = params.get('target');
           var parser = new DOMParser();
-          const doc = parser.parseFromString(trackingdata.html, 'text/html');
-          if(_general.layout == 'website' || _general.layout == 'funnel') {
+          // const doc = parser.parseFromString(trackingdata.html, 'text/html');
+          if(_general.target == 'website' || _general.target == 'funnel') {
               this._general.getAllProducts();
               _general.getPageDetails(params.get('id')).then(e=> {
                 _general.loading.success = false;
@@ -91,22 +90,23 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 _general.file.load = false;
               })
           }
-          else {
-            if(params.get('id') == _general.user.uniqueid) {
-                var obj:any = {};
-                if(_general.layout == 'header') {
-                  obj.html = doc.querySelector('#kb-header');
-                  obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
-                }
-                else if(_general.layout == 'footer') {
-                  obj.html = doc.querySelector('#kb-footer');
-                  obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
-                }
-                this.setBuilder(obj.html, obj.css);
-            }
-            else window.location.replace(window.location.origin);
+          else{
+            // this.setBuilder('', '');
+                // _general.file.load = false;
+          //   if(params.get('id') == _general.user.uniqueid) {
+          //       var obj:any = {};
+          //       if(_general.target == 'header') {
+          //         obj.html = doc.querySelector('#kb-header');
+          //         obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
+          //       }
+          //       else if(_general.target == 'footer') {
+          //         obj.html = doc.querySelector('#kb-footer');
+          //         obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
+          //       }
+          //       this.setBuilder(obj.html, obj.css);
+          //   }
+          //   else window.location.replace(window.location.origin);
           }
-        })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
@@ -210,7 +210,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   }
 
   setBuilder(html:any, css:any) {
-    if(html.querySelectorAll('.kb-section').length != 0) {
+    if(html?.querySelectorAll('.kb-section').length != 0) {
       this._general.main.style = {
         desktop: this.filterStyle('kb-main',css,''),
         tablet_h: this.filterStyle('kb-main',css,'1024,769'),

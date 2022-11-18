@@ -8,7 +8,7 @@
 
       <div class="col-md-6 mkdecnon">
         <button mat-raised-button color="accent" class="float-right" [routerLink]="['/website']" ><i class="fas fa-arrow-left"></i> Back</button>
-        <a mat-raised-button color="accent" class="float-right mr-3" [href]="windoworigin+'/assets/sites/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
+        <a mat-raised-button color="accent" class="float-right mr-3" [href]="windoworigin+'/assets/sites/'+_general.user.uniqueid+'/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
         <button mat-raised-button color="primary" class="float-right mr-3" (click)="updatepage()" ><i class="fas fa-save"></i> Save</button>
       </div>
 
@@ -34,8 +34,18 @@
             
           </div>
 
+        </div>
+
+      </div>
+
+      <div class="col-md-6 mt-4">
+
+        <div class="insideshdw">
+
+          <h5>Domain</h5>
+          <p>Choose from the existing domain.</p>
+
           <div class="form-group">
-            <label for="">Domain</label>
             <div class="kbcustom-domain-edit-link"
               style="border: 1px solid #c7cfd8; border-radius: 4px; padding: 15px; margin-bottom: 20px">
               <div class="kb-card__row">
@@ -51,56 +61,12 @@
 
       <div class="col-md-6 mt-4">
 
-        <div class="insideshdw keanavmenu p-0">
-
-          <app-navigation></app-navigation>
-
-        </div>
-
-      </div>
-
-      <div class="col-md-6 mt-4">
-
         <div class="insideshdw">
-
-          <div class="row">
-            <div class="col-md-6">
-              <h5>Global Header</h5>
-            </div>
-            <div class="col-md-6">
-              <button mat-raised-button color="accent" class="float-right" (click)="editglobal('header')">Edit Header <i class="fas fa-pencil"></i></button>
-            </div>
-        </div>
-
-        </div>
-
-      </div>
-      
-      <div class="col-md-6 mt-4">
-
-        <div class="insideshdw">
-
-          <div class="row">
-              <div class="col-md-6">
-                <h5>Global Footer</h5>
-              </div>
-              <div class="col-md-6">
-                <button mat-raised-button color="accent" class="float-right" (click)="editglobal('footer')">Edit Footer <i class="fas fa-pencil"></i></button>
-              </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="col-md-6 mt-4">
-
-        <div class="insideshdw">
-          <h5>Branding</h5>
-          <p>Control whether or not “Powered by Kea links display in the footer of your site and products.</p>
+          <h5>Logo</h5>
+          <!-- <p>Control whether or not “Powered by Kea links display in the footer of your site and products.</p> -->
 
           <div class="form-group">
-            <label for="">Logo</label>
+            <!-- <label for="">Logo</label> -->
 
             <input type="file" name="" (change)="changeme($event)" id="fileElemlogo" accept=".png, .jpg, .jpeg" class="drop-zone__input">
 
@@ -137,37 +103,38 @@
 
       <div class="col-md-6 mt-4">
         <div class="insideshdw">
+          <h5>Favicon</h5>
           
-          <label for="" class="mt-4">Favicon</label>
+          <!-- <label for="" class="mt-4">Favicon</label> -->
+          <div class="form-group">
+            <input type="file" name="" (change)="changeme2($event)" id="fileElemfavicon" accept=".png, .jpg, .jpeg" class="drop-zone__input">
 
-          <input type="file" name="" (change)="changeme2($event)" id="fileElemfavicon" accept=".png, .jpg, .jpeg" class="drop-zone__input">
-
-          <div class="kb-upload-card_dropzone">
-            <div class="kb-upload-card_preview">
-              <img alt="" class="kb-thumbnail img-fluid" style="border: none; padding: 0;"
-                [src]="faviconimg">
-            </div>
-            <div class="kb-upload-card_body">
-              <div class="kb-btn-group">
-                <div class="kb-dropdown">
-                  <div class="kb-dropdown_trigger">
-
-                    <button type="button" class="kb-btn" (click)="OnOpen2()">
-                      <span class="kb-btn_truncate-text">
-                        Choose a social image
-                      </span>
-                    </button>
-
-                  </div>
-                </div>
-
+            <div class="kb-upload-card_dropzone">
+              <div class="kb-upload-card_preview">
+                <img alt="" class="kb-thumbnail img-fluid" style="border: none; padding: 0;"
+                  [src]="faviconimg">
               </div>
-              <p class="mt-2"><small class="text-danger">{{typeerror2}}</small></p>
+              <div class="kb-upload-card_body">
+                <div class="kb-btn-group">
+                  <div class="kb-dropdown">
+                    <div class="kb-dropdown_trigger">
 
-              <p class="t-kb-body">Recommended dimensions of <strong>32x32</strong></p>
+                      <button type="button" class="kb-btn" (click)="OnOpen2()">
+                        <span class="kb-btn_truncate-text">
+                          Choose a social image
+                        </span>
+                      </button>
+
+                    </div>
+                  </div>
+
+                </div>
+                <p class="mt-2"><small class="text-danger">{{typeerror2}}</small></p>
+
+                <p class="t-kb-body">Recommended dimensions of <strong>32x32</strong></p>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -201,7 +168,7 @@
 
       <div class="col-md-12 text-center mt-5">
         <button mat-raised-button color="primary" class="mr-3" (click)="updatepage()" ><i class="fas fa-save"></i> Save</button>
-        <a mat-raised-button color="accent" class="mr-3" [href]="windoworigin+'/assets/sites/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
+        <a mat-raised-button color="accent" class="mr-3" [href]="windoworigin+'/assets/sites/'+_general.user.uniqueid+'/pages'" target="_blank" ><i class="fas fa-eye"></i> Preview</a>
         <button mat-raised-button color="accent" [routerLink]="['/website']" ><i class="fas fa-arrow-left"></i> Back</button>
       </div>
 

@@ -39,7 +39,7 @@ export class WebsiteDetailsComponent implements OnInit {
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               private fileUploadService: FileUploadService,
-              private _general: GeneralService,
+              public _general: GeneralService,
               private imageService: ImageService,
               private router: Router,
               private route: ActivatedRoute,) { }
@@ -49,7 +49,7 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpages().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.kbpages = data.data;
       },
       error: err => {
@@ -119,7 +119,6 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   updatepage(){
-    console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
@@ -131,8 +130,8 @@ export class WebsiteDetailsComponent implements OnInit {
     }
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
-        console.log('-->');
-        console.log(data);
+        // console.log('-->');
+        // console.log(data);
 
         var splnmlogo = data.genlogo.split('keaimage-');  
         var splnmfavi = data.genfavicon.split('keaimage-');  
@@ -159,15 +158,9 @@ export class WebsiteDetailsComponent implements OnInit {
           };
           this.fileUploadService.updateHome(obj).subscribe({
             next: data => {
-              if(this._general.menus.length == 0) this._snackBar.open('Details Updated Successfully!', 'OK');
+              this._snackBar.open('Details Updated Successfully!', 'OK');
             }
           });
-          this.fileUploadService.saveMenu(this._general.menus).subscribe(data => {
-            this._snackBar.open('Details Updated Successfully!', 'OK');
-          })
-          this.fileUploadService.deleteMenu(this._general.deletedMenuIds).subscribe(data => {
-            // console.log(data);
-          })
         }
       }
     });
@@ -238,14 +231,6 @@ export class WebsiteDetailsComponent implements OnInit {
 
   OnOpen2(){
     (<HTMLInputElement>document.getElementById('fileElemfavicon')).click();
-  }
-
-  editglobal(val:any){
-    if(val=='header'){
-      return window.location.replace('/builder/header/'+this.userid);
-    }else if(val=='footer'){
-      return window.location.replace('/builder/footer/'+this.userid);
-    }
   }
 
 
