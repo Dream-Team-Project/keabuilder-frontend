@@ -20,11 +20,11 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-funnel-archieve',
-  templateUrl: './funnel-archieve.component.html',
-  styleUrls: ['./funnel-archieve.component.css']
+  selector: 'app-funnel-archive',
+  templateUrl: './funnel-archive.component.html',
+  styleUrls: ['./funnel-archive.component.css']
 })
-export class FunnelArchieveComponent implements OnInit {
+export class FunnelArchiveComponent implements OnInit {
 
   
   displayedColumns: string[] = ['name', 'created_at','archive_reason', 'updated_at'];

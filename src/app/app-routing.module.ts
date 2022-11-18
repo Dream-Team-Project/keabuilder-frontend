@@ -14,7 +14,7 @@ import { BuilderComponent } from './builder/builder.component';
 import { BuilderSettingComponent } from './builder-setting/builder-setting.component';
 import { BulderWireframeComponent } from './bulder-wireframe/bulder-wireframe.component';
 import { FunnelComponent } from './funnel/funnel.component';
-import { FunnelArchieveComponent } from './funnel-archieve/funnel-archieve.component';
+import { FunnelArchiveComponent } from './funnel-archive/funnel-archive.component';
 import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
 import { StrategiesComponent } from './strategies/strategies.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
@@ -110,7 +110,7 @@ const routes: Routes = [
   children: [
     { path: '', component: AllFunnelsComponent, canActivate: [AuthGuard] },
     { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-    { path: 'archieve', component: FunnelArchieveComponent, canActivate: [AuthGuard] },
+    { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
     { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
     { path: ':funnel_id', component: FunnelWizardNavComponent, 
     children: [
@@ -249,7 +249,7 @@ export const RoutingComponents =
     ForgetPasswordComponent,
     DashboardComponent, 
     FunnelComponent,
-    FunnelArchieveComponent,
+    FunnelArchiveComponent,
     FunnelMarketplaceComponent,
     FunnelWizardNavComponent,
     StrategiesComponent,
