@@ -253,5 +253,8 @@
     .keamobhd{
         display: none;
     }
+    .mobkeaadjust .mat-form-field {
+        margin-bottom: -20px!important;
+    }
 
 }

@@ -40,10 +40,11 @@ export class AuthService {
     return !!localStorage.getItem('auth-token');
   }
 
-  forgetPassword(email: string, location:string): Observable<any>{
+  forgetPassword(email: string, location:string,type:string): Observable<any>{
     return this.http.post('/api/reset-password-email', {
       email,
-      location
+      location,
+      type
     }, httpOptions);
   }
 

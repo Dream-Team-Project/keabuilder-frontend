@@ -16,6 +16,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class WebsiteDesignComponent implements OnInit {
 
   kbwebsite:any[] = [];
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
   webstatus:any = 'Publish';
   webicon:any = 'fas fa-check mr-2';
 
@@ -135,16 +140,27 @@ export class WebsiteDesignComponent implements OnInit {
   }
 
   addnewpage(){
-    this.popupsidebar = true;
+    // this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = true;
       this.insidepagefirst = true;
       this.insidepagesecond = false;
     this.selecttemplate = false;
+
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
   }
 
   hidepopupsidebar(){
-    this.popupsidebar = false;
+    // this.popupsidebar = false;
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
   }
 
   onSubmit(): void {

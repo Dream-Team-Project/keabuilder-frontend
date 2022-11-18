@@ -1,13 +1,12 @@
 <div id="kb-websitedesign">
-
-  <div id="kb-offcanvas-actions" *ngIf="popupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" [class.fulltemplate] = "selecttemplate" >
+  <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" [class.fulltemplate] = "selecttemplate" >
         
         <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
         <div *ngIf="addnewpagepopup">
 
-          <h6><b>Create A Page</b></h6>
+          <h6><b>Create A Page   {{'good-'+sidebar.anim.open}}</b></h6>
           <hr>
 
           <div *ngIf="insidepagefirst">
@@ -107,7 +106,7 @@
 
     </div>
   </div>
-  <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
 
   <div class="container-fluid">
     <div class="row">
@@ -146,4 +145,5 @@
       </div>
     </div>
   </div>
+
 </div>

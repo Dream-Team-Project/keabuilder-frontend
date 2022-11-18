@@ -1,7 +1,7 @@
 <div id="funnelcontainer">
 
-    <div id="kb-offcanvas-actions" *ngIf="popupsidebar">
-        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+    <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
@@ -93,26 +93,26 @@
 
         </div>
     </div>
-    <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
     
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2 col-6">
                 <button routerLink="/funnels/build" mat-raised-button color="primary">
                     <i class="far fa-plus-square"></i> Build A Funnel
                 </button>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-10 col-6">
                 <ul class="kea-barfunnelsearch">
                     <li class="active">
                         <a routerLink="/funnels" href="javascript:void(0)" mat-raised-button>
-                            <i class="fas fa-filter"></i> All Funnels
+                            <i class="fas fa-filter"></i> <span class="keadnmob">All Funnels</span>
                         </a>
                     </li>
                     <li>
                         <a routerLink="/funnels/archieve" href="javascript:void(0)" mat-button>
-                            <i class="fas fa-archive"></i> Archived
+                            <i class="fas fa-archive"></i> <span class="keadnmob">Archived</span>
                         </a>
                     </li>
                     <!-- <li>
