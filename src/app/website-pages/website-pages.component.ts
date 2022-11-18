@@ -36,6 +36,11 @@ export interface WebpageData {
 export class WebsitePagesComponent implements OnInit {
   
   displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
   selection = new SelectionModel<WebpageData>(true, []);
   dataSource: MatTableDataSource<WebpageData>;
   users:any = [];
@@ -213,7 +218,6 @@ export class WebsitePagesComponent implements OnInit {
   }
   
   addnewpage(){
-    this.popupsidebar = true;
     this.showmytemplates = false;
     this.addnewpagepopup = true;
     this.insidepagefirst = true;
@@ -222,6 +226,15 @@ export class WebsitePagesComponent implements OnInit {
     this.selecttemplate = false;
     this.showpageurl = false;
     this.confirmarchivepage = false;
+    this.openSidebar();
+  }
+
+  openSidebar(){
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
   }
 
   onSubmit(): void {
@@ -374,7 +387,8 @@ export class WebsitePagesComponent implements OnInit {
 
               }else if(type=='quickedit'){
 
-                this.popupsidebar = true;
+                this.openSidebar();
+
                 this.showmytemplates = false;
                 this.addnewpagepopup = false;
                   this.insidepagefirst = true;
@@ -397,7 +411,8 @@ export class WebsitePagesComponent implements OnInit {
 
                   this.quickeditid = data.data[0].id;
                 
-                this.popupsidebar = true;
+                  this.openSidebar();
+
                 this.oldpagepath = this.pageurl;
 
               }
@@ -428,7 +443,7 @@ export class WebsitePagesComponent implements OnInit {
               // console.log(data);
             }
           });
-          this.popupsidebar = false;
+          // this.popupsidebar = false;
           this.showwebpages();
 
         }
@@ -441,6 +456,12 @@ export class WebsitePagesComponent implements OnInit {
   hidepopupsidebar(){
     this.popupsidebar = false;
     this.pathcheck2 = false;
+
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
   }
 
   add(event: MatChipInputEvent): void {
@@ -497,7 +518,8 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.success==1){
 
-            this.popupsidebar = true;
+            this.openSidebar();
+
             this.showmytemplates = false;
             this.addnewpagepopup = false;
             this.insidepagefirst = true;
@@ -546,7 +568,8 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   archive_popup(id:any){
-    this.popupsidebar = true;
+    this.openSidebar();
+
     this.showmytemplates = false;
     this.addnewpagepopup = false;
       this.insidepagefirst = true;

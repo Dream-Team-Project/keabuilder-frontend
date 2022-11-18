@@ -292,3 +292,10 @@ opacity: 0;
     background: #fff;
     box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
 }
+
+@media only screen and (max-width:500px){
+    .keadnmob{
+        display: none;
+    }
+}
+

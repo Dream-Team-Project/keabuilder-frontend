@@ -5,6 +5,7 @@ import { UserService } from '../_services/user.service';
 import { ImageService } from '../_services/image.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { E } from '@angular/cdk/keycodes';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -30,10 +31,18 @@ export class ProfileComponent implements OnInit {
   userchangeerror = false;
   emailchangeerror = false;
 
+  chktoken = '';
+  newpassword = '';
+
+  incrtkn = false;
+  incrpwdlng = false;
+  selectfilenm = '';
+
   constructor(private token: TokenStorageService,
               public userService: UserService,
               public imageService: ImageService,
               private _snackBar: MatSnackBar,
+              private _auth: AuthService, 
               ) { }
 
   ngOnInit(): void {
@@ -74,6 +83,7 @@ export class ProfileComponent implements OnInit {
     var getname = (event.target.files[0].name);
     this.logoimgname = this.generatename(getname);
 
+    this.selectfilenm = getname;
     // console.log(this.logoimgname);
 
     if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
@@ -102,39 +112,107 @@ export class ProfileComponent implements OnInit {
   }
 
   kbsavechange(){
-    var obj = {
-      data:this.profileobj,
-      logo:this.logoimgname,
-      checkimginput1: this.imagelogorequest,
-    };
-    this.userService.updateuserdetails(obj).subscribe({
-      next: data => {  
-        console.log(data);
-        var splnmlogo = data.genlogo.split('keaimage-');  
-        var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
-        if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
-          this.imageService.onImageFileUpload(genobjlogo);
-          this.imageService.timeStamp = (new Date()).getTime();
-        }
+    // console.log(this.activem);
+    if(this.activem == 'profile'){
 
-        console.log(data.result1[0]['count(*)']);
-        if(data.result1[0]['count(*)']==1){
-          this.userchangeerror = true;
+        var obj = {
+          data:this.profileobj,
+          logo:this.logoimgname,
+          checkimginput1: this.imagelogorequest,
+          type:'profile'
+        };
+        this.userService.updateuserdetails(obj).subscribe({
+          next: data => {  
+            console.log(data);
+            var splnmlogo = data.genlogo.split('keaimage-');  
+            var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
+            if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
+              this.imageService.onImageFileUpload(genobjlogo);
+              this.imageService.timeStamp = (new Date()).getTime();
+            }
+
+            // console.log(data.result1[0]['count(*)']);
+            if(data.result1[0]['count(*)']==1){
+              this.userchangeerror = true;
+            }else{
+              this.userchangeerror = false;
+            }
+
+            if(data.result2[0]['count(*)']==1){
+              this.emailchangeerror = true;
+            }else{
+              this.emailchangeerror = false;
+            }
+
+            this.selectfilenm = '';
+            // this.updateuserdetailsnow();
+            this._snackBar.open('Profile Updated Successfully!', 'OK');
+
+          }
+        });
+
+    }else if(this.activem == 'changepassword'){
+
+      if(this.chktoken!='' && this.newpassword!='' && this.incrpwdlng==false){
+        
+        this.incrpwdlng = false;
+        this._auth.onupdatePassword(this.newpassword, this.chktoken).subscribe(resp=>{
+          console.log(resp);
+
+          if(resp[0]=='error'){
+            this._snackBar.open('Invalid Token; please try again!', 'OK');
+          }else{
+            this._snackBar.open('Password Update Successfully!', 'OK');
+            this.chktoken = '';
+            this.newpassword = '';
+          }
+        });
+
+      }else{
+
+        if(this.incrpwdlng==true){
+          this.incrpwdlng = true;
         }else{
-          this.userchangeerror = false;
+          this._snackBar.open('Both fields are required!', 'OK');
         }
 
-        if(data.result2[0]['count(*)']==1){
-          this.emailchangeerror = true;
-        }else{
-          this.emailchangeerror = false;
-        }
+      }
 
-        // this.updateuserdetailsnow();
-        this._snackBar.open('Profile Updated Successfully!', 'OK');
+
+
+    }
+
+  }
+
+  generatetoken(){
+
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+       console.log(data);
+         var loctn:any = window.location.origin;
+         var emailInp = data.data[0].email;
+         var type = 'type2';
+         this._auth.forgetPassword(emailInp, loctn,type).subscribe(resp=>{
+           console.log(resp);
+           this._snackBar.open(resp[1], 'OK');
+         });
 
       }
     });
+    
+  }
+
+  OnOpen(){
+    (<HTMLInputElement>document.getElementById('fileElemlogo')).click();
+  }
+
+  validatepas(event:any){
+
+    if(event.value.length<=6){
+      this.incrpwdlng = true;
+    }else{
+      this.incrpwdlng = false;
+    }
 
   }
 

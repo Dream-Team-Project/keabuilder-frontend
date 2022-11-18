@@ -23,6 +23,11 @@ export class AllFunnelsComponent implements OnInit {
               private fileuploadService: FileUploadService) { }
 
   funnels:any = [];
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
   popupsidebar = false;
   funnelurl = '';
   reason = '';
@@ -196,7 +201,7 @@ export class AllFunnelsComponent implements OnInit {
 
     if(type=='archive'){
       this.forarchiveid = id;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.firstpart = false;
       this.shwobtnfirst = true;
       this.colortheme = false;
@@ -239,7 +244,7 @@ export class AllFunnelsComponent implements OnInit {
             this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
           }else if(type=='copy'){
             this.firstpart = true;
-            this.popupsidebar = true;
+            this.openSidebar();
             this.funneltostep = true;
             this.colortheme = false;
             this.funnelurl = window.origin+'/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
@@ -265,6 +270,20 @@ export class AllFunnelsComponent implements OnInit {
 
   hidepopupsidebar(){
     this.popupsidebar = false;
+
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
+  }
+
+  openSidebar(){
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
   }
 
   copyInputMessage(inputElement:any){
@@ -335,7 +354,7 @@ export class AllFunnelsComponent implements OnInit {
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
     }else if(type=='copy'){
       this.firstpart = true;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.funneltostep = false;
       this.colortheme = false;
       this.funnelurl = window.origin+'/funnels/'+unique1+'/steps/'+unique2;
@@ -349,7 +368,7 @@ export class AllFunnelsComponent implements OnInit {
       });
     }else if(type=='archive'){
       this.forarchiveid = unique2;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.firstpart = false;
       this.shwobtnfirst = false;
       this.colortheme = false;
@@ -380,7 +399,7 @@ export class AllFunnelsComponent implements OnInit {
     }else if(type=='colortheme'){
       this.forarchiveid = unique2;
       this.badgecolor = unique1;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.firstpart = false;
       this.colortheme = true;
     } 

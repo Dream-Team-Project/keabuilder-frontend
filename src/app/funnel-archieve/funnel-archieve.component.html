@@ -5,12 +5,12 @@
                 <ul class="kea-barfunnelsearch">
                       <li >
                           <a routerLink="/funnels" href="javascript:void(0)" mat-button>
-                              <i class="fas fa-filter"></i> All Funnel
+                              <i class="fas fa-filter"></i> <span class="keadnmob">All Funnel</span>
                           </a>
                       </li>
                       <li class="active">
                           <a routerLink="/funnels/archieve" href="javascript:void(0)" mat-raised-button>
-                              <i class="fas fa-archive"></i> Archived
+                              <i class="fas fa-archive"></i> <span class="keadnmob">Archived</span>
                           </a>
                       </li>
                       <!-- <li>
@@ -84,8 +84,8 @@
                     <ng-container matColumnDef="updated_at">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
                       <td mat-cell *matCellDef="let row">
-                        <button mat-raised-button class="mr-2" (click)="restoredeleteme(row.id,'restore')" >Restore <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                        <button mat-raised-button (click)="openDialog(row.id)" >Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button mat-raised-button class="mr-2" (click)="restoredeleteme(row.id,'restore')" ><span class="keadnmob">Restore</span> <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
+                        <button mat-raised-button (click)="openDialog(row.id)" ><span class="keadnmob">Delete</span> <i class="fa fa-trash" aria-hidden="true"></i></button>
                       </td>
                     </ng-container>
                 

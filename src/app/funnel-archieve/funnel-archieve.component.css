@@ -149,3 +149,13 @@
  table {
    width: 100%;
  }
+
+ @media only screen and (max-width:500px){
+  .kea-barfieldset{
+    width: 190px;
+  }
+  .keadnmob{
+   display: none;
+ }
+ }
+

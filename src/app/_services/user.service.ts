@@ -25,7 +25,7 @@ export class UserService {
   }
 
   getUsers(): Observable<any> {
-    return this.http.get(API_URL)
+    return this.http.get(API_URL);
   }
 
   getPublicContent(): Observable<any> {
