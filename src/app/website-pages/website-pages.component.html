@@ -211,16 +211,16 @@
         </fieldset>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary">Add New Page <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add New Page</span> <i class="fas fa-plus"></i></button>
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
         <button mat-raised-button (click)="archivepages()" class="ml-2">
-          {{!showarchivemode ?'Archive':'View'}} Pages 
+          <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>
           <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'" ></i>
         </button>
-        <button mat-raised-button [routerLink]="['/website/details']" >Site Details
+        <button mat-raised-button [routerLink]="['/website/details']" ><span class="keamobhd">Site Details</span>
         <i class="fas fa-palette"></i></button>
       </div>
-      <div class="col-md-12 mt-3 text-right" *ngIf="!showarchivemode">
+      <div class="col-md-12 mt-3 text-right mobkeaadjust" *ngIf="!showarchivemode">
 
         <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="!nodata">Toggle View 
           <i class="fas" [ngClass]="{'fa-th': toggleview1 == true, 'fa-th-large' : toggleview1 == false }"></i>
@@ -303,7 +303,7 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
               <td mat-cell *matCellDef="let row">
                 <button mat-raised-button class="mr-2" (click)="restoredeleteme(row,'restore')" >Restore <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                <button mat-raised-button (click)="restoredeleteme(row,'delete')" >Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button mat-raised-button (click)="openDialog(row)">Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
               </td>
             </ng-container>
         
@@ -435,7 +435,7 @@
                     <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
                   </p>
                 </div>
-                <div class="col-md-4 pt-4">
+                <div class="col-md-4 pt-4 mobadjust">
                     <mat-menu #menu2="matMenu">
                       <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
                           <i class="fas fa-pen mr-2"></i> Quick Edit
@@ -453,9 +453,9 @@
                         <i class="far fa-trash-alt mr-2"></i> Archive
                       </button>
                     </mat-menu>
-                    <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-                    <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> Setting <i class="fas fa-cog"></i></button>
+                    <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> <span class="keamobhd">Preview</span>  <i class="far fa-eye"></i></button>
+                    <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary"><span class="keamobhd">Edit</span> <i class="fas fa-pencil-alt"></i></button>
+                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting</span> <i class="fas fa-cog"></i></button>
                 </div>
               
     

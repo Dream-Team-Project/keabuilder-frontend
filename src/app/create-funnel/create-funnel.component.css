@@ -137,7 +137,6 @@
 
 
 .Keabuilder-item {
-  padding: 10px 20px;
   border-radius: 0.267rem;
   margin-bottom: 20px;
   box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
@@ -160,7 +159,7 @@
   border-radius: 0.5rem;
 }
 
-.Keabuilder-item i {
+.Keabuilder-item .keatitlebox i, .keatitlebox i {
   top: 4px;
   position: relative;
   opacity: 0.5;
@@ -1382,3 +1381,37 @@ select#users-list-verified {
   background-position: center bottom;
 }
 
+
+.keafooterdropmenu {
+  height: 0px;
+  transition: all .3s cubic-bezier(.23,1,.32,1);
+  background: #fff;
+  overflow: hidden;
+  margin: 0px;
+}
+.keafooterdropmenu button {
+  width: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 48px;
+  height: 48px;
+  padding: 0 16px;
+  text-align: left;
+  text-decoration: none;
+  max-width: 100%;
+  position: relative;
+}
+.keamaindropitem:hover .keafooterdropmenu {
+  height: 195px;
+}
+.keatitlebox {
+  padding: 10px 20px;
+}

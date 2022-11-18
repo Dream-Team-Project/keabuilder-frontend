@@ -1396,5 +1396,12 @@ a:hover {
     .navbar-nav{
         display: -webkit-inline-box!important;
     }
+    .header-navbar.fixed-top {
+      left: 0;
+    }
+    .offcanvas.offcanvas-right.offcanvas-on{
+      right: 0px;
+    }
+
 }
 /* mobile media query */
