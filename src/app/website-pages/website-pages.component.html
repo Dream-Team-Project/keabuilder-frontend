@@ -1,6 +1,6 @@
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-  <div id="kb-offcanvas-actions" *ngIf="popupsidebar">
+  <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" [class.fulltemplate] = "selecttemplate" >
         
         <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
