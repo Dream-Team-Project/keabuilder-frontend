@@ -1,7 +1,7 @@
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-  <div id="kb-offcanvas-actions" *ngIf="popupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" [class.fulltemplate] = "selecttemplate" >
+  <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" [class.fulltemplate] = "selecttemplate" >
         
         <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
@@ -209,7 +209,7 @@
         </mat-form-field>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add New Page</span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add New Page </span> <i class="fas fa-plus"></i></button>
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
         <button mat-raised-button (click)="archivepages()" class="ml-2">
           <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>

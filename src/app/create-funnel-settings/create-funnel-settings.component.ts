@@ -135,7 +135,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
   }
 
   viewarchivefunnel(){
-    this.router.navigate(['/funnels/archieve'],{relativeTo: this.route});
+    this.router.navigate(['/funnels/archive'],{relativeTo: this.route});
   }
 
   showpopup(){

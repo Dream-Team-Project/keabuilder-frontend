@@ -310,10 +310,10 @@ export class AllFunnelsComponent implements OnInit {
               newob.grouptags = element.grouptags;
 
                 data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',page_title:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
+                  var newob2 = {id:'',uniqueid:'',page_name:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
                   if(element2.funnelid==newob.id){
                     newob2.id = element2.id;
-                    newob2.page_title = element2.page_title;
+                    newob2.page_name = element2.page_name;
                     newob2.uniqueid = element2.uniqueid;
 
                     var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);

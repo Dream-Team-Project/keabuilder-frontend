@@ -99,7 +99,7 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
-          routerlink: '/funnels/archieve',
+          routerlink: '/funnels/archive',
           img: 'funnel.gif',
           icon: 'fas fa-archive',
           title: 'Archived'
