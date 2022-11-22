@@ -23,7 +23,7 @@ button.mat-button {
     margin: 0;
 }
 
-.kb-has-icon span.cdk-drag-handle, .kb-custom-link {
+.kb-has-icon .cdk-drag-handle, .kb-has-icon .cdk-drag-handle>span, .kb-custom-link {
     cursor: move;
 }
 

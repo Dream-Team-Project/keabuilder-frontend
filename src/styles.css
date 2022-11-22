@@ -9,6 +9,7 @@
         --opacity-primary: rgb(216 200 152 / 70%);        ;
         --opacity-success: rgb(27 197 189 / 70%);
         --opacity-section: rgb(24 103 192 / 80%);
+        --opacity-danger: rgb(220 53 69 / 70%);
         --primary-color: #dea641;
         --secondary-color: #6c757d;
         --section-color: #1867c0;
@@ -635,6 +636,26 @@ main.insidecont .box {
 
 .kb-details-container .cdk-overlay-dark-backdrop {
   background: rgba(0,0,0,.2);
+}
+
+.kb-tag {
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 9px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+
+.kb-info-tag {
+  background-color: rgb(24 103 192 / 20%);
+  color: var(--section-color);
+}
+
+.kb-danger-tag {
+  background-color: rgb(220 53 69 / 20%);
+  color: var(--kb-danger);
 }
 
 div#kb-mat-loader {

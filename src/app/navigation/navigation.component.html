@@ -37,8 +37,12 @@
                                 <div *cdkDragPreview class="custom-preview">{{page.page_name | titlecase}}</div>
                                 <div *cdkDragPlaceholder class="custom-placeholder px-3 py-2">Drop here</div>
                                 <div class="kb-menu-pages kb-has-icon">
-                                    <span cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
-                                        class="px-3 py-2 w-100">{{page.page_name | titlecase}}</span>
+                                    <div cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
+                                        class="px-3 py-2 w-100 d-flex justify-content-between">
+                                        <span>{{page.page_name | titlecase}}</span>
+                                        <span class="kb-tag kb-info-tag" *ngIf="page.publish_status == 1 else draft">Published</span>
+                                        <ng-template #draft><span class="kb-tag kb-danger-tag">Drafted</span></ng-template>
+                                    </div>
                                     <span matTooltip="Preview" matTooltipPosition="above" class="border-left">
                                         <i class="fa fa-external-link-alt px-3 py-2"
                                             (click)="redirectLink(_general.subdomain+page.page_path)"></i>
@@ -67,8 +71,11 @@
                                             <div *cdkDragPlaceholder class="custom-placeholder px-3 py-2">Drop here
                                             </div>
                                             <div class="kb-menu-pages kb-has-icon">
-                                                <span cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
-                                                    class="px-3 py-2 w-100">{{step.page_name | titlecase}}</span>
+                                                <div cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
+                                                    class="px-3 py-2 w-100 d-flex justify-content-between">
+                                                    <span>{{step.page_name | titlecase}}</span>
+                                                    <span class="kb-tag kb-info-tag">{{step.funneltype}}</span>
+                                                </div>
                                                 <span matTooltip="Preview" matTooltipPosition="above"
                                                     class="border-left">
                                                     <i class="fa fa-external-link-alt px-3 py-2"
