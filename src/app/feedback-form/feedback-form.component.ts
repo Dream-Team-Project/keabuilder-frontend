@@ -99,7 +99,7 @@ export class FeedbackFormComponent implements OnInit {
       }
       this._mail.sendmail(maildata).subscribe((data:any)=>{
         this.overlayRefDetach();
-        this._general.openSnackBar('Thanks for your feedback!', 'OK');
+        this._general.openSnackBar('Thanks for your feedback', 'OK', 'center', 'top');
       });
     }
     else this.mailStatus.error = true;

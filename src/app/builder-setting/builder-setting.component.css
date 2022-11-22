@@ -199,3 +199,7 @@ span.kb-trans:after {
 .kb-tab-comp-pad {
     padding: 6px 12px;
 }
+
+i.kb-danger {
+    margin-left: 5px;
+  }

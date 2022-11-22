@@ -127,7 +127,7 @@
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>
-                                                <div [style.width]="element.content.name == 'heading' || element.content.name == 'text' || element.content.name == 'checkout' || element.content.name == 'code' ? '100%' : ''" [ngSwitch]="element.content.name" [attr.data-name]="element.content.name">
+                                                <div [attr.data-name]="element.content.name" [style.width]="element.content.name == 'heading' || element.content.name == 'text' || element.content.name == 'checkout' || element.content.name == 'code' ? '100%' : ''" [ngSwitch]="element.content.name">
                                                     <div *ngSwitchCase="'image'" class="kb-element-content">
                                                         <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
                                                             [ngStyle]="_style.imageStyling()"
@@ -157,11 +157,11 @@
                                                             </ng-template>
                                                         </ng-template>
                                                     </div>
-                                                    <div *ngSwitchCase="'menu'" class="kb-element-content">
-                                                        <ul class="kb-menu" [attr.kb-include-menu]="element.content.data_id"
+                                                    <div *ngSwitchCase="'menu'" [attr.data-id]="element.content.data_id" class="kb-element-content">
+                                                        <ul class="kb-menu" [id]="element.content.data_id"
                                                         [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
                                                             <li *ngFor="let item of element.content.items, index as mi">
-                                                                <a  class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                                <a class="kb-content-item" [id]="item.id" [href]="item.link"
                                                                 [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
                                                             </li>
                                                         </ul>

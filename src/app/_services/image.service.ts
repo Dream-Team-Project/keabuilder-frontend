@@ -152,7 +152,7 @@ export class ImageService {
                 this.saveasnew = true;
                 this.croppedEvent = false;
                 this.imgMatTabIndex = 1;
-                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'OK');
+                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'OK', 'center', 'top');
             })
     }
 

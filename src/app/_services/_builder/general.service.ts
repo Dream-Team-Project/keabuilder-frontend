@@ -9,12 +9,14 @@ import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
 import { UserService } from '../user.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class GeneralService {
+  userdomain:string = 'keapages.com';
   includeHeader:boolean = false;
   includeFooter:boolean = false;
   user:any;
@@ -113,6 +115,7 @@ export class GeneralService {
     { name: 'new tab', value: '_blank' },
     { name: 'linked new tab', value: 'framename' },
   ];
+  validatelink = new FormControl('', [Validators.required, Validators.pattern(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)]);
 
   constructor(private UserService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
@@ -120,10 +123,13 @@ export class GeneralService {
       this.user = {...this.user, ...data.data[0]};
       this.user.name = this.user.username;
       this.main.author = this.user.name;
-      this.subdomain = 'https://'+this.joinWthDash(this.user.name);
+      this.subdomain = 'https://'+this.joinWthDash(this.user.subdomain)+'.'+this.userdomain+'/';
       this.screenWidth = window.innerWidth;  
       this.screenHeight = window.innerHeight; 
     })
+    this.getMenus().then(data=>{
+      this.menus = data;
+    });
   }
 
   getLayout() {
@@ -132,25 +138,28 @@ export class GeneralService {
 
   getMenus() {
     // promises
+    const menus:any = [];
     return new Promise<any>((resolve, reject) => {
       this.fileUploadService.getMenus().subscribe((data:any)=>{
-        var int = 0;
+        if(!data.success) resolve(menus);
+        var ulc = 0;
         data.data.forEach((html:any)=>{
           var doc = this.parser.parseFromString(html, 'text/html');
           var ul = doc.querySelector('ul');
-          var menu:any = {id: ul?.id, name: ul?.getAttribute('name'), type: 'menu', items: []}
-          ul?.querySelectorAll('li').forEach(li => {
+          var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', items: []}
+          var lic = 0;
+          var list:any = ul?.querySelectorAll('li');
+          list.forEach((li:any) => {
             var anc:any = li.querySelector('a');
-            var link = anc?.href.split('#').length > 1 ? '#no-link' : anc?.href;
-            var target = this.menu_target_types.filter((item:any)=>{ if(anc?.target == item.value) return item; })[0];
-            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: link, target: target }
+            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
             menu.items.push(item);
+            if(ulc == data.data.length-1 && lic == list.length-1) {
+              resolve(menus);
+            }
+            lic++;
           })
-          this.menus.push(menu);
-          int++;
-          if(int == data.data.length-1) {
-            resolve(this.menus);
-          };
+          menus.push(menu);
+          ulc++;
         })
       })
     })
@@ -269,32 +278,33 @@ export class GeneralService {
   }
 
   removeCommments(html:any) {
+    html = html.replaceAll('<!--?php','<?php').replaceAll('?-->','?>');
     return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
   }
 
   saveBuild(main:any, sections:any) {
     this.saveDisabled = true;
     this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
-    this.removeStyle('.kb-section');
-    this.removeStyle('.kb-row');
-    this.removeStyle('.kb-column');
-    this.removeStyle('.kb-column-wrap');
-    this.removeStyle('.kb-element');
-    this.removeStyle('.kb-element-content');
+    this.removeExtra('.kb-section');
+    this.removeExtra('.kb-row');
+    this.removeExtra('.kb-column');
+    this.removeExtra('.kb-column-wrap');
+    this.removeExtra('.kb-element');
+    this.removeExtra('.kb-element-content');
     this.setPageStyle(sections);
     var obj = {
       style: this.getAllStyle(),
-      html: this.removeCommments(this.pagehtml.querySelector('BODY').innerHTML)
+      html: this.removeCommments(this.pagehtml.querySelector('body').innerHTML)
     }
     if(this.target == 'header') this.fileUploadService.saveHeader(obj).subscribe(e=>{
       this.saveDisabled = false;
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-      this.openSnackBar('Header has been saved', 'OK');
+      this.openSnackBar('Header has been saved', 'OK', 'center', 'top');
     });
     else if(this.target == 'footer') this.fileUploadService.saveFooter(obj).subscribe(e=>{
       this.saveDisabled = false;
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-      this.openSnackBar('Footer has been saved', 'OK');
+      this.openSnackBar('Footer has been saved', 'OK', 'center', 'top');
     });;
   }
 
@@ -303,13 +313,13 @@ export class GeneralService {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-        this.removeStyle('#kb-main');
-        this.removeStyle('.kb-section');
-        this.removeStyle('.kb-row');
-        this.removeStyle('.kb-column');
-        this.removeStyle('.kb-column-wrap');
-        this.removeStyle('.kb-element');
-        this.removeStyle('.kb-element-content');
+        this.removeExtra('#kb-main');
+        this.removeExtra('.kb-section');
+        this.removeExtra('.kb-row');
+        this.removeExtra('.kb-column');
+        this.removeExtra('.kb-column-wrap');
+        this.removeExtra('.kb-element');
+        this.removeExtra('.kb-element-content');
 
         this.pagehtml.querySelector('head').innerHTML = 
         '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
@@ -352,7 +362,7 @@ export class GeneralService {
               })
             },
           error=>{
-            this.openSnackBar('Server Error', 'OK');
+            this.openSnackBar('Server Error', 'OK', 'center', 'top');
             resolve(error);
           })
         }
@@ -402,20 +412,19 @@ export class GeneralService {
           })
       }
       else{
-        this.openSnackBar('Server Error', 'OK');
+        this.openSnackBar('Server Error', 'OK', 'center', 'top');
         resolve(false);
       }
     })
   }
 
-  removeStyle(blockcls:string) {
+  removeExtra(blockcls:string) {
     this.pagehtml.querySelectorAll(blockcls).forEach((item:any)=>{
       item.removeAttribute('style');
       if(blockcls == '.kb-element-content') {
-        item.querySelectorAll('*').forEach((ele:any)=>{
-          if(ele.tagName.toLowerCase() != 'iframe') ele.removeAttribute('style');
-        });
-        if(item.querySelector('.kb-menu')) item.querySelector('.kb-menu').innerHTML = '';
+        if(item.querySelector('.kb-menu')) {
+          item.querySelector('.kb-menu').outerHTML = '<?php $path="../../menus/'+item.querySelector('.kb-menu').id+'.html"; if(file_exists($path)) include($path); ?>';
+        }
         if(item.querySelector('.kb-code-block')) {
           var cb = item.querySelector('.kb-code-block');
           var hd = this.decodeData(cb.getAttribute('html-data'));
@@ -730,10 +739,18 @@ export class GeneralService {
       this.showInlineEditor = false;
   }
 
-  openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string, hpos: any, vpos: any) {
     this._snackBar.open(message, action, {
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
+      horizontalPosition: hpos,
+      verticalPosition: vpos
+    });
+  }
+
+  openSnackBarAlert(message: string, action: string, hpos: any, vpos: any) {
+    this._snackBar.open(message, action, {
+      horizontalPosition: hpos,
+      verticalPosition: vpos,
+      panelClass: ['bg-danger']
     });
   }
 

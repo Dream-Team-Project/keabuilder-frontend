@@ -172,7 +172,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
             (event: any) => {
                 if (typeof (event) === 'object') {
                   this._general.saveDisabled = false;
-                  this._general.openSnackBar('Page has been saved', 'OK');
+                  this._general.openSnackBar('Page has been saved', 'OK', 'center', 'top');
                 }
             });
         })
@@ -299,7 +299,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                 eleObj.itemstyle = true;
                 eleSel = 'ul';
                 eleSelItem = 'ul a';
-                var id = content.querySelector('ul').getAttribute('kb-include-menu');
+                var id = content.getAttribute('data-id');
                 this._general.menus.forEach((menu:any)=>{
                   if(menu.id == id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));

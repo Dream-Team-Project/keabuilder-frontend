@@ -126,9 +126,8 @@
                     <mat-list class="form-ele-list"
                     cdkDropList [cdkDropListData]="_form.formEle" cdkDropListSortingDisabled> 
                         <mat-list-item
-                              cdkDrag
-                              *ngFor="let fe of _form.formEle, index as fei, odd as o"
-                              [cdkDragData]="fe">
+                            cdkDrag [cdkDragData]="fe"
+                              *ngFor="let fe of _form.formEle, index as fei, odd as o">
                                 <div *cdkDragPreview class="custom-preview-icon" [style.backgroundColor]="o ? 'var(--row-color)' : 'var(--section-color)'">
                                     <i [class]="fe.icls"></i><br>
                                 </div>

@@ -606,7 +606,7 @@
                                         </div>
                                     </div>
                                     <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Funnels</div>
+                                        <div class="kb-tab-head">Funnel Pages</div>
                                         <div class="kb-tab-content kb-inp-left">
                                             <mat-select [(ngModel)]="_style.button_link">
                                                 <mat-option>None</mat-option>
@@ -1255,7 +1255,7 @@
                                     class="fa fa-exclamation-circle kb-danger" matTooltip="Need an unique path"
                                     matTooltipPosition="above"></i></div>
                             <div class="kb-tab-content kb-inp-left">
-                                <span class="highlight">{{_general.subdomain}}.keabuilder.com/</span><input type="text"
+                                <span class="highlight">{{_general.subdomain}}</span><input type="text"
                                     name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
                                     (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
                                     [(ngModel)]="_general.page_path">

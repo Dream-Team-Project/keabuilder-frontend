@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { GeneralService } from '../_services/_builder/general.service';
 import { StyleService } from '../_services/_builder/style.service';
+import { ImageService } from '../_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navigation',
@@ -11,86 +13,201 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class NavigationComponent {
 
   menus:any = [];
-  menuObj:any = {id: '', name: 'New Menu', type: 'menu', items: []};
-  menuItemObj:any = {id: '', name: 'New Item', type: 'item', link: '', target: { name: 'same tab', value: '_self' }};
+  menuobj:any = '';
+  menuItemObj:any = '';
   dragBoxAnime:any = {open: false, close: false};
   selectedMenu:any;
   selectedMenuItem:any;
   putLink:boolean = false;
   webpages:Array<any> = [];
+  funnels:Array<any> = [];
   selWebPage:string = '';
+  loading:any = {
+    menu: true,
+    web: true,
+    funnel: true
+  }
+  custom:any = {page_name: 'Custom Link', page_path: '#'};
+  prevmenuitem:any = {};
+  delmenu:any;
+  action:any = '';
 
-  constructor(public _general: GeneralService,  public _style: StyleService) { 
-    _general.getMenus().then(data=> {
+  constructor(public _general: GeneralService,  public _style: StyleService, public _image: ImageService, public dialog: MatDialog) { 
+    this.getMenus();
+    this.getAllWebPages();
+    this.getAllFunnels();
+  }
+
+  openDialog(templateRef: TemplateRef<any>, menu:any) {
+    this.delmenu = menu;
+    this.dialog.open(templateRef);
+  }
+
+  refreshPages(val:string) {
+    val == 'website' ? this.getAllWebPages() : this.getAllFunnels();
+  }
+
+  getMenus() {
+    this.loading.menu = true;
+    this._general.getMenus().then(data=> {
       this.menus = data;
-    })
-    _general.webPageService.getWebpages().subscribe(web=>{
-      this.webpages = web.data;
-    });
-    _general.funnelService.getallfunnelandstep().subscribe(funnel=>{
-      console.log(funnel.data);
+      this.menuobj = '';
+      this.loading.menu = false;
+      if(this.action) this._general.openSnackBar('Menu has been '+this.action, 'OK', 'center', 'bottom');
+      this.action = '';
     })
   }
 
-  drop(event: CdkDragDrop<any>) {
-    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  }  
+  getAllWebPages() {
+    this.loading.web = true;
+    this._general.webPageService.getWebpages().subscribe(web=>{
+      this.webpages = web.data;
+      this.loading.web = false;
+  });
+  }
+
+  getAllFunnels() {
+    this.loading.funnel = true;
+    this._general.funnelService.getallfunnelandstep().subscribe(data=>{
+      let i = 0;
+      var steps = data.data;
+      this.funnels = data.data2;
+      this.funnels.forEach((fp:any)=>{
+        let j = 0;
+        if(!fp.step_pages) fp.steps = [];
+        steps.forEach((s:any)=>{
+          if(fp.id == s.funnelid) {
+            fp.steps.push(s);
+          }
+          if(i == this.funnels.length-1 && j == steps.length-1) {
+            this.loading.funnel = false;
+          }
+          j++;
+        })
+          i++;
+      })
+    })
+  }
+
+  itemDropped(event: CdkDragDrop<any[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.menuobj.items, event.previousIndex, event.currentIndex);
+    } else {
+      let data = event.item.data;
+      this.menuItemObj = {id: '', name: data.page_name, type: 'item', link: data.page_path == '#' ? '#' : this._general.subdomain+data.page_path, target: '_self', setting: false}
+      this.appendMenuItem(this.menuItemObj, event.currentIndex);
+    }
+  }
 
   // menu
 
-  addMenu() {
-    var menu = JSON.parse((JSON.stringify(this.menuObj)));
-    this.appendMenu(menu, -1);
+  toggleItemSetting(item:any) {
+    item.setting = !item.setting;
+    if(JSON.stringify(item) != JSON.stringify(this.prevmenuitem)) {
+      this.prevmenuitem.setting = false;
+    }
+    if(!item.name) item.name = 'Link';
+    if(!this.prevmenuitem.name) this.prevmenuitem.name = 'Link';
+    if(!item.link) item.link = '#';
+    if(!this.prevmenuitem.link) item.link = '#';
+    this.prevmenuitem = item;
   }
 
-  duplicateMenu(menu:any, m:number) {
-    var menu = JSON.parse((JSON.stringify(menu)));
-    this.appendMenu(menu, m);
+  createNew() {
+    this.menuobj = {id: '', name: '', type: 'menu', items: []};
+    this.menuobj.id = this._general.createBlockId(this.menuobj);
   }
 
-  deleteMenu(id:any, m:any) {
-    this._general.deletedMenuIds.push(id);
-    this._general.menus.splice(m, 1);
+  selectMenu(menu:any) {
+    this.menuobj = JSON.parse((JSON.stringify(menu)));
   }
 
-  appendMenu(menuobj: any, m:number) {
-    menuobj.id = this._general.createBlockId(menuobj);
-    this._general.menus.splice(m+1, 0, menuobj);
-  } 
+  saveMenu(menuobj:any) {
+    if(menuobj.name && menuobj.items.length != 0) {
+      if(!this.action) this.action = 'saved';
+      this.loading.menu = true;
+      var count = 0;
+      var m = menuobj;
+      var ul = document.createElement('UL');
+      ul.id = m.id;
+      ul.className = 'kb-menu';
+      ul.setAttribute('data-name',m.name);
+      m.items.forEach((i:any)=>{
+        var li:any = document.createElement('LI');
+        var a =  document.createElement('A');
+        a.id = i.id;
+        a.setAttribute('href', i.link);
+        a.setAttribute('target', i.target);
+        a.innerHTML = i.name;
+        li.innerHTML = a.outerHTML;
+        ul.innerHTML = ul.innerHTML + li.outerHTML;
+        if(count == m.items.length-1) {
+          var obj = {
+            path: m.id,
+            html: ul.outerHTML,
+          }
+          this._general.fileUploadService.saveMenu(obj).subscribe((data:any)=>{
+            this.getMenus();
+          })
+        }
+        count++;
+      })
+    }
+    else {
+      var msg = !menuobj.name ? 'Menu name should not be empty' : 'Atlease one menu item should be added';
+      this._general.openSnackBarAlert(msg, 'OK', 'center', 'top');
+    }
+  }
+
+  duplicateMenu(menuobj:any) {
+    this.action = 'duplicated';
+    var tempmenu = JSON.parse(JSON.stringify(menuobj));
+    var count = 0;
+    tempmenu.id = this._general.createBlockId(tempmenu);
+    tempmenu.name = tempmenu.name + ' copy';
+    tempmenu.items.forEach((item:any)=>{
+      item.id = this._general.createBlockId(item);
+      if(count == tempmenu.items.length-1) {
+        this.saveMenu(tempmenu);
+      }
+      count++;
+    })
+  }
+
+  deleteMenu() {
+    this.action = 'deleted';
+    this.loading.menu = true;
+    var obj = {path: this.delmenu.id};
+    this._general.fileUploadService.deleteMenu(obj).subscribe((resp:any)=>{
+      this.getMenus();
+    })
+  }
 
   // menu
 
   // menu items
 
-  chngLink(item:any) {
-    this._general.webPageService.getWebpages().subscribe(pages=>{
-      this.webpages = pages.data;
-    });
-    this.selectedMenuItem = item;
-    this.putLink = !this.putLink;
-  }
-
   redirectLink(link:string) {
     window.open(link, '_blank');
   }
 
-  addMenuItem(menu:any, item:any, mi: number) {
+  addMenuItem(item:any, mi: number) {
     var tempObj = JSON.parse(JSON.stringify(item));
-    this.appendMenuItem(menu, tempObj, mi);
+    this.appendMenuItem(tempObj, mi);
   }
 
-  duplicateMenuItem(menu:any, item:any, mi: number) {
+  duplicateMenuItem(item:any, mi: number) {
     var tempObj = JSON.parse(JSON.stringify(item));
-    this.appendMenuItem(menu, tempObj, mi);
+    this.appendMenuItem(tempObj, mi);
   }
 
-  deleteMenuItem(menu:any, mi: number) {
-    menu.splice(mi, 1);
+  deleteMenuItem(mi: number) {
+    this.menuobj.items.splice(mi, 1);
   }
 
-  appendMenuItem(menu: any, tempObj:any, mi: number) {
+  appendMenuItem(tempObj:any, mi: number) {
     tempObj.id = this._general.createBlockId(tempObj);
-    menu.splice(mi+1, 0, tempObj);
+    this.menuobj.items.splice(mi, 0, tempObj);
   }
 
   // menu items

@@ -115,11 +115,8 @@ export class FileUploadService {
 
   // menu
 
-  deleteMenu(menus:any):Observable<any> {
-    var obj = {
-      menus: menus,
-      uniqueuserid: this.uniqueuserid
-    }
+  deleteMenu(obj:any):Observable<any> {
+    obj.uniqueuserid = this.uniqueuserid;
     return this.http.post(this.deleteMenuApi, obj)
     .pipe(catchError(this.errorHandler));
   }
@@ -132,6 +129,7 @@ export class FileUploadService {
 
   saveMenu(obj:any):Observable<any> {
     obj.uniqueuserid = this.uniqueuserid;
+    console.log(obj);
     return this.http.post(this.saveMenuApi, obj)
     .pipe(catchError(this.errorHandler));
   }

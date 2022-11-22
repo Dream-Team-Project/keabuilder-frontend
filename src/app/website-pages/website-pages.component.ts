@@ -586,7 +586,6 @@ export class WebsitePagesComponent implements OnInit {
 
     this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
       next: data => {
-        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 

@@ -1,55 +1,136 @@
+button.mat-button {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
 .kb-menu-cards {
     justify-content: space-evenly;
 }
 
+.kb-inner-pages {
+    overflow-y: scroll;
+    height: 480px;
+}
+
 .kb-menu-cards>div.kb-menu-card-inner {
     box-shadow: 0 0 4px rgb(0 0 0 / 10%);
-    border-radius: 5px;
+    border-radius: 4px;
+    height: 530px;
+    overflow: hidden;
 }
 
 .kb-menu-cards>div.kb-menu-card-inner h5 {
     margin: 0;
 }
 
-.kb-menu {
+.kb-has-icon span.cdk-drag-handle, .kb-custom-link {
     cursor: move;
-    background-color: var(--kb-light);
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s ease;
-    border: 2px solid transparent;
 }
 
-.kb-menu:hover, .kb-menu-active {
+.kb-has-icon span {
+    cursor: pointer;
+}
+
+.kb-has-icon span:last-child {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.kb-has-icon span i {
+    transition: 0.1s ease;
+    cursor: pointer;
+}
+
+.kb-has-icon span i:hover {
+    color: var(--primary-color);
+}
+
+.kb-menu-items, .kb-menu-settings, .custom-placeholder {
+    max-width: 380px;
+}
+
+.kb-menu-pages, .kb-menu-items {
+    background-color: var(--kb-light);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.1s ease-in-out;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.kb-menu-pages:hover, .kb-menu-active{
     color: var(--primary-color);
     border-color: var(--primary-color);
     background: #fff;
     box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 }
 
-/* ::ng-deep .mat-tab-body-content {
-    overflow: unset!important;
-} */
-
-::ng-deep .mat-tab-label-active .mat-tab-label-content{
-    color: var(--primary-color);
+.kb-menu-settings {
+    background: var(--kb-light);
+    padding: 8px 16px;
+    height: 100%;
+    overflow: hidden;
+    animation: opensetting 0.2s ease;
 }
 
-::ng-deep .mat-ink-bar {
-    height: 3px!important;
+@keyframes opensetting {
+    from {
+        padding: 0px 16px;
+        height: 0px;
+    }    
+    to {
+        padding: 8px 16px;
+        height: 249px;
+    }
 }
 
-::ng-deep .mat-ink-bar, ::ng-deep .mat-tab-body-wrapper {
-    transition-duration: 200ms!important;
+.kb-dragzone {
+    min-height: 420px;
+    border: 2px dashed #aeaeae;
+    width: 100%;
+    border-radius: 4px;
+    position: relative;
+    list-style: none;
+    padding: 0;
 }
 
-::ng-deep .mat-tab-group.mat-primary .mat-ink-bar,
-::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+.kb-dragtext:after {
+    content: 'Drag pages to add the menu items';
+    color: #aeaeae;
+    font-size: 20px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-preview {
     background-color: var(--primary-color);
 }
 
-.mat-tab-group {
-    margin-top: -40px;
-    height: calc(100% + 40px);
+.kb-inner-pages .custom-placeholder {
+    display: none;
+}
+
+.cdk-drag {
+    transition: 0.2s ease;
+}
+
+::ng-deep .mat-expansion-panel-body {
+    padding: 0 8px 10px!important;
+}
+
+::ng-deep .mat-expansion-panel-header {
+    height: 40px;
+    padding-left: 16px;
 }

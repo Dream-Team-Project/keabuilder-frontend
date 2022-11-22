@@ -48,12 +48,13 @@ import { ColorMaterialModule } from 'ngx-color/material';
 import { ColorCircleModule } from 'ngx-color/circle';
 import { NgxColorsModule } from 'ngx-colors';
 import { NgxTinymceModule } from 'ngx-tinymce';
-import { SafeHtmlPipe } from './safe-html.pipe';
-import { SafeUrlPipe } from './safe-url.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ResizableModule } from 'angular-resizable-element';
 import { NgxCaptureModule } from 'ngx-capture';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SafeUrlPipe } from './_pipes/safe-url.pipe';
+import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
+import { FilterPipe } from './_pipes/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -61,13 +62,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
+    SafeUrlPipe,
     SafeHtmlPipe,
-    SafeUrlPipe
+    FilterPipe
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     ImageCropperModule,
     FormsModule,
     ReactiveFormsModule,
