@@ -261,7 +261,7 @@ export class AllFunnelsComponent implements OnInit {
       next: data => {
         if(data.status==1){
             this.reason = '';
-            this.popupsidebar = false;
+            this.hidepopupsidebar();
             this.showfunnels();
         }
       }
@@ -413,7 +413,7 @@ export class AllFunnelsComponent implements OnInit {
 
         if(data.status==1){
           this.reason = '';
-          this.popupsidebar = false;
+          this.hidepopupsidebar();
           this.showfunnels();
           this._snackBar.open('Successfully Archived!', 'Close');
         }else if(data.status==0){

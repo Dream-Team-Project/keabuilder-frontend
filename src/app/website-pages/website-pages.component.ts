@@ -659,7 +659,7 @@ export class WebsitePagesComponent implements OnInit {
 
 
           }
-          this.popupsidebar = false;
+          this.hidepopupsidebar();
           this.showwebpages();
           this.applykbfilter();
 
