@@ -47,6 +47,8 @@ export class AllFunnelsComponent implements OnInit {
 
   // MatPaginator Output
   pageEvent!: PageEvent;
+  DialogParentToggle:boolean = false;
+
 
   getServerData(event?:PageEvent){
       var length = event?.length;
@@ -474,6 +476,11 @@ export class AllFunnelsComponent implements OnInit {
     // });
 
   }
+
+  
+  openDialog(e:any) {
+    this.DialogParentToggle = !this.DialogParentToggle;
+}
 
 
 

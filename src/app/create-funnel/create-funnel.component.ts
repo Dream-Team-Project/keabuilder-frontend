@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild, Inject, Input } from '@angular/core';
 import { Options } from 'sortablejs';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -21,6 +21,7 @@ export interface DialogData {
   styleUrls: ['./create-funnel.component.css']
 })
 export class CreateFunnelComponent implements OnInit {
+ 
 
   @ViewChild(MatAccordion)
   accordion!: MatAccordion;

@@ -1,5 +1,5 @@
 <div id="buildfunnelcomp">
-  <div class="container-fluid pb-5">
+  <div class="container-fluid">
 
     <div id="kb-buildfunnel-actions" *ngIf="popupsidebar">
       <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
@@ -59,7 +59,7 @@
     </div>
     <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
 
-    <div class="row mt-4">
+    <div class="row mt-4" *ngIf="isneed">
       <!-- <div class="col-md-12 topfixadjust text-center mb-4"> -->
         <div class="col-md-12 text-center mb-4">
         <h3 class="d-inline-block" *ngIf="hidefornow">Choose Your Path</h3>

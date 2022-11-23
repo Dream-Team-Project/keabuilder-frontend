@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
 import {FormControl, Validators} from '@angular/forms';
@@ -10,6 +10,19 @@ import { GeneralService } from '../_services/_builder/general.service';
   styleUrls: ['./build-funnel.component.css']
 })
 export class BuildFunnelComponent implements OnInit {
+
+    
+  connectWtParent:boolean = false;
+  isneed = false;
+  
+  @Input()
+  set DialogToggle(val: any) {
+    if(this.connectWtParent) {
+        console.log('hi');
+      this.createfunnel();
+    }
+    else this.connectWtParent = true;
+  }  
 
   constructor(private router: Router, 
               private funnelService: FunnelService,
@@ -160,7 +173,6 @@ export class BuildFunnelComponent implements OnInit {
             }
       });
     }
-
   }
 
   loopthefor(value: any, which: any){
