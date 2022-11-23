@@ -322,6 +322,7 @@ export class WebsitePagesComponent implements OnInit {
               this.searching = false;
             }
           }
+          console.log(this.kbpages);
         }
       });
       }
@@ -551,7 +552,16 @@ export class WebsitePagesComponent implements OnInit {
 
   togglepageview(){
     this.toggleview1 = !this.toggleview1;
+
+      var  gendata = {id:this.toggleview1,type:'toggleview',reason:''};
+      this.webpagesService.restoredeletepage(gendata).subscribe({
+        next: data => {
+          // console.log(data);
+        }
+      });
+
   }
+  
 
   archivepages(){
     // console.log('test'+this.fetchdatastatus);

@@ -1,1 +1,131 @@
-<p>website-headers works!</p>
+<div id="keawebheader">
+    <div class="container-fluid">
+        
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Search Headers</mat-label>
+                    <input matInput type="text" (keyup)="searchheader($event)" placeholder="Search Headers">
+                  </mat-form-field>
+            </div>
+            <div class="col-md-6 text-right">
+              <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="!nodata">Toggle View 
+                  <i class="fas" [ngClass]="{'fa-th': toggleview1 == true, 'fa-th-large' : toggleview1 == false }"></i>
+              </button>
+                <button mat-raised-button color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
+            </div>  
+        </div>
+
+          <!-- no pages -->
+          <div class="row" *ngIf="nodata else showheaders">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Header found">
+            </div>
+          </div>
+
+
+          <ng-template #showheaders>
+
+            <div class="row" *ngIf="toggleview1 else toggle">
+                <div class="col-md-6 cardpage mt-4 " *ngFor="let kbheader of kbheaders; index as i;" >
+                    <div>
+                      <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbheader.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                        <div id="loader" *ngIf="shortwaiting">
+                          <div id="shadow"></div>
+                          <div id="box"></div>
+                          <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="keabuilder-title-board line-ellipsis">
+                            <span>{{kbheader.page_name}}</span>
+                            <input type="text" [(ngModel)]="kbheader.page_name"  matTooltip="Edit Header Name" matTooltipPosition="above">
+                          </div>
+                        </div>
+                        <div class="col-md-6 text-right pt-3">
+                          
+                          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                          <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
+
+                          <mat-menu #menu2="matMenu">
+                            <button mat-menu-item>
+                              <i class="fas fa-copy mr-2"></i> Duplicate
+                            </button>
+                            <button class="text-danger" mat-menu-item>
+                              <i class="far fa-trash-alt mr-2"></i> Delete
+                            </button>
+                          </mat-menu>
+
+                        </div>
+                      </div>
+        
+        
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #toggle>
+              <div class="row p-4">
+                <div class="col-md-6 cardpage mt-2 " *ngFor="let kbheader of kbheaders; index as i;" >
+                  <div>
+                    <div class="row">
+          
+                      <div class="col-md-8">
+                          
+                        <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbheader.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                          <div id="loader" *ngIf="shortwaiting">
+                            <div id="shadow"></div>
+                            <div id="box"></div>
+                            <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+                          </div>
+                        </div>
+                        
+                      </div>
+                      <div class="col-md-4">
+                        <div class="keabuilder-title-board line-ellipsis">
+                          <span>{{kbheader.page_name}}</span>
+                          <input type="text" [(ngModel)]="kbheader.page_name" matTooltip="Edit Header Name" matTooltipPosition="above">
+                        </div>
+
+                        <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                        <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
+
+                        <mat-menu #menu2="matMenu">
+                          <button mat-menu-item>
+                            <i class="fas fa-copy mr-2"></i> Duplicate
+                          </button>
+                          <button class="text-danger" mat-menu-item>
+                            <i class="far fa-trash-alt mr-2"></i> Delete
+                          </button>
+                        </mat-menu>
+
+                      </div>
+          
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </ng-template>
+
+          </ng-template>
+
+
+           <!-- pagination -->
+          <div class="row" *ngIf="!nodata">
+            <div class="col-md-12 mt-4">
+              <!-- <mat-paginator 
+                          [length]="length"
+                          [pageSize]="pageSize"
+                          [pageSizeOptions]="pageSizeOptions"
+                          (page)="getServerData($event)"
+                          >
+              </mat-paginator> -->
+            </div>
+          </div>
+
+    </div>
+</div>

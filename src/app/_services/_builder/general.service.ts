@@ -119,17 +119,17 @@ export class GeneralService {
 
   constructor(private UserService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService) {
     this.user = this.tokenStorageService.getUser();
-    this.UserService.getUsersDetails().subscribe(data=>{
-      this.user = {...this.user, ...data.data[0]};
-      this.user.name = this.user.username;
-      this.main.author = this.user.name;
-      this.subdomain = 'https://'+this.joinWthDash(this.user.subdomain)+'.'+this.userdomain+'/';
-      this.screenWidth = window.innerWidth;  
-      this.screenHeight = window.innerHeight; 
-    })
-    this.getMenus().then(data=>{
-      this.menus = data;
-    });
+    // this.UserService.getUsersDetails().subscribe(data=>{
+    //   this.user = {...this.user, ...data.data[0]};
+    //   this.user.name = this.user.username;
+    //   this.main.author = this.user.name;
+    //   this.subdomain = 'https://'+this.joinWthDash(this.user.subdomain)+'.'+this.userdomain+'/';
+    //   this.screenWidth = window.innerWidth;  
+    //   this.screenHeight = window.innerHeight; 
+    // })
+    // this.getMenus().then(data=>{
+    //   this.menus = data;
+    // });
   }
 
   getLayout() {

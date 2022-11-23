@@ -209,7 +209,7 @@
         </mat-form-field>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add New Page </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add Page </span> <i class="fas fa-plus"></i></button>
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
         <button mat-raised-button (click)="archivepages()" class="ml-2">
           <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>
@@ -467,7 +467,6 @@
                     <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary"><span class="keamobhd">Edit </span> <i class="fas fa-pencil-alt"></i></button>
                     <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
                 </div>
-              
     
               </div>
             </div>

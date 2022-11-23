@@ -1,0 +1,59 @@
+.cardpage >div{
+    box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.keabuilder-title-board, .keabuilder-title {
+  padding: 15px 0px;
+}
+.keabuilder-title-board input {
+    display:none;
+    background-color: #475F7B;
+    color: #FFFFFF;
+    border-radius: 0.267rem;
+    outline: none;
+    text-overflow: clip;
+    font-size: 14px;
+    width:100%;
+}
+.keabuilder-title-board:hover span {
+    display: none;
+}
+.keabuilder-title-board:hover input {
+ display: block;
+}
+
+.kb-pagedate {
+    font-size: 13px;
+    color: #988e71;
+}
+.kb-page-settting {
+    float: right;
+    color: #6c757d;
+    font-size: 20px;
+    padding: 3px;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+.kb-page-settting:hover {
+    transform: rotate(
+30deg);
+}
+
+.kb-fitimg {
+    height: 120px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    -webkit-transition: all 1s linear;
+    -moz-transition: all 1s linear;
+    -ms-transition: all 1s linear;
+    -o-transition: all 1s linear;
+    transition: all 1s linear;
+  }
+  
+  .kb-fitimg:hover {
+      background-position: center bottom;
+  }
