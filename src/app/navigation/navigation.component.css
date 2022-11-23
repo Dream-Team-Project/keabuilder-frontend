@@ -102,16 +102,25 @@ button.mat-button {
     padding: 0;
 }
 
-.kb-dragtext:after {
-    content: 'Drag pages to add the menu items';
+.kb-fade-text {
+    font-size: 16px;
+}
+
+.kb-fade-text, .kb-dragtext:after {
     color: #aeaeae;
-    font-size: 20px;
     height: 100%;
     width: 100%;
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
+    left: 0;
+    top: 0;
+}
+
+.kb-dragtext:after {
+    content: 'Drag pages to add the menu items';
+    font-size: 20px;
 }
 
 .custom-preview {

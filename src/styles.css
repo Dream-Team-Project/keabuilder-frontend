@@ -640,7 +640,7 @@ main.insidecont .box {
 
 .kb-tag {
   color: #fff;
-  padding: 2px 6px;
+  padding: 0 6px;
   font-size: 9px;
   border-radius: 10px;
   font-weight: 600;
