@@ -43,65 +43,55 @@ export class FileUploadService {
   deletePageApi = '/api/deletepage';
   // web pages
   // file
+  fileApi = "./api/file";
   fileExistApi = "./api/file-exist";
   // file
-  // menu
-  getMenusApi = "./api/getmenus";
-  saveMenuApi = "./api/savemenu";
-  deleteMenuApi = "./api/deletemenu"
-  // menu
-  // tracking
-  saveHeaderApi = "./api/saveheader";
-  saveFooterApi = "./api/savefooter";
-  getHeaderApi = "./api/getheader";
-  getFooterApi = "./api/getfooter";
-  // tracking
-  uniqueuserid:any = '';
+  uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
 }
 
-  createuserfolder(uniqueuserid:any):Observable<any> {
-    var obj = {uniqueuserid: uniqueuserid};
+  createuserfolder(uuid:any):Observable<any> {
+    var obj = {uuid: uuid};
     return this.http.post(this.createuserfolderApi, obj);
   }
 
   // html pages
 
-  createdefaulthome(uniqueuserid:any):Observable<any> {
-    var obj = {uniqueuserid: uniqueuserid};
+  createdefaulthome(uuid:any):Observable<any> {
+    var obj = {uuid: uuid};
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
   createpage(path:any):Observable<any> {
-    path.uniqueuserid = this.uniqueuserid;
+    path.uuid = this.uuid;
     return this.http.post(this.createPageApi, path);
   }
 
   getPage(page:any):Observable<any> {
-    page.uniqueuserid = this.uniqueuserid;
+    page.uuid = this.uuid;
     return this.http.post(this.getPageApi, page)
     .pipe(catchError(this.errorHandler));
   }
 
   deletepage(path:any):Observable<any> {
-    return this.http.delete(this.deletePageApi + '/' + this.uniqueuserid + '/' + path)
+    return this.http.delete(this.deletePageApi + '/' + this.uuid + '/' + path)
     .pipe(catchError(this.errorHandler));
   }
 
   renamepage(path:any):Observable<any> {
-    path.uniqueuserid = this.uniqueuserid;
+    path.uuid = this.uuid;
     return this.http.post(this.renamePageApi, path);
   }
 
   copypage(path:any):Observable<any> {
-    path.uniqueuserid = this.uniqueuserid;
+    path.uuid = this.uuid;
     return this.http.post(this.copyPageApi, path);
   }
 
   updateHome(obj:any):Observable<any> {
-    obj.uniqueuserid = this.uniqueuserid;
+    obj.uuid = this.uuid;
     return this.http.post(this.updateHomeApi, obj);
   }
 
@@ -113,50 +103,30 @@ export class FileUploadService {
 
   // html pages
 
-  // menu
+  // files
 
-  deleteMenu(obj:any):Observable<any> {
-    obj.uniqueuserid = this.uniqueuserid;
-    return this.http.post(this.deleteMenuApi, obj)
+  fetchFiles(folder:string):Observable<any> {
+    var obj = {uuid: this.uuid};
+    return this.http.get(this.fileApi+'s/'+this.uuid+'/'+folder)
+    .pipe(catchError(this.errorHandler));
+  }
+  fetchFile(id:any, folder:string):Observable<any> {
+    return this.http.get(this.fileApi+'/'+this.uuid+'/'+id+'/'+folder)
+    .pipe(catchError(this.errorHandler));
+  }
+  saveFile(obj:any, folder:string):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.fileApi+'/'+folder, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+  deleteFile(id:any, folder:string):Observable<any> {
+    return this.http.delete(this.fileApi+'/'+this.uuid+'/'+id+'/'+folder)
     .pipe(catchError(this.errorHandler));
   }
 
-  getMenus():Observable<any> {
-    var obj = {uniqueuserid: this.uniqueuserid};
-    return this.http.post(this.getMenusApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  saveMenu(obj:any):Observable<any> {
-    obj.uniqueuserid = this.uniqueuserid;
-    console.log(obj);
-    return this.http.post(this.saveMenuApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  // menu
+  // files
 
   // tracking/header/footer
-
-  saveHeader(header:any):Observable<any> {
-    return this.http.post(this.saveHeaderApi, header)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  saveFooter(footer:any):Observable<any> {
-    return this.http.post(this.saveFooterApi, footer)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  getHeader(header:any):Observable<any> {
-    return this.http.post(this.getHeaderApi, header)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  getFooter(footer:any):Observable<any> {
-    return this.http.post(this.getFooterApi, footer)
-    .pipe(catchError(this.errorHandler));
-  }
 
   gettrackingHTML(data:any):Observable<any> {
     return data;
@@ -177,12 +147,12 @@ export class FileUploadService {
   }
 
   getAllImgs():Observable<any> {
-    return this.http.get(this.getAllImgsApi+'/'+this.uniqueuserid)
+    return this.http.get(this.getAllImgsApi+'/'+this.uuid)
     .pipe(catchError(this.errorHandler));
   }
 
   saveondb(imagedata: any):Observable<any> {
-    return this.http.post(this.saveOnDBApi+'/'+this.uniqueuserid, imagedata)
+    return this.http.post(this.saveOnDBApi+'/'+this.uuid, imagedata)
     .pipe(catchError(this.errorHandler));
   }
 

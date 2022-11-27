@@ -10,7 +10,7 @@ const API_URL = 'api/allusers/';
 })
 export class UserService {
 
-  uniqueuserid:any = '';
+  uuid:any = '';
   getUsersDetailsApi = '/api/getUsersDetailsdata/';
   updateuserdetailsApi = '/api/updateUsersDetailsdata/';
   user = {
@@ -20,7 +20,7 @@ export class UserService {
   prevPath = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
     // console.log(this.tokenStorage.getUser());
   }
 
@@ -45,11 +45,11 @@ export class UserService {
   }
 
   getUsersDetails(): Observable<any> {
-    return this.http.post(this.getUsersDetailsApi+this.uniqueuserid,{});
+    return this.http.post(this.getUsersDetailsApi+this.uuid,{});
   }
 
   updateuserdetails(data: any): Observable<any> {
-    return this.http.post(this.updateuserdetailsApi+this.uniqueuserid, data);
+    return this.http.post(this.updateuserdetailsApi+this.uuid, data);
   }
 
   

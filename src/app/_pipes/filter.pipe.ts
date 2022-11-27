@@ -5,19 +5,19 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(value: any, input: any, search: any): any {
+  transform(items:any,input:any,column:any): any {
       if (input) {
-        if(search == 'page_name') {
-          return value.filter((val:any) => val.page_name.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+        if(column == 'page_name') {
+          return items.filter((val:any) => val.page_name?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
         }
-        else if(search == 'name') {
-          return value.filter((val:any) => val.name.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+        else if(column == 'name') {
+          return items.filter((val:any) => val.name?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
         }
         else {
-          return value;
+          return items;
         }
       } else {
-        return value;
+        return items;
       }
   }
 }

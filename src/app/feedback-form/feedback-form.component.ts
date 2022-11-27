@@ -45,13 +45,12 @@ export class FeedbackFormComponent implements OnInit {
     private _mail: EmailService,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
-  ) {
-    this.feedback.userid = _general.user.uniqueid;
-    this.feedback.name = _general.user.name;
-    this.feedback.email = _general.user.email;
-   }
+  ) {}
 
   ngOnInit(): void {
+    this.feedback.userid = this._general.user.uniqueid;
+    this.feedback.name = this._general.user.name;
+    this.feedback.email = this._general.user.email;
   }
 
   ngAfterViewInit() {

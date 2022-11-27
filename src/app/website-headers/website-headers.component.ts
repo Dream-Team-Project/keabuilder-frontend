@@ -1,88 +1,114 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-website-headers',
   templateUrl: './website-headers.component.html',
   styleUrls: ['./website-headers.component.css']
 })
-export class WebsiteHeadersComponent implements OnInit {
+export class WebsiteHeadersComponent {
 
-  toggleview1 = true;
+  toggleview = true;
   shortwaiting = true;
-  kbheaders:any[] = [{
-      "id": 14,
-      "user_id": "gdc36j95e1507",
-      "uniqueid": "eb7357dg35c",
-      "page_name": "new",
-      "page_title": "new",
-      "page_path": "new",
-      "page_description": "",
-      "page_keywords": "",
-      "page_author": "undefined",
-      "publish_status": 1,
-      "archived": 0,
-      "archive_reason": "",
-      "thumbnail": "keaimage-eb7357dg35c-screenshot.png",
-      "tracking_code": "",
-      "updated_at": "Mon Nov 07 2022 3:36:36 PM",
-      "created_at": "2022-11-07T10:06:36.000Z",
-      "defaulthome": 0
-  },{
-    "id": 14,
-    "user_id": "gdc36j95e1507",
-    "uniqueid": "eb7357dg35c",
-    "page_name": "new",
-    "page_title": "new",
-    "page_path": "new",
-    "page_description": "",
-    "page_keywords": "",
-    "page_author": "undefined",
-    "publish_status": 1,
-    "archived": 0,
-    "archive_reason": "",
-    "thumbnail": "keaimage-eb7357dg35c-screenshot.png",
-    "tracking_code": "",
-    "updated_at": "Mon Nov 07 2022 3:36:36 PM",
-    "created_at": "2022-11-07T10:06:36.000Z",
-    "defaulthome": 0
-},{
-  "id": 14,
-  "user_id": "gdc36j95e1507",
-  "uniqueid": "eb7357dg35c",
-  "page_name": "new",
-  "page_title": "new",
-  "page_path": "new",
-  "page_description": "",
-  "page_keywords": "",
-  "page_author": "undefined",
-  "publish_status": 1,
-  "archived": 0,
-  "archive_reason": "",
-  "thumbnail": "keaimage-eb7357dg35c-screenshot.png",
-  "tracking_code": "",
-  "updated_at": "Mon Nov 07 2022 3:36:36 PM",
-  "created_at": "2022-11-07T10:06:36.000Z",
-  "defaulthome": 0
-  }];
-  nodata = false;
-
-
+  headers:any[] = [];
+  fetching:boolean = true;
+  prevName:string = '';
+  delheader:any;
+  action:any;
 
   constructor(
         public _image: ImageService,
         public _general: GeneralService,
-        ) { }
+        private dialog: MatDialog
+        ) { 
+            this.fetch();
+        }
 
-  ngOnInit(): void {
+  openDialog(templateRef: TemplateRef<any>, menu:any) {
+    this.delheader = menu;
+    this.dialog.open(templateRef);
+  }     
+
+  fetch() {
+    this.fetching = true;
+    this._general.fetchHeaders().then(data=>{
+      this.headers = data;
+      this.fetching = false;
+      if(this.action) this.openSB(false);
+    });
   }
 
-  searchheader(event: Event) {
+  rename(obj:any) {
+    var prevname = this.prevName;
+    if(prevname != obj.name) {
+      var parser = new DOMParser();
+      var html:any = parser.parseFromString(obj.html, 'text/html');
+      var header:any = html.querySelector('HEADER');
+      header.setAttribute('data-name',obj.name);
+      obj.html = header.outerHTML;
+      console.log(obj);
+      this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
+        if(resp.success) {
+          this.action = 'renamed';
+          this.openSB(false);
+        }
+        else {
+          this.openSB(true);
+          header.name = prevname;
+        }
+      });
+    }
   }
 
-  togglepageview(){
-    this.toggleview1 = !this.toggleview1;
+  create() {
+    var obj:any = {id: '', html: '', type: 'header'};
+    obj.id = this._general.createBlockId(obj);
+    obj.html = '<header id="'+obj.id+'" data-name="Header '+(this.headers.length+1)+'"></header>';
+    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
+      resp.success ? this.edit(obj.id) : this.openSB(true);
+    });
   }
 
+  edit(id:any) {
+    this._general.redirectToBuilder(id.split('header-')[1], 'header');
+  }
+
+  duplicate(hobj:any) {
+    var obj = JSON.parse(JSON.stringify(hobj));
+    obj.id = this._general.createBlockId(obj);
+    var parser = new DOMParser();
+    var html:any = parser.parseFromString(obj.html, 'text/html');
+    var header:any = html.querySelector('HEADER');
+    header.id = obj.id;
+    header.setAttribute('data-name',obj.name+' copy');
+    obj.html = header.outerHTML;
+    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
+      if(resp.success) {
+        var imgobj  = {oldname:hobj.thumbnail, newname:'keaimage-'+obj.id.split('kb-')[1]+ '-screenshot.png'};
+        this._general.fileUploadService.copyimage(imgobj).subscribe(resp=>{});
+        this.action = 'duplicated';
+        this.fetch();
+      }
+      else this.openSB(true);
+    });
+  }
+
+  delete() {
+    this._general.fileUploadService.deleteFile(this.delheader.id, 'headers').subscribe(resp=>{
+      if(resp.success) {
+        this.action = 'deleted';
+        this.fetch();
+      }
+      else this.openSB(true);
+    });
+  }
+
+  openSB(alert:any) {
+    if(alert) this._general.openSnackBarAlert('Server Error', 'OK', 'center', 'top');
+    else this._general.openSnackBar('Header has been '+this.action, 'OK', 'center', 'top');
+    this.action = '';
+  }
+  
 }

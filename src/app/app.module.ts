@@ -55,6 +55,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SafeUrlPipe } from './_pipes/safe-url.pipe';
 import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
 import { FilterPipe } from './_pipes/filter.pipe';
+import { SortingPipe } from './_pipes/sorting.pipe';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { FilterPipe } from './_pipes/filter.pipe';
     NavbarComponent,
     SafeUrlPipe,
     SafeHtmlPipe,
-    FilterPipe
+    FilterPipe,
+    SortingPipe
   ],
   imports: [
     AppRoutingModule,

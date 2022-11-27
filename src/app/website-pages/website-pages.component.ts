@@ -57,7 +57,7 @@ export class WebsitePagesComponent implements OnInit {
               public _image: ImageService,
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
-              private fileuploadService: FileUploadService,
+              private fileUploadService: FileUploadService,
               private websiteService: WebsiteService,) {
                 this.dataSource = new MatTableDataSource(this.users);
                }
@@ -119,7 +119,7 @@ export class WebsitePagesComponent implements OnInit {
   showpageurl = false;
   oldpagepath = '';
   selstatusshow = 'all';
-  toggleview1 = true;
+  toggleview = true;
   reason = '';
   confirmarchivepage = false;
   archive_id = 0;
@@ -177,9 +177,9 @@ export class WebsitePagesComponent implements OnInit {
       next: data => {
         if(data?.data) {
           if(data?.data[0]?.toggleview==1){
-            this.toggleview1 = true;
+            this.toggleview = true;
           }else{
-            this.toggleview1 = false;
+            this.toggleview = false;
           }
         }
       }
@@ -315,14 +315,13 @@ export class WebsitePagesComponent implements OnInit {
             var text2 = mycustomdate.toLocaleTimeString();
             element.updated_at = text1+' '+text2;
             element.defaulthome = webdata?.data[0]?.homepage==element.uniqueid ? 1 : 0;
-            element.thumbnail = 'keaimage-'+element.uniqueid+'-screenshot.png';
+            element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
             tempsearch.push(element);
             if(dataA.data.length-1 == i) {
               this.kbpages = tempsearch;
               this.searching = false;
             }
           }
-          console.log(this.kbpages);
         }
       });
       }
@@ -374,7 +373,7 @@ export class WebsitePagesComponent implements OnInit {
                       next: data => {
                         console.log(data);
                         if(data.success==1){
-                          this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                          this.fileUploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
                             // console.log(e);
                           })
                         }
@@ -439,7 +438,7 @@ export class WebsitePagesComponent implements OnInit {
         }else if(data.found==0){
 
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
-          this.fileuploadService.renamepage(pathobj).subscribe({
+          this.fileUploadService.renamepage(pathobj).subscribe({
             next: data => {
               // console.log(data);
             }
@@ -493,19 +492,18 @@ export class WebsitePagesComponent implements OnInit {
           if(data.success==1){
             this._snackBar.open('Processing...', 'OK');
             var pathobj  = {oldpath:oldpath, newpath:data.newpath};
-            this.fileuploadService.copypage(pathobj).subscribe({
+            this.fileUploadService.copypage(pathobj).subscribe({
               next: data => {
                 this._snackBar.open('Page Duplicate Successfully!', 'OK');
                 this.showwebpages();
               }
             });
-            var imgobj  = {oldname:'keaimage-'+page.uniqueid+'-screenshot.png', newname:'keaimage-'+data.uniqueid+'-screenshot.png'};
-            this.fileuploadService.copyimage(imgobj).subscribe({
+            var imgobj  = {oldname:'keaimage-page-'+page.uniqueid+'-screenshot.png', newname:'keaimage-page-'+data.uniqueid+'-screenshot.png'};
+            this.fileUploadService.copyimage(imgobj).subscribe({
               next: data => {
                 // console.log(data);
               }
             });
-            
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -551,15 +549,13 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   togglepageview(){
-    this.toggleview1 = !this.toggleview1;
-
-      var  gendata = {id:this.toggleview1,type:'toggleview',reason:''};
-      this.webpagesService.restoredeletepage(gendata).subscribe({
-        next: data => {
-          // console.log(data);
-        }
-      });
-
+    this.toggleview = !this.toggleview;
+    var  gendata = {id:this.toggleview,type:'toggleview',reason:''};
+    this.webpagesService.restoredeletepage(gendata).subscribe({
+      next: data => {
+        // console.log(data);
+      }
+    });
   }
   
 
@@ -621,7 +617,7 @@ export class WebsitePagesComponent implements OnInit {
       gendata = {id:this.archive_id,type:type,reason:this.reason};
     }
     if(type=='toggleview'){
-      gendata = {id:page.id,type:type,reason:this.toggleview1};
+      gendata = {id:page.id,type:type,reason:this.toggleview};
     }
     
     // console.log(gendata);
@@ -636,7 +632,7 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
 
                 if(data.success==1){
-                  this.fileuploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                  this.fileUploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
                     // console.log(e);
                   })
                 }
@@ -646,12 +642,12 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.deleteme==1){
-            this.fileuploadService.deletepage(data.path).subscribe({
+            this.fileUploadService.deletepage(data.path).subscribe({
               next: data => {
                 // console.log(data);
               }
             });
-            this.fileuploadService.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
+            this.fileUploadService.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
               next: data => {
                 // console.log(data);
               }

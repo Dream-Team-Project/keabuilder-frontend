@@ -662,7 +662,7 @@ export class DashboardComponent implements OnInit {
     var datacondition2 = {type:'lastweekrevenue',option:'7 DAY'}
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         
         var newarr:any = [];
 
@@ -752,7 +752,7 @@ export class DashboardComponent implements OnInit {
           });
 
           output.forEach((element3:any) => {
-            console.log(element3);
+            // console.log(element3);
             this.data2date.push(element3.name);
             this.data2.push(element3.value);
           });

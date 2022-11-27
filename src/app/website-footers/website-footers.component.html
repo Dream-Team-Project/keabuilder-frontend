@@ -1,131 +1,71 @@
-<div id="keawebheader">
-    <div class="container-fluid">
-        
-        <div class="row">
-            <div class="col-md-6">
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Search Footers</mat-label>
-                    <input matInput type="text" (keyup)="searchfooter($event)" placeholder="Search Footers">
-                  </mat-form-field>
-            </div>
-            <div class="col-md-6 text-right">
-              <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="!nodata">Toggle View 
-                  <i class="fas" [ngClass]="{'fa-th': toggleview1 == true, 'fa-th-large' : toggleview1 == false }"></i>
-              </button>
-                <button mat-raised-button color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
-            </div>  
-        </div>
-
-          <!-- no pages -->
-          <div class="row" *ngIf="nodata else showheaders">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Header found">
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete footer</h1>
+  <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{delfooter.name}}</span> footer?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="delete()">Yes</button>
+  </div>
+</ng-template>
+<div class="container-fluid">
+  <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+  <div class="row align-items-center">
+      <div class="col-md-6">
+          <mat-form-field appearance="fill" class="w-100">
+              <i class="fa fa-search"></i>
+              <mat-label>Search Footers</mat-label>
+              <input #searchInp matInput type="text" placeholder="Search Footers">
+            </mat-form-field>
+      </div>
+      <div class="col-md-6 text-right">
+        <button mat-raised-button (click)="toggleview = !toggleview" *ngIf="footers.length != 0">
+          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
+        </button>
+        <button mat-raised-button class="mx-3" (click)="create()" color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
+        <mat-form-field appearance="fill">
+          <mat-label>Sort by</mat-label>
+          <mat-select value="asc" #sortBy>
+              <mat-option value="asc">Ascending</mat-option>
+              <mat-option value="desc">Descending</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>  
+  </div>
+  <div class="row" *ngIf="footers.length != 0 else nodata">
+    <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4 " *ngFor="let footer of footers | filter:searchInp.value:'name' | sorting:sortBy.value:'name'; index as i;">
+        <div [class.row]="!toggleview">
+          <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+footer.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+            <div id="loader" *ngIf="shortwaiting">
+              <div id="shadow"></div>
+              <div id="box"></div>
+              <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
             </div>
           </div>
-
-
-          <ng-template #showheaders>
-
-            <div class="row" *ngIf="toggleview1 else toggle">
-                <div class="col-md-6 cardpage mt-4 " *ngFor="let kbfooter of kbfooters; index as i;" >
-                    <div>
-                      <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbfooter.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-                        <div id="loader" *ngIf="shortwaiting">
-                          <div id="shadow"></div>
-                          <div id="box"></div>
-                          <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="keabuilder-title-board line-ellipsis">
-                            <span>{{kbfooter.page_name}}</span>
-                            <input type="text" [(ngModel)]="kbfooter.page_name"  matTooltip="Edit Footer Name" matTooltipPosition="above">
-                          </div>
-                        </div>
-                        <div class="col-md-6 text-right pt-3">
-                          
-                          <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                          <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
-
-                          <mat-menu #menu2="matMenu">
-                            <button mat-menu-item>
-                              <i class="fas fa-copy mr-2"></i> Duplicate
-                            </button>
-                            <button class="text-danger" mat-menu-item>
-                              <i class="far fa-trash-alt mr-2"></i> Delete
-                            </button>
-                          </mat-menu>
-
-                        </div>
-                      </div>
-        
-        
-                    </div>
-                </div>
-            </div>
-
-            <ng-template #toggle>
-              <div class="row p-4">
-                <div class="col-md-6 cardpage mt-2 " *ngFor="let kbfooter of kbfooters; index as i;" >
-                  <div>
-                    <div class="row">
-          
-                      <div class="col-md-8">
-                          
-                        <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbfooter.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-                          <div id="loader" *ngIf="shortwaiting">
-                            <div id="shadow"></div>
-                            <div id="box"></div>
-                            <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
-                          </div>
-                        </div>
-                        
-                      </div>
-                      <div class="col-md-4">
-                        <div class="keabuilder-title-board line-ellipsis">
-                          <span>{{kbfooter.page_name}}</span>
-                          <input type="text" [(ngModel)]="kbfooter.page_name" matTooltip="Edit Footer Name" matTooltipPosition="above">
-                        </div>
-
-                        <button mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                        <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
-
-                        <mat-menu #menu2="matMenu">
-                          <button mat-menu-item>
-                            <i class="fas fa-copy mr-2"></i> Duplicate
-                          </button>
-                          <button class="text-danger" mat-menu-item>
-                            <i class="far fa-trash-alt mr-2"></i> Delete
-                          </button>
-                        </mat-menu>
-
-                      </div>
-          
-                    </div>
-                  </div>
-
+          <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'" >
+            <div class="row align-items-center p-0 h-100">
+              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'">
+                <div class="kb-title-board line-ellipsis">
+                  <span>{{footer.name ? footer.name : footer.defaultname | titlecase}}</span>
+                  <input type="text" [(ngModel)]="footer.name" (blur)="rename(footer)" (click)="prevName = footer.name" matTooltip="Edit Footer Name" matTooltipPosition="above">
                 </div>
               </div>
-            </ng-template>
-
-          </ng-template>
-
-
-           <!-- pagination -->
-          <div class="row" *ngIf="!nodata">
-            <div class="col-md-12 mt-4">
-              <!-- <mat-paginator 
-                          [length]="length"
-                          [pageSize]="pageSize"
-                          [pageSizeOptions]="pageSizeOptions"
-                          (page)="getServerData($event)"
-                          >
-              </mat-paginator> -->
+              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="text-right">
+                <button mat-raised-button (click)="edit(footer.id)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                <button mat-raised-button (click)="duplicate(footer)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
+                <button mat-raised-button (click)="openDialog(dialog, footer)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
+              </div>
             </div>
           </div>
-
+        </div>
     </div>
+  </div>
+  <ng-template #nodata>
+    <div class="row justify-content-center mt-5" >
+      <div class="col-md-4">
+          <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Footer found">
+      </div>
+    </div>
+  </ng-template>
 </div>

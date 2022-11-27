@@ -9,7 +9,7 @@
     </div>
 </ng-template>
 <div id="pagesinsidepage">
-    <mat-progress-bar *ngIf="loading.menu || loading.web || loading.funnel" mode='indeterminate'></mat-progress-bar>
+    <mat-progress-bar *ngIf="fetching.menu || fetching.web || fetching.funnel" mode='indeterminate'></mat-progress-bar>
     <div class="container-fluid">
         <div class="row align-items-center px-4 py-2">
             <div class="col-md-6">
@@ -31,14 +31,14 @@
                 </mat-form-field>
                 <input class="border-bottom p-2" matInput #searchText [placeholder]="'Search '+selfrom.value" required>
                 <div *ngIf="selfrom.value == 'website' else funnel">
-                    <div class="kb-inner-pages px-3 pt-3">
+                    <div class="kb-inner-pages p-ht p-3">
                         <div cdkDropList [cdkDropListData]="webpages" cdkDropListSortingDisabled>
                             <h6 *ngIf="webpages.length == 0" class="kb-fade-text">You don't have any website pages</h6>
                             <div cdkDrag [cdkDragData]="page" *ngFor="let page of webpages | filter:searchText.value:'page_name'" class="py-1">
                                 <div *cdkDragPreview class="custom-preview">{{page.page_name | titlecase}}</div>
                                 <div *cdkDragPlaceholder class="custom-placeholder px-3 py-2">Drop here</div>
-                                <div class="kb-menu-pages kb-has-icon">
-                                    <div cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
+                                <div class="kb-menu-pages kb-has-icon" [class.kb-disabled]="page.publish_status != 1">
+                                    <div [cdkDragHandleDisabled]="page.publish_status != 1" cdkDragHandle [matTooltip]="page.publish_status == 1 ? 'Drag to add' : ''" matTooltipPosition="above"
                                         class="px-3 py-2 w-100 d-flex justify-content-between">
                                         <span>{{page.page_name | titlecase}}</span>
                                         <span class="kb-tag kb-info-tag" *ngIf="page.publish_status == 1 else draft">Published</span>
@@ -46,7 +46,7 @@
                                     </div>
                                     <span matTooltip="Preview" matTooltipPosition="above" class="border-left">
                                         <i class="fa fa-external-link-alt px-3 py-2"
-                                            (click)="redirectLink(_general.subdomain+page.page_path)"></i>
+                                            (click)="page.publish_status == 1 ? redirectLink(_general.subdomain+page.page_path) : ''"></i>
                                     </span>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <ng-template #funnel>
-                    <div class="kb-inner-pages px-3 pt-3">
+                    <div class="kb-inner-pages p-ht p-3">
                         <mat-accordion>
                             <h6 *ngIf="funnels.length == 0" class="kb-fade-text">You don't have any funnels</h6>
                             <mat-expansion-panel *ngFor="let funnel of funnels | filter:searchText.value:'name', index as fi"  [expanded]="_general.expPanelStep === fi"
@@ -100,7 +100,7 @@
                     </div>
                     <div class="col-4">
                         <button (click)="saveMenu(menuobj)" mat-raised-button color="primary"
-                            [disabled]="loading.menu">Save <i class="fa fa-save"></i></button>
+                            [disabled]="fetching.menu">Save <i class="fa fa-save"></i></button>
                     </div>
                     <div class="col-12">
                         <div class="row align-items-center">
@@ -167,12 +167,17 @@
                 </ng-template>
             </div>
             <div class="col-md-3 kb-menu-card-inner p-0">
-                <h5 class="p-3">Menus</h5>
-                <hr class="m-0" [style.paddingBottom]="'1.34375em'">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Sort by</mat-label>
+                    <mat-select value="asc" #sortBy>
+                        <mat-option value="asc">Ascending</mat-option>
+                        <mat-option value="desc">Descending</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <input class="border-bottom p-2" matInput #searchMenu placeholder="Search menus" required>
-                <div class="kb-inner-pages p-3">
+                <div class="kb-inner-pages m-ht p-3">
                     <h6 *ngIf="menus.length == 0" class="kb-fade-text">You don't have any menus</h6>
-                    <div *ngFor="let menu of menus | filter:searchMenu.value:'name'" class="py-2">
+                    <div *ngFor="let menu of menus | filter:searchMenu.value:'name' | sorting:sortBy.value:'name'" class="py-1">
                         <div [class]="menuobj.id == menu.id ? 'kb-menu-active' : ''" class="kb-menu-pages kb-has-icon">
                             <span matTooltip="Click to customize" matTooltipPosition="above" (click)="selectMenu(menu)"
                                 class="px-3 py-2 w-100">{{menu.name | titlecase}}</span>

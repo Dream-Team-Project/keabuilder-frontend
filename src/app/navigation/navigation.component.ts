@@ -22,7 +22,7 @@ export class NavigationComponent {
   webpages:Array<any> = [];
   funnels:Array<any> = [];
   selWebPage:string = '';
-  loading:any = {
+  fetching:any = {
     menu: true,
     web: true,
     funnel: true
@@ -30,10 +30,10 @@ export class NavigationComponent {
   custom:any = {page_name: 'Custom Link', page_path: '#'};
   prevmenuitem:any = {};
   delmenu:any;
-  action:any = '';
+  action:any;
 
-  constructor(public _general: GeneralService,  public _style: StyleService, public _image: ImageService, public dialog: MatDialog) { 
-    this.getMenus();
+  constructor(public _general: GeneralService,  public _style: StyleService, public _image: ImageService, private dialog: MatDialog) { 
+    this.fetchMenus();
     this.getAllWebPages();
     this.getAllFunnels();
   }
@@ -47,27 +47,26 @@ export class NavigationComponent {
     val == 'website' ? this.getAllWebPages() : this.getAllFunnels();
   }
 
-  getMenus() {
-    this.loading.menu = true;
-    this._general.getMenus().then(data=> {
+  fetchMenus() {
+    this.fetching.menu = true;
+    this._general.fetchMenus().then(data=> {
       this.menus = data;
       this.menuobj = '';
-      this.loading.menu = false;
-      if(this.action) this._general.openSnackBar('Menu has been '+this.action, 'OK', 'center', 'bottom');
-      this.action = '';
+      this.fetching.menu = false;
+      if(this.action) this.openSB(false);
     })
   }
 
   getAllWebPages() {
-    this.loading.web = true;
+    this.fetching.web = true;
     this._general.webPageService.getWebpages().subscribe(web=>{
       this.webpages = web.data;
-      this.loading.web = false;
+      this.fetching.web = false;
   });
   }
 
   getAllFunnels() {
-    this.loading.funnel = true;
+    this.fetching.funnel = true;
     this._general.funnelService.getallfunnelandstep().subscribe(data=>{
       let i = 0;
       var steps = data.data;
@@ -80,7 +79,7 @@ export class NavigationComponent {
             fp.steps.push(s);
           }
           if(i == this.funnels.length-1 && j == steps.length-1) {
-            this.loading.funnel = false;
+            this.fetching.funnel = false;
           }
           j++;
         })
@@ -125,13 +124,13 @@ export class NavigationComponent {
   saveMenu(menuobj:any) {
     if(menuobj.name && menuobj.items.length != 0) {
       if(!this.action) this.action = 'saved';
-      this.loading.menu = true;
+      this.fetching.menu = true;
       var count = 0;
       var m = menuobj;
       var ul = document.createElement('UL');
       ul.id = m.id;
-      ul.className = 'kb-menu';
       ul.setAttribute('data-name',m.name);
+      ul.className = 'kb-menu';
       m.items.forEach((i:any)=>{
         var li:any = document.createElement('LI');
         var a =  document.createElement('A');
@@ -143,11 +142,11 @@ export class NavigationComponent {
         ul.innerHTML = ul.innerHTML + li.outerHTML;
         if(count == m.items.length-1) {
           var obj = {
-            path: m.id,
+            id: m.id,
             html: ul.outerHTML,
           }
-          this._general.fileUploadService.saveMenu(obj).subscribe((data:any)=>{
-            this.getMenus();
+          this._general.fileUploadService.saveFile(obj, 'menus').subscribe((resp:any)=>{
+             resp.success ? this.fetchMenus() : this.openSB(true);
           })
         }
         count++;
@@ -176,10 +175,9 @@ export class NavigationComponent {
 
   deleteMenu() {
     this.action = 'deleted';
-    this.loading.menu = true;
-    var obj = {path: this.delmenu.id};
-    this._general.fileUploadService.deleteMenu(obj).subscribe((resp:any)=>{
-      this.getMenus();
+    this.fetching.menu = true;
+    this._general.fileUploadService.deleteFile(this.delmenu.id, 'menus').subscribe((resp:any)=>{
+      resp.success ? this.fetchMenus() : this.openSB(true);
     })
   }
 
@@ -211,5 +209,11 @@ export class NavigationComponent {
   }
 
   // menu items
+
+  openSB(alert:any) {
+    if(alert) this._general.openSnackBarAlert('Server Error', 'OK', 'center', 'top');
+    else this._general.openSnackBar('Menu has been '+this.action, 'OK', 'center', 'top');
+    this.action = '';
+  }
 
 }
