@@ -73,18 +73,18 @@
     font-size: 13px;
     color: #988e71;
 }
-.kb-page-settting {
+/* .kb-page-settting {
     float: right;
     color: #6c757d;
     font-size: 20px;
     padding: 3px;
     cursor: pointer;
     transition: .5s ease-in-out;
-}
-.kb-page-settting:hover {
+} */
+/* .kb-page-settting:hover {
     transform: rotate(
 30deg);
-}
+} */
 .kb-dropdown__panel {
     position: absolute;
     right: 0px;
