@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -18,7 +18,7 @@ import { asapScheduler } from 'rxjs';
   styleUrls: ['./builder.component.css','./material.component.css'],
 })
 
-export class BuilderComponent implements OnInit, AfterViewInit {
+export class BuilderComponent implements OnInit {
 
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
@@ -51,27 +51,32 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     _general.loading.success = false;
     _general.loading.error = false;
       this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.target = params.get('target');
-          var parser = new DOMParser();
-          // const doc = parser.parseFromString(trackingdata.html, 'text/html');
-          if(_general.target == 'website' || _general.target == 'funnel') {
-              this._general.getAllProducts();
-              _general.getPageDetails(params.get('id')).then(e=> {
-                _general.loading.success = false;
-                var header = _general.file.html.querySelector('HEADER');
-                var footer = _general.file.html.querySelector('FOOTER');
-                if(header && footer) {
-                  if(header.getAttribute('kb-include-html') == 'true') {
-                    _general.includeHeader = true;
-                    // var ah:any = document.getElementById('kb-append-header');
-                    // ah.innerHTML = doc.querySelector('#kb-header-html')?.innerHTML;
-                  }
-                  if(footer.getAttribute('kb-include-html') == 'true') {
-                    _general.includeFooter = true;
-                    // var af:any = document.getElementById('kb-append-footer');
-                    // af.innerHTML = doc.querySelector('#kb-footer-html')?.innerHTML;
-                  }
+        _general.target = {
+          id: params.get('id'),
+          type: params.get('target')
+        }
+        _general.getBuilderData(_general.target.id).then(data=> {
+          if(!data) this._general.redirectToPageNotFound();
+          else {
+            _general.loading.success = false;
+            data.html = _general.parser.parseFromString(data.html, 'text/html');
+            if(_general.target.type == 'website' || _general.target.type == 'funnel') {
+              var header = data.html.querySelector('HEADER');
+              var footer = data.html.querySelector('FOOTER');
+              if(header && footer) {
+                if(header.getAttribute('kb-include-html') == 'true') {
+                  _general.includeHeader = true;
+                  // var ah:any = document.getElementById('kb-append-header');
+                  // ah.innerHTML = doc.querySelector('#kb-header-html')?.innerHTML;
                 }
+                if(footer.getAttribute('kb-include-html') == 'true') {
+                  _general.includeFooter = true;
+                  // var af:any = document.getElementById('kb-append-footer');
+                  // af.innerHTML = doc.querySelector('#kb-footer-html')?.innerHTML;
+                }
+              }
+              if(_general.target.type == 'funnel') {
+                this._general.getAllProducts();
                 if(_general.webpage.funneltype == 'order') {
                   var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
                   _element.elementList.splice(5, 0, checkout);
@@ -86,27 +91,19 @@ export class BuilderComponent implements OnInit, AfterViewInit {
                   _element.elementList[3].content.productid = '';
                   _element.elementList[3].content.text = 'Downsell';
                 }
-                this.setBuilder(_general.file.html, _general.file.css);
-                _general.file.load = false;
-              })
+              }
+            }
+            else if(_general.target.type == 'header') {
+              _general.target.name = data.html.querySelector('HEADER').getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            else if(_general.target.type == 'footer') {
+              _general.target.name = data.html.querySelector('FOOTER').getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            this.setBuilder(data.html, data.css);
           }
-          else{
-            // this.setBuilder('', '');
-                // _general.file.load = false;
-          //   if(params.get('id') == _general.user.uniqueid) {
-          //       var obj:any = {};
-          //       if(_general.target == 'header') {
-          //         obj.html = doc.querySelector('#kb-header');
-          //         obj.css = doc.querySelector('#kb-header-style')?.innerHTML;
-          //       }
-          //       else if(_general.target == 'footer') {
-          //         obj.html = doc.querySelector('#kb-footer');
-          //         obj.css = doc.querySelector('#kb-footer-style')?.innerHTML;
-          //       }
-          //       this.setBuilder(obj.html, obj.css);
-          //   }
-          //   else window.location.replace(window.location.origin);
-          }
+        })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
@@ -116,9 +113,6 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
   }
 
   drop(event: CdkDragDrop<any>) {
@@ -160,22 +154,39 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     asapScheduler.schedule(() => { this.eledls = eleldls; });
   }
 
-  takePageSS(main:any) {
+  takePageSS(id:any, stxt:any) {
+    this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+      var file:any = this._image.base64ToFile(e, id+'-screenshot.png');
+      this._general.fileUploadService.upload(file).subscribe(
+        (event: any) => {
+            if (typeof (event) === 'object') {
+              this._general.saveDisabled = false;
+              this._general.openSnackBar(stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been saved', 'OK', 'center', 'top');
+            }
+        })
+    })
+  }
+
+  saveHeaderFooter(main:any) {
+    this._general.saveDisabled = true;
+    this._general.pathError = false;
+    this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
+      if(res) {
+        this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+      }
+      else {
+        this._general.saveDisabled = false;
+      }
+    });
+  }
+
+  saveHTML(main:any) {
     this._general.saveDisabled = true;
     this._general.pathError = false;
     this._general.showfloatnavtoggle();
     this._general.checkExstingPath(main, this._section.sections).then(res =>{
       if(res) {
-        this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-          var file:any = this._image.base64ToFile(e, this._general.webpage.uniqueid+'-screenshot.png');
-          this._general.fileUploadService.upload(file).subscribe(
-            (event: any) => {
-                if (typeof (event) === 'object') {
-                  this._general.saveDisabled = false;
-                  this._general.openSnackBar('Page has been saved', 'OK', 'center', 'top');
-                }
-            });
-        })
+        this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
       }
       else {
         this._general.saveDisabled = false;
@@ -210,7 +221,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   }
 
   setBuilder(html:any, css:any) {
-    if(html?.querySelectorAll('.kb-section').length != 0) {
+    if(html && css) {
       this._general.main.style = {
         desktop: this.filterStyle('kb-main',css,''),
         tablet_h: this.filterStyle('kb-main',css,'1024,769'),
@@ -381,8 +392,8 @@ export class BuilderComponent implements OnInit, AfterViewInit {
       })
     }
     else {
-      this._general.loading.success = true;
       this._section.addSection(0);
+      this._general.loading.success = true;
     }
   }
 

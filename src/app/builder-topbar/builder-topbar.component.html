@@ -1,7 +1,7 @@
 <div id="topBar" [class.loaderShadow]="_general.saveDisabled" (click)="!_general.showNavAnim.toggle ? _general.showfloatnavtoggle() : ''">
     <div class="innerLinks">
         <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
-        <button mat-button *ngFor="let nav of topBarLinks" (click)="redirectToLink(nav.link)" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="'fa '+nav.icon"></i></button>
+        <button mat-button *ngFor="let nav of topBarLinks" (click)="redirectToLink(nav.link)" [matTooltip]="nav.name" matTooltipPosition="below"><i [class]="nav.icon"></i></button>
     </div>
     <div class="innerLinks">
         <button mat-button [class.resp-active]="!_general.showResp.toggle" (click)="_general.showResp.toggle =  false" matTooltip="Desktop" matTooltipPosition="below"><i class="fa fa-desktop"></i></button>
@@ -10,6 +10,6 @@
         <button mat-button [class.resp-active]="_general.showResp.toggle && _general.respToggleDevice.name == 'mobile'" (click)="_general.selRespDevice(2)" matTooltip="Mobile" matTooltipPosition="below"><i class="fas fa-mobile-alt"></i></button>
         <button mat-button matTooltip="Redo" matTooltipPosition="below" (click)="_section.redo()"><i class="fas fa-redo"></i></button>
         <button mat-button matTooltip="Undo" matTooltipPosition="below" (click)="_section.undo()"><i class="fas fa-undo"></i></button>
-        <button mat-button [routerLink]="'/profile'"><span>{{_general.user.name | titlecase}}</span><img [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)"></button>
+        <button mat-button (click)="redirectToLink('/profile')"><span>{{_general.user.name | titlecase}}</span><img [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)"></button>
     </div>
 </div>

@@ -9,13 +9,12 @@ button.mat-button {
 
 .kb-inner-pages {
     overflow-y: scroll;
-    height: 480px;
+    height: 435px;
 }
 
 .kb-menu-cards>div.kb-menu-card-inner {
     box-shadow: 0 0 4px rgb(0 0 0 / 10%);
     border-radius: 4px;
-    height: 530px;
     overflow: hidden;
 }
 
@@ -66,7 +65,7 @@ button.mat-button {
     text-overflow: ellipsis; 
 }
 
-.kb-menu-pages:hover, .kb-menu-active{
+.kb-menu-pages:hover:not(.kb-disabled), .kb-menu-active{
     color: var(--primary-color);
     border-color: var(--primary-color);
     background: #fff;

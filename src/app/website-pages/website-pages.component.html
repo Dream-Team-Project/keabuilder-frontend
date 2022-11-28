@@ -163,7 +163,7 @@
             </mat-form-field>
             
             <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                <i class="fas fa-copy"></i> Copy Url
+                <i class="far fa-copy"></i> Copy Url
             </button>
               
             <hr>
@@ -176,7 +176,7 @@
             </mat-form-field>
             
             <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-                <i class="fas fa-copy"></i> Copy Url
+                <i class="far fa-copy"></i> Copy Url
             </button>
         </div>
 
@@ -205,13 +205,14 @@
       <div class="col-md-6">
         <mat-form-field *ngIf="!showarchivemode" appearance="fill" class="w-100">
           <mat-label>Search Pages</mat-label>
+          <i class="fa fa-search"></i>
           <input matInput type="text" (keyup)="searchpage($event)" placeholder="Search Pages">
         </mat-form-field>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button class="ml-2" (click)="addnewpage()" color="primary"><span class="keamobhd">Add Page </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button (click)="addnewpage()" color="primary"><span class="keamobhd">Add Page </span> <i class="fas fa-plus"></i></button>
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
-        <button mat-raised-button (click)="archivepages()" class="ml-2">
+        <button mat-raised-button (click)="archivepages()" class="mx-3">
           <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>
           <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'" ></i>
         </button>
@@ -221,12 +222,11 @@
         </button>
       </div>
       <div class="col-md-12 text-right mobkeaadjust" *ngIf="!showarchivemode">
-
-        <button mat-raised-button class="mr-2" (click)="togglepageview()" *ngIf="!nodata">Toggle View 
-          <i class="fas" [ngClass]="{'fa-th': toggleview1 == true, 'fa-th-large' : toggleview1 == false }"></i>
+        <button mat-raised-button (click)="togglepageview()" *ngIf="!nodata">
+          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
         </button>
-
-        <mat-form-field appearance="fill" class="mr-2">
+        <mat-form-field appearance="fill" class="mx-3">
           <mat-label>Visibility</mat-label>
           <mat-select name="visibility" [(ngModel)]="selstatusshow" >
             <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>
@@ -234,7 +234,6 @@
             <mat-option value="publish" (click)="changevisibility('publish')">Publish Only</mat-option>
           </mat-select>
         </mat-form-field>
-
         <mat-form-field appearance="fill">
           <mat-label>Filter</mat-label>
           <mat-select name="kbfilter" [(ngModel)]="selstatusshow" >
@@ -244,7 +243,6 @@
             <mat-option value="desc" (click)="changevisibility('datedesc')">DESC By Date</mat-option>
           </mat-select>
         </mat-form-field>
-        
       </div>
     </div>
 
@@ -346,7 +344,7 @@
       <!-- pages to show -->
       <ng-template #showpages>
         <!-- Pages -->
-        <div class="row" *ngIf="toggleview1 else toggle" >
+        <div class="row" *ngIf="toggleview else toggle" >
           <div class="col-md-4 cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;" >
             <div>
               <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
@@ -395,7 +393,7 @@
                   <i class="fas fa-chart-pie mr-2"></i> View Analytics
                 </button> -->
                 <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)">
-                  <i class="fas fa-copy mr-2"></i> Duplicate
+                  <i class="far fa-copy mr-2"></i> Duplicate
                 </button>
                 <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')">
                   <i class="fas fa-link mr-2"></i> Copy URL
@@ -412,7 +410,6 @@
             </div>
           </div>
         </div>
-        <!-- toggle view -->
         <ng-template #toggle>
           <div class="row p-4">
             <div class="col-md-12 cardpage mt-2 " *ngFor="let kbpage of kbpages; index as i;" >
@@ -458,7 +455,7 @@
                         <i class="fas fa-chart-pie mr-2"></i> View Analytics
                       </button> -->
                       <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)" >
-                        <i class="fas fa-copy mr-2"></i> Duplicate
+                        <i class="far fa-copy mr-2"></i> Duplicate
                       </button>
                       <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')" >
                         <i class="fas fa-link mr-2"></i> Copy URL

@@ -12,22 +12,22 @@ const httpOptions = {
 })
 export class WebsiteService {
 
-  uniqueuserid:any = '';
+  uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { 
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
   getWebsite(): Observable<any> {
-    return this.http.get('/api/allwebsitedata/'+this.uniqueuserid);
+    return this.http.get('/api/allwebsitedata/'+this.uuid);
   }
 
   updatesitedetails(obj:any):Observable<any> {
-    return this.http.post("./api/updatesitedetails/"+this.uniqueuserid, obj, httpOptions);
+    return this.http.post("./api/updatesitedetails/"+this.uuid, obj, httpOptions);
   }
 
   setpublishstatus(status: any):Observable<any> {
-    return this.http.post("./api/setPublishstatus/"+this.uniqueuserid, {
+    return this.http.post("./api/setPublishstatus/"+this.uuid, {
       status,
     }, httpOptions);
   }

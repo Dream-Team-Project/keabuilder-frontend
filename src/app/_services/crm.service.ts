@@ -12,15 +12,15 @@ const httpOptions = {
 })
 export class CrmService {
 
-  uniqueuserid:any = '';
+  uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
     // console.log(this.tokenStorage.getUser());
   }
 
   getcrmcontacts(): Observable<any> {
-    return this.http.get('/api/getcrmcontactsdata/'+this.uniqueuserid);
+    return this.http.get('/api/getcrmcontactsdata/'+this.uuid);
   }
 
 }

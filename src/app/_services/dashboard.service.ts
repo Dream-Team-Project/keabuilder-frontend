@@ -12,23 +12,23 @@ const httpOptions = {
 })
 export class DashboardService {
 
-  uniqueuserid:any = '';
+  uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
     // console.log(this.tokenStorage.getUser());
   }
 
   getAllrevenue(): Observable<any> {
-    return this.http.get('./api/getallrevenue/'+this.uniqueuserid);
+    return this.http.get('./api/getallrevenue/'+this.uuid);
   }
 
   getAllcontact(): Observable<any> {
-    return this.http.get('./api/getallcontact/'+this.uniqueuserid);
+    return this.http.get('./api/getallcontact/'+this.uuid);
   }
 
   getconditionaldata(data:any):Observable<any> {
-    return this.http.post("./api/getconditionaldata/"+this.uniqueuserid, {
+    return this.http.post("./api/getconditionaldata/"+this.uuid, {
       data,
     }, httpOptions);
   }

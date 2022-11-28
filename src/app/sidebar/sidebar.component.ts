@@ -52,14 +52,14 @@ export class SidebarComponent implements OnInit {
         0:true,
         routerlink: '/website/headers',
         img: 'browser.gif',
-        icon: 'fas fa-columns',
+        icon: 'far fa-window-maximize',
         title: 'Headers'
       },
       {
         0:true,
         routerlink: '/website/footers',
         img: 'browser.gif',
-        icon: 'fas fa-columns',
+        icon: 'far fa-window-maximize kb-rev',
         title: 'Footers'
       },
       {

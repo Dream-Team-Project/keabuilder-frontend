@@ -14,27 +14,42 @@ export class BuilderTopbarComponent implements OnInit {
     {
       name: 'Dashboard',
       link: '/dashboard',
-      icon: 'fa-home'
+      icon: 'fa fa-home'
+    },
+    {
+      name: 'Navigation',
+      link: '/website/navigation',
+      icon: 'fa fa-stream'
+    },
+    {
+      name: 'Headers',
+      link: '/website/headers',
+      icon: 'far fa-window-maximize'
+    },
+    {
+      name: 'Footers',
+      link: '/website/footers',
+      icon: 'far fa-window-maximize kb-rev'
     },
     {
       name: 'Website',
       link: '/website',
-      icon: 'fa-desktop'
+      icon: 'fa fa-desktop'
     },
     {
       name: 'Funnels',
       link: '/funnels',
-      icon: 'fa-filter'
+      icon: 'fa fa-filter'
     },
     {
       name: 'Membership',
       link: '/membership',
-      icon: 'fa-shield-alt'
+      icon: 'fa fa-shield-alt'
     },
     {
       name: 'Form',
       link: '/forms',
-      icon: 'fa-address-card'
+      icon: 'fa fa-address-card'
     },
     {
       name: 'Site Details',

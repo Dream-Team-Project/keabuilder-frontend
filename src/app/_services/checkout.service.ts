@@ -12,10 +12,10 @@ const httpOptions = {
 })
 export class CheckoutService {
 
-  uniqueuserid:any = '';
+  uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
-    this.uniqueuserid = this.tokenStorage.getUser().uniqueid;
+    this.uuid = this.tokenStorage.getUser().uniqueid;
     // console.log(this.tokenStorage.getUser());
 }
 
@@ -30,17 +30,17 @@ export class CheckoutService {
   }
 
   updatepayment(data:any): Observable<any>{
-    return this.http.post('/api/updatepayment/'+this.uniqueuserid, {
+    return this.http.post('/api/updatepayment/'+this.uuid, {
       data,
     }, httpOptions);
   }
 
   getpaymentinteg(): Observable<any>{
-    return this.http.post('/api/getpaymentinteg/'+this.uniqueuserid, {}, httpOptions);
+    return this.http.post('/api/getpaymentinteg/'+this.uuid, {}, httpOptions);
   }
 
   updatecheckoutstyle(data:any): Observable<any>{
-    return this.http.post('/api/updatecheckoutstyle/'+this.uniqueuserid, {
+    return this.http.post('/api/updatecheckoutstyle/'+this.uuid, {
       data,
     }, httpOptions);
   }

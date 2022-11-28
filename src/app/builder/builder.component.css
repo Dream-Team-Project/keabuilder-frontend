@@ -33,7 +33,20 @@ div#kb-layout-saveopt>div {
     align-items: center;
 }
 
-.kb-layout-title {
+.kb-layout-title input, .kb-layout-title:hover span {
+    display: none;
+}
+
+.kb-layout-title:hover input {
+    display: block;
+    border-bottom: 1px solid rgb(34 38 42 / 10%);
+}
+
+.kb-layout-title, .kb-layout-title input {
+    background: transparent;
+    border: 0;
+    height: 100%;
+    width: 80%;
     font-size: 26px;
 }
 
