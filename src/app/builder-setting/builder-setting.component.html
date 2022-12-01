@@ -1,6 +1,6 @@
 <ng-template>
     <app-image *ngIf="_general.imgSelection"></app-image>
-    <div id="kb-selection-ask" class="kb-outer-selection-container kb-scroll" [class.dragBox]="dragBoxAnime.open"
+    <div id="kb-selection-ask" [class.kb-d-none]="_general.minimize" class="kb-outer-selection-container kb-scroll" [class.dragBox]="dragBoxAnime.open"
         [class.dragBoxClose]="dragBoxAnime.close" [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''"
         cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
         <span *ngIf="_general.blockSelection" class="kb-selection-top-actions">
@@ -88,7 +88,7 @@
                             <div *ngIf="!_general.showEditor else editor">
                                 <div *ngIf="_general.selectedBlock.content?.name == 'menu'"
                                     class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Select Menu</div>
+                                    <div class="kb-tab-head">Menu</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_general.selectedMenu"
                                             (ngModelChange)="_general.selectedBlock.content = _element.setDataId_items(_general.selectedBlock.content, _general.selectedMenu)">
@@ -1276,14 +1276,27 @@
                             </div>
                             <div *ngSwitchCase="'layout'">
                                 <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Layout</div>
-                                    <div class="kb-tab-content kb-resp-ask">
-                                        <mat-slide-toggle [matTooltip]="_general.includeHeader ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="above" [(ngModel)]="_general.includeHeader">Page Header
-                                        </mat-slide-toggle>
-                                        <mat-slide-toggle [matTooltip]="_general.includeFooter ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="above" [(ngModel)]="_general.includeFooter">Page Footer
-                                        </mat-slide-toggle>
+                                    <div class="kb-tab-head">Header
+                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeHeader ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_general.includeHeader"></mat-slide-toggle>
+                                    </div>
+                                    <div class="kb-tab-content">
+                                        <mat-select [disabled]="!_general.includeHeader" [(ngModel)]="_general.selectedHeader">
+                                            <mat-option *ngFor="let header of _general.headers | sorting:'asc':'name'" [value]="header">{{header.name |
+                                                titlecase}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Footer
+                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeFooter ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_general.includeFooter"></mat-slide-toggle>
+                                    </div>
+                                    <div class="kb-tab-content">
+                                        <mat-select [disabled]="!_general.includeFooter" [(ngModel)]="_general.selectedFooter">
+                                            <mat-option *ngFor="let footer of _general.footers | sorting:'asc':'name'" [value]="footer">{{footer.name |
+                                                titlecase}}</mat-option>
+                                        </mat-select>
                                     </div>
                                 </div>
                             </div>

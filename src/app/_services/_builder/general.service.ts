@@ -18,8 +18,8 @@ import { NgxCaptureService } from 'ngx-capture';
 
 export class GeneralService {
   userdomain:string = 'keapages.com';
-  includeHeader:boolean = false;
-  includeFooter:boolean = false;
+  includeHeader:boolean = true;
+  includeFooter:boolean = true;
   user:any;
   subdomain:string = '';
   target:any = {
@@ -112,8 +112,11 @@ export class GeneralService {
   pathError:boolean = false;
   menus:any = [];
   headers:any = [];
+  footers:any = [];
   deletedMenuIds:any = [];
   selectedMenu:any = {};
+  selectedHeader:any = {};
+  selectedFooter:any = {};
   existwebpages:any = [];
   funnels:any = [];
   step_products:any = [];
@@ -209,6 +212,12 @@ export class GeneralService {
 
   getBuilderData(id:any) {
     return new Promise<any>((resolve, reject) => {
+      this.fetchHeaders().then(data=>{
+        this.headers = data;
+      })
+      this.fetchFooters().then(data=>{
+        this.footers = data;
+      })
       this.fetchMenus().then(data=>{
         this.menus = data;
       });
@@ -334,7 +343,6 @@ export class GeneralService {
 
   checkExstingPath(main:any, sections:any) {
     return new Promise<any>((resolve, reject) => {
-      this.showfloatnavtoggle();
       var data = {
         path: this.main.path
       }
@@ -728,22 +736,6 @@ export class GeneralService {
     }
   }
 
-  undoRedoToggle(navtoggle:boolean) {
-    if(!this.undoRedo.toggle) {
-      this.undoRedo.open = true;
-      this.undoRedo.toggle = true;
-    }
-    else {
-      this.undoRedo.close = true;
-    }
-    setTimeout(()=>{
-      this.undoRedo.close ? this.undoRedo.toggle = false : '';
-      this.undoRedo.open = false;
-      this.undoRedo.close = false;
-  },300)
-    navtoggle ? this.showfloatnavtoggle() : '';
-  }
-
   responsiveToggle(navtoggle:boolean) {
     if(!this.showResp.toggle) {
       this.showResp.open = true;
@@ -757,7 +749,7 @@ export class GeneralService {
       this.showResp.open = false;
       this.showResp.close = false;
   },300)
-    navtoggle ? this.showfloatnavtoggle() : '';
+    if(navtoggle) this.showfloatnavtoggle();
   }
 
   wireframeToggle(navtoggle:any) {
@@ -773,7 +765,7 @@ export class GeneralService {
       this.wireframe.open = false;
       this.wireframe.close = false;
     },300)
-    navtoggle ? this.showfloatnavtoggle() : '';
+    if(navtoggle) this.showfloatnavtoggle();
   }
 
   showfloatnavtoggle() {

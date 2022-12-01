@@ -183,7 +183,7 @@ export class BuilderComponent implements OnInit {
   saveHTML(main:any) {
     this._general.saveDisabled = true;
     this._general.pathError = false;
-    this._general.showfloatnavtoggle();
+    if(this._general.showNavAnim.show) this._general.showfloatnavtoggle();
     this._general.checkExstingPath(main, this._section.sections).then(res =>{
       if(res) {
         this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
@@ -403,7 +403,7 @@ export class BuilderComponent implements OnInit {
     let parentPosition = this.getPosition(element);
     let x = boundingClientRect.x - parentPosition.left;
     let y = boundingClientRect.y - parentPosition.top;
-    if(-1*y > screen.height/1.5) {
+    if(-1*y > screen.height/2) {
       this.showNavFrom = 'top';
     }
     else if(screen.width/2 + x < 70) {
