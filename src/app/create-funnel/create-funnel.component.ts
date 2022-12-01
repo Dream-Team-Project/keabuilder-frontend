@@ -95,6 +95,8 @@ export class CreateFunnelComponent implements OnInit {
   addproductpopup = false;
 
   addstepoption = false;
+
+  crfunnelstepname = '';
   funneltype = '';
   myproductsshowcase = false;
 
@@ -339,40 +341,44 @@ export class CreateFunnelComponent implements OnInit {
   updatestep(){
 
     // console.log(this.funneltype);
-    var data = {funneltype:this.funneltype};
-    this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
-      next: data => {
-        // console.log(data);
-        this.popupsidebar = false;
-        this.addstepoption = false;
-        this._snackBar.open('Step Added Successfully!', 'Close');
+    var data = {funneltype:this.funneltype, stepname: this.crfunnelstepname};
+    
+    if(this.funneltype!='' && this.crfunnelstepname != ''){
+      this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
+        next: data => {
+          // console.log(data);
+          this.popupsidebar = false;
+          this.addstepoption = false;
+          this._snackBar.open('Step Added Successfully!', 'Close');
 
-        this.steps = data.data;
+          this.steps = data.data;
 
-        var page = {
-          head: '',
-          body: '',
-          style: '',
-          folder: data.pagepath,
-          prevFolder: data.pagepath
-        };
-        this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-          // console.log(event);
+          var page = {
+            head: '',
+            body: '',
+            style: '',
+            folder: data.pagepath,
+            prevFolder: data.pagepath
+          };
+          this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+            // console.log(event);
+          },
+          error=>{console.log(error)});
+
+
+
+          // console.log(data);
+          // if(data.success==1){
+          //   this.createvariation = false;
+          //   this.funnelvariation = 1;
+          // }
         },
-        error=>{console.log(error)});
+        error: err => {
+          console.log(err);
+        }
+      });
+    }
 
-
-
-        // console.log(data);
-        // if(data.success==1){
-        //   this.createvariation = false;
-        //   this.funnelvariation = 1;
-        // }
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
 
   }
 
