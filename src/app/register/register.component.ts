@@ -67,9 +67,7 @@ export class RegisterComponent implements OnInit {
         this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
           next: data => {
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
-              this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
-                // console.log(e);
-              });
+              console.log(e);
             });
             var domainpath = window.location.hostname;
             var emailhtml = `Dear `+firstname+`,<br>
