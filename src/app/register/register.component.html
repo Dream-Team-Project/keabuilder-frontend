@@ -78,8 +78,14 @@
                     <mat-label> Subdomain</mat-label>
                     <input type="text" (input)="form.subdomain = _general.joinWthDash(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
                     <span matSuffix>.keapages.com</span>
-                    <mat-error *ngIf="companynameFormControl.hasError('required')">
+                    <mat-error *ngIf="subdomainFormControl.hasError('required')">
                       Subdomain Name is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+                      Subdomain must be at least <strong>3</strong> characters
+                    </mat-error>
+                    <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+                      Subdomain must be at most <strong>20</strong> characters
                     </mat-error>
                   </mat-form-field>
 

@@ -66,5 +66,11 @@ export class AuthService {
     }, httpOptions);
   }
 
+  oncreatesubdomain(domain: any, uniqueid: any): Observable<any>{
+    return this.http.get('https://keabuilder.com/crd.php?domain='+domain+'&uniqueid='+uniqueid);
+  }
+
+  
+
 
 }
