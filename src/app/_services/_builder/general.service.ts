@@ -28,6 +28,7 @@ export class GeneralService {
     type: ''
   };
   webpage:any = {uniqueid: ''};
+  page_general_tab:any = 'info';
   main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
   page_name = '';
   page_title = '';
@@ -54,6 +55,7 @@ export class GeneralService {
   sideFloatBtnAnim = {open: false, close: false};
   blockSelection:string = '';
   imgSelection:boolean = false;
+  minimize:boolean=false;
   expand:boolean= false;
   screenWidth:any = 1000;
   screenHeight:any;

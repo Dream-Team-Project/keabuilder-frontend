@@ -1,205 +1,212 @@
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" [class.fulltemplate] = "selecttemplate" >
-        
-        <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
+      [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" [class.fulltemplate]="selecttemplate">
 
-        <div *ngIf="quickeditpopup">
-            <h6><b>Quick Edit</b></h6>
-            <hr>
+      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+
+      <div *ngIf="quickeditpopup">
+        <h6><b>Quick Edit</b></h6>
+        <hr>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Url</mat-label>
+          <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()"
+            (input)="pageurl = _general.joinWthDash(pageurl)">
+          <small class="text-danger" *ngIf="pathcheck2">
+            Path must be <strong>unique</strong>
+          </small>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Title</mat-label>
+          <input matInput [(ngModel)]="seotitle" name="seotitle">
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Description</mat-label>
+          <textarea [(ngModel)]="seodescr" matInput name="seodescr">{{seodescr}}</textarea>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Add Keywords</mat-label>
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let keyword of keywords" (removed)="remove(keyword)">
+              {{keyword}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input placeholder="New Keywords..." [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Author</mat-label>
+          <input matInput name="seoauthor" [(ngModel)]="seoauthor">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="savequickdetails()">
+          <i class="fas fa-save"></i> Save Details
+        </button>
+      </div>
+
+      <div *ngIf="addnewpagepopup">
+
+        <h6><b>Create A Page</b></h6>
+        <hr>
+
+        <div *ngIf="insidepagefirst">
+
+          <button mat-raised-button color="accent" class="btn-block mb-2" (click)="createfromscratch()"><i
+              class="fas fa-plus"></i> Create From Scratch</button>
+          <!-- <button mat-raised-button color="accent" class="btn-block mb-2" (click)="selectfromtemplate()" ><i class="fab fa-angellist"></i> Select From Template</button> -->
+
+        </div>
+
+        <div *ngIf="insidepagesecond">
+
+          <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
 
             <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Url</mat-label>
-              <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()" (input)="pageurl = _general.joinWthDash(pageurl)">
-              <small class="text-danger" *ngIf="pathcheck2">
+              <mat-label>Page Name</mat-label>
+              <input type="text" matInput [(ngModel)]="form.pagename" (blur)="changemyname($event)" name="pagename"
+                [formControl]="userFormControl" placeholder="Ex. Home" required minlength="3">
+              <mat-error *ngIf="userFormControl.hasError('required')">
+                Page Name is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="userFormControl.hasError('minlength')">
+                Page Name must be at least <strong>3</strong> characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Page Path</mat-label>
+              <input type="text" matInput (input)="form.pagepath = _general.joinWthDash(form.pagepath)"
+                [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home"
+                required minlength="3" (blur)="pathuniqueremove()">
+              <mat-error *ngIf="userFormControl2.hasError('required')">
+                Path Name is <strong>required</strong>
+              </mat-error>
+              <small class="text-danger" *ngIf="pathcheck">
                 Path must be <strong>unique</strong>
               </small>
+              <mat-error *ngIf="userFormControl2.hasError('minlength')">
+                Page Name must be at least <strong>3</strong> characters
+              </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Title</mat-label>
-              <input matInput [(ngModel)]="seotitle" name="seotitle">
-            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" class="mt-2"><i class="fas fa-plus"></i> Create
+              Page</button>
 
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Description</mat-label>
-              <textarea [(ngModel)]="seodescr" matInput name="seodescr">{{seodescr}}</textarea>
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Add Keywords</mat-label>
-              <mat-chip-list #chipList>
-                <mat-chip *ngFor="let keyword of keywords" (removed)="remove(keyword)">
-                  {{keyword}}
-                  <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                </mat-chip>
-                <input placeholder="New Keywords..."
-                       [matChipInputFor]="chipList"
-                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                       [matChipInputAddOnBlur]="addOnBlur"
-                       (matChipInputTokenEnd)="add($event)">
-              </mat-chip-list>
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Author</mat-label>
-              <input matInput name="seoauthor" [(ngModel)]="seoauthor">
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" (click)="savequickdetails()" >
-                <i class="fas fa-save"></i> Save Details
-            </button>
-        </div>
-
-        <div *ngIf="addnewpagepopup">
-
-          <h6><b>Create A Page</b></h6>
-          <hr>
-
-          <div *ngIf="insidepagefirst">
-
-            <button mat-raised-button color="accent" class="btn-block mb-2" (click)="createfromscratch()" ><i class="fas fa-plus"></i> Create From Scratch</button>
-            <!-- <button mat-raised-button color="accent" class="btn-block mb-2" (click)="selectfromtemplate()" ><i class="fab fa-angellist"></i> Select From Template</button> -->
-            
-          </div>
-
-          <div *ngIf="insidepagesecond">
-
-            <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
-
-              <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Page Name</mat-label>
-                <input type="text" matInput [(ngModel)]="form.pagename" (blur)="changemyname($event)" name="pagename" [formControl]="userFormControl" placeholder="Ex. Home" required minlength="3">
-                <mat-error *ngIf="userFormControl.hasError('required')">
-                  Page Name is <strong>required</strong>
-                </mat-error>
-                <mat-error *ngIf="userFormControl.hasError('minlength')">
-                  Page Name must be at least <strong>3</strong> characters
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Page Path</mat-label>
-                <input type="text" matInput (input)="form.pagepath = _general.joinWthDash(form.pagepath)" [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home" required minlength="3" (blur)="pathuniqueremove()" >
-                <mat-error *ngIf="userFormControl2.hasError('required')">
-                  Path Name is <strong>required</strong>
-                </mat-error>
-                <small class="text-danger" *ngIf="pathcheck">
-                  Path must be <strong>unique</strong>
-                </small>
-                <mat-error *ngIf="userFormControl2.hasError('minlength')">
-                  Page Name must be at least <strong>3</strong> characters
-                </mat-error>
-              </mat-form-field>
-    
-              <button mat-raised-button color="primary" type="submit" class="mt-2" ><i class="fas fa-plus"></i> Create Page</button>
-    
-            </form>
-
-          </div>
-
-          <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
+          </form>
 
         </div>
 
-        <div *ngIf="showmytemplates">
+        <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
 
-          <div class="container-fluid">
+      </div>
 
-            <div class="row">
-              <div class="col-md-2">
-                <button mat-raised-button color="accent" (click)="createfromscratch()">
-                  <i class="fas fa-plus"></i> Create From Scratch
-                </button>
-              </div>
-              <div class="col-md-6">
-                <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
-                  <input type="text" class="form-control" id="template-search" placeholder="Search Page Templates">
-                  <div class="form-control-position">
-                      <i class="fab fa-searchengin"></i>                        
-                  </div>
-                </fieldset>
-              </div>
+      <div *ngIf="showmytemplates">
+
+        <div class="container-fluid">
+
+          <div class="row">
+            <div class="col-md-2">
+              <button mat-raised-button color="accent" (click)="createfromscratch()">
+                <i class="fas fa-plus"></i> Create From Scratch
+              </button>
             </div>
-
-            <div class="row mb-5">
-              <div class="col-md-4 cardpage mt-2 " *ngFor="let pagetemplate of pagetemplates; index as i;" >
-                <div>
-                  <img [src]="pagetemplate.thumbnail" alt="" class="img-fluid img-fit">
-        
-                  <div class="keabuilder-title line-ellipsis">
-                    <span>{{pagetemplate.title}}</span>
-                  </div>
-        
-                  <button mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-                  <button mat-raised-button color="primary" (click)="usetemplate(pagetemplate.id)" >Use This Template <i class="fas fa-check"></i></button>
-        
+            <div class="col-md-6">
+              <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
+                <input type="text" class="form-control" id="template-search" placeholder="Search Page Templates">
+                <div class="form-control-position">
+                  <i class="fab fa-searchengin"></i>
                 </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row mb-5">
+            <div class="col-md-4 cardpage mt-2 " *ngFor="let pagetemplate of pagetemplates; index as i;">
+              <div>
+                <img [src]="pagetemplate.thumbnail" alt="" class="img-fluid img-fit">
+
+                <div class="keabuilder-title line-ellipsis">
+                  <span>{{pagetemplate.title}}</span>
+                </div>
+
+                <button mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
+                <button mat-raised-button color="primary" (click)="usetemplate(pagetemplate.id)">Use This Template <i
+                    class="fas fa-check"></i></button>
+
               </div>
             </div>
+          </div>
 
-            <div class="row">
-              <div class="col-md-12">
-                <!-- <mat-paginator [length]="100"
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <mat-paginator [length]="100"
                   [pageSize]="10"
                   [pageSizeOptions]="[5, 10, 25, 100]"
                   aria-label="Select page">
                 </mat-paginator> -->
-              </div>
             </div>
-
           </div>
-        </div>
 
-        <div *ngIf="showpageurl">
-            <h6><b>Copy Page Builder URL</b></h6>
-            <hr>
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Step Url</mat-label>
-              <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{pagebuilderurl}}</textarea>
-            </mat-form-field>
-            
-            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                <i class="far fa-copy"></i> Copy Url
-            </button>
-              
-            <hr>
-              
-            <h6><b>Copy Page URL</b></h6>
-            <hr>
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Url</mat-label>
-              <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
-            </mat-form-field>
-            
-            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-                <i class="far fa-copy"></i> Copy Url
-            </button>
         </div>
+      </div>
 
-        <div *ngIf="confirmarchivepage">
-            <h6><b>Archive</b></h6>
-            <hr>
-            
-            <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Archive Reason</mat-label>
-                <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
-                <small>Optional</small>
-            </mat-form-field>
-    
-            <p>It will help you remember why you archive it!</p>
+      <div *ngIf="showpageurl">
+        <h6><b>Copy Page Builder URL</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step Url</mat-label>
+          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput>{{pagebuilderurl}}</textarea>
+        </mat-form-field>
 
-            <button mat-raised-button color="primary" type="submit" (click)="restoredeleteme('','archived')" >
-                <i class="fas fa-archive"></i> Archive Webpage
-            </button>
-        </div>
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)">
+          <i class="far fa-copy"></i> Copy Url
+        </button>
+
+        <hr>
+
+        <h6><b>Copy Page URL</b></h6>
+        <hr>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Page Url</mat-label>
+          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2>{{pageurl}}</textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)">
+          <i class="far fa-copy"></i> Copy Url
+        </button>
+      </div>
+
+      <div *ngIf="confirmarchivepage">
+        <h6><b>Archive</b></h6>
+        <hr>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Archive Reason</mat-label>
+          <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
+          <small>Optional</small>
+        </mat-form-field>
+
+        <p>It will help you remember why you archive it!</p>
+
+        <button mat-raised-button color="primary" type="submit" (click)="restoredeleteme('','archived')">
+          <i class="fas fa-archive"></i> Archive Webpage
+        </button>
+      </div>
 
     </div>
   </div>
-  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
   <div class="container-fluid">
     <div class="row align-items-center">
       <div class="col-md-6">
@@ -210,15 +217,16 @@
         </mat-form-field>
       </div>
       <div class="col-md-6 pagemainlink float-right">
-        <button mat-raised-button (click)="addnewpage()" color="primary"><span class="keamobhd">Add Page </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button (click)="addnewpage()" color="primary"><span class="keamobhd">Add Page </span> <i
+            class="fas fa-plus"></i></button>
         <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
         <button mat-raised-button (click)="archivepages()" class="mx-3">
           <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>
-          <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'" ></i>
+          <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'"></i>
         </button>
-        <button mat-raised-button [routerLink]="['/website/details']" >
+        <button mat-raised-button [routerLink]="['/website/details']">
           <span class="keamobhd">Site Details </span>
-           <i class="fas fa-palette"></i>
+          <i class="fas fa-palette"></i>
         </button>
       </div>
       <div class="col-md-12 text-right mobkeaadjust" *ngIf="!showarchivemode">
@@ -228,7 +236,7 @@
         </button>
         <mat-form-field appearance="fill" class="mx-3">
           <mat-label>Visibility</mat-label>
-          <mat-select name="visibility" [(ngModel)]="selstatusshow" >
+          <mat-select name="visibility" [(ngModel)]="selstatusshow">
             <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>
             <mat-option value="drafts" (click)="changevisibility('draft')">Draft Only</mat-option>
             <mat-option value="publish" (click)="changevisibility('publish')">Publish Only</mat-option>
@@ -236,7 +244,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Filter</mat-label>
-          <mat-select name="kbfilter" [(ngModel)]="selstatusshow" >
+          <mat-select name="kbfilter" [(ngModel)]="selstatusshow">
             <mat-option value="asc" (click)="changevisibility('nameasc')">ASC By Name</mat-option>
             <mat-option value="desc" (click)="changevisibility('namedesc')">DESC By Name</mat-option>
             <mat-option value="asc" (click)="changevisibility('dateasc')">ASC By Date</mat-option>
@@ -275,9 +283,10 @@
                 </div>
                 <div class="col-md-6 mt-4">
                   <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
-                    <input type="text" (keyup)="applyFilter($event)" class="form-control" id="offer-search" #input  placeholder="Search by page name, reason, created at...">
+                    <input type="text" (keyup)="applyFilter($event)" class="form-control" id="offer-search" #input
+                      placeholder="Search by page name, reason, created at...">
                     <div class="form-control-position">
-                        <i class="fab fa-searchengin"></i>                        
+                      <i class="fab fa-searchengin"></i>
                     </div>
                   </fieldset>
                 </div>
@@ -286,17 +295,17 @@
           </div>
 
         </section>
-      </div>  
+      </div>
       <div class="col-md-12">
 
         <div class="mat-elevation-z8">
           <table mat-table [dataSource]="dataSource" matSort>
-        
+
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Page Name </th>
               <td mat-cell *matCellDef="let row"> {{row.page_name}} </td>
             </ng-container>
-        
+
             <ng-container matColumnDef="created_at">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
               <td mat-cell *matCellDef="let row"> {{datecusfilter(row.created_at)}} </td>
@@ -306,24 +315,26 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Archive Reason </th>
               <td mat-cell *matCellDef="let row"> {{row.archive_reason}} </td>
             </ng-container>
-        
+
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
               <td mat-cell *matCellDef="let row">
-                <button mat-raised-button class="mr-2" (click)="restoredeleteme(row,'restore')" >Restore <i class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                <button mat-raised-button (click)="openDialog(row)">Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button mat-raised-button class="mr-2" (click)="restoredeleteme(row,'restore')">Restore <i
+                    class="fa fa-trash-restore" aria-hidden="true"></i></button>
+                <button mat-raised-button (click)="openDialog(row)">Delete <i class="fa fa-trash"
+                    aria-hidden="true"></i></button>
               </td>
             </ng-container>
-        
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)" ></tr>
-        
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
             </tr>
           </table>
-        
+
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
         </div>
 
@@ -337,17 +348,18 @@
       <div class="row" *ngIf="nodata else showpages">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No webpages found">
+          <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No webpages found">
         </div>
       </div>
       <!-- no pages -->
       <!-- pages to show -->
       <ng-template #showpages>
         <!-- Pages -->
-        <div class="row" *ngIf="toggleview else toggle" >
-          <div class="col-md-4 cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;" >
+        <div class="row" *ngIf="toggleview else toggle">
+          <div class="col-md-4 cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;">
             <div>
-              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+              <div class="kb-fitimg"
+                [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
                 <div id="loader" *ngIf="shortwaiting">
                   <div id="shadow"></div>
                   <div id="box"></div>
@@ -357,37 +369,44 @@
 
               <div class="keabuilder-title-board line-ellipsis">
                 <span>{{kbpage.page_name}}</span>
-                <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
+                <input type="text" [(ngModel)]="kbpage.page_name"
+                  (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
+                  matTooltipPosition="above">
               </div>
               <div class="statbadg">
 
-                <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
+                <span mat-button [matMenuTriggerFor]="menu" class="statusbadge"
+                  [class]="kbpage.publish_status==1 ? 'active1':'active2'">
                   <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
                   {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
                 </span>
 
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
-                  <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                  <button mat-menu-item
+                    (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
+                      class="fa fa-check pr-2"></i> Publish</button>
+                  <button mat-menu-item
+                    (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
+                      class="fa fa-file pr-2"></i> Draft</button>
                 </mat-menu>
 
               </div>
 
-              <div class="statehome" *ngIf="kbpage.defaulthome==1" >
+              <div class="statehome" *ngIf="kbpage.defaulthome==1">
                 <i class="fas fa-star"></i> Home
               </div>
 
               <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
-                <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
+                <i class="far fa-calendar-alt" aria-hidden="true"></i> {{kbpage.updated_at}}
               </p>
 
               <!-- <div class="kb-page-settting" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above">Settings <i
                 class="fas fa-cog"></i></div> -->
-          
+
 
               <mat-menu #menu2="matMenu">
                 <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
-                    <i class="fas fa-pen mr-2"></i> Quick Edit
+                  <i class="fas fa-pen mr-2"></i> Quick Edit
                 </button>
                 <!-- <button mat-menu-item>
                   <i class="fas fa-chart-pie mr-2"></i> View Analytics
@@ -402,73 +421,88 @@
                   <i class="far fa-trash-alt mr-2"></i> Archive
                 </button>
               </mat-menu>
-              <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-              <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-
-              <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> Settings <i class="fas fa-cog"></i></button>
+              <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent"
+                class="mr-2"> Preview <i class="far fa-eye"></i></button>
+              <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button
+                color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+              <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings"
+                matTooltipPosition="above"> Settings <i class="fas fa-cog"></i></button>
 
             </div>
           </div>
         </div>
         <ng-template #toggle>
           <div class="row p-4">
-            <div class="col-md-12 cardpage mt-2 " *ngFor="let kbpage of kbpages; index as i;" >
+            <div class="col-md-12 cardpage mt-2 " *ngFor="let kbpage of kbpages; index as i;">
               <div class="row">
-    
+
                 <div class="col-md-2">
-                    
+
                   <div class="statbadg">
-    
-                    <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbpage.publish_status==1 ? 'active1':'active2'">
+
+                    <span mat-button [matMenuTriggerFor]="menu" class="statusbadge"
+                      [class]="kbpage.publish_status==1 ? 'active1':'active2'">
                       <i class="fas" [class]="kbpages[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
                       {{kbpages[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
                     </span>
-    
+
                     <mat-menu #menu="matMenu">
-                      <button mat-menu-item (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;" ><i class="fa fa-check pr-2"></i> Publish</button>
-                      <button mat-menu-item (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                      <button mat-menu-item
+                        (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
+                          class="fa fa-check pr-2"></i> Publish</button>
+                      <button mat-menu-item
+                        (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
+                          class="fa fa-file pr-2"></i> Draft</button>
                     </mat-menu>
-    
+
                   </div>
-    
-                  <div class="statehome" *ngIf="kbpage.defaulthome==1" >
+
+                  <div class="statehome" *ngIf="kbpage.defaulthome==1">
                     <i class="fas fa-star"></i> Home
                   </div>
-    
-                  <div class="kb-fitimg kb-imgviewchange" [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"></div>
+
+                  <div class="kb-fitimg kb-imgviewchange"
+                    [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="keabuilder-title-board line-ellipsis">
                     <span>{{kbpage.page_name}}</span>
-                    <input type="text" [(ngModel)]="kbpage.page_name" (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name" matTooltipPosition="above">
+                    <input type="text" [(ngModel)]="kbpage.page_name"
+                      (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
+                      matTooltipPosition="above">
                   </div>
                   <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
-                    <i class="fa fa-calendar" aria-hidden="true"></i> {{kbpage.updated_at}}
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i> {{kbpage.updated_at}}
                   </p>
                 </div>
                 <div class="col-md-4 pt-4 mobadjust">
-                    <mat-menu #menu2="matMenu">
-                      <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
-                          <i class="fas fa-pen mr-2"></i> Quick Edit
-                      </button>
-                      <!-- <button mat-menu-item>
+                  <mat-menu #menu2="matMenu">
+                    <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                      <i class="fas fa-pen mr-2"></i> Quick Edit
+                    </button>
+                    <!-- <button mat-menu-item>
                         <i class="fas fa-chart-pie mr-2"></i> View Analytics
                       </button> -->
-                      <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)" >
-                        <i class="far fa-copy mr-2"></i> Duplicate
-                      </button>
-                      <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')" >
-                        <i class="fas fa-link mr-2"></i> Copy URL
-                      </button>
-                      <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
-                        <i class="far fa-trash-alt mr-2"></i> Archive
-                      </button>
-                    </mat-menu>
-                    <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent" class="mr-2"> <span class="keamobhd">Preview </span> <i class="far fa-eye"></i></button>
-                    <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button color="primary"><span class="keamobhd">Edit </span> <i class="fas fa-pencil-alt"></i></button>
-                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2" matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i class="fas fa-cog"></i></button>
+                    <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)">
+                      <i class="far fa-copy mr-2"></i> Duplicate
+                    </button>
+                    <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')">
+                      <i class="fas fa-link mr-2"></i> Copy URL
+                    </button>
+                    <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage.id)">
+                      <i class="far fa-trash-alt mr-2"></i> Archive
+                    </button>
+                  </mat-menu>
+                  <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent"
+                    class="mr-2"> <span class="keamobhd">Preview </span> <i class="far fa-eye"></i></button>
+                  <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button
+                    color="primary"><span class="keamobhd">Edit </span> <i class="fas fa-pencil-alt"></i></button>
+                  <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"
+                    matTooltip="Settings" matTooltipPosition="above"> <span class="keamobhd">Setting </span> <i
+                      class="fas fa-cog"></i></button>
                 </div>
-    
+
               </div>
             </div>
           </div>
