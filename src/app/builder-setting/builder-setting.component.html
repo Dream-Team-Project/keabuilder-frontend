@@ -44,9 +44,12 @@
                             class="fa fa-redo"></i></button>
                     <button mat-button (click)="_style.undo()" matTooltip="Undo" matTooltipPosition="above"><i
                             class="fa fa-undo"></i></button>
+                    <button mat-button (click)="_general.minimize = !_general.minimize"
+                            [matTooltip]="!_general.minimize ? 'Minimize' : 'Maximize'" matTooltipPosition="above"><i
+                                [class]="!_general.minimize ? 'fas fa-window-minimize' : 'far fa-window-maximize'"></i></button>                            
                     <button mat-button (click)="_general.expand = !_general.expand"
                         [matTooltip]="!_general.expand ? 'Expand' : 'Shrink'" matTooltipPosition="above"><i class="fas"
-                            [class]="!_general.expand ? 'fa-expand-arrows-alt' : 'fas fa-compress-arrows-alt'"></i></button>
+                            [class]="!_general.expand ? 'fa-expand-arrows-alt' : 'fa-compress-arrows-alt'"></i></button>
                 </span>
                 <div class="kb-ask-head" cdkDragHandle>
                     <div *ngIf="_general.selectedBlock.type == 'column'" class="side-arrow-group">
@@ -1237,88 +1240,110 @@
                     </mat-tab>
                     <mat-tab label="General" *ngIf="_general.selectedBlock.type == 'main'">
                         <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Page Name</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <input type="text" name="page-name" placeholder="Page name"
-                                    [(ngModel)]="_general.page_name">
-                            </div>
+                            <mat-button-toggle-group name="pageGeneralTab" [(ngModel)]="_general.page_general_tab"
+                            aria-label="Page General Tab">
+                                <mat-button-toggle value="info">
+                                    <i class="fas fa-info"></i>Info
+                                </mat-button-toggle>
+                                <mat-button-toggle value="layout">
+                                    <i class="far fa-window-maximize"></i>Layout
+                                </mat-button-toggle>
+                                <mat-button-toggle value="seo">
+                                    <i class="fa fa-search-dollar"></i>SEO
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
                         </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Page Title</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <input type="text" name="page-title" placeholder="Page title"
-                                    [(ngModel)]="_general.page_title">
-                            </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Path <i *ngIf="_general.pathError"
-                                    class="fa fa-exclamation-circle kb-danger" matTooltip="Need an unique path"
-                                    matTooltipPosition="above"></i></div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <span class="highlight">{{_general.subdomain}}</span><input type="text"
-                                    name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
-                                    (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
-                                    [(ngModel)]="_general.page_path">
-                            </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Description</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <textarea placeholder="Page Description" [(ngModel)]="_general.description"
-                                    name="meta-description"></textarea>
-                            </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Keywords</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <mat-chip-list #chipList aria-label="Fruit selection">
-                                    <mat-chip *ngFor="let keyword of _general.keywords"
-                                        (removed)="_general.removeKeyword(keyword)">
-                                        {{keyword}}
-                                        <button matChipRemove>
-                                            <mat-icon>cancel</mat-icon>
-                                        </button>
-                                    </mat-chip>
-                                    <input name="meta-keywords" placeholder="New keyword..."
-                                        [matChipInputFor]="chipList"
-                                        [matChipInputSeparatorKeyCodes]="_general.separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="_general.addOnBlur"
-                                        (matChipInputTokenEnd)="_general.addKeyword($event)">
-                                </mat-chip-list>
-                            </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Author</div>
-                            <div class="kb-tab-content kb-inp-left">
-                                <input type="text" name="meta-author" placeholder="Author name"
-                                    [(ngModel)]="_general.author">
-                            </div>
-                        </div>
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Layout</div>
-                            <div class="kb-tab-content kb-resp-ask">
-                                <mat-slide-toggle [matTooltip]="_general.includeHeader ? 'Enabled' : 'Disabled'"
-                                    matTooltipPosition="above" [(ngModel)]="_general.includeHeader">Page Header
-                                </mat-slide-toggle>
-                                <mat-slide-toggle [matTooltip]="_general.includeFooter ? 'Enabled' : 'Disabled'"
-                                    matTooltipPosition="above" [(ngModel)]="_general.includeFooter">Page Footer
-                                </mat-slide-toggle>
-                            </div>
-                        </div>
-                        <!-- <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Image</div>
-                            <div class="kb-tab-content">
-                                <div (click)="_image.openImgSelBox()"
-                                    [class]="!_general.meta_img ? 'kb-noImgSel' : ''"
-                                    class="kb-dummy-bg">
-                                    <img *ngIf="_general.meta_img else noimg"
-                                        [src]="_general.meta_img" width="auto">
-                                    <ng-template #noimg><span class="kb-ispan-add" matTooltip="Add Image"
-                                            matTooltipPosition="above"><i class="fa fa-plus"></i></span>
-                                    </ng-template>
+                        <div [ngSwitch]="_general.page_general_tab">
+                            <div *ngSwitchCase="'info'">
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Page Name</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="page-name" placeholder="Page name"
+                                            [(ngModel)]="_general.page_name">
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Path <i *ngIf="_general.pathError"
+                                            class="fa fa-exclamation-circle kb-danger" matTooltip="Need an unique path"
+                                            matTooltipPosition="above"></i></div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <span class="highlight">{{_general.subdomain}}</span><input type="text"
+                                            name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
+                                            (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
+                                            [(ngModel)]="_general.page_path">
+                                    </div>
                                 </div>
                             </div>
-                        </div> -->
+                            <div *ngSwitchCase="'layout'">
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Layout</div>
+                                    <div class="kb-tab-content kb-resp-ask">
+                                        <mat-slide-toggle [matTooltip]="_general.includeHeader ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="above" [(ngModel)]="_general.includeHeader">Page Header
+                                        </mat-slide-toggle>
+                                        <mat-slide-toggle [matTooltip]="_general.includeFooter ? 'Enabled' : 'Disabled'"
+                                            matTooltipPosition="above" [(ngModel)]="_general.includeFooter">Page Footer
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase="'seo'">
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Page Title</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="page-title" placeholder="Page title"
+                                            [(ngModel)]="_general.page_title">
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Description</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <textarea placeholder="Page Description" [(ngModel)]="_general.description"
+                                            name="meta-description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Keywords</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <mat-chip-list #chipList aria-label="Keywords selection">
+                                            <mat-chip *ngFor="let keyword of _general.keywords"
+                                                (removed)="_general.removeKeyword(keyword)">
+                                                {{keyword}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input name="meta-keywords" placeholder="Write and press enter to add"
+                                                [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="_general.separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="_general.addOnBlur"
+                                                (matChipInputTokenEnd)="_general.addKeyword($event)">
+                                        </mat-chip-list>
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Author</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="meta-author" placeholder="Author name"
+                                            [(ngModel)]="_general.author">
+                                    </div>
+                                </div>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Image</div>
+                                    <div class="kb-tab-content">
+                                        <div (click)="_image.openImgSelBox()"
+                                            [class]="!_general.meta_img ? 'kb-noImgSel' : ''"
+                                            class="kb-dummy-bg">
+                                            <img *ngIf="_general.meta_img else noimg"
+                                                [src]="_general.meta_img" width="auto">
+                                            <ng-template #noimg><span class="kb-ispan-add" matTooltip="Add Image"
+                                                    matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </mat-tab>
                     <mat-tab label="Spacing">
                         <!-- margin -->

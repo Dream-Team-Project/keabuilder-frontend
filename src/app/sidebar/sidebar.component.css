@@ -249,12 +249,6 @@
   background: transparent;
 }
 
-/* Handle */
-#topbar_notifications_notifications>div::-webkit-scrollbar-thumb,
-#topbar_notifications_events>div::-webkit-scrollbar-thumb {
-  background: #ececec;
-}
-
 div#topbar_notifications_logs {
   padding: 20px;
 }
@@ -696,10 +690,6 @@ div#topbar_notifications_logs {
 
 .bw-sidebar-content .bw-sidebar::-webkit-scrollbar {
   width: 0px;
-}
-
-.bw-sidebar-content .bw-sidebar::-webkit-scrollbar-thumb {
-  background-color: var(--secondary-color);
 }
 
 .hoveropen {
