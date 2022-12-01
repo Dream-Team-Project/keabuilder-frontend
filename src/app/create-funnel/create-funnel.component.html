@@ -170,6 +170,11 @@
         <h6><b>Step Options</b></h6>
         <hr>
 
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Step Name</mat-label>
+          <input type="text" matInput placeholder="Step Name" required [(ngModel)]="crfunnelstepname">
+        </mat-form-field>
+
         <mat-form-field appearance="fill" class="kb-full-width" >
           <mat-label>Funnel Step Type</mat-label>
           <mat-select name="funneltype" [(ngModel)]="funneltype" required>
@@ -180,6 +185,7 @@
             <mat-option value="thankyou">Thank you Page</mat-option>
           </mat-select>
         </mat-form-field>
+        
         <br>
         <button mat-raised-button color="primary" (click)="updatestep()"><i class="fas fa-plus"></i> Create </button>
       </div>

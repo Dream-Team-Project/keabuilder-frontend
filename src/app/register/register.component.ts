@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   firstnameFormControl = new FormControl('',[Validators.required]);
-  subdomainFormControl = new FormControl('',[Validators.required]);
+  subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
   lastnameFormControl = new FormControl('');
   companynameFormControl = new FormControl('');
   phoneFormControl = new FormControl('');
@@ -67,9 +67,7 @@ export class RegisterComponent implements OnInit {
         this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
           next: data => {
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
-              this._file.createdefaulthome(data.uniqueid).subscribe(e=>{
-                // console.log(e);
-              });
+              console.log(e);
             });
             var domainpath = window.location.hostname;
             var emailhtml = `Dear `+firstname+`,<br>
@@ -104,28 +102,41 @@ export class RegisterComponent implements OnInit {
             //   }
             // });
             
-            
             var subdomain = data.subdomain;
             // window.location.href='https://keahosted.com/create_subdomain.php?subdomain='+subdomain;
 
-          // need to pass unique id to the wistia instead of username
-          //  var userobject = {project_name: username};
-          //   this._wistia.projectCreate(userobject).subscribe({
-          //     next: data2 => {
-          //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
-          //         next: data3 => {
-          //           console.log(data3);
-          //         }
-          //       });
-
-          //     }
-          //   });
+            // need to pass unique id to the wistia instead of username
+            //  var userobject = {project_name: username};
+            //   this._wistia.projectCreate(userobject).subscribe({
+            //     next: data2 => {
+            //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
+            //         next: data3 => {
+            //           console.log(data3);
+            //         }
+            //       });
+            //     }
+            //   });
 
             this.isSuccessful = true;
             this.isSignUpFailed = false;
-            this.redirectToDashboard();
 
-            this._snackBar.open('Sign Up Successfully!', 'OK');
+            var uniqueid = data.uniqueid;
+            var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain,uniqueid];
+
+           this.authService.oncreatesubdomain(subdomain,uniqueid).subscribe({
+              next: data => {
+                
+                console.log(data);
+                if(data.success==true){
+                  this._snackBar.open('Sign Up Successfully!', 'OK');
+                  this.redirectToDashboard();
+                  this.email_creationuser(datasubmittion);
+                }else{
+                  this.email_creationsubdomain(datasubmittion);
+                }
+
+              }
+            });
 
             
         },
@@ -146,6 +157,42 @@ export class RegisterComponent implements OnInit {
       this.changestep = true;
     }
 
+  }
+
+  email_creationsubdomain(data:any){
+    var emailhtml = `Error while creation subdomain.
+    <br>
+    UserId: `+data[7]+`<br>
+    Username: `+data[0]+`<br>
+    Email: `+data[3]+`<br>
+    Subdomain: `+data[6]+`<br>
+    <br>`;
+    var maildata = {tomailid: 'support@keasolution.com', frommailid: 'support@keasolution.com', subject: 'Subdomain Creation Error!', html: emailhtml};
+    this.emailService.sendmail(maildata).subscribe({
+      next: data => {
+        // console.log(data);
+      }
+    });
+  }
+
+  email_creationuser(data:any){
+    var emailhtml = `New User Sign Creation Successfully.
+    <br>
+    UserId: `+data[7]+`<br>
+    Username: `+data[0]+`<br>
+    Firstname: `+data[1]+`<br>
+    Lastname: `+data[2]+`<br>
+    Email: `+data[3]+`<br>
+    Company: `+data[4]+`<br>
+    Phone: `+data[5]+`<br>
+    Subdomain: `+data[6]+`<br>
+    <br>`;
+    var maildata = {tomailid: 'support@keasolution.com', frommailid: 'support@keasolution.com', subject: 'New Registration', html: emailhtml};
+    this.emailService.sendmail(maildata).subscribe({
+      next: data => {
+        // console.log(data);
+      }
+    });
   }
 
   onupdateusername(event:any){
