@@ -121,7 +121,7 @@ export class RegisterComponent implements OnInit {
             this.isSignUpFailed = false;
 
             var uniqueid = data.uniqueid;
-            var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain];
+            var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain,uniqueid];
 
            this.authService.oncreatesubdomain(subdomain,uniqueid).subscribe({
               next: data => {
@@ -162,6 +162,7 @@ export class RegisterComponent implements OnInit {
   email_creationsubdomain(data:any){
     var emailhtml = `Error while creation subdomain.
     <br>
+    UserId: `+data[7]+`<br>
     Username: `+data[0]+`<br>
     Email: `+data[3]+`<br>
     Subdomain: `+data[6]+`<br>
