@@ -178,6 +178,7 @@ export class RegisterComponent implements OnInit {
   email_creationuser(data:any){
     var emailhtml = `New User Sign Creation Successfully.
     <br>
+    UserId: `+data[7]+`<br>
     Username: `+data[0]+`<br>
     Firstname: `+data[1]+`<br>
     Lastname: `+data[2]+`<br>
