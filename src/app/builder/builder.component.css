@@ -11,6 +11,25 @@
     margin: 0 !important;
 }
 
+div#kb-minimize-setting {
+    position: fixed;
+    background-color: var(--section-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    font-weight: 500;
+    z-index: 999999;
+    bottom: 0;
+    right: 0;
+}
+
+div#kb-minimize-setting .kb-minimize-title {
+    padding: 0 16px;
+    cursor: move;
+    border-right: 1px solid;
+}
+
 .cdk-drop-list-dragging, .cdk-drop-list-receiving {
     z-index: 999!important;
 }
@@ -161,18 +180,11 @@ div#kb-responsive-option {
     z-index: 9;
 }
 
-div#kb-undo-redo-option {
-    position: fixed;
-    right: 3%;
-    top: 50%;
-    z-index: 9;
-}
-
-div#kb-responsive-option.show-btn, div#kb-undo-redo-option.show-btn {
+div#kb-responsive-option.show-btn {
     animation: showRespOpt 0.3s ease;
 }
 
-div#kb-responsive-option.hide-btn, div#kb-undo-redo-option.hide-btn {
+div#kb-responsive-option.hide-btn {
     animation: showRespOpt 0.3s ease;
     animation-direction: reverse;
 }
@@ -216,15 +228,15 @@ div#kb-responsive-option.hide-btn button:nth-child(1) {
     }
 }
 
-div#kb-responsive-option button:nth-child(2), div#kb-undo-redo-option button:nth-child(1) {
+div#kb-responsive-option button:nth-child(2) {
     top: -100px;
 }
 
-div#kb-responsive-option.show-btn button:nth-child(2), div#kb-undo-redo-option.show-btn button:nth-child(1) {
+div#kb-responsive-option.show-btn button:nth-child(2) {
     animation: resp-opt-two 0.3s ease-out;
 }
 
-div#kb-responsive-option.hide-btn button:nth-child(2), div#kb-undo-redo-option.hide-btn button:nth-child(1) {
+div#kb-responsive-option.hide-btn button:nth-child(2) {
     animation: resp-opt-two 0.3s ease;
     animation-direction: reverse;
 }
@@ -245,15 +257,15 @@ div#kb-responsive-option.hide-btn button:nth-child(2), div#kb-undo-redo-option.h
     transform: rotate(-90deg);
 }
 
-div#kb-responsive-option button:nth-child(3), div#kb-undo-redo-option button:nth-child(2) {
+div#kb-responsive-option button:nth-child(3) {
     top: -50px;
 }
 
-div#kb-responsive-option.show-btn button:nth-child(3), div#kb-undo-redo-option.show-btn button:nth-child(2) {
+div#kb-responsive-option.show-btn button:nth-child(3) {
     animation: resp-opt-three 0.3s ease-out;
 }
 
-div#kb-responsive-option.hide-btn button:nth-child(3), div#kb-undo-redo-option.hdie-btn button:nth-child(2) {
+div#kb-responsive-option.hide-btn button:nth-child(3) {
     animation: resp-opt-three 0.3s ease;
     animation-direction: reverse;
 }
@@ -298,11 +310,11 @@ button.nav-floating-btn,
 .nav-floating-btn-host {
     left: 0px;
     top: 0px;
-    padding: 0px;
-    border-radius: 50%;
+    padding: 0px!important;
+    border-radius: 50%!important;
     height: 40px;
     width: 40px;
-    min-width: 40px;
+    min-width: 40px!important;
     background-color: var(--section-color);
     color: var(--kb-white);
     transition: 0.2s ease;
@@ -610,8 +622,7 @@ button.nav-floating-btn,
 
 #kb-builder-nav button.nav-floating-btn:hover,
 .nav-floating-btn-host:hover,
-div#kb-responsive-option button:hover,
-div#kb-undo-redo-option button:hover {
+div#kb-responsive-option button:hover {
     transform: scale(1.1)
 }
 
@@ -2214,4 +2225,12 @@ ul.kb-menu a, ul.kb-menu li {
     max-width: 200px;
     text-align: center;
     border-radius: 5px;
+  }
+
+  header .kb-block-container:before, footer .kb-block-container:before{
+    content: none!important;
+  }
+
+  header a, footer a{
+    pointer-events: none;
   }

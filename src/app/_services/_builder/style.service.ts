@@ -539,10 +539,6 @@ export class StyleService {
     else this.blockAlign = pos;
   }
 
-  compareOptValue(item1: any, item2: any) {
-    return item1.name === item2.name && item1.value === item2.value;
-  }
-
   reverseValue(val: any, $event: { target: any; }) {
     this.iconMotion($event.target);
     var num = parseInt(val) * -1;
@@ -1035,7 +1031,7 @@ export class StyleService {
       this.widthRange.value = 100;
     }
 
-    this.height.value = block.type == 'main' ? '100%' : 'auto';
+    this.height.value = 'auto';
     this.heightRange.value = 100;
 
     this.zindex = 0;

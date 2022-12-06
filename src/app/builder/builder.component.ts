@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -16,6 +16,7 @@ import { asapScheduler } from 'rxjs';
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.css','./material.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class BuilderComponent implements OnInit {
@@ -50,30 +51,36 @@ export class BuilderComponent implements OnInit {
     _section.sections = [];
     _general.loading.success = false;
     _general.loading.error = false;
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.target = {
-          id: params.get('id'),
-          type: params.get('target')
-        }
+    route.paramMap.subscribe((params: ParamMap) => {
+      _general.target = {
+        id: params.get('id'),
+        type: params.get('target')
+      }
+      if(_general.target.type == 'website' || _general.target.type == 'funnel' || _general.target.type == 'header' || _general.target.type == 'footer') {
         _general.getBuilderData(_general.target.id).then(data=> {
-          if(!data) this._general.redirectToPageNotFound();
-          else {
-            _general.loading.success = false;
             data.html = _general.parser.parseFromString(data.html, 'text/html');
-            if(_general.target.type == 'website' || _general.target.type == 'funnel') {
-              var header = data.html.querySelector('HEADER');
-              var footer = data.html.querySelector('FOOTER');
-              if(header && footer) {
-                if(header.getAttribute('kb-include-html') == 'true') {
-                  _general.includeHeader = true;
-                  // var ah:any = document.getElementById('kb-append-header');
-                  // ah.innerHTML = doc.querySelector('#kb-header-html')?.innerHTML;
-                }
-                if(footer.getAttribute('kb-include-html') == 'true') {
-                  _general.includeFooter = true;
-                  // var af:any = document.getElementById('kb-append-footer');
-                  // af.innerHTML = doc.querySelector('#kb-footer-html')?.innerHTML;
-                }
+            if(_general.target.type == 'header') {
+              _general.target.name = data.html.body.children[0].getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            else if(_general.target.type == 'footer') {
+              _general.target.name = data.html.body.children[0].getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            else {
+              var header = data.html.querySelector('header');
+              var footer = data.html.querySelector('footer');
+              if(header) {
+                header = header.innerHTML;
+                var headid = header.slice(header.indexOf('../../headers/')+14, header.indexOf('.php'));
+                _general.headers.forEach((head:any)=>{ if(head.id == headid) _general.setHeader(head); })
+                _general.includeLayout.header = true;
+              }
+              if(footer) {
+                footer = footer.innerHTML;
+                var footid = footer.slice(footer.indexOf('../../footers/')+14, footer.indexOf('.php'));
+                _general.footers.forEach((foot:any)=>{ if(foot.id == footid) _general.setFooter(foot); })
+                _general.includeLayout.footer = true;
               }
               if(_general.target.type == 'funnel') {
                 this._general.getAllProducts();
@@ -93,22 +100,15 @@ export class BuilderComponent implements OnInit {
                 }
               }
             }
-            else if(_general.target.type == 'header') {
-              _general.target.name = data.html.querySelector('HEADER').getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-            }
-            else if(_general.target.type == 'footer') {
-              _general.target.name = data.html.querySelector('FOOTER').getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-            }
             this.setBuilder(data.html, data.css);
-          }
         })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
           })
         })
+      }
+      else  _general.redirectToPageNotFound();
    })
   }
 
@@ -183,7 +183,7 @@ export class BuilderComponent implements OnInit {
   saveHTML(main:any) {
     this._general.saveDisabled = true;
     this._general.pathError = false;
-    this._general.showfloatnavtoggle();
+    if(this._general.showNavAnim.show) this._general.showfloatnavtoggle();
     this._general.checkExstingPath(main, this._section.sections).then(res =>{
       if(res) {
         this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
@@ -232,6 +232,7 @@ export class BuilderComponent implements OnInit {
       html.querySelectorAll('.kb-section').forEach((sec:any)=>{
         var secObj = JSON.parse(JSON.stringify(this._section.sectionObj));
         secObj.id = sec.id;
+        this._general.allBlocksIds.push(sec.id);
         secObj.style = {
           desktop: this.filterStyle(sec.id,css,''),
           tablet_h: this.filterStyle(sec.id,css,'1024,769'),
@@ -241,6 +242,7 @@ export class BuilderComponent implements OnInit {
         sec.querySelectorAll('.kb-row').forEach((row:any)=>{
           var rowObj = JSON.parse(JSON.stringify(this._row.rowObj));
           rowObj.id = row.id;
+          this._general.allBlocksIds.push(row.id);
           rowObj.style = {
             desktop: this.filterStyle(row.id,css,''),
             tablet_h: this.filterStyle(row.id,css,'1024,769'),
@@ -269,6 +271,7 @@ export class BuilderComponent implements OnInit {
             rowObj.rowSize = col.classList[2];
             var colObj = JSON.parse(JSON.stringify(this._row.columnObj));
             colObj.id = col.id;
+            this._general.allBlocksIds.push(col.id);
             colObj.style = {
               desktop: this.filterStyle(col.id,css,''),
               tablet_h: this.filterStyle(col.id,css,'1024,769'),
@@ -311,6 +314,7 @@ export class BuilderComponent implements OnInit {
                 eleSel = 'ul';
                 eleSelItem = 'ul a';
                 var id = content.getAttribute('data-id');
+                this._general.allBlocksIds.push(id);
                 this._general.menus.forEach((menu:any)=>{
                   if(menu.id == id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));
@@ -322,6 +326,7 @@ export class BuilderComponent implements OnInit {
                 eleObj.content.html = content.querySelector('.kb-code-block').innerHTML;
               }
               eleObj.id = ele.id;
+              this._general.allBlocksIds.push(ele.id);
               eleObj.style = {
                 desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,''),
                 tablet_h: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'1024,769'),
@@ -403,7 +408,7 @@ export class BuilderComponent implements OnInit {
     let parentPosition = this.getPosition(element);
     let x = boundingClientRect.x - parentPosition.left;
     let y = boundingClientRect.y - parentPosition.top;
-    if(-1*y > screen.height/1.5) {
+    if(-1*y > screen.height/2) {
       this.showNavFrom = 'top';
     }
     else if(screen.width/2 + x < 70) {

@@ -76,7 +76,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      this.overlayRefDetach(!this._general.blockSelection);
+      if(!this._general.minimize) this.overlayRefDetach(!this._general.blockSelection);
     });
   }
 

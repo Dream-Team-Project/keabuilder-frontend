@@ -45,10 +45,9 @@ export class WebsiteFootersComponent {
     if(prevname != obj.name) {
       var parser = new DOMParser();
       var html:any = parser.parseFromString(obj.html, 'text/html');
-      var footer:any = html.querySelector('FOOTER');
+      var footer:any = html.body.children[0];
       footer.setAttribute('data-name',obj.name);
       obj.html = footer.outerHTML;
-      console.log(obj);
       this._general.fileUploadService.saveFile(obj, 'footers').subscribe(resp=>{
         if(resp.success) {
           this.action = 'renamed';
@@ -65,7 +64,7 @@ export class WebsiteFootersComponent {
   create() {
     var obj:any = {id: '', html: '', type: 'footer'};
     obj.id = this._general.createBlockId(obj);
-    obj.html = '<footer id="'+obj.id+'" data-name="Footer '+(this.footers.length+1)+'"></footer>';
+    obj.html = '<div id="'+obj.id+'" data-name="Footer '+(this.footers.length+1)+'"></div>';
     this._general.fileUploadService.saveFile(obj, 'footers').subscribe(resp=>{
       resp.success ? this.edit(obj.id) : this.openSB(true);
     });
@@ -80,7 +79,7 @@ export class WebsiteFootersComponent {
     obj.id = this._general.createBlockId(obj);
     var parser = new DOMParser();
     var html:any = parser.parseFromString(obj.html, 'text/html');
-    var footer:any = html.querySelector('FOOTER');
+    var footer:any = html.body.children[0];
     footer.id = obj.id;
     footer.setAttribute('data-name',obj.name+' copy');
     obj.html = footer.outerHTML;

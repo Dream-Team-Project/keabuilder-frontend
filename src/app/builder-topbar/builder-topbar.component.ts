@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { GeneralService } from '../_services/_builder/general.service';
 import { SectionService } from '../_services/_builder/section.service';
 import { ImageService } from '../_services/image.service';
@@ -9,6 +9,8 @@ import { ImageService } from '../_services/image.service';
   styleUrls: ['./builder-topbar.component.css', '../builder/material.component.css']
 })
 export class BuilderTopbarComponent implements OnInit {
+
+  @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
 
   topBarLinks = [
     {

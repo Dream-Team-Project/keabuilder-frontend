@@ -26,13 +26,15 @@ export class FileUploadService {
   uploadMediaApi = "./api/uploadmedia";
   uploadMediaPath = '/assets/uploads/medias/';
   // media
-  uploadApi = "./api/uploadfile";
+  // images
+  uploadImageApi = "./api/uploadimage";
   getAllImgsApi = "./api/getallimgs";
   saveOnDBApi = "./api/saveondb";
   updateOnDBApi = "./api/updateondb";
   deleteFromDB = "./api/deletefromdb";
   copyImgApi = "./api/copyimage"
   deleteimageApi = "./api/deleteimage";
+  // images
   // web pages
   createPageApi = "./api/savepage";
   getPageApi = "./api/getpage";
@@ -41,6 +43,7 @@ export class FileUploadService {
   createDefaultHomeApi = '/api/default-home';
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
+  toggleDraftApi = '/api/toggledraft'
   // web pages
   // file
   fileApi = "./api/file";
@@ -64,13 +67,28 @@ export class FileUploadService {
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
-  createpage(path:any):Observable<any> {
-    path.uuid = this.uuid;
-    return this.http.post(this.createPageApi, path);
+  createpage(page:any):Observable<any> {
+    page.uuid = this.uuid;
+    page.dir = 'pages';
+    return this.http.post(this.createPageApi, page);
+  }
+
+  createpreview(page:any):Observable<any> {
+    page.uuid = this.uuid;
+    page.dir = 'previews';
+    return this.http.post(this.createPageApi, page);
   }
 
   getPage(page:any):Observable<any> {
     page.uuid = this.uuid;
+    page.dir = 'pages';
+    return this.http.post(this.getPageApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  getPreview(page:any):Observable<any> {
+    page.uuid = this.uuid;
+    page.dir = 'previews';
     return this.http.post(this.getPageApi, page)
     .pipe(catchError(this.errorHandler));
   }
@@ -95,18 +113,22 @@ export class FileUploadService {
     return this.http.post(this.updateHomeApi, obj);
   }
 
-  fileExist(path:any):Observable<any> {
-    var pathobj:Object = {path: path}
-    return this.http.post(this.fileExistApi, pathobj)
-    .pipe(catchError(this.errorHandler));
+  toggleDraft(value:any):Observable<any> {
+    var obj = {uuid: this.uuid, status: value}
+    return this.http.post(this.toggleDraftApi, obj)
   }
+
+  // fileExist(path:any):Observable<any> {
+  //   var pathobj:Object = {path: path}
+  //   return this.http.post(this.fileExistApi, pathobj)
+  //   .pipe(catchError(this.errorHandler));
+  // }
 
   // html pages
 
   // files
 
   fetchFiles(folder:string):Observable<any> {
-    var obj = {uuid: this.uuid};
     return this.http.get(this.fileApi+'s/'+this.uuid+'/'+folder)
     .pipe(catchError(this.errorHandler));
   }
@@ -126,25 +148,9 @@ export class FileUploadService {
 
   // files
 
-  // tracking/header/footer
-
-  gettrackingHTML(data:any):Observable<any> {
-    return data;
-  }
-  // tracking/header/footer
-
   // image 
 
-  // Returns an observable
-  upload(file: any):Observable<any> {
-    // Create form data
-    const formData = new FormData();
-    formData.append('uploadedImage', file, file.name);
-    // Make http post request over api
-    // with formData as req
-    return this.http.post(this.uploadApi, formData)
-    .pipe(catchError(this.errorHandler));
-  }
+  // DB
 
   getAllImgs():Observable<any> {
     return this.http.get(this.getAllImgsApi+'/'+this.uuid)
@@ -161,13 +167,27 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  copyimage(imgname:any):Observable<any> {
-    return this.http.post(this.copyImgApi, imgname);
-  }
-
   deletefromdb(id:any) {
     return this.http.delete(this.deleteFromDB+'/'+id)
     .pipe(catchError(this.errorHandler));
+  }
+
+  // DB
+
+  // folder
+
+  upload(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedImage', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadImageApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  copyimage(imgdata:any):Observable<any> {
+    return this.http.post(this.copyImgApi, imgdata);
   }
 
   deleteimage(path:any) {
@@ -180,6 +200,8 @@ export class FileUploadService {
       path,
     }, httpOptions);
   }
+
+  // folder
 
   // image 
 

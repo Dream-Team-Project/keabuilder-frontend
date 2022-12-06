@@ -13,7 +13,7 @@
                     <div class="kb-img-btn-group">
                         <div *ngIf="!_image.loading else loading">
                             <div>
-                            <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)">
+                            <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)" accept=".jpg, .jpeg, .png">
                             <button mat-raised-button (click)="imgInp.click();" class="kb-btn kb-btn-primary">
                                 <span>Upload a new image</span></button><br><br>
                             <span>File suported png, jpg, jpeg only</span>    

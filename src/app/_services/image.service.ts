@@ -163,7 +163,6 @@ export class ImageService {
     async getBase64ImageFromUrl(imageUrl: RequestInfo) {
         var res = await fetch(imageUrl);
         var blob = await res.blob();
-      
         return new Promise((resolve, reject) => {
           var reader  = new FileReader();
           reader.addEventListener("load", function () {
@@ -192,9 +191,9 @@ export class ImageService {
     // On file Select
 
     editImage(img:any) {
-            this.selectedImg  = img;
+        this.selectedImg = img;
         if(!img.ext_link) {
-            this.croppedImage  =  this.uploadImgPath+img.path;
+            this.croppedImage = this.uploadImgPath+img.path;
             this.getBase64ImageFromUrl(this.croppedImage)
             .then(result => {
                 this.imageBase64String = result;
