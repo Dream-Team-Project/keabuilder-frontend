@@ -43,6 +43,7 @@ export class FileUploadService {
   createDefaultHomeApi = '/api/default-home';
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
+  toggleDraftApi = '/api/toggledraft'
   // web pages
   // file
   fileApi = "./api/file";
@@ -112,10 +113,15 @@ export class FileUploadService {
     return this.http.post(this.updateHomeApi, obj);
   }
 
-  fileExist(path:any):Observable<any> {
-    var pathobj:Object = {path: path}
-    return this.http.post(this.fileExistApi, pathobj)
-    .pipe(catchError(this.errorHandler));
+  // fileExist(path:any):Observable<any> {
+  //   var pathobj:Object = {path: path}
+  //   return this.http.post(this.fileExistApi, pathobj)
+  //   .pipe(catchError(this.errorHandler));
+  // }
+
+  toggleDraft(value:any):Observable<any> {
+    var obj = {uuid: this.uuid, status: value}
+    return this.http.post(this.toggleDraftApi, obj)
   }
 
   // html pages

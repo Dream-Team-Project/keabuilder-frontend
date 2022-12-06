@@ -357,9 +357,7 @@ export class WebsitePagesComponent implements OnInit {
           // console.log(this.kbpages);
 
           if(data.success==1){
-
               if(type!='quickedit'){
-
                 if(data.type=='name'){
                   this._snackBar.open('Name Changed Successfully!', 'OK');
                   // this.showwebpages();
@@ -384,7 +382,6 @@ export class WebsitePagesComponent implements OnInit {
                   this._snackBar.open('Status Changed Successfully!', 'OK');
 
                 }
-
               }else if(type=='quickedit'){
 
                 this.openSidebar();
@@ -423,7 +420,6 @@ export class WebsitePagesComponent implements OnInit {
 
         }
       });
-
   }
 
   savequickdetails(){
