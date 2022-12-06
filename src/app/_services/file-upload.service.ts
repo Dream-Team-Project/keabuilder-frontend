@@ -113,8 +113,8 @@ export class FileUploadService {
     return this.http.post(this.updateHomeApi, obj);
   }
 
-  toggleDraft(value:any):Observable<any> {
-    var obj = {uuid: this.uuid, status: value}
+  toggleDraft(obj:any):Observable<any> {
+    obj.uuid = this.uuid;
     return this.http.post(this.toggleDraftApi, obj)
   }
 
