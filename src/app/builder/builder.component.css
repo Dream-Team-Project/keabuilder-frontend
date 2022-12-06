@@ -310,11 +310,11 @@ button.nav-floating-btn,
 .nav-floating-btn-host {
     left: 0px;
     top: 0px;
-    padding: 0px;
-    border-radius: 50%;
+    padding: 0px!important;
+    border-radius: 50%!important;
     height: 40px;
     width: 40px;
-    min-width: 40px;
+    min-width: 40px!important;
     background-color: var(--section-color);
     color: var(--kb-white);
     transition: 0.2s ease;
@@ -2225,4 +2225,12 @@ ul.kb-menu a, ul.kb-menu li {
     max-width: 200px;
     text-align: center;
     border-radius: 5px;
+  }
+
+  header .kb-block-container:before, footer .kb-block-container:before{
+    content: none!important;
+  }
+
+  header a, footer a{
+    pointer-events: none;
   }

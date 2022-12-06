@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -16,6 +16,7 @@ import { asapScheduler } from 'rxjs';
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.css','./material.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class BuilderComponent implements OnInit {
@@ -50,30 +51,36 @@ export class BuilderComponent implements OnInit {
     _section.sections = [];
     _general.loading.success = false;
     _general.loading.error = false;
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        _general.target = {
-          id: params.get('id'),
-          type: params.get('target')
-        }
+    route.paramMap.subscribe((params: ParamMap) => {
+      _general.target = {
+        id: params.get('id'),
+        type: params.get('target')
+      }
+      if(_general.target.type == 'website' || _general.target.type == 'funnel' || _general.target.type == 'header' || _general.target.type == 'footer') {
         _general.getBuilderData(_general.target.id).then(data=> {
-          if(!data) this._general.redirectToPageNotFound();
-          else {
-            _general.loading.success = false;
             data.html = _general.parser.parseFromString(data.html, 'text/html');
-            if(_general.target.type == 'website' || _general.target.type == 'funnel') {
-              var header = data.html.querySelector('HEADER');
-              var footer = data.html.querySelector('FOOTER');
-              if(header && footer) {
-                if(header.getAttribute('kb-include-html') == 'true') {
-                  _general.includeHeader = true;
-                  // var ah:any = document.getElementById('kb-append-header');
-                  // ah.innerHTML = doc.querySelector('#kb-header-html')?.innerHTML;
-                }
-                if(footer.getAttribute('kb-include-html') == 'true') {
-                  _general.includeFooter = true;
-                  // var af:any = document.getElementById('kb-append-footer');
-                  // af.innerHTML = doc.querySelector('#kb-footer-html')?.innerHTML;
-                }
+            if(_general.target.type == 'header') {
+              _general.target.name = data.html.body.children[0].getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            else if(_general.target.type == 'footer') {
+              _general.target.name = data.html.body.children[0].getAttribute('data-name');
+              data.css = data.html.querySelector('STYLE')?.innerHTML;
+            }
+            else {
+              var header = data.html.querySelector('header');
+              var footer = data.html.querySelector('footer');
+              if(header) {
+                header = header.innerHTML;
+                var headid = header.slice(header.indexOf('../../headers/')+14, header.indexOf('.php'));
+                _general.headers.forEach((head:any)=>{ if(head.id == headid) _general.setHeader(head); })
+                _general.includeLayout.header = true;
+              }
+              if(footer) {
+                footer = footer.innerHTML;
+                var footid = footer.slice(footer.indexOf('../../footers/')+14, footer.indexOf('.php'));
+                _general.footers.forEach((foot:any)=>{ if(foot.id == footid) _general.setFooter(foot); })
+                _general.includeLayout.footer = true;
               }
               if(_general.target.type == 'funnel') {
                 this._general.getAllProducts();
@@ -93,22 +100,15 @@ export class BuilderComponent implements OnInit {
                 }
               }
             }
-            else if(_general.target.type == 'header') {
-              _general.target.name = data.html.querySelector('HEADER').getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-            }
-            else if(_general.target.type == 'footer') {
-              _general.target.name = data.html.querySelector('FOOTER').getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-            }
             this.setBuilder(data.html, data.css);
-          }
         })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
           })
         })
+      }
+      else  _general.redirectToPageNotFound();
    })
   }
 

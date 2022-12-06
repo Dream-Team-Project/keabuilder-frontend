@@ -163,7 +163,7 @@
                                         </mat-expansion-panel-header>
                                         <div class="kb-tab-content">
                                             <mat-select [(ngModel)]="_style.font_weight"
-                                                [compareWith]="_style.compareOptValue">
+                                                [compareWith]="_general.compareOptValue">
                                                 <mat-option *ngFor="let fwt of _style.font_weight_types" [value]="fwt"
                                                     [style.fontWeight]="fwt.value">{{fwt.name |
                                                     titlecase}}</mat-option>
@@ -629,7 +629,7 @@
                                         <div class="kb-tab-head">Target</div>
                                         <div class="kb-tab-content">
                                             <mat-select [(ngModel)]="_style.button_target"
-                                                [compareWith]="_style.compareOptValue">
+                                                [compareWith]="_general.compareOptValue">
                                                 <mat-option *ngFor="let btt of _style.button_target_types"
                                                     [value]="btt">{{btt.name |
                                                     titlecase}}</mat-option>
@@ -756,7 +756,7 @@
                                     </mat-expansion-panel-header>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.font_weight"
-                                            [compareWith]="_style.compareOptValue">
+                                            [compareWith]="_general.compareOptValue">
                                             <mat-option *ngFor="let fwt of _style.font_weight_types" [value]="fwt"
                                                 [style.fontWeight]="fwt.value">{{fwt.name |
                                                 titlecase}}</mat-option>
@@ -1277,11 +1277,11 @@
                             <div *ngSwitchCase="'layout'">
                                 <div class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Header
-                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeHeader ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="above" [(ngModel)]="_general.includeHeader"></mat-slide-toggle>
+                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeLayout.header ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_general.includeLayout.header"></mat-slide-toggle>
                                     </div>
                                     <div class="kb-tab-content">
-                                        <mat-select [disabled]="!_general.includeHeader" [(ngModel)]="_general.selectedHeader">
+                                        <mat-select [disabled]="!_general.includeLayout.header" [(ngModel)]="_general.selectedHeader" (selectionChange)="_general.setHeader(_general.selectedHeader)">
                                             <mat-option *ngFor="let header of _general.headers | sorting:'asc':'name'" [value]="header">{{header.name |
                                                 titlecase}}</mat-option>
                                         </mat-select>
@@ -1289,11 +1289,11 @@
                                 </div>
                                 <div class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Footer
-                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeFooter ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="above" [(ngModel)]="_general.includeFooter"></mat-slide-toggle>
+                                    <mat-slide-toggle [style.marginLeft]="'10px'" [matTooltip]="_general.includeLayout.footer ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_general.includeLayout.footer"></mat-slide-toggle>
                                     </div>
                                     <div class="kb-tab-content">
-                                        <mat-select [disabled]="!_general.includeFooter" [(ngModel)]="_general.selectedFooter">
+                                        <mat-select [disabled]="!_general.includeLayout.footer" [(ngModel)]="_general.selectedFooter" (ngOnChange)="_general.setFooter(_general.selectedFooter)">
                                             <mat-option *ngFor="let footer of _general.footers | sorting:'asc':'name'" [value]="footer">{{footer.name |
                                                 titlecase}}</mat-option>
                                         </mat-select>
@@ -1726,7 +1726,7 @@
                                     <div class="kb-tab-head">Repeat</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_image.repeat"
-                                            [compareWith]="_style.compareOptValue">
+                                            [compareWith]="_general.compareOptValue">
                                             <mat-option *ngFor="let bgimgrep of _style.background_image_repeats"
                                                 [value]="bgimgrep">{{bgimgrep.name |
                                                 titlecase}}</mat-option>

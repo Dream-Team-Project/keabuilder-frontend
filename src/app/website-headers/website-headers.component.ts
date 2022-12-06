@@ -45,10 +45,9 @@ export class WebsiteHeadersComponent {
     if(prevname != obj.name) {
       var parser = new DOMParser();
       var html:any = parser.parseFromString(obj.html, 'text/html');
-      var header:any = html.querySelector('HEADER');
+      var header:any = html.body.children[0];
       header.setAttribute('data-name',obj.name);
       obj.html = header.outerHTML;
-      console.log(obj);
       this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
         if(resp.success) {
           this.action = 'renamed';
@@ -65,7 +64,7 @@ export class WebsiteHeadersComponent {
   create() {
     var obj:any = {id: '', html: '', type: 'header'};
     obj.id = this._general.createBlockId(obj);
-    obj.html = '<header id="'+obj.id+'" data-name="Header '+(this.headers.length+1)+'"></header>';
+    obj.html = '<div id="'+obj.id+'" data-name="Header '+(this.headers.length+1)+'"></div>';
     this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
       resp.success ? this.edit(obj.id) : this.openSB(true);
     });
@@ -80,7 +79,7 @@ export class WebsiteHeadersComponent {
     obj.id = this._general.createBlockId(obj);
     var parser = new DOMParser();
     var html:any = parser.parseFromString(obj.html, 'text/html');
-    var header:any = html.querySelector('HEADER');
+    var header:any = html.body.children[0];
     header.id = obj.id;
     header.setAttribute('data-name',obj.name+' copy');
     obj.html = header.outerHTML;

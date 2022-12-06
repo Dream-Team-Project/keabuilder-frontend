@@ -18,8 +18,8 @@ import { NgxCaptureService } from 'ngx-capture';
 
 export class GeneralService {
   userdomain:string = 'keapages.com';
-  includeHeader:boolean = true;
-  includeFooter:boolean = true;
+  showLayout:any = {header:true, footer:true};
+  includeLayout:any = {header:false, footer:false};
   user:any;
   subdomain:string = '';
   target:any = {
@@ -142,6 +142,34 @@ export class GeneralService {
     }
   }
 
+  fetchMenus() {
+    const menus:any = [];
+    return new Promise<any>((resolve, reject) => {
+      this.fileUploadService.fetchFiles('menus').subscribe((data:any)=>{
+        if(!data.success) resolve(menus);
+        var ulc = 0;
+        data.data.forEach((html:any)=>{
+          var doc = this.parser.parseFromString(html, 'text/html');
+          var ul = doc.querySelector('ul');
+          var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', html: html, items: []}
+          var lic = 0;
+          var list:any = ul?.querySelectorAll('li');
+          list.forEach((li:any) => {
+            var anc:any = li.querySelector('a');
+            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
+            menu.items.push(item);
+            if(ulc == data.data.length-1 && lic == list.length-1) {
+              resolve(menus);
+            }
+            lic++;
+          })
+          menus.push(menu);
+          ulc++;
+        })
+      })
+    })
+  }
+
   fetchHeaders() {
     const headers:any = [];
     return new Promise<any>((resolve, reject) => {
@@ -150,7 +178,7 @@ export class GeneralService {
         var count = 0;
         data.data.forEach((html:any)=>{
           var doc = this.parser.parseFromString(html, 'text/html');
-          var head = doc.querySelector('header');
+          var head = doc.body.children[0];
           var header:any = {id: head?.id, name: head?.getAttribute('data-name'), html: html, defaultname: 'Header '+(count+1), thumbnail: 'keaimage-'+head?.id.split('kb-')[1]+ '-screenshot.png', type: 'header'}
           headers.push(header);
           if(count == data.data.length-1) {
@@ -170,8 +198,8 @@ export class GeneralService {
         var count = 0;
         data.data.forEach((html:any)=>{
           var doc = this.parser.parseFromString(html, 'text/html');
-          var head = doc.querySelector('footer');
-          var footer:any = {id: head?.id, name: head?.getAttribute('data-name'), html: html, defaultname: 'Footer '+(count+1), thumbnail: 'keaimage-'+head?.id.split('kb-')[1]+ '-screenshot.png', type: 'footer'}
+          var foot = doc.body.children[0];
+          var footer:any = {id: foot?.id, name: foot?.getAttribute('data-name'), html: html, defaultname: 'Footer '+(count+1), thumbnail: 'keaimage-'+foot?.id.split('kb-')[1]+ '-screenshot.png', type: 'footer'}
           footers.push(footer);
           if(count == data.data.length-1) {
             resolve(footers);
@@ -182,70 +210,73 @@ export class GeneralService {
     })
   }
 
-  fetchMenus() {
-    const menus:any = [];
+  getBuilderData(id:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFiles('menus').subscribe((data:any)=>{
-        if(!data.success) resolve(menus);
-        var ulc = 0;
-        data.data.forEach((html:any)=>{
-          var doc = this.parser.parseFromString(html, 'text/html');
-          var ul = doc.querySelector('ul');
-          var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', items: []}
-          var lic = 0;
-          var list:any = ul?.querySelectorAll('li');
-          list.forEach((li:any) => {
-            var anc:any = li.querySelector('a');
-            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
-            menu.items.push(item);
-            if(ulc == data.data.length-1 && lic == list.length-1) {
-              resolve(menus);
-            }
-            lic++;
+      this.fetchMenus().then(data=>{
+        this.menus = data;
+        if(this.target.type != 'header' && this.target.type != 'footer') {
+          this.fetchHeaders().then(data=>{
+            this.headers = data;
           })
-          menus.push(menu);
-          ulc++;
-        })
+          this.fetchFooters().then(data=>{
+            this.footers = data;
+          })
+          if(this.target.type == 'website') {
+            this.getWebPageDetails(id).then(data=> {
+              resolve(data);
+            })
+          }
+          else if(this.target.type == 'funnel') {
+            this.getFunnelDetails(id).then(data=> {
+              resolve(data);
+            })
+          }
+        }
+        else {
+          if(this.target.type == 'header') {
+            this.getHeader('kb-header-'+id).then(data=>{
+              resolve(data);
+            });
+          }
+          else if(this.target.type == 'footer') {
+            this.getFooter('kb-footer-'+id).then(data=>{
+              resolve(data);
+            });
+          }
+        }
+      });
+    })
+  }
+
+  setMenu(html:any) {
+    return new Promise<any>((resolve, reject) => {
+      var i = 0;
+      var doc = this.parser.parseFromString(html, 'text/html');
+      var appendmenus = doc.querySelectorAll('[data-name="menu"]');
+      if(appendmenus.length == 0) resolve(doc.body.innerHTML);
+      appendmenus.forEach((data:any)=>{
+        var menu = this.menus.filter((m:any)=>m.id == data.children[0].getAttribute('data-id'))
+          data.children[0].innerHTML = menu[0].html;
+          if(appendmenus.length-1 == i) {
+            resolve(doc.body.innerHTML);
+          }
+        i++;
       })
     })
   }
 
-  getBuilderData(id:any) {
-    return new Promise<any>((resolve, reject) => {
-      this.fetchHeaders().then(data=>{
-        this.headers = data;
-      })
-      this.fetchFooters().then(data=>{
-        this.footers = data;
-      })
-      this.fetchMenus().then(data=>{
-        this.menus = data;
-      });
-      if(this.target.type == 'website') {
-        this.getWebPageDetails(id).then(data=> {
-          resolve(data);
-        })
-      }
-      else if(this.target.type == 'funnel') {
-        this.getFunnelDetails(id).then(data=> {
-          resolve(data);
-        })
-      }
-      else if(this.target.type == 'header') {
-        this.getHeader('kb-header-'+id).then(data=>{
-          resolve(data);
-        });
-      }
-      else if(this.target.type == 'footer') {
-        this.getFooter('kb-footer-'+id).then(data=>{
-          resolve(data);
-        });
-      }
-      else{
-        this.redirectToPageNotFound();
-        resolve(false);
-      }
-    })
+  setHeader(head:any) {
+    this.setMenu(head.html).then(data=>{
+      head.html = data;
+      this.selectedHeader = head;
+    });
+  }
+
+  setFooter(foot:any) {
+    this.setMenu(foot.html).then(data=>{
+      foot.html = data;
+      this.selectedFooter = foot;
+    });
   }
 
   getHeader(id:any) {
@@ -373,20 +404,14 @@ export class GeneralService {
   saveHeaderFooter(main:any, sections:any) {
     return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
-      this.removeExtra('.kb-section');
-      this.removeExtra('.kb-row');
-      this.removeExtra('.kb-column');
-      this.removeExtra('.kb-column-wrap');
-      this.removeExtra('.kb-element');
-      this.removeExtra('.kb-element-content');
+      this.removeExtra();
       this.setPageStyle(sections);
-      
       var obj:any = new Object();
       obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
       obj.html = '<style>'+this.getAllStyle()+'</style>'+this.removeCommments(this.pagehtml.querySelector('body').innerHTML);
       
       if(this.target.type == 'header') {
-        obj.html = '<header id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</header>';
+        obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
           this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
           resolve(true);
@@ -397,7 +422,7 @@ export class GeneralService {
         });
       }
       else if(this.target.type == 'footer') {
-        obj.html = '<footer id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</footer>';
+        obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
           this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
           resolve(true);
@@ -415,13 +440,15 @@ export class GeneralService {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-        this.removeExtra('#kb-main');
-        this.removeExtra('.kb-section');
-        this.removeExtra('.kb-row');
-        this.removeExtra('.kb-column');
-        this.removeExtra('.kb-column-wrap');
-        this.removeExtra('.kb-element');
-        this.removeExtra('.kb-element-content');
+        if(this.includeLayout.header && this.selectedHeader.html) {
+          var header = this.pagehtml.querySelector('header');
+          header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+        }
+        if(this.includeLayout.footer && this.selectedFooter.html) {
+          var footer = this.pagehtml.querySelector('footer');
+          footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+        }
+        this.removeExtra();
         this.setPageStyle(sections);
         this.pagehtml.querySelector('head').innerHTML = 
         '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
@@ -433,8 +460,7 @@ export class GeneralService {
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
         '<title>'+this.main.title+'</title>' +        
         '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
-        (!preview ? '<link rel="stylesheet" href="'+window.location.origin+'/assets/sites/'+this.user.uniqueid+'/pages/'+this.main.path+'/style.css">' : '') +
-        '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>';
+        (!preview ? '<link rel="stylesheet" href="./style.css">':'');
         this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
         var page = {
           head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
@@ -444,8 +470,12 @@ export class GeneralService {
           prevFolder: this.webpage.page_path
         }
         if(preview) {
-          localStorage.setItem("preview-"+this.webpage.uniqueid, JSON.stringify(page));
-          window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target.type+'/'+this.webpage.uniqueid, '_blank');
+          page.body = this.removeCommments(main.innerHTML);
+          page.prevFolder = 'kb-page-'+this.webpage.uniqueid;
+          page.folder = 'kb-page-'+this.webpage.uniqueid;
+          this.fileUploadService.createpreview(page).subscribe((event:any)=>{
+            window.open(window.location.protocol+'//'+window.location.host+'/preview/'+page.folder, '_blank');
+          });
         }
         else {
           this.fileUploadService.createpage(page).subscribe(
@@ -520,20 +550,32 @@ export class GeneralService {
     })
   }
 
-  removeExtra(blockcls:string) {
-    this.pagehtml.querySelectorAll(blockcls).forEach((item:any)=>{
+  removeExtra() {
+    this.pagehtml.querySelectorAll('*').forEach((item:any)=>{
       item.removeAttribute('style');
-      if(blockcls == '.kb-element-content') {
-        if(item.querySelector('.kb-menu')) {
-          item.querySelector('.kb-menu').outerHTML = '<?php $path="../../menus/'+item.querySelector('.kb-menu').id+'.php"; if(file_exists($path)) include($path); ?>';
-        }
-        if(item.querySelector('.kb-code-block')) {
-          var cb = item.querySelector('.kb-code-block');
-          var hd = this.decodeData(cb.getAttribute('html-data'));
-          cb.removeAttribute('html-data');
-          var doc = this.parser.parseFromString(hd, 'text/html');
-          cb.innerHTML = doc.body.innerHTML;
-        }
+      item.classList.remove('cdk-drag');
+      item.removeAttribute('ng-reflect-id');
+      item.removeAttribute('ng-reflect-data');
+      item.classList.remove('cdk-drag-handle');
+      item.removeAttribute('ng-reflect-ng-style');
+      item.removeAttribute('ng-reflect-ng-class');
+      item.removeAttribute('ng-reflect-ng-switch');
+      item.removeAttribute('ng-reflect-connected-to');
+      if(item.classList.contains('kb-ispan-add')) {
+        item.remove();
+      }
+      if(item.classList.contains('cdk-drop-list')) {
+        item.removeAttribute('id');
+        item.classList.remove('cdk-drop-list');
+      }
+      if(item.classList.contains('kb-menu')) {
+        item.outerHTML = '<?php $path="../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
+      }
+      if(item.classList.contains('kb-code-block')) {
+        var cb = this.decodeData(item.getAttribute('html-data'));
+        item.removeAttribute('html-data');
+        var doc = this.parser.parseFromString(cb, 'text/html');
+        item.innerHTML = doc.body.innerHTML;
       }
     })
   }
@@ -864,6 +906,10 @@ export class GeneralService {
     }
     this.allBlocksIds.push(temp.id);
     return 'kb-'+temp.type+'-'+temp.id;
+  }
+
+  compareOptValue(item1: any, item2: any) {
+    return item1.name === item2.name && item1.value === item2.value;
   }
 
   redirectToWebsite() {

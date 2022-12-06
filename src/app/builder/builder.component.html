@@ -20,8 +20,7 @@
             [class.kb-resp-view]="_general.showResp.toggle && _general.respToggleDevice.name != 'tablet-h'"
             [class.kb-border]="_general.showResp.toggle"
             [style.width]="_general.showResp.toggle ? _general.respToggleDevice.width : ''">
-            <header *ngIf="_general.target.type == 'website' || _general.target.type == 'funnel'"
-                [attr.kb-include-html]="_general.includeHeader"></header>
+            <header *ngIf="_general.includeLayout.header && _general.selectedHeader.html" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
             <div id="kb-main"
                 [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div class="kb-drag-container" cdkDropList [cdkDropListConnectedTo]="secdls"
@@ -292,8 +291,7 @@
                     <!-- sections end -->
                 </div>
             </div>
-            <footer *ngIf="_general.target.type == 'website' || _general.target.type == 'funnel'"
-                [attr.kb-include-html]="_general.includeFooter"></footer>
+            <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
         </div>
         <app-bulder-wireframe *ngIf="_general.wireframe.toggle"></app-bulder-wireframe>
     </div>
