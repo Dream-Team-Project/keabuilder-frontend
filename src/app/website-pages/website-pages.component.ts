@@ -273,7 +273,7 @@ export class WebsitePagesComponent implements OnInit {
               prevFolder: pagepath
             }
             this._general.fileUploadService.createpage(page).subscribe((event:any) => {
-              // console.log(event);
+              console.log(event);
             },
             error=>{console.log(error)});
             // create page/folder
