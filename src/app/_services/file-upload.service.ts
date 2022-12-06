@@ -113,16 +113,16 @@ export class FileUploadService {
     return this.http.post(this.updateHomeApi, obj);
   }
 
+  toggleDraft(value:any):Observable<any> {
+    var obj = {uuid: this.uuid, status: value}
+    return this.http.post(this.toggleDraftApi, obj)
+  }
+
   // fileExist(path:any):Observable<any> {
   //   var pathobj:Object = {path: path}
   //   return this.http.post(this.fileExistApi, pathobj)
   //   .pipe(catchError(this.errorHandler));
   // }
-
-  toggleDraft(value:any):Observable<any> {
-    var obj = {uuid: this.uuid, status: value}
-    return this.http.post(this.toggleDraftApi, obj)
-  }
 
   // html pages
 
