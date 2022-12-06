@@ -52,8 +52,4 @@ export class UserService {
     return this.http.post(this.updateuserdetailsApi+this.uuid, data);
   }
 
-  
-
-  
-
 }

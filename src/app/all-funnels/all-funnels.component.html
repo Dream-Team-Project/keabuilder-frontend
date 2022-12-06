@@ -237,6 +237,9 @@
                                     <button class="mt-3" mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'edit')">
                                         <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
                                     </button>
+                                    <button mat-menu-item (click)="viewpagestep(funnels[i]['steps'][j].uniqueid)">
+                                        <i class="fas fa-eye mr-2"></i> View Step
+                                    </button>
                                     <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'copy')">
                                         <i class="fas fa-link mr-2"></i> Copy Step Link
                                     </button>

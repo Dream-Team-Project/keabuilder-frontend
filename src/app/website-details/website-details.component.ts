@@ -6,6 +6,7 @@ import { FileUploadService } from '../_services/file-upload.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'app-website-details',
@@ -34,6 +35,8 @@ export class WebsiteDetailsComponent implements OnInit {
   tagstyle = 'Place CSS inside the style tag <style></style> and place JS inside the script tag <script></script>.';
   userid = '';
 
+  mydomain = {subdomain:'',domain:''};
+
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -41,7 +44,8 @@ export class WebsiteDetailsComponent implements OnInit {
               public _general: GeneralService,
               private imageService: ImageService,
               private router: Router,
-              private route: ActivatedRoute,) { }
+              private route: ActivatedRoute,
+              private userService: UserService,) { }
 
   ngOnInit(): void {
 
@@ -115,6 +119,18 @@ export class WebsiteDetailsComponent implements OnInit {
       }
     });
 
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        this.mydomain.subdomain = data.data[0].subdomain;
+        this.mydomain.domain = data.domain;
+      }
+    });
+
+  }
+
+  viewsite(){
+    var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain;
+    window.open(url, '_blank');
   }
 
   updatepage(){

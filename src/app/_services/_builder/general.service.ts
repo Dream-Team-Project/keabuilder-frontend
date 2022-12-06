@@ -885,4 +885,5 @@ export class GeneralService {
   redirectToPageNotFound() {
     window.location.href = './page-not-found';
   }
+
 }

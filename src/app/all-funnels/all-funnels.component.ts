@@ -6,7 +6,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {PageEvent} from '@angular/material/paginator';
 import { GeneralService } from '../_services/_builder/general.service';
 import { FileUploadService } from '../_services/file-upload.service';
-
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'app-all-funnels',
@@ -20,7 +20,8 @@ export class AllFunnelsComponent implements OnInit {
               private route: ActivatedRoute,
               private _snackBar: MatSnackBar,
               public _general: GeneralService,
-              private fileuploadService: FileUploadService) { }
+              private fileuploadService: FileUploadService,
+              private userService: UserService,) { }
 
   funnels:any = [];
   sidebar = {
@@ -48,6 +49,8 @@ export class AllFunnelsComponent implements OnInit {
   // MatPaginator Output
   pageEvent!: PageEvent;
   DialogParentToggle:boolean = false;
+  mydomain = {subdomain:'',domain:''};
+
 
 
   getServerData(event?:PageEvent){
@@ -61,6 +64,13 @@ export class AllFunnelsComponent implements OnInit {
   ngOnInit(): void {
 
     this.showfunnels();
+
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        this.mydomain.subdomain = data.data[0].subdomain;
+        this.mydomain.domain = data.domain;
+      }
+    });
 
   }
 
@@ -365,9 +375,10 @@ export class AllFunnelsComponent implements OnInit {
       this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
           next: data => {
             // console.log(data); 
-            this.pageurl = window.origin+'/assets/sites/pages/'+data.data[0].page_path;
+            this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
           }
       });
+
     }else if(type=='archive'){
       this.forarchiveid = unique2;
       this.openSidebar();
@@ -408,6 +419,17 @@ export class AllFunnelsComponent implements OnInit {
 
   }
 
+  viewpagestep(unique:any){
+    this.funnelService.makefunnelsettings('',unique,'stepdetails').subscribe({
+      next: data => {
+        // console.log(data); 
+        var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
+        window.open(url, '_blank');
+
+      }
+    });
+  }
+
   makearchivestep(){
     this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
       next: data => {
@@ -423,7 +445,6 @@ export class AllFunnelsComponent implements OnInit {
             this._snackBar.open('Single Step Can not be Archived!', 'Close');
           }
         }
-
 
       }
     });
@@ -477,10 +498,9 @@ export class AllFunnelsComponent implements OnInit {
 
   }
 
-  
   openDialog(e:any) {
     this.DialogParentToggle = !this.DialogParentToggle;
-}
+  }
 
 
 

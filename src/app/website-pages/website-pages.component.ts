@@ -16,6 +16,7 @@ import {MatSort} from '@angular/material/sort';
 import { WebsiteService } from '../_services/website.service';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { UserService } from '../_services/user.service';
 
 export interface DialogData {
   name: string;
@@ -58,7 +59,8 @@ export class WebsitePagesComponent implements OnInit {
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
               private fileUploadService: FileUploadService,
-              private websiteService: WebsiteService,) {
+              private websiteService: WebsiteService,
+              private userService: UserService,) {
                 this.dataSource = new MatTableDataSource(this.users);
                }
 
@@ -125,7 +127,7 @@ export class WebsitePagesComponent implements OnInit {
   archive_id = 0;
   showarchivemode = false;
   nodata = true;
-
+  mydomain = {subdomain:'',domain:''};
   
   // MatPaginator Inputs
   length = 100;
@@ -182,6 +184,13 @@ export class WebsitePagesComponent implements OnInit {
             this.toggleview = false;
           }
         }
+      }
+    });
+
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        this.mydomain.subdomain = data.data[0].subdomain;
+        this.mydomain.domain = data.domain;
       }
     });
 
@@ -335,8 +344,9 @@ export class WebsitePagesComponent implements OnInit {
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = window.location.origin+'/assets/sites/pages/'+data;
-      window.open(url, '_blank')
+      // console.log(this.mydomain);
+      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data;
+      window.open(url, '_blank');
     }
   }
 
@@ -377,6 +387,11 @@ export class WebsitePagesComponent implements OnInit {
                             // console.log(e);
                           })
                         }
+
+                        this.fileUploadService.toggleDraft(value).subscribe((data:any)=>{
+                          console.log(data);
+                        })
+
                       }
                     });
                   }
@@ -529,7 +544,8 @@ export class WebsitePagesComponent implements OnInit {
             this.confirmarchivepage = false;
 
             this.pagebuilderurl = window.origin+'/builder/website/'+data.data[0].uniqueid;
-            this.pageurl = window.origin+'/assets/sites/pages/'+data.data[0].page_path;
+
+            this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
 
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');

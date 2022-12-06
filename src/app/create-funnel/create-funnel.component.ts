@@ -10,6 +10,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FileUploadService } from '../_services/file-upload.service';
 import { CheckoutService } from '../_services/checkout.service';
+import { UserService } from '../_services/user.service';
 
 export interface DialogData {
   name: string;
@@ -36,7 +37,8 @@ export class CreateFunnelComponent implements OnInit {
               public _general: GeneralService,
               public dialog: MatDialog, 
               private fileuploadService: FileUploadService,
-              private checkoutService: CheckoutService) {
+              private checkoutService: CheckoutService,
+              private userService: UserService,) {
                 this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
                   this.uniqueid = params.get('funnel_id');
                 })
@@ -110,6 +112,7 @@ export class CreateFunnelComponent implements OnInit {
 
   editcheckoutdetails = false;
   checkoutstyle:any = {step1headline:'',step1subheadline:'',step1btntext:'', step1btnsubtext:'', step1footertext:'',step2headline:'',step2subheadline:'',step2btntext:'', step2btnsubtext:'', step2footertext:''};
+  mydomain = {subdomain:'',domain:''};
 
 
 
@@ -123,6 +126,13 @@ export class CreateFunnelComponent implements OnInit {
         this.emailoptintemps = data.data;
 
         // console.log(this.emailoptintemps);
+      }
+    });
+
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        this.mydomain.subdomain = data.data[0].subdomain;
+        this.mydomain.domain = data.domain;
       }
     });
 
@@ -628,6 +638,12 @@ export class CreateFunnelComponent implements OnInit {
           }
       }
   }
+  
+ viewpagestep(page_path:any){
+      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+page_path;
+      window.open(url, '_blank');
+  }
+
   funnelstepedit(unique1:any, unique2:any,type:any){
 
     // console.log(unique1+' - '+unique2+' - '+type);
@@ -641,8 +657,8 @@ export class CreateFunnelComponent implements OnInit {
       this.popupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
-      this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+'/'+unique2;
-      this.pageurl = window.origin+'/assets/sites/pages/'+unique1;
+      this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+unique2;
+      this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+unique1;
     }else if(type=='duplicate'){
         this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
           next: data => {
@@ -786,7 +802,7 @@ export class CreateFunnelComponent implements OnInit {
   }
   checkpagesettings(value:any){
     if(value=='redirect'){
-      var url = window.origin+'/assets/sites/pages/'+this.funnelstepurl;
+      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+this.funnelstepurl;
       window.open(url, '_blank')
     }else if(value=='settings'){
       this.tabOpen = 'publishing';
