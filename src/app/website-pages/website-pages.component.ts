@@ -385,8 +385,8 @@ export class WebsitePagesComponent implements OnInit {
                             // console.log(e);
                           })
                         }
-
-                        this.fileUploadService.toggleDraft(value).subscribe((data:any)=>{
+                        var getvl = title == '0' ? 'draft' : 'publish';
+                        this.fileUploadService.toggleDraft(getvl).subscribe((data:any)=>{
                           console.log(data);
                         })
 
