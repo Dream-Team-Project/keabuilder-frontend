@@ -350,7 +350,9 @@ export class WebsitePagesComponent implements OnInit {
     }
   }
 
-  changepagename(id:any, title:any, type:any){
+  changepagename(dataobj:any, title:any, type:any){
+
+    console.log(dataobj);
 
     if(title==''){
       this.showwebpages();
@@ -361,7 +363,7 @@ export class WebsitePagesComponent implements OnInit {
       this.seoauthor = '';
       this.keywords = [];
 
-      this.webpagesService.namepathchanges(id,title,type).subscribe({
+      this.webpagesService.namepathchanges(dataobj.id,title,type).subscribe({
         next: data => {
           console.log(data);
           // console.log(this.kbpages);
@@ -386,7 +388,8 @@ export class WebsitePagesComponent implements OnInit {
                           })
                         }
                         var getvl = title == '0' ? 'draft' : 'publish';
-                        this.fileUploadService.toggleDraft(getvl).subscribe((data:any)=>{
+                        var newobjdt = {'status':getvl, path:dataobj.page_path};
+                        this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
                           console.log(data);
                         })
 

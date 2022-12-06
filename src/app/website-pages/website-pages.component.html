@@ -370,7 +370,7 @@
               <div class="keabuilder-title-board line-ellipsis">
                 <span>{{kbpage.page_name}}</span>
                 <input type="text" [(ngModel)]="kbpage.page_name"
-                  (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
+                  (blur)="changepagename(kbpage,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
                   matTooltipPosition="above">
               </div>
               <div class="statbadg">
@@ -383,10 +383,10 @@
 
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item
-                    (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
+                    (click)="changepagename(kbpage,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
                       class="fa fa-check pr-2"></i> Publish</button>
                   <button mat-menu-item
-                    (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
+                    (click)="changepagename(kbpage,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
                       class="fa fa-file pr-2"></i> Draft</button>
                 </mat-menu>
 
@@ -405,7 +405,7 @@
 
 
               <mat-menu #menu2="matMenu">
-                <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                <button mat-menu-item (click)="changepagename(kbpage,kbpage.page_name,'quickedit')">
                   <i class="fas fa-pen mr-2"></i> Quick Edit
                 </button>
                 <!-- <button mat-menu-item>
@@ -448,10 +448,10 @@
 
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item
-                        (click)="changepagename(kbpage.id,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
+                        (click)="changepagename(kbpage,'1','statusupdate'); kbpages[i]['publish_status']=1;"><i
                           class="fa fa-check pr-2"></i> Publish</button>
                       <button mat-menu-item
-                        (click)="changepagename(kbpage.id,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
+                        (click)="changepagename(kbpage,'0','statusupdate'); kbpages[i]['publish_status']=0; kbpage.defaulthome=0;"><i
                           class="fa fa-file pr-2"></i> Draft</button>
                     </mat-menu>
 
@@ -469,7 +469,7 @@
                   <div class="keabuilder-title-board line-ellipsis">
                     <span>{{kbpage.page_name}}</span>
                     <input type="text" [(ngModel)]="kbpage.page_name"
-                      (blur)="changepagename(kbpage.id,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
+                      (blur)="changepagename(kbpage,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
                       matTooltipPosition="above">
                   </div>
                   <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
@@ -478,7 +478,7 @@
                 </div>
                 <div class="col-md-4 pt-4 mobadjust">
                   <mat-menu #menu2="matMenu">
-                    <button mat-menu-item (click)="changepagename(kbpage.id,kbpage.page_name,'quickedit')">
+                    <button mat-menu-item (click)="changepagename(kbpage,kbpage.page_name,'quickedit')">
                       <i class="fas fa-pen mr-2"></i> Quick Edit
                     </button>
                     <!-- <button mat-menu-item>
