@@ -125,6 +125,7 @@ export class WebsitePagesComponent implements OnInit {
   reason = '';
   confirmarchivepage = false;
   archive_id = 0;
+  arpageobj:any;
   showarchivemode = false;
   nodata = true;
   mydomain = {subdomain:'',domain:''};
@@ -375,6 +376,8 @@ export class WebsitePagesComponent implements OnInit {
                   // this.showwebpages();
                 }else if(data.type=='status'){
 
+                  this.draftpublish(title, dataobj.page_path);
+
                   // this.selstatusshow = 'all';
                   if(data.name=='0'){
                     // this.showwebpages();
@@ -387,12 +390,6 @@ export class WebsitePagesComponent implements OnInit {
                             // console.log(e);
                           })
                         }
-                        var getvl = title == '0' ? 'draft' : 'publish';
-                        var newobjdt = {'status':getvl, path:dataobj.page_path};
-                        this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
-                          console.log(data);
-                        })
-
                       }
                     });
                   }
@@ -438,6 +435,14 @@ export class WebsitePagesComponent implements OnInit {
 
         }
       });
+  }
+
+  draftpublish(status:any, page_path:any){
+    var getvl = status == '0' ? 'draft' : 'publish';
+    var newobjdt = {'status':getvl, path:page_path};
+    this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
+      console.log(data);
+    })
   }
 
   savequickdetails(){
@@ -588,7 +593,7 @@ export class WebsitePagesComponent implements OnInit {
     });
   }
 
-  archive_popup(id:any){
+  archive_popup(dataobj:any){
     this.openSidebar();
 
     this.showmytemplates = false;
@@ -600,7 +605,8 @@ export class WebsitePagesComponent implements OnInit {
     this.showpageurl = false;
 
     this.confirmarchivepage = true;
-    this.archive_id = id;
+    this.archive_id = dataobj.id;
+    this.arpageobj = dataobj;
   }
 
   applykbfilter(){
@@ -635,16 +641,25 @@ export class WebsitePagesComponent implements OnInit {
       gendata = {id:page.id,type:type,reason:this.toggleview};
     }
     
-    // console.log(gendata);
+    console.log(this.arpageobj);
+    console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
         if(data.success==1){
 
+          if(type=='restore'){
+            console.log('second');
+            this.draftpublish('1', this.arpageobj.page_path);
+          }else if(this.arpageobj.publish_status==1 && type=='archived'){
+            console.log('first');
+            this.draftpublish('0', this.arpageobj.page_path);
+          }
+
           if(data.deleteme==0){
             this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
               next: data => {
-                // console.log(data);
+                console.log(data);
 
                 if(data.success==1){
                   this.fileUploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
