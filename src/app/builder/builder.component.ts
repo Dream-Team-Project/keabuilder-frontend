@@ -232,6 +232,7 @@ export class BuilderComponent implements OnInit {
       html.querySelectorAll('.kb-section').forEach((sec:any)=>{
         var secObj = JSON.parse(JSON.stringify(this._section.sectionObj));
         secObj.id = sec.id;
+        this._general.allBlocksIds.push(sec.id);
         secObj.style = {
           desktop: this.filterStyle(sec.id,css,''),
           tablet_h: this.filterStyle(sec.id,css,'1024,769'),
@@ -241,6 +242,7 @@ export class BuilderComponent implements OnInit {
         sec.querySelectorAll('.kb-row').forEach((row:any)=>{
           var rowObj = JSON.parse(JSON.stringify(this._row.rowObj));
           rowObj.id = row.id;
+          this._general.allBlocksIds.push(row.id);
           rowObj.style = {
             desktop: this.filterStyle(row.id,css,''),
             tablet_h: this.filterStyle(row.id,css,'1024,769'),
@@ -269,6 +271,7 @@ export class BuilderComponent implements OnInit {
             rowObj.rowSize = col.classList[2];
             var colObj = JSON.parse(JSON.stringify(this._row.columnObj));
             colObj.id = col.id;
+            this._general.allBlocksIds.push(col.id);
             colObj.style = {
               desktop: this.filterStyle(col.id,css,''),
               tablet_h: this.filterStyle(col.id,css,'1024,769'),
@@ -311,6 +314,7 @@ export class BuilderComponent implements OnInit {
                 eleSel = 'ul';
                 eleSelItem = 'ul a';
                 var id = content.getAttribute('data-id');
+                this._general.allBlocksIds.push(id);
                 this._general.menus.forEach((menu:any)=>{
                   if(menu.id == id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));
@@ -322,6 +326,7 @@ export class BuilderComponent implements OnInit {
                 eleObj.content.html = content.querySelector('.kb-code-block').innerHTML;
               }
               eleObj.id = ele.id;
+              this._general.allBlocksIds.push(ele.id);
               eleObj.style = {
                 desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,''),
                 tablet_h: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'1024,769'),

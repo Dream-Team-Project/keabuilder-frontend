@@ -450,6 +450,7 @@ export class GeneralService {
         }
         this.removeExtra();
         this.setPageStyle(sections);
+        console.log(web.favicon);
         this.pagehtml.querySelector('head').innerHTML = 
         '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
         '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
@@ -898,9 +899,19 @@ export class GeneralService {
   decodeData(data:any) {
     return atob(data);
   }
+
+  makeid(length:number) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
   
   createBlockId(temp: any):any {
-    temp.id = Math.random().toString(20).slice(2);
+    temp.id = this.makeid(20);
     if(this.allBlocksIds.includes(temp.id)) {
       return this.createBlockId(temp);
     }
