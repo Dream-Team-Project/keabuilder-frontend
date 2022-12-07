@@ -64,15 +64,6 @@ export class FormService {
     
   }
 
-  createBlockId(temp: any):any {
-    temp.id = Math.floor(Math.random() * 10000000000);
-    if(this._general.allBlocksIds.includes(temp.id)) {
-      return this.createBlockId(temp);
-    }
-    this._general.allBlocksIds.push(temp.id);
-    return 'kb-'+temp.name+'-'+temp.id;
-  }
-
   deleteField(index:any) {
     this.formOpt.splice(index, 1);
   }

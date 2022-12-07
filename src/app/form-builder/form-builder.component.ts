@@ -65,11 +65,11 @@ export class FormBuilderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addField(field: any, index: number) {
     var tempObj = JSON.parse(JSON.stringify(field));
-    tempObj.id = this._form.createBlockId(tempObj);
+    tempObj.id = this._form._general.createBlockId(tempObj);
     tempObj?.split?.forEach((split: any) => {
-      split.id = this._form.createBlockId(split);
+      split.id = this._form._general.createBlockId(split);
       split?.subsplit?.forEach((subsplit: any) => {
-        subsplit.id = this._form.createBlockId(subsplit);
+        subsplit.id = this._form._general.createBlockId(subsplit);
       })
     })
     this._form.formOpt.splice(index, 0, tempObj)
