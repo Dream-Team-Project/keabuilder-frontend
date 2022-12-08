@@ -23,8 +23,14 @@ export class WebsiteHeadersComponent {
         public _general: GeneralService,
         private dialog: MatDialog
         ) { 
-            this.fetch();
+          this.toggleview = _general.getStorage('header_toggle');
+          this.fetch();
         }
+  
+  toggleView() {
+    this.toggleview = !this.toggleview; 
+    this._general.setStorage('header_toggle',this.toggleview);
+  }
 
   openDialog(templateRef: TemplateRef<any>, menu:any) {
     this.delheader = menu;

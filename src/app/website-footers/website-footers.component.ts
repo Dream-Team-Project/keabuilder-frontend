@@ -23,8 +23,15 @@ export class WebsiteFootersComponent {
         public _general: GeneralService,
         private dialog: MatDialog
         ) { 
-            this.fetch();
+          this.toggleview = _general.getStorage('footer_toggle');
+          this.fetch();
         }
+
+          
+  toggleView() {
+    this.toggleview = !this.toggleview; 
+    this._general.setStorage('footer_toggle',this.toggleview);
+  }
 
   openDialog(templateRef: TemplateRef<any>, menu:any) {
     this.delfooter = menu;

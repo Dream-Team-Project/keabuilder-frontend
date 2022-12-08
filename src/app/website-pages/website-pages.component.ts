@@ -61,6 +61,7 @@ export class WebsitePagesComponent implements OnInit {
               private fileUploadService: FileUploadService,
               private websiteService: WebsiteService,
               private userService: UserService,) {
+                this.toggleview = _general.getStorage('footer_toggle');
                 this.dataSource = new MatTableDataSource(this.users);
                }
 
@@ -386,7 +387,7 @@ export class WebsitePagesComponent implements OnInit {
                       next: data => {
                         console.log(data);
                         if(data.success==1){
-                          this.fileUploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                          this.fileUploadService.createdefaulthome().subscribe(e=>{
                             // console.log(e);
                           })
                         }
@@ -569,13 +570,8 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   togglepageview(){
-    this.toggleview = !this.toggleview;
-    var  gendata = {id:this.toggleview,type:'toggleview',reason:''};
-    this.webpagesService.restoredeletepage(gendata).subscribe({
-      next: data => {
-        // console.log(data);
-      }
-    });
+    this.toggleview = !this.toggleview; 
+    this._general.setStorage('page_toggle',this.toggleview);
   }
   
 
@@ -664,7 +660,7 @@ export class WebsitePagesComponent implements OnInit {
                 console.log(data);
 
                 if(data.success==1){
-                  this.fileUploadService.createdefaulthome(data.data[0].homepage).subscribe(e=>{
+                  this.fileUploadService.createdefaulthome().subscribe(e=>{
                     // console.log(e);
                   })
                 }

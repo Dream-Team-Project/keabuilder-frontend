@@ -19,7 +19,7 @@
             </mat-form-field>
       </div>
       <div class="col-md-6 text-right">
-        <button mat-raised-button [color]="'accent'" (click)="toggleview = !toggleview" *ngIf="footers.length != 0">
+        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="footers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>

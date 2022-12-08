@@ -935,4 +935,12 @@ export class GeneralService {
     window.location.href = './page-not-found';
   }
 
+  setStorage(key:string, value:any) {
+    return window.localStorage.setItem(key, value);
+  } 
+
+  getStorage(key:string) {
+    return window.localStorage.getItem(key) === 'true';
+  }
+
 }
