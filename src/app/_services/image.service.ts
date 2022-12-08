@@ -46,12 +46,12 @@ export class ImageService {
     extImgLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:png|jpg|jpeg|svg)')]);
     timeStamp = (new Date()).getTime();
 
-  constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
+    constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
       this.getAllImgs();
       Object.keys(this.svg).forEach((svg:any)=>{
         this.fetchSVG(svg);
       })
-  }
+    }
 
     checkAspVal(val:any) {
         if(val < 0 || val == '-') {

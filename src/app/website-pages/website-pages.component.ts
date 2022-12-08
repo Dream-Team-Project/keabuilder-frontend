@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
 import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -35,7 +35,7 @@ export interface WebpageData {
   styleUrls: ['./website-pages.component.css']
 })
 export class WebsitePagesComponent implements OnInit {
-  
+  delpage:any;
   displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
   sidebar = {
     open: false,
@@ -719,21 +719,22 @@ export class WebsitePagesComponent implements OnInit {
     });
   }
 
-  openDialog(id:any): void {
+  openDialog(templateRef: TemplateRef<any>, page:any): void {
+    this.delpage = page;
+    this.dialog.open(templateRef);
+    // const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+    //   width: '255px',
+    //   data: {name: ''},
+    // });
     
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '255px',
-      data: {name: ''},
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
+    // dialogRef.afterClosed().subscribe(result => {
+    //   // console.log(id);
 
-      if(result.event == 'Delete'){
-        this.restoredeleteme(id,'delete');
-      }
+    //   if(result.event == 'Delete'){
+    //     this.restoredeleteme(id,'delete');
+    //   }
       
-    });
+    // });
 
   }
   
@@ -741,20 +742,20 @@ export class WebsitePagesComponent implements OnInit {
 
 
 
-@Component({
-  selector: 'tags-dialog',
-  templateUrl: '../delete-dialog/delete-dialog.html',
-})
-export class DialogOverviewExampleDialog {
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-  ) {}
+// @Component({
+//   selector: 'tags-dialog',
+//   templateUrl: '../delete-dialog/delete-dialog.html',
+// })
+// export class DialogOverviewExampleDialog {
+//   constructor(
+//     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+//     @Inject(MAT_DIALOG_DATA) public data: DialogData,
+//   ) {}
 
-  onNoClick(): void {
-    this.dialogRef.close({event:'nothanks'});
-  }
-  onClick(){
-    this.dialogRef.close({event:'Delete'});
-  }
-}
+//   onNoClick(): void {
+//     this.dialogRef.close({event:'nothanks'});
+//   }
+//   onClick(){
+//     this.dialogRef.close({event:'Delete'});
+//   }
+// }

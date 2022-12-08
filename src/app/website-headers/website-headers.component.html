@@ -19,7 +19,7 @@
             </mat-form-field>
       </div>
       <div class="col-md-6 text-right">
-        <button mat-raised-button (click)="toggleview = !toggleview" *ngIf="headers.length != 0">
+        <button mat-raised-button [color]="'accent'" (click)="toggleview = !toggleview" *ngIf="headers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
@@ -33,8 +33,8 @@
         </mat-form-field>
       </div>  
   </div>
-  <div class="row" *ngIf="headers.length != 0 else nodata">
-    <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4 " *ngFor="let header of headers | filter:searchInp.value:'name' | sorting:sortBy.value:'name'; index as i;">
+  <div [class.px-3]="!toggleview" class="row" *ngIf="headers.length != 0 else nodata">
+    <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4" *ngFor="let header of headers | filter:searchInp.value:'name' | sorting:sortBy.value:'name'; index as i;">
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+header.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
             <div id="loader" *ngIf="shortwaiting">
@@ -43,7 +43,7 @@
               <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
             </div>
           </div>
-          <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'" >
+          <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
             <div class="row align-items-center p-0 h-100">
               <div [class]="toggleview ? 'col-md-6' : 'col-md-12'">
                 <div class="kb-title-board line-ellipsis">

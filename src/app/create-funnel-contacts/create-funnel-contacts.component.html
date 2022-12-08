@@ -62,7 +62,7 @@
                         <i class="fab fa-searchengin"></i>                        
                     </div>
                 </fieldset>
-                <button mat-raised-button class="mb-4" *ngIf="selecteddelete">Delete Selected <i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button mat-raised-button class="mb-4" *ngIf="selecteddelete">Delete Selected <i class="far fa-trash-alt" aria-hidden="true"></i></button>
               <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" id="excel-table" matSort>
 
@@ -90,7 +90,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
                     <td mat-cell *matCellDef="let row">
                       <button mat-raised-button class="mr-2">View <i class="far fa-eye" aria-hidden="true"></i></button>
-                        <button mat-raised-button (click)="deletecontact(row.id)" >Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button mat-raised-button (click)="deletecontact(row.id)" >Delete <i class="far fa-trash-alt" aria-hidden="true"></i></button>
                     </td>
                   </ng-container>
               

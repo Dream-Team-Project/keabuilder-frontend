@@ -19,7 +19,7 @@
             </mat-form-field>
       </div>
       <div class="col-md-6 text-right">
-        <button mat-raised-button (click)="toggleview = !toggleview" *ngIf="footers.length != 0">
+        <button mat-raised-button [color]="'accent'" (click)="toggleview = !toggleview" *ngIf="footers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
@@ -33,7 +33,7 @@
         </mat-form-field>
       </div>  
   </div>
-  <div class="row" *ngIf="footers.length != 0 else nodata">
+  <div [class.px-3]="!toggleview" class="row" *ngIf="footers.length != 0 else nodata">
     <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4 " *ngFor="let footer of footers | filter:searchInp.value:'name' | sorting:sortBy.value:'name'; index as i;">
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+footer.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">

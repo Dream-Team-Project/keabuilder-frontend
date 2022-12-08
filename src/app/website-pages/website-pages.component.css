@@ -5,14 +5,15 @@
     box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
     padding: 20px;
     border-radius: 8px;
+    position: relative;
+    overflow: hidden;
 }
+
 .img-fit{
     height: 265px;
     object-fit: cover;
 }
-.keabuilder-title-board, .keabuilder-title {
-  padding: 15px 0px;
-}
+
 .keabuilder-title-board input {
     display:none;
     background-color: #475F7B;
@@ -29,10 +30,11 @@
 .keabuilder-title-board:hover input {
  display: block;
 }
+
 .statbadg{
     position: absolute;
     top: 0px;
-    right: 13px;
+    right: 0px;
 }
 
 .statusbadge {
@@ -153,7 +155,7 @@
 
 
 .kb-fitimg {
-    height: 300px;
+    height: 100%;
     overflow: hidden;
     background-size: cover;
     background-position: center top;
@@ -219,7 +221,7 @@
   }
 
   .kb-imgviewchange{
-    height: 90px;
+    height: 100%;
   }
   
  table {
@@ -228,8 +230,8 @@
 
   .statehome {
     position: absolute;
-    top: 2px;
-    left: 15px;
+    top: 0px;
+    left: 0px;
     color: #ffffff;
     background-color: var(--primary-color);
     font-size: 12px;

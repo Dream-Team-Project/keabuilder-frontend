@@ -17,6 +17,14 @@
     overflow: hidden;
 }
 
+::ng-deep #kb-topBar svg {
+    width: 12px;
+}
+
+::ng-deep #kb-topBar svg path {
+    fill: #fff;
+}
+
 #kb-topBar.loaderShadow {
     box-shadow: rgb(0 0 0 / 25%) 0px 16px 25px 10px;
 }
