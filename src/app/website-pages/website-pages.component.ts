@@ -641,19 +641,21 @@ export class WebsitePagesComponent implements OnInit {
       gendata = {id:page.id,type:type,reason:this.toggleview};
     }
     
-    console.log(this.arpageobj);
-    console.log(gendata);
+    // console.log(this.arpageobj);
+    // console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
         if(data.success==1){
 
-          if(type=='restore'){
-            console.log('second');
-            this.draftpublish('1', this.arpageobj.page_path);
-          }else if(this.arpageobj.publish_status==1 && type=='archived'){
-            console.log('first');
-            this.draftpublish('0', this.arpageobj.page_path);
+          if(type!='delete'){
+            if(type=='restore'){
+              console.log('second');
+              this.draftpublish('1', this.arpageobj.page_path);
+            }else if(this.arpageobj.publish_status==1 && type=='archived'){
+              console.log('first');
+              this.draftpublish('0', this.arpageobj.page_path);
+            }
           }
 
           if(data.deleteme==0){

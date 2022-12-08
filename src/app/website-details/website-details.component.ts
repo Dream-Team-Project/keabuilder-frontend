@@ -36,6 +36,7 @@ export class WebsiteDetailsComponent implements OnInit {
   userid = '';
 
   mydomain = {subdomain:'',domain:''};
+  defaultdomain = '';
 
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
@@ -123,6 +124,8 @@ export class WebsiteDetailsComponent implements OnInit {
       next: data => {
         this.mydomain.subdomain = data.data[0].subdomain;
         this.mydomain.domain = data.domain;
+
+        this.defaultdomain = data.data[0].subdomain+'.'+data.domain;
       }
     });
 
@@ -153,30 +156,33 @@ export class WebsiteDetailsComponent implements OnInit {
         
         var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
         var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi[1]};
-        // console.log(genobjlogo);
-        // console.log(genobjfavicon);
-        if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
-          this.imageService.onImageFileUpload(genobjlogo);
-        }
-    
-        if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-          this.imageService.onImageFileUpload(genobjfavicon);
-        }
 
-        if(data.data.length!=0){
-          var obj = {
-            tracking: {
-              header: this.pagescriptheader,
-              footer: this.pagescriptfooter,
-            },
-            path: data.data[0].page_path
-          };
-          this.fileUploadService.updateHome(obj).subscribe({
-            next: data => {
-              this._snackBar.open('Details Updated Successfully!', 'OK');
-            }
-          });
-        }
+        console.log(genobjlogo);
+        console.log(genobjfavicon);
+
+        // if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+        //   this.imageService.onImageFileUpload(genobjlogo);
+        // }
+    
+        // if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+        //   this.imageService.onImageFileUpload(genobjfavicon);
+        // }
+
+        // if(data.data.length!=0){
+        //   var obj = {
+        //     tracking: {
+        //       header: this.pagescriptheader,
+        //       footer: this.pagescriptfooter,
+        //     },
+        //     path: data.data[0].page_path
+        //   };
+        //   this.fileUploadService.updateHome(obj).subscribe({
+        //     next: data => {
+        //       this._snackBar.open('Details Updated Successfully!', 'OK');
+        //     }
+        //   });
+        // }
+
       }
     });
   }
@@ -210,10 +216,13 @@ export class WebsiteDetailsComponent implements OnInit {
 
   generatename(value:any){
     var extn = value.split(/[. ]+/).pop();
-    var newvl = value.split('.'+extn)
-    var setname = (newvl[0].toLowerCase()).replaceAll(" ","-");
-    var unqueid = Math.random().toString(20).slice(2);
-    return setname+'-'+unqueid+'.'+extn;
+    // var newvl = value.split('.'+extn)
+    // var setname = (newvl[0].toLowerCase()).replaceAll(" ","-");
+    // var unqueid = Math.random().toString(20).slice(2);
+    // return setname+'-'+unqueid+'.'+extn;
+
+    return '.'+extn;
+
   }
 
   OnOpen(){
