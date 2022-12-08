@@ -85,7 +85,7 @@
                                     </mat-button-toggle>
                                 </mat-button-toggle-group>
                             </div>
-                            <div *ngIf="!_general.showEditor else editor">
+                            <div *ngIf="!_general.showEditor else editor" class="kb-tabChange">
                                 <div *ngIf="_general.selectedBlock.content?.name == 'menu'"
                                     class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Menu</div>
@@ -1253,7 +1253,7 @@
                                 </mat-button-toggle>
                             </mat-button-toggle-group>
                         </div>
-                        <div [ngSwitch]="_general.page_general_tab">
+                        <div [ngSwitch]="_general.page_general_tab" class="kb-tabChange">
                             <div *ngSwitchCase="'info'">
                                 <div class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Page Name</div>
@@ -1667,7 +1667,7 @@
                                 </mat-button-toggle>
                             </mat-button-toggle-group>
                         </div>
-                        <div [ngSwitch]="_style.background_type">
+                        <div [ngSwitch]="_style.background_type" class="kb-tabChange">
                             <div *ngSwitchCase="'color'">
                                 <div class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Background Color <span

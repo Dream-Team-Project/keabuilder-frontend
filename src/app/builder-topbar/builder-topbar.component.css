@@ -1,4 +1,4 @@
-#topBar {
+#kb-topBar {
     position: sticky;
     top: 0px;
     left: 0px;
@@ -17,11 +17,11 @@
     overflow: hidden;
 }
 
-#topBar.loaderShadow {
+#kb-topBar.loaderShadow {
     box-shadow: rgb(0 0 0 / 25%) 0px 16px 25px 10px;
 }
 
-#topBar button.mat-button:hover, #topBar button.mat-button.resp-active  {
+#kb-topBar button.mat-button:hover, #kb-topBar button.mat-button.resp-active  {
     color: var(--primary-color);
 }
 
@@ -29,20 +29,20 @@
     transform: rotate(-90deg);
 }
 
-::ng-deep #topBar button.mat-button {
+::ng-deep #kb-topBar button.mat-button {
     padding: 0 10px;
     transition: 0.2s ease-in-out;
     min-width: auto;
 }
 
-::ng-deep #topBar .mat-button i, ::ng-deep #topBar .mat-button span{
+::ng-deep #kb-topBar .mat-button i, ::ng-deep #kb-topBar .mat-button span{
     font-size: 12px;
 }
 
-::ng-deep #topBar .innerLinks:last-child .mat-button span>span{
+::ng-deep #kb-topBar .innerLinks:last-child .mat-button span>span{
     padding-right: 8px;
 }
 
-::ng-deep #topBar .mat-button img{
+::ng-deep #kb-topBar .mat-button img{
     width: 13px;
 }

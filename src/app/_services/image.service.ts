@@ -9,6 +9,11 @@ import { FileUploadService } from './file-upload.service';
   providedIn: 'root'
 })
 export class ImageService {
+    // svgs
+    svg:any = {
+        save: '',
+    }
+    // svgs
     imgBoxAnime:any = {open: true, close: false};
     snackBarMsg:string = '';
     croppedEvent:boolean = false;
@@ -43,6 +48,9 @@ export class ImageService {
 
   constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
       this.getAllImgs();
+      Object.keys(this.svg).forEach((svg:any)=>{
+        this.fetchSVG(svg);
+      })
   }
 
     checkAspVal(val:any) {
@@ -330,4 +338,21 @@ export class ImageService {
           }
           return path;
       }
+
+    // fetch svg
+
+    fetchSVG(name:any) {
+        fetch(this.svgPath+name+'.svg', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(resp=> {
+          return resp.text();
+        })   
+        .then(text => {
+          this.svg[name] = text;
+        }) 
+    }
 }
