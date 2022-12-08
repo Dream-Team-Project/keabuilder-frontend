@@ -160,28 +160,28 @@ export class WebsiteDetailsComponent implements OnInit {
         console.log(genobjlogo);
         console.log(genobjfavicon);
 
-        // if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
-        //   this.imageService.onImageFileUpload(genobjlogo);
-        // }
+        if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
+          this.imageService.onImageFileUpload(genobjlogo);
+        }
     
-        // if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-        //   this.imageService.onImageFileUpload(genobjfavicon);
-        // }
+        if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+          this.imageService.onImageFileUpload(genobjfavicon);
+        }
 
-        // if(data.data.length!=0){
-        //   var obj = {
-        //     tracking: {
-        //       header: this.pagescriptheader,
-        //       footer: this.pagescriptfooter,
-        //     },
-        //     path: data.data[0].page_path
-        //   };
-        //   this.fileUploadService.updateHome(obj).subscribe({
-        //     next: data => {
-        //       this._snackBar.open('Details Updated Successfully!', 'OK');
-        //     }
-        //   });
-        // }
+        if(data.data.length!=0){
+          var obj = {
+            tracking: {
+              header: this.pagescriptheader,
+              footer: this.pagescriptfooter,
+            },
+            path: data.data[0].page_path
+          };
+          this.fileUploadService.updateHome(obj).subscribe({
+            next: data => {
+              this._snackBar.open('Details Updated Successfully!', 'OK');
+            }
+          });
+        }
 
       }
     });
