@@ -157,8 +157,8 @@ export class WebsiteDetailsComponent implements OnInit {
         var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
         var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi[1]};
 
-        console.log(genobjlogo);
-        console.log(genobjfavicon);
+        // console.log(genobjlogo);
+        // console.log(genobjfavicon);
 
         if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
           this.imageService.onImageFileUpload(genobjlogo);
