@@ -1,5 +1,5 @@
 ::ng-deep .mat-drawer-container, ::ng-deep .mat-drawer-content {
-    overflow: visible!important;
+    overflow-y: visible!important;
 }
 
 ::ng-deep mat-drawer-container.mat-drawer-container { 
