@@ -1,29 +1,78 @@
 <div id="kb-domain">
+
+    <div id="kb-offer-actions" *ngIf="sidebar.open">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+            
+            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+            <h6><b>Connect Your Domain</b></h6>
+            <hr>
+            
+            <h4>Add your own domain</h4>
+            <p>Enter the domain name you already own below and we'll take care of the rest.</p>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Domain Name</mat-label>
+                <input type="text" placeholder="mydomain.com" matInput required [formControl]="domainname" (keyup)="gendomainname = removespecialchar(gendomainname)" [(ngModel)]="gendomainname">
+                <mat-error *ngIf="domainname.hasError('required')" class="errdmrgn">
+                    Domain Name is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="connectdomain()" >
+                <span *ngIf="!domainconn">Connect <i class="fas fa-plus"></i></span>
+                <span *ngIf="domainconn">Connecting... <i class="fa-circle-notch fa-spin fas"></i></span>
+            </button>
+            
+            <hr>
+            <div class="outerdivnm">
+                <p><b>How to connect your domain to Kea</b></p>
+                <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span>gina.ns.cloudflare.com</span>&nbsp;&nbsp;<span>jerry.ns.cloudflare.com</span></small></p>
+                
+                <ul class="mynsdetails">
+                    <li>
+                        <b>Domain: </b> <span>mydomain.com</span>
+                    </li>
+                    <li>
+                        <b>Nameservers: </b> <span>gina.ns.cloudflare.com</span> <span>jerry.ns.cloudflare.com</span>
+                    </li>
+                </ul>
+                <br>
+                <button mat-raised-button color="primary" (click)="connectdomain()" >I've done this step <i class="fas fa-plus"></i></button>
+            </div>
+                
+        </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+
     <div class="container-fluid">
         <div class="row mt-4">
-            <div class="col-md-6 mt-4">
-                <h2>Add your own domain to strengthen your brand</h2>
-                <p>Add a custom domain to help customers remember your website. It's like vanity license plates for your business!</p>
-                 <button mat-raised-button color="primary" class="mr-2 outer-card-add" >Add New Domain <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+            <div class="col-md-8 mt-4">
 
-                 <mat-card class="mt-4">
-                     <ul class="kb-domainul">
-                        <li>Connected <i class="fa fa-check-circle" aria-hidden="true"></i></li>
-                         <li>www.clickfunnel.com</li>
-                         <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
-                     </ul>
-                 </mat-card>
+                <div class="col-md-8">
+                    <h2>Add your own domain to strengthen your brand</h2>
+                    <p>Add a custom domain to help customers remember your website. It's like vanity license plates for your business!</p>
+                    <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewdomain()" >Add New Domain <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
 
-                 <mat-card class="mt-4">
+                <mat-card class="mt-4">
                     <ul class="kb-domainul">
-                        <li>Setup Pending <i class="fa fa-clock" aria-hidden="true"></i></li>
-                        <li>www.google.com</li>
-                        <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
+                        <li>Connected 
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i>
+                        </li>
+                        <li>www.clickfunnel.com</li>
+                        <li>
+                            <button mat-raised-button class="mr-2">Update Nameservers <i class="fa fa-globe" aria-hidden="true"></i></button>
+                            <button mat-raised-button class="mr-2">Verify SSl <i class="fa fa-unlock" aria-hidden="true"></i></button>
+                            <button mat-raised-button class="mr-2">View <i class="fa fa-eye" aria-hidden="true"></i></button>
+                            <button mat-raised-button>Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </li>   
                     </ul>
                 </mat-card>
 
+
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <img src="/assets/images/domain/domain-names.png" class="img-fluid" alt="" srcset="">
             </div>
         </div>
