@@ -96,7 +96,7 @@ export class CoursesComponent implements OnInit {
   toggleStatus(course:any, status:number) {
     course.publish_status = status;
     this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course has been '+(status == 1 ? 'published' : 'drafted'), 'OK');
+      this._snackbar.open('Course has been '+(status == 1 ? 'published' : 'draft'), 'OK');
     });
   }
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -15,28 +15,21 @@ import { asapScheduler } from 'rxjs';
 })
 export class BulderWireframeComponent implements OnInit, AfterViewInit {
 
+  @Output('dialogToggle') dialogToggle: EventEmitter<any> = new EventEmitter();
+  @Output('wfpos') wfpos: EventEmitter<any> = new EventEmitter();
+  @Output('saveastemp') saveastemp: EventEmitter<any> = new EventEmitter();
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
-  
-  public secdls: CdkDropList[] = [];
-  public coldls: CdkDropList[] = [];
-  public rowdls: CdkDropList[] = [];
-  public eledls: CdkDropList[] = [];
+  public sectionConnect: CdkDropList[] = [];
+  public rowConnect: CdkDropList[] = [];
+  public columnConnect: CdkDropList[] = [];
+  public elementConnect: CdkDropList[] = [];
+  wfposStart:boolean = false;
+  colDragRow:any;
+  colDropRow:any;
 
-  get = false
   DialogParentToggle:boolean = false;
-  navtimeStyle:any = {
-    position: 'absolute',
-    top: '0px',
-    left: '0px',
-    display: 'inline-flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    width: '32px',
-    height: '32px'
-  }
-  
+    
   constructor(
         // builder services start
         public _style: StyleService,
@@ -54,62 +47,74 @@ export class BulderWireframeComponent implements OnInit, AfterViewInit {
     });
    }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {}
+
+  wfposToggle() {
+    this.wfposStart = !this.wfposStart;
+    this.wfpos.emit(this.wfposStart ? 'start' : 'end');
   }
 
   verifyDrop(drag?: CdkDrag, drop?: CdkDropList) {
     return drop?.data.length != 6;
-  };
-
-  setDragDrop() {
-    let secldls: CdkDropList[] = [];
-    let colldls: CdkDropList[] = [];
-    let rowldls: CdkDropList[] = [];
-    let eleldls: CdkDropList[] = [];
-    this.dlq.forEach((dl:any) => {
-      if(dl.id.split('-')[0] == 'elegroup') {
-        eleldls.push(dl);
-      }
-      else if(dl.id.split('-')[0] == 'colgroup') {
-        colldls.push(dl);
-      }
-      else if(dl.id.split('-')[0] == 'rowgroup') {
-        rowldls.push(dl);
-      }
-      else {
-        secldls.push(dl);
-      }
-    });
-
-    secldls = secldls.reverse();
-    colldls = colldls.reverse();
-    rowldls = rowldls.reverse();
-    eleldls = eleldls.reverse();
-
-    asapScheduler.schedule(() => { this.secdls = secldls; });
-    asapScheduler.schedule(() => { this.coldls = colldls; });
-    asapScheduler.schedule(() => { this.rowdls = rowldls; });
-    asapScheduler.schedule(() => { this.eledls = eleldls; });
   }
 
   drop(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
+    }
+    else {
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex,
       );
+      if(this.colDragRow && this.colDropRow) {
+        this._column.resizeColumn(this.colDragRow);
+        this._column.resizeColumn(this.colDropRow);
+        this.colDragRow = '';
+        this.colDropRow = '';
+      }
     }
     this._section.savePageSession();
+  } 
+
+  setDragDrop() {
+    let secdls: CdkDropList[] = [];
+    let coldls: CdkDropList[] = [];
+    let rowdls: CdkDropList[] = [];
+    let eledls: CdkDropList[] = [];
+
+    this.dlq.forEach((dl:any) => {
+      switch(dl.id.split('-')[0]) {
+      case 'elementgroup': 
+        eledls.push(dl);
+      break;
+      case 'columngroup':
+        coldls.push(dl);
+      break;
+      case 'rowgroup':
+        rowdls.push(dl);
+      break;
+      default:
+        secdls.push(dl);
+      }
+    });
+
+    secdls = secdls.reverse();
+    rowdls = rowdls.reverse();
+    coldls = coldls.reverse();
+    eledls = eledls.reverse();
+
+    asapScheduler.schedule(() => { this.sectionConnect = secdls; });
+    asapScheduler.schedule(() => { this.rowConnect = rowdls; });
+    asapScheduler.schedule(() => { this.columnConnect = coldls; });
+    asapScheduler.schedule(() => { this.elementConnect = eledls; });
   }  
 
-  ngOnInit(): void {
-  }
-
   openDialog(e:any) {
-    this.DialogParentToggle = !this.DialogParentToggle;
+    this.dialogToggle.emit(true);
   }
 }

@@ -159,7 +159,7 @@ export class BuildFunnelComponent implements OnInit {
                         folder: data.data.pagepath,
                         prevFolder: data.data.pagepath
                       }
-                      this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                      this._general.fileUploadService.savePage(page).subscribe((event:any) => {
                         // console.log(event);
                     },
                     error=>{console.log(error)});

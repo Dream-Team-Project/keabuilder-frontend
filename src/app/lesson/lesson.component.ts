@@ -185,7 +185,7 @@ export class LessonComponent implements OnInit {
     toggleStatus(lesson:any) {
       lesson.publish_status = lesson.publish_status ? 1: 0;
       this._lesson.update(lesson).subscribe((res:any)=>{
-        this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'drafted'), 'OK');
+        this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
       });
     }
 

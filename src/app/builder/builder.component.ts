@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation, HostListener, TemplateRef} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -9,8 +9,10 @@ import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { NgxCaptureService } from 'ngx-capture';
-import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { asapScheduler } from 'rxjs';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { asapScheduler} from 'rxjs';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-builder',
@@ -23,17 +25,21 @@ export class BuilderComponent implements OnInit {
 
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
-  
-  public secdls: CdkDropList[] = [];
-  public rowdls: CdkDropList[] = [];
-  public eledls: CdkDropList[] = [];
 
   DialogParentToggle:boolean = false;
+  DialogImageToggle:boolean = false;
 
+  @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('main') main!: ElementRef;
   @ViewChild('main', { static: true }) screen: any;
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
 
   showNavFrom:string = 'bottom';
+  trigger:string = 'Saved';
+  contextMenuPosition = { x: '0px', y: '0px' };
+  transferIndex:number = -1;
+  wfpos:any = 'end';
+  saveTemplateSection:any;
 
   constructor(
     private router: Router,
@@ -47,11 +53,13 @@ export class BuilderComponent implements OnInit {
     public _general: GeneralService,
     public _image: ImageService,
     // builder services end
+    private dialog: MatDialog,
     private captureService: NgxCaptureService) {
     _section.sections = [];
     _general.loading.success = false;
     _general.loading.error = false;
     route.paramMap.subscribe((params: ParamMap) => {
+      document.addEventListener('contextmenu', event => event.preventDefault());
       _general.target = {
         id: params.get('id'),
         type: params.get('target')
@@ -74,14 +82,14 @@ export class BuilderComponent implements OnInit {
                 header = header.innerHTML;
                 var headid = header.slice(header.indexOf('../../headers/')+14, header.indexOf('.php'));
                 _general.headers.forEach((head:any)=>{ if(head.id == headid) _general.setHeader(head); })
-                _general.includeLayout.header = true;
               }
+              else _general.includeLayout.header = false;
               if(footer) {
                 footer = footer.innerHTML;
                 var footid = footer.slice(footer.indexOf('../../footers/')+14, footer.indexOf('.php'));
                 _general.footers.forEach((foot:any)=>{ if(foot.id == footid) _general.setFooter(foot); })
-                _general.includeLayout.footer = true;
               }
+              else _general.includeLayout.footer = false;
               if(_general.target.type == 'funnel') {
                 this._general.getAllProducts();
                 if(_general.webpage.funneltype == 'order') {
@@ -91,12 +99,12 @@ export class BuilderComponent implements OnInit {
                 else if(_general.webpage.funneltype == 'upsell') {
                   _element.elementList[3].content.btntype = 'upsell';
                   _element.elementList[3].content.productid = '';
-                  _element.elementList[3].content.text = 'Upsell';
+                  _element.elementList[3].content.text = 'Upsell Button';
                 }
                 else if(_general.webpage.funneltype == 'downsell') {
                   _element.elementList[3].content.btntype = 'downsell';
                   _element.elementList[3].content.productid = '';
-                  _element.elementList[3].content.text = 'Downsell';
+                  _element.elementList[3].content.text = 'Downsell Button';
                 }
               }
             }
@@ -105,65 +113,48 @@ export class BuilderComponent implements OnInit {
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
+            this._general.saveHTML(this.main.nativeElement, this._section.sections, true);
           })
         })
       }
-      else  _general.redirectToPageNotFound();
+      else _general.redirectToPageNotFound();
    })
+  }
+
+  @HostListener('document:keydown.control.s', ['$event'])  
+  onKeydownHandler(event:KeyboardEvent) {
+    var main = this.main.nativeElement;
+    event.preventDefault();
+    this.saveHTML(main);
   }
 
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<any>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    }
-    this._section.savePageSession();
-  }  
-
-  setDragDrop() {
-    let secldls: CdkDropList[] = [];
-    let rowldls: CdkDropList[] = [];
-    let eleldls: CdkDropList[] = [];
-    this.dlq.forEach((dl:any) => {
-      if(dl.id.split('-')[0] == 'elegroup') {
-        eleldls.push(dl);
-      }
-      else if(dl.id.split('-')[0] == 'rowgroup') {
-        rowldls.push(dl);
-      }
-      else {
-        secldls.push(dl);
-      }
-    });
-
-    secldls = secldls.reverse();
-    rowldls = rowldls.reverse();
-    eleldls = eleldls.reverse();
-
-    asapScheduler.schedule(() => { this.secdls = secldls; });
-    asapScheduler.schedule(() => { this.rowdls = rowldls; });
-    asapScheduler.schedule(() => { this.eledls = eleldls; });
-  }
-
   takePageSS(id:any, stxt:any) {
-    this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+    var scr = stxt == 'template' ? document.getElementById(this.saveTemplateSection.id) : this.screen.nativeElement;
+    this.captureService.getImage(scr, true).subscribe(e=>{
       var file:any = this._image.base64ToFile(e, id+'-screenshot.png');
+      console.log(file);
       this._general.fileUploadService.upload(file).subscribe(
         (event: any) => {
             if (typeof (event) === 'object') {
+              var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;
+              this._general.openSnackBar(msg, 'OK', 'center', 'top');
               this._general.saveDisabled = false;
-              this._general.openSnackBar(stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been saved', 'OK', 'center', 'top');
+              this.trigger = 'Saved';
             }
         })
+    })
+  }
+
+  saveAsTemplate() {
+    this._general.saveDisabled = true;
+    var section = this.saveTemplateSection;
+    var obj = {uniqueid: this._general.makeid(20), name: section.name, template: JSON.stringify(section)};
+    this._general.fileUploadService.savetemplate(obj).subscribe((event:any)=>{
+      this.takePageSS('section-'+obj.uniqueid, 'template');
+      this._general.fetchSectionTemplates();
     })
   }
 
@@ -183,7 +174,6 @@ export class BuilderComponent implements OnInit {
   saveHTML(main:any) {
     this._general.saveDisabled = true;
     this._general.pathError = false;
-    if(this._general.showNavAnim.show) this._general.showfloatnavtoggle();
     this._general.checkExstingPath(main, this._section.sections).then(res =>{
       if(res) {
         this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
@@ -200,7 +190,6 @@ export class BuilderComponent implements OnInit {
     this._general.selectedBlock = this._general.main;
     this._style.blockSetting(this._general.main);
     this.openDialog(event);
-    this._general.showfloatnavtoggle();
   }
 
   filterStyle(id:any, css:any, media:string) {
@@ -318,7 +307,7 @@ export class BuilderComponent implements OnInit {
                 this._general.menus.forEach((menu:any)=>{
                   if(menu.id == id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));
-                    eleObj.content = this._element.setDataId_items(eleObj.content, menuObj);
+                    eleObj.content = this._element.setMenu(eleObj.content, menuObj);
                   }
                 })
               }
@@ -362,6 +351,7 @@ export class BuilderComponent implements OnInit {
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
               eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
+              eleObj.name = ele.getAttribute('data-name');
               if(eleObj.content.name) colObj.elementArr.push(eleObj);
             })
             colObj.hide = {
@@ -370,7 +360,7 @@ export class BuilderComponent implements OnInit {
               tablet_v: col.classList.contains('kb-d-tab-v-none'),
               mobile: col.classList.contains('kb-d-mob-none')  
             }
-            colObj.name = col.title;
+            colObj.name = col.getAttribute('data-name');
             rowObj.columnArr.push(colObj);
           })
           rowObj.hide = {
@@ -379,7 +369,7 @@ export class BuilderComponent implements OnInit {
             tablet_v: row.classList.contains('kb-d-tab-v-none'),
             mobile: row.classList.contains('kb-d-mob-none')  
           }
-          rowObj.name = row.title;
+          rowObj.name = row.getAttribute('data-name');
           secObj.rowArr.push(rowObj);          
         })
         secObj.hide = {
@@ -388,7 +378,7 @@ export class BuilderComponent implements OnInit {
           tablet_v: sec.classList.contains('kb-d-tab-v-none'),
           mobile: sec.classList.contains('kb-d-mob-none')  
         }
-        secObj.name = sec.title;
+        secObj.name = sec.getAttribute('data-name');
         this._section.sections.push(secObj);
         if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
           this._section.savePageSession();
@@ -400,37 +390,6 @@ export class BuilderComponent implements OnInit {
       this._section.addSection(0);
       this._general.loading.success = true;
     }
-  }
-
-  onDragEnded(event:any) {
-    let element = event.source.getRootElement();
-    let boundingClientRect = element.getBoundingClientRect();
-    let parentPosition = this.getPosition(element);
-    let x = boundingClientRect.x - parentPosition.left;
-    let y = boundingClientRect.y - parentPosition.top;
-    if(-1*y > screen.height/2) {
-      this.showNavFrom = 'top';
-    }
-    else if(screen.width/2 + x < 70) {
-      this.showNavFrom = 'left';
-    }
-    else if(screen.width/2 - x < 100) {
-      this.showNavFrom = 'right';
-    }
-    else {
-      this.showNavFrom = 'below';
-    }
-  }
-  
-  getPosition(el:any) {
-    let x = 0;
-    let y = 0;
-    while(el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
-      x += el.offsetLeft - el.scrollLeft;
-      y += el.offsetTop - el.scrollTop;
-      el = el.offsetParent;
-    }
-    return { top: y, left: x };
   }
 
   elementDblClk(element: any, event:any) {
@@ -447,13 +406,139 @@ export class BuilderComponent implements OnInit {
     // }
   }
 
-  // drag drop box
+  // Dialog box
 
   openDialog(e:any) {
       this.DialogParentToggle = !this.DialogParentToggle;
   }
 
-  // drag drop box
+  openImageDialog(e:any) {
+    this.DialogImageToggle = !this.DialogImageToggle;
+  }
+
+  saveAsTemplateDialog(templateRef:any, section:any) {
+    this.saveTemplateSection = JSON.parse(JSON.stringify(section));
+    this.dialog.open(templateRef);
+  } 
+
+  // Dialog box
+
+  // get child triggers
+
+  getTrigger(e:any) {
+    var main = this.main.nativeElement;
+    if(e == 'save') {
+      this.trigger = 'Saved'; 
+      this.saveHTML(main);
+    }
+    if(e == 'publish' || e == 'draft') {
+      this._general.main.publish_status = e == 'publish';
+      this.trigger = this._general.main.publish_status ? 'Published' : 'Draft';
+      this.saveHTML(main);
+    }
+    else if(e == 'setting') this.openPageSetting(null);
+  }
+
+  // get child triggers
+
+  // drag & drops
+
+  drop(event: CdkDragDrop<any>) {
+    if(this.transferIndex != -1) {
+      var appendIndex =  event.currentIndex-1;
+      var appendData = event.previousContainer.data[this.transferIndex];
+      if(appendData.type == 'image') {
+        var image = JSON.parse(JSON.stringify(this._element.elementList[2]));
+        image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
+        image.content.itemset = true;
+        appendData = image;
+      }
+      if(appendData.type == 'menu') {
+        var menu = JSON.parse(JSON.stringify(this._element.elementList[4]));
+        menu.content = this._element.setMenu(this._element.elementList[4].content, appendData);
+        menu.content.itemset = true;
+        appendData = menu;
+      }
+      if(appendData.content) appendData.type = 'element';
+      switch(appendData.type) {
+        case 'element':
+          this._element.element_index = appendIndex;
+          this._element.addElement(appendData.content);
+          break;
+        case 'row':
+          this._row.selectedRow = '';
+          this._row.row_index = appendIndex;
+          this._row.addRow('kb-'+appendData.appendCls+'-block', appendData.nofcolumn);
+          break;
+        default:
+          var temp = JSON.parse(JSON.stringify(this._section.sectionObj));
+          if(appendData.template) temp = JSON.parse(appendData.template);
+          else temp.style.desktop.width = appendData.width;
+          this._section.appendSection(temp, appendIndex);
+      }
+      this.transferIndex = -1;
+    }
+    else {
+      if (event.previousContainer === event.container) {
+        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      }
+      else {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex,
+        );
+      }
+    }
+    this._section.savePageSession();
+  }  
+
+  setDragDrop() {
+    let secdls: CdkDropList[] = [];
+    let rowdls: CdkDropList[] = [];
+    let eledls: CdkDropList[] = [];
+
+    this.dlq.forEach((dl:any) => {
+      switch(dl.id.split('-')[0]) {
+      case 'elementgroup': 
+        eledls.push(dl);
+      break;
+      case 'rowgroup':
+        rowdls.push(dl);
+      break;
+      default:
+        secdls.push(dl);
+        
+      }
+    });
+
+    secdls = secdls.reverse();
+    rowdls = rowdls.reverse();
+    eledls = eledls.reverse();
+
+    asapScheduler.schedule(() => { this._section.sectionConnect = secdls; });
+    asapScheduler.schedule(() => { this._row.rowConnect = rowdls; });
+    asapScheduler.schedule(() => { this._element.elementConnect = eledls; });
+
+  }
+
+  // drag & drops
+
+  onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { 'item': '' };
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
+  }
+
+  dropAllow() {
+    return (item: CdkDrag<any>)=>{
+      return this._section.sectionDrop;
+   }
+  }
 
 }
 

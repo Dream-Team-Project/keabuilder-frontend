@@ -6,7 +6,7 @@
 
 :root {
     /* builder root */
-        --opacity-primary: rgb(216 200 152 / 70%);        ;
+        --opacity-primary: rgb(216 200 152 / 90%);
         --opacity-success: rgb(27 197 189 / 70%);
         --opacity-section: rgb(24 103 192 / 80%);
         --opacity-danger: rgb(220 53 69 / 70%);
@@ -20,8 +20,8 @@
         --kb-info: #17a2b8;
         --kb-gray: #ececec;
         --kb-dim-black: #22262a66;
-        --kb-text-color: #4c5866;
-        --kb-dark: #35363a; 
+        --kb-text-color: #454545;
+        --kb-dark: #2e2e2e; 
         --kb-white: #fff;
         --kb-black: #000;
     
@@ -110,6 +110,10 @@ main {
   background-color: var(--primary-color);
 }
 
+.kb-info {
+  color: var(--kb-info);
+}
+
 .kb-danger {
   color: var(--kb-danger);
 }
@@ -119,6 +123,7 @@ main {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+
 .kb-alert {
     position: relative;
     padding: 0.75rem 1.25rem;
@@ -213,8 +218,8 @@ main.insidecont .box {
 }
 
 .mat-progress-bar {
-    position: absolute!important;
-    top: 0px;
+    position: fixed!important;
+    top: 70px;
     left: 0px;
     z-index: 9999;
 }
@@ -326,58 +331,6 @@ main.insidecont .box {
     animation: animation-offcanvas-fade-in 0.6s ease 1;    
     background: rgba(0, 0, 0, 0.1);
 }
-
-/* resizable */
-
-.rectangle {
-    position: relative;
-    width: 300px;
-    height: 150px;
-    background-color: #fd4140;
-    border: solid 1px #121621;
-    color: #121621;
-  }
-
-  mwlResizable {
-    box-sizing: border-box;
-  }
-
-  .resize-handle-top,
-  .resize-handle-bottom {
-    position: absolute;
-    height: 5px;
-    cursor: row-resize;
-    width: 100%;
-  }
-
-  .resize-handle-top {
-    top: 0;
-  }
-
-  .resize-handle-bottom {
-    bottom: 0;
-  }
-
-  .resize-handle-left,
-  .resize-handle-right {
-    position: absolute;
-    height: 100%;
-    cursor: col-resize;
-    width: 5px;
-  }
-
-  .resize-handle-left {
-    left: 0;
-    top: 0;
-  }
-
-  .resize-handle-right {
-    right: 0;
-    top: 0;
-  }
-
-/* resizable */
-
 
 @media only screen and (max-width: 500px){
     .symbol .symbol-label {
@@ -499,6 +452,7 @@ main.insidecont .box {
 }
 
 .custom-preview {
+  font-size: 14px;
   display: inline-flex;
   flex-direction: column;
   justify-content: center;

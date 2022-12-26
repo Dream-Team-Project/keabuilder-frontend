@@ -35,8 +35,14 @@ export class FileUploadService {
   copyImgApi = "./api/copyimage"
   deleteimageApi = "./api/deleteimage";
   // images
+  // section templates
+  alltemplatesApi = "./api/alltemplates";
+  savetemplateApi = "./api/savetemplate";
+  updatetemplateApi = "./api/updatetemplate";
+  deletetemplateApi = "./api/deletetemplate";
+  // section templates
   // web pages
-  createPageApi = "./api/savepage";
+  savePageApi = "./api/savepage";
   getPageApi = "./api/getpage";
   renamePageApi = "./api/renamepage";
   copyPageApi = "./api/copypage";
@@ -60,6 +66,28 @@ export class FileUploadService {
     return this.http.post(this.createuserfolderApi, obj);
   }
 
+  // section templates 
+
+  fetchtemplates():Observable<any> {
+    return this.http.get(this.alltemplatesApi+'/'+this.uuid);
+  }
+
+  savetemplate(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.savetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updatetemplate(obj:any):Observable<any> {
+    return this.http.post(this.updatetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deletetemplate(id:any):Observable<any> {
+    return this.http.delete(this.deletetemplateApi + '/' + id)
+    .pipe(catchError(this.errorHandler));
+  }
+
   // html pages
 
   createdefaulthome():Observable<any> {
@@ -67,28 +95,13 @@ export class FileUploadService {
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
-  createpage(page:any):Observable<any> {
+  savePage(page:any):Observable<any> {
     page.uuid = this.uuid;
-    page.dir = 'pages';
-    return this.http.post(this.createPageApi, page);
-  }
-
-  createpreview(page:any):Observable<any> {
-    page.uuid = this.uuid;
-    page.dir = 'previews';
-    return this.http.post(this.createPageApi, page);
+    return this.http.post(this.savePageApi, page);
   }
 
   getPage(page:any):Observable<any> {
     page.uuid = this.uuid;
-    page.dir = 'pages';
-    return this.http.post(this.getPageApi, page)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  getPreview(page:any):Observable<any> {
-    page.uuid = this.uuid;
-    page.dir = 'previews';
     return this.http.post(this.getPageApi, page)
     .pipe(catchError(this.errorHandler));
   }

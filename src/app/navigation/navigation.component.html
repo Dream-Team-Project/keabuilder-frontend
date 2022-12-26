@@ -42,7 +42,7 @@
                                         class="px-3 py-2 w-100 d-flex justify-content-between">
                                         <span>{{page.page_name | titlecase}}</span>
                                         <span class="kb-tag kb-info-tag" *ngIf="page.publish_status == 1 else draft">Published</span>
-                                        <ng-template #draft><span class="kb-tag kb-danger-tag">Drafted</span></ng-template>
+                                        <ng-template #draft><span class="kb-tag kb-danger-tag">Draft</span></ng-template>
                                     </div>
                                     <span matTooltip="Preview" matTooltipPosition="above" class="border-left">
                                         <i class="fa fa-external-link-alt px-3 py-2"
@@ -168,7 +168,7 @@
             </div>
             <div class="col-md-3 kb-menu-card-inner p-0">
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Sort by</mat-label>
+                    <mat-label>Sort By</mat-label>
                     <mat-select value="asc" #sortBy>
                         <mat-option value="asc">Ascending</mat-option>
                         <mat-option value="desc">Descending</mat-option>

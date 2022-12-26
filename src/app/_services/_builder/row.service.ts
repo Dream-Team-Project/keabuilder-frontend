@@ -3,15 +3,18 @@ import { Observable, Subject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { StyleService } from './style.service';
 import { SectionService } from './section.service';
+import { CdkDropList } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RowService {
 
+  public rowConnect: CdkDropList[] = [];
+
   distroyDialogue = new Subject<any>();
   selectedRow:any = '';
-  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, columnSetting: true, rowSize: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, columnGap: {desktop:0, tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
+  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, rowSize: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, columnGap: {desktop:0, tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
   row_index:number = 0;
   columnObj:any = {id: '', type: 'column', elementArr: [], name: '', chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
@@ -43,6 +46,7 @@ export class RowService {
     }
     var num = 0;
     this.rowTypes.forEach(item=>{
+      item.type = 'row';
       item.nofcolumn = Array(item.nofcolumn).fill(num++).map((i)=> {
         return i;
       });
@@ -54,22 +58,22 @@ export class RowService {
   }
 
   addRow(rowSize: string, column: any[]) {
-    if(!this.selectedRow) {
+    if(this.selectedRow) {
+      this.selectedRow.columnArr = [];
+      for(var i=0; i<column.length; i++) {
+        this.selectedRow.columnArr.push(this.createColumn());
+      }
+      this.selectedRow.rowSize = rowSize;
+      this._section.savePageSession();
+    }
+    else {
       var tempObj = JSON.parse(JSON.stringify(this.rowObj));
       for(var i=0; i<column.length; i++) {
-        tempObj.columnArr.push(this.createColumn(rowSize,i));
+        tempObj.columnArr.push(this.createColumn());
       }
       tempObj.rowSize = rowSize;
       this.appendRow(this.selectedSectionRows, tempObj, this.row_index);
       this.row_index = 0;
-    }
-    else {
-      this.selectedRow.columnArr = [];
-      for(var i=0; i<column.length; i++) {
-        this.selectedRow.columnArr.push(this.createColumn(rowSize,i));
-      }
-      this.selectedRow.rowSize = rowSize;
-      this._section.savePageSession();
     }
     this.selectedRow = '';
     this.distroyDialogue.next(void 0);
@@ -100,11 +104,9 @@ export class RowService {
     this._section.savePageSession();
   }
 
-  createColumn(rowSize: string, i: number) {
-    var width = rowSize.split('-');
+  createColumn() {
     var tempObj = JSON.parse(JSON.stringify(this.columnObj));
     tempObj.id = this._general.createBlockId(tempObj);
-    tempObj.width = width.length > 3 ? width[i+1] : 'equal';
     return tempObj;
   }
 }

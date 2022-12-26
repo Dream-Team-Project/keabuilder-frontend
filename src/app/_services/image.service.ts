@@ -3,6 +3,8 @@ import { GeneralService } from './_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
 import { base64ToFile, Dimensions, ImageCroppedEvent, ImageTransform, LoadedImage } from 'ngx-image-cropper';
 import { FileUploadService } from './file-upload.service';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -11,10 +13,34 @@ import { FileUploadService } from './file-upload.service';
 export class ImageService {
     // svgs
     svg:any = {
+        add: '',
+        check: '',
+        desktop: '',
+        draft: '',
+        elements: '',
+        ellipsisv: '',
+        filter: '',
+        footer: '',
+        header: '',
+        layout: '',
+        mobile: '',
+        none: '',
+        preview: '',
+        publish: '',
+        redo: '',
+        responsive: '',
+        row: '',
         save: '',
+        search: '',
+        section: '',
+        setting: '',
+        tab: '',
+        template: '',
+        undo: '',
+        upload: '',
+        wireframe: ''
     }
     // svgs
-    imgBoxAnime:any = {open: true, close: false};
     snackBarMsg:string = '';
     croppedEvent:boolean = false;
     saveasnew:boolean = true;
@@ -23,6 +49,7 @@ export class ImageService {
     imgLoaded:boolean = false;
     errMsg:any;
     imgMatTabIndex:any = 1;  
+    imageSelectionAllow:boolean = true;
     imgPath: string = '/assets/images/';  
     svgPath: string = '/assets/svgs/';  
     uploadImgPath: string = '/assets/uploads/images/';
@@ -45,6 +72,9 @@ export class ImageService {
     extImgLink:any = {originalname: '', filename: ''};
     extImgLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:png|jpg|jpeg|svg)')]);
     timeStamp = (new Date()).getTime();
+    imgOrder:any = [{name:'Title Ascending', value: 'asc', type: 'title'}, {name:'Title Descending', value: 'desc', type: 'title'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
+    searchImgFilter:any = this.imgOrder[3];
+    imagesUpdated = new BehaviorSubject(false);
 
     constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
       this.getAllImgs();
@@ -147,7 +177,6 @@ export class ImageService {
             (event:any) => {
                 this.galleryImg = [];
                 this.galleryImg = event.data;
-                this.galleryImg.forEach(item=> item.loaded = false);
                 this.selectedImg.title = '';
                 this.selectedImg.alt = '';
                 this.selectedImg.description = '';
@@ -160,8 +189,10 @@ export class ImageService {
                 this.saveasnew = true;
                 this.croppedEvent = false;
                 this.imgMatTabIndex = 1;
+                this.imagesUpdated.next(!this.imagesUpdated.value);
                 if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'OK', 'center', 'top');
-            })
+            }
+        )
     }
 
         // DB handlers
@@ -313,24 +344,6 @@ export class ImageService {
             rotate: this.rotation
         };
     } 
-    
-    openImgSelBox() {
-        this._general.imgSelection = true;
-        this.imgBoxAnime.open = true;
-        setTimeout(()=>{
-          this.imgBoxAnime.open = false;
-        },200)
-    }
-
-    closeImgSelBox() {
-        this.imgBoxAnime.close = true;
-        setTimeout(()=>{
-            this._general.imgSelection = false;
-            this.imgBoxAnime.close = false;
-            this.showEditImgContainer = false;
-            this.imgMatTabIndex = 1;
-        },200)
-    }
 
     getImgPath(path:string) {
           if(this.timeStamp) {
@@ -344,15 +357,9 @@ export class ImageService {
     fetchSVG(name:any) {
         fetch(this.svgPath+name+'.svg', {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: {'Content-Type': 'application/json'}
         })
-        .then(resp=> {
-          return resp.text();
-        })   
-        .then(text => {
-          this.svg[name] = text;
-        }) 
+        .then(resp=> { return resp.status == 200 ? resp.text() : ''})   
+        .then(text => this.svg[name] = text)
     }
 }

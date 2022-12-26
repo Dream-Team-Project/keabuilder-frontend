@@ -4,20 +4,24 @@ import { RowService } from './row.service';
 import { GeneralService } from './general.service';
 import { StyleService } from './style.service';
 import { SectionService } from './section.service';
+import { CdkDropList } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ElementService {
 
+  public elementConnect: CdkDropList[] = [];
+
   distroyDialogue = new Subject<any>();
-  elementObj:any = { id: '', content: {}, setting: false, type: 'element', itemstyle: false, item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
+  elementObj:any = { id: '', name: '', content: {}, setting: false, type: 'element', itemstyle: false, item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
   element_index = 0;
   selectedElements: any = [];
   elementList: Array<any> = [
     // heading
     { content: { name: 'heading',
     html: '<h2>Heading Goes Here</h2>',
+    size: 38,
     editor: false,
     },
     iconCls: 'fas fa-heading' },
@@ -25,18 +29,19 @@ export class ElementService {
     // text
     { content: { name: 'text',
     html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
+    size: 16,
     editor: false,
   },
-    iconCls: 'fas fa-pen' },
+    iconCls: 'fas fa-font' },
     // text
     // image
-    { content: { name: 'image', src: '' }, iconCls: 'fas fa-image' },
+    { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
     // image
     // button
-    { content: { name: 'button', btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-font' },
+    { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-font' },
     // button
     // menu
-    { content: { name: 'menu', items:[]}, iconCls: 'fas fa-external-link-alt' }, // it should be on the first position
+    { content: { name: 'menu', size: 16, items:[]}, iconCls: 'fas fa-external-link-alt' }, // it should be on the first position
     // menu
     // form
     // { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
@@ -50,6 +55,9 @@ export class ElementService {
   ];
   menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   preMenuItems:any = ['Home','About','Blog','Contact'];
+  defaultHeadings:any = [];
+  defaultTexts:any = [];
+  defaultButtons:any = [];
   constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
   }
 
@@ -57,7 +65,7 @@ export class ElementService {
     return this.distroyDialogue.asObservable();
   }
 
-  setDataId_items(element:any, menu:any) {
+  setMenu(element:any, menu:any) {
     element.data_id = menu.id;
     element.items = JSON.parse(JSON.stringify(menu.items));
     return element;
@@ -65,8 +73,10 @@ export class ElementService {
 
   addElement(element: any) {
     if(element.name == 'menu') {
-      var fm = JSON.parse(JSON.stringify(this._general.menus[0]));
-      element = this.setDataId_items(element, fm);
+      if(element?.itemset) delete element?.itemset;
+      else {
+        element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
+      }
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
@@ -85,11 +95,10 @@ export class ElementService {
           tablet_v:respS,
           mobile:respS}
         }
-      }
-    var objSA =  this._style.defaultStyling(tempObj);
-    tempObj.style.desktop = objSA;
+    }
+    var objS =  this._style.defaultStyling(tempObj);
+    tempObj.style.desktop = objS;
     this.appendElement(tempObj, this.element_index);
-    this._row.selectedRow.columnSetting = false;
     this.distroyDialogue.next(void 0);
   }
 

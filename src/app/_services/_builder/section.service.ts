@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { StyleService } from './style.service';
+import { CdkDropList } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,11 @@ export class SectionService {
     callbuilderCDKMethod() {
       this.builderCDKMethodCallSource.next('');
     }
+
+  public sectionConnect: CdkDropList[] = [];
+  public sectionDrop:boolean = false;
+
+  sectionTypes:any = [];
 
   sections:any = [];
   sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
@@ -57,6 +63,7 @@ export class SectionService {
       this.sections = JSON.parse(sObj);
       this.pageSession.undo--;
       this.pageSession.redo--;
+      this.callbuilderCDKMethod();
     }
   }
 
@@ -66,6 +73,7 @@ export class SectionService {
       this.sections = JSON.parse(sObj);
       this.pageSession.undo++;
       this.pageSession.redo++;
+      this.callbuilderCDKMethod();
     }
   }
   
@@ -86,7 +94,7 @@ export class SectionService {
     this.savePageSession();
   }
 
-  appendSection(section: { id: number; type: string; rowArr: never[]; setting: boolean; style: string; }, index: number) {
+  appendSection(section: any, index: number) {
     var tempObj = JSON.parse(JSON.stringify(section));
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj.setting = false;
@@ -104,5 +112,4 @@ export class SectionService {
     }
     this.savePageSession();
   }
-
 }
