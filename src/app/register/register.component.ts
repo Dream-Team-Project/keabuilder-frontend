@@ -196,7 +196,12 @@ export class RegisterComponent implements OnInit {
   }
 
   onupdateusername(event:any){
-    this.form.subdomain = this._general.joinWthDash(event.target.value);
+    this.form.subdomain = this.removespecialchar(event.target.value);
+  }
+
+  removespecialchar(data:any){
+    var datagen = data.replace(/[^a-zA-Z0-9]/g, "");
+    return datagen;
   }
 
   redirectToDashboard(): void {

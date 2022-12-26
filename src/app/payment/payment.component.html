@@ -1,7 +1,7 @@
 <div id="kb-domain">
 
-    <div id="kb-offer-actions" *ngIf="popupsidebar && paymentaction">
-        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+    <div id="kb-offer-actions" *ngIf="sidebar.open">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
             <h6><b><img [src]="stripecontentactive==true?'/assets/images/payment/stripe-logo.png':'/assets/images/payment/paypal-logo.png'" width="20" alt="" srcset=""> {{stripecontentactive==true?'Stripe':'Paypal'}}</b></h6>
@@ -38,7 +38,7 @@
                 <input type="text" matInput required >
             </mat-form-field>
 
-            <button mat-raised-button color="primary" (click)="connectpayment()" ><i class="fas fa-plus"></i> Connect</button>
+            <button mat-raised-button color="primary" (click)="connectpayment()" >Connect <i class="fas fa-plus"></i></button>
 
             <hr>
             <p>Account details</p>
@@ -56,7 +56,8 @@
                 
         </div>
     </div>
-    <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
 
     <div class="container-fluid">
         <div class="row mt-4">

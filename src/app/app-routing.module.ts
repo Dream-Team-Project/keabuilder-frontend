@@ -125,6 +125,7 @@ const routes: Routes = [
   canActivate: [AuthGuard] },
 
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
+  // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   
   
   
@@ -208,7 +209,6 @@ const routes: Routes = [
   // ],
   //  canActivate: [AuthGuard] },
 
-  // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
 
 
   // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },

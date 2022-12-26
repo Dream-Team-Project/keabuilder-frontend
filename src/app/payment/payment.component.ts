@@ -10,6 +10,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PaymentComponent implements OnInit {
 
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
+
   popupsidebar = false;
   paymentaction = false;
   stripecontentactive = true;
@@ -30,9 +36,7 @@ export class PaymentComponent implements OnInit {
           this.getstatus =  'Connected';
         }
       }
-    });
-
-    
+    });    
 
   }
 
@@ -48,12 +52,31 @@ export class PaymentComponent implements OnInit {
       this.stripecontentactive = false;
       this.paypalcontentactive = true;
     }
-    this.popupsidebar = true;
+    // this.popupsidebar = true;
+    this.openSidebar();
     this.paymentaction = true;
+  }
+
+  // hidepopupsidebar(){
+  //   this.popupsidebar = false;
+  // }
+
+  openSidebar(){
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
   }
 
   hidepopupsidebar(){
     this.popupsidebar = false;
+
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
   }
 
   connectpayment(){
