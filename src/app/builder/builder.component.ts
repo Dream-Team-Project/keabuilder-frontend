@@ -135,7 +135,6 @@ export class BuilderComponent implements OnInit {
     var scr = stxt == 'template' ? document.getElementById(this.saveTemplateSection.id) : this.screen.nativeElement;
     this.captureService.getImage(scr, true).subscribe(e=>{
       var file:any = this._image.base64ToFile(e, id+'-screenshot.png');
-      console.log(file);
       this._general.fileUploadService.upload(file).subscribe(
         (event: any) => {
             if (typeof (event) === 'object') {

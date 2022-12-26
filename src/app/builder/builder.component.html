@@ -15,7 +15,7 @@
     <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
     <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
     <app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframe.toggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
-    <div id="page-container" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
+    <div id="kb-page-container" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
         (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
         <div id="kb-layout-saveopt"
             *ngIf="_general.loading.success && (_general.target.type == 'header' || _general.target.type == 'footer')">
@@ -319,7 +319,7 @@
             <div id="box"></div>
             <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
         </div>
-        <div *ngIf="_general.minimize" id="kb-minimize-setting" cdkDrag cdkDragBoundary="#page-container">
+        <div *ngIf="_general.minimize" id="kb-minimize-setting" cdkDrag cdkDragBoundary="#kb-page-container">
             <div class="kb-minimize-title" cdkDragHandle>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
                 _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</div>
             <button mat-button (click)="_general.minimize = !_general.minimize"

@@ -1,3 +1,7 @@
+::ng-deep .mat-drawer-content {
+    overflow: visible!important;
+}
+
 .mat-form-field {
     display: block;
     width: 100%;

@@ -83,11 +83,11 @@ div#kb-layout-saveopt>div {
     font-size: 26px;
 }
 
-#page-container.hovernone{
+#kb-page-container.hovernone{
     pointer-events: none;
 }
 
-#page-container.hovernone .kb-d-desk-none, #page-container.hovernone .kb-ispan-add {
+#kb-page-container.hovernone .kb-d-desk-none, #kb-page-container.hovernone .kb-ispan-add {
     display: none;
 }
 
@@ -102,7 +102,6 @@ div#kb-layout-saveopt>div {
 
 #kb-block-container {
     display: flex;
-    height: 100%;
     height: 100%;
     justify-content: space-between;
     margin: 0 auto;
@@ -122,12 +121,12 @@ app-bulder-wireframe {
     transform: rotate(-90deg);
 }
 
-#main-container,
-#page-container {
+#kb-main-container,
+#kb-page-container {
     position: relative;
 }
 
-div#page-container {
+div#kb-page-container {
     height: 100%;
 }
 
