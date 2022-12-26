@@ -72,8 +72,7 @@
         <button mat-button (click)="_general.preview()">
             <i [innerHTML]="_image.svg.preview | safeHtml"></i> Preview
         </button>
-        <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled"
-            [class.kb-btn-active]="_general.saveDisabled">
+        <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="_image.svg.save | safeHtml"></i> Save
         </button>
         <button mat-button [disabled]="_general.saveDisabled" #statust="matMenuTrigger" [matMenuTriggerFor]="status" [class.kb-btn-active]="statust.menuOpen">

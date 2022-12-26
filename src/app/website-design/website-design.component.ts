@@ -186,6 +186,7 @@ export class WebsiteDesignComponent implements OnInit {
               head: '',
               body: '',
               style: '',
+              dir: 'pages',
               folder: pagepath,
               prevFolder: pagepath
             }
