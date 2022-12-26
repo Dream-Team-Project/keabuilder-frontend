@@ -34,6 +34,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRippleModule } from '@angular/material/core';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -106,6 +108,7 @@ import { SortingPipe } from './_pipes/sorting.pipe';
     MatBottomSheetModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    MatSidenavModule,
     ResizableModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
@@ -115,6 +118,7 @@ import { SortingPipe } from './_pipes/sorting.pipe';
     MatNativeDateModule,
     MatChipsModule,
     MatMenuModule,
+    MatRippleModule,
     NgxCaptureModule,  
     MatDialogModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),

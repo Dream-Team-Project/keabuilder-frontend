@@ -274,7 +274,7 @@ export class WebsitePagesComponent implements OnInit {
               folder: pagepath,
               prevFolder: pagepath
             }
-            this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+            this._general.fileUploadService.savePage(page).subscribe((event:any) => {
               console.log(event);
             },
             error=>{console.log(error)});

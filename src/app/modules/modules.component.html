@@ -86,7 +86,7 @@
             <h3>
                 {{course.title}}
                 <i matTooltip="Course Setting" matTooltipPosition="above" (click)="openDialog(course, 'course')" class="kb-edit-pencil fa fa-pencil-alt ml-2 p-2"></i>
-                <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle>
+                <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle>
             </h3>
         </div>
         <div class="col-md-4 text-right">
@@ -138,10 +138,10 @@
                                         </span>
                                         <span class="kbc-qs-status px-2">
                                             <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
-                                            <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive">Drafted</span></ng-template>
+                                            <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive">Draft</span></ng-template>
                                         </span>
                                         <span class="kbc-qs-icons">
-                                            <mat-slide-toggle color="success" [matTooltip]="module.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
+                                            <mat-slide-toggle color="success" [matTooltip]="module.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
                                             <i matTooltip="Add New Module" matTooltipPosition="above"
                                                 (click)="openDialog(post, 'module')" class="fa fa-plus"></i>
                                             <i matTooltip="Module Setting" (click)="openDialog(module, 'module')" matTooltipPosition="above" class="far fa-edit"></i>
@@ -177,10 +177,10 @@
                                             <span class="kbc-qs col-3">
                                                 <span class="kbc-qs-status px-2">
                                                     <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
-                                                    <ng-template #draft><span [matTooltip]="'Drafted'" matTooltipPosition="above" class="inactive">Drafted</span></ng-template>
+                                                    <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive">Draft</span></ng-template>
                                                 </span>
                                                 <span class="kbc-qs-icons">
-                                                    <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
+                                                    <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
                                                     <i matTooltip="Add New Lesson" matTooltipPosition="above"
                                                         (click)="openDialog(post,'lesson')" class="fa fa-plus"></i>
                                                     <i matTooltip="Lesson Setting" matTooltipPosition="above" 

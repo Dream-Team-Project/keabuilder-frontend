@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef, OnChanges, SimpleChanges, EventEmitter, Output} from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { NavbarService } from '../_services/navbar.service';
@@ -22,7 +22,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   connectWtParent:boolean = false;
+  rippleClr:string = 'rgb(24 103 192 / 10%)';
 
+  @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()
   set DialogToggle(val: any) {
     if(this.connectWtParent) {
@@ -84,7 +86,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   overlayRefDetach(update: boolean) {
     if(this._general.imgSelection) {
-      this._image.closeImgSelBox();
+      this.openImageDialog.emit(false);
     }
     else if(this.backToRow) {
         this.resetDialog(update);
@@ -129,6 +131,12 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     setTimeout(()=>{
       this.dragBoxAnime.open = false;
     },200)
+  }
+
+  openImgDialog() {
+    this._image.imageSelectionAllow = true;
+    this._image.imgMatTabIndex = 1;
+    this.openImageDialog.emit(true);
   }
 
   // drag drop box

@@ -110,7 +110,7 @@ button.side-floating-btn:last-child {
 
 .dislay-device-list {
     position: absolute;
-    background: var(--kb-light);
+    background: rgb(244 244 244 / 90%);
     color: var(--kb-text-color);
     box-shadow: 0 0 30px rgb(0 0 0 / 20%);
     border-radius: 5px;
@@ -134,10 +134,6 @@ button.side-floating-btn:last-child {
 
 .dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked {
     color: var(--section-color);
-}
-
-span.kb-setting-icon .kb-handle-block {
-    cursor: n-resize;
 }
 
 .kb-tab-content span.highlight {
@@ -219,4 +215,8 @@ i.kb-danger {
         opacity: 1;
         transform: translate(0px, 0px);
     }
+}
+
+span.kb-setting-icon .kb-handle-block {
+    cursor: n-resize;
 }

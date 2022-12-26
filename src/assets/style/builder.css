@@ -4,9 +4,10 @@
 
 :root {
     /* builder root */
-        --opacity-primary: rgb(216 200 152 / 70%);        ;
+        --opacity-primary: rgb(216 200 152 / 90%);
         --opacity-success: rgb(27 197 189 / 70%);
         --opacity-section: rgb(24 103 192 / 80%);
+        --opacity-danger: rgb(220 53 69 / 70%);
         --primary-color: var(--primary-color);
         --secondary-color: #6c757d;
         --section-color: #1867c0;
@@ -17,8 +18,8 @@
         --kb-info: #17a2b8;
         --kb-gray: #ececec;
         --kb-dim-black: #22262a66;
-        --kb-text-color: #4c5866;
-        --kb-dark: #35363a; 
+        --kb-text-color: #454545;
+        --kb-dark: #2e2e2e; 
     
     /* builder root */
     
@@ -333,5 +334,6 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 input[type=number] {
+  -webkit-appearance: textfield;
   -moz-appearance: textfield;
 }

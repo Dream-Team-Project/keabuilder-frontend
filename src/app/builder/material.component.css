@@ -3,8 +3,17 @@
     width: 100%;
 }
 
-::ng-deep *:hover ::-webkit-scrollbar {
-    width: 8px!important;
+::ng-deep .mat-dialog-container {
+    overflow: visible!important;
+    min-width: 400px;
+}
+
+.mat-dialog-actions {
+    justify-content: flex-end;
+}
+
+.mat-dialog-title {
+    margin-bottom: 16px!important;
 }
 
 ::ng-deep .mat-option-text {
@@ -49,7 +58,7 @@ image-cropper {
     /* z-index: 99999; */
 }
 
-::ng-deep .mat-radio-checked, ::ng-deep .mat-button-toggle-checked button, ::ng-deep .mat-form-field.mat-focused .mat-form-field-label, ::ng-deep .mat-button.mat-primary, ::ng-deep .mat-icon-button.mat-primary, ::ng-deep .mat-stroked-button.mat-primary {
+::ng-deep .mat-form-field.mat-focused i, ::ng-deep .mat-radio-checked, ::ng-deep .mat-button-toggle-checked button, ::ng-deep .mat-form-field.mat-focused .mat-form-field-label, ::ng-deep .mat-button.mat-primary, ::ng-deep .mat-icon-button.mat-primary, ::ng-deep .mat-stroked-button.mat-primary {
     color: var(--section-color)!important;
 }
 
@@ -77,7 +86,7 @@ image-cropper {
 ::ng-deep .mat-snack-bar-container {
     color: #ffffff;
     background-color: var(--primary-color)!important;
-    margin-top: 30px!important;
+    margin-top: 50px!important;
     font-weight: 500;
     font-size: 16px;
 }
@@ -153,22 +162,25 @@ image-cropper {
     background-color: var(--section-color);
 }
 
-::ng-deep #kb-form-elements .mat-tab-body-wrapper .mat-tab-body {
-    height: 550px!important;
+::ng-deep #kb-form-elements .mat-tab-body-wrapper {
+    height: 550px;
 }  
 
-::ng-deep .kb-img-inner-group .mat-tab-body-wrapper .mat-tab-body {
-    height: 500px!important;
-    padding-top: 0px;
-    padding-bottom: 0px;
-} 
+::ng-deep #kb-img-group .mat-tab-body-wrapper {
+    height: 500px;
+}
+
+::ng-deep #kb-selection-ask .mat-tab-body-wrapper {
+    height: 400px;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+    overflow-y: auto!important;
+}
 
 ::ng-deep .mat-tab-body-wrapper .mat-tab-body {
-    width: 100%;
     padding: 6px 12px;
     font-size: 14px;
-    overflow-y: auto!important;
-    height: 400px;
 } 
 
 ::ng-deep .mat-radio-label-content {
@@ -207,6 +219,12 @@ image-cropper {
     box-shadow: 0 2px 10px #0000001f, 0 2px 5px #00000029;
 }
 
+::ng-deep color-material input {
+    border-radius: 0px;
+    background: none;
+    border-bottom-color: rgb(238, 238, 238)!important;
+}
+
 ::ng-deep .mat-expansion-panel-header-description {
     margin: 0px!important;
     flex-grow: unset!important;
@@ -234,10 +252,6 @@ image-cropper {
 ::ng-deep .tox.tox-tinymce {
     border-color: var(--kb-gray);
     border-radius: 5px;
-}
-
-::ng-deep .tox .tox-edit-area__iframe {
-    background-color: transparent!important;
 }
 
 ::ng-deep .mce-content-body {
@@ -272,4 +286,270 @@ image-cropper {
 ::ng-deep .mat-chip.mat-standard-chip {
     color: var(--kb-text-color);
     background: var(--kb-gray);
+}
+
+::ng-deep .mat-progress-bar {
+    top: 32px!important;
+}
+
+::ng-deep .mat-menu-content {
+    background-color: var(--kb-text-color);
+}
+
+::ng-deep .kb-builder-options .mat-menu-content {
+    background-color: var(--kb-dark)!important;
+}
+
+::ng-deep .mat-menu-content button.mat-menu-item svg {
+    width: 14px;
+    fill: #fff;
+}
+
+::ng-deep .kb-builder-options .mat-menu-content button.mat-menu-item {
+    font-size: 13px;
+}
+
+::ng-deep button.mat-menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: var(--kb-light);
+    transition: all 0.1s ease-in-out;
+}
+
+::ng-deep button.mat-menu-item i {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    padding-right: 5px;
+}
+
+::ng-deep .mat-menu-content button.mat-menu-item:hover, ::ng-deep button.mat-menu-item.kb-btn-active {
+    color: var(--primary-color);
+    background-color: rgb(255 255 255 / 10%);
+}
+
+::ng-deep .mat-menu-content button.mat-menu-item:hover svg, ::ng-deep .mat-menu-content button.mat-menu-item.kb-btn-active svg {
+    fill: var(--primary-color);
+}
+
+button.mat-menu-item i.kb-rev {
+    padding-right: 0px;
+    padding-left: 5px;
+}
+
+.kb-row-list .kb-row-type.row-1 span.block,
+div.kb-row div.kb-full-block {
+    max-width: 100%;
+    width: 100%;
+}
+
+.kb-row-list .kb-row-type.row-1-2 span.block,
+div.kb-row div.kb-half-block {
+    max-width: 50%;
+    width: 50%;
+}
+
+.kb-row-list .kb-row-type.row-1-3 span.block,
+div.kb-row div.kb-three-block {
+    max-width: 33.3%;
+    width: 33.3%;
+}
+
+.kb-row-list .kb-row-type.row-1-4 span.block,
+.kb-row-list .kb-row-type.row-25-75 span.block:first-child,
+div.kb-row div.kb-tf-sf-block:first-child,
+.kb-row-list .kb-row-type.row-75-25 span.block:last-child,
+div.kb-row div.kb-sf-tf-block:last-child,
+div.kb-row div.kb-four-block {
+    max-width: 25%;
+    width: 25%;
+}
+
+.kb-row-list .kb-row-type.row-1-5 span.block,
+div.kb-row div.kb-five-block,
+.kb-row-list .kb-row-type.row-20-80 span.block:first-child,
+div.kb-row div.kb-t-e-block:first-child,
+.kb-row-list .kb-row-type.row-80-20 span.block:last-child,
+div.kb-row div.kb-e-t-block:last-child,
+.kb-row-list .kb-row-type.row-40-20-40 span.block:nth-child(2),
+div.kb-row div.kb-f-t-f-block:nth-child(2),
+.kb-row-list .kb-row-type.row-40-40-20 span.block:nth-child(3),
+div.kb-row div.kb-f-f-t-block:nth-child(3),
+.kb-row-list .kb-row-type.row-20-40-40 span.block:nth-child(1),
+div.kb-row div.kb-t-f-f-block:nth-child(1),
+.kb-row-list .kb-row-type.row-20-20-60 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-20-20-60 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-20-60-20 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-20-60-20 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-60-20-20 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-60-20-20 span.block:nth-child(3),
+div.kb-row div.kb-t-t-s-block:nth-child(1),
+div.kb-row div.kb-t-t-s-block:nth-child(2),
+div.kb-row div.kb-t-s-t-block:nth-child(1),
+div.kb-row div.kb-t-s-t-block:nth-child(3),
+div.kb-row div.kb-s-t-t-block:nth-child(2),
+div.kb-row div.kb-s-t-t-block:nth-child(3) {
+    max-width: 20%;
+    width: 20%;
+}
+
+.kb-row-list .kb-row-type.row-40-60 span.block:last-child,
+div.kb-row div.kb-f-s-block:last-child,
+.kb-row-list .kb-row-type.row-60-40 span.block:first-child,
+div.kb-row div.kb-s-f-block:first-child,
+.kb-row-list .kb-row-type.row-20-20-60 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-20-60-20 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-60-20-20 span.block:nth-child(1),
+div.kb-row div.kb-t-t-s-block:nth-child(3),
+div.kb-row div.kb-t-s-t-block:nth-child(2),
+div.kb-row div.kb-s-t-t-block:nth-child(1) {
+    max-width: 60%;
+    width: 60%;
+}
+
+.kb-row-list .kb-row-type.row-1-6 span.block,
+div.kb-row div.kb-six-block {
+    max-width: 16.6%;
+    width: 16.6%;
+}
+
+.kb-row-list .kb-row-type.row-25-75 span.block:last-child,
+div.kb-row div.kb-tf-sf-block:last-child,
+.kb-row-list .kb-row-type.row-75-25 span.block:first-child,
+div.kb-row div.kb-sf-tf-block:first-child {
+    max-width: 75%;
+    width: 75%;
+}
+
+.kb-row-list .kb-row-type.row-20-80 span.block:last-child,
+div.kb-row div.kb-t-e-block:last-child,
+.kb-row-list .kb-row-type.row-80-20 span.block:first-child,
+div.kb-row div.kb-e-t-block:first-child,
+.kb-row-list .kb-row-type.row-10-10-80 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-10-80-10 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-80-10-10 span.block:nth-child(1),
+div.kb-row div.kb-t-t-e-block:nth-child(3),
+div.kb-row div.kb-t-e-t-block:nth-child(2),
+div.kb-row div.kb-e-t-t-block:nth-child(1) {
+    max-width: 80%;
+    width: 80%;
+}
+
+.kb-row-list .kb-row-type.row-10-90 span.block:first-child,
+div.kb-row div.kb-t-n-block:first-child,
+.kb-row-list .kb-row-type.row-90-10 span.block:last-child,
+div.kb-row div.kb-n-t-block:last-child,
+.kb-row-list .kb-row-type.row-45-10-45 span.block:nth-child(2),
+div.kb-row div.kb-ff-t-ff-block:nth-child(2),
+.kb-row-list .kb-row-type.row-10-45-45 span.block:nth-child(1),
+div.kb-row div.kb-t-ff-ff-block:nth-child(1),
+.kb-row-list .kb-row-type.row-45-45-10 span.block:nth-child(3),
+div.kb-row div.kb-ff-ff-t-block:nth-child(3),
+.kb-row-list .kb-row-type.row-10-10-80 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-10-10-80 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-10-80-10 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-10-80-10 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-80-10-10 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-80-10-10 span.block:nth-child(3),
+div.kb-row div.kb-t-t-e-block:nth-child(1),
+div.kb-row div.kb-t-t-e-block:nth-child(2),
+div.kb-row div.kb-t-e-t-block:nth-child(1),
+div.kb-row div.kb-t-e-t-block:nth-child(3),
+div.kb-row div.kb-e-t-t-block:nth-child(2),
+div.kb-row div.kb-e-t-t-block:nth-child(3) {
+    max-width: 10%;
+    width: 10%;
+}
+
+.kb-row-list .kb-row-type.row-45-10-45 span.block:nth-child(1),
+div.kb-row div.kb-ff-t-ff-block:nth-child(1),
+.kb-row-list .kb-row-type.row-45-10-45 span.block:nth-child(3),
+div.kb-row div.kb-ff-t-ff-block:nth-child(3),
+.kb-row-list .kb-row-type.row-45-45-10 span.block:nth-child(1),
+div.kb-row div.kb-ff-ff-t-block:nth-child(1),
+.kb-row-list .kb-row-type.row-45-45-10 span.block:nth-child(2),
+div.kb-row div.kb-ff-ff-t-block:nth-child(2),
+.kb-row-list .kb-row-type.row-10-45-45 span.block:nth-child(3),
+div.kb-row div.kb-t-ff-ff-block:nth-child(1),
+.kb-row-list .kb-row-type.row-10-45-45 span.block:nth-child(2),
+div.kb-row div.kb-t-ff-ff-block:nth-child(2) {
+    max-width: 45%;
+    width: 45%;
+}
+
+.kb-row-list .kb-row-type.row-10-90 span.block:last-child,
+div.kb-row div.kb-t-n-block:last-child,
+.kb-row-list .kb-row-type.row-90-10 span.block:first-child,
+div.kb-row div.kb-n-t-block:first-child {
+    max-width: 90%;
+    width: 90%;
+}
+
+.kb-row-list .kb-row-type.row-15-15-70 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-15-70-15 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-70-15-15 span.block:nth-child(1),
+div.kb-row div.kb-ft-ft-s-block:nth-child(3),
+div.kb-row div.kb-ft-s-ft-block:nth-child(2),
+div.kb-row div.kb-s-ft-ft-block:nth-child(1) {
+    max-width: 70%;
+    width: 70%;
+}
+
+.kb-row-list .kb-row-type.row-15-15-70 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-15-15-70 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-15-70-15 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-15-70-15 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-70-15-15 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-70-15-15 span.block:nth-child(3),
+div.kb-row div.kb-ft-ft-s-block:nth-child(1),
+div.kb-row div.kb-ft-ft-s-block:nth-child(2),
+div.kb-row div.kb-ft-s-ft-block:nth-child(1),
+div.kb-row div.kb-ft-s-ft-block:nth-child(3),
+div.kb-row div.kb-s-ft-ft-block:nth-child(2),
+div.kb-row div.kb-s-ft-ft-block:nth-child(3) {
+    max-width: 15%;
+    width: 15%;
+}
+
+.kb-row-list .kb-row-type.row-60-40 span.block:last-child,
+div.kb-row div.kb-s-f-block:last-child,
+.kb-row-list .kb-row-type.row-40-60 span.block:first-child,
+div.kb-row div.kb-f-s-block:first-child,
+.kb-row-list .kb-row-type.row-30-30-40 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-40-20-40 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-40-20-40 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-40-40-20 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-40-40-20 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-20-40-40 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-20-40-40 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-30-40-30 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-40-30-30 span.block:nth-child(1),
+div.kb-row div.kb-t-t-f-block:nth-child(3),
+div.kb-row div.kb-f-t-f-block:nth-child(1),
+div.kb-row div.kb-f-t-f-block:nth-child(3),
+div.kb-row div.kb-f-f-t-block:nth-child(1),
+div.kb-row div.kb-f-f-t-block:nth-child(2),
+div.kb-row div.kb-t-f-f-block:nth-child(2),
+div.kb-row div.kb-t-f-f-block:nth-child(3),
+div.kb-row div.kb-t-f-t-block:nth-child(2),
+div.kb-row div.kb-f-t-t-block:nth-child(1) {
+    max-width: 40%;
+    width: 40%;
+}
+
+.kb-row-list .kb-row-type.row-30-30-40 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-30-30-40 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-30-40-30 span.block:nth-child(1),
+.kb-row-list .kb-row-type.row-30-40-30 span.block:nth-child(3),
+.kb-row-list .kb-row-type.row-40-30-30 span.block:nth-child(2),
+.kb-row-list .kb-row-type.row-40-30-30 span.block:nth-child(3),
+div.kb-row div.kb-t-t-f-block:nth-child(1),
+div.kb-row div.kb-t-t-f-block:nth-child(2),
+div.kb-row div.kb-t-f-t-block:nth-child(1),
+div.kb-row div.kb-t-f-t-block:nth-child(3),
+div.kb-row div.kb-f-t-t-block:nth-child(2),
+div.kb-row div.kb-f-t-t-block:nth-child(3) {
+    max-width: 30%;
+    width: 30%;
 }

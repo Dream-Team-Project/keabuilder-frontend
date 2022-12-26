@@ -94,7 +94,7 @@ export class StyleService {
   // border
   // background
   background_color: string = 'rgba(0,0,0,0)';
-  background_gradient: any = { type: 'linear', radial_direction: 'center', start: '#1867c0', end: '#1BC5BD', direction: 45, startPosition: 0, endPosition: 100 };
+  background_gradient: any = { type: 'linear', radial_direction: 'center', start: '#1867c0', end: '#dea641', direction: 45, startPosition: 0, endPosition: 100 };
   background_gradient_types: any = ['linear', 'radial']
   background_gradient_radial_directions: any = ['center', 'top left', 'top', 'top right', 'right', 'bottom left', 'bottom', 'bottom right', 'left']
   background_image:any = { name: 'no-image.png', size: 'cover', position: 'center', repeat: { name: 'no repeat', value: 'no-repeat' }, attachment: 'scroll'};
@@ -161,23 +161,14 @@ export class StyleService {
     }
   }
 
-  getRespDevice() {
-    if (this._general.showResp.toggle) {
-      return this._general.respToggleDevice.name;
-    }
-    else {
-      return 'desktop';
-    }  
-  }
-
   setRespStyle(block:any, rObj:object) {
-    if (this.getRespDevice() == 'tablet-h') {
+    if (this._general.respToggleDevice.name == 'tablet-h') {
       block.style.tablet_h = rObj;
     }
-    else if (this.getRespDevice() == 'tablet-v') {
+    else if (this._general.respToggleDevice.name == 'tablet-v') {
       block.style.tablet_v = rObj;
     }
-    else if(this.getRespDevice() == 'mobile') {
+    else if (this._general.respToggleDevice.name == 'mobile') {
       block.style.mobile = rObj;
     }
     else {
@@ -270,13 +261,13 @@ export class StyleService {
   }
 
   getDisplay(hide:any) {
-    if (this.getRespDevice() == 'tablet-h') {
+    if (this._general.respToggleDevice.name == 'tablet-h') {
       return hide.tablet_h;
     }
-    else if (this.getRespDevice() == 'tablet-v') {
+    else if (this._general.respToggleDevice.name == 'tablet-v') {
       return hide.tablet_v;
     }
-    else if(this.getRespDevice() == 'mobile') {
+    else if(this._general.respToggleDevice.name == 'mobile') {
       return hide.mobile;
     }
     else {
@@ -285,13 +276,13 @@ export class StyleService {
   }
 
   getColumnReverse(rowColumnRev: any) {
-    if (this.getRespDevice() == 'tablet-h') {
+    if (this._general.respToggleDevice.name == 'tablet-h') {
       return rowColumnRev.tablet_h ? 'row-reverse' : '';
     }
-    else if (this.getRespDevice() == 'tablet-v') {
+    else if (this._general.respToggleDevice.name == 'tablet-v') {
       return rowColumnRev.tablet_v ? 'column-reverse' : '';
     }
-    else if(this.getRespDevice() == 'mobile') {
+    else if(this._general.respToggleDevice.name == 'mobile') {
       return rowColumnRev.mobile ? 'column-reverse' : '';
     }
     else {
@@ -300,13 +291,13 @@ export class StyleService {
   }
 
   getBlockParamValue(blockparam: any) {
-    if (this.getRespDevice() == 'tablet-h' && blockparam.tablet_h != 'auto') {
+    if (this._general.respToggleDevice.name == 'tablet-h' && blockparam.tablet_h != 'auto') {
       return blockparam.tablet_h;
     }
-    else if (this.getRespDevice() == 'tablet-v' && blockparam.tablet_v != 'auto') {
+    else if (this._general.respToggleDevice.name == 'tablet-v' && blockparam.tablet_v != 'auto') {
       return blockparam.tablet_v;
     }
-    else if (this.getRespDevice() == 'mobile' && blockparam.mobile != 'auto') {
+    else if (this._general.respToggleDevice.name == 'mobile' && blockparam.mobile != 'auto') {
       return blockparam.mobile;
     }
     else {
@@ -317,13 +308,13 @@ export class StyleService {
   // set
 
   setElementAlignment(val:string) {
-    if (this.getRespDevice() == 'tablet-h') {
+    if (this._general.respToggleDevice.name == 'tablet-h') {
       this.item_alignment.tablet_h = (val == '') ? 'flex-start' : val;
     }
-    else if (this.getRespDevice() == 'tablet-v') {
+    else if (this._general.respToggleDevice.name == 'tablet-v') {
       this.item_alignment.tablet_v = (val == '') ? 'flex-start' : val;
     }
-    else if (this.getRespDevice() == 'mobile') {
+    else if (this._general.respToggleDevice.name == 'mobile') {
       this.item_alignment.mobile = (val == '') ? 'flex-start' : val;
     }
     else {
@@ -337,13 +328,13 @@ export class StyleService {
 
   getBlockStyle(blockS: any) {
     var objS = {};
-    if (this.getRespDevice() == 'tablet-h') {
+    if (this._general.respToggleDevice.name == 'tablet-h') {
       objS = blockS.tablet_h;
     }
-    else if (this.getRespDevice() == 'tablet-v') {
+    else if (this._general.respToggleDevice.name == 'tablet-v') {
       objS = blockS.tablet_v;
     }
-    else if(this.getRespDevice() == 'mobile') {
+    else if(this._general.respToggleDevice.name == 'mobile') {
       objS = blockS.mobile;
     }
     return {...blockS.desktop, ...objS};
@@ -381,7 +372,7 @@ export class StyleService {
     if(objBoxS['box-shadow']) {
       objAllS = {...objAllS, ...objBoxS}
     }
-    if(this.background_type == 'color' && this._general.showResp.toggle) {
+    if(this.background_type == 'color' && this._general.respToggleDevice.name != 'desktop') {
       return {...objAllS, ...objBgNone};
     }
     else if(this.background_type == 'image') {
@@ -865,6 +856,7 @@ export class StyleService {
   }
 
   updateStyle() {
+    var device = this._general.respToggleDevice.name;
     if(this._general.selectedBlock.type == 'main') {
       var pageN = this._general.page_name ? this._general.page_name : 'Page Name';
       var pageT = this._general.page_title ? this._general.page_title : 'Page Title';
@@ -881,15 +873,15 @@ export class StyleService {
       this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
     }
-    if (this._general.showResp.toggle) {
+    if (device != 'desktop') {
       var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
-      if (this.getRespDevice() == 'tablet-h') {
+      if (device == 'tablet-h') {
         this._general.selectedBlock.style.tablet_h = newS;
       }
-      else if (this.getRespDevice() == 'tablet-v') {
+      else if (device == 'tablet-v') {
         this._general.selectedBlock.style.tablet_v = newS;
       }
-      else if (this.getRespDevice() == 'mobile') {
+      else if (device == 'mobile') {
         this._general.selectedBlock.style.mobile = newS;
       }
     }
@@ -941,15 +933,16 @@ export class StyleService {
   }
 
   setElementStyle(contentStyle: any) {
-    if (this._general.showResp.toggle) {
+    var device = this._general.respToggleDevice.name;
+    if (device != 'desktop') {
       var newS = this.filterElementStyle(contentStyle, this._general.selectedBlock.content.style.desktop);
-      if (this.getRespDevice() == 'tablet-h') {
+      if (this._general.respToggleDevice.name == 'tablet-h') {
         this._general.selectedBlock.content.style.tablet_h = newS;
       }
-      else if (this.getRespDevice() == 'tablet-v') {
+      else if (this._general.respToggleDevice.name == 'tablet-v') {
         this._general.selectedBlock.content.style.tablet_v = newS;
       }
-      else if (this.getRespDevice() == 'mobile') {
+      else if (this._general.respToggleDevice.name == 'mobile') {
         this._general.selectedBlock.content.style.mobile = newS;
       }
     }
@@ -975,8 +968,8 @@ export class StyleService {
       plr = '16px';
       brw = '2px';
       br = '5px';
-      bclr = '#1BC5BD';
-      bgclr = '#1BC5BD';
+      bclr = '#dea641';
+      bgclr = '#dea641';
     }
     else if (block.itemstyle) {
       ptb = '6px';
@@ -1019,8 +1012,8 @@ export class StyleService {
     this.blockAlign = '';
 
     if (block.type == 'row') {
-        this.width.value = '80%';
-        this.widthRange.value = 80;        
+        this.width.value = '90%';
+        this.widthRange.value = 90;        
     }
     else if (block.type == 'element') {
       this.width.value = 'auto';
@@ -1065,9 +1058,9 @@ export class StyleService {
     this.defaultStyling(block);
     // text
     var fsv, fsr, fwn, fwv, tc, ta;
+    fsv = block.content.size+'px';
+    fsr = block.content.size;
     if (block.content.name == 'button') {
-      fsv = '14px';
-      fsr = 14;
       fwn = 'semi bold (demi bold)';
       fwv = 600;
       tc = 'rgba(255, 255, 255, 1)';
@@ -1075,14 +1068,10 @@ export class StyleService {
     }
     else {
       if (block.content.name == 'heading') {
-        fsv = '32px';
-        fsr = 32;
         fwn = 'bold';
         fwv = 700;
       }
       else {
-        fsv = '16px';
-        fsr = 16;
         fwn = 'normal';
         fwv = 400;
       }
@@ -1112,7 +1101,7 @@ export class StyleService {
     // image
     // button
     this.button_text = 'Read More';
-    this.button_subtext = 'Sub Text';
+    this.button_subtext = 'Extra Text';
     this.button_subfont_size.value = '80%';
     this.button_subfont_sizeRange.value = '80';
     this.button_link = '#';
@@ -1161,7 +1150,7 @@ export class StyleService {
     this.background_gradient.type = 'linear';
     this.background_gradient.radial_direction = 'center';
     this.background_gradient.start = '#1867c0';
-    this.background_gradient.end = '#1BC5BD';
+    this.background_gradient.end = '#dea641';
     this.background_gradient.direction = 45;
     this.background_gradient.startPosition = 0;
     this.background_gradient.endPosition = 100;

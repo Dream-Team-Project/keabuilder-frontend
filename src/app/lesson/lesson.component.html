@@ -157,7 +157,7 @@
             <h3>
                 {{lesson.title}}
                 <i matTooltip="Lesson Setting" matTooltipPosition="above" (click)="openDialog(lesson, 'details')" class="kb-edit-pencil fa fa-pencil-alt ml-2 p-2"></i>
-                <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Drafted'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="toggleStatus(lesson)"></mat-slide-toggle>
+                <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="toggleStatus(lesson)"></mat-slide-toggle>
             </h3>
         </div>
         <div class="col-md-4 text-right">

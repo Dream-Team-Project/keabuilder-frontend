@@ -1,36 +1,29 @@
-<app-builder-setting [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<div #wireframe [style.width]="_general.wfmW" mwlResizable [enableGhostResize]="true" (resizeEnd)="_general.onResizeEnd($event, wireframe)"
-    id="kb-wireframe" style="background-color: var(--kb-gray)" [class.openWireframe]="_general.wireframe.open" 
-    [class.closeWireframe]="_general.wireframe.close" class="kb-wfs-contain">
-    <div id="kb-wfs-navtimes" [style]="navtimeStyle" (click)="_general.wireframeToggle(false)" [class.kb-wfs-navtimes-btn-open]="_general.wireframe.open"
-    [class.kb-wfs-navtimes-btn-close]="_general.wireframe.close" matTooltip="Close" matTooltipPosition="below">
-        <div class="kb-wfs-navtimes">
-            <div class="kb-wfs-navtime"></div>
-        </div>
+<div #wireframe
+    id="kb-wireframe">
+    <div class="kb-wireframe-head" [class.kb-wfposleft]="wfposStart">
+        <button mat-button (click)="wfposToggle()" class="kb-wfpos-arrow">
+            <mat-icon>{{wfposStart ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}}</mat-icon>
+        </button>   
+        <button (click)="_general.expandAll(sectionUl, true)" mat-raised-button class="kb-btn kb-btn-secondry">Expand</button>
+        <button (click)="_general.expandAll(sectionUl, false)" mat-raised-button class="kb-btn kb-btn-primary">Collapse</button>
     </div>
-    <div class="wireframe-head">
-        <button (click)="_general.expandAll(sectionUl, true)" mat-raised-button class="kb-btn kb-btn-secondry">Expand
-            all</button>
-        <button (click)="_general.expandAll(sectionUl, false)" mat-raised-button class="kb-btn kb-btn-primary">Collapse
-            all</button>
-    </div>
-    <ul #sectionUl class="kb-drag-container kb-wfs-section" cdkDropList [cdkDropListConnectedTo]="secdls" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
+    <ul #sectionUl class="kb-drag-container kb-wfs-section" cdkDropList id="sectiongroup-0" [cdkDropListConnectedTo]="sectionConnect" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
         <li cdkDrag *ngFor="let section of _section.sections, index as si"
             (mouseenter)="_row.selectedSectionRows = section.rowArr">
             <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">{{section.name ? section.name : 'Section'}}</div>
             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--section-color)'"></div>
-            <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; section.chngName = false" class="kb-wfs">
+            <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); section.chngName = false" class="kb-wfs">
                 <span class="kb-setting-icon">
                     <i cdkDragHandle *ngIf="_section.sections.length > 1" class="kb-handle-block kb-handle-section fas fa-arrows-alt-v"></i>
                     <i (click)="_general.expandDevList('devListS-'+si)" class="fa" [class]="_style.getDisplay(section.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    <div [id]="'devListS-'+si" class="dislay-device-list" [style.maxHeight]="'0px'">
-                            <mat-checkbox [checked]="_general.isAllHide(section.hide)"
-                            [indeterminate]="_general.someComplete(section.hide)"
-                            (change)="_general.setAll(section.hide, $event.checked)">All</mat-checkbox>
-                            <mat-checkbox [(ngModel)]="section.hide.desktop">Desktop</mat-checkbox>
-                            <mat-checkbox [(ngModel)]="section.hide.tablet_h">Tablet Horizontal</mat-checkbox>
-                            <mat-checkbox [(ngModel)]="section.hide.tablet_v">Tablet Vertical</mat-checkbox>
-                            <mat-checkbox [(ngModel)]="section.hide.mobile">Mobile</mat-checkbox>
+                    <div [id]="'devListS-'+si" class="dislay-device-list">
+                        <mat-checkbox [checked]="_general.isAllHide(section.hide)"
+                        [indeterminate]="_general.someComplete(section.hide)"
+                        (change)="_general.setAll(section.hide, $event.checked)">All</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="section.hide.desktop">Desktop</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="section.hide.tablet_h">Tablet Horizontal</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="section.hide.tablet_v">Tablet Vertical</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="section.hide.mobile">Mobile</mat-checkbox>
                     </div>
                 </span>
                 <span class="kb-wfs-name">
@@ -47,28 +40,28 @@
                 <span class="kb-setting-icon">
                     <i (click)="_section.addSection(si)" matTooltip="Add New Section" matTooltipPosition="above"
                         class="fa fa-plus"></i>
+                    <i (click)="saveastemp.emit(section)" matTooltip="Save As Template"
+                        matTooltipPosition="above" class="far fa-save"></i>        
                     <i (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
                         matTooltip="Section Setting" matTooltipPosition="above" class="far fa-edit"></i>
                     <i (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
                         matTooltipPosition="above" class="far fa-copy"></i>
                     <i *ngIf="_section.sections.length > 1" (click)="_section.deleteSection(si)"
                         matTooltip="Delete Section" matTooltipPosition="above" class="far fa-trash-alt"></i>
-                    <i (click)="_general.expandToggle(rowUl)" class="fa fa-angle-down"
-                        [style.transform]="'rotate('+(rowUl.style.maxHeight != '0px' ? '180' : '0') +'deg)'"
-                        [matTooltip]="rowUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
-                        matTooltipPosition="above"></i>
+                    <i (click)="_general.expandToggle(rowUl)" class="fa fa-angle-up"
+                        [style.transform]="rowUl.classList.contains('kb-d-none') ? 'rotate(180deg)' : ''"></i>
                 </span>
             </span>
-            <ul #rowUl [style.maxHeight]="'fit-content'" name="row" class="kb-drag-container kb-wfs-row kb-block-shift"
-            cdkDropList [id]="'rowgroup-'+si" [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="rowdls" (cdkDropListDropped)="drop($event)">
+            <ul #rowUl name="row" class="kb-drag-container kb-wfs-row kb-block-shift"
+            cdkDropList [id]="'rowgroup-'+si" [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="rowConnect" (cdkDropListDropped)="drop($event)">
                 <li cdkDrag *ngFor="let row of section.rowArr, index as ri" (mouseenter)="_row.selectedRow = row;">
                     <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
                     <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--row-color)'"></div>
-                    <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; row.chngName = false" class="kb-wfs">
+                    <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); row.chngName = false" class="kb-wfs">
                         <span class="kb-setting-icon">
                             <i *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row fas fa-arrows-alt-v"></i>
                             <i (click)="_general.expandDevList('devListR-'+si+ri)" class="fa" [class]="_style.getDisplay(row.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
-                            <div [id]="'devListR-'+si+ri" class="dislay-device-list" [style.maxHeight]="'0px'">
+                            <div [id]="'devListR-'+si+ri" class="dislay-device-list">
                                     <mat-checkbox [checked]="_general.isAllHide(row.hide)"
                                     [indeterminate]="_general.someComplete(row.hide)"
                                     (change)="_general.setAll(row.hide, $event.checked)">All</mat-checkbox>
@@ -92,7 +85,7 @@
                         <span class="kb-setting-icon">
                             <i (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
                                 matTooltip="Add New Row" matTooltipPosition="above" class="fa fa-plus"></i>
-                            <i *ngIf="row.columnSetting" (click)="_general.blockSelection = 'row'; openDialog($event)"
+                            <i *ngIf="row.columnArr[0].elementArr.length == 0" (click)="_general.blockSelection = 'row'; openDialog($event)"
                                 matTooltip="Column Structure" matTooltipPosition="above" class="fa fa-columns"></i>
                             <i (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
                                 matTooltip="Row Setting" matTooltipPosition="above" class="far fa-edit"></i>
@@ -100,24 +93,22 @@
                                 matTooltipPosition="above" class="far fa-copy"></i>
                             <i (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
                                 matTooltipPosition="above" class="far fa-trash-alt"></i>
-                            <i (click)="_general.expandToggle(columnUl)" class="fa fa-angle-down"
-                                [style.transform]="'rotate('+(columnUl.style.maxHeight != '0px' ? '180' : '0') +'deg)'"
-                                [matTooltip]="columnUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
-                                matTooltipPosition="above"></i>
+                            <i (click)="_general.expandToggle(columnUl)" class="fa fa-angle-up"
+                                [style.transform]="columnUl.classList.contains('kb-d-none') ? 'rotate(180deg)' : ''"></i>
                         </span>
                     </span>
-                    <ul #columnUl [style.maxHeight]="'fit-content'" name="column"
+                    <ul #columnUl name="column"
                         class="kb-drag-container kb-wfs-column" [cdkDropListEnterPredicate]="verifyDrop"
-                            cdkDropList [id]="'colgroup-'+ri" [cdkDropListData]="row.columnArr" [cdkDropListConnectedTo]="coldls" (cdkDropListDropped)="drop($event)">
+                            cdkDropList [id]="'columngroup-'+ri" [cdkDropListData]="row.columnArr" [cdkDropListConnectedTo]="columnConnect" (cdkDropListEntered)="colDropRow = row" (cdkDropListExited)="colDragRow = row" (cdkDropListDropped)="drop($event)">
                         <li cdkDrag class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
                             (mouseenter)="_element.selectedElements = column.elementArr">
                             <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--kb-text-color)', 'background-color':'var(--kb-white)'}">{{column.name ? column.name : 'Column'}}</div>
                             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-white)'"></div>
-                            <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; column.chngName = false" class="kb-wfs">
+                            <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); column.chngName = false" class="kb-wfs">
                                 <span class="kb-setting-icon">
                                     <i *ngIf="row.columnArr.length > 1" class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>
                                     <i (click)="_general.expandDevList('devListC-'+si+ri+ci)" class="fa" [class]="_style.getDisplay(column.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                    <div [id]="'devListC-'+si+ri+ci" class="dislay-device-list" [style.maxHeight]="'0px'">
+                                    <div [id]="'devListC-'+si+ri+ci" class="dislay-device-list">
                                             <mat-checkbox [checked]="_general.isAllHide(column.hide)"
                                             [indeterminate]="_general.someComplete(column.hide)"
                                             (change)="_general.setAll(column.hide, $event.checked)">All</mat-checkbox>
@@ -141,27 +132,27 @@
                                 </span>
                                 <span class="kb-setting-icon">
                                     <i *ngIf="row.columnArr.length < 6"
-                                        (click)="_column.addColumn(row.rowSize,ci); _general.expandOnAction(columnUl)"
+                                        (click)="_column.addColumn(row.rowSize,ci)"
                                         matTooltip="Add New Column" matTooltipPosition="above" class="fa fa-plus"></i>
                                     <i *ngIf="row.columnArr.length < 6"
-                                        (click)="_column.duplicateColumn(column,ci); _general.expandOnAction(columnUl)"
+                                        (click)="_column.duplicateColumn(column,ci)"
                                         matTooltip="Duplicate Column" matTooltipPosition="above"
                                         class="far fa-copy"></i>
                                     <i *ngIf="row.columnArr.length > 1"
-                                        (click)="_column.deleteColumn(row.columnArr,ci); _general.expandOnAction(columnUl)"
+                                        (click)="_column.deleteColumn(row.columnArr,ci)"
                                         matTooltip="Delete Column" matTooltipPosition="above"
                                         class="far fa-trash-alt"></i>
                                 </span>
                             </span>
-                            <ul name="element" class="kb-drag-container kb-wfs-element" cdkDropList [id]="'elegroup-'+ci" [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="eledls" (cdkDropListDropped)="drop($event)">
+                            <ul name="element" class="kb-drag-container kb-wfs-element" cdkDropList [id]="'elementgroup-'+ci" [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="elementConnect" (cdkDropListDropped)="drop($event)">
                                 <li cdkDrag *ngFor="let element of column.elementArr, index as ei">
                                     <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">{{element.name ? element.name : element.content.name}}</div>
                                     <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--primary-color)'"></div>
-                                    <span (mouseleave)="_general.lastDevList ? _general.lastDevList.style.maxHeight = '0px' : ''; element.chngName = false" class="kb-wfs">
+                                    <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); element.chngName = false" class="kb-wfs">
                                         <span class="kb-setting-icon">
                                             <i cdkDragHandle class="kb-handle-block kb-handle-element fas fa-arrows-alt-v"></i>
                                             <i (click)="_general.expandDevList('devListE-'+si+ri+ci+ei)" class="fa" [class]="_style.getDisplay(element.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                            <div [id]="'devListE-'+si+ri+ci+ei" class="dislay-device-list" [style.maxHeight]="'0px'">
+                                            <div [id]="'devListE-'+si+ri+ci+ei" class="dislay-device-list">
                                                     <mat-checkbox [checked]="_general.isAllHide(element.hide)"
                                                     [indeterminate]="_general.someComplete(element.hide)"
                                                     (change)="_general.setAll(element.hide, $event.checked)">All</mat-checkbox>
@@ -220,5 +211,4 @@
             </ul>
         </li>
     </ul>
-    <div class="resize-handle-left" mwlResizeHandle [resizeEdges]="{ left: true }"></div>
 </div>

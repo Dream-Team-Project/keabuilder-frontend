@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ResizeEvent } from 'angular-resizable-element';
 import { FileUploadService } from '../file-upload.service';
 import {A, B, COMMA, ENTER} from '@angular/cdk/keycodes';
 import { TokenStorageService } from '../token-storage.service';
@@ -11,6 +10,7 @@ import { FunnelService } from '../funnels.service';
 import { UserService } from '../user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NgxCaptureService } from 'ngx-capture';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,7 @@ import { NgxCaptureService } from 'ngx-capture';
 
 export class GeneralService {
   userdomain:string = 'keapages.com';
-  showLayout:any = {header:true, footer:true};
-  includeLayout:any = {header:false, footer:false};
+  includeLayout:any = {header:true, footer:true};
   user:any;
   subdomain:string = '';
   target:any = {
@@ -29,7 +28,7 @@ export class GeneralService {
   };
   webpage:any = {uniqueid: ''};
   page_general_tab:any = 'info';
-  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
   page_name = '';
   page_title = '';
   page_path = '';
@@ -40,15 +39,13 @@ export class GeneralService {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   lastDevList:any;
-  respDevices:any = [
-  {name:'tablet-h', width:'1024px'},
-  {name:'tablet-v', width:'768px'},
-  {name:'mobile', width:'425px'}];
-  respToggleDevice:any = this.respDevices[2];
-  showResp:any = {toggle: false, open: false, close: false};
+  respDevices:any = {
+    'desktop': {name:'desktop', width:''},
+    'tablet-h':{name:'tablet-h', width:'1024px'},
+    'tablet-v':{name:'tablet-v', width:'768px'},
+    'mobile':{name:'mobile', width:'425px'}};
+  respToggleDevice:any = this.respDevices['desktop'];
   undoRedo:any = {toggle: false, open: false, close: false};
-  wireframe = {toggle: false, open: false, close: false};
-  showNavAnim = {open: false, close: false, show: false, toggle: true, navopen: false};
   allBlocksIds:Array<number> = [];
   selectedBlock:any = [];
   showBackToRowOption:boolean = false;
@@ -57,14 +54,13 @@ export class GeneralService {
   imgSelection:boolean = false;
   minimize:boolean=false;
   expand:boolean= false;
-  screenWidth:any = 1000;
+  screenWidth:any;
   screenHeight:any;
   showEditor:boolean = false;
   showInlineEditor:boolean = false;
   insideEditor:boolean = false;
   selectedTab:any;
   expPanelStep = 0;
-  wfmW = '420px';
   config: any = {
     height: 250,
     plugins:
@@ -97,19 +93,16 @@ export class GeneralService {
     diskCache: true
   };
   pagehtml:any;
+  pageObj:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
   parser = new DOMParser();
-  // file:any = {
-  //   html: '',
-  //   css: '',
-  //   load: false
-  // };
   loading = {
     success: false,
     error: false
   };
   saveDisabled:boolean = false;
   pathError:boolean = false;
+  sectionTemplates:any = [];
   menus:any = [];
   headers:any = [];
   footers:any = [];
@@ -127,6 +120,9 @@ export class GeneralService {
     { name: 'linked new tab', value: 'framename' },
   ];
   validatelink = new FormControl('', [Validators.required, Validators.pattern(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)]);
+  templatesUpdated = new BehaviorSubject(false);
+  filterOrder:any = [{name:'Name Ascending', value: 'asc', type: 'name'}, {name:'Name Descending', value: 'desc', type: 'name'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
+  searchFilter:any = this.filterOrder[1];
 
   constructor(private UserService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
@@ -140,6 +136,16 @@ export class GeneralService {
         this.screenHeight = window.innerHeight; 
       })
     }
+  }
+
+  fetchSectionTemplates() {
+    return new Promise<any>((resolve, reject) => {
+      this.fileUploadService.fetchtemplates().subscribe((data:any)=>{
+        this.sectionTemplates = data.data;
+        this.templatesUpdated.next(!this.templatesUpdated.value);
+        resolve(true);
+      })
+    });
   }
 
   fetchMenus() {
@@ -256,27 +262,37 @@ export class GeneralService {
       if(appendmenus.length == 0) resolve(doc.body.innerHTML);
       appendmenus.forEach((data:any)=>{
         var menu = this.menus.filter((m:any)=>m.id == data.children[0].getAttribute('data-id'))
+        if(menu.length != 0) {
           data.children[0].innerHTML = menu[0].html;
           if(appendmenus.length-1 == i) {
             resolve(doc.body.innerHTML);
           }
+        }
         i++;
       })
     })
   }
 
   setHeader(head:any) {
-    this.setMenu(head.html).then(data=>{
-      head.html = data;
-      this.selectedHeader = head;
-    });
+    return new Promise<any>((resolve, reject) => {
+      this.setMenu(head.html).then(data=>{
+        head.html = data;
+        this.selectedHeader = head;
+        this.includeLayout.header = true;
+        resolve(true);
+      });
+    })
   }
 
   setFooter(foot:any) {
-    this.setMenu(foot.html).then(data=>{
-      foot.html = data;
-      this.selectedFooter = foot;
-    });
+    return new Promise<any>((resolve, reject) => {
+      this.setMenu(foot.html).then(data=>{
+        foot.html = data;
+        this.selectedFooter = foot;
+        this.includeLayout.footer = true;
+        resolve(true);
+      });
+    })
   }
 
   getHeader(id:any) {
@@ -307,28 +323,39 @@ export class GeneralService {
     });
   }
   
+  setBuilder(e:any) {
+    return new Promise<any>((resolve, reject) => {
+      if(e.data.length == 0) this.redirectToPageNotFound();
+      this.webpage = e.data[0];
+      this.main.name = this.webpage.page_name;
+      this.main.title = this.webpage.page_title;
+      this.main.path = this.webpage.page_path;
+      if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+      if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+      this.main.author = this.webpage.page_author;
+      var status = this.webpage.publish_status == 1;
+      this.main.publish_status = status;
+      this.main.dir = status ? 'pages' : 'drafts';
+      this.fileUploadService.getPage(this.main).subscribe({
+        next: (file:any)=>{
+          resolve(file);
+        },
+        error: (err:any) => {
+          this.loading.error = true;
+          resolve(false);
+        }
+      });
+    })
+  }
+  
   getWebPageDetails(uniqueid:any) {
     return new Promise<any>((resolve, reject) => {
       this.webpage.uniqueid = uniqueid;
       this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
         (e:any)=>{
-            if(e.data.length == 0) this.redirectToPageNotFound();
-            this.webpage = e.data[0];
-            this.main.name = this.webpage.page_name;
-            this.main.title = this.webpage.page_title;
-            this.main.path = this.webpage.page_path;
-            if(this.webpage.page_description) this.main.description = this.webpage.page_description;
-            if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
-            this.main.author = this.webpage.page_author;
-            this.fileUploadService.getPage(this.webpage).subscribe({
-              next: (file:any)=>{
-                resolve(file);
-              },
-              error: (err:any) => {
-                this.loading.error = true;
-                resolve(false);
-              }
-            });
+          this.setBuilder(e).then(resp=>{
+            resolve(resp);
+          })
         },
         (err:any) => {
           this.loading.error = true;
@@ -343,26 +370,9 @@ export class GeneralService {
       this.webpage.uniqueid = uniqueid;
       this.funnelService.getSingleFunnelpage(this.webpage.uniqueid).subscribe(
         (e:any)=>{
-            if(e.data.length == 0) window.location.replace(window.location.origin);
-            this.webpage = e.data[0];
-            this.main.name = this.webpage.title;
-            this.main.title = this.webpage.title;
-            this.main.path = this.webpage.page_path;
-            // if(this.webpage.page_description) this.main.description = this.webpage.page_description;
-            // if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
-            // this.main.author = this.webpage.page_author;
-            this.main.description = '';
-            this.main.keywords = '';
-            this.main.author = '';
-            this.fileUploadService.getPage(this.webpage).subscribe({
-              next: (file:any)=>{
-                resolve(file);
-              },
-              error: (err:any) => {
-                this.loading.error = true;
-                resolve(false);
-              }
-            });
+          this.setBuilder(e).then(resp=>{
+            resolve(resp);
+          })
         },
         (err:any) => {
           this.loading.error = true;
@@ -392,8 +402,8 @@ export class GeneralService {
     })
   }
 
-  preview(main:any, sections:any) {
-    this.saveHTML(main, sections, true);
+  preview() {
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/kb-page-'+this.webpage.uniqueid, 'framename');
   }
 
   removeCommments(html:any) {
@@ -439,47 +449,47 @@ export class GeneralService {
     return new Promise<any>((resolve, reject) => {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
-        this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-        if(this.includeLayout.header && this.selectedHeader.html) {
-          var header = this.pagehtml.querySelector('header');
-          header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
-        }
-        if(this.includeLayout.footer && this.selectedFooter.html) {
-          var footer = this.pagehtml.querySelector('footer');
-          footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
-        }
-        this.removeExtra();
-        this.setPageStyle(sections);
-        console.log(web.favicon);
-        this.pagehtml.querySelector('head').innerHTML = 
-        '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
-        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
-        '<meta charset="UTF-8">' +
-        '<meta name="description" content="'+this.main.description+'">' +
-        '<meta name="keywords" content="'+this.main.keywords+'">' +
-        '<meta name="author" content="'+this.main.author+'">' +
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-        '<title>'+this.main.title+'</title>' +        
-        '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
-        (!preview ? '<link rel="stylesheet" href="./style.css">':'');
-        this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
-        var page = {
-          head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
-          body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
-          style: this.getAllStyle(),
-          folder: this.main.path,
-          prevFolder: this.webpage.page_path
-        }
         if(preview) {
-          page.body = this.removeCommments(main.innerHTML);
-          page.prevFolder = 'kb-page-'+this.webpage.uniqueid;
-          page.folder = 'kb-page-'+this.webpage.uniqueid;
-          this.fileUploadService.createpreview(page).subscribe((event:any)=>{
-            window.open(window.location.protocol+'//'+window.location.host+'/preview/'+page.folder, '_blank');
-          });
+          this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+          if(this.includeLayout.header && this.selectedHeader.html) {
+            var header = this.pagehtml.querySelector('header');
+            header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          }
+          if(this.includeLayout.footer && this.selectedFooter.html) {
+            var footer = this.pagehtml.querySelector('footer');
+            footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          }
+          this.removeExtra();
+          this.setPageStyle(sections);
+          this.pagehtml.querySelector('head').innerHTML = 
+          '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
+          '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
+          '<meta charset="UTF-8">' +
+          '<meta name="description" content="'+this.main.description+'">' +
+          '<meta name="keywords" content="'+this.main.keywords+'">' +
+          '<meta name="author" content="'+this.main.author+'">' +
+          '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+          '<title>'+this.main.title+'</title>' +        
+          '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
+          this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
+          this.pageObj = {
+            head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
+            body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+            style: this.getAllStyle(),
+          }
+          this.pageObj.prevFolder = 'kb-page-'+this.webpage.uniqueid;
+          this.pageObj.folder = 'kb-page-'+this.webpage.uniqueid;
+          this.pageObj.dir = 'previews';
+          var prevObj = JSON.parse(JSON.stringify(this.pageObj));
+          prevObj.body = this.removeCommments(main.innerHTML);
+          this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{});
         }
         else {
-          this.fileUploadService.createpage(page).subscribe(
+          this.pageObj.head = this.pageObj.head + '<link rel="stylesheet" href="./style.css">';
+          this.pageObj.folder = this.main.path,
+          this.pageObj.prevFolder = this.webpage.page_path,
+          this.pageObj.dir = this.main.publish_status ? 'pages' : 'drafts'
+          this.fileUploadService.savePage(this.pageObj).subscribe(
             (event:any) => {
               if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
                 var obj = {
@@ -491,7 +501,6 @@ export class GeneralService {
               }
               this.updatePageDB().then(e=>{
                 this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-                this.getBuilderData(this.webpage.uniqueid);
                 resolve(true);
               })
             },
@@ -506,6 +515,7 @@ export class GeneralService {
 
   updatePageDB() {
     return new Promise<any>((resolve, reject) => {
+      var status = this.main.publish_status;
       if(this.target.type == 'website'){
         var pagedata = {
           id: this.webpage.id,
@@ -515,7 +525,7 @@ export class GeneralService {
           page_description: this.main.description,
           page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
           page_author: this.main.author,
-          publish_status: this.webpage.publish_status,
+          publish_status: status ? 1 : 0,
           thumbnail: '',
           tracking_code: '',
         }
@@ -535,7 +545,7 @@ export class GeneralService {
             page_description: this.main.description,
             page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
             page_author: this.main.author,
-            publish_status: this.webpage.publish_status,
+            publish_status: status ? 1 : 0,
             thumbnail: '',
             tracking_code: ''
         }
@@ -702,11 +712,6 @@ export class GeneralService {
     }
   }
 
-  selRespDevice(index:number) {
-    this.respToggleDevice = this.respDevices[index];
-    this.showResp.toggle = true;
-  }  
-
   isAllHide(hide:any): boolean {
     return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile;
   }
@@ -724,112 +729,19 @@ export class GeneralService {
 
   expandDevList(id:string) {
     var devList:any = document.getElementById(id);
-    if (devList.style.maxHeight != '0px'){
-      devList.style.maxHeight = '0px';
-    }
-    else {
-      devList.style.maxHeight = devList.scrollHeight + 'px';
-    }
+    if(devList.hasAttribute('style')) devList.removeAttribute('style'); 
+    else devList.style.maxHeight = devList.scrollHeight+'px';
     this.lastDevList = devList;
   }
 
   expandAll(ele:any, action:boolean) {
-    for(var x = 0; x <= 1; x++) {
-      ele.querySelectorAll('UL').forEach((temp: any)=>{
-        temp.classList.add('kb-hidden');
-        temp.style.maxHeight = (action ? 'fit-content' : '0px');
-        setTimeout(()=>{
-          if(!action) ele.classList.remove('kb-hidden');
-        },300)
-      })
-    }
-  }
-
-  expandOnAction(ele:any) {
-    setTimeout(()=>{
-      ele.style.maxHeight = ele.scrollHeight + 'px';
-    },10)
+    ele.querySelectorAll('UL').forEach((temp: any)=>{
+      !action ? temp.classList.add('kb-d-none') : temp.classList.remove('kb-d-none');;
+    })
   }
 
   expandToggle(ele:any) {
-    ele.classList.add('kb-hidden');
-    if (ele.style.maxHeight != '0px'){
-      ele.style.maxHeight = '0px';
-    } else {
-      ele.style.maxHeight = ele.scrollHeight * 2 + 'px';
-    } 
-    setTimeout(()=>{
-      if(ele.style.maxHeight != '0px') { 
-        ele.classList.remove('kb-hidden');
-        ele.style.maxHeight = '';
-      }
-    },300)
-  }
-
-  onResizeEnd(event: ResizeEvent ,rect:any): void {
-    var rw:any = event.rectangle.width;
-    if(rw < 420) {
-      this.wfmW = '420px';
-    }
-    else if( rw > screen.width/2) {
-      this.wfmW = screen.width/2 + 'px';
-    }
-    else {
-      this.wfmW = event.rectangle.width + 'px';
-    }
-  }
-
-  responsiveToggle(navtoggle:boolean) {
-    if(!this.showResp.toggle) {
-      this.showResp.open = true;
-      this.showResp.toggle = true;
-    }
-    else {
-      this.showResp.close = true;
-    }
-    setTimeout(()=>{
-      this.showResp.close ? this.showResp.toggle = false : '';
-      this.showResp.open = false;
-      this.showResp.close = false;
-  },300)
-    if(navtoggle) this.showfloatnavtoggle();
-  }
-
-  wireframeToggle(navtoggle:any) {
-    if(!this.wireframe.toggle) {
-      this.wireframe.open = true;
-      this.wireframe.toggle = true;
-    }
-    else {
-      this.wireframe.close = true;
-    }
-    setTimeout(()=>{
-      this.wireframe.close ? this.wireframe.toggle = false : '';
-      this.wireframe.open = false;
-      this.wireframe.close = false;
-    },300)
-    if(navtoggle) this.showfloatnavtoggle();
-  }
-
-  showfloatnavtoggle() {
-    if(this.showNavAnim.toggle) {
-      this.showNavAnim.open = true;
-      this.showNavAnim.show  = true;
-      this.showNavAnim.navopen = true;
-    }
-    else {
-      this.showNavAnim.close = true; 
-    }
-    var temp = this.showNavAnim.toggle;
-    setTimeout(()=>{
-      this.showNavAnim.open = false;
-      this.showNavAnim.close = false;
-      if(!temp) {
-        this.showNavAnim.show  = false;
-        this.showNavAnim.navopen = false;
-      }
-    },400)
-    this.showNavAnim.toggle = !this.showNavAnim.toggle;
+    ele.classList.toggle('kb-d-none');
   }
 
   sidefloatbtnopen(action:boolean) {

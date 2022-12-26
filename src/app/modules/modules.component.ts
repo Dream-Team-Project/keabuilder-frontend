@@ -213,7 +213,7 @@ export class ModulesComponent implements OnInit {
   toggleStatus(course:any) {
     course.publish_status = course.publish_status ? 1: 0;
     this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'drafted'), 'OK');
+      this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK');
     });
   }
 
@@ -267,7 +267,7 @@ export class ModulesComponent implements OnInit {
           else this.updateModuleAfterMethod();
         }
         else if(action == 'publish') {
-          this._snackbar.open('Module has been '+(status == 1 ? 'published' : 'drafted'), 'OK');
+          this._snackbar.open('Module has been '+(status == 1 ? 'published' : 'draft'), 'OK');
         }
         else if(action == 'title') {
           this._snackbar.open('Module title has been updated', 'OK');
@@ -418,7 +418,7 @@ export class ModulesComponent implements OnInit {
         else this.updateLessonAfterMethod();
       }
       else if(action == 'publish') {
-        this._snackbar.open('Lesson has been '+(status == 1 ? 'published' : 'drafted'), 'OK');
+        this._snackbar.open('Lesson has been '+(status == 1 ? 'published' : 'draft'), 'OK');
       }
       else if(action == 'title') {
         this._snackbar.open('Lesson title has been updated', 'OK');

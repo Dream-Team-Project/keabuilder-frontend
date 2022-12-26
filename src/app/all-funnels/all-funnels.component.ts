@@ -235,7 +235,7 @@ export class AllFunnelsComponent implements OnInit {
                   folder: element,
                   prevFolder: element
                 };
-                this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+                this._general.fileUploadService.savePage(page).subscribe((event:any) => {
                   // console.log(event);
                 },
                 error=>{console.log(error)});
@@ -399,7 +399,7 @@ export class AllFunnelsComponent implements OnInit {
                 folder: data.pagepath,
                 prevFolder: data.pagepath
               };
-              this._general.fileUploadService.createpage(page).subscribe((event:any) => {
+              this._general.fileUploadService.savePage(page).subscribe((event:any) => {
                 // console.log(event);
               },
               error=>{console.log(error)});
