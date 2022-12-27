@@ -26,14 +26,14 @@
             <hr>
             <div class="outerdivnm">
                 <p><b>How to connect your domain to Kea</b></p>
-                <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span>gina.ns.cloudflare.com</span>&nbsp;&nbsp;<span>jerry.ns.cloudflare.com</span></small></p>
+                <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span *ngFor="let name of nameservers" >{{name}}&nbsp;&nbsp;</span></small></p>
                 
                 <ul class="mynsdetails">
                     <li>
-                        <b>Domain: </b> <span>mydomain.com</span>
+                        <b>Domain: </b> <span>{{gendomainname}}</span>
                     </li>
                     <li>
-                        <b>Nameservers: </b> <span>gina.ns.cloudflare.com</span> <span>jerry.ns.cloudflare.com</span>
+                        <b>Nameservers: </b> <span *ngFor="let name of nameservers" >{{name}}</span> 
                     </li>
                 </ul>
                 <br>
