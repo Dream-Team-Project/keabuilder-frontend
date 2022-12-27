@@ -1,10 +1,10 @@
-::ng-deep .mat-drawer-container, ::ng-deep .mat-drawer-content {
-    overflow-y: visible!important;
+::ng-deep .mat-drawer-container {
+    position: fixed;
+    z-index: 99;
+    height: 100%;
+    width: 100%;
+    background: rgb(255 255 255 / 0%);
 }
-
-::ng-deep mat-drawer-container.mat-drawer-container { 
-    flex: 1 1 auto;
- };
 
 .mat-form-field {
     display: block;

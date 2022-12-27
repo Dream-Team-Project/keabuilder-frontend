@@ -30,6 +30,7 @@ export class BuilderComponent implements OnInit {
   DialogImageToggle:boolean = false;
 
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('wireframe') wireframe: any;
   @ViewChild('main') main!: ElementRef;
   @ViewChild('main', { static: true }) screen: any;
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
@@ -40,6 +41,7 @@ export class BuilderComponent implements OnInit {
   transferIndex:number = -1;
   wfpos:any = 'end';
   saveTemplateSection:any;
+  wfhide:any = true;
 
   constructor(
     private router: Router,
@@ -523,6 +525,18 @@ export class BuilderComponent implements OnInit {
   }
 
   // drag & drops
+
+  wireframeToggle() {
+    if(!this.wireframe.opened) this.wfhide = false;
+    this.wireframe.toggle();
+    this.closewf();
+  }
+
+  closewf() {
+    setTimeout((e:any) => { 
+      if(!this.wireframe.opened) this.wfhide = true; 
+    }, 300);
+  }
 
   onContextMenu(event: MouseEvent) {
     event.preventDefault();

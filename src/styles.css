@@ -41,6 +41,10 @@
         font-weight: 400;
     }
 
+    html, body, main, #app, app-builder>div {
+      height: 100%;
+    }
+
     body {
         margin: 0;
         padding: 0;

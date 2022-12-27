@@ -14,7 +14,12 @@
 <div cdkDropListGroup>
     <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
     <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-    <app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframe.toggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+    <app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+    <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
+        <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
+            <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
+        </mat-drawer>
+    </mat-drawer-container>
     <div id="kb-page-container" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
         (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
         <div id="kb-layout-saveopt"
@@ -28,292 +33,287 @@
             <div><button [disabled]="_general.saveDisabled" mat-raised-button (click)="saveHeaderFooter(main)"
                     class="kb-btn-primary">Save <i class="fas fa-save"></i></button></div>
         </div>
-        <mat-drawer-container [hasBackdrop]="true" autosize>
-            <mat-drawer #wireframe mode="over" [position]="wfpos">
-                <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
-            </mat-drawer>
-            <div id="kb-block-container" [class.loading]="!_general.loading.success">
-                <div #main id="kb-main-container"
-                    [class.kb-resp-view]="_general.respToggleDevice.name == 'tablet-v' || _general.respToggleDevice.name == 'mobile'"
-                    [class.kb-border]="_general.respToggleDevice.name != 'desktop'"
-                    [style.width]="_general.respToggleDevice.width">
-                    <header *ngIf="_general.includeLayout.header && _general.selectedHeader.html" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
-                    <div id="kb-main"
-                        [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
-                        <div class="kb-drag-container" cdkDropList id="sectiongroup-0" [cdkDropListEnterPredicate]="dropAllow()" [cdkDropListConnectedTo]="_section.sectionConnect"
-                            [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
-                            <!-- sections start -->
-                            <div cdkDrag *ngFor="let section of _section.sections, index as si"
-                                [attr.data-name]="section.name ? section.name : ''"
-                                (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
-                                (mouseleave)="section.setting = false" [ngClass]="_style.getHideCls(section.hide)"
-                                [class.kb-block-none]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.getDisplay(_style.hide) : _style.getDisplay(section.hide)"
-                                [ngStyle]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.currentStyling() : _style.getBlockStyle(section.style)"
-                                [id]="section.id" class="kb-section kb-block-container"
-                                [class.kb-block-disabled]="_general.showInlineEditor">
-                                <!-- sections setting navigation start -->
-                                <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">
-                                    {{section.name ? section.name : 'Section'}}</div>
-                                <div *cdkDragPlaceholder class="custom-placeholder"
-                                    [style.backgroundColor]="'var(--section-color)'"></div>
-                                <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
-                                    <span cdkDragHandle *ngIf="_section.sections.length > 1"
-                                        class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
-                                    <span (click)="saveAsTemplateDialog(templatedialog, section)" matTooltip="Save As Template"
-                                        matTooltipPosition="above"><i class="far fa-save"></i></span>    
-                                    <span
-                                        (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
-                                        matTooltip="Section Setting" matTooltipPosition="above"><i
-                                            class="far fa-edit"></i></span>
-                                    <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
-                                        matTooltipPosition="above"><i class="far fa-copy"></i></span>
-                                    <span (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1"
-                                        matTooltip="Delete Section" matTooltipPosition="above"><i
-                                            class="far fa-trash-alt"></i></span>
-                                </div>
-                                <!-- sections setting navigation end -->
-                                <!-- add new row option start -->
-                                <span (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
-                                    *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row"
-                                    matTooltipPosition="right"><i class="fa fa-plus"></i></span>
-                                <!-- add new row option end -->
-                                <!-- add new section option start -->
-                                <span (click)="_section.addSection(si)" *ngIf="section.setting && !_general.showInlineEditor"
-                                    class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
-                                    matTooltipPosition="below"><i class="fa fa-plus"></i></span>
-                                <!-- add new section option end -->
-                                <div class="kb-drag-container" cdkDropList [id]="'rowgroup-'+si"
-                                    [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="_row.rowConnect"
-                                    (cdkDropListDropped)="drop($event)">
-                                    <!-- rows start -->
-                                    <div cdkDrag *ngFor="let row of section.rowArr, index as ri"
-                                        [attr.data-name]="row.name ? row.name : ''"
-                                        (mouseenter)="row.setting = true; _row.selectedRow = row;"
-                                        (mouseleave)="row.setting = false" [ngClass]="_style.getHideCls(row.hide)"
-                                        [class.kb-block-none]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getDisplay(_style.hide) : _style.getDisplay(row.hide)"
-                                        [ngStyle]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.currentStyling() : _style.getBlockStyle(row.style)"
-                                        [id]="row.id" [class.kb-block-disabled]="_general.showInlineEditor"
-                                        class="kb-row kb-block-container">
-                                        <!-- rows setting navigation start -->
-                                        <div *cdkDragPreview class="custom-preview"
-                                            [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
-                                        <div *cdkDragPlaceholder class="custom-placeholder"
-                                            [style.backgroundColor]="'var(--row-color)'"></div>
-                                        <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
-                                            <span cdkDragHandle
-                                                *ngIf="_section.sections.length > 1 || section.rowArr.length > 1"
-                                                class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
-                                            <span *ngIf="row.columnArr[0].elementArr.length == 0"
-                                                (click)="_general.blockSelection = 'row'; openDialog($event)"
-                                                matTooltip="Column Structure" matTooltipPosition="above"><i
-                                                    class="fa fa-columns"></i></span>
-                                            <span
-                                                (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
-                                                matTooltip="Row Setting" matTooltipPosition="above"><i
-                                                    class="far fa-edit"></i></span>
-                                            <span (click)="_row.duplicateRow(section.rowArr, row, ri)"
-                                                matTooltip="Duplicate Row" matTooltipPosition="above"><i
-                                                    class="far fa-copy"></i></span>
-                                            <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
-                                                matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
-                                        </div>
-                                        <!-- rows setting navigation end -->
-                                        <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
-                                        [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
-                                        [style.gap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getBlockParamValue(_style.columnGap) : _style.getBlockParamValue(row.columnGap)) + 'rem'"
-                                        [style.flexDirection]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getColumnReverse(_style.columnRev) : _style.getColumnReverse(row.columnRev)">
-                                            <!-- columns start -->
-                                            <div *ngFor="let column of row.columnArr, index as ci"
-                                                [attr.data-name]="column.name ? column.name : ''"
-                                                (mouseenter)="_element.selectedElements = column.elementArr"
-                                                [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : _style.getBlockStyle(column.style)"
-                                                [ngClass]="_style.getHideCls(column.hide)"
-                                                [class.kb-block-none]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.getDisplay(_style.hide) : _style.getDisplay(column.hide)"
-                                                [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
-                                                <div class="kb-drag-container" cdkDropList [id]="'elementgroup-'+ci"
-                                                    [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="_element.elementConnect"
-                                                    (cdkDropListDropped)="drop($event)"
-                                                    (change)="_element.selectedElements = column.elementArr">
-                                                    <!-- elements start -->
-                                                    <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
-                                                        [attr.data-name]="element.name ? element.name : ''"
-                                                        (dblclick)="elementDblClk(element, $event)"
-                                                        (mouseenter)="element.setting = true"
-                                                        (mouseleave)="element.setting = false" [id]="element.id"
-                                                        class="kb-element kb-block-container"
-                                                        [ngClass]="_style.getHideCls(element.hide)"
-                                                        [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
-                                                        [class.kb-block-disabled]="_general.showInlineEditor"
-                                                        [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
-                                                        [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
-                                                        <div *cdkDragPreview class="custom-preview"
-                                                            [style.backgroundColor]="'var(--primary-color)'">{{element.name ?
-                                                            element.name : element.content.name}}</div>
-                                                        <div *cdkDragPlaceholder class="custom-placeholder"
-                                                            [style.backgroundColor]="'var(--primary-color)'"></div>
-                                                        <div class="kb-module-setting"
-                                                            *ngIf="element.setting && !_general.showInlineEditor">
-                                                            <span cdkDragHandle class="kb-handle-block kb-handle-element"><i
-                                                                    class="fa fa-arrows-alt"></i></span>
-                                                            <span *ngIf="element.content.name != 'checkout'"
-                                                                (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
-                                                                matTooltip="Element Setting" matTooltipPosition="above"><i
-                                                                    class="far fa-edit"></i></span>
-                                                            <span *ngIf="element.content.name == 'menu'"
-                                                                (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.setItemStyle = true; _style.blockSetting(element); openDialog($event)"
-                                                                matTooltip="Item Setting" matTooltipPosition="above"><i
-                                                                    class="fas fa-tasks"></i></span>
-                                                            <span
-                                                                (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
-                                                                matTooltip="Duplicate Element" matTooltipPosition="above"><i
-                                                                    class="far fa-copy"></i></span>
-                                                            <span (click)="_element.deleteElement(column.elementArr, ei)"
-                                                                matTooltip="Delete Element" matTooltipPosition="above"><i
-                                                                    class="far fa-trash-alt"></i></span>
-                                                        </div>
-                                                        <div [attr.data-name]="element.content.name"
-                                                            [style.width]="element.content.name == 'heading' || element.content.name == 'text' || element.content.name == 'checkout' || element.content.name == 'code' ? '100%' : ''"
-                                                            [ngSwitch]="element.content.name">
-                                                            <div *ngSwitchCase="'image'" class="kb-element-content">
-                                                                <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
-                                                                    [ngStyle]="_style.imageStyling()"
-                                                                    [src]="_style.image_src ? _style.image_src : _image.imgPath+'builder/no-image.png'"
+        <div id="kb-block-container" [class.loading]="!_general.loading.success">
+            <div #main id="kb-main-container"
+                [class.kb-resp-view]="_general.respToggleDevice.name == 'tablet-v' || _general.respToggleDevice.name == 'mobile'"
+                [class.kb-border]="_general.respToggleDevice.name != 'desktop'"
+                [style.width]="_general.respToggleDevice.width">
+                <header *ngIf="_general.includeLayout.header && _general.selectedHeader.html" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
+                <div id="kb-main"
+                    [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
+                    <div class="kb-drag-container" cdkDropList id="sectiongroup-0" [cdkDropListEnterPredicate]="dropAllow()" [cdkDropListConnectedTo]="_section.sectionConnect"
+                        [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
+                        <!-- sections start -->
+                        <div cdkDrag *ngFor="let section of _section.sections, index as si"
+                            [attr.data-name]="section.name ? section.name : ''"
+                            (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
+                            (mouseleave)="section.setting = false" [ngClass]="_style.getHideCls(section.hide)"
+                            [class.kb-block-none]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.getDisplay(_style.hide) : _style.getDisplay(section.hide)"
+                            [ngStyle]="_general.selectedBlock.id == section.id && _general.selectedBlock.type == section.type ? _style.currentStyling() : _style.getBlockStyle(section.style)"
+                            [id]="section.id" class="kb-section kb-block-container"
+                            [class.kb-block-disabled]="_general.showInlineEditor">
+                            <!-- sections setting navigation start -->
+                            <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">
+                                {{section.name ? section.name : 'Section'}}</div>
+                            <div *cdkDragPlaceholder class="custom-placeholder"
+                                [style.backgroundColor]="'var(--section-color)'"></div>
+                            <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
+                                <span cdkDragHandle *ngIf="_section.sections.length > 1"
+                                    class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
+                                <span (click)="saveAsTemplateDialog(templatedialog, section)" matTooltip="Save As Template"
+                                    matTooltipPosition="above"><i class="far fa-save"></i></span>    
+                                <span
+                                    (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
+                                    matTooltip="Section Setting" matTooltipPosition="above"><i
+                                        class="far fa-edit"></i></span>
+                                <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
+                                    matTooltipPosition="above"><i class="far fa-copy"></i></span>
+                                <span (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1"
+                                    matTooltip="Delete Section" matTooltipPosition="above"><i
+                                        class="far fa-trash-alt"></i></span>
+                            </div>
+                            <!-- sections setting navigation end -->
+                            <!-- add new row option start -->
+                            <span (click)="_general.blockSelection = 'row';  _row.selectedRow=''; openDialog($event)"
+                                *ngIf="section.rowArr.length == 0" class="kb-ispan-add add-row" matTooltip="Add New Row"
+                                matTooltipPosition="right"><i class="fa fa-plus"></i></span>
+                            <!-- add new row option end -->
+                            <!-- add new section option start -->
+                            <span (click)="_section.addSection(si)" *ngIf="section.setting && !_general.showInlineEditor"
+                                class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
+                                matTooltipPosition="below"><i class="fa fa-plus"></i></span>
+                            <!-- add new section option end -->
+                            <div class="kb-drag-container" cdkDropList [id]="'rowgroup-'+si"
+                                [cdkDropListData]="section.rowArr" [cdkDropListConnectedTo]="_row.rowConnect"
+                                (cdkDropListDropped)="drop($event)">
+                                <!-- rows start -->
+                                <div cdkDrag *ngFor="let row of section.rowArr, index as ri"
+                                    [attr.data-name]="row.name ? row.name : ''"
+                                    (mouseenter)="row.setting = true; _row.selectedRow = row;"
+                                    (mouseleave)="row.setting = false" [ngClass]="_style.getHideCls(row.hide)"
+                                    [class.kb-block-none]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getDisplay(_style.hide) : _style.getDisplay(row.hide)"
+                                    [ngStyle]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.currentStyling() : _style.getBlockStyle(row.style)"
+                                    [id]="row.id" [class.kb-block-disabled]="_general.showInlineEditor"
+                                    class="kb-row kb-block-container">
+                                    <!-- rows setting navigation start -->
+                                    <div *cdkDragPreview class="custom-preview"
+                                        [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
+                                    <div *cdkDragPlaceholder class="custom-placeholder"
+                                        [style.backgroundColor]="'var(--row-color)'"></div>
+                                    <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
+                                        <span cdkDragHandle
+                                            *ngIf="_section.sections.length > 1 || section.rowArr.length > 1"
+                                            class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
+                                        <span *ngIf="row.columnArr[0].elementArr.length == 0"
+                                            (click)="_general.blockSelection = 'row'; openDialog($event)"
+                                            matTooltip="Column Structure" matTooltipPosition="above"><i
+                                                class="fa fa-columns"></i></span>
+                                        <span
+                                            (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
+                                            matTooltip="Row Setting" matTooltipPosition="above"><i
+                                                class="far fa-edit"></i></span>
+                                        <span (click)="_row.duplicateRow(section.rowArr, row, ri)"
+                                            matTooltip="Duplicate Row" matTooltipPosition="above"><i
+                                                class="far fa-copy"></i></span>
+                                        <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
+                                            matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
+                                    </div>
+                                    <!-- rows setting navigation end -->
+                                    <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
+                                    [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
+                                    [style.gap]="(_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getBlockParamValue(_style.columnGap) : _style.getBlockParamValue(row.columnGap)) + 'rem'"
+                                    [style.flexDirection]="_general.selectedBlock.id == row.id && _general.selectedBlock.type == row.type ? _style.getColumnReverse(_style.columnRev) : _style.getColumnReverse(row.columnRev)">
+                                        <!-- columns start -->
+                                        <div *ngFor="let column of row.columnArr, index as ci"
+                                            [attr.data-name]="column.name ? column.name : ''"
+                                            (mouseenter)="_element.selectedElements = column.elementArr"
+                                            [ngStyle]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.currentStyling() : _style.getBlockStyle(column.style)"
+                                            [ngClass]="_style.getHideCls(column.hide)"
+                                            [class.kb-block-none]="_general.selectedBlock.id == column.id && _general.selectedBlock.type == column.type ? _style.getDisplay(_style.hide) : _style.getDisplay(column.hide)"
+                                            [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
+                                            <div class="kb-drag-container" cdkDropList [id]="'elementgroup-'+ci"
+                                                [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="_element.elementConnect"
+                                                (cdkDropListDropped)="drop($event)"
+                                                (change)="_element.selectedElements = column.elementArr">
+                                                <!-- elements start -->
+                                                <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
+                                                    [attr.data-name]="element.name ? element.name : ''"
+                                                    (dblclick)="elementDblClk(element, $event)"
+                                                    (mouseenter)="element.setting = true"
+                                                    (mouseleave)="element.setting = false" [id]="element.id"
+                                                    class="kb-element kb-block-container"
+                                                    [ngClass]="_style.getHideCls(element.hide)"
+                                                    [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
+                                                    [class.kb-block-disabled]="_general.showInlineEditor"
+                                                    [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
+                                                    [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
+                                                    <div *cdkDragPreview class="custom-preview"
+                                                        [style.backgroundColor]="'var(--primary-color)'">{{element.name ?
+                                                        element.name : element.content.name}}</div>
+                                                    <div *cdkDragPlaceholder class="custom-placeholder"
+                                                        [style.backgroundColor]="'var(--primary-color)'"></div>
+                                                    <div class="kb-module-setting"
+                                                        *ngIf="element.setting && !_general.showInlineEditor">
+                                                        <span cdkDragHandle class="kb-handle-block kb-handle-element"><i
+                                                                class="fa fa-arrows-alt"></i></span>
+                                                        <span *ngIf="element.content.name != 'checkout'"
+                                                            (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog($event)"
+                                                            matTooltip="Element Setting" matTooltipPosition="above"><i
+                                                                class="far fa-edit"></i></span>
+                                                        <span *ngIf="element.content.name == 'menu'"
+                                                            (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.setItemStyle = true; _style.blockSetting(element); openDialog($event)"
+                                                            matTooltip="Item Setting" matTooltipPosition="above"><i
+                                                                class="fas fa-tasks"></i></span>
+                                                        <span
+                                                            (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
+                                                            matTooltip="Duplicate Element" matTooltipPosition="above"><i
+                                                                class="far fa-copy"></i></span>
+                                                        <span (click)="_element.deleteElement(column.elementArr, ei)"
+                                                            matTooltip="Delete Element" matTooltipPosition="above"><i
+                                                                class="far fa-trash-alt"></i></span>
+                                                    </div>
+                                                    <div [attr.data-name]="element.content.name"
+                                                        [style.width]="element.content.name == 'heading' || element.content.name == 'text' || element.content.name == 'checkout' || element.content.name == 'code' ? '100%' : ''"
+                                                        [ngSwitch]="element.content.name">
+                                                        <div *ngSwitchCase="'image'" class="kb-element-content">
+                                                            <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
+                                                                [ngStyle]="_style.imageStyling()"
+                                                                [src]="_style.image_src ? _style.image_src : _image.imgPath+'builder/no-image.png'"
+                                                                alt="image" width="auto"
+                                                                [class.dummyImg]="!_style.image_src">
+                                                            <ng-template #showImg>
+                                                                <img [ngStyle]="_style.getElementBlockStyle(element)"
+                                                                    [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
                                                                     alt="image" width="auto"
-                                                                    [class.dummyImg]="!_style.image_src">
-                                                                <ng-template #showImg>
-                                                                    <img [ngStyle]="_style.getElementBlockStyle(element)"
-                                                                        [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
-                                                                        alt="image" width="auto"
-                                                                        [class.dummyImg]="!element.content.src">
-                                                                </ng-template>
-                                                            </div>
-                                                            <div *ngSwitchCase="'button'" class="kb-element-content">
-                                                                <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
-                                                                    class="kb-default-btn"
+                                                                    [class.dummyImg]="!element.content.src">
+                                                            </ng-template>
+                                                        </div>
+                                                        <div *ngSwitchCase="'button'" class="kb-element-content">
+                                                            <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
+                                                                class="kb-default-btn"
+                                                                [attr.kb-btn-type]="element.content.btntype"
+                                                                [href]="_style.button_link" [target]="_style.button_target"
+                                                                [ngStyle]="_style.buttonStyling()">
+                                                                <div>{{_style.button_text}}</div>
+                                                                <div class="subtext"
+                                                                    [style.fontSize]="_style.button_subfont_size.value">
+                                                                    {{_style.button_subtext}}</div>
+                                                            </a>
+                                                            <ng-template #showBtn>
+                                                                <a *ngIf="element.content.btntype != 'regular' else regular"
+                                                                    class="kb-default-btn kb-product-btn"
                                                                     [attr.kb-btn-type]="element.content.btntype"
-                                                                    [href]="_style.button_link" [target]="_style.button_target"
-                                                                    [ngStyle]="_style.buttonStyling()">
-                                                                    <div>{{_style.button_text}}</div>
+                                                                    [attr.kb-redirect-link]="element.content.link"
+                                                                    [attr.kb-product-id]="element.content.productid"
+                                                                    href="#no-link" [target]="element.content.target"
+                                                                    [ngStyle]="_style.getElementBlockStyle(element)">
+                                                                    <div>{{element.content.text}}</div>
                                                                     <div class="subtext"
-                                                                        [style.fontSize]="_style.button_subfont_size.value">
-                                                                        {{_style.button_subtext}}</div>
+                                                                        [style.fontSize]="element.content.subfont_size">
+                                                                        {{element.content.subtext}}</div>
                                                                 </a>
-                                                                <ng-template #showBtn>
-                                                                    <a *ngIf="element.content.btntype != 'regular' else regular"
-                                                                        class="kb-default-btn kb-product-btn"
-                                                                        [attr.kb-btn-type]="element.content.btntype"
-                                                                        [attr.kb-redirect-link]="element.content.link"
-                                                                        [attr.kb-product-id]="element.content.productid"
-                                                                        href="#no-link" [target]="element.content.target"
+                                                                <ng-template #regular>
+                                                                    <a class="kb-default-btn" [href]="element.content.link"
+                                                                        [target]="element.content.target"
                                                                         [ngStyle]="_style.getElementBlockStyle(element)">
                                                                         <div>{{element.content.text}}</div>
                                                                         <div class="subtext"
                                                                             [style.fontSize]="element.content.subfont_size">
                                                                             {{element.content.subtext}}</div>
                                                                     </a>
-                                                                    <ng-template #regular>
-                                                                        <a class="kb-default-btn" [href]="element.content.link"
-                                                                            [target]="element.content.target"
-                                                                            [ngStyle]="_style.getElementBlockStyle(element)">
-                                                                            <div>{{element.content.text}}</div>
-                                                                            <div class="subtext"
-                                                                                [style.fontSize]="element.content.subfont_size">
-                                                                                {{element.content.subtext}}</div>
-                                                                        </a>
-                                                                    </ng-template>
                                                                 </ng-template>
-                                                            </div>
-                                                            <div *ngSwitchCase="'menu'" [attr.data-id]="element.content.data_id"
-                                                                class="kb-element-content">
-                                                                <ul class="kb-menu" [id]="element.content.data_id"
-                                                                    [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
-                                                                    <li *ngFor="let item of element.content.items, index as mi">
-                                                                        <a class="kb-content-item" [id]="item.id"
-                                                                            [href]="item.link"
-                                                                            [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div *ngSwitchCase="'code'" class="kb-element-content"
-                                                                [style.justifyContent]="'center'">
-                                                                <div class="kb-code-block"
-                                                                    [attr.html-data]="_general.encodeData(element.content.html)">
-                                                                    {{'
-                                                                    <'+'custom code />'}}
-                                                                </div>
-                                                            </div>
-                                                            <div *ngSwitchCase="'checkout'" class="kb-element-content">
-                                                                <iframe
-                                                                    [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl"
-                                                                    frameborder="0"
-                                                                    style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
-                                                            </div>
-                                                            <div *ngSwitchDefault class="kb-element-content">
-                                                                <div *ngIf="!element.content.editor else editor">
-                                                                    <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
-                                                                        [ngStyle]="_style.textStyling()"
-                                                                        [innerHTML]="_style.edit_html | safeHtml"></div>
-                                                                    <ng-template #originalText>
-                                                                        <div [ngStyle]="_style.getElementBlockStyle(element)"
-                                                                            [innerHTML]="element.content.html | safeHtml"></div>
-                                                                    </ng-template>
-                                                                </div>
-                                                                <ng-template #editor>
-                                                                    <tinymce
-                                                                        [ngStyle]="_style.getBlockStyle(element.content.style)"
-                                                                        [inline]="true"
-                                                                        (mouseenter)="_general.insideEditor = true"
-                                                                        (mouseleave)="_general.insideEditor = false;"
-                                                                        [(ngModel)]="element.content.html"
-                                                                        [config]="_general.config"></tinymce>
-                                                                </ng-template>
+                                                            </ng-template>
+                                                        </div>
+                                                        <div *ngSwitchCase="'menu'" [attr.data-id]="element.content.data_id"
+                                                            class="kb-element-content">
+                                                            <ul class="kb-menu" [id]="element.content.data_id"
+                                                                [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
+                                                                <li *ngFor="let item of element.content.items, index as mi">
+                                                                    <a class="kb-content-item" [id]="item.id"
+                                                                        [href]="item.link"
+                                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div *ngSwitchCase="'code'" class="kb-element-content"
+                                                            [style.justifyContent]="'center'">
+                                                            <div class="kb-code-block"
+                                                                [attr.html-data]="_general.encodeData(element.content.html)">
+                                                                {{'
+                                                                <'+'custom code />'}}
                                                             </div>
                                                         </div>
-                                                        <span
-                                                            (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
-                                                            *ngIf="element.setting && !_general.showInlineEditor"
-                                                            matTooltip="Add New Element" matTooltipPosition="above"
-                                                            class="kb-ispan-add add-element bottom-add-btn"><i
-                                                                class="fa fa-plus"></i></span>
-                                                        <span *ngIf="_style.getDisplay(element.hide)"
-                                                            class="kb-block-hidden-icon"><i class="far fa-eye-slash"
-                                                                aria-hidden="true"></i></span>
+                                                        <div *ngSwitchCase="'checkout'" class="kb-element-content">
+                                                            <iframe
+                                                                [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl"
+                                                                frameborder="0"
+                                                                style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
+                                                        </div>
+                                                        <div *ngSwitchDefault class="kb-element-content">
+                                                            <div *ngIf="!element.content.editor else editor">
+                                                                <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
+                                                                    [ngStyle]="_style.textStyling()"
+                                                                    [innerHTML]="_style.edit_html | safeHtml"></div>
+                                                                <ng-template #originalText>
+                                                                    <div [ngStyle]="_style.getElementBlockStyle(element)"
+                                                                        [innerHTML]="element.content.html | safeHtml"></div>
+                                                                </ng-template>
+                                                            </div>
+                                                            <ng-template #editor>
+                                                                <tinymce
+                                                                    [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                                    [inline]="true"
+                                                                    (mouseenter)="_general.insideEditor = true"
+                                                                    (mouseleave)="_general.insideEditor = false;"
+                                                                    [(ngModel)]="element.content.html"
+                                                                    [config]="_general.config"></tinymce>
+                                                            </ng-template>
+                                                        </div>
                                                     </div>
-                                                    <!-- elements end -->
+                                                    <span
+                                                        (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
+                                                        *ngIf="element.setting && !_general.showInlineEditor"
+                                                        matTooltip="Add New Element" matTooltipPosition="above"
+                                                        class="kb-ispan-add add-element bottom-add-btn"><i
+                                                            class="fa fa-plus"></i></span>
+                                                    <span *ngIf="_style.getDisplay(element.hide)"
+                                                        class="kb-block-hidden-icon"><i class="far fa-eye-slash"
+                                                            aria-hidden="true"></i></span>
                                                 </div>
-                                                <!-- add new column option start -->
-                                                <span
-                                                    (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
-                                                    *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
-                                                    matTooltipPosition="right" class="kb-ispan-add add-element"><i
-                                                        class="fa fa-plus"></i></span>
-                                                <!-- add new column option end -->
-                                                <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
-                                                        class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                                <!-- elements end -->
                                             </div>
-                                            <!-- columns end -->
+                                            <!-- add new column option start -->
+                                            <span
+                                                (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
+                                                *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
+                                                matTooltipPosition="right" class="kb-ispan-add add-element"><i
+                                                    class="fa fa-plus"></i></span>
+                                            <!-- add new column option end -->
+                                            <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
+                                                    class="far fa-eye-slash" aria-hidden="true"></i></span>
                                         </div>
-                                        <!-- add new row option start -->
-                                        <span *ngIf="row.setting && !_general.showInlineEditor"
-                                            (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
-                                            matTooltip="Add New Row" matTooltipPosition="below"
-                                            class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
-                                        <!-- add new row option end -->
-                                        <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
-                                                class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                        <!-- columns end -->
                                     </div>
-                                    <!-- rows end -->
+                                    <!-- add new row option start -->
+                                    <span *ngIf="row.setting && !_general.showInlineEditor"
+                                        (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
+                                        matTooltip="Add New Row" matTooltipPosition="below"
+                                        class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
+                                    <!-- add new row option end -->
+                                    <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
+                                            class="far fa-eye-slash" aria-hidden="true"></i></span>
                                 </div>
-                                <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
-                                        class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                <!-- rows end -->
                             </div>
-                            <!-- sections end -->
+                            <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
+                                    class="far fa-eye-slash" aria-hidden="true"></i></span>
                         </div>
+                        <!-- sections end -->
                     </div>
-                    <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
                 </div>
+                <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
             </div>
-        </mat-drawer-container>
+        </div>
         <div *ngIf="!_general.loading.success" id="loader">
             <div id="shadow"></div>
             <div id="box"></div>
@@ -327,20 +327,20 @@
                 class ='far fa-window-maximize'></i></button>
         </div>
         <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
-    </div>
-    <div style="visibility: hidden; position: fixed"
+        <div style="visibility: hidden; position: fixed"
         [style.left]="contextMenuPosition.x"
         [style.top]="contextMenuPosition.y"
         [matMenuTriggerFor]="contextMenu">
+        </div>
+        <mat-menu #contextMenu="matMenu" class="kb-builder-options">
+            <ng-template matMenuContent let-item="item">
+                <button mat-menu-item (click)="saveHTML(main)"><i [innerHTML]="_image.svg.save | safeHtml"></i> Save</button>
+                <button mat-menu-item (click)="_general.preview()"><i [innerHTML]="_image.svg.preview | safeHtml"></i> Preview</button>
+                <button mat-menu-item (click)="_section.undo()"><i [innerHTML]="_image.svg.undo | safeHtml"></i> Undo</button>
+                <button mat-menu-item (click)="_section.redo()"><i [innerHTML]="_image.svg.redo | safeHtml"></i> Redo</button>
+                <button mat-menu-item (click)="wireframeToggle()"><i [innerHTML]="_image.svg.wireframe| safeHtml"></i> Wireframe</button>
+                <button mat-menu-item (click)="openPageSetting(null)"><i [innerHTML]="_image.svg.setting | safeHtml"></i> Setting</button>
+            </ng-template>
+        </mat-menu>
     </div>
-    <mat-menu #contextMenu="matMenu" class="kb-builder-options">
-        <ng-template matMenuContent let-item="item">
-            <button mat-menu-item (click)="saveHTML(main)"><i [innerHTML]="_image.svg.save | safeHtml"></i> Save</button>
-            <button mat-menu-item (click)="_general.preview()"><i [innerHTML]="_image.svg.preview | safeHtml"></i> Preview</button>
-            <button mat-menu-item (click)="_section.undo()"><i [innerHTML]="_image.svg.undo | safeHtml"></i> Undo</button>
-            <button mat-menu-item (click)="_section.redo()"><i [innerHTML]="_image.svg.redo | safeHtml"></i> Redo</button>
-            <button mat-menu-item (click)="wireframe.toggle()"><i [innerHTML]="_image.svg.wireframe| safeHtml"></i> Wireframe</button>
-            <button mat-menu-item (click)="openPageSetting(null)"><i [innerHTML]="_image.svg.setting | safeHtml"></i> Setting</button>
-        </ng-template>
-    </mat-menu>
 </div>
