@@ -72,10 +72,7 @@ export class BuilderTopbarComponent implements OnInit {
       this._general.fetchSectionTemplates().then(e=>{
         this.snackBar('deleted');
       });
-      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe({
-        next: data => {
-        }
-      });
+      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png');
     })
   }
 
