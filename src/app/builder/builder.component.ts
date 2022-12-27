@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation, HostListener, TemplateRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation, HostListener, TemplateRef} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
   encapsulation: ViewEncapsulation.None,
 })
 
-export class BuilderComponent implements OnInit, AfterViewInit {
+export class BuilderComponent implements OnInit {
 
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
@@ -42,7 +42,7 @@ export class BuilderComponent implements OnInit, AfterViewInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
-  topfixed:any = false;
+  fixedTop:boolean = false;
 
   constructor(
     private router: Router,
@@ -131,10 +131,14 @@ export class BuilderComponent implements OnInit, AfterViewInit {
     this.saveHTML(main);
   }
 
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    window.onscroll = (e) => this.topfixed = window.scrollY > 60;
+  ngOnInit(): void {
+    window.onload = (e) => {
+      window.onscroll = (e) => {
+        var top:any = document.getElementById('kb-builder-topbar');
+        var height = document.body?.clientHeight-top.clientHeight;
+        this.fixedTop = window.scrollY > height;
+      }
+    }
   }
 
   takePageSS(id:any, stxt:any) {

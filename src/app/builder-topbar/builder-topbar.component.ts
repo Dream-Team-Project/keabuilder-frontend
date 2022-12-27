@@ -166,8 +166,8 @@ export class BuilderTopbarComponent implements OnInit {
 
   selectTab(value:string) {
     if(this.waitST) {
-      this.selectElement(this.selectedElement);
       this.waitST = false;
+      this.selectElement(this.selectedElement);
       var temp = this.selectedTab != value;
       if(temp) {
         var isEmpty = this.selectedTab == '';
@@ -180,8 +180,8 @@ export class BuilderTopbarComponent implements OnInit {
         this.toggle.close = false;
         if(!temp) this.selectedTab = '';
         this.setShift();
-        this.waitST = true;
         this.searchText = '';
+        this.waitST = true;
       }, 200);
       this._section.sectionDrop = value == 'l-sections' || value == 'l-templates' ? true : false;
     }
