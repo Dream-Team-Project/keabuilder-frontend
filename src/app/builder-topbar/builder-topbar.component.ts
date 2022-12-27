@@ -64,6 +64,7 @@ export class BuilderTopbarComponent implements OnInit {
 
   openDialog(templateRef: TemplateRef<any>, temp:any) {
     this.seltemp = JSON.parse(JSON.stringify(temp));
+    console.log('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png');
     this.dialog.open(templateRef);
   }  
   
@@ -72,7 +73,7 @@ export class BuilderTopbarComponent implements OnInit {
       this._general.fetchSectionTemplates().then(e=>{
         this.snackBar('deleted');
       });
-      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png');
+      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
     })
   }
 
