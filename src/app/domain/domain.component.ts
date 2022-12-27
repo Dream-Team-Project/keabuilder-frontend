@@ -19,6 +19,7 @@ export class DomainComponent implements OnInit {
 
   gendomainname:any = '';
   domainconn = 0;
+  nameservers = ["gina.ns.cloudflare.com","jerry.ns.cloudflare.com"];
 
   constructor(private domainService: DomainService) { }
 
@@ -77,23 +78,26 @@ export class DomainComponent implements OnInit {
     var qr3 = data.indexOf("https://");
     var qr4 = data.indexOf("http://www.");
     var qr5 = data.indexOf("https://www.");
+    var qr6 = data.indexOf(" ");
     var dm;
-
     if(qr>=0 && qr==0){
-      var dm = data.split('www.');
+      dm = data.split('www.');
       return dm[1];
     }else if(qr2>=0 && qr2==0){
-      var dm = data.split('http://');
+      dm = data.split('http://');
       return dm[1];
     }else if(qr3>=0 && qr3==0){
-      var dm = data.split('https://');
+      dm = data.split('https://');
       return dm[1];
     }else if(qr4>=0 && qr4==0){
-      var dm = data.split('http://www.');
+      dm = data.split('http://www.');
       return dm[1];
     }else if(qr5>=0 && qr5==0){
-      var dm = data.split('https://www.');
+      dm = data.split('https://www.');
       return dm[1];
+    }else if(qr6>=0){
+      dm = data.replace(/\s/g, "");
+      return dm;
     }else{
       return data;
     }
