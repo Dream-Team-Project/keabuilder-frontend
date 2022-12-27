@@ -156,6 +156,7 @@ export class BuildFunnelComponent implements OnInit {
                         head: '',
                         body: '',
                         style: '',
+                        dir: 'pages',
                         folder: data.data.pagepath,
                         prevFolder: data.data.pagepath
                       }

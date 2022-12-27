@@ -367,6 +367,7 @@ export class CreateFunnelComponent implements OnInit {
             head: '',
             body: '',
             style: '',
+            dir: 'pages',
             folder: data.pagepath,
             prevFolder: data.pagepath
           };
@@ -669,6 +670,7 @@ export class CreateFunnelComponent implements OnInit {
                 head: '',
                 body: '',
                 style: '',
+                dir: 'pages',
                 folder: data.pagepath,
                 prevFolder: data.pagepath
               };
@@ -750,6 +752,7 @@ export class CreateFunnelComponent implements OnInit {
               head: '',
               body: '',
               style: '',
+              dir: 'pages',
               folder: data.pagepath,
               prevFolder: data.pagepath
             };
