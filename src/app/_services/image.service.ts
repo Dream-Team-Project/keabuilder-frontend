@@ -14,9 +14,10 @@ export class ImageService {
     // svgs
     svg:any = {
         add: '',
-        bottom_arrow: '',
+        ascending: '',
         check: '',
         desktop: '',
+        descending: '',
         draft: '',
         elements: '',
         ellipsisv: '',
@@ -37,7 +38,6 @@ export class ImageService {
         setting: '',
         tab: '',
         template: '',
-        top_arrow: '',
         undo: '',
         upload: '',
         wireframe: ''

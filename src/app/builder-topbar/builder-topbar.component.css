@@ -138,6 +138,10 @@ button.mat-button.kb-btn-active, ::ng-deep .kb-selection-option button.mat-butto
     padding-right: 5px;
 }
 
+.kb-filter-icon {
+    padding-left: 5px;
+}
+
 ::ng-deep .kb-triggers:last-child .mat-button img{
     margin-left: 6px;
     border-radius: 5px;

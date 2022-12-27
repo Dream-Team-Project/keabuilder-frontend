@@ -98,13 +98,13 @@
             <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value">{{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
         </mat-menu>
         <button mat-button #imgt="matMenuTrigger" *ngIf="selectedTab == 'elements' && selectedElement == 'image' && !wftgl" [class.kb-btn-active]="imgt.menuOpen" [matMenuTriggerFor]="imgmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > {{_image.searchImgFilter.name.split(' ')[2]}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="(_image.searchImgFilter.name.split(' ')[0] == 'Ascending' ? _image.svg.ascending : _image.svg.descending) | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #imgmenu="matMenu" xPosition="before" yPosition="below">
             <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value">{{order.name}}</button>
         </mat-menu>
         <button mat-button #tempt="matMenuTrigger" *ngIf="selectedTab == 'l-templates' && !wftgl" [class.kb-btn-active]="tempt.menuOpen" [matMenuTriggerFor]="tempmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i [innerHTML]="_image.svg.filter | safeHtml"></i> {{tempOrderFilter.name.split(' ')[2]}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="(tempOrderFilter.name.split(' ')[0] == 'Ascending' ? _image.svg.ascending : _image.svg.descending) | safeHtml"></i> {{tempOrderFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #tempmenu="matMenu" xPosition="before" yPosition="below">
             <button mat-menu-item *ngFor="let order of tempOrder" (click)="tempOrderFilter = order" [class.kb-btn-active]="tempOrderFilter.name == order.name" [value]="order.value">{{order.name}}</button>
