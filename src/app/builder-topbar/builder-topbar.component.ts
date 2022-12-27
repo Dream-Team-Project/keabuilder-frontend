@@ -35,7 +35,7 @@ export class BuilderTopbarComponent implements OnInit {
   rowtypes:any = [{name:'All', value: ''}, {name:'Single', value: 1}, {name:'Two', value: 2}, {name:'Three', value: 3}, {name:'Four', value: 4}, {name:'Five', value: 5}, {name:'Six', value: 6}]
   searchText:string = '';
   searchRowFilter:any = this.rowtypes[0];
-  tempOrder:any = [{name:'Name Ascending', value: 'asc', type: 'name'}, {name:'Name Descending', value: 'desc', type: 'name'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
+  tempOrder:any = [{name:'Ascending By Name', value: 'asc', type: 'name'}, {name:'Descending By Name', value: 'desc', type: 'name'}, {name:'Ascending By Date', value: 'asc', type: 'id'}, {name:'Descending By Date', value: 'desc', type: 'id'}];
   tempOrderFilter:any = this.tempOrder[3];
   seltemp:any;
   

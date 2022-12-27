@@ -24,7 +24,7 @@
 <div #topBar id="kb-topBar">
     <div class="kb-triggers">
         <button mat-button (click)="redirectToLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
-        <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="layt.menuOpen || selectedTab.split('-')[0] == 'l'">
+        <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="(layt.menuOpen || selectedTab.split('-')[0] == 'l') && !wftgl">
             <i [innerHTML]="_image.svg.layout | safeHtml"></i> Layouts {{selectedTab.split('-')[0] == 'l' ? ('> '+selectedTab.split('-')[1] | titlecase): ''}}
         </button>
         <mat-menu #layout="matMenu" xPosition="after" yPosition="below">
@@ -44,10 +44,10 @@
                 <i [innerHTML]="_image.svg.footer | safeHtml"></i> Footers
             </button>
         </mat-menu>
-        <button mat-button [disabled]="wftgl" (click)="selectTab('elements')" [class.kb-btn-active]="selectedTab == 'elements'">
+        <button mat-button [disabled]="wftgl" (click)="selectTab('elements')" [class.kb-btn-active]="selectedTab == 'elements' && !wftgl">
             <i [innerHTML]="_image.svg.elements | safeHtml"></i> Elements
         </button>
-        <button mat-button [disabled]="wftgl" (click)="selectTab('responsive')" [class.kb-btn-active]="selectedTab == 'responsive'">
+        <button mat-button [disabled]="wftgl" (click)="selectTab('responsive')" [class.kb-btn-active]="selectedTab == 'responsive' && !wftgl">
             <i [innerHTML]="_image.svg.responsive | safeHtml"></i> Responsive
         </button>
         <button mat-button #moret="matMenuTrigger" [matMenuTriggerFor]="more" [class.kb-btn-active]="moret.menuOpen || _general.selectedBlock.type == 'main' || wftgl">
@@ -98,13 +98,13 @@
             <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value">{{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
         </mat-menu>
         <button mat-button #imgt="matMenuTrigger" *ngIf="selectedTab == 'elements' && selectedElement == 'image' && !wftgl" [class.kb-btn-active]="imgt.menuOpen" [matMenuTriggerFor]="imgmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > {{_image.searchImgFilter.name}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > {{_image.searchImgFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #imgmenu="matMenu" xPosition="before" yPosition="below">
             <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value">{{order.name}}</button>
         </mat-menu>
         <button mat-button #tempt="matMenuTrigger" *ngIf="selectedTab == 'l-templates' && !wftgl" [class.kb-btn-active]="tempt.menuOpen" [matMenuTriggerFor]="tempmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > {{tempOrderFilter.name}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i [innerHTML]="_image.svg.filter | safeHtml"></i> {{tempOrderFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #tempmenu="matMenu" xPosition="before" yPosition="below">
             <button mat-menu-item *ngFor="let order of tempOrder" (click)="tempOrderFilter = order" [class.kb-btn-active]="tempOrderFilter.name == order.name" [value]="order.value">{{order.name}}</button>
@@ -161,6 +161,9 @@
             </span>
         </div>
         <div *ngSwitchCase="'l-headers'" class="kb-block-selection kb-block-list">
+            <button mat-button (click)="redirectToLink('/website/headers')">
+                <i [innerHTML]="_image.svg.add | safeHtml"></i> Add
+            </button>
             <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name'; index as i" 
             (click)="setHeader(head)" [class.kb-btn-active]="head.id == _general.selectedHeader.id && _general.includeLayout.header"
             (mouseover)="prevImg=head.thumbnail" (mouseout)="prevImg=''">
@@ -171,6 +174,9 @@
             </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
+            <button mat-button (click)="redirectToLink('/website/headers')">
+                <i [innerHTML]="_image.svg.add | safeHtml"></i> Add
+            </button>
             <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name'; index as i" 
             (click)="setFooter(foot)" [class.kb-btn-active]="foot.id == _general.selectedFooter.id && _general.includeLayout.footer"
             (mouseover)="prevImg=foot.thumbnail" (mouseout)="prevImg=''">
@@ -258,7 +264,7 @@
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="redirectToLink('/website/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="_image.svg.add | safeHtml"></i>
-                <span>Add New</span>
+                <span>Add</span>
             </button>
             <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="element">
                 <span>{{menu.name | titlecase}}</span>

@@ -14,6 +14,7 @@ export class ImageService {
     // svgs
     svg:any = {
         add: '',
+        bottom_arrow: '',
         check: '',
         desktop: '',
         draft: '',
@@ -36,6 +37,7 @@ export class ImageService {
         setting: '',
         tab: '',
         template: '',
+        top_arrow: '',
         undo: '',
         upload: '',
         wireframe: ''
@@ -72,7 +74,7 @@ export class ImageService {
     extImgLink:any = {originalname: '', filename: ''};
     extImgLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:png|jpg|jpeg|svg)')]);
     timeStamp = (new Date()).getTime();
-    imgOrder:any = [{name:'Title Ascending', value: 'asc', type: 'title'}, {name:'Title Descending', value: 'desc', type: 'title'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
+    imgOrder:any = [{name:'Ascending By Name', value: 'asc', type: 'title'}, {name:'Descending By Name', value: 'desc', type: 'title'}, {name:'Ascending By Date', value: 'asc', type: 'id'}, {name:'Descending By Date', value: 'desc', type: 'id'}];
     searchImgFilter:any = this.imgOrder[3];
     imagesUpdated = new BehaviorSubject(false);
 

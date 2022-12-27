@@ -302,7 +302,7 @@ span.kb-d-btn .kb-d-btn-st{
 
 .kb-search-field {
     position: relative;
-    width: 320px;
+    width: 240px;
     height: 100%;
 }
 
@@ -316,7 +316,7 @@ span.kb-d-btn .kb-d-btn-st{
 
 @keyframes showSearch {
     from{width: 0px;}
-    to{width: 320px;}
+    to{width: 240px;}
 }
 
 .kb-search-field * {
