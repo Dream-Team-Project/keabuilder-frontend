@@ -41,7 +41,7 @@
         font-weight: 400;
     }
 
-    html, body, main, #app, app-builder>div {
+    html, body, main, #app {
       height: 100%;
     }
 

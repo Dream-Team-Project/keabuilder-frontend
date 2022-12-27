@@ -11,6 +11,10 @@
     margin: 0!important;
 }
 
+#kb-builder-topbar.kb-fixed {
+    position: fixed;
+}
+
 #kb-builder-topbar {
     position: sticky;
     top: 0px;

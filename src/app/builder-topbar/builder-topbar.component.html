@@ -21,9 +21,9 @@
         <button mat-button mat-dialog-close cdkFocusInitial class="kb-info" (click)="updateTemplate()">Rename</button>
     </div>
 </ng-template>
-<div id="kb-topBar">
+<div #topBar id="kb-topBar">
     <div class="kb-triggers">
-        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
+        <button mat-button (click)="redirectToLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
         <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="layt.menuOpen || selectedTab.split('-')[0] == 'l'">
             <i [innerHTML]="_image.svg.layout | safeHtml"></i> Layouts {{selectedTab.split('-')[0] == 'l' ? ('> '+selectedTab.split('-')[1] | titlecase): ''}}
         </button>

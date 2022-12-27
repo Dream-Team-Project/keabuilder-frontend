@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation, HostListener, TemplateRef} from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy, ElementRef, QueryList, ViewChildren, ViewEncapsulation, HostListener, TemplateRef} from '@angular/core';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
   encapsulation: ViewEncapsulation.None,
 })
 
-export class BuilderComponent implements OnInit {
+export class BuilderComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
@@ -42,6 +42,7 @@ export class BuilderComponent implements OnInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
+  topfixed:any = false;
 
   constructor(
     private router: Router,
@@ -130,7 +131,10 @@ export class BuilderComponent implements OnInit {
     this.saveHTML(main);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    window.onscroll = (e) => this.topfixed = window.scrollY > 60;
   }
 
   takePageSS(id:any, stxt:any) {
