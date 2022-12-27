@@ -42,6 +42,7 @@ export class BuilderComponent implements OnInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
+  fixedTop:boolean = false;
 
   constructor(
     private router: Router,
@@ -131,6 +132,13 @@ export class BuilderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    window.onload = (e) => {
+      window.onscroll = (e) => {
+        var top:any = document.getElementById('kb-builder-topbar');
+        var height = document.body?.clientHeight-top.clientHeight;
+        this.fixedTop = window.scrollY > height;
+      }
+    }
   }
 
   takePageSS(id:any, stxt:any) {

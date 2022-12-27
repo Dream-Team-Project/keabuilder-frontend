@@ -98,8 +98,7 @@ span.kb-wfs-addnew:hover, .kb-wfs-add-block:hover .kb-wfs-addnew {
 #kb-wireframe {
     position: relative;
     width: 520px;
-    padding: 10px;
-    min-height: 100vh;
+    padding: 42px 10px 20px;
     height: 100%;
     overflow-x: hidden;
     background-color: var(--kb-gray);
