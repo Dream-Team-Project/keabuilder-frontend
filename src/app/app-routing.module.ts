@@ -140,7 +140,7 @@ const routes: Routes = [
 
   { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
-  { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
 
   { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },

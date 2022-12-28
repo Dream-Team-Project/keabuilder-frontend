@@ -62,90 +62,97 @@ export class RegisterComponent implements OnInit {
     const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
 
-      if(this.form.subdomain!='app' && this.form.subdomain!='test' && this.form.subdomain!='developer' && this.form.subdomain!='admin' && this.form.subdomain!='kea'){
+      var nwsubdomain:any = subdomain.toLowerCase();
+      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
 
-        this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
-          next: data => {
-            this._file.createuserfolder(data.uniqueid).subscribe(e=>{
-              console.log(e);
-            });
-            var domainpath = window.location.hostname;
-            var subdomain = data.subdomain;
+      // if( subdomain!='app' && subdomain!='test' && subdomain!='developer' && subdomain!='admin' && subdomain!='kea' && subdomain!='keabuilder'){
 
-            var emailhtml = `Dear `+firstname+`,<br>
-            <br>
-            Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
-            <br>
-            Your account for domain `+subdomain+`.keapages.com has been confirmed and set up.<br>
-            <br>
-            Your new KEA builder includes 2 FREE hours of BONUS Launch Assist [activated from 1st of November] redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
-            <br>
-            Please email <strong>support@keasolution.com</strong> in case you need any clarity or suggestions.<br>
-            <br>
-            Your data will be safe and secure even after KEA builder's first launch on the 1st of November 2022, so play around and enjoy the builder.<br>
-            <br>
-            Login: `+domainpath+`/login<br>
-            Username: `+username+`<br>
-            Password: `+password+`<br>
-            <br>
-            Thanks<br>
-            KEA Solutions Team`;
-            var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome To Kea', html: emailhtml};
-            this.emailService.sendmail(maildata).subscribe({
-              next: data => {
-                // console.log(data);
-              }
-            });
+        if(this.searchStringInArray(nwsubdomain,notusesub)==1){
 
-            // var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
-            // this.emailService.sendmail(maildata).subscribe({
-            //   next: data => {
-            //     // console.log(data);
-            //   }
-            // });
+        console.log(nwsubdomain);
+
+        // this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
+        //   next: data => {
+        //     this._file.createuserfolder(data.uniqueid).subscribe(e=>{
+        //       console.log(e);
+        //     });
+        //     var domainpath = window.location.hostname;
+        //     var subdomain = data.subdomain;
+
+        //     var emailhtml = `Dear `+firstname+`,<br>
+        //     <br>
+        //     Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
+        //     <br>
+        //     Your account for domain `+subdomain+`.keapages.com has been confirmed and set up.<br>
+        //     <br>
+        //     Your new KEA builder includes 2 FREE hours of BONUS Launch Assist [activated from 1st of November] redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
+        //     <br>
+        //     Please email <strong>support@keasolution.com</strong> in case you need any clarity or suggestions.<br>
+        //     <br>
+        //     Your data will be safe and secure even after KEA builder's first launch on the 1st of November 2022, so play around and enjoy the builder.<br>
+        //     <br>
+        //     Login: `+domainpath+`/login<br>
+        //     Username: `+username+`<br>
+        //     Password: `+password+`<br>
+        //     <br>
+        //     Thanks<br>
+        //     KEA Solutions Team`;
+        //     var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome To Kea', html: emailhtml};
+        //     this.emailService.sendmail(maildata).subscribe({
+        //       next: data => {
+        //         // console.log(data);
+        //       }
+        //     });
+
+        //     // var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
+        //     // this.emailService.sendmail(maildata).subscribe({
+        //     //   next: data => {
+        //     //     // console.log(data);
+        //     //   }
+        //     // });
             
-            // window.location.href='https://keahosted.com/create_subdomain.php?subdomain='+subdomain;
+        //     // window.location.href='https://keahosted.com/create_subdomain.php?subdomain='+subdomain;
 
-            // need to pass unique id to the wistia instead of username
-            //  var userobject = {project_name: username};
-            //   this._wistia.projectCreate(userobject).subscribe({
-            //     next: data2 => {
-            //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
-            //         next: data3 => {
-            //           console.log(data3);
-            //         }
-            //       });
-            //     }
-            //   });
+        //     // need to pass unique id to the wistia instead of username
+        //     //  var userobject = {project_name: username};
+        //     //   this._wistia.projectCreate(userobject).subscribe({
+        //     //     next: data2 => {
+        //     //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
+        //     //         next: data3 => {
+        //     //           console.log(data3);
+        //     //         }
+        //     //       });
+        //     //     }
+        //     //   });
 
-            this.isSuccessful = true;
-            this.isSignUpFailed = false;
+        //     this.isSuccessful = true;
+        //     this.isSignUpFailed = false;
 
-            var uniqueid = data.uniqueid;
-            var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain,uniqueid];
+        //     var uniqueid = data.uniqueid;
+        //     var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain,uniqueid];
 
-           this.authService.oncreatesubdomain(subdomain,uniqueid).subscribe({
-              next: data => {
+        //    this.authService.oncreatesubdomain(subdomain,uniqueid).subscribe({
+        //       next: data => {
                 
-                console.log(data);
-                if(data.success==true){
-                  this._snackBar.open('Sign Up Successfully!', 'OK');
-                  this.redirectToDashboard();
-                  this.email_creationuser(datasubmittion);
-                }else{
-                  this.email_creationsubdomain(datasubmittion);
-                }
+        //         console.log(data);
+        //         if(data.success==true){
+        //           this._snackBar.open('Sign Up Successfully!', 'OK');
+        //           this.redirectToDashboard();
+        //           this.email_creationuser(datasubmittion);
+        //         }else{
+        //           this.email_creationsubdomain(datasubmittion);
+        //         }
 
-              }
-            });
+        //       }
+        //     });
 
             
-        },
-        error: err => {
-          this.errorMessage = err.error.message;
-          this.isSignUpFailed = true;
-        }
-        });
+        // },
+        //   error: err => {
+        //     this.errorMessage = err.error.message;
+        //     this.isSignUpFailed = true;
+        //   }
+        // });
 
       }else{
         this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
@@ -159,6 +166,13 @@ export class RegisterComponent implements OnInit {
     }
 
   }
+
+  searchStringInArray(str:any, strArray:any) {
+    for (var j=0; j<strArray.length; j++) {
+        if (strArray[j].match(str)) return 0;
+    }
+    return 1;
+``}
 
   email_creationsubdomain(data:any){
     var emailhtml = `Error while creation subdomain.
@@ -196,12 +210,13 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onupdateusername(event:any){
-    this.form.subdomain = this.removespecialchar(event.target.value);
-  }
-
   removespecialchar(data:any){
     var datagen = data.replace(/[^a-zA-Z0-9]/g, "");
+    return datagen;
+  }
+
+  removespecialcharwithsmall(data:any){
+    var datagen = this.removespecialchar(data).toLowerCase();
     return datagen;
   }
 

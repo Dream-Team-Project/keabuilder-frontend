@@ -14,7 +14,7 @@
 
                   <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Username</mat-label>
-                    <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" (keyup)="form.username = removespecialchar(form.username); form.subdomain = form.username;" >
+                    <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" (keyup)="form.username = removespecialchar(form.username); form.subdomain = removespecialcharwithsmall(form.username);" >
                     <mat-error *ngIf="userFormControl.hasError('required')">
                       Username is <strong>required</strong>
                     </mat-error>
@@ -76,7 +76,7 @@
 
                   <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label> Subdomain</mat-label>
-                    <input type="text" (keyup)="form.subdomain = removespecialchar(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+                    <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
                     <span matSuffix>.keapages.com</span>
                     <mat-error *ngIf="subdomainFormControl.hasError('required')">
                       Subdomain Name is <strong>required</strong>
