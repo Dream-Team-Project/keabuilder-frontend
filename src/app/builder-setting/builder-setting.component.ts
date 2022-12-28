@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy, ChangeDetectionStrategy, Input, ElementRef, OnChanges, SimpleChanges, EventEmitter, Output} from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { NavbarService } from '../_services/navbar.service';
 import { SectionService } from '../_services/_builder/section.service';
 import { RowService } from '../_services/_builder/row.service';
 import { ColumnService } from '../_services/_builder/column.service';
@@ -45,7 +44,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   backToRow:boolean = false;
 
   constructor(
-    private _nav: NavbarService,
     // builder services start
     public _style: StyleService,
     public _section: SectionService,

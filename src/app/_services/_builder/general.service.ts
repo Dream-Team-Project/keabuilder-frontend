@@ -338,6 +338,7 @@ export class GeneralService {
       this.main.dir = status ? 'pages' : 'drafts';
       this.fileUploadService.getPage(this.main).subscribe({
         next: (file:any)=>{
+          console.log(file);
           resolve(file);
         },
         error: (err:any) => {

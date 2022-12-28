@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
-import { NavbarService } from './_services/navbar.service';
-import { AuthService } from './_services/auth.service';
+import { UserService } from './_services/user.service';
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
 import { environment } from './../environments/environment';
 
@@ -20,12 +19,12 @@ export class AppComponent {
   componetLoaded:boolean = false;
   loading:boolean = false;
 
-  constructor(private tokenStorageService: TokenStorageService,
+  constructor(
     private router:Router,
-    public _nav: NavbarService,
-    public _auth: AuthService,
+    public _user: UserService,
+    private _token: TokenStorageService
     ) { 
-      this.router.events
+      router.events
       .subscribe(
         (event: NavigationEvent) => {
             switch (true) {
@@ -33,13 +32,13 @@ export class AppComponent {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
                 if( geturl == 'form-builder' || geturl == 'builder' || geturl == 'preview') {
-                  this._nav.hide();
+                  _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }else if( geturl == 'course'  || geturl == 'checkout'){
-                  this._nav.hide();
+                  _user.hideNav();
                 }
                 else {
-                  this._nav.show();
+                  _user.showNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.setAttribute('href', 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css');
                 }
                 this.loading = true;
@@ -47,6 +46,14 @@ export class AppComponent {
                 break;
               }
               case event instanceof NavigationEnd: {
+                var e:any = event;
+                var navpath:any = localStorage.getItem('route');
+                if(_user.navPath.length == 0 && navpath) _user.navPath = atob(navpath).split(',');
+                else {
+                  if(_user.navPath.length == 2) _user.navPath.shift();
+                  _user.navPath.push(e.url);
+                }
+                localStorage.setItem('route', btoa(_user.navPath.join(',')));
                 this.loading = false;
                 break;
               }
@@ -70,7 +77,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     if(this.isLoggedIn) {
-      const user = this.tokenStorageService.getUser();
+      const user = this._token.getUser();
       this.roles = user.roles;
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
@@ -79,7 +86,7 @@ export class AppComponent {
   }
 
   changeOfRoutes() {
-    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    this.isLoggedIn = !!this._token.getToken();
     this.componetLoaded = true;
     var vm = this;
     setTimeout(()=>{
@@ -88,7 +95,7 @@ export class AppComponent {
   }
 
   logout(): void {
-    this.tokenStorageService.signOut();
+    this._token.signOut();
     window.location.reload();
   }
 }

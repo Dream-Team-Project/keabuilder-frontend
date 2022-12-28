@@ -271,7 +271,7 @@ export class WebsitePagesComponent implements OnInit {
               head: '',
               body: '',
               style: '',
-              dir: 'pages',
+              dir: 'drafts',
               folder: pagepath,
               prevFolder: pagepath
             }
