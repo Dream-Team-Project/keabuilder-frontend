@@ -137,6 +137,7 @@ export class WebsitePagesComponent implements OnInit {
   pageSizeOptions: number[] = [6, 12, 24, 100];
 
   searching:boolean = false;
+  author:any = '';
 
   // MatPaginator Output
   pageEvent!: PageEvent;  
@@ -196,6 +197,12 @@ export class WebsitePagesComponent implements OnInit {
       }
     });
 
+    this.userService.getUsersDetails().subscribe({
+      next: data => {        
+        this.author = data.data[0].firstname;
+      }
+    });
+
   }
 
   pathuniqueremove(){
@@ -250,15 +257,10 @@ export class WebsitePagesComponent implements OnInit {
 
   onSubmit(): void {
     const { pagename, pagepath } = this.form;
-    
-    var author = '';
-    if (this.tokenStorage.getToken()) {
-      author = this.tokenStorage.getUser().username;
-    }
 
     if(this.userFormControl.status=='VALID'){
 
-      this.webpagesService.validatepages(pagename, pagepath, author).subscribe({
+      this.webpagesService.validatepages(pagename, pagepath, this.author).subscribe({
         next: data => {
           // console.log(data);
 
