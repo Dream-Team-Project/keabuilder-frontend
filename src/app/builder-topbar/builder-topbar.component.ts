@@ -267,4 +267,9 @@ export class BuilderTopbarComponent implements OnInit {
     foot ? this._general.setFooter(foot) : this._general.includeLayout.footer = false;
   }
 
+  respToggle(device:any) {
+    if(device == this._general.respToggleDevice.name) device = 'desktop';
+    this._general.respToggleDevice = this._general.respDevices[device];
+  }
+
 }
