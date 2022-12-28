@@ -17,7 +17,8 @@ export class UserService {
     name: '',
     email: ''
   };
-  prevPath = '';
+  navPath:any = [];
+  navVisible:boolean = false;
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
@@ -50,5 +51,9 @@ export class UserService {
   updateuserdetails(data: any): Observable<any> {
     return this.http.post(this.updateuserdetailsApi+this.uuid, data);
   }
+
+  hideNav() { this.navVisible = false; }
+
+  showNav() { this.navVisible = true; }
 
 }

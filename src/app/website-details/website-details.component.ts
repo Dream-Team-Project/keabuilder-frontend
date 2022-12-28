@@ -46,7 +46,7 @@ export class WebsiteDetailsComponent implements OnInit {
               private imageService: ImageService,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,) { }
+              public userService: UserService) { }
 
   ngOnInit(): void {
 

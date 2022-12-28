@@ -232,7 +232,7 @@ export class AllFunnelsComponent implements OnInit {
                   head: '',
                   body: '',
                   style: '',
-                  dir: 'pages',
+                  dir: 'drafts',
                   folder: element,
                   prevFolder: element
                 };
@@ -397,7 +397,7 @@ export class AllFunnelsComponent implements OnInit {
                 head: '',
                 body: '',
                 style: '',
-                dir: 'pages',
+                dir: 'drafts',
                 folder: data.pagepath,
                 prevFolder: data.pagepath
               };

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ConnectableObservable } from 'rxjs';
-import { TokenStorageService } from '../_services/token-storage.service';
 import { UserService } from '../_services/user.service';
 import { ImageService } from '../_services/image.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -38,7 +36,7 @@ export class ProfileComponent implements OnInit {
   incrpwdlng = false;
   selectfilenm = '';
 
-  constructor(private token: TokenStorageService,
+  constructor(
               public userService: UserService,
               public imageService: ImageService,
               private _snackBar: MatSnackBar,
@@ -46,7 +44,6 @@ export class ProfileComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
-    // this.currentUser = this.token.getUser();
     this.updateuserdetailsnow();
   }
 
