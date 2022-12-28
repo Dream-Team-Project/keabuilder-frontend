@@ -74,12 +74,9 @@ export class GeneralService {
     ],
     images_upload_base_path: '/some/basepath',
     images_upload_credentials: true,
-      /* without images_upload_url set, Upload tab won't show up*/
   images_upload_url: './api/uploadfile',
-  /* we override default upload handler to simulate successful upload*/
   images_upload_handler: function (blobInfo:any, success:any, failure:any) {
     setTimeout(function () {
-      /* no matter what you upload, we will turn it into TinyMCE logo :)*/
       success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
     }, 2000);
   },
@@ -124,10 +121,10 @@ export class GeneralService {
   filterOrder:any = [{name:'Name Ascending', value: 'asc', type: 'name'}, {name:'Name Descending', value: 'desc', type: 'name'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
   searchFilter:any = this.filterOrder[1];
 
-  constructor(private UserService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
+  constructor(public userService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
-        this.UserService.getUsersDetails().subscribe(data=>{
+        this.userService.getUsersDetails().subscribe(data=>{
         this.user = {...this.user, ...data.data[0]};
         this.user.name = this.user.username;
         this.main.author = this.user.name;
@@ -338,7 +335,6 @@ export class GeneralService {
       this.main.dir = status ? 'pages' : 'drafts';
       this.fileUploadService.getPage(this.main).subscribe({
         next: (file:any)=>{
-          console.log(file);
           resolve(file);
         },
         error: (err:any) => {

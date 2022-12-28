@@ -318,12 +318,10 @@
         <div id="box"></div>
         <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
     </div>
-    <div *ngIf="_general.minimize" id="kb-minimize-setting" cdkDrag cdkDragBoundary="#kb-page-container">
-        <div class="kb-minimize-title" cdkDragHandle>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-            _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</div>
-        <button mat-button (click)="_general.minimize = !_general.minimize"
-        matTooltip="Maximize" matTooltipPosition="above"><i
-            class ='far fa-window-maximize'></i></button>
+    <div *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
+        <i class ='far fa-window-maximize'></i>
+        <span>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
+            _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</span>
     </div>
     <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
     <div style="visibility: hidden; position: fixed"

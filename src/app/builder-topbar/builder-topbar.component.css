@@ -390,6 +390,24 @@ span.kb-d-btn .kb-d-btn-st{
     100% {background-position: center bottom;}
 }
 
+button.kb-backBtn i {
+    padding: 0px;
+}
+
+button.kb-backBtn .kb-bb-text {
+    transition: 0.2s ease;
+    width: 0px;
+    overflow: hidden;
+}
+
+button.kb-backBtn:hover .kb-bb-text {
+    width: 40px;
+}
+
+button.kb-backBtn:hover {
+    transform: translateY(0px);
+}
+
 .custom-placeholder {
     color: var(--kb-text-color);
 }

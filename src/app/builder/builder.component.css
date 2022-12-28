@@ -33,19 +33,21 @@ div#kb-minimize-setting {
     position: fixed;
     background-color: var(--section-color);
     color: #fff;
-    display: flex;
-    align-items: center;
-    border-radius: 3px;
+    border-top-left-radius: 5px;
     font-weight: 500;
     z-index: 999999;
     bottom: 0;
     right: 0;
+    padding: 8px 16px;
+    cursor: pointer;
 }
 
-div#kb-minimize-setting .kb-minimize-title {
-    padding: 0 16px;
-    cursor: move;
-    border-right: 1px solid;
+div#kb-minimize-setting i {
+    padding-right: 5px;
+}
+
+div#kb-minimize-setting span {
+    padding-left: 5px;
 }
 
 .cdk-drop-list-dragging, .cdk-drop-list-receiving {

@@ -7,7 +7,6 @@
     </div>
   </div>
   <div class="bw-sidebar">
-
     <a href="javascript:void(0)" (click)="backFn($event)" *ngIf="backme">
       <button class="bw-sidebar__item hasIcon">
         <div class="bw-sidebar__item__icon">
@@ -19,7 +18,6 @@
         </div>
       </button>
     </a>
-
     <span *ngFor="let menu of allmenu; index as i;">
       <a [routerLink]="allmenu[i].routerlink" [routerLinkActive]="['a-active']" (click)="changeFn($event)">
         <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]">

@@ -23,7 +23,10 @@
 </ng-template>
 <div #topBar id="kb-topBar">
     <div class="kb-triggers">
-        <button mat-button (click)="redirectToLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
+        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
+        <button mat-button (click)="backBtn(_general.userService.navPath[0])" class="kb-backBtn kb-padadj">
+            <i [innerHTML]="_image.svg.left_circle_arrow | safeHtml"></i><p class="kb-bb-text">Back</p>
+        </button>
         <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="(layt.menuOpen || selectedTab.split('-')[0] == 'l') && !wftgl">
             <i [innerHTML]="_image.svg.layout | safeHtml"></i> Layouts {{selectedTab.split('-')[0] == 'l' ? ('> '+selectedTab.split('-')[1] | titlecase): ''}}
         </button>

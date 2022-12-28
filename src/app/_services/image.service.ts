@@ -25,6 +25,7 @@ export class ImageService {
         footer: '',
         header: '',
         layout: '',
+        left_circle_arrow: '',
         mobile: '',
         none: '',
         preview: '',

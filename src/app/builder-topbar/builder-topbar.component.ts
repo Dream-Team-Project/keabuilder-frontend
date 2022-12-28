@@ -249,6 +249,10 @@ export class BuilderTopbarComponent implements OnInit {
     this.parentTrigger.emit(value);
   }
 
+  backBtn(link:string) {
+    window.open(window.origin+link, '_self');
+  }
+
   redirectToLink(link:string) {
     window.open(window.origin+link, '_blank');
   }
