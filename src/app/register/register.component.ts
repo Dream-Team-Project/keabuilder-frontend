@@ -70,6 +70,8 @@ export class RegisterComponent implements OnInit {
               console.log(e);
             });
             var domainpath = window.location.hostname;
+            var subdomain = data.subdomain;
+
             var emailhtml = `Dear `+firstname+`,<br>
             <br>
             Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
@@ -102,7 +104,6 @@ export class RegisterComponent implements OnInit {
             //   }
             // });
             
-            var subdomain = data.subdomain;
             // window.location.href='https://keahosted.com/create_subdomain.php?subdomain='+subdomain;
 
             // need to pass unique id to the wistia instead of username

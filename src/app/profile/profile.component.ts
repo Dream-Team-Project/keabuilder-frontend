@@ -118,9 +118,11 @@ export class ProfileComponent implements OnInit {
           checkimginput1: this.imagelogorequest,
           type:'profile'
         };
+        console.log(obj);
         this.userService.updateuserdetails(obj).subscribe({
           next: data => {  
             console.log(data);
+            // console.log(this.logoimg);
             var splnmlogo = data.genlogo.split('keaimage-');  
             var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
             if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
