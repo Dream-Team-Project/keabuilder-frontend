@@ -11,26 +11,26 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row align-items-center">
-      <div class="col-md-6">
-          <mat-form-field appearance="fill" class="w-100">
+      <div class="col-md-8">
+          <mat-form-field appearance="fill" class="col-8 pr-2">
               <mat-label>Search Headers</mat-label>
               <input #searchInp matInput type="text" placeholder="Search Headers">
               <i class="fa fa-search"></i>
-            </mat-form-field>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="col-4">
+            <mat-label>Sort By</mat-label>
+            <mat-select value="asc" #sortBy>
+                <mat-option value="asc">Ascending</mat-option>
+                <mat-option value="desc">Descending</mat-option>
+            </mat-select>
+          </mat-form-field>
       </div>
-      <div class="col-md-6 text-right">
+      <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="headers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
         <button mat-raised-button class="mx-3" (click)="create()" color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
-        <mat-form-field appearance="fill">
-          <mat-label>Sort By</mat-label>
-          <mat-select value="asc" #sortBy>
-              <mat-option value="asc">Ascending</mat-option>
-              <mat-option value="desc">Descending</mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>  
   </div>
   <div [class.px-3]="!toggleview" class="row" *ngIf="headers.length != 0 else nodata">
