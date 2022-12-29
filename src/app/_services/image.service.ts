@@ -75,7 +75,7 @@ export class ImageService {
     extImgLink:any = {originalname: '', filename: ''};
     extImgLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:png|jpg|jpeg|svg)')]);
     timeStamp = (new Date()).getTime();
-    imgOrder:any = [{name:'Ascending By Name', value: 'asc', type: 'title'}, {name:'Descending By Name', value: 'desc', type: 'title'}, {name:'Ascending By Date', value: 'asc', type: 'id'}, {name:'Descending By Date', value: 'desc', type: 'id'}];
+    imgOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'title'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'title'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
     searchImgFilter:any = this.imgOrder[3];
     imagesUpdated = new BehaviorSubject(false);
 

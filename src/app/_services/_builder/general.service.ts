@@ -411,7 +411,7 @@ export class GeneralService {
   saveHeaderFooter(main:any, sections:any) {
     return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
-      this.removeExtra();
+      this.removeExtra(false);
       this.setPageStyle(sections);
       var obj:any = new Object();
       obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
@@ -446,39 +446,38 @@ export class GeneralService {
     return new Promise<any>((resolve, reject) => {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
+        this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+        if(this.includeLayout.header && this.selectedHeader.html && !preview) {
+          var header = this.pagehtml.querySelector('header');
+          header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+        }
+        if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
+          var footer = this.pagehtml.querySelector('footer');
+          footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+        }
+        this.removeExtra(preview);
+        this.setPageStyle(sections);
+        this.pagehtml.querySelector('head').innerHTML = 
+        '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
+        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
+        '<meta charset="UTF-8">' +
+        '<meta name="description" content="'+this.main.description+'">' +
+        '<meta name="keywords" content="'+this.main.keywords+'">' +
+        '<meta name="author" content="'+this.main.author+'">' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+        '<title>'+this.main.title+'</title>' +        
+        '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
+        this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
+        this.pageObj = {
+          head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
+          body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+          style: this.getAllStyle(),
+        }
         if(preview) {
-          this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-          if(this.includeLayout.header && this.selectedHeader.html) {
-            var header = this.pagehtml.querySelector('header');
-            header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
-          }
-          if(this.includeLayout.footer && this.selectedFooter.html) {
-            var footer = this.pagehtml.querySelector('footer');
-            footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
-          }
-          this.removeExtra();
-          this.setPageStyle(sections);
-          this.pagehtml.querySelector('head').innerHTML = 
-          '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
-          '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
-          '<meta charset="UTF-8">' +
-          '<meta name="description" content="'+this.main.description+'">' +
-          '<meta name="keywords" content="'+this.main.keywords+'">' +
-          '<meta name="author" content="'+this.main.author+'">' +
-          '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-          '<title>'+this.main.title+'</title>' +        
-          '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
-          this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
-          this.pageObj = {
-            head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
-            body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
-            style: this.getAllStyle(),
-          }
-          this.pageObj.prevFolder = 'kb-page-'+this.webpage.uniqueid;
-          this.pageObj.folder = 'kb-page-'+this.webpage.uniqueid;
-          this.pageObj.dir = 'previews';
           var prevObj = JSON.parse(JSON.stringify(this.pageObj));
-          prevObj.body = this.removeCommments(main.innerHTML);
+          prevObj.prevFolder = 'kb-page-'+this.webpage.uniqueid;
+          prevObj.folder = 'kb-page-'+this.webpage.uniqueid;
+          prevObj.dir = 'previews';
           this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{});
         }
         else {
@@ -558,25 +557,25 @@ export class GeneralService {
     })
   }
 
-  removeExtra() {
+  removeExtra(preview:boolean) {
     this.pagehtml.querySelectorAll('*').forEach((item:any)=>{
       item.removeAttribute('style');
-      item.classList.remove('cdk-drag');
+      item.removeAttribute('cdkdrag');
+      item.removeAttribute('cdkdroplist');
       item.removeAttribute('ng-reflect-id');
       item.removeAttribute('ng-reflect-data');
-      item.classList.remove('cdk-drag-handle');
       item.removeAttribute('ng-reflect-ng-style');
       item.removeAttribute('ng-reflect-ng-class');
       item.removeAttribute('ng-reflect-ng-switch');
       item.removeAttribute('ng-reflect-connected-to');
-      if(item.classList.contains('kb-ispan-add')) {
-        item.remove();
-      }
+      item.classList.remove('cdk-drag');
+      item.classList.remove('cdk-drag-handle');
+      if(item.classList.contains('kb-ispan-add') || item.classList.contains('kb-module-setting')) item.remove();
       if(item.classList.contains('cdk-drop-list')) {
         item.removeAttribute('id');
         item.classList.remove('cdk-drop-list');
       }
-      if(item.classList.contains('kb-menu')) {
+      if(item.classList.contains('kb-menu') && !preview) {
         item.outerHTML = '<?php $path="../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
       }
       if(item.classList.contains('kb-code-block')) {

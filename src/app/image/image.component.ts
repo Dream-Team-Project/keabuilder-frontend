@@ -81,6 +81,7 @@ export class ImageComponent implements OnInit {
       this._style.addImage(img); 
       this.closeDialog();
     }
+    else this._image.editImage(img);
   }
 
 }

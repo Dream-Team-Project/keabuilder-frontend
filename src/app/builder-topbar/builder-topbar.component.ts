@@ -35,7 +35,7 @@ export class BuilderTopbarComponent implements OnInit {
   rowtypes:any = [{name:'All', value: ''}, {name:'Single', value: 1}, {name:'Two', value: 2}, {name:'Three', value: 3}, {name:'Four', value: 4}, {name:'Five', value: 5}, {name:'Six', value: 6}]
   searchText:string = '';
   searchRowFilter:any = this.rowtypes[0];
-  tempOrder:any = [{name:'Ascending By Name', value: 'asc', type: 'name'}, {name:'Descending By Name', value: 'desc', type: 'name'}, {name:'Ascending By Date', value: 'asc', type: 'id'}, {name:'Descending By Date', value: 'desc', type: 'id'}];
+  tempOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
   tempOrderFilter:any = this.tempOrder[3];
   seltemp:any;
   
@@ -264,11 +264,19 @@ export class BuilderTopbarComponent implements OnInit {
   }
 
   setHeader(head:any) {
-    head ? this._general.setHeader(head) : this._general.includeLayout.header = false;
+    if(head) this._general.setHeader(head).then((e:any)=>this.setTrigger('preview'));
+    else {
+      this._general.includeLayout.header = false;
+      this.setTrigger('preview');
+    }
   }
 
   setFooter(foot:any) {
-    foot ? this._general.setFooter(foot) : this._general.includeLayout.footer = false;
+    if(foot) this._general.setFooter(foot).then((e:any)=>this.setTrigger('preview'));
+    else {
+      this._general.includeLayout.footer = false;
+      this.setTrigger('preview');
+    }
   }
 
   respToggle(device:any) {
