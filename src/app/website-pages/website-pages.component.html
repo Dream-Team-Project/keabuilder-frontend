@@ -226,21 +226,21 @@
             <input matInput type="text" (keyup)="searchpage($event)" placeholder="Search Pages">
             <i class="fa fa-search"></i>
           </mat-form-field>
-          <mat-form-field appearance="fill" class="mr-4">
-            <mat-label>Visibility</mat-label>
-            <mat-select name="visibility" [(ngModel)]="selstatusshow">
-              <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>
-              <mat-option value="drafts" (click)="changevisibility('draft')">Draft Only</mat-option>
-              <mat-option value="publish" (click)="changevisibility('publish')">Publish Only</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill"  class="mr-4">
             <mat-label>Sort By</mat-label>
             <mat-select name="kbfilter" [(ngModel)]="selstatusshow">
               <mat-option value="asc" (click)="changevisibility('nameasc')">ASC By Name</mat-option>
               <mat-option value="desc" (click)="changevisibility('namedesc')">DESC By Name</mat-option>
               <mat-option value="asc" (click)="changevisibility('dateasc')">ASC By Date</mat-option>
               <mat-option value="desc" (click)="changevisibility('datedesc')">DESC By Date</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Visibility</mat-label>
+            <mat-select name="visibility" [(ngModel)]="selstatusshow">
+              <mat-option value="all" (click)="changevisibility('showall')">Show All</mat-option>
+              <mat-option value="drafts" (click)="changevisibility('draft')">Draft Only</mat-option>
+              <mat-option value="publish" (click)="changevisibility('publish')">Publish Only</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
