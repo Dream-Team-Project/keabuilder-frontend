@@ -19,7 +19,8 @@ export class DomainComponent implements OnInit {
 
   gendomainname:any = '';
   domainconn = 0;
-  nameservers = ["gina.ns.cloudflare.com","jerry.ns.cloudflare.com"];
+  nameservers = [];
+  shownamehint = false;
 
   constructor(private domainService: DomainService) { }
 
@@ -59,6 +60,12 @@ export class DomainComponent implements OnInit {
             this.domainconn = 0;
             
               if(data.success==true){
+                var objdata = {};
+                this.domainService.oninsertdomain(objdata).subscribe({
+                  next: data => {
+                    console.log(data);
+                  }
+                });
 
                 // this._snackBar.open('Stripe Keys Connected Successfully!', 'OK');
 
