@@ -59,17 +59,18 @@ export class DomainComponent implements OnInit {
             
             this.domainconn = 0;
             
-              if(data.success==true){
-                var objdata = {};
+              // if(data.success==true){
+                var objdata = {zoneid:data.zoneid, nameservers:data.nameservers, status:data.status};
                 this.domainService.oninsertdomain(objdata).subscribe({
                   next: data => {
                     console.log(data);
+                    this.shownamehint = true;
                   }
                 });
 
                 // this._snackBar.open('Stripe Keys Connected Successfully!', 'OK');
 
-              }
+              // }
           }
         });
       }
