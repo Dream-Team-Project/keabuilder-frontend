@@ -105,7 +105,8 @@ export class ProfileComponent implements OnInit {
     var newvl = value.split('.'+extn)
     var setname = (newvl[0].toLowerCase()).replaceAll(" ","-");
     var unqueid = Math.random().toString(20).slice(2);
-    return setname+'-'+unqueid+'.'+extn;
+    return unqueid+'.'+extn;
+    // return setname+'-'+unqueid+'.'+extn;
   }
 
   kbsavechange(){
@@ -125,6 +126,7 @@ export class ProfileComponent implements OnInit {
             // console.log(this.logoimg);
             var splnmlogo = data.genlogo.split('keaimage-');  
             var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
+
             if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
               this.imageService.onImageFileUpload(genobjlogo);
               this.imageService.timeStamp = (new Date()).getTime();

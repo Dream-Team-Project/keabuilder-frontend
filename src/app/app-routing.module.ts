@@ -83,8 +83,9 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
 
 const routes: Routes = [
+
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },

@@ -6,25 +6,29 @@
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
             <h6><b>Connect Your Domain</b></h6>
             <hr>
-            
-            <h4>Add your own domain</h4>
-            <p>Enter the domain name you already own below and we'll take care of the rest.</p>
 
-            <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Domain Name</mat-label>
-                <input type="text" placeholder="mydomain.com" matInput required [formControl]="domainname" (keyup)="gendomainname = removespecialchar(gendomainname)" [(ngModel)]="gendomainname">
-                <mat-error *ngIf="domainname.hasError('required')" class="errdmrgn">
-                    Domain Name is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" (click)="connectdomain()" >
-                <span *ngIf="!domainconn">Connect <i class="fas fa-plus"></i></span>
-                <span *ngIf="domainconn">Connecting... <i class="fa-circle-notch fa-spin fas"></i></span>
-            </button>
+            <div *ngIf="!shownamehint">  
             
-            <hr>
-            <div class="outerdivnm">
+                <h4>Add your own domain</h4>
+                <p>Enter the domain name you already own below and we'll take care of the rest.</p>
+
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Domain Name</mat-label>
+                    <input type="text" placeholder="mydomain.com" matInput required [formControl]="domainname" (keyup)="gendomainname = removespecialchar(gendomainname)" [(ngModel)]="gendomainname">
+                    <mat-error *ngIf="domainname.hasError('required')" class="errdmrgn">
+                        Domain Name is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="connectdomain()" >
+                    <span *ngIf="!domainconn">Connect <i class="fas fa-plus"></i></span>
+                    <span *ngIf="domainconn">Connecting... <i class="fa-circle-notch fa-spin fas"></i></span>
+                </button>
+
+            </div>
+            
+            <div class="outerdivnm" *ngIf="shownamehint">
+                <hr>
                 <p><b>How to connect your domain to Kea</b></p>
                 <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span *ngFor="let name of nameservers" >{{name}}&nbsp;&nbsp;</span></small></p>
                 
