@@ -101,16 +101,16 @@
             <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value">{{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
         </mat-menu>
         <button mat-button #imgt="matMenuTrigger" *ngIf="selectedTab == 'elements' && selectedElement == 'image' && !wftgl" [class.kb-btn-active]="imgt.menuOpen" [matMenuTriggerFor]="imgmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="(_image.searchImgFilter.name.split(' ')[0] == 'Ascending' ? _image.svg.ascending : _image.svg.descending) | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.svg[_image.searchImgFilter.icon] | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #imgmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value">{{order.name}}</button>
+            <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="_image.svg[order.icon] | safeHtml"></i> {{order.name}}</button>
         </mat-menu>
-        <button mat-button #tempt="matMenuTrigger" *ngIf="selectedTab == 'l-templates' && !wftgl" [class.kb-btn-active]="tempt.menuOpen" [matMenuTriggerFor]="tempmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="(tempOrderFilter.name.split(' ')[0] == 'Ascending' ? _image.svg.ascending : _image.svg.descending) | safeHtml"></i> {{tempOrderFilter.name.split(' ')[2]}}
+        <button mat-button #tempt="matMenuTrigger" *ngIf="selectedTab == 'l-templates' || selectedTab == 'l-headers' || selectedTab == 'l-footers' && !wftgl" [class.kb-btn-active]="tempt.menuOpen" [matMenuTriggerFor]="tempmenu">
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.svg[tempOrderFilter.icon] | safeHtml"></i> {{tempOrderFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #tempmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let order of tempOrder" (click)="tempOrderFilter = order" [class.kb-btn-active]="tempOrderFilter.name == order.name" [value]="order.value">{{order.name}}</button>
+            <button mat-menu-item *ngFor="let order of tempOrder" (click)="tempOrderFilter = order" [class.kb-btn-active]="tempOrderFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="_image.svg[order.icon] | safeHtml"></i> {{order.name}}</button>
         </mat-menu>
         <span *ngIf="(selectedTab == 'elements' || selectedTab == 'l-templates' || selectedTab == 'l-headers' || selectedTab == 'l-footers') && !wftgl" [class.open]="toggle.open" [class.close]="toggle.close" class="kb-search-field">
             <i [innerHTML]="_image.svg.search | safeHtml"></i>
@@ -165,28 +165,28 @@
         </div>
         <div *ngSwitchCase="'l-headers'" class="kb-block-selection kb-block-list">
             <button mat-button (click)="redirectToLink('/website/headers')">
-                <i [innerHTML]="_image.svg.add | safeHtml"></i> Add
-            </button>
-            <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name'; index as i" 
-            (click)="setHeader(head)" [class.kb-btn-active]="head.id == _general.selectedHeader.id && _general.includeLayout.header"
-            (mouseover)="prevImg=head.thumbnail" (mouseout)="prevImg=''">
-                {{head.name}}
+                <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setHeader(false)" [class.kb-btn-active]="!_general.includeLayout.header">
                 <i [innerHTML]="_image.svg.none | safeHtml"></i> None
             </button>
+            <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name' | sorting:tempOrderFilter.value:tempOrderFilter.type; index as i" 
+            (click)="setHeader(head)" [class.kb-btn-active]="head.id == _general.selectedHeader.id && _general.includeLayout.header"
+            (mouseover)="prevImg=head.thumbnail" (mouseout)="prevImg=''">
+                {{head.name}}
+            </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
             <button mat-button (click)="redirectToLink('/website/headers')">
-                <i [innerHTML]="_image.svg.add | safeHtml"></i> Add
-            </button>
-            <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name'; index as i" 
-            (click)="setFooter(foot)" [class.kb-btn-active]="foot.id == _general.selectedFooter.id && _general.includeLayout.footer"
-            (mouseover)="prevImg=foot.thumbnail" (mouseout)="prevImg=''">
-                {{foot.name}}
+                <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setFooter(false)" [class.kb-btn-active]="!_general.includeLayout.footer">
                 <i [innerHTML]="_image.svg.none | safeHtml"></i> None
+            </button>
+            <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name' | sorting:tempOrderFilter.value:tempOrderFilter.type; index as i" 
+            (click)="setFooter(foot)" [class.kb-btn-active]="foot.id == _general.selectedFooter.id && _general.includeLayout.footer"
+            (mouseover)="prevImg=foot.thumbnail" (mouseout)="prevImg=''">
+                {{foot.name}}
             </button>
         </div>
         <!-- layout -->

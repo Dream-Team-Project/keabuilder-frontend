@@ -38,7 +38,7 @@ export class ElementService {
     { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
     // image
     // button
-    { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-font' },
+    { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-toggle-off' },
     // button
     // menu
     { content: { name: 'menu', size: 16, items:[]}, iconCls: 'fas fa-external-link-alt' }, // it should be on the first position

@@ -36,12 +36,14 @@
   <div [class.px-3]="!toggleview" class="row" *ngIf="footers.length != 0 else nodata">
     <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4 " *ngFor="let footer of footers | filter:searchInp.value:'name' | sorting:sortBy.value:'name'; index as i;">
         <div [class.row]="!toggleview">
-          <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+footer.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+          <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
+          <div class="kb-fitimg col-12" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+footer.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
             <div id="loader" *ngIf="shortwaiting">
               <div id="shadow"></div>
               <div id="box"></div>
               <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
             </div>
+          </div>
           </div>
           <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'" >
             <div class="row align-items-center p-0 h-100">

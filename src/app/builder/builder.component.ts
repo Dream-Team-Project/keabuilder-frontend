@@ -42,7 +42,6 @@ export class BuilderComponent implements OnInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
-  fixedTop:boolean = false;
 
   constructor(
     private router: Router,
@@ -132,13 +131,10 @@ export class BuilderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    window.onload = (e) => {
-      window.onscroll = (e) => {
-        var top:any = document.getElementById('kb-builder-topbar');
-        var height = document.body?.clientHeight-top.clientHeight;
-        this.fixedTop = window.scrollY > height;
-      }
-    }
+    // window.addEventListener('beforeunload', function (e) {
+    //   e.preventDefault();
+    //   e.returnValue = '';
+    // });
   }
 
   takePageSS(id:any, stxt:any) {
@@ -436,11 +432,12 @@ export class BuilderComponent implements OnInit {
 
   getTrigger(e:any) {
     var main = this.main.nativeElement;
-    if(e == 'save') {
+    if(e == 'preview') this._general.saveHTML(this.main.nativeElement, this._section.sections, true);
+    else if(e == 'save') {
       this.trigger = 'Saved'; 
       this.saveHTML(main);
     }
-    if(e == 'publish' || e == 'draft') {
+    else if(e == 'publish' || e == 'draft') {
       this._general.main.publish_status = e == 'publish';
       this.trigger = this._general.main.publish_status ? 'Published' : 'Draft';
       this.saveHTML(main);

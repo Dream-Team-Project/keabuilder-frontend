@@ -15,7 +15,7 @@
     [class.dragBoxClose]="dragBoxAnime.close">
         <div class="kb-head">
             <div *ngIf="!_image.showEditImgContainer else editImgHead">
-                    {{_image.imgMatTabIndex ? 'Choose' : 'Upload'}} Image
+                    {{_image.imgMatTabIndex ? 'Customize' : 'Upload'}} Image
             </div>
             <ng-template #editImgHead><div><button mat-button class="side-arrow" (click)="_image.showEditImgContainer=false" matTooltip="Back To Gallery"
                 matTooltipPosition="above"><i
@@ -54,7 +54,7 @@
                     <ng-template #loading><mat-spinner></mat-spinner></ng-template>  
                 </div>  
             </mat-tab>
-            <mat-tab label="Choose">
+            <mat-tab label="Customize">
                 <div class="kb-img-filter">
                     <mat-form-field appearance="fill" class="kb-img-search">
                         <mat-label>Search image by name</mat-label>

@@ -13,7 +13,7 @@
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<app-builder-topbar id="kb-builder-topbar" [class.kb-fixed]="fixedTop" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
     <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
         <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
@@ -318,7 +318,7 @@
         <div id="box"></div>
         <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
     </div>
-    <div *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
+    <div mat-ripple *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
         <i class ='far fa-window-maximize'></i>
         <span>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
             _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</span>

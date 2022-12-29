@@ -176,7 +176,7 @@ export class FileUploadService {
   }
 
   updateondb(imagedata: any):Observable<any> {
-    return this.http.put(this.updateOnDBApi, imagedata)
+    return this.http.post(this.updateOnDBApi, imagedata)
     .pipe(catchError(this.errorHandler));
   }
 
