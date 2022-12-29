@@ -1346,10 +1346,15 @@ ul.kb-menu a, ul.kb-menu li {
     border-radius: 5px;
   }
 
-  header .kb-block-container:before, footer .kb-block-container:before{
+  header .kb-block-container:before, footer .kb-block-container:before, header div.kb-column.kb-block-container:not(:last-child)::after, footer .kb-block-container:before {
     content: none!important;
   }
 
-  header a, footer a{
-    pointer-events: none;
+  header div.kb-block-container,  footer div.kb-block-container {
+    pointer-events: none!important;
+    cursor: default!important;
+  }
+
+ header a, footer a{
+    pointer-events: none!important;
   }

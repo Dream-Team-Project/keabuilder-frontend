@@ -16,6 +16,12 @@ export class ImageService {
         add: '',
         ascending: '',
         check: '',
+        column1: '',
+        column2: '',
+        column3: '',
+        column4: '',
+        column5: '',
+        column6: '',
         desktop: '',
         descending: '',
         draft: '',
@@ -98,8 +104,9 @@ export class ImageService {
 
         // DB handlers
 
-    onUpload() {
+    onUpload(saveasnew:boolean) {
         this.loading = !this.loading;
+        this.saveasnew = saveasnew;
         if(this.croppedEvent) {
             this.file = this.base64ToFile(
                 this.croppedImage,
@@ -257,7 +264,7 @@ export class ImageService {
             const reader = new FileReader();
             reader.onload = e => this.selectedImg.path = reader.result;
             reader.readAsDataURL(this.file);
-            if(directUpload) this.onUpload();
+            if(directUpload) this.onUpload(true);
         }
     }
 
@@ -364,5 +371,14 @@ export class ImageService {
         })
         .then(resp=> { return resp.status == 200 ? resp.text() : ''})   
         .then(text => this.svg[name] = text)
+    }
+
+    getSVG(name:any):any {
+        fetch(this.svgPath+name+'.svg', {
+          method: 'GET',
+          headers: {'Content-Type': 'application/json'}
+        })
+        .then(resp=> { return resp.status == 200 ? resp.text() : ''})   
+        .then(text => {return text})
     }
 }

@@ -1253,8 +1253,8 @@ export class StyleService {
       var value = obj.width.match(/(\d+)/);
       this.widthRange.value = value ? value[0] : '100';
       var unit = obj.width.replace(/[^A-Za-z]/g, '');
-      this.widthRange.type = unit ? unit : '%';
-
+      this.widthRange.type = unit && unit != 'auto' ? unit : '%';
+      
       this.height.value = obj.height ? obj.height : '100%';
       var value = obj.height.match(/(\d+)/);
       this.heightRange.value = value ? value[0] : '100';

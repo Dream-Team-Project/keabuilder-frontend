@@ -158,9 +158,9 @@
                         </mat-form-field>
                     </div>
                     <div class="kb-btn-group">
-                        <button mat-button (click)="_image.saveasnew = true; _image.onUpload()" class="kb-btn-secondry"
-                        matTooltipPosition="above" style="margin-right: 10px">Copy</button>
-                        <button mat-button (click)="_image.saveasnew = false; _image.onUpload()" class="kb-btn-primary"
+                        <button mat-button (click)="_image.onUpload(true)" class="kb-btn-secondry"
+                        matTooltipPosition="above" style="margin-right: 10px">Duplicate</button>
+                        <button mat-button (click)="_image.onUpload(false)" class="kb-btn-primary"
                         matTooltipPosition="above">Save</button>
                     </div>
                 </div>

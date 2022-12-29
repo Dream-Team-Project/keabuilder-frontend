@@ -53,6 +53,7 @@ export class AppComponent {
                   if(_user.navPath.length == 2) _user.navPath.shift();
                   _user.navPath.push(e.url);
                 }
+                console.log(_user.navPath);
                 localStorage.setItem('route', btoa(_user.navPath.join(',')));
                 this.loading = false;
                 break;

@@ -412,7 +412,11 @@ button.kb-backBtn:hover {
     color: var(--kb-text-color);
 }
 
-.custom-preview-img img{
+.custom-preview-img {
+    background-color: var(--kb-dim-black);
+}
+
+.custom-preview-img img {
     display: block;
     width: 320px;
     height: auto;

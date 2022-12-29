@@ -32,7 +32,7 @@ export class BuilderTopbarComponent implements OnInit {
   waitST = true;
   waitET = true;
   prevImg:string = '';
-  rowtypes:any = [{name:'All', value: ''}, {name:'Single', value: 1}, {name:'Two', value: 2}, {name:'Three', value: 3}, {name:'Four', value: 4}, {name:'Five', value: 5}, {name:'Six', value: 6}]
+  rowtypes:any = [{icon: 'column1', name:'All', value: ''}, {icon: 'column1', name:'Single', value: 1}, {icon: 'column2', name:'Two', value: 2}, {icon: 'column3', name:'Three', value: 3}, {icon: 'column4', name:'Four', value: 4}, {icon: 'column5', name:'Five', value: 5}, {icon: 'column6', name:'Six', value: 6}]
   searchText:string = '';
   searchRowFilter:any = this.rowtypes[0];
   tempOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
@@ -249,11 +249,13 @@ export class BuilderTopbarComponent implements OnInit {
     this.parentTrigger.emit(value);
   }
 
-  backBtn(link:string) {
+  backBtn() {
+    var link:any = this._general.userService.navPath[1];
+    if(!link) link = '/';
     window.open(window.origin+link, '_self');
   }
 
-  redirectToLink(link:string) {
+  redirectLink(link:string) {
     window.open(window.origin+link, '_blank');
   }
 

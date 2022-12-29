@@ -24,7 +24,7 @@
 <div #topBar id="kb-topBar">
     <div class="kb-triggers">
         <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
-        <button mat-button (click)="backBtn(_general.userService.navPath[0])" class="kb-backBtn kb-padadj">
+        <button mat-button (click)="backBtn()" class="kb-backBtn kb-padadj">
             <i [innerHTML]="_image.svg.left_circle_arrow | safeHtml"></i><p class="kb-bb-text">Back</p>
         </button>
         <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="(layt.menuOpen || selectedTab.split('-')[0] == 'l') && !wftgl">
@@ -79,7 +79,7 @@
             <i [innerHTML]="_image.svg.save | safeHtml"></i> Save
         </button>
         <button mat-button [disabled]="_general.saveDisabled" #statust="matMenuTrigger" [matMenuTriggerFor]="status" [class.kb-btn-active]="statust.menuOpen">
-            <i [innerHTML]="(_general.main.publish_status ? _image.svg.publish : _image.svg.draft) | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
+            <i [innerHTML]="_image.svg[_general.main.publish_status ? 'publish' : 'draft'] | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
         </button>
         <mat-menu #status="matMenu" xPosition="after" yPosition="below">
             <button mat-menu-item (click)="setTrigger('publish')" [class.kb-btn-active]="_general.main.publish_status">
@@ -95,10 +95,10 @@
     </div>
     <div class="kb-triggers">
         <button mat-button #rowt="matMenuTrigger" *ngIf="selectedTab == 'l-rows' && !wftgl" [class.kb-btn-active]="rowt.menuOpen" [matMenuTriggerFor]="rowmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Row Type > {{searchRowFilter.name}} Column{{searchRowFilter.value != 1 ? 's' : ''}}
+            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Row Type > <i class="kb-filter-icon" [innerHTML]="_image.svg[searchRowFilter.icon] | safeHtml"></i> {{searchRowFilter.name}} Column{{searchRowFilter.value != 1 ? 's' : ''}}
         </button>
         <mat-menu #rowmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value">{{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
+            <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value"><i [innerHTML]="_image.svg[type.icon] | safeHtml"></i> {{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
         </mat-menu>
         <button mat-button #imgt="matMenuTrigger" *ngIf="selectedTab == 'elements' && selectedElement == 'image' && !wftgl" [class.kb-btn-active]="imgt.menuOpen" [matMenuTriggerFor]="imgmenu">
             <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.svg[_image.searchImgFilter.icon] | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
@@ -116,9 +116,10 @@
             <i [innerHTML]="_image.svg.search | safeHtml"></i>
             <input placeholder="Search here..." [(ngModel)]="searchText">
         </span>
-        <button mat-button (click)="redirectToLink('/profile')">
-            {{_general.user.name | titlecase}} <img
-                [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)"></button>
+        <button mat-button (click)="redirectLink('/profile')">
+            {{_general.user.name | titlecase}} 
+            <img [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)">
+        </button>
     </div>
 </div>
 <div *ngIf="selectedTab && !wftgl" class="kb-selection-container" [class.open]="toggle.open" [class.close]="toggle.close">
@@ -135,7 +136,7 @@
                     <button mat-menu-item (click)="openDialog(renametempdialog, temp)"><i class="far fa-edit"></i> Rename</button>
                     <button mat-menu-item (click)="openDialog(deltempdialog, temp)"><i class="far fa-trash-alt"></i> Delete</button>
                 </mat-menu>
-                <div *cdkDragPreview class="custom-preview-img" [style.backgroundColor]="'var(--primary-color)'">
+                <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="_image.uploadImgPath+'keaimage-section-'+temp.uniqueid+'-screenshot.png'">
                 </div>
                 <span *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--section-color)'"></span>
@@ -164,7 +165,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'l-headers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="redirectToLink('/website/headers')">
+            <button mat-button (click)="redirectLink('/website/headers')">
                 <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setHeader(false)" [class.kb-btn-active]="!_general.includeLayout.header">
@@ -177,7 +178,7 @@
             </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="redirectToLink('/website/headers')">
+            <button mat-button (click)="redirectLink('/website/footers')">
                 <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setFooter(false)" [class.kb-btn-active]="!_general.includeLayout.footer">
@@ -243,7 +244,7 @@
             </button>
             <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="img">
                 <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
-                <div *cdkDragPreview class="custom-preview-img" [style.backgroundColor]="'var(--primary-color)'">
+                <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
                 </div>
                 <span *cdkDragPlaceholder class="custom-placeholder"
@@ -265,7 +266,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <button mat-button (click)="redirectToLink('/website/navigation')" class="kb-icon-btn">
+            <button mat-button (click)="redirectLink('/website/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="_image.svg.add | safeHtml"></i>
                 <span>Add</span>
             </button>
