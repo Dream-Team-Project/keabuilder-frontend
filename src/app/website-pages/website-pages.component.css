@@ -121,9 +121,6 @@
 .kb-dropdown__panel li a:hover {
     background-color: #f4f8fa;
 }
-.pagemainlink button{
-    float:right;
-}
 
 .kea-barfieldset{
     width: 100%;
@@ -245,6 +242,11 @@ mat-spinner {
     height: 24px; 
     margin: 5px 10px 0px 0px;
   }
+
+  .adjustmatfrm mat-form-field:first-child {
+    width: 50%!important;
+    margin-right: 24px;
+}
 @media only screen and (max-width:500px){
     
     .pagemainlink button {
