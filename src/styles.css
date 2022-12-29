@@ -222,7 +222,7 @@ main.insidecont .box {
 }
 
 .mat-progress-bar {
-    position: absolute!important;
+    position: fixed!important;
     top: 0px;
     left: 0px;
     z-index: 9999;

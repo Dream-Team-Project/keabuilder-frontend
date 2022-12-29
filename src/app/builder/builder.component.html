@@ -269,9 +269,8 @@
                                                         </ng-template>
                                                     </div>
                                                 </div>
-                                                <span
+                                                <span *ngIf="element.setting && !_general.showInlineEditor"
                                                     (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
-                                                    *ngIf="element.setting && !_general.showInlineEditor"
                                                     matTooltip="Add New Element" matTooltipPosition="above"
                                                     class="kb-ispan-add add-element bottom-add-btn"><i
                                                         class="fa fa-plus"></i></span>
