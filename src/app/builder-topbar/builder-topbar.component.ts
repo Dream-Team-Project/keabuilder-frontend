@@ -33,10 +33,8 @@ export class BuilderTopbarComponent implements OnInit {
   waitET = true;
   prevImg:string = '';
   rowtypes:any = [{icon: 'column1', name:'All', value: ''}, {icon: 'column1', name:'Single', value: 1}, {icon: 'column2', name:'Two', value: 2}, {icon: 'column3', name:'Three', value: 3}, {icon: 'column4', name:'Four', value: 4}, {icon: 'column5', name:'Five', value: 5}, {icon: 'column6', name:'Six', value: 6}]
-  searchText:string = '';
   searchRowFilter:any = this.rowtypes[0];
-  tempOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
-  tempOrderFilter:any = this.tempOrder[3];
+  searchText:string = '';
   seltemp:any;
   
   constructor(

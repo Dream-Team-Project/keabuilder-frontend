@@ -118,8 +118,8 @@ export class GeneralService {
   ];
   validatelink = new FormControl('', [Validators.required, Validators.pattern(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)]);
   templatesUpdated = new BehaviorSubject(false);
-  filterOrder:any = [{name:'Name Ascending', value: 'asc', type: 'name'}, {name:'Name Descending', value: 'desc', type: 'name'}, {name:'Save Ascending', value: 'asc', type: 'id'}, {name:'Save Descending', value: 'desc', type: 'id'}];
-  searchFilter:any = this.filterOrder[1];
+  filterOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
+  searchFilter:any = this.filterOrder[3];
 
   constructor(public userService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
