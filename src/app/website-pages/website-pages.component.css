@@ -121,7 +121,12 @@
 .kb-dropdown__panel li a:hover {
     background-color: #f4f8fa;
 }
-
+.adjustarchivesort mat-form-field:first-child {
+    width: 47%;
+}
+.adjustarchivesort mat-form-field:last-child {
+    width: 21.5%;
+}
 .kea-barfieldset{
     width: 100%;
 }
@@ -268,6 +273,13 @@ mat-spinner {
     }
     .mobkeaadjust .mat-form-field {
         margin-bottom: -20px!important;
+    }
+    .adjustarchivesort mat-form-field:first-child , .adjustarchivesort mat-form-field:last-child {
+        width: 93%!important;
+    }
+    .adjustmatfrm mat-form-field:first-child {
+        width: 93%!important;
+        margin-right: 0px;
     }
 
 }

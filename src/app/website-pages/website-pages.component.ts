@@ -138,6 +138,7 @@ export class WebsitePagesComponent implements OnInit {
 
   searching:boolean = false;
   author:any = '';
+  searchval:any = '';
 
   // MatPaginator Output
   pageEvent!: PageEvent;  
@@ -609,18 +610,15 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   applykbfilter(){
-
     this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
       next: data => {
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
-
       },
       error: err => {
         console.log(err);
       }
     });
-
   }
 
   datecusfilter(value:any){
@@ -702,6 +700,7 @@ export class WebsitePagesComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.searchval = filterValue;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
