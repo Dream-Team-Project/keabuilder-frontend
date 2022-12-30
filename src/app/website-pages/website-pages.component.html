@@ -220,6 +220,7 @@
   <div class="container-fluid">
     <div class="row align-items-center mobkeaadjust">
       <div class="col-md-8 adjustmatfrm">
+
         <div *ngIf="!showarchivemode">
           <mat-form-field  appearance="fill" class="w-100">
             <mat-label>Search Pages</mat-label>
@@ -244,6 +245,28 @@
             </mat-select>
           </mat-form-field>
         </div>
+
+        <div *ngIf="showarchivemode" class="adjustarchivesort">
+
+          <mat-form-field  appearance="fill" class="w-100">
+            <mat-label>Search Pages</mat-label>
+            <input matInput type="text" (keyup)="applyFilter($event)" id="offer-search" placeholder="Search by page name, reason, created at...">
+            <i class="fa fa-search"></i>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width ">
+            <mat-label>Showing Archive for</mat-label>
+            <mat-select name="showingcontacts" [(ngModel)]="showingcontacts" (ngModelChange)="applykbfilter()">
+              <mat-option value="7 DAY">Last 7 Days</mat-option>
+              <mat-option value="30 DAY">Last 30 Days</mat-option>
+              <mat-option value="2 MONTH">Last 2 Months</mat-option>
+              <mat-option value="1 YEAR">This Year</mat-option>
+              <mat-option value="all">All Time</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
       </div>
 
       <div class="col-md-4 pagemainlink text-right" >
@@ -275,46 +298,6 @@
 
     <!-- archive -->
     <div class="row pt-4" *ngIf="showarchivemode else pages">
-      <div class="col-md-12">
-
-        <section class="users-list-wrapper" id='table-userslist'>
-
-          <div class="users-list-filter px-1">
-            <form class="container-fluid">
-              <div class="row border rounded py-2 mb-2">
-                <div class="col-md-3">
-
-                  <mat-form-field appearance="fill" class="kb-full-width ">
-                    <mat-label>Showing Archive for</mat-label>
-                    <mat-select name="showingcontacts" [(ngModel)]="showingcontacts">
-                      <mat-option value="7 DAY">Last 7 Days</mat-option>
-                      <mat-option value="30 DAY">Last 30 Days</mat-option>
-                      <mat-option value="2 MONTH">Last 2 Months</mat-option>
-                      <mat-option value="1 YEAR">This Year</mat-option>
-                      <mat-option value="all">All Time</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-
-                </div>
-                <div class="col-md-3 d-flex align-items-center">
-                  <button mat-raised-button color="primary" class="btn-block" (click)="applykbfilter()"><i
-                      class="far fa-check-circle"></i> Apply</button>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
-                    <input type="text" (keyup)="applyFilter($event)" class="form-control" id="offer-search" #input
-                      placeholder="Search by page name, reason, created at...">
-                    <div class="form-control-position">
-                      <i class="fab fa-searchengin"></i>
-                    </div>
-                  </fieldset>
-                </div>
-              </div>
-            </form>
-          </div>
-
-        </section>
-      </div>
       <div class="col-md-12">
 
         <div class="mat-elevation-z8">
@@ -350,7 +333,7 @@
 
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{searchval}}"</td>
             </tr>
           </table>
 
