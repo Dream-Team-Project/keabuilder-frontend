@@ -42,6 +42,7 @@ export class BuilderComponent implements OnInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
+  initial = true;
 
   constructor(
     private router: Router,
@@ -115,7 +116,12 @@ export class BuilderComponent implements OnInit {
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
-            this._general.saveHTML(this.main.nativeElement, this._section.sections, true);
+            _general.saveHTML(this.main.nativeElement, _section.sections, true).then(e=>{
+              if(this.initial) {
+                _general.pageSaved = true;
+                this.initial = false;
+              }
+            });
           })
         })
       }
@@ -131,10 +137,13 @@ export class BuilderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // window.addEventListener('beforeunload', function (e) {
-    //   e.preventDefault();
-    //   e.returnValue = '';
-    // });
+    var vm = this;
+    window.addEventListener('beforeunload', function (e) {
+      if(!vm._general.pageSaved) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
   }
 
   takePageSS(id:any, stxt:any) {
@@ -278,6 +287,7 @@ export class BuilderComponent implements OnInit {
               var content = ele.querySelector('.kb-element-content');
               var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
               eleObj.itemstyle = false;
+              console.log(ele);
               eleObj.content.name = ele.children[0].getAttribute('data-name');
               if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
                 eleSel = 'div>div';

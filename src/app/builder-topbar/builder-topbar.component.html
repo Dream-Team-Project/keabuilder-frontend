@@ -268,7 +268,7 @@
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="redirectLink('/website/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="_image.svg.add | safeHtml"></i>
-                <span>Add</span>
+                <span>Create</span>
             </button>
             <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="element">
                 <span>{{menu.name | titlecase}}</span>

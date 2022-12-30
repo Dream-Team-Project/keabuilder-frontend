@@ -32,7 +32,7 @@ export class BuilderTopbarComponent implements OnInit {
   waitST = true;
   waitET = true;
   prevImg:string = '';
-  rowtypes:any = [{icon: 'column1', name:'All', value: ''}, {icon: 'column1', name:'Single', value: 1}, {icon: 'column2', name:'Two', value: 2}, {icon: 'column3', name:'Three', value: 3}, {icon: 'column4', name:'Four', value: 4}, {icon: 'column5', name:'Five', value: 5}, {icon: 'column6', name:'Six', value: 6}]
+  rowtypes:any = [{icon: 'column', name:'All', value: ''}, {icon: 'column1', name:'Single', value: 1}, {icon: 'column2', name:'Two', value: 2}, {icon: 'column3', name:'Three', value: 3}, {icon: 'column4', name:'Four', value: 4}, {icon: 'column5', name:'Five', value: 5}, {icon: 'column6', name:'Six', value: 6}]
   searchRowFilter:any = this.rowtypes[0];
   searchText:string = '';
   seltemp:any;

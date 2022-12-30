@@ -120,6 +120,7 @@ export class GeneralService {
   templatesUpdated = new BehaviorSubject(false);
   filterOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
   searchFilter:any = this.filterOrder[3];
+  pageSaved = true;
 
   constructor(public userService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
@@ -387,8 +388,7 @@ export class GeneralService {
       this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
         if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
             this.saveHTML(main, sections, false).then(data => {
-              if(data) resolve(true);
-              else resolve(false);
+              resolve(data);
             });
         }
         else {
@@ -478,7 +478,14 @@ export class GeneralService {
           prevObj.prevFolder = 'kb-page-'+this.webpage.uniqueid;
           prevObj.folder = 'kb-page-'+this.webpage.uniqueid;
           prevObj.dir = 'previews';
-          this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{});
+          this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
+            this.pageSaved = false;
+            resolve(true);
+          },
+          error=>{
+            this.openSnackBar('Server Error! Please try to save your page.', 'OK', 'center', 'top');
+            resolve(false);
+          });
         }
         else {
           this.pageObj.head = this.pageObj.head + '<link rel="stylesheet" href="./style.css">';
@@ -497,11 +504,12 @@ export class GeneralService {
               }
               this.updatePageDB().then(e=>{
                 this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+                this.pageSaved = true;
                 resolve(true);
               })
             },
           error=>{
-            this.openSnackBar('Server Error', 'OK', 'center', 'top');
+            this.openSnackBar('Server Error!', 'OK', 'center', 'top');
             resolve(false);
           })
         }

@@ -136,7 +136,6 @@
                                             (change)="_element.selectedElements = column.elementArr">
                                             <!-- elements start -->
                                             <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
-                                                [ngSwitch]="element.content.name"
                                                 [attr.data-name]="element.name ? element.name : ''"
                                                 (dblclick)="elementDblClk(element, $event)"
                                                 (mouseenter)="element.setting = true"
@@ -172,99 +171,103 @@
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>
-                                                <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
-                                                        [ngStyle]="_style.imageStyling()"
-                                                        [src]="_style.image_src ? _style.image_src : _image.imgPath+'builder/no-image.png'"
-                                                        alt="image" width="auto"
-                                                        [class.dummyImg]="!_style.image_src">
-                                                    <ng-template #showImg>
-                                                        <img [ngStyle]="_style.getElementBlockStyle(element)"
-                                                            [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
+                                                <div [attr.data-name]="element.content.name"
+                                                    [style.width]="element.content.name != 'button' ? '100%' : ''"
+                                                    [ngSwitch]="element.content.name">
+                                                    <div *ngSwitchCase="'image'" class="kb-element-content">
+                                                        <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
+                                                            [ngStyle]="_style.imageStyling()"
+                                                            [src]="_style.image_src ? _style.image_src : _image.imgPath+'builder/no-image.png'"
                                                             alt="image" width="auto"
-                                                            [class.dummyImg]="!element.content.src">
-                                                    </ng-template>
-                                                </div>
-                                                <div *ngSwitchCase="'button'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
-                                                        class="kb-default-btn"
-                                                        [attr.kb-btn-type]="element.content.btntype"
-                                                        [href]="_style.button_link" [target]="_style.button_target"
-                                                        [ngStyle]="_style.buttonStyling()">
-                                                        <div>{{_style.button_text}}</div>
-                                                        <div class="subtext"
-                                                            [style.fontSize]="_style.button_subfont_size.value">
-                                                            {{_style.button_subtext}}</div>
-                                                    </a>
-                                                    <ng-template #showBtn>
-                                                        <a *ngIf="element.content.btntype != 'regular' else regular"
-                                                            class="kb-default-btn kb-product-btn"
+                                                            [class.dummyImg]="!_style.image_src">
+                                                        <ng-template #showImg>
+                                                            <img [ngStyle]="_style.getElementBlockStyle(element)"
+                                                                [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
+                                                                alt="image" width="auto"
+                                                                [class.dummyImg]="!element.content.src">
+                                                        </ng-template>
+                                                    </div>
+                                                    <div *ngSwitchCase="'button'" class="kb-element-content">
+                                                        <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
+                                                            class="kb-default-btn"
                                                             [attr.kb-btn-type]="element.content.btntype"
-                                                            [attr.kb-redirect-link]="element.content.link"
-                                                            [attr.kb-product-id]="element.content.productid"
-                                                            href="#no-link" [target]="element.content.target"
-                                                            [ngStyle]="_style.getElementBlockStyle(element)">
-                                                            <div>{{element.content.text}}</div>
+                                                            [href]="_style.button_link" [target]="_style.button_target"
+                                                            [ngStyle]="_style.buttonStyling()">
+                                                            <div>{{_style.button_text}}</div>
                                                             <div class="subtext"
-                                                                [style.fontSize]="element.content.subfont_size">
-                                                                {{element.content.subtext}}</div>
+                                                                [style.fontSize]="_style.button_subfont_size.value">
+                                                                {{_style.button_subtext}}</div>
                                                         </a>
-                                                        <ng-template #regular>
-                                                            <a class="kb-default-btn" [href]="element.content.link"
-                                                                [target]="element.content.target"
+                                                        <ng-template #showBtn>
+                                                            <a *ngIf="element.content.btntype != 'regular' else regular"
+                                                                class="kb-default-btn kb-product-btn"
+                                                                [attr.kb-btn-type]="element.content.btntype"
+                                                                [attr.kb-redirect-link]="element.content.link"
+                                                                [attr.kb-product-id]="element.content.productid"
+                                                                href="#no-link" [target]="element.content.target"
                                                                 [ngStyle]="_style.getElementBlockStyle(element)">
                                                                 <div>{{element.content.text}}</div>
                                                                 <div class="subtext"
                                                                     [style.fontSize]="element.content.subfont_size">
                                                                     {{element.content.subtext}}</div>
                                                             </a>
-                                                        </ng-template>
-                                                    </ng-template>
-                                                </div>
-                                                <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
-                                                    class="kb-element-content">
-                                                    <ul class="kb-menu" [id]="element.content.data_id"
-                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
-                                                        <li *ngFor="let item of element.content.items, index as mi">
-                                                            <a class="kb-content-item" [id]="item.id"
-                                                                [href]="item.link"
-                                                                [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
-                                                    [style.justifyContent]="'center'">
-                                                    <div class="kb-code-block"
-                                                        [attr.html-data]="_general.encodeData(element.content.html)">
-                                                        {{'
-                                                        <'+'custom code />'}}
-                                                    </div>
-                                                </div>
-                                                <div *ngSwitchCase="'checkout'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <iframe
-                                                        [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl"
-                                                        frameborder="0"
-                                                        style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
-                                                </div>
-                                                <div *ngSwitchDefault [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <div *ngIf="!element.content.editor else editor">
-                                                        <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
-                                                            [ngStyle]="_style.textStyling()"
-                                                            [innerHTML]="_style.edit_html | safeHtml"></div>
-                                                        <ng-template #originalText>
-                                                            <div [ngStyle]="_style.getElementBlockStyle(element)"
-                                                                [innerHTML]="element.content.html | safeHtml"></div>
+                                                            <ng-template #regular>
+                                                                <a class="kb-default-btn" [href]="element.content.link"
+                                                                    [target]="element.content.target"
+                                                                    [ngStyle]="_style.getElementBlockStyle(element)">
+                                                                    <div>{{element.content.text}}</div>
+                                                                    <div class="subtext"
+                                                                        [style.fontSize]="element.content.subfont_size">
+                                                                        {{element.content.subtext}}</div>
+                                                                </a>
+                                                            </ng-template>
                                                         </ng-template>
                                                     </div>
-                                                    <ng-template #editor>
-                                                        <tinymce
-                                                            [ngStyle]="_style.getBlockStyle(element.content.style)"
-                                                            [inline]="true"
-                                                            (mouseenter)="_general.insideEditor = true"
-                                                            (mouseleave)="_general.insideEditor = false;"
-                                                            [(ngModel)]="element.content.html"
-                                                            [config]="_general.config"></tinymce>
-                                                    </ng-template>
+                                                    <div *ngSwitchCase="'menu'" [attr.data-id]="element.content.data_id"
+                                                        class="kb-element-content">
+                                                        <ul class="kb-menu" [id]="element.content.data_id"
+                                                            [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
+                                                            <li *ngFor="let item of element.content.items, index as mi">
+                                                                <a class="kb-content-item" [id]="item.id"
+                                                                    [href]="item.link"
+                                                                    [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div *ngSwitchCase="'code'" class="kb-element-content"
+                                                        [style.justifyContent]="'center'">
+                                                        <div class="kb-code-block"
+                                                            [attr.html-data]="_general.encodeData(element.content.html)">
+                                                            {{'
+                                                            <'+'custom code />'}}
+                                                        </div>
+                                                    </div>
+                                                    <div *ngSwitchCase="'checkout'" class="kb-element-content">
+                                                        <iframe
+                                                            [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl"
+                                                            frameborder="0"
+                                                            style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
+                                                    </div>
+                                                    <div *ngSwitchDefault class="kb-element-content">
+                                                        <div *ngIf="!element.content.editor else editor">
+                                                            <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
+                                                                [ngStyle]="_style.textStyling()"
+                                                                [innerHTML]="_style.edit_html | safeHtml"></div>
+                                                            <ng-template #originalText>
+                                                                <div [ngStyle]="_style.getElementBlockStyle(element)"
+                                                                    [innerHTML]="element.content.html | safeHtml"></div>
+                                                            </ng-template>
+                                                        </div>
+                                                        <ng-template #editor>
+                                                            <tinymce
+                                                                [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                                [inline]="true"
+                                                                (mouseenter)="_general.insideEditor = true"
+                                                                (mouseleave)="_general.insideEditor = false;"
+                                                                [(ngModel)]="element.content.html"
+                                                                [config]="_general.config"></tinymce>
+                                                        </ng-template>
+                                                    </div>
                                                 </div>
                                                 <span *ngIf="element.setting && !_general.showInlineEditor"
                                                     (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"

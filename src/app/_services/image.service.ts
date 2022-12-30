@@ -16,6 +16,7 @@ export class ImageService {
         add: '',
         ascending: '',
         check: '',
+        column: '',
         column1: '',
         column2: '',
         column3: '',
