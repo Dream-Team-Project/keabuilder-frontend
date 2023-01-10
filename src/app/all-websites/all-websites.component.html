@@ -103,9 +103,8 @@
                             Total Pages: {{websites.totalpage}}
                         </div>
                         <div class="col-md-8 text-right">
-                            <button mat-raised-button color="primary" class="mr-2" [routerLink]="['/websites/'+websites.uniqueid]"> View Pages <i class="far fa-eye"></i></button>
-                            <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu" matTooltip="Settings"
-                            matTooltipPosition="above"> Settings <i class="fas fa-cog"></i></button>
+                            <button mat-raised-button color="primary" class="mr-2" [routerLink]="['/websites/'+websites.uniqueid]"> Pages <i class="far fa-eye"></i></button>
+                            <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu"> Settings <i class="fas fa-cog"></i></button>
                             <mat-menu #menu="matMenu">
                                 <button mat-menu-item (click)="updatewebsite(websites)">
                                     <i class="fas fa-pen mr-2"></i> Quick Edit

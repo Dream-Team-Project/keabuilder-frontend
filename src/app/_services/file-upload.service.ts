@@ -13,7 +13,8 @@ providedIn: 'root'
 
 export class FileUploadService {
   // API url
-  createuserfolderApi = "./api/create-user-folder";
+  createuserfolderApi = "./api/create-user";
+  createwebsitefolderApi = "./api/create-website";
   createlogofaviApi = "./api/create-user-logofavi";
   // document
   getAllDocumentsApi = "./api/getalldocuments";
@@ -60,7 +61,12 @@ export class FileUploadService {
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
-}
+  }
+
+  createwebsitefolder(uuid:any):Observable<any> {
+    var obj = {uuid: uuid};
+    return this.http.post(this.createwebsitefolderApi, obj);
+  }
 
   createuserfolder(uuid:any):Observable<any> {
     var obj = {uuid: uuid};
