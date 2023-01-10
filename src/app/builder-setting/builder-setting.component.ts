@@ -80,7 +80,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
     this._overlayRef = this._overlay.create({
       positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: true,
+      hasBackdrop: false,
     });
     this._overlayRef.backdropClick().subscribe(() => {
       if(!this._general.minimize) this.overlayRefDetach(!this._general.blockSelection);
