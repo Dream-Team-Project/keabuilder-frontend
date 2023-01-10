@@ -18,7 +18,6 @@
     width: 100%;
     z-index: 9999;
     box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px; 
-    transition: 0.2s ease-in-out;
 }
 
 #kb-builder-topbar.loaderShadow {
@@ -27,62 +26,33 @@
 
 div#kb-minimize-setting {
     position: fixed;
-    background-color: var(--section-color);
+    background-color: var(--kb-dark);
     color: #fff;
     border-top-left-radius: 5px;
     font-weight: 500;
     z-index: 999999;
     bottom: 0;
     right: 0;
-    padding: 8px 18px;
+    padding: 8px 12px;
+    width: 200px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 div#kb-minimize-setting i {
-    padding-right: 5px;
+    margin: 0 6px;
+    width: 10%;
 }
 
 div#kb-minimize-setting span {
-    padding-left: 5px;
+    margin-left: 5px;
+    width: 90%;
 }
 
 .cdk-drop-list-dragging, .cdk-drop-list-receiving {
     z-index: 999!important;
-}
-
-div#kb-layout-saveopt {
-    padding: 12px 60px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background: var(--kb-gray);
-    position: sticky;
-    top: 25px;
-    left: 0;
-    z-index: 99;
-}
-
-div#kb-layout-saveopt>div {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.kb-layout-title input, .kb-layout-title:hover span {
-    display: none;
-}
-
-.kb-layout-title:hover input {
-    display: block;
-    border-bottom: 1px solid rgb(34 38 42 / 10%);
-}
-
-.kb-layout-title, .kb-layout-title input {
-    background: transparent;
-    border: 0;
-    height: 100%;
-    width: 80%;
-    font-size: 26px;
 }
 
 #kb-page-container.hovernone{
@@ -125,6 +95,8 @@ app-bulder-wireframe {
 div#kb-page-container {
     height: auto;
     position: relative;
+    transform-origin: top;
+    transition: 0.2s ease;
 }
 
 textarea {
@@ -140,7 +112,7 @@ textarea {
     display: none !important;
 }
 
-.kb-block-none {
+.kb-block-none div.kb-drag-container, .kb-block-none div.kb-element-content {
     opacity: 0.6 !important;
     z-index: 9 !important;
 }
@@ -202,7 +174,7 @@ div.kb-column.kb-block-container:not(:last-child)::after {
 }
 
 .kb-cs-prev>div {
-    background: var(--row-color);
+    background: var(--primary-color);
     height: 30px;
     margin: 0px 3px;
     border-radius: 5px;
@@ -220,7 +192,7 @@ div.kb-column.kb-block-container:not(:last-child)::after {
     justify-content: center;
     display: flex;
     font-weight: 600;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     position: relative;
 }
 
@@ -288,7 +260,7 @@ input.kb-chngname-inp {
     width: 20% !important;
     cursor: pointer;
     /* border: 2px dashed transparent!important; */
-    transition: 0.2s ease-in-out;
+    transition: 0.2s ease-out;
     padding: 8px !important;
     text-align: center;
 }
@@ -302,16 +274,16 @@ input.kb-chngname-inp {
 }
 
 .kb-align-btn.demo-box-shadow:first-child:hover, .demo-box-shadow.kb-active-brd:first-child {
-    box-shadow: 0 0 10px 1px var(--section-color);
+    box-shadow: 0 0 10px 1px var(--primary-color);
 }
 
 .kb-align-btn.demo-box-shadow:last-child:hover, .demo-box-shadow.kb-active-brd:last-child {
-    box-shadow: inset 0 0 10px 1px var(--section-color);
+    box-shadow: inset 0 0 10px 1px var(--primary-color);
 }
 
 span.kb-wh-btn-group {
     justify-content: flex-start !important;
-    margin-right: 5px;
+    margin-left: 5px;
 }
 
 span.kb-wh-btn-group .kb-align-btn {
@@ -331,7 +303,7 @@ span.kb-wh-btn-group span.kb-align-btn {
 
 span.kb-align-btn i {
     color: var(--kb-dim-black);
-    transition: 0.2s ease-in-out;
+    transition: 0.2s ease-out;
     padding: 3px;
 }
 
@@ -346,7 +318,7 @@ span.kb-align-btn.icon-border:not(:first-child) i:first-child {
 .kb-align-btn-group span.kb-align-btn:hover i,
 .kb-align-btn-group span.kb-align-btn:hover,
 .kb-active-brd i, .kb-active-brd {
-    color: var(--section-color) !important;
+    color: var(--primary-color) !important;
 }
 
 .kb-align-btn-group span.kb-align-btn.icon-border:hover i,
@@ -356,7 +328,7 @@ span.kb-align-btn.icon-border:not(:first-child) i:first-child {
 
 div.kb-align-btn-group span.kb-align-btn:hover,
 div.kb-align-btn-group .kb-active-brd {
-    background: rgb(24 103 192 / 10%) !important;
+    background: rgb(217 201 153 / 30%) !important;
 }
 
 .kb-align-btn-group span.kb-align-btn:not(:last-child) {
@@ -375,19 +347,26 @@ div.kb-align-btn-group .kb-active-brd {
 
 div#kb-selection-ask span.kb-selection-top-actions {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 0px;
+    top: 0px;
     color: var(--kb-light);
     cursor: pointer;
     z-index: 9;
     min-width: 100px;
+    height: 100%;
     display: flex;
     justify-content: flex-end;
 }
 
 div#kb-selection-ask span.kb-selection-top-actions button.mat-button {
-    padding: 0px 12px;
+    padding: 0px 14px;
     min-width: auto;
+    border-radius: 0px;
+    font-size: 13px;
+}
+
+div#kb-selection-ask span.kb-selection-top-actions button.mat-button:hover {
+    color: var(--primary-color);
 }
 
 div#kb-selection-ask {
@@ -395,7 +374,7 @@ div#kb-selection-ask {
     z-index: 99;
     margin: auto;
     box-shadow: 0 0 30px rgb(0 0 0 / 20%);
-    width: 500px;
+    width: 460px;
     height: auto;
     background: var(--kb-light);
     border-radius: 5px;
@@ -409,11 +388,11 @@ div#kb-selection-ask {
 
 div#kb-selection-ask .kb-ask-head {
     width: 100%;
-    background: var(--section-color);
+    background: var(--secondary-color);
     border-radius: 5px 5px 0 0;
-    font-size: 20px;
+    font-size: 18px;
     color: #fff;
-    padding: 16px 32px;
+    padding: 12px 32px;
     cursor: move;
     text-transform: capitalize;
     position: relative;
@@ -435,20 +414,19 @@ div#kb-element-group ul.kb-element-list li.kb-element-box>span {
     height: auto;
     background: var(--kb-gray);
     text-align: center;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     border-radius: 5px;
     transition: 0.2s ease;
     font-weight: 500;
 }
 
 div#kb-element-group ul.kb-element-list li.kb-element-box>span i {
-    color: var(--section-color);
     transform: translateY(2px);
     transition: transform .3s ease;
 }
 
 div#kb-element-group ul.kb-element-list li.kb-element-box>span:hover {
-    background: rgb(24 103 192 / 10%);
+    background: rgb(217 201 153 / 30%);
 }
 
 div#kb-element-group ul.kb-element-list li.kb-element-box>span:hover i {
@@ -478,7 +456,7 @@ div#kb-row-selection ul.kb-row-list,
     justify-content: center;
     align-items: center;
     color: var(--kb-light);
-    background-color: var(--section-color);
+    background-color: var(--primary-color);
     border-radius: 3px;
     font-size: 14px;
     display: flex;
@@ -540,16 +518,17 @@ div#kb-element-group ul.kb-element-list li.kb-element-box {
 }
 
 div#kb-element-group ul.kb-element-list li.kb-element-box>span div {
-    font-size: 90%;
+    font-size: 75%;
 }
 
 div#kb-row-selection ul.kb-row-list li.kb-row-type:hover,
 div#kb-element-group ul.kb-element-list li.kb-element-box span:hover {
     transform: scale(1.1);
+    color: var(--primary-color);
 }
 
 div#kb-row-selection ul.kb-row-list li.kb-row-type.kb-row-type-active span.block span {
-    background-color: var(--row-color);
+    background-color: var(--primary-color);
 }
 
 div#kb-row-selection ul.kb-row-list span.block {
@@ -585,10 +564,10 @@ div.kb-block-container {
 
 div.kb-block-container:before {
     content: '';
-    border: 3px solid transparent;
+    border: 2px solid transparent;
     position: absolute;
     transition: 0.2s ease;
-    border-radius: 3px;
+    border-radius: 4px;
     width: 100%;
     height: 100%;
     top: 0;
@@ -605,19 +584,15 @@ div.kb-section.kb-block-container {
 
 div.kb-section:hover:before {
     border-color: var(--section-color);
-    background-color: rgb(24 103 192 / 10%);
 }
 
 
 div.kb-section div.kb-row:hover:before {
     border-color: var(--row-color);
-    background-color: rgb(27 197 189 / 10%);
 }
 
-div.kb-element.kb-border:before,
-div.kb-element.kb-border-select:before {
+div.kb-element.kb-border:before {
     border-color: var(--primary-color);
-    background-color: rgb(216 200 152 / 10%);
 }
 
 div.kb-element-content *:not(.kb-content-item) {
@@ -629,24 +604,12 @@ div.kb-element-content {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: inherit;
     overflow-wrap: break-word;
 }
 
-div.kb-element-content>div {
-    width: 100%;
-}
-
-div.kb-element-content>img {
+div.kb-element-content img {
     max-width: 100%;
-}
-
-div.kb-row div.kb-element {
-    width: 100%;
-}
-
-div.kb-row div.kb-element>div {
-    max-width: 100%;
-    /* width: 100%; */
 }
 
 div.kb-row div.kb-element:hover:before {
@@ -692,18 +655,15 @@ div.kb-row div.kb-inner-row {
 }
 
 .kb-tab-head strong {
-    color: var(--section-color);
+    color: var(--primary-color);
 }
 
 div.kb-module-setting span {
     padding: 6px;
+    line-height: 1;
     cursor: pointer;
-    transition: 0.1s ease-in-out;
+    transition: 0.1s ease-out;
     display: inline-block;
-}
-
-div.kb-module-setting span:hover {
-    color: var(--kb-gray);
 }
 
 div.kb-module-setting i {
@@ -719,11 +679,15 @@ div.kb-module-setting {
     position: absolute;
     top: 0px;
     right: 0px;
-    padding: 0 8px;
-    border-radius: 3px 0px 3px 0px;
+    padding: 0px 3px;
+    border-radius: 0px 4px 0px 4px;
     animation: show 0.2s ease;
     z-index: 999;
-    width: auto!important;
+    width: auto;
+    font-size: initial;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .kb-gradient-color-selection {
@@ -762,11 +726,11 @@ span.kb-reverse-icon {
 
 span.kb-reverse-icon i {
     color: var(--kb-gray);
-    transition: 0.2s ease-in-out;
+    transition: 0.2s ease-out;
 }
 
 span.kb-reverse-icon.active i {
-    color: #1867c0;
+    color: var(--primary-color);
 }
 
 .kb-dummy-bg {
@@ -774,7 +738,6 @@ span.kb-reverse-icon.active i {
     width: 100%;
     border-radius: 5px;
     border: 2px solid var(--kb-gray);
-    margin: 15px 0px;
     position: relative;
     cursor: pointer;
     display: flex;
@@ -836,13 +799,13 @@ div.kb-section div.kb-row div.kb-element div.kb-module-setting {
 div.kb-section div.kb-row>.kb-module-setting {
     left: 0px;
     right: auto!important;
-    border-radius: 0px 3px 0px 3px;
+    border-radius: 4px 0px 4px 0px!important;
 }
 
 span.kb-ispan-add {
-    width: 28px;
-    height: 28px;
-    border-radius: 100px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -862,7 +825,7 @@ span.kb-ispan-add:hover {
 
 span.kb-ispan-add i {
     color: var(--kb-light);
-    font-size: 12px;
+    font-size: 10px;
 }
 
 /* add new button */
@@ -870,14 +833,14 @@ span.kb-ispan-add i {
 /* tabs */
 
 .side-arrow {
-    background-color: var(--section-color);
+    background-color: var(--secondary-color);
     height: 100%;
-    width: auto;
+    min-width: 50px;
     z-index: 999;
     padding: 0;
     border-radius: 100px;
     font-size: 70%;
-    left: -32px;
+    left: -25px;
     top: 0%;
     align-items: center;
     justify-content: center;
@@ -896,7 +859,7 @@ span.kb-ispan-add i {
     margin-bottom: 10px;
     align-items: center;
     display: flex;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .kb-tab-content.kb-resp-ask>div {
@@ -921,6 +884,10 @@ span.kb-ispan-add i {
     width: 20%;
 }
 
+.kb-tabs-component .kb-tab-content>span label {
+    font-size: 12px;
+}
+
 .kb-tabs-component .kb-tab-content span.kb-linkBtw {
     width: 28px !important;
     cursor: pointer;
@@ -934,14 +901,14 @@ span.kb-ispan-add i {
 }
 
 .kb-tabs-component .kb-tab-content span.kb-linkBtw svg.deactive {
-    fill: var(--kb-gray);
-    transform: rotate(45deg);
+    fill: var(--kb-dim-black);
+    transform: rotate(-45deg);
 }
 
 .kb-tabs-component .kb-tab-content span.kb-linkBtw svg {
     width: 100%;
-    fill: #1867c0;
-    transition: 0.2s ease-in-out;
+    fill: var(--primary-color);
+    transition: 0.2s ease-out;
 }
 
 .kb-inp-left input, .kb-inp-left textarea {
@@ -953,12 +920,12 @@ span.kb-ispan-add i {
 div.kb-dropdown-selected-item,
 div.kb-align-btn-group span.kb-align-btn,
 .kb-img-inp-group input {
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     background: var(--kb-gray);
     border: none;
     border-radius: 4px;
     width: 100%;
-    padding: 8px 10px;
+    padding: 6px 12px;
     text-align: center;
     height: 100%;
 }
@@ -972,7 +939,7 @@ div.kb-align-btn-group span.kb-align-btn,
 
 .kb-tabs-component .kb-tab-content input:hover,
 .kb-tabs-component .kb-tab-content textarea:hover {
-    border-bottom-color: var(--section-color);
+    border-bottom-color: var(--primary-color);
 }
 
 .kb-tabs-component .kb-tab-content textarea {
@@ -1014,6 +981,9 @@ div.kb-align-btn-group span.kb-align-btn,
 
 .kb-tabs-component .kb-inner-tab-component .kb-border-radius-demo span.kb-linkBtw {
     top: 0 !important;
+    display: flex;
+    align-items: center;
+    transform: rotate(45deg);
 }
 
 .kb-tabs-component .kb-inner-tab-component .kb-transparent-bg {
@@ -1046,33 +1016,9 @@ div.kb-rangeInp {
 
 /* button styling */
 
-.kb-btn-primary {
-    color: #fff !important;
-    background-color: var(--kb-success) !important;
-    border-color: var(--kb-success) !important;
-}
-
-.kb-btn-secondry {
-    color: #fff !important;
-    background-color: var(--kb-info) !important;
-    border-color: var(--kb-info) !important;
-}
-
-.kb-btn-primary:hover {
-    color: #fff !important;
-    background-color: #1bb5ad !important;
-    border-color: #1bb5ad !important;
-}
-
-.kb-btn-secondry:hover {
-    color: #fff !important;
-    background-color: #1f97aa !important;
-    border-color: #1f97aa !important;
-}
-
 .kb-btn {
     padding: 6px 14px;
-    font-weight: 600;
+    font-weight: 500;
     outline: none;
     border-radius: 5px;
     font-size: 14px;
@@ -1081,7 +1027,7 @@ div.kb-rangeInp {
 }
 
 .kb-btn, .kb-btn span {
-    transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-out;
 }
 
 .kb-default-btn {
@@ -1094,7 +1040,6 @@ div.kb-rangeInp {
     color: #fff;
     background-color: var(--primary-color);
     border: 2px solid var(--primary-color);
-    transition: 0.2s ease-in-out;
 }
 
 .kb-default-btn div {
@@ -1113,6 +1058,7 @@ div.kb-rangeInp {
     color: var(--kb-danger);
     cursor: pointer;
     padding: 10px 20px;
+    border-bottom-left-radius: 4px;
 }
 
 .kb-btn i {
@@ -1126,11 +1072,6 @@ div.kb-rangeInp {
     display: flex;
     justify-content: center;
 }
-
-.kb-btn:hover {
-    background-color: rgb(0 0 0 / 10%);
-}
-
 
 .kb-btn:hover span {
     transform: translateY(-1px);
@@ -1339,7 +1280,7 @@ ul.kb-menu a, ul.kb-menu li {
   .kb-code-block {
     padding: 20px 10px;
     background-color: rgb(24 103 192 / 20%);
-    color: var(--section-color);
+    color: var(--secondary-color);
     font-weight: bold;
     max-width: 200px;
     text-align: center;

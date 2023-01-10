@@ -1,4 +1,4 @@
-#kb-topBar {
+#kb-topbar {
     color: #fff;
     height: 32px;
     background-color: var(--kb-dark);
@@ -26,7 +26,7 @@
 
 .kb-selection-container {
     color: #fff;
-    background-color: var(--kb-text-color);
+    background-color: var(--secondary-color);
     height: 36px;
     overflow: hidden;
 }
@@ -99,7 +99,7 @@
     transform: rotate(-90deg);
 }
 
-::ng-deep #kb-topBar svg, ::ng-deep .kb-selection-container svg {
+::ng-deep #kb-topbar svg, ::ng-deep .kb-selection-container svg {
     width: 14px;
     fill: #fff;
 }
@@ -151,7 +151,7 @@ button.mat-button.kb-btn-active, ::ng-deep .kb-selection-option button.mat-butto
     background-color: var(--primary-color)!important;
 }
 
-#kb-topBar .kb-triggers .mat-button img {
+#kb-topbar .kb-triggers .mat-button img {
     width: 18px;
 }
 
@@ -247,6 +247,10 @@ span.kb-d-btn .kb-d-btn-st{
     text-overflow: ellipsis;
 }
 
+::ng-deep .kb-triggers .kb-zoom-btn.mat-button span {
+    font-size: 18px;
+}
+
 .kb-block-selection.kb-section-list span.block {
     border: 1px dashed var(--kb-gray);
     border-radius: 3px;
@@ -286,7 +290,7 @@ span.kb-d-btn .kb-d-btn-st{
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--kb-text-color);
+    background: var(--secondary-color);
     cursor: pointer;
     z-index: 9;
     top: 0px;
@@ -334,7 +338,7 @@ span.kb-d-btn .kb-d-btn-st{
 }
 
 .kb-search-field input, .kb-search-field select {
-    background: var(--kb-text-color);
+    background: var(--secondary-color);
     color: var(--kb-light);
     border: none;
     width: 100%;
@@ -366,8 +370,8 @@ span.kb-d-btn .kb-d-btn-st{
     left: 0px;
     width: 100%;
     height: 100px;
-    background-color: var(--kb-text-color);
-    border: 3px solid var(--kb-text-color);
+    background-color: var(--secondary-color);
+    border: 3px solid var(--secondary-color);
     border-top: 0px;
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
 }
@@ -409,7 +413,11 @@ button.kb-backBtn:hover {
 }
 
 .custom-placeholder {
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
+}
+
+.kb-selection-option .custom-placeholder {
+    background-color: var(--primary-color)!important;
 }
 
 .custom-preview-img {
@@ -420,4 +428,14 @@ button.kb-backBtn:hover {
     display: block;
     width: 320px;
     height: auto;
+}
+
+.kb-triggers .kb-more-opt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.kb-triggers .kb-more-opt .mat-button i{
+    padding: 0px;
 }

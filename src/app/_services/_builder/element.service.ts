@@ -47,7 +47,7 @@ export class ElementService {
     // { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
     // form
     // code block
-    { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
+    // { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
     // code block
     // checkout form
     // append

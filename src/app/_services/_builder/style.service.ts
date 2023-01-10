@@ -322,10 +322,6 @@ export class StyleService {
     }   
   }
 
-  getElementBlockStyle(block:any) {
-    return {...this.getBlockStyle(block.content.style), ...this.getBlockStyle(block.style)}
-  }
-
   getBlockStyle(blockS: any) {
     var objS = {};
     if (this._general.respToggleDevice.name == 'tablet-h') {
@@ -915,7 +911,6 @@ export class StyleService {
     if (this._general.selectedBlock.type != "column") {
       this._general.selectedBlock = '';
     }
-    // this._general.openSnackBar('Changes has been done', 'OK', 'center', 'top');
   }
 
   filterElementStyle(cs:any, ds:any) {
@@ -1520,16 +1515,19 @@ export class StyleService {
       else {
         this.resetTextShadow();
       }
+
       this.line_height.value = obj['line-height'];
       var value = obj['line-height'].match(/(\d+)/);
       this.line_heightRange.value = value ? value[0] : '100';
       var unit = obj['line-height'].replace(/[^A-Za-z]/g, '');
-      this.line_heightRange.type = unit ? unit : '%';
+      this.line_heightRange.type = unit && unit != 'normal' ? unit : '%';
+
       this.letter_spacing.value = obj['letter-spacing'];
       var value = obj['letter-spacing'].match(/(\d+)/);
       this.letter_spacingRange.value = value ? value[0] : '100';
       var unit = obj['letter-spacing'].replace(/[^A-Za-z]/g, '');
-      this.letter_spacingRange.type = unit ? unit : '%';
+      this.letter_spacingRange.type = unit && unit != 'normal' ? unit : '%';
+      
       if(element.name == 'text' || element.name == 'heading') {
         this.edit_html = element.html;
       }
@@ -1555,6 +1553,7 @@ export class StyleService {
 
   addImage(img: any) {
     var src = !img.ext_link ? this._image.uploadImgPath + img.path : img.path;
+    console.log(src);
     if (this._general.selectedTab == 'Background') this.background_image.name = src;
     else this._general.selectedBlock.type == 'main' ? this._general.meta_img = src : this.image_src = src;
   }

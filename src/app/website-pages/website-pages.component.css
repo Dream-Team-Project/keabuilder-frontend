@@ -39,7 +39,7 @@
 
 .statusbadge {
     color: #ffffff;
-    background-color: var(--secondary-color);
+    background-color: var(--accent-color);
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 50px 0px 0px 50px;

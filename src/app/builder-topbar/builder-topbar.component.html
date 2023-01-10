@@ -1,92 +1,133 @@
+<ng-template #renamedialog>
+    <h1 mat-dialog-title>Rename {{_general.target.type | titlecase}}</h1>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>{{_general.target.type | titlecase}} name</mat-label>
+            <input matInput type="text" [placeholder]="_general.target.type + 'name'" [(ngModel)]="_general.target.name">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
+    </div>
+</ng-template>
 <ng-template #deltempdialog>
     <h1 mat-dialog-title class="kb-danger">Delete Template</h1>
     <div mat-dialog-content>
         Would you like to delete <span class="kb-danger">{{seltemp.name}}</span> template?
     </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="kb-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="kb-danger" (click)="deleteTemplate()">Yes</button>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close color="primary">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteTemplate()" class="kb-danger">Yes</button>
     </div>
 </ng-template>
 <ng-template #renametempdialog>
-    <h1 mat-dialog-title class="kb-info">Rename Template</h1>
+    <h1 mat-dialog-title>Rename Template</h1>
     <div mat-dialog-content>
-        <mat-form-field appearance="fill" class="w-100">
+        <mat-form-field appearance="fill">
             <mat-label>Template name</mat-label>
             <input matInput type="text" placeholder="Template name" [(ngModel)]="seltemp.name">
           </mat-form-field>
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="kb-info" (click)="updateTemplate()">Rename</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="updateTemplate()">Save</button>
     </div>
 </ng-template>
-<div #topBar id="kb-topBar">
+<div id="kb-topbar">
     <div class="kb-triggers">
         <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
-        <button mat-button (click)="backBtn()" class="kb-backBtn kb-padadj">
-            <i [innerHTML]="_image.svg.left_circle_arrow | safeHtml"></i><p class="kb-bb-text">Back</p>
+        <button mat-button (click)="_general.backBtn()" class="kb-backBtn">
+            <i [innerHTML]="'left_circle_arrow' | svg | safeHtml"></i><p class="kb-bb-text">Back</p>
         </button>
         <button mat-button [disabled]="wftgl" #layt="matMenuTrigger" [matMenuTriggerFor]="layout" [class.kb-btn-active]="(layt.menuOpen || selectedTab.split('-')[0] == 'l') && !wftgl">
-            <i [innerHTML]="_image.svg.layout | safeHtml"></i> Layouts {{selectedTab.split('-')[0] == 'l' ? ('> '+selectedTab.split('-')[1] | titlecase): ''}}
+            <i [innerHTML]="'layout' | svg | safeHtml"></i> Layouts {{selectedTab.split('-')[0] == 'l' ? ('> '+selectedTab.split('-')[1] | titlecase): ''}}
         </button>
         <mat-menu #layout="matMenu" xPosition="after" yPosition="below">
             <button mat-menu-item (click)="selectTab('l-templates')" [class.kb-btn-active]="selectedTab == 'l-templates'">
-                <i [innerHTML]="_image.svg.template | safeHtml"></i> Templates
+                <i [innerHTML]="'template' | svg | safeHtml"></i> Templates
             </button>
             <button mat-menu-item (click)="selectTab('l-sections')" [class.kb-btn-active]="selectedTab == 'l-sections'">
-                <i [innerHTML]="_image.svg.section | safeHtml"></i> Sections
+                <i [innerHTML]="'section' | svg | safeHtml"></i> Sections
             </button>
             <button mat-menu-item (click)="selectTab('l-rows')" [class.kb-btn-active]="selectedTab == 'l-rows'">
-                <i [innerHTML]="_image.svg.row | safeHtml"></i> Rows
+                <i [innerHTML]="'row' | svg | safeHtml"></i> Rows
             </button>
-            <button mat-menu-item (click)="selectTab('l-headers')" [class.kb-btn-active]="selectedTab == 'l-headers'">
-                <i [innerHTML]="_image.svg.header | safeHtml"></i> Headers
+            <button mat-menu-item *ngIf="!ishf" (click)="selectTab('l-headers')" [class.kb-btn-active]="selectedTab == 'l-headers'">
+                <i [innerHTML]="'header' | svg | safeHtml"></i> Headers
             </button>
-            <button mat-menu-item (click)="selectTab('l-footers')" [class.kb-btn-active]="selectedTab == 'l-footers'">
-                <i [innerHTML]="_image.svg.footer | safeHtml"></i> Footers
+            <button mat-menu-item *ngIf="!ishf" (click)="selectTab('l-footers')" [class.kb-btn-active]="selectedTab == 'l-footers'">
+                <i [innerHTML]="'footer' | svg | safeHtml"></i> Footers
             </button>
         </mat-menu>
         <button mat-button [disabled]="wftgl" (click)="selectTab('elements')" [class.kb-btn-active]="selectedTab == 'elements' && !wftgl">
-            <i [innerHTML]="_image.svg.elements | safeHtml"></i> Elements
+            <i [innerHTML]="'elements' | svg | safeHtml"></i> Elements
         </button>
         <button mat-button [disabled]="wftgl" (click)="selectTab('responsive')" [class.kb-btn-active]="selectedTab == 'responsive' && !wftgl">
-            <i [innerHTML]="_image.svg.responsive | safeHtml"></i> Responsive
+            <i [innerHTML]="'responsive' | svg | safeHtml"></i> Responsive
         </button>
-        <button mat-button #moret="matMenuTrigger" [matMenuTriggerFor]="more" [class.kb-btn-active]="moret.menuOpen || _general.selectedBlock.type == 'main' || wftgl">
-            <i [innerHTML]="_image.svg.ellipsisv | safeHtml"></i>
-            More {{_general.selectedBlock.type == 'main' ? '> Setting' : (wftgl ? '> Wireframe' : '')}}
+        <button mat-button #moret="matMenuTrigger" [matMenuTriggerFor]="more" [class.kb-btn-active]="isMoreActive(moret)">
+            <i [innerHTML]="'ellipsisv' | svg | safeHtml"></i>
+            More {{getMoreState()}}
         </button>
         <mat-menu #more="matMenu" xPosition="after" yPosition="below">
-            <button mat-menu-item (click)="_section.undo()">
-                <i [innerHTML]="_image.svg.undo | safeHtml"></i> Undo
+            <button mat-menu-item *ngIf="!ishf else rename" (click)="setTrigger('setting')"
+            [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
+            <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
             </button>
-            <button mat-menu-item (click)="_section.redo()">
-                <i [innerHTML]="_image.svg.redo | safeHtml"></i> Redo
-            </button>
+            <ng-template #rename>
+                <button mat-menu-item (click)="openRenameDialog(renamedialog)"
+                    [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
+                    <i [innerHTML]="'setting' | svg | safeHtml"></i> Rename
+                </button>
+            </ng-template>
             <button mat-menu-item (click)="wireframeToggle.emit(true)" [class.kb-btn-active]="wftgl">
-                <i [innerHTML]="_image.svg.wireframe | safeHtml"></i> Wireframe
+                <i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe
             </button>
-            <button mat-menu-item (click)="setTrigger('setting')"
-                [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
-                <i [innerHTML]="_image.svg.setting | safeHtml"></i> Setting
+            <button mat-menu-item (click)="urdo = !urdo; zoom.active = false" [class.kb-btn-active]="urdo">
+                <i [innerHTML]="'refresh' | svg | safeHtml"></i> Done
+            </button>
+            <button mat-menu-item *ngIf="!wftgl" (click)="zoomEmit(!zoom.active); urdo = false" [class.kb-btn-active]="zoom.active">
+                <i [innerHTML]="'zoomin' | svg | safeHtml"></i> Zoom
             </button>
         </mat-menu>
-        <button mat-button (click)="_general.preview()">
-            <i [innerHTML]="_image.svg.preview | safeHtml"></i> Preview
+        <span *ngIf="urdo" class="kb-more-opt">
+            <button mat-button matTooltip="Undo" [disabled]="!_section.pageSessionArr[_section.pageSession.undo-1]" (click)="_section.undo()">
+                <i [innerHTML]="'undo' | svg | safeHtml"></i>
+            </button>
+            <button mat-button matTooltip="Redo" [disabled]="!_section.pageSessionArr[_section.pageSession.redo]" (click)="_section.redo()">
+                <i [innerHTML]="'redo' | svg | safeHtml"></i>
+            </button>
+        </span>
+        <span *ngIf="zoom.active && !wftgl" class="kb-more-opt">
+            <button mat-button matTooltip="Zoom Out" (click)="zoomPg('-')" [disabled]="zoom.value <= 10">
+                <i [innerHTML]="'zoomout' | svg | safeHtml"></i>
+            </button>
+            <button mat-button matTooltip="Zoom In" (click)="zoomPg('+')" [disabled]="zoom.value >= 100">
+                <i [innerHTML]="'zoomin' | svg | safeHtml"></i>
+            </button>
+        </span>
+        <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
+            Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
+        </button>
+        <mat-menu #autosave>
+            <button mat-menu-item *ngFor="let opt of _general.autosaveopt" (click)="_general.autosave = opt; setTrigger('autosave')" [class.kb-btn-active]="_general.autosave.value == opt.value">{{opt ? 'Every '+opt.value+' '+opt.unit : 'Off'}}</button>
+            <button mat-menu-item (click)="_general.autosave=''" [class.kb-btn-active]="!_general.autosave.value">OFF</button>
+        </mat-menu>
+        <button mat-button *ngIf="!ishf" (click)="_general.preview()">
+            <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
         </button>
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
-            <i [innerHTML]="_image.svg.save | safeHtml"></i> Save
+            <i [innerHTML]="'save' | svg | safeHtml"></i> Save
         </button>
-        <button mat-button [disabled]="_general.saveDisabled" #statust="matMenuTrigger" [matMenuTriggerFor]="status" [class.kb-btn-active]="statust.menuOpen">
-            <i [innerHTML]="_image.svg[_general.main.publish_status ? 'publish' : 'draft'] | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
+        <button mat-button *ngIf="!ishf" [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status" #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
+            <i [innerHTML]="(_general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
         </button>
         <mat-menu #status="matMenu" xPosition="after" yPosition="below">
             <button mat-menu-item (click)="setTrigger('publish')" [class.kb-btn-active]="_general.main.publish_status">
-                <i [innerHTML]="_image.svg.publish | safeHtml"></i> Publish
+                <i [innerHTML]="'publish' | svg | safeHtml"></i> Publish
             </button>
             <button mat-menu-item (click)="setTrigger('draft')" [class.kb-btn-active]="!_general.main.publish_status">
-                <i [innerHTML]="_image.svg.draft | safeHtml"></i> Draft
+                <i [innerHTML]="'draft' | svg | safeHtml"></i> Draft
             </button>
         </mat-menu>
         <button *ngIf="selectedTab && !wftgl" mat-button (click)="hideBar()">
@@ -95,30 +136,30 @@
     </div>
     <div class="kb-triggers">
         <button mat-button #rowt="matMenuTrigger" *ngIf="selectedTab == 'l-rows' && !wftgl" [class.kb-btn-active]="rowt.menuOpen" [matMenuTriggerFor]="rowmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Row Type > <i class="kb-filter-icon" [innerHTML]="_image.svg[searchRowFilter.icon] | safeHtml"></i> {{searchRowFilter.name}} Column{{searchRowFilter.value != 1 ? 's' : ''}}
+            <i [innerHTML]="'filter' | svg | safeHtml"></i> Row Type > <i class="kb-filter-icon" [innerHTML]="searchRowFilter.icon | svg | safeHtml"></i> {{searchRowFilter.name}} Column{{searchRowFilter.value != 1 ? 's' : ''}}
         </button>
         <mat-menu #rowmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value"><i [innerHTML]="_image.svg[type.icon] | safeHtml"></i> {{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
+            <button mat-menu-item *ngFor="let type of rowtypes" (click)="selectFilter(type)" [class.kb-btn-active]="searchRowFilter.value == type.value" [value]="type.value"><i [innerHTML]="type.icon | svg | safeHtml"></i> {{type.name}} Column{{type.value != 1 ? 's' : ''}}</button>
         </mat-menu>
         <button mat-button #imgt="matMenuTrigger" *ngIf="selectedTab == 'elements' && selectedElement == 'image' && !wftgl" [class.kb-btn-active]="imgt.menuOpen" [matMenuTriggerFor]="imgmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.svg[_image.searchImgFilter.icon] | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
+            <i [innerHTML]="'filter' | svg | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.searchImgFilter.icon | svg | safeHtml"></i> {{_image.searchImgFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #imgmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="_image.svg[order.icon] | safeHtml"></i> {{order.name}}</button>
+            <button mat-menu-item *ngFor="let order of _image.imgOrder" (click)="_image.searchImgFilter = order" [class.kb-btn-active]="_image.searchImgFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="order.icon | svg | safeHtml"></i> {{order.name}}</button>
         </mat-menu>
         <button mat-button #tempt="matMenuTrigger" *ngIf="selectedTab == 'l-templates' || selectedTab == 'l-headers' || selectedTab == 'l-footers' && !wftgl" [class.kb-btn-active]="tempt.menuOpen" [matMenuTriggerFor]="tempmenu">
-            <i [innerHTML]="_image.svg.filter | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_image.svg[_general.searchFilter.icon] | safeHtml"></i> {{_general.searchFilter.name.split(' ')[2]}}
+            <i [innerHTML]="'filter' | svg | safeHtml"></i> Sort By > <i class="kb-filter-icon" [innerHTML]="_general.searchFilter.icon | svg | safeHtml"></i> {{_general.searchFilter.name.split(' ')[2]}}
         </button>
         <mat-menu #tempmenu="matMenu" xPosition="before" yPosition="below">
-            <button mat-menu-item *ngFor="let order of _general.filterOrder" (click)="_general.searchFilter = order" [class.kb-btn-active]="_general.searchFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="_image.svg[order.icon] | safeHtml"></i> {{order.name}}</button>
+            <button mat-menu-item *ngFor="let order of _general.filterOrder" (click)="_general.searchFilter = order" [class.kb-btn-active]="_general.searchFilter.name == order.name" [value]="order.value"><i class="kb-filter-icon" [innerHTML]="order.icon | svg | safeHtml"></i> {{order.name}}</button>
         </mat-menu>
         <span *ngIf="(selectedTab == 'elements' || selectedTab == 'l-templates' || selectedTab == 'l-headers' || selectedTab == 'l-footers') && !wftgl" [class.open]="toggle.open" [class.close]="toggle.close" class="kb-search-field">
-            <i [innerHTML]="_image.svg.search | safeHtml"></i>
+            <i [innerHTML]="'search' | svg | safeHtml"></i>
             <input placeholder="Search here..." [(ngModel)]="searchText">
         </span>
-        <button mat-button (click)="redirectLink('/profile')">
+        <button mat-button (click)="_general.redirectLink('/profile')">
             {{_general.user.name | titlecase}} 
-            <img [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)">
+            <img *ngIf="_general.user.useravatar" [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)">
         </button>
     </div>
 </div>
@@ -133,8 +174,8 @@
                     <mat-icon>keyboard_arrow_down</mat-icon>
                 </span>
                 <mat-menu #tempm="matMenu" xPosition="before" yPosition="below">
-                    <button mat-menu-item (click)="openDialog(renametempdialog, temp)"><i class="far fa-edit"></i> Rename</button>
-                    <button mat-menu-item (click)="openDialog(deltempdialog, temp)"><i class="far fa-trash-alt"></i> Delete</button>
+                    <button mat-menu-item (click)="openTempDialog(renametempdialog, temp)"><i class="far fa-edit"></i> Rename</button>
+                    <button mat-menu-item (click)="openTempDialog(deltempdialog, temp)"><i class="far fa-trash-alt"></i> Delete</button>
                 </mat-menu>
                 <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="_image.uploadImgPath+'keaimage-section-'+temp.uniqueid+'-screenshot.png'">
@@ -165,11 +206,11 @@
             </span>
         </div>
         <div *ngSwitchCase="'l-headers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="redirectLink('/website/headers')">
-                <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
+            <button mat-button (click)="_general.redirectLink('/website/headers')">
+                <i [innerHTML]="'add' | svg | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setHeader(false)" [class.kb-btn-active]="!_general.includeLayout.header">
-                <i [innerHTML]="_image.svg.none | safeHtml"></i> None
+                <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
             (click)="setHeader(head)" [class.kb-btn-active]="head.id == _general.selectedHeader.id && _general.includeLayout.header"
@@ -178,11 +219,11 @@
             </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="redirectLink('/website/footers')">
-                <i [innerHTML]="_image.svg.add | safeHtml"></i> Create
+            <button mat-button (click)="_general.redirectLink('/website/footers')">
+                <i [innerHTML]="'add' | svg | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setFooter(false)" [class.kb-btn-active]="!_general.includeLayout.footer">
-                <i [innerHTML]="_image.svg.none | safeHtml"></i> None
+                <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
             (click)="setFooter(foot)" [class.kb-btn-active]="foot.id == _general.selectedFooter.id && _general.includeLayout.footer"
@@ -200,16 +241,16 @@
         <div *ngSwitchCase="'responsive'">
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'desktop'"
                 (click)="respToggle('desktop')">
-                <i [innerHTML]="_image.svg.desktop | safeHtml"></i><span>Desktop</span></button>
+                <i [innerHTML]="'desktop' | svg | safeHtml"></i><span>Desktop</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'tablet-h'"
                 (click)="respToggle('tablet-h')">
-                <i class="rotate-90" [innerHTML]="_image.svg.tab | safeHtml"></i><span>Tablet H</span></button>
+                <i class="rotate-90" [innerHTML]="'tab' | svg | safeHtml"></i><span>Tablet H</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'tablet-v'"
                 (click)="respToggle('tablet-v')">
-                <i [innerHTML]="_image.svg.tab | safeHtml"></i><span>Tablet V</span></button>
+                <i [innerHTML]="'tab' | svg | safeHtml"></i><span>Tablet V</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'mobile'"
                 (click)="respToggle('mobile')">
-                <i [innerHTML]="_image.svg.mobile | safeHtml"></i><span>Mobile</span></button>
+                <i [innerHTML]="'mobile' | svg | safeHtml"></i><span>Mobile</span></button>
         </div>
     </div>
     <mat-icon mat-ripple (click)="nextSlide()" [class.kb-disabled]="slideShift > shiftLen-1" class="kb-side-arrow">keyboard_arrow_right</mat-icon>
@@ -239,7 +280,7 @@
         </div>
         <div *ngSwitchCase="'image'" id="elementgroup" class="kb-block-selection kb-element-list kb-img-list" cdkDropList [cdkDropListData]="_image.galleryImg" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="openImgDialog()" class="kb-icon-btn">
-                <i [innerHTML]="_image.svg.upload | safeHtml"></i>
+                <i [innerHTML]="'upload' | svg | safeHtml"></i>
                 <span>Upload</span>
             </button>
             <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="img">
@@ -266,8 +307,8 @@
             </span>
         </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <button mat-button (click)="redirectLink('/website/navigation')" class="kb-icon-btn">
-                <i [innerHTML]="_image.svg.add | safeHtml"></i>
+            <button mat-button (click)="_general.redirectLink('/website/navigation')" class="kb-icon-btn">
+                <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>
             <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="element">

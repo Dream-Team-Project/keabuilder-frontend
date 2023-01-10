@@ -20,6 +20,8 @@ export class GeneralService {
   userdomain:string = 'keapages.com';
   includeLayout:any = {header:true, footer:true};
   user:any;
+  autosave:any = '';
+  autosaveopt:any = [{value:15, unit:'sec'}, {value:30, unit:'sec'}, {value:2, unit:'min'}, {value:5, unit:'min'}, {value:10, unit:'min'}];
   subdomain:string = '';
   target:any = {
     id: '',
@@ -259,14 +261,16 @@ export class GeneralService {
       var appendmenus = doc.querySelectorAll('[data-name="menu"]');
       if(appendmenus.length == 0) resolve(doc.body.innerHTML);
       appendmenus.forEach((data:any)=>{
-        var menu = this.menus.filter((m:any)=>m.id == data.children[0].getAttribute('data-id'))
-        if(menu.length != 0) {
-          data.children[0].innerHTML = menu[0].html;
-          if(appendmenus.length-1 == i) {
-            resolve(doc.body.innerHTML);
+        if(data) {
+          var menu = this.menus.filter((m:any)=>m.id == data.getAttribute('data-id'))
+          if(menu.length != 0) {
+            data.innerHTML = menu[0].html;
+            if(appendmenus.length-1 == i) {
+              resolve(doc.body.innerHTML);
+            }
           }
+          i++;
         }
-        i++;
       })
     })
   }
@@ -380,14 +384,14 @@ export class GeneralService {
     })
   }
 
-  checkExstingPath(main:any, sections:any) {
+  checkExstingPath(main:any, sections:any, tglDraft:boolean) {
     return new Promise<any>((resolve, reject) => {
       var data = {
         path: this.main.path
       }
       this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
         if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
-            this.saveHTML(main, sections, false).then(data => {
+            this.saveHTML(main, sections, false, tglDraft).then(data => {
               resolve(data);
             });
         }
@@ -403,12 +407,8 @@ export class GeneralService {
     window.open(window.location.protocol+'//'+window.location.host+'/preview/kb-page-'+this.webpage.uniqueid, 'framename');
   }
 
-  removeCommments(html:any) {
-    html = html.replaceAll('<!--?php','<?php').replaceAll('?-->','?>');
-    return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
-  }
-
   saveHeaderFooter(main:any, sections:any) {
+    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
     return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
       this.removeExtra(false);
@@ -420,33 +420,35 @@ export class GeneralService {
       if(this.target.type == 'header') {
         obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
-          this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+          this.pageSaved = true;
           resolve(true);
         },
         error=>{
-          this.openSnackBar('Server Error', 'OK', 'center', 'top');
+          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
           resolve(false);
         });
       }
       else if(this.target.type == 'footer') {
         obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
-          this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+          this.pageSaved = true;
           resolve(true);
         },
         error=>{
-          this.openSnackBar('Server Error', 'OK', 'center', 'top');
+          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
           resolve(false);
         });
       }
     });
   }
 
-  saveHTML(main:any, sections:any, preview:boolean) {
+  saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
+    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
     return new Promise<any>((resolve, reject) => {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+        this.setPageStyle(sections);
         if(this.includeLayout.header && this.selectedHeader.html && !preview) {
           var header = this.pagehtml.querySelector('header');
           header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
@@ -456,9 +458,7 @@ export class GeneralService {
           footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
         }
         this.removeExtra(preview);
-        this.setPageStyle(sections);
         this.pagehtml.querySelector('head').innerHTML = 
-        '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' +
         '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
         '<meta charset="UTF-8">' +
         '<meta name="description" content="'+this.main.description+'">' +
@@ -479,42 +479,56 @@ export class GeneralService {
           prevObj.folder = 'kb-page-'+this.webpage.uniqueid;
           prevObj.dir = 'previews';
           this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
-            this.pageSaved = false;
             resolve(true);
           },
           error=>{
-            this.openSnackBar('Server Error! Please try to save your page.', 'OK', 'center', 'top');
+            this.openSnackBar(true, 'Server Error! Please try to save your page.', 'OK', 'center', 'top');
             resolve(false);
           });
         }
         else {
-          this.pageObj.head = this.pageObj.head + '<link rel="stylesheet" href="./style.css">';
-          this.pageObj.folder = this.main.path,
-          this.pageObj.prevFolder = this.webpage.page_path,
-          this.pageObj.dir = this.main.publish_status ? 'pages' : 'drafts'
-          this.fileUploadService.savePage(this.pageObj).subscribe(
-            (event:any) => {
-              if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
-                var obj = {
-                  path:event.data.folder
-                };
-                this.fileUploadService.updateHome(obj).subscribe({
-                  next: data => {}
-                });
-              }
-              this.updatePageDB().then(e=>{
-                this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
-                this.pageSaved = true;
-                resolve(true);
-              })
-            },
-          error=>{
-            this.openSnackBar('Server Error!', 'OK', 'center', 'top');
-            resolve(false);
-          })
+          var status = this.main.publish_status;
+          this.pageObj.head = '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' + '<link rel="stylesheet" href="./style.css">' + this.pageObj.head;
+          this.pageObj.folder = this.main.path;
+          this.pageObj.prevFolder = this.webpage.page_path;
+          this.pageObj.dir = status ? 'pages' : 'drafts';
+          if(tglDraft) {
+            var td = {
+              status:(status ? 'publish' : 'draft'), 
+              path: this.main.path
+            }
+            this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
+              this.savePage(web).then(resp=>resolve(resp));
+            })
+          }
+          else this.savePage(web).then(resp=>resolve(resp));
         }
       })
     });
+  }
+
+  savePage(web:any) {
+    return new Promise<any>((resolve, reject) => {
+      this.fileUploadService.savePage(this.pageObj).subscribe(
+        (event:any) => {
+          if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
+            var obj = {
+              path:event.data.folder
+            };
+            this.fileUploadService.updateHome(obj).subscribe({
+              next: data => {}
+            });
+          }
+          this.updatePageDB().then(e=>{
+            this.pageSaved = true;
+            resolve(true);
+          })
+        },
+      error=>{
+        this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+        resolve(false);
+      })
+    })
   }
 
   updatePageDB() {
@@ -535,7 +549,7 @@ export class GeneralService {
         }
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
-            resolve(e);
+            this.getWebPageDetails(this.webpage.uniqueid).then(resp=>resolve(e));
           })
       }
       else if(this.target.type == 'funnel'){
@@ -559,40 +573,38 @@ export class GeneralService {
           })
       }
       else{
-        this.openSnackBar('Server Error', 'OK', 'center', 'top');
+        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         resolve(false);
       }
     })
   }
 
+  removeCommments(html:any) {
+    html = html.replaceAll('<!--?php','<?php').replaceAll('?-->','?>');
+    return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
+  }
+
   removeExtra(preview:boolean) {
-    this.pagehtml.querySelectorAll('*').forEach((item:any)=>{
-      item.removeAttribute('style');
-      item.removeAttribute('cdkdrag');
-      item.removeAttribute('cdkdroplist');
-      item.removeAttribute('ng-reflect-id');
-      item.removeAttribute('ng-reflect-data');
-      item.removeAttribute('ng-reflect-ng-style');
-      item.removeAttribute('ng-reflect-ng-class');
-      item.removeAttribute('ng-reflect-ng-switch');
-      item.removeAttribute('ng-reflect-connected-to');
-      item.classList.remove('cdk-drag');
-      item.classList.remove('cdk-drag-handle');
-      if(item.classList.contains('kb-ispan-add') || item.classList.contains('kb-module-setting')) item.remove();
-      if(item.classList.contains('cdk-drop-list')) {
-        item.removeAttribute('id');
-        item.classList.remove('cdk-drop-list');
-      }
-      if(item.classList.contains('kb-menu') && !preview) {
-        item.outerHTML = '<?php $path="../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
-      }
-      if(item.classList.contains('kb-code-block')) {
-        var cb = this.decodeData(item.getAttribute('html-data'));
-        item.removeAttribute('html-data');
-        var doc = this.parser.parseFromString(cb, 'text/html');
-        item.innerHTML = doc.body.innerHTML;
-      }
+    var body = this.pagehtml.querySelector('BODY');
+    var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
+    /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
+    /ng-reflect-enter-predicate="(.*?)"/g, /ng-star-inserted/g, /cdk-drag/g, /cdk-drag-handle/g, /cdk-drop-list/g, 
+    /id="sectiongroup-(.*?)"/g, /id="rowgroup-(.*?)"/g, /id="elementgroup-(.*?)"/g];
+    body.querySelectorAll('.kb-ispan-add').forEach((item:any)=>item.remove());
+    body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
+    regExpArr.forEach((re:any)=>{
+      body.innerHTML = body.innerHTML.replace(re, '');
     })
+    if(!preview) this.pagehtml.querySelectorAll('.kb-menu').forEach((item:any)=>{
+      item.outerHTML = '<?php $path="../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
+    });
+    body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
+      var cb = this.decodeData(item.getAttribute('html-data'));
+      item.removeAttribute('html-data');
+      var doc = this.parser.parseFromString(cb, 'text/html');
+      item.innerHTML = doc.body.innerHTML;
+    });
+    this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;
   }
 
   getAllStyle() {
@@ -616,9 +628,7 @@ export class GeneralService {
             if(ele.content?.item) {
               var tempObj = JSON.parse(JSON.stringify(ele.content.item))
               var pseudoEle:string = '';
-              if(ele.content.name == 'menu') {
-                pseudoEle = 'ul a';
-              }
+              if(ele.content.name == 'menu') pseudoEle = 'ul a';
               tempObj.id = ele.id + ' .kb-element-content ' + pseudoEle;
               this.blockStyling(tempObj);
             }
@@ -630,9 +640,9 @@ export class GeneralService {
 
   blockStyling(block:any) {
     this.pagestyling.desktop = this.pagestyling.desktop + '#' + block.id + '{' + Object.entries(block.style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(block.style.tablet_h) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(block.style.tablet_v) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(block.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.tablet_h)) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.tablet_v)) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.mobile)) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.type == 'row') {
       var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}']
       this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
@@ -645,7 +655,7 @@ export class GeneralService {
   elementStyling(ele:any) {
     var pseudoEle:string = '';
     if(ele.content.name == 'text' || ele.content.name == 'heading') {
-      pseudoEle = 'div>div';
+      pseudoEle = '> div';
     }
     else if(ele.content.name == 'image') {
       pseudoEle = 'img';
@@ -656,16 +666,40 @@ export class GeneralService {
     else if(ele.content.name == 'menu') {
       pseudoEle = 'ul';
     }
-    this.pagestyling.desktop = this.pagestyling.desktop + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.desktop, ...ele.style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(ele.style.tablet_h || ele.content.style.tablet_h) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.tablet_h, ...ele.style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(ele.style.tablet_v || ele.content.style.tablet_v) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.tablet_v, ...ele.style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(ele.style.mobile || ele.content.style.mobile) this.pagestyling.mobile = this.pagestyling.mobile + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...ele.content.style.mobile, ...ele.style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    
-    var eleitma = ['#' + ele.id + '{justify-content:', ';}']
-    if(ele.item_alignment.desktop != '') this.pagestyling.desktop = this.pagestyling.desktop + eleitma.join(ele.item_alignment.desktop);
-    if(ele.item_alignment.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + eleitma.join(ele.item_alignment.tablet_h);
-    if(ele.item_alignment.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + eleitma.join(ele.item_alignment.tablet_v);
-    if(ele.item_alignment.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + eleitma.join(ele.item_alignment.mobile);
+    var style = JSON.parse(JSON.stringify(ele.content.style));
+    var elestl = {
+      selector: '#'+ele.id+'{',
+      jc: 'justify-content:',
+      mar: 'margin:',
+    }
+    var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop + ';' : '';
+    var deskmar = style.desktop.margin ? elestl.mar + style.desktop.margin + ';' : '';
+    if(deskjc || deskmar) this.pagestyling.desktop = this.pagestyling.desktop + elestl.selector + deskjc + deskmar + '}';
+    delete style.desktop?.margin;
+
+    var tabhjc = ele.item_alignment.tablet_h != 'auto' ? elestl.jc + ele.item_alignment.tablet_h + ';' : '';
+    var tabhmar = style.tablet_h.margin ? elestl.mar + style.tablet_h.margin + ';' : '';
+    if(tabhjc || tabhmar) this.pagestyling.tablet_h = this.pagestyling.tablet_h + elestl.selector + tabhjc + tabhmar + '}';
+    delete style.table_h?.margin;
+
+    var tabvjc = ele.item_alignment.tablet_v != 'auto' ? elestl.jc + ele.item_alignment.tablet_v + ';' : '';
+    var tabvmar = style.tablet_v.margin ? elestl.mar + style.tablet_v.margin + ';' : '';
+    if(tabvjc || tabvmar) this.pagestyling.tablet_v = this.pagestyling.tablet_v + elestl.selector + tabvjc + tabvmar + '}';
+    delete style.tablet_v?.margin;
+
+    var mobjc = ele.item_alignment.mobile != 'auto' ? elestl.jc + ele.item_alignment.mobile + ';' : '';
+    var mobmar = style.mobile.margin ? elestl.mar + style.mobile.margin + ';' : '';
+    if(mobjc || mobmar) this.pagestyling.mobile = this.pagestyling.mobile + elestl.selector + mobjc + mobmar + '}';
+    delete style.mobile?.margin;
+
+    this.pagestyling.desktop = this.pagestyling.desktop + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(ele.content.style.tablet_h)) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(ele.content.style.tablet_v)) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(ele.content.style.mobile)) this.pagestyling.mobile = this.pagestyling.mobile + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+  }
+
+  isObjEmpty(obj:any){
+    return JSON.stringify(obj) === '{}' || obj === '';
   }
 
   getAllWebPages() {
@@ -783,23 +817,20 @@ export class GeneralService {
       this.showInlineEditor = false;
   }
 
-  openSnackBar(message: string, action: string, hpos: any, vpos: any) {
-    this._snackBar.open(message, action, {
+  openSnackBar(alert: boolean, message: string, action: string, hpos: any, vpos: any) {
+    if(alert) this._snackBar.open(message, action, {
+      horizontalPosition: hpos,
+      verticalPosition: vpos,
+      panelClass: ['bg-danger']
+    });
+    else this._snackBar.open(message, action, {
       horizontalPosition: hpos,
       verticalPosition: vpos
     });
   }
 
-  openSnackBarAlert(message: string, action: string, hpos: any, vpos: any) {
-    this._snackBar.open(message, action, {
-      horizontalPosition: hpos,
-      verticalPosition: vpos,
-      panelClass: ['bg-danger']
-    });
-  }
-
   selectTabChange(e:any) {
-    this.selectedTab = e.tab['textLabel'];
+    this.selectedTab = e.tab ? e.tab['textLabel'] : '';
   }
   
   detectTabChange() {
@@ -837,6 +868,16 @@ export class GeneralService {
 
   compareOptValue(item1: any, item2: any) {
     return item1.name === item2.name && item1.value === item2.value;
+  }
+
+  backBtn() {
+    var link:any = this.userService.navPath[1];
+    if(!link) link = '/';
+    window.open(window.origin+link, '_self');
+  }
+
+  redirectLink(link:string) {
+    window.open(window.origin+link, '_blank');
   }
 
   redirectToWebsite() {

@@ -1,37 +1,35 @@
+<ng-template #askforsave>
+    <h1 mat-dialog-title>Do you want to save changes?</h1>
+    <mat-checkbox [ngModel]="dntaskforsave"><small>Don't ask me again!</small></mat-checkbox>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="savePage(main, false)">Save</button>
+    </div>
+</ng-template>
 <ng-template #templatedialog>
-        <h1 mat-dialog-title class="kb-info">Save Template</h1>
-        <div mat-dialog-content>
-            <mat-form-field appearance="fill" class="w-100">
-                <mat-label>Template name</mat-label>
-                <input matInput type="text" placeholder="Template name" [(ngModel)]="saveTemplateSection.name">
-              </mat-form-field>
-        </div>
-        <div mat-dialog-actions>
-            <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
-            <button mat-button mat-dialog-close cdkFocusInitial class="kb-info" (click)="saveAsTemplate()">Save</button>
-        </div>
+    <h1 mat-dialog-title>Save Template</h1>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Template name</mat-label>
+            <input matInput type="text" placeholder="Template name" [(ngModel)]="saveTemplateSection.name">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="saveAsTemplate()">Save</button>
+    </div>
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
     <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
         <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
     </mat-drawer>
 </mat-drawer-container>
-<div cdkDropListGroup id="kb-page-container" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
-    (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : '';">
-    <div id="kb-layout-saveopt"
-        *ngIf="_general.loading.success && (_general.target.type == 'header' || _general.target.type == 'footer')">
-        <div class="kb-layout-title">
-            <span class="kb-chngName">{{_general.target.name ? _general.target.name : 'Type '+_general.target.type+'
-                name' | titlecase}}</span>
-            <input class="kb-chngname-inp" type="text" [placeholder]="'Type '+_general.target.type+' name' "
-                [(ngModel)]="_general.target.name">
-        </div>
-        <div><button [disabled]="_general.saveDisabled" mat-raised-button (click)="saveHeaderFooter(main)"
-                class="kb-btn-primary">Save <i class="fas fa-save"></i></button></div>
-    </div>
+<mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
+<div cdkDropListGroup id="kb-page-container" [style.transform]="zoom.active ? 'scale('+zoom.value+'%)' : ''" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
+    (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : ''">
     <div id="kb-block-container" [class.loading]="!_general.loading.success">
         <div #main id="kb-main-container"
             [class.kb-resp-view]="_general.respToggleDevice.name == 'tablet-v' || _general.respToggleDevice.name == 'mobile'"
@@ -143,10 +141,10 @@
                                                 (mouseleave)="element.setting = false" [id]="element.id"
                                                 class="kb-element kb-block-container"
                                                 [ngClass]="_style.getHideCls(element.hide)"
+                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)"
+                                                [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getMargin() : _style.getBlockStyle(element.content.style)['margin']"
                                                 [class.kb-block-none]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
-                                                [class.kb-block-disabled]="_general.showInlineEditor"
-                                                [style.margin]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle ? _style.getMargin() : _style.getBlockStyle(element.style)['margin']"
-                                                [style.justifyContent]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)">
+                                                [class.kb-block-disabled]="_general.showInlineEditor">
                                                 <div *cdkDragPreview class="custom-preview"
                                                     [style.backgroundColor]="'var(--primary-color)'">{{element.name ?
                                                     element.name : element.content.name}}</div>
@@ -174,12 +172,12 @@
                                                 </div>
                                                 <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <img *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showImg"
-                                                        [ngStyle]="_style.imageStyling()"
+                                                        [ngStyle]="_style.imageStyling()"    
                                                         [src]="_style.image_src ? _style.image_src : _image.imgPath+'builder/no-image.png'"
                                                         alt="image" width="auto"
                                                         [class.dummyImg]="!_style.image_src">
                                                     <ng-template #showImg>
-                                                        <img [ngStyle]="_style.getElementBlockStyle(element)"
+                                                        <img [ngStyle]="_style.getBlockStyle(element.content.style)"
                                                             [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
                                                             alt="image" width="auto"
                                                             [class.dummyImg]="!element.content.src">
@@ -187,10 +185,10 @@
                                                 </div>
                                                 <div *ngSwitchCase="'button'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
+                                                        [ngStyle]="_style.buttonStyling()"
                                                         class="kb-default-btn"
                                                         [attr.kb-btn-type]="element.content.btntype"
-                                                        [href]="_style.button_link" [target]="_style.button_target"
-                                                        [ngStyle]="_style.buttonStyling()">
+                                                        [href]="_style.button_link" [target]="_style.button_target">
                                                         <div>{{_style.button_text}}</div>
                                                         <div class="subtext"
                                                             [style.fontSize]="_style.button_subfont_size.value">
@@ -198,21 +196,20 @@
                                                     </a>
                                                     <ng-template #showBtn>
                                                         <a *ngIf="element.content.btntype != 'regular' else regular"
+                                                            [ngStyle]="_style.getBlockStyle(element.content.style)"
                                                             class="kb-default-btn kb-product-btn"
                                                             [attr.kb-btn-type]="element.content.btntype"
                                                             [attr.kb-redirect-link]="element.content.link"
                                                             [attr.kb-product-id]="element.content.productid"
-                                                            href="#no-link" [target]="element.content.target"
-                                                            [ngStyle]="_style.getElementBlockStyle(element)">
+                                                            href="#no-link" [target]="element.content.target">
                                                             <div>{{element.content.text}}</div>
                                                             <div class="subtext"
                                                                 [style.fontSize]="element.content.subfont_size">
                                                                 {{element.content.subtext}}</div>
                                                         </a>
                                                         <ng-template #regular>
-                                                            <a class="kb-default-btn" [href]="element.content.link"
-                                                                [target]="element.content.target"
-                                                                [ngStyle]="_style.getElementBlockStyle(element)">
+                                                            <a [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-default-btn" [href]="element.content.link"
+                                                                [target]="element.content.target">
                                                                 <div>{{element.content.text}}</div>
                                                                 <div class="subtext"
                                                                     [style.fontSize]="element.content.subfont_size">
@@ -224,7 +221,7 @@
                                                 <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                     class="kb-element-content">
                                                     <ul class="kb-menu" [id]="element.content.data_id"
-                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getElementBlockStyle(element)">
+                                                        [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getBlockStyle(element.content.style)">
                                                         <li *ngFor="let item of element.content.items, index as mi">
                                                             <a class="kb-content-item" [id]="item.id"
                                                                 [href]="item.link"
@@ -247,18 +244,15 @@
                                                         style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
                                                 </div>
                                                 <div *ngSwitchDefault [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <div *ngIf="!element.content.editor else editor">
-                                                        <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
-                                                            [ngStyle]="_style.textStyling()"
-                                                            [innerHTML]="_style.edit_html | safeHtml"></div>
-                                                        <ng-template #originalText>
-                                                            <div [ngStyle]="_style.getElementBlockStyle(element)"
-                                                                [innerHTML]="element.content.html | safeHtml"></div>
-                                                        </ng-template>
-                                                    </div>
+                                                    <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
+                                                    [ngStyle]="_style.textStyling()" [innerHTML]="_style.edit_html | safeHtml"></div>
+                                                    <ng-template #originalText>
+                                                        <div [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                            [innerHTML]="element.content.html | safeHtml"></div>
+                                                    </ng-template>
+                                                    <div *ngIf="!element.content.editor else editor"></div>
                                                     <ng-template #editor>
                                                         <tinymce
-                                                            [ngStyle]="_style.getBlockStyle(element.content.style)"
                                                             [inline]="true"
                                                             (mouseenter)="_general.insideEditor = true"
                                                             (mouseleave)="_general.insideEditor = false;"
@@ -272,7 +266,7 @@
                                                     class="kb-ispan-add add-element bottom-add-btn"><i
                                                         class="fa fa-plus"></i></span>
                                                 <span *ngIf="_style.getDisplay(element.hide)"
-                                                    class="kb-block-hidden-icon"><i class="far fa-eye-slash"
+                                                    class="kb-block-hidden-icon"><i class="fa fa-eye-slash"
                                                         aria-hidden="true"></i></span>
                                             </div>
                                             <!-- elements end -->
@@ -285,7 +279,7 @@
                                                 class="fa fa-plus"></i></span>
                                         <!-- add element option end -->
                                         <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
-                                                class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                                class="fa fa-eye-slash" aria-hidden="true"></i></span>
                                     </div>
                                     <!-- columns end -->
                                 </div>
@@ -296,12 +290,12 @@
                                     class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
                                 <!-- add row option end -->
                                 <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
-                                        class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                        class="fa fa-eye-slash" aria-hidden="true"></i></span>
                             </div>
                             <!-- rows end -->
                         </div>
                         <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
-                                class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                class="fa fa-eye-slash" aria-hidden="true"></i></span>
                     </div>
                     <!-- sections end -->
                 </div>
@@ -319,20 +313,19 @@
         <span>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
             _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</span>
     </div>
-    <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
     <div style="visibility: hidden; position: fixed"
     [style.left]="contextMenuPosition.x"
     [style.top]="contextMenuPosition.y"
     [matMenuTriggerFor]="contextMenu">
     </div>
-    <mat-menu #contextMenu="matMenu" class="kb-builder-options">
-        <ng-template matMenuContent let-item="item">
-            <button mat-menu-item (click)="saveHTML(main)"><i [innerHTML]="_image.svg.save | safeHtml"></i> Save</button>
-            <button mat-menu-item (click)="_general.preview()"><i [innerHTML]="_image.svg.preview | safeHtml"></i> Preview</button>
-            <button mat-menu-item (click)="_section.undo()"><i [innerHTML]="_image.svg.undo | safeHtml"></i> Undo</button>
-            <button mat-menu-item (click)="_section.redo()"><i [innerHTML]="_image.svg.redo | safeHtml"></i> Redo</button>
-            <button mat-menu-item (click)="wireframeToggle()"><i [innerHTML]="_image.svg.wireframe| safeHtml"></i> Wireframe</button>
-            <button mat-menu-item (click)="openPageSetting(null)"><i [innerHTML]="_image.svg.setting | safeHtml"></i> Setting</button>
-        </ng-template>
-    </mat-menu>
 </div>
+<mat-menu #contextMenu="matMenu" class="kb-builder-options">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="_general.preview()" *ngIf="!ishf"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
+        <button mat-menu-item (click)="savePage(main, false)"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
+        <button mat-menu-item (click)="openPageSetting(null)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
+        <button mat-menu-item (click)="wireframeToggle()"><i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe</button>
+        <button mat-menu-item (click)="_section.undo()" *ngIf="_section.pageSessionArr[_section.pageSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
+        <button mat-menu-item (click)="_section.redo()" *ngIf="_section.pageSessionArr[_section.pageSession.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
+    </ng-template>
+</mat-menu>

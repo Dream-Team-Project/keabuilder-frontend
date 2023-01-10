@@ -19,7 +19,9 @@ export class BuilderTopbarComponent implements OnInit {
   @Output('wireframeToggle') wireframeToggle: EventEmitter<any> = new EventEmitter();
   @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
   @Output('transferIndex') transferIndex: EventEmitter<any> = new EventEmitter();
+  @Output('zoomPage') zoomPage: EventEmitter<any> = new EventEmitter();
   @Input('wftgl') wftgl:any;
+  @Input('ishf') ishf:any;
 
   selectedTab:string = '';
   selectedElement:string = '';
@@ -36,6 +38,10 @@ export class BuilderTopbarComponent implements OnInit {
   searchRowFilter:any = this.rowtypes[0];
   searchText:string = '';
   seltemp:any;
+  hfdialogOpen:boolean = false;
+  dialogData:any;
+  urdo:boolean = false;
+  zoom:any = {value: 100, active: false};
   
   constructor(
     public _general:GeneralService,
@@ -47,47 +53,43 @@ export class BuilderTopbarComponent implements OnInit {
     ) {
       this.createDefaultSections();
       this.createDefaultElements();
-      this._general.fetchSectionTemplates();
-      this._general.templatesUpdated.subscribe(value => {
+      _general.fetchSectionTemplates();
+      _general.templatesUpdated.subscribe(value => {
         if(this.selectedTab == 'l-templates') 
         setTimeout((e:any)=>this.setShift());
       })
-      this._image.imagesUpdated.subscribe(value => {
+      _image.imagesUpdated.subscribe(value => {
         if(this.selectedTab == 'elements' && this.selectedElement == 'image') 
         setTimeout((e:any)=>this.setElementShift());
       })
-    }
+  }
 
   ngOnInit(): void {}
 
-  openDialog(templateRef: TemplateRef<any>, temp:any) {
-    this.seltemp = JSON.parse(JSON.stringify(temp));
-    console.log('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png');
-    this.dialog.open(templateRef);
+  zoomPg(e:any) {
+    var z = this.zoom;
+    if(e == '+' && z.value <= 100) z.value = z.value+10;
+    else if(e == '-' && z.value >= 10) z.value = z.value-10;
+    this.zoomEmit(z.active);
+  }
+
+  zoomEmit(active:any) {
+    this.zoom.active = active;
+    this.zoomPage.emit(this.zoom);
+  }
+
+  getMoreState() {
+    var sel = '';
+    if(this._general.selectedBlock.type == 'main') sel = 'Setting';
+    else if(this.hfdialogOpen) sel = 'Rename';
+    else if(this.wftgl) sel = 'Wireframe';
+    else if(this.urdo) sel = 'Done';
+    else if(this.zoom.active) sel = 'Zoom';
+    return sel ? '> '+sel : '';
   }  
-  
-  deleteTemplate() {
-    this._general.fileUploadService.deletetemplate(this.seltemp.id).subscribe(e=>{
-      this._general.fetchSectionTemplates().then(e=>{
-        this.snackBar('deleted');
-      });
-      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
-    })
-  }
 
-  updateTemplate() {
-    var temp = JSON.parse(this.seltemp.template);
-    temp.name = this.seltemp.name;
-    this.seltemp.template = JSON.stringify(temp);
-    this._general.fileUploadService.updatetemplate(this.seltemp).subscribe(e=>{
-      this._general.fetchSectionTemplates().then(e=>{
-        this.snackBar('renamed');
-      });
-    })
-  }
-
-  snackBar(msg:string) {
-    this._general.openSnackBar('Template has been '+msg, 'OK', 'center', 'top');
+  isMoreActive(moret:any) {
+    return moret.menuOpen || this._general.selectedBlock.type == 'main' || this.wftgl || this.urdo || this.zoom.active;
   }
 
   createDefaultSections() {
@@ -123,9 +125,10 @@ export class BuilderTopbarComponent implements OnInit {
         }
       }
       if(e.content.name == 'button') {
-        let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}, 
-        {name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}, 
-        {name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}];
+        let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}];
+        let funnelBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}, 
+        {name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}]
+        if(this._general.target.type == 'funnel') types.concat(funnelBtn);
         for(var i=0; i<types.length; i++) {
           var obj = JSON.parse(JSON.stringify(e));
           obj.content.type = types[i];
@@ -139,6 +142,43 @@ export class BuilderTopbarComponent implements OnInit {
         }        
       }
     })
+  }
+
+  openRenameDialog(templateRef: TemplateRef<any>) {
+    this.hfdialogOpen = true;
+    this.dialogData = this.dialog.open(templateRef);
+    this.dialogData.afterClosed().subscribe((data:any)=>{
+      this.hfdialogOpen = false;
+    })
+  }
+
+  openTempDialog(templateRef: TemplateRef<any>, temp:any) {
+    this.seltemp = JSON.parse(JSON.stringify(temp));
+    this.dialog.open(templateRef);
+  }  
+  
+  deleteTemplate() {
+    this._general.fileUploadService.deletetemplate(this.seltemp.id).subscribe(e=>{
+      this._general.fetchSectionTemplates().then(e=>{
+        this.snackBar('deleted');
+      });
+      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
+    })
+  }
+
+  updateTemplate() {
+    var temp = JSON.parse(this.seltemp.template);
+    temp.name = this.seltemp.name;
+    this.seltemp.template = JSON.stringify(temp);
+    this._general.fileUploadService.updatetemplate(this.seltemp).subscribe(e=>{
+      this._general.fetchSectionTemplates().then(e=>{
+        this.snackBar('renamed');
+      });
+    })
+  }
+
+  snackBar(msg:string) {
+    this._general.openSnackBar(false, 'Template has been '+msg, 'OK', 'center', 'top');
   }
 
   dragDataEmit(i:number) {
@@ -245,16 +285,6 @@ export class BuilderTopbarComponent implements OnInit {
 
   setTrigger(value:any) {
     this.parentTrigger.emit(value);
-  }
-
-  backBtn() {
-    var link:any = this._general.userService.navPath[1];
-    if(!link) link = '/';
-    window.open(window.origin+link, '_self');
-  }
-
-  redirectLink(link:string) {
-    window.open(window.origin+link, '_blank');
   }
 
   openImgDialog() {

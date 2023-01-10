@@ -10,7 +10,7 @@ div#kb-img-group {
 
 #kb-img-group .side-arrow {
     background-color: var(--kb-white);
-    width: 70px!important;
+    width: 55px!important;
     box-shadow: -30px 0px 30px -10px rgb(0 0 0 / 20%);
 }
 
@@ -77,7 +77,7 @@ div#kb-img-group .kb-img-thumbnail-group {
 
 div#kb-img-group .kb-head {
     font-size: 20px;
-    padding: 20px 30px;
+    padding: 12px 36px;
     padding-left: 40px;
     font-weight: 600;
     color: #666666;
@@ -90,7 +90,7 @@ div#kb-img-group .kb-head {
 }
 
 .kb-active-img, .kb-img-thumbnail-group ul.kb-img-list li:hover span {
-    border: 3px solid var(--section-color)!important;
+    border: 3px solid var(--primary-color)!important;
 }
 
 .kb-img-filter {
@@ -112,7 +112,7 @@ div#kb-img-group .kb-head {
 #kb-delimg img {
     height: 180px;
     width: auto;
-    margin: 0px auto;
+    margin: 10px auto 0;
     display: block;
     border-radius: 4px;
 }

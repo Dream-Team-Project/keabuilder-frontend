@@ -111,7 +111,7 @@
   
   .kbl-media-box {
     height: 46px;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -149,7 +149,7 @@
     position: relative;
     height: 42px;
     max-width: 260px;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     background-color: #f1f3f4;
     border: 2px dotted #999;
     font-size: 14px;

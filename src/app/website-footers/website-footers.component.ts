@@ -112,8 +112,8 @@ export class WebsiteFootersComponent {
   }
 
   openSB(alert:any) {
-    if(alert) this._general.openSnackBarAlert('Server Error', 'OK', 'center', 'top');
-    else this._general.openSnackBar('Footer has been '+this.action, 'OK', 'center', 'top');
+    var msg = alert ? 'Server Error' : 'Footer has been '+this.action;
+    this._general.openSnackBar(alert, msg, 'OK', 'center', 'top');
     this.action = '';
   }
   

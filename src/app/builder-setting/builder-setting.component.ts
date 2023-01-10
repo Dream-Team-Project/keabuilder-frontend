@@ -21,7 +21,14 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   connectWtParent:boolean = false;
-  rippleClr:string = 'rgb(24 103 192 / 10%)';
+  rippleClr:string = 'rgb(217 201 153 / 30%)';
+  searchTglCls:any;
+  searchInp = {
+    deep: '',
+    tab: ''
+  }
+  searchType:string = '';
+  waitTill:boolean = true;
 
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()
@@ -113,6 +120,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.selectedTab = '';
     this._general.setExpPanelStep(0);
     this._style.setItemStyle = false;
+    this.searchInp.deep = '';
+    this.searchInp.tab = '';
+    this.searchType = '';
+    this.searchTglCls = '';
     if(this._general.blockSelection == '') this._section.savePageSession();
   }
   
@@ -147,6 +158,34 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       this._style.updateStyle();
     };
     this.overlayRefDetach(false);
+  }
+
+  searchToggle(value:string) {
+    if(this.waitTill) {
+      this.waitTill = false;
+      var temp = this.searchType != value;
+      if(temp) {
+        var isEmpty = this.searchType == '';
+        this.searchType = value;
+        if(isEmpty) this.searchTglCls = 'open';
+      }
+      else this.searchTglCls = 'close';
+      setTimeout(()=>{
+        if(!temp) this.searchType = '';
+        this.searchTglCls = '';
+        this.searchInp.tab = '';
+        this.searchInp.deep = '';
+        this.waitTill = true;
+      }, 200)
+    }
+  }
+
+  searchingDeep(val:string) {
+    return val?.toLowerCase().indexOf(this.searchInp.deep.toLowerCase()) >= 0;
+  }
+
+  searchingTab(val:string) {
+    return val?.toLowerCase().indexOf(this.searchInp.tab.toLowerCase()) >= 0;
   }
 
 }

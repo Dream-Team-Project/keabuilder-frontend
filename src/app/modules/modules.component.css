@@ -20,12 +20,12 @@
 
 .kbc-module {
     background-color: var(--kb-gray);
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
 }
 
 .kbc-lesson {
     background-color: var(--kb-light);
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
 }
 
 .kb-drag-container {

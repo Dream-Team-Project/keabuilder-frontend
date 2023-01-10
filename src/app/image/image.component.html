@@ -2,11 +2,12 @@
     <div id="kb-delimg">
         <h1 mat-dialog-title class="kb-danger">Delete Image</h1>
         <div mat-dialog-content>
+            <span>Would you like to delete this image?</span>
             <img [src]="delimage.ext_link ? delimage.path : _image.uploadImgPath+delimage.path">
         </div>
         <div mat-dialog-actions>
-            <button mat-button mat-dialog-close class="kb-info">No</button>
-            <button mat-button mat-dialog-close cdkFocusInitial class="kb-danger" (click)="_image.deleteImage(delimage)">Yes</button>
+            <button mat-button mat-dialog-close color="primary">No</button>
+            <button mat-button mat-dialog-close cdkFocusInitial (click)="_image.deleteImage(delimage)" class="kb-danger">Yes</button>
         </div>
     </div>
   </ng-template>
@@ -28,7 +29,7 @@
                     <div *ngIf="!_image.loading else loading">
                         <div>
                         <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)" accept=".jpg, .jpeg, .png">
-                        <button mat-raised-button (click)="imgInp.click();" class="kb-btn kb-btn-primary">
+                        <button mat-raised-button (click)="imgInp.click();" color="primary" class="kb-btn">
                             <span>Upload a new image</span></button><br><br>
                         <span>File suported png, jpg, jpeg only</span>    
                         </div>
@@ -47,7 +48,7 @@
                                 Please paste a valid image link
                             </mat-error>
                         </div>
-                        <button mat-raised-button [disabled]="_image.extImgLinkInp.invalid" (click)="_image.loading = true; _image.saveImageOnDb(_image.extImgLink)" class="kb-btn kb-btn-primary">
+                        <button mat-raised-button [disabled]="_image.extImgLinkInp.invalid" (click)="_image.loading = true; _image.saveImageOnDb(_image.extImgLink)" color="primary" class="kb-btn">
                             <span>Add as external path</span></button> 
                         </div>                         
                     </div>
@@ -60,7 +61,7 @@
                         <mat-label>Search image by name</mat-label>
                         <i class="fa fa-search"></i>
                         <input matInput type="text" #searchText>
-                        <button *ngIf="searchText.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchText.value=''">
+                        <button *ngIf="searchText.value" color="primary" matSuffix mat-icon-button aria-label="Clear" (click)="searchText.value=''">
                         <mat-icon>close</mat-icon>
                         </button>
                     </mat-form-field>
@@ -158,9 +159,9 @@
                         </mat-form-field>
                     </div>
                     <div class="kb-btn-group">
-                        <button mat-button (click)="_image.onUpload(true)" class="kb-btn-secondry"
+                        <button mat-raised-button (click)="_image.onUpload(true)" color="secondary"
                         matTooltipPosition="above" style="margin-right: 10px">Duplicate</button>
-                        <button mat-button (click)="_image.onUpload(false)" class="kb-btn-primary"
+                        <button mat-raised-button (click)="_image.onUpload(false)" color="primary"
                         matTooltipPosition="above">Save</button>
                     </div>
                 </div>

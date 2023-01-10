@@ -2,15 +2,16 @@
     <div id="kb-selection-ask" [class.kb-d-none]="_general.minimize" class="kb-outer-selection-container kb-scroll" [class.dragBox]="dragBoxAnime.open"
         [class.dragBoxClose]="dragBoxAnime.close" [style.width]="_general.expand ? _general.screenWidth - 400+'px' : ''"
         cdkDragBoundary=".cdk-overlay-container" cdkDragRootElement=".cdk-overlay-pane" cdkDrag>
-        <span *ngIf="_general.blockSelection" class="kb-selection-top-actions">
-            <button mat-button (click)="overlayRefDetach(false)">
-                <i class="fa fa-times"></i>
-            </button>
-        </span>
         <div [ngSwitch]="_general.blockSelection">
             <!-- row selection -->
             <div *ngSwitchCase="'row'" id="kb-row-selection" class="kb-inner-selection-container">
-                <div class="kb-ask-head" cdkDragHandle>Column Structure</div>
+                <div class="kb-ask-head" cdkDragHandle>Column Structure
+                    <span class="kb-selection-top-actions">
+                        <button mat-button matTooltip="Redo" matTooltipPosition="above" (click)="overlayRefDetach(false)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </span>
+                </div>
                 <ul class="kb-row-list">
                     <li *ngFor="let rt of _row.rowTypes"
                         (click)="_row.addRow('kb-'+rt.appendCls+'-block', rt.nofcolumn)"
@@ -25,7 +26,13 @@
             <!-- row selection -->
             <!-- element selection -->
             <div *ngSwitchCase="'element'" id="kb-element-group">
-                <div class="kb-ask-head" cdkDragHandle>Element Selection</div>
+                <div class="kb-ask-head" cdkDragHandle>Element Selection
+                    <span class="kb-selection-top-actions">
+                        <button mat-button matTooltip="Redo" matTooltipPosition="above" (click)="overlayRefDetach(false)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </span>
+                </div>
                 <div class="kb-element-inner-group">
                     <ul class="kb-element-list">
                         <li *ngFor="let element of _element.elementList" class="kb-element-box"><span
@@ -38,18 +45,6 @@
             <!-- element selection -->
             <!-- block setting -->
             <div *ngSwitchDefault (mouseover)="_style.saveStyleSession()" class="kb-inner-selection-container">
-                <span class="kb-selection-top-actions">
-                    <button mat-button (click)="_general.minimize = !_general.minimize"
-                        [matTooltip]="!_general.minimize ? 'Minimize' : 'Maximize'" matTooltipPosition="above"><i
-                        [class]="!_general.minimize ? 'fas fa-window-minimize' : 'far fa-window-maximize'"></i></button>                            
-                    <button mat-button (click)="_style.redo()" matTooltip="Redo" matTooltipPosition="above"><i
-                            class="fa fa-redo"></i></button>
-                    <button mat-button (click)="_style.undo()" matTooltip="Undo" matTooltipPosition="above"><i
-                            class="fa fa-undo"></i></button>
-                    <button mat-button (click)="_general.expand = !_general.expand"
-                        [matTooltip]="!_general.expand ? 'Expand' : 'Shrink'" matTooltipPosition="above"><i class="fas"
-                            [class]="!_general.expand ? 'fa-expand-arrows-alt' : 'fa-compress-arrows-alt'"></i></button>
-                </span>
                 <div class="kb-ask-head" cdkDragHandle>
                     <div *ngIf="_general.selectedBlock.type == 'column'" class="side-arrow-group">
                         <span class="side-floating-btn-group" [class.sidefloatOpen]="_general.sideFloatBtnAnim.open"
@@ -66,16 +61,139 @@
                             (click)="_general.sidefloatbtnopen(!_general.showBackToRowOption)"><i
                                 class="fa fa-arrow-left"></i></button>
                     </div>
-                    {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-                    _general.selectedBlock.type) : _general.selectedBlock.content.name}}
+                    <span>
+                        {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
+                        _general.selectedBlock.type) : _general.selectedBlock.content.name}}
+                    </span>
+                    <span class="kb-selection-top-actions">
+                        <button mat-button (click)="_general.minimize = !_general.minimize"
+                            [matTooltip]="!_general.minimize ? 'Minimize' : 'Maximize'" matTooltipPosition="above"><i
+                            [class]="!_general.minimize ? 'fas fa-window-minimize' : 'far fa-window-maximize'"></i></button> 
+                        <button mat-button #searcht="matMenuTrigger" [matMenuTriggerFor]="search" [class.kb-btn-active]="searchType || searcht.menuOpen"
+                            matTooltip="Search" matTooltipPosition="above">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <mat-menu #search="matMenu" xPosition="after" yPosition="below">
+                            <button mat-menu-item (click)="searchToggle('deep')" [class.kb-btn-active]="searchType == 'deep'">
+                                <i class="fas fa-search"></i> Deep Search
+                            </button>
+                            <button mat-menu-item (click)="searchToggle('tab')" [class.kb-btn-active]="searchType == 'tab'">
+                                <i class="fas fa-search"></i> Tab Search
+                            </button>
+                        </mat-menu>  
+                        <button mat-button (click)="_style.redo()" matTooltip="Redo" matTooltipPosition="above"><i
+                                class="fa fa-redo"></i></button>
+                        <button mat-button (click)="_style.undo()" matTooltip="Undo" matTooltipPosition="above"><i
+                                class="fa fa-undo"></i></button>
+                        <button mat-button (click)="_general.expand = !_general.expand"
+                            [matTooltip]="!_general.expand ? 'Expand' : 'Shrink'" matTooltipPosition="above"><i class="fas"
+                                [class]="!_general.expand ? 'fa-expand-arrows-alt' : 'fa-compress-arrows-alt'"></i></button>
+                    </span>
+                </div>
+                <div *ngIf="searchType" class="kb-searchFeild" [class]="searchTglCls">
+                    <label>{{searchType | titlecase}}</label>
+                    <input *ngIf="searchType == 'tab' else deep" type="text" [(ngModel)]="searchInp.tab" placeholder="Search tab name...">
+                    <ng-template #deep>
+                        <input type="text" [(ngModel)]="searchInp.deep" placeholder="Search deep...">
+                    </ng-template>
                 </div>
                 <mat-tab-group *ngIf="_general.selectedBlock?.content?.name != 'code' else code" (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component"
                     (animationDone)="_general.detectTabChange()" (selectedTabChange)="_general.selectTabChange($event)">
-                    <mat-tab label="Content" *ngIf="_general.selectedBlock.type == 'element' && !_style.setItemStyle">
-                        <!-- text -->
+                    <mat-tab label="General" *ngIf="searchingTab('General') && _general.selectedBlock.type == 'main'">
+                        <div class="kb-inner-tab-component">
+                            <mat-button-toggle-group name="pageGeneralTab" [(ngModel)]="_general.page_general_tab"
+                            aria-label="Page General Tab">
+                                <mat-button-toggle value="info">
+                                    <i class="fas fa-info"></i>Info
+                                </mat-button-toggle>
+                                <mat-button-toggle value="seo">
+                                    <i class="fa fa-search-dollar"></i>SEO
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div [ngSwitch]="_general.page_general_tab" class="kb-tabChange">
+                            <div *ngSwitchCase="'info'">
+                                <div *ngIf="searchingDeep('General Info Page Name')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Page Name</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="page-name" placeholder="Page name"
+                                            [(ngModel)]="_general.page_name">
+                                    </div>
+                                </div>
+                                <div *ngIf="searchingDeep('General Info Page Path')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Path <i *ngIf="_general.pathError"
+                                            class="fa fa-exclamation-circle kb-danger" matTooltip="Need an unique path"
+                                            matTooltipPosition="above"></i></div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <span class="highlight">{{_general.subdomain}}</span><input type="text"
+                                            name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
+                                            (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
+                                            [(ngModel)]="_general.page_path">
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase="'seo'">
+                                <div *ngIf="searchingDeep('General SEO Page Title')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Page Title</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="page-title" placeholder="Page title"
+                                            [(ngModel)]="_general.page_title">
+                                    </div>
+                                </div>
+                                <div *ngIf="searchingDeep('General SEO Page Description')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Description</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <textarea placeholder="Page Description" [(ngModel)]="_general.description"
+                                            name="meta-description"></textarea>
+                                    </div>
+                                </div>
+                                <div *ngIf="searchingDeep('General SEO Page Keywords')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Keywords</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <mat-chip-list #chipList aria-label="Keywords selection">
+                                            <mat-chip *ngFor="let keyword of _general.keywords"
+                                                (removed)="_general.removeKeyword(keyword)">
+                                                {{keyword}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input name="meta-keywords" placeholder="Write and press enter to add"
+                                                [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="_general.separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="_general.addOnBlur"
+                                                (matChipInputTokenEnd)="_general.addKeyword($event)">
+                                        </mat-chip-list>
+                                    </div>
+                                </div>
+                                <div *ngIf="searchingDeep('General SEO Page Author')" class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Author</div>
+                                    <div class="kb-tab-content kb-inp-left">
+                                        <input type="text" name="meta-author" placeholder="Author name"
+                                            [(ngModel)]="_general.author">
+                                    </div>
+                                </div>
+                                <!-- <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Image</div>
+                                    <div class="kb-tab-content">
+                                        <div (click)="openImgDialog()"
+                                            [class]="!_general.meta_img ? 'kb-noImgSel' : ''"
+                                            class="kb-dummy-bg">
+                                            <img *ngIf="_general.meta_img else noimg"
+                                                [src]="_general.meta_img" width="auto">
+                                            <ng-template #noimg><span class="kb-ispan-add" matTooltip="Add Image"
+                                                    matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && !_style.setItemStyle">
                         <div
-                            *ngIf="_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading' || _general.selectedBlock.content.name == 'menu'">
-                            <div *ngIf="_general.selectedBlock.content.name != 'menu'" class="kb-inner-tab-component">
+                            *ngIf="_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading' || _general.selectedBlock.content.name == 'button' || _general.selectedBlock.content.name == 'menu'">
+                            <div *ngIf="_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading'" class="kb-inner-tab-component">
                                 <mat-button-toggle-group name="contentStyle" [(ngModel)]="_general.showEditor"
                                     aria-label="Text Styling">
                                     <mat-button-toggle [value]="false"><i class="fa fa-pen"></i>Styling
@@ -85,7 +203,7 @@
                                 </mat-button-toggle-group>
                             </div>
                             <div *ngIf="!_general.showEditor else editor" class="kb-tabChange">
-                                <div *ngIf="_general.selectedBlock.content?.name == 'menu'"
+                                <div *ngIf="searchingDeep('Content Menu') && _general.selectedBlock.content?.name == 'menu'"
                                     class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Menu</div>
                                     <div class="kb-tab-content">
@@ -97,8 +215,128 @@
                                     </div>
                                 </div>
                                 <mat-accordion>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 0"
-                                        (opened)="_general.setExpPanelStep(0)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button'" [expanded]="_general.expPanelStep === 0"
+                                    (opened)="_general.setExpPanelStep(0)" hideToggle>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Action<small *ngIf="_general.target == 'funnel'" class="infoTxt">{{_general.selectedBlock.content.btntype}}</small>
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            <i class="fas fa-link"></i>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div *ngIf="_general.target == 'funnel' && (_general.webpage.funneltype == 'upsell' || _general.webpage.funneltype == 'downsell')"
+                                        class="kb-tab-head kb-inner-tab-component">
+                                        <mat-button-toggle-group name="buttonaction"
+                                            [(ngModel)]="_general.selectedBlock.content.btntype"
+                                            aria-label="Button Action">
+                                            <mat-button-toggle *ngIf="_general.webpage.funneltype == 'upsell'"
+                                                value="upsell"><i class="fa fa-arrow-up"></i>Upsell</mat-button-toggle>
+                                            <mat-button-toggle *ngIf="_general.webpage.funneltype == 'downsell'"
+                                                value="downsell"><i class="fa fa-arrow-down"></i>Downsell
+                                            </mat-button-toggle>
+                                            <mat-button-toggle value="regular"><i
+                                                    class="fas fa-external-link-alt"></i>Regular</mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                    <div *ngIf="_general.target == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
+                                        class="kb-inner-tab-component">
+                                        <div class="kb-tab-head">Products</div>
+                                        <div class="kb-tab-content kb-inp-left">
+                                            <mat-select [(ngModel)]="_style.button_product">
+                                                <mat-option *ngFor="let product of _general.step_products"
+                                                    [value]="product.uniqueid">
+                                                    {{product.productname | titlecase}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="kb-inner-tab-component">
+                                        <div class="kb-tab-head">Link</div>
+                                        <div class="kb-tab-content kb-inp-left">
+                                            <input type="text" [(ngModel)]="_style.button_link"
+                                                [style.textTransform]="'lowercase'">
+                                        </div>
+                                    </div>
+                                    <div class="kb-inner-tab-component">
+                                        <div class="kb-tab-head">Website Pages</div>
+                                        <div class="kb-tab-content kb-inp-left">
+                                            <mat-select [(ngModel)]="_style.button_link">
+                                                <mat-option>None</mat-option>
+                                                <mat-option *ngFor="let page of _general.existwebpages"
+                                                    [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+page.page_path"
+                                                    [disabled]="page.publish_status == 0">
+                                                    {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
+                                                        *ngIf="page.publish_status == 0"></small>
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="kb-inner-tab-component">
+                                        <div class="kb-tab-head">Funnel Pages</div>
+                                        <div class="kb-tab-content kb-inp-left">
+                                            <mat-select [(ngModel)]="_style.button_link">
+                                                <mat-option>None</mat-option>
+                                                <mat-optgroup *ngFor="let funnel of _general.funnels"
+                                                    [label]="funnel.name | titlecase">
+                                                    <mat-option *ngFor="let step of funnel.steps"
+                                                        [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+step.page_path"
+                                                        [disabled]="step.archived == 1">
+                                                        {{step.title | titlecase}}<small [attr.data]="step.funneltype"
+                                                            class="infoTxt"></small>
+                                                    </mat-option>
+                                                </mat-optgroup>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="kb-inner-tab-component">
+                                        <div class="kb-tab-head">Target</div>
+                                        <div class="kb-tab-content">
+                                            <mat-select [(ngModel)]="_style.button_target"
+                                                [compareWith]="_general.compareOptValue">
+                                                <mat-option *ngFor="let btt of _style.button_target_types"
+                                                    [value]="btt">{{btt.name |
+                                                    titlecase}}</mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <mat-action-row>
+                                        <button mat-button color="secondary"
+                                            (click)="_general.prevExpPanelStep()">Previous</button>
+                                        <button mat-button color="primary"
+                                            (click)="_general.nextExpPanelStep()">Next</button>
+                                    </mat-action-row>
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button'" [expanded]="_general.expPanelStep === 1"
+                                        (opened)="_general.setExpPanelStep(1)" hideToggle>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Text
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                <i class="fas fa-font"></i>
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Main Text</div>
+                                            <div class="kb-tab-content kb-inp-left">
+                                                <input type="text" [(ngModel)]="_style.button_text" placeholder="Main text">
+                                            </div>
+                                        </div>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Sub Text</div>
+                                            <div class="kb-tab-content kb-inp-left">
+                                                <input type="text" [(ngModel)]="_style.button_subtext"
+                                                    placeholder="Sub text">
+                                            </div>
+                                        </div>
+                                        <mat-action-row>
+                                            <button mat-button color="primary"
+                                                (click)="_general.nextExpPanelStep()">Next</button>
+                                        </mat-action-row>
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Size')" [expanded]="_general.expPanelStep === 2"
+                                        (opened)="_general.setExpPanelStep(2)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Font Size
@@ -122,12 +360,14 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="secondary" *ngIf="_general.selectedBlock.content.name == 'button'"
+                                                (click)="_general.prevExpPanelStep()">Previous</button>
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 1"
-                                        (opened)="_general.setExpPanelStep(1)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Family')" [expanded]="_general.expPanelStep === 3"
+                                        (opened)="_general.setExpPanelStep(3)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Font Family
@@ -144,14 +384,14 @@
                                             </mat-select>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 2"
-                                        (opened)="_general.setExpPanelStep(2)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Weight')" [expanded]="_general.expPanelStep === 4"
+                                        (opened)="_general.setExpPanelStep(4)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Font Weight
@@ -169,14 +409,14 @@
                                             </mat-select>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 3"
-                                        (opened)="_general.setExpPanelStep(3)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Style')" [expanded]="_general.expPanelStep === 5"
+                                        (opened)="_general.setExpPanelStep(5)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Font Style
@@ -193,14 +433,14 @@
                                             </mat-select>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 4"
-                                        (opened)="_general.setExpPanelStep(4)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Color')" [expanded]="_general.expPanelStep === 6"
+                                        (opened)="_general.setExpPanelStep(6)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Text Color
@@ -220,14 +460,14 @@
                                             </color-circle>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 5"
-                                        (opened)="_general.setExpPanelStep(5)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Alignment')" [expanded]="_general.expPanelStep === 7"
+                                        (opened)="_general.setExpPanelStep(7)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Text Alignment
@@ -259,14 +499,14 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 6"
-                                        (opened)="_general.setExpPanelStep(6)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Transform')" [expanded]="_general.expPanelStep === 8"
+                                        (opened)="_general.setExpPanelStep(8)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Text Transform
@@ -283,14 +523,14 @@
                                             </mat-select>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 7"
-                                        (opened)="_general.setExpPanelStep(7)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Decoration')" [expanded]="_general.expPanelStep === 9"
+                                        (opened)="_general.setExpPanelStep(9)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Text Decoration
@@ -339,14 +579,14 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 8"
-                                        (opened)="_general.setExpPanelStep(8)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Shadow')" [expanded]="_general.expPanelStep === 10"
+                                        (opened)="_general.setExpPanelStep(10)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Text Shadow
@@ -441,14 +681,14 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 9"
-                                        (opened)="_general.setExpPanelStep(9)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Line Height')" [expanded]="_general.expPanelStep === 11"
+                                        (opened)="_general.setExpPanelStep(11)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Line Height
@@ -472,14 +712,14 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel [expanded]="_general.expPanelStep === 10"
-                                        (opened)="_general.setExpPanelStep(10)" hideToggle>
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Letter Spacing')" [expanded]="_general.expPanelStep === 12"
+                                        (opened)="_general.setExpPanelStep(12)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
                                                 Letter Spacing
@@ -505,25 +745,24 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="primary"
+                                            <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
-                                            <button mat-button color="accent"
+                                            <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Close</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
                                 </mat-accordion>
                             </div>
                             <ng-template #editor>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Content Text Editor')" class="kb-inner-tab-component">
                                     <editor [(ngModel)]="_style.edit_html" [init]="_general.config">
                                     </editor>
                                 </div>
                             </ng-template>
                         </div>
-                        <!-- text -->
                         <!-- image -->
                         <div *ngIf="_general.selectedBlock.content.name == 'image'">
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Choose Image')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Choose Image</div>
                                 <div class="kb-tab-content">
                                     <div (click)="openImgDialog()"
@@ -535,7 +774,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Image Object Fit')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Object Fit</div>
                                 <div class="kb-tab-content">
                                     <mat-select [(ngModel)]="_style.image_objectfit">
@@ -547,565 +786,9 @@
                             </div>
                         </div>
                         <!-- image -->
-                        <!-- button -->
-                        <div *ngIf="_general.selectedBlock.content.name == 'button'">
-                            <mat-accordion>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 0"
-                                    (opened)="_general.setExpPanelStep(0)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Action<small *ngIf="_general.target == 'funnel'" class="infoTxt">{{_general.selectedBlock.content.btntype}}</small>
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-link"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div *ngIf="_general.target == 'funnel' && (_general.webpage.funneltype == 'upsell' || _general.webpage.funneltype == 'downsell')"
-                                        class="kb-tab-head kb-inner-tab-component">
-                                        <mat-button-toggle-group name="buttonaction"
-                                            [(ngModel)]="_general.selectedBlock.content.btntype"
-                                            aria-label="Button Action">
-                                            <mat-button-toggle *ngIf="_general.webpage.funneltype == 'upsell'"
-                                                value="upsell"><i class="fa fa-arrow-up"></i>Upsell</mat-button-toggle>
-                                            <mat-button-toggle *ngIf="_general.webpage.funneltype == 'downsell'"
-                                                value="downsell"><i class="fa fa-arrow-down"></i>Downsell
-                                            </mat-button-toggle>
-                                            <mat-button-toggle value="regular"><i
-                                                    class="fas fa-external-link-alt"></i>Regular</mat-button-toggle>
-                                        </mat-button-toggle-group>
-                                    </div>
-                                    <div *ngIf="_general.target == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
-                                        class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Products</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <mat-select [(ngModel)]="_style.button_product">
-                                                <mat-option *ngFor="let product of _general.step_products"
-                                                    [value]="product.uniqueid">
-                                                    {{product.productname | titlecase}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Link</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.button_link"
-                                                [style.textTransform]="'lowercase'">
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Website Pages</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <mat-select [(ngModel)]="_style.button_link">
-                                                <mat-option>None</mat-option>
-                                                <mat-option *ngFor="let page of _general.existwebpages"
-                                                    [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+page.page_path"
-                                                    [disabled]="page.publish_status == 0">
-                                                    {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
-                                                        *ngIf="page.publish_status == 0"></small>
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Funnel Pages</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <mat-select [(ngModel)]="_style.button_link">
-                                                <mat-option>None</mat-option>
-                                                <mat-optgroup *ngFor="let funnel of _general.funnels"
-                                                    [label]="funnel.name | titlecase">
-                                                    <mat-option *ngFor="let step of funnel.steps"
-                                                        [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+step.page_path"
-                                                        [disabled]="step.archived == 1">
-                                                        {{step.title | titlecase}}<small [attr.data]="step.funneltype"
-                                                            class="infoTxt"></small>
-                                                    </mat-option>
-                                                </mat-optgroup>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Target</div>
-                                        <div class="kb-tab-content">
-                                            <mat-select [(ngModel)]="_style.button_target"
-                                                [compareWith]="_general.compareOptValue">
-                                                <mat-option *ngFor="let btt of _style.button_target_types"
-                                                    [value]="btt">{{btt.name |
-                                                    titlecase}}</mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 1"
-                                    (opened)="_general.setExpPanelStep(1)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-font"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Main Text</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.button_text" placeholder="Main text">
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Sub Text</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.button_subtext"
-                                                placeholder="Sub text">
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 2"
-                                    (opened)="_general.setExpPanelStep(2)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Font Size
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-text-height"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Main Text</div>
-                                        <div class="kb-tab-content">
-                                            <div class="kb-rangeInp">
-                                                <mat-slider #matFontSlider thumbLabel
-                                                    [(ngModel)]="_style.font_sizeRange.value"
-                                                    [displayWith]="_style.formatLabel" tickInterval="0"
-                                                    (ngModelChange)="_style.font_size.value = matFontSlider.value+_style.font_sizeRange.type"
-                                                    step="1" min="0" [max]="_style.font_sizeRange.max" class="slider"
-                                                    aria-label="units"></mat-slider>
-                                                <span><input #matFontInp [(ngModel)]="_style.font_size.value"
-                                                        (blur)="_style.fontSizeChange(matFontInp.value)"
-                                                        (keydown)="matFontInp.value = _style.operateNumVal($event.key, matFontInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.fontSizeChange(matFontInp.value) : ''"
-                                                        type="text" name="font_size"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Sub Text<strong
-                                                style="margin-left: auto;">{{_style.button_subfont_size.value}}</strong>
-                                        </div>
-                                        <div class="kb-tab-content">
-                                            <div class="kb-rangeInp">
-                                                <mat-slider #matSubFontSlider thumbLabel
-                                                    [(ngModel)]="_style.button_subfont_sizeRange.value"
-                                                    [displayWith]="_style.formatLabel" tickInterval="0"
-                                                    (ngModelChange)="_style.button_subfont_size.value = matSubFontSlider.value+_style.button_subfont_sizeRange.type"
-                                                    step="1" min="0" [max]="_style.button_subfont_sizeRange.max"
-                                                    class="slider" aria-label="units"></mat-slider>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 3"
-                                    (opened)="_general.setExpPanelStep(3)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Font Family
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-font"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <mat-select [(ngModel)]="_style.font_family">
-                                            <mat-option *ngFor="let fft of _style.font_family_types" [value]="fft"
-                                                [style.fontFamily]="fft">{{fft |
-                                                titlecase}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 4"
-                                    (opened)="_general.setExpPanelStep(4)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Font Weight
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-bold"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <mat-select [(ngModel)]="_style.font_weight"
-                                            [compareWith]="_general.compareOptValue">
-                                            <mat-option *ngFor="let fwt of _style.font_weight_types" [value]="fwt"
-                                                [style.fontWeight]="fwt.value">{{fwt.name |
-                                                titlecase}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 5"
-                                    (opened)="_general.setExpPanelStep(5)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Font Style
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-italic"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <mat-select [(ngModel)]="_style.font_style">
-                                            <mat-option *ngFor="let fst of _style.font_style_types" [value]="fst"
-                                                [style.fontStyle]="fst">{{fst |
-                                                titlecase}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 6"
-                                    (opened)="_general.setExpPanelStep(6)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text Color
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-tint"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <color-material [(ngModel)]="_style.text_color" [color]="_style.text_color">
-                                        </color-material>
-                                        <ngx-colors ngx-colors-trigger matTooltip="Pick Color"
-                                            matTooltipPosition="above" colorsAnimation="popup" [hideTextInput]="true"
-                                            [(ngModel)]="_style.text_color">
-                                        </ngx-colors>
-                                        <color-circle [(ngModel)]="_style.text_color" [color]="_style.text_color">
-                                        </color-circle>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 7"
-                                    (opened)="_general.setExpPanelStep(7)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text Alignment
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-arrows-alt-h"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <div class="kb-align-btn-group">
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'left'"
-                                                [class]="_style.text_align == 'left' ? 'kb-active-brd' : ''"
-                                                class="kb-align-btn" matTooltip="Left" matTooltipPosition="above"><i
-                                                    class="fas fa-align-left"></i></span>
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'center'"
-                                                [class]="_style.text_align == 'center' ? 'kb-active-brd' : ''"
-                                                class="kb-align-btn" matTooltip="Center" matTooltipPosition="above"><i
-                                                    class="fas fa-align-center"></i></span>
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'right'"
-                                                [class]="_style.text_align == 'right' ? 'kb-active-brd' : ''"
-                                                class="kb-align-btn" matTooltip="Right" matTooltipPosition="above"><i
-                                                    class="fas fa-align-right"></i></span>
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'justify'"
-                                                [class]="_style.text_align == 'justify' ? 'kb-active-brd' : ''"
-                                                class="kb-align-btn" matTooltip="Justify" matTooltipPosition="above"><i
-                                                    class="fas fa-align-justify"></i></span>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 8"
-                                    (opened)="_general.setExpPanelStep(8)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text Transform
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-font"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <mat-select [(ngModel)]="_style.text_transform">
-                                            <mat-option *ngFor="let ttt of _style.text_transform_types" [value]="ttt"
-                                                [style.textTransform]="ttt">{{ttt |
-                                                titlecase}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 9"
-                                    (opened)="_general.setExpPanelStep(9)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text Decoration
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-font"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Line</div>
-                                        <div class="kb-tab-content">
-                                            <mat-select [(ngModel)]="_style.text_decoration_line">
-                                                <mat-option *ngFor="let tdlt of _style.text_decoration_line_types"
-                                                    [value]="tdlt"
-                                                    [style.textDecoration]="tdlt+' '+_style.text_decoration_style">
-                                                    {{tdlt |
-                                                    titlecase}}</mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Style</div>
-                                        <div class="kb-tab-content">
-                                            <mat-select [(ngModel)]="_style.text_decoration_style">
-                                                <mat-option *ngFor="let tdst of _style.text_decoration_style_types"
-                                                    [value]="tdst"
-                                                    [style.textDecoration]="_style.text_decoration_line+' '+tdst">{{tdst
-                                                    |
-                                                    titlecase}}</mat-option>
-                                            </mat-select>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Color</div>
-                                        <div class="kb-tab-content">
-                                            <color-material [(ngModel)]="_style.text_decoration_color"
-                                                [color]="_style.text_decoration_color">
-                                            </color-material>
-                                            <ngx-colors ngx-colors-trigger matTooltip="Pick Color"
-                                                matTooltipPosition="above" colorsAnimation="popup"
-                                                [hideTextInput]="true" [(ngModel)]="_style.text_decoration_color">
-                                            </ngx-colors>
-                                            <color-circle [(ngModel)]="_style.text_decoration_color"
-                                                [color]="_style.text_decoration_color">
-                                            </color-circle>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 10"
-                                    (opened)="_general.setExpPanelStep(10)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Text Shadow
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-font"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-content">
-                                            <div class="kb-align-btn-group">
-                                                <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_shadow = false"
-                                                    [class]="!_style.text_shadow ? 'kb-active-brd' : ''"
-                                                    class="kb-align-btn" matTooltip="None" matTooltipPosition="above">
-                                                    <i class="fa fa-ban"></i>
-                                                </span>
-                                                <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_shadow = true"
-                                                    [class]="_style.text_shadow ? 'kb-active-brd' : ''"
-                                                    class="kb-align-btn kb-demo-text-shadow" matTooltip="Apply"
-                                                    matTooltipPosition="above">Aa</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Horizontal Length</div>
-                                        <div class="kb-tab-content">
-                                            <div class="kb-rangeInp">
-                                                <mat-slider #matTSHLSlider thumbLabel
-                                                    [(ngModel)]="_style.text_shadow_hlRange.value"
-                                                    [displayWith]="_style.formatLabel" tickInterval="0"
-                                                    (ngModelChange)="_style.text_shadow_hl.value = matTSHLSlider.value+_style.text_shadow_hlRange.type"
-                                                    step="1" [min]="_style.text_shadow_hlRange.min"
-                                                    [max]="_style.text_shadow_hlRange.max" class="slider"
-                                                    aria-label="units"></mat-slider>
-                                                <span><input #matTSHLInp [(ngModel)]="_style.text_shadow_hl.value"
-                                                        (blur)="_style.text_shadow_hlChange(matTSHLInp.value)"
-                                                        (keydown)="matTSHLInp.value = _style.operateNumVal($event.key, matTSHLInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.text_shadow_hlChange(matTSHLInp.value) : ''"
-                                                        type="text" name="text_shadow_hl"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Vertical length</div>
-                                        <div class="kb-tab-content">
-                                            <div class="kb-rangeInp">
-                                                <mat-slider #matTSVLSlider thumbLabel
-                                                    [(ngModel)]="_style.text_shadow_vlRange.value"
-                                                    [displayWith]="_style.formatLabel" tickInterval="0"
-                                                    (ngModelChange)="_style.text_shadow_vl.value = matTSVLSlider.value+_style.text_shadow_vlRange.type"
-                                                    step="1" [min]="_style.text_shadow_vlRange.min"
-                                                    [max]="_style.text_shadow_vlRange.max" class="slider"
-                                                    aria-label="units"></mat-slider>
-                                                <span><input #matTSVLInp [(ngModel)]="_style.text_shadow_vl.value"
-                                                        (blur)="_style.text_shadow_vlChange(matTSVLInp.value)"
-                                                        (keydown)="matTSVLInp.value = _style.operateNumVal($event.key, matTSVLInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.text_shadow_vlChange(matTSVLInp.value) : ''"
-                                                        type="text" name="text_shadow_vl"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Blur Strength</div>
-                                        <div class="kb-tab-content">
-                                            <div class="kb-rangeInp">
-                                                <mat-slider #matBSBSSlider thumbLabel
-                                                    [(ngModel)]="_style.text_shadow_bsRange.value"
-                                                    [displayWith]="_style.formatLabel" tickInterval="0"
-                                                    (ngModelChange)="_style.text_shadow_bs.value = matBSBSSlider.value+_style.text_shadow_bsRange.type"
-                                                    step="1" [min]="_style.text_shadow_bsRange.min"
-                                                    [max]="_style.text_shadow_bsRange.max" class="slider"
-                                                    aria-label="units"></mat-slider>
-                                                <span><input #matBSBSInp [(ngModel)]="_style.text_shadow_bs.value"
-                                                        (blur)="_style.text_shadow_bsChange(matBSBSInp.value)"
-                                                        (keydown)="matBSBSInp.value = _style.operateNumVal($event.key, matBSBSInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.text_shadow_bsChange(matBSBSInp.value) : ''"
-                                                        type="text" name="text_shadow_bs"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Shadow Color</div>
-                                        <div class="kb-tab-content kb-color-picker">
-                                            <color-material [(ngModel)]="_style.text_shadow_color"
-                                                [color]="_style.text_shadow_color">
-                                            </color-material>
-                                            <ngx-colors ngx-colors-trigger matTooltip="Pick Color"
-                                                matTooltipPosition="above" colorsAnimation="popup"
-                                                [hideTextInput]="true" [(ngModel)]="_style.text_shadow_color">
-                                            </ngx-colors>
-                                            <color-circle [(ngModel)]="_style.text_shadow_color"
-                                                [color]="_style.text_shadow_color">
-                                            </color-circle>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 11"
-                                    (opened)="_general.setExpPanelStep(11)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Line Height
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-text-height"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <div class="kb-rangeInp">
-                                            <mat-slider #matLineHeightSlider thumbLabel
-                                                [(ngModel)]="_style.line_heightRange.value"
-                                                [displayWith]="_style.formatLabel" tickInterval="0"
-                                                (ngModelChange)="_style.line_height.value = matLineHeightSlider.value+_style.line_heightRange.type"
-                                                step="1" min="0" [max]="_style.line_heightRange.max" class="slider"
-                                                aria-label="units"></mat-slider>
-                                            <span><input #matLineHeightInp [(ngModel)]="_style.line_height.value"
-                                                    (blur)="_style.lineHeightChange(matLineHeightInp.value)"
-                                                    (keydown)="matLineHeightInp.value = _style.operateNumVal($event.key, matLineHeightInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.lineHeightChange(matLineHeightInp.value) : ''"
-                                                    type="text" name="line_height"></span>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Next</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel [expanded]="_general.expPanelStep === 12"
-                                    (opened)="_general.setExpPanelStep(12)" hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title>
-                                            Letter Spacing
-                                        </mat-panel-title>
-                                        <mat-panel-description>
-                                            <i class="fas fa-text-width"></i>
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
-                                    <div class="kb-tab-content">
-                                        <div class="kb-rangeInp">
-                                            <mat-slider #matLetterSpacingSlider thumbLabel
-                                                [(ngModel)]="_style.letter_spacingRange.value"
-                                                [displayWith]="_style.formatLabel" tickInterval="0"
-                                                (ngModelChange)="_style.letter_spacing.value = matLetterSpacingSlider.value+_style.letter_spacingRange.type"
-                                                step="1" [min]="_style.letter_spacingRange.min"
-                                                [max]="_style.letter_spacingRange.max" class="slider"
-                                                aria-label="units"></mat-slider>
-                                            <span><input #matLetterSpacingInp [(ngModel)]="_style.letter_spacing.value"
-                                                    (blur)="_style.letterSpacingChange(matLetterSpacingInp.value)"
-                                                    (keydown)="matLetterSpacingInp.value = _style.operateNumVal($event.key, matLetterSpacingInp.value); $event.key == 'ArrowUp' || $event.key == 'ArrowDown' ? _style.letterSpacingChange(matLetterSpacingInp.value) : ''"
-                                                    type="text" name="letter_spacing"></span>
-                                        </div>
-                                    </div>
-                                    <mat-action-row>
-                                        <button mat-button color="primary"
-                                            (click)="_general.prevExpPanelStep()">Previous</button>
-                                        <button mat-button color="accent"
-                                            (click)="_general.nextExpPanelStep()">Close</button>
-                                    </mat-action-row>
-                                </mat-expansion-panel>
-                            </mat-accordion>
-                        </div>
-                        <!-- button -->
                     </mat-tab>
-                    <mat-tab label="Column" *ngIf="_general.selectedBlock.type == 'row'">
-                        <div class="kb-inner-tab-component">
+                    <mat-tab label="Column" *ngIf="searchingTab('Column') && _general.selectedBlock.type == 'row'">
+                        <div *ngIf="searchingDeep('Column Structure')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Structure</div>
                             <div class="kb-cs-prev kb-row">
                                 <div *ngFor="let column of _general.selectedBlock.columnArr, index as index"
@@ -1179,7 +862,7 @@
                             </div>
                         </div>
                         <div *ngIf="_general.selectedBlock.columnArr.length > 1">
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Column Spacing')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Column Spacing
                                     <strong
                                         style="margin-left: auto;">{{_style.getBlockParamValue(_style.columnGap)}}</strong>
@@ -1209,7 +892,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Column Reverse')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Column Reverse</div>
                                 <div class="kb-tab-content kb-resp-ask">
                                     <div class="kb-resp-ask-inner">
@@ -1236,100 +919,9 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="General" *ngIf="_general.selectedBlock.type == 'main'">
-                        <div class="kb-inner-tab-component">
-                            <mat-button-toggle-group name="pageGeneralTab" [(ngModel)]="_general.page_general_tab"
-                            aria-label="Page General Tab">
-                                <mat-button-toggle value="info">
-                                    <i class="fas fa-info"></i>Info
-                                </mat-button-toggle>
-                                <mat-button-toggle value="seo">
-                                    <i class="fa fa-search-dollar"></i>SEO
-                                </mat-button-toggle>
-                            </mat-button-toggle-group>
-                        </div>
-                        <div [ngSwitch]="_general.page_general_tab" class="kb-tabChange">
-                            <div *ngSwitchCase="'info'">
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Page Name</div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <input type="text" name="page-name" placeholder="Page name"
-                                            [(ngModel)]="_general.page_name">
-                                    </div>
-                                </div>
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Path <i *ngIf="_general.pathError"
-                                            class="fa fa-exclamation-circle kb-danger" matTooltip="Need an unique path"
-                                            matTooltipPosition="above"></i></div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <span class="highlight">{{_general.subdomain}}</span><input type="text"
-                                            name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
-                                            (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
-                                            [(ngModel)]="_general.page_path">
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngSwitchCase="'seo'">
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Page Title</div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <input type="text" name="page-title" placeholder="Page title"
-                                            [(ngModel)]="_general.page_title">
-                                    </div>
-                                </div>
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Description</div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <textarea placeholder="Page Description" [(ngModel)]="_general.description"
-                                            name="meta-description"></textarea>
-                                    </div>
-                                </div>
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Keywords</div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <mat-chip-list #chipList aria-label="Keywords selection">
-                                            <mat-chip *ngFor="let keyword of _general.keywords"
-                                                (removed)="_general.removeKeyword(keyword)">
-                                                {{keyword}}
-                                                <button matChipRemove>
-                                                    <mat-icon>cancel</mat-icon>
-                                                </button>
-                                            </mat-chip>
-                                            <input name="meta-keywords" placeholder="Write and press enter to add"
-                                                [matChipInputFor]="chipList"
-                                                [matChipInputSeparatorKeyCodes]="_general.separatorKeysCodes"
-                                                [matChipInputAddOnBlur]="_general.addOnBlur"
-                                                (matChipInputTokenEnd)="_general.addKeyword($event)">
-                                        </mat-chip-list>
-                                    </div>
-                                </div>
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Author</div>
-                                    <div class="kb-tab-content kb-inp-left">
-                                        <input type="text" name="meta-author" placeholder="Author name"
-                                            [(ngModel)]="_general.author">
-                                    </div>
-                                </div>
-                                <!-- <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Image</div>
-                                    <div class="kb-tab-content">
-                                        <div (click)="openImgDialog()"
-                                            [class]="!_general.meta_img ? 'kb-noImgSel' : ''"
-                                            class="kb-dummy-bg">
-                                            <img *ngIf="_general.meta_img else noimg"
-                                                [src]="_general.meta_img" width="auto">
-                                            <ng-template #noimg><span class="kb-ispan-add" matTooltip="Add Image"
-                                                    matTooltipPosition="above"><i class="fa fa-plus"></i></span>
-                                            </ng-template>
-                                        </div>
-                                    </div>
-                                </div> -->
-                            </div>
-                        </div>
-                    </mat-tab>
-                    <mat-tab label="Spacing">
+                    <mat-tab label="Spacing" *ngIf="searchingTab('Spacing')">
                         <!-- margin -->
-                        <div *ngIf="_general.selectedBlock.type != 'column'" class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Spacing Margin') && _general.selectedBlock.type != 'column'" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Margin</div>
                             <div class="kb-tab-content">
                                 <span><input (blur)="_style.marginUpdate(_style.margin)" [(ngModel)]="_style.margin.top"
@@ -1418,7 +1010,7 @@
                             </div>
                         </div>
                         <!-- padding -->
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Spacing Padding')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Padding</div>
                             <div class="kb-tab-content">
                                 <span><input (blur)="_style.paddingUpdate(_style.padding)"
@@ -1507,8 +1099,8 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Sizing" *ngIf="_general.selectedBlock.type != 'column'">
-                        <div class="kb-inner-tab-component">
+                    <mat-tab label="Sizing" *ngIf="searchingTab('Sizing') && _general.selectedBlock.type != 'column'">
+                        <div *ngIf="searchingDeep('Sizing Width')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Width
                                 <span class="kb-align-btn-group kb-wh-btn-group">
                                     <span mat-ripple [matRippleColor]="rippleClr" matTooltip="100%" matTooltipPosition="above"
@@ -1541,7 +1133,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Sizing Height')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Height
                                 <span class="kb-align-btn-group kb-wh-btn-group">
                                     <span mat-ripple [matRippleColor]="rippleClr" matTooltip="100%" matTooltipPosition="above"
@@ -1574,7 +1166,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!_style.setItemStyle">
+                        <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle">
                             <div *ngIf="_general.selectedBlock.type != 'element' else elementAlign"
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment<span matTooltip="Auto Align"
@@ -1624,7 +1216,7 @@
                             </ng-template>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Background">
+                    <mat-tab label="Background" *ngIf="searchingTab('Background')">
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Background Type<small class="infoTxt">{{_style.background_type}}</small></div>
                             <mat-button-toggle-group name="backgroundType" [(ngModel)]="_style.background_type"
@@ -1638,7 +1230,7 @@
                         </div>
                         <div [ngSwitch]="_style.background_type" class="kb-tabChange">
                             <div *ngSwitchCase="'color'">
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Color')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Background Color <span
                                             (click)="_style.background_color = 'transparent'" matTooltip="Transparent"
                                             matTooltipPosition="above" class="kb-trans"></span></div>
@@ -1657,7 +1249,7 @@
                                 </div>
                             </div>
                             <div *ngSwitchCase="'image'">
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Image')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Background Image</div>
                                     <div class="kb-tab-content">
                                         <div (click)="openImgDialog()"
@@ -1671,7 +1263,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Size')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Size</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_image.size">
@@ -1681,7 +1273,7 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Position')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Position</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_image.position">
@@ -1691,7 +1283,7 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Repeat')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Repeat</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_image.repeat"
@@ -1702,7 +1294,7 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Attachment')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Attachment</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_image.attachment">
@@ -1714,7 +1306,7 @@
                                 </div>
                             </div>
                             <div *ngSwitchCase="'gradient'">
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Gradient')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Background Gradient
                                         <span matTooltip="Reverse" matTooltipPosition="above"
                                             (click)="_style.bgGradColorSwitch($event)" class="kb-reverse-icon active"><i
@@ -1745,7 +1337,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Gradient Type')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Gradient Type</div>
                                     <div class="kb-tab-content">
                                         <mat-select [(ngModel)]="_style.background_gradient.type">
@@ -1755,7 +1347,7 @@
                                         </mat-select>
                                     </div>
                                 </div>
-                                <div *ngIf="_style.background_gradient.type == 'linear' else forBgGradRadial"
+                                <div *ngIf="searchingDeep('Background Gradient Direction') && _style.background_gradient.type == 'linear' else forBgGradRadial"
                                     class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Gradient Direction
                                         <span matTooltip="Reverse" matTooltipPosition="above"
@@ -1775,7 +1367,7 @@
                                     </div>
                                 </div>
                                 <ng-template #forBgGradRadial>
-                                    <div class="kb-inner-tab-component">
+                                    <div *ngIf="searchingDeep('Background Gradient Radial Direction')" class="kb-inner-tab-component">
                                         <div class="kb-tab-head">Radial Direction</div>
                                         <div class="kb-tab-content">
                                             <mat-select [(ngModel)]="_style.background_gradient.radial_direction">
@@ -1787,7 +1379,7 @@
                                         </div>
                                     </div>
                                 </ng-template>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Gradient Start Position')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Start Position
                                         <span matTooltip="Reverse" matTooltipPosition="above"
                                             (click)="_style.background_gradient.startPosition = _style.reverseValue(_style.background_gradient.startPosition, $event)"
@@ -1806,7 +1398,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="kb-inner-tab-component">
+                                <div *ngIf="searchingDeep('Background Gradient End Position')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">End Position
                                         <span matTooltip="Reverse" matTooltipPosition="above"
                                             (click)="_style.background_gradient.endPosition = _style.reverseValue(_style.background_gradient.endPosition, $event)"
@@ -1827,8 +1419,8 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Border">
-                        <div class="kb-inner-tab-component">
+                    <mat-tab label="Border" *ngIf="searchingTab('Border')">
+                        <div *ngIf="searchingDeep('Border Width')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Border Width</div>
                             <div class="kb-tab-content">
                                 <span><input (blur)="_style.borderUpdate(_style.border)" [(ngModel)]="_style.border.top"
@@ -1916,7 +1508,7 @@
                                         for="right-border">Right</label></span>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Border Style')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Border Style</div>
                             <div class="kb-tab-content">
                                 <mat-select [(ngModel)]="_style.border_style">
@@ -1925,7 +1517,7 @@
                                 </mat-select>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Border Radius')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Border Radius</div>
                             <div class="kb-tab-content kb-tab-border-radius-group">
                                 <div class="kb-tab-border-radius">
@@ -1990,7 +1582,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Border Color')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Border Color <span (click)="_style.border_color = 'transparent'"
                                     matTooltip="Transparent" matTooltipPosition="above" class="kb-trans"></span></div>
                             <div class="kb-tab-content kb-color-picker">
@@ -2004,8 +1596,8 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Box Shadow">
-                        <div class="kb-inner-tab-component">
+                    <mat-tab label="Shadow" *ngIf="searchingTab('Shadow')">
+                        <div *ngIf="searchingDeep('Shadow Position')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Shadow Position</div>
                             <div class="kb-tab-content">
                                 <div class="kb-align-btn-group">
@@ -2024,7 +1616,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Shadow Horizontal Position')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Horizontal Position</div>
                             <div class="kb-tab-content">
                                 <div class="kb-rangeInp">
@@ -2041,7 +1633,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Shadow Vertical Position')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Vertical Position</div>
                             <div class="kb-tab-content">
                                 <div class="kb-rangeInp">
@@ -2058,7 +1650,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Shadow Blur Strength')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Blur Strength</div>
                             <div class="kb-tab-content">
                                 <div class="kb-rangeInp">
@@ -2075,7 +1667,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Shadow Spread Strength')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Spread Strength</div>
                             <div class="kb-tab-content">
                                 <div class="kb-rangeInp">
@@ -2092,7 +1684,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="kb-inner-tab-component">
+                        <div *ngIf="searchingDeep('Shadow Color')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Shadow Color</div>
                             <div class="kb-tab-content kb-color-picker">
                                 <color-material [(ngModel)]="_style.box_shadow_color" [color]="_style.box_shadow_color">
@@ -2106,9 +1698,9 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Advanced" *ngIf="!_style.setItemStyle">
+                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced') && !_style.setItemStyle">
                         <div *ngIf="_general.selectedBlock.type != 'main' else mainset" >
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Visibility Off</div>
                                 <div class="kb-tab-content kb-resp-ask">
                                     <div class="kb-resp-ask-inner">
@@ -2129,7 +1721,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Advanced Z Index')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Z Index
                                     <span matTooltip="Reverse" matTooltipPosition="above"
                                         (click)="_style.zindex = _style.reverseValue(_style.zindex, $event)"
@@ -2149,10 +1741,10 @@
                             </div>
                         </div>
                         <ng-template #mainset>
-                            <div class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Code</div>
+                            <div *ngIf="searchingDeep('Advanced Custom CSS')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Custom CSS</div>
                                 <div class="kb-tab-content kb-inp-left">
-                                    <textarea placeholder="<code/>" [(ngModel)]="_general.page_code"
+                                    <textarea placeholder="Write custom css here" [(ngModel)]="_general.page_code"
                                         name="page-code"></textarea>
                                 </div>
                             </div>
@@ -2173,11 +1765,11 @@
                 </ng-template>
                 <!-- code -->
                 <div class="kb-selection-btn-group">
-                    <button type="button" mat-stroked-button (click)="overlayRefDetach(false)"
-                        class="kb-btn kb-btn-secondry kb-selection-btn"><span><i
+                    <button type="button" color="secondary" mat-stroked-button (click)="overlayRefDetach(false)"
+                        class="kb-btn kb-selection-btn"><span><i
                                 class="fa fa-times"></i>Discard</span></button>
-                    <button type="button" mat-stroked-button (click)="overlayRefDetach(true);"
-                        class="kb-btn kb-btn-primary kb-selection-btn"><span><i
+                    <button type="button" color="primary" mat-stroked-button (click)="overlayRefDetach(true);"
+                        class="kb-btn kb-selection-btn"><span><i
                                 class="fa fa-check"></i>Apply</span></button>
                 </div>
             </div>

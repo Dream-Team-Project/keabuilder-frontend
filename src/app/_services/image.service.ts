@@ -11,46 +11,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ImageService {
-    // svgs
-    svg:any = {
-        add: '',
-        ascending: '',
-        check: '',
-        column: '',
-        column1: '',
-        column2: '',
-        column3: '',
-        column4: '',
-        column5: '',
-        column6: '',
-        desktop: '',
-        descending: '',
-        draft: '',
-        elements: '',
-        ellipsisv: '',
-        filter: '',
-        footer: '',
-        header: '',
-        layout: '',
-        left_circle_arrow: '',
-        mobile: '',
-        none: '',
-        preview: '',
-        publish: '',
-        redo: '',
-        responsive: '',
-        row: '',
-        save: '',
-        search: '',
-        section: '',
-        setting: '',
-        tab: '',
-        template: '',
-        undo: '',
-        upload: '',
-        wireframe: ''
-    }
-    // svgs
     snackBarMsg:string = '';
     croppedEvent:boolean = false;
     saveasnew:boolean = true;
@@ -62,7 +22,7 @@ export class ImageService {
     imageSelectionAllow:boolean = true;
     imgPath: string = '/assets/images/';  
     svgPath: string = '/assets/svgs/';  
-    uploadImgPath: string = '/assets/uploads/images/';
+    uploadImgPath: string = window.location.origin + '/assets/uploads/images/';
     imageChangedEvent: any = '';
     croppedImage: any = '';
     canvasRotation = 0;
@@ -88,9 +48,6 @@ export class ImageService {
 
     constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
       this.getAllImgs();
-      Object.keys(this.svg).forEach((svg:any)=>{
-        this.fetchSVG(svg);
-      })
     }
 
     checkAspVal(val:any) {
@@ -201,7 +158,7 @@ export class ImageService {
                 this.croppedEvent = false;
                 this.imgMatTabIndex = 1;
                 this.imagesUpdated.next(!this.imagesUpdated.value);
-                if(this.snackBarMsg) this._general.openSnackBar(this.snackBarMsg,'OK', 'center', 'top');
+                if(this.snackBarMsg) this._general.openSnackBar(false, this.snackBarMsg,'OK', 'center', 'top');
             }
         )
     }
@@ -362,24 +319,4 @@ export class ImageService {
           }
           return path;
       }
-
-    // fetch svg
-
-    fetchSVG(name:any) {
-        fetch(this.svgPath+name+'.svg', {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json'}
-        })
-        .then(resp=> { return resp.status == 200 ? resp.text() : ''})   
-        .then(text => this.svg[name] = text)
-    }
-
-    getSVG(name:any):any {
-        fetch(this.svgPath+name+'.svg', {
-          method: 'GET',
-          headers: {'Content-Type': 'application/json'}
-        })
-        .then(resp=> { return resp.status == 200 ? resp.text() : ''})   
-        .then(text => {return text})
-    }
 }
