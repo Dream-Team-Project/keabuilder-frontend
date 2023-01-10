@@ -309,7 +309,8 @@ export class WebsitePagesComponent implements OnInit {
               style: '',
               dir: '/drafts',
               folder: pagepath,
-              prevFolder: pagepath
+              prevFolder: pagepath,
+              website_id:this.websiteid, 
             }
             this._general.fileUploadService.savePage(page).subscribe((event:any) => {
               console.log(event);
