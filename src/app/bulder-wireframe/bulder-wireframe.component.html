@@ -4,8 +4,8 @@
         <button mat-button (click)="wfposToggle()" class="kb-wfpos-arrow">
             <mat-icon>{{wfposStart ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}}</mat-icon>
         </button>   
-        <button (click)="_general.expandAll(sectionUl, true)" mat-raised-button class="kb-btn kb-btn-secondry">Expand</button>
-        <button (click)="_general.expandAll(sectionUl, false)" mat-raised-button class="kb-btn kb-btn-primary">Collapse</button>
+        <button (click)="_general.expandAll(sectionUl, true)" color="secondary" mat-raised-button class="kb-btn">Expand</button>
+        <button (click)="_general.expandAll(sectionUl, false)" color="primary" mat-raised-button class="kb-btn">Collapse</button>
     </div>
     <ul #sectionUl class="kb-drag-container kb-wfs-section" cdkDropList id="sectiongroup-0" [cdkDropListConnectedTo]="sectionConnect" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
         <li cdkDrag *ngFor="let section of _section.sections, index as si"
@@ -102,7 +102,7 @@
                             cdkDropList [id]="'columngroup-'+ri" [cdkDropListData]="row.columnArr" [cdkDropListConnectedTo]="columnConnect" (cdkDropListEntered)="colDropRow = row" (cdkDropListExited)="colDragRow = row" (cdkDropListDropped)="drop($event)">
                         <li cdkDrag class="kb-wfs" *ngFor="let column of row.columnArr, index as ci"
                             (mouseenter)="_element.selectedElements = column.elementArr">
-                            <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--kb-text-color)', 'background-color':'var(--kb-white)'}">{{column.name ? column.name : 'Column'}}</div>
+                            <div *cdkDragPreview class="custom-preview" [ngStyle]="{'color':'var(--secondary-color)', 'background-color':'var(--kb-white)'}">{{column.name ? column.name : 'Column'}}</div>
                             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-white)'"></div>
                             <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); column.chngName = false" class="kb-wfs">
                                 <span class="kb-setting-icon">

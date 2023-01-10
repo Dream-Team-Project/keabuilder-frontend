@@ -1,12 +1,12 @@
 span.side-floating-btn-group {
     position: absolute;
-    left: -138px;
-    top: -10px;
+    left: -110px;
+    top: 0px;
     display: flex;
     flex-direction: row;
     width: 100%;
-    cursor: default;
-    padding: 20px;
+    cursor: move;
+    padding: 6px 0;
 }
 
 button.side-floating-btn {
@@ -15,10 +15,9 @@ button.side-floating-btn {
     padding: 0px;
     border-radius: 50%;
     height: 40px;
-    width: 40px;
     min-width: 40px;
     opacity: 1;
-    background-color: var(--section-color);
+    background-color: var(--secondary-color);
     transition: 0.2s ease;
 }
 
@@ -111,7 +110,7 @@ button.side-floating-btn:last-child {
 .dislay-device-list {
     position: absolute;
     background: rgb(244 244 244 / 90%);
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     box-shadow: 0 0 30px rgb(0 0 0 / 20%);
     border-radius: 5px;
     left: 0px;
@@ -133,12 +132,12 @@ button.side-floating-btn:last-child {
 }
 
 .dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked {
-    color: var(--section-color);
+    color: var(--primary-color);
 }
 
 .kb-tab-content span.highlight {
     width: 100%!important;
-    color: var(--section-color);
+    color: var(--primary-color);
     text-align: right;
     padding-right: 5px;
 }
@@ -163,6 +162,9 @@ input.errorInp {
 
 .custom-preview {
     background-color: var(--row-color);
+    opacity: 1;
+    z-index: 999;
+    display: block;
   }
   
   .custom-placeholder {
@@ -204,6 +206,51 @@ i.kb-danger {
     animation: contentChng 0.2s ease-out;
     transform: translate(0px, 0px);
     opacity: 1;
+}
+
+.kb-searchFeild input {
+    padding: 0px 8px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    background: transparent;
+    border: 0px;
+}
+
+.kb-searchFeild label {
+    font-size: 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgb(174 174 174 / 20%);
+    min-width: 60px;
+    justify-content: center;
+}
+
+.kb-searchFeild {
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.kb-searchFeild.open {
+    animation: height 0.2s ease-out;
+}
+
+.kb-searchFeild.close {
+    animation: height 0.2s ease-out reverse;
+}
+
+@keyframes height {
+    from {
+        height: 0px;
+    }
+    to {
+        height: 36px;
+    }
 }
 
 @keyframes contentChng {

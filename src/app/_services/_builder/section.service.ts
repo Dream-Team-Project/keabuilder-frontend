@@ -59,7 +59,7 @@ export class SectionService {
 
   undo() {
     var sObj = this.pageSessionArr[this.pageSession.undo-1];
-    if(sObj != undefined) {
+    if(sObj) {
       this.sections = JSON.parse(sObj);
       this.pageSession.undo--;
       this.pageSession.redo--;
@@ -69,7 +69,7 @@ export class SectionService {
 
   redo() {
     var sObj = this.pageSessionArr[this.pageSession.redo];
-    if(sObj != undefined) {
+    if(sObj) {
       this.sections = JSON.parse(sObj);
       this.pageSession.undo++;
       this.pageSession.redo++;

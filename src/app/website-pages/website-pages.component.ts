@@ -459,7 +459,6 @@ export class WebsitePagesComponent implements OnInit {
     var getvl = status == '0' ? 'draft' : 'publish';
     var newobjdt = {'status':getvl, path:page_path};
     this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
-      console.log(data);
     })
   }
 

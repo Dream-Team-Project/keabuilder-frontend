@@ -58,6 +58,7 @@ import { SafeUrlPipe } from './_pipes/safe-url.pipe';
 import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
 import { FilterPipe } from './_pipes/filter.pipe';
 import { SortingPipe } from './_pipes/sorting.pipe';
+import { SvgPipe } from './_pipes/svg.pipe';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { SortingPipe } from './_pipes/sorting.pipe';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
+    SvgPipe
   ],
   imports: [
     AppRoutingModule,

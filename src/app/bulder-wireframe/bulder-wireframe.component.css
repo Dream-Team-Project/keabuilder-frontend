@@ -26,7 +26,7 @@
 .dislay-device-list {
     position: absolute;
     background: rgb(244 244 244 / 90%);
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     box-shadow: 0 5px 30px rgb(0 0 0 / 20%);
     border-radius: 5px;
     left: 0px;
@@ -48,7 +48,7 @@
 }
 
 .dislay-device-list mat-checkbox.mat-checkbox.mat-checkbox-checked {
-    color: var(--section-color);
+    color: var(--primary-color);
 }
 
 .kb-wireframe-head {
@@ -61,18 +61,6 @@
 .kb-wireframe-head .kb-btn {
     margin: 0px 6px;
 }
-
-  .kb-btn-primary {
-    color: #fff!important;
-      background-color: var(--kb-success)!important;
-      border-color: var(--kb-success)!important;
-  }
-
-  .kb-btn-secondry {
-    color: #fff!important;
-    background-color: var(--kb-info)!important;
-      border-color: var(--kb-info)!important;
-  }
 
 span.kb-wfs-addnew {
     position: relative;
@@ -180,7 +168,7 @@ span.kb-setting-icon .kb-handle-block {
     justify-content: center;
     display: flex;
     font-weight: 600;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     position: relative;
 }
 
@@ -221,20 +209,20 @@ span.kb-chngName {
 }
 
 .kb-wfs-column li.kb-wfs>span.kb-wfs input.kb-chngname-inp {
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
 }
 
 .kb-wfs-column li.kb-wfs>span.kb-wfs input.kb-chngname-inp::placeholder {
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     opacity: 1; /* Firefox */
   }
   
   .kb-wfs-column li.kb-wfs>span.kb-wfs input.kb-chngname-inp:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
   }
   
   .kb-wfs-column li.kb-wfs>span.kb-wfs input.kb-chngname-inp::-ms-input-placeholder { /* Microsoft Edge */
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
   }
 
 input.kb-chngname-inp {

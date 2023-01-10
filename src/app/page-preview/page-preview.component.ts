@@ -6,7 +6,7 @@ import { FileUploadService } from '../_services/file-upload.service';
 @Component({
   selector: 'app-page-preview',
   template: ``,
-  styles: ["body.kb-preview:after {content: 'Preview is loading...';position: absolute;background: #fff;left: 0;top: 0;width: 100%;height: 100%;justify-content: center;align-items: center;display: flex;color: var(--section-color);}"],
+  styles: ["body.kb-preview:after {content: 'Preview is loading...';position: absolute;background: #fff;left: 0;top: 0;width: 100%;height: 100%;justify-content: center;align-items: center;display: flex;color: var(--primary-color);}"],
   encapsulation: ViewEncapsulation.None,
 })
 export class PagePreviewComponent implements OnInit {
@@ -23,7 +23,7 @@ export class PagePreviewComponent implements OnInit {
         data.tracking.header = _general.parser.parseFromString(data.tracking.header, 'text/html');
         data.tracking.footer = _general.parser.parseFromString(data.tracking.footer, 'text/html');
         var style = document.createElement('STYLE');
-        style.innerHTML = data.css+`body.kb-preview:after {content: 'Preview is loading...';position: absolute;background: #fff;left: 0;top: 0;width: 100%;height: 100%;justify-content: center;align-items: center;display: flex;color: var(--section-color);}`;
+        style.innerHTML = data.css+`body.kb-preview:after {content: 'Preview is loading...';position: absolute;background: #fff;left: 0;top: 0;width: 100%;height: 100%;justify-content: center;align-items: center;display: flex;color: var(--primary-color);}`;
         data.html.head.appendChild(style);
         document.head.innerHTML = data.html.head.innerHTML;
         document.body.innerHTML = data.html.body.innerHTML;

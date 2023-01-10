@@ -30,6 +30,7 @@ export class BuilderComponent implements OnInit {
   DialogImageToggle:boolean = false;
 
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('askforsave') askforsave!: ElementRef;
   @ViewChild('wireframe') wireframe: any;
   @ViewChild('main') main!: ElementRef;
   @ViewChild('main', { static: true }) screen: any;
@@ -43,6 +44,12 @@ export class BuilderComponent implements OnInit {
   saveTemplateSection:any;
   wfhide:any = true;
   initial = true;
+  autoSaveInterval:any;
+  autoSaving:boolean = false;
+  askForSaveInterval:any;
+  dntaskforsave:boolean = false;
+  ishf:boolean = false;
+  zoom:any = false;
 
   constructor(
     private router: Router,
@@ -67,7 +74,8 @@ export class BuilderComponent implements OnInit {
         id: params.get('id'),
         type: params.get('target')
       }
-      if(_general.target.type == 'website' || _general.target.type == 'funnel' || _general.target.type == 'header' || _general.target.type == 'footer') {
+      this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
+      if(_general.target.type == 'website' || _general.target.type == 'funnel' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
             data.html = _general.parser.parseFromString(data.html, 'text/html');
             if(_general.target.type == 'header') {
@@ -116,12 +124,7 @@ export class BuilderComponent implements OnInit {
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
-            _general.saveHTML(this.main.nativeElement, _section.sections, true).then(e=>{
-              if(this.initial) {
-                _general.pageSaved = true;
-                this.initial = false;
-              }
-            });
+            this.savePreview();
           })
         })
       }
@@ -133,7 +136,7 @@ export class BuilderComponent implements OnInit {
   onKeydownHandler(event:KeyboardEvent) {
     var main = this.main.nativeElement;
     event.preventDefault();
-    this.saveHTML(main);
+    this.savePage(main,  false);
   }
 
   ngOnInit(): void {
@@ -154,7 +157,7 @@ export class BuilderComponent implements OnInit {
         (event: any) => {
             if (typeof (event) === 'object') {
               var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;
-              this._general.openSnackBar(msg, 'OK', 'center', 'top');
+              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
               this._general.saveDisabled = false;
               this.trigger = 'Saved';
             }
@@ -173,30 +176,50 @@ export class BuilderComponent implements OnInit {
   }
 
   saveHeaderFooter(main:any) {
-    this._general.saveDisabled = true;
+    if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
     this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
-      if(res) {
-        this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+      if(!this.autoSaving) {
+        if(res) this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        else this._general.saveDisabled = false;
+        clearInterval(this.askForSaveInterval);
+        this.askForSaveInterval;
       }
-      else {
-        this._general.saveDisabled = false;
-      }
+      else this.autoSaving = false;
+      this.autoSaveTrigger();
     });
   }
 
-  saveHTML(main:any) {
-    this._general.saveDisabled = true;
+  saveHTML(main:any, tglDraft:boolean) {
+    if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
-    this._general.checkExstingPath(main, this._section.sections).then(res =>{
-      if(res) {
-        this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
+    this._general.checkExstingPath(main, this._section.sections, tglDraft).then(res =>{
+      if(!this.autoSaving) {
+        if(res) this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
+        else {
+          this._general.saveDisabled = false;
+          this.openPageSetting(null);
+        }
+        clearInterval(this.askForSaveInterval);
+        this.askForSaveInterval;
       }
-      else {
-        this._general.saveDisabled = false;
-        this.openPageSetting(null);
+      else this.autoSaving = false;
+      this.autoSaveTrigger();
+    });
+  }
+
+  savePage(main:any, tglDraft:boolean) {
+    !this.ishf ? this.saveHTML(main, tglDraft) : this.saveHeaderFooter(main);
+  }
+
+  savePreview() {
+    if(!this.ishf) this._general.saveHTML(this.main.nativeElement, this._section.sections, true, false).then(e=>{
+      if(this.initial) {
+        this._general.pageSaved = true;
+        this.initial = false;
       }
     });
+    this._general.pageSaved = false;
   }
 
   openPageSetting(event:any) {
@@ -287,11 +310,10 @@ export class BuilderComponent implements OnInit {
               var content = ele.querySelector('.kb-element-content');
               var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
               eleObj.itemstyle = false;
-              console.log(ele);
               eleObj.content.name = ele.children[0].getAttribute('data-name');
               if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
-                eleSel = 'div>div';
-                eleObj.content.html = content.children[0].children[0].innerHTML;
+                eleSel = '> div';
+                eleObj.content.html = content.children[0].innerHTML;
               }
               else if(eleObj.content.name == 'image') {
                 eleSel = 'img';
@@ -331,33 +353,28 @@ export class BuilderComponent implements OnInit {
               }
               eleObj.id = ele.id;
               this._general.allBlocksIds.push(ele.id);
-              eleObj.style = {
-                desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,''),
-                tablet_h: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'1024,769'),
-                tablet_v: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'768,426'),
-                mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSel,css,'426')
-              } 
               if(eleObj.itemstyle) {
+                var itemselector = ele.id+' .kb-element-content '+eleSelItem;
                 eleObj.content.item = {
                   style: {
-                    desktop: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,''),
-                    tablet_h: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'1024,769'),
-                    tablet_v: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'768,426'),
-                    mobile: this.filterStyle(ele.id+' .kb-element-content '+eleSelItem,css,'426')
+                    desktop: this.filterStyle(itemselector,css,''),
+                    tablet_h: this.filterStyle(itemselector,css,'1024,769'),
+                    tablet_v: this.filterStyle(itemselector,css,'768,426'),
+                    mobile: this.filterStyle(itemselector,css,'426')
                   } 
                 }
               }
-              var aling = {
+              var eleid = {
                 desktop: this.filterStyle(ele.id,css,''),
                 tablet_h: this.filterStyle(ele.id,css,'1024,769'),
                 tablet_v: this.filterStyle(ele.id,css,'768,426'),
                 mobile: this.filterStyle(ele.id,css,'426')
               }
               eleObj.item_alignment = {
-                desktop: aling.desktop ? aling.desktop['justify-content'] : '',
-                tablet_h: aling.tablet_h ? aling.tablet_h['justify-content'] : 'auto',
-                tablet_v: aling.tablet_v ? aling.tablet_v['justify-content'] : 'auto',
-                mobile: aling.mobile ? aling.mobile['justify-content'] : 'auto',
+                desktop: eleid.desktop ? eleid.desktop['justify-content'] : '',
+                tablet_h: eleid.tablet_h ? eleid.tablet_h['justify-content'] : 'auto',
+                tablet_v: eleid.tablet_v ? eleid.tablet_v['justify-content'] : 'auto',
+                mobile: eleid.mobile ? eleid.mobile['justify-content'] : 'auto',
               }
               eleObj.hide = {
                 desktop: ele.classList.contains('kb-d-desk-none'),
@@ -365,6 +382,13 @@ export class BuilderComponent implements OnInit {
                 tablet_v: ele.classList.contains('kb-d-tab-v-none'),
                 mobile: ele.classList.contains('kb-d-mob-none')  
               }
+              var selector = ele.id+' .kb-element-content '+eleSel;
+              eleObj.style = {
+                desktop: {...this.filterStyle(selector,css,''), ...{margin: eleid.desktop['margin']}},
+                tablet_h: {...this.filterStyle(selector,css,'1024,769'), ...{margin: eleid.tablet_h['margin']}},
+                tablet_v: {...this.filterStyle(selector,css,'768,426'), ...{margin: eleid.tablet_v['margin']}},
+                mobile: {...this.filterStyle(selector,css,'426'), ...{margin: eleid.mobile['margin']}}
+              } 
               eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
               eleObj.name = ele.getAttribute('data-name');
               if(eleObj.content.name) colObj.elementArr.push(eleObj);
@@ -396,6 +420,7 @@ export class BuilderComponent implements OnInit {
         secObj.name = sec.getAttribute('data-name');
         this._section.sections.push(secObj);
         if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
+          this._section.pageSessionArr = [];
           this._section.savePageSession();
           this._general.loading.success = true;
         }
@@ -421,7 +446,7 @@ export class BuilderComponent implements OnInit {
     // }
   }
 
-  // Dialog box
+  // dialog box
 
   openDialog(e:any) {
       this.DialogParentToggle = !this.DialogParentToggle;
@@ -436,26 +461,58 @@ export class BuilderComponent implements OnInit {
     this.dialog.open(templateRef);
   } 
 
-  // Dialog box
+  askForSaveDialog(templateRef:any) {
+    this.dialog.open(templateRef, { disableClose: true });
+  } 
 
-  // get child triggers
+  // dialog box
+
+  // triggers
+
+  autoSaveTrigger() {
+    clearInterval(this.autoSaveInterval);
+    var ast = this._general.autosave;
+    if(ast) {
+      var vm = this;
+      var tm = ast.value * 1000;
+      if(ast.unit == 'min') tm = tm * 60;
+      this.autoSaveInterval = setInterval(()=>{
+        if(!vm._general.pageSaved && vm._general.autosave) {
+          vm.autoSaving = true;
+          vm.savePage(vm.main.nativeElement, false);
+        }
+      }, tm);
+      this.autoSaveInterval;
+    }
+  }
+  
+  askForAutoSave() {
+    clearInterval(this.askForSaveInterval);
+    var vm = this;
+    var tm = 10 * 60000;
+    this.askForSaveInterval = setInterval((e:any)=>{
+      if(!vm.dntaskforsave && !vm._general.autosave) vm.askForSaveDialog(vm.askforsave)
+    },tm)
+    this.askForSaveInterval;
+  }
 
   getTrigger(e:any) {
     var main = this.main.nativeElement;
-    if(e == 'preview') this._general.saveHTML(this.main.nativeElement, this._section.sections, true);
+    if(e == 'preview') this.savePreview();
     else if(e == 'save') {
       this.trigger = 'Saved'; 
-      this.saveHTML(main);
+      this.savePage(main, false);
     }
     else if(e == 'publish' || e == 'draft') {
       this._general.main.publish_status = e == 'publish';
       this.trigger = this._general.main.publish_status ? 'Published' : 'Draft';
-      this.saveHTML(main);
+      this.savePage(main, true);
     }
+    else if(e == 'autosave') this.autoSaveTrigger();
     else if(e == 'setting') this.openPageSetting(null);
   }
 
-  // get child triggers
+  // triggers
 
   // drag & drops
 

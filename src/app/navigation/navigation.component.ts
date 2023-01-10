@@ -154,7 +154,7 @@ export class NavigationComponent {
     }
     else {
       var msg = !menuobj.name ? 'Menu name should not be empty' : 'Atlease one menu item should be added';
-      this._general.openSnackBarAlert(msg, 'OK', 'center', 'top');
+    this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
     }
   }
 
@@ -211,8 +211,8 @@ export class NavigationComponent {
   // menu items
 
   openSB(alert:any) {
-    if(alert) this._general.openSnackBarAlert('Server Error', 'OK', 'center', 'top');
-    else this._general.openSnackBar('Menu has been '+this.action, 'OK', 'center', 'top');
+    var msg = alert ? 'Server Error' : 'Menu has been '+this.action;
+    this._general.openSnackBar(alert, msg, 'OK', 'center', 'top');
     this.action = '';
   }
 

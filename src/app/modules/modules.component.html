@@ -118,7 +118,7 @@
                                     <div *ngIf="module.thumbnail">
                                         <img class="img-fluid" [src]="_image.getImgPath(module.thumbnail)" width="200px">
                                     </div>
-                                    <div class="p-2" [style.color]="'var(--kb-text-color)'">{{module.title ? module.title : 'Module'}}</div>
+                                    <div class="p-2" [style.color]="'var(--secondary-color)'">{{module.title ? module.title : 'Module'}}</div>
                                 </div>
                                 <div *cdkDragPlaceholder class="custom-placeholder col-11" [style.backgroundColor]="'var(--kb-gray)'"></div>
                                 <div class="kbc-block-inner kbc-module d-flex">
@@ -158,7 +158,7 @@
                                             <div *ngIf="lesson.thumbnail">
                                                 <img class="img-fluid" [src]="_image.getImgPath(lesson.thumbnail)" width="200px">
                                             </div>
-                                            <div class="p-2" [style.color]="'var(--kb-text-color)'">{{lesson.title ? lesson.title : 'Lesson'}}</div>
+                                            <div class="p-2" [style.color]="'var(--secondary-color)'">{{lesson.title ? lesson.title : 'Lesson'}}</div>
                                         </div>
                                         <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-light)'"></div>
                                         <div class="kbc-block-inner kbc-lesson d-flex">

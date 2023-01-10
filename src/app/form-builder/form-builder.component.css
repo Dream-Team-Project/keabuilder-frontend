@@ -12,6 +12,13 @@
     background-color: var(--kb-light)!important;
 }
 
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, ::ng-deep .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, ::ng-deep :not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
+    background-color: var(--primary-color)!important;
+}
+
+::ng-deep .mat-checkbox-frame {
+    border-color: var(--kb-gray)!important;
+}
 
 ::ng-deep span.mat-list-item-content {
     padding: 0px!important;
@@ -37,15 +44,11 @@
 
 #kb-main {
     height: 100%;
-    min-height: 100vh;
-    display: flex;
 }
 
 form#kb-form {
     position: relative;
-    width: 70%;
-    min-height: 80px;
-    min-width: 700px;
+    width: 60%;
     min-height: 500px;
     height: auto;
     box-shadow: 0 0 10px 0px rgb(0 0 0 / 40%);
@@ -54,66 +57,39 @@ form#kb-form {
     border-radius: 4px;
 }
 
-div#kb-form-cont {
-    width: 70%;
-    min-height: 100vh;
+#kb-topbar-container {
+    position: sticky;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 9999;
+    box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px; 
+}
+
+#kb-form-container {
     height: auto;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    padding: 75px 0 50px;
+    padding: 20px 0;
 }
 
-div#kb-form-sidebar {
-    margin-top: 25px;
-    position: fixed;
-    background-color: var(--kb-gray);
-    top: 0;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    min-width: 420px;
-    padding: 0;
-}
-.custom-placeholder {
-    z-index: 99;
+#kb-form-elements .custom-placeholder {
+    visibility: hidden;
+    width: auto;
 }
 
-div#kb-form-elements .custom-placeholder {
-    display: none;
+#kb-form-elements .cdk-drag {
+    cursor: grab;
 }
 
-div#kb-form-elements .form-ele-list mat-list-item {
-    background-color: var(--kb-light);
-    color: var(--kb-dark);
-    font-weight: 600;
-    padding: 0;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    line-height: 42px;
-    cursor: all-scroll;
-    overflow: hidden;
-    font-size: 16px;
-    box-shadow: 0px 1px 1px 1px rgb(0 0 0 / 5%);
-    /* transition: 0.2s ease-in-out; */
+#kb-form-elements .cdk-drag:active {
+    cursor: grabbing;
 }
 
-div#kb-form-elements .form-ele-list mat-list-item:hover {
-    box-shadow: 1px 2px 10px 4px rgb(0 0 0 / 15%);
-}
-
-div#kb-form-elements .form-ele-list mat-list-item:nth-child(odd) i, div.kb-form-element:nth-child(odd) div.kb-form-setting {
-    background-color: var(--section-color);
-}
-
-div#kb-form-elements .form-ele-list mat-list-item:nth-child(even) i, div.kb-form-element:nth-child(even) div.kb-form-setting {
-    background-color: var(--row-color);
-}
-
-div#kb-form-elements .form-ele-list mat-list-item i, .custom-preview-icon {
+.custom-preview-icon {
     color: var(--kb-white);
+    background-color: var(--primary-color);
     padding: 14px;
     margin-right: 10px;
     font-size: 18px;
@@ -122,20 +98,11 @@ div#kb-form-elements .form-ele-list mat-list-item i, .custom-preview-icon {
     align-items: center;
     min-width: 48px;   
     min-height: 48px;   
-}
-
-.custom-preview-icon {
     border-radius: 3px;
 }
 
-div#kb-form-elements .form-ele-list mat-list-item {
-    margin: 10px 0;
-}
-
-.form-ele-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.custom-placeholder {
+    background-color: var(--primary-color);
 }
 
 div.kb-form-element {
@@ -146,21 +113,13 @@ div.kb-form-element {
     transition: 0.2s ease;
 }
 
-div.kb-form-element:first-child {
-    margin-top: 0px!important;
-}
-
-div.kb-form-element:last-child {
-    margin-bottom: 0px!important;
-}
-
 div.kb-form-element:before {
     content: '';
     cursor: all-scroll;
-    border: 3px solid transparent;
+    border: 2px solid transparent;
     position: absolute;
     transition: 0.2s ease;
-    border-radius: 3px;
+    border-radius: 4px;
     width: 100%;
     height: 100%;
     top: 0;
@@ -168,22 +127,15 @@ div.kb-form-element:before {
     transition: 0.2s ease;
 }
 
-div.kb-form-element:nth-child(odd):hover:before {
-    border-color: var(--section-color);
-}
-
-div.kb-form-element:nth-child(even):hover:before {
-    border-color: var(--row-color);
-}
-
-div.kb-form-element:hover .kb-form-setting {
-    opacity: 1;
+div.kb-form-element:hover:before {
+    border-color: var(--primary-color);
 }
 
 div.kb-form-setting span {
     padding: 6px;
+    line-height: 1;
     cursor: pointer;
-    transition: 0.1s ease-in-out;
+    transition: 0.1s ease-out;
     display: inline-block;
 }
 
@@ -201,15 +153,29 @@ div.kb-form-setting span.kb-handle-element {
 
 div.kb-form-setting {
     color: var(--kb-light);
+    background-color: var(--primary-color);
     position: absolute;
-    top: -33px;
+    top: 0px;
     right: 0px;
-    padding: 0 8px;
-    border-radius: 3px 3px 0px 0px;
-    transition: 0.2s ease;
-    z-index: 9;
-    background-color: var(--section-color);
-    opacity: 0;
+    padding: 0px 3px;
+    border-radius: 0px 4px 0px 4px;
+    animation: show 0.2s ease;
+    z-index: 999;
+    width: auto;
+    font-size: initial;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+@keyframes show {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .kb-form-para {
@@ -221,50 +187,7 @@ div.kb-form-setting {
 .kb-form-heading {
     font-size: 24px;
     font-weight: 600;
-    color: var(--kb-text-color);
-}
-
-div#kb-form-title {
-    font-size: 24px;
-}
-
-div#kb-form-title input, div#kb-form-head:hover span {
-    display: none;
-}
-
-div#kb-form-head:hover input {
-    display: block;
-}
-
-div#kb-form-title input {
-    width: 100%;
-    padding: 0;
-    background: transparent;
-    font-size: inherit;
-    border-color: #aeaeae;
-    border-width: 0px 0px 2px;
-}
-
-div#kb-form-head {
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background: var(--kb-gray);
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 9;
-}
-
-.kb-layout-title {
-    font-size: 26px;
-}
-
-.kb-btn-primary {
-    color: #fff !important;
-    background-color: var(--kb-success) !important;
-    border-color: var(--kb-success) !important;
+    color: var(--secondary-color);
 }
 
 div#kb-element-drag:after {
@@ -272,11 +195,11 @@ div#kb-element-drag:after {
     border: 2px dashed #aeaeae;
     color: #aeaeae;
     font-size: 22px;
-    height: 80%;
-    width: 80%;
+    height: calc(100% - 120px);
+    width: calc(100% - 120px);
     position: absolute;
-    left: 10%;
-    top: 10%;
+    left: 60px;
+    top: 60px;
     border-radius: 4px;
     margin-top: auto;
     display: flex;
@@ -286,17 +209,16 @@ div#kb-element-drag:after {
 
 /*  input styling  */
 
-div.kb-form-inp .kb-form-inp-reqired{
+.kb-form-inp-reqired{
     color: var(--kb-danger);
     margin-left: 5px;
 }
 
 div.kb-form-inp label, div.kb-form-rc label {
-    text-transform: capitalize;
     margin-bottom: 10px;
     display: block;
     font-weight: 500;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     position: relative;
 }
 
@@ -307,14 +229,12 @@ div.kb-form-inp input, div.kb-form-inp textarea, div.kb-form-inp select {
     border-style: solid;
     display: block;
     width: 100%;
-    min-width: 100%;
-    color: var(--kb-text-color);
+    color: var(--secondary-color);
     border: 1px solid #b8bdc9;
     background-color: var(--kb-light);
     margin-bottom: 16px;
     padding: 0px 10px;
     line-height: 36px;
-    text-transform: capitalize;
 }
 
 div.kb-form-inp input:focus, div.kb-form-inp textarea:focus, div.kb-form-inp select:focus, 
@@ -331,11 +251,17 @@ div.kb-form-divder {
     border: 1px solid var(--kb-light);
 }
 
-.kb-from-inp-split {
+.kb-form-inp-split {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    column-gap: 15px;
     justify-content: space-between;
+}
+
+.kb-form-inp-split>* {
+    flex: 1;
+    -webkit-flex: 1;
 }
 
 .kb-form-btn button{
