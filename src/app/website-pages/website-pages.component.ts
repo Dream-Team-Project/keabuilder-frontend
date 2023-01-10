@@ -150,6 +150,8 @@ export class WebsitePagesComponent implements OnInit {
   // MatPaginator Output
   pageEvent!: PageEvent;  
 
+  togglestatus:any;
+
   getServerData(event?:PageEvent){
     var length = event?.length;
     var pageindex = event?.pageIndex;
@@ -438,6 +440,8 @@ export class WebsitePagesComponent implements OnInit {
                 }
               }else if(type=='quickedit'){
 
+                this.togglestatus = data.data[0].publish_status;
+
                 this.openSidebar();
 
                 this.showmytemplates = false;
@@ -478,23 +482,24 @@ export class WebsitePagesComponent implements OnInit {
 
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {'status':getvl, path:page_path};
+    var newobjdt = {status:getvl, path:page_path};
     this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
 
   savequickdetails(){
-    // console.log(this.quickeditid);
+
     var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
 
-        // console.log(data);
+        console.log(data);
         if(data.found==1){
           this.pathcheck2 = true;
         }else if(data.found==0){
 
-          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl};
+          var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
+          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
           this.fileUploadService.renamepage(pathobj).subscribe({
             next: data => {
               // console.log(data);
@@ -683,10 +688,10 @@ export class WebsitePagesComponent implements OnInit {
 
           if(type!='delete'){
             if(type=='restore'){
-              console.log('second');
+              // console.log('second');
               this.draftpublish('1', page.page_path);
             }else if(this.arpageobj.publish_status==1 && type=='archived'){
-              console.log('first');
+              // console.log('first');
               this.draftpublish('0', this.arpageobj.page_path);
             }
           }
@@ -707,7 +712,9 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.deleteme==1){
-            this.fileUploadService.deletepage(data.path).subscribe({
+            var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
+            var newpath = this.websiteid+'/'+getvl+'/'+data.path;
+            this.fileUploadService.deletepage(newpath).subscribe({
               next: data => {
                 // console.log(data);
               }

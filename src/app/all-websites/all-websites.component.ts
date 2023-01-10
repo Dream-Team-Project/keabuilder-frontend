@@ -27,6 +27,8 @@ export class AllWebsitesComponent implements OnInit {
   websitetitle:any = '';
   createweb:any = true;
   selecteduid = '';
+  nodata = false;
+
 
   constructor(private websiteService: WebsiteService,
               private _snackBar: MatSnackBar,
@@ -46,8 +48,9 @@ export class AllWebsitesComponent implements OnInit {
 
       this.websiteService.getWebsite().subscribe({
         next: data => {
-          if(data.message != 'Error') {
-            // console.log(data);
+          console.log(data);
+          if(data.data?.length != 0) {
+            this.nodata = false;
             this.allwebsites = [];
             data.data.forEach((element:any, index:any) => {
               var genobj = {uniqueid:'',title:'',created:'',publishpages:'',totalpage:''};
@@ -66,6 +69,8 @@ export class AllWebsitesComponent implements OnInit {
               this.allwebsites.push(genobj);
 
             });
+          }else{
+            this.nodata = true;
           }
         },
         error: err => {
@@ -108,7 +113,7 @@ export class AllWebsitesComponent implements OnInit {
         this.websiteService.createwebsite(genobj).subscribe({
           next: data => {
     
-           console.log(data);
+          //  console.log(data);
 
            if(data.exist ==1){
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
@@ -187,6 +192,8 @@ export class AllWebsitesComponent implements OnInit {
   restoredeleteme(web:any){
  
     console.log(web);
+
+    
 
   }
 
