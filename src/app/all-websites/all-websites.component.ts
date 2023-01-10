@@ -118,15 +118,16 @@ export class AllWebsitesComponent implements OnInit {
               console.log(e);
             });
 
-            this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
-              next: data => {
+            // this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
+            //   next: data => {
                 
                 console.log(data);
                 this._snackBar.open('Website Created Successfully!', 'OK');
                 this.router.navigate(['/websites/'+data.uniqueid],{relativeTo: this.route});
 
-              }
-            });
+            //   }
+            // });
+
            }
     
           }
