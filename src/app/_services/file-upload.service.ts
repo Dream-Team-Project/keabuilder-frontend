@@ -118,7 +118,7 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  deletepage(path:any):Observable<any> {
+  deletepage(path:string):Observable<any> {
     return this.http.delete(this.deletePageApi + '/' + this.uuid + '/' + path)
     .pipe(catchError(this.errorHandler));
   }

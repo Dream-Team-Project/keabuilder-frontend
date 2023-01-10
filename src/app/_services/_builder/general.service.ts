@@ -405,7 +405,7 @@ export class GeneralService {
   }
 
   preview() {
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.webpage.website_id+'-'+this.webpage.uniqueid, 'framename');
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.webpage.website_id+'/'+this.webpage.uniqueid, 'framename');
   }
 
   saveHeaderFooter(main:any, sections:any) {
@@ -452,11 +452,11 @@ export class GeneralService {
         this.setPageStyle(sections);
         if(this.includeLayout.header && this.selectedHeader.html && !preview) {
           var header = this.pagehtml.querySelector('header');
-          header.innerHTML = `<?php $path="../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          header.innerHTML = `<?php $path="../../../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
         }
         if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
           var footer = this.pagehtml.querySelector('footer');
-          footer.innerHTML = `<?php $path="../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          footer.innerHTML = `<?php $path="../../../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
         }
         this.removeExtra(preview);
         this.pagehtml.querySelector('head').innerHTML = 
@@ -473,6 +473,7 @@ export class GeneralService {
           head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
           body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
           style: this.getAllStyle(),
+          website_id: web.uniqueid
         }
         if(preview) {
           var prevObj = JSON.parse(JSON.stringify(this.pageObj));
@@ -514,7 +515,8 @@ export class GeneralService {
         (event:any) => {
           if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
             var obj = {
-              path:event.data.folder
+              path:event.data.folder,
+              website_id: web.uniqueid
             };
             this.fileUploadService.updateHome(obj).subscribe({
               next: data => {}
@@ -597,7 +599,7 @@ export class GeneralService {
       body.innerHTML = body.innerHTML.replace(re, '');
     })
     if(!preview) this.pagehtml.querySelectorAll('.kb-menu').forEach((item:any)=>{
-      item.outerHTML = '<?php $path="../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
+      item.outerHTML = '<?php $path="../../../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
     });
     body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
       var cb = this.decodeData(item.getAttribute('html-data'));
