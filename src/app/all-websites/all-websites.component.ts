@@ -114,6 +114,13 @@ export class AllWebsitesComponent implements OnInit {
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
            }else{
 
+
+            var dataobj = {uniqueid:data.uniqueid};
+            this._file.createwebsitefolder(dataobj).subscribe(e=>{
+              console.log(e);
+            });
+
+
             this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
               console.log(e);
             });
