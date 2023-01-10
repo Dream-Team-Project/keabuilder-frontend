@@ -17,7 +17,8 @@ export class PagePreviewComponent implements OnInit {
   ) {
     document.body.classList.add('kb-preview');
     route.paramMap.subscribe((params: ParamMap) => {
-      var page = { path: params.get('id'), dir: 'previews' };
+      var id = params.get('id');
+      var page = { path: id?.split('-')[1], website_id: id?.split('-')[0], dir: 'previews' };
       _file.getPage(page).subscribe((data: any) => {
         data.html = _general.parser.parseFromString(data.html, 'text/html');
         data.tracking.header = _general.parser.parseFromString(data.tracking.header, 'text/html');

@@ -332,6 +332,7 @@ export class GeneralService {
       this.main.name = this.webpage.page_name;
       this.main.title = this.webpage.page_title;
       this.main.path = this.webpage.page_path;
+      this.main.website_id = this.webpage.website_id;
       if(this.webpage.page_description) this.main.description = this.webpage.page_description;
       if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
       this.main.author = this.webpage.page_author;
@@ -404,7 +405,7 @@ export class GeneralService {
   }
 
   preview() {
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/kb-page-'+this.webpage.uniqueid, 'framename');
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.webpage.website_id+'-'+this.webpage.uniqueid, 'framename');
   }
 
   saveHeaderFooter(main:any, sections:any) {
@@ -475,8 +476,8 @@ export class GeneralService {
         }
         if(preview) {
           var prevObj = JSON.parse(JSON.stringify(this.pageObj));
-          prevObj.prevFolder = 'kb-page-'+this.webpage.uniqueid;
-          prevObj.folder = 'kb-page-'+this.webpage.uniqueid;
+          prevObj.prevFolder = this.webpage.uniqueid;
+          prevObj.folder = this.webpage.uniqueid;
           prevObj.dir = 'previews';
           this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
             resolve(true);
