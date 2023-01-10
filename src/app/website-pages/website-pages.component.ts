@@ -499,7 +499,7 @@ export class WebsitePagesComponent implements OnInit {
           this.pathcheck2 = true;
         }else if(data.found==0){
 
-          var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
+          var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
           this.fileUploadService.renamepage(pathobj).subscribe({
             next: data => {
@@ -508,6 +508,8 @@ export class WebsitePagesComponent implements OnInit {
           });
           // this.popupsidebar = false;
           this.showwebpages();
+
+          this.hidepopupsidebar();
 
         }
 
@@ -548,13 +550,17 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   shortsettings(page:any, type:any, oldpath:string){
+    console.log(page);
     if(type=='duplicate'){
       // console.log(id);
       this.webpagesService.dupldelpage(page.id,type).subscribe({
         next: data => {
           if(data.success==1){
             this._snackBar.open('Processing...', 'OK');
-            var pathobj  = {oldpath:oldpath, newpath:data.newpath};
+
+            var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
+            var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
+         
             this.fileUploadService.copypage(pathobj).subscribe({
               next: data => {
                 this._snackBar.open('Page Duplicate Successfully!', 'OK');
