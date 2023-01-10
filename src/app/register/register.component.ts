@@ -66,9 +66,9 @@ export class RegisterComponent implements OnInit {
       // var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
 
         // if(this.searchStringInArray(nwsubdomain,notusesub)==1){
-
         this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
+            console.log(data);
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
               console.log(e);
             });
@@ -179,6 +179,7 @@ export class RegisterComponent implements OnInit {
   }
 
   removespecialchar(data:any){
+    // console.log(data);
     var datagen = data.replace(/[^a-zA-Z0-9]/g, "");
     return datagen;
   }
