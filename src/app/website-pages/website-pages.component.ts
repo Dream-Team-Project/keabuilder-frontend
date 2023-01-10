@@ -198,14 +198,34 @@ export class WebsitePagesComponent implements OnInit {
     //   }
     // });
 
+    var dt = {webid:this.websiteid};
+    this.websiteService.getuniqwebsites(dt).subscribe({
+      next: data => {
+
+        if(data.message != 'Error') {
+          console.log(data);
+          data.data.forEach((element:any) => {
+
+            if(element.domain!='' && element.subdomain!=null){
+              this.mydomain = element.domain;
+            }else{
+              this.mydomain = element.subdomain+'.'+data.globalsubdomain;
+            }
+
+          });
+
+        }
+      }
+    });
+
     this.userService.getUsersDetails().subscribe({
       next: data => {
 
-        if(data.realdomain!=''){
-          this.mydomain = data.realdomain;
-        }else{
-          this.mydomain = data.data[0].subdomain+'.'+data.domain;
-        }
+        // if(data.realdomain!=''){
+        //   this.mydomain = data.realdomain;
+        // }else{
+        //   this.mydomain = data.data[0].subdomain+'.'+data.domain;
+        // }
 
         this.author = data.data[0].firstname;
       }
@@ -316,6 +336,7 @@ export class WebsitePagesComponent implements OnInit {
     var id = this.websiteid;
     this.webpagesService.getWebpagesById(id).subscribe({
       next: data => {
+        // console.log(data);
         this.shortdata(data);
         // console.log(data);
       },
