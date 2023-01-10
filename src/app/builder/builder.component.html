@@ -23,9 +23,9 @@
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
 <app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
-<mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
-    <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
-</mat-drawer>
+    <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
+        <app-bulder-wireframe (dialogToggle)="openDialog($event)" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
+    </mat-drawer>
 </mat-drawer-container>
 <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
 <div cdkDropListGroup id="kb-page-container" [style.transform]="zoom.active ? 'scale('+zoom.value+'%)' : ''" (contextmenu)="onContextMenu($event)" [class.hovernone]="_general.saveDisabled"
@@ -183,7 +183,7 @@
                                                             [class.dummyImg]="!element.content.src">
                                                     </ng-template>
                                                 </div>
-                                                <div *ngSwitchCase="'button'" class="kb-element-content">
+                                                <div *ngSwitchCase="'button'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
                                                         [ngStyle]="_style.buttonStyling()"
                                                         class="kb-default-btn"
@@ -218,7 +218,7 @@
                                                         </ng-template>
                                                     </ng-template>
                                                 </div>
-                                                <div *ngSwitchCase="'menu'" [attr.data-id]="element.content.data_id"
+                                                <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                     class="kb-element-content">
                                                     <ul class="kb-menu" [id]="element.content.data_id"
                                                         [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && !_style.setItemStyle  ? _style.textStyling() : _style.getBlockStyle(element.content.style)">
@@ -229,7 +229,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <div *ngSwitchCase="'code'" class="kb-element-content"
+                                                <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                                     [style.justifyContent]="'center'">
                                                     <div class="kb-code-block"
                                                         [attr.html-data]="_general.encodeData(element.content.html)">
@@ -237,7 +237,7 @@
                                                         <'+'custom code />'}}
                                                     </div>
                                                 </div>
-                                                <div *ngSwitchCase="'checkout'" class="kb-element-content">
+                                                <div *ngSwitchCase="'checkout'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <iframe
                                                         [src]="'http://localhost:4200/checkout/'+_general.webpage.uniqueid | safeUrl"
                                                         frameborder="0"
@@ -269,14 +269,7 @@
                                                     class="kb-block-hidden-icon"><i class="fa fa-eye-slash"
                                                         aria-hidden="true"></i></span>
                                             </div>
-                                            <span *ngIf="element.setting && !_general.showInlineEditor"
-                                                (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog($event)"
-                                                matTooltip="Add New Element" matTooltipPosition="above"
-                                                class="kb-ispan-add add-element bottom-add-btn"><i
-                                                    class="fa fa-plus"></i></span>
-                                            <span *ngIf="_style.getDisplay(element.hide)"
-                                                class="kb-block-hidden-icon"><i class="far fa-eye-slash"
-                                                    aria-hidden="true"></i></span>
+                                            <!-- elements end -->
                                         </div>
                                         <!-- add element option start -->
                                         <span
@@ -288,15 +281,7 @@
                                         <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
                                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
                                     </div>
-                                    <!-- add element option start -->
-                                    <span
-                                        (click)="_column.selectedColumn = column; _element.element_index = 0; _general.blockSelection = 'element'; openDialog($event)"
-                                        *ngIf="column.elementArr.length == 0" matTooltip="Add New Element"
-                                        matTooltipPosition="right" class="kb-ispan-add add-element"><i
-                                            class="fa fa-plus"></i></span>
-                                    <!-- add element option end -->
-                                    <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
-                                            class="far fa-eye-slash" aria-hidden="true"></i></span>
+                                    <!-- columns end -->
                                 </div>
                                 <!-- add row option start -->
                                 <span *ngIf="row.setting && !_general.showInlineEditor"
@@ -307,25 +292,16 @@
                                 <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
                                         class="fa fa-eye-slash" aria-hidden="true"></i></span>
                             </div>
-                            <!-- add row option start -->
-                            <span *ngIf="row.setting && !_general.showInlineEditor"
-                                (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog($event)"
-                                matTooltip="Add New Row" matTooltipPosition="below"
-                                class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>
-                            <!-- add row option end -->
-                            <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
-                                    class="far fa-eye-slash" aria-hidden="true"></i></span>
+                            <!-- rows end -->
                         </div>
                         <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
                     </div>
-                    <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
-                            class="far fa-eye-slash" aria-hidden="true"></i></span>
+                    <!-- sections end -->
                 </div>
-                <!-- sections end -->
             </div>
+            <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
         </div>
-        <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
     </div>
     <div *ngIf="!_general.loading.success" id="loader">
         <div id="shadow"></div>
