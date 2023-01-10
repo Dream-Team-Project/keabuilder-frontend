@@ -63,11 +63,6 @@ export class FileUploadService {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
-  createwebsitefolder(uuid:any):Observable<any> {
-    var obj = {uuid: uuid};
-    return this.http.post(this.createwebsitefolderApi, obj);
-  }
-
   createuserfolder(uuid:any):Observable<any> {
     var obj = {uuid: uuid};
     return this.http.post(this.createuserfolderApi, obj);
@@ -76,6 +71,11 @@ export class FileUploadService {
   createuserlogofavi(id:any):Observable<any> {
     var obj = {id: id};
     return this.http.post(this.createlogofaviApi, obj);
+  }
+
+  createwebsitefolder(obj:any):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.createwebsitefolderApi, obj);
   }
   
   // section templates 
