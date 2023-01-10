@@ -161,7 +161,7 @@ const routes: Routes = [
 
   // builder routes
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  { path: 'preview/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'preview/:website_id/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   { path: 'builder/form', component: FormBuilderComponent, canActivate: [AuthGuard] },
   
   // User Course
