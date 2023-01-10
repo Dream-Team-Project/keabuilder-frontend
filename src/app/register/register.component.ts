@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   firstnameFormControl = new FormControl('',[Validators.required]);
-  subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+  // subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
   lastnameFormControl = new FormControl('');
   companynameFormControl = new FormControl('');
   phoneFormControl = new FormControl('');
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
     email: null,
     phone:'',
     password: null,
-    subdomain:null
+    // subdomain:null
   };
   isSuccessful = false;
   isSignUpFailed = false;
@@ -59,35 +59,28 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username,firstname,lastname,company, email,phone, password,subdomain } = this.form;
-    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
+    const { username,firstname,lastname,company, email,phone, password } = this.form;
+    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID'){
 
-      var nwsubdomain:any = subdomain.toLowerCase();
-      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
+      // var nwsubdomain:any = subdomain.toLowerCase();
+      // var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
 
-      // if( subdomain!='app' && subdomain!='test' && subdomain!='developer' && subdomain!='admin' && subdomain!='kea' && subdomain!='keabuilder'){
+        // if(this.searchStringInArray(nwsubdomain,notusesub)==1){
 
-        if(this.searchStringInArray(nwsubdomain,notusesub)==1){
-
-        this.authService.register(username,firstname,lastname,company, email,phone, password,subdomain).subscribe({
+        this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
               console.log(e);
             });
             var domainpath = window.location.hostname;
-            var subdomain = data.subdomain;
 
             var emailhtml = `Dear `+firstname+`,<br>
             <br>
-            Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>
+            Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>   
             <br>
-            Your account for domain `+subdomain+`.keapages.com has been confirmed and set up.<br>
-            <br>
-            Your new KEA builder includes 2 FREE hours of BONUS Launch Assist [activated from 1st of November] redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
+            Your new KEA builder includes 2 FREE hours of BONUS Launch Assist redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
             <br>
             Please email <strong>support@keasolution.com</strong> in case you need any clarity or suggestions.<br>
-            <br>
-            Your data will be safe and secure even after KEA builder's first launch on the 1st of November 2022, so play around and enjoy the builder.<br>
             <br>
             Login: `+domainpath+`/login<br>
             Username: `+username+`<br>
@@ -101,15 +94,6 @@ export class RegisterComponent implements OnInit {
                 // console.log(data);
               }
             });
-
-            // var maildata = {tomailid: email, frommailid: 'keabuilder@gmail.com', subject: 'Welcome To Kea', html: emailhtml};
-            // this.emailService.sendmail(maildata).subscribe({
-            //   next: data => {
-            //     // console.log(data);
-            //   }
-            // });
-            
-            // window.location.href='https://keahosted.com/create_subdomain.php?subdomain='+subdomain;
 
             // need to pass unique id to the wistia instead of username
             //  var userobject = {project_name: username};
@@ -127,23 +111,11 @@ export class RegisterComponent implements OnInit {
             this.isSignUpFailed = false;
 
             var uniqueid = data.uniqueid;
-            var datasubmittion = [username,firstname,lastname,email,company,phone,subdomain,uniqueid];
+            var datasubmittion = [username,firstname,lastname,email,company,phone,uniqueid];
 
-           this.authService.oncreatesubdomain(subdomain,uniqueid).subscribe({
-              next: data => {
-                
-                console.log(data);
-                if(data.success==true){
-                  this._snackBar.open('Sign Up Successfully!', 'OK');
-                  this.redirectToDashboard();
-                  this.email_creationuser(datasubmittion);
-                }else{
-                  this.email_creationsubdomain(datasubmittion);
-                }
-
-              }
-            });
-
+            this._snackBar.open('Sign Up Successfully!', 'OK');
+            this.redirectToDashboard();
+            this.email_creationuser(datasubmittion);
             
         },
           error: err => {
@@ -152,9 +124,9 @@ export class RegisterComponent implements OnInit {
           }
         });
 
-      }else{
-        this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
-      }
+      // }else{
+      //   this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+      // }
 
 
     }
@@ -178,7 +150,6 @@ export class RegisterComponent implements OnInit {
     UserId: `+data[7]+`<br>
     Username: `+data[0]+`<br>
     Email: `+data[3]+`<br>
-    Subdomain: `+data[6]+`<br>
     <br>`;
     var maildata = {tomailid: 'support@keasolution.com', frommailid: 'support@keasolution.com', subject: 'Subdomain Creation Error!', html: emailhtml};
     this.emailService.sendmail(maildata).subscribe({
@@ -198,7 +169,6 @@ export class RegisterComponent implements OnInit {
     Email: `+data[3]+`<br>
     Company: `+data[4]+`<br>
     Phone: `+data[5]+`<br>
-    Subdomain: `+data[6]+`<br>
     <br>`;
     var maildata = {tomailid: 'support@keasolution.com', frommailid: 'support@keasolution.com', subject: 'New Registration', html: emailhtml};
     this.emailService.sendmail(maildata).subscribe({

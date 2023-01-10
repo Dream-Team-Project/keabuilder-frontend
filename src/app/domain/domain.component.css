@@ -13,10 +13,10 @@
     padding: 8px 20px;
     border-radius: 3px;
 }
-.kb-domainul .fa-lock {
+.kb-domainul.verified li:first-child i {
     color: #06ae78;
 }
-.kb-domainul > li > i:last-child {
+.kb-domainul > li >span > i {
     margin-left: 5px;
 }
 #kb-offer-actions .fa-times {
@@ -48,5 +48,13 @@
 .outerdivnm p{
     word-break: break-word;
 }
-
+.onhidefirst{
+    display: none;
+}
+.onloadingon span:first-child{
+    display: none;
+}
+.onloadingon span:last-child{
+    display: block;
+}
 

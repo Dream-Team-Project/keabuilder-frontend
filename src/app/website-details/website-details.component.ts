@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -35,9 +35,8 @@ export class WebsiteDetailsComponent implements OnInit {
   tagstyle = 'Place CSS inside the style tag <style></style> and place JS inside the script tag <script></script>.';
   userid = '';
 
-  mydomain = {subdomain:'',domain:''};
   defaultdomain = '';
-
+  websiteid:any = '';
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -46,7 +45,12 @@ export class WebsiteDetailsComponent implements OnInit {
               private imageService: ImageService,
               private router: Router,
               private route: ActivatedRoute,
-              public userService: UserService) { }
+              public userService: UserService) { 
+                this.route.paramMap.subscribe((params: ParamMap) => {
+                  // console.log(params);
+                  this.websiteid = params.get('website_id');
+                });
+              }
 
   ngOnInit(): void {
 
@@ -61,13 +65,22 @@ export class WebsiteDetailsComponent implements OnInit {
       }
     });
 
-    this.websiteService.getWebsite().subscribe({
+    var dt = {webid:this.websiteid};
+    this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
         if(data.message != 'Error') {
+          console.log(data);
           data.data.forEach((element:any) => {
 
             this.userid = element.user_id;
             this.kbwebsite.push(element);
+
+            if(element.domain!='' && element.subdomain!=null){
+              this.defaultdomain = element.domain;
+            }else{
+              this.defaultdomain = element.subdomain+'.'+data.globalsubdomain;
+            }
+
 
             if(element.tracking_header!=null && element.tracking_header!=''){
               this.pagescriptheader = atob(element.tracking_header);
@@ -120,46 +133,49 @@ export class WebsiteDetailsComponent implements OnInit {
       }
     });
 
-    this.userService.getUsersDetails().subscribe({
-      next: data => {
-        this.mydomain.subdomain = data.data[0].subdomain;
-        this.mydomain.domain = data.domain;
+    // this.userService.getUsersDetails().subscribe({
+    //   next: data => {
+    //     console.log(data);
 
-        this.defaultdomain = data.data[0].subdomain+'.'+data.domain;
-      }
-    });
+    //     if(data.realdomain!=''){
+    //       this.defaultdomain = data.realdomain;
+    //     }else{
+    //       this.defaultdomain = data.data[0].subdomain+'.'+data.domain;
+    //     }
+
+    //   }
+    // });
 
   }
 
   viewsite(){
-    var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain;
+    var url = 'https://'+this.defaultdomain;
     window.open(url, '_blank');
   }
 
   updatepage(){
-    console.log(this.pathselected);
+    // console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
       scriptheader: btoa(this.pagescriptheader),
       scriptfooter: btoa(this.pagescriptfooter),
-      logo: this.logoimgname,
-      favicon: this.faviconimgname,
-      checkimginput1: this.imagelogorequest,
-      checkimginput2: this.imagefaviconrequest
+      onlysite: false,
+      uniqueid: this.websiteid,
+      // logo: this.logoimgname,
+      // favicon: this.faviconimgname,
+      // checkimginput1: this.imagelogorequest,
+      // checkimginput2: this.imagefaviconrequest
     }
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
         console.log('-->');
         console.log(data);
 
-        var splnmlogo = data.genlogo.split('keaimage-');  
-        var splnmfavi = data.genfavicon.split('keaimage-');  
+        var splnmlogo = 'logo-'+this.websiteid+'.png';  
+        var splnmfavi = 'favicon-'+this.websiteid+'.png';  
         
-        var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
-        var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi[1]};
-
-        // console.log(genobjlogo);
-        // console.log(genobjfavicon);
+        var genobjlogo:any = {path:this.logoimg, name:splnmlogo};
+        var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi};
 
         if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
           this.imageService.onImageFileUpload(genobjlogo);

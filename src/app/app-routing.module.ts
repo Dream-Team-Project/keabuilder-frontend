@@ -81,6 +81,7 @@ import { CourseUserCourseForgotpassComponent } from './course-user/course-forgot
 import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
+import { AllWebsitesComponent } from './all-websites/all-websites.component';
 
 const routes: Routes = [
 
@@ -90,19 +91,18 @@ const routes: Routes = [
   { path: 'forget', component: ForgetPasswordComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
-
-  
   // website 
-  { path: 'website', component: WebsiteComponent,
+  {path: 'websites', component: WebsiteComponent,
     children: [
       // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
-      {path: '', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+      {path: '', component: AllWebsitesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
       {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
       {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
-      {path: 'details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
-      {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]}
+      {path: 'details/:website_id', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+      {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]},
+      {path: ':website_id', component: WebsitePagesComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
 
@@ -126,18 +126,14 @@ const routes: Routes = [
   canActivate: [AuthGuard] },
 
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-  // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
-  
-  
+  { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'domain', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'forms', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
-
 
   { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
@@ -322,5 +318,6 @@ export const RoutingComponents =
     CourseUserCourseForgotpassComponent,
     ComingSoonComponent,
     FunnelCheckoutComponent,
+    AllWebsitesComponent,
   ];
 

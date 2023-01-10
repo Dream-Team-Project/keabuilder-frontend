@@ -13,6 +13,7 @@ const httpOptions = {
 export class WebpagesService {
 
   allwebpagesApi = '/api/allwebpagesdata/';
+  allwebpagesbyidApi = '/api/allwebpagesbyiddata/';
   getwebpagebypathApi = '/api/getwebpagebypath/';
   createwebpagesApi = '/api/createwebpage/';
   updatewebpagesApi = '/api/updatewebpage/';
@@ -37,6 +38,10 @@ export class WebpagesService {
 
   getWebpages(): Observable<any> {
     return this.http.get(this.allwebpagesApi+this.uuid);
+  }
+
+  getWebpagesById(uniqueid:any): Observable<any> {
+    return this.http.get(this.allwebpagesbyidApi+this.uuid+'/'+uniqueid);
   }
 
   getWebPageByPath(data:any): Observable<any> {
@@ -64,11 +69,9 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  validatepages(name: string, path:string, author:string):Observable<any> {
+  validatepages(data:any):Observable<any> {
     return this.http.post(this.validatepagesApi+this.uuid, {
-      name,
-      path,
-      author,
+      data,
     }, httpOptions);
   }
 
@@ -90,9 +93,9 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  getarchivepages(showing:string):Observable<any> {
+  getarchivepages(data:string):Observable<any> {
     return this.http.post(this.getarchivepagesApi+this.uuid, {
-      showing,
+      data,
     }, httpOptions);
   }
 

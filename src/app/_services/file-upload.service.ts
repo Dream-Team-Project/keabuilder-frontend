@@ -14,6 +14,7 @@ providedIn: 'root'
 export class FileUploadService {
   // API url
   createuserfolderApi = "./api/create-user-folder";
+  createlogofaviApi = "./api/create-user-logofavi";
   // document
   getAllDocumentsApi = "./api/getalldocuments";
   uploadDocumentApi = "./api/uploaddocument";
@@ -66,6 +67,11 @@ export class FileUploadService {
     return this.http.post(this.createuserfolderApi, obj);
   }
 
+  createuserlogofavi(id:any):Observable<any> {
+    var obj = {id: id};
+    return this.http.post(this.createlogofaviApi, obj);
+  }
+  
   // section templates 
 
   fetchtemplates():Observable<any> {

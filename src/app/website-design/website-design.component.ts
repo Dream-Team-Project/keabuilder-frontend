@@ -166,14 +166,11 @@ export class WebsiteDesignComponent implements OnInit {
   onSubmit(): void {
     const { pagename, pagepath } = this.form;
     
-    var author = '';
-    if (this.tokenStorage.getToken()) {
-      author = this.tokenStorage.getUser().username;
-    }
-
     if(this.userFormControl.status=='VALID'){
 
-      this.webpagesService.validatepages(pagename, pagepath, author).subscribe({
+      var gendata = {name:pagename, path: pagepath, author: '', webid: ''};
+
+      this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
           // console.log(data);
 

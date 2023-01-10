@@ -29,10 +29,10 @@ export class SidebarComponent implements OnInit {
       submenu:null
     },{
       0:true,
-      routerlink: '/website',
+      routerlink: '/websites',
       img: 'browser.gif',
       icon: 'fas fa-desktop',
-      title: 'Website',
+      title: 'Websites',
       submenu:[
       // {
       //   0:true,
@@ -50,35 +50,35 @@ export class SidebarComponent implements OnInit {
       // },
       {
         0:true,
-        routerlink: '/website/headers',
+        routerlink: '/websites/headers',
         img: 'browser.gif',
         icon: 'far fa-window-maximize',
         title: 'Headers'
       },
       {
         0:true,
-        routerlink: '/website/footers',
+        routerlink: '/websites/footers',
         img: 'browser.gif',
         icon: 'far fa-window-maximize kb-rev',
         title: 'Footers'
       },
       {
         0:true,
-        routerlink: '/website/navigation',
+        routerlink: '/websites/navigation',
         img: 'browser.gif',
         icon: 'fas fa-stream',
         title: 'Navigation'
       },
-      {
-        0:true,
-        routerlink: '/website/details',
-        img: 'browser.gif',
-        icon: 'fas fa-palette',
-        title: 'Site Details'
-      },
       // {
       //   0:true,
-      //   routerlink: '/website/marketplace',
+      //   routerlink: '/websites/details',
+      //   img: 'browser.gif',
+      //   icon: 'fas fa-palette',
+      //   title: 'Site Details'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/websites/marketplace',
       //   img: 'browser.gif',
       //   icon: 'fas fa-store',
       //   title: 'Marketplace'
@@ -121,17 +121,17 @@ export class SidebarComponent implements OnInit {
       submenu:null
     },{
       0:true,
-      routerlink: '/forms',
-      img: 'complete.gif',
-      icon: 'fas fa-address-card',
-      title: 'Forms',
-      submenu:null
-    },{
-      0:true,
       routerlink: '/domain',
       img: 'worldwide.gif',
       icon: 'fas fa-globe-americas',
       title: 'Domains',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/forms',
+      img: 'complete.gif',
+      icon: 'fas fa-address-card',
+      title: 'Forms',
       submenu:null
     },{
       0:true,
@@ -339,7 +339,7 @@ export class SidebarComponent implements OnInit {
 
     var myhref = event.currentTarget.attributes["href"].nodeValue;
 
-    if(myhref=='/website'){
+    if(myhref=='/websites'){
 
       this.extramenus = false;
       
@@ -411,7 +411,7 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/website' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
       this.backme = false;
     } 
 

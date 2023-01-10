@@ -55,16 +55,18 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label> Phone Number</mat-label>
-                    <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
-                  </mat-form-field>
+             
 
                   <button mat-raised-button class="mt-3 registerbtn" (click)="fillnext()">Next</button>
                   
               </div>
 
               <div *ngIf="!changestep">
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label> Phone Number</mat-label>
+                    <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
+                  </mat-form-field>
 
                   <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label> Company Name</mat-label>
@@ -74,7 +76,7 @@
                     </mat-error> -->
                   </mat-form-field>
 
-                  <mat-form-field class="example-full-width" appearance="fill">
+                  <!-- <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label> Subdomain</mat-label>
                     <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
                     <span matSuffix>.keapages.com</span>
@@ -87,7 +89,7 @@
                     <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
                       Subdomain must be at most <strong>20</strong> characters
                     </mat-error>
-                  </mat-form-field>
+                  </mat-form-field> -->
 
                
 

@@ -61,8 +61,14 @@ export class WebsitePagesComponent implements OnInit {
               private fileUploadService: FileUploadService,
               private websiteService: WebsiteService,
               private userService: UserService,) {
-                this.toggleview = _general.getStorage('footer_toggle');
+                this.toggleview = _general.getStorage('page_toggle');
                 this.dataSource = new MatTableDataSource(this.users);
+
+                this.route.paramMap.subscribe((params: ParamMap) => {
+                  // console.log(params);
+                  this.websiteid = params.get('website_id');
+                  this.websiteid=='details' ? this.router.navigate(['/websites'],{relativeTo: this.route}) : '';
+                });
                }
 
   form: any = {
@@ -72,6 +78,7 @@ export class WebsitePagesComponent implements OnInit {
   userFormControl = new FormControl('',[Validators.required]);
   userFormControl2 = new FormControl('',[Validators.required]);
 
+  websiteid:any = '';
   kbpages:any[] = [];
   popupsidebar = false;
   quickeditpopup = true;
@@ -129,7 +136,7 @@ export class WebsitePagesComponent implements OnInit {
   arpageobj:any;
   showarchivemode = false;
   nodata = true;
-  mydomain = {subdomain:'',domain:''};
+  mydomain = '';
   
   // MatPaginator Inputs
   length = 100;
@@ -179,30 +186,32 @@ export class WebsitePagesComponent implements OnInit {
 
     this.applykbfilter();
 
-    this.websiteService.getWebsite().subscribe({
+    // this.websiteService.getWebsite().subscribe({
+    //   next: data => {
+    //     if(data?.data) {
+    //       if(data?.data[0]?.toggleview==1){
+    //         this.toggleview = true;
+    //       }else{
+    //         this.toggleview = false;
+    //       }
+    //     }
+    //   }
+    // });
+
+    this.userService.getUsersDetails().subscribe({
       next: data => {
-        if(data?.data) {
-          if(data?.data[0]?.toggleview==1){
-            this.toggleview = true;
-          }else{
-            this.toggleview = false;
-          }
+
+        if(data.realdomain!=''){
+          this.mydomain = data.realdomain;
+        }else{
+          this.mydomain = data.data[0].subdomain+'.'+data.domain;
         }
-      }
-    });
 
-    this.userService.getUsersDetails().subscribe({
-      next: data => {
-        this.mydomain.subdomain = data.data[0].subdomain;
-        this.mydomain.domain = data.domain;
-      }
-    });
-
-    this.userService.getUsersDetails().subscribe({
-      next: data => {        
         this.author = data.data[0].firstname;
       }
     });
+
+    // console.log(this.toggleview);
 
   }
 
@@ -237,14 +246,15 @@ export class WebsitePagesComponent implements OnInit {
   }
   
   addnewpage(){
-    this.showmytemplates = false;
-    this.addnewpagepopup = true;
-    this.insidepagefirst = true;
-    this.insidepagesecond = false;
-    this.quickeditpopup = false;
-    this.selecttemplate = false;
-    this.showpageurl = false;
-    this.confirmarchivepage = false;
+    // this.showmytemplates = false;
+    // this.addnewpagepopup = true;
+    // this.insidepagefirst = true;
+    // this.insidepagesecond = false;
+    // this.quickeditpopup = false;
+    // this.selecttemplate = false;
+    // this.showpageurl = false;
+    // this.confirmarchivepage = false;
+    this.createfromscratch();
     this.openSidebar();
   }
 
@@ -261,7 +271,8 @@ export class WebsitePagesComponent implements OnInit {
 
     if(this.userFormControl.status=='VALID'){
 
-      this.webpagesService.validatepages(pagename, pagepath, this.author).subscribe({
+      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.websiteid};
+      this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
           // console.log(data);
 
@@ -301,7 +312,9 @@ export class WebsitePagesComponent implements OnInit {
 
   showwebpages(){
     this.searching = true;
-    this.webpagesService.getWebpages().subscribe({
+
+    var id = this.websiteid;
+    this.webpagesService.getWebpagesById(id).subscribe({
       next: data => {
         this.shortdata(data);
         // console.log(data);
@@ -351,7 +364,7 @@ export class WebsitePagesComponent implements OnInit {
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
       // console.log(this.mydomain);
-      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data;
+      var url = 'https://'+this.mydomain+'/'+data;
       window.open(url, '_blank');
     }
   }
@@ -554,7 +567,7 @@ export class WebsitePagesComponent implements OnInit {
 
             this.pagebuilderurl = window.origin+'/builder/website/'+data.data[0].uniqueid;
 
-            this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
+            this.pageurl = 'https://'+this.mydomain+'/'+data.data[0].page_path;
 
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
@@ -575,6 +588,7 @@ export class WebsitePagesComponent implements OnInit {
 
   togglepageview(){
     this.toggleview = !this.toggleview; 
+    console.log(this.toggleview);
     this._general.setStorage('page_toggle',this.toggleview);
   }
   
@@ -586,7 +600,8 @@ export class WebsitePagesComponent implements OnInit {
 
   changevisibility(value:any){
     this.searching = true;
-    this.webpagesService.pagevisibility(value).subscribe({
+    var dt = {order:value, id:this.websiteid};
+    this.webpagesService.pagevisibility(dt).subscribe({
       next: data => {
         this.shortdata(data);
       }
@@ -610,7 +625,8 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   applykbfilter(){
-    this.webpagesService.getarchivepages(this.showingcontacts).subscribe({
+    var dt:any = {showing:this.showingcontacts, webid:this.websiteid};
+    this.webpagesService.getarchivepages(dt).subscribe({
       next: data => {
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
@@ -709,9 +725,10 @@ export class WebsitePagesComponent implements OnInit {
 
   searchpage(event: Event) {
     this.searching = true;
-    var SearchValue = (event.target as HTMLInputElement).value;
+    var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.websiteid};
     // console.log(SearchValue);
     this.selstatusshow = 'all';
+
     this.webpagesService.querystringmanage(SearchValue).subscribe({
       next: data => {
         this.shortdata(data);

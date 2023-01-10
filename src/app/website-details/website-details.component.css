@@ -65,6 +65,9 @@ hr {
     color: #0072ef;
     font-size: 14px;
 }
+.kb-btn{
+    text-decoration: none;
+}
 .kb-navmenu{
   background: transparent;
     border: none;

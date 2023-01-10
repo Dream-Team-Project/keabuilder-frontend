@@ -1,0 +1,131 @@
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Website</h1>
+  <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{delwebsite.title}}</span> website?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="restoredeleteme(delwebsite)">Yes</button>
+  </div>
+</ng-template>
+<div id="allwebsite">
+
+    <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
+          [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+    
+          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+    
+          <div *ngIf="createweb">
+            <h6><b>Build a website</b></h6>
+            <hr>
+    
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Website Title</mat-label>
+              <input required matInput [(ngModel)]="websitetitle" name="websitetitle" [formControl]="webtitleFormControl"  placeholder="Ex. My Dream Website">
+              <mat-error *ngIf="webtitleFormControl.hasError('required')">
+                Title is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label> Subdomain</mat-label>
+              <input type="text" (keyup)="subdomain = removespecialcharwithsmall(subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="subdomain">
+              <span matSuffix>.keapages.com</span>
+              <mat-error *ngIf="subdomainFormControl.hasError('required')">
+                Subdomain Name is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+                Subdomain must be at least <strong>3</strong> characters
+              </mat-error>
+              <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+                Subdomain must be at most <strong>20</strong> characters
+              </mat-error>
+            </mat-form-field>
+    
+            <button mat-raised-button color="primary" (click)="createnewweb()">
+              Create <i class="fas fa-check"></i> 
+            </button>
+          </div>
+
+
+          <div *ngIf="!createweb">
+            <h6><b>Update a website</b></h6>
+            <hr>
+    
+            <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Website Title</mat-label>
+              <input required matInput [(ngModel)]="websitetitle" name="websitetitle" [formControl]="webtitleFormControl"  placeholder="Ex. My Dream Website">
+              <mat-error *ngIf="webtitleFormControl.hasError('required')">
+                Title is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+    
+            <button mat-raised-button color="primary" (click)="updatenewweb()">
+              Update <i class="fas fa-check"></i> 
+            </button>
+          </div>
+    
+        </div>
+      </div>
+      <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+        [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <button mat-raised-button color="primary" class="mr-3" (click)="newwebsite()">Create Website <i
+                    class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+
+            <div class="col-md-4 cardpage mt-4" *ngFor="let websites of allwebsites;">
+                <div>
+                    <div class="row">
+                        <div class="row tphdrcard">
+                            <div class="col-md-6">
+                                Created: {{websites.created}}
+                            </div>
+                            <div class="col-md-6 text-right">
+                               Publish Pages: {{websites.publishpages}}
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-4 mt-4 text-center adjdiv">
+                            <h3 [matTooltip]="websites.title">{{websites.title}}</h3>
+                        </div>
+                        <div class="col-md-4">
+                            Total Pages: {{websites.totalpage}}
+                        </div>
+                        <div class="col-md-8 text-right">
+                            <button mat-raised-button color="primary" class="mr-2" [routerLink]="['/websites/'+websites.uniqueid]"> View Pages <i class="far fa-eye"></i></button>
+                            <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu" matTooltip="Settings"
+                            matTooltipPosition="above"> Settings <i class="fas fa-cog"></i></button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="updatewebsite(websites)">
+                                    <i class="fas fa-pen mr-2"></i> Quick Edit
+                                </button>
+                                <!-- <button mat-menu-item >
+                                  <i class="far fa-copy mr-2"></i> Duplicate
+                                </button> -->
+                                <button mat-menu-item [routerLink]="['/websites/details/'+websites.uniqueid]">
+                                  <i class="fas fa-palette mr-2" ></i> Site Details
+                                </button>
+                                <button class="text-danger" mat-menu-item (click)="openDialog(dialog, websites)">
+                                  <i class="far fa-trash-alt mr-2"></i> Delete
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

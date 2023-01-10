@@ -68,7 +68,7 @@ import { SortingPipe } from './_pipes/sorting.pipe';
     SafeUrlPipe,
     SafeHtmlPipe,
     FilterPipe,
-    SortingPipe
+    SortingPipe,
   ],
   imports: [
     AppRoutingModule,

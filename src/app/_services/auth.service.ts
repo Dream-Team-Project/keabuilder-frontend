@@ -23,7 +23,7 @@ export class AuthService {
     }, httpOptions);
   }
 
-  register(username: string, firstname:string, lastname:string, company:string, email:string, phone:string, password: string, subdomain:string): Observable<any> {
+  register(username: string, firstname:string, lastname:string, company:string, email:string, phone:string, password: string): Observable<any> {
     return this.http.post(this.AUTH_API + 'signup', {
       username,
       firstname,
@@ -32,7 +32,6 @@ export class AuthService {
       email,
       phone,
       password,
-      subdomain
     }, httpOptions);
   }
 
@@ -65,12 +64,6 @@ export class AuthService {
       wistiaid
     }, httpOptions);
   }
-
-  oncreatesubdomain(domain: any, uniqueid: any): Observable<any>{
-    return this.http.get('https://keabuilder.com/crd.php?domain='+domain+'&uniqueid='+uniqueid);
-  }
-
-  
 
 
 }

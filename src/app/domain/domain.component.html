@@ -1,14 +1,25 @@
+<ng-template #dialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Domain</h1>
+    <div mat-dialog-content>
+        Would you like to delete <span class="text-danger">{{deldomain.name}}</span> domain?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-info">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletedomain(deldomain)">Yes</button>
+    </div>
+  </ng-template>
 <div id="kb-domain">
+    <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
 
     <div id="kb-offer-actions" *ngIf="sidebar.open">
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
             <h6><b>Connect Your Domain</b></h6>
-            <hr>
-
-            <div *ngIf="!shownamehint">  
             
+            <div *ngIf="!shownamehint">  
+                
+                <hr>
                 <h4>Add your own domain</h4>
                 <p>Enter the domain name you already own below and we'll take care of the rest.</p>
 
@@ -21,8 +32,7 @@
                 </mat-form-field>
 
                 <button mat-raised-button color="primary" (click)="connectdomain()" >
-                    <span *ngIf="!domainconn">Connect <i class="fas fa-plus"></i></span>
-                    <span *ngIf="domainconn">Connecting... <i class="fa-circle-notch fa-spin fas"></i></span>
+                    Connect <i class="fas fa-plus"></i>
                 </button>
 
             </div>
@@ -39,9 +49,15 @@
                     <li>
                         <b>Nameservers: </b> <span *ngFor="let name of nameservers" >{{name}}</span> 
                     </li>
+                    <li> 
+                        <b>Status: </b> <span>{{cldstatus}}</span>
+                    </li>
+                    <li *ngIf="createdatdomain!=''"> 
+                        <b>Connected At: </b> <span>{{datecusfilter(createdatdomain)}}</span>
+                    </li>
                 </ul>
                 <br>
-                <button mat-raised-button color="primary" (click)="connectdomain()" >I've done this step <i class="fas fa-plus"></i></button>
+                <button mat-raised-button color="primary" (click)="donestep1()" >I've done this step <i class="fas fa-check"></i></button>
             </div>
                 
         </div>
@@ -58,21 +74,28 @@
                     <p>Add a custom domain to help customers remember your website. It's like vanity license plates for your business!</p>
                     <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewdomain()" >Add New Domain <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
-
-                <mat-card class="mt-4">
-                    <ul class="kb-domainul">
-                        <li>Connected 
-                            <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i>
-                        </li>
-                        <li>www.clickfunnel.com</li>
-                        <li>
-                            <button mat-raised-button class="mr-2">Update Nameservers <i class="fa fa-globe" aria-hidden="true"></i></button>
-                            <button mat-raised-button class="mr-2">Verify SSl <i class="fa fa-unlock" aria-hidden="true"></i></button>
-                            <button mat-raised-button class="mr-2">View <i class="fa fa-eye" aria-hidden="true"></i></button>
-                            <button mat-raised-button>Delete <i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </li>   
-                    </ul>
-                </mat-card>
+                <div *ngIf="alldomainsdata.length!=0">
+                    <div *ngFor="let alldomains of alldomainsdata">
+                        <mat-card class="mt-4">
+                            <ul class="kb-domainul" [class.verified]="alldomains.verifyssl==1">
+                                <li>
+                                    <span *ngIf="alldomains.verifyssl==0">Pending <i class="fa fa-clock"></i> <i class="fa fa-unlock" aria-hidden="true"></i></span>
+                                    <span *ngIf="alldomains.verifyssl==1">Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> <i class="fa fa-shield-alt"></i></span>
+                                </li>
+                                <li>www.{{alldomains.name}}</li>
+                                <li>
+                                    <button *ngIf="alldomains.verifyssl==0" mat-raised-button class="mr-2" (click)="verifyssl(alldomains.id,alldomains.name,$event)">
+                                        Verify SSl <i class="fa fa-unlock" aria-hidden="true"></i>
+                                    </button>
+                                    <button mat-raised-button class="mr-2" (click)="viewdomain(alldomains)" >View <i class="fa fa-eye" aria-hidden="true"></i></button>
+                                    <button mat-raised-button (click)="openDialog(dialog,alldomains)">
+                                        Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </li>   
+                            </ul>
+                        </mat-card>
+                    </div>
+                </div>
 
 
             </div>
