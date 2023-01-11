@@ -91,6 +91,7 @@ export class GeneralService {
     },
     diskCache: true
   };
+  includeCond:string = `if(file_exists('../'.$path)) include('../'.$path); else if(file_exists($path)) include($path);`;
   pagehtml:any;
   pageObj:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
@@ -452,11 +453,11 @@ export class GeneralService {
         this.setPageStyle(sections);
         if(this.includeLayout.header && this.selectedHeader.html && !preview) {
           var header = this.pagehtml.querySelector('header');
-          header.innerHTML = `<?php $path="../../../../headers/${header.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          header.innerHTML = `<?php $path="../../../headers/${header.children[0].id}.php"; `+this.includeCond+` ?>`;
         }
         if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
           var footer = this.pagehtml.querySelector('footer');
-          footer.innerHTML = `<?php $path="../../../../footers/${footer.children[0].id}.php"; if(file_exists($path)) include($path); ?>`;
+          footer.innerHTML = `<?php $path="../../../footers/${footer.children[0].id}.php"; `+this.includeCond+` ?>`;
         }
         this.removeExtra(preview);
         this.pagehtml.querySelector('head').innerHTML = 
@@ -468,7 +469,7 @@ export class GeneralService {
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
         '<title>'+this.main.title+'</title>' +        
         '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
-        this.pagehtml.querySelector('body').innerHTML += '<?php $path="../../tracking/footer-tracking.php"; if(file_exists($path)) include($path); ?>';
+        this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
         this.pageObj = {
           head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
           body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
@@ -490,7 +491,7 @@ export class GeneralService {
         }
         else {
           var status = this.main.publish_status;
-          this.pageObj.head = '<?php $path="../../tracking/header-tracking.php"; if(file_exists($path)) include($path); ?>' + '<link rel="stylesheet" href="./style.css">' + this.pageObj.head;
+          this.pageObj.head = `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + '<link rel="stylesheet" href="../'+this.main.path+'/style.css">' + this.pageObj.head;
           this.pageObj.folder = this.main.path;
           this.pageObj.prevFolder = this.webpage.page_path;
           this.pageObj.dir = status ? 'pages' : 'drafts';
@@ -601,7 +602,7 @@ export class GeneralService {
       body.innerHTML = body.innerHTML.replace(re, '');
     })
     if(!preview) this.pagehtml.querySelectorAll('.kb-menu').forEach((item:any)=>{
-      item.outerHTML = '<?php $path="../../../../menus/'+item.id+'.php"; if(file_exists($path)) include($path); ?>';
+      item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
     });
     body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
       var cb = this.decodeData(item.getAttribute('html-data'));
