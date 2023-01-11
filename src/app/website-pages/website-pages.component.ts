@@ -428,9 +428,12 @@ export class WebsitePagesComponent implements OnInit {
                       next: data => {
                         console.log(data);
                         if(data.success==1){
-                          this.fileUploadService.createdefaulthome().subscribe(e=>{
+
+                          var webobj:any = {website_id:this.websiteid};
+                          this.fileUploadService.createdefaulthome(webobj).subscribe(e=>{
                             // console.log(e);
                           })
+
                         }
                       }
                     });
@@ -483,7 +486,7 @@ export class WebsitePagesComponent implements OnInit {
 
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {status:getvl, path:page_path};
+    var newobjdt = {status:getvl, path:page_path, website_id:this.websiteid};
     this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
@@ -499,7 +502,7 @@ export class WebsitePagesComponent implements OnInit {
           this.pathcheck2 = true;
         }else if(data.found==0){
 
-          var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
+          var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
           this.fileUploadService.renamepage(pathobj).subscribe({
             next: data => {
@@ -508,6 +511,8 @@ export class WebsitePagesComponent implements OnInit {
           });
           // this.popupsidebar = false;
           this.showwebpages();
+
+          this.hidepopupsidebar();
 
         }
 
@@ -548,13 +553,20 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   shortsettings(page:any, type:any, oldpath:string){
+    console.log(page);
+    var dtobj = {pageid:page.id, type:type, webid: this.websiteid};
     if(type=='duplicate'){
       // console.log(id);
-      this.webpagesService.dupldelpage(page.id,type).subscribe({
+      this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
+          console.log(data);
           if(data.success==1){
             this._snackBar.open('Processing...', 'OK');
-            var pathobj  = {oldpath:oldpath, newpath:data.newpath};
+
+            var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
+            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.websiteid, dir:getvl};
+            console.log(pathobj);
+         
             this.fileUploadService.copypage(pathobj).subscribe({
               next: data => {
                 this._snackBar.open('Page Duplicate Successfully!', 'OK');
@@ -567,6 +579,9 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
               }
             });
+
+            this.showwebpages();
+
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -574,7 +589,7 @@ export class WebsitePagesComponent implements OnInit {
         }
       });
     }else if(type=='copyurl'){
-      this.webpagesService.dupldelpage(page.id,type).subscribe({
+      this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
           // console.log(data);
 
@@ -681,18 +696,22 @@ export class WebsitePagesComponent implements OnInit {
     }
     
     // console.log(this.arpageobj);
-    // console.log(page);
+    console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         console.log(data);
+        console.log(this.arpageobj);
+        console.log(type);
+
+
         if(data.success==1){
 
           if(type!='delete'){
             if(type=='restore'){
-              // console.log('second');
+              console.log('second');
               this.draftpublish('1', page.page_path);
             }else if(this.arpageobj.publish_status==1 && type=='archived'){
-              // console.log('first');
+              console.log('first');
               this.draftpublish('0', this.arpageobj.page_path);
             }
           }
@@ -713,9 +732,8 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.deleteme==1){
-            var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
-            var newpath = this.websiteid+'/'+getvl+'/'+data.path;
-            this.fileUploadService.deletepage(newpath).subscribe({
+            var newpathobj:any = {website_id:this.websiteid, path:data.path};
+            this.fileUploadService.deletepage(newpathobj).subscribe({
               next: data => {
                 // console.log(data);
               }

@@ -86,10 +86,9 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  dupldelpage(id: string, type:string):Observable<any> {
+  dupldelpage(data:any):Observable<any> {
     return this.http.post(this.dupldelpageApi+this.uuid, {
-      id,
-      type,
+     data
     }, httpOptions);
   }
 
