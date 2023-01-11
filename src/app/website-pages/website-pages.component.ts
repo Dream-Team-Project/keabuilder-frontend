@@ -428,9 +428,12 @@ export class WebsitePagesComponent implements OnInit {
                       next: data => {
                         console.log(data);
                         if(data.success==1){
-                          this.fileUploadService.createdefaulthome().subscribe(e=>{
+
+                          var webobj:any = {website_id:this.websiteid};
+                          this.fileUploadService.createdefaulthome(webobj).subscribe(e=>{
                             // console.log(e);
                           })
+
                         }
                       }
                     });
@@ -483,7 +486,7 @@ export class WebsitePagesComponent implements OnInit {
 
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {status:getvl, path:page_path};
+    var newobjdt = {status:getvl, path:page_path, website_id:this.websiteid};
     this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
@@ -693,18 +696,22 @@ export class WebsitePagesComponent implements OnInit {
     }
     
     // console.log(this.arpageobj);
-    // console.log(page);
+    console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         console.log(data);
+        console.log(this.arpageobj);
+        console.log(type);
+
+
         if(data.success==1){
 
           if(type!='delete'){
             if(type=='restore'){
-              // console.log('second');
+              console.log('second');
               this.draftpublish('1', page.page_path);
             }else if(this.arpageobj.publish_status==1 && type=='archived'){
-              // console.log('first');
+              console.log('first');
               this.draftpublish('0', this.arpageobj.page_path);
             }
           }
@@ -725,9 +732,8 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.deleteme==1){
-            var getvl = this.togglestatus == '0' ? 'draft' : 'publish';
-            var newpath = this.websiteid+'/'+getvl+'/'+data.path;
-            this.fileUploadService.deletepage(newpath).subscribe({
+            var newpathobj:any = {website_id:this.websiteid, path:data.path};
+            this.fileUploadService.deletepage(newpathobj).subscribe({
               next: data => {
                 // console.log(data);
               }
