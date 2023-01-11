@@ -102,8 +102,7 @@ export class FileUploadService {
 
   // html pages
 
-  createdefaulthome():Observable<any> {
-    var obj:any;
+  createdefaulthome(obj:any):Observable<any> {
     obj.uuid = this.uuid;
     return this.http.post(this.createDefaultHomeApi, obj);
   }
