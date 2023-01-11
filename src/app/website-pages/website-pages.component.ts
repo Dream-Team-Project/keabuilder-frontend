@@ -722,7 +722,8 @@ export class WebsitePagesComponent implements OnInit {
                 console.log(data);
 
                 if(data.success==1){
-                  this.fileUploadService.createdefaulthome().subscribe(e=>{
+                  var webobj:any = {website_id:this.websiteid};
+                  this.fileUploadService.createdefaulthome(webobj).subscribe(e=>{
                     // console.log(e);
                   })
                 }
