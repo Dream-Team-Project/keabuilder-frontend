@@ -204,16 +204,17 @@ export class WebsitePagesComponent implements OnInit {
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
 
-        if(data.message != 'Error') {
+        if(data?.length != 0) {
           console.log(data);
           data.data.forEach((element:any) => {
 
-            if(element.domain!='' && element.subdomain!=null){
+            if(element.domain!='' && element.domain!=null){
               this.mydomain = element.domain;
             }else{
               this.mydomain = element.subdomain+'.'+data.globalsubdomain;
             }
 
+            console.log(this.mydomain);
           });
 
         }
