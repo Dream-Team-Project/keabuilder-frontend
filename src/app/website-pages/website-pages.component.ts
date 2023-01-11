@@ -551,15 +551,18 @@ export class WebsitePagesComponent implements OnInit {
 
   shortsettings(page:any, type:any, oldpath:string){
     console.log(page);
+    var dtobj = {pageid:page.id, type:type, webid: this.websiteid};
     if(type=='duplicate'){
       // console.log(id);
-      this.webpagesService.dupldelpage(page.id,type).subscribe({
+      this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
+          console.log(data);
           if(data.success==1){
             this._snackBar.open('Processing...', 'OK');
 
-            var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
-            var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
+            var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
+            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.websiteid, dir:getvl};
+            console.log(pathobj);
          
             this.fileUploadService.copypage(pathobj).subscribe({
               next: data => {
@@ -573,6 +576,9 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
               }
             });
+
+            this.showwebpages();
+
           }else{
             this._snackBar.open('Something Went Wrong!!', 'OK');
           }
@@ -580,7 +586,7 @@ export class WebsitePagesComponent implements OnInit {
         }
       });
     }else if(type=='copyurl'){
-      this.webpagesService.dupldelpage(page.id,type).subscribe({
+      this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
           // console.log(data);
 
