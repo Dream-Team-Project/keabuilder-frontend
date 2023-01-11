@@ -297,7 +297,7 @@ export class WebsitePagesComponent implements OnInit {
       var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.websiteid};
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
 
           if(data.found==1){
             this.pathcheck = true;

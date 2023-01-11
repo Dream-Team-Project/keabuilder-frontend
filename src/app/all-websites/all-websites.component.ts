@@ -113,7 +113,7 @@ export class AllWebsitesComponent implements OnInit {
         this.websiteService.createwebsite(genobj).subscribe({
           next: data => {
     
-          //  console.log(data);
+           console.log(data);
 
            if(data.exist ==1){
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
@@ -192,14 +192,14 @@ export class AllWebsitesComponent implements OnInit {
   restoredeleteme(web:any){
  
     console.log(web);
-
+    
     
 
   }
 
   searchStringInArray(str:any, strArray:any) {
     for (var j=0; j<strArray.length; j++) {
-        if (strArray[j].match(str)) return 0;
+        if (strArray[j] == str) return 0;
     }
     return 1;
 ``}

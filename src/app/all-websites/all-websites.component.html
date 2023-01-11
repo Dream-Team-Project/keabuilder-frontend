@@ -1,9 +1,11 @@
 <ng-template #dialog>
   <h1 mat-dialog-title class="kb-danger">Delete Website</h1>
   <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{delwebsite.title}}</span> website?
+      Would you like to delete <span class="text-danger">{{delwebsite.title}}</span> website?<br>
+      All data with Pages will be deleted and can't be restored!
   </div>
   <div mat-dialog-actions class="justify-content-end">
+      
       <button mat-button mat-dialog-close class="text-info">No</button>
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="restoredeleteme(delwebsite)">Yes</button>
   </div>
