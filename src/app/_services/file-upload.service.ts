@@ -103,7 +103,8 @@ export class FileUploadService {
   // html pages
 
   createdefaulthome():Observable<any> {
-    var obj = {uuid: this.uuid};
+    var obj:any;
+    obj.uuid = this.uuid;
     return this.http.post(this.createDefaultHomeApi, obj);
   }
 
@@ -118,8 +119,8 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  deletepage(path:string):Observable<any> {
-    return this.http.delete(this.deletePageApi + '/' + this.uuid + '/' + path)
+  deletepage(obj:any):Observable<any> {
+    return this.http.delete(this.deletePageApi + '/' + this.uuid + '/' + obj.website_id + '/' + obj.path)
     .pipe(catchError(this.errorHandler));
   }
 

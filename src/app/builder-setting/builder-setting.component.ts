@@ -80,10 +80,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._portal = new TemplatePortal(this._dialogTemplate, this._viewContainerRef);
     this._overlayRef = this._overlay.create({
       positionStrategy: this._overlay.position().global().centerHorizontally().centerVertically(),
-      hasBackdrop: false,
+      hasBackdrop: true,
     });
     this._overlayRef.backdropClick().subscribe(() => {
-      if(!this._general.minimize) this.overlayRefDetach(!this._general.blockSelection);
+      if(this._general.blockSelection) this.overlayRefDetach(!this._general.blockSelection);
     });
   }
 
@@ -120,8 +120,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.selectedTab = '';
     this._general.setExpPanelStep(0);
     this._style.setItemStyle = false;
-    this.searchInp.deep = '';
-    this.searchInp.tab = '';
+    this.searchInpClear();
     this.searchType = '';
     this.searchTglCls = '';
     if(this._general.blockSelection == '') this._section.savePageSession();
@@ -173,8 +172,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       setTimeout(()=>{
         if(!temp) this.searchType = '';
         this.searchTglCls = '';
-        this.searchInp.tab = '';
-        this.searchInp.deep = '';
+        this.searchInpClear();
         this.waitTill = true;
       }, 200)
     }
@@ -186,6 +184,11 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   searchingTab(val:string) {
     return val?.toLowerCase().indexOf(this.searchInp.tab.toLowerCase()) >= 0;
+  }
+
+  searchInpClear() {
+    this.searchInp.deep = '';
+    this.searchInp.tab = '';
   }
 
 }

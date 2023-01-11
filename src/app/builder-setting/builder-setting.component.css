@@ -218,14 +218,25 @@ i.kb-danger {
     border: 0px;
 }
 
-.kb-searchFeild label {
-    font-size: 12px;
+.kb-searchFeild label, .kb-searchFeild span.kb-clear {
     height: 100%;
     display: flex;
     align-items: center;
-    background: rgb(174 174 174 / 20%);
-    min-width: 60px;
     justify-content: center;
+    background: rgb(174 174 174 / 20%);
+    color: var(--secondary-color);
+}
+
+.kb-searchFeild label {
+    font-size: 13px;
+    min-width: 60px;
+    font-weight: 600;
+}
+
+.kb-searchFeild span.kb-clear {
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 40px;
 }
 
 .kb-searchFeild {

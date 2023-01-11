@@ -378,7 +378,7 @@ div#kb-selection-ask {
     height: auto;
     background: var(--kb-light);
     border-radius: 5px;
-    color: initial;
+    transition: 0.2s ease-out;
 }
 
 #kb-row-selection {

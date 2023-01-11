@@ -96,6 +96,7 @@
                     <ng-template #deep>
                         <input type="text" [(ngModel)]="searchInp.deep" placeholder="Search deep...">
                     </ng-template>
+                    <span mat-ripple (click)="searchInpClear()" class="kb-clear"><i class="fa fa-times"></i></span>
                 </div>
                 <mat-tab-group *ngIf="_general.selectedBlock?.content?.name != 'code' else code" (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component"
                     (animationDone)="_general.detectTabChange()" (selectedTabChange)="_general.selectTabChange($event)">
