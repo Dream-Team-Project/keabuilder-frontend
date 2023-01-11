@@ -68,14 +68,14 @@ export class WebsiteDetailsComponent implements OnInit {
     var dt = {webid:this.websiteid};
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
-        if(data.message != 'Error') {
+        if(data?.length != 0) {
           console.log(data);
           data.data.forEach((element:any) => {
 
             this.userid = element.user_id;
             this.kbwebsite.push(element);
 
-            if(element.domain!='' && element.subdomain!=null){
+            if(element.domain!='' && element.domain!=null){
               this.defaultdomain = element.domain;
             }else{
               this.defaultdomain = element.subdomain+'.'+data.globalsubdomain;
@@ -191,7 +191,9 @@ export class WebsiteDetailsComponent implements OnInit {
               header: this.pagescriptheader,
               footer: this.pagescriptfooter,
             },
-            path: data.data[0].page_path
+            path: data.data[0].page_path,
+            website_id: this.websiteid,
+            dir: 'pages'
           };
           this.fileUploadService.updateHome(obj).subscribe({
             next: data => {
