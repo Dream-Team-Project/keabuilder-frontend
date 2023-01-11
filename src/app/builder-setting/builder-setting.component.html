@@ -92,9 +92,9 @@
                 </div>
                 <div *ngIf="searchType" class="kb-searchFeild" [class]="searchTglCls">
                     <label>{{searchType | titlecase}}</label>
-                    <input *ngIf="searchType == 'tab' else deep" type="text" [(ngModel)]="searchInp.tab" placeholder="Search tab name...">
+                    <input *ngIf="searchType == 'tab' else deep" type="text" [(ngModel)]="searchInp.tab" placeholder="Search by tab name...">
                     <ng-template #deep>
-                        <input type="text" [(ngModel)]="searchInp.deep" placeholder="Search deep...">
+                        <input type="text" [(ngModel)]="searchInp.deep" placeholder="Search inside tabs...">
                     </ng-template>
                     <span mat-ripple (click)="searchInpClear()" class="kb-clear"><i class="fa fa-times"></i></span>
                 </div>

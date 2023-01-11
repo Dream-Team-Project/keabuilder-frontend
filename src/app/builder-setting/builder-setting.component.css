@@ -237,6 +237,7 @@ i.kb-danger {
     cursor: pointer;
     font-size: 14px;
     min-width: 40px;
+    transition: all 0.1s ease-out;
 }
 
 .kb-searchFeild span.kb-clear:hover {

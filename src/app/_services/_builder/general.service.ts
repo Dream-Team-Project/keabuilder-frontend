@@ -497,7 +497,8 @@ export class GeneralService {
           if(tglDraft) {
             var td = {
               status:(status ? 'publish' : 'draft'), 
-              path: this.main.path
+              path: this.main.path,
+              website_id: web.uniqueid
             }
             this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
               this.savePage(web).then(resp=>resolve(resp));
@@ -515,7 +516,8 @@ export class GeneralService {
         (event:any) => {
           if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
             var obj = {
-              path:event.data.folder,
+              dir: this.main.publish_status ? 'pages' : 'drafts',
+              path: event.data.folder,
               website_id: web.uniqueid
             };
             this.fileUploadService.updateHome(obj).subscribe({

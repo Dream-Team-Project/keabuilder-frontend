@@ -206,7 +206,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'l-headers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="_general.redirectLink('/website/headers')">
+            <button mat-button (click)="_general.redirectLink('/websites/headers')">
                 <i [innerHTML]="'add' | svg | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setHeader(false)" [class.kb-btn-active]="!_general.includeLayout.header">
@@ -219,7 +219,7 @@
             </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
-            <button mat-button (click)="_general.redirectLink('/website/footers')">
+            <button mat-button (click)="_general.redirectLink('/websites/footers')">
                 <i [innerHTML]="'add' | svg | safeHtml"></i> Create
             </button>
             <button mat-button (click)="setFooter(false)" [class.kb-btn-active]="!_general.includeLayout.footer">
@@ -307,7 +307,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <button mat-button (click)="_general.redirectLink('/website/navigation')" class="kb-icon-btn">
+            <button mat-button (click)="_general.redirectLink('/websites/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>

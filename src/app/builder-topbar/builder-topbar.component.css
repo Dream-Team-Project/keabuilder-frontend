@@ -131,7 +131,7 @@ button.mat-button.kb-btn-active, ::ng-deep .kb-selection-option button.mat-butto
 }
 
 ::ng-deep button.mat-button, ::ng-deep button.mat-button span>span, ::ng-deep svg, .kb-block-selection>span, .kb-block-selection span.block span, .kb-side-arrow {
-    transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-out;
 }
 
 ::ng-deep .kb-triggers .mat-button i, ::ng-deep .kb-block-list .mat-button i {
