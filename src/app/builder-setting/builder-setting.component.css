@@ -239,6 +239,10 @@ i.kb-danger {
     min-width: 40px;
 }
 
+.kb-searchFeild span.kb-clear:hover {
+    color: var(--primary-color);
+}
+
 .kb-searchFeild {
     height: 36px;
     display: flex;
