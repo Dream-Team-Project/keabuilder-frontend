@@ -71,7 +71,7 @@ export class WebsitePagesComponent implements OnInit {
   dataSource: MatTableDataSource<WebpageData>;
   users:any = [];
   showingcontacts = '7 DAY';
-  duplicateaction = true;
+  actionname:any = '';
   
   websites:any = [];
   form: any = {
@@ -792,10 +792,8 @@ export class WebsitePagesComponent implements OnInit {
     });
   }
 
-  openDialog(templateRef: TemplateRef<any>, page:any): void {
-    this.delpage = page;
-    this.dialog.open(templateRef);
-          
+  openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
+  
     this.websiteService.getWebsite().subscribe({
       next: webdata => {
       console.log(webdata);
@@ -808,6 +806,17 @@ export class WebsitePagesComponent implements OnInit {
 
       }
     });
+
+    if(type=='move'){
+      this.actionname = 'Move';
+    }else if(type=='copymove'){
+      this.actionname = 'Copy & Move';
+    }else{
+      this.actionname = '';
+    }
+
+    this.delpage = page;
+    this.dialog.open(templateRef);
 
   }
   
