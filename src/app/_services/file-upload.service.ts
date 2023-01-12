@@ -52,6 +52,7 @@ export class FileUploadService {
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
   toggleDraftApi = '/api/toggledraft'
+  transferPageApi = "./api/transferpage";
   // web pages
   // file
   fileApi = "./api/file";
@@ -131,6 +132,11 @@ export class FileUploadService {
   copypage(path:any):Observable<any> {
     path.uuid = this.uuid;
     return this.http.post(this.copyPageApi, path);
+  }
+
+  transferPage(obj:any):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.transferPageApi, obj);
   }
 
   updateHome(obj:any):Observable<any> {
