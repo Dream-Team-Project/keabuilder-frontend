@@ -63,7 +63,7 @@
                                 (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
                                 matTooltip="Section Setting" matTooltipPosition="above"><i
                                     class="far fa-edit"></i></span>
-                            <span (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
+                            <span (click)="_section.duplicateSection(section,si)" matTooltip="Copy Section"
                                 matTooltipPosition="above"><i class="far fa-copy"></i></span>
                             <span (click)="_section.deleteSection(si)" *ngIf="_section.sections.length != 1"
                                 matTooltip="Delete Section" matTooltipPosition="above"><i
@@ -110,7 +110,7 @@
                                         matTooltip="Row Setting" matTooltipPosition="above"><i
                                             class="far fa-edit"></i></span>
                                     <span (click)="_row.duplicateRow(section.rowArr, row, ri)"
-                                        matTooltip="Duplicate Row" matTooltipPosition="above"><i
+                                        matTooltip="Copy Row" matTooltipPosition="above"><i
                                             class="far fa-copy"></i></span>
                                     <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
                                         matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
@@ -164,7 +164,7 @@
                                                             class="fas fa-tasks"></i></span>
                                                     <span
                                                         (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
-                                                        matTooltip="Duplicate Element" matTooltipPosition="above"><i
+                                                        matTooltip="Copy Element" matTooltipPosition="above"><i
                                                             class="far fa-copy"></i></span>
                                                     <span (click)="_element.deleteElement(column.elementArr, ei)"
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i

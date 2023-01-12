@@ -219,7 +219,7 @@ export class AllFunnelsComponent implements OnInit {
       this.colortheme = false;
     }else if(type=='duplicate'){
       // console.log(uniqueid+'--'+id);
-      this._snackBar.open('Duplicate In Progress!', 'Close');
+      this._snackBar.open('Copy In Progress!', 'Close');
 
       this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
         next: data => {
@@ -244,7 +244,7 @@ export class AllFunnelsComponent implements OnInit {
             }
 
             this.showfunnels();
-            this._snackBar.open('Successfully Duplicate Funnel!', 'Close');
+            this._snackBar.open('Successfully Copy Funnel!', 'Close');
           }
         }
       });
@@ -407,7 +407,7 @@ export class AllFunnelsComponent implements OnInit {
               error=>{console.log(error)});
 
               this.showfunnels();
-              this._snackBar.open('Successfully Duplicate Step!', 'Close');
+              this._snackBar.open('Successfully Copy Step!', 'Close');
             }
           }
         });

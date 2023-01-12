@@ -130,7 +130,7 @@
                                             (click)="toggleItemSetting(item)"
                                             [style.color]="item.setting ? 'var(--primary-color)' : ''"
                                             class="fa fa-edit p-2"></i>
-                                        <i matTooltip="Duplicate" matTooltipPosition="above"
+                                        <i matTooltip="Copy" matTooltipPosition="above"
                                             (click)="duplicateMenuItem(item, mi)" class="far fa-copy p-2"></i>
                                         <i matTooltip="Remove" matTooltipPosition="above" (click)="deleteMenuItem(mi)"
                                             class="fa fa-times kb-danger p-2"></i>
@@ -182,7 +182,7 @@
                             <span matTooltip="Click to customize" matTooltipPosition="above" (click)="selectMenu(menu)"
                                 class="px-3 py-2 w-100">{{menu.name | titlecase}}</span>
                             <span class="border-left">
-                                <i (click)="duplicateMenu(menu)" matTooltip="Duplicate" matTooltipPosition="above"
+                                <i (click)="duplicateMenu(menu)" matTooltip="Copy" matTooltipPosition="above"
                                     class="far fa-copy p-2"></i>
                                 <i (click)="openDialog(dialog, menu)" matTooltip="Delete" matTooltipPosition="above"
                                     class="far fa-trash-alt kb-danger p-2"></i>

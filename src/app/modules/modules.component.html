@@ -65,7 +65,7 @@
             </div> 
             <div class="col-12 pt-3 px-4 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Cancel</button>
-                <button (click)="respWaiting = true; post.type == 'module' ? duplicateModule(post) : duplicateLesson(post)" mat-raised-button color="primary">Duplicate</button>
+                <button (click)="respWaiting = true; post.type == 'module' ? duplicateModule(post) : duplicateLesson(post)" mat-raised-button color="primary">Copy</button>
             </div>
         </div>
         <div *ngIf="respWaiting">
@@ -145,7 +145,7 @@
                                             <i matTooltip="Add New Module" matTooltipPosition="above"
                                                 (click)="openDialog(post, 'module')" class="fa fa-plus"></i>
                                             <i matTooltip="Module Setting" (click)="openDialog(module, 'module')" matTooltipPosition="above" class="far fa-edit"></i>
-                                            <i matTooltip="Duplicate Module"
+                                            <i matTooltip="Copy Module"
                                                 (click)="duplicatePost(module, 'module')" matTooltipPosition="above" class="far fa-copy"></i>
                                             <i (click)="deletePost(module, 'module', mi, -1);" 
                                                 matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt"></i>
@@ -187,7 +187,7 @@
                                                         (click)="openDialog(lesson, 'lesson')" class="far fa-edit"></i>
                                                     <i (click)="redirectToLesson(0,module,lesson)" matTooltip="Go To Content" matTooltipPosition="above" 
                                                         class="fa fa-photo-video"></i>
-                                                    <i matTooltip="Duplicate Lessson" matTooltipPosition="above" 
+                                                    <i matTooltip="Copy Lessson" matTooltipPosition="above" 
                                                         (click)="duplicatePost(lesson, 'lesson')"  class="far fa-copy"></i>
                                                     <i matTooltip="Delete Lesson" matTooltipPosition="above" 
                                                     (click)="deletePost(lesson, 'lesson', mi, li)" class="far fa-trash-alt"></i>

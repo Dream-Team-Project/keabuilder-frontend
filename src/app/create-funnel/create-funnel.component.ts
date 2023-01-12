@@ -680,7 +680,7 @@ export class CreateFunnelComponent implements OnInit {
               error=>{console.log(error)});
 
               this.showfunnelsteps();
-              this._snackBar.open('Successfully Duplicate Step!', 'Close');
+              this._snackBar.open('Successfully Copy Step!', 'Close');
               this.kb_substeps2(data.data.insertId);
             }
           }
@@ -762,7 +762,7 @@ export class CreateFunnelComponent implements OnInit {
             error=>{console.log(error)});
 
             this.showfunnelsteps();
-            this._snackBar.open('Successfully Duplicate Step!', 'Close');
+            this._snackBar.open('Successfully Copy Step!', 'Close');
             this.kb_substeps2(data.data.insertId);
           }
         }

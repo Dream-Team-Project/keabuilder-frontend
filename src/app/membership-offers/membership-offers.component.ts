@@ -333,7 +333,7 @@ export class MembershipOffersComponent implements OnInit {
         next: data => {
           console.log(data);
           this.getallmyoffers();
-          this._snackBar.open('Offer Duplicate Successfully!', 'Close');
+          this._snackBar.open('Offer Copy Successfully!', 'Close');
         }
       });
     }
