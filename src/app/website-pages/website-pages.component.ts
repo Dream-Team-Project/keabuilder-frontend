@@ -570,7 +570,7 @@ export class WebsitePagesComponent implements OnInit {
          
             this.fileUploadService.copypage(pathobj).subscribe({
               next: data => {
-                this._snackBar.open('Page Copy Successfully!', 'OK');
+                this._snackBar.open('Page Duplicate Successfully!', 'OK');
                 this.showwebpages();
               }
             });

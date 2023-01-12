@@ -44,7 +44,7 @@
                         matTooltipPosition="above" class="far fa-save"></i>        
                     <i (click)="_general.blockSelection = ''; _general.selectedBlock = section; _style.blockSetting(section); openDialog($event)"
                         matTooltip="Section Setting" matTooltipPosition="above" class="far fa-edit"></i>
-                    <i (click)="_section.duplicateSection(section,si)" matTooltip="Copy Section"
+                    <i (click)="_section.duplicateSection(section,si)" matTooltip="Duplicate Section"
                         matTooltipPosition="above" class="far fa-copy"></i>
                     <i *ngIf="_section.sections.length > 1" (click)="_section.deleteSection(si)"
                         matTooltip="Delete Section" matTooltipPosition="above" class="far fa-trash-alt"></i>
@@ -89,7 +89,7 @@
                                 matTooltip="Column Structure" matTooltipPosition="above" class="fa fa-columns"></i>
                             <i (click)="_general.blockSelection = ''; _general.selectedBlock = row; _style.blockSetting(row); openDialog($event)"
                                 matTooltip="Row Setting" matTooltipPosition="above" class="far fa-edit"></i>
-                            <i (click)="_row.duplicateRow(section.rowArr, row, ri)" matTooltip="Copy Row"
+                            <i (click)="_row.duplicateRow(section.rowArr, row, ri)" matTooltip="Duplicate Row"
                                 matTooltipPosition="above" class="far fa-copy"></i>
                             <i (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
                                 matTooltipPosition="above" class="far fa-trash-alt"></i>
@@ -136,7 +136,7 @@
                                         matTooltip="Add New Column" matTooltipPosition="above" class="fa fa-plus"></i>
                                     <i *ngIf="row.columnArr.length < 6"
                                         (click)="_column.duplicateColumn(column,ci)"
-                                        matTooltip="Copy Column" matTooltipPosition="above"
+                                        matTooltip="Duplicate Column" matTooltipPosition="above"
                                         class="far fa-copy"></i>
                                     <i *ngIf="row.columnArr.length > 1"
                                         (click)="_column.deleteColumn(row.columnArr,ci)"
@@ -185,7 +185,7 @@
                                                 matTooltip="Element Setting" matTooltipPosition="above"
                                                 class="far fa-edit"></i>
                                             <i (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
-                                                matTooltip="Copy Element" matTooltipPosition="above"
+                                                matTooltip="Duplicate Element" matTooltipPosition="above"
                                                 class="far fa-copy"></i>
                                             <i (click)="_element.deleteElement(column.elementArr, ei)"
                                                 matTooltip="Delete Element" matTooltipPosition="above"

@@ -85,7 +85,7 @@
       </form>
 
       <div *ngIf="showpageurl">
-        <h6><b>Copy Course URL</b></h6>
+        <h6><b>Duplicate Course URL</b></h6>
         <hr>
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Course Url</mat-label>
@@ -93,7 +93,7 @@
         </mat-form-field>
         
         <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-            <i class="far fa-copy"></i> Copy Url
+            <i class="far fa-copy"></i> Duplicate Url
         </button>
       </div>
 
@@ -170,10 +170,10 @@
               <i class="fas fa-chart-pie pr-2"></i>View Analytics
             </button>
             <button mat-menu-item (click)="duplicateCourse(acourse)">
-              <i class="far fa-copy pr-2"></i>Copy
+              <i class="far fa-copy pr-2"></i>Duplicate
             </button>
             <button mat-menu-item  (click)="copyurl(acourse.url)" >
-              <i class="fas fa-link pr-2"></i>Copy URL
+              <i class="fas fa-link pr-2"></i>Duplicate URL
             </button>
             <button mat-menu-item class="text-danger" (click)="deleteCourse(acourse)">
               <i class="far fa-trash-alt pr-2"></i>Delete
