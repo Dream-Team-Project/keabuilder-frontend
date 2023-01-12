@@ -120,7 +120,7 @@ export class AllWebsitesComponent implements OnInit {
            }else{
 
 
-            var dataobj = {uniqueid:data.uniqueid};
+            var dataobj = {website_id:data.uniqueid};
             this._file.createwebsitefolder(dataobj).subscribe(e=>{
               console.log(e);
             });

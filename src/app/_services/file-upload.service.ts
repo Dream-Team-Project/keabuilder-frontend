@@ -13,9 +13,10 @@ providedIn: 'root'
 
 export class FileUploadService {
   // API url
+  // user
   createuserfolderApi = "./api/create-user";
-  createwebsitefolderApi = "./api/create-website";
   createlogofaviApi = "./api/create-user-logofavi";
+  // user
   // document
   getAllDocumentsApi = "./api/getalldocuments";
   uploadDocumentApi = "./api/uploaddocument";
@@ -43,6 +44,12 @@ export class FileUploadService {
   updatetemplateApi = "./api/updatetemplate";
   deletetemplateApi = "./api/deletetemplate";
   // section templates
+  // website
+  createwebsitefolderApi = "./api/create-website";
+  renamewebsitefolderApi = "./api/rename-website";
+  copywebsitefolderApi = "./api/copy-website";
+  deletewebsitefolderApi = "./api/delete-website";
+  // website
   // web pages
   savePageApi = "./api/savepage";
   getPageApi = "./api/getpage";
@@ -64,6 +71,8 @@ export class FileUploadService {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
+  // user
+
   createuserfolder(uuid:any):Observable<any> {
     var obj = {uuid: uuid};
     return this.http.post(this.createuserfolderApi, obj);
@@ -74,32 +83,30 @@ export class FileUploadService {
     return this.http.post(this.createlogofaviApi, obj);
   }
 
+  // user
+
+  // website
+
   createwebsitefolder(obj:any):Observable<any> {
     obj.uuid = this.uuid;
     return this.http.post(this.createwebsitefolderApi, obj);
   }
-  
-  // section templates 
 
-  fetchtemplates():Observable<any> {
-    return this.http.get(this.alltemplatesApi+'/'+this.uuid);
+  renamewebsitefolder(obj:any):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.renamewebsitefolderApi, obj);
   }
 
-  savetemplate(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.savetemplateApi, obj)
-    .pipe(catchError(this.errorHandler));
+  copywebsitefolder(obj:any):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.copywebsitefolderApi, obj);
   }
 
-  updatetemplate(obj:any):Observable<any> {
-    return this.http.post(this.updatetemplateApi, obj)
-    .pipe(catchError(this.errorHandler));
+  deletewebsitefolder(website_id:string):Observable<any> {
+    return this.http.delete(this.deletewebsitefolderApi+'/'+this.uuid+'/'+website_id);
   }
 
-  deletetemplate(id:any):Observable<any> {
-    return this.http.delete(this.deletetemplateApi + '/' + id)
-    .pipe(catchError(this.errorHandler));
-  }
+  // website
 
   // html pages
 
@@ -156,6 +163,30 @@ export class FileUploadService {
   // }
 
   // html pages
+
+  // section templates 
+
+  fetchtemplates():Observable<any> {
+    return this.http.get(this.alltemplatesApi+'/'+this.uuid);
+  }
+
+  savetemplate(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.savetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updatetemplate(obj:any):Observable<any> {
+    return this.http.post(this.updatetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deletetemplate(id:any):Observable<any> {
+    return this.http.delete(this.deletetemplateApi + '/' + id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // section templates 
 
   // files
 
