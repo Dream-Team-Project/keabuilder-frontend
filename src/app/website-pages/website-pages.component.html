@@ -8,6 +8,41 @@
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="this.restoredeleteme(delpage,'delete');">Yes</button>
   </div>
 </ng-template>
+
+<ng-template #dialogduplicate>
+  <h1 mat-dialog-title >Duplicate Page</h1>
+  <div mat-dialog-content>
+      Would you like to Duplicate <span class="text-primary">{{delpage.page_name}}</span> page?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+
+    <div *ngIf="duplicateaction">
+
+      <button mat-raised-button color="accent"(click)="duplicateaction = false;">
+        <i class="far fa-copy"></i> Duplicate in Other
+      </button>
+
+      <button mat-raised-button mat-dialog-close color="primary"  (click)="shortsettings(delpage,'duplicate')">
+        <i class="far fa-copy"></i> Duplicate in Current
+      </button>
+
+    </div>
+
+    <div *ngIf="!duplicateaction">
+      <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-label>Websites</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let website of websites" [value]="website.uniqueid">
+            {{website.title}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-button class="text-info" (click)="duplicateaction = true;">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(delpage)">Yes</button>
+    </div>
+
+  </div>
+</ng-template>
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
@@ -395,10 +430,21 @@
                       <!-- <button mat-menu-item>
                         <i class="fas fa-chart-pie mr-2"></i> View Analytics
                       </button> -->
+<<<<<<< HEAD
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage)">
+                        <i class="far fa-copy mr-2"></i> Copy
+=======
                       <button mat-menu-item (click)="shortsettings(kbpage,'duplicate',kbpage.page_path)">
                         <i class="far fa-copy mr-2"></i> Duplicate
+>>>>>>> 714c78e66c68e70c8d9211d34a93ef8608d58733
                       </button>
-                      <button mat-menu-item (click)="shortsettings(kbpage,'copyurl','')">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage)">
+                        <i class="fa fa-paste mr-2"></i> Move
+                      </button>
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage)">
+                        <i class="fa fa-paste mr-2"></i> Copy & Move
+                      </button>
+                      <button mat-menu-item (click)="shortsettings(kbpage,'copyurl')">
                         <i class="fas fa-link mr-2"></i> Copy URL
                       </button>
                       <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage)">
