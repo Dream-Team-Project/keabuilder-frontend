@@ -10,25 +10,12 @@
 </ng-template>
 
 <ng-template #dialogduplicate>
-  <h1 mat-dialog-title >Duplicate Page</h1>
+  <h1 mat-dialog-title >{{actionname}} Page</h1>
   <div mat-dialog-content>
-      Would you like to Duplicate <span class="text-primary">{{delpage.page_name}}</span> page?
+      Would you like to {{actionname}} <span class="text-primary">{{delpage.page_name}}</span> page?
   </div>
   <div mat-dialog-actions class="justify-content-end">
 
-    <div *ngIf="duplicateaction">
-
-      <button mat-raised-button color="accent"(click)="duplicateaction = false;">
-        <i class="far fa-copy"></i> Duplicate in Other
-      </button>
-
-      <button mat-raised-button mat-dialog-close color="primary"  (click)="shortsettings(delpage,'duplicate')">
-        <i class="far fa-copy"></i> Duplicate in Current
-      </button>
-
-    </div>
-
-    <div *ngIf="!duplicateaction">
       <mat-form-field appearance="fill" class="kb-full-width">
         <mat-label>Websites</mat-label>
         <mat-select>
@@ -37,9 +24,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-button class="text-info" (click)="duplicateaction = true;">No</button>
+      <button mat-button class="text-info" mat-dialog-close >No</button>
       <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(delpage)">Yes</button>
-    </div>
 
   </div>
 </ng-template>
@@ -357,7 +343,7 @@
               <td mat-cell *matCellDef="let row">
                 <button mat-raised-button [color]="'accent'" class="mr-2" (click)="restoredeleteme(row,'restore')">Restore <i
                     class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                <button mat-raised-button [color]="'danger'" (click)="openDialog(dialog, row)">Delete <i class="far fa-trash-alt"
+                <button mat-raised-button [color]="'danger'" (click)="openDialog(dialog, row, '')">Delete <i class="far fa-trash-alt"
                     aria-hidden="true"></i></button>
               </td>
             </ng-container>
@@ -433,10 +419,10 @@
                       <button mat-menu-item (click)="shortsettings(kbpage,'duplicate')">
                         <i class="far fa-copy mr-2"></i> Duplicate
                       </button>
-                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage)">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'move')">
                         <i class="fa fa-paste mr-2"></i> Move
                       </button>
-                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage)">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'copymove')">
                         <i class="fa fa-paste mr-2"></i> Copy & Move
                       </button>
                       <button mat-menu-item (click)="shortsettings(kbpage,'copyurl')">
