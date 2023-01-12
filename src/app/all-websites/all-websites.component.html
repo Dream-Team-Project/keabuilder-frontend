@@ -5,7 +5,10 @@
       All data with Pages will be deleted and can't be restored!
   </div>
   <div mat-dialog-actions class="justify-content-end">
-      
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label> Password</mat-label>
+        <input type="password" matInput >
+      </mat-form-field>
       <button mat-button mat-dialog-close class="text-info">No</button>
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="restoredeleteme(delwebsite)">Yes</button>
   </div>

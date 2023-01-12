@@ -35,17 +35,6 @@ export interface WebpageData {
   styleUrls: ['./website-pages.component.css']
 })
 export class WebsitePagesComponent implements OnInit {
-  delpage:any;
-  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
-  selection = new SelectionModel<WebpageData>(true, []);
-  dataSource: MatTableDataSource<WebpageData>;
-  users:any = [];
-  showingcontacts = '7 DAY';
   
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
@@ -71,6 +60,20 @@ export class WebsitePagesComponent implements OnInit {
                 });
                }
 
+  delpage:any;
+  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
+  selection = new SelectionModel<WebpageData>(true, []);
+  dataSource: MatTableDataSource<WebpageData>;
+  users:any = [];
+  showingcontacts = '7 DAY';
+  duplicateaction = true;
+  
+  websites:any = [];
   form: any = {
     pagename: null,
     pagepath:null,
@@ -199,27 +202,6 @@ export class WebsitePagesComponent implements OnInit {
     //     }
     //   }
     // });
-
-    var dt = {webid:this.websiteid};
-    this.websiteService.getuniqwebsites(dt).subscribe({
-      next: data => {
-
-        if(data?.length != 0) {
-          console.log(data);
-          data.data.forEach((element:any) => {
-
-            if(element.domain!='' && element.domain!=null){
-              this.mydomain = element.domain;
-            }else{
-              this.mydomain = element.subdomain+'.'+data.globalsubdomain;
-            }
-
-            console.log(this.mydomain);
-          });
-
-        }
-      }
-    });
 
     this.userService.getUsersDetails().subscribe({
       next: data => {
@@ -358,25 +340,47 @@ export class WebsitePagesComponent implements OnInit {
         this.searching = false;
       }else{
         this.nodata = false;
-        this.websiteService.getWebsite().subscribe({
-          next: webdata => {
-          var tempsearch = [];
-          for(var i = 0; i < dataA.data.length; i++) {
-            var element = dataA.data[i];
-            var mycustomdate =  new Date(element.updated_at);
-            var text1 = mycustomdate.toDateString();    
-            var text2 = mycustomdate.toLocaleTimeString();
-            element.updated_at = text1+' '+text2;
-            element.defaulthome = webdata?.data[0]?.homepage==element.uniqueid ? 1 : 0;
-            element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
-            tempsearch.push(element);
-            if(dataA.data.length-1 == i) {
-              this.kbpages = tempsearch;
-              this.searching = false;
+
+        var dt = {webid:this.websiteid};
+        this.websiteService.getuniqwebsites(dt).subscribe({
+          next: data => {
+    
+            if(data?.length != 0) {
+              // console.log(data);
+              data.data.forEach((element:any) => {
+    
+                if(element.domain!='' && element.domain!=null){
+                  this.mydomain = element.domain;
+                }else{
+                  this.mydomain = element.subdomain+'.'+data.globalsubdomain;
+                }
+    
+                // console.log(this.mydomain);
+              });
+
+              // console.log(data);
+              var tempsearch = [];
+              for(var i = 0; i < dataA.data.length; i++) {
+                var element = dataA.data[i];
+                var mycustomdate =  new Date(element.updated_at);
+                var text1 = mycustomdate.toDateString();    
+                var text2 = mycustomdate.toLocaleTimeString();
+                element.updated_at = text1+' '+text2;
+                element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
+                element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+                tempsearch.push(element);
+                if(dataA.data.length-1 == i) {
+                  this.kbpages = tempsearch;
+                  this.searching = false;
+                }
+              }
+
+
             }
           }
-        }
-      });
+        });
+        
+    
       }
     }else{
       this.nodata = true;
@@ -553,7 +557,7 @@ export class WebsitePagesComponent implements OnInit {
 
   }
 
-  shortsettings(page:any, type:any, oldpath:string){
+  shortsettings(page:any, type:any){
     console.log(page);
     var dtobj = {pageid:page.id, type:type, webid: this.websiteid};
     if(type=='duplicate'){
@@ -619,6 +623,10 @@ export class WebsitePagesComponent implements OnInit {
       });
     }
 
+  }
+
+  dupanotherdes(page:any){
+    console.log(page);
   }
 
   copyInputMessage(inputElement:any){
@@ -787,19 +795,19 @@ export class WebsitePagesComponent implements OnInit {
   openDialog(templateRef: TemplateRef<any>, page:any): void {
     this.delpage = page;
     this.dialog.open(templateRef);
-    // const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-    //   width: '255px',
-    //   data: {name: ''},
-    // });
-    
-    // dialogRef.afterClosed().subscribe(result => {
-    //   // console.log(id);
+          
+    this.websiteService.getWebsite().subscribe({
+      next: webdata => {
+      console.log(webdata);
 
-    //   if(result.event == 'Delete'){
-    //     this.restoredeleteme(id,'delete');
-    //   }
-      
-    // });
+      this.websites = [];
+      webdata.data.forEach((element:any) => {
+          var nwobj = {uniqueid:element.uniqueid,title:element.title};
+          this.websites.push(nwobj)
+        });
+
+      }
+    });
 
   }
   
