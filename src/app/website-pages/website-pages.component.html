@@ -18,7 +18,7 @@
 
       <mat-form-field appearance="fill" class="kb-full-width">
         <mat-label>Websites</mat-label>
-        <mat-select>
+        <mat-select name="newwebsiteid" [(ngModel)]="newwebsiteid" >
           <mat-option *ngFor="let website of websites" [value]="website.uniqueid">
             {{website.title}}
           </mat-option>
@@ -243,7 +243,7 @@
 
         <div *ngIf="!showarchivemode">
           <mat-form-field  appearance="fill" class="w-100">
-            <mat-label>Search Pages</mat-label>
+            <mat-label>{{searchpagetxt}}</mat-label>
             <input matInput type="text" (keyup)="searchpage($event)" placeholder="Search Pages">
             <i class="fa fa-search"></i>
           </mat-form-field>

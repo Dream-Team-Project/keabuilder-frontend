@@ -72,8 +72,9 @@ export class WebsitePagesComponent implements OnInit {
   users:any = [];
   showingcontacts = '7 DAY';
   actionname:any = '';
-  
+  newwebsiteid:any = '';
   websites:any = [];
+  searchpagetxt = 'Search Pages';
   form: any = {
     pagename: null,
     pagepath:null,
@@ -346,8 +347,11 @@ export class WebsitePagesComponent implements OnInit {
           next: data => {
     
             if(data?.length != 0) {
-              // console.log(data);
+              console.log(data);
               data.data.forEach((element:any) => {
+
+                this.searchpagetxt = 'Search Pages from website: '+element.title;
+                console.log(this.searchpagetxt);
     
                 if(element.domain!='' && element.domain!=null){
                   this.mydomain = element.domain;
@@ -626,8 +630,50 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   dupanotherdes(page:any){
-    console.log(page);
+
+    if(this.newwebsiteid!=''){
+
+      console.log(page);
+      var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
+      var newpath = page.page_path+'-'+this.makeid(20);
+
+      var dtobj = {type:this.actionname, newwebsiteid:this.newwebsiteid, uniqueid:page.uniqueid, newpath: newpath};
+      this.webpagesService.movecopywebpage(dtobj).subscribe({
+        next: data => {
+          console.log(data);
+          var pathobj = {old_website_id:this.websiteid, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:newpath, trigger:''};
+
+          this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
+
+          this.fileUploadService.transferPage(pathobj).subscribe({
+            next: data => {
+              console.log(data);
+
+              this.actionname=='Move' ? this._snackBar.open('Page Move Successfully!', 'OK'): this._snackBar.open('Page Copy & Move Successfully!', 'OK');
+              this.showwebpages();
+            }
+          });
+
+        }
+      });
+
+    }else{
+      this._snackBar.open("Can't find the website!", 'OK');
+    }
+
+   
+
   }
+
+  makeid(length:any) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
   copyInputMessage(inputElement:any){
     inputElement.select();
@@ -793,6 +839,8 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
+
+    this.newwebsiteid = '';
   
     this.websiteService.getWebsite().subscribe({
       next: webdata => {
