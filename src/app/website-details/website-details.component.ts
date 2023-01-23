@@ -19,6 +19,7 @@ export class WebsiteDetailsComponent implements OnInit {
   kblandingpages:any[] = [];
   kbwebsite:any[] = [];
   pathselected = '';
+  domainselected = '';
   pagescriptheader = '';
   pagescriptfooter = '';
   file = null;
@@ -34,9 +35,17 @@ export class WebsiteDetailsComponent implements OnInit {
   windoworigin = window.origin;
   tagstyle = 'Place CSS inside the style tag <style></style> and place JS inside the script tag <script></script>.';
   userid = '';
+  kbdomains:any[] = [];
 
   defaultdomain = '';
   websiteid:any = '';
+  domainconnerror = false;
+  searching = false;
+  defaultsubdomain = '';
+  websitetitle = '';
+
+
+
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -55,9 +64,9 @@ export class WebsiteDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     // Get Pages & landing page
-    this.webpagesService.getWebpages().subscribe({
+    this.webpagesService.getWebpagesById(this.websiteid).subscribe({
       next: data => {
-        // console.log(data);
+        // console.log(data.data);
         this.kbpages = data.data;
       },
       error: err => {
@@ -72,15 +81,33 @@ export class WebsiteDetailsComponent implements OnInit {
           console.log(data);
           data.data.forEach((element:any) => {
 
+              this.websitetitle = '('+element.title+')';
             this.userid = element.user_id;
             this.kbwebsite.push(element);
 
-            if(element.domain!='' && element.domain!=null){
-              this.defaultdomain = element.domain;
-            }else{
-              this.defaultdomain = element.subdomain+'.'+data.globalsubdomain;
+            var elmsubd = element.subdomain+'.'+data.globalsubdomain;
+            this.defaultsubdomain = elmsubd;
+
+            this.kbdomains.push({name:elmsubd});
+
+            if(data.alldomains?.length>0){
+              data.alldomains.forEach((element:any) => {
+                this.kbdomains.push(element);
+              });
             }
 
+            // console.log(element.domain);
+
+            if(element.domain!='' && element.domain!=null){
+              this.domainselected = element.domain;
+              this.defaultdomain = element.domain;
+            }else{
+              this.domainselected = elmsubd;
+              // this.kbdomains.push({name:elmsubd});
+              // this.defaultdomain = element.subdomain+'.'+data.globalsubdomain;
+            }
+
+            console.log(this.domainselected);
 
             if(element.tracking_header!=null && element.tracking_header!=''){
               this.pagescriptheader = atob(element.tracking_header);
@@ -149,11 +176,12 @@ export class WebsiteDetailsComponent implements OnInit {
   }
 
   viewsite(){
-    var url = 'https://'+this.defaultdomain;
+    var url = 'https://'+this.domainselected;
     window.open(url, '_blank');
   }
 
   updatepage(){
+    this.searching = true;
     // console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
@@ -161,11 +189,15 @@ export class WebsiteDetailsComponent implements OnInit {
       scriptfooter: btoa(this.pagescriptfooter),
       onlysite: false,
       uniqueid: this.websiteid,
+      domain: this.domainselected,
       // logo: this.logoimgname,
       // favicon: this.faviconimgname,
       // checkimginput1: this.imagelogorequest,
       // checkimginput2: this.imagefaviconrequest
     }
+
+    console.log(obj);
+
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
         console.log('-->');
@@ -200,12 +232,34 @@ export class WebsiteDetailsComponent implements OnInit {
               this._snackBar.open('Details Updated Successfully!', 'OK');
             }
           });
+
         }else{
+          this.searching = false;
           this._snackBar.open('Details Updated Successfully!', 'OK');
         }
 
+        if(data.found==1){
+          this.domainconnerror = true;
+          this.searching = false;
+        }else{
+
+          if(this.defaultsubdomain!=this.domainselected && data.seldomain?.length==0){
+            this.websiteService.onchangedirdomain(this.domainselected,this.websiteid).subscribe({
+              next: data => {    
+                this.searching = false;
+              }
+            });
+          }else{
+            this.searching = false;
+          }
+          this.domainconnerror = false;
+        }
+        
+
+
       }
     });
+
   }
 
   changeme (event:any) {

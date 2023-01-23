@@ -1,9 +1,10 @@
 <div id="kb-websitedetails">
+  <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div class="container-fluid kb_second_siteinfo">
     <div class="row">
 
       <div class="col-md-6">
-        <h3><b>Site Details</b> </h3>
+        <h3><b>Site Details</b> {{websitetitle}}</h3>
       </div>
 
         <div class="col-md-6 mkdecnon text-right">
@@ -42,17 +43,31 @@
 
         <div class="insideshdw">
 
-          <h5>Domain</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Domain</h5> 
+            </div>
+            <div class="col-md-6 text-right">
+              <a href="javascript:void(0)" routerLink="/domain" class="kb-btnmanage">Manage Domain</a>
+            </div>
+          </div>
           <p>Choose from the existing domain.</p>
 
           <div class="form-group">
-            <div class="kbcustom-domain-edit-link"
-              style="border: 1px solid #c7cfd8; border-radius: 4px; padding: 15px; margin-bottom: 20px">
-              <div class="kb-card__row">
-                <p class="kb-sage-body-semi">{{defaultdomain}}</p>
-                <a href="javascript:void(0)" routerLink="/domain" class="kb-btn">Manage Domain</a>
-              </div>
-            </div>
+
+            <mat-form-field appearance="fill" class="kb-full-width">
+              <mat-label>Select Domain</mat-label>
+              <mat-select [(value)]="domainselected" >
+                <span *ngFor="let kbdomain of kbdomains; index as i;" >
+                  <mat-option [value]="kbdomain.name">
+                    {{kbdomain.name}}
+                  </mat-option>
+                </span>
+              </mat-select>
+              <small class="text-danger" *ngIf="domainconnerror">Domain Already Connected Please remove it from the connected website first!</small>
+            </mat-form-field>
+
+
           </div>
 
         </div>

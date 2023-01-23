@@ -107,14 +107,14 @@ button.mat-button {
 
 .kb-fade-text, .kb-dragtext:after {
     color: #aeaeae;
-    height: 100%;
+    height: 80%;
     width: 100%;
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     left: 0;
-    top: 0;
+    top: 60px;
 }
 
 .kb-dragtext:after {

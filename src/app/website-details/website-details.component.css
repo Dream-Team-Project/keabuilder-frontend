@@ -55,11 +55,11 @@ hr {
     align-items: center;
     flex-wrap: wrap;
 }
-.kb-dropdown_trigger .kb-btn {
+.kb-dropdown_trigger .kb-btn, .kb-btnmanage  {
     text-decoration: none;
     background: transparent;
     border: none;
-    text-align: center;
+    /* text-align: center; */
     display: inline-block;
     width: 100%;
     color: #0072ef;
