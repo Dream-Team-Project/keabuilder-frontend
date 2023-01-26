@@ -130,7 +130,7 @@ const routes: Routes = [
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'forms', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -160,9 +160,9 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
   // builder routes
+  { path: 'builder/form/:id', component: FormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: 'preview/:website_id/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
-  { path: 'builder/form', component: FormBuilderComponent, canActivate: [AuthGuard] },
   
   // User Course
   { path: 'course/dashboard', component: CourseUserDashboardComponent},

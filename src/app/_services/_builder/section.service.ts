@@ -32,7 +32,6 @@ export class SectionService {
 
   pageSession:any = {undo: 0, redo: 0}
   pageSessionArr:any = [];
-  undoToggle:boolean = true;
 
   constructor(private _general: GeneralService, private _style:StyleService) { 
     var respS = {padding: '30px 0px'};

@@ -117,3 +117,27 @@ div#kb-img-group .kb-head {
     border-radius: 4px;
 }
 
+.kb-img-deleting {
+    pointer-events: none;
+}
+
+.kb-img-deleting span:after {
+    content: '';
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%!important;
+    height: 100%!important;
+    background-color: rgb(222 166 65 / 30%);
+}
+
+::ng-deep .kb-img-deleting .mat-spinner {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+}
+
+::ng-deep .kb-img-deleting .mat-spinner svg {
+    height: 60px!important;
+    width: 60px!important;
+}

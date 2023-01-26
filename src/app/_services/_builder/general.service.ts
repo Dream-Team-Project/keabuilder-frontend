@@ -49,7 +49,7 @@ export class GeneralService {
   respToggleDevice:any = this.respDevices['desktop'];
   undoRedo:any = {toggle: false, open: false, close: false};
   allBlocksIds:Array<number> = [];
-  selectedBlock:any = [];
+  selectedBlock:any = {};
   showBackToRowOption:boolean = false;
   sideFloatBtnAnim = {open: false, close: false};
   blockSelection:string = '';
@@ -788,6 +788,11 @@ export class GeneralService {
     ele.classList.toggle('kb-d-none');
   }
 
+  respToggle(device:any) {
+    if(device == this.respToggleDevice.name) device = 'desktop';
+    this.respToggleDevice = this.respDevices[device];
+  }
+
   sidefloatbtnopen(action:boolean) {
     if(action) {
       this.sideFloatBtnAnim.open = true;
@@ -835,14 +840,9 @@ export class GeneralService {
     });
   }
 
-  selectTabChange(e:any) {
-    this.selectedTab = e.tab ? e.tab['textLabel'] : '';
-  }
-  
-  detectTabChange() {
-    if(this.selectedBlock.type == 'element') {
-        this.showEditor = false;
-    }
+  selectedTabChange(e:any) {
+    if(this.selectedBlock.type == 'element') this.showEditor = false;
+    this.selectedTab = e.tab ? e.tab['textLabel'].toLowerCase() : '';
   }
 
   encodeData(data:any) {

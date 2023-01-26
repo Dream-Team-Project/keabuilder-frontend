@@ -120,6 +120,7 @@ export class ImageService {
     }
 
     deleteImage(img:any) {
+        img.deleting = true;
         this.fileUploadService.deletefromdb(img.id).subscribe(
             (event:any) => {
                 if(!img.ext_link) {

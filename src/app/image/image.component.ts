@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef, ViewConta
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { StyleService } from '../_services/_builder/style.service';
+import { FormService } from '../_services/_builder/form.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -33,7 +34,7 @@ export class ImageComponent implements OnInit {
     else this.connectWtParent = true;
   }   
 
-  constructor(public _general:GeneralService, public _image:ImageService, public _style:StyleService, private dialog: MatDialog, private _overlay: Overlay,
+  constructor(public _general:GeneralService, public _image:ImageService, public _style:StyleService, private _form:FormService, private dialog: MatDialog, private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef) { }
 
   ngOnInit(): void {
@@ -76,9 +77,17 @@ export class ImageComponent implements OnInit {
     },200);
   }
 
+  imgActive(img:any) {
+    var src = !img.ext_link ? this._image.uploadImgPath + img.path : img.path;
+    if (this._general.selectedTab == 'background') return this._style.background_image.name == src;
+    else if(this._general.selectedBlock.type == 'main') return this._general.meta_img == src;
+    else return this._style.image_src == src;
+  }
+
   imgSelection(img:any) {
     if(this._image.imageSelectionAllow) {
       this._style.addImage(img); 
+      if(this._form.selEle) this._form.selEle.src = this._style.image_src;
       this.closeDialog();
     }
     else this._image.editImage(img);

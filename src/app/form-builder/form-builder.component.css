@@ -25,6 +25,23 @@
     width: 100%;
 }
 
+::ng-deep .mat-dialog-container .kb-text-editor {
+    width: 640px;
+    height: 250px;
+}
+
+:ng-deep button.tox-button {
+    background-color: var(--primary-color);
+    border: 0px;
+    border-radius: 4px;
+    min-width: 100px;
+    font-weight: 600;
+}
+
+:ng-deep button.tox-button.tox-button--secondary {
+    background-color: var(--secondary-color);
+}
+
 ::ng-deep h1,
 ::ng-deep h2,
 ::ng-deep h3,
@@ -42,18 +59,40 @@
     padding: 16px!important;
 }
 
-#kb-main {
-    height: 100%;
+.mat-dialog-actions.kb-dialog-additional {
+    flex-direction: row-reverse;
+    justify-content: space-between!important;
 }
 
-form#kb-form {
+span.kb-split-fields {
+    display: flex;
     position: relative;
-    width: 60%;
-    min-height: 500px;
-    height: auto;
-    box-shadow: 0 0 10px 0px rgb(0 0 0 / 40%);
-    margin: 0 auto;
-    padding: 20px;
+}
+
+.kb-form-field-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.kb-field-preview.custom-preview {
+    z-index: 99999!important;
+    background-color: var(--primary-color);
+}
+
+.kb-form-field-icon i.cdk-drag-handle {
+    cursor: all-scroll;
+}
+
+.kb-form-field-icon i {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
     border-radius: 4px;
 }
 
@@ -62,16 +101,21 @@ form#kb-form {
     top: 0px;
     left: 0px;
     width: 100%;
-    z-index: 9999;
+    z-index: 99;
     box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px; 
 }
 
 #kb-form-container {
-    height: auto;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    padding: 20px 0;
+    position: relative;
+    width: 75%;
+    min-height: 500px;
+    height: auto;
+    box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
+    margin: 30px auto;
+    border-radius: 4px;
+    transition: width 0.3s ease-out;
 }
 
 #kb-form-elements .custom-placeholder {
@@ -107,9 +151,8 @@ form#kb-form {
 
 div.kb-form-element {
     position: relative;
+    display: grid;
     min-height: 20px;
-    padding: 4px 8px;
-    margin: 10px 0;
     transition: 0.2s ease;
 }
 
@@ -178,16 +221,16 @@ div.kb-form-setting {
     }
 }
 
-.kb-form-para {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--secondary-color);
+#kb-form .kb-form-element .kb-mar-zero{
+    margin: 0px!important;
 }
 
-.kb-form-heading {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--secondary-color);
+.kb-form-image img {
+    height: 320px;
+}
+
+.kb-form-image img {
+    max-width: 100%;
 }
 
 div#kb-element-drag:after {
@@ -220,6 +263,7 @@ div.kb-form-inp label, div.kb-form-rc label {
     font-weight: 500;
     color: var(--secondary-color);
     position: relative;
+    display: flex;
 }
 
 div.kb-form-inp input, div.kb-form-inp textarea, div.kb-form-inp select {
@@ -255,13 +299,14 @@ div.kb-form-divder {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: 15px;
+    column-gap: 10px;
     justify-content: space-between;
 }
 
 .kb-form-inp-split>* {
     flex: 1;
     -webkit-flex: 1;
+    min-width: calc(25% - 10px);
 }
 
 .kb-form-btn button{
@@ -274,9 +319,39 @@ div.kb-form-divder {
     border-radius: 4px;
 }
 
-.kb-form-btn {
-    text-align: right;
+.kb-form-preview .kb-form-element:before {
+    content: none!important;
 }
+
+.mat-select {
+    color: inherit;
+    background: transparent;
+    border-radius: 0px;
+    padding: 0px;
+}
+
+#kb-main.pagedisabled {
+    pointer-events: none;
+    position: relative;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* loader */
+
+  #kb-main.loading:after {
+    content: '';
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: var(--kb-dark);
+    pointer-events: none;
+  }
 
 /* radio input */
 
@@ -288,48 +363,47 @@ label > input[type="radio"], label > input[type="checkbox"] {
     content: "";
     display: inline-block;
     vertical-align: bottom;
-    width: 1rem;
-    height: 1rem;
+    width: 0.9rem;
+    height: 0.9rem;
     margin-right: 0.3rem;
     border-radius: 50%;
     border-style: solid;
     border-width: 0.1rem;
-    border-color: var(--secondary-color);
+    border-color: inherit;
   }
 
   label > input[type="checkbox"] + *::before {
     content: "";
     display: inline-block;
     vertical-align: bottom;
-    width: 1rem;
-    height: 1rem;
+    width: 0.9rem;
+    height: 0.9rem;
     margin-right: 0.3rem;
     border-radius: 0.2rem;
     border-style: solid;
     border-width: 0.1rem;
-    border-color: var(--secondary-color);
+    border-color: inherit;
   }
 
-  label > input[type="radio"]:checked + *::before {
-    background: radial-gradient(teal 0%, teal 40%, transparent 50%, transparent);
-    border-color: teal;
+   label > input[type="radio"]:checked + *::before {
+    background: radial-gradient(var(--section-color) 0%, var(--section-color) 40%, transparent 50%, transparent);
   }
 
-  label > input[type="checkbox"]:checked + *::before {
-    border-color: teal;
+  label > input[type="radio"]:checked + *::before, label > input[type="checkbox"]:checked + *::before {
+    border-color: var(--section-color);
   }
 
   label > input[type="checkbox"]:checked + *::after {
     content: '\2714';
     font-size: 20px;
     position: absolute;
-    top: -6px;
+    top: -7px;
     left: 2px;
-    color: teal;
+    color: var(--section-color);
   }
 
   label > input[type="radio"]:checked + *, label > input[type="checkbox"]:checked + * {
-    color: teal;
+    color: var(--section-color);
   }
 
   label > input[type="radio"] + *, label > input[type="checkbox"] + * {
@@ -337,5 +411,9 @@ label > input[type="radio"], label > input[type="checkbox"] {
     display: inline-flex;
     align-items: center;
     transition: 0.2s ease;
+    cursor: pointer;
+  }
+
+  select {
     cursor: pointer;
   }

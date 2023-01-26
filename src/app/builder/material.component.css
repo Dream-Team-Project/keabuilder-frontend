@@ -73,7 +73,7 @@ image-cropper {
     /* z-index: 99999; */
 }
 
-::ng-deep .mat-dialog-actions .mat-button.mat-primary, ::ng-deep .mat-form-field.mat-focused i, ::ng-deep .mat-radio-checked, ::ng-deep .mat-button-toggle-checked button, 
+::ng-deep .kb-dialog-additional .mat-button.mat-primary, ::ng-deep .mat-dialog-actions .mat-button.mat-primary, ::ng-deep .mat-form-field.mat-focused i, ::ng-deep .mat-radio-checked, ::ng-deep .mat-button-toggle-checked button, 
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-label, ::ng-deep .mat-icon-button.mat-primary, ::ng-deep .mat-action-row .mat-button.mat-primary {
     color: var(--primary-color)!important;
 }

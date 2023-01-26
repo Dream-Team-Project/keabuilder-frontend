@@ -10,7 +10,7 @@
             <button mat-button mat-dialog-close cdkFocusInitial (click)="_image.deleteImage(delimage)" class="kb-danger">Yes</button>
         </div>
     </div>
-  </ng-template>
+</ng-template>
 <ng-template #imgdialog>
     <div id="kb-img-group" [class.dragBox]="dragBoxAnime.open"
     [class.dragBoxClose]="dragBoxAnime.close">
@@ -66,7 +66,7 @@
                         </button>
                     </mat-form-field>
                     <mat-form-field appearance="fill" class="kb-img-search">
-                        <mat-label>Sort By</mat-label>
+                        <mat-label>Sort by</mat-label>
                         <mat-select [(ngModel)]='_image.searchImgFilter'>
                           <mat-option  *ngFor="let order of _image.imgOrder" [value]="order">{{order.name}}</mat-option>
                         </mat-select>
@@ -74,11 +74,12 @@
                 </div>
                 <div class="kb-img-thumbnail-group">
                     <ul *ngIf="_image.galleryImg.length != 0 else noImg" class="kb-img-list">
-                        <li *ngFor="let img of _image.galleryImg | filter:searchText.value:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type">
-                            <span [class.kb-active-img]="(!img.ext_link ? img.path == _style.image_src.split('/')[_style.image_src.split('/').length-1] : img.path == _style.image_src) && _image.imageSelectionAllow" (click)="imgSelection(img)">
+                        <li [class.kb-img-deleting]="img.deleting" *ngFor="let img of _image.galleryImg | filter:searchText.value:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type">
+                            <span [class.kb-active-img]="imgActive(img) && _image.imageSelectionAllow" (click)="imgSelection(img)">
                                 <img [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
+                                <mat-spinner *ngIf="img.deleting" class="kb-img-deleting"></mat-spinner>
                             </span>
-                            <div class="imgSettingIcons">
+                            <div *ngIf="!img.deleting" class="imgSettingIcons">
                                 <i (click)="_image.editImage(img)" class="fas fa-cog" matTooltip="Setting" matTooltipPosition="above"></i>
                                 <i  (click)="openImgDelDialog(delimgdialog, img)" class="far fa-trash-alt" matTooltip="Delete" matTooltipPosition="above"></i>
                             </div>

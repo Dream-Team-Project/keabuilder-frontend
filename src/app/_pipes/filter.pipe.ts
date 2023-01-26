@@ -23,6 +23,9 @@ export class FilterPipe implements PipeTransform {
         else if(column == 'element') {
           return items.filter((val:any) => val.content.name?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
         }
+        else if(column == 'key') {
+          return items.filter((val:any) => val.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+        }
         else {
           return items;
         }

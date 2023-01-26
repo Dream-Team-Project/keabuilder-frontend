@@ -23,7 +23,7 @@ export class StyleService {
     { name: 'semi bold (demi bold)', value: 600 },
     { name: 'bold', value: 700 },
     { name: 'extra bold (ultra bold)', value: 800 },
-    { name: 'black (heavy)', value: 900 },];
+    { name: 'black (heavy)', value: 900 }];
   font_style = 'normal';
   font_style_types = ['normal', 'italic'];
   font_family = 'poppins';
@@ -148,6 +148,12 @@ export class StyleService {
     }
     else if(content == 'image') {
       return this.imageStyling();
+    }
+    else if(content == 'input') {
+      return this.inputStyling();
+    }
+    else if(content == 'form') {
+      return this.currentStyling();
     }
     else {
       return this.textStyling();
@@ -417,51 +423,16 @@ export class StyleService {
     return this.textStyling();
   }
 
+  inputStyling() {
+    return this.textStyling();
+  }
+
   getMargin() {
-    var tempMar: any = {};
-    if (this.m_link.a) {
-      tempMar.top = this.margin.top;
-      tempMar.bottom = this.margin.top;
-      tempMar.left = this.margin.top;
-      tempMar.right = this.margin.top;
-    }
-    else if (this.m_link.tb && this.m_link.lr) {
-      tempMar.top = this.margin.top;
-      tempMar.bottom = this.margin.top;
-      tempMar.left = this.margin.left;
-      tempMar.right = this.margin.left;
-    }
-    else if (this.m_link.tb) {
-      tempMar.top = this.margin.top;
-      tempMar.bottom = this.margin.top;
-      tempMar.left = this.margin.left;
-      tempMar.right = this.margin.right;
-    }
-    else if (this.m_link.lr) {
-      tempMar.top = this.margin.top;
-      tempMar.bottom = this.margin.bottom;
-      tempMar.left = this.margin.left;
-      tempMar.right = this.margin.left;
-    }
-    else {
-      tempMar.top = this.margin.top;
-      tempMar.bottom = this.margin.bottom;
-      tempMar.left = this.margin.left;
-      tempMar.right = this.margin.right;
-    }
-    if(this.setItemStyle) {
-      var mar = tempMar.top + ' ' + tempMar.right + ' ' + tempMar.bottom + ' ' + tempMar.left;
-    }
-    else {
-      var mar = tempMar.top + ' ' + ((this.blockAlign == 'left' || this.blockAlign == 'center'
-      || (this.blockAlign == '' && tempMar.right == '0px' && tempMar.left != 'auto')
-      && this._general.selectedBlock.type != 'element')
-      ? 'auto' : tempMar.right) + ' ' + tempMar.bottom + ' '
-      + ((this.blockAlign == 'right' || this.blockAlign == 'center'
-        || (this.blockAlign == '' && tempMar.left == '0px' && tempMar.right != 'auto')
-        && this._general.selectedBlock.type != 'element') ? 'auto' : tempMar.left);
-    }
-    return mar;
+    if (this.m_link.a) return this.margin.top;
+    else if (this.m_link.tb && this.m_link.lr) return this.margin.top + ' ' + this.margin.left;
+    else if (this.m_link.tb) return this.margin.top + ' ' + this.margin.right + ' ' + this.margin.top + ' ' + this.margin.left;
+    else if (this.m_link.lr) return this.margin.top + ' ' + this.margin.left + ' ' + this.margin.bottom;
+    else return this.margin.top + ' ' + this.margin.right + ' ' + this.margin.bottom + ' ' + this.margin.left;
   }
 
   getPadding() {
@@ -522,8 +493,27 @@ export class StyleService {
   }
 
   setBlockAlign(pos: string) {
-    if (this.blockAlign == pos) this.blockAlign = '';
-    else this.blockAlign = pos;
+      this.blockAlign = pos;
+    if(pos == 'center') {
+      this.margin.left = 'auto';
+      this.margin.right = 'auto';
+      this.m_link.lr = true;
+    }
+    else if(pos == 'left') {
+      this.margin.left = '0px';
+      this.margin.right = 'auto';
+      this.m_link.lr = false;
+    }
+    else if(pos == 'right') {
+      this.margin.left = 'auto';
+      this.margin.right = '0px';
+      this.m_link.lr = false;
+    }
+    else {
+      this.margin.left = '0px';
+      this.margin.right = '0px';
+      this.m_link.lr = true;
+    }
   }
 
   reverseValue(val: any, $event: { target: any; }) {
@@ -560,25 +550,10 @@ export class StyleService {
 
   lineHeightChange(val: any) {
     var vm = this;
-    if (val) {
-      if (isNaN(val)) {
-        vm.line_height.value = vm.updateRexVal(val, 'lh');
-        vm.line_heightRange.value = vm.line_height.value != 'auto' ? vm.line_height.value.replace(/[^0-9]/g, '') : 0;
-        if (vm.line_height.value[vm.line_height.value.length - 1] != '%' && vm.line_height.value != 'auto') {
-          vm.line_heightRange.type = 'px';
-        }
-        else {
-          vm.line_height.value = val;
-          vm.line_heightRange.type = '%';
-        }
-      }
-      else {
-        vm.line_heightRange.value = val;
-      }
-    }
-    else {
+    vm.line_height.value = vm.updateRexVal(val, 'lh');
+    vm.line_heightRange.value = vm.line_height.value != 'auto' ? vm.line_height.value.replace(/[^0-9]/g, '') : 0;
+    if (vm.line_height.value[vm.line_height.value.length - 1] == '%' || vm.line_heightRange.value == 0) {
       vm.line_height.value = 'normal';
-      vm.line_heightRange.value = '0';
       vm.line_heightRange.type = 'px';
     }
   }
@@ -869,24 +844,9 @@ export class StyleService {
       this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
     }
-    if (device != 'desktop') {
-      var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
-      if (device == 'tablet-h') {
-        this._general.selectedBlock.style.tablet_h = newS;
-      }
-      else if (device == 'tablet-v') {
-        this._general.selectedBlock.style.tablet_v = newS;
-      }
-      else if (device == 'mobile') {
-        this._general.selectedBlock.style.mobile = newS;
-      }
-    }
-    else {
-      if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = this.currentStyling();
-      else this._general.selectedBlock.style.desktop = this.currentStyling();
-    }
     if (this._general.selectedBlock.type == 'element' && !this.setItemStyle) {
       this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
+      if(this._general.selectedBlock.content.html) this._general.selectedBlock.content.html = this.edit_html;
       if (this._general.selectedBlock.content.name == 'button') {
         this.setElementStyle(this.buttonStyling());
         this._general.selectedBlock.content.text = this.button_text;
@@ -900,12 +860,29 @@ export class StyleService {
         this._general.selectedBlock.content.src = this.image_src;
         this.setElementStyle(this.imageStyling());
       }
-      else if (this._general.selectedBlock.content.name == 'heading' || this._general.selectedBlock.content.name == 'text'){
-        this._general.selectedBlock.content.html = this.edit_html;
-        this.setElementStyle(this.textStyling());
+      else if(this._general.selectedBlock.content?.name == 'form') {
+        this.setElementStyle(this.currentStyling());
       }
-      else if (this._general.selectedBlock.content.name == 'menu'){
+      else {
         this.setElementStyle(this.textStyling());
+      }      
+    }
+    else {
+      if (device != 'desktop') {
+        var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
+        if (device == 'tablet-h') {
+          this._general.selectedBlock.style.tablet_h = newS;
+        }
+        else if (device == 'tablet-v') {
+          this._general.selectedBlock.style.tablet_v = newS;
+        }
+        else if (device == 'mobile') {
+          this._general.selectedBlock.style.mobile = newS;
+        }
+      }
+      else {
+        if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = this.currentStyling();
+        else this._general.selectedBlock.style.desktop = this.currentStyling();
       }
     }
     if (this._general.selectedBlock.type != "column") {
@@ -930,41 +907,60 @@ export class StyleService {
   setElementStyle(contentStyle: any) {
     var device = this._general.respToggleDevice.name;
     if (device != 'desktop') {
+      var newBS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.content.style.desktop);
       var newS = this.filterElementStyle(contentStyle, this._general.selectedBlock.content.style.desktop);
       if (this._general.respToggleDevice.name == 'tablet-h') {
-        this._general.selectedBlock.content.style.tablet_h = newS;
+        this._general.selectedBlock.content.style.tablet_h = {...newS, ...newBS};
       }
       else if (this._general.respToggleDevice.name == 'tablet-v') {
-        this._general.selectedBlock.content.style.tablet_v = newS;
+        this._general.selectedBlock.content.style.tablet_v = {...newS, ...newBS};
       }
       else if (this._general.respToggleDevice.name == 'mobile') {
-        this._general.selectedBlock.content.style.mobile = newS;
+        this._general.selectedBlock.content.style.mobile = {...newS, ...newBS};
       }
     }
     else {
-      this._general.selectedBlock.content.style.desktop = contentStyle;
+      this._general.selectedBlock.content.style.desktop = {...contentStyle, ...this.currentStyling()};
     }
   }
 
   defaultStyling(block:any) {
     this.margin.top = '0px';
+    var mrl;
     if(block.type == 'element' && !block.itemstyle && block.content?.name != 'code') {
-      this.margin.right = 'auto';
+      mrl = '0px';
       this.margin.bottom = '10px';
     }
     else {
-      this.margin.right = '0px';
+      mrl = 'auto';
       this.margin.bottom = '0px';
     }
-    this.margin.left = '0px';
+    this.margin.right = mrl;
+    this.margin.left = mrl;
     var ptb, plr, brw, br, bclr, bgclr;
     if (block.content?.name == 'button') {
       ptb = '8px';
       plr = '16px';
       brw = '2px';
-      br = '5px';
+      br = '4px';
       bclr = '#dea641';
       bgclr = '#dea641';
+    }
+    else if(block.content?.name == 'input') {
+      ptb = '0px';
+      plr = '10px';
+      brw = '1px';
+      br = '4px';
+      bclr = '#b8bdc9';
+      bgclr = '#f4f4f4';
+    }
+    else if(block.content?.name == 'form') {
+      ptb = '20px';
+      plr = '20px';
+      brw = '0px';
+      br = '0px';
+      bclr = 'rgba(0,0,0,1)';
+      bgclr = 'rgba(0,0,0,0)';
     }
     else if (block.itemstyle) {
       ptb = '6px';
@@ -1011,7 +1007,7 @@ export class StyleService {
         this.widthRange.value = 90;        
     }
     else if (block.type == 'element') {
-      this.width.value = 'auto';
+      this.width.value = block.content?.name == 'input' || block.content?.name == 'label' || block.content?.name == 'option' || block.content?.name == 'form' ? '100%' : 'auto';
       this.widthRange.value = 100;
     }
     else {
@@ -1045,7 +1041,7 @@ export class StyleService {
     this.resetBackgroundImage();
     this.resetBackgroundGradient();
     this.resetBoxShadow();
-
+    
     return this.currentStyling();
   }
 
@@ -1058,7 +1054,7 @@ export class StyleService {
     if (block.content.name == 'button') {
       fwn = 'semi bold (demi bold)';
       fwv = 600;
-      tc = 'rgba(255, 255, 255, 1)';
+      tc = '#ffffff';
       ta = 'center';
     }
     else {
@@ -1066,11 +1062,15 @@ export class StyleService {
         fwn = 'bold';
         fwv = 700;
       }
+      else if (block.content.name == 'label') {
+        fwn = 'medium';
+        fwv = 500;
+      }
       else {
         fwn = 'normal';
         fwv = 400;
       }
-      tc = 'rgba(0,0,0,1)';
+      tc = '#000000';
       ta = 'left';
     }
     this.font_size.value = fsv;
@@ -1085,8 +1085,14 @@ export class StyleService {
     this.text_decoration_style = 'solid';
     this.text_decoration_color = tc;
     this.resetTextShadow();
-    this.line_height.value = 'normal'
-    this.line_heightRange.value = 0;
+    if (block.content.name == 'input') {
+      this.line_height.value = '36px';
+      this.line_heightRange.value = 36;
+    }
+    else {
+      this.line_height.value = 'normal';
+      this.line_heightRange.value = 0;
+    }
     this.letter_spacing.value = 'normal';
     this.letter_spacingRange.value = 0;
     // text
@@ -1108,6 +1114,9 @@ export class StyleService {
     // menu
     if(block.content.name == 'button') {
       return this.buttonStyling();
+    }
+    else if(block.content.name == 'input') {
+      return this.inputStyling();
     }
     else if(block.content.name == 'image') {
       return this.imageStyling();
@@ -1169,8 +1178,12 @@ export class StyleService {
   }
 
   blockSetting(block: any) {
-      var obj = this.setItemStyle ? this.getBlockStyle(block.content.item.style) : this.getBlockStyle(block.style);
-      if (block.type == 'element' && !this.setItemStyle) {
+      var obj:any = new Object();
+      if(this.setItemStyle) obj = this.getBlockStyle(block.content.item.style);
+      else if(block.type == 'element') obj = this.getBlockStyle(block.content.style);
+      else obj = this.getBlockStyle(block.style);
+      // var obj = this.setItemStyle ? this.getBlockStyle(block.content.item.style) : this.getBlockStyle(block.style);
+      if (block.type == 'element' && block.content?.name != 'form' && !this.setItemStyle) {
         this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         this.elementSetting(block.content);
       }
@@ -1259,85 +1272,52 @@ export class StyleService {
       if(obj.margin) {
         var mg = obj.margin.split(' ');
         if (mg.length == 1) {
-          var value:any;
-          if(mg[0] == 'auto') {
-            value = '0px';
-            this.blockAlign = 'center';
-          }
-          else value = mg[0];
-          this.margin.top = value;
-          this.margin.bottom = value;
-          this.margin.right = value;
-          this.margin.left = value;
+          var ma = mg[0];
+          this.margin.top = ma;
+          this.margin.bottom = ma;
+          this.margin.right = ma;
+          this.margin.left = ma;
           this.m_link.a = true;
+          if(ma == 'auto' || ma == '0px') this.blockAlign = 'center';
         }
   
         else if (mg.length == 2) {
-          var my:any;
-          var mx:any;
-          if(mg[0] == 'auto') my = '0px';
-          else my = mg[0];
-          if(mg[1] == 'auto') {
-            mx = '0px';
-            this.blockAlign = 'center';
-          }
-          else mx = mg[1];
+          var my = mg[0];
+          var mx = mg[1];
           this.margin.top = my;
           this.margin.bottom = my;
           this.margin.right = mx;
           this.margin.left = mx;
-          this.m_link.a = false;
+          if(mx == 'auto' || mx == '0px') this.blockAlign = 'center'; 
         }
   
         else if (mg.length == 3) {
-          var mt:any;
-          var mx:any;
-          var mb:any;
-          if(mg[0] == 'auto') mt = '0px';
-          else mt = mg[0];
-          if(mg[1] == 'auto') {
-            mx = '0px';
-            this.blockAlign = 'center';
-          }
-          else mx = mg[1];
-          if(mg[2] == 'auto') mb = '0px';
-          else mb = mg[2];
+          var mt:any = mg[0];
+          var mx:any = mg[1];
+          var mb:any = mg[2];
           this.margin.top = mt;
           this.margin.right = mx;
           this.margin.left = mx;
           this.margin.bottom = mb;
-          this.m_link.a = false;
+          if(mx == 'auto' || mx == '0px') this.blockAlign = 'center';
         }
   
         else {
-          var mt:any;
-          var mr:any;
-          var mb:any;
-          var ml:any;
-          if(mg[0] == 'auto') mt = '0px';
-          else mt = mg[0];
-          if(mg[1] == 'auto') {
-            mr = '0px';
-            this.blockAlign = 'left';
-          }
-          else mr = mg[1];
-          if(mg[2] == 'auto') mb = '0px';
-          else mb = mg[2];
-          if(mg[3] == 'auto') {
-            ml = '0px';
-            this.blockAlign = 'right';
-          }
-          else ml = mg[3];
-          if(mg[1] == 'auto' && mg[3] == 'auto') this.blockAlign = 'center';
+          var mt:any = mg[0];
+          var mr:any = mg[1];
+          var mb:any = mg[2];
+          var ml:any = mg[3];
+          if(mr == 'auto') this.blockAlign = 'left';
+          if(ml == 'auto') this.blockAlign = 'right';
+          if((mr == 'auto' && ml == 'auto') || (mr == '0px' && ml == '0px')) this.blockAlign = 'center';
           this.margin.top = mt;
           this.margin.right = mr;
           this.margin.bottom = mb;
           this.margin.left = ml;
-          this.m_link.a = false;
         }
   
         this.m_link.tb = this.margin.top == this.margin.bottom;
-        this.m_link.lr = this.margin.right == this.margin.left;
+        this.m_link.lr = this.margin.left == this.margin.right;
       }
 
       if(obj.padding) {
@@ -1487,7 +1467,7 @@ export class StyleService {
         }
       })
     }
-    if (element.name == 'text' || element.name == 'heading' || element.name == 'button' || element.name == 'menu') {
+    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || element.name == 'menu') {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'];
@@ -1518,15 +1498,15 @@ export class StyleService {
 
       this.line_height.value = obj['line-height'];
       var value = obj['line-height'].match(/(\d+)/);
-      this.line_heightRange.value = value ? value[0] : '100';
+      this.line_heightRange.value = value ? value[0] : '0';
       var unit = obj['line-height'].replace(/[^A-Za-z]/g, '');
-      this.line_heightRange.type = unit && unit != 'normal' ? unit : '%';
+      this.line_heightRange.type = unit && unit != 'normal' ? unit : 'px';
 
       this.letter_spacing.value = obj['letter-spacing'];
       var value = obj['letter-spacing'].match(/(\d+)/);
-      this.letter_spacingRange.value = value ? value[0] : '100';
+      this.letter_spacingRange.value = value ? value[0] : '0';
       var unit = obj['letter-spacing'].replace(/[^A-Za-z]/g, '');
-      this.letter_spacingRange.type = unit && unit != 'normal' ? unit : '%';
+      this.letter_spacingRange.type = unit && unit != 'normal' ? unit : 'px';
       
       if(element.name == 'text' || element.name == 'heading') {
         this.edit_html = element.html;
@@ -1553,9 +1533,9 @@ export class StyleService {
 
   addImage(img: any) {
     var src = !img.ext_link ? this._image.uploadImgPath + img.path : img.path;
-    console.log(src);
-    if (this._general.selectedTab == 'Background') this.background_image.name = src;
-    else this._general.selectedBlock.type == 'main' ? this._general.meta_img = src : this.image_src = src;
+    if (this._general.selectedTab == 'background') this.background_image.name = src;
+    else if(this._general.selectedBlock.type == 'main') this._general.meta_img = src;
+    else this.image_src = src;
   }
 }
 
