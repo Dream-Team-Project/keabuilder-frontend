@@ -33,7 +33,7 @@ export class NavigationComponent {
   action:any;
 
   constructor(public _general: GeneralService,  public _style: StyleService, public _image: ImageService, private dialog: MatDialog) { 
-    this.fetchMenus();
+    this.fetchMenus(); 
     this.getAllWebPages();
     this.getAllFunnels();
   }
@@ -71,20 +71,26 @@ export class NavigationComponent {
       let i = 0;
       var steps = data.data;
       this.funnels = data.data2;
-      this.funnels.forEach((fp:any)=>{
-        let j = 0;
-        if(!fp.step_pages) fp.steps = [];
-        steps.forEach((s:any)=>{
-          if(fp.id == s.funnelid) {
-            fp.steps.push(s);
-          }
-          if(i == this.funnels.length-1 && j == steps.length-1) {
-            this.fetching.funnel = false;
-          }
-          j++;
+      console.log(data);
+      if(data.data?.length>0){
+        this.funnels.forEach((fp:any)=>{
+          let j = 0;
+          if(!fp.step_pages) fp.steps = [];
+          steps.forEach((s:any)=>{
+            if(fp.id == s.funnelid) {
+              fp.steps.push(s);
+            }
+            if(i == this.funnels.length-1 && j == steps.length-1) {
+              this.fetching.funnel = false;
+            }
+            j++;
+          })
+            i++;
         })
-          i++;
-      })
+      }else{
+        this.fetching.funnel = false;
+      }
+
     })
   }
 

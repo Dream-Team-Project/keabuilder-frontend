@@ -28,6 +28,7 @@ export class WebpagesService {
   querystringmanageApi = '/api/querystringmanage/';
   shortbypaginatorApi = '/api/shortbypaginator/';
   checkandmakestatusApi = '/api/checkandmakestatus/';
+  movecopywebpageApi = '/api/movecopywebpage/';
   uuid:any = '';
 
 
@@ -128,6 +129,12 @@ export class WebpagesService {
 
   checkandmakestatus(data:any):Observable<any> {
     return this.http.post(this.checkandmakestatusApi+this.uuid, {
+      data
+    }, httpOptions);
+  }
+
+  movecopywebpage(data:any):Observable<any> {
+    return this.http.post(this.movecopywebpageApi+this.uuid, {
       data
     }, httpOptions);
   }

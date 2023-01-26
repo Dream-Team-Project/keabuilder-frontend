@@ -34,6 +34,18 @@ export class WebsiteService {
     }, httpOptions);
   }
 
+  duplicatewebsite(data: any):Observable<any> {
+    return this.http.post("./api/duplicatewebsite/"+this.uuid, {
+      data,
+    }, httpOptions);
+  }
+
+  deletewebsite(data: any):Observable<any> {
+    return this.http.post("./api/deletewebsite/"+this.uuid, {
+      data,
+    }, httpOptions);
+  }
+
   updatesitedetails(obj:any):Observable<any> {
     return this.http.post("./api/updatesitedetails/"+this.uuid, obj, httpOptions);
   }
@@ -45,7 +57,27 @@ export class WebsiteService {
   }
 
   oncreatesubdomain(domain: any, uniqueid: any): Observable<any>{
-    return this.http.get('https://keabuilder.com/crd.php?domain='+domain+'&uniqueid='+uniqueid);
+    return this.http.get('https://keabuilder.com/crd.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
+  }
+
+  ondeletesubdomain(domain: any): Observable<any>{
+    return this.http.get('https://keabuilder.com/delsubdm.php?domain='+domain+'&uniqueid='+this.uuid);
+  }
+
+  onchangedirdomain(domain: any, uniqueid: any): Observable<any>{
+    return this.http.get('https://keabuilder.com/cngdmrt.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
+  }
+  
+  querystringmanagewebsite(data:any):Observable<any> {
+    return this.http.post("./api/querystringmanagewebsite/"+this.uuid, {
+      data
+    }, httpOptions);
+  }
+
+  shortbypaginatorwebsite(data:any):Observable<any> {
+    return this.http.post("./api/shortbypaginatorwebsite/"+this.uuid, {
+      data
+    }, httpOptions);
   }
 
 }

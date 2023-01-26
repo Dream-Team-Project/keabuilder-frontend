@@ -18,7 +18,7 @@
 
       <mat-form-field appearance="fill" class="kb-full-width">
         <mat-label>Websites</mat-label>
-        <mat-select>
+        <mat-select name="newwebsiteid" [(ngModel)]="newwebsiteid" >
           <mat-option *ngFor="let website of websites" [value]="website.uniqueid">
             {{website.title}}
           </mat-option>
@@ -243,11 +243,11 @@
 
         <div *ngIf="!showarchivemode">
           <mat-form-field  appearance="fill" class="w-100">
-            <mat-label>Search Pages</mat-label>
+            <mat-label>{{searchpagetxt}}</mat-label>
             <input matInput type="text" (keyup)="searchpage($event)" placeholder="Search Pages">
             <i class="fa fa-search"></i>
           </mat-form-field>
-          <mat-form-field appearance="fill"  class="mr-4">
+          <mat-form-field appearance="fill" class="mr-4">
             <mat-label>Sort By</mat-label>
             <mat-select name="kbfilter" [(ngModel)]="selstatusshow">
               <mat-option value="asc" (click)="changevisibility('nameasc')">ASC By Name</mat-option>
@@ -408,7 +408,7 @@
                       class="mr-2"> View <i class="far fa-eye"></i></button>
                     <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button
                       color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"> Settings <i class="fas fa-cog"></i></button>
+                    <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
                     <mat-menu #menu2="matMenu">
                       <button mat-menu-item (click)="changepagename(kbpage,kbpage.page_name,'quickedit')">
                         <i class="fas fa-pen mr-2"></i> Quick Edit
