@@ -90,13 +90,14 @@ export class SidebarComponent implements OnInit {
       img: 'funnel.gif',
       icon: 'fa fa-filter',
       title: 'Funnels',
-      submenu:[{
-          0:true,
-          routerlink: '/funnels/build',
-          img: 'funnel.gif',
-          icon: 'far fa-plus-square',
-          title: 'Build A Funnel'
-        },
+      submenu:[
+        // {
+        //   0:true,
+        //   routerlink: '/funnels/build',
+        //   img: 'funnel.gif',
+        //   icon: 'far fa-plus-square',
+        //   title: 'Build A Funnel'
+        // },
         {
           0:true,
           routerlink: '/funnels/archive',

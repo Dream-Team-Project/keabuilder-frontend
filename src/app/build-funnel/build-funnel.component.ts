@@ -3,6 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
 import {FormControl, Validators} from '@angular/forms';
 import { GeneralService } from '../_services/_builder/general.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { FileUploadService } from '../_services/file-upload.service';
+import { WebsiteService } from '../_services/website.service';
 
 @Component({
   selector: 'app-build-funnel',
@@ -11,31 +14,41 @@ import { GeneralService } from '../_services/_builder/general.service';
 })
 export class BuildFunnelComponent implements OnInit {
 
-    
-  connectWtParent:boolean = false;
-  isneed = false;
-  
-  @Input()
-  set DialogToggle(val: any) {
-    if(this.connectWtParent) {
-        console.log('hi');
-      this.createfunnel();
-    }
-    else this.connectWtParent = true;
-  }  
-
-  constructor(private router: Router, 
+   constructor(private router: Router, 
               private funnelService: FunnelService,
               private route: ActivatedRoute,
-              public _general: GeneralService,) { }
+              public _general: GeneralService,
+              private _snackBar: MatSnackBar,
+              private _file: FileUploadService,
+              private websiteService: WebsiteService,
+              ) { }
 
+    sidebar = {
+        open: false,
+        anim: {open: false, close: false, time: 500},
+        animtime: 300,
+    }
+    connectWtParent:boolean = false;
+    isneed = false;
+    
+    @Input()
+    set DialogToggle(val: any) {
+        if(this.connectWtParent) {
+            this.createfunnel();
+        }
+        else this.connectWtParent = true;
+    }  
+    
     form: any = {
-        funnelname: null,
+        funnelname: '',
         funnelfirststep: '',
         badgecolor:'',
-        funneltype:null
+        funneltype:'',
+        subdomain:''
     };
-    userFormControl = new FormControl('',[Validators.required ]);
+    userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+    subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+    stepnameFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
     hidefornow = false;
     
     allcategory = [
@@ -139,41 +152,71 @@ export class BuildFunnelComponent implements OnInit {
     sellaproduct = false;
     createaevent = false;
     other2 = false;
-    popupsidebar = false;
     errorMessage = '';
+    searching = false;
+
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    const { funnelname, funnelfirststep, badgecolor, funneltype } = this.form;
-    if(this.userFormControl.status=='VALID'){
-        this.funnelService.saveondb(funnelname, funnelfirststep, badgecolor, funneltype).subscribe({
-            next: data => {
-                // console.log(data);
-                if(data.data.length!=0){
-                    var page = {
-                        head: '',
-                        body: '',
-                        style: '',
-                        dir: 'drafts',
-                        folder: data.data.pagepath,
-                        prevFolder: data.data.pagepath
-                      }
-                      this._general.fileUploadService.savePage(page).subscribe((event:any) => {
-                        // console.log(event);
-                    },
-                    error=>{console.log(error)});
 
-                    this.router.navigate(['/funnels/'+data.data.hash+'/steps/'+data.data.hash2],{relativeTo: this.route});
+    if(this.userFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID' && this.stepnameFormControl.status=='VALID'){
+
+        var nwsubdomain:any = this.form.subdomain.toLowerCase();
+      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
+      if(this.searchStringInArray(nwsubdomain,notusesub)==1){
+        this.searching = true;
+
+            this.funnelService.savefunneldb(this.form).subscribe({
+                next: data => {
+                    console.log(data);
+
+                    if(data.exist ==1){
+                        this.searching = false;
+                        this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+                     }else{
+
+                        var dataobj = {website_id:data.data.uniqueid};
+                        this._file.createwebsitefolder(dataobj).subscribe(e=>{
+                            console.log(e);
+                        });
+                        var page = {
+                            head: '',
+                            body: '',
+                            style: '',
+                            dir: '/drafts',
+                            folder: data.data.pagepath,
+                            prevFolder: data.data.pagepath,
+                            website_id:data.data.uniqueid, 
+                          }
+                          this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+                            console.log(event);
+                          },error=>{console.log(error)});
+
+                        // this.websiteService.oncreatesubdomain(this.form.subdomain,data.uniqueid).subscribe({
+                        //     next: datanw => {
+                            this.searching = false;
+                            this._snackBar.open('Funnel Created Successfully!', 'OK');
+                            this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
+                        //     }
+                        //   });
+
+                     }
+
+                
+                },
+                error: err => {
+                this.errorMessage = err.error.message;
                 }
-            
-            },
-            error: err => {
-            this.errorMessage = err.error.message;
-            }
-      });
+            });
+
+        }else{
+            this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+        }
+
     }
+
   }
 
   loopthefor(value: any, which: any){
@@ -210,13 +253,36 @@ export class BuildFunnelComponent implements OnInit {
   }
 
   createfunnel(){
-    this.popupsidebar = true;
+    this.openSidebar();
+  }
+
+  openSidebar(){
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
   }
   
   hidepopupsidebar(){
-    this.popupsidebar = false;
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
   }
 
+  removespecialcharwithsmall(data:any){
+    var datagen = (data.replace(/[^a-zA-Z0-9]/g, "")).toLowerCase();
+    return datagen;
+  }
+
+  searchStringInArray(str:any, strArray:any) {
+    for (var j=0; j<strArray.length; j++) {
+        if (strArray[j] == str) return 0;
+    }
+    return 1;
+``}
 
 
 }
