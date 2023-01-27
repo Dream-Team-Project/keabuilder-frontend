@@ -5,6 +5,7 @@ import { RowService } from '../_services/_builder/row.service';
 import { ElementService } from '../_services/_builder/element.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-builder-topbar',
@@ -12,7 +13,9 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./builder-topbar.component.css', '../builder/material.component.css'],
 })
 export class BuilderTopbarComponent implements OnInit {
-
+  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
+    return -1;
+  }
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
@@ -100,7 +103,7 @@ export class BuilderTopbarComponent implements OnInit {
   }
 
   createDefaultElements() {
-    this._element.elementList.forEach(e=>{
+    Object.values(this._element.elementList).forEach((e:any)=>{
       if(e.content.name == 'heading') {
         var types = ['h1','h2','h3','h4','h5','h6'];
         var size = 42;
@@ -307,11 +310,6 @@ export class BuilderTopbarComponent implements OnInit {
       this._general.includeLayout.footer = false;
       this.setTrigger('preview');
     }
-  }
-
-  respToggle(device:any) {
-    if(device == this._general.respToggleDevice.name) device = 'desktop';
-    this._general.respToggleDevice = this._general.respDevices[device];
   }
 
 }

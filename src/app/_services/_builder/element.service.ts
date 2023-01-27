@@ -17,42 +17,45 @@ export class ElementService {
   elementObj:any = { id: '', name: '', content: {}, setting: false, type: 'element', itemstyle: false, item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
   element_index = 0;
   selectedElements: any = [];
-  elementList: Array<any> = [
+  elementList:any = {
     // heading
-    { content: { name: 'heading',
-    html: '<h2>Heading Goes Here</h2>',
+    heading: { content: { name: 'heading',
+    html: '<h2>Heading goes here</h2>',
     size: 38,
     editor: false,
     },
     iconCls: 'fas fa-heading' },
     // heading
     // text
-    { content: { name: 'text',
+    text: { content: { name: 'text',
     html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
     size: 16,
     editor: false,
-  },
+    },
     iconCls: 'fas fa-font' },
     // text
     // image
-    { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
+    image: { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
     // image
     // button
-    { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-toggle-off' },
+    button: { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-toggle-off' },
     // button
     // menu
-    { content: { name: 'menu', size: 16, items:[]}, iconCls: 'fas fa-external-link-alt' }, // it should be on the first position
+    menu: { content: { name: 'menu', size: 16, items:[]}, iconCls: 'fas fa-external-link-alt' },
     // menu
+    // divider
+    // divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
+    // divider
     // form
-    // { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
+    // form: { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
     // form
     // code block
-    // { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
+    // code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
     // code block
     // checkout form
     // append
     // checkout form
-  ];
+  };
   menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   preMenuItems:any = ['Home','About','Blog','Contact'];
   defaultHeadings:any = [];
@@ -81,11 +84,20 @@ export class ElementService {
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
     var respS = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
+    if(element.name == 'form') {
+      tempObj.content.style = {
+        desktop: this._style.defaultStyling(tempObj), 
+        tablet_h:'',
+        tablet_v:'',
+        mobile:''}
+    }
+    else {
     tempObj.content.style = {
       desktop: this._style.defaultElementStyling(tempObj), 
       tablet_h:'',
       tablet_v:respS,
       mobile:respS}
+    }
     if(element.name == 'menu') {
       tempObj.itemstyle = true;
       tempObj.content.item = {
@@ -95,9 +107,9 @@ export class ElementService {
           tablet_v:respS,
           mobile:respS}
         }
+      tempObj.itemstyle = false;
     }
-    var objS =  this._style.defaultStyling(tempObj);
-    tempObj.style.desktop = objS;
+    if(element.form) return tempObj;
     this.appendElement(tempObj, this.element_index);
     this.distroyDialogue.next(void 0);
   }

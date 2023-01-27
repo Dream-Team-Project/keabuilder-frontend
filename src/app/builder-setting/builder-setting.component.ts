@@ -10,6 +10,7 @@ import { NgxMatColorPickerInput } from '@angular-material-components/color-picke
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-builder-setting',
@@ -20,6 +21,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
+  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
+    return -1;
+  }
   connectWtParent:boolean = false;
   rippleClr:string = 'rgb(217 201 153 / 30%)';
   searchTglCls:any;
@@ -176,6 +180,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
         this.waitTill = true;
       }, 200)
     }
+  }
+
+  isText(en:string) {
+    return en == 'input' || en == 'label' || en == 'option' || en == 'text' || en == 'heading' || en == 'button' || en == 'menu';
   }
 
   searchingDeep(val:string) {

@@ -35,7 +35,7 @@
 </ng-template>
 <div id="kb-topbar">
     <div class="kb-triggers">
-        <button mat-button disabled><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
+        <button mat-button (click)="_general.redirectLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
         <button mat-button (click)="_general.backBtn()" class="kb-backBtn">
             <i [innerHTML]="'left_circle_arrow' | svg | safeHtml"></i><p class="kb-bb-text">Back</p>
         </button>
@@ -233,23 +233,23 @@
         </div>
         <!-- layout -->
         <div *ngSwitchCase="'elements'">
-            <button mat-button (click)="selectElement(element.content.name)" class="kb-icon-btn" [class.kb-btn-active]="selectedElement == element.content.name" *ngFor="let element of _element.elementList | filter:searchText:'element'">
-                <i [class]="element.iconCls"></i>
-                <span>{{element.content.name | titlecase}}</span>
+            <button mat-button (click)="selectElement(element.key)" class="kb-icon-btn" [class.kb-btn-active]="selectedElement == element.key" *ngFor="let element of _element.elementList  | keyvalue | filter:searchText:'key'">
+                <i [class]="element.value.iconCls"></i>
+                <span>{{element.key | titlecase}}</span>
             </button>
         </div>
         <div *ngSwitchCase="'responsive'">
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'desktop'"
-                (click)="respToggle('desktop')">
+                (click)="_general.respToggle('desktop')">
                 <i [innerHTML]="'desktop' | svg | safeHtml"></i><span>Desktop</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'tablet-h'"
-                (click)="respToggle('tablet-h')">
+                (click)="_general.respToggle('tablet-h')">
                 <i class="rotate-90" [innerHTML]="'tab' | svg | safeHtml"></i><span>Tablet H</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'tablet-v'"
-                (click)="respToggle('tablet-v')">
+                (click)="_general.respToggle('tablet-v')">
                 <i [innerHTML]="'tab' | svg | safeHtml"></i><span>Tablet V</span></button>
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'mobile'"
-                (click)="respToggle('mobile')">
+                (click)="_general.respToggle('mobile')">
                 <i [innerHTML]="'mobile' | svg | safeHtml"></i><span>Mobile</span></button>
         </div>
     </div>

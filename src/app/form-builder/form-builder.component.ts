@@ -1,9 +1,14 @@
-import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, ElementRef, HostListener } from '@angular/core';
 import { FormService } from '../_services/_builder/form.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { GeneralService } from '../_services/_builder/general.service';
+import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
+import { NgxCaptureService } from 'ngx-capture';
+import { KeyValue } from '@angular/common';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-form-builder',
@@ -13,6 +18,17 @@ import { MatDialog } from '@angular/material/dialog';
 export class FormBuilderComponent implements OnInit {
   @ViewChild('selection') selection!: ElementRef;
 
+  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
+    return -1;
+  }
+
+  @ViewChild('form', { static: true }) screen: any;
+  @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+
+  DialogParentToggle:boolean = false;
+  DialogImageToggle:boolean = false;
+
+  contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};
   waitST = true;
   searchText:string = '';
@@ -23,15 +39,83 @@ export class FormBuilderComponent implements OnInit {
   autosave:boolean = false;
   formdialog:boolean = false;
   dialogData:any;
+  drawerPos:any = 'end';
+  preview:boolean = false;
 
   constructor(
+    private route: ActivatedRoute,
     public _form: FormService,
     public _general: GeneralService,
+    public _style: StyleService,
     public _image: ImageService,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    private captureService: NgxCaptureService
+  ) { 
+    route.paramMap.subscribe((params: ParamMap) => {
+      _general.target = {
+        id: params.get('id'),
+        type: 'form'
+      }
+      _general.loading.success = false;
+      _form.getForm(_general.target.id).then(e=>{
+        this._general.loading.success = true;
+        _form.formSessionArr = [];
+        _form.saveFormSession();
+      });
+      document.addEventListener('contextmenu', event => event.preventDefault());
+    })
+  }
+
+  @HostListener('document:keydown.control.s', ['$event'])  
+  onKeydownHandler(event:KeyboardEvent) {
+    event.preventDefault();
+    this.saveForm();
+  }
 
   ngOnInit(): void {
+    var vm = this;
+    window.addEventListener('beforeunload', function (e) {
+      if(!vm._form.formSaved) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  }
+
+  saveForm() {
+    if(this._form.form.name && this._form.form.path) {
+      this._general.saveDisabled = true;
+      this._form.updateForm().then(e=>{
+        this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+          var file:any = this._image.base64ToFile(e, this._form.form.id+'-screenshot.png');
+          this._general.fileUploadService.upload(file).subscribe(
+            (event: any) => {
+              if (typeof (event) === 'object') {
+                var msg =  'Form has been saved';
+                this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+                this._general.saveDisabled = false;
+              }
+            })
+        })
+      })
+    }
+    else {
+      // this.openRenameDialog
+    }
+  }
+
+  getBlockStyle(en:string) {
+    var sbn = this._general.selectedBlock.content?.name;
+    if(en == sbn) return this._style.getContentStyling(en);
+    else if(this._form.formEleTypes[en]) return this._style.getBlockStyle(this._form.formEleTypes[en]?.content.style);
+    else return {};
+  }
+
+  justifyContent(en:string) {
+    var sbn = this._general.selectedBlock.content?.name;
+    if(en == sbn) return this._style.getBlockParamValue(this._style.item_alignment);
+    else if(this._form.formEleTypes[en]) return this._style.getBlockParamValue(this._form.formEleTypes[en]?.item_alignment);
+    else return {};
   }
   
   // dialogs
@@ -40,25 +124,45 @@ export class FormBuilderComponent implements OnInit {
     this.formdialog = true;
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
+      this._form.formSaved = false;
       this.formdialog = false;
     })
   }
 
   openElementDialog(templateRef: TemplateRef<any>, element:any) {
     this._form.selEle = element;
-    this.dialogData = this.dialog.open(templateRef);
-    this.dialogData.afterClosed().subscribe((data:any)=>{
-      this._form.selEle = '';
-    })
+    if(element.name == 'image') {
+      this.openImageDialog();
+      this._form.formSaved = false;
+    }
+    else {
+      this.dialogData = this.dialog.open(templateRef);
+      this.dialogData.afterClosed().subscribe((data:any)=>{
+        this._form.formSaved = false;
+        this._form.selEle = '';
+      })
+    }
+  }
+
+  openStylingDialog(element:any) {
+    this._general.selectedBlock = element;
+    this._style.blockSetting(element);
+    this.DialogParentToggle = !this.DialogParentToggle;
+    this._form.formSaved = false;
+  }
+
+  openImageDialog() {
+    this.DialogImageToggle = !this.DialogImageToggle;
   }
 
   // dialogs
 
   itemDropped(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
-      moveItemInArray(this._form.formOpt, event.previousIndex, event.currentIndex);
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      this._form.saveFormSession();
     } else {
-      this.addField(event.item.data, event.currentIndex);
+      this._form.addField(event.item.data, event.currentIndex);
     }
   }
 
@@ -92,6 +196,7 @@ export class FormBuilderComponent implements OnInit {
   selectTab(value:string) {
     if(this.waitST) {
       this.waitST = false;
+      this.preview = false;
       var temp = this.selectedTab != value;
       if(temp) {
         var isEmpty = this.selectedTab == '';
@@ -110,16 +215,17 @@ export class FormBuilderComponent implements OnInit {
     }
   }
 
-  addField(field: any, index: number) {
-    var tempObj = JSON.parse(JSON.stringify(field));
-    tempObj.id = this._form._general.createBlockId(tempObj);
-    tempObj?.split?.forEach((split: any) => {
-      split.id = this._form._general.createBlockId(split);
-      split?.subsplit?.forEach((subsplit: any) => {
-        subsplit.id = this._form._general.createBlockId(subsplit);
-      })
-    })
-    this._form.formOpt.splice(index, 0, tempObj)
+  onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { 'item': '' };
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
   }
 
+  // autoSave() {
+
+  // }
+  
 }

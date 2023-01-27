@@ -44,6 +44,13 @@ export class FileUploadService {
   updatetemplateApi = "./api/updatetemplate";
   deletetemplateApi = "./api/deletetemplate";
   // section templates
+  // forms
+  getformApi = "./api/getform";
+  allformsApi = "./api/allforms";
+  saveformApi = "./api/saveform";
+  updateformApi = "./api/updateform";
+  deleteformApi = "./api/deleteform";
+  // forms
   // website
   createwebsitefolderApi = "./api/create-website";
   renamewebsitefolderApi = "./api/rename-website";
@@ -70,6 +77,34 @@ export class FileUploadService {
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
+
+  // form
+
+  fetchforms():Observable<any> {
+    return this.http.get(this.allformsApi+'/'+this.uuid);
+  }
+
+  getform(uniqueid:any):Observable<any> {
+    return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
+  }
+
+  saveform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.saveformApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updateform(obj:any):Observable<any> {
+    return this.http.post(this.updateformApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteform(id:any):Observable<any> {
+    return this.http.delete(this.deleteformApi + '/' + id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // form
 
   // user
 

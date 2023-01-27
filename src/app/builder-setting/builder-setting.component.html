@@ -5,7 +5,7 @@
         <div [ngSwitch]="_general.blockSelection">
             <!-- row selection -->
             <div *ngSwitchCase="'row'" id="kb-row-selection" class="kb-inner-selection-container">
-                <div class="kb-ask-head" cdkDragHandle>Column Structure
+                <div class="kb-setting-head" cdkDragHandle>Column Structure
                     <span class="kb-selection-top-actions">
                         <button mat-button matTooltip="Redo" matTooltipPosition="above" (click)="overlayRefDetach(false)">
                             <i class="fa fa-times"></i>
@@ -26,7 +26,7 @@
             <!-- row selection -->
             <!-- element selection -->
             <div *ngSwitchCase="'element'" id="kb-element-group">
-                <div class="kb-ask-head" cdkDragHandle>Element Selection
+                <div class="kb-setting-head" cdkDragHandle>Element Selection
                     <span class="kb-selection-top-actions">
                         <button mat-button matTooltip="Redo" matTooltipPosition="above" (click)="overlayRefDetach(false)">
                             <i class="fa fa-times"></i>
@@ -35,9 +35,9 @@
                 </div>
                 <div class="kb-element-inner-group">
                     <ul class="kb-element-list">
-                        <li *ngFor="let element of _element.elementList" class="kb-element-box"><span
-                                (click)="_element.addElement(element.content)"><i [class]="element.iconCls"></i>
-                                <div>{{element.content.name | titlecase}}</div>
+                        <li *ngFor="let element of _element.elementList | keyvalue | filter:'':'key'" class="kb-element-box"><span
+                                (click)="_element.addElement(element.value.content)"><i [class]="element.value.iconCls"></i>
+                                <div>{{element.key | titlecase}}</div>
                             </span></li>
                     </ul>
                 </div>
@@ -45,7 +45,7 @@
             <!-- element selection -->
             <!-- block setting -->
             <div *ngSwitchDefault (mouseover)="_style.saveStyleSession()" class="kb-inner-selection-container">
-                <div class="kb-ask-head" cdkDragHandle>
+                <div class="kb-setting-head" cdkDragHandle>
                     <div *ngIf="_general.selectedBlock.type == 'column'" class="side-arrow-group">
                         <span class="side-floating-btn-group" [class.sidefloatOpen]="_general.sideFloatBtnAnim.open"
                             [class.sidefloatClose]="_general.sideFloatBtnAnim.close"
@@ -61,9 +61,10 @@
                             (click)="_general.sidefloatbtnopen(!_general.showBackToRowOption)"><i
                                 class="fa fa-arrow-left"></i></button>
                     </div>
-                    <span>
+                    <span class="kb-setting-head-text">
                         {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-                        _general.selectedBlock.type) : _general.selectedBlock.content.name}}
+                        _general.selectedBlock.type) : _general.selectedBlock.content.name}} 
+                        <span class="kb-tag kb-info-tag">{{_general.respToggleDevice.name.replace('-',' ')}}</span>
                     </span>
                     <span class="kb-selection-top-actions">
                         <button mat-button (click)="_general.minimize = !_general.minimize"
@@ -99,7 +100,7 @@
                     <span mat-ripple (click)="searchInpClear()" class="kb-clear"><i class="fa fa-times"></i></span>
                 </div>
                 <mat-tab-group *ngIf="_general.selectedBlock?.content?.name != 'code' else code" (click)="_general.sidefloatbtnopen(false);" class="kb-tabs-component"
-                    (animationDone)="_general.detectTabChange()" (selectedTabChange)="_general.selectTabChange($event)">
+                    (selectedTabChange)="_general.selectedTabChange($event)">
                     <mat-tab label="General" *ngIf="searchingTab('General') && _general.selectedBlock.type == 'main'">
                         <div class="kb-inner-tab-component">
                             <mat-button-toggle-group name="pageGeneralTab" [(ngModel)]="_general.page_general_tab"
@@ -191,10 +192,10 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && !_style.setItemStyle">
+                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.type == 'element' && !_style.setItemStyle">
                         <div
-                            *ngIf="_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading' || _general.selectedBlock.content.name == 'button' || _general.selectedBlock.content.name == 'menu'">
-                            <div *ngIf="_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading'" class="kb-inner-tab-component">
+                            *ngIf="isText(_general.selectedBlock.content.name)">
+                            <div *ngIf="(_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
                                 <mat-button-toggle-group name="contentStyle" [(ngModel)]="_general.showEditor"
                                     aria-label="Text Styling">
                                     <mat-button-toggle [value]="false"><i class="fa fa-pen"></i>Styling
@@ -216,7 +217,7 @@
                                     </div>
                                 </div>
                                 <mat-accordion>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button'" [expanded]="_general.expPanelStep === 0"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form" [expanded]="_general.expPanelStep === 0"
                                     (opened)="_general.setExpPanelStep(0)" hideToggle>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
@@ -308,7 +309,7 @@
                                             (click)="_general.nextExpPanelStep()">Next</button>
                                     </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button'" [expanded]="_general.expPanelStep === 1"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form" [expanded]="_general.expPanelStep === 1"
                                         (opened)="_general.setExpPanelStep(1)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -361,7 +362,7 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="secondary" *ngIf="_general.selectedBlock.content.name == 'button'"
+                                            <button mat-button color="secondary" *ngIf="_general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
                                             <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
@@ -763,15 +764,14 @@
                         </div>
                         <!-- image -->
                         <div *ngIf="_general.selectedBlock.content.name == 'image'">
-                            <div *ngIf="searchingDeep('Choose Image')" class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Choose Image') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Choose Image</div>
                                 <div class="kb-tab-content">
                                     <div (click)="openImgDialog()"
                                         [class]="!_style.image_src ? 'kb-noImgSel' : ''" class="kb-dummy-bg">
-                                        <img *ngIf="_style.image_src else noimg" [src]="_style.image_src" width="auto">
-                                        <ng-template #noimg><span class="kb-ispan-add" matTooltip="Add Image"
+                                        <img *ngIf="_style.image_src" [src]="_style.image_src" width="auto">
+                                        <span class="kb-ispan-add" matTooltip="Add Image"
                                                 matTooltipPosition="above"><i class="fa fa-plus"></i></span>
-                                        </ng-template>
                                     </div>
                                 </div>
                             </div>
@@ -1172,7 +1172,7 @@
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment<span matTooltip="Auto Align"
                                         matTooltipPosition="above"
-                                        (click)="_style.iconMotion($event.target); _style.blockAlign = ''"
+                                        (click)="_style.iconMotion($event.target); _style.setBlockAlign('')"
                                         class="kb-reverse-icon" [class]="_style.blockAlign ? '' : 'active'"><i
                                             class="fa fa-sync"></i></span></div>
                                 <div class="kb-tab-content">
@@ -1256,11 +1256,10 @@
                                         <div (click)="openImgDialog()"
                                             [class]="!_style.background_image.name ? 'kb-noImgSel' : ''"
                                             class="kb-dummy-bg">
-                                            <img *ngIf="_style.background_image.name else nobgimg"
+                                            <img *ngIf="_style.background_image.name"
                                                 [src]="_style.background_image.name" width="auto">
-                                            <ng-template #nobgimg><span class="kb-ispan-add" matTooltip="Add Image"
+                                            <span class="kb-ispan-add" matTooltip="Add Image"
                                                     matTooltipPosition="above"><i class="fa fa-plus"></i></span>
-                                            </ng-template>
                                         </div>
                                     </div>
                                 </div>
@@ -1699,7 +1698,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced') && !_style.setItemStyle">
+                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced') && !_style.setItemStyle && _general.target.type != 'form'">
                         <div *ngIf="_general.selectedBlock.type != 'main' else mainset" >
                             <div *ngIf="searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Visibility Off</div>

@@ -7,7 +7,7 @@ import { StyleService } from '../_services/_builder/style.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { NgxMatColorPickerInput } from '@angular-material-components/color-picker';
-import { Router, ParamMap, ActivatedRoute } from '@angular/router';
+import { ParamMap, ActivatedRoute } from '@angular/router';
 import { NgxCaptureService } from 'ngx-capture';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { asapScheduler} from 'rxjs';
@@ -52,7 +52,6 @@ export class BuilderComponent implements OnInit {
   zoom:any = false;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     // builder services start
     public _style: StyleService,
@@ -69,7 +68,6 @@ export class BuilderComponent implements OnInit {
     _general.loading.success = false;
     _general.loading.error = false;
     route.paramMap.subscribe((params: ParamMap) => {
-      document.addEventListener('contextmenu', event => event.preventDefault());
       _general.target = {
         id: params.get('id'),
         type: params.get('target')
@@ -104,18 +102,17 @@ export class BuilderComponent implements OnInit {
               if(_general.target.type == 'funnel') {
                 this._general.getAllProducts();
                 if(_general.webpage.funneltype == 'order') {
-                  var checkout = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
-                  _element.elementList.splice(5, 0, checkout);
+                  _element.elementList['checkout'] = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
                 }
                 else if(_general.webpage.funneltype == 'upsell') {
-                  _element.elementList[3].content.btntype = 'upsell';
-                  _element.elementList[3].content.productid = '';
-                  _element.elementList[3].content.text = 'Upsell Button';
+                  _element.elementList['button'].content.btntype = 'upsell';
+                  _element.elementList['button'].content.productid = '';
+                  _element.elementList['button'].content.text = 'Upsell Button';
                 }
                 else if(_general.webpage.funneltype == 'downsell') {
-                  _element.elementList[3].content.btntype = 'downsell';
-                  _element.elementList[3].content.productid = '';
-                  _element.elementList[3].content.text = 'Downsell Button';
+                  _element.elementList['button'].content.btntype = 'downsell';
+                  _element.elementList['button'].content.productid = '';
+                  _element.elementList['button'].content.text = 'Downsell Button';
                 }
               }
             }
@@ -127,6 +124,7 @@ export class BuilderComponent implements OnInit {
             this.savePreview();
           })
         })
+        document.addEventListener('contextmenu', event => event.preventDefault());
       }
       else _general.redirectToPageNotFound();
    })
@@ -226,7 +224,7 @@ export class BuilderComponent implements OnInit {
     this._general.blockSelection = '';
     this._general.selectedBlock = this._general.main;
     this._style.blockSetting(this._general.main);
-    this.openDialog(event);
+    this.openDialog();
   }
 
   filterStyle(id:any, css:any, media:string) {
@@ -437,7 +435,7 @@ export class BuilderComponent implements OnInit {
       this._general.blockSelection = '';
       this._general.selectedBlock = element;
       this._style.blockSetting(element);
-      this.openDialog(event)
+      this.openDialog()
     }
     // else if(element.content.name == 'text' || element.content.name == 'heading') {
     //   this._general.showInlineEditor = true;
@@ -448,7 +446,8 @@ export class BuilderComponent implements OnInit {
 
   // dialog box
 
-  openDialog(e:any) {
+  openDialog() {
+      this._general.pageSaved = false;
       this.DialogParentToggle = !this.DialogParentToggle;
   }
 
@@ -521,14 +520,14 @@ export class BuilderComponent implements OnInit {
       var appendIndex =  event.currentIndex-1;
       var appendData = event.previousContainer.data[this.transferIndex];
       if(appendData.type == 'image') {
-        var image = JSON.parse(JSON.stringify(this._element.elementList[2]));
+        var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
         image.content.itemset = true;
         appendData = image;
       }
       if(appendData.type == 'menu') {
-        var menu = JSON.parse(JSON.stringify(this._element.elementList[4]));
-        menu.content = this._element.setMenu(this._element.elementList[4].content, appendData);
+        var menu = JSON.parse(JSON.stringify(this._element.elementList['menu']));
+        menu.content = this._element.setMenu(this._element.elementList['menu'].content, appendData);
         menu.content.itemset = true;
         appendData = menu;
       }

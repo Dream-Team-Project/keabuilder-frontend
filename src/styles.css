@@ -72,7 +72,7 @@
       /* Handle */
 
       * ::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: var(--secondary-color);
       }
 
       /* Handle on hover */
@@ -602,11 +602,12 @@ main.insidecont .box {
 
 .kb-tag {
   color: #fff;
-  padding: 0 6px;
+  padding: 4px 6px;
   font-size: 9px;
   border-radius: 10px;
   font-weight: 600;
   text-transform: capitalize;
+  line-height: normal;
 }
 
 

@@ -283,3 +283,12 @@ i.kb-danger {
 span.kb-setting-icon .kb-handle-block {
     cursor: n-resize;
 }
+
+.kb-setting-head-text {
+    display: inline-flex;
+    align-items: center;
+}
+
+.kb-setting-head-text .kb-tag.kb-info-tag {
+    margin-left: 10px;
+}
