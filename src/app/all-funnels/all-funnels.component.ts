@@ -50,7 +50,8 @@ export class AllFunnelsComponent implements OnInit {
   pageEvent!: PageEvent;
   DialogParentToggle:boolean = false;
   mydomain = {subdomain:'',domain:''};
-
+  selstatusshow = 'all';
+  searching = false;
 
 
   getServerData(event?:PageEvent){
@@ -219,8 +220,7 @@ export class AllFunnelsComponent implements OnInit {
       this.colortheme = false;
     }else if(type=='duplicate'){
       // console.log(uniqueid+'--'+id);
-      this._snackBar.open('Duplicate In Progress!', 'Close');
-
+      this.searching = true;
       this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
         next: data => {
           // console.log(data);
@@ -244,12 +244,17 @@ export class AllFunnelsComponent implements OnInit {
             }
 
             this.showfunnels();
-            this._snackBar.open('Successfully Duplicate Funnel!', 'Close');
+            this.searching = true;
+
+            this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
           }
         }
       });
+
     }else{
-      this.funnelService.makefunnelsettings(uniqueid,id,type).subscribe({
+
+      var obj = {uniqueid:uniqueid, id:id, type: type};
+      this.funnelService.makefunnelsettings(obj).subscribe({
         next: data => {
           // console.log(data); 
           
@@ -270,7 +275,9 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   makearchive(){
-    this.funnelService.makefunnelsettings(this.reason,this.forarchiveid,'archive').subscribe({
+    var obj = {value:this.reason, id:this.forarchiveid, type: 'archive'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         if(data.status==1){
             this.reason = '';
@@ -310,9 +317,9 @@ export class AllFunnelsComponent implements OnInit {
 
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        // console.log(data); 
+        console.log(data); 
         this.funnels = [];
-        if(data.data2.length!=0){
+        if(data.data2?.length!=0){
           this.funnelnotfound = false;
 
           data.data2.forEach((element: any) => {
@@ -324,7 +331,7 @@ export class AllFunnelsComponent implements OnInit {
 
                 data.data.forEach((element2: any) => {
                   var newob2 = {id:'',uniqueid:'',page_name:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
-                  if(element2.funnelid==newob.id){
+                  if(element2.funnelid==newob.uniqueid){
                     newob2.id = element2.id;
                     newob2.page_name = element2.page_name;
                     newob2.uniqueid = element2.uniqueid;
@@ -343,7 +350,7 @@ export class AllFunnelsComponent implements OnInit {
                 });
 
             this.funnels.push(newob);
-            // console.log(this.funnels);
+            console.log(this.funnels);
 
           });
 
@@ -373,7 +380,8 @@ export class AllFunnelsComponent implements OnInit {
       this.funnelurl = window.origin+'/funnels/'+unique1+'/steps/'+unique2;
       this.pageurl = '';
 
-      this.funnelService.makefunnelsettings('',unique2,'stepdetails').subscribe({
+    var obj = {id:unique2, type: 'stepdetails'};
+      this.funnelService.makefunnelsettings(obj).subscribe({
           next: data => {
             // console.log(data); 
             this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
@@ -422,7 +430,9 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   viewpagestep(unique:any){
-    this.funnelService.makefunnelsettings('',unique,'stepdetails').subscribe({
+    var obj = {id:unique, type: 'stepdetails'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data); 
         var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+data.data[0].page_path;
@@ -433,7 +443,9 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   makearchivestep(){
-    this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
+    var obj = {value: this.reason,id:this.forarchiveid, type: 'archivestep'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
 
@@ -467,8 +479,9 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   savesteptheme(){
+    var obj = {value: this.badgecolor,id:this.forarchiveid, type: 'colorbadge'};
    
-    this.funnelService.makefunnelsettings(this.badgecolor, this.forarchiveid, 'colorbadge').subscribe({
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
 
@@ -504,7 +517,35 @@ export class AllFunnelsComponent implements OnInit {
     this.DialogParentToggle = !this.DialogParentToggle;
   }
 
+  searchpage(event: Event) {
+    // this.searching = true;
+    // var SearchValue = {search:(event.target as HTMLInputElement).value};
+    // // console.log(SearchValue);
+    // this.selstatusshow = 'all';
 
+    // this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
+    //   next: data => {
+
+    //     console.log(data);
+    //     this.fetweb(data);
+    //     // this.shortdata(data);
+    //   }
+    // });
+  }
+
+  applykbfilter(){
+    // var dt:any = {order:this.selstatusshow};
+    // this.websiteService.shortbypaginatorwebsite(dt).subscribe({
+    //   next: data => {
+    //     console.log(data);
+
+    //     this.fetweb(data);
+    //   },
+    //   error: err => {
+    //     console.log(err);
+    //   }
+    // });
+  }
 
 
 }

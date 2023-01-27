@@ -259,6 +259,7 @@ export class AllWebsitesComponent implements OnInit {
           console.log(data);
 
           if(data.incorrect == 1){
+            this.searching = false;
             this._snackBar.open("Password did't match!", 'OK');
           }else{
             this._file.deletewebsitefolder(web.uniqueid).subscribe(e=>{

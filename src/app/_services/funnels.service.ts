@@ -21,12 +21,9 @@ export class FunnelService {
     // console.log(this.tokenStorage.getUser());
   }
 
-  saveondb(funnelname: any, funnelfirststep: any, badgecolor: any, funneltype:any):Observable<any> {
+  savefunneldb(data:any):Observable<any> {
       return this.http.post("./api/savefunnel/"+this.uuid, {
-          funnelname,
-          funnelfirststep,
-          badgecolor,
-          funneltype
+        data
       }, httpOptions);
     }
 
@@ -163,11 +160,9 @@ export class FunnelService {
       }, httpOptions);
     }
 
-    makefunnelsettings(value:string, id:string, type:string):Observable<any> {
+    makefunnelsettings(data:any):Observable<any> {
       return this.http.post("./api/makefunnelsettings/"+this.uuid, {
-        value,
-        id,
-        type
+       data
       }, httpOptions);
     }
 

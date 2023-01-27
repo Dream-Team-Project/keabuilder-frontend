@@ -1,4 +1,6 @@
 <div id="funnelcontainer">
+    <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+
     <app-build-funnel [DialogToggle]="DialogParentToggle"></app-build-funnel>
     <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
@@ -98,38 +100,26 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-2 col-6">
-                <button mat-raised-button color="primary" (click)="openDialog($event)">
-                    <i class="far fa-plus-square"></i> Build A Funnel
-                </button>
-                <!-- <button routerLink="/funnels/build" mat-raised-button color="primary">
-                    <i class="far fa-plus-square"></i> Build A Funnel
-                </button> -->
+            <div class="col-md-8 adjustmatfrm">
+              <mat-form-field  appearance="fill" class="w-100">
+                <mat-label>Search Funnel</mat-label>
+                <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Website">
+                <i class="fa fa-search"></i>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="mr-4">
+                <mat-label>Sort By</mat-label>
+                <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
+                  <mat-option value="nameasc" >ASC By Name</mat-option>
+                  <mat-option value="namedesc">DESC By Name</mat-option>
+                  <mat-option value="dateasc" >ASC By Date</mat-option>
+                  <mat-option value="datedesc">DESC By Date</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-            <div class="col-md-10 col-6">
-                <ul class="kea-barfunnelsearch">
-                    <li class="active">
-                        <a routerLink="/funnels" href="javascript:void(0)" mat-raised-button>
-                            <i class="fas fa-filter"></i> <span class="keadnmob"> All Funnels</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/funnels/archive" href="javascript:void(0)" mat-button>
-                            <i class="fas fa-archive"></i> <span class="keadnmob"> Archived</span>
-                        </a>
-                    </li>
-                    <!-- <li>
-                        <a routerLink="/funnels/marketplace" href="javascript:void(0)" mat-button>
-                            <i class="fas fa-store"></i> Marketplace
-                        </a>
-                    </li> -->
-                </ul>
-                <!-- <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
-                    <input type="text" class="form-control" id="email-search" placeholder="Search funnel">
-                    <div class="form-control-position">
-                        <i class="fab fa-searchengin"></i>                        
-                    </div>
-                </fieldset> -->
+            <div class="col-md-4 text-right">
+                <button mat-raised-button color="primary" (click)="openDialog($event)">
+                    Create Funnel <i class="far fas fa-plus"></i>
+                </button>
             </div>
         </div>
 

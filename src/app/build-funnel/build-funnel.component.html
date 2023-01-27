@@ -1,8 +1,10 @@
 <div id="buildfunnelcomp">
+  <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+
   <div class="container-fluid">
 
-    <div id="kb-buildfunnel-actions" *ngIf="popupsidebar">
-      <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+    <div id="kb-buildfunnel-actions" *ngIf="sidebar.open">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
         
         <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
         <h6><b>NEW FUNNEL STEPS</b></h6>
@@ -10,20 +12,36 @@
         <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
 
           <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Funnel Name</mat-label>
+            <mat-label>Name</mat-label>
             <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
             <mat-error *ngIf="userFormControl.hasError('required')">
-              Funnel Name is <strong>required</strong>
+              Name is <strong>required</strong>
             </mat-error>
             <mat-error *ngIf="userFormControl.hasError('minlength')">
-              Funnel Name must be at least <strong>3</strong> characters
+              Name must be at least <strong>3</strong> characters
             </mat-error>
           </mat-form-field>
 
           <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Funnel First Step Name</mat-label>
-            <input type="text" matInput [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
-            <small>Optional</small>
+            <mat-label>Step Name</mat-label>
+            <input type="text" matInput  required minlength="3" [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
+            <mat-error *ngIf="stepnameFormControl.hasError('required')">
+             Step Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="stepnameFormControl.hasError('minlength')">
+              Step Name must be at least <strong>3</strong> characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Step Type</mat-label>
+            <mat-select name="funneltype"  [(ngModel)]="form.funneltype" required>
+              <mat-option value="regular">Regular Page</mat-option>
+              <mat-option value="order">Order Page</mat-option>
+              <mat-option value="upsell">Upsell Page</mat-option>
+              <mat-option value="downsell">Downsell Page</mat-option>
+              <mat-option value="thankyou">Thank you Page</mat-option>
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="fill" class="kb-full-width" >
@@ -40,24 +58,28 @@
             <small>Optional</small>
           </mat-form-field>
 
-          <mat-form-field appearance="fill" class="kb-full-width" >
-            <mat-label>Funnel First Step Type</mat-label>
-            <mat-select name="funneltype"  [(ngModel)]="form.funneltype" required>
-              <mat-option value="regular">Regular Page</mat-option>
-              <mat-option value="order">Order Page</mat-option>
-              <mat-option value="upsell">Upsell Page</mat-option>
-              <mat-option value="downsell">Downsell Page</mat-option>
-              <mat-option value="thankyou">Thank you Page</mat-option>
-            </mat-select>
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label> Subdomain</mat-label>
+            <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+            <span matSuffix>.keapages.com</span>
+            <mat-error *ngIf="subdomainFormControl.hasError('required')">
+              Subdomain Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+              Subdomain must be at least <strong>3</strong> characters
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+              Subdomain must be at most <strong>20</strong> characters
+            </mat-error>
           </mat-form-field>
 
-          <button mat-raised-button color="primary" type="submit" ><i class="fas fa-plus"></i> Create Funnel</button>
+          <button mat-raised-button color="primary" type="submit" >Create <i class="fas fa-check"></i></button>
 
         </form>
 
       </div>
     </div>
-    <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+    <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
 
     <div class="row mt-4" *ngIf="isneed">
       <!-- <div class="col-md-12 topfixadjust text-center mb-4"> -->

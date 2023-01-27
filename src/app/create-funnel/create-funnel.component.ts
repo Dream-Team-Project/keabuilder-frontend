@@ -504,9 +504,10 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   showfunnelsteps(){
+    // console.log(this.uniqueid); 
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.steps = data.data;
         // if(data.data.length>1){
         //   this.firstselectedid = data.data[1].id;
@@ -703,7 +704,9 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   makearchivestep(){
-    this.funnelService.makefunnelsettings(this.reason, this.forarchiveid, 'archivestep').subscribe({
+    var obj = {value:this.reason,id:this.forarchiveid, type: 'archivestep'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
 
@@ -775,7 +778,9 @@ export class CreateFunnelComponent implements OnInit {
         this.copylink = true;
     }else if(value=='deletefunnelstep'){
 
-      this.funnelService.makefunnelsettings('', this.uniqueidstep, 'deletestep').subscribe({
+      var obj = {id:this.uniqueidstep, type: 'deletestep'};
+
+      this.funnelService.makefunnelsettings(obj).subscribe({
         next: data => {
           // console.log(data);
   
@@ -820,7 +825,9 @@ export class CreateFunnelComponent implements OnInit {
   }
   splitapply(){
     // console.log(this.splitvalue); 
-    this.funnelService.makefunnelsettings(this.splitvalue, this.uniqueidstep, 'splitapply').subscribe({
+    var obj = {value:this.splitvalue,id:this.uniqueidstep, type: 'splitapply'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
         if(data.status==1){
@@ -882,8 +889,9 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   savesteptheme(){
+    var obj = {value:this.badgecolor,id:this.forarchiveid, type: 'colorbadge'};
    
-    this.funnelService.makefunnelsettings(this.badgecolor, this.forarchiveid, 'colorbadge').subscribe({
+    this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
 
