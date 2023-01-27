@@ -22,6 +22,10 @@ export class WebsiteService {
     return this.http.get('/api/allwebsitedata/'+this.uuid);
   }
 
+  getSingleWebsite(uniqueid:string): Observable<any> {
+    return this.http.get('/api/getsinglewebsite/'+this.uuid+'/'+uniqueid);
+  }
+
   getuniqwebsites(data: any):Observable<any> {
     return this.http.post("./api/getuniqwebsites/"+this.uuid, {
       data,

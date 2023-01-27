@@ -100,7 +100,6 @@ export class FormBuilderComponent implements OnInit {
       this._form.updateForm().then(e=>{
         this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
           var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-          console.log(file);
           this._general.fileUploadService.upload(file).subscribe(
             (event: any) => {
               if (typeof (event) === 'object') {

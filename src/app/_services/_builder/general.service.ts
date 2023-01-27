@@ -21,7 +21,7 @@ export class GeneralService {
   includeLayout:any = {header:true, footer:true};
   user:any;
   autosave:any = '';
-  autosaveopt:any = [{value:15, unit:'sec'}, {value:30, unit:'sec'}, {value:2, unit:'min'}, {value:5, unit:'min'}, {value:10, unit:'min'}];
+  autosaveopt:any = [{value:10, unit:'sec'}, {value:30, unit:'sec'}, {value:1, unit:'min'}, {value:2, unit:'min'}, {value:5, unit:'min'}];
   subdomain:string = '';
   target:any = {
     id: '',
@@ -228,28 +228,30 @@ export class GeneralService {
           this.fetchFooters().then(data=>{
             this.footers = data;
           })
-          if(this.target.type == 'website') {
-            this.getWebPageDetails(id).then(data=> {
-              resolve(data);
-            })
-          }
-          else if(this.target.type == 'funnel') {
-            this.getFunnelDetails(id).then(data=> {
-              resolve(data);
-            })
-          }
         }
-        else {
-          if(this.target.type == 'header') {
+        if(this.target.type == 'website') {
+          this.getWebPageDetails(id).then(data=> {
+            resolve(data);
+          })
+        }
+        else if(this.target.type == 'funnel') {
+          this.getFunnelDetails(id).then(data=> {
+            resolve(data);
+          })
+        }
+        else if(this.target.type == 'header') {
             this.getHeader('kb-header-'+id).then(data=>{
               resolve(data);
             });
-          }
-          else if(this.target.type == 'footer') {
-            this.getFooter('kb-footer-'+id).then(data=>{
-              resolve(data);
-            });
-          }
+        }
+        else if(this.target.type == 'footer') {
+          this.getFooter('kb-footer-'+id).then(data=>{
+            resolve(data);
+          });
+        }
+        else{
+          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+          resolve(false);
         }
       });
     })
@@ -333,7 +335,7 @@ export class GeneralService {
       this.main.name = this.webpage.page_name;
       this.main.title = this.webpage.page_title;
       this.main.path = this.webpage.page_path;
-      this.main.website_id = this.webpage.website_id;
+      this.main.website_id = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
       if(this.webpage.page_description) this.main.description = this.webpage.page_description;
       if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
       this.main.author = this.webpage.page_author;
@@ -391,22 +393,35 @@ export class GeneralService {
       var data = {
         path: this.main.path
       }
-      this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
-        if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
-            this.saveHTML(main, sections, false, tglDraft).then(data => {
-              resolve(data);
-            });
-        }
-        else {
-            this.pathError = true;
-            resolve(false);
-        }
-      })
+      if(this.target.type == 'website') {
+        this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
+          if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
+              this.saveHTML(main, sections, false, tglDraft).then(data => {
+                resolve(data);
+              });
+          }
+          else {
+              this.pathError = true;
+              resolve(false);
+          }
+        })
+      }
+      else if(this.target.type == 'funnel') {
+        console.log('--check path existance before further operation--');
+        this.saveHTML(main, sections, false, tglDraft).then(data => {
+          resolve(data);
+        });
+      }
+      else{
+        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+        resolve(false);
+      }
     })
   }
 
   preview() {
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.webpage.website_id+'/'+this.webpage.uniqueid, 'framename');
+    var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 
   saveHeaderFooter(main:any, sections:any) {
@@ -446,69 +461,89 @@ export class GeneralService {
   saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
     this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
     return new Promise<any>((resolve, reject) => {
-      this.websiteService.getWebsite().subscribe((e:any)=>{
-        var web = e.data[0];
-        this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-        this.webpage.page_json = this.encodeJSON(sections);
-        this.setPageStyle(sections);
-        if(this.includeLayout.header && this.selectedHeader.html && !preview) {
-          var header = this.pagehtml.querySelector('header');
-          header.innerHTML = `<?php $path="../../../headers/${header.children[0].id}.php"; `+this.includeCond+` ?>`;
-        }
-        if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
-          var footer = this.pagehtml.querySelector('footer');
-          footer.innerHTML = `<?php $path="../../../footers/${footer.children[0].id}.php"; `+this.includeCond+` ?>`;
-        }
-        this.removeExtra(preview);
-        this.pagehtml.querySelector('head').innerHTML = 
-        '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
-        '<meta charset="UTF-8">' +
-        '<meta name="description" content="'+this.main.description+'">' +
-        '<meta name="keywords" content="'+this.main.keywords+'">' +
-        '<meta name="author" content="'+this.main.author+'">' +
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-        '<title>'+this.main.title+'</title>' +        
-        '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
-        this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-        this.pageObj = {
-          head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
-          body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
-          style: this.getAllStyle(),
-          website_id: web.uniqueid
-        }
-        if(preview) {
-          var prevObj = JSON.parse(JSON.stringify(this.pageObj));
-          prevObj.prevFolder = this.webpage.uniqueid;
-          prevObj.folder = this.webpage.uniqueid;
-          prevObj.dir = 'previews';
-          this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
-            resolve(true);
-          },
-          error=>{
-            this.openSnackBar(true, 'Server Error! Please try to save your page.', 'OK', 'center', 'top');
-            resolve(false);
-          });
-        }
-        else {
-          var status = this.main.publish_status;
-          this.pageObj.head = `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + '<link rel="stylesheet" href="../'+this.main.path+'/style.css">' + this.pageObj.head;
-          this.pageObj.folder = this.main.path;
-          this.pageObj.prevFolder = this.webpage.page_path;
-          this.pageObj.dir = status ? 'pages' : 'drafts';
-          if(tglDraft) {
-            var td = {
-              status:(status ? 'publish' : 'draft'), 
-              path: this.main.path,
-              website_id: web.uniqueid
-            }
-            this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
-              this.savePage(web).then(resp=>resolve(resp));
-            })
-          }
-          else this.savePage(web).then(resp=>resolve(resp));
-        }
-      })
+      if(this.target.type == 'website'){
+        this.websiteService.getSingleWebsite(this.webpage.website_id).subscribe((e:any)=>{
+          this.htmlSetUp(e.data[0],main, sections, preview, tglDraft).then(res=>{
+            resolve(res);
+          })
+        })
+      }
+      else if(this.target.type == 'funnel'){
+        this.funnelService.getSingleFunnel(this.webpage.funnelid).subscribe((e:any)=>{
+          this.htmlSetUp(e.data[0],main, sections, preview, tglDraft).then(res=>{
+            resolve(res);
+          })
+        })
+      }
+      else{
+        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+        resolve(false);
+      }
     });
+  }
+
+  htmlSetUp(web:any,main:any, sections:any, preview:boolean, tglDraft:boolean) {
+    return new Promise<any>((resolve, reject) => {
+      this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+      this.webpage.page_json = this.encodeJSON(sections);
+      this.setPageStyle(sections);
+      if(this.includeLayout.header && this.selectedHeader.html && !preview) {
+        var header = this.pagehtml.querySelector('header');
+        header.innerHTML = `<?php $path="../../../headers/${header.children[0].id}.php"; `+this.includeCond+` ?>`;
+      }
+      if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
+        var footer = this.pagehtml.querySelector('footer');
+        footer.innerHTML = `<?php $path="../../../footers/${footer.children[0].id}.php"; `+this.includeCond+` ?>`;
+      }
+      this.removeExtra(preview);
+      this.pagehtml.querySelector('head').innerHTML = 
+      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
+      '<meta charset="UTF-8">' +
+      '<meta name="description" content="'+this.main.description+'">' +
+      '<meta name="keywords" content="'+this.main.keywords+'">' +
+      '<meta name="author" content="'+this.main.author+'">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+      '<title>'+this.main.title+'</title>' +        
+      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
+      this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      this.pageObj = {
+        head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
+        body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+        style: this.getAllStyle(),
+        website_id: web.uniqueid
+      }
+      if(preview) {
+        var prevObj = JSON.parse(JSON.stringify(this.pageObj));
+        prevObj.prevFolder = this.webpage.uniqueid;
+        prevObj.folder = this.webpage.uniqueid;
+        prevObj.dir = 'previews';
+        this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
+          resolve(true);
+        },
+        error=>{
+          this.openSnackBar(true, 'Server Error! Please try to save your page.', 'OK', 'center', 'top');
+          resolve(false);
+        });
+      }
+      else {
+        var status = this.main.publish_status;
+        this.pageObj.head = `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + '<link rel="stylesheet" href="../'+this.main.path+'/style.css">' + this.pageObj.head;
+        this.pageObj.folder = this.main.path;
+        this.pageObj.prevFolder = this.webpage.page_path;
+        this.pageObj.dir = status ? 'pages' : 'drafts';
+        if(tglDraft) {
+          var td = {
+            status:(status ? 'publish' : 'draft'), 
+            path: this.main.path,
+            website_id: web.uniqueid
+          }
+          this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
+            this.savePage(web).then(resp=>resolve(resp));
+          })
+        }
+        else this.savePage(web).then(resp=>resolve(resp));
+      }
+    })
   }
 
   savePage(web:any) {
@@ -554,7 +589,7 @@ export class GeneralService {
         }
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
-            this.getWebPageDetails(this.webpage.uniqueid).then(resp=>resolve(e));
+            resolve(e);
           })
       }
       else if(this.target.type == 'funnel'){
