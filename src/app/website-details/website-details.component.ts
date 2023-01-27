@@ -110,11 +110,11 @@ export class WebsiteDetailsComponent implements OnInit {
             console.log(this.domainselected);
 
             if(element.tracking_header!=null && element.tracking_header!=''){
-              this.pagescriptheader = atob(element.tracking_header);
+              this.pagescriptheader = this._general.decodeData(element.tracking_header);
             }
 
             if(element.tracking_footer!=null && element.tracking_footer!=''){
-              this.pagescriptfooter = atob(element.tracking_footer);
+              this.pagescriptfooter = this._general.decodeData(element.tracking_footer);
             }
 
             if(element.homepage!=null && element.homepage!=''){
@@ -185,8 +185,8 @@ export class WebsiteDetailsComponent implements OnInit {
     // console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
-      scriptheader: btoa(this.pagescriptheader),
-      scriptfooter: btoa(this.pagescriptfooter),
+      scriptheader: this._general.encodeData(this.pagescriptheader),
+      scriptfooter: this._general.encodeData(this.pagescriptfooter),
       onlysite: false,
       uniqueid: this.websiteid,
       domain: this.domainselected,

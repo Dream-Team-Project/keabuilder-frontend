@@ -843,12 +843,12 @@ export class GeneralService {
     this.selectedTab = e.tab ? e.tab['textLabel'].toLowerCase() : '';
   }
 
-  encodeJSON(json:any) {
-    return this.encodeData(JSON.stringify(json));
+  encodeJSON(data:any) {
+    return this.encodeData(JSON.stringify(data));
   }
 
-  decodeJSON(json:string) {
-    return JSON.parse(this.decodeData(json));
+  decodeJSON(data:string) {
+    return JSON.parse(this.decodeData(data));
   }
 
   encodeData(data:any) {
