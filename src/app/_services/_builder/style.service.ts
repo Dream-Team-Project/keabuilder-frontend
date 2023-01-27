@@ -111,10 +111,10 @@ export class StyleService {
   box_shadow_vpRange: any = { value: 2, min: -100, max: 100, type: 'px' };
   box_shadow_bs = { value: '18px' };
   box_shadow_bsRange: any = { value: 18, min: 0, max: 100, type: 'px' };
-  box_shadow_ss = { value: '0px' };
-  box_shadow_ssRange: any = { value: 0, min: 0, max: 100, type: 'px' };
+  box_shadow_ss = { value: '4px' };
+  box_shadow_ssRange: any = { value: 4, min: 0, max: 100, type: 'px' };
   box_shadow_position = 'none';
-  box_shadow_color = 'rgba(0,0,0,40%)';
+  box_shadow_color = '#E0E0E0';
   // box shadow
   // advance
   zindex: number = 0;
@@ -927,13 +927,17 @@ export class StyleService {
   defaultStyling(block:any) {
     this.margin.top = '0px';
     var mrl;
-    if(block.type == 'element' && !block.itemstyle && block.content?.name != 'code') {
+    if(block.type == 'element' && !block.itemstyle && block.content?.name != 'code' && block.content?.name != 'form') {
       mrl = '0px';
       this.margin.bottom = '10px';
     }
     else {
       mrl = 'auto';
       this.margin.bottom = '0px';
+    }
+    if(block.content?.name == 'form') {
+      this.margin.top = '30px';
+      this.margin.bottom = '30px';
     }
     this.margin.right = mrl;
     this.margin.left = mrl;
@@ -1007,8 +1011,14 @@ export class StyleService {
         this.widthRange.value = 90;        
     }
     else if (block.type == 'element') {
-      this.width.value = block.content?.name == 'input' || block.content?.name == 'label' || block.content?.name == 'option' || block.content?.name == 'form' ? '100%' : 'auto';
-      this.widthRange.value = 100;
+      if(block.content?.name == 'form') {
+        this.width.value = '70%';
+        this.widthRange.value = 70;
+      }
+      else {
+        this.width.value = block.content?.name == 'input' || block.content?.name == 'label' || block.content?.name == 'option' ? '100%' : 'auto';
+        this.widthRange.value = 100;
+      }
     }
     else {
       this.width.value = '100%';
@@ -1170,11 +1180,11 @@ export class StyleService {
     this.box_shadow_bs.value = '18px' ;
     this.box_shadow_bsRange.value = 18;
     this.box_shadow_bsRange.type = 'px';
-    this.box_shadow_ss.value = '0px';
-    this.box_shadow_ssRange.value = 0;
+    this.box_shadow_ss.value = '4px';
+    this.box_shadow_ssRange.value = 4;
     this.box_shadow_ssRange.type = 'px';
     this.box_shadow_position = 'none';
-    this.box_shadow_color = 'rgba(0,0,0,40%)';
+    this.box_shadow_color = '#E0E0E0';
   }
 
   blockSetting(block: any) {

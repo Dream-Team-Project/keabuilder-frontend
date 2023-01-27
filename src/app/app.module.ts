@@ -70,7 +70,7 @@ import { SvgPipe } from './_pipes/svg.pipe';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe
+    SvgPipe,
   ],
   imports: [
     AppRoutingModule,

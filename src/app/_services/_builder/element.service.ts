@@ -83,13 +83,14 @@ export class ElementService {
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
-    var respS = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
+    var respS:any = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
     if(element.name == 'form') {
+      respS = {'width': '100%'};
       tempObj.content.style = {
         desktop: this._style.defaultStyling(tempObj), 
         tablet_h:'',
-        tablet_v:'',
-        mobile:''}
+        tablet_v:respS,
+        mobile:respS}
     }
     else {
     tempObj.content.style = {

@@ -101,19 +101,22 @@ span.kb-split-fields {
     top: 0px;
     left: 0px;
     width: 100%;
-    z-index: 99;
+    z-index: 9999;
     box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px; 
+}
+
+#kb-form-container.kb-resp-view {
+    box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
 }
 
 #kb-form-container {
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 75%;
+    width: 100%;
     min-height: 500px;
     height: auto;
-    box-shadow: 0 0 10px 0px rgb(0 0 0 / 20%);
-    margin: 30px auto;
+    margin: 0px auto;
     border-radius: 4px;
     transition: width 0.3s ease-out;
 }
@@ -123,11 +126,11 @@ span.kb-split-fields {
     width: auto;
 }
 
-#kb-form-elements .cdk-drag {
+.cdk-drag {
     cursor: grab;
 }
 
-#kb-form-elements .cdk-drag:active {
+.cdk-drag:active {
     cursor: grabbing;
 }
 
@@ -156,9 +159,8 @@ div.kb-form-element {
     transition: 0.2s ease;
 }
 
-div.kb-form-element:before {
+div.kb-form-element.cdk-drag:before {
     content: '';
-    cursor: all-scroll;
     border: 2px solid transparent;
     position: absolute;
     transition: 0.2s ease;
@@ -170,7 +172,7 @@ div.kb-form-element:before {
     transition: 0.2s ease;
 }
 
-div.kb-form-element:hover:before {
+div.kb-form-element.cdk-drag:hover:before {
     border-color: var(--primary-color);
 }
 
@@ -221,16 +223,17 @@ div.kb-form-setting {
     }
 }
 
-#kb-form .kb-form-element .kb-mar-zero{
+.kb-form-element .kb-mar-zero{
     margin: 0px!important;
 }
 
 .kb-form-image img {
-    height: 320px;
+    max-width: 100%;
 }
 
-.kb-form-image img {
-    max-width: 100%;
+div#kb-element-drag {
+    position: relative;
+    height: 500px;
 }
 
 div#kb-element-drag:after {
@@ -238,16 +241,16 @@ div#kb-element-drag:after {
     border: 2px dashed #aeaeae;
     color: #aeaeae;
     font-size: 22px;
-    height: calc(100% - 120px);
-    width: calc(100% - 120px);
     position: absolute;
-    left: 60px;
-    top: 60px;
+    left: 10%;
+    top: 10%;
     border-radius: 4px;
     margin-top: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 80%;
+    height: 80%;
 }
 
 /*  input styling  */
@@ -257,7 +260,7 @@ div#kb-element-drag:after {
     margin-left: 5px;
 }
 
-div.kb-form-inp label, div.kb-form-rc label {
+.kb-form-inp label, div.kb-form-rc label {
     margin-bottom: 10px;
     display: block;
     font-weight: 500;
@@ -266,7 +269,7 @@ div.kb-form-inp label, div.kb-form-rc label {
     display: flex;
 }
 
-div.kb-form-inp input, div.kb-form-inp textarea, div.kb-form-inp select {
+.kb-form-inp input, .kb-form-inp textarea, .kb-form-inp select {
     font-size: 14px;
     border-radius: 4px;
     border-width: 1px;
@@ -281,13 +284,13 @@ div.kb-form-inp input, div.kb-form-inp textarea, div.kb-form-inp select {
     line-height: 36px;
 }
 
-div.kb-form-inp input:focus, div.kb-form-inp textarea:focus, div.kb-form-inp select:focus, 
-div.kb-form-inp input:focus-visible, div.kb-form-inp textarea:focus-visible, div.kb-form-inp select:focus-visible,
-div.kb-form-inp input:focus-within, div.kb-form-inp textarea:focus-within, div.kb-form-inp select:focus-within {
+.kb-form-inp input:focus, .kb-form-inp textarea:focus, .kb-form-inp select:focus, 
+.kb-form-inp input:focus-visible, .kb-form-inp textarea:focus-visible, .kb-form-inp select:focus-visible,
+.kb-form-inp input:focus-within, .kb-form-inp textarea:focus-within, .kb-form-inp select:focus-within {
     outline: none;
 }
 
-div.kb-form-inp select {
+.kb-form-inp select {
     min-height: 36px;
 }
 
@@ -341,6 +344,10 @@ button {
 
 /* loader */
 
+#kb-main #loader {
+    z-index: 99999;
+}
+
   #kb-main.loading:after {
     content: '';
     position: fixed;
@@ -348,7 +355,7 @@ button {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 999;
+    z-index: 9999;
     background-color: var(--kb-dark);
     pointer-events: none;
   }
@@ -402,9 +409,9 @@ label > input[type="radio"], label > input[type="checkbox"] {
     color: var(--section-color);
   }
 
-  label > input[type="radio"]:checked + *, label > input[type="checkbox"]:checked + * {
+  /* label > input[type="radio"]:checked + *, label > input[type="checkbox"]:checked + * {
     color: var(--section-color);
-  }
+  } */
 
   label > input[type="radio"] + *, label > input[type="checkbox"] + * {
     padding: 0px;

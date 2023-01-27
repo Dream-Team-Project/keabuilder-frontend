@@ -41,6 +41,7 @@ export class FormBuilderComponent implements OnInit {
   dialogData:any;
   drawerPos:any = 'end';
   preview:boolean = false;
+  autoSaveInterval:any;
 
   constructor(
     private route: ActivatedRoute,
@@ -80,6 +81,17 @@ export class FormBuilderComponent implements OnInit {
         e.returnValue = '';
       }
     });
+  }
+
+  autoSaveTrigger(trigger:boolean) {
+    clearInterval(this.autoSaveInterval);
+    if(trigger) {
+      this.autoSaveInterval = setInterval(()=>{
+        this._form.updateForm();
+      }, 2000);
+      this.autoSaveInterval;
+    }
+    this.autosave = trigger;
   }
 
   saveForm() {

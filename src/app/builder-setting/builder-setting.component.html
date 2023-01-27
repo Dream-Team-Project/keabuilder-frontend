@@ -1168,49 +1168,49 @@
                             </div>
                         </div>
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle">
-                            <div *ngIf="_general.selectedBlock.type != 'element' else elementAlign"
+                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' else blockAlign"
                                 class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Alignment<span matTooltip="Auto Align"
+                                <div class="kb-tab-head">Alignment</div>
+                                <div class="kb-tab-content">
+                                    <div class="kb-align-btn-group">
+                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == '' ? 'kb-active-brd' : ''"
+                                            class="kb-align-btn icon-border" matTooltip="Left"
+                                            matTooltipPosition="above"><i class="fa fa-arrow-left"></i></span>
+                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('center')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == 'center' ? 'kb-active-brd' : ''"
+                                            class="kb-align-btn icon-border" matTooltip="Center"
+                                            matTooltipPosition="above"><i class="fa fa-arrow-right"></i><i
+                                                class="fa fa-arrow-left"></i></span>
+                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('flex-end')"
+                                            [class]="_style.getBlockParamValue(_style.item_alignment) == 'flex-end' ? 'kb-active-brd' : ''"
+                                            class="kb-align-btn icon-border" matTooltip="Right"
+                                            matTooltipPosition="above"><i class="fa fa-arrow-right"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #blockAlign>
+                                <div class="kb-inner-tab-component">
+                                    <div class="kb-tab-head">Alignment<span matTooltip="Auto Align"
                                         matTooltipPosition="above"
                                         (click)="_style.iconMotion($event.target); _style.setBlockAlign('')"
                                         class="kb-reverse-icon" [class]="_style.blockAlign ? '' : 'active'"><i
                                             class="fa fa-sync"></i></span></div>
-                                <div class="kb-tab-content">
-                                    <div class="kb-align-btn-group">
-                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('left')"
-                                            [class]="_style.blockAlign == 'left' ? 'kb-active-brd' : ''"
-                                            class="kb-align-btn icon-border" matTooltip="Left"
-                                            matTooltipPosition="below"><i class="fa fa-arrow-left"></i></span>
-                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('center')"
-                                            [class]="_style.blockAlign == 'center' ? 'kb-active-brd' : ''"
-                                            class="kb-align-btn icon-border" matTooltip="Center"
-                                            matTooltipPosition="below"><i class="fa fa-arrow-right"></i><i
-                                                class="fa fa-arrow-left"></i></span>
-                                        <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('right')"
-                                            [class]="_style.blockAlign == 'right' ? 'kb-active-brd' : ''"
-                                            class="kb-align-btn icon-border" matTooltip="Right"
-                                            matTooltipPosition="below"><i class="fa fa-arrow-right"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <ng-template #elementAlign>
-                                <div class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Alignment</div>
                                     <div class="kb-tab-content">
                                         <div class="kb-align-btn-group">
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('')"
-                                                [class]="_style.getBlockParamValue(_style.item_alignment) == '' ? 'kb-active-brd' : ''"
+                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('left')"
+                                                [class]="_style.blockAlign == 'left' ? 'kb-active-brd' : ''"
                                                 class="kb-align-btn icon-border" matTooltip="Left"
-                                                matTooltipPosition="above"><i class="fa fa-arrow-left"></i></span>
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('center')"
-                                                [class]="_style.getBlockParamValue(_style.item_alignment) == 'center' ? 'kb-active-brd' : ''"
+                                                matTooltipPosition="below"><i class="fa fa-arrow-left"></i></span>
+                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('center')"
+                                                [class]="_style.blockAlign == 'center' ? 'kb-active-brd' : ''"
                                                 class="kb-align-btn icon-border" matTooltip="Center"
-                                                matTooltipPosition="above"><i class="fa fa-arrow-right"></i><i
+                                                matTooltipPosition="below"><i class="fa fa-arrow-right"></i><i
                                                     class="fa fa-arrow-left"></i></span>
-                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('flex-end')"
-                                                [class]="_style.getBlockParamValue(_style.item_alignment) == 'flex-end' ? 'kb-active-brd' : ''"
+                                            <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setBlockAlign('right')"
+                                                [class]="_style.blockAlign == 'right' ? 'kb-active-brd' : ''"
                                                 class="kb-align-btn icon-border" matTooltip="Right"
-                                                matTooltipPosition="above"><i class="fa fa-arrow-right"></i></span>
+                                                matTooltipPosition="below"><i class="fa fa-arrow-right"></i></span>
                                         </div>
                                     </div>
                                 </div>

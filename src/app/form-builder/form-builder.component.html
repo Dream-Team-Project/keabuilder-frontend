@@ -33,8 +33,8 @@
 </ng-template>
 <ng-template #elementdialog>
     <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replace('-',' ')}}</h1>
-    <div mat-dialog-content [class.kb-text-editor]="_form.selEle.html">
-        <editor *ngIf="_form.selEle.html" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
+    <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
+        <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
         <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'button'">
             <mat-label>Text</mat-label>
             <input matInput type="text" [placeholder]="'button text'" [(ngModel)]="_form.selEle.text">
@@ -124,8 +124,8 @@
                     Auto Save > {{autosave ? 'ON' : 'OFF'}}
                 </button>
                 <mat-menu #asm>
-                    <button mat-menu-item (click)="autosave = true" [class.kb-btn-active]="autosave">ON</button>
-                    <button mat-menu-item (click)="autosave = false" [class.kb-btn-active]="!autosave">OFF</button>
+                    <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
+                    <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
                 </mat-menu>
                 <button mat-button [class.kb-btn-active]="preview" (click)="hideBar(); preview=!preview">
                     <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
@@ -204,18 +204,15 @@
                 class="kb-side-arrow">keyboard_arrow_right</mat-icon>
         </div>
     </div>
-    <div #form id="kb-form-container" [style.width]="_general.respToggleDevice.width">
-        <form id="kb-form" name="kb-form"
+    <div id="kb-form-container" [class.kb-resp-view]="_general.respToggleDevice.name != 'desktop'" [style.width]="_general.respToggleDevice.width">
+        <form #form [id]="'kb-form-'+_form.form.uniqueid" [name]="'kb-form-'+_form.form.uniqueid"
         [ngStyle]="getBlockStyle('form')" [style.min-height]="_form.formField.length == 0 ? '500px' : ''" [class.kb-form-preview]="preview"
         cdkDropList [cdkDropListDisabled]="preview" [cdkDropListData]="_form.formField" (cdkDropListDropped)="itemDropped($event)">
             <div cdkDrag *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
+                (dblclick)="openElementDialog(elementdialog, fe)"
                 [style.margin]="!fe.input ? getBlockStyle(fe.name)['margin'] : ''" 
                 [style.justifyContent]="!fe.input ? justifyContent(fe.name) : ''" 
                 (mouseenter)="!preview ? fe.setting = true : ''" (mouseleave)="!preview ? fe.setting = false : ''" class="kb-form-element" [ngSwitch]="fe.name">
-                <div *cdkDragPreview class="kb-field-preview custom-preview">
-                    {{fe.label ? fe.label : fe.name.replace('-',' ')}}
-                </div>
-                <div *cdkDragPlaceholder class="custom-placeholder"></div>
                 <div *ngIf="fe.setting" class="kb-form-setting">
                     <span *ngIf="fe.input" matTooltip="Required" matTooltipPosition="above">
                         <mat-checkbox [name]="fe.id+'-requered'" [(ngModel)]="fe.required"></mat-checkbox>
@@ -225,9 +222,9 @@
                     <span (click)="_form.removeField(_form.formField, fei)" matTooltip="Delete" matTooltipPosition="above"><i
                             class="far fa-trash-alt"></i></span>
                 </div>
-                <div *ngSwitchCase="'heading'" [ngStyle]="getBlockStyle(fe.name)" class="kb-form-heading kb-mar-zero"
+                <div *ngSwitchCase="'heading'" [ngStyle]="getBlockStyle(fe.name)" class="kb-mar-zero"
                     [innerHTML]="fe.html | safeHtml"></div>
-                <div *ngSwitchCase="'text'" [ngStyle]="getBlockStyle(fe.name)" class="kb-form-para kb-mar-zero"
+                <div *ngSwitchCase="'text'" [ngStyle]="getBlockStyle(fe.name)" class="kb-mar-zero"
                     [innerHTML]="fe.html | safeHtml"></div>
                 <div *ngSwitchCase="'image'" class="kb-form-image">
                     <img [src]="fe.src ? fe.src : _image.imgPath+'builder/no-image.png'" class="kb-mar-zero"
@@ -309,8 +306,12 @@
                             [required]="fe.required" [placeholder]="fe.placeholder" [ngStyle]="getBlockStyle('input')">
                     </ng-template>
                 </div>
+                <div *cdkDragPreview class="kb-field-preview custom-preview">
+                    {{fe.label ? fe.label : fe.name.replace('-',' ')}}
+                </div>
+                <div *cdkDragPlaceholder class="custom-placeholder"></div>
             </div>
-            <div *ngIf="_form.formField.length == 0" id="kb-element-drag"></div>
+            <div cdkDrag cdkDragDisabled *ngIf="_form.formField.length == 0" id="kb-element-drag"></div>
         </form>
     </div>
     <div *ngIf="!_general.loading.success" id="loader">

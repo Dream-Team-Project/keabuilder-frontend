@@ -56,20 +56,20 @@ export class FormService {
     { name: 'long-text', label: 'Long Text', type: 'textarea', placeholder: 'Long Text', iconCls: 'fas fa-text-height', required: false, input: true },
     {
       name: 'checkbox', label: 'Multiple Choice', iconCls: 'far fa-check-square', required: false, input: true, split: [
-        { option: 'First option', type: 'checkbox', selected: true},
-        { option: 'Second option', type: 'checkbox', selected: true },
+        { option: 'First option', type: 'checkbox', selected: false},
+        { option: 'Second option', type: 'checkbox', selected: false },
         { option: 'Third option', type: 'checkbox', selected: false },
       ]
     },
     {
       name: 'radio', label: 'Single Choice', iconCls: 'far fa-dot-circle', required: false, input: true, split: [
-        { option: 'First option', type: 'radio', selected: true },
+        { option: 'First option', type: 'radio', selected: false },
         { option: 'Second option', type: 'radio', selected: false },
         { option: 'Third option', type: 'radio', selected: false },
       ]
     },
-    { name: 'select', label: 'Select Option', type: 'select', placeholder: 'Select Option', iconCls: 'far fa-list-alt', required: false, input: true, split: [
-      { option: 'First option', type: 'option', selected: true },
+    { name: 'select', label: 'Select Option', type: 'select', placeholder: 'Choose Option', iconCls: 'far fa-list-alt', required: false, input: true, split: [
+      { option: 'First option', type: 'option', selected: false },
       { option: 'Second option', type: 'option', selected: false },
       { option: 'Third option', type: 'option', selected: false },
     ] },
@@ -139,6 +139,8 @@ export class FormService {
   formStyleSessionArr:any = [];
   initial:boolean = true;
   formSaved:boolean = true;
+  formStyle = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
+  currentScrWdth:any;
 
   constructor(private _file: FileUploadService,
     private _general: GeneralService,
@@ -153,28 +155,101 @@ export class FormService {
     })
   }
 
+  formbypath(path:string) {
+    return new Promise((resolve, reject)=>{
+      this._file.formbypath(path).subscribe((resp:any)=>{
+        this.setForm(resp).then(data=>{
+          resolve(data);
+        });
+      })
+    })
+  }
+
   getForm(uniqueid:string) {
     return new Promise((resolve, reject)=>{
       this._file.getform(uniqueid).subscribe((resp:any)=>{
-        this.form = resp.data[0];
-        if(this.form.html) this.formField = JSON.parse(this.form.html);
+        this.setForm(resp).then(data=>{
+          resolve(data);
+        });
+      })
+    })
+  }
+
+  setForm(resp:any) {
+    return new Promise((resolve, reject)=>{
+      this.form = resp.data[0];
+      if(this.form) {
+        if(this.form.html) this.formField = this.decodeTxt(this.form.html);
         if(this.form.style) this.formEleTypes = JSON.parse(this.form.style);
         else this.createFields();
-        resolve(true);
-      })
+      }
+      else this._general.redirectToPageNotFound();
+      resolve(this.form);
     })
   }
 
   updateForm() {
     return new Promise((resolve, reject)=>{
-      this.form.html = JSON.stringify(this.formField);
-      this.form.style = JSON.stringify(this.formEleTypes);
-      console.log(this.form);
-      this._file.updateform(this.form).subscribe((resp:any)=>{
-        resolve(resp);
-        this.formSaved = true;
+      this.setFormStyle(this.formEleTypes).then(style=>{
+        this.form.html = this.encodeTxt(this.formField);
+        this.form.style = JSON.stringify(this.formEleTypes);
+        this.form.appendstyle = style;
+        this._file.updateform(this.form).subscribe((resp:any)=>{
+          resolve(resp);
+          this.formSaved = true;
+        })
+      });
+    })
+  }
+
+  setFormStyle(ele:any) {
+    return new Promise((resolve, reject)=>{
+      var loop = 0;
+      Object.values(ele).forEach((e:any)=>{
+        var style = JSON.parse(JSON.stringify(e.content.style));
+        var selector = '#kb-form-container .kb-'+e.content.name;
+        this.formStyle.desktop = this.formStyle.desktop + selector +'{'+Object.entries(style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+        if(!this._general.isObjEmpty(e.content.style.tablet_h)) this.formStyle.tablet_h = this.formStyle.tablet_h + selector +'{'+Object.entries(style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+        if(!this._general.isObjEmpty(e.content.style.tablet_v)) this.formStyle.tablet_v = this.formStyle.tablet_v + selector +'{'+Object.entries(style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+        if(!this._general.isObjEmpty(e.content.style.mobile)) this.formStyle.mobile = this.formStyle.mobile + selector +'{'+Object.entries(style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+        if(Object.values(ele).length-1 == loop) {
+          var querry = '@media only screen and (max-width:';
+          var data = this.formStyle.desktop +
+          querry + '1024px) and (min-width:769px){'+this.formStyle.tablet_h+'}' +
+          querry + '768px) and (min-width:426px){'+this.formStyle.tablet_v+'}' +
+          querry + '426px){'+this.formStyle.mobile+'}';
+          resolve(data);
+        }
+        loop++;
       })
     })
+  }
+
+  encodeTxt(html:any) {
+      html = JSON.stringify(html);
+      var hregx = new RegExp('"name":"heading","html":(.*?),"type":"heading"','g');
+      var tregx = new RegExp('"name":"text","html":(.*?),"type":"text"','g');
+      var hmatch:any = html.match(hregx);
+      var tmatch:any = html.match(tregx);
+      if(hmatch) html = html.replace(/"html":(.*?),"type"(.*?):"heading"/g, '"<encoded>'+this._general.encodeData(hmatch[0])+'</encoded>"');
+      if(tmatch) html = html.replace(/"html":(.*?),"type"(.*?):"text"/g, '"<encoded>'+this._general.encodeData(tmatch[0])+'</encoded>"');
+      return html;
+  }
+
+  decodeTxt(html:string) {
+    var hregx = new RegExp(`"name":"heading","<encoded>(.*?)</encoded>"`,'g');
+    var tregx = new RegExp(`"name":"text","<encoded>(.*?)</encoded>"`,'g');
+    var hmatch:any = html.match(hregx);
+    var tmatch:any = html.match(tregx);
+    if(hmatch) {
+      var hecd = hmatch[0].slice(hmatch[0].indexOf('<encoded>')+9, hmatch[0].indexOf('</encoded>'));
+      html = html.replace(hregx, this._general.decodeData(hecd));
+    }
+    if(tmatch) {
+      var tecd = tmatch[0].slice(tmatch[0].indexOf('<encoded>')+9, tmatch[0].indexOf('</encoded>'));
+      html = html.replace(tregx, this._general.decodeData(tecd));
+    }
+    return JSON.parse(html);
   }
 
   addInput(split:any, i:number) {
@@ -213,6 +288,25 @@ export class FormService {
       this.selEle.split = JSON.parse(temp);
       this.selEle.split[i].selected = val;
     }
+  }
+
+  justifyContent(en:any) {
+    if(this.formEleTypes[en]) {
+      var blockparam = this.formEleTypes[en]?.item_alignment;
+      if (parseInt(this._general.respDevices['mobile'].width.split('px')[0]) >= this.currentScrWdth && blockparam.mobile != 'auto') {
+        return blockparam.mobile;
+      }
+      else if (parseInt(this._general.respDevices['tablet-v'].width.split('px')[0]) >= this.currentScrWdth && blockparam.tablet_v != 'auto') {
+        return blockparam.tablet_v;
+      }
+      else if (parseInt(this._general.respDevices['tablet-h'].width.split('px')[0]) >= this.currentScrWdth && blockparam.tablet_h != 'auto') {
+        return blockparam.tablet_h;
+      }
+      else {
+        return blockparam.desktop;
+      }
+    }
+    else return {}
   }
 
   saveFormSession() {

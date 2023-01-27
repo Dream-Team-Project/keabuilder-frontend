@@ -31,7 +31,7 @@ export class AppComponent {
               case event instanceof NavigationStart: {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
-                if( geturl == 'form-builder' || geturl == 'builder' || geturl == 'preview') {
+                if(geturl == 'builder' || geturl == 'preview' || geturl == 'form') {
                   _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }else if( geturl == 'course'  || geturl == 'checkout'){

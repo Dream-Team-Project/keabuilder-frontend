@@ -46,6 +46,7 @@ export class FileUploadService {
   // section templates
   // forms
   getformApi = "./api/getform";
+  formbypathApi = "./api/formbypath";
   allformsApi = "./api/allforms";
   saveformApi = "./api/saveform";
   updateformApi = "./api/updateform";
@@ -86,6 +87,10 @@ export class FileUploadService {
 
   getform(uniqueid:any):Observable<any> {
     return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
+  }
+
+  formbypath(path:any):Observable<any> {
+    return this.http.get(this.formbypathApi+'/'+this.uuid+'/'+path);
   }
 
   saveform(obj:any):Observable<any> {
