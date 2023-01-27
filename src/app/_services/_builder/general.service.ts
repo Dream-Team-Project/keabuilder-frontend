@@ -418,7 +418,6 @@ export class GeneralService {
       var obj:any = new Object();
       obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
       obj.html = '<style>'+this.getAllStyle()+'</style>'+this.removeCommments(this.pagehtml.querySelector('body').innerHTML);
-      
       if(this.target.type == 'header') {
         obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
@@ -450,6 +449,7 @@ export class GeneralService {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+        this.webpage.tracking_code = this.encodeJSON(sections);
         this.setPageStyle(sections);
         if(this.includeLayout.header && this.selectedHeader.html && !preview) {
           var header = this.pagehtml.querySelector('header');
@@ -550,8 +550,7 @@ export class GeneralService {
           page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
           page_author: this.main.author,
           publish_status: status ? 1 : 0,
-          thumbnail: '',
-          tracking_code: '',
+          tracking_code: this.webpage.tracking_code,
         }
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
@@ -570,8 +569,7 @@ export class GeneralService {
             page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
             page_author: this.main.author,
             publish_status: status ? 1 : 0,
-            thumbnail: '',
-            tracking_code: ''
+            tracking_code: this.webpage.tracking_code,
         }
         this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
@@ -843,6 +841,14 @@ export class GeneralService {
   selectedTabChange(e:any) {
     if(this.selectedBlock.type == 'element') this.showEditor = false;
     this.selectedTab = e.tab ? e.tab['textLabel'].toLowerCase() : '';
+  }
+
+  encodeJSON(json:any) {
+    return this.encodeData(JSON.stringify(json));
+  }
+
+  decodeJSON(json:string) {
+    return JSON.parse(this.decodeData(json));
   }
 
   encodeData(data:any) {

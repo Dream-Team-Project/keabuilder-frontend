@@ -79,10 +79,12 @@ export class BuilderComponent implements OnInit {
             if(_general.target.type == 'header') {
               _general.target.name = data.html.body.children[0].getAttribute('data-name');
               data.css = data.html.querySelector('STYLE')?.innerHTML;
+              this.setBuilder(data.html, data.css);
             }
             else if(_general.target.type == 'footer') {
               _general.target.name = data.html.body.children[0].getAttribute('data-name');
               data.css = data.html.querySelector('STYLE')?.innerHTML;
+              this.setBuilder(data.html, data.css);
             }
             else {
               var header = data.html.querySelector('header');
@@ -115,8 +117,14 @@ export class BuilderComponent implements OnInit {
                   _element.elementList['button'].content.text = 'Downsell Button';
                 }
               }
+              if(_general.webpage.tracking_code) {
+                _section.sections = _general.decodeJSON(_general.webpage.tracking_code);
+                _section.pageSessionArr = [];
+              }
+              else this._section.addSection(0);
+              this._section.savePageSession();
+              this._general.loading.success = true;
             }
-            this.setBuilder(data.html, data.css);
         })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
@@ -166,8 +174,8 @@ export class BuilderComponent implements OnInit {
   saveAsTemplate() {
     this._general.saveDisabled = true;
     var section = this.saveTemplateSection;
-    var obj = {uniqueid: this._general.makeid(20), name: section.name, template: JSON.stringify(section)};
-    this._general.fileUploadService.savetemplate(obj).subscribe((event:any)=>{
+    var obj = {uniqueid: this._general.makeid(20), name: section.name, template: this._general.encodeJSON(section)};
+    this._general.fileUploadService.savetemplate(obj).subscribe((resp:any)=>{
       this.takePageSS('section-'+obj.uniqueid, 'template');
       this._general.fetchSectionTemplates();
     })
@@ -544,7 +552,7 @@ export class BuilderComponent implements OnInit {
           break;
         default:
           var temp = JSON.parse(JSON.stringify(this._section.sectionObj));
-          if(appendData.template) temp = JSON.parse(appendData.template);
+          if(appendData.template) temp = this._general.decodeJSON(appendData.template);
           else temp.style.desktop.width = appendData.width;
           this._section.appendSection(temp, appendIndex);
       }

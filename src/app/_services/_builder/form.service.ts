@@ -179,8 +179,8 @@ export class FormService {
     return new Promise((resolve, reject)=>{
       this.form = resp.data[0];
       if(this.form) {
-        if(this.form.html) this.formField = this.decodeTxt(this.form.html);
-        if(this.form.style) this.formEleTypes = JSON.parse(this.form.style);
+        if(this.form.html) this.formField = this._general.decodeJSON(this.form.html);
+        if(this.form.style) this.formEleTypes = this._general.decodeJSON(this.form.style);
         else this.createFields();
       }
       else this._general.redirectToPageNotFound();
@@ -191,8 +191,8 @@ export class FormService {
   updateForm() {
     return new Promise((resolve, reject)=>{
       this.setFormStyle(this.formEleTypes).then(style=>{
-        this.form.html = this.encodeTxt(this.formField);
-        this.form.style = JSON.stringify(this.formEleTypes);
+        this.form.html = this._general.encodeJSON(this.formField);
+        this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = style;
         this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
@@ -223,33 +223,6 @@ export class FormService {
         loop++;
       })
     })
-  }
-
-  encodeTxt(html:any) {
-      html = JSON.stringify(html);
-      var hregx = new RegExp('"name":"heading","html":(.*?),"type":"heading"','g');
-      var tregx = new RegExp('"name":"text","html":(.*?),"type":"text"','g');
-      var hmatch:any = html.match(hregx);
-      var tmatch:any = html.match(tregx);
-      if(hmatch) html = html.replace(/"html":(.*?),"type"(.*?):"heading"/g, '"<encoded>'+this._general.encodeData(hmatch[0])+'</encoded>"');
-      if(tmatch) html = html.replace(/"html":(.*?),"type"(.*?):"text"/g, '"<encoded>'+this._general.encodeData(tmatch[0])+'</encoded>"');
-      return html;
-  }
-
-  decodeTxt(html:string) {
-    var hregx = new RegExp(`"name":"heading","<encoded>(.*?)</encoded>"`,'g');
-    var tregx = new RegExp(`"name":"text","<encoded>(.*?)</encoded>"`,'g');
-    var hmatch:any = html.match(hregx);
-    var tmatch:any = html.match(tregx);
-    if(hmatch) {
-      var hecd = hmatch[0].slice(hmatch[0].indexOf('<encoded>')+9, hmatch[0].indexOf('</encoded>'));
-      html = html.replace(hregx, this._general.decodeData(hecd));
-    }
-    if(tmatch) {
-      var tecd = tmatch[0].slice(tmatch[0].indexOf('<encoded>')+9, tmatch[0].indexOf('</encoded>'));
-      html = html.replace(tregx, this._general.decodeData(tecd));
-    }
-    return JSON.parse(html);
   }
 
   addInput(split:any, i:number) {

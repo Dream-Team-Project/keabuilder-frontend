@@ -44,6 +44,18 @@ export class FileUploadService {
   updatetemplateApi = "./api/updatetemplate";
   deletetemplateApi = "./api/deletetemplate";
   // section templates
+  // headers
+  allheadersApi = "./api/allheaders";
+  saveheaderApi = "./api/saveheader";
+  updateheaderApi = "./api/updateheader";
+  deleteheaderApi = "./api/deleteheader";
+  // headers
+  // footers
+  allfootersApi = "./api/allfooters";
+  savefooterApi = "./api/savefooter";
+  updatefooterApi = "./api/updatefooter";
+  deletefooterApi = "./api/deletefooter";
+  // footers
   // forms
   getformApi = "./api/getform";
   formbypathApi = "./api/formbypath";
