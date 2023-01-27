@@ -24,7 +24,7 @@
 
           <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Step Name</mat-label>
-            <input type="text" matInput  required minlength="3" [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
+            <input type="text" matInput  required minlength="3" [formControl]="stepnameFormControl" [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
             <mat-error *ngIf="stepnameFormControl.hasError('required')">
              Step Name is <strong>required</strong>
             </mat-error>
