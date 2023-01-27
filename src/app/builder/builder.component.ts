@@ -117,8 +117,8 @@ export class BuilderComponent implements OnInit {
                   _element.elementList['button'].content.text = 'Downsell Button';
                 }
               }
-              if(_general.webpage.tracking_code) {
-                _section.sections = _general.decodeJSON(_general.webpage.tracking_code);
+              if(_general.webpage.page_json) {
+                _section.sections = _general.decodeJSON(_general.webpage.page_json);
                 _section.pageSessionArr = [];
               }
               else this._section.addSection(0);

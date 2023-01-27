@@ -449,7 +449,7 @@ export class GeneralService {
       this.websiteService.getWebsite().subscribe((e:any)=>{
         var web = e.data[0];
         this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-        this.webpage.tracking_code = this.encodeJSON(sections);
+        this.webpage.page_json = this.encodeJSON(sections);
         this.setPageStyle(sections);
         if(this.includeLayout.header && this.selectedHeader.html && !preview) {
           var header = this.pagehtml.querySelector('header');
@@ -550,7 +550,7 @@ export class GeneralService {
           page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
           page_author: this.main.author,
           publish_status: status ? 1 : 0,
-          tracking_code: this.webpage.tracking_code,
+          page_json: this.webpage.page_json,
         }
         this.webPageService.updateWebpage(pagedata).subscribe(
           (e:any)=>{
@@ -569,7 +569,7 @@ export class GeneralService {
             page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
             page_author: this.main.author,
             publish_status: status ? 1 : 0,
-            tracking_code: this.webpage.tracking_code,
+            page_json: this.webpage.page_json,
         }
         this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
           (e:any)=>{
