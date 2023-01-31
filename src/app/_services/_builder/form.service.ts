@@ -18,7 +18,7 @@ export class FormService {
     { name: 'heading', html: '<h2>Heading goes here</h2>', iconCls: 'fas fa-heading' },
     { name: 'text', html: '<p>Paragraph goes here</p>', iconCls: 'fas fa-paragraph' },
     { name: 'image', src: '', iconCls: 'far fa-image' },
-    // { name: 'divider', iconCls: 'fas fa-grip-lines' },
+    { name: 'divider', iconCls: 'fas fa-grip-lines' },
     {
       name: 'split-text', label: 'Name', iconCls: 'far fa-user', required: true, input: true, split: [
         { name: 'first-name', type: 'text', placeholder: 'First Name' },
@@ -107,6 +107,9 @@ export class FormService {
     // image
     { name: 'image', src: '', iconCls: 'far fa-image' },
     // image
+    // divider
+    { name: 'divider', iconCls: 'fas fa-grip-lines' },
+    // divider
     // label
     {
       name: 'label',
@@ -150,8 +153,10 @@ export class FormService {
 
   createFields() {
     this.formEleTypesObj.forEach(e=>{
-      e.form = true;
-      this.formEleTypes[e.name] = this._element.addElement(e);
+      if(!this.formEleTypes[e.name]) {
+        e.form = true;
+        this.formEleTypes[e.name] = this._element.addElement(e);
+      }
     })
   }
 
@@ -169,6 +174,7 @@ export class FormService {
     return new Promise((resolve, reject)=>{
       this._file.getform(uniqueid).subscribe((resp:any)=>{
         this.setForm(resp).then(data=>{
+          this.createFields();
           resolve(data);
         });
       })
@@ -181,7 +187,6 @@ export class FormService {
       if(this.form) {
         if(this.form.html) this.formField = this._general.decodeJSON(this.form.html);
         if(this.form.style) this.formEleTypes = this._general.decodeJSON(this.form.style);
-        else this.createFields();
       }
       else this._general.redirectToPageNotFound();
       resolve(this.form);
@@ -207,7 +212,7 @@ export class FormService {
       var loop = 0;
       Object.values(ele).forEach((e:any)=>{
         var style = JSON.parse(JSON.stringify(e.content.style));
-        var selector = '#kb-form-container .kb-'+e.content.name;
+        var selector = e.content.name == 'form' ? '#kb-form-'+this.form.uniqueid : '#kb-form-'+this.form.uniqueid+' .kb-form-'+e.content.name;
         this.formStyle.desktop = this.formStyle.desktop + selector +'{'+Object.entries(style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.tablet_h)) this.formStyle.tablet_h = this.formStyle.tablet_h + selector +'{'+Object.entries(style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.tablet_v)) this.formStyle.tablet_v = this.formStyle.tablet_v + selector +'{'+Object.entries(style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';

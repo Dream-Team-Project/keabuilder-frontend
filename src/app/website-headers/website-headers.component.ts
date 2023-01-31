@@ -17,6 +17,7 @@ export class WebsiteHeadersComponent {
   prevName:string = '';
   delheader:any;
   action:any;
+  header:any = {uniqueid: '', name: ''};
 
   constructor(
         public _image: ImageService,
@@ -32,8 +33,7 @@ export class WebsiteHeadersComponent {
     this._general.setStorage('header_toggle',this.toggleview);
   }
 
-  openDialog(templateRef: TemplateRef<any>, menu:any) {
-    this.delheader = menu;
+  openDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef);
   }     
 
@@ -46,15 +46,10 @@ export class WebsiteHeadersComponent {
     });
   }
 
-  rename(obj:any) {
+  rename(header:any) {
     var prevname = this.prevName;
-    if(prevname != obj.name) {
-      var parser = new DOMParser();
-      var html:any = parser.parseFromString(obj.html, 'text/html');
-      var header:any = html.body.children[0];
-      header.setAttribute('data-name',obj.name);
-      obj.html = header.outerHTML;
-      this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
+    if(prevname != header.name) {
+      this._general.fileUploadService.updateheader(header).subscribe(resp=>{
         if(resp.success) {
           this.action = 'renamed';
           this.openSB(false);
@@ -68,46 +63,63 @@ export class WebsiteHeadersComponent {
   }
 
   create() {
-    var obj:any = {id: '', html: '', type: 'header'};
-    obj.id = this._general.createBlockId(obj);
-    obj.html = '<div id="'+obj.id+'" data-name="Header '+(this.headers.length+1)+'"></div>';
-    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
-      resp.success ? this.edit(obj.id) : this.openSB(true);
+    this.header.uniqueid = this._general.makeid(20);
+    var obj:any = {
+      id: 'kb-header-'+this.header.uniqueid,
+      html: ''
+    };
+    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
+      this._general.fileUploadService.saveheader(this.header).subscribe(resp=>{
+        if(resp.success) {
+          this.edit(this.header);
+          this.header.name = '';
+        }
+        else this.openSB(true);
+        resp.success ? this.edit(this.header) : this.openSB(true);
+      });
     });
   }
 
-  edit(id:any) {
-    this._general.redirectToBuilder(id.split('header-')[1], 'header');
+  edit(header:any) {
+    this._general.redirectToBuilder(header.uniqueid, 'header');
   }
 
-  duplicate(hobj:any) {
-    var obj = JSON.parse(JSON.stringify(hobj));
-    obj.id = this._general.createBlockId(obj);
-    var parser = new DOMParser();
-    var html:any = parser.parseFromString(obj.html, 'text/html');
-    var header:any = html.body.children[0];
-    header.id = obj.id;
-    header.setAttribute('data-name',obj.name+' copy');
-    obj.html = header.outerHTML;
-    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(resp=>{
+  duplicate(header:any) {
+    var dobj = JSON.parse(JSON.stringify(header));
+    dobj.name = dobj.name + ' copy';
+    dobj.uniqueid = this._general.makeid(20);
+    var obj = {
+      oldpath: 'kb-header-'+header.uniqueid+'.php',
+      path: 'kb-header-'+dobj.uniqueid+'.php',
+    }
+    this._general.fileUploadService.copyFile(obj, 'headers').subscribe(resp=>{
       if(resp.success) {
-        var imgobj  = {oldname:hobj.thumbnail, newname:'keaimage-'+obj.id.split('kb-')[1]+ '-screenshot.png'};
+        this._general.fileUploadService.saveheader(dobj).subscribe((resp:any)=>{
+          this.fetch();
+          console.log(resp);
+        })
+        var imgobj  = {
+          oldname: this._general.getSSPath('header-'+header.uniqueid), 
+          newname: this._general.getSSPath('header-'+dobj.uniqueid)
+        };
         this._general.fileUploadService.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
-        this.fetch();
       }
       else this.openSB(true);
     });
   }
 
   delete() {
-    this._general.fileUploadService.deleteFile(this.delheader.id, 'headers').subscribe(resp=>{
-      if(resp.success) {
-        this.action = 'deleted';
-        this.fetch();
-      }
-      else this.openSB(true);
-    });
+    this._general.fileUploadService.deleteheader(this.delheader.id).subscribe((resp:any)=>{
+      this._general.fileUploadService.deleteFile('kb-header-'+this.delheader.uniqueid, 'headers').subscribe(resp=>{
+        console.log(resp);
+        if(resp.success) {
+          this.action = 'deleted';
+          this.fetch();
+        }
+        else this.openSB(true);
+      });
+    })
   }
 
   openSB(alert:any) {

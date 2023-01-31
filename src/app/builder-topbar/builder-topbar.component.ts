@@ -21,7 +21,7 @@ export class BuilderTopbarComponent implements OnInit {
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Output('wireframeToggle') wireframeToggle: EventEmitter<any> = new EventEmitter();
   @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
-  @Output('transferIndex') transferIndex: EventEmitter<any> = new EventEmitter();
+  @Output('transferData') transferData: EventEmitter<any> = new EventEmitter();
   @Output('zoomPage') zoomPage: EventEmitter<any> = new EventEmitter();
   @Input('wftgl') wftgl:any;
   @Input('ishf') ishf:any;
@@ -112,7 +112,7 @@ export class BuilderTopbarComponent implements OnInit {
           obj.content.type = types[i];
           obj.content.size = size;
           obj.content.html = '<'+types[i]+'>Heading Goes Here</'+types[i]+'>';
-          this._element.defaultHeadings.push(obj);
+          this._element.default.headings.push(obj);
           size = size - 4;
         }
       }
@@ -123,7 +123,7 @@ export class BuilderTopbarComponent implements OnInit {
           var obj = JSON.parse(JSON.stringify(e));
           obj.content.type = types[i];
           obj.content.size = size;
-          this._element.defaultTexts.push(obj);
+          this._element.default.texts.push(obj);
           size = size - 2;
         }
       }
@@ -131,7 +131,7 @@ export class BuilderTopbarComponent implements OnInit {
         let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}];
         let funnelBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}, 
         {name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}]
-        if(this._general.target.type == 'funnel') types.concat(funnelBtn);
+        if(this._general.target.type == 'funnel') types = types.concat(funnelBtn);
         for(var i=0; i<types.length; i++) {
           var obj = JSON.parse(JSON.stringify(e));
           obj.content.type = types[i];
@@ -141,8 +141,11 @@ export class BuilderTopbarComponent implements OnInit {
               obj.content.productid = '';
           }
           if(types[i].subtext) obj.content.subtext = 'Extra Text';
-          this._element.defaultButtons.push(obj);
+          this._element.default.buttons.push(obj);
         }        
+      }
+      if(e.content.name == 'divider') {
+        this._element.default.dividers.push(e);
       }
     })
   }
@@ -184,8 +187,8 @@ export class BuilderTopbarComponent implements OnInit {
     this._general.openSnackBar(false, 'Template has been '+msg, 'OK', 'center', 'top');
   }
 
-  dragDataEmit(i:number) {
-    this.transferIndex.emit(i);
+  dragDataEmit(data:any) {
+    this.transferData.emit(data);
   }
 
   nextSlide() {

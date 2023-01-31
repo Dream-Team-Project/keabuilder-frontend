@@ -14,7 +14,7 @@ export class ElementService {
   public elementConnect: CdkDropList[] = [];
 
   distroyDialogue = new Subject<any>();
-  elementObj:any = { id: '', name: '', content: {}, setting: false, type: 'element', itemstyle: false, item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
+  elementObj:any = { id: '', name: '', content: {}, setting: false, type: 'element', itemstyle: false, item_alignment: {desktop:'', tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false} };
   element_index = 0;
   selectedElements: any = [];
   elementList:any = {
@@ -44,7 +44,7 @@ export class ElementService {
     menu: { content: { name: 'menu', size: 16, items:[]}, iconCls: 'fas fa-external-link-alt' },
     // menu
     // divider
-    // divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
+    divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
     // divider
     // form
     // form: { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
@@ -56,11 +56,18 @@ export class ElementService {
     // append
     // checkout form
   };
-  menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
+  menuItemObj:any = {id: '', name: 'Item', type: 'item', link: '#', dropdown: [], chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop: false, table_h: false, tablet_v: false, mobile: false}}
   preMenuItems:any = ['Home','About','Blog','Contact'];
   defaultHeadings:any = [];
   defaultTexts:any = [];
   defaultButtons:any = [];
+  defaultDivider:any = [];
+  default:any = {
+    headings: [],
+    texts: [],
+    buttons: [],
+    dividers: []
+  }
   constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
   }
 
@@ -84,13 +91,14 @@ export class ElementService {
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
     var respS:any = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
-    if(element.name == 'form') {
+    if(element.name == 'form' || element.name == 'divider') {
       respS = {'width': '100%'};
       tempObj.content.style = {
         desktop: this._style.defaultStyling(tempObj), 
         tablet_h:'',
         tablet_v:respS,
-        mobile:respS}
+        mobile:respS
+      }
     }
     else {
     tempObj.content.style = {
@@ -106,8 +114,9 @@ export class ElementService {
           desktop: this._style.defaultStyling(tempObj), 
           tablet_h:'',
           tablet_v:respS,
-          mobile:respS}
+          mobile:respS
         }
+      }
       tempObj.itemstyle = false;
     }
     if(element.form) return tempObj;

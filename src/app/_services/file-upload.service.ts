@@ -46,12 +46,14 @@ export class FileUploadService {
   // section templates
   // headers
   allheadersApi = "./api/allheaders";
+  getheaderApi = "./api/getheader";
   saveheaderApi = "./api/saveheader";
   updateheaderApi = "./api/updateheader";
   deleteheaderApi = "./api/deleteheader";
   // headers
   // footers
   allfootersApi = "./api/allfooters";
+  getfooterApi = "./api/getfooter";
   savefooterApi = "./api/savefooter";
   updatefooterApi = "./api/updatefooter";
   deletefooterApi = "./api/deletefooter";
@@ -83,6 +85,7 @@ export class FileUploadService {
   // web pages
   // file
   fileApi = "./api/file";
+  copyfileApi = "./api/copy-file";
   fileExistApi = "./api/file-exist";
   // file
   uuid:any = '';
@@ -216,6 +219,63 @@ export class FileUploadService {
 
   // html pages
 
+    // headers 
+
+    fetchheaders():Observable<any> {
+      return this.http.get(this.allheadersApi+'/'+this.uuid);
+    }
+
+    getheader(uniqueid:any):Observable<any> {
+      return this.http.get(this.getheaderApi+'/'+this.uuid+'/'+uniqueid);
+    }
+  
+    saveheader(obj:any):Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post(this.saveheaderApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    updateheader(obj:any):Observable<any> {
+      return this.http.post(this.updateheaderApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    deleteheader(id:any):Observable<any> {
+      return this.http.delete(this.deleteheaderApi + '/' + id)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    // headers
+
+    
+    // footers 
+
+    fetchfooters():Observable<any> {
+      return this.http.get(this.allfootersApi+'/'+this.uuid);
+    }
+
+    getfooter(uniqueid:any):Observable<any> {
+      return this.http.get(this.getfooterApi+'/'+this.uuid+'/'+uniqueid);
+    }
+  
+    savefooter(obj:any):Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post(this.savefooterApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    updatefooter(obj:any):Observable<any> {
+      return this.http.post(this.updatefooterApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    deletefooter(id:any):Observable<any> {
+      return this.http.delete(this.deletefooterApi + '/' + id)
+      .pipe(catchError(this.errorHandler));
+    }
+  
+    // footers
+
   // section templates 
 
   fetchtemplates():Observable<any> {
@@ -253,6 +313,11 @@ export class FileUploadService {
   saveFile(obj:any, folder:string):Observable<any> {
     obj.uuid = this.uuid;
     return this.http.post(this.fileApi+'/'+folder, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+  copyFile(obj:any, folder:string):Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post(this.copyfileApi+'/'+folder, obj)
     .pipe(catchError(this.errorHandler));
   }
   deleteFile(id:any, folder:string):Observable<any> {

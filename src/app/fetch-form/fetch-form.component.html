@@ -1,49 +1,58 @@
 <div id="kb-form-container">
-    <form [id]="'kb-form-'+_form.form.uniqueid" name="kb-form" class="kb-form">
+    <form [id]="'kb-form-'+_form.form.uniqueid" name="kb-form">
         <div *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
             [style.justifyContent]="!fe.input ? _form.justifyContent(fe.name) : ''" class="kb-form-element" [ngSwitch]="fe.name">
-            <div *ngSwitchCase="'heading'" [class]="'kb-'+fe.name"
+            <div *ngSwitchCase="'heading'" class="kb-form-heading"
                 [innerHTML]="fe.html | safeHtml"></div>
-            <div *ngSwitchCase="'text'" [class]="'kb-'+fe.name"
+            <div *ngSwitchCase="'text'" class="kb-form-text"
                 [innerHTML]="fe.html | safeHtml"></div>
-            <div *ngSwitchCase="'image'" class="kb-form-image">
-                <img [src]="fe.src ? fe.src : _image.imgPath+'builder/no-image.png'" [class]="'kb-'+fe.name">
+            <div *ngSwitchCase="'image'">
+                <img [src]="fe.src ? fe.src : _image.imgPath+'builder/no-image.png'" class="kb-form-image">
             </div>
-            <div *ngSwitchCase="'divider'" class="kb-form-divider">
-                <hr>
+            <div *ngSwitchCase="'divider'" class="kb-w-100">
+                <hr class="kb-form-divider">
             </div>
-            <div *ngSwitchCase="'address'" class="kb-form-inp">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+            <div *ngSwitchCase="'address'" class="kb-form-inp kb-w-100">
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div *ngFor="let split of fe.split">
                     <div *ngIf="split.subsplit" class="kb-form-inp-split">
                         <span *ngFor="let subsplit of split.subsplit" [class.kb-d-none]="subsplit.hide">
-                            <select *ngIf="subsplit.type == 'select'" class="kb-input"
+                            <select *ngIf="subsplit.type == 'select'" class="kb-form-input"
                                 [name]="subsplit.id" [required]="fe.required">
                                 <option  value="no value">{{subsplit.placeholder}}</option>
                                 <option *ngFor="let opt of _form.countries" [value]="opt.name" [selected]="opt.name == subsplit.placeholder">{{opt.name}}
                                 </option>
                             </select>
-                            <textarea *ngIf="subsplit.type == 'textarea'" [name]="subsplit.id" class="kb-input"
+                            <textarea *ngIf="subsplit.type == 'textarea'" [name]="subsplit.id" class="kb-form-input"
                                 [required]="fe.required" [placeholder]="subsplit.placeholder"></textarea>
                             <input *ngIf="subsplit.type == 'text'" [type]="subsplit.type" [name]="subsplit.id"
-                                class="kb-input" [required]="fe.required"
+                                class="kb-form-input" [required]="fe.required"
                                 [placeholder]="subsplit.placeholder">
                         </span>
                     </div>
                 </div>
             </div>
-            <div *ngSwitchCase="'split-text'" class="kb-form-inp">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+            <div *ngSwitchCase="'split-text'" class="kb-form-inp kb-w-100">
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div class="kb-form-inp-split">
                     <input *ngFor="let split of fe.split" [type]="split.type" [name]="split.id"
-                        class="kb-input" [required]="fe.required"
+                        class="kb-form-input" [required]="fe.required"
                         [placeholder]="split.placeholder">
                 </div>
             </div>
+            <div *ngSwitchCase="'select'" class="kb-form-inp kb-w-100">
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+                        class="kb-form-inp-reqired">*</span></label>
+                <select class="kb-form-input" [name]="fe.id" [required]="fe.required">
+                    <option value="no value">{{fe.placeholder}}</option>
+                    <option *ngFor="let opt of fe.split" [value]="opt.option" [selected]="opt.selected">{{opt.option}}
+                    </option>
+                </select>
+            </div>
             <div *ngSwitchCase="'checkbox'" class="kb-form-rc">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div *ngFor="let split of fe.split">
                     <label [for]="split.id" class="kb-option" [style.justifyContent]="_form.justifyContent('option')">
@@ -53,7 +62,7 @@
                 </div>
             </div>
             <div *ngSwitchCase="'radio'" class="kb-form-rc">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div *ngFor="let split of fe.split">
                     <label [for]="split.id" class="kb-option" [style.justifyContent]="_form.justifyContent('option')">
@@ -62,27 +71,18 @@
                     </label>
                 </div>
             </div>
-            <div *ngSwitchCase="'select'" class="kb-form-inp">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*</span></label>
-                <select class="kb-input" [name]="fe.id" [required]="fe.required">
-                    <option value="no value">{{fe.placeholder}}</option>
-                    <option *ngFor="let opt of fe.split" [value]="opt.option" [selected]="opt.selected">{{opt.option}}
-                    </option>
-                </select>
-            </div>
             <div *ngSwitchCase="'button'" class="kb-form-btn">
                 <button [name]="fe.id" type="submit"
                     class="kb-button">{{fe.text}}</button>
             </div>
-            <div *ngSwitchDefault class="kb-form-inp">
-                <label [for]="fe.id" class="kb-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+            <div *ngSwitchDefault class="kb-form-inp kb-w-100">
+                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <textarea *ngIf="fe.type == 'textarea' else input" [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder"
-                        class="kb-input"></textarea>
+                        class="kb-form-input"></textarea>
                 <ng-template #input>
                     <input [type]="fe.type" [name]="fe.id"
-                        [required]="fe.required" [placeholder]="fe.placeholder" class="kb-input">
+                        [required]="fe.required" [placeholder]="fe.placeholder" class="kb-form-input">
                 </ng-template>
             </div>
         </div>

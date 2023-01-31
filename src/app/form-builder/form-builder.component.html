@@ -32,7 +32,7 @@
     </div>
 </ng-template>
 <ng-template #elementdialog>
-    <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replace('-',' ')}}</h1>
+    <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
         <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
         <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'button'">
@@ -167,7 +167,7 @@
                     <button mat-button cdkDrag [cdkDragData]="element"
                         *ngFor="let element of _form.formEle | filter:searchText:'name'" class="kb-icon-btn">
                         <i [class]="element.iconCls"></i>
-                        <span>{{element.label ? element.label : element.name.replace('-', ' ') |
+                        <span>{{element.label ? element.label : element.name.replaceAll('-', ' ') |
                             titlecase}}</span>
                         <span *cdkDragPreview class="custom-preview-icon"
                             [style.backgroundColor]="'var(--primary-color)'">
@@ -204,7 +204,7 @@
                 class="kb-side-arrow">keyboard_arrow_right</mat-icon>
         </div>
     </div>
-    <div id="kb-form-container" [class.kb-resp-view]="_general.respToggleDevice.name != 'desktop'" [style.width]="_general.respToggleDevice.width">
+    <div id="kb-form-container" [class.kb-resp-border]="_general.respToggleDevice.name != 'desktop' && _general.respToggleDevice.name != 'hover'" [style.width]="_general.respToggleDevice.width">
         <form #form [id]="'kb-form-'+_form.form.uniqueid" [name]="'kb-form-'+_form.form.uniqueid"
         [ngStyle]="getBlockStyle('form')" [style.min-height]="_form.formField.length == 0 ? '500px' : ''" [class.kb-form-preview]="preview"
         cdkDropList [cdkDropListDisabled]="preview" [cdkDropListData]="_form.formField" (cdkDropListDropped)="itemDropped($event)">
@@ -217,7 +217,7 @@
                     <span *ngIf="fe.input" matTooltip="Required" matTooltipPosition="above">
                         <mat-checkbox [name]="fe.id+'-requered'" [(ngModel)]="fe.required"></mat-checkbox>
                     </span>
-                    <span (click)="openElementDialog(elementdialog, fe)" matTooltip="Edit" matTooltipPosition="above"><i
+                    <span *ngIf="fe.name != 'divider'" (click)="openElementDialog(elementdialog, fe)" matTooltip="Edit" matTooltipPosition="above"><i
                             class="far fa-edit"></i></span>
                     <span (click)="_form.removeField(_form.formField, fei)" matTooltip="Delete" matTooltipPosition="above"><i
                             class="far fa-trash-alt"></i></span>
@@ -226,14 +226,14 @@
                     [innerHTML]="fe.html | safeHtml"></div>
                 <div *ngSwitchCase="'text'" [ngStyle]="getBlockStyle(fe.name)" class="kb-mar-zero"
                     [innerHTML]="fe.html | safeHtml"></div>
-                <div *ngSwitchCase="'image'" class="kb-form-image">
-                    <img [src]="fe.src ? fe.src : _image.imgPath+'builder/no-image.png'" class="kb-mar-zero"
+                <div *ngSwitchCase="'image'">
+                    <img [src]="fe.src ? fe.src : _image.imgPath+'builder/no-image.png'" class="kb-form-image kb-mar-zero"
                         [ngStyle]="getBlockStyle(fe.name)">
                 </div>
-                <div *ngSwitchCase="'divider'" class="kb-form-divider">
-                    <hr>
+                <div *ngSwitchCase="'divider'" class="kb-w-100">
+                    <hr [ngStyle]="getBlockStyle(fe.name)">
                 </div>
-                <div *ngSwitchCase="'address'" class="kb-form-inp">
+                <div *ngSwitchCase="'address'" class="kb-form-inp kb-w-100">
                     <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                             class="kb-form-inp-reqired">*</span></label>
                     <div *ngFor="let split of fe.split">
@@ -254,7 +254,7 @@
                         </div>
                     </div>
                 </div>
-                <div *ngSwitchCase="'split-text'" class="kb-form-inp">
+                <div *ngSwitchCase="'split-text'" class="kb-form-inp kb-w-100">
                     <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                             class="kb-form-inp-reqired">*</span></label>
                     <div class="kb-form-inp-split">
@@ -262,6 +262,15 @@
                             [ngStyle]="getBlockStyle('input')" [required]="fe.required"
                             [placeholder]="split.placeholder">
                     </div>
+                </div>
+                <div *ngSwitchCase="'select'" class="kb-form-inp kb-w-100">
+                    <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
+                            class="kb-form-inp-reqired">*</span></label>
+                    <select [ngStyle]="getBlockStyle('input')" [name]="fe.id" [required]="fe.required">
+                        <option value="no value">{{fe.placeholder}}</option>
+                        <option *ngFor="let opt of fe.split" [value]="opt.option" [selected]="opt.selected">{{opt.option}}
+                        </option>
+                    </select>
                 </div>
                 <div *ngSwitchCase="'checkbox'" class="kb-form-rc">
                     <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
@@ -283,20 +292,11 @@
                         </label>
                     </div>
                 </div>
-                <div *ngSwitchCase="'select'" class="kb-form-inp">
-                    <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                            class="kb-form-inp-reqired">*</span></label>
-                    <select [ngStyle]="getBlockStyle('input')" [name]="fe.id" [required]="fe.required">
-                        <option value="no value">{{fe.placeholder}}</option>
-                        <option *ngFor="let opt of fe.split" [value]="opt.option" [selected]="opt.selected">{{opt.option}}
-                        </option>
-                    </select>
-                </div>
                 <div *ngSwitchCase="'button'" class="kb-form-btn">
                     <button [name]="fe.id" class="kb-mar-zero" type="submit"
                         [ngStyle]="getBlockStyle('button')">{{fe.text}}</button>
                 </div>
-                <div *ngSwitchDefault class="kb-form-inp">
+                <div *ngSwitchDefault class="kb-form-inp kb-w-100">
                     <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                             class="kb-form-inp-reqired">*</span></label>
                     <textarea *ngIf="fe.type == 'textarea' else input" [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder"
@@ -307,7 +307,7 @@
                     </ng-template>
                 </div>
                 <div *cdkDragPreview class="kb-field-preview custom-preview">
-                    {{fe.label ? fe.label : fe.name.replace('-',' ')}}
+                    {{fe.label ? fe.label : fe.name.replaceAll('-',' ')}}
                 </div>
                 <div *cdkDragPlaceholder class="custom-placeholder"></div>
             </div>

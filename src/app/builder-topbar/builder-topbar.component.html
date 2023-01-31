@@ -168,7 +168,7 @@
     <div #selection class="kb-selection-option" [style.transform]="'translateX(-'+(_general.screenWidth - 100)*slideShift+'px)'" [ngSwitch]="selectedTab">
         <!-- layout -->
         <div *ngSwitchCase="'l-templates'" id="sectiongroup" class="kb-block-selection kb-template-list" cdkDropList [cdkDropListData]="_general.sectionTemplates" [cdkDropListConnectedTo]="_section.sectionConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let temp of _general.sectionTemplates | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type, index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="temp">
+            <span cdkDrag *ngFor="let temp of _general.sectionTemplates | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type, index as i" (cdkDragMoved)="dragDataEmit(temp)" [cdkDragData]="temp">
                 <span>{{temp.name}}</span>
                 <span mat-ripple class="kb-temp-trigger" #tempt="matMenuTrigger" [matMenuTriggerFor]="tempm" [class.kb-menu-active]="tempt.menuOpen">
                     <mat-icon>keyboard_arrow_down</mat-icon>
@@ -185,7 +185,7 @@
             <div *ngIf="_general.sectionTemplates.length == 0">Templates not found.</div>
         </div>
         <div *ngSwitchCase="'l-sections'" id="sectiongroup" class="kb-block-selection kb-section-list" cdkDropList [cdkDropListData]="_section.sectionTypes" [cdkDropListConnectedTo]="_section.sectionConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let st of _section.sectionTypes, index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="st">
+            <span cdkDrag *ngFor="let st of _section.sectionTypes, index as i" (cdkDragMoved)="dragDataEmit(st)" [cdkDragData]="st">
                 <span class="block"><span [style.width]="st.width">{{st.width}}</span></span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">
                     {{st.width | titlecase}}
@@ -194,7 +194,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'l-rows'" id="rowgroup" class="kb-block-selection kb-row-list" cdkDropList [cdkDropListData]="_row.rowTypes" [cdkDropListConnectedTo]="_row.rowConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let rt of _row.rowTypes | filter:searchRowFilter.value:'row', index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="rt" class="kb-row-type"
+            <span cdkDrag *ngFor="let rt of _row.rowTypes | filter:searchRowFilter.value:'row', index as i" (cdkDragMoved)="dragDataEmit(rt)" [cdkDragData]="rt" class="kb-row-type"
                 [class]="'row-'+rt.cls">
                     <span *ngFor="let c of rt.nofcolumn" class="block">
                         <span></span>
@@ -213,9 +213,10 @@
                 <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
-            (click)="setHeader(head)" [class.kb-btn-active]="head.id == _general.selectedHeader.id && _general.includeLayout.header"
-            (mouseover)="prevImg=head.thumbnail" (mouseout)="prevImg=''">
+            (click)="setHeader(head)" [class.kb-btn-active]="head.uniqueid == _general.selectedHeader.id && _general.includeLayout.header"
+            (mouseover)="prevImg=_general.getSSPath('header-'+head.uniqueid)" (mouseout)="prevImg=''">
                 {{head.name}}
+                <mat-icon *ngIf="!head.json" class="kb-mat-error-icon" matTooltip="Didn't created yet">error_outline</mat-icon>
             </button>
         </div>
         <div *ngSwitchCase="'l-footers'" class="kb-block-selection kb-block-list">
@@ -226,9 +227,10 @@
                 <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
-            (click)="setFooter(foot)" [class.kb-btn-active]="foot.id == _general.selectedFooter.id && _general.includeLayout.footer"
-            (mouseover)="prevImg=foot.thumbnail" (mouseout)="prevImg=''">
+            (click)="setFooter(foot)" [class.kb-btn-active]="foot.uniqueid == _general.selectedFooter.id && _general.includeLayout.footer"
+            (mouseover)="prevImg=_general.getSSPath('footer-'+foot.uniqueid)" (mouseout)="prevImg=''">
                 {{foot.name}}
+                <mat-icon *ngIf="!foot.json" class="kb-mat-error-icon" matTooltip="Didn't created yet">error_outline</mat-icon>
             </button>
         </div>
         <!-- layout -->
@@ -251,6 +253,9 @@
             <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'mobile'"
                 (click)="_general.respToggle('mobile')">
                 <i [innerHTML]="'mobile' | svg | safeHtml"></i><span>Mobile</span></button>
+            <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'hover'"
+                (click)="_general.respToggle('hover')">
+                <i class="fas fa-mouse-pointer"></i><span>Hover</span></button>
         </div>
     </div>
     <mat-icon mat-ripple (click)="nextSlide()" [class.kb-disabled]="slideShift > shiftLen-1" class="kb-side-arrow">keyboard_arrow_right</mat-icon>
@@ -258,8 +263,8 @@
 <div *ngIf="selectedTab == 'elements' && selectedElement && !wftgl" class="kb-selection-container" [class.open]="toggleElement.open" [class.close]="toggleElement.close">
     <mat-icon mat-ripple (click)="prevElementSlide()" [class.kb-disabled]="slideElementShift <= 0" class="kb-side-arrow">keyboard_arrow_left</mat-icon>
     <div #element class="kb-selection-option" [style.transform]="'translateX(-'+(_general.screenWidth - 100)*slideElementShift+'px)'" [ngSwitch]="selectedElement">
-        <div *ngSwitchCase="'heading'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.defaultHeadings" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let heading of _element.defaultHeadings, index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="heading">
+        <div *ngSwitchCase="'heading'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.default.headings" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let heading of _element.default.headings, index as i " (cdkDragMoved)="dragDataEmit(heading)" [cdkDragData]="heading">
                 <span>{{heading.content.type | titlecase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{heading.content.type | titlecase}} heading
@@ -268,8 +273,8 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
-        <div *ngSwitchCase="'text'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.defaultTexts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let text of _element.defaultTexts, index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="text">
+        <div *ngSwitchCase="'text'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.default.texts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let text of _element.default.texts, index as i " (cdkDragMoved)="dragDataEmit(text)" [cdkDragData]="text">
                 <span>{{text.content.type | uppercase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{text.content.type | uppercase}} text
@@ -283,7 +288,7 @@
                 <i [innerHTML]="'upload' | svg | safeHtml"></i>
                 <span>Upload</span>
             </button>
-            <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="img">
+            <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(img)" [cdkDragData]="img">
                 <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
                 <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
@@ -292,8 +297,8 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
-        <div *ngSwitchCase="'button'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.defaultButtons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let btn of _element.defaultButtons, index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="btn">
+        <div *ngSwitchCase="'button'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.buttons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let btn of _element.default.buttons, index as i " (cdkDragMoved)="dragDataEmit(btn)" [cdkDragData]="btn">
                 <span class="kb-d-btn">
                     {{btn.content.btntype | titlecase}}
                     <span *ngIf="btn.content.subtext" class="kb-d-btn-st">[Extra Text]</span>
@@ -306,12 +311,24 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'divider'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.dividers" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let div of _element.default.dividers, index as i " (cdkDragMoved)="dragDataEmit(div)" [cdkDragData]="div">
+                <span class="kb-d-btn">
+                    <i [class]="div.iconCls"></i>
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="div.iconCls"></i>
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="_general.redirectLink('/websites/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>
-            <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(i)" [cdkDragData]="element">
+            <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(menu)" [cdkDragData]="menu">
                 <span>{{menu.name | titlecase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{menu.name | titlecase}}
@@ -324,5 +341,5 @@
     <mat-icon mat-ripple (click)="nextElementSlide()" [class.kb-disabled]="slideElementShift > shiftElementLen-1" class="kb-side-arrow">keyboard_arrow_right</mat-icon>
 </div>
 <div *ngIf="prevImg" class="kb-block-preview">
-    <div class="kb-block-prev-img" [style.backgroundImage]="'url('+_image.uploadImgPath+prevImg+')'"></div>
+    <div class="kb-block-prev-img" [style.backgroundImage]="'url('+_image.uploadImgPath+prevImg+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'"></div>
 </div>

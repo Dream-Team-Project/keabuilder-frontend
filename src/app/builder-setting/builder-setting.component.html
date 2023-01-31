@@ -192,7 +192,225 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.type == 'element' && !_style.setItemStyle">
+                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && !_style.setItemStyle && _general.selectedBlock.content?.name != 'form'">
+                        <!-- image -->
+                        <div *ngIf="_general.selectedBlock.content.name == 'image'">
+                            <div *ngIf="searchingDeep('Choose Image') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Choose Image</div>
+                                <div class="kb-tab-content">
+                                    <div (click)="openImgDialog()"
+                                        [class]="!_style.image_src ? 'kb-noImgSel' : ''" class="kb-dummy-bg">
+                                        <img *ngIf="_style.image_src" [src]="_style.image_src" width="auto">
+                                        <span class="kb-ispan-add" matTooltip="Add Image"
+                                                matTooltipPosition="above"><i class="fa fa-plus"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Image Object Fit')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Object Fit</div>
+                                <div class="kb-tab-content">
+                                    <mat-select [(ngModel)]="_style.image_objectfit">
+                                        <mat-option *ngFor="let imgof of _style.image_objectfit_types" [value]="imgof">
+                                            {{imgof |
+                                            titlecase}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- image -->
+                        <!-- divider -->
+                        <div *ngIf="_general.selectedBlock.content.name == 'divider'">
+                            <div *ngIf="searchingDeep('Content Width')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Width</div>
+                                <div class="kb-tab-content">
+                                    <span><input (blur)="_style.borderUpdate(_style.border)" [(ngModel)]="_style.border.top"
+                                            type="text" name="top-border"
+                                            (keydown)="_style.border.top = _style.operateNumVal($event.key, _style.border.top)"><label
+                                            for="top-border">Top</label></span>
+                                    <span
+                                        (click)="_style.b_link.tb = !_style.b_link.tb; _style.b_link.a = false; _style.borderUpdate(_style.border)"
+                                        class="kb-linkBtw">
+                                        <svg [class]="!_style.b_link.tb ? 'deactive' : ''" viewBox="0 0 28 28"
+                                            preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision">
+                                            <g>
+                                                <path
+                                                    d="M8 14a1 1 0 0 1 0 2h-.5A2.5 2.5 0 0 1 5 13.5v-2A2.5 2.5 0 0 1 7.5 9h8a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5H15a1 1 0 0 1 0-2h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5z"
+                                                    fill-rule="evenodd"></path>
+                                                <path
+                                                    d="M20 14a1 1 0 0 1 0-2h.5a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5h-8a2.5 2.5 0 0 1-2.5-2.5v-2a2.5 2.5 0 0 1 2.5-2.5h.5a1 1 0 0 1 0 2h-.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z"
+                                                    fill-rule="evenodd"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <input (blur)="_style.borderUpdate(_style.border)"
+                                            *ngIf="_style.b_link.tb else btbtoggle" [(ngModel)]="_style.border.top"
+                                            type="text" name="bottom-border"
+                                            (keydown)="_style.border.top = _style.operateNumVal($event.key, _style.border.top)">
+                                        <ng-template #btbtoggle><input (blur)="_style.borderUpdate(_style.border)"
+                                                *ngIf="!_style.b_link.tb" [(ngModel)]="_style.border.bottom" type="text"
+                                                name="bottom-border"
+                                                (keydown)="_style.border.bottom = _style.operateNumVal($event.key, _style.border.bottom)">
+                                        </ng-template>
+                                        <label for="bottom-border">Bottom</label>
+                                    </span>
+                                    <span
+                                        (click)="_style.b_link.a = !_style.b_link.a; _style.b_link.tb = _style.b_link.a; _style.b_link.lr = _style.b_link.a; _style.borderUpdate(_style.border)"
+                                        class="kb-linkBtw">
+                                        <svg [class]="!_style.b_link.a ? 'deactive' : ''" viewBox="0 0 28 28"
+                                            preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision">
+                                            <g>
+                                                <path
+                                                    d="M8 14a1 1 0 0 1 0 2h-.5A2.5 2.5 0 0 1 5 13.5v-2A2.5 2.5 0 0 1 7.5 9h8a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5H15a1 1 0 0 1 0-2h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5z"
+                                                    fill-rule="evenodd"></path>
+                                                <path
+                                                    d="M20 14a1 1 0 0 1 0-2h.5a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5h-8a2.5 2.5 0 0 1-2.5-2.5v-2a2.5 2.5 0 0 1 2.5-2.5h.5a1 1 0 0 1 0 2h-.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z"
+                                                    fill-rule="evenodd"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <input *ngIf="_style.b_link.a else bltoggle"
+                                            (blur)="_style.borderUpdate(_style.border)" [(ngModel)]="_style.border.top"
+                                            type="text" name="left-border"
+                                            (keydown)="_style.border.top = _style.operateNumVal($event.key, _style.border.top)">
+                                        <ng-template #bltoggle><input (blur)="_style.borderUpdate(_style.border)"
+                                                [(ngModel)]="_style.border.left" type="text" name="left-border"
+                                                (keydown)="_style.border.left = _style.operateNumVal($event.key, _style.border.left)">
+                                        </ng-template><label for="left-border">Left</label>
+                                    </span>
+                                    <span
+                                        (click)="_style.b_link.lr = !_style.b_link.lr; _style.b_link.a = false; _style.borderUpdate(_style.border)"
+                                        class="kb-linkBtw">
+                                        <svg [class]="!_style.b_link.lr ? 'deactive' : ''" viewBox="0 0 28 28"
+                                            preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision">
+                                            <g>
+                                                <path
+                                                    d="M8 14a1 1 0 0 1 0 2h-.5A2.5 2.5 0 0 1 5 13.5v-2A2.5 2.5 0 0 1 7.5 9h8a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5H15a1 1 0 0 1 0-2h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5z"
+                                                    fill-rule="evenodd"></path>
+                                                <path
+                                                    d="M20 14a1 1 0 0 1 0-2h.5a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5h-8a2.5 2.5 0 0 1-2.5-2.5v-2a2.5 2.5 0 0 1 2.5-2.5h.5a1 1 0 0 1 0 2h-.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z"
+                                                    fill-rule="evenodd"></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <input *ngIf="_style.b_link.a" (blur)="_style.borderUpdate(_style.border)"
+                                            [(ngModel)]="_style.border.top" type="text" name="right-border"
+                                            (keydown)="_style.border.top = _style.operateNumVal($event.key, _style.border.top)">
+                                        <input *ngIf="_style.b_link.lr && !_style.b_link.a"
+                                            (blur)="_style.borderUpdate(_style.border)" [(ngModel)]="_style.border.left"
+                                            type="text" name="right-border"
+                                            (keydown)="_style.border.left = _style.operateNumVal($event.key, _style.border.left)">
+                                        <input *ngIf="!_style.b_link.lr" (blur)="_style.borderUpdate(_style.border)"
+                                            [(ngModel)]="_style.border.right" type="text" name="right-border"
+                                            (keydown)="_style.border.right = _style.operateNumVal($event.key, _style.border.right)"><label
+                                            for="right-border">Right</label></span>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Content Style')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Style</div>
+                                <div class="kb-tab-content">
+                                    <mat-select [(ngModel)]="_style.border_style">
+                                        <mat-option *ngFor="let bst of _style.border_style_types" [value]="bst">{{bst |
+                                            titlecase}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Content Radius')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Radius</div>
+                                <div class="kb-tab-content kb-tab-border-radius-group">
+                                    <div class="kb-tab-border-radius">
+                                        <span><input [(ngModel)]="_style.border_radius.top_left" type="text"
+                                                (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                name="top-left-border"
+                                                (keydown)="_style.border_radius.top_left = _style.operateNumVal($event.key, _style.border_radius.top_left)"></span>
+                                        <span><input *ngIf="_style.br_link else btratoggle"
+                                                [(ngModel)]="_style.border_radius.top_left"
+                                                (blur)="_style.borderRadiusUpdate(_style.border_radius)" type="text"
+                                                name="top-right-border"
+                                                (keydown)="_style.border_radius.top_left = _style.operateNumVal($event.key, _style.border_radius.top_left)">
+                                            <ng-template #btratoggle><input [(ngModel)]="_style.border_radius.top_right"
+                                                    type="text" (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                    name="top-right-border"
+                                                    (keydown)="_style.border_radius.top_right = _style.operateNumVal($event.key, _style.border_radius.top_right)">
+                                            </ng-template>
+                                        </span>
+                                    </div>
+                                    <div class="kb-border-radius-demo" [ngStyle]="_style.demoBorder()">
+                                        <span
+                                            (click)="_style.br_link = !_style.br_link; _style.borderRadiusUpdate(_style.border_radius)"
+                                            class="kb-linkBtw"><svg [class]="!_style.br_link ? 'deactive' : ''"
+                                                viewBox="0 0 28 28" preserveAspectRatio="xMidYMid meet"
+                                                shape-rendering="geometricPrecision">
+                                                <g>
+                                                    <path
+                                                        d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z">
+                                                    </path>
+                                                    <path
+                                                        d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z">
+                                                    </path>
+                                                </g>
+                                            </svg></span>
+                                    </div>
+                                    <div class="kb-tab-border-radius">
+                                        <span><input *ngIf="_style.br_link else bblatoggle"
+                                                [(ngModel)]="_style.border_radius.top_left" type="text"
+                                                (ngModelChange)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                name="bottom-left-border"
+                                                (keydown)="_style.border_radius.top_left = _style.operateNumVal($event.key, _style.border_radius.top_left);">
+                                            <ng-template #bblatoggle><input
+                                                    (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                    [(ngModel)]="_style.border_radius.bottom_left" type="text"
+                                                    name="bottom-left-border"
+                                                    (keydown)="_style.border_radius.bottom_left = _style.operateNumVal($event.key, _style.border_radius.bottom_left);">
+                                            </ng-template>
+                                        </span>
+                                        <span><input *ngIf="_style.br_link else btlatoggle"
+                                                [(ngModel)]="_style.border_radius.top_left" type="text"
+                                                (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                name="bottom-right-border"
+                                                (keydown)="_style.border_radius.top_left = _style.operateNumVal($event.key, _style.border_radius.top_left);">
+                                            <ng-template #btlatoggle><input
+                                                    (blur)="_style.borderRadiusUpdate(_style.border_radius)"
+                                                    [(ngModel)]="_style.border_radius.bottom_right" type="text"
+                                                    name="bottom-right-border"
+                                                    (keydown)="_style.border_radius.bottom_right = _style.operateNumVal($event.key, _style.border_radius.bottom_right);">
+                                            </ng-template>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Content Color')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Color <span (click)="_style.border_color = 'transparent'"
+                                        matTooltip="Transparent" matTooltipPosition="above" class="kb-trans"></span></div>
+                                <div class="kb-tab-content kb-color-picker">
+                                    <color-material [(ngModel)]="_style.border_color" [color]="_style.border_color">
+                                    </color-material>
+                                    <ngx-colors ngx-colors-trigger matTooltip="Pick Color" matTooltipPosition="above"
+                                        colorsAnimation="popup" [hideTextInput]="true" [(ngModel)]="_style.border_color">
+                                    </ngx-colors>
+                                    <color-circle [(ngModel)]="_style.border_color" [color]="_style.border_color">
+                                    </color-circle>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- divider -->
+                        <!-- menu -->
+                        <div *ngIf="searchingDeep('Content Menu') && _general.selectedBlock.content?.name == 'menu'"
+                        class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Menu</div>
+                            <div class="kb-tab-content">
+                                <mat-select [(ngModel)]="_general.selectedMenu"
+                                    (ngModelChange)="_general.selectedBlock.content = _element.setMenu(_general.selectedBlock.content, _general.selectedMenu)">
+                                    <mat-option *ngFor="let menu of _general.menus" [value]="menu">{{menu.name |
+                                        titlecase}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <!-- menu -->
+                        <!-- text styling/editor -->
                         <div
                             *ngIf="isText(_general.selectedBlock.content.name)">
                             <div *ngIf="(_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
@@ -205,17 +423,6 @@
                                 </mat-button-toggle-group>
                             </div>
                             <div *ngIf="!_general.showEditor else editor" class="kb-tabChange">
-                                <div *ngIf="searchingDeep('Content Menu') && _general.selectedBlock.content?.name == 'menu'"
-                                    class="kb-inner-tab-component">
-                                    <div class="kb-tab-head">Menu</div>
-                                    <div class="kb-tab-content">
-                                        <mat-select [(ngModel)]="_general.selectedMenu"
-                                            (ngModelChange)="_general.selectedBlock.content = _element.setMenu(_general.selectedBlock.content, _general.selectedMenu)">
-                                            <mat-option *ngFor="let menu of _general.menus" [value]="menu">{{menu.name |
-                                                titlecase}}</mat-option>
-                                        </mat-select>
-                                    </div>
-                                </div>
                                 <mat-accordion>
                                     <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form" [expanded]="_general.expPanelStep === 0"
                                     (opened)="_general.setExpPanelStep(0)" hideToggle>
@@ -762,31 +969,7 @@
                                 </div>
                             </ng-template>
                         </div>
-                        <!-- image -->
-                        <div *ngIf="_general.selectedBlock.content.name == 'image'">
-                            <div *ngIf="searchingDeep('Choose Image') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Choose Image</div>
-                                <div class="kb-tab-content">
-                                    <div (click)="openImgDialog()"
-                                        [class]="!_style.image_src ? 'kb-noImgSel' : ''" class="kb-dummy-bg">
-                                        <img *ngIf="_style.image_src" [src]="_style.image_src" width="auto">
-                                        <span class="kb-ispan-add" matTooltip="Add Image"
-                                                matTooltipPosition="above"><i class="fa fa-plus"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div *ngIf="searchingDeep('Image Object Fit')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Object Fit</div>
-                                <div class="kb-tab-content">
-                                    <mat-select [(ngModel)]="_style.image_objectfit">
-                                        <mat-option *ngFor="let imgof of _style.image_objectfit_types" [value]="imgof">
-                                            {{imgof |
-                                            titlecase}}</mat-option>
-                                    </mat-select>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- image -->
+                        <!-- text styling/editor -->
                     </mat-tab>
                     <mat-tab label="Column" *ngIf="searchingTab('Column') && _general.selectedBlock.type == 'row'">
                         <div *ngIf="searchingDeep('Column Structure')" class="kb-inner-tab-component">
@@ -822,6 +1005,7 @@
                                                 <mat-checkbox [(ngModel)]="column.hide.tablet_v">Tablet Vertical
                                                 </mat-checkbox>
                                                 <mat-checkbox [(ngModel)]="column.hide.mobile">Mobile</mat-checkbox>
+                                                <mat-checkbox [(ngModel)]="column.hide.hover">Hover</mat-checkbox>
                                             </div>
                                         </span>
                                         <span class="kb-block-name">
@@ -1419,7 +1603,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Border" *ngIf="searchingTab('Border')">
+                    <mat-tab label="Border" *ngIf="searchingTab('Border') && _general.selectedBlock.content?.name != 'divider'">
                         <div *ngIf="searchingDeep('Border Width')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Border Width</div>
                             <div class="kb-tab-content">
@@ -1698,57 +1882,98 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced') && !_style.setItemStyle && _general.target.type != 'form'">
-                        <div *ngIf="_general.selectedBlock.type != 'main' else mainset" >
-                            <div *ngIf="searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Visibility Off</div>
-                                <div class="kb-tab-content kb-resp-ask">
-                                    <div class="kb-resp-ask-inner">
-                                        <mat-slide-toggle [matTooltip]="_style.hide.desktop ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="above" [(ngModel)]="_style.hide.desktop">Desktop
-                                        </mat-slide-toggle>
-                                        <mat-slide-toggle [matTooltip]="_style.hide.tablet_h ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_h">Tablet Horizontal
-                                        </mat-slide-toggle>
-                                    </div>
-                                    <div class="kb-resp-ask-inner">
-                                        <mat-slide-toggle [matTooltip]="_style.hide.mobile ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="above" [(ngModel)]="_style.hide.mobile">Mobile
-                                        </mat-slide-toggle>
-                                        <mat-slide-toggle [matTooltip]="_style.hide.tablet_v ? 'Enabled' : 'Disabled'"
-                                            matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_v">Tablet Vertical
-                                        </mat-slide-toggle>
-                                    </div>
+                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced')">
+                        <div *ngIf="_general.selectedBlock.type != 'main' && searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Visibility Off</div>
+                            <div class="kb-tab-content kb-resp-ask">
+                                <div class="kb-resp-ask-inner">
+                                    <mat-slide-toggle [matTooltip]="_style.hide.desktop ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_style.hide.desktop">Desktop
+                                    </mat-slide-toggle>
+                                    <mat-slide-toggle [matTooltip]="_style.hide.tablet_h ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_h">Tablet Horizontal
+                                    </mat-slide-toggle>
+                                </div>
+                                <div class="kb-resp-ask-inner">
+                                    <mat-slide-toggle [matTooltip]="_style.hide.mobile ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="above" [(ngModel)]="_style.hide.mobile">Mobile
+                                    </mat-slide-toggle>
+                                    <mat-slide-toggle [matTooltip]="_style.hide.tablet_v ? 'Enabled' : 'Disabled'"
+                                        matTooltipPosition="below" [(ngModel)]="_style.hide.tablet_v">Tablet Vertical
+                                    </mat-slide-toggle>
                                 </div>
                             </div>
-                            <div *ngIf="searchingDeep('Advanced Z Index')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Z Index
-                                    <span matTooltip="Reverse" matTooltipPosition="above"
-                                        (click)="_style.zindex = _style.reverseValue(_style.zindex, $event)"
-                                        [class]="_style.zindex < 0 ? 'active' : ''" class="kb-reverse-icon"><i
-                                            class="fa fa-sync"></i></span>
-                                    <strong style="margin-left: auto;">{{_style.zindex == 0 ? 'Auto' :
-                                        _style.zindex}}</strong>
+                        </div>
+                        <div *ngIf="_general.respToggleDevice.name != 'hover'">
+                            <div *ngIf="searchingDeep('Advanced Transition Duration')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Transition Duration
+                                    <span matTooltip="None" matTooltipPosition="above"
+                                    (click)="_style.transition.duration = 0"
+                                    [class]="_style.transition.duration != 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                        class="fa fa-sync"></i></span>
+                                    <strong style="margin-left: auto;">{{_style.transition.duration == 0 ? 'None' :
+                                        _style.transition.duration+'s'}}</strong>
                                 </div>
                                 <div class="kb-tab-content">
                                     <div class="kb-rangeInp">
-                                        <mat-slider thumbLabel [(ngModel)]="_style.zindex"
-                                            [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="-999"
-                                            max="999" class="slider" aria-label="units">
+                                        <mat-slider thumbLabel [(ngModel)]="_style.transition.duration" tickInterval="0" step="0.1" min="0"
+                                            max="5" class="slider" aria-label="units">
+                                        </mat-slider>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Advanced Transition Timing Function')" class="kb-inner-tab-component"> 
+                                <div class="kb-tab-head">Transition Timing Function</div>
+                                <div class="kb-tab-content">
+                                    <mat-select [(ngModel)]="_style.transition.timing_function">
+                                        <mat-option *ngFor="let tf of _style.timing_functions" [value]="tf">{{tf?.replaceAll('-',' ') |
+                                            titlecase}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Advanced Transition Delay')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Transition Delay
+                                    <span matTooltip="None" matTooltipPosition="above"
+                                    (click)="_style.transition.delay = 0"
+                                    [class]="_style.transition.delay != 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                        class="fa fa-sync"></i></span>
+                                    <strong style="margin-left: auto;">{{_style.transition.delay == 0 ? 'None' :
+                                        _style.transition.delay+'s'}}</strong>
+                                </div>
+                                <div class="kb-tab-content">
+                                    <div class="kb-rangeInp">
+                                        <mat-slider thumbLabel [(ngModel)]="_style.transition.delay" tickInterval="0" step="0.1" min="0"
+                                            max="5" class="slider" aria-label="units">
                                         </mat-slider>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <ng-template #mainset>
-                            <div *ngIf="searchingDeep('Advanced Custom CSS')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Custom CSS</div>
-                                <div class="kb-tab-content kb-inp-left">
-                                    <textarea placeholder="Write custom css here" [(ngModel)]="_general.page_code"
-                                        name="page-code"></textarea>
+                        <div *ngIf="_general.selectedBlock.type != 'main' && searchingDeep('Advanced Z Index')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Z Index
+                                <span matTooltip="Auto" matTooltipPosition="above"
+                                    (click)="_style.zindex = 0"
+                                    [class]="_style.zindex != 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                        class="fa fa-sync"></i></span>
+                                <strong style="margin-left: auto;">{{_style.zindex == 0 ? 'Auto' :
+                                    _style.zindex}}</strong>
+                            </div>
+                            <div class="kb-tab-content">
+                                <div class="kb-rangeInp">
+                                    <mat-slider thumbLabel [(ngModel)]="_style.zindex"
+                                        [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="-999"
+                                        max="999" class="slider" aria-label="units">
+                                    </mat-slider>
                                 </div>
                             </div>
-                        </ng-template>
+                        </div>
+                        <div *ngIf="_general.selectedBlock.type == 'main' && searchingDeep('Advanced Custom CSS')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Custom CSS</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <textarea placeholder="Write custom css here" [(ngModel)]="_general.page_code"
+                                    name="page-code"></textarea>
+                            </div>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
                 <!-- code -->

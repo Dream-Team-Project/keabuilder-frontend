@@ -545,14 +545,21 @@ div#kb-row-selection ul.kb-row-list span.block span {
 
 /* section and row */
 
+div.kb-block-container.kb-element.cdk-drag {
+    cursor: grab;
+}
+
+div.kb-block-container.kb-element.cdk-drag:active {
+    cursor: grabbing;
+}
+
 div.kb-block-container {
     position: relative;
-    cursor: pointer;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     max-width: 100%;
-    min-height: 30px;
+    min-height: auto;
     display: flex;
     flex-wrap: wrap;
 }
@@ -565,6 +572,7 @@ div.kb-block-container:before {
     border-radius: 4px;
     width: 100%;
     height: 100%;
+    min-height: 20px;
     top: 0;
     left: 0;
 }
@@ -1140,10 +1148,10 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-/* input[type=number] {
+input[type=number] {
   -webkit-appearance: textfield;
   -moz-appearance: textfield;
-} */
+}
 
 @keyframes show {
     from {
@@ -1156,6 +1164,13 @@ input::-webkit-inner-spin-button {
 }
 
 /* responsivness */
+
+.kb-resp-border {
+    border: 3px solid var(--secondary-color);
+    border-radius: 0px;
+    border-width: 0px 3px;
+    overflow: hidden;
+}
 
 .kb-resp-view div.kb-column-wrap {
     flex-direction: column;
@@ -1281,6 +1296,7 @@ ul.kb-menu a, ul.kb-menu li {
     bottom: -18px;
     border-radius: 3px;
     animation: show 0.2s ease;
+    z-index: 99;
 }
 
   .kb-code-block {

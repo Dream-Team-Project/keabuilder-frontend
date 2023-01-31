@@ -17,6 +17,7 @@ export class WebsiteFootersComponent {
   prevName:string = '';
   delfooter:any;
   action:any;
+  footer:any = {uniqueid: '', name: ''};
 
   constructor(
         public _image: ImageService,
@@ -26,15 +27,13 @@ export class WebsiteFootersComponent {
           this.toggleview = _general.getStorage('footer_toggle');
           this.fetch();
         }
-
-          
+  
   toggleView() {
     this.toggleview = !this.toggleview; 
     this._general.setStorage('footer_toggle',this.toggleview);
   }
 
-  openDialog(templateRef: TemplateRef<any>, menu:any) {
-    this.delfooter = menu;
+  openDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef);
   }     
 
@@ -47,15 +46,10 @@ export class WebsiteFootersComponent {
     });
   }
 
-  rename(obj:any) {
+  rename(footer:any) {
     var prevname = this.prevName;
-    if(prevname != obj.name) {
-      var parser = new DOMParser();
-      var html:any = parser.parseFromString(obj.html, 'text/html');
-      var footer:any = html.body.children[0];
-      footer.setAttribute('data-name',obj.name);
-      obj.html = footer.outerHTML;
-      this._general.fileUploadService.saveFile(obj, 'footers').subscribe(resp=>{
+    if(prevname != footer.name) {
+      this._general.fileUploadService.updatefooter(footer).subscribe(resp=>{
         if(resp.success) {
           this.action = 'renamed';
           this.openSB(false);
@@ -69,46 +63,62 @@ export class WebsiteFootersComponent {
   }
 
   create() {
-    var obj:any = {id: '', html: '', type: 'footer'};
-    obj.id = this._general.createBlockId(obj);
-    obj.html = '<div id="'+obj.id+'" data-name="Footer '+(this.footers.length+1)+'"></div>';
-    this._general.fileUploadService.saveFile(obj, 'footers').subscribe(resp=>{
-      resp.success ? this.edit(obj.id) : this.openSB(true);
+    this.footer.uniqueid = this._general.makeid(20);
+    var obj:any = {
+      id: 'kb-footer-'+this.footer.uniqueid,
+      html: ''
+    }
+    this._general.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
+      this._general.fileUploadService.savefooter(this.footer).subscribe(resp=>{
+        console.log('hello');
+        if(resp.success) {
+          this.edit(this.footer);
+          this.footer.name = '';
+        }
+        else this.openSB(true);
+        resp.success ? this.edit(this.footer) : this.openSB(true);
+      });
     });
   }
 
-  edit(id:any) {
-    this._general.redirectToBuilder(id.split('footer-')[1], 'footer');
+  edit(footer:any) {
+    this._general.redirectToBuilder(footer.uniqueid, 'footer');
   }
 
-  duplicate(fobj:any) {
-    var obj = JSON.parse(JSON.stringify(fobj));
-    obj.id = this._general.createBlockId(obj);
-    var parser = new DOMParser();
-    var html:any = parser.parseFromString(obj.html, 'text/html');
-    var footer:any = html.body.children[0];
-    footer.id = obj.id;
-    footer.setAttribute('data-name',obj.name+' copy');
-    obj.html = footer.outerHTML;
-    this._general.fileUploadService.saveFile(obj, 'footers').subscribe(resp=>{
+  duplicate(footer:any) {
+    var dobj = JSON.parse(JSON.stringify(footer));
+    dobj.name = dobj.name + ' copy';
+    dobj.uniqueid = this._general.makeid(20);
+    var obj = {
+      oldpath: 'kb-footer-'+footer.uniqueid+'.php',
+      path: 'kb-footer-'+dobj.uniqueid+'.php',
+    }
+    this._general.fileUploadService.copyFile(obj, 'footers').subscribe(resp=>{
       if(resp.success) {
-        var imgobj  = {oldname:fobj.thumbnail, newname:'keaimage-'+obj.id.split('kb-')[1]+ '-screenshot.png'};
+        this._general.fileUploadService.savefooter(dobj).subscribe((resp:any)=>{
+          this.fetch();
+        })
+        var imgobj  = {
+          oldname: this._general.getSSPath('footer-'+footer.uniqueid), 
+          newname: this._general.getSSPath('footer-'+dobj.uniqueid)
+        };
         this._general.fileUploadService.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
-        this.fetch();
       }
       else this.openSB(true);
     });
   }
 
   delete() {
-    this._general.fileUploadService.deleteFile(this.delfooter.id, 'footers').subscribe(resp=>{
-      if(resp.success) {
-        this.action = 'deleted';
-        this.fetch();
-      }
-      else this.openSB(true);
-    });
+    this._general.fileUploadService.deletefooter(this.delfooter.id).subscribe((resp:any)=>{
+      this._general.fileUploadService.deleteFile('kb-footer-'+this.delfooter.uniqueid, 'footers').subscribe(resp=>{
+        if(resp.success) {
+          this.action = 'deleted';
+          this.fetch();
+        }
+        else this.openSB(true);
+      });
+    })
   }
 
   openSB(alert:any) {

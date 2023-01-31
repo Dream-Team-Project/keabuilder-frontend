@@ -439,3 +439,11 @@ button.kb-backBtn:hover {
 .kb-triggers .kb-more-opt .mat-button i{
     padding: 0px;
 }
+
+.mat-icon.kb-mat-error-icon {
+    font-size: 18px;
+    right: 2px;
+    color: var(--kb-danger);
+    position: absolute;
+    top: 4px;
+}

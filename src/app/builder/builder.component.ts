@@ -39,7 +39,7 @@ export class BuilderComponent implements OnInit {
   showNavFrom:string = 'bottom';
   trigger:string = 'Saved';
   contextMenuPosition = { x: '0px', y: '0px' };
-  transferIndex:number = -1;
+  transferData:any;
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
@@ -75,56 +75,68 @@ export class BuilderComponent implements OnInit {
       this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
       if(_general.target.type == 'website' || _general.target.type == 'funnel' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
-            data.html = _general.parser.parseFromString(data.html, 'text/html');
-            if(_general.target.type == 'header') {
-              _general.target.name = data.html.body.children[0].getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-              this.setBuilder(data.html, data.css);
-            }
-            else if(_general.target.type == 'footer') {
-              _general.target.name = data.html.body.children[0].getAttribute('data-name');
-              data.css = data.html.querySelector('STYLE')?.innerHTML;
-              this.setBuilder(data.html, data.css);
-            }
-            else {
-              var header = data.html.querySelector('header');
-              var footer = data.html.querySelector('footer');
-              if(header) {
-                header = header.innerHTML;
-                var headid = header.slice(header.indexOf('../../headers/')+14, header.indexOf('.php'));
-                _general.headers.forEach((head:any)=>{ if(head.id == headid) _general.setHeader(head); })
+            if(!_general.isObjEmpty(data)) {
+              if(this.ishf) {
+                _general.target.name = data.name;
               }
-              else _general.includeLayout.header = false;
-              if(footer) {
-                footer = footer.innerHTML;
-                var footid = footer.slice(footer.indexOf('../../footers/')+14, footer.indexOf('.php'));
-                _general.footers.forEach((foot:any)=>{ if(foot.id == footid) _general.setFooter(foot); })
+              else {
+                data.html = _general.parser.parseFromString(data.html, 'text/html');
+                var header = data.html.querySelector('header');
+                var footer = data.html.querySelector('footer');
+                if(header) {
+                  var headid = header.id.split('kb-header-')[1];
+                  _general.headers.forEach((head:any)=>{ if(head.uniqueid == headid) _general.setHeader(head); })
+                }
+                else _general.includeLayout.header = false;
+                if(footer) {
+                  var footid = footer.id.split('kb-footer-')[1];
+                  _general.footers.forEach((foot:any)=>{ if(foot.uniqueid == footid) _general.setFooter(foot); })
+                }
+                else _general.includeLayout.footer = false;
+                if(_general.target.type == 'funnel') {
+                  this._general.getAllProducts();
+                  if(_general.webpage.funneltype == 'order') {
+                    _element.elementList['checkout'] = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
+                  }
+                  else if(_general.webpage.funneltype == 'upsell') {
+                    _element.elementList['button'].content.btntype = 'upsell';
+                    _element.elementList['button'].content.productid = '';
+                    _element.elementList['button'].content.text = 'Upsell Button';
+                  }
+                  else if(_general.webpage.funneltype == 'downsell') {
+                    _element.elementList['button'].content.btntype = 'downsell';
+                    _element.elementList['button'].content.productid = '';
+                    _element.elementList['button'].content.text = 'Downsell Button';
+                  }
+                }
+                data.json = _general.webpage.page_json;
               }
-              else _general.includeLayout.footer = false;
-              if(_general.target.type == 'funnel') {
-                this._general.getAllProducts();
-                if(_general.webpage.funneltype == 'order') {
-                  _element.elementList['checkout'] = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
-                }
-                else if(_general.webpage.funneltype == 'upsell') {
-                  _element.elementList['button'].content.btntype = 'upsell';
-                  _element.elementList['button'].content.productid = '';
-                  _element.elementList['button'].content.text = 'Upsell Button';
-                }
-                else if(_general.webpage.funneltype == 'downsell') {
-                  _element.elementList['button'].content.btntype = 'downsell';
-                  _element.elementList['button'].content.productid = '';
-                  _element.elementList['button'].content.text = 'Downsell Button';
-                }
-              }
-              if(_general.webpage.page_json) {
-                _section.sections = _general.decodeJSON(_general.webpage.page_json);
+              if(data.json) {
+                _section.sections = _general.decodeJSON(data.json);
                 _section.pageSessionArr = [];
+                _section.sections.forEach((sec:any)=>{
+                  sec.rowArr.forEach((row:any)=>{
+                    row.columnArr.forEach((col:any)=>{
+                      col.elementArr.forEach((ele:any)=>{
+                        var cont = ele.content;
+                        if(cont.name == 'menu') {
+                          this._general.menus.forEach((menu:any)=>{
+                            if(menu.id == cont.data_id) {
+                              var menuObj = JSON.parse(JSON.stringify(menu));
+                              ele.content = this._element.setMenu(cont, menuObj);
+                            }
+                          })
+                        }
+                    })
+                  })
+                  })
+                })
               }
               else this._section.addSection(0);
               this._section.savePageSession();
               this._general.loading.success = true;
             }
+            else _general.redirectToPageNotFound();
         })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
@@ -235,209 +247,6 @@ export class BuilderComponent implements OnInit {
     this.openDialog();
   }
 
-  filterStyle(id:any, css:any, media:string) {
-    if(css) {
-      if(media) css = css.split('@media only screen and (max-width:'+media.split(',')[0]+'px)'+ (media.split(',')[1] != undefined ? ' and (min-width:'+media.split(',')[1]+'px)' : '')+'{')[1].split('}')[0];
-      if(css && css.split(id+'{')[1] != ';' && css.split(id+'{').length != 1) {
-        var styleArr = css.split(id+'{')[1].split('}')[0].split(';');
-        styleArr.pop();
-        for(var i = 0; i < styleArr.length; i++) {
-          styleArr[i] = '"'+styleArr[i].split(':')[0]+'"'+':'+'"'+styleArr[i].split(':')[1]+'"';
-        }
-        return JSON.parse('{'+styleArr.toString()+'}');
-      }  
-      else {
-        return '';
-      }
-    }
-  }
-
-  setBuilder(html:any, css:any) {
-    if(html && css) {
-      this._general.main.style = {
-        desktop: this.filterStyle('kb-main',css,''),
-        tablet_h: this.filterStyle('kb-main',css,'1024,769'),
-        tablet_v: this.filterStyle('kb-main',css,'768,426'),
-        mobile: this.filterStyle('kb-main',css,'426')
-      }
-      this._section.sections = [];
-      html.querySelectorAll('.kb-section').forEach((sec:any)=>{
-        var secObj = JSON.parse(JSON.stringify(this._section.sectionObj));
-        secObj.id = sec.id;
-        this._general.allBlocksIds.push(sec.id);
-        secObj.style = {
-          desktop: this.filterStyle(sec.id,css,''),
-          tablet_h: this.filterStyle(sec.id,css,'1024,769'),
-          tablet_v: this.filterStyle(sec.id,css,'768,426'),
-          mobile: this.filterStyle(sec.id,css,'426')
-        }
-        sec.querySelectorAll('.kb-row').forEach((row:any)=>{
-          var rowObj = JSON.parse(JSON.stringify(this._row.rowObj));
-          rowObj.id = row.id;
-          this._general.allBlocksIds.push(row.id);
-          rowObj.style = {
-            desktop: this.filterStyle(row.id,css,''),
-            tablet_h: this.filterStyle(row.id,css,'1024,769'),
-            tablet_v: this.filterStyle(row.id,css,'768,426'),
-            mobile: this.filterStyle(row.id,css,'426')
-          }
-          var cw = ' .kb-column-wrap';
-          rowObj.columnGap = {
-            desktop: this.filterStyle(row.id+cw,css,''),
-            tablet_h: this.filterStyle(row.id+cw,css,'1024,769'),
-            tablet_v: this.filterStyle(row.id+cw,css,'768,426'),
-            mobile: this.filterStyle(row.id+cw,css,'426')            
-          }
-          var colWrap = row.querySelector('.kb-column-wrap');
-          rowObj.columnRev = {
-            desktop: colWrap.classList.contains('kb-desk-flex-rev'),
-            tablet_h: colWrap.classList.contains('kb-tab-h-flex-rev'),
-            tablet_v: colWrap.classList.contains('kb-tab-v-flex-rev'),
-            mobile: colWrap.classList.contains('kb-mob-flex-rev')  
-          }
-          rowObj.columnGap.desktop = rowObj.columnGap.desktop ? rowObj.columnGap.desktop.gap.split('rem')[0] : 0;
-          rowObj.columnGap.tablet_h = rowObj.columnGap.tablet_h ? rowObj.columnGap.tablet_h.gap.split('rem')[0] : 'auto';
-          rowObj.columnGap.tablet_v = rowObj.columnGap.tablet_v ? rowObj.columnGap.tablet_v.gap.split('rem')[0] : 'auto';
-          rowObj.columnGap.mobile = rowObj.columnGap.mobile ? rowObj.columnGap.mobile.gap.split('rem')[0] : 'auto';
-          row.querySelectorAll('.kb-column').forEach((col:any)=>{
-            rowObj.rowSize = col.classList[2];
-            var colObj = JSON.parse(JSON.stringify(this._row.columnObj));
-            colObj.id = col.id;
-            this._general.allBlocksIds.push(col.id);
-            colObj.style = {
-              desktop: this.filterStyle(col.id,css,''),
-              tablet_h: this.filterStyle(col.id,css,'1024,769'),
-              tablet_v: this.filterStyle(col.id,css,'768,426'),
-              mobile: this.filterStyle(col.id,css,'426')
-            }
-            col.querySelectorAll('.kb-element').forEach((ele:any)=>{
-              var eleSel = '';
-              var eleSelItem = '';
-              var content = ele.querySelector('.kb-element-content');
-              var eleObj = JSON.parse(JSON.stringify(this._element.elementObj));
-              eleObj.itemstyle = false;
-              eleObj.content.name = ele.children[0].getAttribute('data-name');
-              if(eleObj.content.name == 'heading' || eleObj.content.name == 'text') {
-                eleSel = '> div';
-                eleObj.content.html = content.children[0].innerHTML;
-              }
-              else if(eleObj.content.name == 'image') {
-                eleSel = 'img';
-                eleObj.content.src = content.querySelector('IMG').src;
-              }
-              else if(eleObj.content.name == 'button') {
-                eleSel = 'a';
-                var anchor = content.querySelector('A');
-                var bt = anchor.getAttribute('kb-btn-type');
-                eleObj.content.btntype = bt ? bt : 'regular';
-                if(eleObj.content.btntype != 'regular') {
-                  eleObj.content.link = anchor.getAttribute('kb-redirect-link');
-                  eleObj.content.productid = anchor.getAttribute('kb-product-id');
-                }
-                else eleObj.content.link = anchor.href.split('#').length > 1 ? '#no-link' : anchor.href;
-                eleObj.content.text = anchor.querySelectorAll('DIV')[0].innerText;
-                eleObj.content.subtext = anchor.querySelectorAll('DIV')[1].innerText;
-                eleObj.content.subfont_size = anchor.querySelectorAll('DIV')[1].style['font-size'];
-                eleObj.content.target = anchor.target;
-                // eleObj.content.
-              }
-              else if(eleObj.content.name == 'menu') {
-                eleObj.itemstyle = true;
-                eleSel = 'ul';
-                eleSelItem = 'ul a';
-                var id = content.getAttribute('data-id');
-                this._general.allBlocksIds.push(id);
-                this._general.menus.forEach((menu:any)=>{
-                  if(menu.id == id) {
-                    var menuObj = JSON.parse(JSON.stringify(menu));
-                    eleObj.content = this._element.setMenu(eleObj.content, menuObj);
-                  }
-                })
-              }
-              else if(eleObj.content.name == 'code') {
-                eleObj.content.html = content.querySelector('.kb-code-block').innerHTML;
-              }
-              eleObj.id = ele.id;
-              this._general.allBlocksIds.push(ele.id);
-              if(eleObj.itemstyle) {
-                var itemselector = ele.id+' .kb-element-content '+eleSelItem;
-                eleObj.content.item = {
-                  style: {
-                    desktop: this.filterStyle(itemselector,css,''),
-                    tablet_h: this.filterStyle(itemselector,css,'1024,769'),
-                    tablet_v: this.filterStyle(itemselector,css,'768,426'),
-                    mobile: this.filterStyle(itemselector,css,'426')
-                  } 
-                }
-              }
-              var eleid = {
-                desktop: this.filterStyle(ele.id,css,''),
-                tablet_h: this.filterStyle(ele.id,css,'1024,769'),
-                tablet_v: this.filterStyle(ele.id,css,'768,426'),
-                mobile: this.filterStyle(ele.id,css,'426')
-              }
-              eleObj.item_alignment = {
-                desktop: eleid.desktop ? eleid.desktop['justify-content'] : '',
-                tablet_h: eleid.tablet_h ? eleid.tablet_h['justify-content'] : 'auto',
-                tablet_v: eleid.tablet_v ? eleid.tablet_v['justify-content'] : 'auto',
-                mobile: eleid.mobile ? eleid.mobile['justify-content'] : 'auto',
-              }
-              eleObj.hide = {
-                desktop: ele.classList.contains('kb-d-desk-none'),
-                tablet_h: ele.classList.contains('kb-d-tab-h-none'),
-                tablet_v: ele.classList.contains('kb-d-tab-v-none'),
-                mobile: ele.classList.contains('kb-d-mob-none')  
-              }
-              var selector = ele.id+' .kb-element-content '+eleSel;
-              eleObj.style = {
-                desktop: {...this.filterStyle(selector,css,''), ...{margin: eleid.desktop['margin']}},
-                tablet_h: {...this.filterStyle(selector,css,'1024,769'), ...{margin: eleid.tablet_h['margin']}},
-                tablet_v: {...this.filterStyle(selector,css,'768,426'), ...{margin: eleid.tablet_v['margin']}},
-                mobile: {...this.filterStyle(selector,css,'426'), ...{margin: eleid.mobile['margin']}}
-              } 
-              eleObj.content.style = JSON.parse(JSON.stringify(eleObj.style));
-              eleObj.name = ele.getAttribute('data-name');
-              if(eleObj.content.name) colObj.elementArr.push(eleObj);
-            })
-            colObj.hide = {
-              desktop: col.classList.contains('kb-d-desk-none'),
-              tablet_h: col.classList.contains('kb-d-tab-h-none'),
-              tablet_v: col.classList.contains('kb-d-tab-v-none'),
-              mobile: col.classList.contains('kb-d-mob-none')  
-            }
-            colObj.name = col.getAttribute('data-name');
-            rowObj.columnArr.push(colObj);
-          })
-          rowObj.hide = {
-            desktop: row.classList.contains('kb-d-desk-none'),
-            tablet_h: row.classList.contains('kb-d-tab-h-none'),
-            tablet_v: row.classList.contains('kb-d-tab-v-none'),
-            mobile: row.classList.contains('kb-d-mob-none')  
-          }
-          rowObj.name = row.getAttribute('data-name');
-          secObj.rowArr.push(rowObj);          
-        })
-        secObj.hide = {
-          desktop: sec.classList.contains('kb-d-desk-none'),
-          tablet_h: sec.classList.contains('kb-d-tab-h-none'),
-          tablet_v: sec.classList.contains('kb-d-tab-v-none'),
-          mobile: sec.classList.contains('kb-d-mob-none')  
-        }
-        secObj.name = sec.getAttribute('data-name');
-        this._section.sections.push(secObj);
-        if(html.querySelectorAll('.kb-section').length == this._section.sections.length) {
-          this._section.pageSessionArr = [];
-          this._section.savePageSession();
-          this._general.loading.success = true;
-        }
-      })
-    }
-    else {
-      this._section.addSection(0);
-      this._general.loading.success = true;
-    }
-  }
-
   elementDblClk(element: any, event:any) {
     if(element.content.name != 'checkout') {
       this._general.blockSelection = '';
@@ -524,9 +333,9 @@ export class BuilderComponent implements OnInit {
   // drag & drops
 
   drop(event: CdkDragDrop<any>) {
-    if(this.transferIndex != -1) {
+    if(this.transferData) {
       var appendIndex =  event.currentIndex-1;
-      var appendData = event.previousContainer.data[this.transferIndex];
+      var appendData = this.transferData;
       if(appendData.type == 'image') {
         var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
@@ -556,7 +365,7 @@ export class BuilderComponent implements OnInit {
           else temp.style.desktop.width = appendData.width;
           this._section.appendSection(temp, appendIndex);
       }
-      this.transferIndex = -1;
+      this.transferData = '';
     }
     else {
       if (event.previousContainer === event.container) {

@@ -81,6 +81,15 @@ main {
     background-color: var(--opacity-primary);
 }
 
+::ng-deep .mat-dialog-container {
+    overflow: visible!important;
+    min-width: 460px;
+}
+
+::ng-deep .mat-dialog-actions .mat-button.mat-primary, .mat-dialog-title {
+    color: var(--primary-color);
+}
+
 @media only screen and (max-width:500px){
     .insidecont{
         padding: 20px 0px;

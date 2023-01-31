@@ -8,6 +8,19 @@
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="delete()">Yes</button>
   </div>
 </ng-template>
+<ng-template #createdialog>
+  <h1 mat-dialog-title>Create Header</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Header Name</mat-label>
+      <input matInput type="text" [placeholder]="'Header name'" [(ngModel)]="header.name">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+      <button mat-button mat-dialog-close [color]="header.name ? 'primary' : ''" (click)="create()" [disabled]="!header.name">Create</button>
+  </div>
+</ng-template>
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row align-items-center">
@@ -29,14 +42,14 @@
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
-        <button mat-raised-button class="mx-3" (click)="create()" color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>
   <div [class.px-3]="!toggleview" class="row" *ngIf="headers.length != 0 else nodata">
     <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4" *ngFor="let header of headers | filter:searchInp.value:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type">
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
-            <div class="kb-fitimg col-12" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+header.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+            <div class="kb-fitimg col-12" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('header-'+header.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
               <div id="loader" *ngIf="shortwaiting">
                 <div id="shadow"></div>
                 <div id="box"></div>
@@ -53,9 +66,9 @@
                 </div>
               </div>
               <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="text-right">
-                <button mat-raised-button (click)="edit(header.id)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                <button mat-raised-button (click)="edit(header)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button (click)="duplicate(header)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
-                <button mat-raised-button (click)="openDialog(dialog, header)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
+                <button mat-raised-button (click)="delheader = header; openDialog(dialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
               </div>
             </div>
           </div>

@@ -36,7 +36,7 @@
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferIndex)="transferIndex = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferData)="transferData = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
     <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
         <app-bulder-wireframe (dialogToggle)="openDialog()" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
@@ -47,9 +47,10 @@
     (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : ''">
     <div id="kb-block-container" [class.loading]="!_general.loading.success">
         <div #main id="kb-main-container"
+            [class.kb-resp-border]="_general.respToggleDevice.name != 'desktop' && _general.respToggleDevice.name != 'hover'"
             [class.kb-resp-view]="_general.respToggleDevice.name == 'tablet-v' || _general.respToggleDevice.name == 'mobile'"
             [style.width]="_general.respToggleDevice.width">
-            <header *ngIf="_general.includeLayout.header && _general.selectedHeader.html" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
+            <header *ngIf="_general.includeLayout.header && _general.selectedHeader.html" [id]="'kb-header-'+_general.selectedHeader.id" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
             <div id="kb-main"
                 [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
                 <div class="kb-drag-container" cdkDropList id="sectiongroup-0" [cdkDropListEnterPredicate]="dropAllow()" [cdkDropListConnectedTo]="_section.sectionConnect"
@@ -166,7 +167,7 @@
                                                     [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting"
                                                     *ngIf="element.setting && !_general.showInlineEditor">
-                                                    <span cdkDragHandle class="kb-handle-block kb-handle-element"><i
+                                                    <span class="kb-handle-block kb-handle-element"><i
                                                             class="fa fa-arrows-alt"></i></span>
                                                     <span *ngIf="element.content.name != 'checkout'"
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog()"
@@ -258,6 +259,9 @@
                                                         frameborder="0"
                                                         style="width:100%;height:100%; border:0; min-height: 1085px;"></iframe>
                                                 </div>
+                                                <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">
+                                                    <hr [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
+                                                </div>
                                                 <div *ngSwitchDefault [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else originalText"
                                                     [ngStyle]="_style.textStyling()" [innerHTML]="_style.edit_html | safeHtml"></div>
@@ -265,7 +269,7 @@
                                                         <div [ngStyle]="_style.getBlockStyle(element.content.style)"
                                                             [innerHTML]="element.content.html | safeHtml"></div>
                                                     </ng-template>
-                                                    <div *ngIf="!element.content.editor else editor"></div>
+                                                    <!-- <div *ngIf="!element.content.editor else editor"></div>
                                                     <ng-template #editor>
                                                         <tinymce
                                                             [inline]="true"
@@ -273,7 +277,7 @@
                                                             (mouseleave)="_general.insideEditor = false;"
                                                             [(ngModel)]="element.content.html"
                                                             [config]="_general.config"></tinymce>
-                                                    </ng-template>
+                                                    </ng-template> -->
                                                 </div>
                                                 <span *ngIf="element.setting && !_general.showInlineEditor"
                                                     (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog()"
@@ -315,7 +319,7 @@
                     <!-- sections end -->
                 </div>
             </div>
-            <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
+            <footer *ngIf="_general.includeLayout.footer && _general.selectedFooter.html" [id]="'kb-footer-'+_general.selectedFooter.id" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
         </div>
     </div>
     <div *ngIf="!_general.loading.success" id="loader">

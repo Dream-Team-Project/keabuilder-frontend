@@ -118,6 +118,8 @@ export class StyleService {
   // box shadow
   // advance
   zindex: number = 0;
+  transition:any = {duration: 0.2, timing_function: 'linear', delay: 0};
+  timing_functions:any = ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out']
   // advance
   styleSession:any = {undo: 0, redo: 0}
   styleSessionArr:any = [];
@@ -175,6 +177,9 @@ export class StyleService {
       block.style.tablet_v = rObj;
     }
     else if (this._general.respToggleDevice.name == 'mobile') {
+      block.style.mobile = rObj;
+    }
+    else if (this._general.respToggleDevice.name == 'hover') {
       block.style.mobile = rObj;
     }
     else {
@@ -339,13 +344,17 @@ export class StyleService {
     else if(this._general.respToggleDevice.name == 'mobile') {
       objS = blockS.mobile;
     }
+    else if(this._general.respToggleDevice.name == 'hover') {
+      objS = blockS.hover;
+    }
     return {...blockS.desktop, ...objS};
   }
 
   currentStyling() {
-    var objAllS = {
+    var objAllS:any = {
       'margin': this.getMargin(),
       'padding': this.getPadding(),
+      'box-shadow': this.getBoxShadow(),
       'border-width': this.getBorder(),
       'border-radius': this.getBorderRadius(),
       'border-color': this.border_color,
@@ -353,8 +362,18 @@ export class StyleService {
       'background-color': this.background_color,
       'width': this.width.value,
       'height': this.height.value,
-      'z-index': this.zindex == 0 ? 'auto' : this.zindex,
+      'z-index': this.zindex,
+      'transition-duration': this.transition.duration + 's',
+      'transition-timing-function': this.transition.timing_function,
+      'transition-delay': this.transition.delay + 's',
     }
+    if(!objAllS['box-shadow']) delete objAllS['box-shadow'];
+    if(objAllS['z-index'] == 0) delete objAllS['z-index'];
+    if(objAllS['transition-duration'] == '0s') {
+      delete objAllS['transition-duration'];
+      delete objAllS['transition-timing-function'];
+    }
+    if(objAllS['transition-delay'] == '0s') delete objAllS['transition-delay'];
     var objBgImg = {
       'background-image': 'url(' + this.background_image.name + ')',
       'background-size': this.background_image.size,
@@ -367,12 +386,6 @@ export class StyleService {
     }
     var objBgNone = {
       'background-image': 'none',
-    }
-    var objBoxS = {
-      'box-shadow': this.getBoxShadow(),
-    }
-    if(objBoxS['box-shadow']) {
-      objAllS = {...objAllS, ...objBoxS}
     }
     if(this.background_type == 'color' && this._general.respToggleDevice.name != 'desktop') {
       return {...objAllS, ...objBgNone};
@@ -389,13 +402,14 @@ export class StyleService {
   }
 
   textStyling() {
-    var textS = {
+    var textS:any = {
       'font-size': this.font_size.value,
       'font-weight': this.font_weight.value,
       'font-style': this.font_style,
       'font-family': this.font_family,
       'color': this.text_color,
       'text-align': this.text_align,
+      'text-shadow': this.getTextShadow(),
       'text-transform': this.text_transform,
       'text-decoration-line': this.text_decoration_line,
       'text-decoration-style': this.text_decoration_style,
@@ -403,12 +417,16 @@ export class StyleService {
       'line-height': this.line_height.value,
       'letter-spacing': this.letter_spacing.value,
     }
-    var objTextShadow = {
-      'text-shadow': this.getTextShadow(),
+    if(textS['font-style'] == 'normal') delete textS['font-style'];
+    if(!textS['text-shadow']) delete textS['text-shadow'];
+    if(textS['text-transform'] == 'none') delete textS['text-transform'];
+    if(textS['text-decoration-line'] == 'none') {
+      delete textS['text-decoration-line'];
+      delete textS['text-decoration-style'];
+      delete textS['text-decoration-color'];
     }
-    if(objTextShadow['text-shadow']) {
-      textS = {...textS, ...objTextShadow}
-    }
+    if(textS['line-height'] == 'normal') delete textS['line-height'];
+    if(textS['letter-spacing'] == 'normal') delete textS['letter-spacing'];
     return { ...textS, ...this.currentStyling() }
   }
 
@@ -816,6 +834,9 @@ export class StyleService {
     if(cs['width'] != ds['width']) ns['width'] = cs['width'];
     if(cs['height'] != ds['height']) ns['height'] = cs['height'];
     if(cs['z-index'] != ds['z-index']) ns['z-index'] = cs['z-index'];
+    if(cs['transition-duration'] != ds['transition-duration']) ns['transition-duration'] = cs['transition-duration'];
+    if(cs['transition-timing-function'] != ds['transition-timing-function']) ns['transition-timing-function'] = cs['transition-timing-function'];
+    if(cs['transition-delay'] != ds['transition-delay']) ns['transition-delay'] = cs['transition-delay'];
     if(cs['box-shadow'] != ds['box-shadow']) ns['box-shadow'] = cs['box-shadow'];
     if(cs['background-color'] != ds['background-color']) ns['background-color'] = cs['background-color'];
     if(cs['background-image'] != ds['background-image'] && cs['background-image'] != undefined) ns['background-image'] = cs['background-image'];
@@ -860,7 +881,7 @@ export class StyleService {
         this._general.selectedBlock.content.src = this.image_src;
         this.setElementStyle(this.imageStyling());
       }
-      else if(this._general.selectedBlock.content?.name == 'form') {
+      else if(this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
         this.setElementStyle(this.currentStyling());
       }
       else {
@@ -869,15 +890,23 @@ export class StyleService {
     }
     else {
       if (device != 'desktop') {
-        var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
+        var newS = this.setItemStyle ? this.filterStyle(this.currentStyling(),  this._general.selectedBlock.content.item.style.desktop) 
+        : this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
         if (device == 'tablet-h') {
-          this._general.selectedBlock.style.tablet_h = newS;
+          if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_h = newS;
+          else this._general.selectedBlock.style.tablet_h = newS;
         }
         else if (device == 'tablet-v') {
-          this._general.selectedBlock.style.tablet_v = newS;
+          if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_v = newS;
+          else this._general.selectedBlock.style.tablet_v = newS;
         }
         else if (device == 'mobile') {
-          this._general.selectedBlock.style.mobile = newS;
+          if(this.setItemStyle) this._general.selectedBlock.content.item.style.mobile = newS;  
+          else this._general.selectedBlock.style.mobile = newS;
+        }
+        else if (device == 'hover') {
+          if(this.setItemStyle) this._general.selectedBlock.content.item.style.hover = newS; 
+          else this._general.selectedBlock.style.hover = newS;
         }
       }
       else {
@@ -918,6 +947,9 @@ export class StyleService {
       else if (this._general.respToggleDevice.name == 'mobile') {
         this._general.selectedBlock.content.style.mobile = {...newS, ...newBS};
       }
+      else if (this._general.respToggleDevice.name == 'hover') {
+        this._general.selectedBlock.content.style.hover = {...newS, ...newBS};
+      }
     }
     else {
       this._general.selectedBlock.content.style.desktop = {...contentStyle, ...this.currentStyling()};
@@ -925,74 +957,103 @@ export class StyleService {
   }
 
   defaultStyling(block:any) {
-    this.margin.top = '0px';
-    var mrl;
-    if(block.type == 'element' && !block.itemstyle && block.content?.name != 'code' && block.content?.name != 'form') {
-      mrl = '0px';
-      this.margin.bottom = '10px';
-    }
-    else {
-      mrl = 'auto';
-      this.margin.bottom = '0px';
-    }
-    if(block.content?.name == 'form') {
-      this.margin.top = '30px';
-      this.margin.bottom = '30px';
-    }
-    this.margin.right = mrl;
-    this.margin.left = mrl;
-    var ptb, plr, brw, br, bclr, bgclr;
+    var w, mt, mb, mlr, ptb, plr, bw, br, bclr, bgclr;
+    var isDivider = block.content?.name == 'divider';
+
     if (block.content?.name == 'button') {
+      w = 'auto';
+      mt = '0px';
+      mb = '10px';
+      mlr = '0px';
       ptb = '8px';
       plr = '16px';
-      brw = '2px';
+      bw = '2px';
       br = '4px';
       bclr = '#dea641';
       bgclr = '#dea641';
     }
     else if(block.content?.name == 'input') {
+      w = '100%';
+      mt = '0px';
+      mb = '10px';
+      mlr = '0px';
       ptb = '0px';
       plr = '10px';
-      brw = '1px';
+      bw = '1px';
       br = '4px';
       bclr = '#b8bdc9';
       bgclr = '#f4f4f4';
     }
     else if(block.content?.name == 'form') {
+      w = '70%';
+      mt = '30px';
+      mb = '30px';
+      mlr = 'auto';
       ptb = '20px';
       plr = '20px';
-      brw = '0px';
+      bw = '0px';
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
       bgclr = 'rgba(0,0,0,0)';
     }
+    else if(block.content?.name == 'divider') {
+      w = '50%';
+      mt = '10px';
+      mb = '10px';
+      mlr = '0px';
+      ptb = '4px';
+      plr = '0px';
+      bw = '0px';
+      br = '0px';
+      bclr = 'rgba(0,0,0,0.4)';
+      bgclr = 'rgba(0,0,0,0)';
+      block.item_alignment = {desktop:'center', tablet_h:'center', tablet_v:'center', mobile:'center'};
+    }
     else if (block.itemstyle) {
+      w = 'auto';
+      mt = '0px';
+      mb = '0px';
+      mlr = '0px';
       ptb = '6px';
       plr = '12px';
-      brw = '0px';
+      bw = '0px';
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
       bgclr = 'rgba(0,0,0,0)';
     }
     else {
-      ptb = block.type == 'element' || block.type == 'column' || block.type == 'main' ? 
-      '0px' : block.type == 'row' ?  '30px' : '60px';
+      w = block.type == 'element' ? 'auto' : (block.type == 'row' ? '90%' : '100%');
+      mt = '0px';
+      mb = block.type == 'element' ? '10px' : '0px';
+      mlr = block.type == 'element' ? '0px' : 'auto';
+      ptb = block.type == 'section' ? '60px' : (block.type == 'row' ? '30px' : '0px');
       plr = block.type == 'column' ? '20px' : '0px';
-      brw = '0px';
+      bw = '0px';
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
       bgclr = 'rgba(0,0,0,0)';
     }
 
+    this.width.value = w;
+    this.widthRange.value = w.slice(0, w.length-1);
+
+    this.height.value = 'auto';
+    this.heightRange.value = 100;
+
+    this.margin.top = mt;
+    this.margin.bottom = mb;
+    this.margin.left = mlr;
+    this.margin.right = mlr;
+
     this.padding.top = ptb;
-    this.padding.right = plr;
     this.padding.bottom = ptb;
     this.padding.left = plr;
+    this.padding.right = plr;
 
-    this.border.top = brw;
-    this.border.right = brw;
-    this.border.bottom = brw;
-    this.border.left = brw;
+    this.border.top = isDivider ? '2px' : bw;
+    this.border.bottom = isDivider ? '2px' : bw;
+    this.border.left = bw;
+    this.border.right = bw;
 
     this.border_radius.top_left = br;
     this.border_radius.top_right = br;
@@ -1006,29 +1067,10 @@ export class StyleService {
 
     this.blockAlign = '';
 
-    if (block.type == 'row') {
-        this.width.value = '90%';
-        this.widthRange.value = 90;        
-    }
-    else if (block.type == 'element') {
-      if(block.content?.name == 'form') {
-        this.width.value = '70%';
-        this.widthRange.value = 70;
-      }
-      else {
-        this.width.value = block.content?.name == 'input' || block.content?.name == 'label' || block.content?.name == 'option' ? '100%' : 'auto';
-        this.widthRange.value = 100;
-      }
-    }
-    else {
-      this.width.value = '100%';
-      this.widthRange.value = 100;
-    }
-
-    this.height.value = 'auto';
-    this.heightRange.value = 100;
-
     this.zindex = 0;
+    this.transition.duration = 0;
+    this.transition.timing_function = 'linear';
+    this.transition.delay= 0;
 
     this.m_link.a = false;
     this.m_link.tb = false;
@@ -1038,9 +1080,9 @@ export class StyleService {
     this.p_link.tb = false;
     this.p_link.lr = false;
 
-    this.b_link.a = true;
+    this.b_link.a = !isDivider;
     this.b_link.tb = true;
-    this.b_link.lr = true;
+    this.b_link.lr = !isDivider;
 
     this.br_link = true;
 
@@ -1189,14 +1231,16 @@ export class StyleService {
 
   blockSetting(block: any) {
       var obj:any = new Object();
+
       if(this.setItemStyle) obj = this.getBlockStyle(block.content.item.style);
-      else if(block.type == 'element') obj = this.getBlockStyle(block.content.style);
-      else obj = this.getBlockStyle(block.style);
-      // var obj = this.setItemStyle ? this.getBlockStyle(block.content.item.style) : this.getBlockStyle(block.style);
-      if (block.type == 'element' && block.content?.name != 'form' && !this.setItemStyle) {
+      else if(block.type == 'element') {
         this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
-        this.elementSetting(block.content);
+        obj = this.getBlockStyle(block.content.style);
+        if(block.content?.name != 'form' && block.content?.name != 'divider' && !this.setItemStyle) {
+          this.elementSetting(block.content);
+        }
       }
+      else obj = this.getBlockStyle(block.style);
       if(obj['box-shadow'] && obj['box-shadow'] != 'none') {
         var boxS = obj['box-shadow'].split(' ');
         var bsp = 'none';
@@ -1226,9 +1270,7 @@ export class StyleService {
         
         this.box_shadow_color = boxS[4];
       }
-      else {
-        this.resetBoxShadow();
-      }
+      else this.resetBoxShadow();
       if (obj['background-image'] && obj['background-image'] != 'none') {
         var bgImg = obj['background-image'].trim().split('(');
         if (bgImg[0] == 'url') {
@@ -1445,14 +1487,20 @@ export class StyleService {
       }
 
       this.border_style = obj['border-style'];
-
       this.border_color = obj['border-color'];
+
+      this.zindex = obj['z-index'] ? obj['z-index'] : 0;
+
+      this.transition.duration = obj['transition-duration'] ? obj['transition-duration'].replace('s','') : 0;
+      this.transition.timing_function = obj['transition-timing-function'] ? obj['transition-timing-function'] : 'linear';
+      this.transition.delay = obj['transition-delay'] ? obj['transition-delay'].replace('s','') : 0;
+
+      this.hide = block.hide;
 
       if (block.type == 'row') {
         this.columnGap = JSON.parse(JSON.stringify(block.columnGap));
         this.columnRev =  JSON.parse(JSON.stringify(block.columnRev));
       }
-
       else if (block.type == 'main') {
         this._general.page_name = block.name;
         this._general.page_title = block.title;
@@ -1462,8 +1510,6 @@ export class StyleService {
         this._general.author = block.author;
         this._general.meta_img = block.meta_img;
       }
-
-      this.hide = block.hide;
 
       if(this.resetSession) this.resetStyleSession();
   }
@@ -1478,16 +1524,23 @@ export class StyleService {
       })
     }
     if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || element.name == 'menu') {
-      this.font_size.value = obj['font-size'];
+      this.font_size.value = obj['font-size'] ? obj['font-size'] : 'normal';
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'];
       this.font_family = obj['font-family'];
       this.text_color = obj['color'];
       this.text_align = obj['text-align'];
-      this.text_transform = obj['text-transform'];
-      this.text_decoration_line = obj['text-decoration-line'];
-      this.text_decoration_style = obj['text-decoration-style'];
-      this.text_decoration_color = obj['text-decoration-color'];
+      this.text_transform = obj['text-transform'] ? obj['text-transform'] : 'none';
+      if(obj['text-decoration-line']) {
+        this.text_decoration_line = obj['text-decoration-line'];
+        this.text_decoration_style = obj['text-decoration-style'];
+        this.text_decoration_color = obj['text-decoration-color'];
+      }
+      else {
+        this.text_decoration_line = 'none';
+        this.text_decoration_style = 'solid';
+        this.text_decoration_color = element.name == 'button' ? '#ffffff' : '#000000';
+      }
       if(obj['text-shadow']) {
         var textS = obj['text-shadow'].split(' ');
         this.text_shadow = true;
@@ -1502,20 +1555,17 @@ export class StyleService {
         this.text_shadow_bsRange.type = textS[2].replace(/[^a-z]/g, '');
         this.text_shadow_color = textS[3];
       }
-      else {
-        this.resetTextShadow();
-      }
-
-      this.line_height.value = obj['line-height'];
-      var value = obj['line-height'].match(/(\d+)/);
+      else this.resetTextShadow();
+      this.line_height.value = obj['line-height'] ? obj['line-height'] : 'normal';
+      var value = obj['line-height']?.match(/(\d+)/);
       this.line_heightRange.value = value ? value[0] : '0';
-      var unit = obj['line-height'].replace(/[^A-Za-z]/g, '');
+      var unit = obj['line-height']?.replace(/[^A-Za-z]/g, '');
       this.line_heightRange.type = unit && unit != 'normal' ? unit : 'px';
 
-      this.letter_spacing.value = obj['letter-spacing'];
-      var value = obj['letter-spacing'].match(/(\d+)/);
+      this.letter_spacing.value = obj['letter-spacing'] ? obj['letter-spacing'] : 'normal';
+      var value = obj['letter-spacing']?.match(/(\d+)/);
       this.letter_spacingRange.value = value ? value[0] : '0';
-      var unit = obj['letter-spacing'].replace(/[^A-Za-z]/g, '');
+      var unit = obj['letter-spacing']?.replace(/[^A-Za-z]/g, '');
       this.letter_spacingRange.type = unit && unit != 'normal' ? unit : 'px';
       
       if(element.name == 'text' || element.name == 'heading') {

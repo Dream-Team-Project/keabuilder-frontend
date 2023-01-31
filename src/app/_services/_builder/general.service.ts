@@ -30,7 +30,7 @@ export class GeneralService {
   };
   webpage:any = {uniqueid: ''};
   page_general_tab:any = 'info';
-  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:''}};
+  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
   page_name = '';
   page_title = '';
   page_path = '';
@@ -45,7 +45,9 @@ export class GeneralService {
     'desktop': {name:'desktop', width:''},
     'tablet-h':{name:'tablet-h', width:'1024px'},
     'tablet-v':{name:'tablet-v', width:'768px'},
-    'mobile':{name:'mobile', width:'425px'}};
+    'mobile':{name:'mobile', width:'425px'},
+    'hover': {name:'hover', width:''},
+  };
   respToggleDevice:any = this.respDevices['desktop'];
   undoRedo:any = {toggle: false, open: false, close: false};
   allBlocksIds:Array<number> = [];
@@ -94,7 +96,7 @@ export class GeneralService {
   includeCond:string = `if(file_exists('../'.$path)) include('../'.$path); else if(file_exists($path)) include($path);`;
   pagehtml:any;
   pageObj:any;
-  pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+  pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
   parser = new DOMParser();
   loading = {
     success: false,
@@ -178,41 +180,17 @@ export class GeneralService {
   }
 
   fetchHeaders() {
-    const headers:any = [];
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFiles('headers').subscribe((data:any)=>{
-        if(!data.success) resolve(headers);
-        var count = 0;
-        data.data.forEach((html:any)=>{
-          var doc = this.parser.parseFromString(html, 'text/html');
-          var head = doc.body.children[0];
-          var header:any = {id: head?.id, name: head?.getAttribute('data-name'), html: html, defaultname: 'Header '+(count+1), thumbnail: 'keaimage-'+head?.id.split('kb-')[1]+ '-screenshot.png', type: 'header'}
-          headers.push(header);
-          if(count == data.data.length-1) {
-            resolve(headers);
-          }
-          count++;
-        })
+      this.fileUploadService.fetchheaders().subscribe((resp:any)=>{
+        resolve(resp.data);
       })
     })
   }
 
   fetchFooters() {
-    const footers:any = [];
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFiles('footers').subscribe((data:any)=>{
-        if(!data.success) resolve(footers);
-        var count = 0;
-        data.data.forEach((html:any)=>{
-          var doc = this.parser.parseFromString(html, 'text/html');
-          var foot = doc.body.children[0];
-          var footer:any = {id: foot?.id, name: foot?.getAttribute('data-name'), html: html, defaultname: 'Footer '+(count+1), thumbnail: 'keaimage-'+foot?.id.split('kb-')[1]+ '-screenshot.png', type: 'footer'}
-          footers.push(footer);
-          if(count == data.data.length-1) {
-            resolve(footers);
-          }
-          count++;
-        })
+      this.fileUploadService.fetchfooters().subscribe((resp:any)=>{
+        resolve(resp.data);
       })
     })
   }
@@ -240,14 +218,14 @@ export class GeneralService {
           })
         }
         else if(this.target.type == 'header') {
-            this.getHeader('kb-header-'+id).then(data=>{
-              resolve(data);
-            });
+          this.fileUploadService.getheader(id).subscribe((resp:any)=>{
+            resolve(resp.data[0]);
+          })
         }
         else if(this.target.type == 'footer') {
-          this.getFooter('kb-footer-'+id).then(data=>{
-            resolve(data);
-          });
+          this.fileUploadService.getfooter(id).subscribe((resp:any)=>{
+            resolve(resp.data[0]);
+          })
         }
         else{
           this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -262,14 +240,14 @@ export class GeneralService {
       var i = 0;
       var doc = this.parser.parseFromString(html, 'text/html');
       var appendmenus = doc.querySelectorAll('[data-name="menu"]');
-      if(appendmenus.length == 0) resolve(doc.body.innerHTML);
+      if(appendmenus.length == 0) resolve(doc);
       appendmenus.forEach((data:any)=>{
         if(data) {
           var menu = this.menus.filter((m:any)=>m.id == data.getAttribute('data-id'))
           if(menu.length != 0) {
             data.innerHTML = menu[0].html;
             if(appendmenus.length-1 == i) {
-              resolve(doc.body.innerHTML);
+              resolve(doc);
             }
           }
           i++;
@@ -280,52 +258,30 @@ export class GeneralService {
 
   setHeader(head:any) {
     return new Promise<any>((resolve, reject) => {
-      this.setMenu(head.html).then(data=>{
-        head.html = data;
-        this.selectedHeader = head;
-        this.includeLayout.header = true;
-        resolve(true);
-      });
+      this.fileUploadService.fetchFile('kb-header-'+head.uniqueid, 'headers').subscribe((data1)=>{
+        this.setMenu(data1.html).then(data2=>{
+          data1.id = head.uniqueid;
+          data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
+          this.selectedHeader = data1;
+          this.includeLayout.header = true;
+          resolve(true);
+        });
+      })
     })
   }
 
   setFooter(foot:any) {
     return new Promise<any>((resolve, reject) => {
-      this.setMenu(foot.html).then(data=>{
-        foot.html = data;
-        this.selectedFooter = foot;
-        this.includeLayout.footer = true;
-        resolve(true);
-      });
+      this.fileUploadService.fetchFile('kb-footer-'+foot.uniqueid, 'footers').subscribe((data1)=>{
+        this.setMenu(data1.html).then(data2=>{
+          data1.id = foot.uniqueid;
+          data1.html = data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML;
+          this.selectedFooter = data1;
+          this.includeLayout.footer = true;
+          resolve(true);
+        });
+      })
     })
-  }
-
-  getHeader(id:any) {
-    return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile(id, 'headers').subscribe({
-        next: (file:any)=>{
-          resolve(file);
-        },
-        error: (err:any) => {
-          this.loading.error = true;
-          resolve(false);
-        }
-      })
-    });
-  }
-
-  getFooter(id:any) {
-    return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile(id, 'footers').subscribe({
-        next: (file:any)=>{
-          resolve(file);
-        },
-        error: (err:any) => {
-          this.loading.error = true;
-          resolve(false);
-        }
-      })
-    });
   }
   
   setBuilder(e:any) {
@@ -411,6 +367,7 @@ export class GeneralService {
         this.saveHTML(main, sections, false, tglDraft).then(data => {
           resolve(data);
         });
+        console.log('--check path existance before further operation--');
       }
       else{
         this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -425,7 +382,7 @@ export class GeneralService {
   }
 
   saveHeaderFooter(main:any, sections:any) {
-    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
     return new Promise<any>((resolve, reject) => {
       this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
       this.removeExtra(false);
@@ -433,11 +390,16 @@ export class GeneralService {
       var obj:any = new Object();
       obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
       obj.html = '<style>'+this.getAllStyle()+'</style>'+this.removeCommments(this.pagehtml.querySelector('body').innerHTML);
+      var dbobj:any = new Object();
+      dbobj.name = this.target.name;
+      dbobj.uniqueid = this.target.id;
+      dbobj.json = this.encodeJSON(sections);
       if(this.target.type == 'header') {
-        obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
-          this.pageSaved = true;
-          resolve(true);
+          this.fileUploadService.updateheader(dbobj).subscribe((resp:any)=>{
+            this.pageSaved = true;
+            resolve(true);
+          })
         },
         error=>{
           this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -445,10 +407,11 @@ export class GeneralService {
         });
       }
       else if(this.target.type == 'footer') {
-        obj.html = '<div id="'+obj.id+'" data-name="'+this.target.name+'">' + obj.html + '</div>';
         this.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
-          this.pageSaved = true;
-          resolve(true);
+          this.fileUploadService.updatefooter(dbobj).subscribe((resp:any)=>{
+            this.pageSaved = true;
+            resolve(true);
+          })
         },
         error=>{
           this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -459,7 +422,7 @@ export class GeneralService {
   }
 
   saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
-    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: ''};
+    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
     return new Promise<any>((resolve, reject) => {
       if(this.target.type == 'website'){
         this.websiteService.getSingleWebsite(this.webpage.website_id).subscribe((e:any)=>{
@@ -484,16 +447,18 @@ export class GeneralService {
 
   htmlSetUp(web:any,main:any, sections:any, preview:boolean, tglDraft:boolean) {
     return new Promise<any>((resolve, reject) => {
+      this.setPageStyle(sections);
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
       this.webpage.page_json = this.encodeJSON(sections);
-      this.setPageStyle(sections);
       if(this.includeLayout.header && this.selectedHeader.html && !preview) {
         var header = this.pagehtml.querySelector('header');
-        header.innerHTML = `<?php $path="../../../headers/${header.children[0].id}.php"; `+this.includeCond+` ?>`;
+        header.id = 'kb-header-'+this.selectedHeader.id;
+        header.innerHTML = `<?php $path="../../../headers/${header.id}.php"; `+this.includeCond+` ?>`;
       }
       if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
         var footer = this.pagehtml.querySelector('footer');
-        footer.innerHTML = `<?php $path="../../../footers/${footer.children[0].id}.php"; `+this.includeCond+` ?>`;
+        footer.id = 'kb-footer-'+this.selectedFooter.id;
+        footer.innerHTML = `<?php $path="../../../footers/${footer.id}.php"; `+this.includeCond+` ?>`;
       }
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
@@ -648,7 +613,7 @@ export class GeneralService {
 
   getAllStyle() {
     var querry = '@media only screen and (max-width:';
-    return this.pagestyling.desktop +
+    return this.pagestyling.desktop + this.pagestyling.hover +
     querry + '1024px) and (min-width:769px){'+this.pagestyling.tablet_h+'}' +
     querry + '768px) and (min-width:426px){'+this.pagestyling.tablet_v+'}' +
     querry + '426px){'+this.pagestyling.mobile+'}';
@@ -682,9 +647,10 @@ export class GeneralService {
     if(!this.isObjEmpty(block.style.tablet_h)) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(!this.isObjEmpty(block.style.tablet_v)) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(!this.isObjEmpty(block.style.mobile)) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.hover)) this.pagestyling.hover = this.pagestyling.hover + '#' + block.id + ':hover{' + Object.entries(block.style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.type == 'row') {
-      var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}']
-      this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
+      var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}'];
+      if(block.columnGap.desktop) this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
       if(block.columnGap.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + clmwrp.join(block.columnGap.tablet_h);
       if(block.columnGap.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + clmwrp.join(block.columnGap.tablet_v);
       if(block.columnGap.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + clmwrp.join(block.columnGap.mobile);
@@ -696,6 +662,9 @@ export class GeneralService {
     if(ele.content.name == 'text' || ele.content.name == 'heading') {
       pseudoEle = '> div';
     }
+    if(ele.content.name == 'divider') {
+      pseudoEle = '> hr';
+    }
     else if(ele.content.name == 'image') {
       pseudoEle = 'img';
     }
@@ -705,40 +674,49 @@ export class GeneralService {
     else if(ele.content.name == 'menu') {
       pseudoEle = 'ul';
     }
-    var style = JSON.parse(JSON.stringify(ele.content.style));
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',
       mar: 'margin:',
     }
     var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop + ';' : '';
-    var deskmar = style.desktop.margin ? elestl.mar + style.desktop.margin + ';' : '';
-    if(deskjc || deskmar) this.pagestyling.desktop = this.pagestyling.desktop + elestl.selector + deskjc + deskmar + '}';
-    delete style.desktop?.margin;
+    this.pagestyling.desktop = this.pagestyling.desktop + elestl.selector + deskjc + ';}';
 
-    var tabhjc = ele.item_alignment.tablet_h != 'auto' ? elestl.jc + ele.item_alignment.tablet_h + ';' : '';
-    var tabhmar = style.tablet_h.margin ? elestl.mar + style.tablet_h.margin + ';' : '';
-    if(tabhjc || tabhmar) this.pagestyling.tablet_h = this.pagestyling.tablet_h + elestl.selector + tabhjc + tabhmar + '}';
-    delete style.table_h?.margin;
+    var tabhjc = ele.item_alignment.tablet_h ? elestl.jc + ele.item_alignment.tablet_h + ';' : '';
+    this.pagestyling.tablet_h = this.pagestyling.tablet_h + elestl.selector + tabhjc + ';}';
 
-    var tabvjc = ele.item_alignment.tablet_v != 'auto' ? elestl.jc + ele.item_alignment.tablet_v + ';' : '';
-    var tabvmar = style.tablet_v.margin ? elestl.mar + style.tablet_v.margin + ';' : '';
-    if(tabvjc || tabvmar) this.pagestyling.tablet_v = this.pagestyling.tablet_v + elestl.selector + tabvjc + tabvmar + '}';
-    delete style.tablet_v?.margin;
+    var tabvjc = ele.item_alignment.tablet_v ? elestl.jc + ele.item_alignment.tablet_v + ';' : '';
+    this.pagestyling.tablet_v = this.pagestyling.tablet_v + elestl.selector + tabvjc + ';}';
 
-    var mobjc = ele.item_alignment.mobile != 'auto' ? elestl.jc + ele.item_alignment.mobile + ';' : '';
-    var mobmar = style.mobile.margin ? elestl.mar + style.mobile.margin + ';' : '';
-    if(mobjc || mobmar) this.pagestyling.mobile = this.pagestyling.mobile + elestl.selector + mobjc + mobmar + '}';
-    delete style.mobile?.margin;
+    var mobjc = ele.item_alignment.mobile ? elestl.jc + ele.item_alignment.mobile + ';' : '';
+    this.pagestyling.mobile = this.pagestyling.mobile + elestl.selector + mobjc + ';}';
 
-    this.pagestyling.desktop = this.pagestyling.desktop + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(ele.content.style.tablet_h)) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(ele.content.style.tablet_v)) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(ele.content.style.mobile)) this.pagestyling.mobile = this.pagestyling.mobile + '#' + ele.id + ' .kb-element-content ' + pseudoEle + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    var style = JSON.parse(JSON.stringify(ele.content.style));
+
+    var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
+
+    style.desktop.margin = style.desktop.margin?.replace(/auto/g,'0px');
+    this.pagestyling.desktop = this.pagestyling.desktop + selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(ele.content.style.tablet_h)) {
+      if(style.tablet_h.margin) style.tablet_h.margin = style.tablet_h.margin?.replace(/auto/g,'0px');
+      this.pagestyling.tablet_h = this.pagestyling.tablet_h + selector + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
+    if(!this.isObjEmpty(ele.content.style.tablet_v)) {
+      if(style.tablet_v.margin) style.tablet_v.margin = style.tablet_v.margin?.replace(/auto/g,'0px');
+      this.pagestyling.tablet_v = this.pagestyling.tablet_v + selector + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
+    if(!this.isObjEmpty(ele.content.style.mobile)) {
+      if(style.mobile.margin) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
+      this.pagestyling.mobile = this.pagestyling.mobile + selector + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
+    if(!this.isObjEmpty(ele.content.style.hover)) {
+      if(style.hover.margin) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
+      this.pagestyling.hover = this.pagestyling.hover + selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
   }
 
   isObjEmpty(obj:any){
-    return JSON.stringify(obj) === '{}' || obj === '';
+    return JSON.stringify(obj) === '{}' || obj === '' || !obj;
   }
 
   getAllWebPages() {
@@ -915,6 +893,10 @@ export class GeneralService {
 
   compareOptValue(item1: any, item2: any) {
     return item1.name === item2.name && item1.value === item2.value;
+  }
+
+  getSSPath(path:string) {
+    return 'keaimage-'+path+ '-screenshot.png'
   }
 
   backBtn() {
