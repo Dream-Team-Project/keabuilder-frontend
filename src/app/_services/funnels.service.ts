@@ -18,7 +18,10 @@ export class FunnelService {
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
-    // console.log(this.tokenStorage.getUser());
+  }
+
+  getSingleFunnel(uniqueid:string): Observable<any> {
+    return this.http.get('/api/getsinglefunnnel/'+this.uuid+'/'+uniqueid);
   }
 
   savefunneldb(data:any):Observable<any> {
@@ -197,11 +200,5 @@ export class FunnelService {
         data,
       }, httpOptions);
     }
-
-    
-    
-    
-    
-
         
 }
