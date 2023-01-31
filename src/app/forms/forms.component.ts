@@ -195,12 +195,32 @@ export class FormsComponent implements OnInit {
   }
 
   deleteme(page:any){
- 
+ console.log(page);
     this.fileUploadService.deleteform(page.id).subscribe({
       next: data => {
         console.log(data);
-         this.fetformdata();
-        this._snackBar.open('Form Deleted Successfully!', 'OK');
+        
+        var genscrn = 'keaimage-form-'+page.uniqueid+'-screenshot.png';
+            
+        this.fileUploadService.validateimg(genscrn).subscribe({
+          next: datagen => {
+            console.log(datagen);
+
+            if(datagen.data==1){
+              this.fileUploadService.deleteimage('keaimage-form-'+page.uniqueid+'-screenshot.png').subscribe({
+                next: data => {
+                  // console.log(data);
+                  this._snackBar.open('Form Deleted Successfully!', 'OK');
+                  this.fetformdata();
+                }
+              });
+            }
+            
+            this._snackBar.open('Form Deleted Successfully!', 'OK');
+            this.fetformdata();
+          }
+        });
+
       }
     });
 
@@ -222,14 +242,42 @@ export class FormsComponent implements OnInit {
     this.pathcheck = false;
   }
 
-  duplicateform(data:any){
-    var obj = {uniqueid:data.uniqueid};
+  duplicateform(datadup:any){
+    var obj = {uniqueid:datadup.uniqueid};
     this.fileUploadService.duplicateform(obj).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
 
-          this._snackBar.open('Form Duplicate successfully!', 'OK');
-          this.fetformdata();
+
+          if(data.uniqueid!=''){
+            
+            var genscrn = 'keaimage-form-'+datadup.uniqueid+'-screenshot.png';
+            
+            this.fileUploadService.validateimg(genscrn).subscribe({
+              next: datagen => {
+                console.log(datagen);
+
+                if(datagen.data==1){
+                  var imgobj  = {oldname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png', newname:'keaimage-form-'+data.uniqueid+'-screenshot.png'};
+                  this.fileUploadService.copyimage(imgobj).subscribe({
+                    next: data => {
+                      console.log(data);
+                      
+                      this._snackBar.open('Form Duplicate successfully!', 'OK');
+                      this.fetformdata();
+
+                    }
+                  });
+                }else{
+                  
+                  this._snackBar.open('Form Duplicate successfully!', 'OK');
+                  this.fetformdata();
+                }
+  
+              }
+            });
+            
+          }
 
       }
     });

@@ -545,7 +545,6 @@ export class WebsitePagesComponent implements OnInit {
 
     if (value) {
       this.keywords.push(value);
-
     }
   
     event.chipInput!.clear();
