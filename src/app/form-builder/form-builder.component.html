@@ -209,7 +209,7 @@
         [ngStyle]="getBlockStyle('form')" [style.min-height]="_form.formField.length == 0 ? '500px' : ''" [class.kb-form-preview]="preview"
         cdkDropList [cdkDropListDisabled]="preview" [cdkDropListData]="_form.formField" (cdkDropListDropped)="itemDropped($event)">
             <div cdkDrag *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
-                (dblclick)="openElementDialog(elementdialog, fe)"
+                (dblclick)="fe.name != 'divider' ? openElementDialog(elementdialog, fe) : ''"
                 [style.margin]="!fe.input ? getBlockStyle(fe.name)['margin'] : ''" 
                 [style.justifyContent]="!fe.input ? justifyContent(fe.name) : ''" 
                 (mouseenter)="!preview ? fe.setting = true : ''" (mouseleave)="!preview ? fe.setting = false : ''" class="kb-form-element" [ngSwitch]="fe.name">
