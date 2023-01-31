@@ -188,3 +188,78 @@
   font-size: 13px;
   padding: 20px 10px 20px 30px;
 }
+
+.kb-height{
+  height: 300px;
+}
+
+.kb-fitimg {
+  height: 100%;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  -webkit-transition: all 2s linear;
+  -moz-transition: all 2s linear;
+  -ms-transition: all 2s linear;
+  -o-transition: all 2s linear;
+  transition: all 2s linear;
+}
+
+.kb-fitimg:hover {
+    background-position: center bottom;
+}
+
+
+#loader {
+  animation: loader 5s linear infinite;
+  position: relative;
+  top: calc(45% - 20px);
+  left: calc(50% - 20px);
+}
+@keyframes loader {
+      0% {left: 45%;}
+      50% { left: 55%;}
+      100% { left: 45%;}
+  }
+#box {
+  width: 60px;
+  height: 60px;
+  background: var(--primary-color);
+  animation: animate .5s linear infinite;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 3px;
+}
+@keyframes animate {
+  17% { border-bottom-right-radius: 3px; }
+  25% { transform: translateY(9px) rotate(22.5deg); }
+  50% {
+    transform: translateY(18px) scale(1,.9) rotate(45deg) ;
+    border-bottom-right-radius: 40px;
+  }
+  75% { transform: translateY(9px) rotate(67.5deg); }
+  100% { transform: translateY(0) rotate(90deg); }
+} 
+#shadow { 
+  width: 60px;
+  height: 5px;
+  background: #000;
+  opacity: 0.1;
+  position: absolute;
+  top: 69px;
+  left: 0;
+  border-radius: 50%;
+  animation: shadow .5s linear infinite;
+}
+@keyframes shadow {
+  50% {
+    transform: scale(1.2,1);
+  }
+}
+
+.adjustmatfrm mat-form-field:first-child {
+  width: 50%!important;
+  margin-right: 24px;
+}
