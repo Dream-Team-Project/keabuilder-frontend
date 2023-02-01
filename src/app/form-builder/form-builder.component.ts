@@ -97,18 +97,32 @@ export class FormBuilderComponent implements OnInit {
   saveForm() {
     if(this._form.form.name && this._form.form.path) {
       this._general.saveDisabled = true;
-      this._form.updateForm().then(e=>{
-        this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-          var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-          this._general.fileUploadService.upload(file).subscribe(
-            (event: any) => {
-              if (typeof (event) === 'object') {
-                var msg =  'Form has been saved';
-                this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-                this._general.saveDisabled = false;
-              }
+      this._form.updateForm().then((e:any)=>{
+        if(e.found == 0) {
+          if(this._form.formField.length != 0) {
+            this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+              var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
+              this._general.fileUploadService.upload(file).subscribe(
+                (event: any) => {
+                  if (typeof (event) === 'object') {
+                    var msg =  'Form has been saved';
+                    this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+                    this._general.saveDisabled = false;
+                  }
+                })
             })
-        })
+          }
+          else {
+            var msg =  'Form has been saved';
+            this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+            this._general.saveDisabled = false;
+          }
+        }
+        else {
+          var msg =  'Form path should be unique';
+          this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+          this._general.saveDisabled = false;
+        };
       })
     }
     else {

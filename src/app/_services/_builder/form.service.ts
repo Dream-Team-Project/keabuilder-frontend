@@ -145,6 +145,7 @@ export class FormService {
   formSaved:boolean = true;
   formStyle = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
   currentScrWdth:any;
+  pathError:boolean = false;
 
   constructor(private _file: FileUploadService,
     private _general: GeneralService,
@@ -201,6 +202,8 @@ export class FormService {
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = style;
         this._file.updateform(this.form).subscribe((resp:any)=>{
+          console.log(resp);
+      // else resolve(false)
           resolve(resp);
           this.formSaved = true;
         })
