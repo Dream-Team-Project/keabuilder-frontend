@@ -86,7 +86,7 @@
       <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="forms.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
         </button>
         <button mat-raised-button color="primary" class="mx-3" (click)="newform('create','')">Create New <i
               class="fas fa-plus"></i></button>
