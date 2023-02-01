@@ -50,7 +50,7 @@
             </mat-error>
           </mat-form-field>
 
-          <button *ngIf="updatemode else submit" mat-raised-button color="primary" class="mt-2" (click)="onformUpdate()"> Save <i class="far fa-save"></i></button>
+          <button *ngIf="updatemode else submit" mat-raised-button color="primary" class="mt-2" (click)="onformUpdate()"> Update <i class="far fa-save"></i></button>
           <ng-template #submit>
             <button mat-raised-button color="primary" class="mt-2" (click)="onformSubmit()"> Create <i class="fas fa-plus"></i></button>
           </ng-template>
