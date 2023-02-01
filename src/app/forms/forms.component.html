@@ -9,7 +9,6 @@
   </div>
 </ng-template>
 <div id="kbformcomponent">
-
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
@@ -51,9 +50,9 @@
             </mat-error>
           </mat-form-field>
 
-          <button *ngIf="!updatemode" mat-raised-button color="primary" class="mt-2" (click)="onformSubmit()"> Create Form <i class="fas fa-plus"></i></button>
+          <button *ngIf="!updatemode" mat-raised-button color="primary" class="mt-2" (click)="onformSubmit()"> Create <i class="fas fa-plus"></i></button>
           
-          <button *ngIf="updatemode" mat-raised-button color="primary" class="mt-2" (click)="onformUpdate()"> Save Details <i class="fas fa-save"></i></button>
+          <button *ngIf="updatemode" mat-raised-button color="primary" class="mt-2" (click)="onformUpdate()"> Save <i class="far fa-save"></i></button>
 
         <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
 
@@ -62,120 +61,126 @@
 
     </div>
   </div>
-  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
-    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
- 
-
-    <div class="container-fluid mb-4">
-
-      <div class="row">
-        <div class="col-md-8 adjustmatfrm">
-          <mat-form-field  appearance="fill" class="w-100">
-            <mat-label>Search Form</mat-label>
-            <input matInput type="text" name="searchweb" (keyup)="searchform($event)" placeholder="Search Form">
-            <i class="fa fa-search"></i>
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="mr-4">
-            <mat-label>Sort By</mat-label>
-            <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
-              <mat-option value="nameasc" >ASC By Name</mat-option>
-              <mat-option value="namedesc">DESC By Name</mat-option>
-              <mat-option value="dateasc" >ASC By Date</mat-option>
-              <mat-option value="datedesc">DESC By Date</mat-option>
-            </mat-select>
-          </mat-form-field>
+  <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+      [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close">
+  </div>
+  <div class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <mat-form-field  appearance="fill" class="col-8 pr-2">
+          <mat-label>Search Form</mat-label>
+          <input matInput type="text" name="searchweb" (keyup)="searchform($event)" placeholder="Search Form">
+          <i class="fa fa-search"></i>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col-4">
+          <mat-label>Sort By</mat-label>
+          <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
+            <mat-option value="nameasc" >ASC By Name</mat-option>
+            <mat-option value="namedesc">DESC By Name</mat-option>
+            <mat-option value="dateasc" >ASC By Date</mat-option>
+            <mat-option value="datedesc">DESC By Date</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 text-right">
+        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="forms.length != 0">
+          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
+        </button>
+        <button mat-raised-button color="primary" class="mx-3" (click)="newform('create','')">Create New <i
+              class="fas fa-plus"></i></button>
+      </div>
+    </div>
+    <div [class.px-3]="!toggleview" class="row" *ngIf="forms.length != 0 else nodata">
+      <div [class]="toggleview ? 'col-md-4' : 'col-md-12'" class="cardpage mt-4" *ngFor="let form of forms">
+          <div [class.row]="!toggleview">
+            <div [style.height]="toggleview ? '300px' : '150px'" [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
+              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                <div id="loader" *ngIf="shortwaiting">
+                  <div id="shadow"></div>
+                  <div id="box"></div>
+                  <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+                </div>
+              </div>
+            </div>
+            <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
+              <div class="row align-items-center p-0 h-100">
+                <div [class.p-0]="toggleview" class="col-md-12">
+                  <div class="kb-title-board line-ellipsis">
+                    <span>{{form.name ? form.name : 'form' | titlecase}}</span>
+                    <input type="text" #headname [value]="form.name" (blur)="rename(form, headname)" matTooltip="Edit form Name" matTooltipPosition="above">
+                  </div>
+                  <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(form.updated_at)}}
+                  </p>
+                </div>
+                <div [class.p-0]="toggleview" class="col-md-12 text-right">
+                  <button mat-raised-button color="accent" (click)="openform(form.path)">View <i class="far fa-eye"></i></button>
+                  <button mat-raised-button color="primary" (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i class="fas fa-pencil-alt"></i></button>
+                  <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">More <i class="fas fa-cog"></i></button>
+                  <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="newform('update',form)">
+                        <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
+                      </button>
+                      <button mat-menu-item (click)="duplicateform(form)">
+                        <i class="far fa-copy pr-2"></i>Duplicate
+                      </button>
+                      <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)">
+                        <i class="far fa-trash-alt pr-2"></i>Delete
+                      </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <!-- <div class="row" *ngIf="forms.length != 0 else nodata">
+      <div [class]="toggleview ? 'col-md-4' : 'col-md-12'" class="cardpage mt-4" *ngFor="let form of forms; index as i;">
+        <div>
+          <div class="kb-height">
+            <div class="kb-fitimg"
+              [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+              <div id="loader" *ngIf="shortwaiting">
+                <div id="shadow"></div>
+                <div id="box"></div>
+                <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+              </div>
+            </div>
+          </div>
+            <div class="kb-title-board line-ellipsis" matTooltip="Edit Form Name" matTooltipPosition="above">
+              <span>{{form.name}}</span>
+              <input type="text" #formname [value]="form.name" (blur)="rename(form, formname)">
+            </div>
+            <p class="kb-pagedate mb-2" matTooltip="Last Updated" matTooltipPosition="above">
+              <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(form.updated_at)}}
+            </p>
+            <div class="text-right">
+              <button mat-raised-button color="accent" class="mr-2" (click)="openform(form.path)" > View <i class="far fa-eye"></i></button>
+              <button mat-raised-button color="primary" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">Edit <i class="fas fa-pencil-alt"></i></button>
+              <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu"> More <i class="fas fa-cog"></i></button>
+              <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="newform('update',form)">
+                    <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
+                  </button>
+                  <button mat-menu-item (click)="duplicateform(form)">
+                    <i class="far fa-copy pr-2"></i>Duplicate
+                  </button>
+                  <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)">
+                    <i class="far fa-trash-alt pr-2"></i>Delete
+                  </button>
+              </mat-menu>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4 text-right">
-            <button mat-raised-button color="primary" class="mr-3" (click)="newform('create','')">Create Form <i
-                class="fas fa-plus"></i></button>
+    </div> -->
+    <ng-template #nodata>
+      <div class="row justify-content-center mt-5" >
+        <div class="col-md-4">
+            <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Form Found">
         </div>
       </div>
-
-        
-    </div>
-    <div class="container-fluid">
-
-        <div class="row" *ngIf="nodata else showpages">
-          <div class="col-md-4"></div>
-          <div class="col-md-4">
-            <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No webpages found">
-          </div>
-        </div>
-        <ng-template #showpages>
-          <div class="row">
-              <div class="col-md-4 cardpage mb-4" *ngFor="let kbform of kbforms; index as i;">
-                  <div>
-
-                    <div class="kb-height">
-                      <div class="kb-fitimg"
-                        [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbform.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-                        <div id="loader" *ngIf="shortwaiting">
-                          <div id="shadow"></div>
-                          <div id="box"></div>
-                          <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
-                        </div>
-                      </div>
-                    </div>
-          
-                      <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Form Name" matTooltipPosition="above">
-                        <span>{{kbform.name}}</span>
-                        <input type="text" [(ngModel)]="kbform.name" (blur)="changeformname(kbform,kbform.name)">
-                      </div>
-                      <!-- <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-                        
-                        <span mat-button [matMenuTriggerFor]="menu" class="statusbadge" [class]="kbcourses[i]['publish_status']==1 ? 'active1':'active2'">
-                            <i class="fas" [class]="kbcourses[i]['publish_status']==1 ? 'fa-check':'fa-file'"></i>
-                            {{kbcourses[i]['publish_status']==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
-                        </span>
-
-                        <mat-menu #menu="matMenu">
-                          <button mat-menu-item><i class="fa fa-check pr-2"></i> Publish</button>
-                          <button mat-menu-item><i class="fa fa-file pr-2"></i> Draft</button>
-                      </mat-menu>
-
-                      </div> -->
-                      <!-- <p class="kb-pagedate"><span [matTooltip]="kbcourses[i]['entries']+' Entries'" matTooltipPosition="above"><i class="fa fa-tasks" aria-hidden="true"></i> {{kbcourses[i]['entries']}}</span> &nbsp; <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{kbcourses[i]['updated_at']}}</span>  &nbsp; <span matTooltip="Actions" matTooltipPosition="above"><i class="fa fa-bolt" aria-hidden="true"></i> {{kbcourses[i]['actions']}}</span></p> -->
-
-                      <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
-                        <i class="far fa-calendar-alt" aria-hidden="true"></i> {{datecusfilter(kbform.updated_at)}}
-                      </p>
-                      <div class="text-right">
-                        <button mat-raised-button color="accent" class="mr-2" (click)="openform(kbform.path)" > View <i class="far fa-eye"></i></button>
-                        <button mat-raised-button color="primary" [routerLink]="'/builder/form/'+kbform.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>
-                        <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu"> More <i class="fas fa-cog"></i></button>
-                        <mat-menu #menu="matMenu">
-                            <!-- <button mat-menu-item>
-                              <i class="fas fa-code pr-2"></i>Integrate
-                            </button>
-                            <button mat-menu-item>
-                              <i class="fas fa-chart-pie pr-2"></i>Statistics
-                            </button> -->
-                            <button mat-menu-item (click)="newform('update',kbform)">
-                              <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
-                            </button>
-                            <button mat-menu-item (click)="duplicateform(kbform)">
-                              <i class="far fa-copy pr-2"></i>Duplicate
-                            </button>
-                            <button mat-menu-item class="text-danger" (click)="openDialog(dialog, kbform)">
-                              <i class="far fa-trash-alt pr-2"></i>Delete
-                            </button>
-                        </mat-menu>
-                      </div>
-
-                  </div>
-                </div>
-          </div>
-        </ng-template>
-
-        <div class="row mt-4">
-          <div class="col-md-12 mt-4">
-            <!-- <mat-paginator [length]="100"
-                    [pageSize]="10"
-                    [pageSizeOptions]="[5, 10, 25, 100]"
-                    aria-label="Select page">
-            </mat-paginator> -->
-          </div>
-        </div>
-
-    </div>    
+    </ng-template>
+  </div>    
 </div>

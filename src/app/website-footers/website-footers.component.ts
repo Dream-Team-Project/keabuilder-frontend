@@ -14,7 +14,6 @@ export class WebsiteFootersComponent {
   shortwaiting = true;
   footers:any[] = [];
   fetching:boolean = true;
-  prevName:string = '';
   delfooter:any;
   action:any;
   footer:any = {uniqueid: '', name: ''};
@@ -46,19 +45,26 @@ export class WebsiteFootersComponent {
     });
   }
 
-  rename(footer:any) {
-    var prevname = this.prevName;
-    if(prevname != footer.name) {
-      this._general.fileUploadService.updatefooter(footer).subscribe(resp=>{
-        if(resp.success) {
-          this.action = 'renamed';
-          this.openSB(false);
-        }
-        else {
-          this.openSB(true);
-          footer.name = prevname;
-        }
-      });
+  rename(footer:any, inp:any) {
+    var footname = inp.value;
+    if(footer.name !== footname) {
+      if(footname.length > 3) {
+        footer.name = footname;
+        this._general.fileUploadService.updatefooter(footer).subscribe(resp=>{
+          if(resp.success) {
+            this.action = 'renamed';
+            this.openSB(false);
+          }
+          else {
+            this.openSB(true);
+          }
+        });
+      }
+      else {
+        var msg = "Name must be at least 3 characters!";
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        inp.value = footer.name;
+      }
     }
   }
 

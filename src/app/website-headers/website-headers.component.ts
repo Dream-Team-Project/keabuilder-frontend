@@ -12,9 +12,8 @@ export class WebsiteHeadersComponent {
 
   toggleview = true;
   shortwaiting = true;
-  headers:any[] = [];
   fetching:boolean = true;
-  prevName:string = '';
+  headers:any[] = [];
   delheader:any;
   action:any;
   header:any = {uniqueid: '', name: ''};
@@ -46,19 +45,26 @@ export class WebsiteHeadersComponent {
     });
   }
 
-  rename(header:any) {
-    var prevname = this.prevName;
-    if(prevname != header.name) {
-      this._general.fileUploadService.updateheader(header).subscribe(resp=>{
-        if(resp.success) {
-          this.action = 'renamed';
-          this.openSB(false);
-        }
-        else {
-          this.openSB(true);
-          header.name = prevname;
-        }
-      });
+  rename(header:any, inp:any) {
+    var headname = inp.value;
+    if(header.name !== headname) {
+      if(headname.length > 3){
+        header.name = headname;
+        this._general.fileUploadService.updateheader(header).subscribe(resp=>{
+          if(resp.success) {
+            this.action = 'renamed';
+            this.openSB(false);
+          }
+          else {
+            this.openSB(true);
+          }
+        });
+      }
+      else {
+        var msg = "Name must be at least 3 characters!";
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        inp.value = header.name;
+      }
     }
   }
 

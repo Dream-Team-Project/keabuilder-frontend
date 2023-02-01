@@ -19,8 +19,9 @@ export class FormService {
     { name: 'text', html: '<p>Paragraph goes here</p>', iconCls: 'fas fa-paragraph' },
     { name: 'image', src: '', iconCls: 'far fa-image' },
     { name: 'divider', iconCls: 'fas fa-grip-lines' },
+    { name: 'full-name', label: 'Full Name', type: 'text', placeholder: 'Full Name', iconCls: 'fas fa-user', required: true, input: true },
     {
-      name: 'split-text', label: 'Name', iconCls: 'far fa-user', required: true, input: true, split: [
+      name: 'name', label: 'Name', iconCls: 'far fa-user', required: true, input: true, split: [
         { name: 'first-name', type: 'text', placeholder: 'First Name' },
         { name: 'last-name', type: 'text', placeholder: 'Last Name' },
       ]

@@ -25,11 +25,13 @@
   border-bottom: 1px solid var(--primary-color);
 }
 
-.keabuilder-title-board {
-  padding: 15px 0px;
+.kb-title-board {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
 }
 
-.keabuilder-title-board input {
+.kb-title-board input {
   display: none;
   background-color: #475F7B;
   color: #FFFFFF;
@@ -40,11 +42,11 @@
   width: 100%;
 }
 
-.keabuilder-title-board:hover span {
+.kb-title-board:hover span {
   display: none;
 }
 
-.keabuilder-title-board:hover input {
+.kb-title-board:hover input {
   display: block;
 }
 
@@ -189,10 +191,6 @@
   padding: 20px 10px 20px 30px;
 }
 
-.kb-height{
-  height: 300px;
-}
-
 .kb-fitimg {
   height: 100%;
   overflow: hidden;
@@ -257,9 +255,4 @@
   50% {
     transform: scale(1.2,1);
   }
-}
-
-.adjustmatfrm mat-form-field:first-child {
-  width: 50%!important;
-  margin-right: 24px;
 }

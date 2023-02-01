@@ -1000,7 +1000,7 @@ export class StyleService {
       w = '50%';
       mt = '10px';
       mb = '10px';
-      mlr = '0px';
+      mlr = 'auto';
       ptb = '4px';
       plr = '0px';
       bw = '0px';
@@ -1022,10 +1022,17 @@ export class StyleService {
       bgclr = 'rgba(0,0,0,0)';
     }
     else {
-      w = block.type == 'element' ? 'auto' : (block.type == 'row' ? '90%' : '100%');
+      if(block.type == 'element') {
+        w = 'auto';
+        mb = '10px';
+        mlr = '0px';
+      }
+      else {
+        w = block.type == 'row' ? '90%' : '100%';
+        mb = '0px';
+        mlr = 'auto';
+      }
       mt = '0px';
-      mb = block.type == 'element' ? '10px' : '0px';
-      mlr = block.type == 'element' ? '0px' : 'auto';
       ptb = block.type == 'section' ? '60px' : (block.type == 'row' ? '30px' : '0px');
       plr = block.type == 'column' ? '20px' : '0px';
       bw = '0px';
@@ -1330,7 +1337,7 @@ export class StyleService {
           this.margin.right = ma;
           this.margin.left = ma;
           this.m_link.a = true;
-          if(ma == 'auto' || ma == '0px') this.blockAlign = 'center';
+          if(ma == 'auto') this.blockAlign = 'center';
         }
   
         else if (mg.length == 2) {
@@ -1340,7 +1347,7 @@ export class StyleService {
           this.margin.bottom = my;
           this.margin.right = mx;
           this.margin.left = mx;
-          if(mx == 'auto' || mx == '0px') this.blockAlign = 'center'; 
+          if(mx == 'auto') this.blockAlign = 'center'; 
         }
   
         else if (mg.length == 3) {
@@ -1351,7 +1358,7 @@ export class StyleService {
           this.margin.right = mx;
           this.margin.left = mx;
           this.margin.bottom = mb;
-          if(mx == 'auto' || mx == '0px') this.blockAlign = 'center';
+          if(mx == 'auto') this.blockAlign = 'center';
         }
   
         else {
@@ -1359,9 +1366,11 @@ export class StyleService {
           var mr:any = mg[1];
           var mb:any = mg[2];
           var ml:any = mg[3];
-          if(mr == 'auto') this.blockAlign = 'left';
-          if(ml == 'auto') this.blockAlign = 'right';
-          if((mr == 'auto' && ml == 'auto') || (mr == '0px' && ml == '0px')) this.blockAlign = 'center';
+          if(mr == 'auto' && ml == 'auto') this.blockAlign = 'center';
+          else {
+            if(mr == 'auto') this.blockAlign = 'left';
+            else if(ml == 'auto') this.blockAlign = 'right';
+          }
           this.margin.top = mt;
           this.margin.right = mr;
           this.margin.bottom = mb;

@@ -4,6 +4,12 @@
     border-radius: 8px;
 }
 
+.kb-title-board {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+}
+
 .kb-title-board input {
     display:none;
     background-color: #475F7B;
@@ -50,3 +56,8 @@
   .kb-fitimg:hover {
       background-position: center bottom;
   }
+
+.kb-pagedate {
+    font-size: 13px;
+    color: #988e71;
+}

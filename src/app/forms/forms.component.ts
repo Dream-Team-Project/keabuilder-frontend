@@ -17,15 +17,8 @@ export interface DialogData {
 })
 export class FormsComponent implements OnInit {
 
-
-  constructor(private fileUploadService: FileUploadService,
-              public _image: ImageService,
-              public _general: GeneralService,
-              private _snackBar: MatSnackBar,
-              public dialog: MatDialog, 
-              ) { }
-              
-  kbforms:any[] = [];
+  forms:any[] = [];
+  toggleview = true;
   shortwaiting = true;
   selstatusshow = 'all';
   form: any = {
@@ -44,32 +37,39 @@ export class FormsComponent implements OnInit {
   delform:any;
   nodata = true;
   updatemode = false;
+  fetching:boolean = true;
   selecteduid:any = [];
 
+  constructor(private fileUploadService: FileUploadService,
+              public _image: ImageService,
+              public _general: GeneralService,
+              private _snackBar: MatSnackBar,
+              public dialog: MatDialog, 
+              ) {
+                  this.toggleview = _general.getStorage('form_toggle');
+                  this.fetformdata();
+               }
+
   ngOnInit(): void {
-
-   this.fetformdata();
-
     setTimeout(() => {
       this.shortwaiting = false;
-    }, 1500);
-
+    }, 1000);
   }
 
   fetformdata(){
+    this.fetching = true;
     this.fileUploadService.fetchforms().subscribe({
       next: data => {
-        // console.log(data);
         if(data.data?.length!=0){
-          this.kbforms = [];
+          this.forms = [];
           this.nodata = false;
+          this.forms = data.data;
           data.data.forEach((element:any) => {
             element.thumbnail = 'keaimage-form-'+element.uniqueid+'-screenshot.png';
-            this.kbforms.push(element);
+            this.forms.push(element);
           });
-        }else{
-          this.nodata = true;
-        }
+        }else this.nodata = true;
+        this.fetching = false;
       }
     });
   }
@@ -92,13 +92,6 @@ export class FormsComponent implements OnInit {
     }
     this.openSidebar();
     this.pathcheck = false;
-  }
-
-  datecusfilter(value:any){
-    var dt = new Date(value);
-    var text1 = dt.toDateString();    
-    var text2 = dt.toLocaleTimeString();
-    return text1+' '+text2;
   }
 
   openSidebar(){
@@ -168,28 +161,24 @@ export class FormsComponent implements OnInit {
       }
   }
 
-  changeformname(data:any, newname:any){
-    var pglength = newname.length;
-    if(newname!='' && pglength>3){
-
-      var obj = {name:newname, path: data.path, uniqueid:data.uniqueid};
-      this.fileUploadService.shortupdateform(obj).subscribe({
-        next: data => {
-
-          if(data.found==0){
-            this._snackBar.open('Name update successfully!', 'OK');
+  rename(data:any, inp:any){
+    var newname = inp.value;
+    if(data.name !== newname) {
+      if(newname.length>3){
+        data.name = newname;
+        var obj = {name:newname, path: data.path, uniqueid:data.uniqueid};
+        this.fileUploadService.shortupdateform(obj).subscribe({
+          next: data => {
+            if(data.found==0){
+              this._snackBar.open('Name update successfully!', 'OK');
+              this.fetformdata();
+            }
           }
-          
-        }
-      });
-      
-    }else{
-      if(pglength<3){
-        this._snackBar.open("Name must be at least 3 characters!", 'OK');
+        }); 
       }else{
-        this._snackBar.open("Name Can't be blank!", 'OK');
+        this._snackBar.open("Name must be at least 3 characters!", 'OK');
+        inp.value = data.name;
       }
-      this.fetformdata();
     }
 
   }
@@ -246,32 +235,21 @@ export class FormsComponent implements OnInit {
     var obj = {uniqueid:datadup.uniqueid};
     this.fileUploadService.duplicateform(obj).subscribe({
       next: data => {
-        console.log(data);
-
-
           if(data.uniqueid!=''){
-            
             var genscrn = 'keaimage-form-'+datadup.uniqueid+'-screenshot.png';
-            
             this.fileUploadService.validateimg(genscrn).subscribe({
               next: datagen => {
-                console.log(datagen);
-
                 if(datagen.data==1){
                   var imgobj  = {oldname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png', newname:'keaimage-form-'+data.uniqueid+'-screenshot.png'};
                   this.fileUploadService.copyimage(imgobj).subscribe({
                     next: data => {
-                      console.log(data);
-                      
-                      this._snackBar.open('Form Duplicate successfully!', 'OK');
                       this.fetformdata();
-
+                      this._snackBar.open('Form Duplicate successfully!', 'OK');
                     }
                   });
                 }else{
-                  
-                  this._snackBar.open('Form Duplicate successfully!', 'OK');
                   this.fetformdata();
+                  this._snackBar.open('Form Duplicate successfully!', 'OK');
                 }
   
               }
@@ -315,12 +293,14 @@ export class FormsComponent implements OnInit {
   }
 
   adjustdata(data:any){
-    this.kbforms = [];
+    this.forms = [];
     this.nodata = false;
-    data.data.forEach((element:any) => {
-      element.thumbnail = 'keaimage-form-'+element.uniqueid+'-screenshot.png';
-      this.kbforms.push(element);
-    });
+    this.forms = data.data;
+  }
+
+  toggleView() {
+    this.toggleview = !this.toggleview; 
+    this._general.setStorage('form_toggle',this.toggleview);
   }
 
 }

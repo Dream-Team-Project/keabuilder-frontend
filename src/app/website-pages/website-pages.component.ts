@@ -731,13 +731,6 @@ export class WebsitePagesComponent implements OnInit {
     });
   }
 
-  datecusfilter(value:any){
-    var dt = new Date(value);
-    var text1 = dt.toDateString();    
-    var text2 = dt.toLocaleTimeString();
-    return text1+' '+text2;
-  }
-
   restoredeleteme(page:any,type:any){
  
     var gendata:any = {id:page.id,type:type,reason:''};

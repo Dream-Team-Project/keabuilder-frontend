@@ -929,4 +929,11 @@ export class GeneralService {
     return window.localStorage.getItem(key) === 'true';
   }
 
+  dateformat(value:any){
+    var dt = new Date(value);
+    var text1 = dt.toDateString();    
+    var text2 = dt.toLocaleTimeString();
+    return text1+' '+text2;
+  }
+
 }

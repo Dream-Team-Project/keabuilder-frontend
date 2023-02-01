@@ -293,7 +293,7 @@
       <div class="col-md-4 pagemainlink text-right" >
         <span *ngIf="!showarchivemode">
           <button mat-raised-button [color]="'accent'" (click)="togglepageview()" *ngIf="!nodata" class="mr-3">
-            <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+            <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
             <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
           </button>
         </span>
@@ -331,7 +331,7 @@
 
             <ng-container matColumnDef="created_at">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-              <td mat-cell *matCellDef="let row"> {{datecusfilter(row.created_at)}} </td>
+              <td mat-cell *matCellDef="let row"> {{_general.dateformat(row.created_at)}} </td>
             </ng-container>
 
             <ng-container matColumnDef="archive_reason">
@@ -381,7 +381,7 @@
         <div [class.px-3]="toggleview" class="row">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;">
             <div [class.row]="toggleview">
-              <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6 auto' : 'col-md-12'" class="p-0">
+              <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
                 <div class="kb-fitimg"
                   [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
                   <div id="loader" *ngIf="shortwaiting">
@@ -393,18 +393,18 @@
               </div>
               <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
                 <div class="row align-items-center p-0 h-100">
-                  <div class="col-md-12">
-                    <div class="keabuilder-title-board line-ellipsis pb-2">
+                  <div [class.p-0]="!toggleview" class="col-md-12">
+                    <div class="keabuilder-title-board line-ellipsis">
                       <span>{{kbpage.page_name}}</span>
                       <input type="text" [(ngModel)]="kbpage.page_name"
                         (blur)="changepagename(kbpage,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
                         matTooltipPosition="above">
                     </div>
-                    <p class="kb-pagedate mb-2" matTooltip="Last Update" matTooltipPosition="above">
+                    <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
                       <i class="far fa-calendar-alt" aria-hidden="true"></i> {{kbpage.updated_at}}
                     </p>
                   </div>
-                  <div [class.mt-2]="toggleview" class="col-md-12 text-right">
+                  <div [class.p-0]="!toggleview" class="col-md-12 text-right">
                     <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent"
                       class="mr-2"> View <i class="far fa-eye"></i></button>
                     <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button

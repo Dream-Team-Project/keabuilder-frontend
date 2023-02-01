@@ -1352,7 +1352,7 @@
                             </div>
                         </div>
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle">
-                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' else blockAlign"
+                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' else blockAlign"
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment</div>
                                 <div class="kb-tab-content">

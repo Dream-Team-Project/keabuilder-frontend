@@ -59,13 +59,16 @@
           </div>
           <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
             <div class="row align-items-center p-0 h-100">
-              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'">
+              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'">
                 <div class="kb-title-board line-ellipsis">
-                  <span>{{footer.name ? footer.name : footer.defaultname | titlecase}}</span>
-                  <input type="text" [(ngModel)]="footer.name" (blur)="rename(footer)" (click)="prevName = footer.name" matTooltip="Edit footer Name" matTooltipPosition="above">
+                  <span>{{footer.name ? footer.name : 'Footer Name' | titlecase}}</span>
+                  <input type="text" #footname [value]="footer.name" (blur)="rename(footer, footname)" matTooltip="Edit footer Name" matTooltipPosition="above">
                 </div>
+                <p class="kb-pagedate mt-2 mb-0" matTooltip="Last Updated" matTooltipPosition="above">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(footer.updated_at)}}
+                </p>
               </div>
-              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="text-right">
+              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'" class="text-right">
                 <button mat-raised-button (click)="edit(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button (click)="duplicate(footer)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
                 <button mat-raised-button (click)="delfooter = footer; openDialog(dialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>

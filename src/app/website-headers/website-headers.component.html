@@ -59,13 +59,16 @@
           </div>
           <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
             <div class="row align-items-center p-0 h-100">
-              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'">
+              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'">
                 <div class="kb-title-board line-ellipsis">
-                  <span>{{header.name ? header.name : header.defaultname | titlecase}}</span>
-                  <input type="text" [(ngModel)]="header.name" (blur)="rename(header)" (click)="prevName = header.name" matTooltip="Edit Header Name" matTooltipPosition="above">
+                  <span>{{header.name ? header.name : 'Header' | titlecase}}</span>
+                  <input type="text" #headname [value]="header.name" (blur)="rename(header, headname)" matTooltip="Edit Header Name" matTooltipPosition="above">
                 </div>
+                <p class="kb-pagedate mt-2 mb-0" matTooltip="Last Updated" matTooltipPosition="above">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(header.updated_at)}}
+                </p>
               </div>
-              <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="text-right">
+              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'" class="text-right">
                 <button mat-raised-button (click)="edit(header)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button (click)="duplicate(header)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
                 <button mat-raised-button (click)="delheader = header; openDialog(dialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
