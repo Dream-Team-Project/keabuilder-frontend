@@ -224,7 +224,7 @@ export class FormsComponent implements OnInit {
 
   changemyname(event:any){
     // console.log(event.target.value);
-    this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
+    this.form.formpath = (event.target.value).replaceAll(" ", "-").toLowerCase();
   }
 
   pathuniqueremove(){

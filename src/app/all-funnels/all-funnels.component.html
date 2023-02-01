@@ -7,87 +7,126 @@
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
-            <div *ngIf="firstpart">
-                <div *ngIf="funneltostep">
-                    <h6><b>Copy Funnel URL</b></h6>
-                    <hr>
-                    
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Funnel Url</mat-label>
+            <span *ngIf="!duplpopupfunnel">
+
+                <div *ngIf="firstpart">
+                        <div *ngIf="funneltostep">
+                            <h6><b>Copy Funnel URL</b></h6>
+                            <hr>
+                            
+                        <mat-form-field class="kb-full-width" appearance="fill">
+                            <mat-label>Funnel Url</mat-label>
+                            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
+                        </mat-form-field>
+                        
+                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+                            <i class="far fa-copy"></i> Copy Funnel Url
+                        </button>
+                    </div>
+
+                    <div *ngIf="!funneltostep">
+                        <h6><b>Copy Step URL</b></h6>
+                        <hr>
+                        <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Step Url</mat-label>
                         <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
-                    </mat-form-field>
+                        </mat-form-field>
+                        
+                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+                            <i class="far fa-copy"></i> Copy Step Url
+                        </button>
+                        
+                        <hr>
+                        
+                        <h6><b>Copy Page URL</b></h6>
+                        <hr>
+                        <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Page Url</mat-label>
+                        <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+                        </mat-form-field>
+                        
+                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+                            <i class="far fa-copy"></i> Copy Url
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="!firstpart && !colortheme">
+                    <h6><b>Archive</b></h6>
+                    <hr>
                     
-                    <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                        <i class="far fa-copy"></i> Copy Funnel Url
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Archive Reason</mat-label>
+                        <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
+                        <small>Optional</small>
+                    </mat-form-field>
+            
+                    <p>It will help you remember why you archive it!</p>
+                    
+                    <button mat-raised-button color="primary" type="submit" (click)="makearchive()" *ngIf="shwobtnfirst" >
+                        <i class="fas fa-archive"></i> Archive Funnel
+                    </button>
+
+                    <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" *ngIf="!shwobtnfirst" >
+                        <i class="fas fa-archive"></i> Archive Funnel Step
                     </button>
                 </div>
 
-                <div *ngIf="!funneltostep">
-                    <h6><b>Copy Step URL</b></h6>
+                <div *ngIf="colortheme">
+                    <h6><b>Change Color Badge</b></h6>
                     <hr>
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                      <mat-label>Step Url</mat-label>
-                      <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
-                    </mat-form-field>
-                    
-                    <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                        <i class="far fa-copy"></i> Copy Step Url
-                    </button>
-                      
-                    <hr>
-                      
-                    <h6><b>Copy Page URL</b></h6>
-                    <hr>
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                      <mat-label>Page Url</mat-label>
-                      <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
-                    </mat-form-field>
-                    
-                    <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-                        <i class="far fa-copy"></i> Copy Url
-                    </button>
-                </div>
-            </div>
 
-            <div *ngIf="!firstpart && !colortheme">
-                <h6><b>Archive</b></h6>
+                    <mat-form-field appearance="fill" class="kb-full-width" >
+                        <mat-label>Badge Color</mat-label>
+                        <mat-select name="badgecolor" [(ngModel)]="badgecolor">
+                        <mat-option value="">None</mat-option>
+                        <mat-option value="primary">Primary</mat-option>
+                        <mat-option value="secondary">Secondary</mat-option>
+                        <mat-option value="success">Success</mat-option>
+                        <mat-option value="warning">Warning</mat-option>
+                        <mat-option value="info">Info</mat-option>
+                        <mat-option value="danger">Danger</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
+
+                </div>
+
+            </span>
+
+            <div *ngIf="duplpopupfunnel">
+
+                <h6><b>Duplicate '{{dupfunnelname}}' Funnel</b></h6>
                 <hr>
-                
+
                 <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Archive Reason</mat-label>
-                    <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
-                    <small>Optional</small>
-                </mat-form-field>
-        
-                <p>It will help you remember why you archive it!</p>
-                
-                <button mat-raised-button color="primary" type="submit" (click)="makearchive()" *ngIf="shwobtnfirst" >
-                    <i class="fas fa-archive"></i> Archive Funnel
-                </button>
-
-                <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" *ngIf="!shwobtnfirst" >
-                    <i class="fas fa-archive"></i> Archive Funnel Step
-                </button>
-            </div>
-
-            <div *ngIf="colortheme">
-                <h6><b>Change Color Badge</b></h6>
-                <hr>
-
-                <mat-form-field appearance="fill" class="kb-full-width" >
-                    <mat-label>Badge Color</mat-label>
-                    <mat-select name="badgecolor" [(ngModel)]="badgecolor">
-                      <mat-option value="">None</mat-option>
-                      <mat-option value="primary">Primary</mat-option>
-                      <mat-option value="secondary">Secondary</mat-option>
-                      <mat-option value="success">Success</mat-option>
-                      <mat-option value="warning">Warning</mat-option>
-                      <mat-option value="info">Info</mat-option>
-                      <mat-option value="danger">Danger</mat-option>
-                    </mat-select>
+                    <mat-label>Name</mat-label>
+                    <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
+                    <mat-error *ngIf="userFormControl.hasError('required')">
+                      Name is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="userFormControl.hasError('minlength')">
+                      Name must be at least <strong>3</strong> characters
+                    </mat-error>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label> Subdomain</mat-label>
+                    <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+                    <span matSuffix>.keapages.com</span>
+                    <mat-error *ngIf="subdomainFormControl.hasError('required')">
+                      Subdomain Name is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+                      Subdomain must be at least <strong>3</strong> characters
+                    </mat-error>
+                    <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+                      Subdomain must be at most <strong>20</strong> characters
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" >Duplicate <i class="fas fa-copy"></i></button>
 
             </div>
 
@@ -130,13 +169,13 @@
             </div>
         </div>
 
-        <div [sortablejs]="funnels" [sortablejsOptions]="parentOptions" class="steps-group row keabuilder-container mt-5">
+        <div class="steps-group row keabuilder-container mt-5">
             <div class="col-md-3 mb-4" *ngFor="let funnel of funnels; index as i">
                 <div class="keabuilder-board">
                     <header class="keabuilder-board-header">
-                        <div class="keabuilder-title-board line-ellipsis"><span>{{funnels[i]['name']}}</span> <input type="text" [(ngModel)]="funnels[i]['name']" name="funnelname" (blur)="changestepnamesoutside(funnels[i].id,funnels[i]['name'])" ></div>
-                        <div class="keabuilder-attachment d-flex align-items-center font-size-small pr-2"  matTooltip="Group Tags" matTooltipPosition="above" *ngIf="funnels[i].grouptags!='' && funnels[i].grouptags!=null" >
-                            <i class="fas fa-tags mr-1"></i> {{funnels[i]['grouptags']}}
+                        <div class="keabuilder-title-board line-ellipsis"><span>{{funnel.name}}</span> <input type="text" [(ngModel)]="funnel.name" name="funnelname" (blur)="changestepnamesoutside(funnel.id,funnel.name)" ></div>
+                        <div class="keabuilder-attachment d-flex align-items-center font-size-small pr-2"  matTooltip="Group Tags" matTooltipPosition="above" *ngIf="funnel.grouptags!='' && funnel.grouptags!=null" >
+                            <i class="fas fa-tags mr-1"></i> {{funnel.grouptags}}
                         </div>
                         <div class="btn-group">
 
@@ -145,16 +184,16 @@
                                    More <i class="fas fa-ellipsis-v"></i>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="funneledit(funnels[i].uniqueid, funnels[i].id,'edit')" >
+                                    <button mat-menu-item (click)="funneledit(funnel.uniqueid, funnel.id,'edit')" >
                                         <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> Edit
                                     </button>
-                                    <button mat-menu-item (click)="funneledit(funnels[i].uniqueid, funnels[i].id,'copy')" >
+                                    <button mat-menu-item (click)="funneledit(funnel.uniqueid, funnel.id,'copy')" >
                                         <i class="fas fa-link mr-2"></i> Copy Funnel Link
                                     </button>
-                                    <button mat-menu-item (click)="funneledit(funnels[i].uniqueid, funnels[i].id,'duplicate')" >
+                                    <button mat-menu-item (click)="funneledit(funnel.uniqueid, funnel.id,'duplicate')" >
                                         <i class="far fa-clone mr-2"></i> Duplicate
                                     </button>
-                                    <button mat-menu-item class="text-danger" (click)="funneledit(funnels[i].uniqueid, funnels[i].id,'archive')" >
+                                    <button mat-menu-item class="text-danger" (click)="funneledit(funnel.uniqueid, funnel.id,'archive')" >
                                         <i class="far fa-trash-alt mr-2"></i> Archive
                                     </button>
                                 </mat-menu>
@@ -162,93 +201,91 @@
 
                         </div>
                     </header>
-                    <main [sortablejs]="funnels[i]['steps']" [sortablejsOptions]="childrenOptions">
-                        <div [class.draggable]="isDraggable(funnels[i]['steps'].length)" *ngFor="let funnelstep of funnels[i]['steps']; index as j" [class]="'kbstep-'+funnels[i]['steps'][j]['uniqueid']"  [ngStyle]="{'background-image': 'url(/assets/uploads/images/webpage_thumbnail.jpg)'}" >
+                    <div class="m-2" *ngFor="let funnelstep of funnel.steps; index as j" [class]="'kbstep-'+funnelstep.uniqueid"  [ngStyle]="{'background-image': 'url(/assets/uploads/images/webpage_thumbnail.jpg)'}" >
 
-                            <div class="keatopstep" [attr.data-border]="funnels[i]['steps'][j]['color']">
+                        <div class="keatopstep" [attr.data-border]="funnelstep.color">
 
-                                <div class="keabuilder-item is-moving" >{{funnels[i]['steps'][j]['page_name']}}
-                                    
-                                    <div class="keabuilder-footer d-flex justify-content-between mt-3">
-                                        <div class="keabuilder-footer-left d-flex">
+                            <div class="keabuilder-item is-moving" >{{funnelstep.page_name}}
+                                
+                                <div class="keabuilder-footer d-flex justify-content-between mt-3">
+                                    <div class="keabuilder-footer-left d-flex">
 
-                                            <div class="keabuilder-due-date d-flex align-items-center mr-50" matTooltip="Last Updated At" matTooltipPosition="above" >
-                                                <i class="far fa-clock"></i> <span
-                                                    class="font-size-small">{{funnels[i]['steps'][j]['updated_at']}}</span>
-                                            </div>
-
-                                            <div class="keabuilder-comment d-flex align-items-center mr-50" matTooltip="Variation" matTooltipPosition="above" >
-                                                <i class="fas fa-puzzle-piece"></i> <span
-                                                    class="font-size-small">{{funnels[i]['steps'][j]['variation']}}</span>
-                                            </div>
-
-                                            <div class="keabuilder-comment d-flex align-items-center mr-50" matTooltip="Step Type" matTooltipPosition="above" >
-                                                <i class="fas fa-check"></i> <span
-                                                    class="font-size-small funnelstypekb">{{funnels[i]['steps'][j]['funneltype']}}</span>
-                                            </div>
-
-                                            <div class="keabuilder-attachment d-flex align-items-center" *ngIf="funnels[i]['steps'][j]['tag']!=''" matTooltip="Tags" matTooltipPosition="above" >
-                                                <i class="fas fa-tags"></i> <span
-                                                    class="font-size-small">{{funnels[i]['steps'][j]['tag']}}</span>
-                                            </div>  
-                                            
+                                        <div class="keabuilder-due-date d-flex align-items-center mr-50" matTooltip="Last Updated At" matTooltipPosition="above" >
+                                            <i class="far fa-clock"></i> <span
+                                                class="font-size-small">{{funnelstep.updated_at}}</span>
                                         </div>
+
+                                        <div class="keabuilder-comment d-flex align-items-center mr-50" matTooltip="Variation" matTooltipPosition="above" >
+                                            <i class="fas fa-puzzle-piece"></i> <span
+                                                class="font-size-small">{{funnelstep.variation}}</span>
+                                        </div>
+
+                                        <div class="keabuilder-comment d-flex align-items-center mr-50" matTooltip="Step Type" matTooltipPosition="above" >
+                                            <i class="fas fa-check"></i> <span
+                                                class="font-size-small funnelstypekb">{{funnelstep.funneltype}}</span>
+                                        </div>
+
+                                        <div class="keabuilder-attachment d-flex align-items-center" *ngIf="funnelstep.tag!=''" matTooltip="Tags" matTooltipPosition="above" >
+                                            <i class="fas fa-tags"></i> <span
+                                                class="font-size-small">{{funnelstep.tag}}</span>
+                                        </div>  
                                         
-                                        <!-- <div class="keabuilder-footer-right">
-                                            
-                                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <mat-menu #menu="matMenu">
-                                                <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'edit')">
-                                                    <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
-                                                </button>
-                                                <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'copy')">
-                                                    <i class="fas fa-link mr-2"></i> Copy Step Link
-                                                </button>
-                                                <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'duplicate')">
-                                                    <i class="far fa-clone mr-2"></i> Duplicate
-                                                </button>
-                                                <button mat-menu-item (click)="funnelstepedit(funnels[i]['steps'][j].color,funnels[i]['steps'][j].uniqueid,'colortheme')">
-                                                    <i class="far fa-check-circle mr-2"></i> Change Color Badge
-                                                </button>
-                                                <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnels[i].id,funnels[i]['steps'][j].uniqueid,'archive')">
-                                                    <i class="far fa-trash-alt mr-2"></i> Archive
-                                                </button>
-                                            </mat-menu>
-
-                                        </div> -->
-
                                     </div>
+                                    
+                                    <!-- <div class="keabuilder-footer-right">
+                                        
+                                        <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'edit')">
+                                                <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
+                                            </button>
+                                            <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'copy')">
+                                                <i class="fas fa-link mr-2"></i> Copy Step Link
+                                            </button>
+                                            <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'duplicate')">
+                                                <i class="far fa-clone mr-2"></i> Duplicate
+                                            </button>
+                                            <button mat-menu-item (click)="funnelstepedit(funnels[i]['steps'][j].color,funnels[i]['steps'][j].uniqueid,'colortheme')">
+                                                <i class="far fa-check-circle mr-2"></i> Change Color Badge
+                                            </button>
+                                            <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnels[i].id,funnels[i]['steps'][j].uniqueid,'archive')">
+                                                <i class="far fa-trash-alt mr-2"></i> Archive
+                                            </button>
+                                        </mat-menu>
 
-                                </div>
+                                    </div> -->
 
-                                <div class="kea-footerbar">
-                                    <button class="mt-3" mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'edit')">
-                                        <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
-                                    </button>
-                                    <button mat-menu-item (click)="viewpagestep(funnels[i]['steps'][j].uniqueid)">
-                                        <i class="fas fa-eye mr-2"></i> View Step
-                                    </button>
-                                    <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'copy')">
-                                        <i class="fas fa-link mr-2"></i> Copy Step Link
-                                    </button>
-                                    <button mat-menu-item (click)="funnelstepedit(funnels[i].uniqueid,funnels[i]['steps'][j].uniqueid,'duplicate')">
-                                        <i class="far fa-clone mr-2"></i> Duplicate
-                                    </button>
-                                    <button mat-menu-item (click)="funnelstepedit(funnels[i]['steps'][j].color,funnels[i]['steps'][j].uniqueid,'colortheme')">
-                                        <i class="far fa-check-circle mr-2"></i> Change Color Badge
-                                    </button>
-                                    <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnels[i].id,funnels[i]['steps'][j].uniqueid,'archive')">
-                                        <i class="far fa-trash-alt mr-2"></i> Archive
-                                    </button>
                                 </div>
 
                             </div>
 
+                            <div class="kea-footerbar">
+                                <button class="mt-3" mat-menu-item (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'edit')">
+                                    <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
+                                </button>
+                                <button mat-menu-item (click)="viewpagestep(funnelstep.uniqueid)">
+                                    <i class="fas fa-eye mr-2"></i> View Step
+                                </button>
+                                <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'copy')">
+                                    <i class="fas fa-link mr-2"></i> Copy Step Link
+                                </button>
+                                <button mat-menu-item (click)="funnelstepedit(funnel.name,funnelstep.uniqueid,'duplicate')">
+                                    <i class="far fa-clone mr-2"></i> Duplicate
+                                </button>
+                                <button mat-menu-item (click)="funnelstepedit(funnelstep.color,funnelstep.uniqueid,'colortheme')">
+                                    <i class="far fa-check-circle mr-2"></i> Change Color Badge
+                                </button>
+                                <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnel.id,funnelstep.uniqueid,'archive')">
+                                    <i class="far fa-trash-alt mr-2"></i> Archive
+                                </button>
+                            </div>
 
                         </div>
-                    </main>
+
+
+                    </div>
                 </div>
             </div>
         </div>
