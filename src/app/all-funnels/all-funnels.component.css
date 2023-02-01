@@ -35,7 +35,6 @@
     padding: 13px;
     display: flex;
     justify-content: space-between;
-    cursor: move;
 }
 .line-ellipsis {
     overflow: hidden;
@@ -96,7 +95,6 @@
     padding: 15px;
     margin-bottom: 20px;
     transition: all .3s cubic-bezier(.23,1,.32,1);
-    cursor: move;
 }
 .keabuilder-container .keabuilder-board .keatopstep {
     padding: 1rem 0.8rem;

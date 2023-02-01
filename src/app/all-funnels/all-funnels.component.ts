@@ -7,6 +7,7 @@ import {PageEvent} from '@angular/material/paginator';
 import { GeneralService } from '../_services/_builder/general.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { UserService } from '../_services/user.service';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-all-funnels',
@@ -49,10 +50,22 @@ export class AllFunnelsComponent implements OnInit {
   // MatPaginator Output
   pageEvent!: PageEvent;
   DialogParentToggle:boolean = false;
+
   mydomain = {subdomain:'',domain:''};
   selstatusshow = 'all';
   searching = false;
 
+  selfunnelid = '';
+  duplpopupfunnel = false;
+  dupfunnelname = '';
+
+  userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+  subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+
+  form: any = {
+    funnelname: '',
+    subdomain:''
+  };
 
   getServerData(event?:PageEvent){
       var length = event?.length;
@@ -219,38 +232,12 @@ export class AllFunnelsComponent implements OnInit {
       this.shwobtnfirst = true;
       this.colortheme = false;
     }else if(type=='duplicate'){
-      // console.log(uniqueid+'--'+id);
-      this.searching = true;
-      this.funnelService.makefunnelstepduplicate(id, 'duplicatefunnel').subscribe({
-        next: data => {
-          // console.log(data);
-          if(data.success==1){
 
-            if(data.objpath.length!=0){
-              data.objpath.forEach((element:any) => {
-                var page = {
-                  head: '',
-                  body: '',
-                  style: '',
-                  dir: 'drafts',
-                  folder: element,
-                  prevFolder: element
-                };
-                this._general.fileUploadService.savePage(page).subscribe((event:any) => {
-                  // console.log(event);
-                },
-                error=>{console.log(error)});
-              });
-            }
-
-            this.showfunnels();
-            this.searching = true;
-
-            this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
-          }
-        }
-      });
-
+      this.dupfunnelname = uniqueid;
+      this.selfunnelid = id;
+      this.openSidebar();
+      this.duplpopupfunnel = true;
+     
     }else{
 
       var obj = {uniqueid:uniqueid, id:id, type: type};
@@ -273,6 +260,47 @@ export class AllFunnelsComponent implements OnInit {
     }
 
   }
+
+  removespecialcharwithsmall(data:any){
+    var datagen = (data.replace(/[^a-zA-Z0-9]/g, "")).toLowerCase();
+    return datagen;
+  }
+
+  makeduplicatefunnel(id:any){
+
+    this.searching = true;
+    this.funnelService.makefunnelstepduplicate(this.selfunnelid, 'duplicatefunnel').subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.success==1){
+
+          if(data.objpath.length!=0){
+            data.objpath.forEach((element:any) => {
+              var page = {
+                head: '',
+                body: '',
+                style: '',
+                dir: 'drafts',
+                folder: element,
+                prevFolder: element
+              };
+              this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+                // console.log(event);
+              },
+              error=>{console.log(error)});
+            });
+          }
+
+          this.showfunnels();
+          this.searching = true;
+
+          this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
+        }
+      }
+    });
+
+  }
+
 
   makearchive(){
     var obj = {value:this.reason, id:this.forarchiveid, type: 'archive'};
@@ -299,6 +327,8 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   openSidebar(){
+    this.duplpopupfunnel = false; 
+
     this.sidebar.open = true;
     this.sidebar.anim.open = true;
     setTimeout((e:any)=>{
