@@ -182,7 +182,7 @@ export class WebsitePagesComponent implements OnInit {
 
     setTimeout(() => {
         this.shortwaiting = false;
-    }, 1500);
+    }, 1000);
 
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;

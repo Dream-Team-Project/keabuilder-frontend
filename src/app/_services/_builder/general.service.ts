@@ -208,14 +208,30 @@ export class GeneralService {
           })
         }
         if(this.target.type == 'website') {
-          this.getWebPageDetails(id).then(data=> {
-            resolve(data);
-          })
+          this.webPageService.getSingleWebpage(id).subscribe(
+            (e:any)=>{
+              this.setBuilder(e).then(resp=>{
+                resolve(resp);
+              })
+            },
+            (err:any) => {
+              this.loading.error = true;
+              resolve(false);
+            }
+          )
         }
         else if(this.target.type == 'funnel') {
-          this.getFunnelDetails(id).then(data=> {
-            resolve(data);
-          })
+          this.funnelService.getSingleFunnelpage(id).subscribe(
+            (e:any)=>{
+              this.setBuilder(e).then(resp=>{
+                resolve(resp);
+              })
+            },
+            (err:any) => {
+              this.loading.error = true;
+              resolve(false);
+            }
+          )
         }
         else if(this.target.type == 'header') {
           this.fileUploadService.getheader(id).subscribe((resp:any)=>{
@@ -306,40 +322,6 @@ export class GeneralService {
       });
     })
   }
-  
-  getWebPageDetails(uniqueid:any) {
-    return new Promise<any>((resolve, reject) => {
-      this.webpage.uniqueid = uniqueid;
-      this.webPageService.getSingleWebpage(this.webpage.uniqueid).subscribe(
-        (e:any)=>{
-          this.setBuilder(e).then(resp=>{
-            resolve(resp);
-          })
-        },
-        (err:any) => {
-          this.loading.error = true;
-          resolve(false);
-        }
-      )
-    })
-  }
-
-  getFunnelDetails(uniqueid:any) {
-    return new Promise<any>((resolve, reject) => {
-      this.webpage.uniqueid = uniqueid;
-      this.funnelService.getSingleFunnelpage(this.webpage.uniqueid).subscribe(
-        (e:any)=>{
-          this.setBuilder(e).then(resp=>{
-            resolve(resp);
-          })
-        },
-        (err:any) => {
-          this.loading.error = true;
-          resolve(false);
-        }
-      )
-    })
-  }
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
@@ -358,7 +340,8 @@ export class GeneralService {
       var dbobj:any = new Object();
       dbobj.name = this.target.name;
       dbobj.uniqueid = this.target.id;
-      dbobj.json = this.encodeJSON(sections);
+      var jsonObj = {sections: sections};
+      dbobj.json = this.encodeJSON(jsonObj);
       if(this.target.type == 'header') {
         this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
           this.fileUploadService.updateheader(dbobj).subscribe((resp:any)=>{
@@ -381,31 +364,13 @@ export class GeneralService {
   }
 
   saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
-    this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
     return new Promise<any>((resolve, reject) => {
-      if(this.target.type == 'website'){
-        this.websiteService.getSingleWebsite(this.webpage.website_id).subscribe((e:any)=>{
-          this.htmlSetUp(e.data[0],main, sections, preview, tglDraft).then(res=>{
-            resolve(res);
-          })
-        })
-      }
-      else if(this.target.type == 'funnel'){
-        this.funnelService.getSingleFunnel(this.webpage.funnelid).subscribe((e:any)=>{
-          this.htmlSetUp(e.data[0],main, sections, preview, tglDraft).then(res=>{
-            resolve(res);
-          })
-        })
-      }
-      else resolve(false);
-    });
-  }
-
-  htmlSetUp(web:any,main:any, sections:any, preview:boolean, tglDraft:boolean) {
-    return new Promise<any>((resolve, reject) => {
+      this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
+      var websiteid = this.webpage.website_id;
+      var jsonObj = {mainstyle: this.main.style, sections: sections};
+      this.webpage.page_json = this.encodeJSON(jsonObj);
       this.setPageStyle(sections);
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-      this.webpage.page_json = this.encodeJSON(sections);
       if(this.includeLayout.header && this.selectedHeader.html && !preview) {
         var header = this.pagehtml.querySelector('header');
         header.id = 'kb-header-'+this.selectedHeader.id;
@@ -418,7 +383,7 @@ export class GeneralService {
       }
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
-      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/'+web.favicon+'">' +
+      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
       '<meta charset="UTF-8">' +
       '<meta name="description" content="'+this.main.description+'">' +
       '<meta name="keywords" content="'+this.main.keywords+'">' +
@@ -431,7 +396,7 @@ export class GeneralService {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
         body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
         style: this.getAllStyle(),
-        website_id: web.uniqueid
+        website_id: websiteid
       }
       if(preview) {
         var prevObj = JSON.parse(JSON.stringify(this.pageObj));
@@ -456,35 +421,41 @@ export class GeneralService {
           var td = {
             status:(status ? 'publish' : 'draft'), 
             path: this.main.path,
-            website_id: web.uniqueid
+            website_id: websiteid
           }
           this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
-            this.savePage(web).then(resp=>resolve(resp));
+            this.savePage().then(resp=>resolve(resp));
           })
         }
-        else this.savePage(web).then(resp=>resolve(resp));
+        else this.savePage().then(resp=>resolve(resp));
       }
-    })
+    });
   }
 
-  savePage(web:any) {
+  savePage() {
     return new Promise<any>((resolve, reject) => {
       this.updatePageDB().then(e=>{
         if(e.found == 0) {
           this.fileUploadService.savePage(this.pageObj).subscribe(
             (event:any) => {
-              if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
+              if(e.ishome) {
                 var obj = {
                   dir: this.main.publish_status ? 'pages' : 'drafts',
                   path: event.data.folder,
-                  website_id: web.uniqueid
-                };
-                this.fileUploadService.updateHome(obj).subscribe({
-                  next: data => {
+                  website_id: this.webpage.website_id
+                }
+                if(obj.dir == 'drafts') {
+                  this.fileUploadService.createdefaulthome(obj).subscribe((d:any)=>{
+                      this.pageSaved = true;
+                      resolve(true);
+                  });
+                }
+                else {
+                  this.fileUploadService.updateHome(obj).subscribe((d:any)=>{
                     this.pageSaved = true;
                     resolve(true);
-                  }
                 });
+                }
               }
               else {
                 this.pageSaved = true;

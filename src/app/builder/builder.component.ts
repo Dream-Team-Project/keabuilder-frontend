@@ -77,9 +77,7 @@ export class BuilderComponent implements OnInit {
         _general.getBuilderData(_general.target.id).then(data=> {
             if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
             else if(!_general.isObjEmpty(data)) {
-              if(this.ishf) {
-                _general.target.name = data.name;
-              }
+              if(this.ishf) _general.target.name = data.name;
               else {
                 data.html = _general.parser.parseFromString(data.html, 'text/html');
                 var header = data.html.querySelector('header');
@@ -113,7 +111,9 @@ export class BuilderComponent implements OnInit {
                 data.json = _general.webpage.page_json;
               }
               if(data.json) {
-                _section.sections = _general.decodeJSON(data.json);
+                var jsonObj = _general.decodeJSON(data.json);
+                if(!this.ishf) _general.main.style = jsonObj.mainstyle;
+                _section.sections = jsonObj.sections;
                 _section.pageSessionArr = [];
                 _section.sections.forEach((sec:any)=>{
                   sec.rowArr.forEach((row:any)=>{
@@ -404,7 +404,6 @@ export class BuilderComponent implements OnInit {
       break;
       default:
         secdls.push(dl);
-        
       }
     });
 
