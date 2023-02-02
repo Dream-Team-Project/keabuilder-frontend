@@ -662,7 +662,8 @@ export class CreateFunnelComponent implements OnInit {
       this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+unique2;
       this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+unique1;
     }else if(type=='duplicate'){
-        this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
+      var newobj = {uniqueid:unique2, type:'duplicatestep'}
+        this.funnelService.makefunnelstepduplicate(newobj).subscribe({
           next: data => {
             // console.log(data);
             if(data.success==1){
@@ -746,7 +747,8 @@ export class CreateFunnelComponent implements OnInit {
     // console.log(this.uniqueidstep);
 
     if(value=='clonefunnelstep'){
-      this.funnelService.makefunnelstepduplicate(this.uniqueidstep, 'duplicatestep').subscribe({
+      var newobj = {uniqueid:this.uniqueidstep, type:'duplicatestep'};
+      this.funnelService.makefunnelstepduplicate(newobj).subscribe({
         next: data => {
           // console.log(data);
           if(data.success==1){

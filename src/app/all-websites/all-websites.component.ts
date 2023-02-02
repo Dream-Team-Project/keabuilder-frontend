@@ -353,10 +353,10 @@ export class AllWebsitesComponent implements OnInit {
           });
 
 
+        }else{
+          this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
         }
 
-      }else{
-        this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
       }
 
     }
