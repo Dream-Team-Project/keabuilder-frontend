@@ -33,15 +33,6 @@
                     </div>
                 </div>
             </div>
-            <div *ngSwitchCase="'split-text'" class="kb-form-inp kb-w-100">
-                <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*</span></label>
-                <div class="kb-form-inp-split">
-                    <input *ngFor="let split of fe.split" [type]="split.type" [name]="split.id"
-                        class="kb-form-input" [required]="fe.required"
-                        [placeholder]="split.placeholder">
-                </div>
-            </div>
             <div *ngSwitchCase="'select'" class="kb-form-inp kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
@@ -51,7 +42,7 @@
                     </option>
                 </select>
             </div>
-            <div *ngSwitchCase="'checkbox'" class="kb-form-rc">
+            <div *ngSwitchCase="'checkbox'" class="kb-form-rc kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div *ngFor="let split of fe.split">
@@ -61,7 +52,7 @@
                     </label>
                 </div>
             </div>
-            <div *ngSwitchCase="'radio'" class="kb-form-rc">
+            <div *ngSwitchCase="'radio'" class="kb-form-rc kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
                 <div *ngFor="let split of fe.split">
@@ -78,11 +69,17 @@
             <div *ngSwitchDefault class="kb-form-inp kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*</span></label>
-                <textarea *ngIf="fe.type == 'textarea' else input" [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder"
-                        class="kb-form-input"></textarea>
-                <ng-template #input>
-                    <input [type]="fe.type" [name]="fe.id"
-                        [required]="fe.required" [placeholder]="fe.placeholder" class="kb-form-input">
+                <div *ngIf="fe.split else inp" class="kb-form-inp-split">
+                    <input *ngFor="let split of fe.split" [type]="split.type" [name]="split.id"
+                        [required]="fe.required" [placeholder]="split.placeholder">
+                </div>   
+                <ng-template #inp>     
+                    <textarea *ngIf="fe.type == 'textarea' else input" [name]="fe.id" 
+                        [required]="fe.required" [placeholder]="fe.placeholder"></textarea>
+                    <ng-template #input>
+                        <input [type]="fe.type" [name]="fe.id"
+                            [required]="fe.required" [placeholder]="fe.placeholder">
+                    </ng-template>
                 </ng-template>
             </div>
         </div>

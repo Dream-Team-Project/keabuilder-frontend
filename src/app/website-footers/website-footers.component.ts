@@ -62,7 +62,7 @@ export class WebsiteFootersComponent {
       }
       else {
         var msg = "Name must be at least 3 characters!";
-        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
         inp.value = footer.name;
       }
     }

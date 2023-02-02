@@ -63,7 +63,6 @@ export class FileUploadService {
   formbypathApi = "./api/formbypath";
   allformsApi = "./api/allforms";
   saveformApi = "./api/saveform";
-  shortupdateformApi = "./api/shortupdateform";
   updateformApi = "./api/updateform";
   duplicateformApi = './api/duplicateform';
   searchformqueryApi = './api/searchformquery';
@@ -118,12 +117,6 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
-  shortupdateform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.shortupdateformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
   searchformquery(obj:any):Observable<any> {
     obj.user_id = this.uuid;
     return this.http.post(this.searchformqueryApi, obj)
@@ -131,11 +124,13 @@ export class FileUploadService {
   }
 
   duplicateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
     return this.http.post(this.duplicateformApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
   updateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
     return this.http.post(this.updateformApi, obj)
     .pipe(catchError(this.errorHandler));
   }
