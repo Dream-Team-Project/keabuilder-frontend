@@ -102,11 +102,11 @@
 
                 <mat-form-field class="kb-full-width" appearance="fill">
                     <mat-label>Name</mat-label>
-                    <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
-                    <mat-error *ngIf="userFormControl.hasError('required')">
+                    <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="funneltitleFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
+                    <mat-error *ngIf="funneltitleFormControl.hasError('required')">
                       Name is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="userFormControl.hasError('minlength')">
+                    <mat-error *ngIf="funneltitleFormControl.hasError('minlength')">
                       Name must be at least <strong>3</strong> characters
                     </mat-error>
                 </mat-form-field>
@@ -126,7 +126,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <button mat-raised-button color="primary" type="submit" >Duplicate <i class="fas fa-copy"></i></button>
+                <button mat-raised-button color="primary" (click)="makeduplicatefunnel()" >Duplicate <i class="fas fa-copy"></i></button>
 
             </div>
 
@@ -190,7 +190,7 @@
                                     <button mat-menu-item (click)="funneledit(funnel.uniqueid, funnel.id,'copy')" >
                                         <i class="fas fa-link mr-2"></i> Copy Funnel Link
                                     </button>
-                                    <button mat-menu-item (click)="funneledit(funnel.uniqueid, funnel.id,'duplicate')" >
+                                    <button mat-menu-item (click)="funneledit(funnel.name, funnel.id,'duplicate')" >
                                         <i class="far fa-clone mr-2"></i> Duplicate
                                     </button>
                                     <button mat-menu-item class="text-danger" (click)="funneledit(funnel.uniqueid, funnel.id,'archive')" >
@@ -271,7 +271,7 @@
                                 <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'copy')">
                                     <i class="fas fa-link mr-2"></i> Copy Step Link
                                 </button>
-                                <button mat-menu-item (click)="funnelstepedit(funnel.name,funnelstep.uniqueid,'duplicate')">
+                                <button mat-menu-item (click)="funnelstepedit(funnelstep.id,funnelstep.uniqueid,'duplicate')">
                                     <i class="far fa-clone mr-2"></i> Duplicate
                                 </button>
                                 <button mat-menu-item (click)="funnelstepedit(funnelstep.color,funnelstep.uniqueid,'colortheme')">

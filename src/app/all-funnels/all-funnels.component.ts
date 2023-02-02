@@ -59,7 +59,7 @@ export class AllFunnelsComponent implements OnInit {
   duplpopupfunnel = false;
   dupfunnelname = '';
 
-  userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+  funneltitleFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
 
   form: any = {
@@ -233,6 +233,8 @@ export class AllFunnelsComponent implements OnInit {
       this.colortheme = false;
     }else if(type=='duplicate'){
 
+      this.form.funnelname = '';
+      this.form.subdomain = '';
       this.dupfunnelname = uniqueid;
       this.selfunnelid = id;
       this.openSidebar();
@@ -266,41 +268,65 @@ export class AllFunnelsComponent implements OnInit {
     return datagen;
   }
 
-  makeduplicatefunnel(id:any){
+  makeduplicatefunnel(){
 
-    this.searching = true;
-    this.funnelService.makefunnelstepduplicate(this.selfunnelid, 'duplicatefunnel').subscribe({
-      next: data => {
-        // console.log(data);
-        if(data.success==1){
+      if(this.funneltitleFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
 
-          if(data.objpath.length!=0){
-            data.objpath.forEach((element:any) => {
-              var page = {
-                head: '',
-                body: '',
-                style: '',
-                dir: 'drafts',
-                folder: element,
-                prevFolder: element
-              };
-              this._general.fileUploadService.savePage(page).subscribe((event:any) => {
-                // console.log(event);
-              },
-              error=>{console.log(error)});
-            });
-          }
+        var nwsubdomain:any = this.form.subdomain.toLowerCase();
+        var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user'];
 
-          this.showfunnels();
+        if(this.searchStringInArray(nwsubdomain,notusesub)==1){
+          
           this.searching = true;
+          var obj:any = {funnelid:this.selfunnelid, funnelname:this.form.funnelname, subdomain:this.form.subdomain, type:'duplicatefunnel'}
+          this.funnelService.makefunnelstepduplicate(obj).subscribe({
+            next: data => {
+              // console.log(data);
+              if(data.success==1){
+      
+                if(data.objpath.length!=0){
+                  data.objpath.forEach((element:any) => {
+                    var page = {
+                      head: '',
+                      body: '',
+                      style: '',
+                      dir: 'drafts',
+                      folder: element,
+                      prevFolder: element
+                    };
+                    this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+                      // console.log(event);
+                    },
+                    error=>{console.log(error)});
+                  });
+                }
+      
+                this.showfunnels();
+                this.searching = true;
+      
+                this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
+              }
+            }
+          });
 
-          this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
+        }else{
+          this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
         }
+
+      }else{
+          this._snackBar.open("Title & subdomain fields can't be blank!", 'OK');
       }
-    });
+
+   
 
   }
 
+  searchStringInArray(str:any, strArray:any) {
+    for (var j=0; j<strArray.length; j++) {
+        if (strArray[j] == str) return 0;
+    }
+    return 1;
+``}
 
   makearchive(){
     var obj = {value:this.reason, id:this.forarchiveid, type: 'archive'};
@@ -426,7 +452,8 @@ export class AllFunnelsComponent implements OnInit {
       this.colortheme = false;
     }else if(type=='duplicate'){
         console.log(unique1+' - '+unique2);
-        this.funnelService.makefunnelstepduplicate(unique2, 'duplicatestep').subscribe({
+        var nwobj:any = {uniqueid: unique2, type:'duplicatestep'};
+        this.funnelService.makefunnelstepduplicate(nwobj).subscribe({
           next: data => {
             console.log(data);
             if(data.success==1){
