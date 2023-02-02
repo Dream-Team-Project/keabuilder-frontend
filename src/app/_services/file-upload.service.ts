@@ -124,11 +124,13 @@ export class FileUploadService {
   }
 
   duplicateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
     return this.http.post(this.duplicateformApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
   updateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
     return this.http.post(this.updateformApi, obj)
     .pipe(catchError(this.errorHandler));
   }

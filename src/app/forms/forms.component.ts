@@ -3,7 +3,6 @@ import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface DialogData {
@@ -43,7 +42,6 @@ export class FormsComponent implements OnInit {
   constructor(private fileUploadService: FileUploadService,
               public _image: ImageService,
               public _general: GeneralService,
-              private _snackBar: MatSnackBar,
               public dialog: MatDialog, 
               ) {
                   this.toggleview = _general.getStorage('form_toggle');
@@ -128,7 +126,6 @@ export class FormsComponent implements OnInit {
   onformUpdate(){
       if(this.userFormControl.status=='VALID' && this.userFormControl2.status=='VALID'){
           var obj = {name:this.form.formname, path: this.form.formpath, uniqueid:this.selecteduid};
-          console.log(obj);
           this.fileUploadService.updateform(obj).subscribe({
             next: data => {
               console.log(data);
