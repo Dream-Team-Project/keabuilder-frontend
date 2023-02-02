@@ -75,7 +75,8 @@ export class BuilderComponent implements OnInit {
       this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
       if(_general.target.type == 'website' || _general.target.type == 'funnel' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
-            if(!_general.isObjEmpty(data)) {
+            if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+            else if(!_general.isObjEmpty(data)) {
               if(this.ishf) {
                 _general.target.name = data.name;
               }
@@ -198,7 +199,8 @@ export class BuilderComponent implements OnInit {
     this._general.pathError = false;
     this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
       if(!this.autoSaving) {
-        if(res) this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+        else if(res) this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
         else this._general.saveDisabled = false;
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
@@ -211,13 +213,17 @@ export class BuilderComponent implements OnInit {
   saveHTML(main:any, tglDraft:boolean) {
     if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
-    this._general.checkExstingPath(main, this._section.sections, tglDraft).then(res =>{
+    this._general.saveHTML(main, this._section.sections, false, tglDraft).then(res =>{
       if(!this.autoSaving) {
-        if(res) this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
-        else {
+        if(this._general.pathError) {
           this._general.saveDisabled = false;
           this.openPageSetting(null);
         }
+        else if(!res) {
+          this._general.saveDisabled = false;
+          this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+        }
+        else this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
       }

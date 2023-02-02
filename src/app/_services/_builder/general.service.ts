@@ -227,10 +227,7 @@ export class GeneralService {
             resolve(resp.data[0]);
           })
         }
-        else{
-          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-          resolve(false);
-        }
+        else resolve(false);
       });
     })
   }
@@ -344,38 +341,6 @@ export class GeneralService {
     })
   }
 
-  checkExstingPath(main:any, sections:any, tglDraft:boolean) {
-    return new Promise<any>((resolve, reject) => {
-      var data = {
-        path: this.main.path
-      }
-      if(this.target.type == 'website') {
-        this.webPageService.getWebPageByPath(data).subscribe((e:any)=>{
-          if(this.main.path && (this.main.path == this.webpage.page_path || e.data.length == 0)) {
-              this.saveHTML(main, sections, false, tglDraft).then(data => {
-                resolve(data);
-              });
-          }
-          else {
-              this.pathError = true;
-              resolve(false);
-          }
-        })
-      }
-      else if(this.target.type == 'funnel') {
-        console.log('--check path existance before further operation--');
-        this.saveHTML(main, sections, false, tglDraft).then(data => {
-          resolve(data);
-        });
-        console.log('--check path existance before further operation--');
-      }
-      else{
-        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        resolve(false);
-      }
-    })
-  }
-
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
     window.open(window.location.protocol+'//'+window.location.host+'/preview/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
@@ -401,10 +366,7 @@ export class GeneralService {
             resolve(true);
           })
         },
-        error=>{
-          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-          resolve(false);
-        });
+        error=>{resolve(false);});
       }
       else if(this.target.type == 'footer') {
         this.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
@@ -413,10 +375,7 @@ export class GeneralService {
             resolve(true);
           })
         },
-        error=>{
-          this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-          resolve(false);
-        });
+        error=>{resolve(false);});
       }
     });
   }
@@ -438,10 +397,7 @@ export class GeneralService {
           })
         })
       }
-      else{
-        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        resolve(false);
-      }
+      else resolve(false);
     });
   }
 
@@ -513,26 +469,38 @@ export class GeneralService {
 
   savePage(web:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.savePage(this.pageObj).subscribe(
-        (event:any) => {
-          if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
-            var obj = {
-              dir: this.main.publish_status ? 'pages' : 'drafts',
-              path: event.data.folder,
-              website_id: web.uniqueid
-            };
-            this.fileUploadService.updateHome(obj).subscribe({
-              next: data => {}
-            });
-          }
-          this.updatePageDB().then(e=>{
-            this.pageSaved = true;
-            resolve(true);
+      this.updatePageDB().then(e=>{
+        if(e.found == 0) {
+          this.fileUploadService.savePage(this.pageObj).subscribe(
+            (event:any) => {
+              if(this.webpage.uniqueid ==  web.homepage && this.target.type == 'website') {
+                var obj = {
+                  dir: this.main.publish_status ? 'pages' : 'drafts',
+                  path: event.data.folder,
+                  website_id: web.uniqueid
+                };
+                this.fileUploadService.updateHome(obj).subscribe({
+                  next: data => {
+                    this.pageSaved = true;
+                    resolve(true);
+                  }
+                });
+              }
+              else {
+                this.pageSaved = true;
+                resolve(true);
+              }
+            },
+          error=>{
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
           })
-        },
-      error=>{
-        this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-        resolve(false);
+        }
+        else if(e.found == 1) {
+          this.pathError = true;
+          resolve(false);
+        }
+        else resolve(false);
       })
     })
   }
@@ -540,46 +508,32 @@ export class GeneralService {
   updatePageDB() {
     return new Promise<any>((resolve, reject) => {
       var status = this.main.publish_status;
+      var dbobj:any = {
+        id: this.webpage.id,
+        uniqueid: this.webpage.uniqueid,
+        page_name: this.main.name,
+        page_title: this.main.title,
+        page_path: this.main.path,
+        page_description: this.main.description,
+        page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
+        page_author: this.main.author,
+        page_json: this.webpage.page_json,
+        publish_status: status ? 1 : 0,
+      }
       if(this.target.type == 'website'){
-        var pagedata = {
-          id: this.webpage.id,
-          page_name: this.main.name,
-          page_title: this.main.title,
-          page_path: this.main.path,
-          page_description: this.main.description,
-          page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
-          page_author: this.main.author,
-          publish_status: status ? 1 : 0,
-          page_json: this.webpage.page_json,
-        }
-        this.webPageService.updateWebpage(pagedata).subscribe(
+        this.webPageService.updateWebpage(dbobj).subscribe(
           (e:any)=>{
             resolve(e);
           })
       }
       else if(this.target.type == 'funnel'){
-        var funnelstepdata = {
-            id: this.webpage.id,
-            funnelid: this.webpage.funnelid,
-            funneltype: this.webpage.funneltype,
-            page_name: this.main.name,
-            page_title: this.main.title,
-            page_path: this.main.path,
-            page_description: this.main.description,
-            page_keywords: this.main.keywords ? this.main.keywords.join(',') : '',
-            page_author: this.main.author,
-            publish_status: status ? 1 : 0,
-            page_json: this.webpage.page_json,
-        }
-        this.funnelService.updatefunnelpage(funnelstepdata).subscribe(
+        dbobj.funneltype = this.webpage.funneltype;
+        this.funnelService.updatefunnelpage(dbobj).subscribe(
           (e:any)=>{
             resolve(e);
           })
       }
-      else{
-        this.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        resolve(false);
-      }
+      else resolve(false);
     })
   }
 
