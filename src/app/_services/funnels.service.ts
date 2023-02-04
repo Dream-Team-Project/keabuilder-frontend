@@ -175,13 +175,19 @@ export class FunnelService {
         type
       }, httpOptions);
     }
-    // id:string, type:string
+
     makefunnelstepduplicate(data:any):Observable<any> {
       return this.http.post("./api/makefunnelstepduplicate/"+this.uuid, {
         data,
       }, httpOptions);
     }
 
+    movecopyfunnel(data:any):Observable<any> {
+      return this.http.post("./api/movecopyfunnel/"+this.uuid, {
+        data,
+      }, httpOptions);
+    }
+    
     funnelandstepshorting(data:string, type:string):Observable<any> {
       return this.http.post("./api/funnelandstepshorting/"+this.uuid, {
         data,

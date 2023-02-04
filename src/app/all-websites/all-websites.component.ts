@@ -314,7 +314,7 @@ export class AllWebsitesComponent implements OnInit {
 
         if(this.searchStringInArray(nwsubdomain,notusesub)==1){
           var genobj = {title:this.websitetitle, subdomain: this.subdomain, website_id:this.duplicatewebid};
-          console.log(genobj);
+          // console.log(genobj);
 
           this.websiteService.duplicatewebsite(genobj).subscribe({
             next: data => {

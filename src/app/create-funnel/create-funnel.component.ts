@@ -131,6 +131,7 @@ export class CreateFunnelComponent implements OnInit {
 
     this.userService.getUsersDetails().subscribe({
       next: data => {
+        // console.log(data);
         this.mydomain.subdomain = data.data[0].subdomain;
         this.mydomain.domain = data.domain;
       }
