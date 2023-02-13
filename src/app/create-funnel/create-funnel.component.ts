@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild, Inject, Input } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild, Inject, Input, TemplateRef } from '@angular/core';
 import { Options } from 'sortablejs';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
@@ -38,7 +38,8 @@ export class CreateFunnelComponent implements OnInit {
               public dialog: MatDialog, 
               private fileuploadService: FileUploadService,
               private checkoutService: CheckoutService,
-              private userService: UserService,) {
+              private userService: UserService,
+              ) {
                 this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
                   this.uniqueid = params.get('funnel_id');
                 })
@@ -112,9 +113,14 @@ export class CreateFunnelComponent implements OnInit {
 
   editcheckoutdetails = false;
   checkoutstyle:any = {step1headline:'',step1subheadline:'',step1btntext:'', step1btnsubtext:'', step1footertext:'',step2headline:'',step2subheadline:'',step2btntext:'', step2btnsubtext:'', step2footertext:''};
-  mydomain = {subdomain:'',domain:''};
-
-
+  mydomain = '';
+  searching = false;
+  
+  selfunnelstep:any;
+  actionname:any = '';
+  newfunnelid:any = '';
+  funnels:any;
+  delfunnel:any;
 
   ngOnInit(): void {
 
@@ -129,11 +135,24 @@ export class CreateFunnelComponent implements OnInit {
       }
     });
 
-    this.userService.getUsersDetails().subscribe({
+    this.funnelService.getSingleFunnel(this.uniqueid).subscribe({
       next: data => {
-        // console.log(data);
-        this.mydomain.subdomain = data.data[0].subdomain;
-        this.mydomain.domain = data.domain;
+
+        data.data.forEach((element:any) => {
+          if(element.domain!='' && element.domain!=null){
+            this.mydomain = 'https://'+element.domain;
+          }else{
+            this.mydomain = 'https://'+element.subdomain+'.keapages.com/';
+          }
+        });
+
+      }
+    });
+
+    this.funnelService.getallfunnelandstep().subscribe({
+      next: data => {
+        console.log(data); 
+        this.funnels = data.data2;
       }
     });
 
@@ -271,62 +290,67 @@ export class CreateFunnelComponent implements OnInit {
 
       this.funnelService.setfunnelselect(value).subscribe({
         next: data => {
-          this.uniqueidstep = data.data[0].uniqueid;
-          this.funnelService.uniquestepId = data.data[0].uniqueid;
-          this.router.navigate(['/funnels/'+this.uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
+          
+          data.data.forEach((stepdata:any) => {
+            console.log(stepdata);
+              
+              this.uniqueidstep = stepdata.uniqueid;
+              this.funnelService.uniquestepId = stepdata.uniqueid;
+              this.router.navigate(['/funnels/'+this.uniqueid+'/steps/'+stepdata.uniqueid],{relativeTo: this.route});
+              
+              if(stepdata.funnelselected==1){
+                this.tabOpen = 'overviewstep';
+                this.funnelselected = 1;
+              }else{
+                this.tabOpen = 'overview';
+                this.funnelselected = 0;
+              }
 
-          if(data.data[0].funnelselected==1){
-            this.tabOpen = 'overviewstep';
-            this.funnelselected = 1;
-          }else{
-            this.tabOpen = 'overview';
-            this.funnelselected = 0;
-          }
+              if(stepdata.funneltype!='regular' && stepdata.funneltype!='thankyou'){
+                this.myproductsshowcase = true;
+                this.showproductset();
+              }else{
+                // this.tabOpen = 'overview'
+                this.myproductsshowcase = false;
+              }
 
-          if(data.data[0].funneltype!='regular' && data.data[0].funneltype!='thankyou'){
-            this.myproductsshowcase = true;
-            this.showproductset();
-          }else{
-            this.tabOpen = 'overview'
-            this.myproductsshowcase = false;
-          }
+              this.funnelstepname = stepdata.page_name;
+              this.funnelstepurl = stepdata.page_path;
 
-          this.funnelstepname = data.data[0].title;
-          this.funnelstepurl = data.data[0].page_path;
+              if(stepdata.variation==1){
+                this.funnelvariation = 1;
+              }else{
+                this.funnelvariation = 0;
+              }
+              
+              this.selectedstep = value;
+              
+              var gettag = stepdata.tags;
+              if(gettag!=''){
+                var crtag = gettag.split(',');
+                this.tags = crtag; 
+              }else{
+                this.tags = [];
+              }
 
-          if(data.data[0].variation==1){
-            this.funnelvariation = 1;
-          }else{
-            this.funnelvariation = 0;
-          }
+              if(stepdata.variationlink!=null && stepdata.variationlink!=''){
+                this.funnelstepvariationurl = stepdata.variationlink;
+              }
 
-          this.selectedstep = value;
-
-          var gettag = data.data[0].tags;
-          if(gettag!=''){
-            var crtag = gettag.split(',');
-            this.tags = crtag; 
-          }else{
-            this.tags = [];
-          }
-
-          if(data.data[0].variationlink!=null && data.data[0].variationlink!=''){
-            this.funnelstepvariationurl = data.data[0].variationlink;
-          }
-
-          if(data.data[0].variation==1){
-            // console.log(data.data[0].splittestper);
-            if(data.data[0].splittestper!=null && data.data[0].splittestper!=''){
-              this.splitvalue = data.data[0].splittestper;
-              setTimeout(() => {
-                (<HTMLInputElement>document.getElementById('kb-splittestmake')).setAttribute('value',data.data[0].splittestper);
-                (<HTMLInputElement>document.getElementById('kb-changemyprogress')).style.width = this.splitvalue + '%';
-                (<HTMLElement>document.getElementById('kb-control')).innerHTML = this.splitvalue + '%';
-                (<HTMLElement>document.getElementById('kb-variation')).innerHTML = (100 - parseInt(this.splitvalue)) + '%';
-              }, 500);
-            }
-          }
-
+              if(stepdata.variation==1){
+                // console.log(data.data[0].splittestper);
+                if(stepdata.splittestper!=null && stepdata.splittestper!=''){
+                  this.splitvalue = stepdata.splittestper;
+                  setTimeout(() => {
+                    (<HTMLInputElement>document.getElementById('kb-splittestmake')).setAttribute('value',stepdata.splittestper);
+                    (<HTMLInputElement>document.getElementById('kb-changemyprogress')).style.width = this.splitvalue + '%';
+                    (<HTMLElement>document.getElementById('kb-control')).innerHTML = this.splitvalue + '%';
+                    (<HTMLElement>document.getElementById('kb-variation')).innerHTML = (100 - parseInt(this.splitvalue)) + '%';
+                  }, 500);
+                }
+              }
+            
+          });
           
         },
         error: err => {
@@ -348,7 +372,6 @@ export class CreateFunnelComponent implements OnInit {
     this.addproductpopup = false;
 
   }
-
   updatestep(){
 
     // console.log(this.funneltype);
@@ -357,10 +380,9 @@ export class CreateFunnelComponent implements OnInit {
     if(this.funneltype!='' && this.crfunnelstepname != ''){
       this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
         next: data => {
-          // console.log(data);
+          console.log(data);
           this.popupsidebar = false;
           this.addstepoption = false;
-          this._snackBar.open('Step Added Successfully!', 'Close');
 
           this.steps = data.data;
 
@@ -368,15 +390,17 @@ export class CreateFunnelComponent implements OnInit {
             head: '',
             body: '',
             style: '',
-            dir: 'drafts',
+            dir: '/pages',
             folder: data.pagepath,
-            prevFolder: data.pagepath
-          };
+            prevFolder: data.pagepath,
+            website_id:this.uniqueid, 
+          }
           this._general.fileUploadService.savePage(page).subscribe((event:any) => {
             // console.log(event);
           },
           error=>{console.log(error)});
 
+          this._snackBar.open('Step Added Successfully!', 'Close');
 
 
           // console.log(data);
@@ -393,7 +417,6 @@ export class CreateFunnelComponent implements OnInit {
 
 
   }
-
   usertemplateselected(value:any){
     // console.log(this.selectedstep);
     this.funnelService.setfunnelstep(this.selectedstep).subscribe({
@@ -419,7 +442,6 @@ export class CreateFunnelComponent implements OnInit {
       }
     });
   }
-
   duplicatemain(){
 
     this.funnelService.setfunnelvariation(this.uniqueidstep).subscribe({
@@ -537,6 +559,8 @@ export class CreateFunnelComponent implements OnInit {
 
           data.data.forEach((element: any) => {
               if(element.uniqueid==this.uniqueidstep){
+                console.log('insidestep');
+                console.log(element);
                   if(element.funneltype!='regular' && element.funneltype!='thankyou'){
                     this.myproductsshowcase = true;
 
@@ -641,12 +665,10 @@ export class CreateFunnelComponent implements OnInit {
           }
       }
   }
-  
- viewpagestep(page_path:any){
-      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+page_path;
-      window.open(url, '_blank');
+  viewpagestep(getdata:any){
+    var url = this.mydomain+getdata.page_path;
+    window.open(url, '_blank');
   }
-
   funnelstepedit(unique1:any, unique2:any,type:any){
 
     // console.log(unique1+' - '+unique2+' - '+type);
@@ -656,35 +678,49 @@ export class CreateFunnelComponent implements OnInit {
     this.automationaddnewtext = false;
 
     if(type=='copy'){
+
       this.copylink = true;
       this.popupsidebar = true;
       this.firstpart = true;
       this.colortheme = false;
+
       this.funnelurl = window.origin+'/funnels/'+this.uniqueid+'funnel/steps/'+unique2;
-      this.pageurl = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+unique1;
+      this.pageurl = this.mydomain+unique1;
+
     }else if(type=='duplicate'){
-      var newobj = {uniqueid:unique2, type:'duplicatestep'}
+      this.searching = true;
+      var newobj = {uniqueid:unique2, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(newobj).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             if(data.success==1){
 
-              var page = {
-                head: '',
-                body: '',
-                style: '',
-                dir: 'drafts',
-                folder: data.pagepath,
-                prevFolder: data.pagepath
-              };
-              this._general.fileUploadService.savePage(page).subscribe((event:any) => {
-                // console.log(event);
-              },
-              error=>{console.log(error)});
+              var pathobj  = {oldpath:unique1,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
+              this.fileuploadService.copypage(pathobj).subscribe({
+                next: data => {
+                  this.searching = false;
+                  this.showfunnelsteps();
+                  this._snackBar.open('Successfully Duplicate Step!', 'Close');
+                }
+              });
 
-              this.showfunnelsteps();
-              this._snackBar.open('Successfully Duplicate Step!', 'Close');
-              this.kb_substeps2(data.data.insertId);
+              var oldscr = 'keaimage-page-'+unique2+'-screenshot.png';
+              this.fileuploadService.validateimg(oldscr).subscribe({
+                next: data2 => {
+                  this.searching = false;
+                  if(data2.data==1){
+                      var imgobj  = {oldname:oldscr, newname:'keaimage-page-'+data.newuniqueid+'-screenshot.png'};
+                      this.fileuploadService.copyimage(imgobj).subscribe({
+                        next: data => {
+
+                        }
+                      });
+                    }
+                  }
+              });
+
+              // this.kb_substeps2(data.data.insertId);
+
             }
           }
         });
@@ -720,7 +756,6 @@ export class CreateFunnelComponent implements OnInit {
           this._snackBar.open('Successfully Archived!', 'Close');
 
           setTimeout(() => {
-            
             // console.log(this.nextstepid+'  --1');
             // console.log(this.uniqueidstep+'  --2');
             // console.log(this.firstselectedid+' --id');
@@ -748,31 +783,43 @@ export class CreateFunnelComponent implements OnInit {
     // console.log(this.uniqueidstep);
 
     if(value=='clonefunnelstep'){
-      var newobj = {uniqueid:this.uniqueidstep, type:'duplicatestep'};
-      this.funnelService.makefunnelstepduplicate(newobj).subscribe({
-        next: data => {
-          // console.log(data);
-          if(data.success==1){
+      if(this.funnelstepurl!=''){
 
-            var page = {
-              head: '',
-              body: '',
-              style: '',
-              dir: 'drafts',
-              folder: data.pagepath,
-              prevFolder: data.pagepath
-            };
-            this._general.fileUploadService.savePage(page).subscribe((event:any) => {
-              // console.log(event);
-            },
-            error=>{console.log(error)});
+        var newobj = {uniqueid:this.uniqueidstep, type:'duplicatestep'};
+        this.funnelService.makefunnelstepduplicate(newobj).subscribe({
+          next: data => {
+            // console.log(data);
+            if(data.success==1){
 
-            this.showfunnelsteps();
-            this._snackBar.open('Successfully Duplicate Step!', 'Close');
-            this.kb_substeps2(data.data.insertId);
+              var pathobj  = {oldpath:this.funnelstepurl,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
+              this.fileuploadService.copypage(pathobj).subscribe({
+                next: data => {
+                  this.showfunnelsteps();
+                  this._snackBar.open('Successfully Duplicate Step!', 'Close');
+                }
+              });
+
+              var oldscr = 'keaimage-page-'+this.uniqueidstep+'-screenshot.png';
+              this.fileuploadService.validateimg(oldscr).subscribe({
+                next: data2 => {
+                if(data2.data==1){
+                    var imgobj  = {oldname:oldscr, newname:'keaimage-page-'+data.newuniqueid+'-screenshot.png'};
+                    this.fileuploadService.copyimage(imgobj).subscribe({
+                      next: data => {
+                      }
+                    });
+                  }
+                }
+              });
+
+              // this.kb_substeps2(data.data.insertId);
+
+            }
+
           }
-        }
-      });
+        });
+
+      }
     }else if(value=='archivefunnelstep'){
       this.automationaddnewaction = false;
         this.forarchiveid = this.uniqueidstep;
@@ -781,39 +828,13 @@ export class CreateFunnelComponent implements OnInit {
         this.copylink = true;
     }else if(value=='deletefunnelstep'){
 
-      var obj = {id:this.uniqueidstep, type: 'deletestep'};
-
-      this.funnelService.makefunnelsettings(obj).subscribe({
-        next: data => {
-          // console.log(data);
-  
-          if(data.status==1){
-
-            this.fileuploadService.deletepage(data.path).subscribe({
-              next: data => {
-                // console.log(data);
-              }
-            });
-
-            this.showfunnelsteps();
-            this._snackBar.open('Successfully Deleted!', 'Close');
-            this.kb_substeps2(data.id);
-          }else if(data.status==0){
-            if(data.notallow==1){
-              this._snackBar.open('Single Step Can not be Deleted!', 'Close');
-            }
-          }
-  
-  
-        }
-      });
 
     }
 
   }
   checkpagesettings(value:any){
     if(value=='redirect'){
-      var url = 'https://'+this.mydomain.subdomain+'.'+this.mydomain.domain+'/'+this.funnelstepurl;
+      var url = this.mydomain+this.funnelstepurl;
       window.open(url, '_blank')
     }else if(value=='settings'){
       this.tabOpen = 'publishing';
@@ -842,14 +863,15 @@ export class CreateFunnelComponent implements OnInit {
   }
   archivepanel(value:any,selectedid:any){
     // console.log(this.panelOpenState);
-
     if(value=='archivefunnelstep'){
-
+      
       if(this.panelOpenState){
+        this.searching = true;
         this.funnelService.getuniquefunnelstep(this.uniqueid, value).subscribe({
           next: data => {
+            this.searching = false;
+            console.log(data);
             this.archivesteps = data.data;
-            // console.log(this.archivesteps);
           }
         });
       }
@@ -869,28 +891,106 @@ export class CreateFunnelComponent implements OnInit {
 
           }
         });
-    }else if(value=='deleteit'){
-      this.funnelService.getuniquefunnelstep(selectedid, value).subscribe({
-        next: data => {
-          // console.log(data);
-          if(data.status==1){
-
-            this.fileuploadService.deletepage(data.path).subscribe({
-              next: data => {
-                // console.log(data);
-              }
-            });
-          
-            this.archivesteps = data.data;
-            this._snackBar.open('Successfully Deleted!', 'Close');
-
-          }
-        }
-      });
     }
 
+  }
+  
+  openDialogdel(templateRef: TemplateRef<any>, page:any): void {
+    this.delfunnel = page;
+    this.dialog.open(templateRef);
+  }
+  
+  deletefunnelstep(selectdata:any){
+    this.searching = true;
+    this.funnelService.getuniquefunnelstep(selectdata.id, 'deleteit').subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.status==1){
+
+          var newpathobj:any = {website_id:this.uniqueid, path:data.path};
+          this.fileuploadService.deletepage(newpathobj).subscribe({
+            next: data => {
+              // console.log(data);
+            }
+          });
+
+          var genscrn = 'keaimage-'+selectdata.uniqueid+'-screenshot.png';
+          this.fileuploadService.validateimg(genscrn).subscribe({
+            next: data => {
+
+             if(data.data==1){
+                this.fileuploadService.deleteimage(genscrn).subscribe({
+                  next: data => {
+                    // console.log(data);
+                  }
+                });
+              }
+
+            }
+          });
+          
+          this.searching = false;
+          this.archivesteps = data.data;
+          this._snackBar.open('Funnel Step Deleted Successfully!', 'Close');
+
+        }
+      }
+    });
+  }
+
+  openDialogdel2(templateRef: TemplateRef<any>, page:any): void {
+    this.dialog.open(templateRef);
+  }
+
+  deletefunnelstep2(){
+    
+    var obj = {id:this.uniqueidstep, type: 'deletestep'};
+
+    this.funnelService.makefunnelsettings(obj).subscribe({
+      next: data => {
+        console.log(data);
+
+        if(data.status==1){
+
+          var newpathobj:any = {website_id:this.uniqueid, path:data.path};
+          console.log(newpathobj);
+          this.fileuploadService.deletepage(newpathobj).subscribe({
+            next: data => {
+              // console.log(data);
+            }
+          });
+
+          var genscrn = 'keaimage-'+this.uniqueid+'-screenshot.png';
+          this.fileuploadService.validateimg(genscrn).subscribe({
+            next: data => {
+
+             if(data.data==1){
+                this.fileuploadService.deleteimage(genscrn).subscribe({
+                  next: data => {
+                    // console.log(data);
+                  }
+                });
+              }
+
+            }
+          });
+
+          this.showfunnelsteps();
+          this._snackBar.open('Step deleted Successfully Deleted!', 'Close');
+          this.kb_substeps2(data.id);
+
+        }else if(data.status==0){
+          if(data.notallow==1){
+            this._snackBar.open('Single Step Can not be Deleted!', 'Close');
+          }
+        }
+
+
+      }
+    });
 
   }
+
   savesteptheme(){
     var obj = {value:this.badgecolor,id:this.forarchiveid, type: 'colorbadge'};
    
@@ -998,7 +1098,6 @@ export class CreateFunnelComponent implements OnInit {
     }
 
   }
-
   editproduct(id:any){
     this.editproid = id;
 
@@ -1030,7 +1129,6 @@ export class CreateFunnelComponent implements OnInit {
     });
 
   }
-
   editcheckout(){
     this.popupsidebar = true;
    this.editcheckoutdetails = true;
@@ -1043,7 +1141,6 @@ export class CreateFunnelComponent implements OnInit {
    this.colortheme = false;
 
   }
-  
   savemycheckout(){
 
     this.checkoutstyle.id = this.uniqueidstep;
@@ -1152,6 +1249,70 @@ export class CreateFunnelComponent implements OnInit {
       }
       
     });
+
+  }
+
+  dupanotherdes(page:any){
+    
+    console.log(page);
+    console.log(this.newfunnelid);
+
+    if(this.newfunnelid!=''){
+
+      console.log(page);
+      var getvl = 'pages';
+      // var newpath = page.page_path+'-'+this.makeid(20);
+
+      var dtobj = {type:this.actionname, newfunnelid:this.newfunnelid, uniqueid:page.uniqueid, newpath: page.page_path};
+      this.funnelService.movecopyfunnel(dtobj).subscribe({
+        next: data => {
+          console.log(data);
+
+          if(data.foundone==0 && data.success==1){
+
+            if(this.actionname == 'Move'){
+              this.kb_substeps2(this.firstselectedid);
+            }
+
+            // console.log('inside');
+
+            var pathobj = {old_website_id:data.oldfunnelid, new_website_id:this.newfunnelid, dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
+            this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
+            
+            // console.log(pathobj);
+            this.fileuploadService.transferPage(pathobj).subscribe({
+              next: data => {
+                console.log(data);
+                this.actionname=='Move' ? this._snackBar.open('Funnel Step Move Successfully!', 'OK'): this._snackBar.open('Funnel Step Copy & Move Successfully!', 'OK');
+                this.showfunnelsteps();
+              }
+            });
+
+          }else{
+            this.actionname=='Move' ? this._snackBar.open("Single Step Can't be Move!", 'OK'): this._snackBar.open("Single Step Can't be Copy & Move!", 'OK');
+          }
+
+        }
+      });
+
+    }else{
+      this._snackBar.open("Can't find the Funnel!", 'OK');
+    }
+
+  }
+
+  openDialog2(templateRef: TemplateRef<any>, page:any , type:any): void {
+
+    if(type=='move'){
+      this.actionname = 'Move';
+    }else if(type=='copymove'){
+      this.actionname = 'Copy & Move';
+    }else{
+      this.actionname = '';
+    }
+
+    this.selfunnelstep = page;
+    this.dialog.open(templateRef);
 
   }
 

@@ -260,9 +260,11 @@ ul.kea-barfunnelsearch li.active a {
 opacity: 0;
 }
 .keabuilder-footer-right{
-    position: relative;
+    position: absolute;
+    top: 0px;
+    right: 4px;
 }
-.keabuilder-footer-right a {
+.keabuilder-footer-right i {
     font-size: 12px;
 }
 .keabuilder-attachment {
@@ -281,10 +283,10 @@ opacity: 0;
     overflow: hidden;
 }
 
-.keatopstep:hover .kea-footerbar{
+/* .keatopstep:hover .kea-footerbar{
     height: 310px;
     display: block;
-}
+} */
 
 .keatopstep{
     background: #fff;

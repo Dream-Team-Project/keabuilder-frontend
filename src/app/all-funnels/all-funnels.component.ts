@@ -273,56 +273,62 @@ export class AllFunnelsComponent implements OnInit {
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
         console.log(data); 
-        this.funnels = [];
-        if(data.data2?.length!=0){
-          this.funnelnotfound = false;
-
-          data.data2.forEach((element: any) => {
-              var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[]};
-              newob.uniqueid = element.uniqueid;
-              newob.id = element.id;
-              newob.name = element.name;
-              newob.grouptags = element.grouptags;
-
-              newob.domain = element.domain;
-              newob.subdomain = element.subdomain;
-
-                data.data.forEach((element2: any) => {
-                  var newob2 = {id:'',uniqueid:'',page_name:'',page_path:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
-                  if(element2.funnelid==newob.uniqueid){
-                    newob2.id = element2.id;
-                    newob2.page_name = element2.page_name;
-                    newob2.uniqueid = element2.uniqueid;
-
-                    var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);
-                    newob2.updated_at = subdate;
-                    newob2.variation = element2.variation;
-                    newob2.tag = element2.tags;
-                    newob2.color = element2.color;
-                    newob2.img = element2.img;
-                    newob2.funnelid = element2.funnelid;
-                    newob2.funneltype = element2.funneltype;
-                    newob2.page_path = element2.page_path;
-
-                    newob.steps.push(newob2);
-                  }
-                });
-
-            this.funnels.push(newob);
-            console.log(this.funnels);
-
-          });
-
-        }else{
-            this.funnelnotfound = true;
-        }
-
+        
+        this.generatefunneldt(data);
 
       },
       error: err => {
         console.log(err);
       }
     });
+
+  }
+
+  generatefunneldt(data:any){
+
+    this.funnels = [];
+    if(data.data2?.length!=0){
+      this.funnelnotfound = false;
+
+      data.data2.forEach((element: any) => {
+          var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[]};
+          newob.uniqueid = element.uniqueid;
+          newob.id = element.id;
+          newob.name = element.name;
+          newob.grouptags = element.grouptags;
+
+          newob.domain = element.domain;
+          newob.subdomain = element.subdomain;
+
+            data.data.forEach((element2: any) => {
+              var newob2 = {id:'',uniqueid:'',page_name:'',page_path:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
+              if(element2.funnelid==newob.uniqueid){
+                newob2.id = element2.id;
+                newob2.page_name = element2.page_name;
+                newob2.uniqueid = element2.uniqueid;
+
+                var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);
+                newob2.updated_at = subdate;
+                newob2.variation = element2.variation;
+                newob2.tag = element2.tags;
+                newob2.color = element2.color;
+                newob2.img = element2.img;
+                newob2.funnelid = element2.funnelid;
+                newob2.funneltype = element2.funneltype;
+                newob2.page_path = element2.page_path;
+
+                newob.steps.push(newob2);
+              }
+            });
+
+        this.funnels.push(newob);
+        console.log(this.funnels);
+
+      });
+
+    }else{
+        this.funnelnotfound = true;
+    }
 
   }
 
@@ -352,7 +358,7 @@ export class AllFunnelsComponent implements OnInit {
       this.shwobtnfirst = false;
       this.colortheme = false;
     }else if(type=='duplicate'){
-        console.log(unique1+' - '+unique2);
+        // console.log(unique1+' - '+unique2);
         var nwobj:any = {uniqueid: unique2, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(nwobj).subscribe({
           next: data => {
@@ -360,8 +366,6 @@ export class AllFunnelsComponent implements OnInit {
             if(data.success==1){
 
               var pathobj  = {oldpath:unique1,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
-              // console.log(pathobj);
-          
               this._file.copypage(pathobj).subscribe({
                 next: data => {
 
@@ -369,10 +373,17 @@ export class AllFunnelsComponent implements OnInit {
                   this._snackBar.open('Step Duplicate Successfully!', 'Close');
                 }
               });
-              var imgobj  = {oldname:'keaimage-page-'+unique2+'-screenshot.png', newname:'keaimage-page-'+data.newuniqueid+'-screenshot.png'};
-              this._file.copyimage(imgobj).subscribe({
-                next: data => {
-                  console.log(data);
+
+              var oldscr = 'keaimage-page-'+unique2+'-screenshot.png';
+              this._file.validateimg(oldscr).subscribe({
+                next: data2 => {
+                if(data2.data==1){
+                    var imgobj  = {oldname:oldscr, newname:'keaimage-page-'+data.newuniqueid+'-screenshot.png'};
+                    this._file.copyimage(imgobj).subscribe({
+                      next: data => {
+                      }
+                    });
+                  }
                 }
               });
 
@@ -457,42 +468,26 @@ export class AllFunnelsComponent implements OnInit {
     });
   }
 
-  getthumbnail(id:any){
-    var genscrn = '/assets/uploads/images/keaimage-'+id+'-screenshot.png';
-    return genscrn;
+  // getthumbnail(id:any){
+  //   var genscrn = '/assets/uploads/images/keaimage-'+id+'-screenshot.png';
+  //   return genscrn;
 
-    // this.fileuploadService.validateimg(genscrn).subscribe({
-    //   next: data => {
+  //   // this.fileuploadService.validateimg(genscrn).subscribe({
+  //   //   next: data => {
 
-    //    if(data.data==1){
-    //       return '/assets/uploads/images/'+genscrn;
-    //     }else{
-    //       return ' ';
-    //     }
+  //   //    if(data.data==1){
+  //   //       return '/assets/uploads/images/'+genscrn;
+  //   //     }else{
+  //   //       return ' ';
+  //   //     }
 
-    //   }
-    // });
+  //   //   }
+  //   // });
 
-  }
+  // }
 
   openDialog(e:any) {
     this.DialogParentToggle = !this.DialogParentToggle;
-  }
-
-  searchpage(event: Event) {
-    // this.searching = true;
-    // var SearchValue = {search:(event.target as HTMLInputElement).value};
-    // // console.log(SearchValue);
-    // this.selstatusshow = 'all';
-
-    // this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
-    //   next: data => {
-
-    //     console.log(data);
-    //     this.fetweb(data);
-    //     // this.shortdata(data);
-    //   }
-    // });
   }
 
   dupanotherdes(page:any){
@@ -521,7 +516,7 @@ export class AllFunnelsComponent implements OnInit {
             this._file.transferPage(pathobj).subscribe({
               next: data => {
                 console.log(data);
-                this.actionname=='Move' ? this._snackBar.open('Funnel Move Successfully!', 'OK'): this._snackBar.open('Funnel Copy & Move Successfully!', 'OK');
+                this.actionname=='Move' ? this._snackBar.open('Funnel Step Move Successfully!', 'OK'): this._snackBar.open('Funnel Step Copy & Move Successfully!', 'OK');
                 this.showfunnels();
               }
             });
@@ -564,19 +559,35 @@ export class AllFunnelsComponent implements OnInit {
 
   }
   
+  searchpage(event: Event) {
+    this.searching = true;
+    var SearchValue = {search:(event.target as HTMLInputElement).value};
+    // console.log(SearchValue);
+    this.selstatusshow = 'all';
+
+    this.funnelService.querystringmanagefunnel(SearchValue).subscribe({
+      next: data => {
+        // console.log(data);
+        this.generatefunneldt(data);
+        this.searching = false;
+      }
+    });
+  }
 
   applykbfilter(){
-    // var dt:any = {order:this.selstatusshow};
-    // this.websiteService.shortbypaginatorwebsite(dt).subscribe({
-    //   next: data => {
-    //     console.log(data);
+    var dt:any = {order:this.selstatusshow};
+    this.searching = true;
 
-    //     this.fetweb(data);
-    //   },
-    //   error: err => {
-    //     console.log(err);
-    //   }
-    // });
+    this.funnelService.shortbypaginatorfunnnel(dt).subscribe({
+      next: data => {
+        console.log(data);
+        this.searching = false;
+        this.generatefunneldt(data);
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
 

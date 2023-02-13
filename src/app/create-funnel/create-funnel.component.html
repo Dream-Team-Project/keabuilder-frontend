@@ -1,7 +1,53 @@
 <div id="createfunnel">
+  <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+
+  <ng-template #dialogduplicate>
+    <h1 mat-dialog-title >{{actionname}} Step</h1>
+    <div mat-dialog-content>
+        Would you like to {{actionname}} <span class="text-primary">{{selfunnelstep.page_name}}</span> Step?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+  
+        <mat-form-field appearance="fill" class="kb-full-width">
+          <mat-label>Funnels</mat-label>
+          <mat-select name="newfunnelid" [(ngModel)]="newfunnelid" >
+            <span *ngFor="let funnel of funnels">
+                <mat-option *ngIf="uniqueid!=funnel.uniqueid" [value]="funnel.uniqueid">
+                    {{funnel.name}}
+                </mat-option>
+            </span>
+          </mat-select>
+        </mat-form-field>
+        <button mat-button class="text-info" mat-dialog-close >No</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(selfunnelstep)">Yes</button>
+  
+    </div>
+</ng-template>
+
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
+  <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{delfunnel.page_name}}</span> Funnel Step?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep(delfunnel);">Yes</button>
+  </div>
+</ng-template>
+
+<ng-template #dialog2>
+  <h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
+  <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{funnelstepname}}</span> Funnel Step? <br>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep2();">Yes</button>
+  </div>
+</ng-template>
 
   <div id="kb-automation-actions" *ngIf="popupsidebar">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar" >
+    <div class="offcanvas offcanvas-right p-4 offcanvas-on" >
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
 
       <div *ngIf="automationaddnewaction" > 
@@ -72,7 +118,7 @@
 
         <div *ngIf="firstpart">
 
-          <h6><b>Duplicate Step URL</b></h6>
+          <h6><b>Copy Step URL</b></h6>
           <hr>
           <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Funnel Url</mat-label>
@@ -80,12 +126,12 @@
           </mat-form-field>
           
           <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-              <i class="far fa-copy"></i> Duplicate Step Url
+              <i class="far fa-copy"></i> Copy Step Url
           </button>
             
           <hr>
             
-          <h6><b>Duplicate Page URL</b></h6>
+          <h6><b>Copy Page URL</b></h6>
           <hr>
           <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Page Url</mat-label>
@@ -93,7 +139,7 @@
           </mat-form-field>
           
           <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-              <i class="far fa-copy"></i> Duplicate Url
+              <i class="far fa-copy"></i> Copy Url
           </button>
 
         </div>
@@ -253,51 +299,60 @@
   <!-- <app-funnel-wizard-nav></app-funnel-wizard-nav> -->
 
   <div class="container-fluid" *ngIf="steps.length>0">
-    <div class="row whitefunnel loadEffect" >
+    <div class="row whitefunnel" >
       <div class="col-md-3 pb-3 pt-3 rightbrder">
         <button class="mt-2 btn-block mb-3" (click)="addsteps()" mat-raised-button color="primary" ><i class="fas fa-plus"></i> Add A Step</button>
         
           <div [sortablejs]="steps" [sortablejsOptions]="parentOptions" >
-            <div class="Keabuilder-item infome keamaindropitem" [class]="element.color" [class.selectedstep]="selectedstep==element.id" *ngFor="let element of steps; index as i;" >
+            <div class="Keabuilder-item infome keamaindropitem" [class]="step.color" [class.selectedstep]="selectedstep==step.id" *ngFor="let step of steps; index as i;" >
 
-              <div class="keatitlebox">
+              <div class="keatitlebox" (click)="kb_substeps2(step.id)" [attr.key]="step.id"
+              [attr.data-listid]="step.id">
                 <div class="keabuilder-title-board">
-                  <span>{{ element.page_name }}</span>
-                  <input type="text" [(ngModel)]="element.page_name" (blur)="changestepnamesoutside(element.id,element.page_name)" >
+                  <span>{{ step.page_name }}</span>
+                  <!-- <input type="text" [(ngModel)]="step.page_name" (blur)="changestepnamesoutside(step.id,step.page_name)" > -->
                 </div>
   
-                <div class="kea-selectarea" (click)="kb_substeps2(element.id)" [attr.key]="element.id"
-                [attr.data-listid]="element.id">
-                  <span class="funneltypesty">{{element.funneltype}}</span>
+                <div class="kea-selectarea" >
+                  <span class="funneltypesty">{{step.funneltype}}</span>
                 </div>
   
                 <i class="fas fa-grip-lines float-right mt-1"></i>
               </div>
              
-              <!-- <div class="btn-group float-right mr-1 mt-lg-n2">
+              <div class="btn-group">
 
                 <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
-                  <i class="fas fa-ellipsis-v"></i>
+                  <i class="fas fa-cog"></i>
                 </button>
                 
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="funnelstepedit(steps[i].page_path, steps[i].uniqueid, 'copy')">
-                      <i class="fas fa-link" ></i> Duplicate Link
-                    </button>
-                    <button mat-menu-item (click)="funnelstepedit(steps[i].funnelid, steps[i].uniqueid, 'duplicate')">
-                        <i class="far fa-clone mr-2" ></i> Duplicate
-                    </button>
-                    <button mat-menu-item (click)="funnelstepedit(steps[i].color,steps[i].uniqueid,'colortheme')">
-                        <i class="far fa-check-circle mr-2"></i> Change Color Badge
-                    </button>
-                    <button mat-menu-item class="text-danger" (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
-                        <i class="far fa-trash-alt mr-2"></i> Archive
-                    </button>
+                  <button mat-menu-item (click)="viewpagestep(step)">
+                    <i class="fas fa-eye mr-2" ></i> View Step
+                  </button>
+                  <button mat-menu-item (click)="funnelstepedit(step.page_path, step.uniqueid, 'copy')">
+                    <i class="fas fa-link mr-2" ></i> Copy Link
+                  </button>
+                  <button mat-menu-item (click)="funnelstepedit(step.page_path, step.uniqueid, 'duplicate')">
+                      <i class="far fa-clone mr-2" ></i> Duplicate
+                  </button>
+                  <button mat-menu-item (click)="openDialog2(dialogduplicate, step, 'move');">
+                    <i class="fa fa-paste mr-2"></i> Move
+                  </button>
+                  <button mat-menu-item (click)="openDialog2(dialogduplicate, step, 'copymove');">
+                      <i class="fa fa-paste mr-2"></i> Copy & Move
+                  </button>
+                  <button mat-menu-item (click)="funnelstepedit(step.color,step.uniqueid,'colortheme')">
+                      <i class="far fa-check-circle mr-2"></i> Change Color Badge
+                  </button>
+                  <button mat-menu-item class="text-danger" (click)="funnelstepedit(step.id, step.uniqueid, 'archive')" >
+                      <i class="far fa-trash-alt mr-2"></i> Archive
+                  </button>
                 </mat-menu>
 
-              </div> -->
+              </div>
 
-              <div class="keafooterdropmenu">
+              <!-- <div class="keafooterdropmenu">
                 <button mat-menu-item (click)="viewpagestep(steps[i].page_path)">
                   <i class="fas fa-eye mr-2" ></i> View Step
                 </button>
@@ -313,7 +368,7 @@
                 <button mat-menu-item class="text-danger" (click)="funnelstepedit(steps[i].id, steps[i].uniqueid, 'archive')" >
                     <i class="far fa-trash-alt mr-2"></i> Archive
                 </button>
-              </div>
+              </div> -->
 
             </div>
           </div>
@@ -333,12 +388,12 @@
                       <span>{{ element.page_name }}</span>
                     </div>
                             
-                    <div class="btn-group float-right mr-1 mt-lg-n2">
-      
+                    <div class="btn-group adjustarc">
+                      
                       <div class="kb-archivebtn" matTooltip="UnArchive It" (click)="archivepanel('unarchiveit',element.id)" matTooltipPosition="above">
                         <i class="fa fa-trash-restore"></i>
                       </div>
-                      <div class="kb-archivebtn" matTooltip="Permanent Delete It!" (click)="archivepanel('deleteit',element.id)" matTooltipPosition="above">
+                      <div class="kb-archivebtn" matTooltip="Permanent Delete It!" (click)="openDialogdel(dialog, element)" matTooltipPosition="above">
                         <i class="far fa-trash-alt"></i>
                       </div>
       
@@ -405,7 +460,7 @@
           </div>
 
           <!-- templates -->
-          <div class="kb-templates loadEffectFromLeft text-center mt-5" *ngIf="tabOpen == 'overview'">
+          <div class="kb-templates text-center mt-5" *ngIf="tabOpen == 'overview'">
 
             <button mat-raised-button (click)="usertemplateselected('start')" class="mt-4">
               <i class="fas fa-plus"></i> Build Funnel With Keabuilder
@@ -545,7 +600,7 @@
           </div>
           <!-- templates -->
 
-          <div class="kb-overview loadEffectFromLeft" *ngIf="tabOpen == 'overviewstep'">
+          <div class="kb-overview " *ngIf="tabOpen == 'overviewstep'">
             <div class="sage-input site_support_email mt-3">
               <input class="sage-input__field" type="url" [(value)]="'/'+funnelstepurl" disabled >
               <label class="sage-input__label" for="site_support_email">Your Link</label>
@@ -697,13 +752,13 @@
 
             <div class="footer-wizard-kb mb-5">
               <button mat-raised-button color="accent" (click)="kbfootersteps('archivefunnelstep')"><i class="fas fa-times"></i> Archive<span class="keamkmob"> Funnel step</span></button>
-              <button mat-raised-button color="accent" (click)="kbfootersteps('deletefunnelstep')"><i class="far fa-trash-alt"></i> Delete <span class="keamkmob">Funnel Step</span></button>
+              <button mat-raised-button color="accent" (click)="openDialogdel2(dialog2, '')"><i class="far fa-trash-alt"></i> Delete <span class="keamkmob">Funnel Step</span></button>
               <button mat-raised-button color="accent" (click)="kbfootersteps('clonefunnelstep')"><i class="far fa-clone"></i> Clone <span class="keamkmob">Funnel Step</span></button>
             </div>
           </div>
           <!-- overview end -->
 
-          <div class="kb-automation mt-4 pb-5 loadEffect" *ngIf="tabOpen == 'product'">
+          <div class="kb-automation mt-4 pb-5 " *ngIf="tabOpen == 'product'">
               <div class="row pt-4">
                 <div class="col-md-12" *ngIf="myproductsshow.length==0">
                   <h5><strong>Add a New Product to Funnel Step</strong></h5>
@@ -734,7 +789,7 @@
           </div>
           <!-- product end -->
 
-          <div class="kb-automation mt-4 pb-5 loadEffect" *ngIf="tabOpen == 'automation'">
+          <div class="kb-automation mt-4 pb-5 " *ngIf="tabOpen == 'automation'">
             <div class="kb-automation-header">
 
             </div>
@@ -749,13 +804,13 @@
           </div>
           <!-- automation end -->
 
-          <div class="kb-publishing loadEffect" *ngIf="tabOpen == 'publishing'">
+          <div class="kb-publishing " *ngIf="tabOpen == 'publishing'">
             <div class="row mt-4 pb-5">
 
               <div class="col-md-6 mt-4" *ngIf="isvariationinactive">
 
                 <mat-form-field class="kb-full-width" appearance="fill">
-                  <mat-label>FUNNEL STEP NAME</mat-label>
+                  <mat-label>Funnel Step Name</mat-label>
                   <input type="text" name="funnelname" (blur)="changestepnames('stepname')" [(ngModel)]="funnelstepname" matInput>
                 </mat-form-field>
 
@@ -764,7 +819,7 @@
               <div class="col-md-6 mt-4" *ngIf="isvariationinactive">
                 
                 <mat-form-field class="kb-full-width" appearance="fill">
-                  <mat-label>PATH</mat-label>
+                  <mat-label>Path</mat-label>
                   <input type="text" (input)="funnelstepurl = _general.joinWthDash(funnelstepurl)" matInput name="funnelpath" (blur)="changestepnames('page_path')" [(ngModel)]="funnelstepurl">
                 </mat-form-field>
                
