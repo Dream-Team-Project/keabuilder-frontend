@@ -100,8 +100,12 @@ export class FunnelArchiveComponent implements OnInit {
 
     this.funnelService.restoredeletefunnel(id,type).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         if(data.success==1){
+
+          data.data.forEach((element:any) => {
+            this.draftpublish('1', element.page_path, id);
+          });
 
           this.applykbfilter();
 
@@ -112,6 +116,15 @@ export class FunnelArchiveComponent implements OnInit {
         console.log(err);
       }
     });
+
+  }
+
+  draftpublish(status:any, page_path:any, websiteid:any){
+
+    var getvl = status == '0' ? 'draft' : 'publish';
+    var newobjdt = {status:getvl, path:page_path, website_id:websiteid};
+    this.fileuploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
+    })
 
   }
 

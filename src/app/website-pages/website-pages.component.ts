@@ -154,6 +154,8 @@ export class WebsitePagesComponent implements OnInit {
   pageEvent!: PageEvent;  
 
   togglestatus:any;
+  dialogwebsiteset = '';
+
 
   getServerData(event?:PageEvent){
     var length = event?.length;
@@ -350,7 +352,9 @@ export class WebsitePagesComponent implements OnInit {
               data.data.forEach((element:any) => {
 
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
-                console.log(this.searchpagetxt);
+
+                this.dialogwebsiteset = element.uniqueid;
+                // console.log(this.searchpagetxt);
     
                 if(element.domain!='' && element.domain!=null){
                   this.mydomain = element.domain;
@@ -404,16 +408,12 @@ export class WebsitePagesComponent implements OnInit {
   changepagename(dataobj:any, title:any, type:any){
 
     console.log(dataobj);
-
-    if(title==''){
-      this.showwebpages();
-    }
       this.pageurl = '';
       this.seotitle = '';
       this.seodescr = '';
       this.seoauthor = '';
       this.keywords = [];
-
+    console.log(title);
       this.webpagesService.namepathchanges(dataobj.id,title,type).subscribe({
         next: data => {
           console.log(data);
@@ -422,8 +422,9 @@ export class WebsitePagesComponent implements OnInit {
           if(data.success==1){
               if(type!='quickedit'){
                 if(data.type=='name'){
+
+                  this.showwebpages();
                   this._snackBar.open('Name Changed Successfully!', 'OK');
-                  // this.showwebpages();
                 }else if(data.type=='status'){
 
                   this.draftpublish(title, dataobj.page_path);
@@ -633,13 +634,13 @@ export class WebsitePagesComponent implements OnInit {
 
       console.log(page);
       var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
-      var newpath = page.page_path+'-'+this.makeid(20);
+      // var newpath = page.page_path+'-'+this.makeid(20);
 
-      var dtobj = {type:this.actionname, newwebsiteid:this.newwebsiteid, uniqueid:page.uniqueid, newpath: newpath};
+      var dtobj = {type:this.actionname, newwebsiteid:this.newwebsiteid, uniqueid:page.uniqueid, newpath: page.page_path};
       this.webpagesService.movecopywebpage(dtobj).subscribe({
         next: data => {
           console.log(data);
-          var pathobj = {old_website_id:this.websiteid, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:newpath, trigger:''};
+          var pathobj = {old_website_id:this.websiteid, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
 
           this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
 
@@ -658,8 +659,6 @@ export class WebsitePagesComponent implements OnInit {
     }else{
       this._snackBar.open("Can't find the website!", 'OK');
     }
-
-   
 
   }
 

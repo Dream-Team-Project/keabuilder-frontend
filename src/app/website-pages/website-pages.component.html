@@ -19,9 +19,11 @@
       <mat-form-field appearance="fill" class="kb-full-width">
         <mat-label>Websites</mat-label>
         <mat-select name="newwebsiteid" [(ngModel)]="newwebsiteid" >
-          <mat-option *ngFor="let website of websites" [value]="website.uniqueid">
-            {{website.title}}
-          </mat-option>
+          <span *ngFor="let website of websites">
+            <mat-option *ngIf="dialogwebsiteset!=website.uniqueid" [value]="website.uniqueid">
+              {{website.title}}
+            </mat-option>
+          </span>
         </mat-select>
       </mat-form-field>
       <button mat-button class="text-info" mat-dialog-close >No</button>
@@ -419,7 +421,7 @@
                       <button mat-menu-item (click)="shortsettings(kbpage,'duplicate')">
                         <i class="far fa-copy mr-2"></i> Duplicate
                       </button>
-                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'move')">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'move');">
                         <i class="fa fa-paste mr-2"></i> Move
                       </button>
                       <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'copymove')">

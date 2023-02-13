@@ -181,11 +181,12 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
                         this._file.createwebsitefolder(dataobj).subscribe(e=>{
                             console.log(e);
                         });
+
                         var page = {
                             head: '',
                             body: '',
                             style: '',
-                            dir: '/drafts',
+                            dir: '/pages',
                             folder: data.data.pagepath,
                             prevFolder: data.data.pagepath,
                             website_id:data.data.uniqueid, 
