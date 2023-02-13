@@ -71,7 +71,6 @@ export class NavigationComponent {
       let i = 0;
       var steps = data.data;
       this.funnels = data.data2;
-      console.log(data);
       if(data.data?.length>0){
         this.funnels.forEach((fp:any)=>{
           let j = 0;

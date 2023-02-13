@@ -11,76 +11,71 @@ export class FormService {
   form: any = {
     id: '',
     name: 'Form Name',
-    path: '',
-    action: '',
+    redirection: ''
   }
   formEle: any = [
     { name: 'heading', html: '<h2>Heading goes here</h2>', iconCls: 'fas fa-heading' },
     { name: 'text', html: '<p>Paragraph goes here</p>', iconCls: 'fas fa-paragraph' },
     { name: 'image', src: '', iconCls: 'far fa-image' },
     { name: 'divider', iconCls: 'fas fa-grip-lines' },
-    { name: 'full-name', label: 'Full Name', type: 'text', placeholder: 'Full Name', iconCls: 'fas fa-user', required: true, input: true },
+    { name: 'full-name', label: 'Full Name', type: 'text', placeholder: 'Full Name', iconCls: 'fas fa-user', value: '', required: true, input: true },
     {
       name: 'name', label: 'Name', iconCls: 'far fa-user', required: true, input: true, split: [
-        { name: 'first-name', type: 'text', placeholder: 'First Name' },
-        { name: 'last-name', type: 'text', placeholder: 'Last Name' },
+        { name: 'first-name', type: 'text', placeholder: 'First Name', value: '' },
+        { name: 'last-name', type: 'text', placeholder: 'Last Name', value: '' },
       ]
     },
-    { name: 'email', label: 'Email', type: 'email', placeholder: 'Email Address', iconCls: 'fas fa-envelope-open-text', required: true, input: true },
-    { name: 'phone', label: 'Phone', type: 'tel', placeholder: 'Phone Number', iconCls: 'fas fa-phone', required: false, input: true },
+    { name: 'email', label: 'Email', type: 'email', placeholder: 'Email Address', iconCls: 'fas fa-envelope-open-text', value: '', required: true, input: true },
+    { name: 'phone', label: 'Phone', type: 'tel', placeholder: 'Phone Number', iconCls: 'fas fa-phone', value: '', required: false, input: true },
     {
       name: 'address', label: 'Address', iconCls: 'fas fa-address-card', required: true, input: true, split: [
         { 
           subsplit: [
-            { name: 'street-address', label: 'Street Address', type: 'textarea', placeholder: 'Street Address' }
+            { name: 'street-address', type: 'textarea', placeholder: 'Street Address', value: '' }
           ]
         },
         {
           subsplit: [
-            { name: 'city', type: 'text', placeholder: 'City', hide: false },
-            { name: 'state', type: 'text', placeholder: 'State / Province', hide: false },
+            { name: 'city', type: 'text', placeholder: 'City', value: '', hide: false },
+            { name: 'state', type: 'text', placeholder: 'State / Province', value: '', hide: false },
           ]
         },
         {
           subsplit: [
-            { name: 'postal-code', type: 'text', placeholder: 'Postal / Zip Code', hide: false },
-            { name: 'country', type: 'select', placeholder: 'Select Country', hide: false },
+            { name: 'postal-code', type: 'text', placeholder: 'Postal / Zip Code', value: '', hide: false },
+            { name: 'country', type: 'select', placeholder: 'Select Country', value: 'none', hide: false },
           ]
         }
       ]
     },
-    {
-      name: 'split-text', label: 'Short Text', iconCls: 'fas fa-text-width', required: true, input: true, split: [
-        { name: 'short-text', type: 'text', placeholder: 'Short Text' },
-      ]
-    },
-    { name: 'long-text', label: 'Long Text', type: 'textarea', placeholder: 'Long Text', iconCls: 'fas fa-text-height', required: false, input: true },
+    { name: 'short-text', label: 'Short Text', type: 'text', placeholder: 'Short Text', iconCls: 'fas fa-text-width', value: '', required: false, input: true },
+    { name: 'long-text', label: 'Long Text', type: 'textarea', placeholder: 'Long Text', iconCls: 'fas fa-text-height', value: '', required: false, input: true },
     {
       name: 'checkbox', label: 'Multiple Choice', iconCls: 'far fa-check-square', required: false, input: true, split: [
-        { option: 'First option', type: 'checkbox', selected: false},
-        { option: 'Second option', type: 'checkbox', selected: false },
-        { option: 'Third option', type: 'checkbox', selected: false },
+        { value: 'First option', type: 'checkbox', selected: false},
+        { value: 'Second option', type: 'checkbox', selected: false },
+        { value: 'Third option', type: 'checkbox', selected: false },
       ]
     },
     {
       name: 'radio', label: 'Single Choice', iconCls: 'far fa-dot-circle', required: false, input: true, split: [
-        { option: 'First option', type: 'radio', selected: false },
-        { option: 'Second option', type: 'radio', selected: false },
-        { option: 'Third option', type: 'radio', selected: false },
+        { value: 'First option', type: 'radio', selected: false },
+        { value: 'Second option', type: 'radio', selected: false },
+        { value: 'Third option', type: 'radio', selected: false },
       ]
     },
-    { name: 'select', label: 'Select Option', type: 'select', placeholder: 'Choose Option', iconCls: 'far fa-list-alt', required: false, input: true, split: [
-      { option: 'First option', type: 'option', selected: false },
-      { option: 'Second option', type: 'option', selected: false },
-      { option: 'Third option', type: 'option', selected: false },
+    { name: 'select', label: 'Select Option', type: 'select', placeholder: 'Choose Option', iconCls: 'far fa-list-alt', value: 'none', required: false, input: true, split: [
+      { value: 'First option', type: 'option', selected: false },
+      { value: 'Second option', type: 'option', selected: false },
+      { value: 'Third option', type: 'option', selected: false },
     ] },
     {
       name: 'split-text', label: 'Split Text', iconCls: 'far fa-hand-scissors', required: false, input: true, split: [
-        { name: 'split-text-1', label: 'First Text', type: 'text', placeholder: 'First Text' },
-        { name: 'split-text-2', label: 'Last Text', type: 'text', placeholder: 'Last Text' },
+        { name: 'split-text-1', label: 'First Text', type: 'text', placeholder: 'First Text', value: '' },
+        { name: 'split-text-2', label: 'Last Text', type: 'text', placeholder: 'Last Text', value: '' },
       ]
     },
-    { name: 'number', label: 'Number', type: 'number', placeholder: 'Number', iconCls: 'fas fa-hashtag', required: false, input: true },
+    { name: 'number', label: 'Number', type: 'number', placeholder: 'Number', iconCls: 'fas fa-hashtag', value: '', required: false, input: true },
     { name: 'button', text: 'Submit', type: 'submit', iconCls: 'far fa-paper-plane' },
   ];
   formEleTypes: any = {};
@@ -143,14 +138,77 @@ export class FormService {
   formStyleSessionArr:any = [];
   initial:boolean = true;
   formSaved:boolean = true;
-  formStyle = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
+  formStyle = {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''};
   currentScrWdth:any;
-  pathError:boolean = false;
+  answers = {
+    uniqueid: '',
+    form_id: '',
+    email: '',
+    json: '',
+  };
+  ansjson:any = {};
 
-  constructor(private _file: FileUploadService,
+  constructor(
+    private _file: FileUploadService,
     private _general: GeneralService,
     public _element: ElementService) { 
-      this.saveFormSession();
+  }
+
+  formSubmit() {
+    return new Promise((resolve, reject)=>{
+      this.answers.json = this._general.encodeJSON(this.ansjson);
+      this._file.saveform_ans(this.answers).subscribe((resp:any)=>{
+        resolve(resp);
+      })
+    })
+  }
+
+  valchng(fe:any, i:number) {
+    var value:boolean = !fe.split[i].selected;
+    if(fe.name == 'radio') {
+      var temp = JSON.stringify(fe.split);
+      temp = temp.replace(/"selected":true/g, '"selected":false');
+      fe.split = JSON.parse(temp);
+      value = true;
+    }
+    fe.split[i].selected = value;
+    this.inpAns(fe);
+  }
+
+  inpAns(data:any) {
+    this.ansjson[data.id] = data;
+    if(data.primary) this.answers.email = data.value?.toLowerCase();
+  }
+
+  checkFields() {
+    return new Promise((resolve, reject)=>{
+      var anslen = 0;
+      var ansVal = Object.values(this.ansjson);
+      for(var i = 0; i < ansVal.length; i++) {
+        var ans:any = ansVal[i];
+        if(ans.required) {
+          if(ans.name == 'select') ans.error = (ans.value === 'none');
+          else if(ans.name == 'radio' || ans.name == 'checkbox') {
+            var temp = JSON.stringify(ans);
+            ans.error = (temp.search(/"selected":true/g) == -1);
+          }
+          else {
+            var temp = JSON.stringify(ans);
+            ans.error = (temp.search(/"value":""/g) != -1);
+          }
+        }
+        if(ans.name == 'email' && ans.value) ans.invalid = !this.validateEmail(ans.value);
+        else ans.invalid = false;
+        if(ans.error == true || ans.invalid) resolve(false);
+        if(ansVal.length-1 == anslen) resolve(true);
+        anslen++;
+      }
+    })
+  }
+
+  validateEmail(value:any) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regex.test(value);
   }
 
   createFields() {
@@ -162,10 +220,10 @@ export class FormService {
     })
   }
 
-  formbypath(path:string) {
+  formbypath(obj:string) {
     return new Promise((resolve, reject)=>{
-      this._file.formbypath(path).subscribe((resp:any)=>{
-        this.setForm(resp).then(data=>{
+      this._file.formbypath(obj).subscribe((resp:any)=>{
+        this.setForm(resp).then((data:any)=>{
           resolve(data);
         });
       })
@@ -188,9 +246,16 @@ export class FormService {
       this.form = resp.data[0];
       if(this.form) {
         if(this.form.html) this.formField = this._general.decodeJSON(this.form.html);
+        else {
+          var email = JSON.parse(JSON.stringify(this.formEle[6]));
+          email.primary = true;
+          this.addField(email, 0);
+          var button = JSON.parse(JSON.stringify(this.formEle[this.formEle.length-1]));
+          this.addField(button, 1);
+        }
         if(this.form.style) this.formEleTypes = this._general.decodeJSON(this.form.style);
+        if(this.form.appendstyle) this.form.appendstyle = this._general.decodeJSON(this.form.appendstyle);
       }
-      else this._general.redirectToPageNotFound();
       resolve(this.form);
     })
   }
@@ -200,12 +265,9 @@ export class FormService {
       this.setFormStyle(this.formEleTypes).then(style=>{
         this.form.html = this._general.encodeJSON(this.formField);
         this.form.style = this._general.encodeJSON(this.formEleTypes);
-        this.form.appendstyle = style;
+        this.form.appendstyle = this._general.encodeJSON(style);
         this._file.updateform(this.form).subscribe((resp:any)=>{
-          console.log(resp);
-      // else resolve(false)
           resolve(resp);
-          this.formSaved = true;
         })
       });
     })
@@ -221,9 +283,10 @@ export class FormService {
         if(!this._general.isObjEmpty(e.content.style.tablet_h)) this.formStyle.tablet_h = this.formStyle.tablet_h + selector +'{'+Object.entries(style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.tablet_v)) this.formStyle.tablet_v = this.formStyle.tablet_v + selector +'{'+Object.entries(style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.mobile)) this.formStyle.mobile = this.formStyle.mobile + selector +'{'+Object.entries(style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+        if(!this._general.isObjEmpty(e.content.style.hover)) this.formStyle.hover = this.formStyle.hover + selector +':hover{'+Object.entries(style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(Object.values(ele).length-1 == loop) {
           var querry = '@media only screen and (max-width:';
-          var data = this.formStyle.desktop +
+          var data = this.formStyle.desktop + this.formStyle.hover +
           querry + '1024px) and (min-width:769px){'+this.formStyle.tablet_h+'}' +
           querry + '768px) and (min-width:426px){'+this.formStyle.tablet_v+'}' +
           querry + '426px){'+this.formStyle.mobile+'}';
@@ -238,7 +301,7 @@ export class FormService {
     var obj = new Object();
     var len =  split.length;
     if(split[0].type == 'text') obj = { name: 'new-field-'+len, label: 'New field '+len, type: 'text', placeholder: 'New Field '+len };
-    else obj = { option: 'New option '+len, type: split[0].type};
+    else obj = { value: 'New option '+len, type: split[0].type};
     split.splice(i+1, 0, obj);
     this.saveFormSession();
   }
@@ -253,7 +316,9 @@ export class FormService {
     if(!tempObj.type) tempObj.type = tempObj.name;
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj?.split?.forEach((split: any) => {
-      if(!split?.subsplit) split.id = this._general.createBlockId(split);
+      if(!split?.subsplit) {
+        split.id = this._general.createBlockId(split);
+      }
       split?.subsplit?.forEach((subsplit: any) => {
         subsplit.id = this._general.createBlockId(subsplit);
       })

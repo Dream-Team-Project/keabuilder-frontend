@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, ElementRef, HostListener } from '@angular/core';
-import { FormService } from '../_services/_builder/form.service';
+import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { FormService } from '../_services/_builder/form.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
 import { KeyValue } from '@angular/common';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-form-builder',
@@ -16,7 +17,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./form-builder.component.css','../builder-topbar/builder-topbar.component.css','../builder/builder.component.css','../builder/material.component.css']
 })
 export class FormBuilderComponent implements OnInit {
+
   @ViewChild('selection') selection!: ElementRef;
+  @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
 
   private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
     return -1;
@@ -28,6 +31,16 @@ export class FormBuilderComponent implements OnInit {
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
 
+  urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+  '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+  validate:any = {
+    name: new FormControl('', [Validators.required]),
+    relink: new FormControl('', [Validators.pattern(this.urlPattern)])
+  }
   contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};
   waitST = true;
@@ -53,6 +66,8 @@ export class FormBuilderComponent implements OnInit {
     private captureService: NgxCaptureService
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
+      this._general.getAllWebPages();
+      this._general.getAllFunnels();
       _general.target = {
         id: params.get('id'),
         type: 'form'
@@ -95,10 +110,9 @@ export class FormBuilderComponent implements OnInit {
   }
 
   saveForm() {
-    if(this._form.form.name && this._form.form.path) {
       this._general.saveDisabled = true;
       this._form.updateForm().then((e:any)=>{
-        if(e.found == 0) {
+        if(e.success == 1) {
           if(this._form.formField.length != 0) {
             this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
               var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
@@ -108,6 +122,7 @@ export class FormBuilderComponent implements OnInit {
                     var msg =  'Form has been saved';
                     this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
                     this._general.saveDisabled = false;
+                    this._form.formSaved = true;
                   }
                 })
             })
@@ -116,18 +131,16 @@ export class FormBuilderComponent implements OnInit {
             var msg =  'Form has been saved';
             this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
             this._general.saveDisabled = false;
+            this._form.formSaved = true;
           }
         }
         else {
-          var msg =  'Form path should be unique';
+          var msg =  'Server Error';
           this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
           this._general.saveDisabled = false;
+          this.openSettingDialog(this.settingdialog);
         };
       })
-    }
-    else {
-      // this.openRenameDialog
-    }
   }
 
   getBlockStyle(en:string) {
@@ -146,12 +159,17 @@ export class FormBuilderComponent implements OnInit {
   
   // dialogs
 
-  openRenameDialog(templateRef: TemplateRef<any>) {
+  openSettingDialog(templateRef: TemplateRef<any>) {
     this.formdialog = true;
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       this._form.formSaved = false;
       this.formdialog = false;
+      if(this.validate.name.errors?.['required'] || this.validate.relink.invalid) this.openSettingDialog(this.settingdialog);
+      else {
+        this.validate.name.reset();
+        this.validate.relink.reset();
+      }
     })
   }
 
@@ -250,8 +268,6 @@ export class FormBuilderComponent implements OnInit {
     this.contextMenu.openMenu();
   }
 
-  // autoSave() {
-
-  // }
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
   
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from '../_services/_builder/form.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-fetch-form',
@@ -11,7 +12,8 @@ import { ImageService } from '../_services/image.service';
 })
 export class FetchFormComponent implements OnInit {
 
-  chngDetection:boolean = true;
+  submitting:boolean = false;
+  thankyou:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,11 +22,15 @@ export class FetchFormComponent implements OnInit {
     public _image: ImageService
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
-      var path:any = params.get('path');
-      _form.formbypath(path).then((data:any)=>{
+      var obj:any = {user_id: params.get('user_id'), form_id: params.get('form_id')};
+      _form.formbypath(obj).then((data:any)=>{
         var style = document.createElement('STYLE');
         style.innerHTML = data.appendstyle;
         document.head.appendChild(style);
+        this._form.answers.form_id = data.uniqueid;
+        this._form.formField.forEach((fe:any)=>{
+          if(fe.input) this._form.inpAns(fe);
+        })
       })
     })
   }
@@ -37,8 +43,26 @@ export class FetchFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  formSubmit() {
+    this.submitting = true;
+    this._form.checkFields().then(res=>{
+      if(res) {
+        this._form.formSubmit().then((res:any)=>{
+          if(res.success == 1) {
+            var redirection = this._form.form.redirection;
+            if(redirection) window.location.replace(redirection);
+            else this.thankyou = true;
+          }
+          else this.submitting = false;
+        });
+      }
+      else this.submitting = false;
+    });;
+  }
+
   getBlockStyle(en:string) {
     if(this._form.formEleTypes[en]) return this._style.getBlockStyle(this._form.formEleTypes[en]?.content.style);
     else return {}
   }
+
 }

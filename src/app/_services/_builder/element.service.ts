@@ -47,7 +47,7 @@ export class ElementService {
     divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
     // divider
     // form
-    // form: { content: { name: 'form'}, iconCls: 'fab fa-wpforms' },
+    form: { content: { name: 'iframe', src: '', height: '0px'}, iconCls: 'fab fa-wpforms' },
     // form
     // code block
     // code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
@@ -81,6 +81,12 @@ export class ElementService {
     return element;
   }
 
+  setIframe(element:any, adata:any) {
+    element.data_id = adata.uniqueid;
+    element.src = window.origin+'/form/'+adata.user_id+'/'+adata.uniqueid;
+    return element;
+  }
+
   addElement(element: any) {
     if(element.name == 'menu') {
       if(element?.itemset) delete element?.itemset;
@@ -88,38 +94,47 @@ export class ElementService {
         element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
       }
     }
-    var tempObj = JSON.parse(JSON.stringify(this.elementObj));
-    tempObj.content = JSON.parse(JSON.stringify(element));
-    var respS:any = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
-    if(element.name == 'form' || element.name == 'divider') {
-      respS = {'width': '100%'};
-      tempObj.content.style = {
-        desktop: this._style.defaultStyling(tempObj), 
-        tablet_h:'',
-        tablet_v:respS,
-        mobile:respS
+    if(element.name == 'iframe') {
+      if(element?.itemset) delete element?.itemset;
+      else {
+        element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
+        console.log(element);
       }
     }
-    else {
-    tempObj.content.style = {
-      desktop: this._style.defaultElementStyling(tempObj), 
-      tablet_h:'',
-      tablet_v:respS,
-      mobile:respS}
-    }
-    if(element.name == 'menu') {
-      tempObj.itemstyle = true;
-      tempObj.content.item = {
-        style: {
+    var tempObj = JSON.parse(JSON.stringify(this.elementObj));
+    tempObj.content = JSON.parse(JSON.stringify(element));
+    if(element.name != 'iframe') {
+      var respS:any = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
+      if(element.name == 'form' || element.name == 'divider') {
+        respS = {'width': '100%'};
+        tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj), 
           tablet_h:'',
           tablet_v:respS,
           mobile:respS
         }
       }
-      tempObj.itemstyle = false;
+      else {
+      tempObj.content.style = {
+        desktop: this._style.defaultElementStyling(tempObj), 
+        tablet_h:'',
+        tablet_v:respS,
+        mobile:respS}
+      }
+      if(element.name == 'menu') {
+        tempObj.itemstyle = true;
+        tempObj.content.item = {
+          style: {
+            desktop: this._style.defaultStyling(tempObj), 
+            tablet_h:'',
+            tablet_v:respS,
+            mobile:respS
+          }
+        }
+        tempObj.itemstyle = false;
+      }
+      if(element.form) return tempObj;
     }
-    if(element.form) return tempObj;
     this.appendElement(tempObj, this.element_index);
     this.distroyDialogue.next(void 0);
   }

@@ -60,15 +60,18 @@ export class FileUploadService {
   // footers
   // forms
   getformApi = "./api/getform";
-  formbypathApi = "./api/formbypath";
   allformsApi = "./api/allforms";
   saveformApi = "./api/saveform";
   updateformApi = "./api/updateform";
   duplicateformApi = './api/duplicateform';
   searchformqueryApi = './api/searchformquery';
-  
   deleteformApi = "./api/deleteform";
   // forms
+  // form answers
+  saveformansApi = "./api/saveformans";
+  updateformansApi = "./api/updateformans";
+  deleteformansApi = "./api/deleteformans";
+  // form answers
   // website
   createwebsitefolderApi = "./api/create-website";
   renamewebsitefolderApi = "./api/rename-website";
@@ -97,7 +100,7 @@ export class FileUploadService {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
-  // form
+  // forms
 
   fetchforms():Observable<any> {
     return this.http.get(this.allformsApi+'/'+this.uuid);
@@ -107,8 +110,8 @@ export class FileUploadService {
     return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
   }
 
-  formbypath(path:any):Observable<any> {
-    return this.http.get(this.formbypathApi+'/'+this.uuid+'/'+path);
+  formbypath(obj:any):Observable<any> {
+    return this.http.get(this.getformApi+'/'+obj.user_id+'/'+obj.form_id);
   }
 
   saveform(obj:any):Observable<any> {
@@ -141,6 +144,27 @@ export class FileUploadService {
   }
 
   // form
+
+  // form answers
+
+  saveform_ans(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.saveformansApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updateform_ans(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.updateformansApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteform_ans(id:any):Observable<any> {
+    return this.http.delete(this.deleteformansApi + '/' + id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // form answers
 
   // user
 

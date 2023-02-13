@@ -159,10 +159,9 @@
                           
                           <div class="kb-fitimg"
                             [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+websites.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-                            <div id="loader" *ngIf="shortwaiting">
-                              <div id="shadow"></div>
-                              <div id="box"></div>
-                              <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+                            <div class="kb-loader" *ngIf="shortwaiting">
+                              <div class="kb-loader-shadow"></div>
+                              <div class="kb-loader-box"></div>
                             </div>
                           </div>
 

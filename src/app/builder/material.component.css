@@ -11,6 +11,11 @@
     background-color: rgba(0,0,0,.3)!important;
 }
 
+::ng-deep .mat-error {
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .mat-form-field {
     display: block;
     width: 100%;

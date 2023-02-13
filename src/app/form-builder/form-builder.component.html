@@ -7,28 +7,60 @@
     <ng-template matMenuContent let-item="item">
         <button mat-menu-item (click)="hideBar(); preview = !preview"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
         <button mat-menu-item (click)="saveForm()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
-        <button mat-menu-item (click)="openRenameDialog(renamedialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
+        <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
         <button mat-menu-item (click)="_form.undo()" *ngIf="_form.formSessionArr[_form.formSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
         <button mat-menu-item (click)="_form.redo()" *ngIf="_form.formSessionArr[_form.formSession.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
     </ng-template>
 </mat-menu>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<ng-template #renamedialog>
+<ng-template #settingdialog>
     <h1 mat-dialog-title>Form Setting</h1>
     <div mat-dialog-content>
+        <mat-error *ngIf="isNotValid(validate.name)">
+            Form name should not be empty
+        </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
-            <input matInput type="text" [placeholder]="'form name'" [(ngModel)]="_form.form.name">
+            <input matInput type="text" placeholder="form name" [formControl]="validate.name" [(ngModel)]="_form.form.name" required>
         </mat-form-field>
+        <div class="kb-active-brd">Redirection</div>
+        <small class="kb-small">Leave blank if you don't want to redirect</small>
+        <mat-error *ngIf="validate.relink.touched && validate.relink.invalid && validate.relink.dirty">
+            Redirection link is invalid
+        </mat-error>
         <mat-form-field appearance="fill">
-            <mat-label>Path</mat-label>
-            <input matInput type="text" (input)="_form.form.path = _general.joinWthDash(_form.form.path)" [placeholder]="'form path'" [(ngModel)]="_form.form.path">
+            <mat-label>Redirection Link</mat-label>
+            <input matInput type="text" placeholder="form redirection" [formControl]="validate.relink" [(ngModel)]="_form.form.redirection">
         </mat-form-field>
-        <div>Action</div>
+        <mat-form-field appearance="fill" *ngIf="_general.existwebpages">
+            <mat-label>Website Pages</mat-label>
+            <mat-select [(ngModel)]="_form.form.redirection">
+                <mat-option *ngFor="let page of _general.existwebpages"
+                    [value]="_general.subdomain+page.page_path"
+                    [disabled]="page.publish_status == 0">
+                    {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
+                        *ngIf="page.publish_status == 0"></small>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="_general.funnels">
+            <mat-label>Funnel Steps</mat-label>
+            <mat-select [(ngModel)]="_form.form.redirection">
+                <mat-optgroup *ngFor="let funnel of _general.funnels"
+                    [label]="funnel.name | titlecase">
+                    <mat-option *ngFor="let step of funnel.steps"
+                        [value]="_general.subdomain+step.page_path"
+                        [disabled]="step.archived == 1">
+                        {{step.title | titlecase}}<small [attr.data]="step.funneltype"
+                            class="infoTxt"></small>
+                    </mat-option>
+                </mat-optgroup>
+            </mat-select>
+        </mat-form-field>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.errors?.['required'] && !validate.relink.invalid ? 'primary' : ''" [disabled]="isNotValid(validate.name) || validate.name.errors?.['required'] || validate.relink.invalid">Done</button>
     </div>
 </ng-template>
 <ng-template #elementdialog>
@@ -51,23 +83,23 @@
         [cdkDropListData]="_form.selEle.split" (cdkDropListDropped)="itemDropped($event)">
             <span *ngFor="let split of _form.selEle.split, index as i">
                 <span cdkDrag *ngIf="!split.subsplit" class="kb-split-fields">
-                    <mat-form-field *ngIf="split.placeholder else option" appearance="fill">
+                    <mat-form-field *ngIf="split.type == 'text' else option" appearance="fill">
                         <mat-label>Placeholder {{i+1}}</mat-label>
                         <input matInput type="text" [placeholder]="'placeholder '+(i+1)" [(ngModel)]="split.placeholder">
                     </mat-form-field>
                     <ng-template #option>
                         <mat-form-field appearance="fill">
                             <mat-label>Option {{i+1}}</mat-label>
-                            <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.option">
+                            <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
                         </mat-form-field>
                     </ng-template>
                     <div *cdkDragPreview class="custom-preview kb-field-preview">
-                        {{split.option ? split.option : split.placeholder}}
+                        {{split.value ? split.value : split.placeholder}}
                     </div>
                     <div *cdkDragPlaceholder class="custom-placeholder"></div>
                     <span class="kb-form-field-icon">
                         <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="_form.onSelChng(i, split.selected)" [name]="split.id+'-selected'" matTooltip="Selected" matTooltipPosition="above"></mat-checkbox>
-                        <i cdkDragHandle *ngIf="_form.selEle.split.length > 1" matTooltip="Move" matTooltipPosition="above" class="fa fa-arrows-alt"></i>
+                        <i *ngIf="_form.selEle.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
                         <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="_form.addInput(_form.selEle.split, i)"></i>
                         <i class="fa fa-times kb-danger" *ngIf="_form.selEle.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="_form.removeField(_form.selEle.split, i)"></i>
                     </span>
@@ -94,7 +126,7 @@
     </div>
     <div mat-dialog-actions class="kb-dialog-additional">
         <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
-        <mat-checkbox *ngIf="_form.selEle.input" [(ngModel)]="_form.selEle.required">Required</mat-checkbox>
+        <mat-checkbox *ngIf="_form.selEle.input && !_form.selEle.primary" [(ngModel)]="_form.selEle.required">Required</mat-checkbox>
     </div>
 </ng-template>
 <div id="kb-main" cdkDropListGroup (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled" [class.loading]="!_general.loading.success">
@@ -117,7 +149,7 @@
                 <button mat-button (click)="selectTab('responsive')" [class.kb-btn-active]="selectedTab == 'responsive'">
                     <i [innerHTML]="'responsive' | svg | safeHtml"></i> Responsive
                 </button>
-                <button mat-button (click)="openRenameDialog(renamedialog)" [class.kb-btn-active]="formdialog">
+                <button mat-button (click)="openSettingDialog(settingdialog)" [class.kb-btn-active]="formdialog">
                     <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
                 </button>
                 <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger" [class.kb-btn-active]="ast.menuOpen">
@@ -198,6 +230,9 @@
                     <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'mobile'"
                         (click)="_general.respToggle('mobile')">
                         <i [innerHTML]="'mobile' | svg | safeHtml"></i><span>Mobile</span></button>
+                    <button mat-button class="kb-icon-btn" [class.kb-btn-active]="_general.respToggleDevice.name == 'hover'"
+                        (click)="_general.respToggle('hover')">
+                        <i class="fas fa-mouse-pointer"></i><span>Hover</span></button>
                 </div>
             </div>
             <mat-icon mat-ripple (click)="nextSlide()" [class.kb-disabled]="slideShift > shiftLen-1"
@@ -214,12 +249,15 @@
                 [style.justifyContent]="!fe.input ? justifyContent(fe.name) : ''" 
                 (mouseenter)="!preview ? fe.setting = true : ''" (mouseleave)="!preview ? fe.setting = false : ''" class="kb-form-element" [ngSwitch]="fe.name">
                 <div *ngIf="fe.setting" class="kb-form-setting">
-                    <span *ngIf="fe.input" matTooltip="Required" matTooltipPosition="above">
+                    <span class="kb-drag-element" *ngIf="_form.formField.length != 0" >
+                        <i class="fa fa-arrows-alt"></i>
+                    </span>
+                    <span *ngIf="fe.input && !fe.primary" matTooltip="Required" matTooltipPosition="above">
                         <mat-checkbox [name]="fe.id+'-requered'" [(ngModel)]="fe.required"></mat-checkbox>
                     </span>
                     <span *ngIf="fe.name != 'divider'" (click)="openElementDialog(elementdialog, fe)" matTooltip="Edit" matTooltipPosition="above"><i
                             class="far fa-edit"></i></span>
-                    <span (click)="_form.removeField(_form.formField, fei)" matTooltip="Delete" matTooltipPosition="above"><i
+                    <span *ngIf="!fe.primary" (click)="_form.removeField(_form.formField, fei)" matTooltip="Delete" matTooltipPosition="above"><i
                             class="far fa-trash-alt"></i></span>
                 </div>
                 <div *ngSwitchCase="'heading'" [ngStyle]="getBlockStyle(fe.name)" class="kb-mar-zero"
@@ -241,7 +279,7 @@
                             <span *ngFor="let subsplit of split.subsplit" [class.kb-d-none]="subsplit.hide">
                                 <select *ngIf="subsplit.type == 'select'" [ngStyle]="getBlockStyle('input')"
                                     [name]="subsplit.id" [required]="fe.required">
-                                    <option  value="no value">{{subsplit.placeholder}}</option>
+                                    <option value="none" selected disabled>{{subsplit.placeholder}}</option>
                                     <option *ngFor="let opt of _form.countries" [value]="opt.name" [selected]="opt.name == subsplit.placeholder">{{opt.name}}
                                     </option>
                                 </select>
@@ -257,9 +295,9 @@
                 <div *ngSwitchCase="'select'" class="kb-form-inp kb-w-100">
                     <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                             class="kb-form-inp-reqired">*</span></label>
-                    <select [ngStyle]="getBlockStyle('input')" [name]="fe.id" [required]="fe.required">
-                        <option value="no value">{{fe.placeholder}}</option>
-                        <option *ngFor="let opt of fe.split" [value]="opt.option" [selected]="opt.selected">{{opt.option}}
+                    <select [ngStyle]="getBlockStyle('input')" [name]="fe.id" [required]="fe.required" >
+                        <option value="none" selected disabled hidden>{{fe.placeholder}}</option>
+                        <option *ngFor="let opt of fe.split" [value]="opt.value" [selected]="opt.selected">{{opt.value}}
                         </option>
                     </select>
                 </div>
@@ -269,7 +307,7 @@
                     <div *ngFor="let split of fe.split">
                         <label [for]="split.id" [ngStyle]="getBlockStyle('option')" [style.justifyContent]="justifyContent('option')">
                             <input [type]="split.type" [id]="split.id" [name]="split.id" [required]="fe.required" [checked]="split.selected">
-                            <span>{{split.option}}</span>
+                            <span>{{split.value}}</span>
                         </label>
                     </div>
                 </div>
@@ -279,7 +317,7 @@
                     <div *ngFor="let split of fe.split">
                         <label [for]="split.id" [ngStyle]="getBlockStyle('option')" [style.justifyContent]="justifyContent('option')">
                             <input [type]="split.type" [id]="split.id" [name]="fe.id" [required]="fe.required" [checked]="split.selected">
-                            <span>{{split.option}}</span>
+                            <span>{{split.value}}</span>
                         </label>
                     </div>
                 </div>
@@ -288,12 +326,13 @@
                         [ngStyle]="getBlockStyle('button')">{{fe.text}}</button>
                 </div>
                 <div *ngSwitchDefault class="kb-form-inp kb-w-100">
-                    <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                            class="kb-form-inp-reqired">*</span></label>
+                    <label [for]="fe.id" [ngStyle]="getBlockStyle('label')" [style.justifyContent]="justifyContent('label')">{{fe.label}}
+                        <span *ngIf="fe.required"
+                            class="kb-form-inp-reqired">*</span>
+                    </label>
                     <div *ngIf="fe.split else inp" class="kb-form-inp-split">
                         <input *ngFor="let split of fe.split" [type]="split.type" [name]="split.id"
-                            [ngStyle]="getBlockStyle('input')" [required]="fe.required"
-                            [placeholder]="split.placeholder">
+                            [ngStyle]="getBlockStyle('input')" [required]="fe.required" [placeholder]="split.placeholder">
                     </div>   
                     <ng-template #inp>     
                         <textarea *ngIf="fe.type == 'textarea' else input" [name]="fe.id" [required]="fe.required" [placeholder]="fe.placeholder"
@@ -303,6 +342,7 @@
                                 [required]="fe.required" [placeholder]="fe.placeholder" [ngStyle]="getBlockStyle('input')">
                         </ng-template>
                     </ng-template>
+                    <span *ngIf="fe.setting && fe.primary" class="kb-element-info">Primary Email</span>
                 </div>
                 <div *cdkDragPreview class="kb-field-preview custom-preview">
                     {{fe.label ? fe.label : fe.name.replaceAll('-',' ')}}

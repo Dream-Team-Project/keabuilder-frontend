@@ -13,9 +13,7 @@
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
       [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-
       <div>
 
         <h6 *ngIf="!updatemode"><b>Create A Form</b></h6>
@@ -24,28 +22,12 @@
 
           <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Form Name</mat-label>
-            <input type="text" matInput [(ngModel)]="form.formname" (blur)="changemyname($event)" name="formname"
+            <input type="text" matInput [(ngModel)]="form.name" name="formname"
               [formControl]="userFormControl" placeholder="Ex. Home" required minlength="3">
             <mat-error *ngIf="userFormControl.hasError('required')">
               Form Name is <strong>required</strong>
             </mat-error>
             <mat-error *ngIf="userFormControl.hasError('minlength')">
-              Form Name must be at least <strong>3</strong> characters
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Form Path</mat-label>
-            <input type="text" matInput (input)="form.formpath = _general.joinWthDash(form.formpath)"
-              [(ngModel)]="form.formpath" name="formpath" [formControl]="userFormControl2" placeholder="Ex. home"
-              required minlength="3" (blur)="pathuniqueremove()">
-            <mat-error *ngIf="userFormControl2.hasError('required')">
-              Form Name is <strong>required</strong>
-            </mat-error>
-            <small class="text-danger" *ngIf="pathcheck">
-              Form must be <strong>unique</strong>
-            </small>
-            <mat-error *ngIf="userFormControl2.hasError('minlength')">
               Form Name must be at least <strong>3</strong> characters
             </mat-error>
           </mat-form-field>
@@ -57,8 +39,6 @@
         <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
 
       </div>
-
-
     </div>
   </div>
   <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="hidepopupsidebar()"
@@ -96,11 +76,10 @@
       <div [class]="toggleview ? 'col-md-4' : 'col-md-12'" class="cardpage mt-4" *ngFor="let form of forms">
           <div [class.row]="!toggleview">
             <div [style.height]="toggleview ? '300px' : '150px'" [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
-              <div class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-                <div id="loader" *ngIf="shortwaiting">
-                  <div id="shadow"></div>
-                  <div id="box"></div>
-                  <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+              <div [class.kb-disabled]="form.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                <div class="kb-loader" *ngIf="shortwaiting || form.deleting">
+                  <div class="kb-loader-shadow"></div>
+                  <div class="kb-loader-box"></div>
                 </div>
               </div>
             </div>
@@ -109,16 +88,16 @@
                 <div [class.p-0]="toggleview" class="col-md-12">
                   <div class="kb-title-board line-ellipsis">
                     <span>{{form.name ? form.name : 'form' | titlecase}}</span>
-                    <input type="text" #headname [value]="form.name" (blur)="rename(form, headname)" matTooltip="Edit form Name" matTooltipPosition="above">
+                    <input type="text" #formname [value]="form.name" (blur)="rename(form, formname)" matTooltip="Edit form Name" matTooltipPosition="above">
                   </div>
                   <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
                     <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(form.updated_at)}}
                   </p>
                 </div>
                 <div [class.p-0]="toggleview" class="col-md-12 text-right">
-                  <button mat-raised-button color="accent" (click)="openform(form.path)">View <i class="far fa-eye"></i></button>
-                  <button mat-raised-button color="primary" (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i class="fas fa-pencil-alt"></i></button>
-                  <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">More <i class="fas fa-cog"></i></button>
+                  <button mat-raised-button color="accent" [disabled]="form.deleting" (click)="_general.redirectLink('/form/'+form.user_id+'/'+form.uniqueid)">View <i class="far fa-eye"></i></button>
+                  <button mat-raised-button color="primary" [disabled]="form.deleting" (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i class="fas fa-pencil-alt"></i></button>
+                  <button mat-raised-button color="accent" [disabled]="form.deleting" [matMenuTriggerFor]="menu">More <i class="fas fa-cog"></i></button>
                   <mat-menu #menu="matMenu">
                       <button mat-menu-item (click)="newform('update',form)">
                         <i class="fas fa-pencil-alt pr-2"></i>Quick Edit

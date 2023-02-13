@@ -1,7 +1,8 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-website-footers',
@@ -9,7 +10,12 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./website-footers.component.css']
 })
 export class WebsiteFootersComponent {
+  
+  @ViewChild('createdialog') createdialog!: TemplateRef<any>;
 
+  validate:any = {
+    name: new FormControl('', [Validators.required]),
+  }
   toggleview = true;
   shortwaiting = true;
   footers:any[] = [];
@@ -26,6 +32,12 @@ export class WebsiteFootersComponent {
           this.toggleview = _general.getStorage('footer_toggle');
           this.fetch();
         }
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.shortwaiting = false;
+    }, 1000);
+  }
   
   toggleView() {
     this.toggleview = !this.toggleview; 
@@ -33,8 +45,11 @@ export class WebsiteFootersComponent {
   }
 
   openDialog(templateRef: TemplateRef<any>) {
-    this.dialog.open(templateRef);
-  }     
+    var dialog = this.dialog.open(templateRef);
+    dialog.afterClosed().subscribe((data:any)=>{
+      this.validate.name.reset();
+    })
+  }       
 
   fetch() {
     this.fetching = true;
@@ -69,22 +84,24 @@ export class WebsiteFootersComponent {
   }
 
   create() {
-    this.footer.uniqueid = this._general.makeid(20);
-    var obj:any = {
-      id: 'kb-footer-'+this.footer.uniqueid,
-      html: ''
-    }
-    this._general.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
-      this._general.fileUploadService.savefooter(this.footer).subscribe(resp=>{
-        console.log('hello');
-        if(resp.success) {
-          this.edit(this.footer);
-          this.footer.name = '';
-        }
-        else this.openSB(true);
-        resp.success ? this.edit(this.footer) : this.openSB(true);
+    if(!this.validate.name.errors?.['required']) {
+      this.footer.uniqueid = this._general.makeid(20);
+      var obj:any = {
+        id: 'kb-footer-'+this.footer.uniqueid,
+        html: ''
+      }
+      this._general.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
+        this._general.fileUploadService.savefooter(this.footer).subscribe(resp=>{
+          if(resp.success) {
+            this.edit(this.footer);
+            this.footer.name = '';
+          }
+          else this.openSB(true);
+          resp.success ? this.edit(this.footer) : this.openSB(true);
+        });
       });
-    });
+    }
+    else this.openDialog(this.createdialog);
   }
 
   edit(footer:any) {
@@ -115,9 +132,10 @@ export class WebsiteFootersComponent {
     });
   }
 
-  delete() {
-    this._general.fileUploadService.deletefooter(this.delfooter.id).subscribe((resp:any)=>{
-      this._general.fileUploadService.deleteFile('kb-footer-'+this.delfooter.uniqueid, 'footers').subscribe(resp=>{
+  delete(footer:any) {
+    footer.deleting = true;
+    this._general.fileUploadService.deletefooter(footer.id).subscribe((resp:any)=>{
+      this._general.fileUploadService.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp=>{
         if(resp.success) {
           this.action = 'deleted';
           this.fetch();
@@ -132,5 +150,7 @@ export class WebsiteFootersComponent {
     this._general.openSnackBar(alert, msg, 'OK', 'center', 'top');
     this.action = '';
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
   
 }

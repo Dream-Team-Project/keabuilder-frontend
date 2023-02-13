@@ -1,13 +1,16 @@
-<ng-template #renamedialog>
+<ng-template #renamehfdialog>
     <h1 mat-dialog-title>Rename {{_general.target.type | titlecase}}</h1>
     <div mat-dialog-content>
+        <mat-error *ngIf="isNotValid(validate.targetname)">
+            {{_general.target.type | titlecase}} name should not be empty
+        </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>{{_general.target.type | titlecase}} name</mat-label>
-            <input matInput type="text" [placeholder]="_general.target.type + 'name'" [(ngModel)]="_general.target.name">
+            <input matInput type="text" [formControl]="validate.targetname" [placeholder]="_general.target.type + ' name'" [(ngModel)]="_general.target.name" required>
         </mat-form-field>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.targetname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.targetname) || validate.targetname.errors?.['required']">Done</button>
     </div>
 </ng-template>
 <ng-template #deltempdialog>
@@ -23,14 +26,17 @@
 <ng-template #renametempdialog>
     <h1 mat-dialog-title>Rename Template</h1>
     <div mat-dialog-content>
+        <mat-error *ngIf="isNotValid(validate.tempname)">
+            Template name should not be empty
+        </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>Template name</mat-label>
-            <input matInput type="text" placeholder="Template name" [(ngModel)]="seltemp.name">
-          </mat-form-field>
+            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="seltemp.name">
+        </mat-form-field>
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="updateTemplate()">Save</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.tempname) || validate.tempname.errors?.['required']" (click)="updateTemplate()">Save</button>
     </div>
 </ng-template>
 <div id="kb-topbar">
@@ -75,7 +81,7 @@
             <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
             </button>
             <ng-template #rename>
-                <button mat-menu-item (click)="openRenameDialog(renamedialog)"
+                <button mat-menu-item (click)="openRenameHFDialog(renamehfdialog)"
                     [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
                     <i [innerHTML]="'setting' | svg | safeHtml"></i> Rename
                 </button>
@@ -213,7 +219,7 @@
                 <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let head of _general.headers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
-            (click)="setHeader(head)" [class.kb-btn-active]="head.uniqueid == _general.selectedHeader.id && _general.includeLayout.header"
+            (click)="setHeader(head.uniqueid)" [class.kb-btn-active]="head.uniqueid == _general.selectedHeader.id && _general.includeLayout.header"
             (mouseover)="prevImg=_general.getSSPath('header-'+head.uniqueid)" (mouseout)="prevImg=''">
                 {{head.name}}
                 <mat-icon *ngIf="!head.json" class="kb-mat-error-icon" matTooltip="Didn't created yet">error_outline</mat-icon>
@@ -227,7 +233,7 @@
                 <i [innerHTML]="'none' | svg | safeHtml"></i> None
             </button>
             <button mat-button *ngFor="let foot of _general.footers | filter:searchText:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type; index as i" 
-            (click)="setFooter(foot)" [class.kb-btn-active]="foot.uniqueid == _general.selectedFooter.id && _general.includeLayout.footer"
+            (click)="setFooter(foot.uniqueid)" [class.kb-btn-active]="foot.uniqueid == _general.selectedFooter.id && _general.includeLayout.footer"
             (mouseover)="prevImg=_general.getSSPath('footer-'+foot.uniqueid)" (mouseout)="prevImg=''">
                 {{foot.name}}
                 <mat-icon *ngIf="!foot.json" class="kb-mat-error-icon" matTooltip="Didn't created yet">error_outline</mat-icon>
@@ -333,6 +339,20 @@
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{menu.name | titlecase}}
                 </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
+        <div *ngSwitchCase="'form'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.forms" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <button mat-button (click)="_general.redirectLink('/forms')" class="kb-icon-btn">
+                <i [innerHTML]="'add' | svg | safeHtml"></i>
+                <span>Create</span>
+            </button>
+            <span cdkDrag *ngFor="let form of _general.forms | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(form)" [cdkDragData]="form">
+                <span>{{form.name | titlecase}}</span>
+                <div *cdkDragPreview class="custom-preview-img">
+                    <img class="kb-images" [src]="_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)">
+                </div>
                 <span *cdkDragPlaceholder class="custom-placeholder"
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>

@@ -1,7 +1,8 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-website-headers',
@@ -10,6 +11,11 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class WebsiteHeadersComponent {
 
+  @ViewChild('createdialog') createdialog!: TemplateRef<any>;
+
+  validate:any = {
+    name: new FormControl('', [Validators.required]),
+  }
   toggleview = true;
   shortwaiting = true;
   fetching:boolean = true;
@@ -27,13 +33,22 @@ export class WebsiteHeadersComponent {
           this.fetch();
         }
   
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.shortwaiting = false;
+    }, 1000);
+  }
+
   toggleView() {
     this.toggleview = !this.toggleview; 
     this._general.setStorage('header_toggle',this.toggleview);
   }
 
   openDialog(templateRef: TemplateRef<any>) {
-    this.dialog.open(templateRef);
+    var dialog = this.dialog.open(templateRef);
+    dialog.afterClosed().subscribe((data:any)=>{
+      this.validate.name.reset();
+    })
   }     
 
   fetch() {
@@ -69,21 +84,24 @@ export class WebsiteHeadersComponent {
   }
 
   create() {
-    this.header.uniqueid = this._general.makeid(20);
-    var obj:any = {
-      id: 'kb-header-'+this.header.uniqueid,
-      html: ''
-    };
-    this._general.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
-      this._general.fileUploadService.saveheader(this.header).subscribe(resp=>{
-        if(resp.success) {
-          this.edit(this.header);
-          this.header.name = '';
-        }
-        else this.openSB(true);
-        resp.success ? this.edit(this.header) : this.openSB(true);
+    if(!this.validate.name.errors?.['required']) {
+      this.header.uniqueid = this._general.makeid(20);
+      var obj:any = {
+        id: 'kb-header-'+this.header.uniqueid,
+        html: ''
+      };
+      this._general.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
+        this._general.fileUploadService.saveheader(this.header).subscribe(resp=>{
+          if(resp.success) {
+            this.edit(this.header);
+            this.header.name = '';
+          }
+          else this.openSB(true);
+          resp.success ? this.edit(this.header) : this.openSB(true);
+        });
       });
-    });
+    }
+    else this.openDialog(this.createdialog);
   }
 
   edit(header:any) {
@@ -115,9 +133,10 @@ export class WebsiteHeadersComponent {
     });
   }
 
-  delete() {
-    this._general.fileUploadService.deleteheader(this.delheader.id).subscribe((resp:any)=>{
-      this._general.fileUploadService.deleteFile('kb-header-'+this.delheader.uniqueid, 'headers').subscribe(resp=>{
+  delete(header:any) {
+    header.deleting = true;
+    this._general.fileUploadService.deleteheader(header.id).subscribe((resp:any)=>{
+      this._general.fileUploadService.deleteFile('kb-header-'+header.uniqueid, 'headers').subscribe(resp=>{
         console.log(resp);
         if(resp.success) {
           this.action = 'deleted';
@@ -133,5 +152,7 @@ export class WebsiteHeadersComponent {
     this._general.openSnackBar(alert, msg, 'OK', 'center', 'top');
     this.action = '';
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
   
 }

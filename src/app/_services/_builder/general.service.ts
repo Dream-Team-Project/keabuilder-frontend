@@ -105,6 +105,7 @@ export class GeneralService {
   saveDisabled:boolean = false;
   pathError:boolean = false;
   sectionTemplates:any = [];
+  forms:any = [];
   menus:any = [];
   headers:any = [];
   footers:any = [];
@@ -121,11 +122,10 @@ export class GeneralService {
     { name: 'new tab', value: '_blank' },
     { name: 'linked new tab', value: 'framename' },
   ];
-  validatelink = new FormControl('', [Validators.required, Validators.pattern(/(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi)]);
   templatesUpdated = new BehaviorSubject(false);
   filterOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];
   searchFilter:any = this.filterOrder[3];
-  pageSaved = true;
+  pageSaved:boolean = true;
 
   constructor(public userService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
@@ -179,6 +179,14 @@ export class GeneralService {
     })
   }
 
+  fetchForms() {
+    return new Promise<any>((resolve, reject) => {
+      this.fileUploadService.fetchforms().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
   fetchHeaders() {
     return new Promise<any>((resolve, reject) => {
       this.fileUploadService.fetchheaders().subscribe((resp:any)=>{
@@ -205,6 +213,9 @@ export class GeneralService {
           })
           this.fetchFooters().then(data=>{
             this.footers = data;
+          })
+          this.fetchForms().then(data=>{
+            this.forms = data;
           })
         }
         if(this.target.type == 'website') {
@@ -269,11 +280,11 @@ export class GeneralService {
     })
   }
 
-  setHeader(head:any) {
+  setHeader(headid:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile('kb-header-'+head.uniqueid, 'headers').subscribe((data1)=>{
+      this.fileUploadService.fetchFile('kb-header-'+headid, 'headers').subscribe((data1)=>{
         this.setMenu(data1.html).then(data2=>{
-          data1.id = head.uniqueid;
+          data1.id = headid;
           data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
           this.selectedHeader = data1;
           this.includeLayout.header = true;
@@ -283,12 +294,12 @@ export class GeneralService {
     })
   }
 
-  setFooter(foot:any) {
+  setFooter(footid:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile('kb-footer-'+foot.uniqueid, 'footers').subscribe((data1)=>{
+      this.fileUploadService.fetchFile('kb-footer-'+footid, 'footers').subscribe((data1)=>{
         this.setMenu(data1.html).then(data2=>{
-          data1.id = foot.uniqueid;
-          data1.html = data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML;
+          data1.id = footid;
+          data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
           this.selectedFooter = data1;
           this.includeLayout.footer = true;
           resolve(true);
@@ -366,21 +377,43 @@ export class GeneralService {
   saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
     return new Promise<any>((resolve, reject) => {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
-      var websiteid = this.webpage.website_id;
-      var jsonObj = {mainstyle: this.main.style, sections: sections};
-      this.webpage.page_json = this.encodeJSON(jsonObj);
       this.setPageStyle(sections);
+      var websiteid = this.webpage.website_id;
+      var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections};
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-      if(this.includeLayout.header && this.selectedHeader.html && !preview) {
-        var header = this.pagehtml.querySelector('header');
-        header.id = 'kb-header-'+this.selectedHeader.id;
-        header.innerHTML = `<?php $path="../../../headers/${header.id}.php"; `+this.includeCond+` ?>`;
+      var header = this.pagehtml.querySelector('header');
+      if(this.includeLayout.header && this.selectedHeader.html) {
+        if(header) header.innerHTML = this.selectedHeader.html;
+        else if(preview) {
+          var h = document.createElement('HEADER');
+          h.id = this.selectedHeader.id;
+          h.innerHTML = this.selectedHeader.html;
+          this.pagehtml.body.insertBefore(h, this.pagehtml.getElementById('kb-main'));
+        }
+        if(!preview) {
+          header.id = 'kb-header-'+this.selectedHeader.id;
+          header.innerHTML = `<?php $path="../../../headers/${header.id}.php"; `+this.includeCond+` ?>`;
+        }
+        jsonObj.header = this.selectedHeader;
       }
-      if(this.includeLayout.footer && this.selectedFooter.html && !preview) {
-        var footer = this.pagehtml.querySelector('footer');
-        footer.id = 'kb-footer-'+this.selectedFooter.id;
-        footer.innerHTML = `<?php $path="../../../footers/${footer.id}.php"; `+this.includeCond+` ?>`;
+      else header?.remove();
+      var footer = this.pagehtml.querySelector('footer');
+      if(this.includeLayout.footer && this.selectedFooter.html) {
+        if(footer) footer.innerHTML = this.selectedFooter.html;
+        else if(preview) {
+          var f = document.createElement('FOOTER');
+          f.id = this.selectedFooter.id;
+          f.innerHTML = this.selectedFooter.html;
+          this.pagehtml.body.appendChild(f);
+        }
+        if(!preview) {
+          footer.id = 'kb-footer-'+this.selectedFooter.id;
+          footer.innerHTML = `<?php $path="../../../footers/${footer.id}.php"; `+this.includeCond+` ?>`;
+        }
+        jsonObj.footer = this.selectedFooter;
       }
+      else footer?.remove();
+      this.webpage.page_json = this.encodeJSON(jsonObj);
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
       '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
@@ -553,7 +586,7 @@ export class GeneralService {
         row.columnArr.forEach((col:any)=>{
           this.blockStyling(col);
           col.elementArr.forEach((ele:any)=>{
-            this.elementStyling(ele);
+            if(ele.content.name != 'iframe') this.elementStyling(ele);
             if(ele.content?.item) {
               var tempObj = JSON.parse(JSON.stringify(ele.content.item))
               var pseudoEle:string = '';

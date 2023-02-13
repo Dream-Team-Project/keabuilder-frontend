@@ -707,8 +707,8 @@ export class WebsitePagesComponent implements OnInit {
 
     this.showmytemplates = false;
     this.addnewpagepopup = false;
-      this.insidepagefirst = true;
-      this.insidepagesecond = false;
+    this.insidepagefirst = true;
+    this.insidepagesecond = false;
     this.quickeditpopup = false;
     this.selecttemplate = false;
     this.showpageurl = false;

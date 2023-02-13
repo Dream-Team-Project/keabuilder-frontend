@@ -13,6 +13,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem }
 import { asapScheduler} from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-builder',
@@ -30,14 +31,18 @@ export class BuilderComponent implements OnInit {
   DialogImageToggle:boolean = false;
 
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('templatedialog') templatedialog!: TemplateRef<any>;
   @ViewChild('askforsave') askforsave!: ElementRef;
   @ViewChild('wireframe') wireframe: any;
   @ViewChild('main') main!: ElementRef;
   @ViewChild('main', { static: true }) screen: any;
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
-
+  
+  validate:any = {
+    tempname: new FormControl('', [Validators.required]),
+  }
   showNavFrom:string = 'bottom';
-  trigger:string = 'Saved';
+  trigger:string = 'saved';
   contextMenuPosition = { x: '0px', y: '0px' };
   transferData:any;
   wfpos:any = 'end';
@@ -79,19 +84,7 @@ export class BuilderComponent implements OnInit {
             else if(!_general.isObjEmpty(data)) {
               if(this.ishf) _general.target.name = data.name;
               else {
-                data.html = _general.parser.parseFromString(data.html, 'text/html');
-                var header = data.html.querySelector('header');
-                var footer = data.html.querySelector('footer');
-                if(header) {
-                  var headid = header.id.split('kb-header-')[1];
-                  _general.headers.forEach((head:any)=>{ if(head.uniqueid == headid) _general.setHeader(head); })
-                }
-                else _general.includeLayout.header = false;
-                if(footer) {
-                  var footid = footer.id.split('kb-footer-')[1];
-                  _general.footers.forEach((foot:any)=>{ if(foot.uniqueid == footid) _general.setFooter(foot); })
-                }
-                else _general.includeLayout.footer = false;
+                data.json = _general.webpage.page_json;
                 if(_general.target.type == 'funnel') {
                   this._general.getAllProducts();
                   if(_general.webpage.funneltype == 'order') {
@@ -108,11 +101,12 @@ export class BuilderComponent implements OnInit {
                     _element.elementList['button'].content.text = 'Downsell Button';
                   }
                 }
-                data.json = _general.webpage.page_json;
               }
               if(data.json) {
                 var jsonObj = _general.decodeJSON(data.json);
                 if(!this.ishf) _general.main.style = jsonObj.mainstyle;
+                jsonObj.header ? _general.selectedHeader = jsonObj.header : _general.includeLayout.header = false;
+                jsonObj.footer ? _general.selectedFooter = jsonObj.footer : _general.includeLayout.footer = false;
                 _section.sections = jsonObj.sections;
                 _section.pageSessionArr = [];
                 _section.sections.forEach((sec:any)=>{
@@ -142,7 +136,7 @@ export class BuilderComponent implements OnInit {
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
-            this.savePreview();
+            if(!this.ishf) this.savePreview();
           })
         })
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -161,6 +155,7 @@ export class BuilderComponent implements OnInit {
   ngOnInit(): void {
     var vm = this;
     window.addEventListener('beforeunload', function (e) {
+      console.log(!vm._general.pageSaved);
       if(!vm._general.pageSaved) {
         e.preventDefault();
         e.returnValue = '';
@@ -178,20 +173,23 @@ export class BuilderComponent implements OnInit {
               var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;
               this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
               this._general.saveDisabled = false;
-              this.trigger = 'Saved';
+              this.trigger = 'saved';
             }
         })
     })
   }
 
   saveAsTemplate() {
-    this._general.saveDisabled = true;
-    var section = this.saveTemplateSection;
-    var obj = {uniqueid: this._general.makeid(20), name: section.name, template: this._general.encodeJSON(section)};
-    this._general.fileUploadService.savetemplate(obj).subscribe((resp:any)=>{
-      this.takePageSS('section-'+obj.uniqueid, 'template');
-      this._general.fetchSectionTemplates();
-    })
+    if(!this.validate.tempname.errors?.['required']) {
+      this._general.saveDisabled = true;
+      var section = this.saveTemplateSection;
+      var obj = {uniqueid: this._general.makeid(20), name: section.name, template: this._general.encodeJSON(section)};
+      this._general.fileUploadService.savetemplate(obj).subscribe((resp:any)=>{
+        this.takePageSS('section-'+obj.uniqueid, 'template');
+        this._general.fetchSectionTemplates();
+      })
+    }
+    else this.saveAsTemplateDialog(this.templatedialog, this.saveTemplateSection);
   }
 
   saveHeaderFooter(main:any) {
@@ -237,13 +235,13 @@ export class BuilderComponent implements OnInit {
   }
 
   savePreview() {
-    if(!this.ishf) this._general.saveHTML(this.main.nativeElement, this._section.sections, true, false).then(e=>{
+    var main = this.main.nativeElement;
+    this._general.saveHTML(main, this._section.sections, true, false).then(e=>{
       if(this.initial) {
         this._general.pageSaved = true;
         this.initial = false;
       }
     });
-    this._general.pageSaved = false;
   }
 
   openPageSetting(event:any) {
@@ -280,7 +278,10 @@ export class BuilderComponent implements OnInit {
 
   saveAsTemplateDialog(templateRef:any, section:any) {
     this.saveTemplateSection = JSON.parse(JSON.stringify(section));
-    this.dialog.open(templateRef);
+    var dialogData = this.dialog.open(templateRef);
+    dialogData.afterClosed().subscribe((data:any)=>{
+      this.validate.tempname.reset();
+    })
   } 
 
   askForSaveDialog(templateRef:any) {
@@ -322,12 +323,12 @@ export class BuilderComponent implements OnInit {
     var main = this.main.nativeElement;
     if(e == 'preview') this.savePreview();
     else if(e == 'save') {
-      this.trigger = 'Saved'; 
+      this.trigger = 'saved'; 
       this.savePage(main, false);
     }
     else if(e == 'publish' || e == 'draft') {
       this._general.main.publish_status = e == 'publish';
-      this.trigger = this._general.main.publish_status ? 'Published' : 'Draft';
+      this.trigger = this._general.main.publish_status ? 'published' : 'draft';
       this.savePage(main, true);
     }
     else if(e == 'autosave') this.autoSaveTrigger();
@@ -350,9 +351,15 @@ export class BuilderComponent implements OnInit {
       }
       if(appendData.type == 'menu') {
         var menu = JSON.parse(JSON.stringify(this._element.elementList['menu']));
-        menu.content = this._element.setMenu(this._element.elementList['menu'].content, appendData);
+        menu.content = this._element.setMenu(menu.content, appendData);
         menu.content.itemset = true;
         appendData = menu;
+      }
+      if(appendData.type == 'form') {
+        var form = JSON.parse(JSON.stringify(this._element.elementList['form']));
+        form.content = this._element.setIframe(form.content, appendData);
+        form.content.itemset = true;
+        appendData = form;
       }
       if(appendData.content) appendData.type = 'element';
       switch(appendData.type) {
@@ -445,6 +452,8 @@ export class BuilderComponent implements OnInit {
       return this._section.sectionDrop;
    }
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
 }
 

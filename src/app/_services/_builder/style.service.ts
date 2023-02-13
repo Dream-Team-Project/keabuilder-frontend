@@ -336,18 +336,18 @@ export class StyleService {
   getBlockStyle(blockS: any) {
     var objS = {};
     if (this._general.respToggleDevice.name == 'tablet-h') {
-      objS = blockS.tablet_h;
+      objS = blockS?.tablet_h;
     }
     else if (this._general.respToggleDevice.name == 'tablet-v') {
-      objS = blockS.tablet_v;
+      objS = blockS?.tablet_v;
     }
     else if(this._general.respToggleDevice.name == 'mobile') {
-      objS = blockS.mobile;
+      objS = blockS?.mobile;
     }
     else if(this._general.respToggleDevice.name == 'hover') {
-      objS = blockS.hover;
+      objS = blockS?.hover;
     }
-    return {...blockS.desktop, ...objS};
+    return {...blockS?.desktop, ...objS};
   }
 
   currentStyling() {
@@ -959,7 +959,6 @@ export class StyleService {
   defaultStyling(block:any) {
     var w, mt, mb, mlr, ptb, plr, bw, br, bclr, bgclr;
     var isDivider = block.content?.name == 'divider';
-
     if (block.content?.name == 'button') {
       w = 'auto';
       mt = '0px';
@@ -986,11 +985,11 @@ export class StyleService {
     }
     else if(block.content?.name == 'form') {
       w = '70%';
-      mt = '30px';
-      mb = '30px';
+      mt = '0px';
+      mb = '0px';
       mlr = 'auto';
-      ptb = '20px';
-      plr = '20px';
+      ptb = '0px';
+      plr = '0px';
       bw = '0px';
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
@@ -1585,7 +1584,7 @@ export class StyleService {
       this.image_src = element.src;
       this.image_objectfit = obj['object-fit'];
     }
-    else if (element.name == 'button') {
+    else if (element.name == 'button' && !element.form) {
       this._general.getAllWebPages();
       this._general.getAllFunnels();
       if(element.btntype != 'regular') {

@@ -22,16 +22,19 @@
     </div>
 </ng-template>
 <ng-template #templatedialog>
-    <h1 mat-dialog-title>Save Template</h1>
+    <h1 mat-dialog-title>Save As Template</h1>
     <div mat-dialog-content>
+        <mat-error *ngIf="isNotValid(validate.tempname)">
+            Template name should not be empty
+        </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>Template name</mat-label>
-            <input matInput type="text" placeholder="Template name" [(ngModel)]="saveTemplateSection.name">
+            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="saveTemplateSection.name">
         </mat-form-field>
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="saveAsTemplate()">Save</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.tempname) || validate.tempname.errors?.['required']" (click)="saveAsTemplate()">Save</button>
     </div>
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
@@ -169,7 +172,7 @@
                                                     *ngIf="element.setting && !_general.showInlineEditor">
                                                     <span class="kb-handle-block kb-handle-element"><i
                                                             class="fa fa-arrows-alt"></i></span>
-                                                    <span *ngIf="element.content.name != 'checkout'"
+                                                    <span *ngIf="element.content.name != 'iframe'"
                                                         (click)="_general.blockSelection = ''; _general.selectedBlock = element; _style.blockSetting(element); openDialog()"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
@@ -244,6 +247,11 @@
                                                                 [ngStyle]="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type && _style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.item.style)">{{item.name}}</a>
                                                         </li>
                                                     </ul>
+                                                </div>
+                                                <div *ngSwitchCase="'iframe'" [attr.data-name]="'form'" [attr.data-id]="element.content.data_id"
+                                                class="kb-element-content">
+                                                    <iframe #iframe *ngIf="element.content.src" [src]="element.content.src | safeUrl"
+                                                    frameborder="0" width="100%" [height]="iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px'"></iframe>
                                                 </div>
                                                 <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                                     [style.justifyContent]="'center'">

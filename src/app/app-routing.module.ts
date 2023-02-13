@@ -131,7 +131,7 @@ const routes: Routes = [
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'form/:path', component: FetchFormComponent},
+  { path: 'form/:user_id/:form_id', component: FetchFormComponent},
   { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },

@@ -241,7 +241,7 @@ span.kb-d-btn .kb-d-btn-st{
     display: block;
 }
 
-::ng-deep .kb-block-selection.kb-block-list>button.mat-button , .kb-block-selection span {
+::ng-deep .kb-block-selection.kb-block-list>button.mat-button, .kb-block-selection span {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -21,18 +21,15 @@ export class FormsComponent implements OnInit {
   shortwaiting = true;
   selstatusshow = 'all';
   form: any = {
-    formname: null,
-    formpath: null,
+    name: '',
   };
   userFormControl = new FormControl('',[Validators.required]);
-  userFormControl2 = new FormControl('',[Validators.required]);
   searching:boolean = false;
   sidebar = {
     open: false,
     anim: {open: false, close: false, time: 500},
     animtime: 300,
   }
-  pathcheck = false;
   delform:any;
   nodata = true;
   updatemode = false;
@@ -58,32 +55,22 @@ export class FormsComponent implements OnInit {
     this.fetching = true;
     this.fileUploadService.fetchforms().subscribe({
       next: data => {
-        if(data.data?.length!=0){
-          this.adjustdata(data);
-        }else this.nodata = true;
+        this.adjustdata(data);
         this.fetching = false;
       }
     });
   }
 
-  openform(path:any){
-    var url = window.origin+'/form/'+path;
-      window.open(url, '_blank');
-  }
-
   newform(value:any, data:any){
    if(value=='update'){
       this.updatemode = true;
-      this.form.formname = data.name;
-      this.form.formpath = data.path;
+      this.form = JSON.parse(JSON.stringify(data));
       this.selecteduid = data.uniqueid;
   }else{
       this.updatemode = false;
-      this.form.formname = '';
-      this.form.formpath = '';
+      this.form.name = '';
     }
     this.openSidebar();
-    this.pathcheck = false;
   }
 
   openSidebar(){
@@ -103,14 +90,12 @@ export class FormsComponent implements OnInit {
   }
 
   onformSubmit(): void {
-    if(this.userFormControl.status=='VALID' && this.userFormControl2.status=='VALID'){
-      var obj = {name:this.form.formname, path: this.form.formpath};
-      this.fileUploadService.saveform(obj).subscribe({
+    if(!this.userFormControl.invalid){
+      this.fileUploadService.saveform(this.form).subscribe({
         next: data => {
-          var msg, err = data.found==1;
+          var msg, err = data.success==0;
           if(err){
-            this.pathcheck = true;
-            msg = 'Form path must be unique!';
+            msg = 'Server Error';
           }
           else {
             msg = 'Form has been successfully created!';
@@ -120,19 +105,15 @@ export class FormsComponent implements OnInit {
         }
       });  
     }
-
   }
 
   onformUpdate(){
-      if(this.userFormControl.status=='VALID' && this.userFormControl2.status=='VALID'){
-          var obj = {name:this.form.formname, path: this.form.formpath, uniqueid:this.selecteduid};
-          this.fileUploadService.updateform(obj).subscribe({
+      if(!this.userFormControl.invalid){
+          this.fileUploadService.updateform(this.form).subscribe({
             next: data => {
-              console.log(data);
-              var msg, err = data.found==1;
+              var msg, err = data.success==0;
               if(err){
-                this.pathcheck = true;
-                msg = 'Form path must be unique!';
+                msg = 'Server Error';
               }
               else {
                 msg = 'Form has been update successfully!';
@@ -151,13 +132,18 @@ export class FormsComponent implements OnInit {
     if(data.name !== newname) {
       if(newname.length>3){
         data.name = newname;
-        var obj = {name:newname, path: data.path, uniqueid:data.uniqueid};
-        this.fileUploadService.updateform(obj).subscribe({
+        this.fileUploadService.updateform(data).subscribe({
           next: data => {
-            if(data.found==0){
-              this._general.openSnackBar(false, 'Name update successfully!', 'OK', 'center', 'top');
+            var msg, err = data.success==0;
+            if(err){
+              msg = 'Server Error';
+            }
+            else {
+              msg = 'Name update successfully!';
+              this.hidepopupsidebar();
               this.fetformdata();
             }
+            this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
           }
         }); 
       }else{
@@ -168,18 +154,15 @@ export class FormsComponent implements OnInit {
 
   }
 
-  deleteme(page:any){
- console.log(page);
-    this.fileUploadService.deleteform(page.id).subscribe({
-      next: data => {
-        console.log(data);
-        
-        var genscrn = 'keaimage-form-'+page.uniqueid+'-screenshot.png';
-            
+  deleteme(form:any){
+    form.deleting = true;
+    this.fileUploadService.deleteform(form.id).subscribe({
+      next: data => {        
+        var genscrn = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
         this.fileUploadService.validateimg(genscrn).subscribe({
           next: datagen => {
             if(datagen.data==1){
-              this.fileUploadService.deleteimage('keaimage-form-'+page.uniqueid+'-screenshot.png').subscribe({
+              this.fileUploadService.deleteimage('keaimage-form-'+form.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
                   this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
                   this.fetformdata();
@@ -195,34 +178,29 @@ export class FormsComponent implements OnInit {
 
       }
     });
-
   }
 
-  openDialog(templateRef: TemplateRef<any>, page:any ): void {
-
-    this.delform = page;
+  openDialog(templateRef: TemplateRef<any>, form:any ): void {
+    this.delform = form;
     this.dialog.open(templateRef);
-
   }
 
-  changemyname(event:any){
-    // console.log(event.target.value);
-    this.form.formpath = (event.target.value).replaceAll(" ", "-").toLowerCase();
-  }
-
-  pathuniqueremove(){
-    this.pathcheck = false;
-  }
-
-  duplicateform(datadup:any){
+  duplicateform(form:any){
+    var datadup = JSON.parse(JSON.stringify(form));
+    datadup.olduid = form.uniqueid;
+    datadup.uniqueid = this._general.makeid(20);
+    var regex = new RegExp(form.uniqueid, 'g');
+    var decode = this._general.decodeData(datadup.appendstyle);
+    var newapsty = decode.replace(regex, datadup.uniqueid);
+    datadup.appendstyle = this._general.encodeData(newapsty);
     this.fileUploadService.duplicateform(datadup).subscribe({
       next: data => {
           if(data.uniqueid!=''){
-            var genscrn = 'keaimage-form-'+datadup.uniqueid+'-screenshot.png';
-            this.fileUploadService.validateimg(genscrn).subscribe({
+            var oldimg = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
+            this.fileUploadService.validateimg(oldimg).subscribe({
               next: datagen => {
                 if(datagen.data==1){
-                  var imgobj  = {oldname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png', newname:'keaimage-form-'+data.uniqueid+'-screenshot.png'};
+                  var imgobj  = {oldname:oldimg, newname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png'};
                   this.fileUploadService.copyimage(imgobj).subscribe({
                     next: data => {
                       this.fetformdata();
@@ -248,9 +226,8 @@ export class FormsComponent implements OnInit {
     var obj = {search:SearchValue,type:'search'};
     this.fileUploadService.searchformquery(obj).subscribe({
       next: data => {
-        console.log(data);
-        this.searching = false;
         this.adjustdata(data);
+        this.searching = false;
       }
     });
   }
@@ -268,10 +245,10 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  adjustdata(data:any){
+  adjustdata(resp:any){
     this.forms = [];
-    this.nodata = false;
-    this.forms = data.data;
+    this.nodata = resp.data.length == 0;
+    this.forms = resp.data;
   }
 
   toggleView() {

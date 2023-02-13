@@ -6,6 +6,7 @@ import { ElementService } from '../_services/_builder/element.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-builder-topbar',
@@ -18,6 +19,8 @@ export class BuilderTopbarComponent implements OnInit {
   }
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
+  @ViewChild('renamehfdialog') renamehfdialog!: TemplateRef<any>;
+  @ViewChild('renametempdialog') renametempdialog!: TemplateRef<any>;
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Output('wireframeToggle') wireframeToggle: EventEmitter<any> = new EventEmitter();
   @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
@@ -26,6 +29,10 @@ export class BuilderTopbarComponent implements OnInit {
   @Input('wftgl') wftgl:any;
   @Input('ishf') ishf:any;
 
+  validate:any = {
+    targetname: new FormControl('', [Validators.required]),
+    tempname: new FormControl('', [Validators.required]),
+  }
   selectedTab:string = '';
   selectedElement:string = '';
   toggle = {open: false, close: false};
@@ -92,7 +99,7 @@ export class BuilderTopbarComponent implements OnInit {
   }  
 
   isMoreActive(moret:any) {
-    return moret.menuOpen || this._general.selectedBlock.type == 'main' || this.wftgl || this.urdo || this.zoom.active;
+    return moret.menuOpen || this._general.selectedBlock.type == 'main' || this.hfdialogOpen || this.wftgl || this.urdo || this.zoom.active;
   }
 
   createDefaultSections() {
@@ -150,11 +157,12 @@ export class BuilderTopbarComponent implements OnInit {
     })
   }
 
-  openRenameDialog(templateRef: TemplateRef<any>) {
+  openRenameHFDialog(templateRef: TemplateRef<any>) {
     this.hfdialogOpen = true;
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       this.hfdialogOpen = false;
+      if(this.validate.targetname.errors?.['required']) this.openRenameHFDialog(this.renamehfdialog);
     })
   }
 
@@ -173,14 +181,14 @@ export class BuilderTopbarComponent implements OnInit {
   }
 
   updateTemplate() {
-    var temp = JSON.parse(this.seltemp.template);
-    temp.name = this.seltemp.name;
-    this.seltemp.template = JSON.stringify(temp);
-    this._general.fileUploadService.updatetemplate(this.seltemp).subscribe(e=>{
-      this._general.fetchSectionTemplates().then(e=>{
-        this.snackBar('renamed');
-      });
-    })
+    if(!this.validate.tempname.errors?.['required']) {
+      this._general.fileUploadService.updatetemplate(this.seltemp).subscribe(e=>{
+        this._general.fetchSectionTemplates().then(e=>{
+          this.snackBar('renamed');
+        });
+      })
+    }
+    else this.openTempDialog(this.renametempdialog, this.seltemp);
   }
 
   snackBar(msg:string) {
@@ -299,20 +307,22 @@ export class BuilderTopbarComponent implements OnInit {
     this.openImageDialog.emit(true);
   }
 
-  setHeader(head:any) {
-    if(head) this._general.setHeader(head).then((e:any)=>this.setTrigger('preview'));
+  setHeader(headid:any) {
+    if(headid) this._general.setHeader(headid).then((e:any)=>this.setTrigger('preview'));
     else {
       this._general.includeLayout.header = false;
       this.setTrigger('preview');
     }
   }
 
-  setFooter(foot:any) {
-    if(foot) this._general.setFooter(foot).then((e:any)=>this.setTrigger('preview'));
+  setFooter(footid:any) {
+    if(footid) this._general.setFooter(footid).then((e:any)=>this.setTrigger('preview'));
     else {
       this._general.includeLayout.footer = false;
       this.setTrigger('preview');
     }
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
 }

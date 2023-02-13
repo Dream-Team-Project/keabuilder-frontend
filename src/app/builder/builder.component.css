@@ -1228,7 +1228,7 @@ ul.kb-menu a, ul.kb-menu li {
     animation: loader 5s linear infinite;
     position: fixed;
     top: calc(35% - 20px);
-    left: calc(50% - 20px);
+    left: calc(50% - 30px);
     z-index: 9999;
   }
   @keyframes loader {
@@ -1287,12 +1287,13 @@ ul.kb-menu a, ul.kb-menu li {
 
   /* loader */
 
-  span.kb-btn-link {
-    background-color: rgb(69 69 69 / 40%);
+  span.kb-element-info, span.kb-btn-link {
+    background-color: rgb(69 69 69 / 60%);
     position: absolute;
     color: #fff;
     font-size: 10px;
     padding: 2px 4px;
+    left: 0px;
     bottom: -18px;
     border-radius: 3px;
     animation: show 0.2s ease;

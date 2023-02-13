@@ -128,7 +128,7 @@ div#kb-img-group .kb-head {
     position: absolute;
     width: 100%!important;
     height: 100%!important;
-    background-color: rgb(222 166 65 / 30%);
+    background-color: var(--kb-dim-black);
 }
 
 ::ng-deep .kb-img-deleting .mat-spinner {

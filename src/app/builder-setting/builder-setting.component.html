@@ -471,9 +471,8 @@
                                         <div class="kb-tab-head">Website Pages</div>
                                         <div class="kb-tab-content kb-inp-left">
                                             <mat-select [(ngModel)]="_style.button_link">
-                                                <mat-option>None</mat-option>
                                                 <mat-option *ngFor="let page of _general.existwebpages"
-                                                    [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+page.page_path"
+                                                    [value]="_general.subdomain+page.page_path"
                                                     [disabled]="page.publish_status == 0">
                                                     {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
                                                         *ngIf="page.publish_status == 0"></small>
@@ -482,14 +481,13 @@
                                         </div>
                                     </div>
                                     <div class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Funnel Pages</div>
+                                        <div class="kb-tab-head">Funnel Steps</div>
                                         <div class="kb-tab-content kb-inp-left">
                                             <mat-select [(ngModel)]="_style.button_link">
-                                                <mat-option>None</mat-option>
                                                 <mat-optgroup *ngFor="let funnel of _general.funnels"
                                                     [label]="funnel.name | titlecase">
                                                     <mat-option *ngFor="let step of funnel.steps"
-                                                        [value]="'https://'+(_general.user.name | lowercase)+'.keabuilder.com/'+step.page_path"
+                                                        [value]="_general.subdomain+step.page_path"
                                                         [disabled]="step.archived == 1">
                                                         {{step.title | titlecase}}<small [attr.data]="step.funneltype"
                                                             class="infoTxt"></small>

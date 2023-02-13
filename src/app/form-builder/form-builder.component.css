@@ -85,11 +85,22 @@ span.kb-split-fields {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     width: 28px;
     height: 28px;
     font-size: 14px;
     border-radius: 4px;
+}
+
+.kb-form-field-icon i:not(.kb-drag-element) {
+    cursor: pointer;
+}
+
+.kb-drag-element {
+    cursor: all-scroll!important;
+}
+
+::ng-deep .kb-split-fields .mat-checkbox-frame {
+    border-color: var(--kb-dim-black)!important;
 }
 
 #kb-topbar-container {
@@ -106,9 +117,8 @@ span.kb-split-fields {
     flex-direction: column;
     position: relative;
     width: 100%;
-    min-height: 500px;
     height: auto;
-    margin: 0px auto;
+    margin: 20px auto;
     transition: width 0.3s ease-out;
 }
 
@@ -117,11 +127,11 @@ span.kb-split-fields {
     width: auto;
 }
 
-.cdk-drag, .cdk-drag-handle {
+.cdk-drag {
     cursor: grab;
 }
 
-.cdk-drag:active, .cdk-drag-handle:active {
+.cdk-drag:active {
     cursor: grabbing;
 }
 
@@ -357,7 +367,7 @@ button {
 
 /* radio input */
 
-label > input[type="radio"], label > input[type="checkbox"] {
+/* label > input[type="radio"], label > input[type="checkbox"] {
     display: none;
   }
 
@@ -399,23 +409,31 @@ label > input[type="radio"], label > input[type="checkbox"] {
     content: '\2714';
     font-size: 20px;
     position: absolute;
-    top: -7px;
+    top: -6px;
     left: 2px;
     color: var(--section-color);
-  }
+  } */
 
   /* label > input[type="radio"]:checked + *, label > input[type="checkbox"]:checked + * {
     color: var(--section-color);
   } */
 
-  label > input[type="radio"] + *, label > input[type="checkbox"] + * {
+  /* label > input[type="radio"] + *, label > input[type="checkbox"] + * {
     padding: 0px;
     display: inline-flex;
     align-items: center;
     transition: 0.2s ease;
     cursor: pointer;
+  } */
+
+  textarea {
+    max-width: 100%;
   }
 
-  select {
+  select, label > input[type="radio"] + *, label > input[type="checkbox"] + * {
     cursor: pointer;
+  }
+
+  .kb-form-input.kb-form-field-error { 
+    border: 2px solid #f44336!important;
   }

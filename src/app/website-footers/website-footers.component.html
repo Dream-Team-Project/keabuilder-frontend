@@ -1,24 +1,27 @@
-<ng-template #dialog>
+<ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete Footer</h1>
   <div mat-dialog-content>
       Would you like to delete <span class="text-danger">{{delfooter.name}}</span> footer?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-info">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="delete()">Yes</button>
+      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="delete(delfooter)">Yes</button>
   </div>
 </ng-template>
 <ng-template #createdialog>
   <h1 mat-dialog-title>Create Footer</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="isNotValid(validate.name)">
+      Footer name is required
+    </mat-error>
     <mat-form-field appearance="fill" class="w-100">
       <mat-label>Footer Name</mat-label>
-      <input matInput type="text" [placeholder]="'Footer name'" [(ngModel)]="footer.name">
+      <input matInput type="text" [placeholder]="'Footer name'" [formControl]="validate.name" [(ngModel)]="footer.name">
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-      <button mat-button mat-dialog-close [color]="footer.name ? 'primary' : ''" (click)="create()" [disabled]="!footer.name">Create</button>
+      <button mat-button mat-dialog-close [color]="!validate.name.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.name) || validate.name.errors?.['required']" (click)="create()">Create</button>
   </div>
 </ng-template>
 <div class="container-fluid">
@@ -49,11 +52,10 @@
     <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4" *ngFor="let footer of footers | filter:searchInp.value:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type">
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
-            <div class="kb-fitimg col-12" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('footer-'+footer.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-              <div id="loader" *ngIf="shortwaiting">
-                <div id="shadow"></div>
-                <div id="box"></div>
-                <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
+            <div [class.kb-disabled]="footer.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('footer-'+footer.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+              <div class="kb-loader" *ngIf="shortwaiting || footer.deleting">
+                <div class="kb-loader-shadow"></div>
+                <div class="kb-loader-box"></div>
               </div>
             </div>
           </div>
@@ -69,9 +71,9 @@
                 </p>
               </div>
               <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'" class="text-right">
-                <button mat-raised-button (click)="edit(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                <button mat-raised-button (click)="duplicate(footer)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
-                <button mat-raised-button (click)="delfooter = footer; openDialog(dialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
+                <button mat-raised-button [disabled]="footer.deleting" (click)="edit(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                <button mat-raised-button [disabled]="footer.deleting" (click)="duplicate(footer)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
+                <button mat-raised-button [disabled]="footer.deleting" (click)="delfooter = footer; openDialog(deldialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
               </div>
             </div>
           </div>
