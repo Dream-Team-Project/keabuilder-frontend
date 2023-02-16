@@ -67,11 +67,14 @@ export class FileUploadService {
   searchformqueryApi = './api/searchformquery';
   deleteformApi = "./api/deleteform";
   // forms
-  // form answers
-  saveformansApi = "./api/saveformans";
-  updateformansApi = "./api/updateformans";
-  deleteformansApi = "./api/deleteformans";
-  // form answers
+  // form submissions
+  searchformsubmApi = './api/searchformsubms';
+  allformssubmApi = "./api/allformssubm";
+  singleformsubm = "./api/singleformsubm";
+  saveformsubmApi = "./api/saveformsubm";
+  updateformsubmApi = "./api/updateformsubm";
+  deleteformsubmApi = "./api/deleteformsubm";
+  // form submissions
   // website
   createwebsitefolderApi = "./api/create-website";
   renamewebsitefolderApi = "./api/rename-website";
@@ -145,26 +148,39 @@ export class FileUploadService {
 
   // form
 
-  // form answers
+  // form submissions
 
-  saveform_ans(obj:any):Observable<any> {
+  searchformsubm(obj:any):Observable<any> {
     obj.user_id = this.uuid;
-    return this.http.post(this.saveformansApi, obj)
+    return this.http.post(this.searchformsubmApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  updateform_ans(obj:any):Observable<any> {
+  fetchforms_subm():Observable<any> {
+    return this.http.get(this.allformssubmApi+'/'+this.uuid);
+  }
+
+  singleform_subm(uniqueid:any):Observable<any> {
+    return this.http.get(this.singleformsubm+'/'+this.uuid+'/'+uniqueid);
+  }
+
+  saveform_subm(obj:any):Observable<any> {
+    return this.http.post(this.saveformsubmApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updateform_subm(obj:any):Observable<any> {
     obj.user_id = this.uuid;
-    return this.http.post(this.updateformansApi, obj)
+    return this.http.post(this.updateformsubmApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  deleteform_ans(id:any):Observable<any> {
-    return this.http.delete(this.deleteformansApi + '/' + id)
+  deleteform_subm(id:any):Observable<any> {
+    return this.http.delete(this.deleteformsubmApi + '/' + id)
     .pipe(catchError(this.errorHandler));
   }
 
-  // form answers
+  // form submissions
 
   // user
 

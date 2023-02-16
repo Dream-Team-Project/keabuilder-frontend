@@ -4,13 +4,35 @@
         <mat-error *ngIf="isNotValid(validate.targetname)">
             {{_general.target.type | titlecase}} name should not be empty
         </mat-error>
+        <mat-error *ngIf="validate.targetname.hasError('minlength')">
+            {{_general.target.type | titlecase}} name must be at least <strong>3</strong> characters
+        </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>{{_general.target.type | titlecase}} name</mat-label>
-            <input matInput type="text" [formControl]="validate.targetname" [placeholder]="_general.target.type + ' name'" [(ngModel)]="_general.target.name" required>
+            <input matInput type="text" [formControl]="validate.targetname" [placeholder]="_general.target.type + ' name'" [(ngModel)]="_general.target.name" required minlength="3">
         </mat-form-field>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.targetname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.targetname) || validate.targetname.errors?.['required']">Done</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.targetname.invalid ? 'primary' : ''" [disabled]="validate.targetname.invalid">Done</button>
+    </div>
+</ng-template>
+<ng-template #renametempdialog>
+    <h1 mat-dialog-title>Rename Template</h1>
+    <div mat-dialog-content>
+        <mat-error *ngIf="isNotValid(validate.tempname)">
+            Template name should not be empty
+        </mat-error>
+        <mat-error *ngIf="validate.tempname.hasError('minlength')">
+            Template name must be at least <strong>3</strong> characters
+        </mat-error>
+        <mat-form-field appearance="fill">
+            <mat-label>Template name</mat-label>
+            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="seltemp.name" required minlength="3">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="updateTemplate()">Save</button>
     </div>
 </ng-template>
 <ng-template #deltempdialog>
@@ -23,23 +45,7 @@
         <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteTemplate()" class="kb-danger">Yes</button>
     </div>
 </ng-template>
-<ng-template #renametempdialog>
-    <h1 mat-dialog-title>Rename Template</h1>
-    <div mat-dialog-content>
-        <mat-error *ngIf="isNotValid(validate.tempname)">
-            Template name should not be empty
-        </mat-error>
-        <mat-form-field appearance="fill">
-            <mat-label>Template name</mat-label>
-            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="seltemp.name">
-        </mat-form-field>
-    </div>
-    <div mat-dialog-actions>
-        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.tempname) || validate.tempname.errors?.['required']" (click)="updateTemplate()">Save</button>
-    </div>
-</ng-template>
-<div id="kb-topbar">
+<div id="kb-topbar" [class.pagedisabled]="_general.saveDisabled">
     <div class="kb-triggers">
         <button mat-button (click)="_general.redirectLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
         <button mat-button (click)="_general.backBtn()" class="kb-backBtn">

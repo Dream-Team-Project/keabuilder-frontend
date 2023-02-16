@@ -1,0 +1,22 @@
+table.kb-submmission-list thead{
+    background-color: var(--opacity-primary);
+}
+
+table.kb-submmission-list th, table.kb-submmission-list td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+.kb-table-action {
+    cursor: pointer;
+}
+
+table.kb-submmission-list tr {
+    transition: 0.2s ease;
+}
+
+table.kb-submmission-list tbody tr:hover, tr.kb-table-action-active {
+    color: var(--primary-color);
+}

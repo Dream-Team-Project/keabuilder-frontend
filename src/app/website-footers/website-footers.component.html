@@ -14,14 +14,17 @@
     <mat-error *ngIf="isNotValid(validate.name)">
       Footer name is required
     </mat-error>
+    <mat-error *ngIf="validate.name.hasError('minlength')">
+      Footer name must be at least <strong>3</strong> characters
+    </mat-error>
     <mat-form-field appearance="fill" class="w-100">
       <mat-label>Footer Name</mat-label>
-      <input matInput type="text" [placeholder]="'Footer name'" [formControl]="validate.name" [(ngModel)]="footer.name">
+      <input matInput type="text" [placeholder]="'Footer name'" [formControl]="validate.name" [(ngModel)]="footer.name" minlength="3">
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-      <button mat-button mat-dialog-close [color]="!validate.name.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.name) || validate.name.errors?.['required']" (click)="create()">Create</button>
+      <button mat-button mat-dialog-close [color]="!validate.name.invalid ? 'primary' : ''" [disabled]="validate.name.invalid" (click)="create()">Create</button>
   </div>
 </ng-template>
 <div class="container-fluid">

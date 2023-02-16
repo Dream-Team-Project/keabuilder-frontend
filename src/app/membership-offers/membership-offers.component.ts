@@ -72,7 +72,7 @@ export class MembershipOffersComponent implements OnInit {
     this.courseService.all().subscribe({
 
       next: data => {
-        console.log(data);
+        // console.log(data);
         data.data.forEach((element:any) => {
             var genobj = {id:element.uniqueid,text:element.title};
             this.productoptionalList.push(genobj);
@@ -169,7 +169,7 @@ export class MembershipOffersComponent implements OnInit {
   showdataoffer(data:any){
     this.kbcourses = [];
 
-    console.log(data);
+    // console.log(data);
     data.data.forEach((element:any) => {
       console.log(element);
 
@@ -201,7 +201,7 @@ export class MembershipOffersComponent implements OnInit {
     if(value!='stats'){
       this.courseService.filteroffer(value).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           this.showdataoffer(data);
 
         }
@@ -245,7 +245,7 @@ export class MembershipOffersComponent implements OnInit {
 
       this.courseService.addnewoffer(newoffer).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.already==1){
             this._snackBar.open('Offer Already Exist!', 'Close');
           }else{
@@ -272,7 +272,7 @@ export class MembershipOffersComponent implements OnInit {
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedeloffer(data).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this.getallmyoffers();
             this._snackBar.open('Offer Deleted Successfully!', 'Close');
           }
@@ -292,7 +292,7 @@ export class MembershipOffersComponent implements OnInit {
       var data = {id:id,name:'',type:'geteditdata'};
       this.courseService.updatedeloffer(data).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           data.data.forEach((element:any) => {
 
             
@@ -331,7 +331,7 @@ export class MembershipOffersComponent implements OnInit {
       var data = {id:id,name:'',type:'duplicate'};
       this.courseService.updatedeloffer(data).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           this.getallmyoffers();
           this._snackBar.open('Offer Duplicate Successfully!', 'Close');
         }
@@ -345,7 +345,7 @@ export class MembershipOffersComponent implements OnInit {
     var data = {id:id,name:name,type:type};
     this.courseService.updatedeloffer(data).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.isrename==true){
           this._snackBar.open('Offer Renamed Successfully!', 'Close');
         }else if(data.isrename==false){
@@ -378,11 +378,11 @@ export class MembershipOffersComponent implements OnInit {
 
     var newoffer = {title:this.title,selected_course:selectcourse,payment_type:this.paymenttype,price:this.price,currency:this.pricetype,no_monthly_payment:this.monthly_payments,bill_every:this.bill_every,offer_interval:this.interval};
     var data = {id:this.updateid, name:'', type:'update', update:newoffer};
-    console.log(data);
+    // console.log(data);
 
     this.courseService.updatedeloffer(data).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.getallmyoffers();
         this._snackBar.open('Offer Updated Successfully!', 'Close');
       }
@@ -396,7 +396,7 @@ export class MembershipOffersComponent implements OnInit {
 
     this.courseService.querystringmanage(SearchValue).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.showdataoffer(data);
       }
     });

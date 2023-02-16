@@ -13,7 +13,7 @@ export class WebsiteFootersComponent {
   
   @ViewChild('createdialog') createdialog!: TemplateRef<any>;
 
-  validate:any = {
+  validate = {
     name: new FormControl('', [Validators.required]),
   }
   toggleview = true;
@@ -65,10 +65,10 @@ export class WebsiteFootersComponent {
     if(footer.name !== footname) {
       if(footname.length > 3) {
         footer.name = footname;
-        this._general.fileUploadService.updatefooter(footer).subscribe(resp=>{
+        this._general._file.updatefooter(footer).subscribe(resp=>{
           if(resp.success) {
             this.action = 'renamed';
-            this.openSB(false);
+            this.fetch();
           }
           else {
             this.openSB(true);
@@ -84,14 +84,14 @@ export class WebsiteFootersComponent {
   }
 
   create() {
-    if(!this.validate.name.errors?.['required']) {
+    if(!this.validate.name.invalid) {
       this.footer.uniqueid = this._general.makeid(20);
       var obj:any = {
         id: 'kb-footer-'+this.footer.uniqueid,
         html: ''
       }
-      this._general.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
-        this._general.fileUploadService.savefooter(this.footer).subscribe(resp=>{
+      this._general._file.saveFile(obj, 'footers').subscribe(e=>{
+        this._general._file.savefooter(this.footer).subscribe(resp=>{
           if(resp.success) {
             this.edit(this.footer);
             this.footer.name = '';
@@ -110,22 +110,21 @@ export class WebsiteFootersComponent {
 
   duplicate(footer:any) {
     var dobj = JSON.parse(JSON.stringify(footer));
-    dobj.name = dobj.name + ' copy';
     dobj.uniqueid = this._general.makeid(20);
     var obj = {
       oldpath: 'kb-footer-'+footer.uniqueid+'.php',
       path: 'kb-footer-'+dobj.uniqueid+'.php',
     }
-    this._general.fileUploadService.copyFile(obj, 'footers').subscribe(resp=>{
+    this._general._file.copyFile(obj, 'footers').subscribe(resp=>{
       if(resp.success) {
-        this._general.fileUploadService.savefooter(dobj).subscribe((resp:any)=>{
+        this._general._file.savefooter(dobj).subscribe((resp:any)=>{
           this.fetch();
         })
         var imgobj  = {
           oldname: this._general.getSSPath('footer-'+footer.uniqueid), 
           newname: this._general.getSSPath('footer-'+dobj.uniqueid)
         };
-        this._general.fileUploadService.copyimage(imgobj).subscribe(resp=>{});
+        this._general._file.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
       }
       else this.openSB(true);
@@ -134,8 +133,8 @@ export class WebsiteFootersComponent {
 
   delete(footer:any) {
     footer.deleting = true;
-    this._general.fileUploadService.deletefooter(footer.id).subscribe((resp:any)=>{
-      this._general.fileUploadService.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp=>{
+    this._general._file.deletefooter(footer.id).subscribe((resp:any)=>{
+      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp=>{
         if(resp.success) {
           this.action = 'deleted';
           this.fetch();

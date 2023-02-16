@@ -204,7 +204,7 @@ function forclick(e){
             name: kb_fulldata
         },
         success: function (data) {
-            console.log(data);
+            // console.log(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log(xhr.status)
@@ -239,7 +239,7 @@ function formouse(e){
             name: kb_fulldata
         },
         success: function (data) {
-            console.log(data);
+            // console.log(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log(xhr.status)
@@ -433,7 +433,7 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
                         ipv4: allinonegeoloc[7] 
                     },
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log(xhr.status)
@@ -1866,7 +1866,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 url: window.location.href.toString().split('#kb-heatmaps')[0]
             },
             success: function (data) {
-                console.log(data);
+                // console.log(data);
 
                 var browser_segment = [];
                 var os_segment = [];
@@ -2069,7 +2069,7 @@ if(window.location.hash=='#kb-heatmaps'){
                     whichvalue: value2
                 },
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
 
                 var strng1 = [];
                 var strng2 = [];

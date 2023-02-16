@@ -13,7 +13,7 @@ export class WebsiteHeadersComponent {
 
   @ViewChild('createdialog') createdialog!: TemplateRef<any>;
 
-  validate:any = {
+  validate = {
     name: new FormControl('', [Validators.required]),
   }
   toggleview = true;
@@ -65,10 +65,10 @@ export class WebsiteHeadersComponent {
     if(header.name !== headname) {
       if(headname.length > 3){
         header.name = headname;
-        this._general.fileUploadService.updateheader(header).subscribe(resp=>{
+        this._general._file.updateheader(header).subscribe(resp=>{
           if(resp.success) {
             this.action = 'renamed';
-            this.openSB(false);
+            this.fetch();
           }
           else {
             this.openSB(true);
@@ -84,14 +84,14 @@ export class WebsiteHeadersComponent {
   }
 
   create() {
-    if(!this.validate.name.errors?.['required']) {
+    if(!this.validate.name.invalid) {
       this.header.uniqueid = this._general.makeid(20);
       var obj:any = {
         id: 'kb-header-'+this.header.uniqueid,
         html: ''
       };
-      this._general.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
-        this._general.fileUploadService.saveheader(this.header).subscribe(resp=>{
+      this._general._file.saveFile(obj, 'headers').subscribe(e=>{
+        this._general._file.saveheader(this.header).subscribe(resp=>{
           if(resp.success) {
             this.edit(this.header);
             this.header.name = '';
@@ -110,23 +110,21 @@ export class WebsiteHeadersComponent {
 
   duplicate(header:any) {
     var dobj = JSON.parse(JSON.stringify(header));
-    dobj.name = dobj.name + ' copy';
     dobj.uniqueid = this._general.makeid(20);
     var obj = {
       oldpath: 'kb-header-'+header.uniqueid+'.php',
       path: 'kb-header-'+dobj.uniqueid+'.php',
     }
-    this._general.fileUploadService.copyFile(obj, 'headers').subscribe(resp=>{
+    this._general._file.copyFile(obj, 'headers').subscribe(resp=>{
       if(resp.success) {
-        this._general.fileUploadService.saveheader(dobj).subscribe((resp:any)=>{
+        this._general._file.saveheader(dobj).subscribe((resp:any)=>{
           this.fetch();
-          console.log(resp);
         })
         var imgobj  = {
           oldname: this._general.getSSPath('header-'+header.uniqueid), 
           newname: this._general.getSSPath('header-'+dobj.uniqueid)
         };
-        this._general.fileUploadService.copyimage(imgobj).subscribe(resp=>{});
+        this._general._file.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
       }
       else this.openSB(true);
@@ -135,8 +133,8 @@ export class WebsiteHeadersComponent {
 
   delete(header:any) {
     header.deleting = true;
-    this._general.fileUploadService.deleteheader(header.id).subscribe((resp:any)=>{
-      this._general.fileUploadService.deleteFile('kb-header-'+header.uniqueid, 'headers').subscribe(resp=>{
+    this._general._file.deleteheader(header.id).subscribe((resp:any)=>{
+      this._general._file.deleteFile('kb-header-'+header.uniqueid, 'headers').subscribe(resp=>{
         console.log(resp);
         if(resp.success) {
           this.action = 'deleted';

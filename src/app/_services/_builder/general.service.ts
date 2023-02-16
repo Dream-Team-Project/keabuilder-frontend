@@ -127,7 +127,7 @@ export class GeneralService {
   searchFilter:any = this.filterOrder[3];
   pageSaved:boolean = true;
 
-  constructor(public userService: UserService, private _snackBar: MatSnackBar, public fileUploadService: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
+  constructor(public userService: UserService, private _snackBar: MatSnackBar, public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -143,7 +143,7 @@ export class GeneralService {
 
   fetchSectionTemplates() {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchtemplates().subscribe((data:any)=>{
+      this._file.fetchtemplates().subscribe((data:any)=>{
         this.sectionTemplates = data.data;
         this.templatesUpdated.next(!this.templatesUpdated.value);
         resolve(true);
@@ -154,7 +154,7 @@ export class GeneralService {
   fetchMenus() {
     const menus:any = [];
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFiles('menus').subscribe((data:any)=>{
+      this._file.fetchFiles('menus').subscribe((data:any)=>{
         if(!data.success) resolve(menus);
         var ulc = 0;
         data.data.forEach((html:any)=>{
@@ -181,7 +181,7 @@ export class GeneralService {
 
   fetchForms() {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchforms().subscribe((resp:any)=>{
+      this._file.fetchforms().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
@@ -189,7 +189,7 @@ export class GeneralService {
 
   fetchHeaders() {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchheaders().subscribe((resp:any)=>{
+      this._file.fetchheaders().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
@@ -197,7 +197,7 @@ export class GeneralService {
 
   fetchFooters() {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchfooters().subscribe((resp:any)=>{
+      this._file.fetchfooters().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
@@ -245,12 +245,12 @@ export class GeneralService {
           )
         }
         else if(this.target.type == 'header') {
-          this.fileUploadService.getheader(id).subscribe((resp:any)=>{
+          this._file.getheader(id).subscribe((resp:any)=>{
             resolve(resp.data[0]);
           })
         }
         else if(this.target.type == 'footer') {
-          this.fileUploadService.getfooter(id).subscribe((resp:any)=>{
+          this._file.getfooter(id).subscribe((resp:any)=>{
             resolve(resp.data[0]);
           })
         }
@@ -282,7 +282,7 @@ export class GeneralService {
 
   setHeader(headid:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile('kb-header-'+headid, 'headers').subscribe((data1)=>{
+      this._file.fetchFile('kb-header-'+headid, 'headers').subscribe((data1)=>{
         this.setMenu(data1.html).then(data2=>{
           data1.id = headid;
           data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
@@ -296,7 +296,7 @@ export class GeneralService {
 
   setFooter(footid:any) {
     return new Promise<any>((resolve, reject) => {
-      this.fileUploadService.fetchFile('kb-footer-'+footid, 'footers').subscribe((data1)=>{
+      this._file.fetchFile('kb-footer-'+footid, 'footers').subscribe((data1)=>{
         this.setMenu(data1.html).then(data2=>{
           data1.id = footid;
           data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
@@ -322,7 +322,7 @@ export class GeneralService {
       var status = this.webpage.publish_status == 1;
       this.main.publish_status = status;
       this.main.dir = status ? 'pages' : 'drafts';
-      this.fileUploadService.getPage(this.main).subscribe({
+      this._file.getPage(this.main).subscribe({
         next: (file:any)=>{
           resolve(file);
         },
@@ -354,8 +354,8 @@ export class GeneralService {
       var jsonObj = {sections: sections};
       dbobj.json = this.encodeJSON(jsonObj);
       if(this.target.type == 'header') {
-        this.fileUploadService.saveFile(obj, 'headers').subscribe(e=>{
-          this.fileUploadService.updateheader(dbobj).subscribe((resp:any)=>{
+        this._file.saveFile(obj, 'headers').subscribe(e=>{
+          this._file.updateheader(dbobj).subscribe((resp:any)=>{
             this.pageSaved = true;
             resolve(true);
           })
@@ -363,8 +363,8 @@ export class GeneralService {
         error=>{resolve(false);});
       }
       else if(this.target.type == 'footer') {
-        this.fileUploadService.saveFile(obj, 'footers').subscribe(e=>{
-          this.fileUploadService.updatefooter(dbobj).subscribe((resp:any)=>{
+        this._file.saveFile(obj, 'footers').subscribe(e=>{
+          this._file.updatefooter(dbobj).subscribe((resp:any)=>{
             this.pageSaved = true;
             resolve(true);
           })
@@ -436,7 +436,7 @@ export class GeneralService {
         prevObj.prevFolder = this.webpage.uniqueid;
         prevObj.folder = this.webpage.uniqueid;
         prevObj.dir = 'previews';
-        this.fileUploadService.savePage(prevObj).subscribe((event:any)=>{
+        this._file.savePage(prevObj).subscribe((event:any)=>{
           resolve(true);
         },
         error=>{
@@ -456,7 +456,7 @@ export class GeneralService {
             path: this.main.path,
             website_id: websiteid
           }
-          this.fileUploadService.toggleDraft(td).subscribe((data:any)=>{
+          this._file.toggleDraft(td).subscribe((data:any)=>{
             this.savePage().then(resp=>resolve(resp));
           })
         }
@@ -469,7 +469,7 @@ export class GeneralService {
     return new Promise<any>((resolve, reject) => {
       this.updatePageDB().then(e=>{
         if(e.found == 0) {
-          this.fileUploadService.savePage(this.pageObj).subscribe(
+          this._file.savePage(this.pageObj).subscribe(
             (event:any) => {
               if(e.ishome) {
                 var obj = {
@@ -478,13 +478,13 @@ export class GeneralService {
                   website_id: this.webpage.website_id
                 }
                 if(obj.dir == 'drafts') {
-                  this.fileUploadService.createdefaulthome(obj).subscribe((d:any)=>{
+                  this._file.createdefaulthome(obj).subscribe((d:any)=>{
                       this.pageSaved = true;
                       resolve(true);
                   });
                 }
                 else {
-                  this.fileUploadService.updateHome(obj).subscribe((d:any)=>{
+                  this._file.updateHome(obj).subscribe((d:any)=>{
                     this.pageSaved = true;
                     resolve(true);
                 });
@@ -601,17 +601,17 @@ export class GeneralService {
   }
 
   blockStyling(block:any) {
-    this.pagestyling.desktop = this.pagestyling.desktop + '#' + block.id + '{' + Object.entries(block.style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(block.style.tablet_h)) this.pagestyling.tablet_h = this.pagestyling.tablet_h + '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(block.style.tablet_v)) this.pagestyling.tablet_v = this.pagestyling.tablet_v + '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(block.style.mobile)) this.pagestyling.mobile = this.pagestyling.mobile + '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(!this.isObjEmpty(block.style.hover)) this.pagestyling.hover = this.pagestyling.hover + '#' + block.id + ':hover{' + Object.entries(block.style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    this.pagestyling.desktop += '#' + block.id + '{' + Object.entries(block.style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.tablet_h)) this.pagestyling.tablet_h += '#' + block.id + '{' + Object.entries(block.style.tablet_h).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.tablet_v)) this.pagestyling.tablet_v += '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.mobile)) this.pagestyling.mobile += '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.hover)) this.pagestyling.hover += '#' + block.id + ':hover{' + Object.entries(block.style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.type == 'row') {
       var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}'];
-      if(block.columnGap.desktop) this.pagestyling.desktop = this.pagestyling.desktop + clmwrp.join(block.columnGap.desktop);
-      if(block.columnGap.tablet_h != 'auto') this.pagestyling.tablet_h = this.pagestyling.tablet_h + clmwrp.join(block.columnGap.tablet_h);
-      if(block.columnGap.tablet_v != 'auto') this.pagestyling.tablet_v = this.pagestyling.tablet_v + clmwrp.join(block.columnGap.tablet_v);
-      if(block.columnGap.mobile != 'auto') this.pagestyling.mobile = this.pagestyling.mobile + clmwrp.join(block.columnGap.mobile);
+      if(block.columnGap.desktop) this.pagestyling.desktop += clmwrp.join(block.columnGap.desktop);
+      if(block.columnGap.tablet_h != 'auto') this.pagestyling.tablet_h += clmwrp.join(block.columnGap.tablet_h);
+      if(block.columnGap.tablet_v != 'auto') this.pagestyling.tablet_v += clmwrp.join(block.columnGap.tablet_v);
+      if(block.columnGap.mobile != 'auto') this.pagestyling.mobile += clmwrp.join(block.columnGap.mobile);
     }
   }
 
@@ -638,38 +638,38 @@ export class GeneralService {
       mar: 'margin:',
     }
     var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop + ';' : '';
-    this.pagestyling.desktop = this.pagestyling.desktop + elestl.selector + deskjc + ';}';
+    this.pagestyling.desktop += elestl.selector + deskjc + ';}';
 
     var tabhjc = ele.item_alignment.tablet_h ? elestl.jc + ele.item_alignment.tablet_h + ';' : '';
-    this.pagestyling.tablet_h = this.pagestyling.tablet_h + elestl.selector + tabhjc + ';}';
+    this.pagestyling.tablet_h += elestl.selector + tabhjc + ';}';
 
     var tabvjc = ele.item_alignment.tablet_v ? elestl.jc + ele.item_alignment.tablet_v + ';' : '';
-    this.pagestyling.tablet_v = this.pagestyling.tablet_v + elestl.selector + tabvjc + ';}';
+    this.pagestyling.tablet_v += elestl.selector + tabvjc + ';}';
 
     var mobjc = ele.item_alignment.mobile ? elestl.jc + ele.item_alignment.mobile + ';' : '';
-    this.pagestyling.mobile = this.pagestyling.mobile + elestl.selector + mobjc + ';}';
+    this.pagestyling.mobile += elestl.selector + mobjc + ';}';
 
     var style = JSON.parse(JSON.stringify(ele.content.style));
 
     var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
 
     style.desktop.margin = style.desktop.margin?.replace(/auto/g,'0px');
-    this.pagestyling.desktop = this.pagestyling.desktop + selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    this.pagestyling.desktop += selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(!this.isObjEmpty(ele.content.style.tablet_h)) {
       if(style.tablet_h.margin) style.tablet_h.margin = style.tablet_h.margin?.replace(/auto/g,'0px');
-      this.pagestyling.tablet_h = this.pagestyling.tablet_h + selector + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      this.pagestyling.tablet_h += selector + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
     if(!this.isObjEmpty(ele.content.style.tablet_v)) {
       if(style.tablet_v.margin) style.tablet_v.margin = style.tablet_v.margin?.replace(/auto/g,'0px');
-      this.pagestyling.tablet_v = this.pagestyling.tablet_v + selector + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      this.pagestyling.tablet_v += selector + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
     if(!this.isObjEmpty(ele.content.style.mobile)) {
       if(style.mobile.margin) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
-      this.pagestyling.mobile = this.pagestyling.mobile + selector + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      this.pagestyling.mobile += selector + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
     if(!this.isObjEmpty(ele.content.style.hover)) {
       if(style.hover.margin) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
-      this.pagestyling.hover = this.pagestyling.hover + selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      this.pagestyling.hover += selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
   }
 

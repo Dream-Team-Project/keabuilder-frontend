@@ -89,7 +89,7 @@ export class MembershipCouponsComponent implements OnInit {
   getallmycoupons(){
     this.courseService.getallcoupons().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.users = [];
         this.dataSource.data = [];
 
@@ -173,7 +173,7 @@ export class MembershipCouponsComponent implements OnInit {
 
       this.courseService.addnewcoupon(this.newcoupon).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.already==1){
             this._snackBar.open('Coupon Already Exist!', 'Close');
           }else{
@@ -194,7 +194,7 @@ export class MembershipCouponsComponent implements OnInit {
     var data = {id:id,name:'',type:'geteditdata'};
     this.courseService.updatedelcoupon(data).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         data.data.forEach((element:any) => {
           
           this.newcoupon = {name:element.name, discount_type:element.discount_type, percent_off:element.percent_off, amount_off:element.amount_off, currency_type:element.currency_type, duration:element.duration, expiration_date:element.expiration_date, duration_in_month:element.duration_in_months, included_offers:element.include_offers};
@@ -227,7 +227,7 @@ export class MembershipCouponsComponent implements OnInit {
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedelcoupon(data).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this.getallmycoupons();
             this._snackBar.open('Coupon Deleted Successfully!', 'Close');
           }
@@ -249,7 +249,7 @@ export class MembershipCouponsComponent implements OnInit {
     var data = {id:this.updateid, name:'', type:'update', update:this.newcoupon};
     this.courseService.updatedelcoupon(data).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.getallmycoupons();
         this._snackBar.open('Coupon Updated Successfully!', 'Close');
       }

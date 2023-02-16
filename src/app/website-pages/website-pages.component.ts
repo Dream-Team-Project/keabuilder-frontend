@@ -7,7 +7,6 @@ import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { ImageService } from '../_services/image.service';
 import { FormControl, Validators } from '@angular/forms';import { TokenStorageService } from '../_services/token-storage.service';
 import { GeneralService } from '../_services/_builder/general.service';
-import { FileUploadService } from '../_services/file-upload.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
@@ -46,7 +45,6 @@ export class WebsitePagesComponent implements OnInit {
               public _image: ImageService,
               private tokenStorage: TokenStorageService,
               public _general: GeneralService,
-              private fileUploadService: FileUploadService,
               private websiteService: WebsiteService,
               private userService: UserService,) {
                 this.toggleview = _general.getStorage('page_toggle');
@@ -168,7 +166,7 @@ export class WebsitePagesComponent implements OnInit {
     var data = {pagesize:pageSize};
     // this.webpagesService.shortbypaginator(data).subscribe({
     //   next: data => {
-    //     console.log(data);
+    //     // console.log(data);
     //     // this.kbpages = [];
     //     // this.shortdata(data);
     //   },
@@ -281,7 +279,7 @@ export class WebsitePagesComponent implements OnInit {
       var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.websiteid};
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.found==1){
             this.pathcheck = true;
@@ -297,7 +295,7 @@ export class WebsitePagesComponent implements OnInit {
               prevFolder: pagepath,
               website_id:this.websiteid, 
             }
-            this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+            this._general._file.savePage(page).subscribe((event:any) => {
               console.log(event);
             },
             error=>{console.log(error)});
@@ -348,7 +346,7 @@ export class WebsitePagesComponent implements OnInit {
           next: data => {
     
             if(data?.length != 0) {
-              console.log(data);
+              // console.log(data);
               data.data.forEach((element:any) => {
 
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
@@ -416,7 +414,7 @@ export class WebsitePagesComponent implements OnInit {
     console.log(title);
       this.webpagesService.namepathchanges(dataobj.id,title,type).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           // console.log(this.kbpages);
 
           if(data.success==1){
@@ -435,11 +433,11 @@ export class WebsitePagesComponent implements OnInit {
                     // console.log(data.id);
                     this.webpagesService.checkandmakestatus(data.id).subscribe({
                       next: data => {
-                        console.log(data);
+                        // console.log(data);
                         if(data.success==1){
 
                           var webobj:any = {website_id:this.websiteid};
-                          this.fileUploadService.createdefaulthome(webobj).subscribe(e=>{
+                          this._general._file.createdefaulthome(webobj).subscribe(e=>{
                             // console.log(e);
                           })
 
@@ -496,7 +494,7 @@ export class WebsitePagesComponent implements OnInit {
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
     var newobjdt = {status:getvl, path:page_path, website_id:this.websiteid};
-    this.fileUploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
+    this._general._file.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
 
@@ -506,14 +504,14 @@ export class WebsitePagesComponent implements OnInit {
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
 
-        console.log(data);
+        // console.log(data);
         if(data.found==1){
           this.pathcheck2 = true;
         }else if(data.found==0){
 
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
-          this.fileUploadService.renamepage(pathobj).subscribe({
+          this._general._file.renamepage(pathobj).subscribe({
             next: data => {
               // console.log(data);
             }
@@ -567,7 +565,7 @@ export class WebsitePagesComponent implements OnInit {
       // console.log(id);
       this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.success==1){
             this._snackBar.open('Processing...', 'OK');
 
@@ -575,14 +573,14 @@ export class WebsitePagesComponent implements OnInit {
             var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.websiteid, dir:getvl};
             console.log(pathobj);
          
-            this.fileUploadService.copypage(pathobj).subscribe({
+            this._general._file.copypage(pathobj).subscribe({
               next: data => {
                 this._snackBar.open('Page Duplicate Successfully!', 'OK');
                 this.showwebpages();
               }
             });
             var imgobj  = {oldname:'keaimage-page-'+page.uniqueid+'-screenshot.png', newname:'keaimage-page-'+data.uniqueid+'-screenshot.png'};
-            this.fileUploadService.copyimage(imgobj).subscribe({
+            this._general._file.copyimage(imgobj).subscribe({
               next: data => {
                 // console.log(data);
               }
@@ -639,14 +637,14 @@ export class WebsitePagesComponent implements OnInit {
       var dtobj = {type:this.actionname, newwebsiteid:this.newwebsiteid, uniqueid:page.uniqueid, newpath: page.page_path};
       this.webpagesService.movecopywebpage(dtobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           var pathobj = {old_website_id:this.websiteid, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
 
           this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
 
-          this.fileUploadService.transferPage(pathobj).subscribe({
+          this._general._file.transferPage(pathobj).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
 
               this.actionname=='Move' ? this._snackBar.open('Page Move Successfully!', 'OK'): this._snackBar.open('Page Copy & Move Successfully!', 'OK');
               this.showwebpages();
@@ -744,7 +742,7 @@ export class WebsitePagesComponent implements OnInit {
     console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         console.log(this.arpageobj);
         console.log(type);
 
@@ -764,11 +762,11 @@ export class WebsitePagesComponent implements OnInit {
           if(data.deleteme==0){
             this.webpagesService.checkandmakestatus(this.archive_id).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
 
                 if(data.success==1){
                   var webobj:any = {website_id:this.websiteid};
-                  this.fileUploadService.createdefaulthome(webobj).subscribe(e=>{
+                  this._general._file.createdefaulthome(webobj).subscribe(e=>{
                     // console.log(e);
                   })
                 }
@@ -779,12 +777,12 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.deleteme==1){
             var newpathobj:any = {website_id:this.websiteid, path:data.path};
-            this.fileUploadService.deletepage(newpathobj).subscribe({
+            this._general._file.deletepage(newpathobj).subscribe({
               next: data => {
                 // console.log(data);
               }
             });
-            this.fileUploadService.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
+            this._general._file.deleteimage('keaimage-'+page.uniqueid+'-screenshot.png').subscribe({
               next: data => {
                 // console.log(data);
               }

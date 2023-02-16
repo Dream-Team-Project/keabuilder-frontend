@@ -4,7 +4,7 @@
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-            <h6><b><img [src]="stripecontentactive==true?'/assets/images/payment/stripe-logo.png':'/assets/images/payment/paypal-logo.png'" width="20" alt="" srcset=""> {{stripecontentactive==true?'Stripe':'Paypal'}}</b></h6>
+            <h6><strong><img [src]="stripecontentactive==true?'/assets/images/payment/stripe-logo.png':'/assets/images/payment/paypal-logo.png'" width="20" alt="" srcset=""> {{stripecontentactive==true?'Stripe':'Paypal'}}</strong></h6>
             <hr>
             <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
                 <mat-label>Stripe Key</mat-label>

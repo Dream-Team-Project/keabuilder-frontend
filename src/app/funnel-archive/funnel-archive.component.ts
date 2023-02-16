@@ -100,7 +100,7 @@ export class FunnelArchiveComponent implements OnInit {
 
     this.funnelService.restoredeletefunnel(id,type).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.success==1){
 
           data.data.forEach((element:any) => {

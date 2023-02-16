@@ -70,7 +70,7 @@ export class AllWebsitesComponent implements OnInit {
 
   fetweb(data:any){
 
-    console.log(data);
+    // console.log(data);
     if(data.data?.length != 0) {
       this.nodata = false;
       this.allwebsites = [];
@@ -110,7 +110,7 @@ export class AllWebsitesComponent implements OnInit {
     this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
       next: data => {
 
-        console.log(data);
+        // console.log(data);
         this.fetweb(data);
         // this.shortdata(data);
       }
@@ -121,7 +121,7 @@ export class AllWebsitesComponent implements OnInit {
     var dt:any = {order:this.selstatusshow};
     this.websiteService.shortbypaginatorwebsite(dt).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         this.fetweb(data);
       },
@@ -168,7 +168,7 @@ export class AllWebsitesComponent implements OnInit {
         this.websiteService.createwebsite(genobj).subscribe({
           next: data => {
     
-           console.log(data);
+           // console.log(data);
 
            if(data.exist ==1){
               this.searching = false;
@@ -188,7 +188,7 @@ export class AllWebsitesComponent implements OnInit {
               next: datanw => {
                 
               this.searching = false;
-              console.log(data);
+              // console.log(data);
               this._snackBar.open('Website Created Successfully!', 'OK');
               this.router.navigate(['/websites/'+data.uniqueid],{relativeTo: this.route});
 
@@ -209,7 +209,7 @@ export class AllWebsitesComponent implements OnInit {
   }
 
   updatewebsite(data:any){
-    console.log(data);
+    // console.log(data);
     this.websitetitle = data.title;
     this.selecteduid = data.uniqueid;
     this.createweb = false;
@@ -227,7 +227,7 @@ export class AllWebsitesComponent implements OnInit {
       }
       this.websiteService.updatesitedetails(obj).subscribe({
         next: data => {  
-          console.log(data);
+          // console.log(data);
           this._snackBar.open("Changes has been updated!", 'OK');
           this.fetwebfull();
 
@@ -253,7 +253,7 @@ export class AllWebsitesComponent implements OnInit {
       var genobj = {websiteid:web.uniqueid, password:this.confirmpass};
       this.websiteService.deletewebsite(genobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.incorrect == 1){
             this.searching = false;
@@ -315,7 +315,7 @@ export class AllWebsitesComponent implements OnInit {
 
           this.websiteService.duplicatewebsite(genobj).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
              if(data.exist ==1){
                 this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
              }else{
@@ -344,7 +344,7 @@ export class AllWebsitesComponent implements OnInit {
 
              }
       
-            console.log(data);
+            // console.log(data);
 
             }
           });

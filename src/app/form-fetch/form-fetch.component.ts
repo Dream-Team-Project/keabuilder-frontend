@@ -3,14 +3,13 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from '../_services/_builder/form.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
-import { FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-fetch-form',
-  templateUrl: './fetch-form.component.html',
-  styleUrls: ['./fetch-form.component.css','../form-builder/form-builder.component.css']
+  selector: 'app-form-fetch',
+  templateUrl: './form-fetch.component.html',
+  styleUrls: ['./form-fetch.component.css','../form-builder/form-builder.component.css']
 })
-export class FetchFormComponent implements OnInit {
+export class FormFetchComponent implements OnInit {
 
   submitting:boolean = false;
   thankyou:boolean = false;
@@ -22,13 +21,17 @@ export class FetchFormComponent implements OnInit {
     public _image: ImageService
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
-      var obj:any = {user_id: params.get('user_id'), form_id: params.get('form_id')};
-      _form.formbypath(obj).then((data:any)=>{
+      var prmObj = {
+        user_id: params.get('user_id'),
+        form_id: params.get('form_id')
+      }
+      _form.formbypath(prmObj).then((data:any)=>{
         var style = document.createElement('STYLE');
         style.innerHTML = data.appendstyle;
         document.head.appendChild(style);
-        this._form.answers.form_id = data.uniqueid;
-        this._form.formField.forEach((fe:any)=>{
+        _form.submission.user_id = data.user_id;
+        _form.submission.form_id = data.uniqueid;
+        _form.formField.forEach((fe:any)=>{
           if(fe.input) this._form.inpAns(fe);
         })
       })
@@ -50,7 +53,7 @@ export class FetchFormComponent implements OnInit {
         this._form.formSubmit().then((res:any)=>{
           if(res.success == 1) {
             var redirection = this._form.form.redirection;
-            if(redirection) window.location.replace(redirection);
+            if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
             else this.thankyou = true;
           }
           else this.submitting = false;

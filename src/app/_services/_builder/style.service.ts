@@ -988,7 +988,7 @@ export class StyleService {
       mt = '0px';
       mb = '0px';
       mlr = 'auto';
-      ptb = '0px';
+      ptb = '20px';
       plr = '0px';
       bw = '0px';
       br = '0px';

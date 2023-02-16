@@ -98,6 +98,20 @@ main {
     position: relative;
 }
 
+.kb-mat-label {
+  display: block;
+  font-weight: 400;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.kb-text-gap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+}
+
 .mat-form-field i {
   position: absolute;
   right: 10px;

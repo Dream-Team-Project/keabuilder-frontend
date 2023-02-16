@@ -29,7 +29,7 @@ export class BuilderTopbarComponent implements OnInit {
   @Input('wftgl') wftgl:any;
   @Input('ishf') ishf:any;
 
-  validate:any = {
+  validate = {
     targetname: new FormControl('', [Validators.required]),
     tempname: new FormControl('', [Validators.required]),
   }
@@ -162,7 +162,7 @@ export class BuilderTopbarComponent implements OnInit {
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       this.hfdialogOpen = false;
-      if(this.validate.targetname.errors?.['required']) this.openRenameHFDialog(this.renamehfdialog);
+      if(this.validate.targetname.invalid) this.openRenameHFDialog(this.renamehfdialog);
     })
   }
 
@@ -172,17 +172,17 @@ export class BuilderTopbarComponent implements OnInit {
   }  
   
   deleteTemplate() {
-    this._general.fileUploadService.deletetemplate(this.seltemp.id).subscribe(e=>{
+    this._general._file.deletetemplate(this.seltemp.id).subscribe(e=>{
       this._general.fetchSectionTemplates().then(e=>{
         this.snackBar('deleted');
       });
-      this._general.fileUploadService.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
+      this._general._file.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
     })
   }
 
   updateTemplate() {
-    if(!this.validate.tempname.errors?.['required']) {
-      this._general.fileUploadService.updatetemplate(this.seltemp).subscribe(e=>{
+    if(!this.validate.tempname.invalid) {
+      this._general._file.updatetemplate(this.seltemp).subscribe(e=>{
         this._general.fetchSectionTemplates().then(e=>{
           this.snackBar('renamed');
         });

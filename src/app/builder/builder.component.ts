@@ -38,7 +38,7 @@ export class BuilderComponent implements OnInit {
   @ViewChild('main', { static: true }) screen: any;
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
   
-  validate:any = {
+  validate = {
     tempname: new FormControl('', [Validators.required]),
   }
   showNavFrom:string = 'bottom';
@@ -167,7 +167,7 @@ export class BuilderComponent implements OnInit {
     var scr = stxt == 'template' ? document.getElementById(this.saveTemplateSection.id) : this.screen.nativeElement;
     this.captureService.getImage(scr, true).subscribe(e=>{
       var file:any = this._image.base64ToFile(e, id+'-screenshot.png');
-      this._general.fileUploadService.upload(file).subscribe(
+      this._general._file.upload(file).subscribe(
         (event: any) => {
             if (typeof (event) === 'object') {
               var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;
@@ -180,11 +180,11 @@ export class BuilderComponent implements OnInit {
   }
 
   saveAsTemplate() {
-    if(!this.validate.tempname.errors?.['required']) {
+    if(!this.validate.tempname.invalid) {
       this._general.saveDisabled = true;
       var section = this.saveTemplateSection;
       var obj = {uniqueid: this._general.makeid(20), name: section.name, template: this._general.encodeJSON(section)};
-      this._general.fileUploadService.savetemplate(obj).subscribe((resp:any)=>{
+      this._general._file.savetemplate(obj).subscribe((resp:any)=>{
         this.takePageSS('section-'+obj.uniqueid, 'template');
         this._general.fetchSectionTemplates();
       })

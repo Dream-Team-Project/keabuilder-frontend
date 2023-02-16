@@ -170,7 +170,7 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
 
             this.funnelService.savefunneldb(this.form).subscribe({
                 next: data => {
-                    console.log(data);
+                    // console.log(data);
 
                     if(data.exist ==1){
                         this.searching = false;
@@ -191,7 +191,7 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
                             prevFolder: data.data.pagepath,
                             website_id:data.data.uniqueid, 
                           }
-                          this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+                          this._general._file.savePage(page).subscribe((event:any) => {
                             console.log(event);
                           },error=>{console.log(error)});
 

@@ -33,7 +33,7 @@ export class ColumnService {
   appendColumn(column: any, index: number) {
     var tempObj = JSON.parse(JSON.stringify(column));
     tempObj.id = this._general.createBlockId(tempObj);
-    tempObj.name ? (tempObj.name = tempObj.name + ' (copy)') : '';
+    tempObj.name ? (tempObj.name += ' (copy)') : '';
     this._row.selectedRow.columnArr.splice(index+1, 0, tempObj);
     this.resizeColumn(this._row.selectedRow);
     if(this._row.selectedRow.columnArr[index+1] != undefined) {

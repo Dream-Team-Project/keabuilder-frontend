@@ -151,7 +151,7 @@ export class CreateFunnelComponent implements OnInit {
 
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.funnels = data.data2;
       }
     });
@@ -380,7 +380,7 @@ export class CreateFunnelComponent implements OnInit {
     if(this.funneltype!='' && this.crfunnelstepname != ''){
       this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           this.popupsidebar = false;
           this.addstepoption = false;
 
@@ -395,7 +395,7 @@ export class CreateFunnelComponent implements OnInit {
             prevFolder: data.pagepath,
             website_id:this.uniqueid, 
           }
-          this._general.fileUploadService.savePage(page).subscribe((event:any) => {
+          this._general._file.savePage(page).subscribe((event:any) => {
             // console.log(event);
           },
           error=>{console.log(error)});
@@ -486,7 +486,7 @@ export class CreateFunnelComponent implements OnInit {
     // console.log(this.selectedstep)
     this.funnelService.namepathchanges(this.selectedstep,mainvalue,value).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.funnelstepurl = data.data[0].page_path;
         this.funnelstepvariationurl = data.data[0].variationlink;
         
@@ -530,7 +530,7 @@ export class CreateFunnelComponent implements OnInit {
     // console.log(this.uniqueid); 
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.steps = data.data;
         // if(data.data.length>1){
         //   this.firstselectedid = data.data[1].id;
@@ -692,7 +692,7 @@ export class CreateFunnelComponent implements OnInit {
       var newobj = {uniqueid:unique2, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(newobj).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success==1){
 
               var pathobj  = {oldpath:unique1,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
@@ -870,7 +870,7 @@ export class CreateFunnelComponent implements OnInit {
         this.funnelService.getuniquefunnelstep(this.uniqueid, value).subscribe({
           next: data => {
             this.searching = false;
-            console.log(data);
+            // console.log(data);
             this.archivesteps = data.data;
           }
         });
@@ -948,7 +948,7 @@ export class CreateFunnelComponent implements OnInit {
 
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.status==1){
 
@@ -1266,7 +1266,7 @@ export class CreateFunnelComponent implements OnInit {
       var dtobj = {type:this.actionname, newfunnelid:this.newfunnelid, uniqueid:page.uniqueid, newpath: page.page_path};
       this.funnelService.movecopyfunnel(dtobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.foundone==0 && data.success==1){
 
@@ -1282,7 +1282,7 @@ export class CreateFunnelComponent implements OnInit {
             // console.log(pathobj);
             this.fileuploadService.transferPage(pathobj).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
                 this.actionname=='Move' ? this._snackBar.open('Funnel Step Move Successfully!', 'OK'): this._snackBar.open('Funnel Step Copy & Move Successfully!', 'OK');
                 this.showfunnelsteps();
               }

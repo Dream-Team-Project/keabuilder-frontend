@@ -72,7 +72,7 @@ export class MembershipMembersComponent implements OnInit {
 
     this.courseService.getalltags().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         data.data.forEach((element:any) => {
           this.tagoptionalList.push(element.name);
         }); 
@@ -86,7 +86,7 @@ export class MembershipMembersComponent implements OnInit {
   getallmymembers(){
     this.courseService.getallmembers().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.users = [];
         this.dataSource.data = [];
 
@@ -141,7 +141,7 @@ export class MembershipMembersComponent implements OnInit {
 
       this.courseService.addnewmember(this.addmemberobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.already==1){
               this._snackBar.open('Email Already Exist!', 'Close');
@@ -170,7 +170,7 @@ export class MembershipMembersComponent implements OnInit {
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedelmember(data).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this.getallmymembers();
             this._snackBar.open('Member Deleted Successfully!', 'Close');
           }

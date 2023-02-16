@@ -28,7 +28,7 @@ export class CourseUserCourseForgotpassComponent implements OnInit {
  
        this.courseService.validatecourseemail(userdata).subscribe({
          next: data => {
-           console.log(data);
+           // console.log(data);
          }
        });
  

@@ -154,7 +154,7 @@ export class AllFunnelsComponent implements OnInit {
 
           this.funnelService.makefunnelstepduplicate(obj).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
 
               if(data.exist ==1){
 
@@ -215,7 +215,7 @@ export class AllFunnelsComponent implements OnInit {
     // console.log(obj);
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         if(data.status==1){
 
           data.data.forEach((element:any) => {
@@ -272,7 +272,7 @@ export class AllFunnelsComponent implements OnInit {
 
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         
         this.generatefunneldt(data);
 
@@ -362,7 +362,7 @@ export class AllFunnelsComponent implements OnInit {
         var nwobj:any = {uniqueid: unique2, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(nwobj).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success==1){
 
               var pathobj  = {oldpath:unique1,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
@@ -417,7 +417,7 @@ export class AllFunnelsComponent implements OnInit {
     console.log(obj);
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.status==1){
 
@@ -505,7 +505,7 @@ export class AllFunnelsComponent implements OnInit {
       var dtobj = {type:this.actionname, newfunnelid:this.newfunnelid, uniqueid:page.uniqueid, newpath: page.page_path};
       this.funnelService.movecopyfunnel(dtobj).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
 
           if(data.foundone==0 && data.success==1){
             console.log('inside');
@@ -516,7 +516,7 @@ export class AllFunnelsComponent implements OnInit {
             console.log(pathobj);
             this._file.transferPage(pathobj).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
                 this.actionname=='Move' ? this._snackBar.open('Funnel Step Move Successfully!', 'OK'): this._snackBar.open('Funnel Step Copy & Move Successfully!', 'OK');
                 this.showfunnels();
               }
@@ -581,7 +581,7 @@ export class AllFunnelsComponent implements OnInit {
 
     this.funnelService.shortbypaginatorfunnnel(dt).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.searching = false;
         this.generatefunneldt(data);
       },
