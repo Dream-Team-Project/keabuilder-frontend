@@ -88,7 +88,7 @@
         </div>
     </form>
     <ng-template #thankumsg>
-        <div id="thankumsg">
+        <div id="thankumsg"  [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
             <div><img src="./assets/default/images/kbtick.png" width="100px" height="auto"></div>
             <h4>Thankyou</h4>
             <div><p>The form has been submitted successfully!</p></div>
@@ -96,5 +96,5 @@
     </ng-template>
 </div>
 <ng-template #notfound>
-    <div id="form-not-found">Form not found!</div>
+    <div id="form-not-found" [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">Form not found!</div>
 </ng-template>

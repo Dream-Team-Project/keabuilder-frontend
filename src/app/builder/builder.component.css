@@ -55,7 +55,7 @@ div#kb-minimize-setting span {
     z-index: 999!important;
 }
 
-#kb-page-container.pagedisabled{
+#kb-page-container.pagedisabled, #kb-topbar.pagedisabled{
     pointer-events: none;
 }
 

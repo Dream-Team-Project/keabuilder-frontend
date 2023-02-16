@@ -4,7 +4,7 @@
         <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-            <h6><b>NEW Link</b></h6>
+            <h6><strong>NEW Link</strong></h6>
             <hr>
             <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Name</mat-label>
@@ -72,7 +72,7 @@
                 <div class="row kb-insidecard" *ngFor="let sharelink of sharelinks; let i=index">
                     <div class="col-md-8">
                         <p>{{sharelinks[i]['heading']}}</p>
-                        <small><b>{{sharelinks[i]['linkname']}}:</b> {{sharelinks[i]['subheading']}}</small>
+                        <small><strong>{{sharelinks[i]['linkname']}}:</strong> {{sharelinks[i]['subheading']}}</small>
                     </div>
                     <div class="col-md-2">
                         <p>Clicks: {{sharelinks[i]['clicks']}}</p>

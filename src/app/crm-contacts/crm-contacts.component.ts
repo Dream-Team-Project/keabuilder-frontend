@@ -50,7 +50,7 @@ export class CrmContactsComponent implements OnInit {
 
     this.crmService.getcrmcontacts().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.data.length!=0){
           var gendataar:any = [];

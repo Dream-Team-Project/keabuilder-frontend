@@ -20,6 +20,7 @@ export class FormBuilderComponent implements OnInit {
 
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
+  @ViewChild('emailsetdialog') emailsetdialog!: TemplateRef<any>;
 
   private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
     return -1;
@@ -37,9 +38,10 @@ export class FormBuilderComponent implements OnInit {
   '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
   '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
   '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
-  validate:any = {
+  validate = {
     name: new FormControl('', [Validators.required]),
-    relink: new FormControl('', [Validators.pattern(this.urlPattern)])
+    relink: new FormControl('', [Validators.pattern(this.urlPattern)]),
+    emailsubject: new FormControl('', [Validators.required]),
   }
   contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};
@@ -50,7 +52,7 @@ export class FormBuilderComponent implements OnInit {
   slideShift:number = 0;
   shiftLen:number = 0;
   autosave:boolean = false;
-  formdialog:boolean = false;
+  formdialog:string = '';
   dialogData:any;
   drawerPos:any = 'end';
   preview:boolean = false;
@@ -116,7 +118,7 @@ export class FormBuilderComponent implements OnInit {
           if(this._form.formField.length != 0) {
             this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
               var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-              this._general.fileUploadService.upload(file).subscribe(
+              this._general._file.upload(file).subscribe(
                 (event: any) => {
                   if (typeof (event) === 'object') {
                     var msg =  'Form has been saved';
@@ -138,7 +140,6 @@ export class FormBuilderComponent implements OnInit {
           var msg =  'Server Error';
           this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
           this._general.saveDisabled = false;
-          this.openSettingDialog(this.settingdialog);
         };
       })
   }
@@ -160,15 +161,28 @@ export class FormBuilderComponent implements OnInit {
   // dialogs
 
   openSettingDialog(templateRef: TemplateRef<any>) {
-    this.formdialog = true;
+    this.formdialog = 'Setting';
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
-      this._form.formSaved = false;
-      this.formdialog = false;
-      if(this.validate.name.errors?.['required'] || this.validate.relink.invalid) this.openSettingDialog(this.settingdialog);
+      if(this.validate.name.invalid || this.validate.relink.invalid) this.openSettingDialog(this.settingdialog);
       else {
+        this.formdialog = '';
+        this._form.formSaved = false;
         this.validate.name.reset();
         this.validate.relink.reset();
+      }
+    })
+  }
+
+  openEmailSetDialog(templateRef: TemplateRef<any>) {
+    this.formdialog = 'Email setup';
+    this.dialogData = this.dialog.open(templateRef);
+    this.dialogData.afterClosed().subscribe((data:any)=>{
+      if(this.validate.emailsubject.errors?.['required']) this.openEmailSetDialog(this.emailsetdialog);
+      else {
+        this.formdialog = '';
+        this._form.formSaved = false;
+        this.validate.emailsubject.reset();
       }
     })
   }

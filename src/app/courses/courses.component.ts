@@ -51,7 +51,7 @@ export class CoursesComponent implements OnInit {
     this._course.getalloffers().subscribe({
       next: data => {
 
-        console.log(data);
+        // console.log(data);
         console.log('--data');  
 
        data.data.forEach((element: any) => {

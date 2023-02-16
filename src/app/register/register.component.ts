@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
         // if(this.searchStringInArray(nwsubdomain,notusesub)==1){
         this.authService.register(username,firstname,lastname,company, email,phone, password).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
               console.log(e);
             });

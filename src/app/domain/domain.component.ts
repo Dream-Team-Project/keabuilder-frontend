@@ -82,14 +82,14 @@ export class DomainComponent implements OnInit {
 
         this.domainService.oncreatedomain(this.domainname.value).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
           
             if(data.success==true){
               this.nameservers = data.nameservers.split(',');
               var objdata = {name:data.dmname,zoneid:data.zoneid, nameservers:data.nameservers, status:data.status};
               this.domainService.oninsertdomain(objdata).subscribe({
                 next: data => {
-                  console.log(data);
+                  // console.log(data);
                   this.searching = false;
                   this.domainconn = 0;
                   this._snackBar.open('Domain has been Successfully added. Please check the given nameservers and update it!', 'OK');
@@ -144,7 +144,7 @@ export class DomainComponent implements OnInit {
                 this.ssldomconn = 0;
                 this.searching = false;
 
-                console.log(data);
+                // console.log(data);
                 if(data.success==true){
                   this.alldomainsdata[0].verifyssl=1;
                   this._snackBar.open('SSL Verified Successfully. Your domain is live now!', 'OK');
@@ -177,12 +177,12 @@ export class DomainComponent implements OnInit {
 
       this.domainService.onclouddeletedomain(zoneid,domain).subscribe({
             next: data => {
-              console.log(data);
+              // console.log(data);
               if(data.success==true){
 
                 this.domainService.ondeletedomain(id).subscribe({
                   next: data => {
-                    console.log(data);
+                    // console.log(data);
                     this.searching = false;
                     this.deldomconn = 0; 
 

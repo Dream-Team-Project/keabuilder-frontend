@@ -15,7 +15,7 @@
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-            <h6><b>Connect Your Domain</b></h6>
+            <h6><strong>Connect Your Domain</strong></h6>
             
             <div *ngIf="!shownamehint">  
                 
@@ -39,21 +39,21 @@
             
             <div class="outerdivnm" *ngIf="shownamehint">
                 <hr>
-                <p><b>How to connect your domain to Kea</b></p>
+                <p><strong>How to connect your domain to Kea</strong></p>
                 <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span *ngFor="let name of nameservers" >{{name}}&nbsp;&nbsp;</span></small></p>
                 
                 <ul class="mynsdetails">
                     <li>
-                        <b>Domain: </b> <span>{{gendomainname}}</span>
+                        <strong>Domain: </strong> <span>{{gendomainname}}</span>
                     </li>
                     <li>
-                        <b>Nameservers: </b> <span *ngFor="let name of nameservers" >{{name}}</span> 
+                        <strong>Nameservers: </strong> <span *ngFor="let name of nameservers" >{{name}}</span> 
                     </li>
                     <li> 
-                        <b>Status: </b> <span>{{cldstatus}}</span>
+                        <strong>Status: </strong> <span>{{cldstatus}}</span>
                     </li>
                     <li *ngIf="createdatdomain!=''"> 
-                        <b>Connected At: </b> <span>{{datecusfilter(createdatdomain)}}</span>
+                        <strong>Connected At: </strong> <span>{{datecusfilter(createdatdomain)}}</span>
                     </li>
                 </ul>
                 <br>

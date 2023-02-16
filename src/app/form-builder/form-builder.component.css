@@ -1,17 +1,3 @@
-::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: #ececec!important;
-}
-
-::ng-deep .mat-slide-toggle .mat-slide-toggle-bar{
-    background-color: rgb(255 255 255 / 50%)!important;
-    color: #fff;
-}
-
-::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb,
-::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element {
-    background-color: var(--kb-light)!important;
-}
-
 ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, ::ng-deep .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, ::ng-deep :not(.mat-checkbox-disabled).mat-accent .mat-ripple-element {
     background-color: var(--primary-color)!important;
 }

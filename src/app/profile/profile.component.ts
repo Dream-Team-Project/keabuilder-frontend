@@ -122,7 +122,7 @@ export class ProfileComponent implements OnInit {
         console.log(obj);
         this.userService.updateuserdetails(obj).subscribe({
           next: data => {  
-            console.log(data);
+            // console.log(data);
             // console.log(this.logoimg);
             var splnmlogo = data.genlogo.split('keaimage-');  
             var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
@@ -189,7 +189,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getUsersDetails().subscribe({
       next: data => {
-       console.log(data);
+       // console.log(data);
          var loctn:any = window.location.origin;
          var emailInp = data.data[0].email;
          var type = 'type2';

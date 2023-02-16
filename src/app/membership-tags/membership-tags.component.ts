@@ -138,7 +138,7 @@ export class MembershipTagsComponent implements OnInit {
       console.log(gentags);
       this.courseService.addnewtags(gentags).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           this.tags = [];
           this.getallmytags();
           this._snackBar.open('Successfully Tag Added!', 'Close');
@@ -162,7 +162,7 @@ export class MembershipTagsComponent implements OnInit {
     var data = {id:this.tagsselid,name:this.tagselname,type:'update'};
     this.courseService.updatedeltag(data).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.getallmytags();
         this._snackBar.open('Tag Updated Successfully!', 'Close');
       }
@@ -182,7 +182,7 @@ export class MembershipTagsComponent implements OnInit {
         var data = {id:id,name:'',type:'delete'};
         this.courseService.updatedeltag(data).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             this.getallmytags();
             this._snackBar.open('Tag Deleted Successfully!', 'Close');
           }

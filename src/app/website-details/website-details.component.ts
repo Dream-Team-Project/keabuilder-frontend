@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { WebsiteService } from '../_services/website.service';
 import { WebpagesService } from '../_services/webpages.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileUploadService } from '../_services/file-upload.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
@@ -49,7 +48,6 @@ export class WebsiteDetailsComponent implements OnInit {
   constructor(private websiteService: WebsiteService,
               private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
-              private fileUploadService: FileUploadService,
               public _general: GeneralService,
               private imageService: ImageService,
               private router: Router,
@@ -78,7 +76,7 @@ export class WebsiteDetailsComponent implements OnInit {
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
         if(data?.length != 0) {
-          console.log(data);
+          // console.log(data);
           data.data.forEach((element:any) => {
 
               this.websitetitle = '('+element.title+')';
@@ -123,7 +121,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
             if(element.logo!=null && element.logo!=''){
               this.logoimgname = element.logo;
-              this.fileUploadService.validateimg(element.logo).subscribe({
+              this._general._file.validateimg(element.logo).subscribe({
                 next: data => {
     
                   if(data.data==0){
@@ -138,7 +136,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
             if(element.favicon!=null && element.favicon!=''){
               this.faviconimgname = element.favicon;
-              this.fileUploadService.validateimg(element.favicon).subscribe({
+              this._general._file.validateimg(element.favicon).subscribe({
                 next: data => {
     
                   if(data.data==0){
@@ -162,7 +160,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
     // this.userService.getUsersDetails().subscribe({
     //   next: data => {
-    //     console.log(data);
+    //     // console.log(data);
 
     //     if(data.realdomain!=''){
     //       this.defaultdomain = data.realdomain;
@@ -201,7 +199,7 @@ export class WebsiteDetailsComponent implements OnInit {
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
         console.log('-->');
-        console.log(data);
+        // console.log(data);
 
         var splnmlogo = 'logo-'+this.websiteid+'.png';  
         var splnmfavi = 'favicon-'+this.websiteid+'.png';  
@@ -227,7 +225,7 @@ export class WebsiteDetailsComponent implements OnInit {
             website_id: this.websiteid,
             dir: 'pages'
           };
-          this.fileUploadService.updateHome(obj).subscribe({
+          this._general._file.updateHome(obj).subscribe({
             next: data => {
               this._snackBar.open('Details Updated Successfully!', 'OK');
             }

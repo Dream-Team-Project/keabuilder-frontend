@@ -16,6 +16,16 @@ export interface DialogData {
 })
 export class FormsComponent implements OnInit {
 
+  urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+  '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+  validate = {
+    name: new FormControl('', [Validators.required]),
+    relink: new FormControl('', [Validators.pattern(this.urlPattern)]),
+  }
   forms:any[] = [];
   toggleview = true;
   shortwaiting = true;
@@ -23,7 +33,6 @@ export class FormsComponent implements OnInit {
   form: any = {
     name: '',
   };
-  userFormControl = new FormControl('',[Validators.required]);
   searching:boolean = false;
   sidebar = {
     open: false,
@@ -36,7 +45,7 @@ export class FormsComponent implements OnInit {
   fetching:boolean = true;
   selecteduid:any = [];
 
-  constructor(private fileUploadService: FileUploadService,
+  constructor(private _file: FileUploadService,
               public _image: ImageService,
               public _general: GeneralService,
               public dialog: MatDialog, 
@@ -53,7 +62,7 @@ export class FormsComponent implements OnInit {
 
   fetformdata(){
     this.fetching = true;
-    this.fileUploadService.fetchforms().subscribe({
+    this._file.fetchforms().subscribe({
       next: data => {
         this.adjustdata(data);
         this.fetching = false;
@@ -90,8 +99,8 @@ export class FormsComponent implements OnInit {
   }
 
   onformSubmit(): void {
-    if(!this.userFormControl.invalid){
-      this.fileUploadService.saveform(this.form).subscribe({
+    if(!this.validate.name.invalid && !this.validate.relink.invalid){
+      this._file.saveform(this.form).subscribe({
         next: data => {
           var msg, err = data.success==0;
           if(err){
@@ -108,8 +117,8 @@ export class FormsComponent implements OnInit {
   }
 
   onformUpdate(){
-      if(!this.userFormControl.invalid){
-          this.fileUploadService.updateform(this.form).subscribe({
+      if(!this.validate.name.invalid && !this.validate.relink.invalid){
+          this._file.updateform(this.form).subscribe({
             next: data => {
               var msg, err = data.success==0;
               if(err){
@@ -122,8 +131,7 @@ export class FormsComponent implements OnInit {
               }
               this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
             }
-          });
-          
+          }); 
       }
   }
 
@@ -132,7 +140,7 @@ export class FormsComponent implements OnInit {
     if(data.name !== newname) {
       if(newname.length>3){
         data.name = newname;
-        this.fileUploadService.updateform(data).subscribe({
+        this._file.updateform(data).subscribe({
           next: data => {
             var msg, err = data.success==0;
             if(err){
@@ -156,13 +164,13 @@ export class FormsComponent implements OnInit {
 
   deleteme(form:any){
     form.deleting = true;
-    this.fileUploadService.deleteform(form.id).subscribe({
+    this._file.deleteform(form.id).subscribe({
       next: data => {        
         var genscrn = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
-        this.fileUploadService.validateimg(genscrn).subscribe({
+        this._file.validateimg(genscrn).subscribe({
           next: datagen => {
             if(datagen.data==1){
-              this.fileUploadService.deleteimage('keaimage-form-'+form.uniqueid+'-screenshot.png').subscribe({
+              this._file.deleteimage('keaimage-form-'+form.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
                   this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
                   this.fetformdata();
@@ -193,15 +201,15 @@ export class FormsComponent implements OnInit {
     var decode = this._general.decodeData(datadup.appendstyle);
     var newapsty = decode.replace(regex, datadup.uniqueid);
     datadup.appendstyle = this._general.encodeData(newapsty);
-    this.fileUploadService.duplicateform(datadup).subscribe({
+    this._file.duplicateform(datadup).subscribe({
       next: data => {
           if(data.uniqueid!=''){
             var oldimg = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
-            this.fileUploadService.validateimg(oldimg).subscribe({
+            this._file.validateimg(oldimg).subscribe({
               next: datagen => {
                 if(datagen.data==1){
                   var imgobj  = {oldname:oldimg, newname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png'};
-                  this.fileUploadService.copyimage(imgobj).subscribe({
+                  this._file.copyimage(imgobj).subscribe({
                     next: data => {
                       this.fetformdata();
                       this._general.openSnackBar(false, 'Form Duplicated Successfully!', 'OK', 'center', 'top');
@@ -224,7 +232,7 @@ export class FormsComponent implements OnInit {
     var SearchValue = (event.target as HTMLInputElement).value;
     this.selstatusshow = 'all';
     var obj = {search:SearchValue,type:'search'};
-    this.fileUploadService.searchformquery(obj).subscribe({
+    this._file.searchformquery(obj).subscribe({
       next: data => {
         this.adjustdata(data);
         this.searching = false;
@@ -235,7 +243,7 @@ export class FormsComponent implements OnInit {
   applykbfilter(){
     this.searching = true;
     var obj:any = {order:this.selstatusshow, type:'filter'};
-    this.fileUploadService.searchformquery(obj).subscribe({
+    this._file.searchformquery(obj).subscribe({
       next: data => {
         this.searching = false;
       },
@@ -255,5 +263,7 @@ export class FormsComponent implements OnInit {
     this.toggleview = !this.toggleview; 
     this._general.setStorage('form_toggle',this.toggleview);
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
 }

@@ -27,14 +27,17 @@
         <mat-error *ngIf="isNotValid(validate.tempname)">
             Template name should not be empty
         </mat-error>
+        <mat-error *ngIf="validate.tempname.hasError('minlength')">
+            Template name must be at least <strong>3</strong> characters
+          </mat-error>
         <mat-form-field appearance="fill">
             <mat-label>Template name</mat-label>
-            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="saveTemplateSection.name">
+            <input matInput type="text" [formControl]="validate.tempname" placeholder="Template name" [(ngModel)]="saveTemplateSection.name" minlength="3">
         </mat-form-field>
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.errors?.['required'] ? 'primary' : ''" [disabled]="isNotValid(validate.tempname) || validate.tempname.errors?.['required']" (click)="saveAsTemplate()">Save</button>
+        <button mat-button mat-dialog-close [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="saveAsTemplate()">Save</button>
     </div>
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>

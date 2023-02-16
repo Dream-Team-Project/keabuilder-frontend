@@ -38,7 +38,8 @@ import { MembershipPaymentComponent } from './membership-payment/membership-paym
 import { MembershipMembersComponent } from './membership-members/membership-members.component';
 import { MembershipTagsComponent } from './membership-tags/membership-tags.component';
 import { MembershipMarketplaceComponent } from './membership-marketplace/membership-marketplace.component';
-import { FetchFormComponent } from './fetch-form/fetch-form.component';
+import { FormSubmissionsComponent } from './form-submissions/form-submissions.component';
+import { FormFetchComponent } from './form-fetch/form-fetch.component';
 import { FormsComponent } from './forms/forms.component';
 import { DomainComponent } from './domain/domain.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -131,7 +132,8 @@ const routes: Routes = [
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'form/:user_id/:form_id', component: FetchFormComponent},
+  { path: 'form/:user_id/:form_id', component: FormFetchComponent},
+  { path: 'forms/submissions', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
   { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -280,7 +282,8 @@ export const RoutingComponents =
     MembershipTagsComponent,
     MembershipMarketplaceComponent,
     FormsComponent,
-    FetchFormComponent,
+    FormFetchComponent,
+    FormSubmissionsComponent,
     DomainComponent,
     PaymentComponent,
     CrmComponent,

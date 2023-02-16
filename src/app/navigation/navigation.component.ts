@@ -150,7 +150,7 @@ export class NavigationComponent {
             id: m.id,
             html: ul.outerHTML,
           }
-          this._general.fileUploadService.saveFile(obj, 'menus').subscribe((resp:any)=>{
+          this._general._file.saveFile(obj, 'menus').subscribe((resp:any)=>{
              resp.success ? this.fetchMenus() : this.openSB(true);
           })
         }
@@ -181,7 +181,7 @@ export class NavigationComponent {
   deleteMenu() {
     this.action = 'deleted';
     this.fetching.menu = true;
-    this._general.fileUploadService.deleteFile(this.delmenu.id, 'menus').subscribe((resp:any)=>{
+    this._general._file.deleteFile(this.delmenu.id, 'menus').subscribe((resp:any)=>{
       resp.success ? this.fetchMenus() : this.openSB(true);
     })
   }

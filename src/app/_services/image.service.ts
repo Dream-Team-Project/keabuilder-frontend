@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GeneralService } from './_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
 import { base64ToFile, Dimensions, ImageCroppedEvent, ImageTransform, LoadedImage } from 'ngx-image-cropper';
-import { FileUploadService } from './file-upload.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -46,7 +45,7 @@ export class ImageService {
     searchImgFilter:any = this.imgOrder[3];
     imagesUpdated = new BehaviorSubject(false);
 
-    constructor(private fileUploadService: FileUploadService, private _general: GeneralService) {
+    constructor(private _general: GeneralService) {
       this.getAllImgs();
     }
 
@@ -71,7 +70,7 @@ export class ImageService {
                 (this.saveasnew ? Math.floor(Math.random() * 10000000000) : this.selectedImg.title.toLowerCase().replace(/ /g,"_"))+'.'+this.croppedImage.split('data:image/')[1].split(';base64')[0]
               )
         }
-        this.fileUploadService.upload(this.file).subscribe(
+        this._general._file.upload(this.file).subscribe(
             (event: any) => {
                 if (typeof (event) === 'object') {
                     // Short link via api response/
@@ -85,7 +84,7 @@ export class ImageService {
     onImageFileUpload(data:any) {
         return new Promise<any>((resolve, reject) => {
             this.file = this.base64ToFile(data.path, data.name)
-            this.fileUploadService.upload(this.file).subscribe(
+            this._general._file.upload(this.file).subscribe(
                 (event: any) => {
                     if (typeof (event) === 'object') {
                         resolve(event);
@@ -102,7 +101,7 @@ export class ImageService {
         this.selectedImg.path = data.filename;
         this.selectedImg.ext_link = this.extImgLink.filename ? true : false;
         if(this.saveasnew) {
-            this.fileUploadService.saveondb(this.selectedImg).subscribe(
+            this._general._file.saveondb(this.selectedImg).subscribe(
                 (event:any) => {
                     this.snackBarMsg = 'Image has been uploaded';
                     this. getAllImgs();
@@ -110,7 +109,7 @@ export class ImageService {
                 error=>{console.log(error)})
         }
         else {
-            this.fileUploadService.updateondb(this.selectedImg).subscribe(
+            this._general._file.updateondb(this.selectedImg).subscribe(
                 (event:any) => {
                     this.snackBarMsg = 'Image has been edited';
                     this. getAllImgs();
@@ -121,10 +120,10 @@ export class ImageService {
 
     deleteImage(img:any) {
         img.deleting = true;
-        this.fileUploadService.deletefromdb(img.id).subscribe(
+        this._general._file.deletefromdb(img.id).subscribe(
             (event:any) => {
                 if(!img.ext_link) {
-                    this.fileUploadService.deleteimage(img.path).subscribe(
+                    this._general._file.deleteimage(img.path).subscribe(
                         (event:any) => {
                             this.snackBarMsg = 'Image has been deleted';
                             this.getAllImgs();
@@ -142,7 +141,7 @@ export class ImageService {
     }
 
     getAllImgs() {
-        this.fileUploadService.getAllImgs().subscribe(
+        this._general._file.getAllImgs().subscribe(
             (event:any) => {
                 this.galleryImg = [];
                 this.galleryImg = event.data;
