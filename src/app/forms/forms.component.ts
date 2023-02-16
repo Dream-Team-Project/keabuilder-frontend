@@ -33,7 +33,6 @@ export class FormsComponent implements OnInit {
   form: any = {
     name: '',
   };
-  searching:boolean = false;
   sidebar = {
     open: false,
     anim: {open: false, close: false, time: 500},
@@ -51,6 +50,8 @@ export class FormsComponent implements OnInit {
               public dialog: MatDialog, 
               ) {
                   this.toggleview = _general.getStorage('form_toggle');
+                  this._general.getAllWebPages();
+                  this._general.getAllFunnels();
                   this.fetformdata();
                }
 
@@ -62,11 +63,8 @@ export class FormsComponent implements OnInit {
 
   fetformdata(){
     this.fetching = true;
-    this._file.fetchforms().subscribe({
-      next: data => {
-        this.adjustdata(data);
-        this.fetching = false;
-      }
+    this._file.fetchforms().subscribe((resp:any)=>{
+        this.adjustdata(resp.data);
     });
   }
 
@@ -227,36 +225,22 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  searchform(event: Event) {
-    this.searching = true;
-    var SearchValue = (event.target as HTMLInputElement).value;
-    this.selstatusshow = 'all';
-    var obj = {search:SearchValue,type:'search'};
-    this._file.searchformquery(obj).subscribe({
-      next: data => {
-        this.adjustdata(data);
-        this.searching = false;
-      }
-    });
-  }
-  
-  applykbfilter(){
-    this.searching = true;
-    var obj:any = {order:this.selstatusshow, type:'filter'};
-    this._file.searchformquery(obj).subscribe({
-      next: data => {
-        this.searching = false;
-      },
-      error: err => {
-        console.log(err);
-      }
+  searchforms(search: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+    }
+    this._file.searchformquery(obj).subscribe((resp:any)=>{
+      this.adjustdata(resp.data);
     });
   }
 
-  adjustdata(resp:any){
+  adjustdata(data:any){
     this.forms = [];
-    this.nodata = resp.data.length == 0;
-    this.forms = resp.data;
+    this.nodata = data.length == 0;
+    this.forms = data;
+    this.fetching = false;
   }
 
   toggleView() {

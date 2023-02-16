@@ -11,7 +11,9 @@ import { GeneralService } from '../_services/_builder/general.service';
 export class FormSubmissionsComponent implements OnInit {
 
   submissions:any = [];
-  fetching = true;
+  fetching:boolean = true;
+  form_id:any = '';
+  step = -1;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,12 +21,9 @@ export class FormSubmissionsComponent implements OnInit {
     public _general: GeneralService
   ) {
       route.paramMap.subscribe((params: ParamMap) => {
-        var prmObj = {
-          user_id: params.get('user_id'),
-          form_id: params.get('form_id')
-        }
-        this._file.fetchforms_subm().subscribe((res:any)=>{
-          this.setSubmissions(res.data);
+        this.form_id = params.get('form_id');
+        this._file.singleform_subm(this.form_id).subscribe((resp:any)=>{
+          this.setSubmissions(resp.data);
         })
       })
    }
@@ -32,19 +31,24 @@ export class FormSubmissionsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showDetails(i:number) {
+    console.log(this._general.decodeJSON(this.submissions[i].json))
+    this.step = i;
+  }
+
   searchSubmissions(search: any, filter: any) {
     this.fetching = true;
     var obj = {
       search: search.value,
-      filter: filter.value
+      filter: filter.value,
+      form_id: this.form_id
     }
-    this._file.searchformsubm(obj).subscribe((res:any)=>{
-      this.setSubmissions(res.data);
+    this._file.searchformsubm(obj).subscribe((resp:any)=>{
+      this.setSubmissions(resp.data);
     });
   }
 
   setSubmissions(data:any) {
-    console.log(data);
     this.submissions = data;
     this.fetching = false;
   }

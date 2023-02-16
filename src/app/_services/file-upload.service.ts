@@ -45,6 +45,7 @@ export class FileUploadService {
   deletetemplateApi = "./api/deletetemplate";
   // section templates
   // headers
+  searchheadersApi = './api/searchheaders';
   allheadersApi = "./api/allheaders";
   getheaderApi = "./api/getheader";
   saveheaderApi = "./api/saveheader";
@@ -52,6 +53,7 @@ export class FileUploadService {
   deleteheaderApi = "./api/deleteheader";
   // headers
   // footers
+  searchfootersApi = './api/searchfooters';
   allfootersApi = "./api/allfooters";
   getfooterApi = "./api/getfooter";
   savefooterApi = "./api/savefooter";
@@ -59,12 +61,12 @@ export class FileUploadService {
   deletefooterApi = "./api/deletefooter";
   // footers
   // forms
+  searchformqueryApi = './api/searchformquery';
   getformApi = "./api/getform";
   allformsApi = "./api/allforms";
   saveformApi = "./api/saveform";
   updateformApi = "./api/updateform";
   duplicateformApi = './api/duplicateform';
-  searchformqueryApi = './api/searchformquery';
   deleteformApi = "./api/deleteform";
   // forms
   // form submissions
@@ -237,6 +239,11 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
 
+  getPreview(page:any):Observable<any> {
+    return this.http.post(this.getPageApi, page)
+    .pipe(catchError(this.errorHandler));
+  }
+
   deletepage(obj:any):Observable<any> {
     return this.http.delete(this.deletePageApi + '/' + this.uuid + '/' + obj.website_id + '/' + obj.path)
     .pipe(catchError(this.errorHandler));
@@ -277,6 +284,12 @@ export class FileUploadService {
 
     // headers 
 
+    searchheaders(obj:any):Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post(this.searchheadersApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
+
     fetchheaders():Observable<any> {
       return this.http.get(this.allheadersApi+'/'+this.uuid);
     }
@@ -305,6 +318,12 @@ export class FileUploadService {
 
     
     // footers 
+
+    searchfooters(obj:any):Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post(this.searchfootersApi, obj)
+      .pipe(catchError(this.errorHandler));
+    }
 
     fetchfooters():Observable<any> {
       return this.http.get(this.allfootersApi+'/'+this.uuid);

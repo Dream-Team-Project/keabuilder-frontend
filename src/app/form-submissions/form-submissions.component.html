@@ -1,11 +1,11 @@
 <div id="kbformcomponent">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="container-fluid">
-      <div class="row align-items-center">
+      <div class="row">
           <div class="col-md-8">
             <mat-form-field appearance="fill" class="col-8 pr-2">
               <mat-label>Search Submissions</mat-label>
-              <input matInput #searchInp type="text" (input)="searchSubmissions(searchInp, filterInp)" name="searchweb" placeholder="Search Form">
+              <input matInput #searchInp type="text" (input)="searchSubmissions(searchInp, filterInp)" placeholder="Search Form">
               <i class="fa fa-search"></i>
             </mat-form-field>
             <mat-form-field appearance="fill" class="col-4">
@@ -13,46 +13,33 @@
               <mat-select #filterInp name="kbfilter" (valueChange)="searchSubmissions(searchInp, filterInp)">
                 <mat-option [value]="'email ASC'">ASC By Email</mat-option>
                 <mat-option [value]="'email DESC'">DESC By Email</mat-option>
-                <mat-option [value]="'updated_at ASC'">ASC By Updated</mat-option>
-                <mat-option [value]="'updated_at DESC'">DESC By Updated</mat-option>
-                <mat-option [value]="'created_at ASC'">ASC By Created</mat-option>
-                <mat-option [value]="'created_at DESC'">DESC By Created</mat-option>
+                <mat-option [value]="'created_at ASC'">ASC By Received At</mat-option>
+                <mat-option [value]="'created_at DESC'">DESC By Received At</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
+          <div class="col-md-4 text-right">
+            <button mat-raised-button color="accent" [routerLink]="[_general.userService.navPath[0]]"><i class="fas fa-arrow-left"></i> Back</button>
+          </div>
       </div>
-      <div *ngIf="submissions.length != 0 else nodata" class="row mx-2">
-          <table class="table table-striped kb-submmission-list">
-              <thead>
-                <tr>
-                    <th>S. No.</th>
-                    <th>Email</th>
-                    <th>Added</th>
-                    <th>Updated</th>
-                    <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let subm of submissions, index as i" [class.kb-table-action-active]="actiont.menuOpen">
-                    <td><i class="far fa-user mr-2"></i>{{i+1}}.</td>
-                    <td>{{subm.email}}</td>
-                    <td>{{_general.dateformat(subm.created_at)}}</td>
-                    <td>{{_general.dateformat(subm.updated_at)}}</td>
-                    <td #actiont="matMenuTrigger" [matMenuTriggerFor]="actionm" class="kb-table-action"><i class="fas fa-ellipsis-h"></i></td>
-                    <mat-menu #actionm="matMenu" xPosition="after" yPosition="below">
-                      <button mat-menu-item>
-                        <i class="far fa-eye"></i> View
-                      </button>
-                      <button mat-menu-item>
-                        <i class="far fa-edit"></i> Edit
-                      </button>
-                      <button mat-menu-item class="text-danger">
-                        <i class="far fa-trash-alt"></i> Delete
-                      </button>
-                  </mat-menu>
-                </tr>
-              </tbody>
-          </table>
+      <div *ngIf="submissions.length != 0 else nodata" class="row m-2">
+        <mat-accordion multi class="kb-mat-accordion col-12">
+          <mat-expansion-panel *ngFor="let subm of submissions, index as i" [expanded]="step === i" (opened)="showDetails(i)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="mr-1">account_circle</mat-icon>
+                {{subm.email}}
+              </mat-panel-title>
+              <mat-panel-description>
+                  <mat-icon class="mr-1">date_range</mat-icon>
+                  {{_general.dateformat(subm.created_at)}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-action-row>
+              <button mat-button class="text-danger">Delete</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
       <ng-template #nodata>
           <div class="row justify-content-center mt-5">

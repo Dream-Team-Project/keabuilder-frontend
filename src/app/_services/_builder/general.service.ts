@@ -336,7 +336,7 @@ export class GeneralService {
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 
   saveHeaderFooter(main:any, sections:any) {
@@ -378,7 +378,7 @@ export class GeneralService {
     return new Promise<any>((resolve, reject) => {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
-      var websiteid = this.webpage.website_id;
+      var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
       var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections};
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
       var header = this.pagehtml.querySelector('header');

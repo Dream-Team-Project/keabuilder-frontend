@@ -54,8 +54,7 @@ export class WebsiteHeadersComponent {
   fetch() {
     this.fetching = true;
     this._general.fetchHeaders().then(data=>{
-      this.headers = data;
-      this.fetching = false;
+      this.setHeaders(data);
       if(this.action) this.openSB(false);
     });
   }
@@ -143,6 +142,22 @@ export class WebsiteHeadersComponent {
         else this.openSB(true);
       });
     })
+  }
+
+  searchheaders(search: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+    }
+    this._general._file.searchheaders(obj).subscribe((resp:any)=>{
+      this.setHeaders(resp.data);
+    });
+  }
+
+  setHeaders(data:any) {
+    this.headers = data;
+    this.fetching = false;
   }
 
   openSB(alert:any) {

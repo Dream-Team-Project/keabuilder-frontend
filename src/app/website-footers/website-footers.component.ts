@@ -54,8 +54,7 @@ export class WebsiteFootersComponent {
   fetch() {
     this.fetching = true;
     this._general.fetchFooters().then(data=>{
-      this.footers = data;
-      this.fetching = false;
+      this.setFooters(data);
       if(this.action) this.openSB(false);
     });
   }
@@ -142,6 +141,22 @@ export class WebsiteFootersComponent {
         else this.openSB(true);
       });
     })
+  }
+
+  searchfooters(search: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+    }
+    this._general._file.searchfooters(obj).subscribe((resp:any)=>{
+      this.setFooters(resp.data);
+    });
+  }
+
+  setFooters(data:any) {
+    this.footers = data;
+    this.fetching = false;
   }
 
   openSB(alert:any) {

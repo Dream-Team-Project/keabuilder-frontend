@@ -22,8 +22,8 @@ export class PagePreviewComponent implements OnInit {
     this.html.style = this.style;
     document.body.innerHTML = this.loader;
     route.paramMap.subscribe((params: ParamMap) => {
-      var page = { website_id: params.get('website_id'), path: params.get('id'), dir: 'previews' };
-      _file.getPage(page).subscribe((data: any) => {
+      var page = { uuid: params.get('user_id'), website_id: params.get('website_id'), path: params.get('path_id'), dir: 'previews' };
+      _file.getPreview(page).subscribe((data: any) => {
         data.html = _general.parser.parseFromString(data.html, 'text/html');
         data.tracking.header = _general.parser.parseFromString(data.tracking.header, 'text/html');
         data.tracking.footer = _general.parser.parseFromString(data.tracking.footer, 'text/html');

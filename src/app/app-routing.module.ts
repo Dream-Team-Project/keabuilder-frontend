@@ -132,8 +132,8 @@ const routes: Routes = [
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'form/:user_id/:form_id', component: FormFetchComponent},
-  { path: 'forms/submissions', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
+  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
+  { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
   { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -166,7 +166,7 @@ const routes: Routes = [
   // builder routes
   { path: 'builder/form/:id', component: FormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  { path: 'preview/:website_id/:id', component: PagePreviewComponent, canActivate: [AuthGuard] },
+  { path: 'preview/:user_id/:website_id/:path_id', component: PagePreviewComponent, canActivate: [AuthGuard] },
   
   // User Course
   { path: 'course/dashboard', component: CourseUserDashboardComponent},

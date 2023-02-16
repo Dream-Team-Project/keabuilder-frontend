@@ -1,22 +1,11 @@
-table.kb-submmission-list thead{
-    background-color: var(--opacity-primary);
+.kb-mat-accordion .mat-expansion-panel-header-title,
+.kb-mat-accordion .mat-expansion-panel-header-description {
+    flex-basis: 0;
 }
 
-table.kb-submmission-list th, table.kb-submmission-list td{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-}
-
-.kb-table-action {
-    cursor: pointer;
-}
-
-table.kb-submmission-list tr {
-    transition: 0.2s ease;
-}
-
-table.kb-submmission-list tbody tr:hover, tr.kb-table-action-active {
-    color: var(--primary-color);
+.kb-mat-accordion .mat-expansion-panel-header mat-icon {
+  color: var(--accent-color);
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
 }

@@ -83,7 +83,7 @@ export class ElementService {
 
   setIframe(element:any, adata:any) {
     element.data_id = adata.uniqueid;
-    element.src = window.origin+'/form/'+adata.user_id+'/'+adata.uniqueid;
+    element.src = window.origin+'/fetch-form/'+adata.user_id+'/'+adata.uniqueid;
     return element;
   }
 

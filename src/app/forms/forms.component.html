@@ -9,7 +9,7 @@
   </div>
 </ng-template>
 <div id="kbformcomponent">
-  <mat-progress-bar *ngIf="searching || fetching" mode='indeterminate'></mat-progress-bar>
+  <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
       [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
@@ -61,7 +61,6 @@
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
-
         <button *ngIf="updatemode else submit" mat-raised-button color="primary" class="mt-2" (click)="onformUpdate()">
           Update <i class="far fa-save"></i></button>
         <ng-template #submit>
@@ -80,17 +79,17 @@
     <div class="row align-items-center">
       <div class="col-md-8">
         <mat-form-field appearance="fill" class="col-8 pr-2">
-          <mat-label>Search Form</mat-label>
-          <input matInput type="text" name="searchweb" (input)="searchform($event)" placeholder="Search Form">
+          <mat-label>Search Forms</mat-label>
+          <input matInput #searchInp type="text" (input)="searchforms(searchInp, filterInp)" placeholder="Search Form Name">
           <i class="fa fa-search"></i>
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-4">
           <mat-label>Sort By</mat-label>
-          <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
-            <mat-option value="nameasc">ASC By Name</mat-option>
-            <mat-option value="namedesc">DESC By Name</mat-option>
-            <mat-option value="dateasc">ASC By Date</mat-option>
-            <mat-option value="datedesc">DESC By Date</mat-option>
+          <mat-select #filterInp name="kbfilter" (valueChange)="searchforms(searchInp, filterInp)">
+            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -101,9 +100,6 @@
         </button>
         <button mat-raised-button color="primary" (click)="newform('create','')" class="mx-3">Create New <i
             class="fas fa-plus"></i></button>
-        <button mat-raised-button [routerLink]="['/forms/submissions']">Submissions <i
-            class="fa fa-paper-plane"></i>
-        </button>
       </div>
     </div>
     <div [class.px-3]="!toggleview" class="row" *ngIf="forms.length != 0 else nodata">
@@ -132,15 +128,16 @@
                 </p>
               </div>
               <div [class.p-0]="toggleview" class="col-md-12 text-right">
-                <button mat-raised-button color="accent" [disabled]="form.deleting"
-                  (click)="_general.redirectLink('/form/'+form.user_id+'/'+form.uniqueid)">View <i
-                    class="far fa-eye"></i></button>
+                <button mat-raised-button color="accent" [routerLink]="['/form/submissions/'+form.uniqueid]" [disabled]="form.deleting">Submissions <i
+                    class="fa fa-paper-plane"></i></button>
                 <button mat-raised-button color="primary" [disabled]="form.deleting"
                   (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i
                     class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button color="accent" [disabled]="form.deleting" [matMenuTriggerFor]="menu">More <i
                     class="fas fa-cog"></i></button>
                 <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="_general.redirectLink('/fetch-form/'+form.user_id+'/'+form.uniqueid)">
+                    <i class="far fa-eye pr-2"></i>View</button>
                   <button mat-menu-item (click)="newform('update',form)">
                     <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
                   </button>
