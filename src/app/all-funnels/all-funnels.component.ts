@@ -412,6 +412,7 @@ export class AllFunnelsComponent implements OnInit {
   }
 
   makearchivestep(){
+    
     var obj = {value: this.reason,id:this.forarchiveid, type: 'archivestep'};
     console.log(obj);
     this.funnelService.makefunnelsettings(obj).subscribe({
