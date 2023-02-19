@@ -69,7 +69,7 @@
                     <span class="kb-selection-top-actions">
                         <button mat-button (click)="_general.minimize = !_general.minimize"
                             [matTooltip]="!_general.minimize ? 'Minimize' : 'Maximize'" matTooltipPosition="above"><i
-                            [class]="!_general.minimize ? 'fas fa-window-minimize' : 'far fa-window-maximize'"></i></button> 
+                            [class]="!_general.minimize ? 'fas fa-window-minimize' : 'far fa-window-maximize'"></i></button>
                         <button mat-button #searcht="matMenuTrigger" [matMenuTriggerFor]="search" [class.kb-btn-active]="searchType || searcht.menuOpen"
                             matTooltip="Search" matTooltipPosition="above">
                             <i class="fas fa-search"></i>
@@ -1980,7 +1980,7 @@
                         <div class="kb-inner-tab-component">
                             <div class="kb-tab-head">Paste your code here</div>
                             <div class="kb-tab-content">
-                                <textarea placeholder="<code/>" [(ngModel)]="_general.selectedBlock.content.html"
+                                <textarea placeholder="<code/>" [(ngModel)]="_style.code_html"
                                 name="element-code" [style.height]="'200px'"></textarea>
                             </div>
                         </div>

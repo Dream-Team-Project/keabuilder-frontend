@@ -1,3 +1,13 @@
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Submission</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{delsubm.email}}</span> submission?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesubm(delsubm)">Yes</button>
+  </div>
+</ng-template>
 <div id="kbformcomponent">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="container-fluid">
@@ -10,11 +20,11 @@
             </mat-form-field>
             <mat-form-field appearance="fill" class="col-4">
               <mat-label>Sort By</mat-label>
-              <mat-select #filterInp name="kbfilter" (valueChange)="searchSubmissions(searchInp, filterInp)">
+              <mat-select #filterInp name="kbfilter" [value]="'updated_at DESC'" (valueChange)="searchSubmissions(searchInp, filterInp)">
                 <mat-option [value]="'email ASC'">ASC By Email</mat-option>
                 <mat-option [value]="'email DESC'">DESC By Email</mat-option>
-                <mat-option [value]="'created_at ASC'">ASC By Received At</mat-option>
-                <mat-option [value]="'created_at DESC'">DESC By Received At</mat-option>
+                <mat-option [value]="'updated_at ASC'">ASC By Received At</mat-option>
+                <mat-option [value]="'updated_at DESC'">DESC By Received At</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -35,8 +45,28 @@
                   {{_general.dateformat(subm.created_at)}}
               </mat-panel-description>
             </mat-expansion-panel-header>
+            <div *ngFor="let data of subm.data | keyvalue | filter:'':'key'">
+              <div *ngIf="data.value.split else nosplit" class="kb-subm-group">
+                <span class="kb-subm-title"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}</span>
+                <div *ngFor="let split of data.value.split" class="kb-subm-group-data">
+                  <div *ngIf="split.subsplit else nosubsplit">
+                    <div *ngFor="let subsplit of split.subsplit">
+                      <strong class="kb-subm-label">{{subsplit.placeholder}}:</strong>{{subsplit.value ? subsplit.value : '----'}}
+                    </div>
+                  </div>
+                  <ng-template #nosubsplit>
+                    <strong class="kb-subm-label">{{split.placeholder}}:</strong>{{split.value ? split.value : '----'}}
+                  </ng-template>
+                </div>
+              </div>
+              <ng-template #nosplit>
+                <div class="kb-subm-group">
+                  <strong class="kb-subm-label"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}:</strong>{{data.value.value ? data.value.value : '----'}}
+                </div>
+              </ng-template>
+            </div>
             <mat-action-row>
-              <button mat-button class="text-danger">Delete</button>
+              <button mat-button (click)="openDialog(dialog, subm)" class="text-danger">Delete</button>
             </mat-action-row>
           </mat-expansion-panel>
         </mat-accordion>

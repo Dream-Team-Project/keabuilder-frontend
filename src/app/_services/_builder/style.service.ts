@@ -9,6 +9,9 @@ import { ImageService } from '../image.service';
 export class StyleService {
   // content/element styling
   item_alignment:any = {desktop:'', tablet_h:'', tablet_v:'', mobile:''};
+  // code block
+  code_html:any;
+  // code block
   // text
   edit_html:any;
   font_size = { value: '16px' };
@@ -855,10 +858,13 @@ export class StyleService {
       this._general.main.name = pageN;
       this._general.main.title = pageT;
       this._general.main.path = this._general.page_path;
+      this._general.main.page_code = this._general.page_code;
       this._general.main.description = this._general.description;
       this._general.main.keywords = JSON.parse(JSON.stringify(this._general.keywords));
       this._general.main.author = this._general.author;
       this._general.main.meta_img = this._general.meta_img;
+      var ele:any = document.getElementById('kb-append-style');
+      if(ele) ele.innerHTML = this._general.page_code;
     }
     else this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     if (this._general.selectedBlock.type == 'row') {
@@ -883,6 +889,9 @@ export class StyleService {
       }
       else if(this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
         this.setElementStyle(this.currentStyling());
+      }
+      else if(this._general.selectedBlock.content?.name == 'code') {
+        this._general.selectedBlock.content.html = this.code_html;
       }
       else {
         this.setElementStyle(this.textStyling());
@@ -1237,289 +1246,295 @@ export class StyleService {
 
   blockSetting(block: any) {
       var obj:any = new Object();
-
       if(this.setItemStyle) obj = this.getBlockStyle(block.content.item.style);
       else if(block.type == 'element') {
         this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         obj = this.getBlockStyle(block.content.style);
-        if(block.content?.name != 'form' && block.content?.name != 'divider' && !this.setItemStyle) {
+        if(block.content?.name != 'form' && block.content?.name != 'divider' && block.content?.name != 'code' && !this.setItemStyle) {
           this.elementSetting(block.content);
         }
       }
       else obj = this.getBlockStyle(block.style);
-      if(obj['box-shadow'] && obj['box-shadow'] != 'none') {
-        var boxS = obj['box-shadow'].split(' ');
-        var bsp = 'none';
-        if(boxS[0] == 'inset') {
-          bsp = 'inset';
-          boxS.shift();
+      if(!this._general.isObjEmpty(obj)) {
+        if(obj['box-shadow'] && obj['box-shadow'] != 'none') {
+          var boxS = obj['box-shadow'].split(' ');
+          var bsp = 'none';
+          if(boxS[0] == 'inset') {
+            bsp = 'inset';
+            boxS.shift();
+          }
+          else bsp = 'outset';
+
+          this.box_shadow_position = bsp;
+
+          this.box_shadow_hp.value = boxS[0];
+          this.box_shadow_hpRange.value = boxS[0].replace(/[^0-9]/g, '');
+          this.box_shadow_hpRange.type = boxS[0].replace(/[^a-z]/g, '');
+
+          this.box_shadow_vp.value = boxS[1];
+          this.box_shadow_vpRange.value = boxS[1].replace(/[^0-9]/g, '');
+          this.box_shadow_vpRange.type = boxS[1].replace(/[^a-z]/g, '');
+
+          this.box_shadow_bs.value = boxS[2];
+          this.box_shadow_bsRange.value = boxS[2].replace(/[^0-9]/g, '');
+          this.box_shadow_bsRange.type = boxS[2].replace(/[^a-z]/g, '');
+
+          this.box_shadow_ss.value = boxS[3];
+          this.box_shadow_ssRange.value = boxS[3].replace(/[^0-9]/g, '');
+          this.box_shadow_ssRange.type = boxS[3].replace(/[^a-z]/g, '');
+          
+          this.box_shadow_color = boxS[4];
         }
-        else bsp = 'outset';
-
-        this.box_shadow_position = bsp;
-
-        this.box_shadow_hp.value = boxS[0];
-        this.box_shadow_hpRange.value = boxS[0].replace(/[^0-9]/g, '');
-        this.box_shadow_hpRange.type = boxS[0].replace(/[^a-z]/g, '');
-
-        this.box_shadow_vp.value = boxS[1];
-        this.box_shadow_vpRange.value = boxS[1].replace(/[^0-9]/g, '');
-        this.box_shadow_vpRange.type = boxS[1].replace(/[^a-z]/g, '');
-
-        this.box_shadow_bs.value = boxS[2];
-        this.box_shadow_bsRange.value = boxS[2].replace(/[^0-9]/g, '');
-        this.box_shadow_bsRange.type = boxS[2].replace(/[^a-z]/g, '');
-
-        this.box_shadow_ss.value = boxS[3];
-        this.box_shadow_ssRange.value = boxS[3].replace(/[^0-9]/g, '');
-        this.box_shadow_ssRange.type = boxS[3].replace(/[^a-z]/g, '');
-        
-        this.box_shadow_color = boxS[4];
-      }
-      else this.resetBoxShadow();
-      if (obj['background-image'] && obj['background-image'] != 'none') {
-        var bgImg = obj['background-image'].trim().split('(');
-        if (bgImg[0] == 'url') {
-          this.background_image.name = bgImg[1].split(')')[0];
-          this.background_image.size = obj['background-size'];
-          this.background_image.position = obj['background-position'];
-          this.background_image.repeat = this.background_image_repeats.filter((item:any)=>{ if(obj['background-repeat'] == item.value) return item; })[0];
-          this.background_image.attachment = obj['background-attachment'];
-          this.resetBackgroundGradient();
-          this.background_type = 'image';
-        }
-        else {
-          var bgGrad = bgImg[1].split(')')[0].split(',');
-          if (bgImg[0] == 'linear-gradient') {
-            this.background_gradient.type = 'linear';
-            this.background_gradient.direction = bgGrad[0].split('deg')[0];
+        else this.resetBoxShadow();
+        if (obj['background-image'] && obj['background-image'] != 'none') {
+          var bgImg = obj['background-image'].trim().split('(');
+          if (bgImg[0] == 'url') {
+            this.background_image.name = bgImg[1].split(')')[0];
+            this.background_image.size = obj['background-size'];
+            this.background_image.position = obj['background-position'];
+            this.background_image.repeat = this.background_image_repeats.filter((item:any)=>{ if(obj['background-repeat'] == item.value) return item; })[0];
+            this.background_image.attachment = obj['background-attachment'];
+            this.resetBackgroundGradient();
+            this.background_type = 'image';
           }
           else {
-            this.background_gradient.type = 'radial';
-            this.background_gradient.radial_direction = bgGrad[0].split('circle at ')[1];
+            var bgGrad = bgImg[1].split(')')[0].split(',');
+            if (bgImg[0] == 'linear-gradient') {
+              this.background_gradient.type = 'linear';
+              this.background_gradient.direction = bgGrad[0].split('deg')[0];
+            }
+            else {
+              this.background_gradient.type = 'radial';
+              this.background_gradient.radial_direction = bgGrad[0].split('circle at ')[1];
+            }
+
+            this.background_gradient.start = bgGrad[1].split(' ')[1];
+            this.background_gradient.end = bgGrad[2].split(' ')[1];
+
+            this.background_gradient.startPosition = bgGrad[1].split(' ')[2].split('%')[0];
+            this.background_gradient.endPosition = bgGrad[2].split(' ')[2].split('%')[0];
+
+            this.resetBackgroundImage();
+            this.background_type = 'gradient';
+          }
+        }
+        else {
+          this.resetBackgroundImage();
+          this.resetBackgroundGradient();
+        }
+        this.background_color = obj['background-color'];
+
+        this.width.value = obj.width ? obj.width : '100%';
+        var value = obj.width.match(/(\d+)/);
+        this.widthRange.value = value ? value[0] : '100';
+        var unit = obj.width.replace(/[^A-Za-z]/g, '');
+        this.widthRange.type = unit && unit != 'auto' ? unit : '%';
+        
+        this.height.value = obj.height ? obj.height : '100%';
+        var value = obj.height.match(/(\d+)/);
+        this.heightRange.value = value ? value[0] : '100';
+        var unit = obj.height.replace(/[^A-Za-z]/g, '');
+        this.heightRange.type = unit && unit != 'auto' ? unit : '%';
+
+        if(obj.margin) {
+          var mg = obj.margin.split(' ');
+          if (mg.length == 1) {
+            var ma = mg[0];
+            this.margin.top = ma;
+            this.margin.bottom = ma;
+            this.margin.right = ma;
+            this.margin.left = ma;
+            this.m_link.a = true;
+            if(ma == 'auto') this.blockAlign = 'center';
+          }
+    
+          else if (mg.length == 2) {
+            var my = mg[0];
+            var mx = mg[1];
+            this.margin.top = my;
+            this.margin.bottom = my;
+            this.margin.right = mx;
+            this.margin.left = mx;
+            if(mx == 'auto') this.blockAlign = 'center'; 
+          }
+    
+          else if (mg.length == 3) {
+            var mt:any = mg[0];
+            var mx:any = mg[1];
+            var mb:any = mg[2];
+            this.margin.top = mt;
+            this.margin.right = mx;
+            this.margin.left = mx;
+            this.margin.bottom = mb;
+            if(mx == 'auto') this.blockAlign = 'center';
+          }
+    
+          else {
+            var mt:any = mg[0];
+            var mr:any = mg[1];
+            var mb:any = mg[2];
+            var ml:any = mg[3];
+            if(mr == 'auto' && ml == 'auto') this.blockAlign = 'center';
+            else {
+              if(mr == 'auto') this.blockAlign = 'left';
+              else if(ml == 'auto') this.blockAlign = 'right';
+            }
+            this.margin.top = mt;
+            this.margin.right = mr;
+            this.margin.bottom = mb;
+            this.margin.left = ml;
+          }
+    
+          this.m_link.tb = this.margin.top == this.margin.bottom;
+          this.m_link.lr = this.margin.left == this.margin.right;
+        }
+
+        if(obj.padding) {
+          var pd = obj.padding.split(' ');
+
+          if (pd.length == 1) {
+            this.padding.top = pd[0];
+            this.padding.bottom = pd[0];
+            this.padding.right = pd[0];
+            this.padding.left = pd[0];
+            this.p_link.a = true;
+          }
+    
+          else if (pd.length == 2) {
+            this.padding.top = pd[0];
+            this.padding.bottom = pd[0];
+            this.padding.right = pd[1];
+            this.padding.left = pd[1];
+            this.p_link.a = false;
+          }
+    
+          else if (pd.length == 3) {
+            this.padding.top = pd[0];
+            this.padding.right = pd[1];
+            this.padding.left = pd[1];
+            this.padding.bottom = pd[2];
+            this.p_link.a = false;
+          }
+    
+          else {
+            this.padding.top = pd[0];
+            this.padding.right = pd[1];
+            this.padding.bottom = pd[2];
+            this.padding.left = pd[3];
+            this.p_link.a = false;
+          }
+    
+          this.p_link.tb = this.padding.top == this.padding.bottom;
+          this.p_link.lr = this.padding.right == this.padding.left;
+        }
+
+        if(obj['border-width']) {
+          var brd = obj['border-width'].split(' ');
+
+          if (brd.length == 1) {
+            this.border.top = brd[0];
+            this.border.bottom = brd[0];
+            this.border.right = brd[0];
+            this.border.left = brd[0];
+            this.b_link.a = true;
           }
 
-          this.background_gradient.start = bgGrad[1].split(' ')[1];
-          this.background_gradient.end = bgGrad[2].split(' ')[1];
+          else if (brd.length == 2) {
+            this.border.top = brd[0];
+            this.border.bottom = brd[0];
+            this.border.right = brd[1];
+            this.border.left = brd[1];
+            this.b_link.a = false;
+          }
 
-          this.background_gradient.startPosition = bgGrad[1].split(' ')[2].split('%')[0];
-          this.background_gradient.endPosition = bgGrad[2].split(' ')[2].split('%')[0];
+          else if (brd.length == 3) {
+            this.border.top = brd[0];
+            this.border.right = brd[1];
+            this.border.left = brd[1];
+            this.border.bottom = brd[2];
+            this.b_link.a = false;
+          }
 
-          this.resetBackgroundImage();
-          this.background_type = 'gradient';
+          else {
+            this.border.top = brd[0];
+            this.border.right = brd[1];
+            this.border.bottom = brd[2];
+            this.border.left = brd[3];
+            this.b_link.a = false;
+          }
+
+          this.b_link.tb = this.border.top == this.border.bottom;
+          this.b_link.lr = this.border.right == this.border.left;
         }
+
+        if(obj['border-radius']) {
+          var brdr = obj['border-radius'].split(' ');
+
+          if (brdr.length == 1) {
+            this.border_radius.top_left = brdr[0];
+            this.border_radius.top_right = brdr[0];
+            this.border_radius.bottom_right = brdr[0];
+            this.border_radius.bottom_left = brdr[0];
+            this.br_link = true;
+          }
+
+          else if (brdr.length == 2) {
+            this.border_radius.top_left = brdr[0];
+            this.border_radius.top_right = brdr[1];
+            this.border_radius.bottom_right = brdr[0];
+            this.border_radius.bottom_left = brdr[1];
+            this.br_link = false;
+          }
+
+          else if (brdr.length == 3) {
+            this.border_radius.top_left = brdr[0];
+            this.border_radius.top_right = brdr[1];
+            this.border_radius.bottom_left = brdr[1];
+            this.border_radius.bottom_right = brdr[2];
+            this.br_link = false;
+          }
+
+          else {
+            this.border_radius.top_left = brdr[0];
+            this.border_radius.top_right = brdr[1];
+            this.border_radius.bottom_right = brdr[2];
+            this.border_radius.bottom_left = brdr[3];
+            this.br_link = false;
+          }
+        }
+
+        this.border_style = obj['border-style'];
+        this.border_color = obj['border-color'];
+
+        this.zindex = obj['z-index'] ? obj['z-index'] : 0;
+
+        this.transition.duration = obj['transition-duration'] ? obj['transition-duration'].replace('s','') : 0;
+        this.transition.timing_function = obj['transition-timing-function'] ? obj['transition-timing-function'] : 'linear';
+        this.transition.delay = obj['transition-delay'] ? obj['transition-delay'].replace('s','') : 0;
+
+        this.hide = block.hide;
+
+        if (block.type == 'row') {
+          this.columnGap = JSON.parse(JSON.stringify(block.columnGap));
+          this.columnRev =  JSON.parse(JSON.stringify(block.columnRev));
+        }
+        else if (block.type == 'main') {
+          this._general.page_name = block.name;
+          this._general.page_title = block.title;
+          this._general.page_path = block.path;
+          this._general.page_code = block.page_code;
+          this._general.description = block.description;
+          this._general.keywords = JSON.parse(JSON.stringify(block.keywords));
+          this._general.author = block.author;
+          this._general.meta_img = block.meta_img;
+        }
+
+        if(this.resetSession) this.resetStyleSession();
       }
       else {
-        this.resetBackgroundImage();
-        this.resetBackgroundGradient();
+        if(block.content && block.content?.name == 'code') this.code_html = block.content.html;
+        console.log(this.code_html);
       }
-      this.background_color = obj['background-color'];
-
-      this.width.value = obj.width ? obj.width : '100%';
-      var value = obj.width.match(/(\d+)/);
-      this.widthRange.value = value ? value[0] : '100';
-      var unit = obj.width.replace(/[^A-Za-z]/g, '');
-      this.widthRange.type = unit && unit != 'auto' ? unit : '%';
-      
-      this.height.value = obj.height ? obj.height : '100%';
-      var value = obj.height.match(/(\d+)/);
-      this.heightRange.value = value ? value[0] : '100';
-      var unit = obj.height.replace(/[^A-Za-z]/g, '');
-      this.heightRange.type = unit && unit != 'auto' ? unit : '%';
-
-      if(obj.margin) {
-        var mg = obj.margin.split(' ');
-        if (mg.length == 1) {
-          var ma = mg[0];
-          this.margin.top = ma;
-          this.margin.bottom = ma;
-          this.margin.right = ma;
-          this.margin.left = ma;
-          this.m_link.a = true;
-          if(ma == 'auto') this.blockAlign = 'center';
-        }
-  
-        else if (mg.length == 2) {
-          var my = mg[0];
-          var mx = mg[1];
-          this.margin.top = my;
-          this.margin.bottom = my;
-          this.margin.right = mx;
-          this.margin.left = mx;
-          if(mx == 'auto') this.blockAlign = 'center'; 
-        }
-  
-        else if (mg.length == 3) {
-          var mt:any = mg[0];
-          var mx:any = mg[1];
-          var mb:any = mg[2];
-          this.margin.top = mt;
-          this.margin.right = mx;
-          this.margin.left = mx;
-          this.margin.bottom = mb;
-          if(mx == 'auto') this.blockAlign = 'center';
-        }
-  
-        else {
-          var mt:any = mg[0];
-          var mr:any = mg[1];
-          var mb:any = mg[2];
-          var ml:any = mg[3];
-          if(mr == 'auto' && ml == 'auto') this.blockAlign = 'center';
-          else {
-            if(mr == 'auto') this.blockAlign = 'left';
-            else if(ml == 'auto') this.blockAlign = 'right';
-          }
-          this.margin.top = mt;
-          this.margin.right = mr;
-          this.margin.bottom = mb;
-          this.margin.left = ml;
-        }
-  
-        this.m_link.tb = this.margin.top == this.margin.bottom;
-        this.m_link.lr = this.margin.left == this.margin.right;
-      }
-
-      if(obj.padding) {
-        var pd = obj.padding.split(' ');
-
-        if (pd.length == 1) {
-          this.padding.top = pd[0];
-          this.padding.bottom = pd[0];
-          this.padding.right = pd[0];
-          this.padding.left = pd[0];
-          this.p_link.a = true;
-        }
-  
-        else if (pd.length == 2) {
-          this.padding.top = pd[0];
-          this.padding.bottom = pd[0];
-          this.padding.right = pd[1];
-          this.padding.left = pd[1];
-          this.p_link.a = false;
-        }
-  
-        else if (pd.length == 3) {
-          this.padding.top = pd[0];
-          this.padding.right = pd[1];
-          this.padding.left = pd[1];
-          this.padding.bottom = pd[2];
-          this.p_link.a = false;
-        }
-  
-        else {
-          this.padding.top = pd[0];
-          this.padding.right = pd[1];
-          this.padding.bottom = pd[2];
-          this.padding.left = pd[3];
-          this.p_link.a = false;
-        }
-  
-        this.p_link.tb = this.padding.top == this.padding.bottom;
-        this.p_link.lr = this.padding.right == this.padding.left;
-      }
-
-      if(obj['border-width']) {
-        var brd = obj['border-width'].split(' ');
-
-        if (brd.length == 1) {
-          this.border.top = brd[0];
-          this.border.bottom = brd[0];
-          this.border.right = brd[0];
-          this.border.left = brd[0];
-          this.b_link.a = true;
-        }
-
-        else if (brd.length == 2) {
-          this.border.top = brd[0];
-          this.border.bottom = brd[0];
-          this.border.right = brd[1];
-          this.border.left = brd[1];
-          this.b_link.a = false;
-        }
-
-        else if (brd.length == 3) {
-          this.border.top = brd[0];
-          this.border.right = brd[1];
-          this.border.left = brd[1];
-          this.border.bottom = brd[2];
-          this.b_link.a = false;
-        }
-
-        else {
-          this.border.top = brd[0];
-          this.border.right = brd[1];
-          this.border.bottom = brd[2];
-          this.border.left = brd[3];
-          this.b_link.a = false;
-        }
-
-        this.b_link.tb = this.border.top == this.border.bottom;
-        this.b_link.lr = this.border.right == this.border.left;
-      }
-
-      if(obj['border-radius']) {
-        var brdr = obj['border-radius'].split(' ');
-
-        if (brdr.length == 1) {
-          this.border_radius.top_left = brdr[0];
-          this.border_radius.top_right = brdr[0];
-          this.border_radius.bottom_right = brdr[0];
-          this.border_radius.bottom_left = brdr[0];
-          this.br_link = true;
-        }
-
-        else if (brdr.length == 2) {
-          this.border_radius.top_left = brdr[0];
-          this.border_radius.top_right = brdr[1];
-          this.border_radius.bottom_right = brdr[0];
-          this.border_radius.bottom_left = brdr[1];
-          this.br_link = false;
-        }
-
-        else if (brdr.length == 3) {
-          this.border_radius.top_left = brdr[0];
-          this.border_radius.top_right = brdr[1];
-          this.border_radius.bottom_left = brdr[1];
-          this.border_radius.bottom_right = brdr[2];
-          this.br_link = false;
-        }
-
-        else {
-          this.border_radius.top_left = brdr[0];
-          this.border_radius.top_right = brdr[1];
-          this.border_radius.bottom_right = brdr[2];
-          this.border_radius.bottom_left = brdr[3];
-          this.br_link = false;
-        }
-      }
-
-      this.border_style = obj['border-style'];
-      this.border_color = obj['border-color'];
-
-      this.zindex = obj['z-index'] ? obj['z-index'] : 0;
-
-      this.transition.duration = obj['transition-duration'] ? obj['transition-duration'].replace('s','') : 0;
-      this.transition.timing_function = obj['transition-timing-function'] ? obj['transition-timing-function'] : 'linear';
-      this.transition.delay = obj['transition-delay'] ? obj['transition-delay'].replace('s','') : 0;
-
-      this.hide = block.hide;
-
-      if (block.type == 'row') {
-        this.columnGap = JSON.parse(JSON.stringify(block.columnGap));
-        this.columnRev =  JSON.parse(JSON.stringify(block.columnRev));
-      }
-      else if (block.type == 'main') {
-        this._general.page_name = block.name;
-        this._general.page_title = block.title;
-        this._general.page_path = block.path;
-        this._general.description = block.description;
-        this._general.keywords = JSON.parse(JSON.stringify(block.keywords));
-        this._general.author = block.author;
-        this._general.meta_img = block.meta_img;
-      }
-
-      if(this.resetSession) this.resetStyleSession();
   }
 
   elementSetting(element: any) {

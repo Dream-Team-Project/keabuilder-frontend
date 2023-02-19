@@ -30,10 +30,11 @@ export class GeneralService {
   };
   webpage:any = {uniqueid: ''};
   page_general_tab:any = 'info';
-  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
+  main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], page_code: '', author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
   page_name = '';
   page_title = '';
   page_path = '';
+  page_code = '';
   description = '';
   keywords:any = [];
   author = '';
@@ -116,7 +117,6 @@ export class GeneralService {
   existwebpages:any = [];
   funnels:any = [];
   step_products:any = [];
-  page_code:any = '';
   menu_target_types = [
     { name: 'same tab', value: '_self' },
     { name: 'new tab', value: '_blank' },
@@ -205,6 +205,9 @@ export class GeneralService {
 
   getBuilderData(id:any) {
     return new Promise<any>((resolve, reject) => {
+      this.fetchForms().then(data=>{
+        this.forms = data;
+      });
       this.fetchMenus().then(data=>{
         this.menus = data;
         if(this.target.type != 'header' && this.target.type != 'footer') {
@@ -213,9 +216,6 @@ export class GeneralService {
           })
           this.fetchFooters().then(data=>{
             this.footers = data;
-          })
-          this.fetchForms().then(data=>{
-            this.forms = data;
           })
         }
         if(this.target.type == 'website') {
@@ -379,7 +379,7 @@ export class GeneralService {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
       var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
-      var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections};
+      var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
       var header = this.pagehtml.querySelector('header');
       if(this.includeLayout.header && this.selectedHeader.html) {
@@ -416,6 +416,7 @@ export class GeneralService {
       this.webpage.page_json = this.encodeJSON(jsonObj);
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
+      '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
       '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
       '<meta charset="UTF-8">' +
       '<meta name="description" content="'+this.main.description+'">' +
@@ -423,7 +424,8 @@ export class GeneralService {
       '<meta name="author" content="'+this.main.author+'">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       '<title>'+this.main.title+'</title>' +        
-      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">';
+      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
+      '<style>'+jsonObj.page_code+'</style>';
       this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
       this.pageObj = {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
@@ -561,10 +563,12 @@ export class GeneralService {
       item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
     });
     body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
-      var cb = this.decodeData(item.getAttribute('html-data'));
-      item.removeAttribute('html-data');
+      var cb = item.getAttribute('html-data');
+      // item.removeAttribute('html-data');
       var doc = this.parser.parseFromString(cb, 'text/html');
-      item.innerHTML = doc.body.innerHTML;
+      console.log(doc);
+      item.innerHTML = cb;
+      console.log(item);
     });
     this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;
   }
@@ -586,7 +590,7 @@ export class GeneralService {
         row.columnArr.forEach((col:any)=>{
           this.blockStyling(col);
           col.elementArr.forEach((ele:any)=>{
-            if(ele.content.name != 'iframe') this.elementStyling(ele);
+            if(ele.content.name != 'iframe' && ele.content.name != 'code') this.elementStyling(ele);
             if(ele.content?.item) {
               var tempObj = JSON.parse(JSON.stringify(ele.content.item))
               var pseudoEle:string = '';

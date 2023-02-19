@@ -81,7 +81,7 @@
                         [required]="fe.required" [placeholder]="fe.placeholder" [class.kb-form-field-error]="fe.error && fe.value == ''" class="kb-form-input"></textarea>
                     <ng-template #input>
                         <input [type]="fe.type" [name]="fe.id" (input)="_form.inpAns(fe)" [(ngModel)]="fe.value"
-                            [required]="fe.required" [placeholder]="fe.placeholder" [class.kb-form-field-error]="(fe.error || fe.invalid) && fe.value == ''" class="kb-form-input">
+                            [required]="fe.required" [placeholder]="fe.placeholder" [class.kb-form-field-error]="(fe.error && fe.value == '') || fe.invalid" class="kb-form-input">
                     </ng-template>
                 </ng-template>
             </div>

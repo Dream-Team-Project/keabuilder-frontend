@@ -9,7 +9,6 @@ import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
-import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-form-builder',
@@ -21,11 +20,6 @@ export class FormBuilderComponent implements OnInit {
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
   @ViewChild('emailsetdialog') emailsetdialog!: TemplateRef<any>;
-
-  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
-    return -1;
-  }
-
   @ViewChild('form', { static: true }) screen: any;
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
 

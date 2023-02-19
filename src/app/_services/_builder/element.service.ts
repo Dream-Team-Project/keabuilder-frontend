@@ -47,7 +47,7 @@ export class ElementService {
     divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
     // divider
     // form
-    form: { content: { name: 'iframe', src: '', height: '0px'}, iconCls: 'fab fa-wpforms' },
+    form: { content: { name: 'iframe', src: '', height: ''}, iconCls: 'fab fa-wpforms' },
     // form
     // code block
     // code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
@@ -103,7 +103,7 @@ export class ElementService {
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
-    if(element.name != 'iframe') {
+    if(element.name != 'iframe' && element.name != 'code') {
       var respS:any = {'font-size': tempObj.content.name == 'heading' ? '24px' : '14px'};
       if(element.name == 'form' || element.name == 'divider') {
         respS = {'width': '100%'};

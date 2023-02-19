@@ -37,8 +37,3 @@
   .kbimgcard{
     height: 300px;
   }
-
-  .adjustmatfrm mat-form-field:first-child {
-    width: 50%!important;
-    margin-right: 24px;
-}

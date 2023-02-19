@@ -108,13 +108,13 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-8 adjustmatfrm">
-              <mat-form-field  appearance="fill" class="w-100">
+            <div class="col-md-8">
+              <mat-form-field  appearance="fill" class="col-8 pr-2">
                 <mat-label>Search Website</mat-label>
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Website">
                 <i class="fa fa-search"></i>
               </mat-form-field>
-              <mat-form-field appearance="fill" class="mr-4">
+              <mat-form-field appearance="fill" class="col-4">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
                   <mat-option value="nameasc" >ASC By Name</mat-option>

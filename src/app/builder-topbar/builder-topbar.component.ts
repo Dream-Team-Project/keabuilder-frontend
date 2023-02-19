@@ -5,7 +5,6 @@ import { RowService } from '../_services/_builder/row.service';
 import { ElementService } from '../_services/_builder/element.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
-import { KeyValue } from '@angular/common';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -14,9 +13,6 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./builder-topbar.component.css', '../builder/material.component.css'],
 })
 export class BuilderTopbarComponent implements OnInit {
-  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
-    return -1;
-  }
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
   @ViewChild('renamehfdialog') renamehfdialog!: TemplateRef<any>;
