@@ -15,6 +15,7 @@ export class FunnelService {
 
   uniquestepId:any;
   uuid:any = '';
+  funnelname:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
@@ -127,16 +128,8 @@ export class FunnelService {
     }, httpOptions);
   }
 
-  updatebasicdetails(id:string, funnelname:string,domain:string ,tags:string ,faviconurl:string ,headertracking:string ,bodytracking:string):Observable<any> {
-    return this.http.post("./api/updatefunnelsetting/"+this.uuid, {
-      id,
-      funnelname,
-      domain,
-      tags,
-      faviconurl,
-      headertracking,
-      bodytracking
-    }, httpOptions);
+  updatebasicdetails(data:any):Observable<any> {
+    return this.http.post("./api/updatefunnelsetting/"+this.uuid, data, httpOptions);
   }
 
   getfunnelsetting(id:string):Observable<any> {
