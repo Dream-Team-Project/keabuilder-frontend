@@ -462,3 +462,12 @@ label {
       opacity: 1;
   }
 }
+
+.kb-payment-stripe-i{
+  text-align: center;
+}
+.showstatdomain {
+  background: var(--secondary);
+  color: #fff;
+  font-size: 12px;
+}

@@ -4,6 +4,7 @@ import { FunnelService } from '../_services/funnels.service';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, Validators} from '@angular/forms';
+import { CheckoutService } from '../_services/checkout.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class CreateFunnelSettingsComponent implements OnInit {
 
   constructor(private funnelService: FunnelService,
               private router: Router, 
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private checkoutService: CheckoutService,) { }
 
   form: any = {
     reason: '',
@@ -24,7 +26,6 @@ export class CreateFunnelSettingsComponent implements OnInit {
 
   uniqueid:any = '';
   uniqueidstep:any = '';
-  funnelpath = '';
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   funnelname = '';
@@ -37,7 +38,9 @@ export class CreateFunnelSettingsComponent implements OnInit {
   processondata = 'Update Settings';
   popupsidebar = false;
   hidefornow = false;
-
+  accountconnect = 'Not connnected';
+  kbpages:any[] = [];
+  pathselected = '';
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe((params: ParamMap) => { 
@@ -51,8 +54,6 @@ export class CreateFunnelSettingsComponent implements OnInit {
       next: data => {
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
-
-        this.funnelpath = '/funnels/'+this.uniqueid+'/steps/'+data.data2[0].uniqueid;
       },
       error: err => {
         console.log(err);
@@ -62,7 +63,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
     this.funnelService.getfunnelsetting(this.uniqueid).subscribe({
       next: data => {
 
-        // console.log(data); 
+        console.log(data); 
 
         if(data.data.length!=0){
           this.funnelname = data.data[0].name;
@@ -81,6 +82,22 @@ export class CreateFunnelSettingsComponent implements OnInit {
         console.log(err);
       }
     });
+
+    this.checkoutService.getpaymentinteg().subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.data.length!=0){
+          this.accountconnect =  'Connected';
+        }
+      }
+    });   
+
+    this.funnelService.getSingleFunnelpage(this.uniqueid).subscribe({
+      next: data => {
+        console.log(data);
+        
+      }
+    });   
 
 
   }

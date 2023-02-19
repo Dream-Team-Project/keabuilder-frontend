@@ -124,12 +124,19 @@
                           </div>
 
                           <div class="col-sm-6">
-                            <mat-form-field class="kb-full-width" appearance="fill">
-                              <mat-label>Path</mat-label>
-                              <input type="text" matInput disabled name="path" [value]="funnelpath">
-                            </mat-form-field>
-                            <small class="text-muted form-text mt-n3">The path of this funnels</small>
 
+                              <mat-form-field appearance="fill" class="kb-full-width">
+                                  <mat-label>Select Homepage</mat-label>
+                                  <mat-select [(value)]="pathselected" >
+                                    <span *ngFor="let kbpage of kbpages; index as i;" >
+                                      <mat-option [value]="kbpages[i].uniqueid" *ngIf="kbpages[i]['publish_status']==1">
+                                        {{kbpages[i]['page_name']}}
+                                      </mat-option>
+                                    </span>
+                                  </mat-select>
+                              </mat-form-field>
+                            <small class="text-muted form-text mt-n3">Choose the main Page of your funnel.</small>
+                            
                           </div>
                         </div>
 
@@ -193,16 +200,17 @@
                           <div class="col-md-2">
                             <div class="kb-payment-stripe-i">
                               <i class="fab fa-stripe"></i>
+                              <div class="showstatdomain">{{accountconnect}}</div>
                             </div>
                           </div>
                           <div class="col-md-10">
                             <div class="form-group">
-                              <mat-form-field class="kb-full-width" appearance="fill">
+                              <!-- <mat-form-field class="kb-full-width" appearance="fill">
                                 <mat-label>Stripe Account</mat-label>
                                 <mat-select>
-                                  <mat-option>Account not connnected</mat-option>
+                                  <mat-option>{{accountconnect}}</mat-option>
                                 </mat-select>
-                              </mat-form-field>
+                              </mat-form-field> -->
                               <br>
                               <label for="">Test Mode</label>
                               <p style="line-height: 16px;">
@@ -212,7 +220,7 @@
                                   delivered will not operate.</small>
                               </p>
                               <small>
-                                <a href="">Edit Stripe Details</a>
+                                <a href="javascript:void(0)" routerLink="/payment">Edit Stripe Details</a>
                               </small>
                             </div>
                           </div>
@@ -253,22 +261,22 @@
                     <div class="actions clearfix " id="kb-settingsaction">
                       <ul>
                         <li class="ml-2">
-                          <a mat-raised-button color="accent" (click)="showpopup()">
+                          <button mat-raised-button color="accent" (click)="showpopup()">
                             <i class="fas fa-archive"></i> Archive Funnel
-                          </a>
+                          </button>
                         </li>
       
                         <li class="ml-2">
-                          <a mat-raised-button color="accent" (click)="viewarchivefunnel()">
+                          <button mat-raised-button color="accent" (click)="viewarchivefunnel()">
                             <i class="fas fa-binoculars"></i> View Archive Funnel Steps
-                          </a>
+                          </button>
                         </li>
       
                         <li class="ml-2">
-                          <a mat-raised-button color="primary" (click)="updatesetting()" >
+                          <button mat-raised-button color="primary" (click)="updatesetting()" >
                             <span *ngIf="processon"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
                             <span *ngIf="!processon" ><i class="far fa-check-circle"></i> {{processondata}}</span>
-                          </a>
+                          </button>
                         </li>
                       </ul>
                     </div>

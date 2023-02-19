@@ -40,9 +40,9 @@
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 calc(33%);
-    flex: 0 0 calc(33%);
-    width: calc(33%);
+    -ms-flex: 0 0 calc(25%);
+    flex: 0 0 calc(25%);
+    width: calc(25%);
     background-color: #F3F6F9;
   }
   

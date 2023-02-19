@@ -11,6 +11,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { FileUploadService } from '../_services/file-upload.service';
 import { CheckoutService } from '../_services/checkout.service';
 import { UserService } from '../_services/user.service';
+import { ImageService } from '../_services/image.service';
 
 export interface DialogData {
   name: string;
@@ -33,6 +34,7 @@ export class CreateFunnelComponent implements OnInit {
   constructor(private funnelService: FunnelService,
               private router: Router,
               private route: ActivatedRoute,
+              public _image: ImageService,
               private _snackBar: MatSnackBar,
               public _general: GeneralService,
               public dialog: MatDialog, 
@@ -49,6 +51,11 @@ export class CreateFunnelComponent implements OnInit {
                 });
               }
 
+  sidebar = {
+    open: false,
+    anim: {open: false, close: false, time: 500},
+    animtime: 300,
+  }
   createvariation = false;
   automationaddnewaction = true;
   automationaddnewemail = false;
@@ -109,7 +116,7 @@ export class CreateFunnelComponent implements OnInit {
   myproductsshow:any = [];
   editproid = '';
   editmode = false;
-  getthumbnail = '/assets/uploads/images/webpage_thumbnail.jpg';
+  getthumbnail = '';
 
   editcheckoutdetails = false;
   checkoutstyle:any = {step1headline:'',step1subheadline:'',step1btntext:'', step1btnsubtext:'', step1footertext:'',step2headline:'',step2subheadline:'',step2btntext:'', step2btnsubtext:'', step2footertext:''};
@@ -213,10 +220,11 @@ export class CreateFunnelComponent implements OnInit {
         filterdrag.push(element.id);
       });
 
-      // console.log(filterdrag);
+      console.log(filterdrag);
 
       this.funnelService.funnelandstepshorting(filterdrag,'funnelsteponly').subscribe({
         next: data => {
+          this._snackBar.open('Order Change Successfully!', 'Close');
           // console.log(data);
         }
       });
@@ -259,10 +267,10 @@ export class CreateFunnelComponent implements OnInit {
           this.automationaddnewtext = true;
           this.copylink = false;
       }
-      this.popupsidebar = true;
+      this.openSidebar();
   }
   hidepopupsidebar() {
-      this.popupsidebar = false;
+      this.closeSidebar();
     this.addstepoption = false;
     this.automationaddnewaction = false;
     this.automationaddnewemail = false;
@@ -271,8 +279,24 @@ export class CreateFunnelComponent implements OnInit {
     this.colortheme = false;
     this.addproductpopup = false;
     this.editcheckoutdetails = false;
-
   }
+
+  closeSidebar(){
+    this.sidebar.anim.close = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.close = false;
+      this.sidebar.open = false;
+    },this.sidebar.animtime)
+  }
+  
+  openSidebar(){
+    this.sidebar.open = true;
+    this.sidebar.anim.open = true;
+    setTimeout((e:any)=>{
+      this.sidebar.anim.open = false;
+    },this.sidebar.animtime)
+  }
+
   kb_substeps(value: string) {
       this.tabOpen = value;
       // console.log(this.funnelselected);
@@ -349,6 +373,22 @@ export class CreateFunnelComponent implements OnInit {
                   }, 500);
                 }
               }
+
+              var genscrn = 'keaimage-page-'+this.uniqueidstep+'-screenshot.png';
+
+              this.fileuploadService.validateimg(genscrn).subscribe({
+                next: data => {
+
+                if(data.data==1){
+                    this.getthumbnail = genscrn;
+                  }else{
+                    this.getthumbnail = 'webpage_thumbnail.jpg';
+                  }
+
+                }
+              });
+
+              this.maintime = this.fromNow(new Date(stepdata.updated_at));
             
           });
           
@@ -361,7 +401,7 @@ export class CreateFunnelComponent implements OnInit {
   }
   addsteps() {
 
-    this.popupsidebar = true;
+    this.openSidebar();
     this.addstepoption = true;
 
     this.automationaddnewaction = false;
@@ -381,7 +421,7 @@ export class CreateFunnelComponent implements OnInit {
       this.funnelService.setfunneladd(this.uniqueid, data).subscribe({
         next: data => {
           // console.log(data);
-          this.popupsidebar = false;
+          this.closeSidebar();
           this.addstepoption = false;
 
           this.steps = data.data;
@@ -582,13 +622,15 @@ export class CreateFunnelComponent implements OnInit {
                     this.tabOpen = 'overviewstep';
                     this.funnelselected = 1;
 
-                    var genscrn = 'keaimage-'+this.uniqueidstep+'-screenshot.png';
+                    var genscrn = 'keaimage-page-'+this.uniqueidstep+'-screenshot.png';
 
                     this.fileuploadService.validateimg(genscrn).subscribe({
                       next: data => {
           
                        if(data.data==1){
-                          this.getthumbnail = '/assets/uploads/images/'+genscrn;
+                          this.getthumbnail = genscrn;
+                        }else{
+                          this.getthumbnail = 'webpage_thumbnail.jpg';
                         }
           
                       }
@@ -652,7 +694,7 @@ export class CreateFunnelComponent implements OnInit {
           { ge: HOUR, divisor: HOUR, unit: 'hour' },
           { ge: MINUTE, divisor: MINUTE, unit: 'minute' },
           { ge: 30 * SECOND, divisor: SECOND, unit: 'seconds' },
-          { ge: 0, divisor: 1, text: 'just now' },
+          { ge: 0, divisor: 1, text: 'Just now' },
       ];
       const now = typeof nowDate === 'object' ? nowDate.getTime() : new Date(nowDate).getTime();
       const diff = now - (typeof date === 'object' ? date : new Date(date)).getTime();
@@ -680,7 +722,7 @@ export class CreateFunnelComponent implements OnInit {
     if(type=='copy'){
 
       this.copylink = true;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.firstpart = true;
       this.colortheme = false;
 
@@ -727,7 +769,7 @@ export class CreateFunnelComponent implements OnInit {
     }else if(type=='archive'){
       this.forarchiveid = unique2;
       this.firstpart = false;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.copylink = true;
       this.colortheme = false;
       // console.log(this.panelOpenState);
@@ -735,7 +777,7 @@ export class CreateFunnelComponent implements OnInit {
     }else if(type=='colortheme'){
       this.forarchiveid = unique2;
       this.badgecolor = unique1;
-      this.popupsidebar = true;
+      this.openSidebar();
       this.firstpart = false;
       this.colortheme = true;
     } 
@@ -746,12 +788,12 @@ export class CreateFunnelComponent implements OnInit {
 
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
 
         if(data.status==1){
           this.accordion.closeAll();
           this.reason = '';
-          this.popupsidebar = false;
+          this.closeSidebar();
           this.showfunnelsteps();
           this._snackBar.open('Successfully Archived!', 'Close');
 
@@ -824,7 +866,7 @@ export class CreateFunnelComponent implements OnInit {
       this.automationaddnewaction = false;
         this.forarchiveid = this.uniqueidstep;
         this.firstpart = false;
-        this.popupsidebar = true;
+        this.openSidebar();
         this.copylink = true;
     }else if(value=='deletefunnelstep'){
 
@@ -999,7 +1041,7 @@ export class CreateFunnelComponent implements OnInit {
         // console.log(data);
 
         if(data.status==1){
-          this.popupsidebar = false;
+          this.closeSidebar();
           this.showfunnelsteps();
           this._snackBar.open('Color Successfully Updated!', 'Close');
         }
@@ -1069,7 +1111,7 @@ export class CreateFunnelComponent implements OnInit {
     this.productprice = '';
     this.priceoverride = '';
     
-    this.popupsidebar = true;
+    this.openSidebar();
     this.addproductpopup = true;
     this.automationaddnewaction = false;
     this.automationaddnewemail = false;
@@ -1103,7 +1145,7 @@ export class CreateFunnelComponent implements OnInit {
 
     this.editmode = true;
 
-    this.popupsidebar = true;
+    this.openSidebar();
     this.addproductpopup = true;
     this.automationaddnewaction = false;
     this.automationaddnewemail = false;
@@ -1130,7 +1172,7 @@ export class CreateFunnelComponent implements OnInit {
 
   }
   editcheckout(){
-    this.popupsidebar = true;
+    this.openSidebar();
    this.editcheckoutdetails = true;
 
    this.addproductpopup = false;
