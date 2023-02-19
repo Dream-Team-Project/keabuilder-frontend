@@ -17,6 +17,7 @@ export class FormSubmissionsComponent implements OnInit {
   step = -1;
   delsubm:any;
   icons:any = {
+    'full-name': 'fas fa-user',
     'name': 'far fa-user',
     'email': 'fas fa-envelope-open-text',
     'phone': 'fas fa-phone',
