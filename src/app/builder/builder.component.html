@@ -253,15 +253,14 @@
                                                 </div>
                                                 <div *ngSwitchCase="'iframe'" [attr.data-name]="'form'" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
-                                                    <iframe #iframe *ngIf="element.content.src" [src]="element.content.src | safeUrl"
+                                                    <iframe #iframe *ngIf="element.content.src" [src]="element.content.src | safeUrl" (load)="iframeLoad(iframe)"
                                                     frameborder="0" width="100%" [height]="iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px'"></iframe>
                                                 </div>
                                                 <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                                     [style.justifyContent]="'center'">
                                                     <div class="kb-code-block"
-                                                        [attr.html-data]="_general.encodeData(element.content.html)">
-                                                        {{'
-                                                        <'+'custom code />'}}
+                                                        [attr.html-data]="element.content.html">
+                                                        {{'<'+'custom code/>'}}
                                                     </div>
                                                 </div>
                                                 <div *ngSwitchCase="'checkout'" [attr.data-name]="element.content.name" class="kb-element-content">

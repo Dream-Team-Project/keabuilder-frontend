@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FileUploadService } from '../_services/file-upload.service';
 import { GeneralService } from '../_services/_builder/general.service';
@@ -10,29 +11,62 @@ import { GeneralService } from '../_services/_builder/general.service';
 })
 export class FormSubmissionsComponent implements OnInit {
 
-  submissions:any = [];
+  submissions:any[] = [];
   fetching:boolean = true;
   form_id:any = '';
   step = -1;
+  delsubm:any;
+  icons:any = {
+    'name': 'far fa-user',
+    'email': 'fas fa-envelope-open-text',
+    'phone': 'fas fa-phone',
+    'address': 'fas fa-address-card',
+    'short-text': 'fas fa-text-width',
+    'long-text': 'fas fa-text-height',
+    'checkbox': 'far fa-check-square',
+    'radio': 'far fa-dot-circle',
+    'select': 'far fa-list-alt',
+    'number': 'fas fa-hashtag',
+    'split-text': 'far fa-hand-scissors',
+  }
 
   constructor(
     private route: ActivatedRoute,
     private _file: FileUploadService,
-    public _general: GeneralService
+    public _general: GeneralService,
+    public dialog: MatDialog,
   ) {
       route.paramMap.subscribe((params: ParamMap) => {
         this.form_id = params.get('form_id');
-        this._file.singleform_subm(this.form_id).subscribe((resp:any)=>{
-          this.setSubmissions(resp.data);
-        })
+        this.fetchSubm();
       })
    }
 
   ngOnInit(): void {
   }
 
+  fetchSubm() {
+    this._file.singleform_subm(this.form_id).subscribe((resp:any)=>{
+      this.setSubmissions(resp.data);
+    })
+  }
+
+  openDialog(templateRef: TemplateRef<any>, subm:any ): void {
+    this.delsubm = subm;
+    this.dialog.open(templateRef);
+  }
+
+  deletesubm(subm:any) {
+    this.fetching = true;
+    this._file.deleteform_subm(subm.id).subscribe((resp:any)=>{
+      this.fetchSubm();
+    })
+
+  }
+
   showDetails(i:number) {
-    console.log(this._general.decodeJSON(this.submissions[i].json))
+    this.submissions[i].data = this._general.decodeJSON(this.submissions[i].json);
+    console.log(this.submissions[i].data);
     this.step = i;
   }
 

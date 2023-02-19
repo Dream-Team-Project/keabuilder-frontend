@@ -48,13 +48,13 @@ export class BuilderComponent implements OnInit {
   wfpos:any = 'end';
   saveTemplateSection:any;
   wfhide:any = true;
-  initial = true;
   autoSaveInterval:any;
   autoSaving:boolean = false;
   askForSaveInterval:any;
   dntaskforsave:boolean = false;
   ishf:boolean = false;
   zoom:any = false;
+  initial:boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -102,13 +102,16 @@ export class BuilderComponent implements OnInit {
                   }
                 }
               }
+              _section.pageSessionArr = [];
               if(data.json) {
                 var jsonObj = _general.decodeJSON(data.json);
-                if(!this.ishf) _general.main.style = jsonObj.mainstyle;
+                if(!this.ishf) {
+                  _general.main.style = jsonObj.mainstyle;
+                  _general.main.page_code = jsonObj.page_code;
+                } 
                 jsonObj.header ? _general.selectedHeader = jsonObj.header : _general.includeLayout.header = false;
                 jsonObj.footer ? _general.selectedFooter = jsonObj.footer : _general.includeLayout.footer = false;
                 _section.sections = jsonObj.sections;
-                _section.pageSessionArr = [];
                 _section.sections.forEach((sec:any)=>{
                   sec.rowArr.forEach((row:any)=>{
                     row.columnArr.forEach((col:any)=>{
@@ -126,17 +129,26 @@ export class BuilderComponent implements OnInit {
                   })
                   })
                 })
+                this._section.savePageSession();
               }
               else this._section.addSection(0);
-              this._section.savePageSession();
               this._general.loading.success = true;
+              var style = document.createElement('STYLE');
+              style.id = 'kb-append-style';
+              style.innerHTML = _general.main.page_code;
+              document.head.appendChild(style);
             }
             else _general.redirectToPageNotFound();
         })
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
+            this._general.pageSaved = false;
             if(!this.ishf) this.savePreview();
+            else if(this.initial) {
+                this._general.pageSaved = true;
+                this.initial = false;
+            }
           })
         })
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -155,7 +167,6 @@ export class BuilderComponent implements OnInit {
   ngOnInit(): void {
     var vm = this;
     window.addEventListener('beforeunload', function (e) {
-      console.log(!vm._general.pageSaved);
       if(!vm._general.pageSaved) {
         e.preventDefault();
         e.returnValue = '';
@@ -218,6 +229,7 @@ export class BuilderComponent implements OnInit {
           this.openPageSetting(null);
         }
         else if(!res) {
+          console.log(res);
           this._general.saveDisabled = false;
           this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         }
@@ -252,7 +264,7 @@ export class BuilderComponent implements OnInit {
   }
 
   elementDblClk(element: any, event:any) {
-    if(element.content.name != 'checkout') {
+    if(element.content.name != 'iframe') {
       this._general.blockSelection = '';
       this._general.selectedBlock = element;
       this._style.blockSetting(element);
@@ -268,7 +280,6 @@ export class BuilderComponent implements OnInit {
   // dialog box
 
   openDialog() {
-      this._general.pageSaved = false;
       this.DialogParentToggle = !this.DialogParentToggle;
   }
 
@@ -451,6 +462,12 @@ export class BuilderComponent implements OnInit {
     return (item: CdkDrag<any>)=>{
       return this._section.sectionDrop;
    }
+  }
+
+  iframeLoad(iframe:any) {
+    setTimeout(()=>{
+      iframe.height = iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px';
+    }, 100)
   }
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}

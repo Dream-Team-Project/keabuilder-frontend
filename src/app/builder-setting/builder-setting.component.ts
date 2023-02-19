@@ -10,7 +10,6 @@ import { NgxMatColorPickerInput } from '@angular-material-components/color-picke
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-builder-setting',
@@ -21,9 +20,6 @@ import { KeyValue } from '@angular/common';
 
 export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
-  private onCompare(_left: KeyValue<any, any>, _right: KeyValue<any, any>): number {
-    return -1;
-  }
   connectWtParent:boolean = false;
   rippleClr:string = 'rgb(217 201 153 / 30%)';
   searchTglCls:any;
@@ -137,6 +133,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   }
 
   openDialog() {
+    this._general.pageSaved = false;
     this.backToRow ? this.backToRow = false : this.dragBoxAnime.open = true;
     this._overlayRef.attach(this._portal);
     setTimeout(()=>{

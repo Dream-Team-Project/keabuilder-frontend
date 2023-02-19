@@ -33,7 +33,7 @@ export class PagePreviewComponent implements OnInit {
         document.head.innerHTML = data.html.head.innerHTML;
         data.tracking.header.head.querySelectorAll('*').forEach((ele: any) => {
           var appEle = this.appendElement(ele);
-          if (appEle) document.head.appendChild(appEle);
+          if(appEle) document.head.appendChild(appEle);
         })
         data.tracking.footer.head.querySelectorAll('*').forEach((ele: any) => {
           var appEle = this.appendElement(ele);

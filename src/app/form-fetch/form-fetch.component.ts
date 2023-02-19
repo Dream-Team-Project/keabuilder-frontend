@@ -13,6 +13,7 @@ export class FormFetchComponent implements OnInit {
 
   submitting:boolean = false;
   thankyou:boolean = false;
+  showErrors:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,9 +32,7 @@ export class FormFetchComponent implements OnInit {
         document.head.appendChild(style);
         _form.submission.user_id = data.user_id;
         _form.submission.form_id = data.uniqueid;
-        _form.formField.forEach((fe:any)=>{
-          if(fe.input) this._form.inpAns(fe);
-        })
+        this.setFormValidation(_form.formField);
       })
     })
   }
@@ -44,6 +43,20 @@ export class FormFetchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  setFormValidation(ff:any) {
+    ff.forEach((e:any)=>{
+      if(e.input) {
+        this._form.inpAns(e);
+        e.split?.forEach((spl:any)=>{
+          this._form.inpAns(spl);
+          spl.subsplit?.forEach((subspl:any)=>{
+            this._form.inpAns(subspl);
+          })
+        })
+      }
+    })
   }
 
   formSubmit() {
@@ -59,8 +72,12 @@ export class FormFetchComponent implements OnInit {
           else this.submitting = false;
         });
       }
-      else this.submitting = false;
-    });;
+      else {
+        var element:any = document.getElementById('kb-form-'+this._form.submission.form_id);
+        element?.scrollIntoView();
+        this.submitting = false;
+      }
+    });
   }
 
   getBlockStyle(en:string) {

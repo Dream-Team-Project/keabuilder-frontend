@@ -152,7 +152,6 @@ export class FormService {
   formStyle = {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''};
   currentScrWdth:any;
   submission = {
-    uniqueid: '',
     user_id: '',
     form_id: '',
     email: '',
@@ -169,7 +168,8 @@ export class FormService {
 
   formSubmit() {
     return new Promise((resolve, reject)=>{
-      this.submission.json = this._general.encodeJSON(this.ansjson);
+      var json = this.formField.filter((ff:any)=>{if(ff.input) return ff;});
+      this.submission.json = this._general.encodeJSON(json);
       this._file.saveform_subm(this.submission).subscribe((resp:any)=>{
         if(this.form.emailenabled) {
           var maildata = {
@@ -207,6 +207,7 @@ export class FormService {
     return new Promise((resolve, reject)=>{
       var anslen = 0;
       var ansVal = Object.values(this.ansjson);
+      if(ansVal.length == 0) resolve(false);
       for(var i = 0; i < ansVal.length; i++) {
         var ans:any = ansVal[i];
         if(ans.required) {
@@ -217,11 +218,11 @@ export class FormService {
           }
           else {
             var temp = JSON.stringify(ans);
-            ans.error = (temp.search(/"value":""/g) != -1);
+            if(temp.search(/"type":"select"/g) != -1) ans.error = (temp.search(/"value":"none"/g) != -1);
+            else ans.error = (temp.search(/"value":""/g) != -1);
           }
         }
-        if(ans.name == 'email' && ans.value) ans.invalid = !this.validateEmail(ans.value);
-        else ans.invalid = false;
+        if(ans.name == 'email') ans.invalid = ans.value ? !this.validateEmail(ans.value) : false;
         if(ans.error == true || ans.invalid) resolve(false);
         if(ansVal.length-1 == anslen) resolve(true);
         anslen++;
@@ -329,10 +330,11 @@ export class FormService {
   }
 
   addInput(split:any, i:number) {
-    var obj = new Object();
+    var obj:any = new Object();
     var len =  split.length;
     if(split[0].type == 'text') obj = { name: 'new-field-'+len, label: 'New field '+len, type: 'text', placeholder: 'New Field '+len };
     else obj = { value: 'New option '+len, type: split[0].type};
+    obj.id = this._general.createBlockId(obj);
     split.splice(i+1, 0, obj);
     this.saveFormSession();
   }
@@ -347,9 +349,7 @@ export class FormService {
     if(!tempObj.type) tempObj.type = tempObj.name;
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj?.split?.forEach((split: any) => {
-      if(!split?.subsplit) {
-        split.id = this._general.createBlockId(split);
-      }
+      if(!split?.subsplit) split.id = this._general.createBlockId(split);
       split?.subsplit?.forEach((subsplit: any) => {
         subsplit.id = this._general.createBlockId(subsplit);
       })

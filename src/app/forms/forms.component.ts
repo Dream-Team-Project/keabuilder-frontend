@@ -160,7 +160,7 @@ export class FormsComponent implements OnInit {
 
   }
 
-  deleteme(form:any){
+  deleteform(form:any){
     form.deleting = true;
     this._file.deleteform(form.id).subscribe({
       next: data => {        
