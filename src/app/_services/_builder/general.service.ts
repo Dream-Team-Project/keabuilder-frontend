@@ -536,7 +536,6 @@ export class GeneralService {
         dbobj.funneltype = this.webpage.funneltype;
         this.funnelService.updatefunnelpage(dbobj).subscribe(
           (e:any)=>{
-          console.log(e);
             resolve(e);
           })
       }

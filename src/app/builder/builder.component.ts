@@ -88,7 +88,7 @@ export class BuilderComponent implements OnInit {
                 if(_general.target.type == 'funnel') {
                   this._general.getAllProducts();
                   if(_general.webpage.funneltype == 'order') {
-                    _element.elementList['checkout'] = { content: { name: 'checkout'}, iconCls: 'fab fa-wpforms' };
+                    _element.elementList['checkout'] = { content: { name: 'iframe', type: 'checkout', src: window.location.origin+'/checkout/'+_general.webpage.uniqueid}, iconCls: 'fab fa-wpforms' };
                   }
                   else if(_general.webpage.funneltype == 'upsell') {
                     _element.elementList['button'].content.btntype = 'upsell';

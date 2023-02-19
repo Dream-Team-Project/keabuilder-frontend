@@ -47,7 +47,7 @@ export class ElementService {
     divider: { content: { name: 'divider'}, iconCls: 'fas fa-grip-lines' },
     // divider
     // form
-    form: { content: { name: 'iframe', src: '', height: ''}, iconCls: 'fab fa-wpforms' },
+    form: { content: { name: 'iframe', type: 'form', src: '', height: ''}, iconCls: 'fab fa-wpforms' },
     // form
     // code block
     // code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
@@ -90,16 +90,11 @@ export class ElementService {
   addElement(element: any) {
     if(element.name == 'menu') {
       if(element?.itemset) delete element?.itemset;
-      else {
-        element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
-      }
+      else element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
     }
-    if(element.name == 'iframe') {
+    if(element.name == 'iframe' && element.type == 'form') {
       if(element?.itemset) delete element?.itemset;
-      else {
-        element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
-        console.log(element);
-      }
+      else element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
