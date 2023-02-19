@@ -251,7 +251,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <div *ngSwitchCase="'iframe'" [attr.data-name]="'form'" [attr.data-id]="element.content.data_id"
+                                                <div *ngSwitchCase="'iframe'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
                                                     <iframe #iframe *ngIf="element.content.src" [src]="element.content.src | safeUrl" (load)="iframeLoad(iframe)"
                                                     frameborder="0" width="100%" [height]="iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px'"></iframe>
