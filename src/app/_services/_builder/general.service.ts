@@ -442,7 +442,7 @@ export class GeneralService {
           resolve(true);
         },
         error=>{
-          this.openSnackBar(true, 'Server Error! Please try to save your page.', 'OK', 'center', 'top');
+          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
           resolve(false);
         });
       }
@@ -536,6 +536,7 @@ export class GeneralService {
         dbobj.funneltype = this.webpage.funneltype;
         this.funnelService.updatefunnelpage(dbobj).subscribe(
           (e:any)=>{
+          console.log(e);
             resolve(e);
           })
       }

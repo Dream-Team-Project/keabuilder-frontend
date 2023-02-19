@@ -229,6 +229,7 @@ export class BuilderComponent implements OnInit {
           this.openPageSetting(null);
         }
         else if(!res) {
+          console.log(res);
           this._general.saveDisabled = false;
           this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         }

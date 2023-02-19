@@ -131,7 +131,7 @@
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
         </button>
-        <button mat-button *ngIf="!ishf" [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status" #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
+        <button mat-button *ngIf="_general.target.type == 'website'" [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status" #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
             <i [innerHTML]="(_general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
         </button>
         <mat-menu #status="matMenu" xPosition="after" yPosition="below">
