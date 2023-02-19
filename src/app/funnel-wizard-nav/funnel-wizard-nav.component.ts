@@ -12,7 +12,7 @@ export class FunnelWizardNavComponent implements OnInit {
 
   uniqueid:any;
   uniqueidstep:any;
-  funnelname:any;
+  // funnelname:any;
 
   constructor(
     private router: Router,
@@ -22,7 +22,9 @@ export class FunnelWizardNavComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.uniqueid = params.get('funnel_id');
       funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe((data:any)=>{
-        this.funnelname = data.data2[0].name;
+        // this.funnelname = data.data2[0].name;
+        this.uniqueidstep = data.data[0].uniqueid;  
+        funnelService.funnelname = data.data2[0].name;
       })
     })
   }

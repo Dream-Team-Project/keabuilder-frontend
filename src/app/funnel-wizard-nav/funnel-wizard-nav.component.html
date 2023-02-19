@@ -1,11 +1,11 @@
 <header class="wizard-nav">
     <div class="wizard-steps">
       <!--begin::Wizard Step 1 Nav-->
-      <div class="wizard-step" [routerLinkActive]="['tab-active']" [routerLink]="['/funnels/'+uniqueid+'/steps/'+funnelService.uniquestepId]">
+      <div class="wizard-step" [routerLinkActive]="['tab-active']" [routerLink]="['/funnels/'+uniqueid+'/steps/'+uniqueidstep]">
         <div class="wizard-wrapper">
           <div class="wizard-number"><i class="fas fa-filter"></i></div>
           <div class="wizard-label">
-            <div class="wizard-title">{{funnelname}}</div>
+            <div class="wizard-title">{{funnelService.funnelname}}</div>
             <div class="wizard-desc">Steps</div>
           </div>
         </div>
