@@ -363,6 +363,18 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'checkout'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.checkouts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let check of _element.default.checkouts, index as i " (cdkDragMoved)="dragDataEmit(check)" [cdkDragData]="check">
+                <span class="kb-d-btn">
+                    <i [class]="check.iconCls"></i>
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="check.iconCls"></i>
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
     </div>
     <mat-icon mat-ripple (click)="nextElementSlide()" [class.kb-disabled]="slideElementShift > shiftElementLen-1" class="kb-side-arrow">keyboard_arrow_right</mat-icon>
 </div>

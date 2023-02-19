@@ -42,6 +42,17 @@ export class PagePreviewComponent implements OnInit {
         setTimeout((e:any)=>{
           document.body.innerHTML = data.html.body.innerHTML;
           this.html.removeAttribute('style');
+          var script = document.createElement('SCRIPT');
+          script.innerHTML = `
+          document.querySelectorAll('iframe').forEach((iframe)=>{
+            iframe.onload = function($event) {
+              var target = $event.target;
+              setTimeout((e)=>{
+                target.height = target.contentWindow.document.documentElement.scrollHeight+'px';
+              }, 100)
+            }
+          })`;
+          document.head.appendChild(script);
         }, 1000);
       })
     })

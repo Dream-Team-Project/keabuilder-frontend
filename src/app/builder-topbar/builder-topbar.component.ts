@@ -150,6 +150,9 @@ export class BuilderTopbarComponent implements OnInit {
       if(e.content.name == 'divider') {
         this._element.default.dividers.push(e);
       }
+      if(e.content.name == 'iframe' && e.content.type == 'checkout') {
+        this._element.default.checkouts.push(e);
+      }
     })
   }
 

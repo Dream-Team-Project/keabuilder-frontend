@@ -66,7 +66,8 @@ export class ElementService {
     headings: [],
     texts: [],
     buttons: [],
-    dividers: []
+    dividers: [],
+    checkouts: [],
   }
   constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
   }
