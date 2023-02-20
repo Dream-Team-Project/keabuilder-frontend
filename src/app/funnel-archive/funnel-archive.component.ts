@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -37,6 +37,9 @@ export class FunnelArchiveComponent implements OnInit {
   funnelsteps: any = [];
   showingcontacts = '7 DAY';
   users:any = [];
+  searchval:any = '';
+  delpage:any;
+
 
   constructor(private funnelService: FunnelService,
             private fileuploadService: FileUploadService,
@@ -69,6 +72,7 @@ export class FunnelArchiveComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.searchval = filterValue;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -96,50 +100,30 @@ export class FunnelArchiveComponent implements OnInit {
   }
 
   restoredeleteme(id:any,type:any){
-  // console.log(type+''+id);
 
-    this.funnelService.restoredeletefunnel(id,type).subscribe({
-      next: data => {
-        // console.log(data);
-        if(data.success==1){
 
-          data.data.forEach((element:any) => {
-            this.draftpublish('1', element.page_path, id);
-          });
+    if(type=="restore"){
 
-          this.applykbfilter();
+      this.funnelService.restoredeletefunnel(id,type).subscribe({
+        next: data => {
+          // console.log(data);
+          if(data.success==1){
 
+            data.data.forEach((element:any) => {
+              this.draftpublish('1', element.page_path, id);
+            });
+
+            this.applykbfilter();
+
+          }
+
+        },
+        error: err => {
+          console.log(err);
         }
+      });
 
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
-
-  }
-
-  draftpublish(status:any, page_path:any, websiteid:any){
-
-    var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {status:getvl, path:page_path, website_id:websiteid};
-    this.fileuploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
-    })
-
-  }
-
-  openDialog(id:any): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '455px',
-      data: {name: ' Funnel!! It will delete all steps as well.'},
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log(id);
-
-      if(result.event == 'Delete'){
-        
-        this._snackBar.open('Funnel Delete In Process...', 'Close');
+    }else if(type=="delete"){
 
         this.funnelService.restoredeletefunnel(id,'delete').subscribe({
           next: data => {
@@ -173,9 +157,74 @@ export class FunnelArchiveComponent implements OnInit {
           }
         });
           
-      }
+    }
+
+  }
+
+  draftpublish(status:any, page_path:any, websiteid:any){
+
+    var getvl = status == '0' ? 'draft' : 'publish';
+    var newobjdt = {status:getvl, path:page_path, website_id:websiteid};
+    this.fileuploadService.toggleDraft(newobjdt).subscribe((data:any)=>{
+    })
+
+  }
+
+  // openDialog(id:any): void {
+  //   const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+  //     width: '455px',
+  //     data: {name: ' Funnel!! It will delete all steps as well.'},
+  //   });
+    
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     // console.log(id);
+
+  //     if(result.event == 'Delete'){
+        
+  //       this._snackBar.open('Funnel Delete In Process...', 'Close');
+
+  //       this.funnelService.restoredeletefunnel(id,'delete').subscribe({
+  //         next: data => {
+  //           // console.log(data);
+  //           if(data.success==1){
+    
+  //             this._snackBar.open('Funnel Deleted Successfully!', 'Close');
+    
+  //             if(data.objpath.length!=0){
+  //               // console.log('--inside');
+    
+  //               data.objpath.forEach((element:any) => {
+    
+  //                  this.fileuploadService.deletepage(element).subscribe({
+  //                     next: data => {
+  //                         // console.log(data);
+  //                       }
+  //                     });
+    
+  //               });
+    
+  //             }
+    
+  //             this.applykbfilter();
+    
+  //           }
+    
+  //         },
+  //         error: err => {
+  //           console.log(err);
+  //         }
+  //       });
+          
+  //     }
       
-    });
+  //   });
+
+  // }
+
+  openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
+    
+    this.delpage = page;
+    this.dialog.open(templateRef);
 
   }
 

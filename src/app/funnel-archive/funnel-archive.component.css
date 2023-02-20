@@ -159,3 +159,10 @@
  }
  }
 
+ .adjustarchivesort mat-form-field:first-child {
+  width: 33%!important;
+  margin-right: 24px;
+}
+.adjustarchivesort mat-form-field:last-child {
+  width: 21.5%;
+}

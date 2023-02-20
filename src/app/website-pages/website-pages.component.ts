@@ -776,6 +776,7 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.deleteme==1){
+            
             var newpathobj:any = {website_id:this.websiteid, path:data.path};
             this._general._file.deletepage(newpathobj).subscribe({
               next: data => {
@@ -787,7 +788,6 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
               }
             });
-
 
           }
           this.hidepopupsidebar();
