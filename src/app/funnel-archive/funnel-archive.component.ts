@@ -7,6 +7,7 @@ import { FunnelService } from '../_services/funnels.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { WebsiteService } from '../_services/website.service';
 
 export interface UserData {
   name:string;
@@ -39,12 +40,15 @@ export class FunnelArchiveComponent implements OnInit {
   users:any = [];
   searchval:any = '';
   delpage:any;
+  confirmpass = '';
+  searching:boolean = false;
 
 
   constructor(private funnelService: FunnelService,
             private fileuploadService: FileUploadService,
             private _snackBar: MatSnackBar,
             public dialog: MatDialog, 
+            private websiteService: WebsiteService,
             ) { 
     this.dataSource = new MatTableDataSource(this.users);
   }
@@ -99,18 +103,19 @@ export class FunnelArchiveComponent implements OnInit {
     return new Date(value).toDateString();
   }
 
-  restoredeleteme(id:any,type:any){
-
+  restoredeleteme(row:any,type:any){
+    console.log(row);
+    var data = {id:row.id,type:type, password:'', funnelid:row.uniqueid};
 
     if(type=="restore"){
 
-      this.funnelService.restoredeletefunnel(id,type).subscribe({
+      this.funnelService.restoredeletefunnel(data).subscribe({
         next: data => {
           // console.log(data);
           if(data.success==1){
 
             data.data.forEach((element:any) => {
-              this.draftpublish('1', element.page_path, id);
+              this.draftpublish('1', element.page_path, row.id);
             });
 
             this.applykbfilter();
@@ -125,37 +130,44 @@ export class FunnelArchiveComponent implements OnInit {
 
     }else if(type=="delete"){
 
-        this.funnelService.restoredeletefunnel(id,'delete').subscribe({
+      data.password = this.confirmpass;
+
+      if(this.confirmpass!=''){
+        this.searching = true;
+
+        this.funnelService.restoredeletefunnel(data).subscribe({
           next: data => {
             // console.log(data);
-            if(data.success==1){
-    
-              this._snackBar.open('Funnel Deleted Successfully!', 'Close');
-    
-              if(data.objpath.length!=0){
-                // console.log('--inside');
-    
-                data.objpath.forEach((element:any) => {
-    
-                   this.fileuploadService.deletepage(element).subscribe({
-                      next: data => {
-                          // console.log(data);
-                        }
-                      });
-    
+  
+            if(data.incorrect == 1){
+              this.searching = false;
+              this._snackBar.open("Password did't match!", 'OK');
+            }else{
+              this.fileuploadService.deletewebsitefolder(row.uniqueid).subscribe(e=>{
+                // console.log(e);
+              });
+  
+                this.websiteService.ondeletesubdomain(row.subdomain).subscribe({
+                  next: data => {
+                    
+                    this.searching = false;
+                    this._snackBar.open("Website has been successfully deleted!", 'OK'); 
+  
+                  }
                 });
-    
-              }
-    
-              this.applykbfilter();
-    
+  
             }
-    
-          },
-          error: err => {
-            console.log(err);
+
+            this.applykbfilter();
+
+  
           }
+  
         });
+      }else{
+        this._snackBar.open("Password Can't be blank!", 'OK');
+      }
+
           
     }
 

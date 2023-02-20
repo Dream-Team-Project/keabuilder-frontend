@@ -121,15 +121,20 @@ export class CreateFunnelContactsComponent implements OnInit {
   {
     this.funnelService.getfunnelexportcontacts(this.uniqueid).subscribe({
       next: data => {
+        // console.log(data.data);
 
-        const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
-     
-        /* generate workbook and add the worksheet */
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-     
-        /* save to file */  
-        XLSX.writeFile(wb, this.fileName);
+        if(data.data?.length!=0){
+
+          const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
+      
+          /* generate workbook and add the worksheet */
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      
+          /* save to file */  
+          XLSX.writeFile(wb, this.fileName);
+
+        }
 
       },
       error: err => {

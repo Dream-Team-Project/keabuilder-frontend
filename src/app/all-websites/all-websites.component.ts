@@ -247,7 +247,7 @@ export class AllWebsitesComponent implements OnInit {
   }
 
   restoredeleteme(web:any){
-    console.log(web);
+    // console.log(web);
     if(this.confirmpass!=''){
       this.searching = true;
       var genobj = {websiteid:web.uniqueid, password:this.confirmpass};

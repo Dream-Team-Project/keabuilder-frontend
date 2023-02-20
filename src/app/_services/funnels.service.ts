@@ -162,11 +162,8 @@ export class FunnelService {
     }, httpOptions);
   }
 
-  restoredeletefunnel(id:string, type:string):Observable<any> {
-    return this.http.post("./api/restoredeletefunnel/"+this.uuid, {
-      id,
-      type
-    }, httpOptions);
+  restoredeletefunnel(data:any):Observable<any> {
+    return this.http.post("./api/restoredeletefunnel/"+this.uuid, data, httpOptions);
   }
 
   makefunnelstepduplicate(data:any):Observable<any> {
