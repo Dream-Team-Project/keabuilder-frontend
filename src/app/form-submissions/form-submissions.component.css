@@ -14,15 +14,19 @@
   padding-bottom: 0px!important;
 }
 
-.kb-subm-group-data {
-  padding-left: 10px;
+.kb-subm-border {
+  border-top: 1px solid var(--kb-dim-black);
+  padding: 10px 0px;
 }
 
 .kb-subm-group {
-  border-top: 1px solid var(--kb-dim-black);
-  padding: 10px;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.kb-subm-group .kb-subm-data {
+  padding: 10px 0px 0px 10px;
 }
 
 span.kb-subm-title {
@@ -30,7 +34,6 @@ span.kb-subm-title {
   align-items: center;
   font-size: 15px;
   font-weight: 500;
-  margin-bottom: 8px;
 }
 
 .kb-subm-label {

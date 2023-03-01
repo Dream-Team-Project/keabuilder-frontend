@@ -45,22 +45,24 @@
                   {{_general.dateformat(subm.created_at)}}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <div *ngFor="let data of subm.data | keyvalue | filter:'':'key'">
+            <div *ngFor="let data of subm.data | keyvalue | filter:'':'key'" class="kb-subm-border">
               <div *ngIf="data.value.split else nosplit" class="kb-subm-group">
                 <span class="kb-subm-title"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}</span>
-                <div *ngFor="let split of data.value.split" class="kb-subm-group-data">
+                <div *ngFor="let split of data.value.split">
                   <div *ngIf="split.subsplit else nosubsplit">
-                    <div *ngFor="let subsplit of split.subsplit">
+                    <div *ngFor="let subsplit of split.subsplit" class="kb-subm-data">
                       <strong class="kb-subm-label">{{subsplit.placeholder}}:</strong>{{subsplit.value ? subsplit.value : '----'}}
                     </div>
                   </div>
                   <ng-template #nosubsplit>
-                    <strong class="kb-subm-label">{{split.placeholder}}:</strong>{{split.value ? split.value : '----'}}
+                    <div class="kb-subm-data">
+                      <strong class="kb-subm-label">{{split.placeholder}}:</strong>{{split.value ? split.value : '----'}}
+                    </div>
                   </ng-template>
                 </div>
               </div>
               <ng-template #nosplit>
-                <div class="kb-subm-group">
+                <div class="kb-subm-data">
                   <strong class="kb-subm-label"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}:</strong>{{data.value.value ? data.value.value : '----'}}
                 </div>
               </ng-template>
