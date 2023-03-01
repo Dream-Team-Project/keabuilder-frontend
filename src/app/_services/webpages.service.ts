@@ -106,9 +106,7 @@ export class WebpagesService {
   }
 
   pagevisibility(data:any):Observable<any> {
-    return this.http.post(this.pagevisibilityApi+this.uuid, {
-      data
-    }, httpOptions);
+    return this.http.post(this.pagevisibilityApi+this.uuid, data, httpOptions);
   }
 
   querystringmanage(data:any):Observable<any> {

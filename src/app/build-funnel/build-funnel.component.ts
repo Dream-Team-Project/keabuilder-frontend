@@ -170,7 +170,7 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
 
             this.funnelService.savefunneldb(this.form).subscribe({
                 next: data => {
-                    // console.log(data);
+                    console.log(data);
 
                     if(data.exist ==1){
                         this.searching = false;
@@ -178,6 +178,7 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
                      }else{
 
                         var dataobj = {website_id:data.data.uniqueid};
+                        console.log(dataobj);
                         this._file.createwebsitefolder(dataobj).subscribe(e=>{
                             console.log(e);
                         });
@@ -193,15 +194,18 @@ console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '
                           }
                           this._general._file.savePage(page).subscribe((event:any) => {
                             console.log(event);
-                          },error=>{console.log(error)});
+                          },error=>{
+                            console.log(error)
+                        });
+                       
 
-                        // this.websiteService.oncreatesubdomain(this.form.subdomain,data.uniqueid).subscribe({
-                        //     next: datanw => {
+                        this.websiteService.oncreatesubdomain(this.form.subdomain,data.data.uniqueid).subscribe({
+                            next: datanw => {
                             this.searching = false;
                             this._snackBar.open('Funnel Created Successfully!', 'OK');
                             this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
-                        //     }
-                        //   });
+                            }
+                          });
 
                      }
 

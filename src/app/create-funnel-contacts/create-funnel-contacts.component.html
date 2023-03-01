@@ -1,19 +1,27 @@
 <div id="kb-createfunnelcontacts">
   <!-- <app-funnel-wizard-nav></app-funnel-wizard-nav> -->
 
-    <div class="container-fluid loadEffect">
-        <div class="row whitefunnel pt-5 pb-5 ">
+    <div class="container-fluid">
+        <div class="row whitefunnel pt-5">
             <div class="col-md-12">
               <section class="users-list-wrapper" id='table-userslist'>
 
                 <div class="users-list-filter px-1">
                   <form class="container-fluid">
                     <div class="row border rounded py-2 mb-2">
-                      <div class="col-12 col-sm-6 col-lg-3">
+                      
+                      <div class="col-12 col-sm-6 col-lg-6">
+                        <mat-form-field  appearance="fill" class="w-100">
+                          <mat-label>Search Your Contacts</mat-label>
+                          <input matInput type="text" (keyup)="applyFilter($event)" id="offer-search" #searchinput  placeholder="Search By Name, Email, Sign up date...">
+                          <i class="fa fa-search"></i>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-12 col-sm-6 col-lg-2">
       
                         <mat-form-field appearance="fill" class="kb-form-field">
                           <mat-label>Showing Contacts for</mat-label>
-                          <mat-select name="showingcontacts" [(ngModel)]="showingcontacts">
+                          <mat-select name="showingcontacts" [(ngModel)]="showingcontacts" (ngModelChange)="applykbfilter()">
                             <mat-option value="7 DAY">Last 7 Days</mat-option>
                             <mat-option value="30 DAY">Last 30 Days</mat-option>
                             <mat-option value="2 MONTH">Last 2 Months</mat-option>
@@ -23,11 +31,11 @@
                         </mat-form-field>
       
                       </div>
-                      <div class="col-12 col-sm-6 col-lg-3">
+                      <div class="col-12 col-sm-6 col-lg-2">
       
                         <mat-form-field appearance="fill" class="kb-form-field">
                           <mat-label>Steps</mat-label>
-                          <mat-select name="steps" [(ngModel)]="selectedfunnelsteps">
+                          <mat-select name="steps" [(ngModel)]="selectedfunnelsteps" (ngModelChange)="applykbfilter()">
                             <!-- <mat-option value="all">All Funnel Steps</mat-option> -->
                             <mat-optgroup label="Funnel Steps">
                               <mat-option *ngFor="let funnelstep of funnelsteps" [value]="funnelstep.id">
@@ -38,11 +46,11 @@
                         </mat-form-field>
       
                       </div>
-                      <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
+                      <!-- <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
                         <button mat-raised-button color="primary" class="btn-block" (click)="applykbfilter()" ><i
                             class="far fa-check-circle"></i> Apply</button>
-                      </div>
-                      <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-center">
+                      </div> -->
+                      <div class="col-12 col-sm-6 col-lg-2 d-flex align-items-center">
                         <button type="reset" class="btn-block" mat-raised-button color="primary" (click)="exportexcel()" ><i
                             class="fas fa-download"></i> Download All Contacts</button>
                       </div>
@@ -56,12 +64,14 @@
         
         <div class="row whitefunnel">
             <div class="col-md-12">
-                <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
+
+                <!-- <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
                     <input type="text" (keyup)="applyFilter($event)" class="form-control" id="offer-search" #searchinput  placeholder="Search By Name, Email, Sign up date...">
                     <div class="form-control-position">
                         <i class="fab fa-searchengin"></i>                        
                     </div>
-                </fieldset>
+                </fieldset> -->
+
                 <button mat-raised-button class="mb-4" *ngIf="selecteddelete">Delete Selected <i class="far fa-trash-alt" aria-hidden="true"></i></button>
               <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" id="excel-table" matSort>

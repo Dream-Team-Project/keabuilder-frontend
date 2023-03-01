@@ -28,6 +28,7 @@ export class FunnelCheckoutComponent implements OnInit {
 
   checkoutstyle:any = {step1headline:'SHIPPING',step1subheadline:'Where Should We Ship It?',step1btntext:'Special Offer Click Here', step1btnsubtext:'', step1footertext:'* 100% Secure & Safe Payments *',step2headline:'YOUR INFO',step2subheadline:'Upgrade Now & Save!',step2btntext:'Buy Now', step2btnsubtext:'', step2footertext:'* 100% Secure & Safe Payments *'};
   user_id:any = '';
+  mydomain = '';
 
   constructor(
     private fb: FormBuilder, 
@@ -39,7 +40,6 @@ export class FunnelCheckoutComponent implements OnInit {
     @Inject(DOCUMENT) private _document: Document) { }
 
   ngOnInit(): void {
-
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.uniqueidstep = params.get('id');
     });
@@ -93,10 +93,17 @@ export class FunnelCheckoutComponent implements OnInit {
     var dataobj3 = {id: this.uniqueidstep};
     this.checkoutService.getnextstepurl(dataobj3).subscribe({
       next: data => { 
-        // console.log(data);
-        if(data?.data?.length!=0){
-          this.redirecturi = data.data;
+        console.log(data);
+        if(data?.path!=''){
+          this.redirecturi = data.path;
         }
+
+        if(data?.domain!='' && data?.domain!=null){
+          this.mydomain = 'https://'+data.domain;
+        }else{
+          this.mydomain = 'https://'+data.subdomain+'.keapages.com';
+        }
+
       }
     });
 
@@ -267,7 +274,7 @@ export class FunnelCheckoutComponent implements OnInit {
                 if(window.top!=null){
                   // window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
                   if(this.redirecturi!=''){
-                     window.top.location.href = '/'+this.redirecturi+"/#customerid="+data.customer.id+'?userid='+this.user_id; 
+                     window.top.location.href = this.mydomain = '/'+this.redirecturi+"/#customerid="+data.customer.id+'?userid='+this.user_id; 
                   }
                 }
 
