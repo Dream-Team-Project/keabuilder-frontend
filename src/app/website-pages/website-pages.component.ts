@@ -689,15 +689,6 @@ export class WebsitePagesComponent implements OnInit {
     this.showarchivemode = !this.showarchivemode;
   }
 
-  changevisibility(value:any){
-    this.searching = true;
-    var dt = {order:value, id:this.websiteid};
-    this.webpagesService.pagevisibility(dt).subscribe({
-      next: data => {
-        this.shortdata(data);
-      }
-    });
-  }
 
   archive_popup(dataobj:any){
     this.openSidebar();
@@ -727,6 +718,33 @@ export class WebsitePagesComponent implements OnInit {
       }
     });
   }
+
+  searchforms(search: any, filter: any, visibility:any) {
+    this.searching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+      visibility: visibility.value,
+      id:this.websiteid
+    }
+    // console.log(obj);
+    this.webpagesService.pagevisibility(obj).subscribe({
+      next: data => {
+        this.shortdata(data);
+      }
+    });
+  }
+
+  
+  // changevisibility(value:any){
+  //   this.searching = true;
+  //   var dt = {order:value, id:this.websiteid};
+  //   this.webpagesService.pagevisibility(dt).subscribe({
+  //     next: data => {
+  //       this.shortdata(data);
+  //     }
+  //   });
+  // }
 
   restoredeleteme(page:any,type:any){
  
