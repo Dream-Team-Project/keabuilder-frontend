@@ -68,6 +68,27 @@ export class FormSubmissionsComponent implements OnInit {
   showDetails(i:number) {
     this.submissions[i].data = this._general.decodeJSON(this.submissions[i].json);
     this.step = i;
+    // var temp:any = new Object();  
+    // this.submissions[i].data.forEach((sub:any)=>{
+    //   if(sub.name == 'select') temp[sub.label] = sub.value;
+    //   else if(sub.split && sub.name != 'select') {
+    //       var value:any = [];
+    //       sub.split?.forEach((spl:any)=>{
+    //       if(spl.type == 'checkbox' && spl.selected) {
+    //           value.push(spl.value);
+    //           temp[sub.label] = value.join(', ');
+    //       }
+    //       else if(spl.type == 'radio' && spl.selected) temp[sub.label] = spl.value;
+    //       else if(spl.subsplit) {
+    //         spl.subsplit?.forEach((subspl:any)=>{
+    //           temp[subspl.placeholder] = subspl.value;
+    //         })
+    //       }
+    //     })
+    //   } 
+    //   else temp[sub.label] = sub.value;
+    // })
+    // console.log(temp);
     // var originalData:any = [];
     // this.submissions[i].data.forEach((sub:any)=>{
     //   if(sub.split) {
@@ -75,23 +96,20 @@ export class FormSubmissionsComponent implements OnInit {
     //       if(spl.subsplit) {
     //         spl.subsplit?.forEach((subspl:any)=>{
     //           var temp:any = new Object();  
-    //           temp.label = subspl.placeholder,
-    //           temp.value = subspl.value
+    //           temp[subspl.placeholder] = subspl.value;
     //           originalData.push(temp);
     //         })
     //       }
     //       else {
     //         var temp:any = new Object();
-    //         temp.label = spl.placeholder,
-    //         temp.value = spl.value
+    //         temp[spl.placeholder] = spl.value;
     //         originalData.push(temp);
     //       }
     //     })
     //   } 
     //   else {
     //     var temp:any = new Object();
-    //     temp.label = sub.label,
-    //     temp.value = sub.value
+    //     temp[sub.label] = sub.value;
     //     originalData.push(temp);
     //   }
     // })
