@@ -71,17 +71,13 @@ export class NavigationComponent {
       let i = 0;
       var steps = data.data;
       this.funnels = data.data2;
-      if(data.data?.length>0){
+      if(steps?.length>0){
         this.funnels.forEach((fp:any)=>{
           let j = 0;
-          if(!fp.step_pages) fp.steps = [];
+          fp.steps = [];
           steps.forEach((s:any)=>{
-            if(fp.id == s.funnelid) {
-              fp.steps.push(s);
-            }
-            if(i == this.funnels.length-1 && j == steps.length-1) {
-              this.fetching.funnel = false;
-            }
+            if(fp.uniqueid == s.funnelid) fp.steps.push(s);
+            if(i == this.funnels.length-1 && j == steps.length-1) this.fetching.funnel = false;
             j++;
           })
             i++;
@@ -89,7 +85,6 @@ export class NavigationComponent {
       }else{
         this.fetching.funnel = false;
       }
-
     })
   }
 

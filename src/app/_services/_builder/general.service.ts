@@ -566,9 +566,7 @@ export class GeneralService {
       var cb = item.getAttribute('html-data');
       // item.removeAttribute('html-data');
       var doc = this.parser.parseFromString(cb, 'text/html');
-      console.log(doc);
       item.innerHTML = cb;
-      console.log(item);
     });
     this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;
   }
@@ -692,11 +690,9 @@ export class GeneralService {
       var steps = data.data;
       this.funnels = data.data2;
       this.funnels.forEach((fp:any)=>{
-        if(!fp.step_pages) fp.steps = [];
+        fp.steps = [];
         steps.forEach((s:any)=>{
-          if(fp.id == s.funnelid) {
-            fp.steps.push(s);
-          }
+          if(fp.uniqueid == s.funnelid) fp.steps.push(s);
         })
       })
     })
@@ -706,7 +702,6 @@ export class GeneralService {
     var dataobj = {stepid: this.webpage.uniqueid,name: '', price: '', priceoverride: '',type:'get'};
     this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
       this.step_products = data.data;
-      console.log(this.step_products);
     })
   }
 
