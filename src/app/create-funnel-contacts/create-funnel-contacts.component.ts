@@ -149,7 +149,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
     this.funnelService.getfunnelcontacts(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
-        // console.log(data); 
+        console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
