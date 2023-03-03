@@ -116,6 +116,7 @@ image-cropper {
     border: none;
     border-radius: 5px;
     padding: 6px 12px;
+    line-height: 20px;
 }
 
 ::ng-deep .mat-snack-bar-container {

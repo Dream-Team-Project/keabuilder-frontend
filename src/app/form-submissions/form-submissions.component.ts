@@ -67,8 +67,35 @@ export class FormSubmissionsComponent implements OnInit {
 
   showDetails(i:number) {
     this.submissions[i].data = this._general.decodeJSON(this.submissions[i].json);
-    console.log(this.submissions[i].data);
     this.step = i;
+    // var originalData:any = [];
+    // this.submissions[i].data.forEach((sub:any)=>{
+    //   if(sub.split) {
+    //     sub.split?.forEach((spl:any)=>{
+    //       if(spl.subsplit) {
+    //         spl.subsplit?.forEach((subspl:any)=>{
+    //           var temp:any = new Object();  
+    //           temp.label = subspl.placeholder,
+    //           temp.value = subspl.value
+    //           originalData.push(temp);
+    //         })
+    //       }
+    //       else {
+    //         var temp:any = new Object();
+    //         temp.label = spl.placeholder,
+    //         temp.value = spl.value
+    //         originalData.push(temp);
+    //       }
+    //     })
+    //   } 
+    //   else {
+    //     var temp:any = new Object();
+    //     temp.label = sub.label,
+    //     temp.value = sub.value
+    //     originalData.push(temp);
+    //   }
+    // })
+    // console.log(originalData);
   }
 
   searchSubmissions(search: any, filter: any) {

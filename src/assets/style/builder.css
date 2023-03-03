@@ -233,6 +233,11 @@ div.kb-element-content img {
     max-width: 100%;
 }
 
+div.kb-element-content iframe, div.kb-element-content video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 div.kb-row div.kb-element {
     width: 100%;
 }

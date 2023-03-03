@@ -132,17 +132,19 @@ export class BuilderTopbarComponent implements OnInit {
       }
       if(e.content.name == 'button') {
         let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}];
-        let funnelBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}, 
-        {name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}]
-        if(this._general.target.type == 'funnel') types = types.concat(funnelBtn);
+        let upsBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}];
+        let dwnsBtn = [{name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}];
+        
+        if(this._general.target.type == 'funnel') {
+          if(this._general.webpage.funneltype == 'upsell') types = types.concat(upsBtn);
+          if(this._general.webpage.funneltype == 'downsell') types = types.concat(dwnsBtn);
+        }
         for(var i=0; i<types.length; i++) {
           var obj = JSON.parse(JSON.stringify(e));
           obj.content.type = types[i];
-          if(types[i].name == 'upsell' || types[i].name == 'downsell') {
-              obj.content.btntype = types[i].name;
-              obj.content.text = types[i].name[0].toUpperCase() + types[i].name.slice(1) + ' Button';
-              obj.content.productid = '';
-          }
+          obj.content.btntype = types[i].name;
+          obj.content.text = types[i].name[0].toUpperCase() + types[i].name.slice(1) + ' Button';
+          if(types[i].name == 'upsell' || types[i].name == 'downsell') obj.content.productid = '';
           if(types[i].subtext) obj.content.subtext = 'Extra Text';
           this._element.default.buttons.push(obj);
         }        

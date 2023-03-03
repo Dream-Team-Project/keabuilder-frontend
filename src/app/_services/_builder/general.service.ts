@@ -706,6 +706,7 @@ export class GeneralService {
     var dataobj = {stepid: this.webpage.uniqueid,name: '', price: '', priceoverride: '',type:'get'};
     this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
       this.step_products = data.data;
+      console.log(this.step_products);
     })
   }
 

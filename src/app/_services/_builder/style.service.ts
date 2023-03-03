@@ -58,6 +58,15 @@ export class StyleService {
   image_objectfit = 'fill';
   image_objectfit_types = ['fill', 'cover', 'contain', 'scale-down', 'none'];
   // image
+  // video
+  video_type:string = 'link';
+  video_iframe:string = '';
+  video_src:string = '';
+  video_autoplay:boolean = false;
+  video_muted:boolean = false;
+  video_loop:boolean = false;
+  video_controls:boolean = false;
+  // video
   // button
   button_text = 'Read More';
   button_subtext = 'Sub Text';
@@ -887,6 +896,15 @@ export class StyleService {
         this._general.selectedBlock.content.src = this.image_src;
         this.setElementStyle(this.imageStyling());
       }
+      else if (this._general.selectedBlock.content.name == 'video') {
+        this._general.selectedBlock.content.iframe = this.video_iframe;
+        this._general.selectedBlock.content.src = this.video_src;
+        this._general.selectedBlock.content.autoplay = this.video_autoplay;
+        this._general.selectedBlock.content.muted = this.video_muted;
+        this._general.selectedBlock.content.loop = this.video_loop;
+        this._general.selectedBlock.content.controls = this.video_controls;
+        this.setElementStyle(this.currentStyling());
+      }
       else if(this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
         this.setElementStyle(this.currentStyling());
       }
@@ -1167,6 +1185,14 @@ export class StyleService {
     this.image_src = '';
     this.image_objectfit = 'fill';
     // image
+    // video
+    this.video_iframe = '';
+    this.video_src = '';
+    this.video_autoplay = false;
+    this.video_muted = false;
+    this.video_loop = false;
+    this.video_controls = false;
+    // video
     // button
     this.button_text = 'Read More';
     this.button_subtext = 'Extra Text';
@@ -1598,6 +1624,14 @@ export class StyleService {
     if (element.name == 'image') {
       this.image_src = element.src;
       this.image_objectfit = obj['object-fit'];
+    }
+    if (element.name == 'video') {
+      this.video_iframe = element.iframe;
+      this.video_src = element.src;
+      this.video_autoplay = element.autoplay;
+      this.video_muted = element.muted;
+      this.video_loop = element.loop;
+      this.video_controls = element.controls;
     }
     else if (element.name == 'button' && !element.form) {
       this._general.getAllWebPages();

@@ -204,6 +204,37 @@
                                                             [class.dummyImg]="!element.content.src">
                                                     </ng-template>
                                                 </div>
+                                                <div *ngSwitchCase="'video'" [attr.data-name]="element.content.name" class="kb-element-content">
+                                                    <div [ngSwitch]="_style.video_type">
+                                                        <div *ngSwitchCase="'link'">
+                                                            <video *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showVideo" 
+                                                            [autoplay]="_style.video_autoplay"
+                                                            [muted]="_style.video_muted"
+                                                            [loop]="_style.video_loop"
+                                                            [controls]="_style.video_controls"
+                                                            [ngStyle]="_style.currentStyling()">
+                                                                <source [src]="_style.video_src" type="video/mp4">
+                                                                Video is not supported
+                                                              </video>
+                                                            <ng-template #showVideo>
+                                                                <video [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                                [autoplay]="element.content.autoplay"
+                                                                [muted]="element.content.muted"
+                                                                [loop]="element.content.loop"
+                                                                [controls]="element.content.controls">
+                                                                    <source [src]="element.content.src" type="video/mp4">
+                                                                </video>
+                                                            </ng-template>
+                                                        </div>
+                                                        <div *ngSwitchCase="'iframe'">
+                                                            <div *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showVideo" [innerHTML]="_style.video_iframe | safeHtml" [ngStyle]="_style.currentStyling()">
+                                                            </div>
+                                                            <ng-template #showVideo>
+                                                                <div [innerHTML]="element.content.iframe | safeHtml" [ngStyle]="_style.getBlockStyle(element.content.style)"></div>
+                                                            </ng-template>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div *ngSwitchCase="'button'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <a *ngIf="_general.selectedBlock.id == element.id && _general.selectedBlock.type == element.type else showBtn"
                                                         [ngStyle]="_style.buttonStyling()"
