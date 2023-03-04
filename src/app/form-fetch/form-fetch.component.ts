@@ -48,6 +48,7 @@ export class FormFetchComponent implements OnInit {
   setFormValidation(ff:any) {
     ff.forEach((e:any)=>{
       if(e.input) {
+        if(e.name != 'split-text' && e.name != 'name') e.value = e.name == 'select' ? 'none' : '';
         this._form.inpAns(e);
         e.split?.forEach((spl:any)=>{
           this._form.inpAns(spl);

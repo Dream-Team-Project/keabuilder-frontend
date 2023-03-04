@@ -70,50 +70,19 @@ export class FormSubmissionsComponent implements OnInit {
     this.step = i;
     // var temp:any = new Object();  
     // this.submissions[i].data.forEach((sub:any)=>{
-    //   if(sub.name == 'select') temp[sub.label] = sub.value;
-    //   else if(sub.split && sub.name != 'select') {
-    //       var value:any = [];
+    //   if(sub.split && sub.name != 'select' && sub.name != 'checkbox' && sub.name != 'radio') {
     //       sub.split?.forEach((spl:any)=>{
-    //       if(spl.type == 'checkbox' && spl.selected) {
-    //           value.push(spl.value);
-    //           temp[sub.label] = value.join(', ');
-    //       }
-    //       else if(spl.type == 'radio' && spl.selected) temp[sub.label] = spl.value;
-    //       else if(spl.subsplit) {
+    //       if(spl.subsplit) {
     //         spl.subsplit?.forEach((subspl:any)=>{
     //           temp[subspl.placeholder] = subspl.value;
     //         })
     //       }
+    //       else temp[spl.placeholder] = spl.value;
     //     })
     //   } 
     //   else temp[sub.label] = sub.value;
     // })
     // console.log(temp);
-    // var originalData:any = [];
-    // this.submissions[i].data.forEach((sub:any)=>{
-    //   if(sub.split) {
-    //     sub.split?.forEach((spl:any)=>{
-    //       if(spl.subsplit) {
-    //         spl.subsplit?.forEach((subspl:any)=>{
-    //           var temp:any = new Object();  
-    //           temp[subspl.placeholder] = subspl.value;
-    //           originalData.push(temp);
-    //         })
-    //       }
-    //       else {
-    //         var temp:any = new Object();
-    //         temp[spl.placeholder] = spl.value;
-    //         originalData.push(temp);
-    //       }
-    //     })
-    //   } 
-    //   else {
-    //     var temp:any = new Object();
-    //     temp[sub.label] = sub.value;
-    //     originalData.push(temp);
-    //   }
-    // })
-    // console.log(originalData);
   }
 
   searchSubmissions(search: any, filter: any) {

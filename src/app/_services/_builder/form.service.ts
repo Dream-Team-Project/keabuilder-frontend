@@ -62,14 +62,14 @@ export class FormService {
     { name: 'short-text', label: 'Short Text', type: 'text', placeholder: 'Short Text', iconCls: 'fas fa-text-width', value: '', required: false, input: true },
     { name: 'long-text', label: 'Long Text', type: 'textarea', placeholder: 'Long Text', iconCls: 'fas fa-text-height', value: '', required: false, input: true },
     {
-      name: 'checkbox', label: 'Multiple Choice', iconCls: 'far fa-check-square', required: false, input: true, split: [
+      name: 'checkbox', label: 'Multiple Choice', iconCls: 'far fa-check-square', value: '', required: false, input: true, split: [
         { value: 'First option', type: 'checkbox', selected: false},
         { value: 'Second option', type: 'checkbox', selected: false },
         { value: 'Third option', type: 'checkbox', selected: false },
       ]
     },
     {
-      name: 'radio', label: 'Single Choice', iconCls: 'far fa-dot-circle', required: false, input: true, split: [
+      name: 'radio', label: 'Single Choice', iconCls: 'far fa-dot-circle', value: '', required: false, input: true, split: [
         { value: 'First option', type: 'radio', selected: false },
         { value: 'Second option', type: 'radio', selected: false },
         { value: 'Third option', type: 'radio', selected: false },
@@ -195,6 +195,13 @@ export class FormService {
       value = true;
     }
     fe.split[i].selected = value;
+    if(fe.name == 'checkbox') {
+        var tempVal = fe.split.filter((v:any)=>{
+          if(v.selected) return v.value;
+        });
+        fe.value = tempVal.map((v:any)=> v.value).join(', ');
+    }
+    else fe.value = fe.split[i].value;
     this.inpAns(fe);
   }
 
@@ -212,10 +219,6 @@ export class FormService {
         var ans:any = ansVal[i];
         if(ans.required) {
           if(ans.name == 'select') ans.error = (ans.value === 'none');
-          else if(ans.name == 'radio' || ans.name == 'checkbox') {
-            var temp = JSON.stringify(ans);
-            ans.error = (temp.search(/"selected":true/g) == -1);
-          }
           else {
             var temp = JSON.stringify(ans);
             if(temp.search(/"type":"select"/g) != -1) ans.error = (temp.search(/"value":"none"/g) != -1);
