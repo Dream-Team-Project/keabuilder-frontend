@@ -709,7 +709,7 @@ div.kb-module-setting {
 .kb-selected-color {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
     margin: auto;
     width: 50%;
     height: 100%;
@@ -882,7 +882,7 @@ span.kb-ispan-add i {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 

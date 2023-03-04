@@ -70,6 +70,10 @@ image-cropper {
     background-color: var(--opacity-primary);
 }
 
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-content {
+    color: var(--primary-color);
+}
+
 ::ng-deep .mat-tooltip {
     position: relative;
     font-size: 13px;
