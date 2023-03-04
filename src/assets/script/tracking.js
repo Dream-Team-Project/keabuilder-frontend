@@ -19,14 +19,14 @@ window.onload = function(a){
 
             if(custmid!='' && userid!='' && productid!=''){
 
-                const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
+                const response = await fetch("http://localhost:4200/api/paymentupsell", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(itemscustm ),
                 });
                 var getresponse = await response.json();
                 
-                // console.log(getresponse);
+                console.log(getresponse);
                 var gopath = getresponse.path;
                 if(getresponse.success){
                     alert('Payment Successful!');
