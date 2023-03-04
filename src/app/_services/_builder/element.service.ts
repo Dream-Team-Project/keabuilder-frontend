@@ -38,15 +38,15 @@ export class ElementService {
     image: { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
     // image
     // video
-  //   video: { content: { name: 'video', 
-  //   type: 'video',
-  //   iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/video.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
-  //   src: 'http://localhost:4200/assets/videos/video.mp4',
-  //   autoplay: false,
-  //   muted: false,
-  //   loop: false,
-  //   controls: false
-  // }, iconCls: 'fas fa-video' },
+    // video: { content: { name: 'video', 
+    // type: 'video',
+    // iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/video.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+    // src: 'http://localhost:4200/assets/videos/video.mp4',
+    // autoplay: false,
+    // muted: false,
+    // loop: false,
+    // controls: false
+    // }, iconCls: 'fas fa-video' },
     // video
     // button
     button: { content: { name: 'button', size: 14, btntype: 'regular', text: 'Read More', subtext: '', subfont_size:'80%', link: '#no-link', target: '_self' }, iconCls: 'fas fa-toggle-off' },

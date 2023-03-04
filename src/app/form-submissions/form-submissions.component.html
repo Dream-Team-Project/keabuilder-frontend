@@ -46,7 +46,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <div *ngFor="let data of subm.data | keyvalue | filter:'':'key'" class="kb-subm-border">
-              <div *ngIf="data.value.split else nosplit" class="kb-subm-group">
+              <div *ngIf="data.value.split && data.value.name != 'select' && data.value.name != 'checkbox' && data.value.name != 'radio'  else nosplit" class="kb-subm-group">
                 <span class="kb-subm-title"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}</span>
                 <div *ngFor="let split of data.value.split">
                   <div *ngIf="split.subsplit else nosubsplit">
@@ -63,7 +63,8 @@
               </div>
               <ng-template #nosplit>
                 <div class="kb-subm-data">
-                  <strong class="kb-subm-label"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}:</strong>{{data.value.value ? data.value.value : '----'}}
+                  <strong class="kb-subm-label"><i [class]="icons[data.value.name]" class="kb-subm-icon"></i>{{data.value.label}}:</strong>
+                  {{data.value.value ? data.value.value : '----'}}
                 </div>
               </ng-template>
             </div>

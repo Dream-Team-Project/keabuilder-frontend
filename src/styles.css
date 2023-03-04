@@ -120,7 +120,8 @@ main {
   transition: 0.2s ease;
 }
 
-.mat-form-field.mat-focused i, .mat-form-field.mat-focused .mat-form-field-label, .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+.mat-form-field.mat-focused i, .mat-form-field.mat-focused .mat-form-field-label, .mat-primary .mat-option.mat-selected:not(.mat-option-disabled),
+.mat-form-field-appearance-outline.mat-focused.mat-primary .mat-form-field-outline-thick {
   color: var(--primary-color);
 }
 
