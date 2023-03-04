@@ -244,7 +244,8 @@ export class FunnelCheckoutComponent implements OnInit {
 
     });
     // console.log(this.selectedproduct.toString());
-
+    var storename = this.checkoutstyle.step2btntext;
+    this.checkoutstyle.step2btntext = 'Submitting...';
     setTimeout(() => {
       if(this.stripeForm.status=='VALID' && this.totalprice!=0){
         this.checkoutstyle.step2btntext = 'Processing...';
@@ -289,6 +290,7 @@ export class FunnelCheckoutComponent implements OnInit {
         });
 
       }else{
+        this.checkoutstyle.step2btntext =storename;
         this.someerror = 'something went wrong please try again!'
       }
 
