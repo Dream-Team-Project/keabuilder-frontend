@@ -240,20 +240,28 @@
                                         </div>
                                     </div>
                                     <div *ngIf="searchingDeep('Content Video Autoplay')" class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Autoplay</div>
-                                        <mat-slide-toggle [matTooltip]="_style.hide.desktop ? 'Enabled' : 'Disabled'"
-                                        matTooltipPosition="above" [(ngModel)]="_style.hide.desktop">Desktop
-                                        </mat-slide-toggle>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.video_src"
-                                                [style.textTransform]="'lowercase'">
-                                        </div>
-                                    </div>
-                                    <div *ngIf="searchingDeep('Content Video Controls')" class="kb-inner-tab-component">
-                                        <div class="kb-tab-head">Autoplay</div>
-                                        <div class="kb-tab-content kb-inp-left">
-                                            <input type="text" [(ngModel)]="_style.video_src"
-                                                [style.textTransform]="'lowercase'">
+                                        <div class="kb-tab-head">Extras</div>
+                                        <div class="kb-tab-content kb-resp-ask">
+                                            <div class="kb-resp-ask-inner">
+                                                <mat-slide-toggle
+                                                    [matTooltip]="_style.video_autoplay ? 'Enabled' : 'Disabled'"
+                                                    matTooltipPosition="above" [(ngModel)]="_style.video_autoplay">Autoplay
+                                                </mat-slide-toggle>
+                                                <mat-slide-toggle
+                                                    [matTooltip]="_style.video_muted ? 'Enabled' : 'Disabled'"
+                                                    matTooltipPosition="below" [(ngModel)]="_style.video_muted">Muted
+                                                </mat-slide-toggle>
+                                            </div>
+                                            <div class="kb-resp-ask-inner">
+                                                <mat-slide-toggle
+                                                    [matTooltip]="_style.video_loop ? 'Enabled' : 'Disabled'"
+                                                    matTooltipPosition="above" [(ngModel)]="_style.video_loop">Loop
+                                                </mat-slide-toggle>
+                                                <mat-slide-toggle
+                                                    [matTooltip]="_style.video_controls ? 'Enabled' : 'Disabled'"
+                                                    matTooltipPosition="below" [(ngModel)]="_style.video_controls">Controls
+                                                </mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

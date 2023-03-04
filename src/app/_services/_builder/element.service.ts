@@ -101,7 +101,8 @@ export class ElementService {
 
   addElement(element: any) {
     if(element.btntype == 'upsell' || element.btntype == 'downsell') {
-      element.productid = this._general.step_products[0].uniqueid;
+      var proId = this._general.step_products[0]; 
+      element.productid = proId ? proId.uniqueid : '';
     }
     if(element.name == 'menu') {
       if(element?.itemset) delete element?.itemset;
