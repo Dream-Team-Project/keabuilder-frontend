@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild,TemplateRef } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -40,6 +40,7 @@ export class CreateFunnelContactsComponent implements OnInit {
   showingcontacts = '7 DAY';
   selectedfunnelsteps:any = 'all';
   selecteddelete = false;
+  contactname = '';
 
   constructor(private funnelService: FunnelService,
     private router: Router,
@@ -162,9 +163,9 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   }
 
-  deletecontact(value:any){
+  deletecontact(){
     // console.log(value);
-
+    var value = '';
     this.funnelService.deletefunnelcontacts(value).subscribe({
       next: data => {
         // console.log(data.data); 
@@ -180,4 +181,18 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   }
 
+  openDialog2(templateRef: TemplateRef<any>, page:any): void {
+
+    // if(type=='move'){
+    //   this.actionname = 'Move';
+    // }else if(type=='copymove'){
+    //   this.actionname = 'Copy & Move';
+    // }else{
+    //   this.actionname = '';
+    // }
+
+    // this.selfunnelstep = page;
+    // this.dialog.open(templateRef);
+
+  }
 }
