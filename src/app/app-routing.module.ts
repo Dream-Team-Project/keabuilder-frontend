@@ -103,7 +103,7 @@ const routes: Routes = [
       {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
       {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
       {path: 'details/:website_id', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
-      {path: 'marketplace', component: WebsiteMarketplaceComponent, canActivate: [AuthGuard]},
+      {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
       {path: ':website_id', component: WebsitePagesComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
@@ -141,7 +141,7 @@ const routes: Routes = [
 
   { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
-  { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+  // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
 
   { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -194,21 +194,21 @@ const routes: Routes = [
 
   // Membership
 
-  // { path: 'membership', component: MembershipComponent,
-  //   children:[
-  //     { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: LessonComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
-  //     { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
-  //     { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-  //     { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-  //     { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
-  //     { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-  //     { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
-  //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-  // ],
-  //  canActivate: [AuthGuard] },
+  { path: 'membership', component: MembershipComponent,
+    children:[
+      { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: LessonComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
+      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
+      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+      { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+      { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+  ],
+   canActivate: [AuthGuard] },
 
 
 

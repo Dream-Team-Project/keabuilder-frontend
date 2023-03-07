@@ -15,7 +15,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 
 export class CoursesComponent implements OnInit {
 
-  allcoursesarr:any[] = [];
+  courses:any[] = [];
   sidebar = {
     open: false,
     anim: {open: false, close: false, time: 500},
@@ -38,6 +38,8 @@ export class CoursesComponent implements OnInit {
   selectedcourse = false;
   showmyselected = [];
   showquickoffer:any = [];
+  fetching:boolean = true;
+  toggleview:boolean = true;
 
 
   constructor(private _course: CourseService,
@@ -45,71 +47,34 @@ export class CoursesComponent implements OnInit {
              private _snackbar: MatSnackBar,  
              private _file: FileUploadService,
              private _snackBar: MatSnackBar,
-             public _general: GeneralService,) { }
+             public _general: GeneralService,) {
+              this.toggleview = _general.getStorage('course_toggle');
+              }
 
   ngOnInit(): void {
-    this._course.getalloffers().subscribe({
-      next: data => {
+    // this._course.getalloffers().subscribe({
+    //   next: data => {
+    //    data.data.forEach((element: any) => {
+    //       var genobj = {id:element.uniqueid,text:element.title};
+    //       this.offersList.push(genobj);
+    //       console.log(this.offersList);
+    //    });
 
-        // console.log(data);
-        console.log('--data');  
-
-       data.data.forEach((element: any) => {
-          var genobj = {id:element.uniqueid,text:element.title};
-          this.offersList.push(genobj);
-          console.log(this.offersList);
-       });
-
-      }
-    });
+    //   }
+    // });
     this.allCourses(false);
-    this.resetCourseData();
-  }
-
-  resetCourseData() {
-    this.course = {uniqueid: '', title: '', url:'', description: '', thumbnail: '', offers: ''};
-    this.offersToAdd = [];
-    this.thumbnail = {name: '', path: '', type: ''};
-    this.update = false;
   }
 
   allCourses(reset:boolean) {
     this._course.all().subscribe((res:any)=>{
       console.log(res.data);
-      res.data.forEach((element:any) => {
-          element.members = 0;
-      });
-      this.allcoursesarr = res.data;
+      // this.courses = res.data;
+      for(let i = 0 ; i < 9; i++) this.courses = this.courses.concat(res.data);
       if(reset) this.closeSidebar();
     }); 
   }
 
-  changeselectcourse(event:any){
-      this.selectedcourse = false;
-  }
-
-  duplicateCourse(course:any) {
-    this.course = course;
-    this.createCourse();
-  }
-
-  toggleStatus(course:any, status:number) {
-    course.publish_status = status;
-    this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course has been '+(status == 1 ? 'published' : 'draft'), 'OK');
-    });
-  }
-
-  updateTitle(course:any) {
-    if(this.prevTitle != course.title) {
-      this._course.update(course).subscribe((res:any)=>{
-        this._snackbar.open('Course title updated', 'OK');
-      });
-    }
-  }
-
   createCourse() {
-
     if(this.course.title!=''){
       this.course.uniqueid = Math.random().toString(20).slice(2);
       if(this.thumbnail.type) {
@@ -123,26 +88,18 @@ export class CoursesComponent implements OnInit {
         this.allCourses(true);
       })
     }
-
   }
 
   updateCourse() {
-
     if(this.thumbnail.type) {
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
     }
-
-    console.log(this.course.offers);
-
     if(this.offers.value!=null){
       // this.course.offers = this.offersToAdd.join(',');
       this.course.offers = this.offers.value.join(',');
     }
-
-    console.log(this.course);
     this._course.update(this.course).subscribe((res:any)=>{
-      console.log(res);
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
       this._image.timeStamp = (new Date()).getTime();
       this.allCourses(true);
@@ -177,12 +134,10 @@ export class CoursesComponent implements OnInit {
     this.showmyselected  = [];
     var arselmult:any = [];
     this.offers.setValue(arselmult); 
-
     this.sidebar.anim.close = true;
     setTimeout((e:any)=>{
       this.sidebar.anim.close = false;
       this.sidebar.open = false;
-      this.resetCourseData();
     },this.sidebar.animtime)
   }
 
@@ -254,5 +209,28 @@ export class CoursesComponent implements OnInit {
     this.firstquickedit = false;
   }
 
+
+  searchCourses(search: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+    }
+    this._file.searchformquery(obj).subscribe((resp:any)=>{
+      this.adjustdata(resp.data);
+    });
+  }
+
+  adjustdata(data:any){
+    // this.forms = [];
+    // this.nodata = data.length == 0;
+    // this.forms = data;
+    this.fetching = false;
+  }
+
+  toggleView() {
+    this.toggleview = !this.toggleview; 
+    this._general.setStorage('course_toggle',this.toggleview);
+  }
 
 }

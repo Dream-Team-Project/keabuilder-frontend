@@ -225,7 +225,7 @@ export class FormsComponent implements OnInit {
     });
   }
 
-  searchforms(search: any, filter: any) {
+  searchForms(search: any, filter: any) {
     this.fetching = true;
     var obj = {
       search: search.value,

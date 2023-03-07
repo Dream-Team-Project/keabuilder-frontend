@@ -10,6 +10,41 @@ import { FileUploadService } from '../_services/file-upload.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class PagePreviewComponent implements OnInit {
+  trackJs:string=`// product code
+  document.querySelectorAll('.kb-product-btn').forEach(function(b){
+      b.addEventListener("click", handleSubmition);
+  });
+  async function handleSubmition(e) {
+      var producttype = e.target.getAttribute('kb-btn-type')==null ? e.target.parentElement.getAttribute('kb-btn-type') :e.target.getAttribute('kb-btn-type');
+      if(producttype=='upsell' || producttype=='downsell'){
+          e.preventDefault();
+          var productid = e.target.getAttribute('kb-product-id')==null ? e.target.parentElement.getAttribute('kb-product-id') :e.target.getAttribute('kb-product-id');
+          var custmid = window.location.hash.split('?')[0]?.split('=')[0]=='#customerid'?window.location.hash.split('?')[0]?.split('=')[1]:'';
+          var userid = window.location.hash.split('?')[1]?.split('=')[0]=='userid'?window.location.hash.split('?')[1]?.split('=')[1]:'';
+          if(custmid && userid && productid) {
+              var itemscustm = { customerid: custmid, user_id:userid,productid:productid };
+              const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(itemscustm ),
+              });
+              var getresponse = await response.json();
+              var gopath = getresponse.path;
+              if(getresponse.success){
+                  alert('Payment Successful!');
+                  if(gopath!='') window.location.href = '/'+gopath+'/'+'#customerid='+custmid+'?userid='+userid;
+              }
+              else alert('Something Went Wrong!');
+          }
+      }
+  }
+  // product code
+  // video muted
+  document.querySelectorAll('.kb-video-muted').forEach(item=>{
+      item.muted = true;
+      item.classList.remove('kb-video-muted');
+  });
+  // video muted`
   html:any;
   style:any = 'background-color: #2e2e2e; width:100%; height:100%; justify-content:center; align-items:center; display:flex;';
   loader = `<svg style="width: 100px; height: 100px; background-color: #dea641;" version="1.1" id="L6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"> <rect fill="none" stroke="#fff" stroke-width="4" x="25" y="25" width="50" height="50"> <animateTransform attributeName="transform" dur="0.5s" from="0 50 50" to="180 50 50" type="rotate" id="strokeBox" attributeType="XML" begin="rectBox.end"></animateTransform> </rect> <rect x="27" y="27" fill="#fff" width="46" height="50"> <animate attributeName="height" dur="1.3s" attributeType="XML" from="50" to="0" id="rectBox" fill="freeze" begin="0s;strokeBox.end"></animate> </rect> </svg>`;
@@ -43,15 +78,7 @@ export class PagePreviewComponent implements OnInit {
           document.body.innerHTML = data.html.body.innerHTML;
           this.html.removeAttribute('style');
           var script = document.createElement('SCRIPT');
-          script.innerHTML = `
-          document.querySelectorAll('iframe').forEach((iframe)=>{
-            iframe.onload = function($event) {
-              var target = $event.target;
-              setTimeout((e)=>{
-                target.height = target.contentWindow.document.documentElement.scrollHeight+'px';
-              }, 100)
-            }
-          })`;
+          script.innerHTML = this.trackJs;
           document.head.appendChild(script);
         }, 1000);
       })

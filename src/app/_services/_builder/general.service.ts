@@ -634,6 +634,9 @@ export class GeneralService {
     else if(ele.content.name == 'menu') {
       pseudoEle = 'ul';
     }
+    else if(ele.content.name == 'video') {
+      pseudoEle = ele.type == 'video' ? 'video' : '> div';
+    }
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',
