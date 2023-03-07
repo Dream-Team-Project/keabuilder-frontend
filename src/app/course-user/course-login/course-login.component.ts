@@ -47,7 +47,7 @@ export class CourseUserCourseLoginComponent implements OnInit {
             this.findfalseinfo = false;
             var getassigncourse:any = [];
 
-            var splt = data.data[0].courseassign;
+            var splt = data.data[0].course_assign;
             if(splt!=null){
               getassigncourse = splt.split(',');
             }
@@ -65,7 +65,7 @@ export class CourseUserCourseLoginComponent implements OnInit {
 
             var genrtname = firstletter+''+lastletter;
 
-            var loginobj:any = {isloggedIn:true, courseassign:getassigncourse, username:genrtname};
+            var loginobj:any = {isloggedIn:true, course_assign:getassigncourse, username:genrtname};
             localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
             this.router.navigate(['/course/dashboard'],{relativeTo: this.route});
 

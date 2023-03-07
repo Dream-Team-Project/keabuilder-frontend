@@ -67,8 +67,7 @@
           <button mat-raised-button color="primary" class="mt-2" (click)="onformSubmit()"> Create <i
               class="fas fa-plus"></i></button>
         </ng-template>
-        <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
-
+        <!-- <img src="/assets/images/website/website1.png" class="img-fluid" alt=""> -->
       </div>
     </div>
   </div>
@@ -80,12 +79,12 @@
       <div class="col-md-8">
         <mat-form-field appearance="fill" class="col-8 pr-2">
           <mat-label>Search Forms</mat-label>
-          <input matInput #searchInp type="text" (input)="searchforms(searchInp, filterInp)" placeholder="Search Form Name">
-          <i class="fa fa-search"></i>
+          <input matInput #searchInp type="text" (input)="searchForms(searchInp, filterInp)" placeholder="Search Form Name">
+          <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-4">
           <mat-label>Sort By</mat-label>
-          <mat-select #filterInp name="kbfilter" (valueChange)="searchforms(searchInp, filterInp)">
+          <mat-select #filterInp name="kbfilter" (valueChange)="searchForms(searchInp, filterInp)">
             <mat-option [value]="'name ASC'">ASC By Name</mat-option>
             <mat-option [value]="'name DESC'">DESC By Name</mat-option>
             <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>

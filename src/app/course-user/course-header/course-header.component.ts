@@ -24,8 +24,8 @@ export class CourseUserCourseHeaderComponent implements OnInit {
       if(cnvrtobj.username!=''){
         this.shortname = cnvrtobj.username;
       }
-      console.log(cnvrtobj.courseassign);
-      if(cnvrtobj.courseassign=='all'){ 
+      console.log(cnvrtobj.course_assign);
+      if(cnvrtobj.course_assign=='all'){ 
           this.adminlogged = false;
       }else{
         this.adminlogged = true;

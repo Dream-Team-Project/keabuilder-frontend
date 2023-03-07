@@ -65,7 +65,7 @@ export class StyleService {
   video_autoplay:boolean = false;
   video_muted:boolean = false;
   video_loop:boolean = false;
-  video_controls:boolean = false;
+  video_controls:boolean = true;
   // video
   // button
   button_text = 'Read More';
@@ -1191,7 +1191,7 @@ export class StyleService {
     this.video_autoplay = false;
     this.video_muted = false;
     this.video_loop = false;
-    this.video_controls = false;
+    this.video_controls = true;
     // video
     // button
     this.button_text = 'Read More';

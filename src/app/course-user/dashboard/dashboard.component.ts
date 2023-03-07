@@ -24,7 +24,7 @@ export class CourseUserDashboardComponent implements OnInit {
       this.router.navigate(['/course/login'],{relativeTo: this.route});
     }else{
       var cnvrtobj = JSON.parse(atob(courselogincheck));
-      this.userselectedcourse = cnvrtobj.courseassign;
+      this.userselectedcourse = cnvrtobj.course_assign;
     }
 
     if(this.userselectedcourse!='all'){

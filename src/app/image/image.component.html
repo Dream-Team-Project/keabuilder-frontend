@@ -59,7 +59,7 @@
                 <div class="kb-img-filter">
                     <mat-form-field appearance="fill" class="kb-img-search">
                         <mat-label>Search image by name</mat-label>
-                        <i class="fa fa-search"></i>
+                        <i class="fa-solid fa-magnifying-glass"></i>
                         <input matInput type="text" #searchText>
                         <button *ngIf="searchText.value" color="primary" matSuffix mat-icon-button aria-label="Clear" (click)="searchText.value=''">
                         <mat-icon>close</mat-icon>
@@ -105,9 +105,9 @@
                             <button mat-button (click)="_image.flipVertical()" matTooltip="Flip vertical"
                                 matTooltipPosition="above"><i class="fa fa-redo"></i></button>
                             <button mat-button (click)="_image.zoomOut()" matTooltip="Zoom Out"
-                                matTooltipPosition="above"><i class="fa fa-search-minus"></i></button>
+                                matTooltipPosition="above"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
                             <button mat-button (click)="_image.zoomIn()" matTooltip="Zoom In"
-                                matTooltipPosition="above"><i class="fa fa-search-plus"></i></button>
+                                matTooltipPosition="above"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
                             <mat-slide-toggle [(ngModel)]="_image.aspRatio.toggle"
                                 [disabled]="!_image.aspRatio.w || !_image.aspRatio.h">Aspect Ratio
                             </mat-slide-toggle>

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-
+  <!-- sidebar -->
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
 
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
@@ -48,7 +48,7 @@
           </mat-select>
         </mat-form-field> -->
 
-        <mat-form-field class="kb-full-width" appearance="fill" >
+        <!-- <mat-form-field class="kb-full-width" appearance="fill" >
           <mat-label>Offers</mat-label>
           <mat-select [formControl]="offers" multiple (selectionChange)="changeselectcourse($event.value)">
             <mat-select-trigger>
@@ -64,14 +64,14 @@
             </mat-select-trigger>
             <mat-option *ngFor="let offer of offersList" [value]="offer['id']">{{offer['text']}}</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
 
-        <p *ngIf="selectedcourse && showmyselected.length!=0">
+        <!-- <p *ngIf="selectedcourse && showmyselected.length!=0">
           Selected Course: 
             <span *ngFor="let showquickoff of showquickoffer;" class="showsomediff" >
                 {{showquickoff}}
             </span>
-        </p>
+        </p> -->
 
         <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()">
           <i class="far fa-edit"></i> Update Course
@@ -100,101 +100,85 @@
     </div>
 
   </div>
-
   <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+  <!-- sidebar -->
 
-  <div class="row">
-    <div class="col-md-12 mb-4 text-right">
-      <button mat-raised-button class="mr-2 outer-card-add" (click)="openSidebar()">Add New Course <i
-          class="fa fa-paper-plane" aria-hidden="true"></i></button>
-      <button mat-raised-button class="mr-2 btnul">Pages
-        <i class="fa fa-file-alt" aria-hidden="true"></i>
-        <ul class="kb-ul">
-          <li> <button mat-raised-button class="mr-2"><i class="fa fa-file"></i> Landing Page</button> </li>
-          <li> <button mat-raised-button class="mr-2"><i class="fa fa-file" aria-hidden="true"></i> Library
-              Page</button> </li>
-        </ul>
-      </button>
-      <button mat-raised-button class="mr-2 btnul">Sales
-        <i class="fa fa-dollar-sign" aria-hidden="true"></i>
-        <ul class="kb-ul">
-          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/offers']"> <i class="fa fa-percentage"
-                aria-hidden="true"></i> Offers</button> </li>
-          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/coupons']"> <i class="fa fa-percent"
-                aria-hidden="true"></i> Coupons</button> </li>
-          <li> <button mat-raised-button class="mr-2" [routerLink]="['/membership/payments']"> <i
-                class="fa fa-dollar-sign" aria-hidden="true"></i> Payments</button> </li>
-        </ul>
-      </button>
-      <button mat-raised-button class="mr-2" [routerLink]="['/membership/members']">Members <i class="fa fa-users"
-          aria-hidden="true"></i></button>
-      <button mat-raised-button class="mr-2" [routerLink]="['/membership/marketplace']">Marketplace <i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <mat-form-field appearance="fill" class="col-8 pr-2">
+          <mat-label>Search Courses</mat-label>
+          <input matInput #searchInp type="text" (input)="searchCourses(searchInp, filterInp)" placeholder="Search Course Name">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col-4">
+          <mat-label>Sort By</mat-label>
+          <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
+            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 text-right">
+        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
+          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+        </button>
+        <button mat-raised-button color="primary" (click)="createCourse()" class="mx-3">Create New <i
+            class="fas fa-plus"></i></button>
+      </div>
     </div>
-    <div *ngIf="allcoursesarr.length != 0 else nodata" class="row col-12">
-      <div class="col-md-4 cardpage loadEffect mt-4" *ngFor="let acourse of allcoursesarr; index as i;">
-        <div>
-          <img [src]="_image.getImgPath(acourse.thumbnail)" alt="" class="img-fluid img-fit">
-          <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
-            <span mat-button [matMenuTriggerFor]="menu" class="statusbadge"
-              [class]="acourse.publish_status==1 ? 'active1':'active2'">
-              <i class="fas" [class]="acourse.publish_status==1 ? 'fa-check':'fa-file'"></i>
-              {{acourse.publish_status==1?'Publish':'Draft'}} <i class="fas fa-chevron-down drpdwnfa"></i>
-            </span>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="toggleStatus(acourse, 1)"><i class="fa fa-check pr-2"></i> Publish</button>
-              <button mat-menu-item (click)="toggleStatus(acourse, 0)"><i class="fa fa-file pr-2"></i> Draft</button>
-            </mat-menu>
+    <div class="row">
+      <div *ngFor="let course of courses" [class]="toggleview ? 'col-md-6' : 'col-12'">
+        <div class="row kb-course-block">
+          <div class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
+          [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'keaimage-course-thumbnail-'+course.uniqueid+'.png' + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
           </div>
-          <div class="keabuilder-title-board line-ellipsis" matTooltip="Edit Course Name" matTooltipPosition="above">
-            <span>{{acourse.title}}</span>
-            <input type="text" [(ngModel)]="acourse.title" (blur)="updateTitle(acourse)" (click)="prevTitle = acourse.title">
+          <div class="kb-course-content p-0" [class]="toggleview ? 'col-12' : 'col-md-9'">
+            <div class="kb-course-subblock p-2" [class.px-3]="!toggleview">
+              <div class="kb-course-title">
+                {{course.title}}
+              </div>
+              <div>
+                <span [matTooltip]="course.total_modules+' Module'+(course.total_modules==1 ? '' : 's')" matTooltipPosition="above" class="mx-2">
+                  <i class="fa-regular fa-folder pr-1"></i>
+                  {{course.total_modules}}
+                </span>
+                <span [matTooltip]="course.total_members+' Member'+(course.total_members==1 ? '' : 's')" matTooltipPosition="above">
+                  <i class="fa-regular fa-user pr-1"></i>
+                  {{course.total_members}}
+                </span>
+              </div>
+            </div>
+            <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
+              <span class="kb-course-updatedat text-left float-left px-0 pb-2" [class.col-12]="toggleview">
+                <span matTooltip="Updated At" matTooltipPosition="above">
+                  <i class="fa-regular fa-calendar"></i>
+                  {{_general.dateformat(course.updated_at)}}
+                </span>
+              </span>
+              <button mat-raised-button color="accent">View <i class="fa-solid fa-eye"></i></button>
+              <button mat-raised-button color="primary" [disabled]="course.deleting" 
+              class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
+              <button mat-raised-button color="accent" [disabled]="course.deleting" 
+              [matMenuTriggerFor]="menu">More <i class="fa-solid fa-gear"></i></button>
+              <mat-menu #menu="matMenu">
+                <button (click)="openSidebar()" mat-menu-item>
+                  <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
+                </button>
+                <button mat-menu-item>
+                  <i class="far fa-copy pr-2"></i>Duplicate
+                </button>
+                <button mat-menu-item class="text-danger">
+                  <i class="far fa-trash-alt pr-2"></i>Delete
+                </button>
+              </mat-menu>
+            </div>
           </div>
-          <p class="kb-pagedate">
-            <span [matTooltip]="acourse.members+' Members'" matTooltipPosition="above"><i
-                class="fa fa-user" aria-hidden="true"></i> {{acourse.members ? acourse.members : 0}}</span> &nbsp; 
-                <span [matTooltip]="'Last Updated At '+modifydate(acourse.updated_at)" matTooltipPosition="above"><i class="far fa-calendar-alt" aria-hidden="true"></i> {{modifydate(acourse.updated_at)}}</span>
-            </p>
-
-          <a mat-raised-button color="accent" class="mr-2" [href]="'/course/'+acourse.url" target="_blank" >Preview <i class="far fa-eye"></i></a>
-          <button mat-raised-button color="primary" [routerLink]="'./course/'+acourse.uniqueid">Edit <i class="fas fa-pencil-alt"></i></button>
-
-          <button class="kb-page-settting" mat-icon-button [matMenuTriggerFor]="menu2" matTooltip="Settings"
-            matTooltipPosition="above">
-            <i class="fas fa-cog"></i>
-          </button>
-          <mat-menu #menu2="matMenu">
-            <button mat-menu-item (click)="editDetails(acourse)">
-              <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i> Edit Details
-            </button>
-            <button mat-menu-item>
-              <i class="fas fa-chart-pie pr-2"></i>View Analytics
-            </button>
-            <button mat-menu-item (click)="duplicateCourse(acourse)">
-              <i class="far fa-copy pr-2"></i>Duplicate
-            </button>
-            <button mat-menu-item  (click)="copyurl(acourse.url)" >
-              <i class="fas fa-link pr-2"></i>Copy URL
-            </button>
-            <button mat-menu-item class="text-danger" (click)="deleteCourse(acourse)">
-              <i class="far fa-trash-alt pr-2"></i>Delete
-            </button>
-          </mat-menu>
-
         </div>
       </div>
-    </div>
-    <ng-template #nodata>
-      <div class="col-12 text-center mt-5">
-        Ready to create your first course!<br><br>
-        <button mat-raised-button color="primary" (click)="openSidebar()">Click Here</button>
-      </div>
-    </ng-template>
-  </div>
-
-  <div *ngIf="allcoursesarr.length != 0" class="row mt-4">
-    <div class="col-md-12 mt-4">
-      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
-      </mat-paginator>
     </div>
   </div>
 
