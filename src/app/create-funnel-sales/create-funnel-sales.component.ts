@@ -64,11 +64,12 @@ export class CreateFunnelSalesComponent implements OnInit {
         var gensepratestep:any = [];
 
         data.data.forEach((element: any) => {
-          var gennewobj = {id:'',value:''};
-          gennewobj.id = element.uniqueid;
-          gennewobj.value = element.page_title;
-
-          gensepratestep.push(gennewobj);
+          if(element.funneltype!='regular' && element.funneltype!='thankyou'){
+            var gennewobj = {id:'',value:''};
+            gennewobj.id = element.uniqueid;
+            gennewobj.value = element.page_title;
+            gensepratestep.push(gennewobj);
+          }
         });
 
         this.funnelsteps = gensepratestep;

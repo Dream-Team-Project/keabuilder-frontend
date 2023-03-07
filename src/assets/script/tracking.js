@@ -19,7 +19,7 @@ window.onload = function(a){
 
             if(custmid!='' && userid!='' && productid!=''){
 
-                const response = await fetch("http://localhost:4200/api/paymentupsell", {
+                const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(itemscustm ),

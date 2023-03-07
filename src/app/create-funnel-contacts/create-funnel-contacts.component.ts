@@ -58,18 +58,19 @@ export class CreateFunnelContactsComponent implements OnInit {
     });
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
 
         var gensepratestep:any = [];
 
         data.data.forEach((element: any) => {
-          var gennewobj = {id:'',value:''};
-          gennewobj.id = element.uniqueid;
-          gennewobj.value = element.page_title;
-
-          gensepratestep.push(gennewobj);
+          if(element.funneltype!='regular' && element.funneltype!='thankyou'){
+            var gennewobj = {id:'',value:'', type:''};
+            gennewobj.id = element.uniqueid;
+            gennewobj.value = element.page_title;
+            gensepratestep.push(gennewobj);
+          }
         });
 
         this.funnelsteps = gensepratestep;
