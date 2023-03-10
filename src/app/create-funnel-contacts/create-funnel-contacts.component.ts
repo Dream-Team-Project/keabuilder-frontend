@@ -6,6 +6,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import { FunnelService } from '../_services/funnels.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import * as XLSX from 'xlsx';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface UserData {
   fullname: string;
@@ -41,9 +42,11 @@ export class CreateFunnelContactsComponent implements OnInit {
   selectedfunnelsteps:any = 'all';
   selecteddelete = false;
   contactname = '';
+  contactid = '';
 
   constructor(private funnelService: FunnelService,
     private router: Router,
+    public dialog: MatDialog, 
     private route: ActivatedRoute) { 
 
     this.dataSource = new MatTableDataSource(this.users);
@@ -116,33 +119,59 @@ export class CreateFunnelContactsComponent implements OnInit {
   }
 
   datecusfilter(value:any){
-    return new Date(value).toDateString();
+    var dt = new Date(value);
+    var text1 = dt.toDateString();    
+    var text2 = dt.toLocaleTimeString();
+    return text1+' '+text2;
   }
 
   exportexcel(): void
   {
-    this.funnelService.getfunnelexportcontacts(this.uniqueid).subscribe({
-      next: data => {
-        // console.log(data.data);
+    // console.log(this.users);
 
-        if(data.data?.length!=0){
+    var generateobj:any = [];
+    
+    if(this.users?.length!=0){
+      this.users.forEach((element:any) => {
+        var genobj = {fullname:element.fullname,email: element.email,phone:element.phone,address:element.address,city:element.city,state:element.state,zip:element.zip,country:element.country,created_at:element.created_at};
+        generateobj.push(genobj);
+      });
+      console.log(generateobj);
 
-          const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
-      
+        if(generateobj?.length!=0){
+          const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(generateobj);
+          
           /* generate workbook and add the worksheet */
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      
+          
           /* save to file */  
           XLSX.writeFile(wb, this.fileName);
-
         }
 
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
+    }
+    // this.funnelService.getfunnelexportcontacts(this.uniqueid).subscribe({
+    //   next: data => {
+    //     console.log(data.data);
+
+    //     if(data.data?.length!=0){
+
+    //       const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
+      
+    //       /* generate workbook and add the worksheet */
+    //       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    //       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      
+    //       /* save to file */  
+    //       XLSX.writeFile(wb, this.fileName);
+
+    //     }
+
+    //   },
+    //   error: err => {
+    //     console.log(err);
+    //   }
+    // });
 
  
   }
@@ -165,8 +194,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   deletecontact(){
     // console.log(value);
-    var value = '';
-    this.funnelService.deletefunnelcontacts(value).subscribe({
+    this.funnelService.deletefunnelcontacts(this.contactid).subscribe({
       next: data => {
         // console.log(data.data); 
         if(data.data==1){
@@ -181,18 +209,14 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   }
 
-  openDialog2(templateRef: TemplateRef<any>, page:any): void {
+  openDialog(templateRef: TemplateRef<any>, contact:any): void {
 
-    // if(type=='move'){
-    //   this.actionname = 'Move';
-    // }else if(type=='copymove'){
-    //   this.actionname = 'Copy & Move';
-    // }else{
-    //   this.actionname = '';
-    // }
+    console.log(contact);
+    this.contactname = contact.fullname;
+    this.contactid = contact.id;
 
-    // this.selfunnelstep = page;
-    // this.dialog.open(templateRef);
+
+    this.dialog.open(templateRef);
 
   }
 }

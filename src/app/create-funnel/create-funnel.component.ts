@@ -831,13 +831,13 @@ export class CreateFunnelComponent implements OnInit {
   kbfootersteps(value:any){
     // console.log(this.uniqueidstep);
 
+    console.log(this.funnelstepurl);
     if(value=='clonefunnelstep'){
       if(this.funnelstepurl!=''){
-
         var newobj = {uniqueid:this.uniqueidstep, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(newobj).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             if(data.success==1){
 
               var pathobj  = {oldpath:this.funnelstepurl,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};

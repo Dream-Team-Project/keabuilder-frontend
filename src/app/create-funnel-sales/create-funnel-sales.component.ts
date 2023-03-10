@@ -112,7 +112,10 @@ export class CreateFunnelSalesComponent implements OnInit {
   }
 
   datecusfilter(value:any){
-    return new Date(value).toDateString();
+    var dt = new Date(value);
+    var text1 = dt.toDateString();    
+    var text2 = dt.toLocaleTimeString();
+    return text1+' '+text2;
   }
 
   exportexcel(): void
