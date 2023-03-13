@@ -209,7 +209,6 @@ export class GeneralService {
         this.forms = data;
       });
       this.fetchMenus().then(data=>{
-        this.menus = data;
         if(this.target.type != 'header' && this.target.type != 'footer') {
           this.fetchHeaders().then(data=>{
             this.headers = data;
@@ -353,6 +352,7 @@ export class GeneralService {
       dbobj.uniqueid = this.target.id;
       var jsonObj = {sections: sections};
       dbobj.json = this.encodeJSON(jsonObj);
+      console.log(dbobj);
       if(this.target.type == 'header') {
         this._file.saveFile(obj, 'headers').subscribe(e=>{
           this._file.updateheader(dbobj).subscribe((resp:any)=>{

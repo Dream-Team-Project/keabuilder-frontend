@@ -1,31 +1,32 @@
 <div class="container-fluid">
   <!-- sidebar -->
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
-
-      <form *ngIf="firstquickedit" >
+      <form>
         <i class="fas fa-times" (click)="closeSidebar()"></i>
         <h6><strong>NEW COURSE STEPS</strong></h6>
         <hr>
-        <mat-form-field #title class="kb-full-width" appearance="fill">
+        <mat-error *ngIf="isNotValid(validate.title)">
+          Course title should not be empty
+        </mat-error>
+        <mat-error *ngIf="validate.title.hasError('minlength')">
+          Course title must be at least <strong>3</strong> characters
+        </mat-error>
+        <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Title</mat-label>
-          <input name="title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
-            minlength="3" maxlength="140">
+          <input name="title" [formControl]="validate.title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
+            minlength="3">
         </mat-form-field>
-
-        <mat-form-field #title class="kb-full-width" appearance="fill" *ngIf="editshowurl" >
-          <mat-label>Url</mat-label>
-          <input name="url" [(ngModel)]="course.url" (input)="course.url = _general.joinWthDash(course.url)" type="text" matInput>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Path</mat-label>
+          <input name="url" [(ngModel)]="course.path" (input)="course.path = _general.joinWthDash(course.path)" type="text" matInput>
         </mat-form-field>
-
         <mat-form-field #description class="kb-full-width" appearance="fill">
           <mat-label>Description</mat-label>
           <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
         </mat-form-field>
-
         <div class="imgFormField p-3 inpfill">
-          <label>Product Thumbnail</label>
+          <label>Thumbnail</label>
           <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
             <img class="img-fluid" [src]="thumbnail.path"/>
           </div>
@@ -72,19 +73,18 @@
                 {{showquickoff}}
             </span>
         </p> -->
-
-        <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()">
-          <i class="far fa-edit"></i> Update Course
-        </button>
-
-        <ng-template #create>
-          <button mat-raised-button color="primary" (click)="createCourse()">
-            <i class="fas fa-plus"></i>Create Course
+        <div class="col-12 p-0 text-right">
+          <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()" [disabled]="btndis">
+            Update Course <i class="far fa-edit"></i>
           </button>
-        </ng-template>
+          <ng-template #create>
+            <button mat-raised-button color="primary" (click)="createCourse()" [disabled]="btndis">
+              Create Course <i class="fas fa-plus"></i>
+            </button>
+          </ng-template>
+        </div>
       </form>
-
-      <div *ngIf="showpageurl">
+      <!-- <div *ngIf="showpageurl">
         <h6><strong>Duplicate Course URL</strong></h6>
         <hr>
         <mat-form-field class="kb-full-width" appearance="fill">
@@ -95,8 +95,7 @@
         <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
             <i class="far fa-copy"></i> Duplicate Url
         </button>
-      </div>
-
+      </div> -->
     </div>
 
   </div>
@@ -124,9 +123,9 @@
       <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
-        <button mat-raised-button color="primary" (click)="createCourse()" class="mx-3">Create New <i
+        <button mat-raised-button color="primary" (click)="openSidebar(course, false)" class="mx-3">Create New <i
             class="fas fa-plus"></i></button>
       </div>
     </div>
@@ -153,7 +152,7 @@
               </div>
             </div>
             <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
-              <span class="kb-course-updatedat text-left float-left px-0 pb-2" [class.col-12]="toggleview">
+              <span class="kb-course-updatedat text-left float-left px-0 pb-2">
                 <span matTooltip="Updated At" matTooltipPosition="above">
                   <i class="fa-regular fa-calendar"></i>
                   {{_general.dateformat(course.updated_at)}}
@@ -165,7 +164,7 @@
               <button mat-raised-button color="accent" [disabled]="course.deleting" 
               [matMenuTriggerFor]="menu">More <i class="fa-solid fa-gear"></i></button>
               <mat-menu #menu="matMenu">
-                <button (click)="openSidebar()" mat-menu-item>
+                <button (click)="quickEdit(course)" mat-menu-item>
                   <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
                 </button>
                 <button mat-menu-item>
