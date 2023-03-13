@@ -160,11 +160,11 @@ export class BuildFunnelComponent implements OnInit {
   }
 
   onSubmit(): void {
-console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '+this.stepnameFormControl.status);
+// console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '+this.stepnameFormControl.status);
     if(this.userFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID' && this.stepnameFormControl.status=='VALID'){
 
         var nwsubdomain:any = this.form.subdomain.toLowerCase();
-      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
+      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user'];
       if(this.searchStringInArray(nwsubdomain,notusesub)==1){
         this.searching = true;
 

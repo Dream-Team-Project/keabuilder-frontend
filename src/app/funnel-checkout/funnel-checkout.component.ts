@@ -266,7 +266,7 @@ export class FunnelCheckoutComponent implements OnInit {
         this.checkoutService.stripePayment(this.stripeData).subscribe({
           next: data => {
 
-            // console.log(data);
+            console.log(data);
             if(data.success==true){
 
               if(data.customer){

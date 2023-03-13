@@ -64,11 +64,12 @@ export class CreateFunnelSalesComponent implements OnInit {
         var gensepratestep:any = [];
 
         data.data.forEach((element: any) => {
-          var gennewobj = {id:'',value:''};
-          gennewobj.id = element.uniqueid;
-          gennewobj.value = element.page_title;
-
-          gensepratestep.push(gennewobj);
+          if(element.funneltype!='regular' && element.funneltype!='thankyou'){
+            var gennewobj = {id:'',value:''};
+            gennewobj.id = element.uniqueid;
+            gennewobj.value = element.page_title;
+            gensepratestep.push(gennewobj);
+          }
         });
 
         this.funnelsteps = gensepratestep;
@@ -111,7 +112,10 @@ export class CreateFunnelSalesComponent implements OnInit {
   }
 
   datecusfilter(value:any){
-    return new Date(value).toDateString();
+    var dt = new Date(value);
+    var text1 = dt.toDateString();    
+    var text2 = dt.toLocaleTimeString();
+    return text1+' '+text2;
   }
 
   exportexcel(): void

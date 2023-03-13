@@ -46,6 +46,17 @@
     </div>
   </ng-template>
 
+  <ng-template #dialogdeletepro>
+    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
+    <div mat-dialog-content>
+        Would you like to delete <span class="text-danger">{{selectedproductname}}</span> Product? <br>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-info">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletemyproduct()">Yes</button>
+    </div>
+  </ng-template>
+
   <div id="kb-automation-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
@@ -195,7 +206,7 @@
 
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Product Price</mat-label>
-          <input type="number" matInput placeholder="Product Price" [(ngModel)]="productprice">
+          <input type="number" min="1" matInput placeholder="Product Price" [(ngModel)]="productprice">
           <small>(Minimum Price: $1.00)</small>
         </mat-form-field>
 
@@ -775,17 +786,16 @@
                             Price: ${{productsshow.productprice}}
                         </div>
                         <div class="col-md-3">
-                          <button mat-raised-button color="accent" class="mr-2" (click)="editproduct(productsshow.id)"><i class="fas fa-pen"></i> Edit</button>
-                          <button mat-raised-button color="accent" (click)="openDialog(productsshow.id)"  ><i class="fas fa-trash"></i> Delete</button>
+                          <button mat-raised-button color="primary" class="mr-2" (click)="editproduct(productsshow.id)"><i class="fas fa-pen"></i> Edit</button>
+                          <button mat-raised-button color="accent" (click)="openDialogdelete(dialogdeletepro,productsshow)"  ><i class="fas fa-trash"></i> Delete</button>
                           <!-- (click)="edtdelpro('delete',productsshow.id)" -->
                         </div>
                     </div>                  
                 </div>
                 <div class="col-md-12 mt-4">
-                  <button mat-raised-button color="accent" (click)="addproduct()" class="mr-4" ><i class="fas fa-plus"></i> Add product</button>
+                  <button mat-raised-button color="primary" (click)="addproduct()" class="mr-4" ><i class="fas fa-plus"></i> Add product</button>
 
-                  <button mat-raised-button color="accent" (click)="editcheckout()"  ><i class="fas fa-shopping-cart"></i> Edit Checkout</button>
-
+                  <button *ngIf="funnelsteptype=='order'" mat-raised-button color="accent" (click)="editcheckout()"  ><i class="fas fa-shopping-cart"></i> Edit Checkout</button>
                 </div>
               </div>
           </div>
