@@ -55,6 +55,7 @@ export class BuilderComponent implements OnInit {
   ishf:boolean = false;
   zoom:any = false;
   initial:boolean = true;
+  matMenuEle:any;
 
   constructor(
     private route: ActivatedRoute,
@@ -263,20 +264,6 @@ export class BuilderComponent implements OnInit {
     this.openDialog();
   }
 
-  elementDblClk(element: any, event:any) {
-    if(element.content.name != 'iframe') {
-      this._general.blockSelection = '';
-      this._general.selectedBlock = element;
-      this._style.blockSetting(element);
-      this.openDialog()
-    }
-    // else if(element.content.name == 'text' || element.content.name == 'heading') {
-    //   this._general.showInlineEditor = true;
-    //   element.content.editor = true;
-    //   this._general.selectedBlock = element;
-    // }
-  }
-
   // dialog box
 
   openDialog() {
@@ -472,5 +459,26 @@ export class BuilderComponent implements OnInit {
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
+  elementDblClk(element:any) {
+    if(element.content.name != 'iframe') {
+      this.openSetting(element);
+    }
+    // else if(element.content.name == 'text' || element.content.name == 'heading') {
+    //   this._general.showInlineEditor = true;
+    //   element.content.editor = true;
+    //   this._general.selectedBlock = element;
+    // }
+  }
+
+  isBlockActive(block:any) {
+    return this._general.selectedBlock.id == block.id && this._general.selectedBlock.type == block.type;
+  }
+
+  openSetting(block:any) {
+    this._general.blockSelection = ''; 
+    this._general.selectedBlock = block; 
+    this._style.blockSetting(block); 
+    this.openDialog();
+  }
 }
 

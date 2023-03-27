@@ -1,4 +1,15 @@
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Course</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{delcourse.title}}</span> course?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteCourse(delcourse)">Yes</button>
+  </div>
+</ng-template>
 <div class="container-fluid">
+  <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <!-- sidebar -->
   <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
@@ -101,7 +112,6 @@
   </div>
   <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
   <!-- sidebar -->
-
   <div class="container-fluid">
     <div class="row align-items-center">
       <div class="col-md-8">
@@ -132,8 +142,12 @@
     <div class="row">
       <div *ngFor="let course of courses" [class]="toggleview ? 'col-md-6' : 'col-12'">
         <div class="row kb-course-block">
-          <div class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
+          <div [class.kb-disabled]="course.deleting" class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
           [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'keaimage-course-thumbnail-'+course.uniqueid+'.png' + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+            <div class="kb-loader" *ngIf="shortwaiting || course.deleting">
+              <div class="kb-loader-shadow"></div>
+              <div class="kb-loader-box"></div>
+            </div>
           </div>
           <div class="kb-course-content p-0" [class]="toggleview ? 'col-12' : 'col-md-9'">
             <div class="kb-course-subblock p-2" [class.px-3]="!toggleview">
@@ -158,10 +172,10 @@
                   {{_general.dateformat(course.updated_at)}}
                 </span>
               </span>
-              <button mat-raised-button color="accent">View <i class="fa-solid fa-eye"></i></button>
-              <button mat-raised-button color="primary" [disabled]="course.deleting" 
-              class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
-              <button mat-raised-button color="accent" [disabled]="course.deleting" 
+              <button [disabled]="course.deleting" mat-raised-button color="accent">View <i class="fa-solid fa-eye"></i></button>
+              <button [disabled]="course.deleting" mat-raised-button color="primary"
+              [routerLink]="'course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
+              <button [disabled]="course.deleting" mat-raised-button color="accent"
               [matMenuTriggerFor]="menu">More <i class="fa-solid fa-gear"></i></button>
               <mat-menu #menu="matMenu">
                 <button (click)="quickEdit(course)" mat-menu-item>
@@ -170,7 +184,7 @@
                 <button mat-menu-item>
                   <i class="far fa-copy pr-2"></i>Duplicate
                 </button>
-                <button mat-menu-item class="text-danger">
+                <button (click)="openDialog(dialog, course)" mat-menu-item class="text-danger">
                   <i class="far fa-trash-alt pr-2"></i>Delete
                 </button>
               </mat-menu>
@@ -180,5 +194,4 @@
       </div>
     </div>
   </div>
-
 </div>

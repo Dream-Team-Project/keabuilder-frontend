@@ -4,7 +4,7 @@
     Would you like to delete <span class="text-danger">{{delform.name}}</span> form?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close [color]="'primary'">No</button>
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteform(delform)">Yes</button>
   </div>
 </ng-template>
@@ -127,7 +127,7 @@
                 </p>
               </div>
               <div [class.p-0]="toggleview" class="col-md-12 text-right">
-                <button mat-raised-button color="accent" [routerLink]="['/form/submissions/'+form.uniqueid]" [disabled]="form.deleting">Submissions <i
+                <button mat-raised-button color="accent" [routerLink]="'/form/submissions/'+form.uniqueid" [disabled]="form.deleting">Submissions <i
                     class="fa fa-paper-plane"></i></button>
                 <button mat-raised-button color="primary" [disabled]="form.deleting"
                   (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i

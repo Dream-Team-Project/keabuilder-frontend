@@ -209,6 +209,7 @@ export class GeneralService {
         this.forms = data;
       });
       this.fetchMenus().then(data=>{
+        this.menus = data;
         if(this.target.type != 'header' && this.target.type != 'footer') {
           this.fetchHeaders().then(data=>{
             this.headers = data;
@@ -592,7 +593,10 @@ export class GeneralService {
             if(ele.content?.item) {
               var tempObj = JSON.parse(JSON.stringify(ele.content.item))
               var pseudoEle:string = '';
-              if(ele.content.name == 'menu') pseudoEle = 'ul a';
+              if(ele.content.name == 'menu') {
+                pseudoEle = 'ul.kb-menu a';
+                tempObj.dropdownid = ele.id + ' .kb-element-content .kb-menu-resp ul.kb-menu-content a';
+              }
               tempObj.id = ele.id + ' .kb-element-content ' + pseudoEle;
               this.blockStyling(tempObj);
             }
@@ -608,6 +612,7 @@ export class GeneralService {
     if(!this.isObjEmpty(block.style.tablet_v)) this.pagestyling.tablet_v += '#' + block.id + '{' + Object.entries(block.style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(!this.isObjEmpty(block.style.mobile)) this.pagestyling.mobile += '#' + block.id + '{' + Object.entries(block.style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(!this.isObjEmpty(block.style.hover)) this.pagestyling.hover += '#' + block.id + ':hover{' + Object.entries(block.style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(!this.isObjEmpty(block.style.dropdown)) this.pagestyling.desktop += '#' + block.dropdownid + '{' + Object.entries(block.style.dropdown).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     if(block.type == 'row') {
       var clmwrp = ['#' + block.id + ' .kb-column-wrap{gap:', 'rem;}'];
       if(block.columnGap.desktop) this.pagestyling.desktop += clmwrp.join(block.columnGap.desktop);
@@ -632,7 +637,7 @@ export class GeneralService {
       pseudoEle = 'a';
     }
     else if(ele.content.name == 'menu') {
-      pseudoEle = 'ul';
+      pseudoEle = 'ul.kb-menu';
     }
     else if(ele.content.name == 'video') {
       pseudoEle = ele.type == 'video' ? 'video' : '> div';
@@ -640,19 +645,24 @@ export class GeneralService {
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',
-      mar: 'margin:',
     }
-    var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop + ';' : '';
+    var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop : '';
     this.pagestyling.desktop += elestl.selector + deskjc + ';}';
 
-    var tabhjc = ele.item_alignment.tablet_h ? elestl.jc + ele.item_alignment.tablet_h + ';' : '';
+    var tabhjc = ele.item_alignment.tablet_h ? elestl.jc + ele.item_alignment.tablet_h : '';
     this.pagestyling.tablet_h += elestl.selector + tabhjc + ';}';
 
-    var tabvjc = ele.item_alignment.tablet_v ? elestl.jc + ele.item_alignment.tablet_v + ';' : '';
+    var tabvjc = ele.item_alignment.tablet_v ? elestl.jc + ele.item_alignment.tablet_v : '';
     this.pagestyling.tablet_v += elestl.selector + tabvjc + ';}';
 
-    var mobjc = ele.item_alignment.mobile ? elestl.jc + ele.item_alignment.mobile + ';' : '';
+    var mobjc = ele.item_alignment.mobile ? elestl.jc + ele.item_alignment.mobile : '';
     this.pagestyling.mobile += elestl.selector + mobjc + ';}';
+
+    if(ele.content.name == 'menu') {
+      var ddSel = '#' + ele.id + ' .kb-element-content .kb-menu-resp {';
+      this.pagestyling.tablet_v += ddSel + tabvjc + ';}';
+      this.pagestyling.mobile += ddSel + mobjc + ';}';
+    }
 
     var style = JSON.parse(JSON.stringify(ele.content.style));
 
@@ -667,14 +677,26 @@ export class GeneralService {
     if(!this.isObjEmpty(ele.content.style.tablet_v)) {
       if(style.tablet_v.margin) style.tablet_v.margin = style.tablet_v.margin?.replace(/auto/g,'0px');
       this.pagestyling.tablet_v += selector + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      if(ele.content.name == 'menu') {
+        var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
+        this.pagestyling.tablet_v += hamsel + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      }
     }
     if(!this.isObjEmpty(ele.content.style.mobile)) {
       if(style.mobile.margin) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
       this.pagestyling.mobile += selector + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      if(ele.content.name == 'menu') {
+        var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
+        this.pagestyling.mobile += hamsel + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      }
     }
     if(!this.isObjEmpty(ele.content.style.hover)) {
       if(style.hover.margin) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
       this.pagestyling.hover += selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
+    if(!this.isObjEmpty(ele.content.style.dropdown)) {
+        var tempsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp ul.kb-menu-content';
+        this.pagestyling.desktop += tempsel + '{' + Object.entries({...style.dropdown}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
   }
 

@@ -119,6 +119,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.selectedTab = '';
     this._general.setExpPanelStep(0);
     this._style.setItemStyle = false;
+    this._style.setDropDownStyle = {
+      main: false,
+      item: false
+    }
     this.searchInpClear();
     this.searchType = '';
     this.searchTglCls = '';
@@ -179,7 +183,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   }
 
   isText(en:string) {
-    return en == 'input' || en == 'label' || en == 'option' || en == 'text' || en == 'heading' || en == 'button' || en == 'menu';
+    return en == 'input' || en == 'label' || en == 'option' || en == 'text' || en == 'heading' || en == 'button' || this._style.setItemStyle || this._style.setDropDownStyle.item;
   }
 
   searchingDeep(val:string) {
@@ -193,6 +197,16 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   searchInpClear() {
     this.searchInp.deep = '';
     this.searchInp.tab = '';
+  }
+
+  isElementExist(ele:any) {
+    if(ele == 'menu') {
+      return this._general.menus.length != 0;
+    }
+    else if(ele == 'form') {
+      return this._general.forms.length != 0;
+    }
+    return true;
   }
 
 }

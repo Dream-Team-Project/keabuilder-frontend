@@ -292,3 +292,10 @@ span.kb-setting-icon .kb-handle-block {
 .kb-setting-head-text .kb-tag.kb-info-tag {
     margin-left: 10px;
 }
+
+.kb-element-not-found-alert {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: var(--kb-danger);
+}

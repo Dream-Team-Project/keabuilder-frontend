@@ -1,11 +1,10 @@
-import { ThisReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CourseService } from '../_services/_membership/course.service';
 import { ImageService } from '../_services/image.service';
 import { FileUploadService } from '../_services/file-upload.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GeneralService } from '../_services/_builder/general.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-courses',
@@ -52,18 +51,22 @@ export class CoursesComponent implements OnInit {
   showquickoffer:any = [];
   fetching:boolean = true;
   toggleview:boolean = true;
+  shortwaiting = true;
   btndis:boolean = false;
+  delcourse:any;
 
   constructor(private _course: CourseService,
              public _image: ImageService, 
-             private _snackbar: MatSnackBar,  
              private _file: FileUploadService,
-             private _snackBar: MatSnackBar,
-             public _general: GeneralService,) {
+             public _general: GeneralService,
+             public dialog: MatDialog) {
               this.toggleview = _general.getStorage('course_toggle');
               }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.shortwaiting = false;
+    }, 1000);
     // this._course.getalloffers().subscribe({
     //   next: data => {
     //    data.data.forEach((element: any) => {
@@ -74,13 +77,19 @@ export class CoursesComponent implements OnInit {
 
     //   }
     // });
-    this.allCourses(false);
+    this.allCourses();
   }
 
-  allCourses(reset:boolean) {
+  openDialog(templateRef: TemplateRef<any>, course:any ): void {
+    this.delcourse = course;
+    this.dialog.open(templateRef);
+  }
+
+  allCourses() {
+    this.fetching = true;
     this._course.all().subscribe((res:any)=>{
       this.courses = res.data;
-      if(reset) this.closeSidebar();
+      this.fetching = false;
     }); 
   }
 
@@ -93,10 +102,10 @@ export class CoursesComponent implements OnInit {
       // this.course.offers = this.offers.value.join(',');
       this._course.create(this.course).subscribe((res:any)=>{
         this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          this.allCourses();
+          this.closeSidebar();
           this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
-          this.btndis = false;
         })
-        this.allCourses(true);
       })
     }
     else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
@@ -104,6 +113,7 @@ export class CoursesComponent implements OnInit {
 
   updateCourse() {
     if(this.course.title!='' && this.thumbnail.path) {
+      this.btndis = true;
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
       if(this.offers.value!=null){
@@ -113,7 +123,9 @@ export class CoursesComponent implements OnInit {
       this._course.update(this.course).subscribe((res:any)=>{
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
         this._image.timeStamp = (new Date()).getTime();
-        this.allCourses(true);
+        this.allCourses();
+        this.closeSidebar();
+        this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
       })
     }
     else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
@@ -133,11 +145,16 @@ export class CoursesComponent implements OnInit {
   }
 
   deleteCourse(course:any) {
+    course.deleting = true;
     this._course.delete(course.id).subscribe((res:any)=>{
       if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
-        console.log(res);
+        this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
+        this.allCourses();
       });
-      this.allCourses(true);
+      else {
+        this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
+        this.allCourses();
+      }
     }); 
   }
 
@@ -149,6 +166,7 @@ export class CoursesComponent implements OnInit {
     setTimeout((e:any)=>{
       this.sidebar.anim.close = false;
       this.sidebar.open = false;
+      this.btndis = false;
       this.course ={ 
         id: '',
         uniqueid: '',
@@ -180,9 +198,7 @@ export class CoursesComponent implements OnInit {
     // this.offersToAdd = this.course.offers.split(',');
     // this.showmyselected = course.offers.split(',');
     // this.findselectedproduct();
-    console.log(course);
-    if(temp.thumbnail) this.thumbnail.path = this._image.uploadImgPath + temp.thumbnail;
-    console.log(this.thumbnail);
+    this.thumbnail.path = this._image.uploadImgPath + 'keaimage-course-thumbnail-'+temp.uniqueid+'.png';
     this.openSidebar(temp, true);
   }
   
@@ -205,7 +221,7 @@ export class CoursesComponent implements OnInit {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Successfully Copied!', 'OK');
+    this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
   }
 
   // copyurl(url:any){

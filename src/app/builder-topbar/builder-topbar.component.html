@@ -276,7 +276,7 @@
     <mat-icon mat-ripple (click)="prevElementSlide()" [class.kb-disabled]="slideElementShift <= 0" class="kb-side-arrow">keyboard_arrow_left</mat-icon>
     <div #element class="kb-selection-option" [style.transform]="'translateX(-'+(_general.screenWidth - 100)*slideElementShift+'px)'" [ngSwitch]="selectedElement">
         <div *ngSwitchCase="'heading'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.default.headings" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let heading of _element.default.headings, index as i " (cdkDragMoved)="dragDataEmit(heading)" [cdkDragData]="heading">
+            <span cdkDrag *ngFor="let heading of _element.default.headings, index as i" (cdkDragMoved)="dragDataEmit(heading)" [cdkDragData]="heading">
                 <span>{{heading.content.type | titlecase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{heading.content.type | titlecase}} heading
@@ -286,7 +286,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'text'" id="elementgroup" class="kb-block-selection kb-element-list kb-font-list" cdkDropList [cdkDropListData]="_element.default.texts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let text of _element.default.texts, index as i " (cdkDragMoved)="dragDataEmit(text)" [cdkDragData]="text">
+            <span cdkDrag *ngFor="let text of _element.default.texts, index as i" (cdkDragMoved)="dragDataEmit(text)" [cdkDragData]="text">
                 <span>{{text.content.type | uppercase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{text.content.type | uppercase}} text
@@ -309,8 +309,20 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'video'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.videos" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let video of _element.default.videos, index as i" (cdkDragMoved)="dragDataEmit(video)" [cdkDragData]="video">
+                <span class="kb-d-btn">
+                    <i [class]="video.iconCls"></i>
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="video.iconCls"></i>
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
         <div *ngSwitchCase="'button'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.buttons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let btn of _element.default.buttons, index as i " (cdkDragMoved)="dragDataEmit(btn)" [cdkDragData]="btn">
+            <span cdkDrag *ngFor="let btn of _element.default.buttons, index as i" (cdkDragMoved)="dragDataEmit(btn)" [cdkDragData]="btn">
                 <span class="kb-d-btn">
                     {{btn.content.btntype | titlecase}}
                     <span *ngIf="btn.content.subtext" class="kb-d-btn-st">[Extra Text]</span>
@@ -324,7 +336,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'divider'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.dividers" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let div of _element.default.dividers, index as i " (cdkDragMoved)="dragDataEmit(div)" [cdkDragData]="div">
+            <span cdkDrag *ngFor="let div of _element.default.dividers, index as i" (cdkDragMoved)="dragDataEmit(div)" [cdkDragData]="div">
                 <span class="kb-d-btn">
                     <i [class]="div.iconCls"></i>
                 </span>
@@ -340,7 +352,7 @@
                 <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>
-            <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(menu)" [cdkDragData]="menu">
+            <span cdkDrag *ngFor="let menu of _general.menus | filter:searchText:'name', index as i" (cdkDragMoved)="dragDataEmit(menu)" [cdkDragData]="menu">
                 <span>{{menu.name | titlecase}}</span>
                 <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     {{menu.name | titlecase}}
@@ -354,7 +366,7 @@
                 <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>
-            <span cdkDrag *ngFor="let form of _general.forms | filter:searchText:'name', index as i " (cdkDragMoved)="dragDataEmit(form)" [cdkDragData]="form">
+            <span cdkDrag *ngFor="let form of _general.forms | filter:searchText:'name', index as i" (cdkDragMoved)="dragDataEmit(form)" [cdkDragData]="form">
                 <span>{{form.name | titlecase}}</span>
                 <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)">
@@ -364,7 +376,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'checkout'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.checkouts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let check of _element.default.checkouts, index as i " (cdkDragMoved)="dragDataEmit(check)" [cdkDragData]="check">
+            <span cdkDrag *ngFor="let check of _element.default.checkouts, index as i" (cdkDragMoved)="dragDataEmit(check)" [cdkDragData]="check">
                 <span class="kb-d-btn">
                     <i [class]="check.iconCls"></i>
                 </span>

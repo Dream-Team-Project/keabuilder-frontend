@@ -141,7 +141,10 @@ export class StyleService {
   hideBlockSessionArr:any = [];
   resetSession:boolean = true;
   setItemStyle:boolean = false;
-
+  setDropDownStyle:any = {
+    main: false,
+    item: false
+  }
   constructor(private _general: GeneralService, private _image: ImageService) {
     _general.main.style.desktop = this.defaultStyling(_general.main);
   }
@@ -166,7 +169,7 @@ export class StyleService {
     else if(content == 'input') {
       return this.inputStyling();
     }
-    else if(content == 'form') {
+    else if((content == 'form' || content == 'menu') && !this.setItemStyle) {
       return this.currentStyling();
     }
     else {
@@ -205,16 +208,18 @@ export class StyleService {
   applySession(sStr:any, cStr:any, csStr:any, eitmaStr:any, hideStr:any) {
     var sObj = JSON.parse(sStr);
     var selB = JSON.parse(JSON.stringify(this._general.selectedBlock));
-    if(this.setItemStyle) selB.content.item = this.setRespStyle(selB.content.item, sObj); 
+    if(selB.type == 'element' && cStr != undefined) {
+      var cObj = JSON.parse(cStr);
+      if(this.setItemStyle) selB.content.item = this.setRespStyle(selB.content.item, cObj); 
+      else {
+        selB.content = this.setRespStyle(selB.content, cObj);
+        var eiaObj = JSON.parse(eitmaStr);
+        selB.item_alignment = eiaObj;
+      }
+    }
     else selB = this.setRespStyle(selB, sObj);
     selB.hide = JSON.parse(hideStr);
-    if(!this.setItemStyle && selB.type == 'element' && cStr != undefined) {
-      var eiaObj = JSON.parse(eitmaStr);
-      selB.item_alignment = eiaObj;
-      var cObj = JSON.parse(cStr);
-      selB.content = this.setRespStyle(selB.content, cObj);
-    }
-    else if(selB.type == 'row' && csStr != undefined) {
+    if(selB.type == 'row' && csStr != undefined) {
       var csObj = JSON.parse(csStr);
       selB.columnGap = csObj.columnGap;
       selB.columnRev = csObj.columnRev;
@@ -228,14 +233,13 @@ export class StyleService {
     var selB = this._general.selectedBlock;
     if((this.styleSessionArr[this.styleSessionArr.length-1] != JSON.stringify(this.currentStyling()) && this.styleSessionArr[this.styleSession.undo] != JSON.stringify(this.currentStyling()))
     || (this.hideBlockSessionArr[this.hideBlockSessionArr.length-1] != JSON.stringify(this.hide) && this.hideBlockSessionArr[this.styleSession.undo] != JSON.stringify(this.hide))
-    || (this.setItemStyle && (this.styleSessionArr[this.styleSessionArr.length-1] != JSON.stringify(this.currentStyling()) && this.styleSessionArr[this.styleSession.undo] != JSON.stringify(this.currentStyling())))
-    || (!this.setItemStyle && selB.type == 'element' && this.styleContentArr[this.styleContentArr.length-1] != JSON.stringify(this.getContentStyling(selB.content)) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.getContentStyling(selB.content)))
+    || (selB.type == 'element' && this.styleContentArr[this.styleContentArr.length-1] != JSON.stringify(this.getContentStyling(selB.content.name)) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.getContentStyling(selB.content.name)))
     || (!this.setItemStyle && selB.type == 'element' && this.eleItemAlignArr[this.eleItemAlignArr.length-1] != JSON.stringify(this.item_alignment) && this.styleContentArr[this.styleSession.undo] != JSON.stringify(this.item_alignment))
     || (selB.type == 'row' && this.styleColumnSArr[this.styleColumnSArr.length-1] != JSON.stringify(this.getColumnStructureStyling()) && this.styleColumnSArr[this.styleSession.undo] != JSON.stringify(this.getColumnStructureStyling()))) {
       this.styleSessionArr.push(JSON.stringify(this.currentStyling()));
       this.hideBlockSessionArr.push(JSON.stringify(this.hide));
-      if(selB.type == 'element' && !this.setItemStyle) {
-        this.styleContentArr.push(JSON.stringify(this.getContentStyling(selB.content)));
+      if(selB.type == 'element') {
+        this.styleContentArr.push(JSON.stringify(this.getContentStyling(selB.content.name)));
         this.eleItemAlignArr.push(JSON.stringify(this.item_alignment));
       }
       else if(selB.type == 'row') {
@@ -876,74 +880,67 @@ export class StyleService {
       if(ele) ele.innerHTML = this._general.page_code;
     }
     else this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
-    if (this._general.selectedBlock.type == 'row') {
+    if(this._general.selectedBlock.type == 'row') {
       this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
     }
-    if (this._general.selectedBlock.type == 'element' && !this.setItemStyle) {
-      this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
-      if(this._general.selectedBlock.content.html) this._general.selectedBlock.content.html = this.edit_html;
-      if (this._general.selectedBlock.content.name == 'button') {
-        this.setElementStyle(this.buttonStyling());
-        this._general.selectedBlock.content.text = this.button_text;
-        this._general.selectedBlock.content.subtext = this.button_subtext;
-        this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
-        this._general.selectedBlock.content.link = this.button_link;
-        this._general.selectedBlock.content.target = this.button_target.value;
-        if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.productid = this.button_product;
-      }
-      else if (this._general.selectedBlock.content.name == 'image') {
-        this._general.selectedBlock.content.src = this.image_src;
-        this.setElementStyle(this.imageStyling());
-      }
-      else if (this._general.selectedBlock.content.name == 'video') {
-        this._general.selectedBlock.content.iframe = this.video_iframe;
-        this._general.selectedBlock.content.src = this.video_src;
-        this._general.selectedBlock.content.autoplay = this.video_autoplay;
-        this._general.selectedBlock.content.muted = this.video_muted;
-        this._general.selectedBlock.content.loop = this.video_loop;
-        this._general.selectedBlock.content.controls = this.video_controls;
-        this.setElementStyle(this.currentStyling());
-      }
-      else if(this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
-        this.setElementStyle(this.currentStyling());
-      }
-      else if(this._general.selectedBlock.content?.name == 'code') {
-        this._general.selectedBlock.content.html = this.code_html;
-      }
+    if(this._general.selectedBlock.type == 'element') {
+      if(this.setItemStyle) this.setElementStyle(this.textStyling());
       else {
-        this.setElementStyle(this.textStyling());
-      }      
+        this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
+        if(this._general.selectedBlock.content.html) this._general.selectedBlock.content.html = this.edit_html;
+        if(this._general.selectedBlock.content?.name == 'menu' || this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
+          if(this.setDropDownStyle.main) this._general.selectedBlock.content.style.dropdown = this.currentStyling();
+          else if(this.setDropDownStyle.item) this._general.selectedBlock.content.item.style.dropdown = this.textStyling();
+          else this.setElementStyle(this.currentStyling());
+        }
+        else if (this._general.selectedBlock.content.name == 'button') {
+          this.setElementStyle(this.buttonStyling());
+          this._general.selectedBlock.content.text = this.button_text;
+          this._general.selectedBlock.content.subtext = this.button_subtext;
+          this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
+          this._general.selectedBlock.content.link = this.button_link;
+          this._general.selectedBlock.content.target = this.button_target.value;
+          if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.productid = this.button_product;
+        }
+        else if (this._general.selectedBlock.content.name == 'image') {
+          this._general.selectedBlock.content.src = this.image_src;
+          this.setElementStyle(this.imageStyling());
+        }
+        else if (this._general.selectedBlock.content.name == 'video') {
+          this._general.selectedBlock.content.iframe = this.video_iframe;
+          this._general.selectedBlock.content.src = this.video_src;
+          this._general.selectedBlock.content.autoplay = this.video_autoplay;
+          this._general.selectedBlock.content.muted = this.video_muted;
+          this._general.selectedBlock.content.loop = this.video_loop;
+          this._general.selectedBlock.content.controls = this.video_controls;
+          this.setElementStyle(this.currentStyling());
+        }
+        else if(this._general.selectedBlock.content?.name == 'code') {
+          this._general.selectedBlock.content.html = this.code_html;
+        }
+        else this.setElementStyle(this.textStyling());
+      }    
     }
     else {
       if (device != 'desktop') {
-        var newS = this.setItemStyle ? this.filterStyle(this.currentStyling(),  this._general.selectedBlock.content.item.style.desktop) 
-        : this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
+        var newS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.style.desktop);
         if (device == 'tablet-h') {
-          if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_h = newS;
-          else this._general.selectedBlock.style.tablet_h = newS;
+          this._general.selectedBlock.style.tablet_h = newS;
         }
         else if (device == 'tablet-v') {
-          if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_v = newS;
-          else this._general.selectedBlock.style.tablet_v = newS;
+          this._general.selectedBlock.style.tablet_v = newS;
         }
         else if (device == 'mobile') {
-          if(this.setItemStyle) this._general.selectedBlock.content.item.style.mobile = newS;  
-          else this._general.selectedBlock.style.mobile = newS;
+          this._general.selectedBlock.style.mobile = newS;
         }
         else if (device == 'hover') {
-          if(this.setItemStyle) this._general.selectedBlock.content.item.style.hover = newS; 
-          else this._general.selectedBlock.style.hover = newS;
+          this._general.selectedBlock.style.hover = newS;
         }
       }
-      else {
-        if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = this.currentStyling();
-        else this._general.selectedBlock.style.desktop = this.currentStyling();
-      }
+      else this._general.selectedBlock.style.desktop = this.currentStyling();
     }
-    if (this._general.selectedBlock.type != "column") {
-      this._general.selectedBlock = '';
-    }
+    if(this._general.selectedBlock.type != "column") this._general.selectedBlock = '';
   }
 
   filterElementStyle(cs:any, ds:any) {
@@ -954,7 +951,11 @@ export class StyleService {
     if(cs['font-family'] != ds['font-family']) ns['font-family'] = cs['font-family'];
     if(cs['color'] != ds['color']) ns['color'] = cs['color'];
     if(cs['text-align'] != ds['text-align']) ns['text-align'] = cs['text-align'];
+    if(cs['text-shadow'] != ds['text-shadow']) ns['text-shadow'] = cs['text-shadow'];
     if(cs['text-transform'] != ds['text-transform']) ns['text-transform'] = cs['text-transform'];
+    if(cs['text-decoration-line'] != ds['text-decoration-line']) ns['text-decoration-line'] = cs['text-decoration-line'];
+    if(cs['text-decoration-style'] != ds['text-decoration-style']) ns['text-decoration-style'] = cs['text-decoration-style'];
+    if(cs['text-decoration-color'] != ds['text-decoration-color']) ns['text-decoration-color'] = cs['text-decoration-color'];
     if(cs['line-height'] != ds['line-height']) ns['line-height'] = cs['line-height'];
     if(cs['letter-spacing'] != ds['letter-spacing']) ns['letter-spacing'] = cs['letter-spacing'];
     return ns;
@@ -963,29 +964,37 @@ export class StyleService {
   setElementStyle(contentStyle: any) {
     var device = this._general.respToggleDevice.name;
     if (device != 'desktop') {
-      var newBS = this.filterStyle(this.currentStyling(), this._general.selectedBlock.content.style.desktop);
-      var newS = this.filterElementStyle(contentStyle, this._general.selectedBlock.content.style.desktop);
+      var deskS = this.setItemStyle ? this._general.selectedBlock.content.item.style.desktop : this._general.selectedBlock.content.style.desktop;
+      var newES = this.filterElementStyle(contentStyle, deskS);
+      var newCS = this.filterStyle(this.currentStyling(), deskS);
+      var newS = {...newES, ...newCS};
       if (this._general.respToggleDevice.name == 'tablet-h') {
-        this._general.selectedBlock.content.style.tablet_h = {...newS, ...newBS};
+        if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_h = newS;
+        else this._general.selectedBlock.content.style.tablet_h = newS;
       }
       else if (this._general.respToggleDevice.name == 'tablet-v') {
-        this._general.selectedBlock.content.style.tablet_v = {...newS, ...newBS};
+        if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_v = newS;
+        else this._general.selectedBlock.content.style.tablet_v = newS;
       }
       else if (this._general.respToggleDevice.name == 'mobile') {
-        this._general.selectedBlock.content.style.mobile = {...newS, ...newBS};
+        if(this.setItemStyle) this._general.selectedBlock.content.item.style.mobile = newS;
+        else this._general.selectedBlock.content.style.mobile = newS;
       }
       else if (this._general.respToggleDevice.name == 'hover') {
-        this._general.selectedBlock.content.style.hover = {...newS, ...newBS};
+        console.log(newS);
+        if(this.setItemStyle) this._general.selectedBlock.content.item.style.hover = newS;
+        else this._general.selectedBlock.content.style.hover = newS;
       }
     }
     else {
-      this._general.selectedBlock.content.style.desktop = {...contentStyle, ...this.currentStyling()};
+      var mergS = {...contentStyle, ...this.currentStyling()};
+      if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = mergS;
+      else this._general.selectedBlock.content.style.desktop = mergS;
     }
   }
 
   defaultStyling(block:any) {
-    var w, mt, mb, mlr, ptb, plr, bw, br, bclr, bgclr;
-    var isDivider = block.content?.name == 'divider';
+    var w, mt, mb, mlr, ptb, plr, bw, br, bclr, bgclr, isDivider = false;
     if (block.content?.name == 'button') {
       w = 'auto';
       mt = '0px';
@@ -1031,9 +1040,10 @@ export class StyleService {
       plr = '0px';
       bw = '0px';
       br = '0px';
-      bclr = 'rgba(0,0,0,0.4)';
+      bclr = 'rgba(0,0,0,1)';
       bgclr = 'rgba(0,0,0,0)';
       block.item_alignment = {desktop:'center', tablet_h:'center', tablet_v:'center', mobile:'center'};
+      isDivider = true;
     }
     else if (block.itemstyle) {
       w = 'auto';
@@ -1046,6 +1056,18 @@ export class StyleService {
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
       bgclr = 'rgba(0,0,0,0)';
+    }
+    else if (block.dropdownstyle) {
+      w = '100%';
+      mt = '0px';
+      mb = '0px';
+      mlr = '0px';
+      ptb = '0px';
+      plr = '0px';
+      bw = '0px';
+      br = '0px';
+      bclr = 'rgba(0,0,0,1)';
+      bgclr = 'rgba(255,255,255,1)';
     }
     else {
       if(block.type == 'element') {
@@ -1084,7 +1106,7 @@ export class StyleService {
     this.padding.right = plr;
 
     this.border.top = isDivider ? '2px' : bw;
-    this.border.bottom = isDivider ? '2px' : bw;
+    this.border.bottom = bw;
     this.border.left = bw;
     this.border.right = bw;
 
@@ -1113,8 +1135,8 @@ export class StyleService {
     this.p_link.tb = false;
     this.p_link.lr = false;
 
-    this.b_link.a = !isDivider;
-    this.b_link.tb = true;
+    this.b_link.a = false;
+    this.b_link.tb = !isDivider;
     this.b_link.lr = !isDivider;
 
     this.br_link = true;
@@ -1126,6 +1148,8 @@ export class StyleService {
     this.resetBackgroundImage();
     this.resetBackgroundGradient();
     this.resetBoxShadow();
+
+    if(block.dropdownstyle) this.box_shadow_position = '';
     
     return this.currentStyling();
   }
@@ -1267,17 +1291,24 @@ export class StyleService {
     this.box_shadow_ssRange.value = 4;
     this.box_shadow_ssRange.type = 'px';
     this.box_shadow_position = 'none';
-    this.box_shadow_color = '#E0E0E0';
+    this.box_shadow_color = 'rgba(0,0,0,30%)';
   }
 
   blockSetting(block: any) {
       var obj:any = new Object();
-      if(this.setItemStyle) obj = this.getBlockStyle(block.content.item.style);
-      else if(block.type == 'element') {
-        this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
-        obj = this.getBlockStyle(block.content.style);
-        if(block.content?.name != 'form' && block.content?.name != 'divider' && block.content?.name != 'code' && !this.setItemStyle) {
-          this.elementSetting(block.content);
+      if(block.type == 'element') {
+        if(this.setItemStyle) {
+          obj = this.getBlockStyle(block.content.item.style);
+          this.elementSetting(block.content.item);
+        }
+        else {
+          if(this.setDropDownStyle.main) obj = block.content.style.dropdown;
+          else if(this.setDropDownStyle.item) obj = block.content.item.style.dropdown;
+          else {
+            obj = this.getBlockStyle(block.content.style);
+            if(block.content?.name != 'form' && block.content?.name != 'divider' && block.content?.name != 'code') this.elementSetting(block.content);
+          }
+          this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         }
       }
       else obj = this.getBlockStyle(block.style);
@@ -1565,17 +1596,17 @@ export class StyleService {
 
   elementSetting(element: any) {
     var obj = this.getBlockStyle(element.style);
-    if(element.name == 'menu') {
+    if(element.name == 'menu' && !this.setItemStyle) {
       this._general.menus.forEach((menu:any)=>{
         if(menu.id == element.data_id) {
           this._general.selectedMenu = menu;
         }
       })
     }
-    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || element.name == 'menu') {
-      this.font_size.value = obj['font-size'] ? obj['font-size'] : 'normal';
+    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle) {
+      this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
-      this.font_style = obj['font-style'];
+      this.font_style = obj['font-style'] ? obj['font-style'] : 'normal';
       this.font_family = obj['font-family'];
       this.text_color = obj['color'];
       this.text_align = obj['text-align'];
@@ -1633,7 +1664,7 @@ export class StyleService {
       this.video_loop = element.loop;
       this.video_controls = element.controls;
     }
-    else if (element.name == 'button' && !element.form) {
+    if (element.name == 'button' && !element.form) {
       this._general.getAllWebPages();
       this._general.getAllFunnels();
       if(element.btntype != 'regular') {
