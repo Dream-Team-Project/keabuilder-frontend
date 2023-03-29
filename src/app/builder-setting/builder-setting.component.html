@@ -36,8 +36,10 @@
                 <div class="kb-element-inner-group">
                     <ul class="kb-element-list">
                         <li *ngFor="let element of _element.elementList | keyvalue | filter:'':'key'" class="kb-element-box"><span
-                                (click)="_element.addElement(element.value.content)"><i [class]="element.value.iconCls"></i>
+                                [matTooltip]="!isElementExist(element.key) ? 'Please create first '+ element.key : ''" matTooltipPosition="above"
+                                (click)="isElementExist(element.key) ? _element.addElement(element.value.content) : ''"><i [class]="element.value.iconCls"></i>
                                 <div>{{element.key | titlecase}}</div>
+                                <i *ngIf="!isElementExist(element.key)" class="fa-solid fa-circle-exclamation kb-element-not-found-alert"></i>
                             </span></li>
                     </ul>
                 </div>
@@ -63,7 +65,7 @@
                     </div>
                     <span class="kb-setting-head-text">
                         {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-                        _general.selectedBlock.type) : _general.selectedBlock.content.name}} 
+                        _general.selectedBlock.type) : _general.selectedBlock.content.name}} {{_style.setItemStyle ? 'Item' : ''}} {{_style.setDropDownStyle.main ? 'Dropdown' : ''}}
                         <span class="kb-tag kb-info-tag">{{_general.respToggleDevice.name.replace('-',' ')}}</span>
                     </span>
                     <span class="kb-selection-top-actions">
@@ -192,7 +194,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && !_style.setItemStyle && _general.selectedBlock.content?.name != 'form'">
+                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && !_style.setDropDownStyle.main">
                         <!-- image -->
                         <div *ngIf="_general.selectedBlock.content.name == 'image'">
                             <div *ngIf="searchingDeep('Content Choose Image') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
@@ -457,7 +459,7 @@
                         </div>
                         <!-- divider -->
                         <!-- menu -->
-                        <div *ngIf="searchingDeep('Content Menu') && _general.selectedBlock.content?.name == 'menu'"
+                        <div *ngIf="searchingDeep('Content Menu') && _general.selectedBlock.content?.name == 'menu' && !_style.setItemStyle && !_style.setDropDownStyle.item"
                         class="kb-inner-tab-component">
                             <div class="kb-tab-head">Menu</div>
                             <div class="kb-tab-content">
@@ -1410,7 +1412,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle">
+                        <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item">
                             <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' else blockAlign"
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment</div>
@@ -1941,7 +1943,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Advanced" *ngIf="searchingTab('Advanced')">
+                    <mat-tab label="Advanced" *ngIf="_general.respToggleDevice.name != 'hover' && searchingTab('Advanced')">
                         <div *ngIf="_general.selectedBlock.type != 'main' && searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Visibility Off</div>
                             <div class="kb-tab-content kb-resp-ask">
@@ -1963,48 +1965,46 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="_general.respToggleDevice.name != 'hover'">
-                            <div *ngIf="searchingDeep('Advanced Transition Duration')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Transition Duration
-                                    <span matTooltip="None" matTooltipPosition="above"
-                                    (click)="_style.transition.duration = 0"
-                                    [class]="_style.transition.duration != 0 ? 'active' : ''" class="kb-reverse-icon"><i
-                                        class="fa fa-sync"></i></span>
-                                    <strong style="margin-left: auto;">{{_style.transition.duration == 0 ? 'None' :
-                                        _style.transition.duration+'s'}}</strong>
-                                </div>
-                                <div class="kb-tab-content">
-                                    <div class="kb-rangeInp">
-                                        <mat-slider thumbLabel [(ngModel)]="_style.transition.duration" tickInterval="0" step="0.1" min="0"
-                                            max="5" class="slider" aria-label="units">
-                                        </mat-slider>
-                                    </div>
+                        <div *ngIf="searchingDeep('Advanced Transition Duration')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Transition Duration
+                                <span matTooltip="None" matTooltipPosition="above"
+                                (click)="_style.transition.duration = 0"
+                                [class]="_style.transition.duration != 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                    class="fa fa-sync"></i></span>
+                                <strong style="margin-left: auto;">{{_style.transition.duration == 0 ? 'None' :
+                                    _style.transition.duration+'s'}}</strong>
+                            </div>
+                            <div class="kb-tab-content">
+                                <div class="kb-rangeInp">
+                                    <mat-slider thumbLabel [(ngModel)]="_style.transition.duration" tickInterval="0" step="0.1" min="0"
+                                        max="5" class="slider" aria-label="units">
+                                    </mat-slider>
                                 </div>
                             </div>
-                            <div *ngIf="searchingDeep('Advanced Transition Timing Function')" class="kb-inner-tab-component"> 
-                                <div class="kb-tab-head">Transition Timing Function</div>
-                                <div class="kb-tab-content">
-                                    <mat-select [(ngModel)]="_style.transition.timing_function">
-                                        <mat-option *ngFor="let tf of _style.timing_functions" [value]="tf">{{tf?.replaceAll('-',' ') |
-                                            titlecase}}</mat-option>
-                                    </mat-select>
-                                </div>
+                        </div>
+                        <div *ngIf="searchingDeep('Advanced Transition Timing Function')" class="kb-inner-tab-component"> 
+                            <div class="kb-tab-head">Transition Timing Function</div>
+                            <div class="kb-tab-content">
+                                <mat-select [(ngModel)]="_style.transition.timing_function">
+                                    <mat-option *ngFor="let tf of _style.timing_functions" [value]="tf">{{tf?.replaceAll('-',' ') |
+                                        titlecase}}</mat-option>
+                                </mat-select>
                             </div>
-                            <div *ngIf="searchingDeep('Advanced Transition Delay')" class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Transition Delay
-                                    <span matTooltip="None" matTooltipPosition="above"
-                                    (click)="_style.transition.delay = 0"
-                                    [class]="_style.transition.delay != 0 ? 'active' : ''" class="kb-reverse-icon"><i
-                                        class="fa fa-sync"></i></span>
-                                    <strong style="margin-left: auto;">{{_style.transition.delay == 0 ? 'None' :
-                                        _style.transition.delay+'s'}}</strong>
-                                </div>
-                                <div class="kb-tab-content">
-                                    <div class="kb-rangeInp">
-                                        <mat-slider thumbLabel [(ngModel)]="_style.transition.delay" tickInterval="0" step="0.1" min="0"
-                                            max="5" class="slider" aria-label="units">
-                                        </mat-slider>
-                                    </div>
+                        </div>
+                        <div *ngIf="searchingDeep('Advanced Transition Delay')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Transition Delay
+                                <span matTooltip="None" matTooltipPosition="above"
+                                (click)="_style.transition.delay = 0"
+                                [class]="_style.transition.delay != 0 ? 'active' : ''" class="kb-reverse-icon"><i
+                                    class="fa fa-sync"></i></span>
+                                <strong style="margin-left: auto;">{{_style.transition.delay == 0 ? 'None' :
+                                    _style.transition.delay+'s'}}</strong>
+                            </div>
+                            <div class="kb-tab-content">
+                                <div class="kb-rangeInp">
+                                    <mat-slider thumbLabel [(ngModel)]="_style.transition.delay" tickInterval="0" step="0.1" min="0"
+                                        max="5" class="slider" aria-label="units">
+                                    </mat-slider>
                                 </div>
                             </div>
                         </div>
@@ -2049,10 +2049,10 @@
                 </ng-template>
                 <!-- code -->
                 <div class="kb-selection-btn-group">
-                    <button type="button" color="secondary" mat-stroked-button (click)="overlayRefDetach(false)"
+                    <button mat-stroked-button color="secondary" (click)="overlayRefDetach(false)"
                         class="kb-btn kb-selection-btn"><span><i
                                 class="fa fa-times"></i>Discard</span></button>
-                    <button type="button" color="primary" mat-stroked-button (click)="overlayRefDetach(true);"
+                    <button mat-stroked-button color="primary" (click)="overlayRefDetach(true);"
                         class="kb-btn kb-selection-btn"><span><i
                                 class="fa fa-check"></i>Apply</span></button>
                 </div>

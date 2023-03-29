@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
+import { TokenStorageService } from '../token-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,15 @@ export class CourseService {
   createApi = './api/createcourse';
   updateApi = './api/updatecourse';
   deleteApi = './api/deletecourse';
+  // API url
+  uuid: any;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
+    this.uuid = this.tokenStorage.getUser().uniqueid;
+  }
 
   all():Observable<any> {
-    return this.http.get(this.allApi);
+    return this.http.get(this.allApi+'/'+this.uuid);
   }
 
   single(param:any):Observable<any> {
@@ -34,12 +39,14 @@ export class CourseService {
     return this.http.get(this.singlebyurlApi+'/'+param);
   }
 
-  create(req:any):Observable<any> {
-    return this.http.post(this.createApi, req);
+  create(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.createApi, obj);
   }
 
-  update(req:any):Observable<any> {
-    return this.http.put(this.updateApi, req);
+  update(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.put(this.updateApi, obj);
   }
 
   delete(param:any):Observable<any> {

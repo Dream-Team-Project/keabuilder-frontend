@@ -1,11 +1,10 @@
-import { ThisReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CourseService } from '../_services/_membership/course.service';
 import { ImageService } from '../_services/image.service';
 import { FileUploadService } from '../_services/file-upload.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GeneralService } from '../_services/_builder/general.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-courses',
@@ -15,6 +14,9 @@ import { GeneralService } from '../_services/_builder/general.service';
 
 export class CoursesComponent implements OnInit {
 
+  validate = {
+    title: new FormControl('', [Validators.required]),
+  }
   courses:any[] = [];
   sidebar = {
     open: false,
@@ -25,33 +27,46 @@ export class CoursesComponent implements OnInit {
   typeerror = '';
   offers = new FormControl();
   offersList: any[] = [];
-  thumbnail:any;
+  thumbnail:any = {
+    path: '',
+    type: ''
+  };
   offersToAdd:Array<string> = [];
-  course:any;
+  course = {
+    id: '',
+    uniqueid: '',
+    user_id: '',
+    title: '',
+    path: '',
+    description: '',
+    thumbnail: '',
+    offers: '',
+    publish_status: ''
+  };
   update:boolean = false;
   prevTitle:string = '';
 
-  showpageurl = false;
   pageurl = '';
-  firstquickedit = true;
-  editshowurl = false;
-  selectedcourse = false;
   showmyselected = [];
   showquickoffer:any = [];
   fetching:boolean = true;
   toggleview:boolean = true;
-
+  shortwaiting = true;
+  btndis:boolean = false;
+  delcourse:any;
 
   constructor(private _course: CourseService,
              public _image: ImageService, 
-             private _snackbar: MatSnackBar,  
              private _file: FileUploadService,
-             private _snackBar: MatSnackBar,
-             public _general: GeneralService,) {
+             public _general: GeneralService,
+             public dialog: MatDialog) {
               this.toggleview = _general.getStorage('course_toggle');
               }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.shortwaiting = false;
+    }, 1000);
     // this._course.getalloffers().subscribe({
     //   next: data => {
     //    data.data.forEach((element: any) => {
@@ -62,49 +77,58 @@ export class CoursesComponent implements OnInit {
 
     //   }
     // });
-    this.allCourses(false);
+    this.allCourses();
   }
 
-  allCourses(reset:boolean) {
+  openDialog(templateRef: TemplateRef<any>, course:any ): void {
+    this.delcourse = course;
+    this.dialog.open(templateRef);
+  }
+
+  allCourses() {
+    this.fetching = true;
     this._course.all().subscribe((res:any)=>{
-      console.log(res.data);
-      // this.courses = res.data;
-      for(let i = 0 ; i < 9; i++) this.courses = this.courses.concat(res.data);
-      if(reset) this.closeSidebar();
+      this.courses = res.data;
+      this.fetching = false;
     }); 
   }
 
   createCourse() {
-    if(this.course.title!=''){
-      this.course.uniqueid = Math.random().toString(20).slice(2);
-      if(this.thumbnail.type) {
-        this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
-        this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
-        // this.course.offers = this.offersToAdd.join(',');
-      }
-      this.course.offers = this.offers.value.join(',');
+    if(this.course.title!='' && this.thumbnail.path) {
+      this.btndis = true;
+      this.course.uniqueid = this._general.makeid(20);
+      this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+      this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      // this.course.offers = this.offers.value.join(',');
       this._course.create(this.course).subscribe((res:any)=>{
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
-        this.allCourses(true);
+        this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          this.allCourses();
+          this.closeSidebar();
+          this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
+        })
       })
     }
+    else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
   }
 
   updateCourse() {
-    if(this.thumbnail.type) {
+    if(this.course.title!='' && this.thumbnail.path) {
+      this.btndis = true;
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      if(this.offers.value!=null){
+        // this.course.offers = this.offersToAdd.join(',');
+        this.course.offers = this.offers.value.join(',');
+      }
+      this._course.update(this.course).subscribe((res:any)=>{
+        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
+        this._image.timeStamp = (new Date()).getTime();
+        this.allCourses();
+        this.closeSidebar();
+        this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
+      })
     }
-    if(this.offers.value!=null){
-      // this.course.offers = this.offersToAdd.join(',');
-      this.course.offers = this.offers.value.join(',');
-    }
-    this._course.update(this.course).subscribe((res:any)=>{
-      if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
-      this._image.timeStamp = (new Date()).getTime();
-      this.allCourses(true);
-    })
-
+    else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
   }
 
   findselectedproduct(){
@@ -121,16 +145,20 @@ export class CoursesComponent implements OnInit {
   }
 
   deleteCourse(course:any) {
+    course.deleting = true;
     this._course.delete(course.id).subscribe((res:any)=>{
       if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
-        console.log(res);
+        this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
+        this.allCourses();
       });
-      this.allCourses(true);
+      else {
+        this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
+        this.allCourses();
+      }
     }); 
   }
 
   closeSidebar(){
-    this.selectedcourse = false;
     this.showmyselected  = [];
     var arselmult:any = [];
     this.offers.setValue(arselmult); 
@@ -138,35 +166,40 @@ export class CoursesComponent implements OnInit {
     setTimeout((e:any)=>{
       this.sidebar.anim.close = false;
       this.sidebar.open = false;
+      this.btndis = false;
+      this.course ={ 
+        id: '',
+        uniqueid: '',
+        user_id: '',
+        title: '',
+        path: '',
+        description: '',
+        thumbnail: '',
+        offers: '',
+        publish_status: ''
+      }
+      this.thumbnail = {
+        path: '',
+        type: ''
+      }
     },this.sidebar.animtime)
   }
 
-  openSidebar(){
-    this.editshowurl = false;
+  openSidebar(course:any, update:boolean){
+    this.update = update;
+    this.course = course;
     this.sidebar.open = true;
     this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
+    setTimeout((e:any)=>this.sidebar.anim.open = false,this.sidebar.animtime);
   }
 
-  editDetails(course:any) {
-    this.course = JSON.parse(JSON.stringify(course));
+  quickEdit(course:any) {
+    var temp = JSON.parse(JSON.stringify(course));
     // this.offersToAdd = this.course.offers.split(',');
-    this.selectedcourse = true;
-    this.showmyselected = course.offers.split(',');
-    this.findselectedproduct();
-    console.log(course);
-    if(this.course.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.course.thumbnail;
-    this.update = true;
-    this.openSidebar();
-    this.showpageurl = false;
-    this.firstquickedit = true;
-    this.editshowurl = true;
-  }
-
-  compareImgRepeat(imgR1:any, imgR2:any) {
-    return imgR1.value === imgR2.value && imgR1.viewValue === imgR2.viewValue;
+    // this.showmyselected = course.offers.split(',');
+    // this.findselectedproduct();
+    this.thumbnail.path = this._image.uploadImgPath + 'keaimage-course-thumbnail-'+temp.uniqueid+'.png';
+    this.openSidebar(temp, true);
   }
   
   changeImg (event:any) {
@@ -184,30 +217,17 @@ export class CoursesComponent implements OnInit {
 
   }
 
-  modifydate(value:any){
-    if(value!=''){
-      var mycustomdate =  new Date(value);
-      var text1 = mycustomdate.toDateString();    
-      var text2 = mycustomdate.toLocaleTimeString();
-      return text1+' '+text2;
-    }else{
-      return '';
-    }
-  }
-
   copyInputMessage(inputElement:any){
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Successfully Copied!', 'OK');
+    this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
   }
 
-  copyurl(url:any){
-    this.pageurl = url;
-    this.openSidebar();
-    this.showpageurl = true;
-    this.firstquickedit = false;
-  }
+  // copyurl(url:any){
+  //   this.pageurl = url;
+  //   this.openSidebar(this.course);
+  // }
 
 
   searchCourses(search: any, filter: any) {
@@ -232,5 +252,7 @@ export class CoursesComponent implements OnInit {
     this.toggleview = !this.toggleview; 
     this._general.setStorage('course_toggle',this.toggleview);
   }
+
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
 }

@@ -11,6 +11,33 @@
     margin: 0!important;
 }
 
+.kb-gloabally-block {
+    position: relative;
+}
+
+div.kb-gloabally-block:hover:before {
+    border-color: var(--secondary-color);
+    z-index: 9;
+}
+
+.kb-gloabally-block:hover button.kb-globally-edit-btn {
+    opacity: 1;
+}
+
+button.kb-globally-edit-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    font-size: 13px;
+    border-radius: 0px 0px 0px 4px;
+    z-index: 99;
+}
+
+::ng-deep button.kb-btn.kb-globally-edit-btn:hover {
+    color: var(--primary-color)!important;
+}
+
 #kb-builder-topbar {
     position: sticky;
     top: 0px;
@@ -402,6 +429,7 @@ div#kb-element-group .kb-element-inner-group {
 }
 
 div#kb-element-group ul.kb-element-list li.kb-element-box>span {
+    position: relative;
     display: block;
     width: 100%;
     padding: 6px 0;
@@ -564,7 +592,7 @@ div.kb-block-container {
     flex-wrap: wrap;
 }
 
-div.kb-block-container:before {
+div.kb-block-container:before, .kb-gloabally-block:before {
     content: '';
     border: 2px solid transparent;
     position: absolute;
@@ -589,7 +617,6 @@ div.kb-section:hover:before {
     border-color: var(--section-color);
 }
 
-
 div.kb-section div.kb-row:hover:before {
     border-color: var(--row-color);
 }
@@ -598,7 +625,7 @@ div.kb-element.kb-border:before {
     border-color: var(--primary-color);
 }
 
-div.kb-element-content *:not(.kb-content-item) {
+div.kb-element-content *:not(.kb-content-item, .kb-menu-resp *), .kb-menu-bar {
     margin: 0!important;
 }
 
@@ -1207,16 +1234,19 @@ div.kb-section div.kb-row:hover .kb-column-wrap.flexColumnRev div.kb-column.kb-b
     border-left: 1px solid rgb(216 200 152 / 50%);
 }
 
-ul.kb-menu {
+ul.kb-menu, .kb-menu-resp ul.kb-menu-content {
     list-style: none;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     padding: 0px;
     margin: 0px;
 }
 
-ul.kb-menu a, ul.kb-menu li {
+ul.kb-menu {
+    flex-direction: row;
+}
+
+ul.kb-menu a, ul.kb-menu li, .kb-menu-resp ul.kb-menu-content a, .kb-menu-resp ul.kb-menu-content li {
     font-family: inherit;
     font-weight: inherit;
     color: inherit
@@ -1330,3 +1360,58 @@ ul.kb-menu a, ul.kb-menu li {
  header a, footer a{
     pointer-events: none!important;
   }
+
+  /* menu responsiveness */
+
+.kb-menu-resp .kb-menu-content {
+    flex-direction: column;
+    background-color: var(--kb-light);
+    position: absolute;
+    top: 25px;
+    z-index: 999;
+    width: 100%;
+}
+
+.kb-resp-view .kb-menu {
+    display: none;
+}
+
+.kb-resp-view .kb-menu-resp {
+    display: flex;
+}
+
+.kb-menu-resp {
+    width: 100%;
+    display: none;
+    position: relative;
+    align-items: center;
+}
+
+.kb-menu-bar {
+    cursor: pointer;
+    display: inline-block;
+}
+  
+.kb-menu-bar1, .kb-menu-bar2, .kb-menu-bar3 {
+    display: block;
+    width: 20px;
+    height: 4px;
+    background-color: var(--kb-dark);
+    margin-top: 3px;
+    margin-bottom: 3px;
+    transition: 0.2s ease;
+}
+
+.kb-menu-bar-open .kb-menu-bar1 {
+    transform: translate(0, 7px) rotate(-45deg);
+}
+
+.kb-menu-bar-open .kb-menu-bar2 {
+    opacity: 0;
+}
+
+.kb-menu-bar-open .kb-menu-bar3 {
+    transform: translate(0, -7px) rotate(45deg);
+}
+
+/* menu responsiveness */

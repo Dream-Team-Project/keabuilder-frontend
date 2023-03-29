@@ -34,4 +34,12 @@ window.onload = function(a){
         item.classList.remove('kb-video-muted');
     });
     // video muted
+    // responsive menu
+    document.querySelectorAll('.kb-menu-bar').forEach(item=>{
+        item.addEventListener('click',()=>{
+        item.classList.toggle("kb-menu-bar-open");
+        item.parentElement.getElementsByTagName('UL')[0].classList.toggle('kb-d-none');
+        })
+    });
+  // responsive menu
 }

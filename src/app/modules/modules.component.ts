@@ -12,6 +12,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-module',
@@ -72,7 +73,7 @@ export class ModulesComponent implements OnInit {
     private _viewContainerRef: ViewContainerRef,
     public _image: ImageService,
     public _general: GeneralService,
-  ) {
+    public dialog: MatDialog) {
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
       this.fetchCourse();
@@ -84,9 +85,7 @@ export class ModulesComponent implements OnInit {
   // ng events
 
   ngOnInit(): void {
-
     this._course.single(this.course.uniqueid).subscribe(res=>{
-      console.log(res);
         var getofferid = res.data[0].offers;
         if(getofferid!=''){
           var newob = {id:getofferid};
@@ -96,9 +95,7 @@ export class ModulesComponent implements OnInit {
           });
           
         }
-
     })
-
   }
 
   ngAfterViewInit() {
@@ -118,6 +115,11 @@ export class ModulesComponent implements OnInit {
 
   // ng events
 
+  // openDialog(templateRef: TemplateRef<any>, course:any ): void {
+  //   this.delcourse = course;
+  //   this.dialog.open(templateRef);
+  // }
+
   redirectToLesson(tab:number, module:any, lesson:any) {
     var lespath = './module/'+module.uniqueid+'/lesson/'+lesson.uniqueid;
     this.router.navigate([lespath+'/'+tab], {relativeTo: this.route});
@@ -135,6 +137,7 @@ export class ModulesComponent implements OnInit {
    fetchPosts() {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
+        console.log(res.data);
         this.modules = res.data;
         var request = 0;
         this.modules.forEach((m:any)=>{
