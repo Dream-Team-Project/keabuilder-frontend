@@ -143,7 +143,7 @@ export class CreateFunnelContactsComponent implements OnInit {
           
           /* generate workbook and add the worksheet */
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+          XLSX.utils.book_append_sheet(wb, ws, 'Contact');
           
           /* save to file */  
           XLSX.writeFile(wb, this.fileName);

@@ -28,7 +28,7 @@
   }
 
   table {
-    width: 100%;
+    width: 60%;
   }
 
   
@@ -143,4 +143,81 @@
   padding-right: 8px;
 }
 
+::ng-deep td.border-bottom {
+  border-bottom: 2px ;
+  border-top:0;
+  text-align: center;
 
+}
+.fntli li{
+  font-size: 11px;
+  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  padding: 5px;
+  margin: 2px;
+  background-color: rgb(233, 231, 231);
+}
+.fntilitem{
+  font-size: 11px;
+  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  /* padding: 5px;
+  margin: 2px; */
+  
+  align-items: center;
+  background-color: rgb(233, 231, 231);
+}
+.fntli{
+  /* margin: 16px; */
+  justify-items: center;
+  /* margin-left: 10px; */
+  padding-left: 5px;
+}
+.fntlitag{
+ margin: 1px;
+ padding: 1px;
+
+}
+.fntli-box{
+  display: inline-block;
+  width: 100%;
+  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 8px;
+  
+ 
+}
+.funtag1{
+  margin-left: 10px;
+  padding-left: 10px;
+  font-size: 12px;
+}
+.funtag{
+  font-weight: 400;
+  font-size: 18px;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+.fntilform{
+  border-bottom: none;
+  border:0;
+  padding: 0;
+}
+.namebox1{
+  font-size: 18px;
+    padding: 8px;
+    border: 2px solid lightgray;
+    border-radius: 8px;
+    background: #f2f4f4;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    color: var(--primary-color);
+}
+.text-warning{
+  color: var(--primary-color);
+}
+.searchbox{
+  width:500px;
+}

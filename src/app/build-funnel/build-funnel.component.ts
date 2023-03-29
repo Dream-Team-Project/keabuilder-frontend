@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
-import {FormControl, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms'; 
 import { GeneralService } from '../_services/_builder/general.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { FileUploadService } from '../_services/file-upload.service';

@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { CrmCampaignsService } from '../_services/_crmservice/crm-campaigns.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import {FormControl, Validators} from '@angular/forms';
+import { ImageService } from '../_services/image.service';
+import { GeneralService } from '../_services/_builder/general.service';
+
 
 @Component({
   selector: 'app-crm-campaigns',
@@ -6,62 +14,86 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./crm-campaigns.component.css']
 })
 export class CrmCampaignsComponent implements OnInit {
+  
+  campaignname ='';
+  campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+  toggleview = true;
+  kbcampaigns:any = [];
+  shortwaiting = true;
+  campoption = '';
 
-  automations_campaign:any[] = [
-    {
-        "id": 1,
-        "campaign_name": "Order Summary",
-        "campaign_url": "order-summary",
-        "domain": null,
-        "publish_status": 1,
-        "quick_status":"Sent",
-        "campaign_sent":"Thu Jan 07 2022 5:09:57 PM",
-        "campaign_type":"One-Time",
-        "campaign_sent_to":"2,200",
-        "thumbnail": "https://sendgrid.com/wp-content/uploads/2019/08/Transactional_DESKTOP.png",
-        "updated_at": "Thu Jan 06 2022 5:09:57 PM",
-        "entries":'10',
-        "itemshow": false,
-        "dropdownstatus": false
-    },
-    {
-      "id": 1,
-      "campaign_name": "Lead Form Automation",
-      "campaign_url": "lead-form",
-      "domain": null,
-      "publish_status": 0,
-      "quick_status":"Scheduled",
-      "campaign_sent":"Thu Jan 08 2022 5:09:57 PM",
-      "campaign_type":"One-Time",
-      "campaign_sent_to":"--",
-      "thumbnail": "https://www.smartinsights.com/wp-content/uploads/2014/05/maketing-campaign-plan-template-look-inside.jpg",
-      "updated_at": "Thu Jan 06 2022 5:09:57 PM",
-      "entries":'2',
-      "itemshow": false,
-      "dropdownstatus": false
-    },
-    {
-      "id": 1,
-      "campaign_name": "Order Confirm",
-      "campaign_url": "order-confirm",
-      "domain": null,
-      "publish_status": 0,
-      "quick_status":"Draft",
-      "campaign_sent":"Thu Jan 16 2022 5:09:57 PM",
-      "campaign_type":"One-Time",
-      "campaign_sent_to":"--",
-      "thumbnail": "https://stripo.email/photos/shares/Templates/529-Stripo-Pets-Trigger-newsletter-Order-Confirmation-web.png",
-      "updated_at": "Thu Jan 06 2022 5:09:57 PM",
-      "entries":'2',
-      "itemshow": false,
-      "dropdownstatus": false
-    },
-    
-  ];
+  constructor(
+      private crmCampaignservice: CrmCampaignsService,
+      private _snackBar: MatSnackBar, 
+      private dialog: MatDialog,
+      private route: ActivatedRoute,
+      private router: Router,
+      public _image: ImageService,
+      public _general: GeneralService,
+    ) {
+      this.toggleview = _general.getStorage('campaign_toggle');
 
-  constructor() { }
+  }
 
   ngOnInit(): void {
+
+    setTimeout(() => {
+        this.shortwaiting = false;
+    }, 1000);
+    
+    this.crmCampaignservice.getAllcrmcampaigns().subscribe({
+      next: data => {
+        console.log(data);
+        this.kbcampaigns = data.data;
+      }
+    });
+
   }
+
+  dateformat(value:any){
+    if(value=='') return '';
+    var mycustomdate =  new Date(value);
+    var text1 = mycustomdate.toDateString();    
+    var text2 = mycustomdate.toLocaleTimeString();
+    return text1+' '+text2;
+  }
+
+  createcamp(){
+
+    if(this.campaignnameControl.status=='VALID'){
+      
+      if(this.campaignname!=''){
+        
+        var data = {name:this.campaignname};
+        this.crmCampaignservice.createcrmcampaign(data).subscribe({
+          next: data => {
+            // console.log(data);
+            this.dialog.closeAll();
+            this._snackBar.open('Campaign Created Successfully!', 'OK');
+
+            this.router.navigate(['/crm-newcampaign/'+data.uniqueid],{relativeTo: this.route});
+          }
+        });
+
+      }
+
+    }
+
+  }
+
+  openDialog(templateRef: TemplateRef<any>): void {
+    this.dialog.open(templateRef);
+  }
+  
+  changepagename(dataobj:any, title:any){
+
+  }
+
+  togglepageview(){
+    this.toggleview = !this.toggleview; 
+    console.log(this.toggleview);
+    this._general.setStorage('campaign_toggle',this.toggleview);
+  }
+  
 
 }

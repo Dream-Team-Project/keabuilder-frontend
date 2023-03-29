@@ -182,16 +182,20 @@ export class DomainComponent implements OnInit {
 
                 this.domainService.ondeletedomain(id).subscribe({
                   next: data => {
-                    // console.log(data);
+                    console.log(data);
                     this.searching = false;
                     this.deldomconn = 0; 
 
                     if(data.success==true){
                       this.alldomainsdata = [];
-                      data.data.forEach((element:any) => {
-                        this.alldomainsdata.push(element);
-                      });
+                      if(data.data?.length!=0){
+                        data.data.forEach((element:any) => {
+                          this.alldomainsdata.push(element);
+                        });
+                      }
                       this._snackBar.open('Domain has been Successfully removed!', 'OK');
+                    }else{
+                      this._snackBar.open('Something Went Wrong!', 'OK');
                     }
                     
                   }
