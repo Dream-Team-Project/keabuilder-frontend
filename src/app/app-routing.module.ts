@@ -85,6 +85,10 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
 import { AllWebsitesComponent } from './all-websites/all-websites.component';
 
+import { CrmContactsViewComponent } from './crm-contacts-view/crm-contacts-view.component';
+import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.component';
+import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
+
 const routes: Routes = [
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -143,13 +147,13 @@ const routes: Routes = [
 
   { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
 
-  { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-contacts', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-lists', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-tags', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-reports', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'crm-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-contacts', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-lists', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-tags', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-reports', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
   { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -221,6 +225,20 @@ const routes: Routes = [
   // { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
   // { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
 
+  { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
+  { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
+  
+  
+  { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contact-view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contacts-view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
+  { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
@@ -289,10 +307,13 @@ export const RoutingComponents =
     CrmComponent,
     CrmCampaignsComponent,
     CrmContactsComponent,
+    CrmContactViewComponent,
+    CrmContactsViewComponent,
     CrmListsComponent,
     CrmTagsComponent,
     CrmReportsComponent,
     CrmSettingsComponent,
+    CrmNewCampaignComponent,
     AffiliatesComponent,
     AffiliateUsersComponent,
     AffiliateCommissionComponent,

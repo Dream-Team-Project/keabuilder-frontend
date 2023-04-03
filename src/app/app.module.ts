@@ -60,6 +60,9 @@ import { FilterPipe } from './_pipes/filter.pipe';
 import { SortingPipe } from './_pipes/sorting.pipe';
 import { SvgPipe } from './_pipes/svg.pipe';
 
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -92,6 +95,7 @@ import { SvgPipe } from './_pipes/svg.pipe';
     MatSnackBarModule,
     MatSliderModule,
     MatIconModule,
+    MatStepperModule,
     MatRadioModule,
     MatButtonToggleModule,
     ColorMaterialModule,
@@ -124,7 +128,8 @@ import { SvgPipe } from './_pipes/svg.pipe';
     NgxCaptureModule,  
     MatDialogModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
-    AngularSvgIconModule.forRoot()
+    AngularSvgIconModule.forRoot(),
+    MatAutocompleteModule
   ],
   providers: [authInterceptorProviders, { 
     provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },

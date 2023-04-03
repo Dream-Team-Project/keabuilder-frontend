@@ -121,23 +121,47 @@ export class CreateFunnelSalesComponent implements OnInit {
   exportexcel(): void
   {
 
-    this.funnelService.getfunnelexportsale(this.uniqueid).subscribe({
-      next: data => {
+    console.log(this.users);
 
-        const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
-     
-        /* generate workbook and add the worksheet */
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-     
-        /* save to file */  
-        XLSX.writeFile(wb, this.fileName);
+    var generateobj:any = [];
+    
+    if(this.users?.length!=0){
+      this.users.forEach((element:any) => {
+        var genobj = {product_name:element.product_name,amount: '$'+element.amount,customer:element?.customer,status:element.status,created_at:element.created_at};
+        generateobj.push(genobj);
+      });
+      // console.log(generateobj);
 
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
+        if(generateobj?.length!=0){
+          const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(generateobj);
+          
+          /* generate workbook and add the worksheet */
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Sales');
+          
+          /* save to file */  
+          XLSX.writeFile(wb, this.fileName);
+        }
+    }
+
+
+    // this.funnelService.getfunnelexportsale(this.uniqueid).subscribe({
+    //   next: data => {
+
+    //     const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(data.data);
+     
+    //     /* generate workbook and add the worksheet */
+    //     const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+     
+    //     /* save to file */  
+    //     XLSX.writeFile(wb, this.fileName);
+
+    //   },
+    //   error: err => {
+    //     console.log(err);
+    //   }
+    // });
 
  
   }

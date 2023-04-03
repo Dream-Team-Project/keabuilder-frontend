@@ -199,17 +199,18 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/crm',
+      routerlink: '/crm-campaigns',
       img: 'hacker.gif',
       icon: 'fas fa-user-secret',
       title: 'CRM',
-      submenu:[{
-          0:true,
-          routerlink: '/crm',
-          img: 'hacker.gif',
-          icon: 'fa fa-random',
-          title: 'Automations'
-        },
+      submenu:[
+        // {
+        //   0:true,
+        //   routerlink: '/crm',
+        //   img: 'hacker.gif',
+        //   icon: 'fa fa-random',
+        //   title: 'Automations'
+        // },
         {
           0:true,
           routerlink: '/crm-campaigns',

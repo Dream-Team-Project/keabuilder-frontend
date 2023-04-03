@@ -4,7 +4,7 @@
         <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
           
           <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-          <h6><strong>New {{kbforsmtp==false?'Email':'SMTP'}} Integration</strong></h6>
+          <h6><b>New {{kbforsmtp==false?'Email':'SMTP'}} Integration</b></h6>
           <p>Enter your {{kbforsmtp==false?'Email':'SMTP'}} settings using the options below.</p>
           <hr>
           <mat-form-field class="kb-full-width" appearance="fill">
@@ -355,12 +355,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 mb-4">
-                <button mat-raised-button class="mr-2" [routerLink]="['/crm']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+                <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button> -->
                 <button mat-raised-button class="mr-2" [routerLink]="['/crm-campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
                 <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']"><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
                 <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
                 <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-                <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+                <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button> -->
             </div>
             <div class="col-md-6 mt-4">
                <h2>Email Integrations (SMTP)</h2>
@@ -368,12 +368,12 @@
                <h4 class="mt-4">Choose an Email Type you want to setup:</h4>
                <div class="kb-insidecard" (click)="addnewcourse('transactional')">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    <h5><strong>Transactional Only</strong></h5>
+                    <h5><b>Transactional Only</b></h5>
                     <small>Free Clickfunnels service to send order confirmations, email receipts, etc.</small>                
                </div>
                <div class="kb-insidecard" (click)="addnewcourse('marketing')">
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>   
-                    <h5><strong>Transactional & Marketing</strong></h5>
+                    <h5><b>Transactional & Marketing</b></h5>
                     <small>Third party integration for marketing and transactional emails.</small>                
                 </div>
 
@@ -383,7 +383,7 @@
                     <ul class="kb-domainul">
                         <li>Connected <i class="fa fa-check-circle" aria-hidden="true"></i></li>
                         <li>Transactional Only <i class="fa fa-shopping-cart" aria-hidden="true"></i></li>
-                        <li><strong>Name: </strong>My SMTP Integration</li>
+                        <li><b>Name: </b>My SMTP Integration</li>
                         <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
                     </ul>
                 </mat-card>
@@ -392,7 +392,7 @@
                    <ul class="kb-domainul">
                        <li>Setup Pending <i class="fa fa-clock" aria-hidden="true"></i></li>
                        <li>Transactional & Marketing <i class="fa fa-bullhorn" aria-hidden="true"></i></li>
-                       <li><strong>Name: </strong>For External</li>
+                       <li><b>Name: </b>For External</li>
                        <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
                    </ul>
                </mat-card>
