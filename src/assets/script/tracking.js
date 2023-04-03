@@ -37,8 +37,8 @@ window.onload = function(a){
     // responsive menu
     document.querySelectorAll('.kb-menu-bar').forEach(item=>{
         item.addEventListener('click',()=>{
-        item.classList.toggle("kb-menu-bar-open");
-        item.parentElement.getElementsByTagName('UL')[0].classList.toggle('kb-d-none');
+            item.classList.toggle("kb-menu-bar-open");
+            item.parentElement.querySelector('.kb-menu-content').classList.toggle('kb-d-none');
         })
     });
   // responsive menu

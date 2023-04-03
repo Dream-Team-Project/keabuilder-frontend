@@ -382,38 +382,48 @@ export class GeneralService {
       var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
       var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
       this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
-      var header = this.pagehtml.querySelector('header');
+      // append Header
+      var gHead = this.pagehtml.querySelector('#kb-globall-header');
+      var header = gHead?.querySelector('header');
       if(this.includeLayout.header && this.selectedHeader.html) {
-        if(header) header.innerHTML = this.selectedHeader.html;
-        else if(preview) {
+        if(gHead && header) header.innerHTML = this.selectedHeader.html;
+        if(preview) {
           var h = document.createElement('HEADER');
           h.id = this.selectedHeader.id;
           h.innerHTML = this.selectedHeader.html;
+          gHead?.remove();
           this.pagehtml.body.insertBefore(h, this.pagehtml.getElementById('kb-main'));
         }
-        if(!preview) {
+        else {
           header.id = 'kb-header-'+this.selectedHeader.id;
           header.innerHTML = `<?php $path="../../../headers/${header.id}.php"; `+this.includeCond+` ?>`;
+          gHead.outerHTML = header.outerHTML;
         }
         jsonObj.header = this.selectedHeader;
       }
       else header?.remove();
-      var footer = this.pagehtml.querySelector('footer');
+      // append Header
+      // append Footer
+      var gFoot = this.pagehtml.querySelector('#kb-globall-footer');
+      var footer = gFoot?.querySelector('footer');
       if(this.includeLayout.footer && this.selectedFooter.html) {
-        if(footer) footer.innerHTML = this.selectedFooter.html;
-        else if(preview) {
+        if(gFoot && footer) footer.innerHTML = this.selectedFooter.html;
+        if(preview) {
           var f = document.createElement('FOOTER');
           f.id = this.selectedFooter.id;
           f.innerHTML = this.selectedFooter.html;
+          gFoot?.remove();
           this.pagehtml.body.appendChild(f);
         }
-        if(!preview) {
+        else {
           footer.id = 'kb-footer-'+this.selectedFooter.id;
           footer.innerHTML = `<?php $path="../../../footers/${footer.id}.php"; `+this.includeCond+` ?>`;
+          gFoot.outerHTML = footer.outerHTML;
         }
         jsonObj.footer = this.selectedFooter;
       }
       else footer?.remove();
+      // append Footer
       this.webpage.page_json = this.encodeJSON(jsonObj);
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
@@ -427,7 +437,7 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +        
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      if(!preview) this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
       this.pageObj = {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
         body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
@@ -551,16 +561,26 @@ export class GeneralService {
 
   removeExtra(preview:boolean) {
     var body = this.pagehtml.querySelector('BODY');
+
+    // encode text
+    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.encodeData(text.innerHTML);})
+    // encoded text
+
+    // remvoe extras
     var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
     /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
     /ng-reflect-enter-predicate="(.*?)"/g, /ng-star-inserted/g, /cdk-drag/g, /cdk-drag-handle/g, /cdk-drop-list/g, 
     /id="sectiongroup-(.*?)"/g, /id="rowgroup-(.*?)"/g, /id="elementgroup-(.*?)"/g];
     body.querySelectorAll('.kb-ispan-add').forEach((item:any)=>item.remove());
     body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
-    regExpArr.forEach((re:any)=>{
-      body.innerHTML = body.innerHTML.replace(re, '');
-    })
-    if(!preview) this.pagehtml.querySelectorAll('.kb-menu').forEach((item:any)=>{
+    regExpArr.forEach((re:any)=>{body.innerHTML = body.innerHTML.replace(re, '');})
+    // remvoed extras
+
+    // decode text
+    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.decodeData(text.innerHTML);})
+    // decoded text
+
+    if(!preview) body.querySelectorAll('.kb-menu').forEach((item:any)=>{
       item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
     });
     body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
@@ -594,8 +614,8 @@ export class GeneralService {
               var tempObj = JSON.parse(JSON.stringify(ele.content.item))
               var pseudoEle:string = '';
               if(ele.content.name == 'menu') {
-                pseudoEle = 'ul.kb-menu a';
-                tempObj.dropdownid = ele.id + ' .kb-element-content .kb-menu-resp ul.kb-menu-content a';
+                pseudoEle = '>ul.kb-menu a';
+                tempObj.dropdownid = ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-content>ul.kb-menu a';
               }
               tempObj.id = ele.id + ' .kb-element-content ' + pseudoEle;
               this.blockStyling(tempObj);
@@ -637,7 +657,7 @@ export class GeneralService {
       pseudoEle = 'a';
     }
     else if(ele.content.name == 'menu') {
-      pseudoEle = 'ul.kb-menu';
+      pseudoEle = '>ul.kb-menu';
     }
     else if(ele.content.name == 'video') {
       pseudoEle = ele.type == 'video' ? 'video' : '> div';
@@ -670,9 +690,17 @@ export class GeneralService {
 
     style.desktop.margin = style.desktop.margin?.replace(/auto/g,'0px');
     this.pagestyling.desktop += selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    if(ele.content.name == 'menu') {
+      var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
+      this.pagestyling.desktop += hamsel + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
     if(!this.isObjEmpty(ele.content.style.tablet_h)) {
       if(style.tablet_h.margin) style.tablet_h.margin = style.tablet_h.margin?.replace(/auto/g,'0px');
       this.pagestyling.tablet_h += selector + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      if(ele.content.name == 'menu') {
+        var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
+        this.pagestyling.tablet_h += hamsel + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      }
     }
     if(!this.isObjEmpty(ele.content.style.tablet_v)) {
       if(style.tablet_v.margin) style.tablet_v.margin = style.tablet_v.margin?.replace(/auto/g,'0px');
@@ -695,7 +723,7 @@ export class GeneralService {
       this.pagestyling.hover += selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
     if(!this.isObjEmpty(ele.content.style.dropdown)) {
-        var tempsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp ul.kb-menu-content';
+        var tempsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-content>ul.kb-menu';
         this.pagestyling.desktop += tempsel + '{' + Object.entries({...style.dropdown}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
   }

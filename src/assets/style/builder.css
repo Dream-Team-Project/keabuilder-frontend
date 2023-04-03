@@ -256,7 +256,6 @@ div.kb-row.kb-block-container {
 /* menu responsiveness */
 
 .kb-menu-resp .kb-menu-content {
-    flex-direction: column;
     background-color: var(--kb-light);
     position: absolute;
     top: 25px;
@@ -301,7 +300,7 @@ div.kb-row.kb-block-container {
     .kb-menu-resp {
         display: flex;
     }
-    ul.kb-menu {
+    .kb-element-content>ul.kb-menu {
         display: none!important;
     }    
   }
@@ -370,7 +369,9 @@ div.kb-row.kb-block-container {
     }
 }
 
-ul.kb-menu, .kb-menu-resp ul.kb-menu-content {
+
+
+ul.kb-menu {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -378,11 +379,15 @@ ul.kb-menu, .kb-menu-resp ul.kb-menu-content {
     margin: 0px;
 }
 
-ul.kb-menu {
+.kb-element-content>ul.kb-menu {
     flex-direction: row;
 }
 
-a, .kb-menu-resp ul.kb-menu-content a, ul.kb-menu li, .kb-menu-resp ul.kb-menu-content a, ul.kb-menu-resp li {
+.kb-menu-resp .kb-menu-content>ul.kb-menu {
+    flex-direction: column;
+}
+
+a, ul.kb-menu li {
     font-family: inherit;
     font-weight: inherit;
     color: inherit

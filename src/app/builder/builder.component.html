@@ -56,9 +56,9 @@
             [class.kb-resp-border]="_general.respToggleDevice.name != 'desktop' && _general.respToggleDevice.name != 'hover'"
             [class.kb-resp-view]="_general.respToggleDevice.name == 'tablet-v' || _general.respToggleDevice.name == 'mobile'"
             [style.width]="_general.respToggleDevice.width">
-            <div class="kb-gloabally-block" *ngIf="_general.includeLayout.header && _general.selectedHeader.html">
+            <div id="kb-globall-header" class="kb-gloabally-block" *ngIf="_general.includeLayout.header && _general.selectedHeader.html">
                 <header [id]="'kb-header-'+_general.selectedHeader.id" [innerHTML]="_general.selectedHeader.html | safeHtml"></header>
-                <button color="secondary" mat-stroked-button class="kb-btn kb-globally-edit-btn" (click)="_general.redirectLink('/builder/header/'+_general.selectedHeader.id)">Edit Header Globally</button>
+                <button color="secondary" mat-stroked-button class="kb-globally-edit-btn" (click)="_general.redirectLink('/builder/header/'+_general.selectedHeader.id)">Edit Header Globally</button>
             </div>
             <div id="kb-main"
                 [ngStyle]="_general.selectedBlock.type == 'main' ? _style.currentStyling() : _style.getBlockStyle(_general.main.style)">
@@ -304,13 +304,15 @@
                                                             <span class="kb-menu-bar2"></span>
                                                             <span class="kb-menu-bar3"></span>
                                                         </div>
-                                                        <ul [class.kb-d-none]="!(isBlockActive(element) && (_style.setDropDownStyle.main || _style.setDropDownStyle.item))" class="kb-menu-content" [id]="element.content.data_id"
-                                                        [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.main ? _style.currentStyling() : element.content.style.dropdown">
-                                                            <li *ngFor="let item of element.content.items, index as mi">
-                                                                <a class="kb-content-item" [id]="item.id" [href]="item.link"
-                                                                    [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.item ? _style.textStyling() : element.content.item.style.dropdown">{{item.name}}</a>
-                                                            </li>
-                                                        </ul>
+                                                        <div [class.kb-d-none]="!(isBlockActive(element) && (_style.setDropDownStyle.main || _style.setDropDownStyle.item))" class="kb-menu-content">
+                                                            <ul class="kb-menu" [id]="element.content.data_id"
+                                                            [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.main ? _style.currentStyling() : element.content.style.dropdown">
+                                                                <li *ngFor="let item of element.content.items, index as mi">
+                                                                    <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                                        [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.item ? _style.textStyling() : element.content.item.style.dropdown">{{item.name}}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div *ngSwitchCase="'iframe'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
@@ -332,7 +334,7 @@
                                                     <div *ngIf="isBlockActive(element) else originalText"
                                                     [ngStyle]="_style.textStyling()" [innerHTML]="_style.edit_html | safeHtml"></div>
                                                     <ng-template #originalText>
-                                                        <div [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                        <div [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-text-block"
                                                             [innerHTML]="element.content.html | safeHtml"></div>
                                                     </ng-template>
                                                     <!-- <div *ngIf="!element.content.editor else editor"></div>
@@ -385,9 +387,9 @@
                     <!-- sections end -->
                 </div>
             </div>
-            <div class="kb-gloabally-block" *ngIf="_general.includeLayout.footer && _general.selectedFooter.html">
+            <div id="kb-globall-footer" class="kb-gloabally-block" *ngIf="_general.includeLayout.footer && _general.selectedFooter.html">
                 <footer [id]="'kb-footer-'+_general.selectedFooter.id" [innerHTML]="_general.selectedFooter.html | safeHtml"></footer>
-                <button color="secondary" mat-stroked-button class="kb-btn kb-globally-edit-btn" (click)="_general.redirectLink('/builder/footer/'+_general.selectedFooter.id)">Edit Footer Globally</button>
+                <button color="secondary" mat-stroked-button class="kb-globally-edit-btn" (click)="_general.redirectLink('/builder/footer/'+_general.selectedFooter.id)">Edit Footer Globally</button>
             </div>
         </div>
     </div>

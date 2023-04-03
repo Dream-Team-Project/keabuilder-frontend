@@ -29,12 +29,13 @@ button.kb-globally-edit-btn {
     top: 0;
     right: 0;
     opacity: 0;
-    font-size: 13px;
-    border-radius: 0px 0px 0px 4px;
     z-index: 99;
+    font-size: 13px;
+    transition: 0.2s ease;
+    border-radius: 0px 0px 0px 4px;
 }
 
-::ng-deep button.kb-btn.kb-globally-edit-btn:hover {
+::ng-deep button.mat-stroked-button.kb-globally-edit-btn:hover {
     color: var(--primary-color)!important;
 }
 
@@ -1234,7 +1235,7 @@ div.kb-section div.kb-row:hover .kb-column-wrap.flexColumnRev div.kb-column.kb-b
     border-left: 1px solid rgb(216 200 152 / 50%);
 }
 
-ul.kb-menu, .kb-menu-resp ul.kb-menu-content {
+ul.kb-menu {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -1242,11 +1243,15 @@ ul.kb-menu, .kb-menu-resp ul.kb-menu-content {
     margin: 0px;
 }
 
-ul.kb-menu {
+.kb-element-content>ul.kb-menu {
     flex-direction: row;
 }
 
-ul.kb-menu a, ul.kb-menu li, .kb-menu-resp ul.kb-menu-content a, .kb-menu-resp ul.kb-menu-content li {
+.kb-menu-resp .kb-menu-content>ul.kb-menu {
+    flex-direction: column;
+}
+
+ul.kb-menu a, ul.kb-menu li {
     font-family: inherit;
     font-weight: inherit;
     color: inherit
@@ -1364,7 +1369,6 @@ ul.kb-menu a, ul.kb-menu li, .kb-menu-resp ul.kb-menu-content a, .kb-menu-resp u
   /* menu responsiveness */
 
 .kb-menu-resp .kb-menu-content {
-    flex-direction: column;
     background-color: var(--kb-light);
     position: absolute;
     top: 25px;
@@ -1372,7 +1376,7 @@ ul.kb-menu a, ul.kb-menu li, .kb-menu-resp ul.kb-menu-content a, .kb-menu-resp u
     width: 100%;
 }
 
-.kb-resp-view .kb-menu {
+.kb-resp-view .kb-element-content>ul.kb-menu {
     display: none;
 }
 
