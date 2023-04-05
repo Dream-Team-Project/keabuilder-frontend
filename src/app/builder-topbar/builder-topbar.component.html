@@ -347,6 +347,18 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'code'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.codes" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let code of _element.default.codes, index as i" (cdkDragMoved)="dragDataEmit(code)" [cdkDragData]="code">
+                <span class="kb-d-btn">
+                    <i [class]="code.iconCls"></i>
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="code.iconCls"></i>
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="_general.redirectLink('/websites/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="'add' | svg | safeHtml"></i>

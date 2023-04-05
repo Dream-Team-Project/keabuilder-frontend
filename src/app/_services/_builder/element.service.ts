@@ -92,6 +92,7 @@ export class ElementService {
     dividers: [],
     videos: [],
     checkouts: [],
+    codes: [],
   }
   constructor(private _general: GeneralService, private _row: RowService, private _style: StyleService, private _section: SectionService) {
   }
