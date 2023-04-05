@@ -73,7 +73,7 @@ export class ElementService {
     form: { content: { name: 'iframe', type: 'form', src: '', height: '' }, iconCls: 'fab fa-wpforms'},
     // form
     // code block
-    // code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
+    code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
     // code block
     // checkout form
     // append

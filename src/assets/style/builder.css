@@ -109,12 +109,7 @@ div#page-container {
     padding: 0px 20px;
 }
 
-.kb-drag-container {
-    /* display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    height: 100%; */
+.kb-drag-container, .kb-code-block {
     width: 100%;
 }
 
@@ -126,7 +121,7 @@ div#kb-row-selection   ul.kb-row-list   span.block {
 div#kb-row-selection   ul.kb-row-list   span.block   span{
     background-color: var(--kb-gray);
     display: block;
-    border-radius: 5px;
+    border-radius: 4px;
     height: 36px;
 }
 

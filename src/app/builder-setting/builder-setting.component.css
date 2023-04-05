@@ -112,7 +112,7 @@ button.side-floating-btn:last-child {
     background: rgb(244 244 244 / 90%);
     color: var(--secondary-color);
     box-shadow: 0 0 30px rgb(0 0 0 / 20%);
-    border-radius: 5px;
+    border-radius: 4px;
     left: 0px;
     max-height: 0px;
     overflow: hidden;

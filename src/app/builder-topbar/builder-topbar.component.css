@@ -144,7 +144,7 @@ button.mat-button.kb-btn-active, ::ng-deep .kb-selection-option button.mat-butto
 
 ::ng-deep .kb-triggers:last-child .mat-button img{
     margin-left: 6px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .kb-block-selection>span:hover span.block span {

@@ -5,7 +5,7 @@ div#kb-img-group {
     min-height: 600px;
     left: calc(50% - 600px);
     top: 40px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 #kb-img-group .side-arrow {

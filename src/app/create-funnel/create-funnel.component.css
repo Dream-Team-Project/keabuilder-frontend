@@ -743,7 +743,7 @@ input[type=range]::-webkit-slider-runnable-track {
   box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
   background: #fff;
   margin-top: 5px;
-  border-radius: 5px;
+  border-radius: 4px;
   font-size: 13px;
   transition: .5s ease;
 }

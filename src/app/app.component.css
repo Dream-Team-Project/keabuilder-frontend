@@ -53,7 +53,7 @@ main {
 }
 
 ::ng-deep .tox.tox-tinymce {
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 ::ng-deep .tox-tinymce-aux {

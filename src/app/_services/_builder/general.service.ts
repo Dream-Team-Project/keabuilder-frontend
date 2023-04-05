@@ -353,7 +353,6 @@ export class GeneralService {
       dbobj.uniqueid = this.target.id;
       var jsonObj = {sections: sections};
       dbobj.json = this.encodeJSON(jsonObj);
-      console.log(dbobj);
       if(this.target.type == 'header') {
         this._file.saveFile(obj, 'headers').subscribe(e=>{
           this._file.updateheader(dbobj).subscribe((resp:any)=>{
@@ -437,7 +436,11 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +        
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      if(!preview) this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      if(!preview) {
+        this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
+        '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
+        this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      }
       this.pageObj = {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
         body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
@@ -445,11 +448,11 @@ export class GeneralService {
         website_id: websiteid
       }
       if(preview) {
-        var prevObj = JSON.parse(JSON.stringify(this.pageObj));
-        prevObj.prevFolder = this.webpage.uniqueid;
-        prevObj.folder = this.webpage.uniqueid;
-        prevObj.dir = 'previews';
-        this._file.savePage(prevObj).subscribe((event:any)=>{
+        // var prevObj = JSON.parse(JSON.stringify(this.pageObj));
+        this.pageObj.prevFolder = this.webpage.uniqueid;
+        this.pageObj.folder = this.webpage.uniqueid;
+        this.pageObj.dir = 'previews';
+        this._file.savePage(this.pageObj).subscribe((event:any)=>{
           resolve(true);
         },
         error=>{
@@ -459,9 +462,8 @@ export class GeneralService {
       }
       else {
         var status = this.main.publish_status;
-        this.pageObj.head = `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + '<link rel="stylesheet" href="../'+this.main.path+'/style.css">' + this.pageObj.head;
-        this.pageObj.folder = this.main.path;
         this.pageObj.prevFolder = this.webpage.page_path;
+        this.pageObj.folder = this.main.path;
         this.pageObj.dir = status ? 'pages' : 'drafts';
         if(tglDraft) {
           var td = {
@@ -585,8 +587,7 @@ export class GeneralService {
     });
     body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
       var cb = item.getAttribute('html-data');
-      // item.removeAttribute('html-data');
-      var doc = this.parser.parseFromString(cb, 'text/html');
+      item.removeAttribute('html-data');
       item.innerHTML = cb;
     });
     this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;

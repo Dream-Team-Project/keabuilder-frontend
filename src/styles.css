@@ -562,7 +562,7 @@ main.insidecont .box {
 }
 
 .imgFormField{
-  border-radius: 5px;
+  border-radius: 4px;
   margin-bottom: 1.34375em;
 }
 
@@ -606,7 +606,7 @@ main.insidecont .box {
   width: 750px;
   height: auto;
   background: var(--kb-light);
-  border-radius: 5px;
+  border-radius: 4px;
   color: initial;
   overflow: hidden;
 }
@@ -665,7 +665,7 @@ div#kb-mat-loader {
 .kb-bg-info-line {
   background: var(--kb-gray);
   padding: 4px 8px;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .kb-or-divider {

@@ -13,7 +13,7 @@
 
 ::ng-deep .mat-tab-body-wrapper {
     border: 1px solid #dee2e6!important;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 ::ng-deep .mat-tab-header{

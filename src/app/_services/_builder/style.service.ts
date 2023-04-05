@@ -981,7 +981,6 @@ export class StyleService {
         else this._general.selectedBlock.content.style.mobile = newS;
       }
       else if (this._general.respToggleDevice.name == 'hover') {
-        console.log(newS);
         if(this.setItemStyle) this._general.selectedBlock.content.item.style.hover = newS;
         else this._general.selectedBlock.content.style.hover = newS;
       }
@@ -1592,8 +1591,8 @@ export class StyleService {
         if(this.resetSession) this.resetStyleSession();
       }
       else {
+        this.margin.bottom = '0px';
         if(block.content && block.content?.name == 'code') this.code_html = block.content.html;
-        console.log(this.code_html);
       }
   }
 

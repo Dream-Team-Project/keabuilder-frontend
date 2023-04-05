@@ -118,7 +118,7 @@ image-cropper {
     color: var(--secondary-color);
     background: var(--kb-gray);
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     padding: 6px 12px;
     line-height: 20px;
 }
@@ -263,7 +263,7 @@ image-cropper {
 }
 
 ::ng-deep color-material {
-    border-radius: 5px;
+    border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 2px 10px #0000001f, 0 2px 5px #00000029;
 }
@@ -300,7 +300,7 @@ image-cropper {
 
 ::ng-deep .tox.tox-tinymce {
     border-color: var(--kb-gray);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 ::ng-deep .mce-content-body {
