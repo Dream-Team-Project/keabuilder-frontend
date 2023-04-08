@@ -75,13 +75,15 @@ export class StyleService {
   button_target_types = [
     { name: 'same tab', value: '_self' },
     { name: 'new tab', value: '_blank' },
-    { name: 'linked new tab', value: 'framename' },
+    // { name: 'linked new tab', value: 'framename' },
   ]
   button_subfont_size = {value: '80'};
   button_subfont_sizeRange: any = { value: 80, max: 200, type: '%' };
   button_product = '';
   // button
   // general
+  block_link:string = '';
+  block_target:any = { name: 'same tab', value: '_self' };
   width = { value: '100%' };
   widthRange: any = { value: 100, max: 100, type: '%' };
   height = { value: 'auto' };
@@ -940,6 +942,10 @@ export class StyleService {
       }
       else this._general.selectedBlock.style.desktop = this.currentStyling();
     }
+    if(this._general.selectedBlock.redirection) {
+      this._general.selectedBlock.redirection.link = this.block_link;
+      this._general.selectedBlock.redirection.target = this.block_target.value;
+    }
     if(this._general.selectedBlock.type != "column") this._general.selectedBlock = '';
   }
 
@@ -1294,6 +1300,8 @@ export class StyleService {
   }
 
   blockSetting(block: any) {
+      this._general.getAllWebPages();
+      this._general.getAllFunnels();
       var obj:any = new Object();
       if(block.type == 'element') {
         if(this.setItemStyle) {
@@ -1594,6 +1602,14 @@ export class StyleService {
         this.margin.bottom = '0px';
         if(block.content && block.content?.name == 'code') this.code_html = block.content.html;
       }
+      if(block.redirection) {
+        this.block_link = block.redirection.link;
+        this.block_target = this.button_target_types.filter((item:any)=>{ if(block.redirection.target == item.value) return item; })[0];
+      }
+      else {
+        this.block_link = '';
+        this.block_target = { name: 'same tab', value: '_self'};
+      }
   }
 
   elementSetting(element: any) {
@@ -1667,8 +1683,6 @@ export class StyleService {
       this.video_controls = element.controls;
     }
     if (element.name == 'button' && !element.form) {
-      this._general.getAllWebPages();
-      this._general.getAllFunnels();
       if(element.btntype != 'regular') {
         this.button_product = element.productid;
         this._general.getAllProducts();

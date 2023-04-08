@@ -27,7 +27,7 @@ export class SectionService {
   sectionTypes:any = [];
 
   sections:any = [];
-  sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
+  sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, redirection: {link: '', target: '_self' }, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
 
   pageSession:any = {undo: 0, redo: 0}

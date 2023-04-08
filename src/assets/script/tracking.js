@@ -42,4 +42,14 @@ window.onload = function(a){
         })
     });
   // responsive menu
+    // block redirection
+    document.querySelectorAll('.kb-block-redirection').forEach(block=>{
+        block.addEventListener('click',()=>{
+            console.log(block);
+            var link = block.getAttribute('data-link');
+            var target = block.getAttribute('data-target');
+            if(link) window.open(link, target);
+        })
+    })
+    // block redirection
 }

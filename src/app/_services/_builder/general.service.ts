@@ -79,8 +79,8 @@ export class GeneralService {
     ],
     images_upload_base_path: '/some/basepath',
     images_upload_credentials: true,
-  images_upload_url: './api/uploadfile',
-  images_upload_handler: function (blobInfo:any, success:any, failure:any) {
+    images_upload_url: './api/uploadfile',
+    images_upload_handler: function (blobInfo:any, success:any, failure:any) {
     setTimeout(function () {
       success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
     }, 2000);
@@ -120,7 +120,7 @@ export class GeneralService {
   menu_target_types = [
     { name: 'same tab', value: '_self' },
     { name: 'new tab', value: '_blank' },
-    { name: 'linked new tab', value: 'framename' },
+    // { name: 'linked new tab', value: 'framename' },
   ];
   templatesUpdated = new BehaviorSubject(false);
   filterOrder:any = [{icon: 'ascending', name:'Ascending By Name', value: 'asc', type: 'name'}, {icon: 'ascending', name:'Ascending By Date', value: 'asc', type: 'id'}, {icon: 'descending', name:'Descending By Name', value: 'desc', type: 'name'}, {icon: 'descending', name:'Descending By Date', value: 'desc', type: 'id'}];

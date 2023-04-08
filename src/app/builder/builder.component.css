@@ -358,11 +358,11 @@ div.kb-align-btn-group .kb-active-brd {
 }
 
 .kb-drag-container {
-    display: block;
+    display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: auto;
     width: 100%;
     min-height: 40px;
 }
@@ -587,7 +587,7 @@ div.kb-block-container {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    max-width: 100%;
+    width: 100%;
     min-height: auto;
     display: flex;
     flex-wrap: wrap;

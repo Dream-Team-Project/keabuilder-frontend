@@ -16,6 +16,7 @@ export class ElementService {
   distroyDialogue = new Subject<any>();
   elementObj: any = {id: '', name: '',  type: 'element', content: {}, setting: false, 
                     item_alignment: {desktop: '', tablet_h: 'auto', tablet_v: 'auto', mobile: 'auto'}, 
+                    redirection: {link: '', target: '_self' },
                     style: {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''}, 
                     hide: {desktop: false, tablet_h: false, tablet_v: false, mobile: false}};
   element_index = 0;

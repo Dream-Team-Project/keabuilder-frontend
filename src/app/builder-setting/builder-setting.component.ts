@@ -29,6 +29,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   }
   searchType:string = '';
   waitTill:boolean = true;
+  code_block_ht:string = '200px';
 
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()

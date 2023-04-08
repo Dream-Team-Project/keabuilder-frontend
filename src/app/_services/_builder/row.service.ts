@@ -14,10 +14,10 @@ export class RowService {
 
   distroyDialogue = new Subject<any>();
   selectedRow:any = '';
-  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, rowSize: '', style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, columnGap: {desktop:0, tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
+  rowObj:any = {id: '', type: 'row', columnArr: [], setting: false, rowSize: '', redirection: {link: '', target: '_self' }, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, columnGap: {desktop:0, tablet_h:'auto', tablet_v:'auto', mobile:'auto'}, columnRev: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
   row_index:number = 0;
-  columnObj:any = {id: '', type: 'column', elementArr: [], name: '', chngName: false, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
+  columnObj:any = {id: '', type: 'column', elementArr: [], name: '', chngName: false, redirection: {link: '', target: '_self' }, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   rowTypes:Array<any> = [{cls: '1', appendCls: 'full', nofcolumn: 1}, {cls: '1-2', appendCls: 'half', nofcolumn: 2}, {cls: '1-3', appendCls: 'three', nofcolumn: 3}, 
   {cls: '1-4', appendCls: 'four', nofcolumn: 4}, {cls: '1-5', appendCls: 'five', nofcolumn: 5}, {cls: '1-6', appendCls: 'six', nofcolumn: 6}, 
   {cls: '40-60', appendCls: 'f-s', nofcolumn: 2}, {cls: '60-40', appendCls: 's-f', nofcolumn: 2}, {cls: '25-75', appendCls: 'tf-sf', nofcolumn: 2},

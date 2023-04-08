@@ -2033,23 +2033,74 @@
                                 <div class="kb-tab-head">Custom CSS</div>
                                 <div class="kb-tab-content kb-inp-left">
                                     <textarea placeholder="Write custom css here" [(ngModel)]="_general.page_code"
-                                        name="page-code"></textarea>
+                                        name="page-code" [style.height]="code_block_ht"></textarea>
                                 </div>
                             </div>
                         </ng-template>
                     </mat-tab>
+                    <mat-tab label="Redirection" *ngIf="_general.selectedBlock.type != 'main' && _general.respToggleDevice.name != 'hover' && searchingTab('Redirection')">
+                        <div *ngIf="searchingDeep('Redirection Link')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Link</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <input type="text" [(ngModel)]="_style.block_link"
+                                    [style.textTransform]="'lowercase'">
+                            </div>
+                        </div>
+                        <div *ngIf="searchingDeep('Redirection Link Website Pages')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Website Pages</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <mat-select [(ngModel)]="_style.block_link">
+                                    <mat-option *ngFor="let page of _general.existwebpages"
+                                        [value]="_general.subdomain+page.page_path"
+                                        [disabled]="page.publish_status == 0">
+                                        {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
+                                            *ngIf="page.publish_status == 0"></small>
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div *ngIf="searchingDeep('Redirection Link Funnel Steps')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Funnel Steps</div>
+                            <div class="kb-tab-content kb-inp-left">
+                                <mat-select [(ngModel)]="_style.block_link">
+                                    <mat-optgroup *ngFor="let funnel of _general.funnels"
+                                        [label]="funnel.name | titlecase">
+                                        <mat-option *ngFor="let step of funnel.steps"
+                                            [value]="_general.subdomain+step.page_path"
+                                            [disabled]="step.archived == 1">
+                                            {{step.page_name | titlecase}}<small [attr.data]="step.funneltype"
+                                                class="infoTxt"></small>
+                                        </mat-option>
+                                    </mat-optgroup>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div *ngIf="searchingDeep('Redirection Link Target')" class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Target</div>
+                            <div class="kb-tab-content">
+                                <mat-select [(ngModel)]="_style.block_target"
+                                    [compareWith]="_general.compareOptValue">
+                                    <mat-option *ngFor="let btt of _style.button_target_types"
+                                        [value]="btt">{{btt.name |
+                                        titlecase}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                    </mat-tab>
                 </mat-tab-group>
                 <!-- code -->
                 <ng-template #code>
-                    <div class="kb-tabs-component kb-tab-comp-pad" *ngIf="_general.selectedBlock.content.name == 'code'">
-                        <div class="kb-inner-tab-component">
-                            <div class="kb-tab-head">Paste your code here</div>
-                            <div class="kb-tab-content">
-                                <textarea placeholder="<code/>" [(ngModel)]="_style.code_html"
-                                name="element-code" [style.height]="'200px'"></textarea>
+                    <mat-tab-group class="kb-tabs-component" (selectedTabChange)="_general.selectedTabChange($event)">
+                        <mat-tab label="Code" *ngIf="searchingTab('Code')">
+                            <div *ngIf="searchingDeep('Custom Code')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Paste your code here</div>
+                                <div class="kb-tab-content kb-inp-left">
+                                    <textarea placeholder="<code/>" [(ngModel)]="_style.code_html"
+                                        name="custom-code" [style.height]="code_block_ht"></textarea>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </mat-tab>
+                    </mat-tab-group>
                 </ng-template>
                 <!-- code -->
                 <div class="kb-selection-btn-group">
