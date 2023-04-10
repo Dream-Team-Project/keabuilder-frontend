@@ -6,7 +6,7 @@
     </div>
     <mat-menu #contextMenu="matMenu" class="kb-builder-options">
     <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="_form.preview = true"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
+        <button mat-menu-item (click)="switchPreviewMode()"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
         <button mat-menu-item (click)="saveForm()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
         <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
         <button mat-menu-item (click)="_form.undo()" *ngIf="_form.formSessionArr[_form.formSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
@@ -193,7 +193,7 @@
                     <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
                     <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
                 </mat-menu>
-                <button mat-button [class.kb-btn-active]="_form.preview" (click)="_form.preview = true">
+                <button mat-button [class.kb-btn-active]="_form.preview" (click)="switchPreviewMode()">
                     <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
                 </button>
                 <button mat-button (click)="saveForm()">
@@ -403,7 +403,7 @@
         <div id="kb-topbar-container" class="kb-preview-exit">
             <div id="kb-topbar">
                 <div class="kb-triggers">
-                    <button mat-button (click)="_form.preview = false">
+                    <button mat-button (click)="switchPreviewMode()">
                         Exit Preview
                     </button>
                 </div>

@@ -265,6 +265,12 @@ export class FormBuilderComponent implements OnInit {
     }
   }
 
+  switchPreviewMode() {
+    this._form.preview = !this._form.preview;
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
   onContextMenu(event: MouseEvent) {
     event.preventDefault();
     this.contextMenuPosition.x = event.clientX + 'px';
