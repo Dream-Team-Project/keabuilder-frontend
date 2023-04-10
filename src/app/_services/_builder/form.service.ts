@@ -158,6 +158,7 @@ export class FormService {
     json: '',
   };
   ansjson:any = {};
+  preview:boolean = false;
 
   constructor(
     private _email: EmailService,
@@ -249,11 +250,13 @@ export class FormService {
 
   formbypath(obj:any) {
     return new Promise((resolve, reject)=>{
+      if(!this.preview)
       this._file.formbypath(obj).subscribe((resp:any)=>{
         this.setForm(resp).then((data:any)=>{
           resolve(data);
         });
       })
+      else resolve(this.form);
     })
   }
 

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from '../_services/_builder/form.service';
 import { StyleService } from '../_services/_builder/style.service';
@@ -9,8 +9,8 @@ import { ImageService } from '../_services/image.service';
   templateUrl: './form-fetch.component.html',
   styleUrls: ['./form-fetch.component.css','../form-builder/form-builder.component.css']
 })
-export class FormFetchComponent implements OnInit {
-
+export class FormFetchComponent implements OnInit { 
+  
   submitting:boolean = false;
   thankyou:boolean = false;
   showErrors:boolean = false;
@@ -54,8 +54,11 @@ export class FormFetchComponent implements OnInit {
           this._form.inpAns(spl);
           spl.subsplit?.forEach((subspl:any)=>{
             this._form.inpAns(subspl);
+            delete subspl?.error;
           })
+          delete spl?.error;
         })
+        delete e?.error;
       }
     })
   }

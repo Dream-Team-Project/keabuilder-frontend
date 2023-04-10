@@ -14,7 +14,7 @@
             </div>
             <div *ngSwitchCase="'address'" class="kb-form-inp kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*<mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
+                        class="kb-form-inp-reqired">* <mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
                 <div *ngFor="let split of fe.split">
                     <div *ngIf="split.subsplit" class="kb-form-inp-split">
                         <span *ngFor="let subsplit of split.subsplit" [class.kb-d-none]="subsplit.hide">
@@ -34,7 +34,7 @@
             </div>
             <div *ngSwitchCase="'select'" class="kb-form-inp kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*<mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
+                        class="kb-form-inp-reqired">* <mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
                 <select [name]="fe.id" (input)="_form.inpAns(fe)" [(ngModel)]="fe.value" [required]="fe.required" 
                 [class.kb-form-field-error]="fe.error && fe.value == 'none'" class="kb-form-input">
                     <option value="none" selected disabled hidden>{{fe.placeholder}}</option>
@@ -44,7 +44,7 @@
             </div>
             <div *ngSwitchCase="'checkbox'" class="kb-form-rc kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*<mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
+                        class="kb-form-inp-reqired">* <mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
                 <div *ngFor="let split of fe.split, index as i">
                     <label [for]="split.id" class="kb-form-option" [style.justifyContent]="_form.justifyContent('option')">
                         <input [type]="split.type" [id]="split.id" [name]="split.id" [value]="split.value" (change)="_form.valchng(fe, i)" [checked]="split.selected">
@@ -54,7 +54,7 @@
             </div>
             <div *ngSwitchCase="'radio'" class="kb-form-rc kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*<mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
+                        class="kb-form-inp-reqired">* <mat-error *ngIf="fe.error">This field is required</mat-error></span></label>
                 <div *ngFor="let split of fe.split, index as i">
                     <label [for]="split.id" class="kb-form-option" [style.justifyContent]="_form.justifyContent('option')">
                         <input [type]="split.type" [id]="split.id" [name]="fe.id" [value]="split.value" (change)="_form.valchng(fe, i)" [checked]="split.selected">
@@ -68,7 +68,7 @@
             </div>
             <div *ngSwitchDefault class="kb-form-inp kb-w-100">
                 <label [for]="fe.id" class="kb-form-label" [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
-                        class="kb-form-inp-reqired">*
+                        class="kb-form-inp-reqired">* 
                         <mat-error *ngIf="fe.error">This field is required</mat-error>
                         <mat-error *ngIf="fe.invalid">Email is invalid</mat-error>
                     </span></label>

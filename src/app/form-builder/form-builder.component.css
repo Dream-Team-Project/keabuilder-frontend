@@ -313,10 +313,6 @@ div.kb-form-divder {
     border-radius: 4px;
 }
 
-.kb-form-preview .kb-form-element:before {
-    content: none!important;
-}
-
 .mat-select {
     color: inherit;
     background: transparent;
@@ -423,3 +419,13 @@ button {
   .kb-form-input.kb-form-field-error { 
     border: 2px solid #f44336!important;
   }
+
+  div#kb-topbar-container.kb-preview-exit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+::ng-deep div#kb-topbar-container.kb-preview-exit .kb-triggers button.mat-button span,
+::ng-deep div#kb-topbar-container.kb-preview-exit .kb-triggers button.mat-button span i {
+    font-size: 13px;
+}

@@ -1,20 +1,21 @@
-<div style="visibility: hidden; position: fixed"
-[style.left]="contextMenuPosition.x"
-[style.top]="contextMenuPosition.y"
-[matMenuTriggerFor]="contextMenu">
-</div>
-<mat-menu #contextMenu="matMenu" class="kb-builder-options">
+<div *ngIf="!_form.preview else fetchpreview" id="kb-form-builder">
+    <div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+    </div>
+    <mat-menu #contextMenu="matMenu" class="kb-builder-options">
     <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="hideBar(); preview = !preview"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
+        <button mat-menu-item (click)="_form.preview = true"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
         <button mat-menu-item (click)="saveForm()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
         <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
         <button mat-menu-item (click)="_form.undo()" *ngIf="_form.formSessionArr[_form.formSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
         <button mat-menu-item (click)="_form.redo()" *ngIf="_form.formSessionArr[_form.formSession.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
     </ng-template>
-</mat-menu>
-<app-image [DialogImageToggle]="DialogImageToggle"></app-image>
-<app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<ng-template #settingdialog>
+    </mat-menu>
+    <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
+    <app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
+    <ng-template #settingdialog>
     <h1 mat-dialog-title>Form Setting</h1>
     <div mat-dialog-content>
         <mat-error *ngIf="isNotValid(validate.name)">
@@ -66,8 +67,8 @@
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid && !validate.relink.invalid ? 'primary' : ''" [disabled]="validate.name.invalid || validate.relink.invalid">Done</button>
     </div>
-</ng-template>
-<ng-template #emailsetdialog>
+    </ng-template>
+    <ng-template #emailsetdialog>
     <h1 mat-dialog-title class="kb-text-gap">Email Setup 
         <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle></h1>
     <div mat-dialog-content class="kb-text-editor">
@@ -89,8 +90,8 @@
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
     </div>
-</ng-template>
-<ng-template #elementdialog>
+    </ng-template>
+    <ng-template #elementdialog>
     <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
         <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
@@ -146,17 +147,17 @@
             <mat-label>Selected Country</mat-label>
             <mat-select [(ngModel)]="_form.selEle.split[2].subsplit[1].placeholder" name="selected-country">
                 <mat-option *ngFor="let opt of _form.countries" [value]="opt.name">
-                  {{opt.name}}
+                    {{opt.name}}
                 </mat-option>
-              </mat-select>
+                </mat-select>
         </mat-form-field>
     </div>
     <div mat-dialog-actions class="kb-dialog-additional">
         <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
         <mat-checkbox *ngIf="_form.selEle.input && !_form.selEle.primary" [(ngModel)]="_form.selEle.required">Required</mat-checkbox>
     </div>
-</ng-template>
-<div id="kb-main" cdkDropListGroup (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled" [class.loading]="!_general.loading.success">
+    </ng-template>
+    <div id="kb-main" cdkDropListGroup (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled" [class.loading]="!_general.loading.success">
     <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
     <div id="kb-topbar-container">
         <div id="kb-topbar">
@@ -192,7 +193,7 @@
                     <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
                     <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
                 </mat-menu>
-                <button mat-button [class.kb-btn-active]="preview" (click)="hideBar(); preview=!preview">
+                <button mat-button [class.kb-btn-active]="_form.preview" (click)="_form.preview = true">
                     <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
                 </button>
                 <button mat-button (click)="saveForm()">
@@ -274,13 +275,13 @@
     </div>
     <div id="kb-form-container" [class.kb-resp-border]="_general.respToggleDevice.name != 'desktop' && _general.respToggleDevice.name != 'hover'" [style.width]="_general.respToggleDevice.width">
         <form #form [id]="'kb-form-'+_form.form.uniqueid" [name]="'kb-form-'+_form.form.uniqueid"
-        [ngStyle]="getBlockStyle('form')" [style.min-height]="_form.formField.length == 0 ? '500px' : ''" [class.kb-form-preview]="preview"
-        cdkDropList [cdkDropListDisabled]="preview" [cdkDropListData]="_form.formField" (cdkDropListDropped)="itemDropped($event)">
+        [ngStyle]="getBlockStyle('form')" [style.min-height]="_form.formField.length == 0 ? '500px' : ''"
+        cdkDropList [cdkDropListData]="_form.formField" (cdkDropListDropped)="itemDropped($event)">
             <div cdkDrag *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
                 (dblclick)="fe.name != 'divider' ? openElementDialog(elementdialog, fe) : ''"
                 [style.margin]="!fe.input ? getBlockStyle(fe.name)['margin'] : ''" 
                 [style.justifyContent]="!fe.input ? justifyContent(fe.name) : ''" 
-                (mouseenter)="!preview ? fe.setting = true : ''" (mouseleave)="!preview ? fe.setting = false : ''" class="kb-form-element" [ngSwitch]="fe.name">
+                (mouseenter)="fe.setting = true" (mouseleave)="fe.setting = false" class="kb-form-element" [ngSwitch]="fe.name">
                 <div *ngIf="fe.setting" class="kb-form-setting">
                     <span class="kb-drag-element" *ngIf="_form.formField.length != 0" >
                         <i class="fa fa-arrows-alt"></i>
@@ -390,9 +391,24 @@
         <div id="box"></div>
         <div *ngIf="_general.loading.error" class="loadErrMsg">Something went wrong!</div>
     </div>
-</div>
-<div mat-ripple *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
+    </div>
+    <div mat-ripple *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
     <i class ='far fa-window-maximize'></i>
     <span>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
         _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</span>
+    </div>
 </div>
+<ng-template #fetchpreview>
+    <div id="kb-form-preview">
+        <div id="kb-topbar-container" class="kb-preview-exit">
+            <div id="kb-topbar">
+                <div class="kb-triggers">
+                    <button mat-button (click)="_form.preview = false">
+                        Exit Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+        <app-form-fetch></app-form-fetch>
+    </div>
+</ng-template>

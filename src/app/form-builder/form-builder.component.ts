@@ -49,7 +49,6 @@ export class FormBuilderComponent implements OnInit {
   formdialog:string = '';
   dialogData:any;
   drawerPos:any = 'end';
-  preview:boolean = false;
   autoSaveInterval:any;
 
   constructor(
@@ -248,7 +247,6 @@ export class FormBuilderComponent implements OnInit {
   selectTab(value:string) {
     if(this.waitST) {
       this.waitST = false;
-      this.preview = false;
       var temp = this.selectedTab != value;
       if(temp) {
         var isEmpty = this.selectedTab == '';

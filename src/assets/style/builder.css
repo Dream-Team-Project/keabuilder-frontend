@@ -215,6 +215,10 @@ div.kb-block-container {
     flex-wrap: wrap;
 }
 
+.kb-block-redirection {
+    cursor: pointer;
+}
+
 
 div.kb-section.kb-block-container {
     padding: 60px 0px;
