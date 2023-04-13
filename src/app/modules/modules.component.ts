@@ -195,18 +195,18 @@ export class ModulesComponent implements OnInit {
     else this.overlayRefDetach();
   }
 
-  deletePost(post:any, type:string, mi:number, li:number) {
+  deletePost(post:any, type:string, mi:number, li:number,templateRef: TemplateRef<any>) {
     this.popask = 'delete';
     this.index = {
       module: mi,
       lesson: li,
     }
-    this.openDialog(post, type);
+    this.openDialog(post, type,templateRef);
   }
 
-  duplicatePost(post:any, type:string) {
+  duplicatePost(post:any, type:string,templateRef: TemplateRef<any>) {
     this.popask = 'duplicate';
-    this.openDialog(post, type);
+    this.openDialog(post, type,templateRef);
   }
 
   // post methods
@@ -530,16 +530,17 @@ export class ModulesComponent implements OnInit {
     },200);
   }
 
-  openDialog(post:any, type:string) {
+  openDialog(post:any, type:string,templateRef: TemplateRef<any>,) {
     this.post = JSON.parse(JSON.stringify(post));
     if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
     this.post.type = type;
     if(this.post.offers) this.offersToAdd = this.post.offers.split(',');
-    this.dragBoxAnime.open = true;
-    this._overlayRef.attach(this._portal);
-    setTimeout(()=>{
-      this.dragBoxAnime.open = false;
-    },200)
+    this.dialog.open(templateRef);
+    // this.dragBoxAnime.open = true;
+    // this._overlayRef.attach(this._portal);
+    // setTimeout(()=>{
+    //   this.dragBoxAnime.open = false;
+    // },200)
   }
 
   // dialog methods
@@ -606,4 +607,5 @@ export class ModulesComponent implements OnInit {
   getUID() {
     return Math.random().toString(20).slice(2);
   }
+  
 }

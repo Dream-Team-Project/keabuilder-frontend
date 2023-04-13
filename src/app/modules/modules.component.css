@@ -133,7 +133,20 @@ span.kbc-qs-status span.active {
 }
 
 span.kbc-qs-status span.inactive {
-    background-color: var(--kb-dim-black);
+    background-color: var(--secondary-color);
+    
+}
+span.kbc-qs-status span.active1 {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+span.kbc-qs-status span.inactive1 {
+    background-color: white;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    
 }
 
 span.kb-ispan-add {
@@ -160,4 +173,8 @@ span.kb-ispan-add:hover {
     cursor: pointer;
     font-size: 65%;
     color: var(--secondary-color);
+}
+.adjustmatfrm mat-form-field:first-child {
+    width: 60%!important;
+    margin-right: 24px;
 }
