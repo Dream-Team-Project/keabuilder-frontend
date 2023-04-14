@@ -81,7 +81,7 @@
     </div>
 </ng-template>
 <ng-template #deleteDialog>
-    <h5 mat-dialog-title>Are you indeed want to delete this {{post.type | titlecase}}: <span
+    <h5 mat-dialog-title>Are you indeed want to delete thi {{post.type | titlecase}}: <span
             class="text-danger">{{post.title | uppercase}}</span>?</h5>
     <div mat-dialog-content>
         <h6 *ngIf="post.type == 'module'" class="text-info">It will delete all the module lessons too.</h6>
