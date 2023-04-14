@@ -289,13 +289,13 @@
                                                       (click)="duplicatePost(lesson, 'lesson',duplicateDialog)"  class="far fa-copy"></i>
                                                   <i matTooltip="Delete Lesson" matTooltipPosition="above" 
                                                   (click)="deletePost(lesson, 'lesson', mi, li,deleteDialog)" class="far fa-trash-alt text-danger"></i>   
-                                                  <span mat-button [matMenuTriggerFor]="menu2" [class]="lesson.publish_status==1 ? 'active1':'inactive1'" >
+                                                  <button mat-stroked-button [matMenuTriggerFor]="menu2" [class]="lesson.publish_status==1 ? 'active1':'inactive1'" >
                                                     <i class="fas" [class]="lesson.publish_status==1 ? 'fa-check':'fa-file'"></i>
                                                     {{lesson.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa"></i>
-                                                  </span>
+                                                  </button>
                                                   <mat-menu #menu2="matMenu">
                                                     <button mat-menu-item class="active1" (click)="updateLesson(lesson, 'publish');lesson.publish_status=1;"><i class="fa fa-check pr-2"></i> Publish</button>
-                                                    <button mat-menu-item class="inactive1" (click)="updateLesson(lesson, 'publish');lesson.publish_status=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                                                    <button mat-menu-item class="inactive1" (click)="updateLesson(lesson, 'draft');lesson.publish_status=0;"><i class="fa fa-file pr-2"></i> Draft</button>
                                                   </mat-menu> 
                                                 </span>
                                                     <!-- <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above"  class="active1">Published</span>

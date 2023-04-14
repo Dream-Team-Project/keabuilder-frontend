@@ -408,10 +408,9 @@ export class ModulesComponent implements OnInit {
         this.thumbnail.name = 'lesson-thumbnail-'+lesson.uniqueid+'.'+this.thumbnail.type;
         lesson.thumbnail = 'keaimage-'+this.thumbnail.name;
     }
-    else if(action == 'publish') {
-      var status = lesson.publish_status;
-      lesson.publish_status = status ? 1 : 0;
-    }
+    else if(action == 'publish') lesson.publish_status = 1;
+    else if(action == 'draft') lesson.publish_status = 0;
+    
     this._lesson.update(lesson).subscribe(res=>{
       if(action == 'details') {
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
@@ -419,7 +418,7 @@ export class ModulesComponent implements OnInit {
         });
         else this.updateLessonAfterMethod();
       }
-      else if(action == 'publish') {
+      else if(action == 'publish' || action == 'draft') {
         this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
       }
       else if(action == 'title') {
