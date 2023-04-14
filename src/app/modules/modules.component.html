@@ -252,6 +252,7 @@
                                             {{module.lessons.length}} Lesson{{module.lessons.length != 1 ? 's' : ''}}
                                         </span>
                                         <span class="kbc-qs-status px-2">
+<<<<<<< HEAD
                                             <span mat-button [matMenuTriggerFor]="menu1"
                                                 [class]="module.publish_status==1 ? 'active':'inactive'">
                                                 <i class="fas"
@@ -267,6 +268,16 @@
                                                     (click)="updateModule(module,'draft');"><i
                                                         class="fa fa-file pr-2"></i> Draft</button>
                                             </mat-menu>
+=======
+                                            <span mat-button [matMenuTriggerFor]="menu1" [class]="module.publish_status==1 ? 'active':'inactive'">
+                                                <i class="fas" [class]="module.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                                                {{module.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa"></i>
+                                              </span>
+                                              <mat-menu #menu1="matMenu">
+                                                <button mat-menu-item class="active" (click)="updateModule(module,'publish')"><i class="fa fa-check pr-2"></i> Publish</button>
+                                                <button mat-menu-item class="inactive" (click)="updateModule(module,'draft')"><i class="fa fa-file pr-2"></i> Draft</button>
+                                              </mat-menu>
+>>>>>>> f2b2f84a136087f78ceb04a60c0cf94c0afa981e
                                             <!-- <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
                                             <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive">Draft</span></ng-template> -->
 

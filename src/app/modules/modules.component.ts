@@ -258,14 +258,17 @@ export class ModulesComponent implements OnInit {
           this.thumbnail.name = 'module-thumbnail-'+module.uniqueid+'.'+this.thumbnail.type;
           module.thumbnail = 'keaimage-'+this.thumbnail.name;
       }
-      else if(action == 'publish') module.publish_status = 1;
-      else if(action == 'draft') module.publish_status = 0;
+      else if(action == 'publish')module.publish_status =1; 
+      else if(action == 'draft') module.publish_status =0;
       this._module.update(module).subscribe(res=>{
         if(action == 'details') {
           if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
             this.updateModuleAfterMethod();
           });
           else this.updateModuleAfterMethod();
+        }
+        else if(action == 'publish' || action == 'draft') {
+          this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
         }
         else if(action == 'title') {
           this._snackbar.open('Module title has been updated', 'OK');
