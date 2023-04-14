@@ -112,8 +112,16 @@
                 <span>
                     {{course.title}}
                 </span>
-                <span>
-                    <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle>
+                <span class="kbc-qs-status px-2 toggle text-center">
+                    <!-- <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle> -->
+                    <span mat-button [matMenuTriggerFor]="menu1" [class]="course.publish_status==1 ? 'active':'inactive'">
+                        <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check ':'fa-file '"></i>
+                        {{course.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                      </span>
+                      <mat-menu #menu1="matMenu">
+                        <button mat-menu-item class="active" (click)="toggleStatus(course);course.publish_status=1;"><i class="fa fa-check pr-2"></i> Publish</button>
+                        <button mat-menu-item class="inactive" (click)="toggleStatus(course);course.publish_status=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                      </mat-menu>
                 </span>
             </h3>
             <div class="kbc-top-info mt-2 mb-4">
@@ -192,7 +200,7 @@
                                 </div>
                                 <div *cdkDragPlaceholder class="custom-placeholder col-11" [style.backgroundColor]="'var(--kb-gray)'"></div>
                                 <div class="kbc-block-inner kbc-module d-flex">
-                                    <span class="kbc-title col-9 ">
+                                    <span class="kbc-title col-8 ">
                                         <i cdkDragHandle *ngIf="modules.length > 1" class="kb-handle-block fas fa-arrows-alt-v mr-2"></i>
                                         <i (click)="_general.expandToggle(lessonUl)" [matTooltip]="lessonUl.style.maxHeight != '0px' ? 'Collapse' : 'Expand'"
                                         matTooltipPosition="above" class="far mr-2" [ngClass]="lessonUl.style.maxHeight != '0px' ? 'fa-folder-open' : 'fa-folder'"></i>
@@ -206,15 +214,24 @@
                                         matTooltipPosition="above" class="far" [ngClass]="lessonUl.style.maxHeight != '0px' ? 'fa-folder-open' : 'fa-folder'"></i>
                                     </span> -->
                                     
-                                    <span class="kbc-qs col-3">
+                                    <span class="kbc-qs col-4">
                                         <span class="kbc-qs-summary px-2">
                                             {{module.lessons.length}} Lesson{{module.lessons.length != 1 ? 's' : ''}}
                                         </span>
                                         <span class="kbc-qs-status px-2">
-                                            <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
-                                            <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive">Draft</span></ng-template>
+                                            <span mat-button [matMenuTriggerFor]="menu1" [class]="module.publish_status==1 ? 'active':'inactive'">
+                                                <i class="fas" [class]="module.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                                                {{module.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa"></i>
+                                              </span>
+                                              <mat-menu #menu1="matMenu">
+                                                <button mat-menu-item class="active" (click)="updateModule(module,'publish');module.publish_status=1;"><i class="fa fa-check pr-2"></i> Publish</button>
+                                                <button mat-menu-item class="inactive" (click)="updateModule(module,'publish');module.publish_status=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                                              </mat-menu>
+                                            <!-- <span *ngIf="module.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above" class="active">Published</span>
+                                            <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive">Draft</span></ng-template> -->
+                                            
                                         </span>
-                                        <span class="kbc-qs-icons">
+                                        <!-- <span class="kbc-qs-icons">
                                             <mat-slide-toggle color="success" [matTooltip]="module.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="module.publish_status" (ngModelChange)="updateModule(module, 'publish')"></mat-slide-toggle>
                                             <i matTooltip="Add New Module" matTooltipPosition="above"
                                                 (click)="openDialog(post, 'module',detailDialog)" class="fa fa-plus"></i>
@@ -223,7 +240,18 @@
                                                 (click)="duplicatePost(module, 'module',duplicateDialog)" matTooltipPosition="above" class="far fa-copy"></i>
                                             <i (click)="deletePost(module, 'module', mi, -1,deleteDialog);" 
                                                 matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt text-danger"></i>
-                                        </span>
+                                        </span> -->
+                                        <span  class="kbc-qs1-status">
+                                            <button  mat-icon-button  [matMenuTriggerFor]="menu">
+                                                <mat-icon class="">more_vert</mat-icon>
+                                              </button>
+                                              <mat-menu #menu="matMenu">
+                                                <button mat-menu-item (click)="openDialog(post,'module',detailDialog)"> <i matTooltip="Add New Module" matTooltipPosition="above"  class="fa fa-plus mr-2"></i>Add New Module</button>
+                                                <button mat-menu-item (click)="openDialog(module, 'module',detailDialog)"><i matTooltip="Module Setting"  matTooltipPosition="above" class="far fa-edit mr-2"></i>Settings</button> 
+                                                <button mat-menu-item (click)="duplicatePost(module, 'module',duplicateDialog)"> <i matTooltip="Duplicate Module"  matTooltipPosition="above" class="far fa-copy mr-2"></i>Duplicate</button>
+                                                <button mat-menu-item (click)="deletePost(module, 'module', mi, -1,deleteDialog);" class="text-danger"><i matTooltip="Delete Module"  matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt text-danger mr-2"></i> Delete</button>
+                          </mat-menu>
+                        </span>
                                     </span>
                                 </div>
                                 <ul #lessonUl [style.minHeight]="module.lessons.length == 0 ? '40px' : ''"  [id]="'lessongroup-'+mi" class="kb-drag-container pl-4" [style.maxHeight]="'fit-content'" cdkDropList [cdkDropListData]="module.lessons" [cdkDropListConnectedTo]="lesdls" (cdkDropListDropped)="drop($event)">
@@ -242,20 +270,39 @@
                                                 <input type="hidden" placeholder="Lesson title" (blur)="updateLessonTitle(lesson)" (click)="prevTitle.lesson = lesson.title" [(ngModel)]="lesson.title"
                                                     class="kb-chngname-inp">
                                             </span>
-                                            <span class="kbc-qs col-3">
-                                                <!-- <i cdkDragHandle class="kb-handle-block fas fa-arrows-alt-v"></i> -->
+                                            <!-- <span class="kbc-qs col-3">
+                                                <i cdkDragHandle class="kb-handle-block fas fa-arrows-alt-v"></i>
                                                 <i (click)="redirectToLesson(0,module,lesson)" matTooltip="Content" matTooltipPosition="above" class="far fa-file-alt"></i>
                                                 <i (click)="redirectToLesson(1,module,lesson)" matTooltip="Video" matTooltipPosition="above" *ngIf="lesson.video" class="fa fa-video"></i>
                                                 <i (click)="redirectToLesson(2,module,lesson)" matTooltip="Audio" matTooltipPosition="above" *ngIf="lesson.audio" class="fa fa-music"></i>
                                                 <i (click)="redirectToLesson(3,module,lesson)" matTooltip="Downloads" matTooltipPosition="above" *ngIf="lesson.download" class="fas fa-file-download"></i>
-                                            </span>
+                                            </span> -->
                                            
-                                            <span class="kbc-qs col-3">
-                                                <span class="kbc-qs-status px-2">
-                                                    <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above"  class="active1">Published</span>
-                                                    <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive1">Draft</span></ng-template>
+                                            <span class="kbc-qs col-6">
+                                                <span class="kbc-qs-status px-2 ">
+                                                      <i matTooltip="Add New Lesson" matTooltipPosition="above"
+                                                      (click)="openDialog(post,'lesson',detailDialog)" class="fa fa-plus"></i>
+                                                  <i matTooltip="Lesson Setting" matTooltipPosition="above" 
+                                                      (click)="openDialog(lesson, 'lesson',detailDialog)" class="far fa-edit"></i>
+                                                  <i (click)="redirectToLesson(0,module,lesson)" matTooltip="Go To Content" matTooltipPosition="above" 
+                                                      class="fa fa-photo-video"></i>
+                                                  <i matTooltip="Duplicate Lessson" matTooltipPosition="above" 
+                                                      (click)="duplicatePost(lesson, 'lesson',duplicateDialog)"  class="far fa-copy"></i>
+                                                  <i matTooltip="Delete Lesson" matTooltipPosition="above" 
+                                                  (click)="deletePost(lesson, 'lesson', mi, li,deleteDialog)" class="far fa-trash-alt text-danger"></i>   
+                                                  <span mat-button [matMenuTriggerFor]="menu2" [class]="lesson.publish_status==1 ? 'active1':'inactive1'" >
+                                                    <i class="fas" [class]="lesson.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                                                    {{lesson.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa"></i>
+                                                  </span>
+                                                  <mat-menu #menu2="matMenu">
+                                                    <button mat-menu-item class="active1" (click)="updateLesson(lesson, 'publish');lesson.publish_status=1;"><i class="fa fa-check pr-2"></i> Publish</button>
+                                                    <button mat-menu-item class="inactive1" (click)="updateLesson(lesson, 'publish');lesson.publish_status=0;"><i class="fa fa-file pr-2"></i> Draft</button>
+                                                  </mat-menu> 
                                                 </span>
-                                                <span class="kbc-qs-icons">
+                                                    <!-- <span *ngIf="lesson.publish_status else draft" [matTooltip]="'Published'" matTooltipPosition="above"  class="active1">Published</span>
+                                                    <ng-template #draft><span [matTooltip]="'Draft'" matTooltipPosition="above" class="inactive1">Draft</span></ng-template> -->
+                                                <!-- </span> -->
+                                                <!-- <span class="kbc-qs-icons">
                                                     <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="updateLesson(lesson, 'publish')"></mat-slide-toggle>
                                                     <i matTooltip="Add New Lesson" matTooltipPosition="above"
                                                         (click)="openDialog(post,'lesson',detailDialog)" class="fa fa-plus"></i>
@@ -267,7 +314,7 @@
                                                         (click)="duplicatePost(lesson, 'lesson',duplicateDialog)"  class="far fa-copy"></i>
                                                     <i matTooltip="Delete Lesson" matTooltipPosition="above" 
                                                     (click)="deletePost(lesson, 'lesson', mi, li,deleteDialog)" class="far fa-trash-alt text-danger"></i>
-                                                </span>    
+                                                </span>     -->
                                             </span>
                                         </div>
                                     </li>

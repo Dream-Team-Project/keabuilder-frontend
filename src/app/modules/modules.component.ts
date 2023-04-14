@@ -254,6 +254,7 @@ export class ModulesComponent implements OnInit {
     }
 
     updateModule(module:any, action:string) {
+      console.log(module)
       if(action == 'details' && this.thumbnail.type) {
           this.thumbnail.name = 'module-thumbnail-'+module.uniqueid+'.'+this.thumbnail.type;
           module.thumbnail = 'keaimage-'+this.thumbnail.name;
@@ -270,7 +271,7 @@ export class ModulesComponent implements OnInit {
           else this.updateModuleAfterMethod();
         }
         else if(action == 'publish') {
-          this._snackbar.open('Module has been '+(status == 1 ? 'published' : 'draft'), 'OK');
+          this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
         }
         else if(action == 'title') {
           this._snackbar.open('Module title has been updated', 'OK');
@@ -421,7 +422,7 @@ export class ModulesComponent implements OnInit {
         else this.updateLessonAfterMethod();
       }
       else if(action == 'publish') {
-        this._snackbar.open('Lesson has been '+(status == 1 ? 'published' : 'draft'), 'OK');
+        this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
       }
       else if(action == 'title') {
         this._snackbar.open('Lesson title has been updated', 'OK');
