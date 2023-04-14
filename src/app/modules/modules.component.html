@@ -113,7 +113,6 @@
                     {{course.title}}
                 </span>
                 <span class="kbc-qs-status px-2 toggle text-center">
-                    <!-- <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle> -->
                     <span mat-button [matMenuTriggerFor]="menu1" [class]="course.publish_status==1 ? 'active':'inactive'">
                         <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check ':'fa-file '"></i>
                         {{course.publish_status==1 ? 'Published':'Draft'}}<i class="fas fa-chevron-down drpdwnfa pl-2"></i>
