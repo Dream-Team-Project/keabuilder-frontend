@@ -259,7 +259,7 @@ export class ModulesComponent implements OnInit {
           this.thumbnail.name = 'module-thumbnail-'+module.uniqueid+'.'+this.thumbnail.type;
           module.thumbnail = 'keaimage-'+this.thumbnail.name;
       }
-      else if(action == 'publish') module.publish_status =1; 
+      else if(action == 'publish')module.publish_status =1; 
       else if(action == 'draft') module.publish_status =0;
       this._module.update(module).subscribe(res=>{
         if(action == 'details') {
@@ -268,7 +268,7 @@ export class ModulesComponent implements OnInit {
           });
           else this.updateModuleAfterMethod();
         }
-        else if(action == 'publish') {
+        else if(action == 'publish' || action == 'draft') {
           this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
         }
         else if(action == 'title') {
