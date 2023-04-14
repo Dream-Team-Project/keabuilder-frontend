@@ -65,7 +65,7 @@ export class ElementService {
       }, iconCls: 'fas fa-toggle-off'},
     // button
     // menu
-    menu: { content: { name: 'menu', size: 16, items: [], logo: '' }, iconCls: 'fas fa-bars'},
+    menu: { content: { name: 'menu', size: 16, items: []}, iconCls: 'fas fa-bars'},
     // menu
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus'},
