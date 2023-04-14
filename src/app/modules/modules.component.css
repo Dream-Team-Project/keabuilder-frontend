@@ -43,7 +43,8 @@ div#kbc-topbar {
 }
 
 .kbc-lesson {
-    background-color: var(--kb-light);
+    /* background-color: var(--kb-light); */
+    background-color: var(--kb-white);
     color: var(--secondary-color);
 }
 
@@ -84,15 +85,18 @@ span.kbc-qs i  {
 span.kbc-qs:last-child {
     text-align: right;
 }
-
-.kbc-block-inner span.kbc-qs-icons, .kbc-block-inner:hover span.kbc-qs-summary, .kbc-block-inner:hover span.kbc-qs-status {
+/* .kbc-block-inner:hover span.kbc-qs-summary, .kbc-block-inner:hover span.kbc-qs-status */
+.kbc-block-inner span.kbc-qs-icons{
     display: none;
 }
-
-.kbc-block-inner:hover span.kbc-qs-icons, span.kbc-qs-status {
+/* span.kbc-qs-icons, span.kbc-qs-status  */
+.kbc-block-inner:hover {
     display: flex;
 }
 
+.fa-ellipsis-vertical{
+    color: var(--secondary-color);
+}
 input.kb-chngname-inp {
     background: transparent;
     border: none;
@@ -120,7 +124,7 @@ input.kb-chngname-inp::placeholder {
 span.kbc-qs-status span {
     padding: 2px 10px;
     display: inline-block;
-    border-radius: 20px;
+    border-radius: 5px;
     line-height: 20px;
     width: auto;
     font-size: 75%;
@@ -177,4 +181,7 @@ span.kb-ispan-add:hover {
 .adjustmatfrm mat-form-field:first-child {
     width: 60%!important;
     margin-right: 24px;
+}
+.toggle{
+    font-size: 14px;
 }
