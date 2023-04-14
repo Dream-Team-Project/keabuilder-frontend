@@ -65,7 +65,7 @@ export class ElementService {
       }, iconCls: 'fas fa-toggle-off'},
     // button
     // menu
-    menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars'},
+    menu: { content: { name: 'menu', size: 16, items: [], logo: '' }, iconCls: 'fas fa-bars'},
     // menu
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus'},
@@ -80,7 +80,6 @@ export class ElementService {
     // append
     // checkout form
   };
-  // menuItemObj: any = { id: '', name: 'Item', type: 'item', link: '#', chngName: false, style: { desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: '' }, hide: { desktop: false, table_h: false, tablet_v: false, mobile: false } }
   preMenuItems: any = ['Home', 'About', 'Blog', 'Contact'];
   defaultHeadings: any = [];
   defaultTexts: any = [];
