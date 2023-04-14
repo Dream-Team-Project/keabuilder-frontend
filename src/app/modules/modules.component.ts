@@ -254,7 +254,6 @@ export class ModulesComponent implements OnInit {
     }
 
     updateModule(module:any, action:string) {
-      console.log(module)
       if(action == 'details' && this.thumbnail.type) {
           this.thumbnail.name = 'module-thumbnail-'+module.uniqueid+'.'+this.thumbnail.type;
           module.thumbnail = 'keaimage-'+this.thumbnail.name;
@@ -273,6 +272,9 @@ export class ModulesComponent implements OnInit {
         }
         else if(action == 'title') {
           this._snackbar.open('Module title has been updated', 'OK');
+        }
+        else if(action == 'publish' || action == 'draft') {
+          this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
         }
       })
     }
