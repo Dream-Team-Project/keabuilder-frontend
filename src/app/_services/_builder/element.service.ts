@@ -76,6 +76,8 @@ export class ElementService {
     // code block
     code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
     // code block
+    // icon
+    // icon
     // checkout form
     // append
     // checkout form
