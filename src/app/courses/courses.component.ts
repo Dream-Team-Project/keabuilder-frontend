@@ -236,7 +236,7 @@ export class CoursesComponent implements OnInit {
       search: search.value,
       filter: filter.value,
     }
-    this._file.searchformquery(obj).subscribe((resp:any)=>{
+    this._course.searchformquery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
   }
@@ -245,6 +245,7 @@ export class CoursesComponent implements OnInit {
     // this.forms = [];
     // this.nodata = data.length == 0;
     // this.forms = data;
+    this.courses = data;
     this.fetching = false;
   }
 

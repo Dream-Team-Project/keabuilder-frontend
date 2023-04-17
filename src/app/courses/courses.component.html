@@ -123,8 +123,8 @@
         <mat-form-field appearance="fill" class="col-4">
           <mat-label>Sort By</mat-label>
           <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
-            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'title ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'title DESC'">DESC By Name</mat-option>
             <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
             <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
           </mat-select>
