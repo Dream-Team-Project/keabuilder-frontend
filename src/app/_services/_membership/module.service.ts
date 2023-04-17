@@ -16,7 +16,7 @@ export class ModuleService {
   createApi = './api/createmodule';
   updateApi = './api/updatemodule';
   deleteApi = './api/deletemodule';
-  searchformqueryApi = './api/membership_searchformquery';
+  searchmodulequeryApi = './api/searchmodulequery';
   uuid:any = '';
   constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
@@ -47,9 +47,9 @@ export class ModuleService {
     .pipe(catchError(this.errorHandler));
   }
  // search & filter
-searchformquery(obj:any):Observable<any> {
+searchmodulequery(obj:any):Observable<any> {
   obj.user_id = this.uuid;
-  return this.http.post(this.searchformqueryApi, obj)
+  return this.http.post(this.searchmodulequeryApi, obj)
   .pipe(catchError(this.errorHandler));
 }
 

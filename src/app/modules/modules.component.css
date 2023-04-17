@@ -189,10 +189,6 @@ span.kb-ispan-add:hover {
     font-size: 65%;
     color: var(--secondary-color);
 }
-.adjustmatfrm mat-form-field:first-child {
-    width: 60%!important;
-    margin-right: 24px;
-}
 .toggle{
     font-size: 15px;
     font-weight: 400;

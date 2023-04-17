@@ -236,7 +236,7 @@ export class CoursesComponent implements OnInit {
       search: search.value,
       filter: filter.value,
     }
-    this._course.searchformquery(obj).subscribe((resp:any)=>{
+    this._course.searchcoursequery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
   }

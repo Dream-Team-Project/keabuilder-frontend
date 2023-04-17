@@ -609,14 +609,16 @@ export class ModulesComponent implements OnInit {
   getUID() {
     return Math.random().toString(20).slice(2);
   }
-  searchForms(search: any, filter: any) {
+
+  searchModules(search: any, filter: any) {
     this.postLoading = true;
     var obj = {
       search: search.value,
       filter: filter.value,
-      course_id:this.course.uniqueid,
+      course_id: this.course.uniqueid,
     }
-    this._module.searchformquery(obj).subscribe((resp:any)=>{
+    console.log(obj);
+    this._module.searchmodulequery(obj).subscribe((resp:any)=>{
       console.log(resp.data)
       this.modules = resp.data;
       var request = 0;
