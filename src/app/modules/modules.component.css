@@ -22,15 +22,17 @@ div#kbc-topbar {
 }
 
 .kbc-block-inner {
-    line-height: 26px;
+    line-height: 20px;
     padding: 4px 0;
     align-items: center;
     border-radius: 4px;
-    margin: 5px 0px;
-    font-weight: 500;
+    /* margin: 2px 0px; */
+    font-weight: 400;
     font-size: 15px;
     transition: 0.2s ease;
-    border: 1px solid var(--kb-dim-black);
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #e2e2e2;
 }
 
 .kbc-block-inner:hover {
@@ -40,7 +42,10 @@ div#kbc-topbar {
 .kbc-module {
     background-color: var(--kb-gray);
     color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 40px;
 }
+
 
 .kbc-lesson {
     /* background-color: var(--kb-light); */
@@ -67,7 +72,8 @@ span.kbc-qs .kb-handle-block {
 }
 
 span.kbc-qs i  {
-    padding: 6px 10px;
+    padding: 2px;
+    /* padding: 6px 10px; */
     cursor: pointer;
     font-size: 90%;
 }
@@ -121,23 +127,28 @@ input.kb-chngname-inp::placeholder {
     color: var(--kb-light);
   }
 
-span.kbc-qs-status span {
-    padding: 2px 10px;
+span.kbc-qs-status button {
+    padding: 2px;
     display: inline-block;
     border-radius: 5px;
     line-height: 20px;
     width: auto;
-    font-size: 75%;
+    font-size: 90%;
     color: var(--kb-light);
-    font-weight: 500;
+    font-weight: 600;
 }
 
-span.kbc-qs-status span.active {
-    background-color: var(--primary-color);
+span.kbc-qs-status button.active {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    
 }
 
-span.kbc-qs-status span.inactive {
-    background-color: var(--secondary-color);
+span.kbc-qs-status button.inactive {
+    background-color: white;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
     
 }
 span.kbc-qs-status span.active1 {
@@ -148,8 +159,8 @@ span.kbc-qs-status span.active1 {
 
 span.kbc-qs-status span.inactive1 {
     background-color: white;
-    color: var(--secondary-color);
-    border: 1px solid var(--secondary-color);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
     
 }
 
@@ -183,5 +194,6 @@ span.kb-ispan-add:hover {
     margin-right: 24px;
 }
 .toggle{
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 400;
 }

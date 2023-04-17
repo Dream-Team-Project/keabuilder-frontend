@@ -213,8 +213,10 @@ export class ModulesComponent implements OnInit {
 
   // course methods
 
-  toggleStatus(course:any) {
-    course.publish_status = course.publish_status ? 1: 0;
+  toggleStatus(course:any,action:string) {
+    if(action == 'publish')course.publish_status =1; 
+    else if(action == 'draft')course.publish_status =0;
+    // course.publish_status = course.publish_status ? 1: 0;
     this._course.update(course).subscribe((res:any)=>{
       this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK');
     });
@@ -410,10 +412,9 @@ export class ModulesComponent implements OnInit {
         this.thumbnail.name = 'lesson-thumbnail-'+lesson.uniqueid+'.'+this.thumbnail.type;
         lesson.thumbnail = 'keaimage-'+this.thumbnail.name;
     }
-    else if(action == 'publish') {
-      var status = lesson.publish_status;
-      lesson.publish_status = status ? 1 : 0;
-    }
+    else if(action == 'publish') lesson.publish_status = 1;
+    else if(action == 'draft') lesson.publish_status = 0;
+    
     this._lesson.update(lesson).subscribe(res=>{
       if(action == 'details') {
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
@@ -421,7 +422,7 @@ export class ModulesComponent implements OnInit {
         });
         else this.updateLessonAfterMethod();
       }
-      else if(action == 'publish') {
+      else if(action == 'publish' || action == 'draft') {
         this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
       }
       else if(action == 'title') {
@@ -608,5 +609,34 @@ export class ModulesComponent implements OnInit {
   getUID() {
     return Math.random().toString(20).slice(2);
   }
-  
+  searchForms(search: any, filter: any) {
+    this.postLoading = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+      course_id:this.course.uniqueid,
+    }
+    this._module.searchformquery(obj).subscribe((resp:any)=>{
+      console.log(resp.data)
+      this.modules = resp.data;
+      var request = 0;
+      this.modules.forEach((m:any)=>{
+        var paramObj = {
+          course_id: m.course_id,
+          module_id: m.uniqueid,
+        }
+        this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
+          m.lessons = res.data;
+          if(request == this.modules.length - 1) {
+            this.postLoading = false;
+            setTimeout((e:any)=>{
+              this.setDragDrop();
+            })
+          }
+          request++;
+        })
+      })
+      if(this.modules.length == 0) this.postLoading = false;
+    });
+  }
 }

@@ -99,6 +99,10 @@ export class FileUploadService {
   copyfileApi = "./api/copy-file";
   fileExistApi = "./api/file-exist";
   // file
+
+
+ 
+
   uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
@@ -500,6 +504,8 @@ export class FileUploadService {
   }
 
   // document
+  
+  
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

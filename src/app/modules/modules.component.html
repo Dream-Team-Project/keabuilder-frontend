@@ -72,10 +72,10 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close color="accent">Cancel</button>
-        <button *ngIf="post.id+1 else add" mat-button mat-dialog-close cdkFocusInitial color="primary"
+        <button [disabled]="!post.title" *ngIf="post.id+1 else add" mat-button mat-dialog-close cdkFocusInitial color="primary"
             (click)="updatePost()">Update {{post.type | titlecase}}</button>
         <ng-template #add>
-            <button (click)="addPost()" mat-button mat-dialog-close color="primary">Create {{post.type |
+            <button [disabled]="!post.title" (click)="addPost()" mat-button mat-dialog-close color="primary">Create {{post.type |
                 titlecase}}</button>
         </ng-template>
     </div>
@@ -115,7 +115,7 @@
     </div>
 </ng-template>
 <div *ngIf="course.title" class="container-fluid px-md-5 py-2">
-    <div id="kbc-topbar" class="row align-items-center mb-4">
+    <div id="kbc-topbar" class="row align-items-center mb-4 ">
         <div class="kbc-thumbnail"
             [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'keaimage-course-thumbnail-'+course.uniqueid+'.png' + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
         </div>
@@ -124,22 +124,21 @@
                 <span>
                     {{course.title}}
                 </span>
-                <span class="kbc-qs-status px-2 toggle text-center">
-                    <!-- <mat-slide-toggle color="success" [matTooltip]="course.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="course.publish_status" (ngModelChange)="toggleStatus(course)"></mat-slide-toggle> -->
-                    <span mat-button [matMenuTriggerFor]="menu1"
+                <span class="kbc-qs-status px-2 toggle ">
+                    <button mat-button  [matMenuTriggerFor]="menu1"
                         [class]="course.publish_status==1 ? 'active':'inactive'">
                         <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check ':'fa-file '"></i>
-                        {{course.publish_status==1 ? 'Published':'Draft'}}<i
+                        {{course.publish_status==1 ?'Published':'Draft'}}<i
                             class="fas fa-chevron-down drpdwnfa pl-2"></i>
-                    </span>
+                </button>
                     <mat-menu #menu1="matMenu">
-                        <button mat-menu-item class="active" (click)="toggleStatus(course); course.publish_status=1;"><i
-                                class="fa fa-check pr-2"></i> Publish</button>
+                        <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
+                                class="fa fa-check pr-2"></i>Publish</button>
                         <button mat-menu-item class="inactive"
-                            (click)="toggleStatus(course);course.publish_status=0;"><i class="fa fa-file pr-2"></i>
-                            Draft</button>
+                            (click)="toggleStatus(course,'draft')"><i class="fa fa-file pr-2"></i>Draft</button>
                     </mat-menu>
                 </span>
+               
             </h3>
             <div class="kbc-top-info mt-2 mb-4">
                 {{modules.length}} Modules | 0 Members
@@ -178,15 +177,15 @@
                             <div class="col-md-12 adjustmatfrm">
                                 <mat-form-field appearance="fill" class="w-100 ">
                                     <mat-label>Search </mat-label>
-                                    <input matInput type="text" id="offer-search"
+                                    <input matInput #searchInp type="text" (input)="searchForms(searchInp, filterInp)" id="offer-search"
                                         placeholder="Search Module or Lessons...">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </mat-form-field>
                                 <mat-form-field appearance="fill" class="mr-4 ml-4">
                                     <mat-label>Sort By</mat-label>
-                                    <mat-select name="kbfilter" #filterInp>
-                                        <mat-option [value]="'page_name ASC'">ASC By Name</mat-option>
-                                        <mat-option [value]="'page_name DESC'">DESC By Name</mat-option>
+                                    <mat-select name="kbfilter" #filterInp (valueChange)="searchForms(searchInp, filterInp)">
+                                        <mat-option [value]="'title ASC'">ASC By Name</mat-option>
+                                        <mat-option [value]="'title DESC'">DESC By Name</mat-option>
                                         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
                                         <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
                                     </mat-select>
@@ -252,13 +251,13 @@
                                             {{module.lessons.length}} Lesson{{module.lessons.length != 1 ? 's' : ''}}
                                         </span>
                                         <span class="kbc-qs-status px-2">
-                                            <span mat-button [matMenuTriggerFor]="menu1"
+                                            <button mat-button  [matMenuTriggerFor]="menu1"
                                                 [class]="module.publish_status==1 ? 'active':'inactive'">
                                                 <i class="fas"
                                                     [class]="module.publish_status==1 ? 'fa-check':'fa-file'"></i>
                                                 {{module.publish_status==1 ? 'Published':'Draft'}}<i
-                                                    class="fas fa-chevron-down drpdwnfa"></i>
-                                            </span>
+                                                    class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                                        </button>
                                             <mat-menu #menu1="matMenu">
                                                 <button mat-menu-item class="active"
                                                     (click)="updateModule(module,'publish');"><i
@@ -282,7 +281,7 @@
                                                 matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt text-danger"></i>
                                         </span> -->
                                         <span class="kbc-qs1-status">
-                                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
                                                 <mat-icon class="">more_vert</mat-icon>
                                             </button>
                                             <mat-menu #menu="matMenu">
@@ -303,6 +302,7 @@
                                                         matTooltip="Delete Module" matTooltipPosition="above"
                                                         class="far fa-trash-alt text-danger mr-2"></i> Delete</button>
                                             </mat-menu>
+                                            <i class="fas fa-chevron-down drpdwnfa pl-2"></i>
                                         </span>
                                     </span>
                                 </div>
@@ -346,32 +346,32 @@
                                                 <span class="kbc-qs-status px-2 ">
                                                     <i matTooltip="Add New Lesson" matTooltipPosition="above"
                                                         (click)="openDialog(post,'lesson',detailDialog)"
-                                                        class="fa fa-plus"></i>
+                                                        class="fa fa-plus mr-2"></i>
                                                     <i matTooltip="Lesson Setting" matTooltipPosition="above"
                                                         (click)="openDialog(lesson, 'lesson',detailDialog)"
-                                                        class="far fa-edit"></i>
+                                                        class="far fa-edit mr-2"></i>
                                                     <i (click)="redirectToLesson(0,module,lesson)"
                                                         matTooltip="Go To Content" matTooltipPosition="above"
-                                                        class="fa fa-photo-video"></i>
+                                                        class="fa fa-photo-video mr-2"></i>
                                                     <i matTooltip="Duplicate Lessson" matTooltipPosition="above"
                                                         (click)="duplicatePost(lesson, 'lesson',duplicateDialog)"
-                                                        class="far fa-copy"></i>
+                                                        class="far fa-copy mr-2"></i>
                                                     <i matTooltip="Delete Lesson" matTooltipPosition="above"
                                                         (click)="deletePost(lesson, 'lesson', mi, li,deleteDialog)"
-                                                        class="far fa-trash-alt text-danger"></i>
-                                                    <span mat-button [matMenuTriggerFor]="menu2"
-                                                        [class]="lesson.publish_status==1 ? 'active1':'inactive1'">
+                                                        class="far fa-trash-alt text-danger mr-2"></i>
+                                                    <button mat-button [matMenuTriggerFor]="menu2"
+                                                        [class]="lesson.publish_status==1 ? 'active':'inactive'">
                                                         <i class="fas"
                                                             [class]="lesson.publish_status==1 ? 'fa-check':'fa-file'"></i>
                                                         {{lesson.publish_status==1 ? 'Published':'Draft'}}<i
-                                                            class="fas fa-chevron-down drpdwnfa"></i>
-                                                    </span>
+                                                            class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                                                </button>
                                                     <mat-menu #menu2="matMenu">
-                                                        <button mat-menu-item class="active1"
-                                                            (click)="updateLesson(lesson, 'publish');lesson.publish_status=1;"><i
+                                                        <button mat-menu-item class="active"
+                                                            (click)="updateLesson(lesson, 'publish')"><i
                                                                 class="fa fa-check pr-2"></i> Publish</button>
-                                                        <button mat-menu-item class="inactive1"
-                                                            (click)="updateLesson(lesson, 'publish');lesson.publish_status=0;"><i
+                                                        <button mat-menu-item class="inactive"
+                                                            (click)="updateLesson(lesson, 'draft')"><i
                                                                 class="fa fa-file pr-2"></i> Draft</button>
                                                     </mat-menu>
                                                 </span>
