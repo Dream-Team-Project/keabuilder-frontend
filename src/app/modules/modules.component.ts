@@ -213,8 +213,10 @@ export class ModulesComponent implements OnInit {
 
   // course methods
 
-  toggleStatus(course:any) {
-    course.publish_status = course.publish_status ? 1: 0;
+  toggleStatus(course:any,action:string) {
+    if(action == 'publish')course.publish_status =1; 
+    else if(action == 'draft')course.publish_status =0;
+    // course.publish_status = course.publish_status ? 1: 0;
     this._course.update(course).subscribe((res:any)=>{
       this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK');
     });
