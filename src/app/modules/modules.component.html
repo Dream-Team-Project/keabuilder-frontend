@@ -115,7 +115,7 @@
     </div>
 </ng-template>
 <div *ngIf="course.title" class="container-fluid px-md-5 py-2">
-    <div id="kbc-topbar" class="row align-items-center mb-4">
+    <div id="kbc-topbar" class="row align-items-center mb-4 ">
         <div class="kbc-thumbnail"
             [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'keaimage-course-thumbnail-'+course.uniqueid+'.png' + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
         </div>
@@ -124,7 +124,7 @@
                 <span>
                     {{course.title}}
                 </span>
-                <span class="kbc-qs-status px-2 toggle">
+                <span class="kbc-qs-status px-2 toggle ">
                     <button mat-button  [matMenuTriggerFor]="menu1"
                         [class]="course.publish_status==1 ? 'active':'inactive'">
                         <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check ':'fa-file '"></i>
@@ -138,6 +138,7 @@
                             (click)="toggleStatus(course,'draft')"><i class="fa fa-file pr-2"></i>Draft</button>
                     </mat-menu>
                 </span>
+               
             </h3>
             <div class="kbc-top-info mt-2 mb-4">
                 {{modules.length}} Modules | 0 Members
@@ -255,7 +256,7 @@
                                                 <i class="fas"
                                                     [class]="module.publish_status==1 ? 'fa-check':'fa-file'"></i>
                                                 {{module.publish_status==1 ? 'Published':'Draft'}}<i
-                                                    class="fas fa-chevron-down drpdwnfa"></i>
+                                                    class="fas fa-chevron-down drpdwnfa pl-2"></i>
                                         </button>
                                             <mat-menu #menu1="matMenu">
                                                 <button mat-menu-item class="active"
@@ -280,7 +281,7 @@
                                                 matTooltip="Delete Module" matTooltipPosition="above" class="far fa-trash-alt text-danger"></i>
                                         </span> -->
                                         <span class="kbc-qs1-status">
-                                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menu">
                                                 <mat-icon class="">more_vert</mat-icon>
                                             </button>
                                             <mat-menu #menu="matMenu">
@@ -363,7 +364,7 @@
                                                         <i class="fas"
                                                             [class]="lesson.publish_status==1 ? 'fa-check':'fa-file'"></i>
                                                         {{lesson.publish_status==1 ? 'Published':'Draft'}}<i
-                                                            class="fas fa-chevron-down drpdwnfa"></i>
+                                                            class="fas fa-chevron-down drpdwnfa pl-2"></i>
                                                 </button>
                                                     <mat-menu #menu2="matMenu">
                                                         <button mat-menu-item class="active"
