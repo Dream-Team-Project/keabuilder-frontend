@@ -26,7 +26,7 @@ export class ElementService {
     heading: {
       content: {
         name: 'heading',
-        html: '<h2>Heading goes here</h2>',
+        html: `<h2>Heading goes here</h2>`,
         size: 38,
         editor: false,
       }, iconCls: 'fas fa-heading'},
@@ -35,7 +35,7 @@ export class ElementService {
     text: {
       content: {
         name: 'text',
-        html: '<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>',
+        html: `<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>`,
         size: 16,
         editor: false,
       }, iconCls: 'fas fa-font'},
@@ -74,19 +74,24 @@ export class ElementService {
     form: { content: { name: 'iframe', type: 'form', src: '', height: '' }, iconCls: 'fab fa-wpforms'},
     // form
     // code block
-    code: { content: { name: 'code', html: ''}, iconCls: 'fas fa-code' },
+    code: { content: { name: 'code', html: ``}, iconCls: 'fas fa-code' },
     // code block
     // icon
+    icon: { content: { name: 'icon', html: `<i class="fa-solid fa-icons"></i>`}, iconCls: 'fa-solid fa-icons' },
     // icon
     // checkout form
     // append
     // checkout form
   };
   preMenuItems: any = ['Home', 'About', 'Blog', 'Contact'];
-  defaultHeadings: any = [];
-  defaultTexts: any = [];
-  defaultButtons: any = [];
-  defaultDivider: any = [];
+  defaultIcons: any = [
+    {name: 'fa-solid fa-house', type: 'solid'},
+    {name: 'fa-solid fa-user', type: 'solid'},
+    {name: 'fa-regular fa-user', type: 'regular'},
+    {name: 'fa-brands fa-facebook', type: 'brand'},
+    {name: 'fa-brands fa-square-facebook', type: 'brand'},
+    {name: 'fa-brands fa-twitter', type: 'brand'},
+  ]
   default: any = {
     headings: [],
     texts: [],
@@ -119,11 +124,11 @@ export class ElementService {
       var proId = this._general.step_products[0];
       element.productid = proId ? proId.uniqueid : '';
     }
-    if (element.name == 'menu') {
+    else if (element.name == 'menu') {
       if (element?.itemset) delete element?.itemset;
       else element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
     }
-    if (element.name == 'iframe' && element.type == 'form') {
+    else if (element.name == 'iframe' && element.type == 'form') {
       if (element?.itemset) delete element?.itemset;
       else element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
     }
