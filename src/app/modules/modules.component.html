@@ -192,8 +192,8 @@
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="col-md-3">
                             <mat-label>Visibility</mat-label>
-                            <mat-select name="visibility" #visibility>
-                                <mat-option [value]="">Show All</mat-option>
+                            <mat-select name="visibility" #visibilityInp (valueChange)="searchModules(searchInp, filterInp)">
+                                <!-- <mat-option [value]="">Show All</mat-option> -->
                                 <mat-option [value]="'draft'">Draft Only</mat-option>
                                 <mat-option [value]="'publish'">Publish Only</mat-option>
                             </mat-select>

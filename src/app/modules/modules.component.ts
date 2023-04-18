@@ -138,25 +138,25 @@ export class ModulesComponent implements OnInit {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
         console.log(res.data);
-        this.modules = res.data;
-        var request = 0;
-        this.modules.forEach((m:any)=>{
-          var paramObj = {
-            course_id: m.course_id,
-            module_id: m.uniqueid,
-          }
-          this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
-            m.lessons = res.data;
-            if(request == this.modules.length - 1) {
-              this.postLoading = false;
-              setTimeout((e:any)=>{
-                this.setDragDrop();
-              })
-            }
-            request++;
-          })
-        })
-        if(this.modules.length == 0) this.postLoading = false;
+        this.adjustdata(res.data);
+        // var request = 0;
+        // this.modules.forEach((m:any)=>{
+        //   var paramObj = {
+        //     course_id: m.course_id,
+        //     module_id: m.uniqueid,
+        //   }
+        //   this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
+        //     m.lessons = res.data;
+        //     if(request == this.modules.length - 1) {
+        //       this.postLoading = false;
+        //       setTimeout((e:any)=>{
+        //         this.setDragDrop();
+        //       })
+        //     }
+        //     request++;
+        //   })
+        // })
+        // if(this.modules.length == 0) this.postLoading = false;
       })
     }
 
@@ -612,33 +612,18 @@ export class ModulesComponent implements OnInit {
 
   searchModules(search: any, filter: any) {
     this.postLoading = true;
-    var obj = {
+        var obj = {
       search: search.value,
       filter: filter.value,
       course_id: this.course.uniqueid,
+      // visibility:visibilityInp=="draft" ? 0 : 1,
     }
-    console.log(obj);
     this._module.searchmodulequery(obj).subscribe((resp:any)=>{
-      console.log(resp.data)
-      this.modules = resp.data;
-      var request = 0;
-      this.modules.forEach((m:any)=>{
-        var paramObj = {
-          course_id: m.course_id,
-          module_id: m.uniqueid,
-        }
-        this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
-          m.lessons = res.data;
-          if(request == this.modules.length - 1) {
-            this.postLoading = false;
-            setTimeout((e:any)=>{
-              this.setDragDrop();
-            })
-          }
-          request++;
-        })
-      })
-      if(this.modules.length == 0) this.postLoading = false;
+      this.adjustdata(resp.data);
     });
+  }
+  adjustdata(data:any){
+    this.modules = data;
+    this.postLoading = false;
   }
 }
