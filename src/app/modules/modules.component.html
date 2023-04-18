@@ -177,13 +177,13 @@
                             <div class="col-md-12 adjustmatfrm">
                                 <mat-form-field appearance="fill" class="w-100 ">
                                     <mat-label>Search </mat-label>
-                                    <input matInput #searchInp type="text" (input)="searchForms(searchInp, filterInp)" id="offer-search"
+                                    <input matInput #searchInp type="text" (input)="searchmodules(searchInp, filterInp)" id="offer-search"
                                         placeholder="Search Module or Lessons...">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </mat-form-field>
                                 <mat-form-field appearance="fill" class="mr-4 ml-4">
                                     <mat-label>Sort By</mat-label>
-                                    <mat-select name="kbfilter" #filterInp (valueChange)="searchForms(searchInp, filterInp)">
+                                    <mat-select name="kbfilter" #filterInp (valueChange)="searchmodules(searchInp, filterInp)">
                                         <mat-option [value]="'title ASC'">ASC By Name</mat-option>
                                         <mat-option [value]="'title DESC'">DESC By Name</mat-option>
                                         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>

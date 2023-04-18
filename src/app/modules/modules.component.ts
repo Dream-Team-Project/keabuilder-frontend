@@ -609,7 +609,7 @@ export class ModulesComponent implements OnInit {
   getUID() {
     return Math.random().toString(20).slice(2);
   }
-  searchForms(search: any, filter: any) {
+  searchmodules(search: any, filter: any) {
     this.postLoading = true;
     var obj = {
       search: search.value,
