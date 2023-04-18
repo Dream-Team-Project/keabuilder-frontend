@@ -202,6 +202,12 @@ export class BuilderTopbarComponent implements OnInit {
     this._general.openSnackBar(false, 'Template has been '+msg, 'OK', 'center', 'top');
   }
 
+  emitIcon(icon:any) {
+    var appendIcon = JSON.parse(JSON.stringify(this._element.elementList.icon));
+    appendIcon.content.html = '<i class="'+icon.name+'"></i>';
+    this.dragDataEmit(appendIcon);
+  }
+
   dragDataEmit(data:any) {
     this.transferData.emit(data);
   }

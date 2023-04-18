@@ -58,11 +58,12 @@ body {
     box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6, p, i, svg {
+    color: inherit;
+    font-size: inherit;
     font-family: inherit;
     font-weight: inherit;
-    font-size: inherit;
-    margin: 0 !important;
+    margin: 0!important;
 }
 
 

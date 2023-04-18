@@ -4,10 +4,13 @@
 ::ng-deep h4,
 ::ng-deep h5,
 ::ng-deep h6,
-::ng-deep p {
+::ng-deep p,
+::ng-deep i,
+::ng-deep svg {
+    color: inherit;
+    font-size: inherit;
     font-family: inherit;
     font-weight: inherit;
-    font-size: inherit;
     margin: 0!important;
 }
 

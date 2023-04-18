@@ -16,7 +16,7 @@ export class CourseService {
   createApi = './api/createcourse';
   updateApi = './api/updatecourse';
   deleteApi = './api/deletecourse';
-  searchformqueryApi = './api/membership_searchformquery';
+  searchcoursequeryApi = './api/searchcoursequery';
   // API url
   uuid: any;
 
@@ -143,9 +143,9 @@ export class CourseService {
   // login
 
 // search & filter
-searchformquery(obj:any):Observable<any> {
+searchcoursequery(obj:any):Observable<any> {
   obj.user_id = this.uuid;
-  return this.http.post(this.searchformqueryApi, obj)
+  return this.http.post(this.searchcoursequeryApi, obj)
   .pipe(catchError(this.errorHandler));
 }
 

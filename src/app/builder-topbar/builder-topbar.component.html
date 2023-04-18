@@ -321,6 +321,16 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'icon'" id="elementgroup" class="kb-block-selection kb-element-list kb-icon-list" cdkDropList [cdkDropListData]="_element.defaultIcons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let icon of _element.defaultIcons | filter:searchText:'name' | sorting:'asc':'name', index as i" (cdkDragMoved)="emitIcon(icon)" [cdkDragData]="icon">
+                <i [class]="icon.name"></i>
+                <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="icon.name"></i>
+                </div>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
         <div *ngSwitchCase="'button'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.buttons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <span cdkDrag *ngFor="let btn of _element.default.buttons, index as i" (cdkDragMoved)="dragDataEmit(btn)" [cdkDragData]="btn">
                 <span class="kb-d-btn">
