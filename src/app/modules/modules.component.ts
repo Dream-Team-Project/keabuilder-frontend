@@ -610,14 +610,19 @@ export class ModulesComponent implements OnInit {
     return Math.random().toString(20).slice(2);
   }
 
-  searchModules(search: any, filter: any) {
+  searchModules(search: any, filter: any,visibilityInp:any) {
+   let visibilityvalue;
+   if(!visibilityInp.value) visibilityvalue='';
+   else if(visibilityInp.value=='draft') visibilityvalue=0;
+   else if(visibilityInp.value=='publish') visibilityvalue=1;
     this.postLoading = true;
         var obj = {
       search: search.value,
       filter: filter.value,
       course_id: this.course.uniqueid,
-      // visibility:visibilityInp=="draft" ? 0 : 1,
+      visibility:visibilityvalue,
     }
+   
     this._module.searchmodulequery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
