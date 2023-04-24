@@ -32,6 +32,7 @@ export class CoursesComponent implements OnInit {
     type: ''
   };
   offersToAdd:Array<string> = [];
+  
   course = {
     id: '',
     uniqueid: '',
@@ -41,7 +42,8 @@ export class CoursesComponent implements OnInit {
     description: '',
     thumbnail: '',
     offers: '',
-    publish_status: ''
+    publish_status: '',
+   
   };
   update:boolean = false;
   prevTitle:string = '';
@@ -111,6 +113,7 @@ export class CoursesComponent implements OnInit {
     else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
   }
   duplicateCourse(course:any) {
+    course.olduniqueid=course.uniqueid;
         this.course.uniqueid = this._general.makeid(20);
     var oldimg ='keaimage-course-thumbnail-'+course.uniqueid+'.png';
     this.course.description=course.description;
@@ -119,6 +122,9 @@ export class CoursesComponent implements OnInit {
     this.course.path=course.path;
     this.course.title=course.title;
     this.course.publish_status=course.publish_status;
+
+  
+
       this.btndis = true;
       // this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       // this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
