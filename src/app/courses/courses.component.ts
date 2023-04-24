@@ -110,6 +110,43 @@ export class CoursesComponent implements OnInit {
     }
     else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
   }
+  duplicateCourse(course:any) {
+        this.course.uniqueid = this._general.makeid(20);
+    var oldimg ='keaimage-course-thumbnail-'+course.uniqueid+'.png';
+    this.course.description=course.description;
+    this.thumbnail.path=course.path;
+    this.thumbnail.type='png';
+    this.course.path=course.path;
+    this.course.title=course.title;
+    this.course.publish_status=course.publish_status;
+      this.btndis = true;
+      // this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+      // this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      this._course.duplicate(this.course).subscribe((res:any)=>{
+        console.log(res)
+        if(res.success==true){
+        this._file.validateimg(oldimg).subscribe({
+          next: datagen => {
+            console.log(datagen)
+            if(datagen.data==1){
+              var imgobj  = {oldname:oldimg, newname:'keaimage-course-thumbnail-'+this.course.uniqueid+'.png'};
+              this._file.copyimage(imgobj).subscribe({
+                next: data => {
+                  this.allCourses();
+                  this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+                }
+              });
+            }else{
+              this.allCourses();
+        this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+            }
+
+          }
+        });
+      }
+      })
+    }
+   
 
   updateCourse() {
     if(this.course.title!='' && this.thumbnail.path) {

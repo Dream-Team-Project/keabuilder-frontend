@@ -35,6 +35,7 @@ export class ModuleService {
   }
 
   create(req:any):Observable<any> {
+    req.user_id=this.uuid;
     return this.http.post(this.createApi, req);
   }
 

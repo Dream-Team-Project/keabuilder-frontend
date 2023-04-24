@@ -290,7 +290,7 @@ export class ModulesComponent implements OnInit {
       var module = JSON.parse(JSON.stringify(this.post));
       var newM = module.id ? false : true;
       module.uniqueid = this.getUID();
-      module.sort = this.index.module+1;
+      module.sort = this.index.module;
       module.publish_status = 1;
       var imgNObj:any = null;
       if(module.thumbnail) {
@@ -611,16 +611,12 @@ export class ModulesComponent implements OnInit {
   }
 
   searchModules(search: any, filter: any,visibilityInp:any) {
-   let visibilityvalue;
-   if(!visibilityInp.value) visibilityvalue='';
-   else if(visibilityInp.value=='draft') visibilityvalue=0;
-   else if(visibilityInp.value=='publish') visibilityvalue=1;
     this.postLoading = true;
         var obj = {
       search: search.value,
       filter: filter.value,
       course_id: this.course.uniqueid,
-      visibility:visibilityvalue,
+      visibility:visibilityInp.value,
     }
    
     this._module.searchmodulequery(obj).subscribe((resp:any)=>{
