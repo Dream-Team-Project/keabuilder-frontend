@@ -137,7 +137,6 @@ export class ModulesComponent implements OnInit {
    fetchPosts() {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
-        console.log(res.data);
         this.modules = res.data;
         var request = 0;
         this.modules.forEach((m:any)=>{
@@ -640,5 +639,10 @@ export class ModulesComponent implements OnInit {
       })
       if(this.modules.length == 0) this.postLoading = false;
     });
+  }
+
+  adjustdata(data:any){
+    this.modules = data;
+    this.postLoading = false;
   }
 }

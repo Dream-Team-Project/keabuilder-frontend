@@ -242,9 +242,6 @@ export class CoursesComponent implements OnInit {
   }
 
   adjustdata(data:any){
-    // this.forms = [];
-    // this.nodata = data.length == 0;
-    // this.forms = data;
     this.courses = data;
     this.fetching = false;
   }
