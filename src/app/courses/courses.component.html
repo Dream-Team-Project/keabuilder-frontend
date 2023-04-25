@@ -8,6 +8,16 @@
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteCourse(delcourse)">Yes</button>
   </div>
 </ng-template>
+<ng-template #duplicatedialog>
+  <h1 mat-dialog-title class="">Are you indeed want to duplicate this Course</h1>
+  <div mat-dialog-content>
+    Would you like to duplicate <span >{{delcourse.title}}</span> course?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="duplicateCourse(delcourse)">Yes</button>
+  </div>
+</ng-template>
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <!-- sidebar -->
@@ -84,7 +94,7 @@
                 {{showquickoff}}
             </span>
         </p> -->
-        <div class="col-12 p-0 text-right">
+        <div class="col-12 p-0 text-center">
           <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()" [disabled]="btndis">
             Update Course <i class="far fa-edit"></i>
           </button>
@@ -181,7 +191,7 @@
                 <button (click)="quickEdit(course)" mat-menu-item>
                   <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="openDialog(duplicatedialog,course)">
                   <i class="far fa-copy pr-2"></i>Duplicate
                 </button>
                 <button (click)="openDialog(dialog, course)" mat-menu-item class="text-danger">

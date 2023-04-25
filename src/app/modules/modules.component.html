@@ -176,14 +176,14 @@
                     <div class="row align-items-center ">
                         <mat-form-field appearance="fill" class="col-md-6">
                             <mat-label>Search </mat-label>
-                            <input matInput #searchInp type="text" (input)="searchModules(searchInp, filterInp)"
+                            <input matInput #searchInp type="text" (input)="searchModules(searchInp, filterInp,visibilityInp)"
                                 id="offer-search" placeholder="Search Module or Lessons...">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="col-md-3">
                             <mat-label>Sort By</mat-label>
                             <mat-select name="kbfilter" #filterInp
-                                (valueChange)="searchModules(searchInp, filterInp)">
+                                (valueChange)="searchModules(searchInp, filterInp,visibilityInp)">
                                 <mat-option [value]="'title ASC'">ASC By Name</mat-option>
                                 <mat-option [value]="'title DESC'">DESC By Name</mat-option>
                                 <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -192,8 +192,8 @@
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="col-md-3">
                             <mat-label>Visibility</mat-label>
-                            <mat-select name="visibility" #visibility>
-                                <mat-option [value]="">Show All</mat-option>
+                            <mat-select name="visibility" #visibilityInp (valueChange)="searchModules(searchInp, filterInp,visibilityInp)">
+                                <!-- <mat-option [value]="">Show All</mat-option> -->
                                 <mat-option [value]="'draft'">Draft Only</mat-option>
                                 <mat-option [value]="'publish'">Publish Only</mat-option>
                             </mat-select>

@@ -137,25 +137,26 @@ export class ModulesComponent implements OnInit {
    fetchPosts() {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
-        this.modules = res.data;
-        var request = 0;
-        this.modules.forEach((m:any)=>{
-          var paramObj = {
-            course_id: m.course_id,
-            module_id: m.uniqueid,
-          }
-          this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
-            m.lessons = res.data;
-            if(request == this.modules.length - 1) {
-              this.postLoading = false;
-              setTimeout((e:any)=>{
-                this.setDragDrop();
-              })
-            }
-            request++;
-          })
-        })
-        if(this.modules.length == 0) this.postLoading = false;
+        console.log(res.data);
+        this.adjustdata(res.data);
+        // var request = 0;
+        // this.modules.forEach((m:any)=>{
+        //   var paramObj = {
+        //     course_id: m.course_id,
+        //     module_id: m.uniqueid,
+        //   }
+        //   this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
+        //     m.lessons = res.data;
+        //     if(request == this.modules.length - 1) {
+        //       this.postLoading = false;
+        //       setTimeout((e:any)=>{
+        //         this.setDragDrop();
+        //       })
+        //     }
+        //     request++;
+        //   })
+        // })
+        // if(this.modules.length == 0) this.postLoading = false;
       })
     }
 
@@ -289,7 +290,7 @@ export class ModulesComponent implements OnInit {
       var module = JSON.parse(JSON.stringify(this.post));
       var newM = module.id ? false : true;
       module.uniqueid = this.getUID();
-      module.sort = this.index.module+1;
+      module.sort = this.index.module;
       module.publish_status = 1;
       var imgNObj:any = null;
       if(module.thumbnail) {
@@ -609,40 +610,17 @@ export class ModulesComponent implements OnInit {
     return Math.random().toString(20).slice(2);
   }
 
-  searchModules(search: any, filter: any) {
+  searchModules(search: any, filter: any,visibilityInp:any) {
     this.postLoading = true;
-    var obj = {
+        var obj = {
       search: search.value,
       filter: filter.value,
       course_id: this.course.uniqueid,
+      visibility:visibilityInp.value,
     }
-    console.log(obj);
+   
     this._module.searchmodulequery(obj).subscribe((resp:any)=>{
-      console.log(resp.data)
-      this.modules = resp.data;
-      var request = 0;
-      this.modules.forEach((m:any)=>{
-        var paramObj = {
-          course_id: m.course_id,
-          module_id: m.uniqueid,
-        }
-        this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
-          m.lessons = res.data;
-          if(request == this.modules.length - 1) {
-            this.postLoading = false;
-            setTimeout((e:any)=>{
-              this.setDragDrop();
-            })
-          }
-          request++;
-        })
-      })
-      if(this.modules.length == 0) this.postLoading = false;
+      this.adjustdata(resp.data);
     });
-  }
-
-  adjustdata(data:any){
-    this.modules = data;
-    this.postLoading = false;
   }
 }

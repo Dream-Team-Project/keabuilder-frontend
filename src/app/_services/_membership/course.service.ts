@@ -14,6 +14,7 @@ export class CourseService {
   multipleApi = './api/multiplecourse';
   singlebyurlApi = './api/singlebyurlcourse';
   createApi = './api/createcourse';
+  duplicateApi = './api/duplicatecourse';
   updateApi = './api/updatecourse';
   deleteApi = './api/deletecourse';
   searchcoursequeryApi = './api/searchcoursequery';
@@ -44,6 +45,11 @@ export class CourseService {
     obj.user_id = this.uuid;
     return this.http.post(this.createApi, obj);
   }
+  duplicate(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.duplicateApi, obj);
+  }
+
 
   update(obj:any):Observable<any> {
     obj.user_id = this.uuid;
