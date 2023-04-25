@@ -627,4 +627,9 @@ export class ModulesComponent implements OnInit {
     this.modules = data;
     this.postLoading = false;
   }
+
+  adjustdata(data:any){
+    this.modules = data;
+    this.postLoading = false;
+  }
 }
