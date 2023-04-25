@@ -122,9 +122,6 @@ export class CoursesComponent implements OnInit {
     this.course.path=course.path;
     this.course.title=course.title;
     this.course.publish_status=course.publish_status;
-
-  
-
       this.btndis = true;
       // this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       // this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
