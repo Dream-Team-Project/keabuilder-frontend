@@ -1,0 +1,30 @@
+<div id="heatmapcomntainer">
+    <div class="container-fluid">
+        <div class="row kb-mt-tp-2">
+            <div class="col-md-12">
+                <img [src]="bgImg" class="img-fluid" alt="">
+                <p class="kb-heatmapnew"><span>ALL NEW</span> HEATMAPS</p>
+            </div>
+        </div>
+        <div class="row p-5 kb-findsection">
+            <div class="col-md-12">
+                <h3>Enter a URL on your site to start with...</h3>
+                <p>You can easily monitor your user behavior.</p>
+                <input class="mt-2" type="text" placeholder="e.g. http://.com/page.html" id="inpurl">
+                <button (click)="settheurl()" mat-raised-button color="primary" >View</button>
+            </div>
+        </div>
+        <div class="row pt-5">
+            <div class="col-md-12 kb-mostvisitpage">
+                <h3>Most Visited Pages</h3>
+                <ol>
+                    <li *ngFor="let visit of visited; index as i;">
+                        <a [href]="visit['landing_page']+'#kb-heatmaps'" target="_blank">
+                            {{visit['landing_page']}}
+                        </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>

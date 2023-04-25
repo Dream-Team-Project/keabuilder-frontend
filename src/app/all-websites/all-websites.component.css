@@ -1,0 +1,39 @@
+.cardpage >div{
+    box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+.tphdrcard{
+    background: #f5f5f5;
+    padding: 5px;
+    width: 106%;
+    border-radius: 4px;
+}
+.adjdiv h3{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kb-fitimg {
+    height: 100%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    -webkit-transition: all 2s linear;
+    -moz-transition: all 2s linear;
+    -ms-transition: all 2s linear;
+    -o-transition: all 2s linear;
+    transition: all 2s linear;
+  }
+  
+  .kb-fitimg:hover {
+      background-position: center bottom;
+  }
+
+  .kbimgcard{
+    height: 300px;
+  }

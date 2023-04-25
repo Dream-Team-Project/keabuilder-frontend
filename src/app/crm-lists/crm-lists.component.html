@@ -1,0 +1,290 @@
+<!-- dialog for delete list button -->
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete List</h1>
+  <div mat-dialog-content>
+    Would you like to delete this List?
+    <!-- Would you like to delete <span class="text-danger">{{this.delcontact.name}}</span> Contact? -->
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      class="text-danger"
+      (click)="deletecrmlist(this.dellist)"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
+<!-- dialog for duplicate entry on add list button -->
+<ng-template #dialog_addnew>
+  <h1 mat-dialog-title class="kb-danger">Alert Message</h1>
+  <div mat-dialog-content>
+    this List Name already exist,Would you like to create duplicate List with this name?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      class="text-danger"
+      (click)="addcrmlist()"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
+
+<div id="kb-crmlist">
+  <div id="kb-offer-actions" *ngIf="sidebar.open">
+    <div
+      class="offcanvas offcanvas-right p-4 offcanvas-on"
+      [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
+      [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close"
+    >
+      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+      <h6><b>Add a list</b></h6>
+      <hr />
+      <form
+        [formGroup]="crmlistForm"
+        (ngSubmit)="buttonText === 'add' ? openDialog_addlist(dialog_addnew) : updatecrmlist()"
+      >
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>List Name</mat-label>
+          <input
+            type="text"
+            placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+            formControlName="list_name"
+            matInput
+            required
+          />
+          <mat-error *ngIf="crmlistForm.controls.list_name.hasError('required')">Please enter List Name</mat-error>
+          <mat-error *ngIf="crmlistForm.controls.list_name.hasError('minlength')">Please enter more than 3 characters</mat-error>
+          <mat-error *ngIf="crmlistForm.controls.list_name.hasError('maxlength')">Please enter less than 50 characters</mat-error>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          type="Submit"
+          [disabled]="crmlistForm.invalid"
+        >
+          {{ buttonText }}
+        </button>
+      </form>
+    </div>
+  </div>
+  <div
+    class="offcanvas-overlay"
+    *ngIf="sidebar.open"
+    (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open"
+    [class.slowHide]="sidebar.anim.close"
+  ></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
+          <i class="fa fa-random" aria-hidden="true"></i> Automations
+        </button> -->
+        <button
+          mat-raised-button
+          class="mr-2"
+          [routerLink]="['/crm-campaigns']"
+        >
+          <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']">
+          <i class="fa fa-users" aria-hidden="true"></i> Contacts
+        </button>
+        <button
+          mat-raised-button
+          class="mr-2"
+          [routerLink]="['/crm-lists']"
+          color="primary"
+        >
+          <i class="fa fa-list" aria-hidden="true"></i> Lists
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']">
+          <i class="fa fa-tags" aria-hidden="true"></i> Tags
+        </button>
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']">
+          <i class="fa fa-chart-bar" aria-hidden="true"></i> Reports
+        </button> -->
+      </div>
+      <div class="col-md-4 text-right">
+        <button
+          mat-raised-button
+          (click)="opensidebar()"
+          color="primary"
+          class="mr-2 d-inline-block"
+        >
+          <i class="fa fa-list" aria-hidden="true"></i> Create a list
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 mt-4 ">
+           <span ><span style="font-size:40px">Lists</span> ({{this.lists.length}})</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7 text-left m-3 pl-0">
+    <div style="font-size:12px">List search by name or </div>
+  <fieldset
+  (keyup)="applyFilter($event)"
+  class="form-group position-relative has-icon-left kea-barfieldset mr-2"
+>
+  <input
+    type="text"
+    class="form-control"
+    id="offer-search"
+    #input
+    placeholder="Search Lists..."
+  />
+  <div class="form-control-position">
+    <i class="fab fa-searchengin"></i>
+  </div>
+</fieldset>
+<div  class="d-inline " style="font-size:14px">
+  <!-- <mat-label>Sort by:</mat-label> -->
+    <mat-form-field  class= "col-md-3 fntilform" appearance="fill">
+      <mat-label>Filter by:</mat-label>
+          <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortlist()">
+            <mat-option value="">-- None --</mat-option>
+            <mat-optgroup *ngFor="let group of optionGroup" [label]="group.viewValue">
+              <mat-option *ngFor="let item of group.order" [value]="[group.value, item.viewValue]">
+                {{item.viewValue}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+</div>
+  </div>
+  <!-- view   Button -->
+<!-- 
+  <div id="kb-offer-actions" *ngIf="popup">
+    <div
+      class="offcanvas offcanvas-right p-4 offcanvas-on"
+      [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
+      [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close"
+    >
+      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-12">
+            <h6><b>List View :-</b></h6>
+            <hr />
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <td>Id</td>
+                  <td>Name</td>
+                  <td>Created At</td>
+                  <td>Updated At</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ singlelist.id }}</td>
+                  <td>{{ singlelist.list_name }}</td>
+                  <td>{{ singlelist.created_at | date : "fullDate" }}</td>
+                  <td>{{ singlelist.updated_at | date : "fullDate" }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-md-4 text-right">
+            <button
+              mat-raised-button
+              (click)="hidepopupsidebar()"
+              color="accent"
+              class="mr-2 d-inline-block"
+            >
+              <i class="fa fa-back" aria-hidden="true"></i> Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table ml-2">
+          <thead>
+            <tr>
+              <td class="border-bottom border-warning text-center">Name</td>
+              <td class="border-bottom border-warning text-center">Active Contacts</td>
+              <!-- <td class="border-bottom border-warning text-center">Created At</td> -->
+              <td class="border-bottom border-warning text-center">Actions</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of lists; index as i">
+              <td class="d-flex">
+                <div>
+                  <div class="namebox1">{{ gettwochar(list.list_name) | uppercase }}</div>
+                </div>
+                <div>
+                <div class="text-left funlist">{{ list.list_name | titlecase   }} </div>
+                <div class="text-left funlist1 " ><span class="text-warning">Created On: </span> {{list.created_at | date : "mediumDate"}}</div>
+              </div>
+              </td>
+              <td class="text-center text-warning">{{ list.activecontacts }}</td>
+              <!-- <td>{{ list.created_at | date : "fullDate" }}</td> -->
+              <td class="text-center">
+                <button mat-raised-button class="mr-2"  [routerLink]="['/crm-contacts/'+list.uniqueid+'/list']">
+                  View <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button mat-raised-button class="mr-2" (click)="editList(list)">
+                  Edit <i class="fa fa-pen" aria-hidden="true"></i>
+                </button>
+                <button
+                  mat-raised-button
+                  class="mr-2"
+                  (click)="copyList(list.list_name)"
+                >
+                  Copy <i class="fa fa-copy" aria-hidden="true"></i>
+                </button>
+                <button
+                  mat-raised-button
+                  (click)="openDialog(dialog, list.uniqueid)"
+                >
+                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <!-- <button mat-raised-button (click)="deletecrmlist(list.uniqueid)">Delete <i class="fa fa-trash" aria-hidden="true"></i></button> -->
+              </td>
+            </tr>
+          </tbody>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="selection.toggle(row)"
+          ></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+
+        <!-- <mat-paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          aria-label="Select page of users"
+        ></mat-paginator> -->
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+</div>

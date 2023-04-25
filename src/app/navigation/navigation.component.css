@@ -1,0 +1,144 @@
+button.mat-button {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.kb-menu-cards {
+    justify-content: space-evenly;
+}
+
+.kb-inner-pages {
+    overflow-y: scroll;
+    height: 435px;
+}
+
+.kb-menu-cards>div.kb-menu-card-inner {
+    box-shadow: 0 0 4px rgb(0 0 0 / 10%);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.kb-menu-cards>div.kb-menu-card-inner h5 {
+    margin: 0;
+}
+
+.kb-has-icon .cdk-drag-handle, .kb-has-icon .cdk-drag-handle>span, .kb-custom-link {
+    cursor: move;
+}
+
+.kb-has-icon span {
+    cursor: pointer;
+}
+
+.kb-has-icon span:last-child {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.kb-has-icon span i {
+    transition: 0.1s ease;
+    cursor: pointer;
+}
+
+.kb-has-icon span i:hover {
+    color: var(--primary-color);
+}
+
+.kb-menu-items, .kb-menu-settings, .custom-placeholder {
+    max-width: 380px;
+}
+
+.kb-menu-pages, .kb-menu-items {
+    background-color: var(--kb-light);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.1s ease-in-out;
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.kb-menu-pages:hover:not(.kb-disabled), .kb-menu-active{
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+}
+
+.kb-menu-settings {
+    background: var(--kb-light);
+    padding: 8px 16px;
+    height: 100%;
+    overflow: hidden;
+    animation: opensetting 0.2s ease;
+}
+
+@keyframes opensetting {
+    from {
+        padding: 0px 16px;
+        height: 0px;
+    }    
+    to {
+        padding: 8px 16px;
+        height: 249px;
+    }
+}
+
+.kb-dragzone {
+    min-height: 420px;
+    border: 2px dashed #aeaeae;
+    width: 100%;
+    border-radius: 4px;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+
+.kb-fade-text {
+    font-size: 16px;
+}
+
+.kb-fade-text, .kb-dragtext:after {
+    color: #aeaeae;
+    height: 80%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 60px;
+}
+
+.kb-dragtext:after {
+    content: 'Drag pages to add the menu items';
+    font-size: 20px;
+}
+
+.custom-preview {
+    background-color: var(--primary-color);
+}
+
+.kb-inner-pages .custom-placeholder {
+    display: none;
+}
+
+.cdk-drag {
+    transition: 0.2s ease;
+}
+
+::ng-deep .mat-expansion-panel-body {
+    padding: 0 8px 10px!important;
+}
+
+::ng-deep .mat-expansion-panel-header {
+    height: 40px;
+    padding-left: 16px;
+}

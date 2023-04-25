@@ -1,0 +1,38 @@
+<div class="kb-maincoursepost">
+
+    <!-- header -->
+    <div class="mb-5">
+        <button mat-raised-button color="primary" class="mr-4">Mark As Completed! <i class="fas fa-check-circle"></i></button>
+        <button mat-raised-button color="accent" class="mr-4" (click)="gotonextprev('previous',true)" [class.disabled]="!prevlesson" >Previous <i class="fas fa-angle-left"></i></button>
+        <button mat-raised-button color="accent" class="mr-4" (click)="gotonextprev('next',true)" [class.disabled]="!nextlesson" >Next <i class="fas fa-angle-right"></i></button>
+        <button mat-raised-button color="accent" class="mr-4">Downloads <i class="fas fa-download"></i></button>
+        <button mat-raised-button color="primary" [routerLink]="'/course/'+coursename" >Back To Main Course <i class="fas fa-long-arrow-alt-left"></i></button>
+    </div>
+    <!-- header -->
+
+    <!-- video -->
+    <div class="kb-videopost" *ngIf="videodata!=''">
+        <video controls>
+            <source [src]="videodata" type="video/mp4">
+            <source [src]="videodata" type="video/ogg">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <!-- video -->
+    
+    <div class="kb-audiopost mt-4" *ngIf="audiodata!=''">
+    <!-- audio -->
+        <audio controls>
+            <source [src]="audiodata" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+    </div>
+    <!-- audio -->
+
+    <!-- content -->
+    <div class="kb-contentpost mt-4" *ngIf="kb_fullcontent!=''" >
+        <div [innerHTML]="kb_fullcontent"> </div>
+    </div>
+    <!-- content -->
+
+</div>

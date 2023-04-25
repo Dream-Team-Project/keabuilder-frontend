@@ -1,0 +1,129 @@
+.kb-insidecard{
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    border-radius: 4px;
+    margin: 12px 8px;
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 0 0 2px #f4f4f4;
+    padding: 20px;
+    float: left;
+    cursor: pointer;
+    transition: .5s all ease;
+}
+.kb-insidecard p{
+    margin-bottom: 0;
+}
+
+.kb-insidecard:hover {
+    box-shadow: -4px 4px 6px 0 rgb(55 70 95 / 12%);
+}
+
+
+
+/* Userprofile css start */
+.offcanvas,
+.offcanvas-mobile {
+  -ms-flex-negative: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.offcanvas {
+  z-index: 1000;
+  position: fixed;
+  top: 5px;
+  bottom: 5px;
+  -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+  transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+  left: -395px;
+  width: 375px;
+}
+
+.offcanvas {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
+  box-shadow: 0px 1px 9px -3px rgb(0 0 0 / 25%);
+}
+
+.offcanvas.offcanvas-right.offcanvas-on {
+  -webkit-transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+  transition: left 0.3s ease, right 0.3s ease, bottom 0.3s ease, top 0.3s ease;
+  right: 7px;
+  left: auto;
+}
+
+.offcanvas h3 {
+  font-size: 19px;
+}
+
+
+/* width */
+.offcanvas-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.offcanvas-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.offcanvas-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 999;
+  -webkit-animation: animation-offcanvas-fade-in 0.6s ease 1;
+  animation: animation-offcanvas-fade-in 0.6s ease 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes animation-offcanvas-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.kb-full-width {
+  width: 100%;
+}
+
+
+#kb-offer-actions>div {
+  overflow-y: scroll;
+}
+
+/* width */
+#kb-offer-actions>div::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+#kb-offer-actions>div::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+#kb-offer-actions>div::-webkit-scrollbar-thumb {
+  background: #ececec;
+}
+
+#kb-offer-actions .fa-times {
+  position: absolute;
+  right: 24px;
+  z-index: 99999;
+  cursor: pointer;
+  top: 20px;
+}
+
+#kb-offer-actions td {
+  padding-right: 8px;
+}

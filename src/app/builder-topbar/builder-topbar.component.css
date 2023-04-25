@@ -1,0 +1,453 @@
+#kb-topbar {
+    color: #fff;
+    height: 32px;
+    background-color: var(--kb-dark);
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+::ng-deep .kb-triggers button.mat-button-disabled span svg {
+    fill: rgb(255 255 255 / 26%)!important;
+}
+
+::ng-deep .kb-triggers button.mat-button-disabled span {
+    color: rgb(255 255 255 / 26%);
+}
+
+::ng-deep .kb-triggers button.mat-button-disabled {
+    background-color: transparent!important;
+}
+
+.kb-selection-container, .kb-selection-option {
+    display: flex;
+    flex-direction: row;
+}
+
+.kb-selection-container {
+    color: #fff;
+    background-color: var(--secondary-color);
+    height: 36px;
+    overflow: hidden;
+}
+
+.kb-selection-option {
+    width: calc(100% - 80px);
+    transition: 0.5s ease-out;
+}
+
+::ng-deep button.mat-button.kb-icon-btn {
+    transform: translateY(7px);
+}
+
+::ng-deep button.mat-button.kb-icon-btn span>span {
+    font-size: 10px!important;
+    transform: translateY(9px);
+    height: auto;
+}
+
+::ng-deep .kb-selection-container button.mat-button.kb-icon-btn:hover span>span, 
+::ng-deep .kb-selection-container button.mat-button.kb-icon-btn.kb-btn-active span>span {
+    transform: translateY(1px);
+}
+
+::ng-deep .kb-selection-container button.mat-button.kb-icon-btn:hover,
+::ng-deep .kb-selection-container button.mat-button.kb-icon-btn.kb-btn-active,
+.kb-block-selection>span {
+    transform: translateY(0px);
+}
+
+::ng-deep button.mat-button.kb-icon-btn span {
+    flex-direction: column;
+    line-height: initial;
+}
+
+::ng-deep button.mat-button.kb-icon-btn svg {
+    width: 16px;
+}
+
+::ng-deep button.mat-button.kb-icon-btn i {
+    font-size: 14px;
+    display: inline-flex;
+}
+
+.kb-selection-option>div, .kb-selection-option button.mat-button, .kb-triggers button.mat-button, 
+::ng-deep .kb-block-list button.mat-button i, ::ng-deep .kb-selection-option button.mat-button span, 
+::ng-deep .kb-triggers .mat-button i, ::ng-deep .kb-triggers .mat-button span, .kb-triggers {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 0px;
+}
+
+.kb-selection-container.open, .kb-selection-container.close {
+    animation: slideToggle 0.2s ease-out;
+}
+
+.kb-selection-container.close {
+    animation-direction: reverse;
+}
+
+@keyframes slideToggle {
+    from{height: 0px;}
+    to{height: 36px;}
+}
+
+.kb-rotate-90 {
+    transform: rotate(-90deg);
+}
+
+::ng-deep #kb-topbar svg, ::ng-deep .kb-selection-container svg {
+    width: 14px;
+    fill: #fff;
+}
+
+::ng-deep .kb-selection-container button.mat-button:hover svg, ::ng-deep .kb-selection-container button.mat-button.kb-btn-active svg, ::ng-deep .kb-search-field:hover i svg, ::ng-deep .kb-triggers button.mat-button:hover svg, ::ng-deep .kb-triggers button.mat-button.kb-btn-active svg {
+    fill: var(--primary-color)!important;
+}
+
+::ng-deep .kb-triggers button.mat-button:hover, ::ng-deep .kb-selection-container button.mat-button:hover {
+    transform: translateY(-1px);
+}
+
+::ng-deep .kb-menu-active, .kb-triggers button.mat-button:hover, .kb-triggers button.mat-button:hover i, .kb-selection-option button.mat-button:hover, .kb-selection-option button.mat-button:hover i, 
+button.mat-button.kb-btn-active, ::ng-deep .kb-selection-option button.mat-button.kb-icon-btn:hover span>span, .kb-side-arrow:hover  {
+    color: var(--primary-color);
+}
+
+.kb-triggers button.mat-button:hover, .kb-selection-option button.mat-button:hover, button.mat-button.kb-btn-active, .kb-block-selection>span:hover {
+    background-color: rgb(255 255 255 / 10%);
+    color: var(--primary-color);
+}
+
+.kb-triggers button.mat-button {
+    padding: 0 14px;
+    min-width: auto;
+    border-radius: 0px;
+    line-height: 32px;
+    height: 33px;
+}
+
+::ng-deep button.mat-button, ::ng-deep button.mat-button span>span, ::ng-deep svg, .kb-block-selection>span, .kb-block-selection span.block span, .kb-side-arrow {
+    transition: all 0.1s ease-out;
+}
+
+::ng-deep .kb-triggers .mat-button i, ::ng-deep .kb-block-list .mat-button i {
+    padding-right: 5px;
+}
+
+.kb-filter-icon {
+    padding-left: 5px;
+}
+
+::ng-deep .kb-triggers:last-child .mat-button img{
+    margin-left: 6px;
+    border-radius: 4px;
+}
+
+.kb-block-selection>span:hover span.block span {
+    background-color: var(--primary-color)!important;
+}
+
+#kb-topbar .kb-triggers .mat-button img {
+    width: 18px;
+}
+
+.kb-block-selection>span {
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kb-block-selection>span.cdk-drag {
+    cursor: grab;
+}
+
+.kb-block-selection>span.cdk-drag:active {
+    cursor: grabbing;
+}
+
+.kb-block-selection.kb-element-list.kb-font-list span {
+    font-family: auto;
+    font-size: 16px;
+}
+
+.kb-block-selection.kb-element-list.kb-icon-list i {
+    font-size: 13px;
+}
+
+.kb-block-selection.kb-element-list.kb-img-list img {
+    max-width: 100%;
+    height: 100%;
+}
+
+span.kb-d-btn {
+    text-align: center;
+    font-size: 12px;
+}
+
+span.kb-d-btn .kb-d-btn-st{
+    font-size: 10px;
+    display: block;
+}
+
+.kb-block-selection.kb-element-list>span {
+    width: 60px;
+}
+
+.kb-block-selection.kb-element-list.kb-img-list>span {
+    width: 80px;
+}
+
+.kb-block-selection.kb-element-list.kb-btn-list>span, .kb-block-selection.kb-element-list.kb-menu-list>span {
+    width: 100px;
+}
+
+.kb-block-selection.kb-row-list>span {
+    width: 120px;
+}
+
+.kb-block-selection.kb-template-list>span {
+    width: 160px;
+}
+
+.kb-block-selection.kb-section-list>span {
+    width: 200px;
+}
+
+.kb-block-selection.kb-template-list>span {
+    padding-right: 30px!important;
+    position: relative;
+}
+
+.kb-block-selection.kb-template-list span.kb-temp-trigger {
+    min-width: 30px;
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-width: 0px 1px;
+    border-style: solid;
+    border-color: var(--kb-dim-black);
+}
+
+::ng-deep .kb-block-selection.kb-block-list>button.mat-button {
+    width: 120px;
+    line-height: 36px;
+    height: 37px;
+    display: block;
+}
+
+::ng-deep .kb-block-selection.kb-block-list>button.mat-button, .kb-block-selection span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .kb-triggers .kb-zoom-btn.mat-button span {
+    font-size: 18px;
+}
+
+.kb-block-selection.kb-section-list span.block {
+    border: 1px dashed var(--kb-gray);
+    border-radius: 3px;
+}
+
+.kb-block-selection>span:hover span.block {
+    border-color: var(--primary-color)
+}
+
+.kb-block-selection span.block {
+    width: 100%;
+    padding: 2px;
+}
+
+.kb-block-selection span.block span {
+    color: var(--kb-dark);
+    background-color: var(--kb-gray);
+    display: flex;
+    border-radius: 3px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin: auto;
+}
+
+.kb-block-selection>span:hover span.block span {
+   color: var(--kb-light);
+}
+
+.kb-side-arrow {
+    position: relative;
+    height: 100%;
+    font-size: 24px;
+    width: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--secondary-color);
+    cursor: pointer;
+    z-index: 9;
+    top: 0px;
+}
+
+.kb-side-arrow:hover {
+    color: var(--primary-color);
+}  
+
+.kb-side-arrow:first-child {
+    left: 0px
+}
+
+.kb-side-arrow:last-child {
+    right: 0px
+}
+
+.kb-search-field {
+    position: relative;
+    width: 240px;
+    height: 100%;
+}
+
+.kb-search-field.open, .kb-search-field.close {
+    animation: showSearch 0.2s ease-out;
+}
+
+.kb-search-field.close {
+    animation-direction: reverse;
+}
+
+@keyframes showSearch {
+    from{width: 0px;}
+    to{width: 240px;}
+}
+
+.kb-search-field * {
+    transition: 0.2s ease-out;
+}
+
+.kb-search-field i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.kb-search-field input, .kb-search-field select {
+    background: var(--secondary-color);
+    color: var(--kb-light);
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    padding-left: 30px;
+    padding-right: 10px;
+}
+
+.kb-search-field:after {
+    content: '';
+    border-top: 1px solid var(--primary-color);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0%;
+    transition: 0.2s ease-out;
+    visibility: hidden;
+}
+
+.kb-search-field:hover:after {
+    visibility: visible;
+    width: 100%;
+}
+
+.kb-block-preview {
+    position: absolute;
+    top: auto;
+    left: 0px;
+    width: 100%;
+    height: 100px;
+    background-color: var(--secondary-color);
+    border: 3px solid var(--secondary-color);
+    border-top: 0px;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+}
+
+.kb-block-prev-img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: block;
+    animation: showPreview 5s ease-in-out;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+@keyframes showPreview {
+    0% {background-position: center center;}
+    50% {background-position: center top;}
+    100% {background-position: center bottom;}
+}
+
+button.kb-backBtn i {
+    padding: 0px;
+}
+
+button.kb-backBtn .kb-bb-text {
+    transition: 0.2s ease;
+    width: 0px;
+    overflow: hidden;
+}
+
+button.kb-backBtn:hover .kb-bb-text {
+    width: 40px;
+}
+
+button.kb-backBtn:hover {
+    transform: translateY(0px);
+}
+
+.custom-placeholder {
+    color: var(--secondary-color);
+}
+
+.kb-selection-option .custom-placeholder {
+    background-color: var(--primary-color)!important;
+}
+
+.custom-preview-img {
+    background-color: var(--kb-dim-black);
+}
+
+.custom-preview-img img {
+    display: block;
+    width: 320px;
+    height: auto;
+}
+
+.kb-triggers .kb-more-opt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.kb-triggers .kb-more-opt .mat-button i{
+    padding: 0px;
+}
+
+.mat-icon.kb-mat-error-icon {
+    font-size: 18px;
+    right: 2px;
+    color: var(--kb-danger);
+    position: absolute;
+    top: 4px;
+}

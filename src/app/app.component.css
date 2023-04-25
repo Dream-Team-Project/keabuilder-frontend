@@ -1,0 +1,104 @@
+main {
+    position: relative;
+}
+
+.insidecont{
+    padding: 20px 0px;
+    width: 96.7%;
+    margin-left: auto;
+    top: 70px;
+    position: relative;
+}
+
+::ng-deep mat-form-field.kb-matinp-text .mat-form-field-infix {
+    display: flex;
+}
+
+::ng-deep .mat-option-text small.infoTxt, ::ng-deep small.infoTxt {
+    background-color: rgb(217 201 153 / 30%);
+    margin-left: 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    color: var(--primary-color);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+::ng-deep .mat-option-text small.infoTxt:after {
+    content: attr(data);
+}
+
+::ng-deep div#ngx-colors-overlay.ngx-colors-overlay, .ngx-colors-overlay {
+    z-index: 999999999!important;
+}
+
+::ng-deep .mat-tab-label {
+    opacity: 1!important;
+}
+
+::ng-deep .mat-tab-label .mat-tab-label-content {
+    color: var(--secondary-color);
+}
+
+::ng-deep .mat-tab-header-pagination {
+    z-index: 1!important;
+}
+
+::ng-deep .tox-shadowhost.tox-fullscreen, ::ng-deep .tox.tox-tinymce.tox-fullscreen {
+    top: 50%!important;
+    max-width: 90%;
+    left: 50%!important;
+    transform: translate(-50%, -50%);
+}
+
+::ng-deep .tox.tox-tinymce {
+    border-radius: 4px;
+}
+
+::ng-deep .tox-tinymce-aux {
+    z-index: 100000!important;
+}
+
+::ng-deep button.mat-menu-item {
+    height: 36px;
+    line-height: 36px;
+}
+
+::ng-deep .mat-simple-snackbar-action button {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+::ng-deep .mat-slide-toggle .mat-slide-toggle-bar{
+    background-color: var(--kb-gray);
+} 
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb,
+::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element,
+::ng-deep .mat-progress-bar-fill::after {
+    background-color: var(--primary-color);
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar,
+::ng-deep .mat-progress-bar, ::ng-deep .mat-progress-bar-buffer {
+    background-color: var(--opacity-primary);
+    color: var(--primary-color);
+}
+
+::ng-deep .mat-dialog-container {
+    overflow: visible!important;
+    min-width: 460px;
+}
+
+::ng-deep .mat-dialog-actions .mat-button.mat-primary, .mat-dialog-title {
+    color: var(--primary-color);
+}
+
+@media only screen and (max-width:500px){
+    .insidecont{
+        padding: 20px 0px;
+        width: 100%;
+    }
+}
+

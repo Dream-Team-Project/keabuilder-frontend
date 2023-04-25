@@ -1,0 +1,134 @@
+.kb-webpreviewer {
+  margin: auto;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 2px rgb(0 0 0 / 8%);
+  text-align: center;
+  width: 80%;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  background-size: cover;
+  height: 450px;
+}
+
+.kb-webpreviewinside {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(55, 63, 71, 0.5);
+  left: 0px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.kb-webpreviewer:hover .kb-webpreviewinside {
+  opacity: 1;
+}
+
+.kb-weblive {
+  color: #054fb8;
+  background-color: #e6f4fe;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 4px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.kb-dropdown_livestatus {
+  top: 54px;
+  min-width: 156px;
+}
+
+.kb-dropdown__panel {
+  position: absolute;
+  right: 0px;
+  top: 40px;
+  min-width: 200px;
+  width: auto;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  box-shadow: 0 8px 14px rgb(0 0 0 / 16%), 0 0 4px rgb(0 0 0 / 8%);
+  padding: 10px;
+  z-index: 9;
+}
+
+.kb-dropdown__panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kb-dropdown__panel li a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  list-style: none;
+  padding: 5px 0px 5px 20px;
+  color: #444;
+  font-size: 14px;  
+}
+
+.kb-dropdown__panel li a:hover {
+  background-color: #f4f8fa;
+}
+
+.kb-border-before {
+  border-top: 1px solid #e0e7f1;
+}
+
+.pagemainlink button {
+    float: right;
+}
+
+
+.kea-barfieldset{
+  width: 100%;
+}
+.form-control-position {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  text-align: center;
+  color: rgba(0,0,0,.4);
+  cursor: pointer;
+}
+.has-icon-left .form-control-position {
+  right: auto;
+}
+.has-icon-left .form-control {
+  border-color: #DFE3E7;
+  font-size: 13px;
+  padding: 20px 10px 20px 30px;
+}
+
+.cardpage >div{
+  box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+  padding: 20px;
+  border-radius: 8px;
+}
+.img-fit{
+  height: 265px;
+  object-fit: cover;
+}
+
+#kb-offcanvas-actions .offcanvas.fulltemplate{
+  width:96%;
+}
+.keabuilder-title {
+  padding: 15px 0px;
+}

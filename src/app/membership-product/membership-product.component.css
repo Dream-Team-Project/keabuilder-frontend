@@ -1,0 +1,44 @@
+.kb-page-settting {
+    transition: .5s ease-in-out;
+}
+.kb-page-settting:hover {
+    transform: rotate(
+30deg);
+}
+
+.kb-dropdown__panel {
+    position: absolute;
+    right: 0px;
+    top: calc(100% + -5px);
+    min-width: 280px;
+    width: auto;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    box-shadow: 0 8px 14px rgb(0 0 0 / 16%), 0 0 4px rgb(0 0 0 / 8%);
+    padding: 10px;
+    z-index: 9;
+}
+ .kb-dropdown__panel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.kb-dropdown__panel li a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    list-style: none;
+    padding: 5px 0px 5px 20px;
+    color:#444;
+    font-size: 14px;
+}
+.kb-dropdown__panel li a:hover {
+    background-color: #f4f8fa;
+}
+.cardpage{
+    box-shadow: -10px 15px 30px 0 rgb(25 42 70 / 13%);
+    padding: 20px;
+    border-radius: 8px;
+}

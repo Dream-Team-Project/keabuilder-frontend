@@ -1,0 +1,90 @@
+<div id="kb-affiliates-share">
+
+    <div id="kb-offer-actions" *ngIf="popupsidebar && affiliatesharenewaction">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
+            
+            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+            <h6><strong>NEW Link</strong></h6>
+            <hr>
+            <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput required minlength="3" maxlength="140" >
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Redirect to</mat-label>
+                <mat-select [(value)]="redirectto">
+                  <mat-option>None</mat-option>
+                  <mat-option value="customurl">Custom URL</mat-option>
+                  <mat-option value="landingpage">Landing Page</mat-option>
+                  <mat-option value="salespage">Sales Page</mat-option>
+                  <mat-option value="offercheckout">Offer Checkout Page</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="redirectto=='customurl'" >
+                <mat-label>URL</mat-label>
+                <input type="text" matInput placeholder="Ex. https://www.keabuilder.com/gourl" minlength="3" maxlength="140" >
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="redirectto=='landingpage'" >
+                <mat-label>Select Landing Page</mat-label>
+                <mat-select >
+                  <mat-option>None</mat-option>
+                  <mat-option value="salepage">All Access Pass Sales Page</mat-option>
+                  <mat-option value="landingpage">All Access Pass Landing Page</mat-option>
+                  <mat-option value="thankyoupage">All Access Pass Thank You Page</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Create Link</button>
+
+            <hr>
+
+            <p>Create Your Link</p>
+            <small>Provide a name and URL for this affiliate link to redirect to. This sharable link will be accessible to every affiliate on your site and contain their unique tracking.</small>
+            <br> <br>
+            <small>If you are redirecting to an offer checkout page, only offers with enabled affiliate commission will show up.</small>
+
+        </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates']" ><i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-users']"  ><i class="fa fa-users" aria-hidden="true"></i> Users</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-commission']" ><i class="fas fa-hand-holding-usd"></i> Commission Setup</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-transactions']" ><i class="fas fa-credit-card"></i> Transactions</button>
+                <button mat-raised-button class="mr-2"  color="primary" [routerLink]="['/affiliates-share']" ><i class="fas fa-share"></i> Share Links</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-announcements']" ><i class="fas fa-bullhorn"></i> Announcements</button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/affiliates-exports']"><i class="fas fa-file-download"></i> Exports</button>
+                <button mat-raised-button [routerLink]="['/affiliates-settings']"><i class="fas fa-cogs"></i> Settings</button>
+                
+                <button mat-raised-button color="accent" class="float-right" (click)="addnewcourse()"><i class="fas fa-plus"></i> New Link</button>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-4">
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="row kb-insidecard" *ngFor="let sharelink of sharelinks; let i=index">
+                    <div class="col-md-8">
+                        <p>{{sharelinks[i]['heading']}}</p>
+                        <small><strong>{{sharelinks[i]['linkname']}}:</strong> {{sharelinks[i]['subheading']}}</small>
+                    </div>
+                    <div class="col-md-2">
+                        <p>Clicks: {{sharelinks[i]['clicks']}}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <button mat-raised-button><i class="fas fa-pen"></i> Edit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <img src="/assets/images/affiliate/new-link.png" class="img-fluid" alt="">
+            </div>  
+        </div>
+    </div>
+</div>

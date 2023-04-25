@@ -1,0 +1,17 @@
+.intgrconnect{
+    cursor: pointer;
+    display: block;
+}
+.intgrconnect button{
+    display: none;
+    animation-name: slideLeft;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    opacity: 1;
+    
+}
+.intgrconnect:hover button{
+    display: inline-block;
+}
+

@@ -1,0 +1,170 @@
+<div id="buildfunnelcomp">
+  <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+
+  <div class="container-fluid">
+
+    <div id="kb-buildfunnel-actions" *ngIf="sidebar.open">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+        
+        <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+        <h6><strong>NEW FUNNEL STEPS</strong></h6>
+        <hr>
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="userFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
+            <mat-error *ngIf="userFormControl.hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="userFormControl.hasError('minlength')">
+              Name must be at least <strong>3</strong> characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Step Name</mat-label>
+            <input type="text" matInput  required minlength="3" [formControl]="stepnameFormControl" [(ngModel)]="form.funnelfirststep" name="funnelfirststep" placeholder="Ex. My First Optin" >
+            <mat-error *ngIf="stepnameFormControl.hasError('required')">
+             Step Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="stepnameFormControl.hasError('minlength')">
+              Step Name must be at least <strong>3</strong> characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Step Type</mat-label>
+            <mat-select name="funneltype"  [(ngModel)]="form.funneltype" required>
+              <mat-option value="regular">Regular Page</mat-option>
+              <mat-option value="order">Order Page</mat-option>
+              <mat-option value="upsell">Upsell Page</mat-option>
+              <mat-option value="downsell">Downsell Page</mat-option>
+              <mat-option value="thankyou">Thank you Page</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Badge Color</mat-label>
+            <mat-select name="badgecolor" [(ngModel)]="form.badgecolor">
+              <mat-option value="">None</mat-option>
+              <mat-option value="primary">Primary</mat-option>
+              <mat-option value="secondary">Secondary</mat-option>
+              <mat-option value="success">Success</mat-option>
+              <mat-option value="warning">Warning</mat-option>
+              <mat-option value="info">Info</mat-option>
+              <mat-option value="danger">Danger</mat-option>
+            </mat-select>
+            <small>Optional</small>
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label> Subdomain</mat-label>
+            <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+            <span matSuffix>.keapages.com</span>
+            <mat-error *ngIf="subdomainFormControl.hasError('required')">
+              Subdomain Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+              Subdomain must be at least <strong>3</strong> characters
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+              Subdomain must be at most <strong>20</strong> characters
+            </mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" >Create <i class="fas fa-check"></i></button>
+
+        </form>
+
+      </div>
+    </div>
+    <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+
+    <div class="row mt-4" *ngIf="isneed">
+      <!-- <div class="col-md-12 topfixadjust text-center mb-4"> -->
+        <div class="col-md-12 text-center mb-4">
+        <h3 class="d-inline-block" *ngIf="hidefornow">Choose Your Path</h3>
+
+            <button [routerLink]="['/funnels']" mat-raised-button color="accent" class="gobackward mr-2"><i class="fas fa-arrow-left fa-2x "></i> Back</button>
+
+            <!-- <button mat-raised-button color="primary"  class="float-right" (click)="createfunnel()" >Or.. Create a Custom Funnel</button> -->
+
+            <button mat-raised-button color="primary" (click)="createfunnel()" >Start Now</button>
+
+      </div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <img src="/assets/images/funnel/choose-your-path.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-2 mt-3 fixedcategory loadEffectFromLeft" *ngIf="hidefornow">
+        <h6>INDUSTRY</h6>
+        <ul class="list-unstyled">
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9],'author')"
+              [class]="{ active:author }">Author / Speaker / Coach / Consultant</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,0,8,18,12,15,4,9,21],'professional')" [class]="{ active:professional }">Professional Services</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,11,18,19,13],'retail')" [class]="{ active:retail }">Retail</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,11,16,6,18,19,9,21,13],'ecommerce')" [class]="{ active:ecommerce }">Ecommerce</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,11,18,4,15,4,9,13],'b2b')" [class]="{ active:b2b }">B2B</mat-card>
+            </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,11,0,8,18,12,15,4,9],'network')" [class]="{ active:network }">Network Marketing</mat-card>
+            </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,9,21,13],'other1')"
+              [class]="{ active:other1 }">Other</mat-card>
+            </li>
+        </ul>
+
+        <h6>TYPE OF FUNNEL</h6>
+        <ul class="list-unstyled">
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,7,10,11,0,8,18,15,9],'generate')" [class]="{ active:generate }">Generate Leads</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([20,16,6,1,19,12,14,4,2,9,21,13],'sellaproduct')" [class]="{ active:sellaproduct }">Sell A Product</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([17,1,12,4,2],'createaevent')" [class]="{ active:createaevent }">Create An Event</mat-card>
+          </li>
+          <li class="mb-1">
+            <mat-card (click)="loopthefor([5,3,7,10,11,20,17,16,6,0,1,8,18,19,12,14,15,4,2,9,21,13],'other2')"
+              [class]="{ active:other2 }">Other</mat-card>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-2 mt-3" *ngIf="hidefornow"></div>
+      <div class="col-md-10 mt-4" *ngIf="hidefornow">
+        <div class="">
+          <span *ngFor="let allcategor of allcategory; index as i;" class="adjustloopvfor">
+            <div class="clmwithshadow loadEffect" *ngIf="allcategory[i][0]">
+              <div>
+                <div class="clmicon">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="funnel-dollar" role="img"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                    class="svg-inline--fa fa-funnel-dollar fa-w-20 fa-7x">
+                    <path fill="currentColor"
+                      d="M464.02 160c-4.7 0-9.32.34-13.93.7L568.06 46.09C585.02 29.13 573.01 0 548.97 0H27.03C3.05 0-9.05 29.1 7.94 46.09L224 256v182c0 8.81 4.3 17.07 11.52 22.12l74 46.98c4.82 3.37 10.15 4.9 15.36 4.9 13.99 0 27.12-11.03 27.12-27.02v-13.22c30.43 25.12 69.46 40.21 112.02 40.21 97.34 0 175.98-78.78 175.98-175.98C640 238.64 561.22 160 464.02 160zM320 474l-63.74-38.25-.26-.22V242.47L39.35 32h497.29l-150.7 146.41c-58.01 28.78-97.9 88.42-97.9 157.56 0 37.65 11.88 72.42 31.96 101.01V474zm144.02 5.96c-79.39 0-143.98-64.59-143.98-143.98S384.63 192 464.02 192 608 256.59 608 335.98s-64.59 143.98-143.98 143.98zm27.11-152.54l-45-13.5c-5.16-1.55-8.77-6.78-8.77-12.73 0-7.27 5.3-13.19 11.8-13.19h28.11c4.56 0 8.96 1.29 12.82 3.72 3.24 2.03 7.36 1.91 10.13-.73l11.75-11.21c3.53-3.37 3.33-9.21-.57-12.14-9.1-6.83-20.08-10.77-31.37-11.35V240c0-4.42-3.58-8-8-8h-16c-4.42 0-8 3.58-8 8v16.12c-23.62.63-42.67 20.55-42.67 45.07 0 19.97 12.98 37.81 31.58 43.39l45 13.5c5.16 1.55 8.77 6.78 8.77 12.73 0 7.27-5.3 13.19-11.8 13.19H450.8c-4.56 0-8.96-1.29-12.82-3.72-3.24-2.03-7.36-1.91-10.13.73l-11.75 11.21c-3.53 3.37-3.33 9.21.57 12.14 9.1 6.83 20.08 10.77 31.37 11.35V432c0 4.42 3.58 8 8 8h16c4.42 0 8-3.58 8-8v-16.12c23.62-.63 42.67-20.54 42.67-45.07 0-19.97-12.98-37.81-31.58-43.39z"
+                      class=""></path>
+                  </svg>
+                </div>
+                <h5>{{allcategor.title}}</h5>
+                <p class="text-muted">{{allcategor.paragraph}}</p>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

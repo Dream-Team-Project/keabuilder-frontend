@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            <form class="p-5 text-center">
+
+                <h2 class="mb-4">Log In</h2>
+
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput [formControl]="emailFormControl" [(ngModel)]="email"
+                         placeholder="Ex. pat@example.com">
+                  <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                    Please enter a valid email address
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput [formControl]="passwordFormControl" required minlength="3" [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+                      <i class="far fa-eye" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+                    </button>
+                    <mat-error *ngIf="passwordFormControl.hasError('required')">
+                      Password is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                      Password must be at least <strong>3</strong> characters
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-error *ngIf="findfalseinfo">
+                  Email Password Is Incorrect!
+                </mat-error>
+
+                <button mat-raised-button color="accent" class="mt-2 mr-4" (click)="courselogin()" >Login</button>
+                <button mat-raised-button color="accent" class="mt-2" routerLink="/course/forgot">Forgot Password</button>
+
+            </form>
+            
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>

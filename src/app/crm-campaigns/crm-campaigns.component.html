@@ -1,0 +1,140 @@
+<ng-template #dialog>
+  <h1 mat-dialog-title class="text-primary">Create A Campaign</h1>
+  <div mat-dialog-content>
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Campaign Name</mat-label>
+        <input type="text" matInput name="campaignname" [(ngModel)]="campaignname" [formControl]="campaignnameControl" required minlength="3" >
+        <mat-error *ngIf="campaignnameControl.hasError('required')">
+            Campaign Name is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="campaignnameControl.hasError('minlength')">
+            Name must be at least <strong>3</strong> characters
+        </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">Close</button>
+      <button mat-button class="text-primary" (click)="createcamp()">Create</button>
+  </div>
+</ng-template>
+<div id="kb-crm">
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-md-8">
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
+          <i class="fa fa-random" aria-hidden="true"></i> Automations
+        </button> -->
+        <button
+          mat-raised-button
+          class="mr-2"
+          color="primary"
+          [routerLink]="['/crm-campaigns']"
+        >
+          <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']">
+          <i class="fa fa-users" aria-hidden="true"></i> Contacts
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']">
+          <i class="fa fa-list" aria-hidden="true"></i> Lists
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']">
+          <i class="fa fa-tags" aria-hidden="true"></i> Tags
+        </button>
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']">
+          <i class="fa fa-chart-bar" aria-hidden="true"></i> Reports
+        </button> -->
+      </div>
+      <div class="col-md-4 text-right">
+        <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
+          <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+        </button>
+        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog)">
+          <i class="fa fa fa-envelope" aria-hidden="true"></i> Create Campaign
+        </button>
+      </div>
+    </div>
+
+    <div [class.px-3]="toggleview" class="row">
+      <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
+        <div [class.row]="toggleview">
+          <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
+            <div class="kb-fitimg"
+              [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbcampaign.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"
+              >
+              <div class="kb-loader" *ngIf="shortwaiting">
+                <div class="kb-loader-shadow"></div>
+                <div class="kb-loader-box"></div>
+              </div>
+            </div>
+          </div>
+          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+            <div class="row align-items-center p-0 h-100">
+
+              <div [class.p-0]="!toggleview" class="col-md-12">
+
+                <div class="keabuilder-title-board line-ellipsis">
+                  <span>{{kbcampaign.campaign_name}}</span>
+                  <input type="text" [(ngModel)]="kbcampaign.campaign_name"
+                    (blur)="changepagename(kbcampaign,kbcampaign.campaign_name)" matTooltip="Edit Campaign Name"
+                    matTooltipPosition="above">
+                </div>
+
+                <div class="sentoption">
+                  <hr>
+                  <p>Sent to: <span *ngIf="kbcampaign.sento>0"><i class="fa fa-user" aria-hidden="true"></i> {{kbcampaign.sento}}</span>
+                    <span *ngIf="kbcampaign.sento==0">--</span></p>
+                  <p>Sent: 
+                    <span *ngIf="kbcampaign.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kbcampaign.deliverdate)}}</span>
+                    <span *ngIf="!kbcampaign.deliverdate">--</span>
+                  </p>
+                  <p>Last Modified: <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kbcampaign.updated_at)}}</span></p>
+                </div>
+
+              </div>
+              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
+                
+                <button *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button color="accent" [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid" class="mr-2"> Continue <i class="fa fa-arrow-alt-circle-right"></i></button>               
+
+                <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
+                <mat-menu #menu2="matMenu">
+                  <button mat-menu-item>
+                    <i class="far fa-copy mr-2"></i> Duplicate
+                  </button>
+                 
+                  <button class="text-danger" mat-menu-item>
+                    <i class="far fa-trash-alt mr-2"></i> Delete
+                  </button>
+                </mat-menu>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="statbadg">
+
+            <span class="statusbadge" [class]="kbcampaign.publish_status==1 ? 'active1':'active2'" *ngIf="kbcampaign.campaign_sent=='0'">
+              <i class="fas" [class]="kbcampaign.publish_status==1 ? 'fa-check':'fa-file'"></i>
+              {{kbcampaign.publish_status==1?'Publish':'Draft'}}
+            </span>
+
+            <span class="statusbadge" [class]="kbcampaign.publish_status==1 ? 'active1':'active2'" *ngIf="kbcampaign.campaign_sent=='1'">
+              <i class="fas fa-paper-plane"></i> Sent
+            </span>
+
+          </div>
+
+          <div class="statbadg2">
+            <span class="statusbadge2">{{kbcampaign.sendoption=='immediately'?'Immediately':'Specific Time'}}</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

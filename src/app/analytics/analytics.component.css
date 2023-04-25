@@ -1,0 +1,25 @@
+.chartbox{
+    border: 1px solid #dadce0;
+    padding: 10px;
+    border-radius: 8px;
+}
+.chartbox2 {
+  border: 1px solid #dadce0;
+  padding: 10px 0px;
+  border-radius: 8px;
+}
+.kb-mt-tp-2{
+  margin-top: -20px;;
+}
+.kb-heatmapnew{
+    font-size: 75px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    /* top: 75%; */
+    /* left: 33%; */
+}
+.kb-heatmapnew span {
+    font-size: 22px;
+    color: var(--primary-color);
+}

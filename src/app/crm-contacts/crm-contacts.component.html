@@ -1,0 +1,381 @@
+<div id="kb-membershippayments">
+  <div id="kb-offer-actions" *ngIf="sidebar.open">
+    <div
+      class="offcanvas offcanvas-right p-4 offcanvas-on"
+      [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
+      [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close"
+    >
+      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+      <h6><b>Add a Contact</b></h6>
+      <hr />
+      <form
+        [formGroup]="crmcontactForm"
+        (ngSubmit)="buttonText === 'Add' ? addcrmcontact() : updatecrmcontact()"
+      >
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>First Name</mat-label>
+          <input
+            type="text"
+            matInput
+            required
+            minlength="3"
+            maxlength="140"
+            formControlName="firstname"
+          />
+          <mat-error *ngIf="crmcontactForm.controls.firstname.hasError('required')">Please enter Firstname</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.firstname.hasError('minlength')">Please enter more than 3 characters</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.firstname.hasError('maxlength')">Please enter less than 140 characters</mat-error>
+  </mat-form-field>
+        
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Last Name</mat-label>
+          <input
+            type="text"
+            matInput
+            minlength="3"
+            maxlength="140"
+            formControlName="lastname"
+          />
+        <mat-error *ngIf="crmcontactForm.controls.lastname.hasError('minlength')">Please enter more than 3 characters</mat-error>
+        <mat-error *ngIf="crmcontactForm.controls.lastname.hasError('maxlength')">Please enter less than 50 characters</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            required
+            minlength="3"
+            maxlength="140"
+            formControlName="email"
+            (blur)="validateEmail($event)"
+          />
+          <mat-error *ngIf="crmcontactForm.controls.email.hasError('required')">Please enter email</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.email.hasError('minlength')">Please enter more than 8 characters</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.email.hasError('maxlength')">Please enter less than 50 characters</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.email.hasError('email')">Please enter valid email</mat-error>
+          <mat-error *ngIf="uniqueEmail == 1">Email is already exist.</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Phone Number</mat-label>
+          <input
+            type="text"
+            matInput
+            minlength="10"
+            maxlength="50"
+            formControlName="phone"
+          />
+          
+          <mat-error *ngIf="crmcontactForm.controls.phone.hasError('minlength')">Please enter more than 10 digits</mat-error>
+          <mat-error *ngIf="crmcontactForm.controls.phone.hasError('maxlength')">Please enter less than 50 digits</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Add on lists</mat-label>
+          <mat-chip-list #chipGrid aria-label="List selection">
+            <mat-chip *ngFor="let list of listarr" (removed)="removelist(list)">
+              {{ list.list_name }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-list>
+          <input
+            placeholder="Search list..."
+            #listInput
+            [formControl]="listCtrl"
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selectedList($event)"
+          >
+              <mat-option
+              *ngFor="let list of filteredList | async"
+              [value]="list.uniqueid"
+            >
+              {{ list.list_name }}
+            </mat-option>
+          
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Add Tags</mat-label>
+          <mat-chip-list #chipGrid2 aria-label="Tag selection">
+            <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
+              {{ tag.tag_name }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-list>
+          <input
+            placeholder="Search/add tag..."
+            #tagInput
+            [formControl]="tagCtrl"
+            [matChipInputFor]="chipGrid2"
+            [matAutocomplete]="auto2"
+            
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addtag($event)"
+          />
+          <!-- [matChipInputAddOnBlur]="addOnBlur" -->
+          <mat-autocomplete
+            #auto2="matAutocomplete"
+            (optionSelected)="selectedTag($event)"
+          >
+            <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
+              {{ tag.tag_name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br />
+        <button
+          mat-raised-button
+          color="primary"
+          type="Submit"
+          [disabled]="crmcontactForm.invalid"
+        >
+          <!-- <i class="fas fa-plus"></i> -->
+           {{ buttonText }}
+        </button>
+      </form>
+    </div>
+  </div>
+  <div
+    class="offcanvas-overlay"
+    *ngIf="sidebar.open"
+    (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open"
+    [class.slowHide]="sidebar.anim.close"
+  ></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
+          <i class="fa fa-random" aria-hidden="true"></i> Automations
+        </button> -->
+        <button
+          mat-raised-button
+          class="mr-2"
+          [routerLink]="['/crm-campaigns']"
+        >
+          <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
+        </button>
+        <button
+          mat-raised-button
+          class="mr-2"
+          [routerLink]="['/crm-contacts']"
+          color="primary"
+        >
+          <i class="fa fa-users" aria-hidden="true"></i> Contacts
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']">
+          <i class="fa fa-list" aria-hidden="true"></i> Lists
+        </button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']">
+          <i class="fa fa-tags" aria-hidden="true"></i> Tags
+        </button>
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']">
+          <i class="fa fa-chart-bar" aria-hidden="true"></i> Reports
+        </button> -->
+      </div>
+      <div class="col-md-4 text-right">
+        <button
+        mat-raised-button
+        color="primary"
+        class="mr-2 d-inline-block"
+        (click)="openSidebar()"
+      >
+        <i class="fa fa-users" aria-hidden="true"></i> Add a contact
+      </button>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 mt-4 ">
+           <span ><span style="font-size:35px">Contacts</span> ({{this.contacts.length}})</span>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="col-md-4 text-right"> -->
+    <div class=" m-2 ml-3 pl-0 mb-0 pb-0" style="font-size:12px ">Contacts search by name or email</div>
+    <div class="  text-left ml-2 mb-0 pl-0 d-flex ">
+    <div  class=" d-inline m-2 searchbox" style="font-size:14px">
+        <mat-form-field  class= "fntilform "  style="width:500px" appearance="fill" >
+          <mat-label> <i class="fab fa-searchengin "></i>Search Contacts...</mat-label>
+    <input type="email" 
+    matInput 
+    type="text"
+    (keyup)="applyFilter($event)"
+    class="form-control-search "
+    id="offer-search"
+    #input
+    placeholder="Search Contacts..."
+         >
+        </mat-form-field>
+    </div>
+
+    <div  class="d-inline m-2" style="font-size:14px">
+      <!-- <mat-label>Sort by:</mat-label> -->
+        <mat-form-field  class= "fntilform" appearance="fill">
+          <mat-label>Filter by:</mat-label>
+          <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortcontact()">
+            <mat-option value="">-- None --</mat-option>
+            <mat-optgroup *ngFor="let group of optionGroup" [label]="group.viewValue">
+              <mat-option *ngFor="let item of group.order" [value]="[group.value, item.viewValue]">
+                {{item.viewValue}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div  class="d-inline m-2 " style="font-size:14px">
+        <mat-form-field  class= "fntilform" appearance="fill">
+          <mat-label>Filter by Lists:</mat-label>
+          <mat-select 
+          [(ngModel)]="filterlistid"
+            [formControl]="selectedlistForm"
+           (ngModelChange)="sortlist()">
+            <mat-option (click)="fetchAlldata()" value=''>-- None --</mat-option>
+            <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
+                {{list.list_name | titlecase}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div  class="d-inline m-2 " style="font-size:14px">
+        <mat-form-field  class= "fntilform" appearance="fill">
+          <mat-label>Filter by Tags:</mat-label>
+          <mat-select
+          [(ngModel)]="filtertagid"
+          [formControl]="selectedtagForm"
+         (ngModelChange)="sorttag()">
+            <mat-option (click)="fetchAlldata()" value=''>-- None --</mat-option>
+            <mat-option *ngFor="let tag of tags" [value]="tag.uniqueid">
+                {{tag.tag_name | titlecase}}
+              </mat-option>
+            
+          </mat-select>
+        </mat-form-field>
+    </div>
+    </div>
+
+  <ng-template #dialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Contact</h1>
+    <div mat-dialog-content>
+      Would you like to delete this Contact?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button
+        mat-button
+        mat-dialog-close
+        cdkFocusInitial
+        class="text-danger"
+        (click)="deletecrmContact(this.delcontact)"
+      >
+        Yes
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="container-fluid mt-4 ">
+    <div class="row">
+      <div class="table ml-2">
+        <table *ngIf="fetchList" class="md-0">
+          <thead>
+            <tr>
+              <td class="border-bottom border-warning text-center">Name</td>
+              <td class="border-bottom border-warning text-center">Email</td>
+              <td class="border-bottom border-warning text-center">Phone</td>
+              <td class="border-bottom border-warning text-center">List</td>
+              <!-- <td class="border-bottom border-warning text-center">Date</td> -->
+              <td class="border-bottom border-warning text-center">Actions</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contact of contacts; index as i">
+              <td class="d-flex">
+                <div class="namebox  ">
+                  <div class="namebox1">{{gettwochar(contact.firstname+' '+contact.lastname) | uppercase }}</div>
+                </div>
+                <div>
+                  <div class="text-left funlist">{{contact.firstname + " " + isExistB(contact.lastname) | titlecase   }} </div>
+                  <div class="text-left funlist1 " ><span class="text-warning">Created On: </span> {{contact.created_at | date : "mediumDate"}}</div>
+                </div>
+              </td>
+              <td  class="text-center">{{ contact.email }}</td>
+              <td class="text-center">{{ isNaN(contact.phone) }}</td>
+              <td  class="text-center">
+                <div *ngIf="contact?.list_name?.length>1; else elseTemplateName">
+                  {{ contact?.list_name[0]+' '+'(+'+ (contact?.list_name?.length-1)+')' }}
+              </div>
+              <ng-template #elseTemplateName>
+                {{ isExistD(contact?.list_name[0])}}
+              </ng-template>
+                
+              </td>
+              <!-- <td>{{ contact.created_at | date: "fullDate" }}</td>
+              <td> -->
+              <!-- <td  class="text-center">{{ contact.created_at |  date : "mediumDate" }}</td> -->
+              <td  class="text-center">
+               
+                <button
+                  mat-raised-button
+                  class="mr-2"
+                  [routerLink]="['/crm-contact-view/'+contact.uniqueid]" 
+                >
+                  View <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button
+                  mat-raised-button
+                  class="mr-2"
+                  (click)="editcrmContact(contact)"
+                >
+                  Edit <i class="fa fa-pen" aria-hidden="true"></i>
+                </button>
+                <!-- <button mat-raised-button class="mr-2" (click)="copycrmContact(contact)">Copy <i class="fa fa-copy" aria-hidden="true"></i></button> -->
+                <button
+                  mat-raised-button
+                  (click)="openDialog(dialog, contact.uniqueid)"
+                >
+                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+
+                <!-- <button mat-raised-button (click)="deletecrmContact(contact.uniqueid)">Delete <i class="fa fa-trash" aria-hidden="true"></i></button> -->
+              </td>
+            </tr>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (click)="selection.toggle(row)"
+            ></tr>
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">
+                No data matching the filter "{{ input.value }}"
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- <mat-paginator
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          aria-label="Select pages"
+        ></mat-paginator> -->
+      </div>
+    </div>
+  </div>
+</div>

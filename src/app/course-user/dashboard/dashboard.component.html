@@ -1,0 +1,32 @@
+<div id="maincourse-kea">
+  <app-course-user-header></app-course-user-header>
+  <div class="container section2 mb-5">
+    <div class="row">
+      <div class="col-md-12 mt-5 mb-5 text-center">
+        <h2>Welcome to the Innovation Technology Design Course. You'll find the courses below. Select a course to get Started!.</h2>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="col-md-12 text-center" *ngIf="allcourses.length==0" >
+          <p>You have not purchased any course Yet!</p>
+      </div>  
+
+      <div class="col-md-6 mb-5" *ngFor="let allcourse of allcourses;" >
+        <div class="kbcourse-img text-center pb-2">
+          <a [routerLink]="'/course/'+allcourse.url">
+            <img [src]="'/assets/uploads/images/'+allcourse.thumbnail" class="img-fluid" alt="">
+            <h4 class="m-0 p-3" *ngIf="allcourse.title" >
+              {{allcourse.title}}
+            </h4>
+            <h6 class="mb-3 p-3" *ngIf="allcourse.description" >
+              {{allcourse.description}}
+            </h6>
+          </a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+</div>

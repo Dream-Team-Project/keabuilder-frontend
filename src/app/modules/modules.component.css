@@ -1,0 +1,195 @@
+.kbc-block {
+    padding: 0px;
+}
+
+div#kbc-topbar {
+    background-color: var(--kb-gray);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.kbc-thumbnail {
+    width: 260px;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    background-image: url('/assets/uploads/images/webpage_thumbnail.jpg');
+}
+
+.kbc-top-info {
+    color: var(--accent-color);
+    font-size: 15px;
+}
+
+.kbc-block-inner {
+    line-height: 20px;
+    padding: 4px 0;
+    align-items: center;
+    border-radius: 4px;
+    /* margin: 2px 0px; */
+    font-weight: 400;
+    font-size: 15px;
+    transition: 0.2s ease;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #e2e2e2;
+}
+
+.kbc-block-inner:hover {
+    box-shadow: -1px 0px 10px 2px rgb(0 0 0 / 20%);
+}
+
+.kbc-module {
+    background-color: var(--kb-gray);
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 40px;
+}
+
+
+.kbc-lesson {
+    /* background-color: var(--kb-light); */
+    background-color: var(--kb-white);
+    color: var(--secondary-color);
+}
+
+.kb-drag-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: no-wrap;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style: none;
+    overflow: hidden;
+    transition: 0.2s ease;
+}
+
+span.kbc-qs .kb-handle-block {
+    cursor: n-resize;
+}
+
+span.kbc-qs i  {
+    padding: 2px;
+    /* padding: 6px 10px; */
+    cursor: pointer;
+    font-size: 90%;
+}
+
+.mat-slide-toggle {
+    padding: 0px 6px;
+}
+
+.kbc-block-inner span.kbc-qs-icons, span.kbc-qs:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+span.kbc-qs:last-child {
+    text-align: right;
+}
+/* .kbc-block-inner:hover span.kbc-qs-summary, .kbc-block-inner:hover span.kbc-qs-status */
+.kbc-block-inner span.kbc-qs-icons{
+    display: none;
+}
+/* span.kbc-qs-icons, span.kbc-qs-status  */
+.kbc-block-inner:hover {
+    display: flex;
+}
+
+.fa-ellipsis-vertical{
+    color: var(--secondary-color);
+}
+input.kb-chngname-inp {
+    background: transparent;
+    border: none;
+    width: 100%;
+    color: var(--kb-light);
+    background-color: var(--kb-dim-black);
+    padding: 0px 8px;
+    border-radius: 4px;
+    font-size: inherit;
+}
+
+input.kb-chngname-inp::placeholder {
+    color: var(--kb-light);
+    opacity: 1; /* Firefox */
+  }
+  
+  input.kb-chngname-inp:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--kb-light);
+  }
+  
+  input.kb-chngname-inp::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--kb-light);
+  }
+
+span.kbc-qs-status button {
+    padding: 2px;
+    display: inline-block;
+    border-radius: 5px;
+    line-height: 20px;
+    width: auto;
+    font-size: 90%;
+    color: var(--kb-light);
+    font-weight: 600;
+}
+
+span.kbc-qs-status button.active {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    
+}
+
+span.kbc-qs-status button.inactive {
+    background-color: white;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    
+}
+span.kbc-qs-status span.active1 {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+span.kbc-qs-status span.inactive1 {
+    background-color: white;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    
+}
+
+span.kb-ispan-add {
+    width: 28px;
+    height: 28px;
+    border-radius: 100px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+    transition: 0.2s ease;
+    margin: auto;
+    z-index: 9;
+    color: var(--kb-white);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+span.kb-ispan-add:hover {
+    transform: scale(1.1);
+}
+
+#kbc-topbar .kb-edit-pencil {
+    cursor: pointer;
+    font-size: 65%;
+    color: var(--secondary-color);
+}
+.toggle{
+    font-size: 15px;
+    font-weight: 400;
+}
