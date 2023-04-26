@@ -113,8 +113,8 @@ export class CoursesComponent implements OnInit {
     else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
   }
   duplicateCourse(course:any) {
-    course.olduniqueid=course.uniqueid;
-        this.course.uniqueid = this._general.makeid(20);
+    this.course.id=course.uniqueid;
+    this.course.uniqueid = this._general.makeid(20);
     var oldimg ='keaimage-course-thumbnail-'+course.uniqueid+'.png';
     this.course.description=course.description;
     this.thumbnail.path=course.path;
@@ -125,6 +125,7 @@ export class CoursesComponent implements OnInit {
       this.btndis = true;
       // this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       // this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      console.log(this.course)
       this._course.duplicate(this.course).subscribe((res:any)=>{
         console.log(res)
         if(res.success==true){
