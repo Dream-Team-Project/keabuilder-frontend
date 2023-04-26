@@ -138,7 +138,7 @@ export class ModulesComponent implements OnInit {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
         console.log(res.data);
-        this.adjustdata(res.data);
+        // this.adjustdata(res.data);
         // var request = 0;
         // this.modules.forEach((m:any)=>{
         //   var paramObj = {
@@ -620,16 +620,13 @@ export class ModulesComponent implements OnInit {
     }
    
     this._module.searchmodulequery(obj).subscribe((resp:any)=>{
-      this.adjustdata(resp.data);
+      // this.adjustdata(resp.data);
     });
   }
-  adjustdata(data:any){
-    this.modules = data;
-    this.postLoading = false;
-  }
+  // adjustdata(data:any){
+  //   this.modules = data;
+  //   this.postLoading = false;
+  // }
 
-  adjustdata(data:any){
-    this.modules = data;
-    this.postLoading = false;
-  }
+
 }
