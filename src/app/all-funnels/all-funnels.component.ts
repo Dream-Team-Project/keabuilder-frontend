@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Options } from 'sortablejs';
 import { FunnelService } from '../_services/funnels.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
   styleUrls: ['./all-funnels.component.css']
 })
 export class AllFunnelsComponent implements OnInit {
-
+  panelOpenState = false;
   constructor(private funnelService: FunnelService,
               private router: Router, 
               private route: ActivatedRoute,
@@ -291,11 +291,12 @@ export class AllFunnelsComponent implements OnInit {
       this.funnelnotfound = false;
 
       data.data2.forEach((element: any) => {
-          var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[]};
+          var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[],updated_at:''};
           newob.uniqueid = element.uniqueid;
           newob.id = element.id;
           newob.name = element.name;
           newob.grouptags = element.grouptags;
+          newob.updated_at=element.updated_at;
 
           newob.domain = element.domain;
           newob.subdomain = element.subdomain;
