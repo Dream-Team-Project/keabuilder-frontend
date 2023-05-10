@@ -199,7 +199,7 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/crm-campaigns',
+      routerlink: '/crm',
       img: 'hacker.gif',
       icon: 'fas fa-user-secret',
       title: 'CRM',

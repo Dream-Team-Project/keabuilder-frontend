@@ -135,7 +135,18 @@ export class ElementService {
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
     if (element.name != 'iframe' && element.name != 'code') {
-      var respS: any = { 'font-size': tempObj.content.name == 'heading' ? '24px' : '14px' };
+      var fntSz = '14px';
+      switch(tempObj.content.name) {
+        case 'heading': 
+          fntSz = '24px';
+        break; 
+        case 'icon': 
+          fntSz = '16px';
+        break;   
+        default:
+          fntSz = '14px';
+      }
+      var respS: any = { 'font-size': fntSz };
       if(element.name == 'menu') {
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),

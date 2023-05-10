@@ -427,6 +427,8 @@ export class GeneralService {
       this.removeExtra(preview);
       this.pagehtml.querySelector('head').innerHTML = 
       '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
+      '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
+      '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
       '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
       '<meta charset="UTF-8">' +
       '<meta name="description" content="'+this.main.description+'">' +
