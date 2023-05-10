@@ -6,6 +6,8 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
+import { CrmListService } from '../_services/_crmservice/crm_list.service';
+import { CrmService } from '../_services/crm.service';
 
 
 @Component({
@@ -21,9 +23,19 @@ export class CrmCampaignsComponent implements OnInit {
   kbcampaigns:any = [];
   shortwaiting = true;
   campoption = '';
-
+  selectedForm:string = '';
+  order:any=[ 
+    {value: 'ascending', viewValue: 'Ascending'},
+    {value: 'descending', viewValue: 'Descending'},
+  ];
+optionGroup:any=[
+    {value: 'firstname', viewValue: 'Name', order: this.order},
+    {value: 'email', viewValue: 'EmailId', order: this.order},
+]
   constructor(
       private crmCampaignservice: CrmCampaignsService,
+      private crmService: CrmService,
+      private _crmlistService: CrmListService,
       private _snackBar: MatSnackBar, 
       private dialog: MatDialog,
       private route: ActivatedRoute,
@@ -95,5 +107,14 @@ export class CrmCampaignsComponent implements OnInit {
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
   
-
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.kbcampaigns.filter = filterValue.trim().toLowerCase();
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+  }
+  sortcampaigns(){}
+  sortlist(){
+  }
 }
