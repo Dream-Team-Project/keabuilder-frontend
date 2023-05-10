@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4">
+    <div class="col-lg-3 col-md-3 col-sm-3">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -58,18 +58,21 @@
             <div class="col-7 col-md-9">
               <div class="numbers">
                 <p class="card-category">Revenue</p>
-                <p class="card-title">${{totalrevenue}} </p>
+                <p class="card-title colr">${{totalrevenue}} </p>
               </div>
             </div>
           </div>
         </div>
         <div class="card-footer ">
           <hr>
-          <div class="stats"><i class="far fa-calendar-alt-o"></i> All Time <span class="float-right"><i class="fas fa-arrow-up"></i></span></div>
+          <div class="stats "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span><span class="float-right"> <mat-select value="month">
+            <mat-option value="month" selected>Last Month</mat-option>
+            <mat-option value="week">Last Week</mat-option>
+          </mat-select></span></div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4">
+    <div class="col-lg-3 col-md-3 col-sm-3">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -92,7 +95,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4">
+    <div class="col-lg-3 col-md-3 col-sm-3">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -104,19 +107,370 @@
             <div class="col-7 col-md-9">
               <div class="numbers">
                 <p class="card-category">Members</p>
-                <p class="card-title">{{totalmembers}} </p>
+                <p class="card-title colr">{{totalmembers}} </p>
               </div>
             </div>
           </div>
         </div>
         <div class="card-footer ">
           <hr>
-          <div class="stats"><i class="fa fa-refresh"></i> All Time <span class="float-right"><i class="fas fa-arrow-up"></i></span> </div>
+          <div class="stats"><span class="text-danger"><i class="fa-solid fa-circle-arrow-down text-danger"></i> 0%</span> <span class="float-right"> <mat-select value="month">
+            <mat-option value="month">Last Month</mat-option>
+            <mat-option value="week">Last Week</mat-option>
+          </mat-select></span> </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-3">
+              <div class="icon-big text-center icon-warning">
+                <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
+              </div>
+            </div>
+            <div class="col-7 col-md-9">
+              <div class="numbers">
+                <p class="card-category">Daily Sales</p>
+                <p class="card-title colr">7932 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats"><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success"></i> 5.56%</span><span class="float-right">
+            <mat-select value="month">
+            <mat-option value="month">Last Month</mat-option>
+            <mat-option value="week">Last Week</mat-option>
+          </mat-select></span> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-lg-8 col-sm-6"  *ngIf="data1.length!=0">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-10">
+              <div class="numbers pull-left"><span>Total Earnings</span><span class="colr"> ${{totalrevenue7day}} </span></div>
+            </div>
+            <div class="col-sm-2">
+              <mat-select value="month">
+                <mat-option value="month" selected>Last Month</mat-option>
+                <mat-option value="week">Last Week</mat-option>
+              </mat-select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          <!-- <h6 class="big-title">Total earnings in last Week</h6> -->
+          <div class="kbcustmwidthforbox4">
+            <apx-chart
+              [series]="chartOptions11.series"
+              [chart]="chartOptions11.chart"
+              [yaxis]="chartOptions11.yaxis"
+              [xaxis]="chartOptions11.xaxis"
+              [labels]="chartOptions11.labels"
+              [stroke]="chartOptions11.stroke"
+              [title]="chartOptions11.title"
+              [dataLabels]="chartOptions11.dataLabels"
+              [fill]="chartOptions11.fill"
+              [tooltip]="chartOptions11.tooltip"
+            ></apx-chart>
+          </div>
+        </div>
+        <div class="card-footer" *ngIf="hidefornow">
+          <hr>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="footer-title">Sales Statistics</div>
+            </div>
+            <div class="col-sm-8">
+              <div class="pull-right">
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Weekly" matTooltipPosition="above" >Weekly</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Monthly" matTooltipPosition="above" >Monthly</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Yearly" matTooltipPosition="above" >Yearly</button>
+
+                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Sales" matTooltipPosition="above" >
+                  <i class="fas fa-play"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-6"  >
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-10">
+              <div class="numbers pull-left"><span>Recent Sales Activity</span></div>
+            </div>
+          </div>
+          
+        </div>
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          <div class="kbcustmwidthforbox4-recent">
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-9 ">
+                <div class="row">
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                </div>
+                <div class="row">
+                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+              </div>
+              </div>
+              <div class="col-sm-3">
+                <span class="colr">+$2.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer" >
+          <hr>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="pull-right">
+                <button mat-raised-button  class="btn-round btn-icon badge mr-1 colr" matTooltip="Recent Sales" matTooltipPosition="above" >Show More</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
+    <div class="col-lg-6 col-sm-6" *ngIf="data2.length!=0">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-10">
+              <div class="numbers pull-left"><span>Total Contacts Last Week</span><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+            </div>
+            <div class="col-sm-5" *ngIf="hidefornow">
+              <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          <!-- <h6 class="big-title">total Contact in last 7 days</h6> -->
+          <div class="chart1 kbcustmwidthforbox3">
+            <apx-chart
+              [series]="chartOptions10.series"
+              [chart]="chartOptions10.chart"
+              [xaxis]="chartOptions10.xaxis"
+              [stroke]="chartOptions10.stroke"
+              [dataLabels]="chartOptions10.dataLabels"
+              [yaxis]="chartOptions10.yaxis"
+              [labels]="chartOptions10.labels"
+              [legend]="chartOptions10.legend"
+              [title]="chartOptions10.title"
+              [subtitle]="chartOptions10.subtitle"
+            ></apx-chart>
+          </div>
+
+        </div>
+        <div class="card-footer" *ngIf="hidefornow">
+          <hr>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="footer-title">Website Stats</div>
+            </div>
+            <div class="col-sm-8">
+              <div class="pull-right">
+
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1"  matTooltip="Page Views" matTooltipPosition="above" >Views</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Source" matTooltipPosition="above" >Source</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Devices" matTooltipPosition="above" >Devices</button>
+
+                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Stats" matTooltipPosition="above" >
+                  <i class="fas fa-play"></i>
+                </button>
+
+                  
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-sm-6" *ngIf="data2.length!=0">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="numbers pull-left"><span>Sales By Category</span><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
+        </div>
+        </div>
+        <div class="card-body">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+              <div class=""></div>
+            </div>
+            <div class="chartjs-size-monitor-shrink">
+              <div class=""></div>
+            </div>
+          </div>
+          
+          <div class="chart1 kbcustmwidthforbox3">
+            <apx-chart
+              [series]="chartOptions12.series"
+              [chart]="chartOptions12.chart"
+              [xaxis]="chartOptions12.xaxis"
+              [stroke]="chartOptions12.stroke"
+              [dataLabels]="chartOptions12.dataLabels"
+              [yaxis]="chartOptions12.yaxis"
+              [labels]="chartOptions12.labels"
+              [legend]="chartOptions12.legend"
+              [title]="chartOptions12.title"
+              [subtitle]="chartOptions12.subtitle"
+            ></apx-chart>
+          </div>
+
+        </div>
+        <div class="card-footer" *ngIf="hidefornow">
+          <hr>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="footer-title">Website Stats</div>
+            </div>
+            <div class="col-sm-8">
+              <div class="pull-right">
+
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1"  matTooltip="Page Views" matTooltipPosition="above" >Views</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Source" matTooltipPosition="above" >Source</button>
+                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Devices" matTooltipPosition="above" >Devices</button>
+
+                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Stats" matTooltipPosition="above" >
+                  <i class="fas fa-play"></i>
+                </button>
+
+                  
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row" *ngIf="hidefornow">
     <div class="col-lg-4 col-sm-6"  *ngIf="data1.length!=0">
       <div class="card">
         <div class="card-header">
@@ -287,6 +641,7 @@
       </div>
     </div>
   </div>
+  
   <div class="row" *ngIf="hidefornow">
     <div class="col-md-12">
       <div class="card ">
@@ -1163,7 +1518,7 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="hidefornow" >
+  <div class="row"  *ngIf="hidefornow">
     <div class="col-md-3">
       <div class="card ">
         <div class="card-header ">
