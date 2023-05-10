@@ -12,7 +12,8 @@ export class ColumnService {
   constructor(private _general: GeneralService, private _row: RowService, private _section: SectionService) { }
 
   resizeColumn(row:any) {
-    row.rowSize = 'kb-'+this._row.rowTypes[row.columnArr.length-1].appendCls+'-block';
+    row.rowSize = 'kb-full-block';
+    console.log(row.rowSize);
   }
 
   addColumn(rowSize: any, index: any) {

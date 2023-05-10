@@ -77,7 +77,7 @@ export class ElementService {
     code: { content: { name: 'code', html: ``}, iconCls: 'fas fa-code' },
     // code block
     // icon
-    icon: { content: { name: 'icon', html: `<i class="fa-solid fa-icons"></i>`}, iconCls: 'fa-solid fa-icons' },
+    icon: { content: { name: 'icon', html: `<i class="fa-solid fa-icons"></i>`, size: 18,}, iconCls: 'fa-solid fa-icons' },
     // icon
     // checkout form
     // append

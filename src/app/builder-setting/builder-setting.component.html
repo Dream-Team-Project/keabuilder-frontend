@@ -605,11 +605,11 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Size')" [expanded]="_general.expPanelStep === 2"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Icon Size')" [expanded]="_general.expPanelStep === 2"
                                         (opened)="_general.setExpPanelStep(2)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                Font Size
+                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Font'}} Size
                                             </mat-panel-title>
                                             <mat-panel-description>
                                                 <i class="fas fa-text-height"></i>
@@ -636,7 +636,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Family')" [expanded]="_general.expPanelStep === 3"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Family') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 3"
                                         (opened)="_general.setExpPanelStep(3)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -660,7 +660,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Weight')" [expanded]="_general.expPanelStep === 4"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Weight') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 4"
                                         (opened)="_general.setExpPanelStep(4)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -685,7 +685,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Style')" [expanded]="_general.expPanelStep === 5"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Font Style') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 5"
                                         (opened)="_general.setExpPanelStep(5)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -709,11 +709,11 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Color')" [expanded]="_general.expPanelStep === 6"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Icon Color')" [expanded]="_general.expPanelStep === 6"
                                         (opened)="_general.setExpPanelStep(6)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                Text Color
+                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Text'}} Color
                                             </mat-panel-title>
                                             <mat-panel-description>
                                                 <i class="fas fa-tint"></i>
@@ -736,11 +736,11 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Alignment')" [expanded]="_general.expPanelStep === 7"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Icon Alignment')" [expanded]="_general.expPanelStep === 7"
                                         (opened)="_general.setExpPanelStep(7)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                Text Alignment
+                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Text'}} Alignment <i matTooltip="Works only on 100% element width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i>
                                             </mat-panel-title>
                                             <mat-panel-description>
                                                 <i class="fas fa-arrows-alt-h"></i>
@@ -761,7 +761,7 @@
                                                     [class]="_style.text_align == 'right' ? 'kb-active-brd' : ''"
                                                     class="kb-align-btn" matTooltip="Right"
                                                     matTooltipPosition="above"><i class="fas fa-align-right"></i></span>
-                                                <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'justify'"
+                                                <span *ngIf="_general.selectedBlock.content.name != 'icon'" mat-ripple [matRippleColor]="rippleClr" (click)="_style.text_align = 'justify'"
                                                     [class]="_style.text_align == 'justify' ? 'kb-active-brd' : ''"
                                                     class="kb-align-btn" matTooltip="Justify"
                                                     matTooltipPosition="above"><i
@@ -775,7 +775,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Transform')" [expanded]="_general.expPanelStep === 8"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Transform') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 8"
                                         (opened)="_general.setExpPanelStep(8)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -799,7 +799,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Decoration')" [expanded]="_general.expPanelStep === 9"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Decoration') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 9"
                                         (opened)="_general.setExpPanelStep(9)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -855,11 +855,11 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Shadow')" [expanded]="_general.expPanelStep === 10"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text Icon Shadow')" [expanded]="_general.expPanelStep === 10"
                                         (opened)="_general.setExpPanelStep(10)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                Text Shadow
+                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Text'}} Shadow
                                             </mat-panel-title>
                                             <mat-panel-description>
                                                 <i class="fas fa-font"></i>
@@ -957,7 +957,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Line Height')" [expanded]="_general.expPanelStep === 11"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Line Height') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 11"
                                         (opened)="_general.setExpPanelStep(11)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -988,7 +988,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Letter Spacing')" [expanded]="_general.expPanelStep === 12"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Letter Spacing') && _general.selectedBlock.content.name != 'icon'" [expanded]="_general.expPanelStep === 12"
                                         (opened)="_general.setExpPanelStep(12)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -1084,8 +1084,7 @@
                                             </ng-template>
                                         </span>
                                         <span class="kb-setting-icon">
-                                            <i *ngIf="_general.selectedBlock.columnArr.length < 6"
-                                                (click)="_column.addColumn(_general.selectedBlock.rowSize,index)"
+                                            <i (click)="_column.addColumn(_general.selectedBlock.rowSize,index)"
                                                 matTooltip="Add New Column" matTooltipPosition="above"
                                                 class="fa fa-plus"></i>
                                             <i (click)="_general.selectedBlock = column; _style.blockSetting(column);"
@@ -1094,8 +1093,7 @@
                                             <i (click)="_style.updateStyle(); _general.selectedBlock = column; _style.blockSetting(column);"
                                                 class="far fa-save" matTooltip="Save Row & Edit Column"
                                                 matTooltipPosition="above"></i>
-                                            <i *ngIf="_general.selectedBlock.columnArr.length < 6"
-                                                (click)="_column.duplicateColumn(column,index)"
+                                            <i (click)="_column.duplicateColumn(column,index)"
                                                 matTooltip="Duplicate Column" matTooltipPosition="above"
                                                 class="far fa-copy"></i>
                                             <i *ngIf="_general.selectedBlock.columnArr.length > 1"
@@ -1415,7 +1413,7 @@
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item">
                             <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' else blockAlign"
                                 class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Alignment</div>
+                                <div class="kb-tab-head">Alignment <i matTooltip="Not work on 100% width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i></div>
                                 <div class="kb-tab-content">
                                     <div class="kb-align-btn-group">
                                         <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('')"

@@ -184,7 +184,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   }
 
   isText(en:string) {
-    return en == 'input' || en == 'label' || en == 'option' || en == 'text' || en == 'heading' || en == 'button' || this._style.setItemStyle || this._style.setDropDownStyle.item;
+    return en == 'input' || en == 'label' || en == 'option' || en == 'icon' || en == 'text' || en == 'heading' || en == 'button' || this._style.setItemStyle || this._style.setDropDownStyle.item;
   }
 
   searchingDeep(val:string) {

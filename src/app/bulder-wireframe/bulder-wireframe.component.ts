@@ -57,7 +57,8 @@ export class BulderWireframeComponent implements OnInit, AfterViewInit {
   }
 
   verifyDrop(drag?: CdkDrag, drop?: CdkDropList) {
-    return drop?.data.length != 6;
+    return true;
+    // return drop?.data.length != 6;
   }
 
   drop(event: CdkDragDrop<any>) {

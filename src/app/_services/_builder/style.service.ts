@@ -1621,7 +1621,7 @@ export class StyleService {
         }
       })
     }
-    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle || this.setDropDownStyle.item) {
+    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle || this.setDropDownStyle.item) {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'] ? obj['font-style'] : 'normal';
@@ -1666,7 +1666,7 @@ export class StyleService {
       var unit = obj['letter-spacing']?.replace(/[^A-Za-z]/g, '');
       this.letter_spacingRange.type = unit && unit != 'normal' ? unit : 'px';
       
-      if(element.name == 'text' || element.name == 'heading') {
+      if(element.name == 'text' || element.name == 'heading' || element.name == 'icon') {
         this.edit_html = element.html;
       }
     }

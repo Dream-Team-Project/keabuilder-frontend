@@ -59,7 +59,7 @@
                     <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--row-color)'"></div>
                     <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); row.chngName = false" class="kb-wfs">
                         <span class="kb-setting-icon">
-                            <i *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row fas fa-arrows-alt-v"></i>
+                            <i cdkDragHandle *ngIf="_section.sections.length > 1 || section.rowArr.length > 1" class="kb-handle-block kb-handle-row fas fa-arrows-alt-v"></i>
                             <i (click)="_general.expandDevList('devListR-'+si+ri)" class="fa" [class]="_style.getDisplay(row.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                             <div [id]="'devListR-'+si+ri" class="dislay-device-list">
                                     <mat-checkbox [checked]="_general.isAllHide(row.hide)"
@@ -106,7 +106,7 @@
                             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--kb-white)'"></div>
                             <span (mouseleave)="_general.lastDevList?.removeAttribute('style'); column.chngName = false" class="kb-wfs">
                                 <span class="kb-setting-icon">
-                                    <i *ngIf="row.columnArr.length > 1" class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>
+                                    <i cdkDragHandle class="kb-handle-block kb-handle-column fas fa-arrows-alt-v"></i>
                                     <i (click)="_general.expandDevList('devListC-'+si+ri+ci)" class="fa" [class]="_style.getDisplay(column.hide) ? 'fa-eye-slash' : 'fa-eye'"></i>
                                     <div [id]="'devListC-'+si+ri+ci" class="dislay-device-list">
                                             <mat-checkbox [checked]="_general.isAllHide(column.hide)"
@@ -131,11 +131,9 @@
                                     </ng-template>
                                 </span>
                                 <span class="kb-setting-icon">
-                                    <i *ngIf="row.columnArr.length < 6"
-                                        (click)="_column.addColumn(row.rowSize,ci)"
+                                    <i (click)="_column.addColumn(row.rowSize,ci)"
                                         matTooltip="Add New Column" matTooltipPosition="above" class="fa fa-plus"></i>
-                                    <i *ngIf="row.columnArr.length < 6"
-                                        (click)="_column.duplicateColumn(column,ci)"
+                                    <i (click)="_column.duplicateColumn(column,ci)"
                                         matTooltip="Duplicate Column" matTooltipPosition="above"
                                         class="far fa-copy"></i>
                                     <i *ngIf="row.columnArr.length > 1"
