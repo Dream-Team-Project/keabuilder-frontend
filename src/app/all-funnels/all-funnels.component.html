@@ -161,14 +161,13 @@
     
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3"><h2>Funnels</h2></div>
-            <div class="col-md-7 adjustmatfrm text-right">
-              <mat-form-field  appearance="fill" class="w-100">
+            <div class="col-md-8">
+              <mat-form-field  appearance="fill" class="col-8">
                 <mat-label>Search Funnel</mat-label>
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Funnel">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </mat-form-field>
-              <mat-form-field appearance="fill" class="mr-0">
+              <mat-form-field appearance="fill" class="col-4">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
                   <mat-option value="nameasc" >ASC By Name</mat-option>
@@ -178,7 +177,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-md-2 mt-2 text-right">
+            <div class="col-md-4 text-right">
                 <button mat-raised-button color="primary" (click)="openDialog($event)">
                     Create Funnel <i class="far fas fa-plus"></i>
                 </button>
@@ -195,7 +194,7 @@
         <div class="steps-group row keabuilder-container mt-5">
             
             <div class="col-md-12 mb-4" *ngFor="let funnel of funnels; index as i">
-                    <mat-accordion  >
+                    <mat-accordion>
                         <div class="keabuilder-board">
                             <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>          
@@ -205,8 +204,8 @@
                         <!-- <div class="keabuilder-attachment d-flex align-items-center font-size-small pr-2 col-md-2"  matTooltip="Group Tags" matTooltipPosition="above" *ngIf="funnel.grouptags!='' && funnel.grouptags!=null" >
                             <i class="fas fa-tags mr-1"></i> {{funnel.grouptags}}
                         </div> -->
-                        <div class=" col-md-2"><span>Steps : </span><span class="colr">{{funnel.steps.length }}</span></div>
-                        <div class=" col-md-4"><span>Last Updated : </span><span class="colr">{{funnel.updated_at | date:'mediumDate'}}</span></div>
+                        <div class=" col-md-2"><span>Steps: </span><span class="colr">{{funnel.steps.length }}</span></div>
+                        <div class=" col-md-4"><span>Last Updated: </span><span class="colr">{{funnel.updated_at}}</span></div>
                         <!-- <div class="btn-group "> -->
                             <div class="cursor-pointer col-md-2 d-flex justify-content-between" role="button">
                                 <!-- <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">

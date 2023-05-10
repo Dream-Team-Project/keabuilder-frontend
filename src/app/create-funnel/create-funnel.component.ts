@@ -320,7 +320,7 @@ export class CreateFunnelComponent implements OnInit {
         next: data => {
           
           data.data.forEach((stepdata:any) => {
-            console.log(stepdata);
+            // console.log(stepdata);
 
             this.funnelsteptype = stepdata.funneltype;
               

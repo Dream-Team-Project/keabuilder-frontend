@@ -307,10 +307,6 @@ padding: 0px 15px;
     }
 }
 
-.adjustmatfrm mat-form-field:first-child {
-    width: 65%!important;
-    margin-right: 35px;
-}
 .colr{
     color: #dea641;
 }

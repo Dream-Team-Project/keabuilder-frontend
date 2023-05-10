@@ -300,15 +300,13 @@ export class AllFunnelsComponent implements OnInit {
 
           newob.domain = element.domain;
           newob.subdomain = element.subdomain;
-
             data.data.forEach((element2: any) => {
               var newob2 = {id:'',uniqueid:'',page_name:'',page_path:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
               if(element2.funnelid==newob.uniqueid){
                 newob2.id = element2.id;
                 newob2.page_name = element2.page_name;
                 newob2.uniqueid = element2.uniqueid;
-
-                var subdate = (new Date(element2.updated_at).toDateString()).substr(3, 7);
+                var subdate = element2.updated_at ? (new Date(element2.updated_at).toDateString()) : '';
                 newob2.updated_at = subdate;
                 newob2.variation = element2.variation;
                 newob2.tag = element2.tags;
@@ -317,13 +315,13 @@ export class AllFunnelsComponent implements OnInit {
                 newob2.funnelid = element2.funnelid;
                 newob2.funneltype = element2.funneltype;
                 newob2.page_path = element2.page_path;
-
                 newob.steps.push(newob2);
+                if(new Date(subdate) > new Date(newob.updated_at)) newob.updated_at = subdate;
               }
             });
 
         this.funnels.push(newob);
-        console.log(this.funnels);
+        // console.log(this.funnels);
 
       });
 
@@ -415,7 +413,7 @@ export class AllFunnelsComponent implements OnInit {
   makearchivestep(){
     
     var obj = {value: this.reason,id:this.forarchiveid, type: 'archivestep'};
-    console.log(obj);
+    // console.log(obj);
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
         // console.log(data);
@@ -494,12 +492,12 @@ export class AllFunnelsComponent implements OnInit {
 
   dupanotherdes(page:any){
     
-    console.log(page);
-    console.log(this.newfunnelid);
+    // console.log(page);
+    // console.log(this.newfunnelid);
 
     if(this.newfunnelid!=''){
 
-      console.log(page);
+      // console.log(page);
       var getvl = 'pages';
       // var newpath = page.page_path+'-'+this.makeid(20);
 
@@ -509,12 +507,12 @@ export class AllFunnelsComponent implements OnInit {
           // console.log(data);
 
           if(data.foundone==0 && data.success==1){
-            console.log('inside');
+            // console.log('inside');
 
             var pathobj = {old_website_id:data.oldfunnelid, new_website_id:this.newfunnelid, dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
             this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
             
-            console.log(pathobj);
+            // console.log(pathobj);
             this._file.transferPage(pathobj).subscribe({
               next: data => {
                 // console.log(data);
@@ -591,7 +589,6 @@ export class AllFunnelsComponent implements OnInit {
       }
     });
   }
-
 
 }
 
