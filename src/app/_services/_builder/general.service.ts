@@ -879,11 +879,11 @@ export class GeneralService {
   }
 
   encodeData(data:any) {
-    return btoa(data);
+    return btoa(encodeURIComponent(data));
   }
 
   decodeData(data:any) {
-    return atob(data);
+    return decodeURIComponent(atob(data));
   }
 
   makeid(length:number) {
