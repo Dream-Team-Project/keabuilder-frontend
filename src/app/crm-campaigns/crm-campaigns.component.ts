@@ -24,13 +24,14 @@ export class CrmCampaignsComponent implements OnInit {
   shortwaiting = true;
   campoption = '';
   selectedForm:string = '';
+  lists: any = [];
   order:any=[ 
     {value: 'ascending', viewValue: 'Ascending'},
     {value: 'descending', viewValue: 'Descending'},
   ];
 optionGroup:any=[
-    {value: 'firstname', viewValue: 'Name', order: this.order},
-    {value: 'email', viewValue: 'EmailId', order: this.order},
+    {value: 'campaign_name', viewValue: 'Name', order: this.order},
+    {value: 'senddate', viewValue: 'Sent On', order: this.order},
 ]
   constructor(
       private crmCampaignservice: CrmCampaignsService,
@@ -53,15 +54,17 @@ optionGroup:any=[
         this.shortwaiting = false;
     }, 1000);
     
-    this.crmCampaignservice.getAllcrmcampaigns().subscribe({
-      next: data => {
-        console.log(data);
-        this.kbcampaigns = data.data;
-      }
-    });
-
+    this.fetchAllcampaigns();
+    this.fetchLists();
   }
-
+fetchAllcampaigns(){
+  this.crmCampaignservice.getAllcrmcampaigns().subscribe({
+    next: data => {
+      console.log(data);
+      this.kbcampaigns = data.data;
+    }
+  });
+}
   dateformat(value:any){
     if(value=='') return '';
     var mycustomdate =  new Date(value);
@@ -117,4 +120,12 @@ optionGroup:any=[
   sortcampaigns(){}
   sortlist(){
   }
+  fetchLists() {
+    
+      this._crmlistService.getAllcrmlists().subscribe(
+        (data) => {
+          this.lists = data.data;
+         
+  })
+}
 }

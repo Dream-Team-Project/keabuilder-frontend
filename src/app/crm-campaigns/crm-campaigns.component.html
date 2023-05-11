@@ -64,6 +64,7 @@
         </div>
       </div>
     </div>
+    <div class=" m-2 ml-3 pl-0 mb-0 pb-0" style="font-size:12px ">Campaigns search by name or email</div>
     <div class="  text-left ml-2 mb-0 pl-0 d-flex ">
     <div  class=" d-inline m-2 searchbox" style="font-size:14px">
         <mat-form-field  class= "fntilform "  style="width:500px" appearance="fill" >
@@ -83,7 +84,7 @@
         <mat-form-field  class= "fntilform" appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortcampaigns()">
-            <mat-option value="">-- None --</mat-option>
+            <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
             <mat-optgroup *ngFor="let group of optionGroup" [label]="group.viewValue">
               <mat-option *ngFor="let item of group.order" [value]="[group.value, item.viewValue]">
                 {{item.viewValue}}
@@ -96,7 +97,7 @@
         <mat-form-field  class= "fntilform" appearance="fill">
           <mat-label>Filter by Type:</mat-label>
           <mat-select >
-            <mat-option value=''>-- None --</mat-option>
+            <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
             <mat-option value="One-Time">One Time</mat-option>
             <mat-option value="Others">Others</mat-option>
           </mat-select>
@@ -106,7 +107,7 @@
       <mat-form-field  class= "fntilform" appearance="fill">
         <mat-label>Filter by Status:</mat-label>
         <mat-select >
-          <mat-option  value=''>-- None --</mat-option>
+          <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
           <mat-option >Drafts</mat-option>
           <mat-option >Schedule</mat-option>
           <mat-option >Sent</mat-option>
@@ -117,8 +118,10 @@
       <mat-form-field  class= "fntilform" appearance="fill">
         <mat-label>Filter by Lists:</mat-label>
         <mat-select >
-          <mat-option  value=''>-- None --</mat-option>
-          <mat-option >list1</mat-option>
+          <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
+          <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
+            {{list.list_name | titlecase}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -126,6 +129,12 @@
     <div [class.px-3]="toggleview" class="row">
       <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
         <div [class.row]="toggleview">
+          <div *ngIf="!toggleview" class="keabuilder-title-board line-ellipsis mt-2 mb-2">
+            <span class="fntwt">{{kbcampaign.campaign_name | titlecase}}</span>
+            <input type="text" [(ngModel)]="kbcampaign.campaign_name"
+              (blur)="changepagename(kbcampaign,kbcampaign.campaign_name)" matTooltip="Edit Campaign Name"
+              matTooltipPosition="above">
+          </div>
           <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
             <div class="kb-fitimg"
               [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbcampaign.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"
@@ -141,15 +150,30 @@
 
               <div [class.p-0]="!toggleview" class="col-md-12">
 
-                <div class="keabuilder-title-board line-ellipsis">
+                <div *ngIf="toggleview" class="keabuilder-title-board line-ellipsis ">
                   <span class="fntwt">{{kbcampaign.campaign_name | titlecase}}</span>
                   <input type="text" [(ngModel)]="kbcampaign.campaign_name"
                     (blur)="changepagename(kbcampaign,kbcampaign.campaign_name)" matTooltip="Edit Campaign Name"
                     matTooltipPosition="above">
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button  class="view-btn" mat-raised-button><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i>View Report</button>
-                  <button class="view-btn1" mat-raised-button><i class="fa-regular fa-pen-to-square mr-2" aria-hidden="true" ></i>Edit</button>
+                  <button *ngIf="kbcampaign.campaign_sent=='1'" class="view-btn" mat-raised-button><i class="fa-solid fa-chart-pie mr-1" aria-hidden="true"></i>View Report</button>
+                  <button *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button  [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid" class="view-btn1 mr-2"> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
+                  <!-- <button  class="view-btn" mat-raised-button><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i>View Report</button> -->
+                  <!-- <button class="view-btn1" mat-raised-button><i class="fa-regular fa-pen-to-square mr-2" aria-hidden="true" ></i>Edit</button> -->
+                  <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
+                <mat-menu #menu2="matMenu">
+                  <button mat-menu-item [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid">
+                    <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
+                  </button>
+                  <button mat-menu-item>
+                    <i class="far fa-copy mr-2"></i>Duplicate
+                  </button>
+                 
+                  <button class="text-danger" mat-menu-item>
+                    <i class="far fa-trash-alt mr-2"></i>Delete
+                  </button>
+                </mat-menu>
                 </div>
 
                 <div class="sentoption">
@@ -168,7 +192,7 @@
                   </div>
               </div>
               </div>
-              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
+              <!-- <div [class.p-0]="!toggleview" class="col-md-12 text-right">
                 
                 <button *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button color="accent" [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid" class="mr-2"> Continue <i class="fa fa-arrow-alt-circle-right"></i></button>               
 
@@ -182,8 +206,7 @@
                     <i class="far fa-trash-alt mr-2"></i> Delete
                   </button>
                 </mat-menu>
-              </div>
-
+              </div> -->
             </div>
           </div>
 
