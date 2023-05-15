@@ -146,7 +146,7 @@ const routes: Routes = [
 
   { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
 
-  { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
   // { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
   // { path: 'crm-contacts', component: ComingSoonComponent, canActivate: [AuthGuard] },
   // { path: 'crm-lists', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -189,7 +189,6 @@ const routes: Routes = [
   // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
   // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
   // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
-  // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
 
 
   // { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
@@ -212,31 +211,23 @@ const routes: Routes = [
   // ],
   //  canActivate: [AuthGuard] },
 
-
-
-  // { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+  // crm
 
   // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
-  // { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
-  
-  
-  // { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-contact-view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-contacts-view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+
+  { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },  
+  { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contact-view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
+  { path: 'crm-contacts-view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
+  { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+  { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+
+  // crm
 
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
