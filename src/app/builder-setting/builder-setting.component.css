@@ -1,3 +1,36 @@
+.kb-multi-icon-outter {
+    width: 100%;
+}
+
+.kb-multi-icon-cont {
+    border: 1px solid var(--kb-dim-black);
+    border-radius: 3px;
+    overflow-y: scroll;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4px;
+}
+
+.kb-multi-icon-cont span {
+    font-size: 18px;
+    color: var(--secondary-color);
+    height: 18%;
+    width: 9%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.1s ease;
+    border-radius: 3px;
+}
+
+.kb-multi-icon-cont span:hover, .kb-multi-icon-cont span.kb-active-icon {
+    color: var(--kb-white);
+    background-color: var(--primary-color);
+}
+
 span.side-floating-btn-group {
     position: absolute;
     left: -110px;
@@ -202,6 +235,10 @@ i.kb-danger {
     animation: contentChng 0.2s ease-out;
     transform: translate(0px, 0px);
     opacity: 1;
+}
+
+.kb-element-inner-group .kb-searchFeild input {
+    border-bottom: 1px solid var(--kb-dim-black);
 }
 
 .kb-searchFeild input {

@@ -1,7 +1,7 @@
 <ng-template #dialog>
   <h1 mat-dialog-title class="kb-danger">Delete Page</h1>
   <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{delpage.page_name}}</span> page?
+      Would you like to delete the <span class="text-danger">{{delpage.page_name}}</span> page?
   </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-info">No</button>
@@ -12,7 +12,7 @@
 <ng-template #dialogduplicate>
   <h1 mat-dialog-title >{{actionname}} Page</h1>
   <div mat-dialog-content>
-      Would you like to {{actionname}} <span class="text-primary">{{delpage.page_name}}</span> page?
+      Choose a website where you wanna to {{actionname}} the <span class="text-primary">{{delpage.page_name}}</span> page?
   </div>
   <div mat-dialog-actions class="justify-content-end">
 
@@ -20,15 +20,14 @@
         <mat-label>Websites</mat-label>
         <mat-select name="newwebsiteid" [(ngModel)]="newwebsiteid" >
           <span *ngFor="let website of websites">
-            <mat-option *ngIf="dialogwebsiteset!=website.uniqueid" [value]="website.uniqueid">
+            <mat-option [value]="website.uniqueid" *ngIf="websiteid != website.uniqueid">
               {{website.title}}
             </mat-option>
           </span>
         </mat-select>
       </mat-form-field>
-      <button mat-button class="text-info" mat-dialog-close >No</button>
-      <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(delpage)">Yes</button>
-
+      <button mat-button class="kb-danger" mat-dialog-close >Cancel</button>
+      <button mat-button mat-dialog-close color="primary" (click)="dupanotherdes(delpage)">Move</button>
   </div>
 </ng-template>
 <div id="pagesinsidepage">
@@ -420,10 +419,10 @@
                       <button mat-menu-item (click)="shortsettings(kbpage,'duplicate')">
                         <i class="far fa-copy mr-2"></i> Duplicate
                       </button>
-                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'move');">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'move');" *ngIf="websites.length != 1">
                         <i class="fa fa-paste mr-2"></i> Move
                       </button>
-                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'copymove')">
+                      <button mat-menu-item (click)="openDialog(dialogduplicate, kbpage, 'copymove')" *ngIf="websites.length != 1">
                         <i class="fa fa-paste mr-2"></i> Copy & Move
                       </button>
                       <button mat-menu-item (click)="shortsettings(kbpage,'copyurl')">

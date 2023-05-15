@@ -30,6 +30,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   searchType:string = '';
   waitTill:boolean = true;
   code_block_ht:string = '200px';
+  searchText:string = '';
 
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()
@@ -125,6 +126,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       item: false
     }
     this.searchInpClear();
+    this.searchText = '';
     this.searchType = '';
     this.searchTglCls = '';
     if(this._general.blockSelection == '') this._section.savePageSession();
