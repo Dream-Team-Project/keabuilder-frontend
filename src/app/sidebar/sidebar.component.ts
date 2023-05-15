@@ -199,7 +199,7 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/crm',
+      routerlink: '/crmmain',
       img: 'hacker.gif',
       icon: 'fas fa-user-secret',
       title: 'CRM',
@@ -211,44 +211,53 @@ export class SidebarComponent implements OnInit {
         //   icon: 'fa fa-random',
         //   title: 'Automations'
         // },
+        // {
+        //   0:true,
+        //   routerlink: '/crmmain/crm-campaigns',
+        //   img: 'hacker.gif',
+        //   icon: 'fa fa-envelope',
+        //   title: 'Campaigns'
+        // },
+        // {
+        //   0:true,
+        //   routerlink: '/no-link',
+        //   img: 'hacker.gif',
+        //   icon: 'fa fa-bars',
+        //   title: 'Pipelines'
+        // },
         {
           0:true,
-          routerlink: '/crm-campaigns',
-          img: 'hacker.gif',
-          icon: 'fa fa-envelope',
-          title: 'Campaigns'
-        },
-        {
-          0:true,
-          routerlink: '/no-link',
-          img: 'hacker.gif',
-          icon: 'fa fa-bars',
-          title: 'Pipelines'
-        },{
-          0:true,
-          routerlink: '/crm-contacts',
+          routerlink: '/crmmain/crm-contacts',
           img: 'hacker.gif',
           icon: 'fa fa-users',
           title: 'Contacts'
         },{
           0:true,
-          routerlink: '/crm-lists',
+          routerlink: '/crmmain/crm-lists',
           img: 'hacker.gif',
           icon: 'fa fa-list',
           title: 'List'
         },{
           0:true,
-          routerlink: '/crm-tags',
+          routerlink: '/crmmain/crm-tags',
           img: 'hacker.gif',
           icon: 'fa fa-tags',
           title: 'Tags'
-        },{
+        },
+        // {
+        //   0:true,
+        //   routerlink: '/crm/crm-reports',
+        //   img: 'hacker.gif',
+        //   icon: 'fa fa-chart-bar',
+        //   title: 'Reports'
+        // }, 
+        {
           0:true,
-          routerlink: '/crm-reports',
+          routerlink: '/crmmain/crm-smtp',
           img: 'hacker.gif',
-          icon: 'fa fa-chart-bar',
-          title: 'Reports'
-        }
+          icon: 'fa-solid fa-server',
+          title: 'SMTP Config'
+        },
       ]
     },{
       0:true,
@@ -382,20 +391,20 @@ export class SidebarComponent implements OnInit {
     //     element[0] = false;
     //   });
     // }
-    // else if(myhref=='/crm'){
+    else if(myhref=='/crmmain'){
 
-    //   this.extramenus = false;
+      this.extramenus = false;
       
-    //   this.allmenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
       
-    //   this.allmenu[6][0] = true;
+      this.allmenu[7][0] = true;
 
-    //   this.allmenu[6].submenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
-    // }
+      this.allmenu[7].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
     // else if(myhref=='/affiliates'){
 
     //   this.extramenus = false;
@@ -413,11 +422,11 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crmmain' && myhref!='/affiliates'){
       this.backme = false;
     } 
 
-    if(myhref=='/membership' || myhref=='/crm' || myhref=='/affiliates'){
+    if(myhref=='/membership' || myhref=='/affiliates'){
       this.backme = false;
     }
 

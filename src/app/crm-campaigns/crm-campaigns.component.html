@@ -17,30 +17,50 @@
       <button mat-button class="text-primary" (click)="createcamp()">Create</button>
   </div>
 </ng-template>
+<ng-template #deletedialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Campaign</h1>
+  <div mat-dialog-content>
+    Would you like to delete this Campaign?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      class="text-danger"
+      (click)="deletecampaign(delcampaign)"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
+
 <div id="kb-crm">
-
   <div class="container-fluid">
-
     <div class="row">
       <div class="col-md-8">
-        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
+         <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm']">
+          <i class="fa-solid fa-server" aria-hidden="true"></i> Crm Smtp
+        </button> -->
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm']">
           <i class="fa fa-random" aria-hidden="true"></i> Automations
         </button> -->
         <button
           mat-raised-button
           class="mr-2"
           color="primary"
-          [routerLink]="['/crm-campaigns']"
+          [routerLink]="['/crmmain']"
         >
           <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-contacts']">
           <i class="fa fa-users" aria-hidden="true"></i> Contacts
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-lists']">
           <i class="fa fa-list" aria-hidden="true"></i> Lists
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-tags']">
           <i class="fa fa-tags" aria-hidden="true"></i> Tags
         </button>
         <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']">
@@ -83,7 +103,7 @@
     <div  class="d-inline m-2" style="font-size:14px">
         <mat-form-field  class= "fntilform" appearance="fill">
           <mat-label>Filter by:</mat-label>
-          <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortcampaigns()">
+          <mat-select [(ngModel)]="selectedForm" (ngModelChange)="filter()">
             <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
             <mat-optgroup *ngFor="let group of optionGroup" [label]="group.viewValue">
               <mat-option *ngFor="let item of group.order" [value]="[group.value, item.viewValue]">
@@ -96,7 +116,7 @@
     <div  class="d-inline m-2 " style="font-size:14px">
         <mat-form-field  class= "fntilform" appearance="fill">
           <mat-label>Filter by Type:</mat-label>
-          <mat-select >
+          <mat-select  [(ngModel)]="selectedForm" (ngModelChange)="sort()">
             <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
             <mat-option value="One-Time">One Time</mat-option>
             <mat-option value="Others">Others</mat-option>
@@ -106,18 +126,18 @@
     <div  class="d-inline m-2 " style="font-size:14px">
       <mat-form-field  class= "fntilform" appearance="fill">
         <mat-label>Filter by Status:</mat-label>
-        <mat-select >
+        <mat-select  [(ngModel)]="selectedForm" (ngModelChange)="sortcampaigns()">
           <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
-          <mat-option >Drafts</mat-option>
-          <mat-option >Schedule</mat-option>
-          <mat-option >Sent</mat-option>
+          <mat-option [value]="'0'" >Drafts</mat-option>
+          <!-- <mat-option [value]="'schedule'">Schedule</mat-option> -->
+          <mat-option [value]="'1'">Sent</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div  class="d-inline m-2 " style="font-size:14px">
       <mat-form-field  class= "fntilform" appearance="fill">
         <mat-label>Filter by Lists:</mat-label>
-        <mat-select >
+        <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortlist()" >
           <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
           <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
             {{list.list_name | titlecase}}
@@ -157,20 +177,20 @@
                     matTooltipPosition="above">
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button *ngIf="kbcampaign.campaign_sent=='1'" class="view-btn" mat-raised-button><i class="fa-solid fa-chart-pie mr-1" aria-hidden="true"></i>View Report</button>
-                  <button *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button  [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid" class="view-btn1 mr-2"> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
+                  <button *ngIf="kbcampaign.campaign_sent=='1'" class="view-btn align" mat-raised-button><i class="fa-solid fa-chart-pie mr-1" aria-hidden="true"></i>View Report</button>
+                  <button  *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button  [routerLink]="'/crmmain/crm-newcampaign/'+kbcampaign.uniqueid" class="view-btn1 mr-2 "> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
                   <!-- <button  class="view-btn" mat-raised-button><i class="fa-solid fa-clock mr-1" aria-hidden="true"></i>View Report</button> -->
                   <!-- <button class="view-btn1" mat-raised-button><i class="fa-regular fa-pen-to-square mr-2" aria-hidden="true" ></i>Edit</button> -->
                   <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
                 <mat-menu #menu2="matMenu">
-                  <button mat-menu-item [routerLink]="'/crm-newcampaign/'+kbcampaign.uniqueid">
+                  <button mat-menu-item [routerLink]="'/crmmain/crm-newcampaign/'+kbcampaign.uniqueid" >
                     <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
                   </button>
                   <button mat-menu-item>
                     <i class="far fa-copy mr-2"></i>Duplicate
                   </button>
                  
-                  <button class="text-danger" mat-menu-item>
+                  <button class="text-danger" mat-menu-item (click)="openDialog1(deletedialog,kbcampaign.uniqueid)">
                     <i class="far fa-trash-alt mr-2"></i>Delete
                   </button>
                 </mat-menu>

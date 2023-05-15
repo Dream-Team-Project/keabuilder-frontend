@@ -118,7 +118,7 @@ export class CrmNewCampaignComponent implements OnInit {
             });
 
           }else{
-            this.router.navigate(['/crm-campaigns'],{relativeTo: this.route});
+            this.router.navigate(['/crmmain'],{relativeTo: this.route});
           }
       }
     });
@@ -168,7 +168,7 @@ export class CrmNewCampaignComponent implements OnInit {
                 if(data.success==1){
                     this.campstatus = 'Publish';
                     this._snackBar.open('Campaign Publish Successfully!!', 'OK');
-                    this.router.navigate(['/crm-campaigns'],{relativeTo: this.route});
+                    this.router.navigate(['/crmmain'],{relativeTo: this.route});
                     
                   }
                 }

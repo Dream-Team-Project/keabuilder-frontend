@@ -1,0 +1,124 @@
+<ng-template #dialog>
+    <h1 mat-dialog-title class="kb-danger">Delete SMTP</h1>
+    <div mat-dialog-content>
+        Would you like to delete <span class="text-danger">{{allsmtpdata.smtp_type}}</span> smtp?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-info">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesmtp(allsmtpdata)">Yes</button>
+    </div>
+  </ng-template>
+<div id="kb-crm">
+    <div id="kb-offer-actions" *ngIf="sidebar.open">
+        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+            
+            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+            <h6><strong>Connect With Your SMTP Server</strong></h6>
+            
+            <div>  
+                
+                <hr>
+                <h5>Add your SMTP Server Details</h5>
+                <!-- <p>Enter the  name you already own below and we'll take care of the rest.</p> -->
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Choose an option</mat-label>
+                    <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
+                      <mat-option value="sendgrid">SendGrid</mat-option>
+                      <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
+                      <mat-option value="mailchimp">Mailchimp</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Email From</mat-label>
+                    <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
+                    <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>API KEY ID</mat-label>
+                    <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
+                    <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
+                        API Key Id is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>API KEY </mat-label>
+                    <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
+                    <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
+                        API Key is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="addsmtpdetails()" >
+                    ADD <i class="fas fa-plus"></i>
+                </button>
+
+            </div> 
+        </div>
+    </div>
+    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+    
+        <div class="container-fluid">
+            <!-- <div class="row">
+              <div class="col-md-8">
+                 <button mat-raised-button   color="primary" class="mr-2" [routerLink]="['/crmmain/crm']">
+                  <i class="fa-solid fa-server" aria-hidden="true"></i> Crm Smtp
+                </button>
+                <button
+                  mat-raised-button
+                  class="mr-2"
+                  [routerLink]="['/crmmain']"
+                >
+                  <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
+                </button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-contacts']">
+                  <i class="fa fa-users" aria-hidden="true"></i> Contacts
+                </button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-lists']">
+                  <i class="fa fa-list" aria-hidden="true"></i> Lists
+                </button>
+                <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-tags']">
+                  <i class="fa fa-tags" aria-hidden="true"></i> Tags
+                </button>
+                
+              </div>
+              
+              </div> -->
+              <div class="row mt-4">
+                <div class="col-md-8 mt-4">
+                    <div class="col-md-10">
+                        <h2>Add your own SMTP Server Details to strengthen your brand</h2>
+                        <p>Add/Configure a SMTP Server to send Emails & help customers remember your website. It's like vanity license plates for your business!</p>
+                        <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </div>
+                    <div *ngIf="allsmtpdata.length!=0">
+                            <mat-card class="mt-4">
+                                <ul class="kb-smtpul">
+                                    <li>
+                                        
+                                        <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> <i class="fa fa-shield-alt"></i></span>
+                                    </li>
+                                    <li>{{allsmtpdata.smtp_type}}</li>
+                                    <li>{{allsmtpdata.emailfrom}}</li>
+                                    <li>
+                                        <!-- <button mat-raised-button class="mr-2" (click)="viewdomain(alldomains)" >View <i class="fa fa-eye" aria-hidden="true"></i></button> -->
+                                        <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                                            Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </li>   
+                                </ul>
+                            </mat-card>
+                    </div>
+    
+    
+                </div>
+                <div class="col-md-4">
+                    <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+                </div>
+            </div>
+            </div>
+        
+
+    </div>

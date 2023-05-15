@@ -159,28 +159,31 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-8">
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm']">
+          <i class="fa-solid fa-server" aria-hidden="true"></i> Crm Smtp
+        </button> -->
         <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
           <i class="fa fa-random" aria-hidden="true"></i> Automations
         </button> -->
         <button
           mat-raised-button
           class="mr-2"
-          [routerLink]="['/crm-campaigns']"
+          [routerLink]="['/crmmain']"
         >
           <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
         </button>
         <button
           mat-raised-button
           class="mr-2"
-          [routerLink]="['/crm-contacts']"
+          [routerLink]="['/crmmain/crm-contacts']"
           color="primary"
         >
           <i class="fa fa-users" aria-hidden="true"></i> Contacts
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-lists']">
           <i class="fa fa-list" aria-hidden="true"></i> Lists
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-tags']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-tags']">
           <i class="fa fa-tags" aria-hidden="true"></i> Tags
         </button>
         <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm-reports']">
@@ -332,7 +335,7 @@
                 <button
                   mat-raised-button
                   class="mr-2"
-                  [routerLink]="['/crm-contact-view/'+contact.uniqueid]" 
+                  [routerLink]="['/crmmain/crm-contact-view/'+contact.uniqueid]" 
                 >
                   View <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>

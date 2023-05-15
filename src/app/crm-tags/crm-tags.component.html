@@ -62,25 +62,28 @@
     <div class="row">
       <div class="col-md-8">
         <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
+          <i class="fa-solid fa-server" aria-hidden="true"></i> Crm Smtp
+        </button> -->
+        <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
           <i class="fa fa-random" aria-hidden="true"></i> Automations
         </button> -->
         <button
           mat-raised-button
           class="mr-2"
-          [routerLink]="['/crm-campaigns']"
+          [routerLink]="['/crmmain']"
         >
           <i class="fa fa-envelope" aria-hidden="true"></i> Campaigns
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-contacts']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-contacts']">
           <i class="fa fa-users" aria-hidden="true"></i> Contacts
         </button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm-lists']">
+        <button mat-raised-button class="mr-2" [routerLink]="['/crmmain/crm-lists']">
           <i class="fa fa-list" aria-hidden="true"></i> Lists
         </button>
         <button
           mat-raised-button
           class="mr-2"
-          [routerLink]="['/crm-tags']"
+          [routerLink]="['/crmmain/crm-tags']"
           color="primary"
         >
           <i class="fa fa-tags" aria-hidden="true"></i> Tags
@@ -202,7 +205,7 @@
                   <button
                   mat-raised-button
                   class="mr-2"
-                  [routerLink]="['/crm-contacts/'+tag.uniqueid+'/tag']" 
+                  [routerLink]="['/crmmain/crm-contacts/'+tag.uniqueid+'/tag']" 
                 >
                   View <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>

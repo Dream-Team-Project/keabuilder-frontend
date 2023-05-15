@@ -87,6 +87,8 @@ import { AllWebsitesComponent } from './all-websites/all-websites.component';
 import { CrmContactsViewComponent } from './crm-contacts-view/crm-contacts-view.component';
 import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.component';
 import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
+import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
+import { CrmMainComponent } from './crm-main/crm-main.component';
 
 const routes: Routes = [
 
@@ -223,11 +225,11 @@ const routes: Routes = [
   // { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
   // { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
 
-  // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
-  { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'crmmain', component: CrmMainComponent, 
+children:[
+  { path: 'crm-smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
+  { path: '', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
   { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
-  
   
   { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
   { path: 'crm-contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
@@ -237,7 +239,8 @@ const routes: Routes = [
   { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
   { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
   { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-
+],
+canActivate: [AuthGuard] },
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
@@ -312,6 +315,8 @@ export const RoutingComponents =
     CrmReportsComponent,
     CrmSettingsComponent,
     CrmNewCampaignComponent,
+    CrmSmtpComponent,
+    CrmMainComponent,
     AffiliatesComponent,
     AffiliateUsersComponent,
     AffiliateCommissionComponent,

@@ -38,6 +38,10 @@ export class CrmCampaignsService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getcrmcampaign/'+uniqueid,obj).pipe(catchError(this.errorHandler));
   }
+  getSinglecrmcampaigns(obj:any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getSinglecrmcampaigns',obj).pipe(catchError(this.errorHandler));
+  }
 
   createcrmcampaign(obj:any): Observable<any> {
     obj.user_id = this.uuid;
@@ -65,7 +69,10 @@ export class CrmCampaignsService {
   //   return this.http.post('/api/countcrmcontacttags/'+uniqueid,obj).pipe(catchError(this.errorHandler));
     
   // }
-
+  filtercrmcampaigns(obj:any): Observable<any>{
+  obj.uuid = this.uuid;
+  return this.http.post('/api/filtercrmcampaigns',obj).pipe(catchError(this.errorHandler));
+}
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

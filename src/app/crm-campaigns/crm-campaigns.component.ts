@@ -8,6 +8,7 @@ import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { CrmListService } from '../_services/_crmservice/crm_list.service';
 import { CrmService } from '../_services/crm.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { CrmService } from '../_services/crm.service';
   styleUrls: ['./crm-campaigns.component.css']
 })
 export class CrmCampaignsComponent implements OnInit {
-  
+
   campaignname ='';
   campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   toggleview = true;
@@ -25,6 +26,7 @@ export class CrmCampaignsComponent implements OnInit {
   campoption = '';
   selectedForm:string = '';
   lists: any = [];
+  delcampaign:any;
   order:any=[ 
     {value: 'ascending', viewValue: 'Ascending'},
     {value: 'descending', viewValue: 'Descending'},
@@ -33,6 +35,7 @@ optionGroup:any=[
     {value: 'campaign_name', viewValue: 'Name', order: this.order},
     {value: 'senddate', viewValue: 'Sent On', order: this.order},
 ]
+
   constructor(
       private crmCampaignservice: CrmCampaignsService,
       private crmService: CrmService,
@@ -45,6 +48,8 @@ optionGroup:any=[
       public _general: GeneralService,
     ) {
       this.toggleview = _general.getStorage('campaign_toggle');
+     
+
 
   }
 
@@ -86,7 +91,7 @@ fetchAllcampaigns(){
             this.dialog.closeAll();
             this._snackBar.open('Campaign Created Successfully!', 'OK');
 
-            this.router.navigate(['/crm-newcampaign/'+data.uniqueid],{relativeTo: this.route});
+            this.router.navigate(['/crmmain/crm-newcampaign/'+data.uniqueid],{relativeTo: this.route});
           }
         });
 
@@ -99,6 +104,10 @@ fetchAllcampaigns(){
   openDialog(templateRef: TemplateRef<any>): void {
     this.dialog.open(templateRef);
   }
+  openDialog1(templateRef: TemplateRef<any>,uniqueid:any): void {
+    this.delcampaign = uniqueid;
+    this.dialog.open(templateRef);
+  }
   
   changepagename(dataobj:any, title:any){
 
@@ -109,16 +118,60 @@ fetchAllcampaigns(){
     console.log(this.toggleview);
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
+  deletecampaign(uniqueid:any){
+    this.crmCampaignservice.deletecrmcampaign(uniqueid).subscribe((data:any)=>{
+      this.fetchAllcampaigns();
+    })
+  }
   
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.kbcampaigns.filter = filterValue.trim().toLowerCase();
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
+    var SearchValue = {search:(event.target as HTMLInputElement).value};
+    console.log(SearchValue)
+    this.crmCampaignservice.getSinglecrmcampaigns(SearchValue).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbcampaigns=data.data;
+        
+      }
+    });
+    
   }
-  sortcampaigns(){}
+  sortcampaigns(){
+    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'other'}).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbcampaigns=data.data;
+        
+      }
+    });
+  }
+  sort(){
+    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'sort'}).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbcampaigns=data.data;
+        
+      }
+    });
+  }
+  filter(){
+    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm[0],order1:this.selectedForm[1],search:'filter'}).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbcampaigns=data.data;
+        
+      }
+    });
+  }
   sortlist(){
+    // console.log(this.selectedForm)
+    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'list'}).subscribe({
+      next: data => {
+        // console.log(data);
+        this.kbcampaigns=data.data;
+        
+      }
+    });
   }
   fetchLists() {
     
