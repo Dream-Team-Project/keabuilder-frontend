@@ -204,7 +204,7 @@ export class BuilderTopbarComponent implements OnInit {
 
   emitIcon(icon:any) {
     var appendIcon = JSON.parse(JSON.stringify(this._element.elementList.icon));
-    appendIcon.content.html = '<i class="'+icon.name+'"></i>';
+    appendIcon.content.icon_html = this._element.setIcon(icon);
     this.dragDataEmit(appendIcon);
   }
 

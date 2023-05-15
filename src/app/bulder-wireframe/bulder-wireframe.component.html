@@ -8,7 +8,7 @@
         <button (click)="_general.expandAll(sectionUl, false)" color="primary" mat-raised-button class="kb-btn">Collapse</button>
     </div>
     <ul #sectionUl class="kb-drag-container kb-wfs-section" cdkDropList id="sectiongroup-0" [cdkDropListConnectedTo]="sectionConnect" [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
-        <li cdkDrag *ngFor="let section of _section.sections, index as si"
+        <li (click)="sectionActivated(section)" cdkDrag *ngFor="let section of _section.sections, index as si"
             (mouseenter)="_row.selectedSectionRows = section.rowArr">
             <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">{{section.name ? section.name : 'Section'}}</div>
             <div *cdkDragPlaceholder class="custom-placeholder" [style.backgroundColor]="'var(--section-color)'"></div>

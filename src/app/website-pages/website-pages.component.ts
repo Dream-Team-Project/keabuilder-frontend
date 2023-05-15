@@ -152,7 +152,6 @@ export class WebsitePagesComponent implements OnInit {
   pageEvent!: PageEvent;  
 
   togglestatus:any;
-  dialogwebsiteset = '';
 
 
   getServerData(event?:PageEvent){
@@ -179,6 +178,7 @@ export class WebsitePagesComponent implements OnInit {
   ngOnInit(): void {
 
     this.showwebpages();
+    this.getWebsites();
 
     setTimeout(() => {
         this.shortwaiting = false;
@@ -218,6 +218,18 @@ export class WebsitePagesComponent implements OnInit {
 
     // console.log(this.toggleview);
 
+  }
+
+  getWebsites() {
+    this.websiteService.getWebsite().subscribe({
+      next: webdata => {
+        this.websites = [];
+        webdata.data.forEach((element:any) => {
+            var nwobj = {uniqueid:element.uniqueid,title:element.title};
+            this.websites.push(nwobj);
+          });
+        }
+    });
   }
 
   pathuniqueremove(){
@@ -350,8 +362,6 @@ export class WebsitePagesComponent implements OnInit {
               data.data.forEach((element:any) => {
 
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
-
-                this.dialogwebsiteset = element.uniqueid;
                 // console.log(this.searchpagetxt);
     
                 if(element.domain!='' && element.domain!=null){
@@ -845,33 +855,22 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
-
     this.newwebsiteid = '';
-  
-    this.websiteService.getWebsite().subscribe({
-      next: webdata => {
-      console.log(webdata);
-
-      this.websites = [];
-      webdata.data.forEach((element:any) => {
-          var nwobj = {uniqueid:element.uniqueid,title:element.title};
-          this.websites.push(nwobj)
-        });
-
-      }
-    });
-
-    if(type=='move'){
-      this.actionname = 'Move';
-    }else if(type=='copymove'){
-      this.actionname = 'Copy & Move';
-    }else{
-      this.actionname = '';
+    this.getWebsites();
+    var acn;
+    switch(type){
+      case 'move':
+        acn = 'move';
+      break;
+      case 'copymove':
+        acn = 'copy & move';
+      break;
+      default:
+        acn = '';
     }
-
+    this.actionname = acn;
     this.delpage = page;
     this.dialog.open(templateRef);
-
   }
   
 }

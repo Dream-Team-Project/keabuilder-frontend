@@ -53,6 +53,9 @@ export class StyleService {
   text_shadow_color = 'rgba(0,0,0,40%)';
   text_shadow:boolean = false;
   // text
+  // icon
+  selected_icon:any;
+  // icon
   // image
   image_src = '';
   image_objectfit = 'fill';
@@ -891,6 +894,7 @@ export class StyleService {
       else {
         this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
         if(this._general.selectedBlock.content.html) this._general.selectedBlock.content.html = this.edit_html;
+        if(this._general.selectedBlock.content.icon_html) this._general.selectedBlock.content.icon_html = this.selected_icon;
         if(this._general.selectedBlock.content?.name == 'menu' || this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
           if(this.setDropDownStyle.main) this._general.selectedBlock.content.style.dropdown = this.currentStyling();
           else if(this.setDropDownStyle.item) this._general.selectedBlock.content.item.style.dropdown = this.textStyling();
@@ -1666,8 +1670,11 @@ export class StyleService {
       var unit = obj['letter-spacing']?.replace(/[^A-Za-z]/g, '');
       this.letter_spacingRange.type = unit && unit != 'normal' ? unit : 'px';
       
-      if(element.name == 'text' || element.name == 'heading' || element.name == 'icon') {
+      if(element.name == 'text' || element.name == 'heading') {
         this.edit_html = element.html;
+      }
+      else if(element.name == 'icon') {
+        this.selected_icon = element.icon_html;
       }
     }
     if (element.name == 'image') {

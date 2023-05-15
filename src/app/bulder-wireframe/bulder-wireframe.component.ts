@@ -118,4 +118,8 @@ export class BulderWireframeComponent implements OnInit, AfterViewInit {
   openDialog(e:any) {
     this.dialogToggle.emit(true);
   }
+
+  sectionActivated(section:any) {
+    document.getElementById(section.id)?.scrollIntoView();
+  }
 }

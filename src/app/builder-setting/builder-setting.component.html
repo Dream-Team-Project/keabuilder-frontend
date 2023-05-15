@@ -34,8 +34,12 @@
                     </span>
                 </div>
                 <div class="kb-element-inner-group">
+                    <div class="kb-searchFeild">
+                        <input placeholder="Search icons..." [(ngModel)]="searchText">
+                        <span mat-ripple class="kb-clear" (click)="searchText=''"><i class="fa fa-times"></i></span>
+                    </div>
                     <ul class="kb-element-list">
-                        <li *ngFor="let element of _element.elementList | keyvalue | filter:'':'key'" class="kb-element-box"><span
+                        <li *ngFor="let element of _element.elementList | keyvalue | filter:searchText:'key'" class="kb-element-box"><span
                                 [matTooltip]="!isElementExist(element.key) ? 'Please create first '+ element.key : ''" matTooltipPosition="above"
                                 (click)="isElementExist(element.key) ? _element.addElement(element.value.content) : ''"><i [class]="element.value.iconCls"></i>
                                 <div>{{element.key | titlecase}}</div>
@@ -471,6 +475,25 @@
                             </div>
                         </div>
                         <!-- menu -->
+                        <!-- icon -->
+                        <div *ngIf="searchingDeep('Content Icon') && _general.selectedBlock.content?.name == 'icon'"
+                        class="kb-inner-tab-component">
+                            <div class="kb-tab-head">Choose Icon</div>
+                            <div class="kb-tab-content">
+                                <div class="kb-multi-icon-outter">
+                                    <div class="kb-searchFeild">
+                                        <input placeholder="Search icons..." [(ngModel)]="searchText">
+                                        <span mat-ripple class="kb-clear" (click)="searchText=''"><i class="fa fa-times"></i></span>
+                                    </div>
+                                    <div class="kb-multi-icon-cont">
+                                        <span *ngFor="let icon of _element.defaultIcons | filter:searchText:'title' | sorting:'asc':'title', index as i" (click)="_style.selected_icon = _element.setIcon(icon)" [class.kb-active-icon]="_style.selected_icon == _element.setIcon(icon)" [matTooltip]="icon.title | titlecase" matTooltipPosition="above">
+                                            <i [class]="icon.name"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- icon -->
                         <!-- text styling/editor -->
                         <div
                             *ngIf="isText(_general.selectedBlock.content.name)">
@@ -740,7 +763,7 @@
                                         (opened)="_general.setExpPanelStep(7)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Text'}} Alignment <i matTooltip="Works only on 100% element width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i>
+                                                {{_general.selectedBlock.content.name == 'icon' ? 'Icon' : 'Text'}} Alignment
                                             </mat-panel-title>
                                             <mat-panel-description>
                                                 <i class="fas fa-arrows-alt-h"></i>
@@ -1413,7 +1436,7 @@
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item">
                             <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' else blockAlign"
                                 class="kb-inner-tab-component">
-                                <div class="kb-tab-head">Alignment <i matTooltip="Not work on 100% width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i></div>
+                                <div class="kb-tab-head">Alignment <i matTooltip="Not work on full width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i></div>
                                 <div class="kb-tab-content">
                                     <div class="kb-align-btn-group">
                                         <span mat-ripple [matRippleColor]="rippleClr" (click)="_style.setElementAlignment('')"

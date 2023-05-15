@@ -167,7 +167,7 @@
         </mat-menu>
         <span *ngIf="(selectedTab == 'elements' || selectedTab == 'l-templates' || selectedTab == 'l-headers' || selectedTab == 'l-footers') && !wftgl" [class.open]="toggle.open" [class.close]="toggle.close" class="kb-search-field">
             <i [innerHTML]="'search' | svg | safeHtml"></i>
-            <input placeholder="Search here..." [(ngModel)]="searchText">
+            <input placeholder="Search here..." [(ngModel)]="searchText" (keydown)="setShift(); setElementShift()">
         </span>
         <button mat-button (click)="_general.redirectLink('/profile')">
             {{_general.user.name | titlecase}} 
@@ -247,7 +247,7 @@
         </div>
         <!-- layout -->
         <div *ngSwitchCase="'elements'">
-            <button mat-button (click)="selectElement(element.key)" class="kb-icon-btn" [class.kb-btn-active]="selectedElement == element.key" *ngFor="let element of _element.elementList  | keyvalue | filter:searchText:'key'">
+            <button mat-button (click)="selectElement(element.key)" class="kb-icon-btn" [class.kb-btn-active]="selectedElement == element.key" *ngFor="let element of _element.elementList | keyvalue | filter:searchText:'key'">
                 <i [class]="element.value.iconCls"></i>
                 <span>{{element.key | titlecase}}</span>
             </button>
@@ -300,7 +300,7 @@
                 <i [innerHTML]="'upload' | svg | safeHtml"></i>
                 <span>Upload</span>
             </button>
-            <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(img)" [cdkDragData]="img">
+            <span cdkDrag *ngFor="let img of _image.galleryImg | filter:searchText:'title' | sorting:_image.searchImgFilter.value:_image.searchImgFilter.type, index as i" (cdkDragMoved)="dragDataEmit(img)" [cdkDragData]="img" [matTooltip]="img.title | titlecase">
                 <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
                 <div *cdkDragPreview class="custom-preview-img">
                     <img class="kb-images" [src]="img.ext_link ? img.path : _image.uploadImgPath+img.path">
@@ -322,7 +322,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'icon'" id="elementgroup" class="kb-block-selection kb-element-list kb-icon-list" cdkDropList [cdkDropListData]="_element.defaultIcons" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let icon of _element.defaultIcons | filter:searchText:'name' | sorting:'asc':'name', index as i" (cdkDragMoved)="emitIcon(icon)" [cdkDragData]="icon">
+            <span cdkDrag *ngFor="let icon of _element.defaultIcons | filter:searchText:'title' | sorting:'asc':'title', index as i" (cdkDragMoved)="emitIcon(icon)" [cdkDragData]="icon" [matTooltip]="icon.title | titlecase">
                 <i [class]="icon.name"></i>
                 <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
                     <i [class]="icon.name"></i>

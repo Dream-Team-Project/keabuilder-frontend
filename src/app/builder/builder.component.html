@@ -342,10 +342,11 @@
                                                 </div>
                                                 <div *ngSwitchCase="'icon'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <div *ngIf="isBlockActive(element) else originalIcon"
-                                                    [ngStyle]="_style.textStyling()" [innerHTML]="_style.edit_html | safeHtml"></div>
+                                                    [ngStyle]="_style.textStyling()" [innerHTML]="_style.selected_icon | safeHtml">
+                                                    </div>
                                                     <ng-template #originalIcon>
                                                         <div [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-icon-block"
-                                                            [innerHTML]="element.content.html | safeHtml"></div>
+                                                            [innerHTML]="element.content.icon_html | safeHtml"></div>
                                                     </ng-template>
                                                 </div>
                                                 <div *ngSwitchDefault [attr.data-name]="element.content.name" class="kb-element-content">
