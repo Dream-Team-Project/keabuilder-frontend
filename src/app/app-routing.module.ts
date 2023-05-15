@@ -89,6 +89,7 @@ import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.com
 import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
 import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
 import { CrmMainComponent } from './crm-main/crm-main.component';
+import { CrmAutomationComponent } from './crm-automation/crm-automation.component';
 
 const routes: Routes = [
 
@@ -137,9 +138,7 @@ const routes: Routes = [
   
   // Coming Soon links==>  ComingSoonComponent
   
-  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
-  { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
-  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
+  
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -215,22 +214,25 @@ const routes: Routes = [
 
   // crm
 
-  { path: 'crmmain', component: CrmMainComponent, 
+  { path: 'crm', component: CrmComponent, 
   children:[
-    { path: '', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  // { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-   { path: 'crm-smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
-  { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
+    { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
+   { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
+  { path: 'newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
   
-  
-  { path: 'crm-contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-contact-view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
-  { path: 'crm-contacts-view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
-  { path: 'crm-lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+  { path: 'contact/view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
+  // { path: 'contacts/view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
+  { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+  { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+  { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
+  { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
+  { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
+  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
@@ -309,6 +311,7 @@ export const RoutingComponents =
     CrmNewCampaignComponent,
     CrmSmtpComponent,
     CrmMainComponent,
+    CrmAutomationComponent,
     AffiliatesComponent,
     AffiliateUsersComponent,
     AffiliateCommissionComponent,

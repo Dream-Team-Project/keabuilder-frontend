@@ -127,14 +127,16 @@ export class SidebarComponent implements OnInit {
       icon: 'fas fa-globe-americas',
       title: 'Domains',
       submenu:null
-    },{
-      0:true,
-      routerlink: '/forms',
-      img: 'complete.gif',
-      icon: 'fas fa-address-card',
-      title: 'Forms',
-      submenu:null
-    },{
+    },
+    // {
+    //   0:true,
+    //   routerlink: '/nolink',
+    //   img: 'complete.gif',
+    //   icon: 'fas fa-address-card',
+    //   title: 'Forms',
+    //   submenu:null
+    // },
+    {
       0:true,
       routerlink: '/membership',
       img: 'shield.gif',
@@ -199,25 +201,53 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/crmmain',
+      routerlink: '/crm',
       img: 'hacker.gif',
       icon: 'fas fa-user-secret',
       title: 'CRM',
       submenu:[
-        // {
-        //   0:true,
-        //   routerlink: '/crm',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-random',
-        //   title: 'Automations'
-        // },
-        // {
-        //   0:true,
-        //   routerlink: '/crmmain/crm-campaigns',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-envelope',
-        //   title: 'Campaigns'
-        // },
+        {
+          0:true,
+          routerlink: '/crm/reports',
+          img: 'hacker.gif',
+          icon: 'fa fa-chart-bar',
+          title: 'Reports'
+        },
+        {
+          0:true,
+          routerlink: '/crm/contacts',
+          img: 'hacker.gif',
+          icon: 'fa fa-users',
+          title: 'Contacts'
+        },
+        {
+          0:true,
+          routerlink: '/crm/lists',
+          img: 'hacker.gif',
+          icon: 'fa fa-list',
+          title: 'List'
+        },
+        {
+          0:true,
+          routerlink: '/crm/forms',
+          img: 'complete.gif',
+          icon: 'fas fa-address-card',
+          title: 'Forms',
+        },
+        {
+          0:true,
+          routerlink: '/crm/automations',
+          img: 'hacker.gif',
+          icon: 'fa fa-random',
+          title: 'Automations'
+        },
+        {
+          0:true,
+          routerlink: '/crm/campaigns',
+          img: 'hacker.gif',
+          icon: 'fa fa-envelope',
+          title: 'Campaigns'
+        },
         // {
         //   0:true,
         //   routerlink: '/no-link',
@@ -225,21 +255,9 @@ export class SidebarComponent implements OnInit {
         //   icon: 'fa fa-bars',
         //   title: 'Pipelines'
         // },
-        {
+       {
           0:true,
-          routerlink: '/crmmain/crm-contacts',
-          img: 'hacker.gif',
-          icon: 'fa fa-users',
-          title: 'Contacts'
-        },{
-          0:true,
-          routerlink: '/crmmain/crm-lists',
-          img: 'hacker.gif',
-          icon: 'fa fa-list',
-          title: 'List'
-        },{
-          0:true,
-          routerlink: '/crmmain/crm-tags',
+          routerlink: '/crm/tags',
           img: 'hacker.gif',
           icon: 'fa fa-tags',
           title: 'Tags'
@@ -251,12 +269,19 @@ export class SidebarComponent implements OnInit {
         //   icon: 'fa fa-chart-bar',
         //   title: 'Reports'
         // }, 
+        // {
+        //   0:true,
+        //   routerlink: '/crm/crm-smtp',
+        //   img: 'hacker.gif',
+        //   icon: 'fa-solid fa-server',
+        //   title: 'SMTP Config'
+        // },
         {
           0:true,
-          routerlink: '/crmmain/crm-smtp',
+          routerlink: '/crm/settings',
           img: 'hacker.gif',
-          icon: 'fa-solid fa-server',
-          title: 'SMTP Config'
+          icon: 'fas fa-cogs',
+          title: 'Settings'
         },
       ]
     },{
@@ -391,7 +416,7 @@ export class SidebarComponent implements OnInit {
     //     element[0] = false;
     //   });
     // }
-    else if(myhref=='/crmmain'){
+    else if(myhref=='/crm'){
 
       this.extramenus = false;
       
@@ -399,9 +424,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[7][0] = true;
+      this.allmenu[6][0] = true;
 
-      this.allmenu[7].submenu.forEach((element: any) => {
+      this.allmenu[6].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -422,7 +447,7 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crmmain' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
       this.backme = false;
     } 
 

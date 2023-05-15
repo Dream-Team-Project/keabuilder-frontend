@@ -1,0 +1,400 @@
+
+<!-- dialog for delete campaign button -->
+<ng-template #dialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Automation</h1>
+    <div mat-dialog-content>Would you like to delete this Automation?</div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button
+        mat-button
+        mat-dialog-close
+        cdkFocusInitial
+        class="text-danger"
+        (click)="deleteAutomation(this.delautomation)"
+      >
+        Yes
+      </button>
+    </div>
+  </ng-template>
+  <div id="kb-crm">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" ><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" color="primary"><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+          <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button> -->
+        </div>
+        <div class="col-md-4 text-right">
+          <button mat-raised-button color="primary" class="mr-2 d-inline-block">
+            <i class="fa fa-random" aria-hidden="true"></i> Create an automation
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-10 mt-3">
+          <span
+            ><span style="font-size: 35px">Automation</span> ({{
+              this.automations.length
+            }})</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="text-left m-2 pl-0">
+      <div class="text-left m-2 pl-0" style="font-size: 12px">
+        Automation search by name
+      </div>
+      <div class="d-flex m-2 pl-0">
+        <fieldset
+          class="form-group position-relative has-icon-left kea-barfieldset mr-2"
+        >
+          <input
+            type="text"
+            class="form-control"
+            id="offer-search"
+            #input
+            placeholder="Search Automations..."
+          />
+          <div class="form-control-position">
+            <i class="fab fa-searchengin"></i>
+          </div>
+        </fieldset>
+        <!-- <fieldset
+              class="form-group position-relative has-icon-left kea-barfieldset "
+            >
+              <input
+                type="text"
+                class="form-control "
+                id="offer-search"
+                #input
+                placeholder="Search Campaigns..."
+              />
+              <div class="form-control-position">
+                <i class="fab fa-searchengin"></i>
+              </div>
+            </fieldset> -->
+        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+          <mat-label>Status :</mat-label>
+          <mat-select
+            [(ngModel)]="selectedForm1"
+            (ngModelChange)="sortautomations1()"
+          >
+            <mat-option value="">-- None --</mat-option>
+            <mat-option [value]="'Active'">Active</mat-option>
+            <mat-option [value]="'Inactive'">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+          <mat-label>Filter by:</mat-label>
+          <mat-select
+            [(ngModel)]="selectedForm"
+            (ngModelChange)="sortautomations()"
+          >
+            <mat-option value="">-- None --</mat-option>
+            <mat-optgroup
+              *ngFor="let group of optionGroup"
+              [label]="group.viewValue"
+            >
+              <mat-option
+                *ngFor="let item of group.order"
+                [value]="[group.value, item.viewValue]"
+              >
+                {{ item.viewValue }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+        <mat-label
+          (click)="toggleView()"
+          matTooltip="List view"
+          class="m-1 viewicon"
+          ><i
+            [class]="togglebutton == false ? 'fa fa-th-large' : 'fa fa-bars'"
+          ></i
+        ></mat-label>
+      </div>
+    </div>
+    <div class="mt-0 pt-0" *ngIf="togglebutton; else gridview">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="table m-2">
+            <table class="col-md-12 border border-1 m-center">
+              <thead>
+                <tr>
+                  <td class="border-bottom border-warning text-center">Name</td>
+                  <!-- <td class="border-bottom border-warning text-center">
+                    Automations
+                  </td> -->
+                  <td class="border-bottom border-warning text-center">Mail</td>
+                  <!-- <td class="border-bottom border-warning text-center">Type</td> -->
+                  <td class="border-bottom border-warning text-center">
+                    Created On
+                  </td>
+                  <td class="border-bottom border-warning text-center">
+                    Last Modified
+                  </td>
+                  <td class="border-bottom border-warning text-center">More</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let automation of automations; index as i">
+                  <td class="d-flex">
+                    <div
+                      class="kb-fitimg namebox1"
+                      [ngStyle]="{
+                        'background-image': 'url(' + automation.thumbnail + ')'
+                      }"
+                    ></div>
+                    <div>
+                      <div class="text-left funlist p-1">
+                        {{ automation.automation_name | titlecase }}
+                        <span
+                          class="statusbadge"
+                          [class]="
+                            automation.publish_status == 1 ? 'active1' : 'active2'
+                          "
+                        >
+                          <i
+                            class="fa"
+                            [class]="
+                              automation.publish_status == 1
+                                ? 'fa-check'
+                                : 'fa-clock'
+                            "
+                          ></i>
+                          {{ automation.quick_status }}
+                        </span>
+                      </div>
+                      <div class="text-left funlist1">
+                        <button mat-raised-button color="primary">
+                          Edit <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button
+                          class="m-1"
+                          mat-raised-button
+                          color="danger"
+                          (click)="openDialog(dialog, automation.uniqueid)"
+                        >
+                          Delete
+                          <i class="far fa-trash-alt pr-2"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- <td class="text-center">
+                    <span class="automationitem">{{
+                      automation.automation_campaigns
+                    }}</span>
+                  </td> -->
+                  <td class="text-center">
+                    <span class="tdtype">{{ automation.mail }}</span>
+                  </td>
+                  <!-- <td class="text-center">
+                    <span class="tdtype">{{ automation.quick_status }}</span>
+                  </td> -->
+                  <td class="text-center">
+                    <span>{{ automation.created_at | date : "mediumDate" }}</span
+                    ><br />
+                    <span class="automationitem" style="font-size: 12px">{{
+                      automation.created_at | date : "shortTime"
+                    }}</span>
+                  </td>
+                  <td class="text-center">
+                    <span>{{ automation.updated_at | date : "mediumDate" }}</span
+                    ><br />
+                    <span class="automationitem" style="font-size: 12px">{{
+                      automation.updated_at | date : "shortTime"
+                    }}</span>
+                  </td>
+                  <td class="text-center">
+                    <button
+                      matTooltip="Settings"
+                      matTooltipPosition="above"
+                      mat-icon-button
+                      [matMenuTriggerFor]="menu"
+                      aria-label="Example icon-button with a menu"
+                    >
+                      <mat-icon><i class="fas fa-ellipsis-h"></i></mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="copyAutomation(automation)">
+                        <mat-icon> <i class="far fa-copy pr-2"></i></mat-icon>
+                        <span>Duplicate</span>
+                      </button>
+                      <!-- <button mat-menu-item>
+                            <mat-icon><i class="fas fa-save pr-2"></i></mat-icon>
+                            <span>Save as a template</span>
+                          </button>
+                          <button mat-menu-item>
+                            <mat-icon> <i class="fas fa-link pr-2"></i></mat-icon>
+                            <span>Copy URL</span>
+                          </button> -->
+                      <button
+                        mat-menu-item
+                        class="text-danger"
+                        (click)="openDialog(dialog, automation.uniqueid)"
+                      >
+                        <mat-icon><i class="far fa-trash-alt pr-2"></i></mat-icon>
+                        <span>Delete</span>
+                      </button>
+                    </mat-menu>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #gridview class="container-fluid">
+      <div class="row">
+        <div
+          class="col-md-4 cardpage mt-5 mb-5 loadEffect"
+          *ngFor="let automation of automations; index as i"
+        >
+          <div>
+            <div
+              class="kb-fitimg"
+              [ngStyle]="{
+                'background-image': 'url(' + automation.thumbnail + ')'
+              }"
+            >
+              <!-- <img [src]="automations[i]['thumbnail']" alt="" class="img-fluid"> -->
+            </div>
+            <div class="d-flex justify-content-between">
+              <div
+                class="keabuilder-title-board line-ellipsis"
+                matTooltip="Edit Automation Name"
+                matTooltipPosition="above"
+              >
+                <span>Automation : {{ automation.automation_name }}</span>
+                <input type="text" [(ngModel)]="automation.automation_name" />
+              </div>
+              <div class="text-center mt-2">
+              <button   mat-raised-button color="primary">
+                Edit <i class="fas fa-pencil-alt"></i>
+              </button>
+          </div >
+            </div>
+            <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+              <span
+                mat-button
+                [matMenuTriggerFor]="menu"
+                class="statusbadge"
+                [class]="automation.publish_status == 1 ? 'active1' : 'active2'"
+              >
+                <i
+                  class="fas"
+                  [class]="
+                    automations[i]['publish_status'] == 1 ? 'fa-check' : 'fa-file'
+                  "
+                ></i>
+                {{ automation.publish_status == 1 ? "Active" : "Inactive" }}
+                <i class="fas fa-chevron-down drpdwnfa"></i>
+              </span>
+              <mat-menu #menu="matMenu">
+                  <!-- <button mat-menu-item>
+                    <i class="fas fa-users pr-2"></i>View Contacts
+                  </button>
+                  <button mat-menu-item>
+                    <i class="fas fa-share pr-2"></i>Share
+                  </button> -->
+                  <button mat-menu-item (click)="copyAutomation(automation)">
+                    <i
+                      class="far fa-copy pr-2"
+                      
+                    ></i
+                    >Duplicate
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <i class="fas fa-link pr-2"></i>Copy URL
+                  </button> -->
+                  <button mat-menu-item class="text-danger"
+                  (click)="openDialog(dialog, automation.uniqueid)">
+                    <i
+                      class="far fa-trash-alt pr-2"
+                     
+                    ></i
+                    >Delete
+                  </button>
+                </mat-menu>
+              <!-- <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <i class="fa fa-check pr-2"></i> Active
+                </button>
+                <button mat-menu-item>
+                  <i class="fa fa-file pr-2"></i> Inactive
+                </button>
+              </mat-menu> -->
+            </div>
+            <div
+              class="kb-pagedate d-flex justify-content-around border border-1"
+            >
+              <div class="text-center">
+                <div
+                  [matTooltip]="
+                    automation.entries + ' Contact currently in the automation'
+                  "
+                  matTooltipPosition="above"
+                >
+                  <i class="fa fa-retweet" aria-hidden="true"></i>
+                </div>
+                <div class="automationitem">
+                  {{ automation.entries }}
+                </div>
+              </div>
+              <div>
+                <div
+                  class="text-center"
+                  [matTooltip]="
+                    automation.automation_campaigns +
+                    ' Campaign in the automation'
+                  "
+                  matTooltipPosition="above"
+                >
+                  <i class="fa fa-envelope" aria-hidden="true"></i>
+                </div>
+                <div class="automationitem">
+                  {{ automation.automation_campaigns }}
+                </div>
+              </div>
+              <div>
+                <div
+                  class="text-center"
+                  [matTooltip]="'Last Update: ' + automation.updated_at"
+                  matTooltipPosition="above"
+                >
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+                <div class="automationitem">
+                  {{ automation.updated_at | date : "mediumDate" }}<br>
+                  <span class="automationitem"style="font-size:12px">
+                      {{ automation.updated_at | date : 'shortTime'  }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <div class="col-md-12">
+      <mat-paginator
+        [length]="100"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+  

@@ -91,7 +91,7 @@ fetchAllcampaigns(){
             this.dialog.closeAll();
             this._snackBar.open('Campaign Created Successfully!', 'OK');
 
-            this.router.navigate(['/crmmain/crm-newcampaign/'+data.uniqueid],{relativeTo: this.route});
+            this.router.navigate(['/crm/newcampaign/'+data.uniqueid],{relativeTo: this.route});
           }
         });
 
