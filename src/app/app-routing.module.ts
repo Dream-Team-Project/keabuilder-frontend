@@ -215,9 +215,11 @@ const routes: Routes = [
 
   // crm
 
-  // { path: 'crm', component: CrmComponent, canActivate: [AuthGuard] },
-  { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  { path: 'crm-campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  { path: 'crmmain', component: CrmMainComponent, 
+  children:[
+    { path: '', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+  // { path: 'crm', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+   { path: 'crm-smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
   { path: 'crm-newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
   
   
@@ -229,7 +231,8 @@ const routes: Routes = [
   { path: 'crm-tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
   { path: 'crm-reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
   { path: 'crm-settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-
+  ],
+  canActivate: [AuthGuard] },
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
