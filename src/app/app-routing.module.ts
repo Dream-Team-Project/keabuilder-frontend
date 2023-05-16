@@ -106,9 +106,9 @@ const routes: Routes = [
       {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
       {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
       {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
-      {path: 'details/:website_id', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+      {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
-      {path: ':website_id', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+      {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
 

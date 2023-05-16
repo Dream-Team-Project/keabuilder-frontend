@@ -20,8 +20,8 @@ export class FormBuilderComponent implements OnInit {
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
   @ViewChild('emailsetdialog') emailsetdialog!: TemplateRef<any>;
-  @ViewChild('form', { static: true }) screen: any;
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('form', { static: false }) screen: any;
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;

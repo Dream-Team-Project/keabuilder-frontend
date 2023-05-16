@@ -49,11 +49,8 @@ export class WebsitePagesComponent implements OnInit {
               private userService: UserService,) {
                 this.toggleview = _general.getStorage('page_toggle');
                 this.dataSource = new MatTableDataSource(this.users);
-
                 this.route.paramMap.subscribe((params: ParamMap) => {
-                  // console.log(params);
                   this.websiteid = params.get('website_id');
-                  this.websiteid=='details' ? this.router.navigate(['/websites'],{relativeTo: this.route}) : '';
                 });
                }
 
@@ -176,7 +173,6 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.showwebpages();
     this.getWebsites();
 
@@ -221,7 +217,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   getWebsites() {
-    this.websiteService.getWebsite().subscribe({
+    if(this.websiteid) this.websiteService.getWebsite().subscribe({
       next: webdata => {
         this.websites = [];
         webdata.data.forEach((element:any) => {
@@ -330,18 +326,30 @@ export class WebsitePagesComponent implements OnInit {
 
   showwebpages(){
     this.searching = true;
-
-    var id = this.websiteid;
-    this.webpagesService.getWebpagesById(id).subscribe({
-      next: data => {
-        // console.log(data);
-        this.shortdata(data);
-        // console.log(data);
-      },
-      error: err => {
-        // console.log(err);
-      }
-    });
+    if(this.websiteid) {
+      this.webpagesService.getWebpagesById(this.websiteid).subscribe({
+        next: data => {
+          // console.log(data);
+          this.shortdata(data);
+          // console.log(data);
+        },
+        error: err => {
+          // console.log(err);
+        }
+      });
+    }
+    else {
+      this.webpagesService.getWebpages().subscribe({
+        next: data => {
+          // console.log(data);
+          this.shortdata(data);
+          // console.log(data);
+        },
+        error: err => {
+          // console.log(err);
+        }
+      });
+    }
   }
 
   shortdata(dataA:any){
@@ -640,9 +648,7 @@ export class WebsitePagesComponent implements OnInit {
 
     if(this.newwebsiteid!=''){
 
-      console.log(page);
       var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
-      // var newpath = page.page_path+'-'+this.makeid(20);
 
       var dtobj = {type:this.actionname, newwebsiteid:this.newwebsiteid, uniqueid:page.uniqueid, newpath: page.page_path};
       this.webpagesService.movecopywebpage(dtobj).subscribe({
@@ -669,16 +675,6 @@ export class WebsitePagesComponent implements OnInit {
     }
 
   }
-
-  makeid(length:any) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
 
   copyInputMessage(inputElement:any){
     inputElement.select();
@@ -729,7 +725,7 @@ export class WebsitePagesComponent implements OnInit {
     });
   }
 
-  searchforms(search: any, filter: any, visibility:any) {
+  searchpages(search: any, filter: any, visibility:any) {
     this.searching = true;
     var obj = {
       search: search.value,

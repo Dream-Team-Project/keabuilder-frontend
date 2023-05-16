@@ -34,13 +34,13 @@ export class SidebarComponent implements OnInit {
       icon: 'fas fa-desktop',
       title: 'Websites',
       submenu:[
-      // {
-      //   0:true,
-      //   routerlink: '/website/pages',
-      //   img: 'browser.gif',
-      //   icon: 'far fa-window-restore',
-      //   title: 'Pages'
-      // },
+      {
+        0:true,
+        routerlink: '/websites/pages',
+        img: 'browser.gif',
+        icon: 'far fa-window-restore',
+        title: 'Pages'
+      },
       // {
       //   0:true,
       //   routerlink: '/website/blog',
