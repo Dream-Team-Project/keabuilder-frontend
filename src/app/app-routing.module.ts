@@ -84,11 +84,9 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
 import { AllWebsitesComponent } from './all-websites/all-websites.component';
 
-import { CrmContactsViewComponent } from './crm-contacts-view/crm-contacts-view.component';
 import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.component';
 import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
 import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
-import { CrmMainComponent } from './crm-main/crm-main.component';
 import { CrmAutomationComponent } from './crm-automation/crm-automation.component';
 
 const routes: Routes = [
@@ -303,14 +301,12 @@ export const RoutingComponents =
     CrmCampaignsComponent,
     CrmContactsComponent,
     CrmContactViewComponent,
-    CrmContactsViewComponent,
     CrmListsComponent,
     CrmTagsComponent,
     CrmReportsComponent,
     CrmSettingsComponent,
     CrmNewCampaignComponent,
     CrmSmtpComponent,
-    CrmMainComponent,
     CrmAutomationComponent,
     AffiliatesComponent,
     AffiliateUsersComponent,
