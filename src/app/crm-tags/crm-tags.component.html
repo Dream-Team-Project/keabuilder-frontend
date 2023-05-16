@@ -88,32 +88,31 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid">
+  <!-- <div class="container-fluid">
     <div class="row">
       <div class="col-md-10 mt-4 ">
            <span ><span style="font-size:40px">Tags</span> ({{this.tags.length}})</span>
       </div>
     </div>
-  </div>
+  </div> -->
 
-    <div class="col-md-7 text-left m-3 pl-0 ">
-      <div style="font-size:12px">Tags search by name or contacts</div>
-      <fieldset
-      (keyup)="applyFilter($event)"
-        class="form-group position-relative has-icon-left kea-barfieldset mr-2"
-      >
+  <div class="  text-left ml-2 mb-0 pl-0 d-flex mt-4">
+    <div  class=" d-inline mr-4 ml-2 searchbox" style="font-size:14px">
+      <!-- <div style="font-size:12px">Tags search by name or contacts</div> -->
+      <mat-form-field class= " fntilform "  style="width:500px" appearance="fill">
+        <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Tags...</mat-label>
         <input
+        matInput
           type="text"
-          class="form-control "
+          (keyup)="applyFilter($event)"
+          class=""
           id="offer-search"
           #input
          
           placeholder="Search Tags..."
         />
-        <div class="form-control-position">
-          <i class="fab fa-searchengin"></i>
-        </div>
-      </fieldset>
+      </mat-form-field>
+      </div>
       <div  class="d-inline " style="font-size:14px">
         <!-- <mat-label>Sort by:</mat-label> -->
         <mat-form-field appearance="fill">
@@ -152,7 +151,7 @@
     </div>
   </ng-template>
   
-    <div class="container-fluid mt-4 ">
+    <div class="container-fluid mt-2 ">
       <div class="row  ">
         <div class="col-md-12 d-flex">
           <table class="table ml-2 ">

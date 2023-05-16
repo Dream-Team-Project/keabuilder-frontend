@@ -153,5 +153,8 @@ deleteAutomation(uniqueid:any){
 
   })
 }
+applyFilter(event:any){
+
+}
 }
 

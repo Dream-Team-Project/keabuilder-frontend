@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid">
+    <!-- <div class="container-fluid">
       <div class="row">
         <div class="col-md-10 mt-3">
           <span
@@ -46,13 +46,13 @@
           >
         </div>
       </div>
-    </div>
-    <div class="text-left m-2 pl-0">
-      <div class="text-left m-2 pl-0" style="font-size: 12px">
+    </div> -->
+    <div class=" text-left ml-2 mb-0 pl-0 d-flex mt-4">
+      <!-- <div class="text-left m-2 pl-0" style="font-size: 12px">
         Automation search by name
-      </div>
-      <div class="d-flex m-2 pl-0">
-        <fieldset
+      </div> -->
+      <div  class=" d-inline searchbox " style="font-size:14px">
+        <!-- <fieldset
           class="form-group position-relative has-icon-left kea-barfieldset mr-2"
         >
           <input
@@ -65,22 +65,22 @@
           <div class="form-control-position">
             <i class="fab fa-searchengin"></i>
           </div>
-        </fieldset>
-        <!-- <fieldset
-              class="form-group position-relative has-icon-left kea-barfieldset "
-            >
-              <input
-                type="text"
-                class="form-control "
-                id="offer-search"
-                #input
-                placeholder="Search Campaigns..."
-              />
-              <div class="form-control-position">
-                <i class="fab fa-searchengin"></i>
-              </div>
-            </fieldset> -->
-        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+        </fieldset> -->
+        <mat-form-field class= "fntilform " style="width:500px" appearance="fill">
+          <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Automations...</mat-label>
+          <input
+          matInput 
+            type="text"
+            class=""
+            id="offer-search"
+            (keyup)="applyFilter($event)"
+            #input
+            placeholder="Search Automations..."
+          />
+        </mat-form-field>
+        </div>
+        <div  class="d-inline " style="font-size:14px">
+        <mat-form-field class="ml-2 fntilform" appearance="fill">
           <mat-label>Status :</mat-label>
           <mat-select
             [(ngModel)]="selectedForm1"
@@ -91,7 +91,9 @@
             <mat-option [value]="'Inactive'">Inactive</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+      </div>
+      <div  class="d-inline " style="font-size:14px">
+        <mat-form-field class="ml-2 fntilform" appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select
             [(ngModel)]="selectedForm"
@@ -111,16 +113,19 @@
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
+      </div>
+      <div  class="d-inline " style="font-size:14px">
         <mat-label
           (click)="toggleView()"
           matTooltip="List view"
-          class="m-1 viewicon"
+          class="ml-2 viewicon"
           ><i
             [class]="togglebutton == false ? 'fa fa-th-large' : 'fa fa-bars'"
           ></i
         ></mat-label>
       </div>
     </div>
+    <!-- </div> -->
     <div class="mt-0 pt-0" *ngIf="togglebutton; else gridview">
       <div class="container-fluid">
         <div class="row">

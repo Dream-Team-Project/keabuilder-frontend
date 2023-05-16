@@ -118,33 +118,31 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid">
+  <!-- <div class="container-fluid">
     <div class="row">
       <div class="col-md-10 mt-4 ">
            <span ><span style="font-size:40px">Lists</span> ({{this.lists.length}})</span>
       </div>
     </div>
-  </div>
-  <div class="col-md-7 text-left m-3 pl-0">
-    <div style="font-size:12px">List search by name  </div>
-  <fieldset
-  (keyup)="applyFilter($event)"
-  class="form-group position-relative has-icon-left kea-barfieldset mr-2"
->
-  <input
+  </div> -->
+  <!-- <div class=" ml-3 pl-0 mb-0 pb-0" style="font-size:12px ">List search by name  </div> -->
+<div class="  text-left ml-2 mb-0 pl-0 d-flex mt-4">
+    <div  class=" d-inline m-2 searchbox" style="font-size:14px">
+        <mat-form-field  class= "fntilform "  style="width:500px" appearance="fill" >
+          <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Lists...</mat-label>
+    <input  
+    matInput 
     type="text"
-    class="form-control"
+    (keyup)="applyFilter($event)"
+    class="form-control-search "
     id="offer-search"
     #input
     placeholder="Search Lists..."
-  />
-  <div class="form-control-position">
-    <i class="fab fa-searchengin"></i>
-  </div>
-</fieldset>
+         >
+        </mat-form-field>
+    </div>
 <div  class="d-inline " style="font-size:14px">
-  <!-- <mat-label>Sort by:</mat-label> -->
-    <mat-form-field  class= "col-md-3 fntilform" appearance="fill">
+    <mat-form-field  class= "m-2 fntilform" appearance="fill">
       <mat-label>Filter by:</mat-label>
           <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortlist()">
             <mat-option value="">-- None --</mat-option>
@@ -206,7 +204,7 @@
       </div>
     </div>
   </div> -->
-  <div class="container-fluid mt-4">
+  <div class="container-fluid mt-2">
     <div class="row">
       <div class="col-md-12">
         <table class="table ml-2">
