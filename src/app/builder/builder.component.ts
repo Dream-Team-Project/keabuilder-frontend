@@ -35,7 +35,7 @@ export class BuilderComponent implements OnInit {
   @ViewChild('askforsave') askforsave!: ElementRef;
   @ViewChild('wireframe') wireframe: any;
   @ViewChild('main') main!: ElementRef;
-  @ViewChild('main', { static: true }) screen: any;
+  @ViewChild('main', { static: false }) screen: any;
   @ViewChild(NgxMatColorPickerInput) pickerInput: NgxMatColorPickerInput | any;
   
   validate = {

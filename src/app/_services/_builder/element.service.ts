@@ -560,7 +560,6 @@ export class ElementService {
       else element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
-    console.log(tempObj);
     tempObj.content = JSON.parse(JSON.stringify(element));
     if (element.name != 'iframe' && element.name != 'code') {
       var fntSz = '14px';
