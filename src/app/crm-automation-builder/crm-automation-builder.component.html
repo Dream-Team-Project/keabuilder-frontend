@@ -1,0 +1,292 @@
+<!-- trigger templates -->
+<ng-template #triggerslist>
+    <h4 class="kb-workflow-selection-title border-bottom py-2">
+        <span>Select Trigger
+            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the trigger to add or remove"
+                matTooltipPosition="above"></i>
+        </span>
+        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </h4>
+    <mat-form-field appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search Triggers</mat-label>
+        <input matInput placeholder="Search triggers..." [(ngModel)]="searchVal" (input)="isFilter('trigger')">
+        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <mat-accordion>
+        <mat-expansion-panel [class.d-none]="triggergroup.hide" *ngFor="let triggergroup of _automation.triggersList, index as tgi" [expanded]="_general.expPanelStep === tgi" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{triggergroup.name}}</mat-panel-title>
+                <mat-panel-description><span [innerHTML]="triggergroup.icon | safeHtml"></span></mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-nav-list class="pt-0">
+                <div (click)="toggleTrigger(trigger)" [class.kb-workflow-option-active]="trigger.active"
+                    *ngFor="let trigger of triggergroup.workflows | filter:searchVal:'name', index as ti" class="kb-workflow-option" mat-ripple
+                    mat-list-item>
+                    <span class="kb-workflow-option-icon" [innerHTML]="trigger.icon | safeHtml"></span>
+                    <span class="kb-workflow-option-name">
+                        {{trigger.name}}
+                        <span *ngIf="trigger.active" class="kb-workflow-option-remove-icon">
+                            <i class="fa-regular fa-circle-xmark kb-danger"></i>
+                        </span>
+                    </span>
+                </div>
+            </mat-nav-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+</ng-template>
+<ng-template #triggerDialog>
+    <h1 mat-dialog-title class="kb-primary">Trigger</h1>
+    <div mat-dialog-content>
+        Add Trigger
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addTrigger(selTrg)"
+            [color]="'primary'">Add</button>
+    </div>
+</ng-template>
+<ng-template #delTriggerDialog>
+    <h1 mat-dialog-title class="kb-danger">Remove Trigger</h1>
+    <div mat-dialog-content>
+        Do you want to remove <span class="text-danger">{{selTrg.name}}</span> trigger?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close [color]="'primary'">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
+            (click)="_automation.removeTrigger(selTrg)">Yes</button>
+    </div>
+</ng-template>
+<!-- trigger templates -->
+<!-- action templates -->
+<ng-template #actionslist>
+    <h4 class="kb-workflow-selection-title border-bottom py-2">
+        <span>Select Action
+            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the action to add or remove"
+                matTooltipPosition="above"></i>
+        </span>
+        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </h4>
+    <mat-form-field appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search Actions</mat-label>
+        <input matInput placeholder="Search actions..." [(ngModel)]="searchVal" (input)="isFilter('action')">
+        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <mat-accordion>
+        <mat-expansion-panel [class.d-none]="actiongroup.hide" *ngFor="let actiongroup of _automation.actionsList, index as agi" [expanded]="_general.expPanelStep === agi" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{actiongroup.name}}</mat-panel-title>
+                <mat-panel-description><span [innerHTML]="actiongroup.icon | safeHtml"></span></mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-nav-list class="pt-0">
+                <div (click)="openActionDialog(actionDialog, action)"
+                    *ngFor="let action of actiongroup.workflows | filter:searchVal:'name', index as ai" class="kb-workflow-option" mat-ripple
+                    mat-list-item>
+                    <span class="kb-workflow-option-icon" [innerHTML]="action.icon | safeHtml"></span>
+                    <span class="kb-workflow-option-name">
+                        {{action.name}}
+                    </span>
+                </div>
+            </mat-nav-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+</ng-template>
+<ng-template #actionDialog>
+    <h1 mat-dialog-title class="kb-primary">Action</h1>
+    <div mat-dialog-content>
+        Add action
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addAction(selAct, appendIndex)"
+            [color]="'primary'">Add</button>
+    </div>
+</ng-template>
+<ng-template #delActionDialog>
+    <h1 mat-dialog-title class="kb-danger">Remove Action</h1>
+    <div mat-dialog-content>
+        Do you want to remove <span class="text-danger">{{selAct.name}}</span> action?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close [color]="'primary'">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
+            (click)="_automation.removeAction(appendIndex)">Yes</button>
+    </div>
+</ng-template>
+<!-- action templates -->
+<!-- worflow starts -->
+<div id="kb-workflow-main">
+    <!-- worflow head -->
+    <div id="kb-workflow-head" class="container-fluid">
+        <div class="row kb-top-actions">
+            <div class="col-8 p-0">
+                <button mat-button (click)="_general.redirectLink('/')"><img
+                        [src]="_image.imgPath+'logo/kblogo-white.png'" width="18px"></button>
+                <button mat-button (click)="_general.backBtn()" class="kb-backBtn">
+                    <i [innerHTML]="'left_circle_arrow' | svg | safeHtml" class="mr-1"></i>Back
+                </button>
+                <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger"
+                    [class.kb-btn-active]="autosavet.menuOpen">
+                    Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
+                </button>
+                <mat-menu #autosave>
+                    <button mat-menu-item (click)="setTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
+                    <button mat-menu-item (click)="setTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
+                </mat-menu>
+                <button mat-button>
+                    <i class="fa-solid fa-vial"></i> Test
+                </button>
+                <button mat-button>
+                    <i [innerHTML]="'save' | svg | safeHtml"></i> Save
+                </button>
+                <button mat-button [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status"
+                    #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
+                    <i [innerHTML]="(_general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status >
+                    {{_general.main.publish_status ? 'Published' : 'Draft'}}
+                </button>
+                <mat-menu #status="matMenu" xPosition="after" yPosition="below">
+                    <button mat-menu-item [class.kb-btn-active]="_general.main.publish_status">
+                        <i [innerHTML]="'publish' | svg | safeHtml"></i> Publish
+                    </button>
+                    <button mat-menu-item [class.kb-btn-active]="!_general.main.publish_status">
+                        <i [innerHTML]="'draft' | svg | safeHtml"></i> Draft
+                    </button>
+                </mat-menu>
+            </div>
+            <div class="col-4 p-0">
+                <div class="kb-top-inp-cont">
+                    <input [(ngModel)]="automation.name" type="text" class="kb-top-input" placeholder="Automation name">
+                    <span class="kb-automation-name">{{automation.name ? automation.name : 'Automation Name'}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- worflow head -->
+    <!-- worflow body -->
+    <div id="kb-workflow-body">
+        <!-- initial trigger section -->
+        <div class="kb-workflow-section">
+            <span class="kb-trigger-section">
+                <span class="kb-active-triggers">
+                    <button *ngFor="let trigger of _automation.activeTriggers" mat-raised-button class="m-1"
+                        [color]="trigger.color">
+                        <span class="mr-1" [innerHTML]="trigger.icon | safeHtml"></span>
+                        {{trigger.name}}
+                    </button>
+                </span>
+                <button mat-raised-button (click)="openBottomSheet(triggerslist, 0)" class="kb-trigger-action m-1">Add New
+                    Trigger</button>
+            </span>
+        </div>
+        <!-- initial trigger section -->
+        <!-- action sections starts -->
+        <div class="kb-workflow-section" *ngFor="let action of _automation.activeActions, index as acti">
+            <span class="kb-workflow-node">
+                <i (click)="openBottomSheet(actionslist, acti)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+            </span>
+            <button mat-raised-button [color]="action.color" (click)="openActionDialog(delActionDialog, action)">
+                <span class="mr-1" [innerHTML]="action.icon | safeHtml"></span>
+                {{action.name}}
+            </button>
+            <div *ngIf="action.id == 'act-if-else'" class="kb-workflow-inner-section">
+                <div class="kb-workflow-split-section">
+                    <div class="kb-workflow-split-section-first">
+                        <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-first">
+                            <span class="kb-workflow-split-node">Yes</span>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-tag mr-1"></i>Add Tag</button>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="secondary"><i
+                                    class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                        </div>
+                    </div>
+                    <div class="kb-workflow-split-section-last">
+                        <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-last">
+                            <span class="kb-workflow-split-node">No</span>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-tag mr-1"></i>Add Tag</button>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="secondary"><i
+                                    class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="kb-workflow-section">
+            <span class="kb-workflow-node">
+                <i (click)="openBottomSheet(actionslist, 0)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml"
+                    mat-ripple></i>
+            </span>
+            <button mat-raised-button><i class="fa-solid fa-arrows-split-up-and-left mr-1"></i>Condition</button>
+            <div class="kb-workflow-inner-section">
+                <div class="kb-workflow-split-section">
+                    <div class="kb-workflow-split-section-first">
+                        <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-first">
+                            <span class="kb-workflow-split-node">Yes</span>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-tag mr-1"></i>Add Tag</button>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="secondary"><i
+                                    class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                        </div>
+                    </div>
+                    <div class="kb-workflow-split-section-last">
+                        <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-last">
+                            <span class="kb-workflow-split-node">No</span>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-tag mr-1"></i>Add Tag</button>
+                        </div>
+                        <div class="kb-workflow-section">
+                            <span class="kb-workflow-node">
+                                <i class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                            </span>
+                            <button mat-raised-button color="secondary"><i
+                                    class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- action sections ends -->
+    </div>
+    <!-- worflow body -->
+</div>
+<!-- worflow ends -->

@@ -65,7 +65,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,9 +76,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     FilterPipe,
     SortingPipe,
     SvgPipe,
-   
-  
-   
   ],
   imports: [
     AppRoutingModule,

@@ -31,14 +31,13 @@ export class AppComponent {
               case event instanceof NavigationStart: {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
-                if(geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') {
+                var isAutomation = e.url.split('/')[2] == 'automation';
+                if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') && !isAutomation) {
                   _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
-                }else if( geturl == 'course'  || geturl == 'checkout'){
-                  _user.hideNav();
                 }
                 else {
-                  _user.showNav();
+                  (geturl == 'course'  || geturl == 'checkout' || isAutomation) ? _user.hideNav() : _user.showNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.setAttribute('href', 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css');
                 }
                 this.loading = true;

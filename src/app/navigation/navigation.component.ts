@@ -36,7 +36,6 @@ export class NavigationComponent {
     this.fetchMenus(); 
     this.getAllWebPages();
     this.getAllFunnels();
-    console.log('hello');
   }
 
   openDialog(templateRef: TemplateRef<any>, menu:any) {

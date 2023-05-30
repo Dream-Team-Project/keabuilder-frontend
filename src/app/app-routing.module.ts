@@ -88,6 +88,7 @@ import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.com
 import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
 import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
 import { CrmAutomationComponent } from './crm-automation/crm-automation.component';
+import { CrmAutomationBuilderComponent } from './crm-automation-builder/crm-automation-builder.component';
 
 const routes: Routes = [
 
@@ -166,6 +167,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
   // builder routes
+  { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/form/:id', component: FormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   
@@ -214,23 +216,22 @@ const routes: Routes = [
 
   { path: 'crm', component: CrmComponent, 
   children:[
-  { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-  { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
-  { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
-  { path: 'newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
-  
-  { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
-  { path: 'contact/view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
-  // { path: 'contacts/view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
-  { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-  { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-  { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-  { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
-  { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
-  { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
+    { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+    { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
+    { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
+    { path: 'newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+    { path: 'contact/view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
+    { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+    // { path: 'contacts/view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
+    { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+    { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+    { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
+    { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+    { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
+    { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
+    { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
@@ -308,6 +309,7 @@ export const RoutingComponents =
     CrmNewCampaignComponent,
     CrmSmtpComponent,
     CrmAutomationComponent,
+    CrmAutomationBuilderComponent,
     AffiliatesComponent,
     AffiliateUsersComponent,
     AffiliateCommissionComponent,

@@ -29,9 +29,15 @@
                         <mat-option value="funnel">Funnel</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <input class="border-bottom p-2" matInput #searchText [placeholder]="'Search '+selfrom.value" required>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Search {{selfrom.value | titlecase}}</mat-label>
+                    <input matInput #searchText [placeholder]="'Search '+selfrom.value+'...'">
+                    <button *ngIf="searchText.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchText.value=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
                 <div *ngIf="selfrom.value == 'website' else funnel">
-                    <div class="kb-inner-pages p-ht p-3">
+                    <div class="kb-inner-pages px-3 pb-3">
                         <div cdkDropList [cdkDropListData]="webpages" cdkDropListSortingDisabled>
                             <h6 *ngIf="webpages.length == 0" class="kb-fade-text">You don't have any website pages</h6>
                             <div cdkDrag [cdkDragData]="page" *ngFor="let page of webpages | filter:searchText.value:'page_name'" class="py-1">
@@ -54,7 +60,7 @@
                     </div>
                 </div>
                 <ng-template #funnel>
-                    <div class="kb-inner-pages p-ht p-3">
+                    <div class="kb-inner-pages px-3 pb-3">
                         <mat-accordion>
                             <h6 *ngIf="funnels.length == 0" class="kb-fade-text">You don't have any funnels</h6>
                             <mat-expansion-panel *ngFor="let funnel of funnels | filter:searchText.value:'name', index as fi"  [expanded]="_general.expPanelStep === fi"
@@ -174,8 +180,14 @@
                         <mat-option value="desc">Descending</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <input class="border-bottom p-2" matInput #searchMenu placeholder="Search menus" required>
-                <div class="kb-inner-pages m-ht p-3">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Search Menus</mat-label>
+                    <input matInput #searchMenu placeholder="Search menus...">
+                    <button *ngIf="searchMenu.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchMenu.value=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <div class="kb-inner-pages px-3 pb-3">
                     <h6 *ngIf="menus.length == 0" class="kb-fade-text">You don't have any menus</h6>
                     <div *ngFor="let menu of menus | filter:searchMenu.value:'name' | sorting:sortBy.value:'name'" class="py-1">
                         <div [class]="menuobj.id == menu.id ? 'kb-menu-active' : ''" class="kb-menu-pages kb-has-icon">
