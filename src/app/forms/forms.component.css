@@ -207,3 +207,30 @@
 .kb-fitimg:hover {
     background-position: center bottom;
 }
+.ftsize{
+  font-weight: 700;
+  font-size: 20px;
+}
+.colr{
+  color: var(--primary-color);
+}
+.statbadg{
+  position: absolute;
+  top: 0px;
+  right: 40px;
+}
+.statusbadge1 {
+  color:#FFFFFF;
+  background-color:var(--primary-color) ;
+  /* border:1px solid blue; */
+  font-size: 14px;
+  padding: 2px 12px;
+  border-radius: 5px;
+  /* border-radius: 50px 0px 0px 50px; */
+  cursor: pointer;
+  transition: .5s ease-in-out;
+}
+.btn-black{
+  background-color: black;
+  color: white;
+}

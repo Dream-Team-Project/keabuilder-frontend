@@ -9,6 +9,11 @@ import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
+import { CrmListService } from '../_services/_crmservice/crm_list.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Observable, map, startWith } from 'rxjs';
+import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
 
 @Component({
   selector: 'app-form-builder',
@@ -22,9 +27,17 @@ export class FormBuilderComponent implements OnInit {
   @ViewChild('emailsetdialog') emailsetdialog!: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
   @ViewChild('form', { static: false }) screen: any;
-
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
+  
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
+  selectedvalue:any;
+  tags: any = [];
+  newtags: any = [];
+  tagarr: any[] = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  tagCtrl = new FormControl(['']);
+  filteredTag: Observable<any>;
 
   urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
@@ -36,6 +49,10 @@ export class FormBuilderComponent implements OnInit {
     name: new FormControl('', [Validators.required]),
     relink: new FormControl('', [Validators.pattern(this.urlPattern)]),
     emailsubject: new FormControl('', [Validators.required]),
+    emailto:new FormControl('', [Validators.required]),
+    emailfrom:new FormControl('', [Validators.required]),
+    emailname:new FormControl('', [Validators.required]),
+
   }
   contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};
@@ -50,6 +67,7 @@ export class FormBuilderComponent implements OnInit {
   dialogData:any;
   drawerPos:any = 'end';
   autoSaveInterval:any;
+  crmlist:any;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,8 +76,11 @@ export class FormBuilderComponent implements OnInit {
     public _style: StyleService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private _crmlistService: CrmListService,
+    private _crmtagService: CrmTagsService,
   ) { 
+   
     route.paramMap.subscribe((params: ParamMap) => {
       this._general.getAllWebPages();
       this._general.getAllFunnels();
@@ -74,7 +95,18 @@ export class FormBuilderComponent implements OnInit {
         _form.saveFormSession();
       });
       document.addEventListener('contextmenu', event => event.preventDefault());
-    })
+    });
+    this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
+      this.crmlist=data.data;
+    });
+    this.fetchTags();
+    this.filteredTag = this.tagCtrl.valueChanges.pipe(
+      startWith(null),
+      map((tag: string | null) =>
+        tag ? this._filterTag(tag) : this.tags.slice()
+      )
+    );
+
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -281,5 +313,58 @@ export class FormBuilderComponent implements OnInit {
   }
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+
+  fetchTags() {
+    return new Promise((resolve) => {
+      this._crmtagService.getAllcrmtags().subscribe(
+        (data) => {
+          this.tags = data.data;
+          resolve(true);
+        },
+        (error: any) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  addtag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      var obj: any = {
+        uniqueid: Math.random().toString(20).slice(2),
+        tag_name: event.value,
+      };
+      this.tagarr.push(obj);
+      this.newtags.push(obj);
+    }
+    // Clear the input value
+    event.chipInput!.clear();
+    this.tagCtrl.setValue(null);
+  }
+
+  removetag(event: string): void {
+    const index = this.tagarr.indexOf(event);
+    if (index >= 0) {
+      this.tagarr.splice(index, 1);
+      this.newtags.splice(index, 1);
+    }
+  }
+
+  selectedTag(event: any): void {
+    var obj: any = {
+      uniqueid: event.option.value,
+      tag_name: event.option.viewValue,
+    };
+    this.tagarr.push(obj);
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
+  private _filterTag(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.tags.filter((tag: any) =>
+      tag.tag_name.toLowerCase().includes(filterValue)
+    );
+  }
   
 }

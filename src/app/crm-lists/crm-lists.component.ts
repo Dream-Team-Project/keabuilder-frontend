@@ -75,30 +75,6 @@ selectedForm:string = '';
     ],
     uniqueid: ''
   });
-  ngOnInit(): void {
-  
-   this.fetchLists().then((resp1) => {
-    this.fetchContacts().then((resp2) => {
-      this.lists.forEach((list:any)=>{
-        let activecontact=0;
-        this.contacts.forEach((contact:any) => {
-          contact.list_uniqueid.split(',').forEach((lid:any)=>{
-            if(lid==list.uniqueid){
-              activecontact++;
-            }
-          })
-          // console.log(activecontact)
-        });
-        list.activecontacts=activecontact;
-      })
-
-     });
-   });
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }, 500);
-  }
   constructor(private _crmlistService: CrmListService,private _frmbuidr: FormBuilder,
     private _snackBar: MatSnackBar, 
     private _crmtagService: CrmTagsService,
@@ -109,7 +85,14 @@ selectedForm:string = '';
     this.dataSource = new MatTableDataSource(this.lists);
 
   }
- 
+  ngOnInit(): void {
+    this.fetchLists().then((resp1) => {
+    });
+     // setTimeout(() => {
+     //   this.dataSource.paginator = this.paginator;
+     //   this.dataSource.sort = this.sort;
+     // }, 500);
+   }
   sortlist(){
     console.log(this.selectedForm)
     if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Ascending'){
@@ -145,20 +128,6 @@ selectedForm:string = '';
       );
     });
   }
-  fetchContacts() {
-    return new Promise((resolve) => {
-      this.crmService.getAllcrmcontacts().subscribe(
-        (data) => {
-          this.contacts = data.data;
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
-
   openpopup(){
     this.sidebar.open = true;
     this.sidebar.anim.open = true;
@@ -168,20 +137,6 @@ selectedForm:string = '';
     }, this.sidebar.animtime);
     this.popup = true;
   }
-
-  // hidepopup(){
-  //   this.sidebar.anim.close = true;
-  //   setTimeout((e: any) => {
-  //      this.sidebar.anim.close = false;
-  //     this.popup = false;
-  //     this.sidebar.open = false;
-  //     this.crmlistForm.reset();
-  //     this.buttonText = 'Add';
-  //   }, this.sidebar.animtime);
-   
-   
-  // }
-
   opensidebar(){
     this.sidebar.open = true;
     this.sidebar.anim.open = true;

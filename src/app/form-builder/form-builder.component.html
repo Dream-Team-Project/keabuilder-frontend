@@ -69,14 +69,95 @@
     </div>
     </ng-template>
     <ng-template #emailsetdialog>
+        <h1 mat-dialog-title class="kb-text-gap">Add Form Action
+            <!-- <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle> -->
+       
+        </h1>
+        <mat-form-field>
+            <mat-label>Select an Action</mat-label>
+            <mat-select [(value)]="selectedvalue">
+              <!-- mmmm <mat-option>None</mat-option> -->
+              <mat-option value="3">Subscribe to a list</mat-option>
+              <mat-option value="1">Add a tag</mat-option>
+              <mat-option value="2">Email Setup</mat-option>
+             
+            </mat-select>
+          </mat-form-field>
+          <div *ngIf="selectedvalue=='1'" mat-dialog-content class="kb-text-editor"> 
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Add Tag</mat-label>
+                <mat-chip-list #chipGrid2 aria-label="Tag selection">
+                  <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
+                    {{ tag.tag_name }}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                </mat-chip-list>
+                <input
+                  placeholder="Search/add tag..."
+                  #tagInput
+                  [formControl]="tagCtrl"
+                  [matChipInputFor]="chipGrid2"
+                  [matAutocomplete]="auto2"
+                  
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  (matChipInputTokenEnd)="addtag($event)"
+                />
+                <!-- [matChipInputAddOnBlur]="addOnBlur" -->
+                <mat-autocomplete
+                  #auto2="matAutocomplete"
+                  (optionSelected)="selectedTag($event)"
+                >
+                  <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
+                    {{ tag.tag_name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+        </div>
+        <div *ngIf="selectedvalue=='2'" mat-dialog-content class="kb-text-editor"> 
+            <mat-error *ngIf="isNotValid(validate.emailsubject)">
+                Email subject should not be empty
+            </mat-error>
+            <mat-form-field appearance="fill">
+                <mat-label>Email Subject</mat-label>
+                <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Send To</mat-label>
+                <input matInput type="text" placeholder="email To" [formControl]="validate.emailto" [(ngModel)]="_form.form.emailto">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>From</mat-label>
+                <input matInput type="text" placeholder="email From" [formControl]="validate.emailfrom" [(ngModel)]="_form.form.emailfrom">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>From Name</mat-label>
+                <input matInput type="text" placeholder="email From Name" [formControl]="validate.emailname" [(ngModel)]="_form.form.emailname">
+            </mat-form-field>
+            <mat-label class="kb-mat-label">Message</mat-label>
+            <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
+        </div>
+        <div *ngIf="selectedvalue=='3'" mat-dialog-content class="kb-text-editor"> 
+            <mat-form-field>
+                <mat-label>Please select a list</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let list of crmlist" [value]="list.uniqueid">
+                    {{list.list_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div>
+        <div mat-dialog-actions>
+            <button *ngIf="selectedvalue=='1'" mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
+            <button *ngIf="selectedvalue=='2'" mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
+            <button *ngIf="selectedvalue=='3'" mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
+        </div>
+        </ng-template>
+    <!-- <ng-template #emailsetdialog>
     <h1 mat-dialog-title class="kb-text-gap">Email Setup 
         <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle></h1>
     <div mat-dialog-content class="kb-text-editor">
-        <!-- <mat-form-field appearance="fill" class="kb-matinp-text">
-            <mat-label>Sender Email</mat-label>
-            <input matInput type="text" (blur)="_form.setEmailFrom()" [placeholder]="_general.user" [(ngModel)]="_form.form.emailfrom">
-            <span>@keasolution.com</span>
-        </mat-form-field> -->
         <mat-error *ngIf="isNotValid(validate.emailsubject)">
             Email subject should not be empty
         </mat-error>
@@ -90,7 +171,7 @@
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
     </div>
-    </ng-template>
+    </ng-template> -->
     <ng-template #elementdialog>
     <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
@@ -183,8 +264,10 @@
                 <mat-menu #stngm>
                     <button mat-menu-item (click)="openSettingDialog(settingdialog)">
                         <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
-                    <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
-                        <i class="far fa-envelope" aria-hidden="true"></i>Email Setup</button>
+                        <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
+                            <i class="far fa-envelope" aria-hidden="true"></i>Actions</button>
+                    <!-- <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
+                        <i class="far fa-envelope" aria-hidden="true"></i>Email Setup</button> -->
                 </mat-menu>
                 <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger" [class.kb-btn-active]="ast.menuOpen">
                     Auto Save > {{autosave ? 'ON' : 'OFF'}}

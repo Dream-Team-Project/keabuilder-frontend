@@ -17,6 +17,8 @@ export class FormService {
     redirection: '',
     redirenbled: false,
     emailfrom: 'info',
+    emailto: '',
+    emailname: '',
     emailsubject: '',
     emailmessage: '',
     emailenabled: false,

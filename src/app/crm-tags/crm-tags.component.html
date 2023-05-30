@@ -68,7 +68,7 @@
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" color="primary"><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-          <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button> -->
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
       </div>
       <div class="col-md-4 text-right">
         <button
@@ -175,7 +175,7 @@
                 </div>
                 </td>
                 <!-- <td class="text-center" >{{ tag.tag_name }}</td> -->
-                <td class="text-center text-warning">{{ tag.contacts }}</td>
+                <td class="text-center text-warning">{{ tag.activecontacts }}</td>
                 <!-- <td>{{ tag.created_at | date : "fullDate" }}</td> -->
                 <!-- <td class="text-center text-warning"></td> -->
                 <td class="text-center text-warning">
@@ -237,7 +237,7 @@
             <div class="ml-4 mt-5 fntlitag" >
               <span>Recent Tags</span>
               <div class="border border-3 fntli-box" >
-                <ul class="d-inline-block fntli "><li class="d-inline fntilitem" *ngFor="let tag of populartags ">
+                <ul class="d-inline-block fntli "><li class="d-inline fntilitem" *ngFor="let tag of recenttags ">
                   {{tag}}
                 </li></ul>
               </div>

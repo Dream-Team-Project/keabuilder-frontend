@@ -27,9 +27,14 @@
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" color="primary"><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
           <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-          <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button> -->
+          <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
         </div>
         <div class="col-md-4 text-right">
+          <button mat-raised-button [color]="'accent'"
+            (click)="toggleView()" class="mr-2">
+            <span *ngIf="togglebutton==false">List View <i class="fas fa-th-list ml-1"></i></span>
+             <span *ngIf="togglebutton==true">Grid View <i class="fas fa-th ml-1"></i></span>
+          </button>
           <button mat-raised-button color="primary" class="mr-2 d-inline-block">
             <i class="fa fa-random" aria-hidden="true"></i> Create an automation
           </button>
@@ -114,7 +119,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div  class="d-inline " style="font-size:14px">
+      <!-- <div  class="d-inline " style="font-size:14px">
         <mat-label
           (click)="toggleView()"
           matTooltip="List view"
@@ -123,7 +128,7 @@
             [class]="togglebutton == false ? 'fa fa-th-large' : 'fa fa-bars'"
           ></i
         ></mat-label>
-      </div>
+      </div> -->
     </div>
     <!-- </div> -->
     <div class="mt-0 pt-0" *ngIf="togglebutton; else gridview">
@@ -167,7 +172,7 @@
                           "
                         >
                           <i
-                            class="fa"
+                            class="fa "
                             [class]="
                               automation.publish_status == 1
                                 ? 'fa-check'
@@ -343,14 +348,14 @@
             <div
               class="kb-pagedate d-flex justify-content-around border border-1"
             >
-              <div class="text-center">
+              <div class="text-center mt-1">
                 <div
                   [matTooltip]="
                     automation.entries + ' Contact currently in the automation'
                   "
                   matTooltipPosition="above"
                 >
-                  <i class="fa fa-retweet" aria-hidden="true"></i>
+                  <i class="fa fa-retweet ftsize" aria-hidden="true"></i>
                 </div>
                 <div class="automationitem">
                   {{ automation.entries }}
@@ -358,14 +363,14 @@
               </div>
               <div>
                 <div
-                  class="text-center"
+                  class="text-center mt-1"
                   [matTooltip]="
                     automation.automation_campaigns +
                     ' Campaign in the automation'
                   "
                   matTooltipPosition="above"
                 >
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
+                  <i class="fa fa-envelope ftsize" aria-hidden="true"></i>
                 </div>
                 <div class="automationitem">
                   {{ automation.automation_campaigns }}
@@ -373,11 +378,11 @@
               </div>
               <div>
                 <div
-                  class="text-center"
+                  class="text-center mt-1"
                   [matTooltip]="'Last Update: ' + automation.updated_at"
                   matTooltipPosition="above"
                 >
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  <i class="fa fa-calendar ftsize" aria-hidden="true"></i>
                 </div>
                 <div class="automationitem">
                   {{ automation.updated_at | date : "mediumDate" }}<br>

@@ -1,87 +1,20 @@
-<div id="kb-settings">
+<ng-template #dialog>
+  <h1 mat-dialog-title class="kb-danger">Delete SMTP</h1>
+  <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{allsmtpdata.smtp_type}}</span> smtp?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-info">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesmtp(allsmtpdata)">Yes</button>
+  </div>
+</ng-template>
+<ng-template #dialog2>
+    <h1 mat-dialog-title class="text-primary">Add an Address</h1>
+    <div mat-dialog-content>
 
-    <div id="kb-crmsettings-actions" *ngIf="popupsidebar && automationaddnewaction">
-        <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
-          
-          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-          <h6><b>New {{kbforsmtp==false?'Email':'SMTP'}} Integration</b></h6>
-          <p>Enter your {{kbforsmtp==false?'Email':'SMTP'}} settings using the options below.</p>
-          <hr>
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Title</mat-label>
-            <input type="text" matInput placeholder="Integration Name" required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>From Name</mat-label>
-            <input type="text" matInput placeholder="Send From Name" required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>From Email</mat-label>
-            <input type="text" matInput placeholder="Send From Email Address" required >
-          </mat-form-field>
-
-          <!-- for custom -->
-          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
-            <mat-label>SMTP Server</mat-label>
-            <input type="text" matInput placeholder="SMTP Server URL" required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
-            <mat-label>SMTP Port</mat-label>
-            <input type="number" matInput placeholder="SMTP Port Number" required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
-            <mat-label>SMTP User</mat-label>
-            <input type="text" matInput placeholder="SMTP Username" required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill" *ngIf="kbforsmtp">
-            <mat-label>SMTP Password</mat-label>
-            <input type="text" matInput placeholder="SMTP Password" required >
-          </mat-form-field>
-          <!-- for custom -->
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Domain</mat-label>
-            <mat-select required>
-              <mat-option >Select a domain</mat-option>
-              <mat-option value="clickfunnel">www.clickfunnel.com</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address 1</mat-label>
-            <input type="text" matInput required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address 2</mat-label>
-            <input type="text" matInput >
-          </mat-form-field>
-          
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>City</mat-label>
-            <input type="text" matInput required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>State</mat-label>
-            <input type="text" matInput required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Zip Code</mat-label>
-            <input type="number" matInput required >
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Country</mat-label>
-            <mat-select>
-                
+            <mat-select (selectionChange)="getcountrynm($event)">
                 <mat-option class="item " value="AF">Afghanistan</mat-option>
                 <mat-option class="item" value="AL">Albania</mat-option>
                 <mat-option class="item" value="DZ">Algeria</mat-option>
@@ -331,82 +264,941 @@
                 <mat-option class="item" value="ZM">Zambia</mat-option>
                 <mat-option class="item" value="ZW">Zimbabwe</mat-option>
                 <mat-option class="item" value="AX">Åland Islands</mat-option>
-
-
             </mat-select>
-          </mat-form-field>          
+        </mat-form-field> 
 
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address 1</mat-label>
-            <input type="text" matInput required >
-          </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Company Name</mat-label>
+            <input type="text" matInput name="companyname" [(ngModel)]="genaddress.company_name" [formControl]="companynameControl" required minlength="3" >
+            <mat-error *ngIf="companynameControl.hasError('required')">
+                Company Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="companynameControl.hasError('minlength')">
+                Name must be at least <strong>3</strong> characters
+            </mat-error>
+        </mat-form-field>
 
-          <mat-form-field appearance="fill" class="kb-full-width">
-            <mat-label>SMTP Footer</mat-label>
-            <textarea matInput placeholder="Footer Added to all Outgoing Emails.  Including physical address in emails is required for CAN-SPAM compliance.  #UN_SUB# will be substituted for your contact's unsubscribe link." ></textarea>
-          </mat-form-field>
-    
-          <button mat-raised-button color="primary" ><i class="fas fa-plus"></i> Save SMTP Integration</button>
-    
-        </div>
-      </div>
-      <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address Line 1</mat-label>
+            <input type="text" matInput name="addressline1" [(ngModel)]="genaddress.address_1"  [formControl]="addressline1Control" required minlength="3" >
+            <small>Street address, P.O. box</small>
+            <mat-error *ngIf="addressline1Control.hasError('required')">
+                Address Line 1 is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="addressline1Control.hasError('minlength')">
+                Address Line 1 must be at least <strong>3</strong> characters
+            </mat-error>
+        </mat-form-field>
 
-    <div class="container-fluid">
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address Line 2</mat-label>
+            <input type="text" matInput name="addressline2" [(ngModel)]="genaddress.address_2" >
+            <small>Apartment, suite, unit, building, floor, etc.</small>
+        </mat-form-field>
+
         <div class="row">
-            <div class="col-md-12 mb-4">
-              <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm']">
-                <i class="fa-solid fa-server" aria-hidden="true"></i> Crm Smtp
-              </button> -->
-              <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']" color="primary" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-              <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']"><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>City</mat-label>
+                    <input type="text" matInput name="city" [(ngModel)]="genaddress.city"  [formControl]="cityControl" required  >
+                    <mat-error *ngIf="cityControl.hasError('required')">
+                        City is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>State / Province / Region</mat-label>
+                    <input type="text" matInput name="state" [(ngModel)]="genaddress.state"  [formControl]="stateControl" required  >
+                    <mat-error *ngIf="stateControl.hasError('required')">
+                        State is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>ZIP/Postal Code</mat-label>
+                    <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
+                    <mat-error *ngIf="zipControl.hasError('required')">
+                        Zip is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-info">Close</button>
+        <button mat-button class="text-primary" (click)="sendaddress()">Add </button>
+    </div>
+</ng-template>
+<div id="kb-crm">
+  <div id="kb-offer-actions " *ngIf="sidebar.open">
+      <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
+          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
+          <h6><strong>Connect With Your SMTP Server</strong></h6>
+          
+          <div>   
+              <hr>
+              <h5>Add your SMTP Server Details</h5>
+              <!-- <p>Enter the  name you already own below and we'll take care of the rest.</p> -->
+              <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Choose an option</mat-label>
+                  <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
+                    <mat-option value="sendgrid">SendGrid</mat-option>
+                    <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
+                    <mat-option value="mailchimp">Mailchimp</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Email From</mat-label>
+                  <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
+                  <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
+                      Email is <strong>required</strong>
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>API KEY ID</mat-label>
+                  <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
+                  <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
+                      API Key Id is <strong>required</strong>
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>API KEY </mat-label>
+                  <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
+                  <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
+                      API Key is <strong>required</strong>
+                  </mat-error>
+              </mat-form-field>
+
+              <button mat-raised-button color="primary" (click)="addsmtpdetails()" >
+                  ADD <i class="fas fa-plus"></i>
+              </button>
+
+          </div> 
+      </div>
+  </div>
+  <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
+  [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+  
+      <div class="container-fluid">
+        <div class="row mb-3">
+          <div class="col-md-10">
+            <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
               <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
               <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" ><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
               <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
               <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
               <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-              <!-- <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button> -->
-            </div>
-            <div class="col-md-6 mt-4">
-               <h2>Email Integrations (SMTP)</h2>
-               <p>Setup transactional or marketing emails. We have included transactional emails with your domain, or you can add your own external SMTP service to support both your transactional and marketing emails.</p>
-               <h4 class="mt-4">Choose an Email Type you want to setup:</h4>
-               <div class="kb-insidecard" (click)="addnewcourse('transactional')">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    <h5><b>Transactional Only</b></h5>
-                    <small>Free Clickfunnels service to send order confirmations, email receipts, etc.</small>                
-               </div>
-               <div class="kb-insidecard" (click)="addnewcourse('marketing')">
-                    <i class="fa fa-bullhorn" aria-hidden="true"></i>   
-                    <h5><b>Transactional & Marketing</b></h5>
-                    <small>Third party integration for marketing and transactional emails.</small>                
+              <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" color="primary"><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
+          </div>
+          <div class="col-md-2 text-right">
+           
+          </div>
+        </div>
+      <!-- <div class="row mt-3">
+            <div class="col-md-12 d-flex justify-content-between">
+            <div class="col-md-6 cardpage mr-1">
+              <div class="row d-inline-flex">
+              <div class="col-md-8 ">
+                  <div class="col-md-12">
+                      <h2>Add your own SMTP Server Details </h2>
+                      <p>Add/Configure a SMTP Server to send Emails & help customers remember your website. It's like vanity license plates for your business!</p>
+                      <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
+                  <mat-card class="mt-4">
+                      <ul class="kb-smtpul">
+                          <li>
+                              
+                              <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> </span>
+                           
+                          </li>
+                          <li>{{allsmtpdata.smtp_type}}</li>
+                          <li>{{allsmtpdata.emailfrom}}</li>
+                          <li>
+                              <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                              </button>
+                          </li>   
+                      </ul>
+                  </mat-card>
+          </div>
+              </div>
+          </div>
+          <div class="col-md-6 cardpage ml-1">
+            <div class="row d-inline-flex">
+            <div class="col-md-8 ">
+                <div class="col-md-12">
+                    <h2>Add your own SMTP Server Details </h2>
+                    <p>Add/Configure a SMTP Server to send Emails & help customers remember your website. It's like vanity license plates for your business!</p>
+                    <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
-
-                <div class="clearfix"></div>
-
+            </div>
+            <div class="col-md-4">
+                <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
                 <mat-card class="mt-4">
-                    <ul class="kb-domainul">
-                        <li>Connected <i class="fa fa-check-circle" aria-hidden="true"></i></li>
-                        <li>Transactional Only <i class="fa fa-shopping-cart" aria-hidden="true"></i></li>
-                        <li><b>Name: </b>My SMTP Integration</li>
-                        <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
+                    <ul class="kb-smtpul">
+                        <li>
+                            
+                            <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> </span>
+                        </li>
+                        <li>{{allsmtpdata.smtp_type}}</li>
+                        <li>{{allsmtpdata.emailfrom}}</li>
+                        <li>
+                          
+                            <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                                Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </li>   
                     </ul>
                 </mat-card>
-
-                <mat-card class="mt-4">
-                   <ul class="kb-domainul">
-                       <li>Setup Pending <i class="fa fa-clock" aria-hidden="true"></i></li>
-                       <li>Transactional & Marketing <i class="fa fa-bullhorn" aria-hidden="true"></i></li>
-                       <li><b>Name: </b>For External</li>
-                       <li><button mat-raised-button>Edit <i class="fa fa-pen" aria-hidden="true"></i></button></li>
-                   </ul>
-               </mat-card>
-
-            </div>
-            <div class="col-md-5 mt-4">
-                <img src="/assets/images/payment/email-campaign.png" class="img-fluid" alt="">
+        </div>
             </div>
         </div>
     </div>
-    
+      </div> -->
+      <!-- <div class="row mt-5 ">
+        <div class="col-md-12 d-flex justify-content-between">
+        <div class="col-md-6 cardpage mr-1">
+          <div class="row d-inline-flex">
+          <div class="col-md-8 ">
+              <div class="col-md-12">
+                  <h2>Add your own SMTP Server Details </h2>
+                  <p>Add/Configure a SMTP Server to send Emails & help customers remember your website. It's like vanity license plates for your business!</p>
+                  <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+          </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
+              <mat-card class="mt-4">
+                  <ul class="kb-smtpul">
+                      <li>
+                          
+                          <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> </span>
+                      </li>
+                      <li>{{allsmtpdata.smtp_type}}</li>
+                      <li>{{allsmtpdata.emailfrom}}</li>
+                      <li>
+                         
+                          <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                              Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button>
+                      </li>   
+                  </ul>
+              </mat-card>
+      </div>
+          </div>
+      </div>
+        <div class="col-md-6 cardpage ml-1">
+          <div class="row d-inline-flex">
+          <div class="col-md-8 ">
+              <div class="col-md-12">
+                  <h2>Add your own SMTP Server Details </h2>
+                  <p>Add/Configure a SMTP Server to send Emails & help customers remember your website. It's like vanity license plates for your business!</p>
+                  <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+          </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
+              <mat-card class="mt-4">
+                  <ul class="kb-smtpul">
+                      <li>
+                          
+                          <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i> <i class="fa fa-lock" aria-hidden="true"></i> </span>
+                      </li>
+                      <li>{{allsmtpdata.smtp_type}}</li>
+                      <li>{{allsmtpdata.emailfrom}}</li>
+                      <li>
+                          
+                          <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                              Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button>
+                      </li>   
+                  </ul>
+              </mat-card>
+      </div>
+          </div>
+      </div>
+    </div>
+      </div> -->
+       <div class="row mt-4">     
+            <div class="col-md-6 ">
+            <div class="insideshdw">
+              <div class="d-flex">
+              <div class="col-md-8 ">
+                      <h5>Add your own SMTP Server Details </h5>
+                      <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
+                      <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="addnewsmtp()" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+              </div>
+              <div class="col-md-4">
+                  <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+              </div>
+               </div>
+              <div class="row">
+                <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
+                  <mat-card class="mt-4">
+                      <ul class="kb-smtpul">
+                          <li>
+                              <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span>
+                          </li>
+                          <li>{{allsmtpdata.smtp_type}}</li>
+                          <li>{{allsmtpdata.emailfrom}}</li>
+                          <li>
+                              <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                              </button>
+                          </li>   
+                      </ul>
+                  </mat-card>
+          </div>
+              <!-- </div> -->
+          </div>
+          </div>
+          </div>
+          <div class="col-md-6 ">
+            <div class="insideshdw">
+              <div class="row">
+                <div class="col-md-12">
+                  <h5>Default Time Zone Settings</h5> 
+                </div>
+                <!-- <div class="col-md-6 text-right">
+                  <a href="javascript:void(0)" routerLink="/domain" class="kb-btnmanage">Manage Domain</a>
+                </div> -->
+              </div>
+              <p>Edit your timezone settings.</p>
+              <div class="form-group ">
+                <mat-form-field appearance="fill" class="kb-full-width">
+                    <mat-label>Timezones</mat-label>
+                    <mat-select name="timezone" [(ngModel)]="timezone" (selectionChange)="gettimezone($event)">
+                        <mat-option value="Africa/Abidjan">Africa/Abidjan</mat-option>
+                        <mat-option value="Africa/Accra">Africa/Accra</mat-option>
+                        <mat-option value="Africa/Bamako">Africa/Bamako</mat-option>
+                        <mat-option value="Africa/Banjul">Africa/Banjul</mat-option>
+                        <mat-option value="Africa/Bissau">Africa/Bissau</mat-option>
+                        <mat-option value="Africa/Casablanca">Africa/Casablanca</mat-option>
+                        <mat-option value="Africa/Conakry">Africa/Conakry</mat-option>
+                        <mat-option value="Africa/Dakar">Africa/Dakar</mat-option>
+                        <mat-option value="Africa/El_Aaiun">Africa/El_Aaiun</mat-option>
+                        <mat-option value="Africa/Freetown">Africa/Freetown</mat-option>
+                        <mat-option value="Africa/Lome">Africa/Lome</mat-option>
+                        <mat-option value="Africa/Monrovia">Africa/Monrovia</mat-option>
+                        <mat-option value="Africa/Nouakchott">Africa/Nouakchott</mat-option>
+                        <mat-option value="Africa/Ouagadougou">Africa/Ouagadougou</mat-option>
+                        <mat-option value="Africa/Sao_Tome">Africa/Sao_Tome</mat-option>
+                        <mat-option value="Africa/Timbuktu">Africa/Timbuktu</mat-option>
+                        <mat-option value="America/Danmarkshavn">America/Danmarkshavn</mat-option>
+                        <mat-option value="America/Scoresbysund">America/Scoresbysund</mat-option>
+                        <mat-option value="Atlantic/Azores">Atlantic/Azores</mat-option>
+                        <mat-option value="Atlantic/Reykjavik">Atlantic/Reykjavik</mat-option>
+                        <mat-option value="Atlantic/St_Helena">Atlantic/St_Helena</mat-option>
+                        <mat-option value="Etc/GMT">Etc/GMT</mat-option>
+                        <mat-option value="Etc/GMT+0">Etc/GMT+0</mat-option>
+                        <mat-option value="Etc/GMT-0">Etc/GMT-0</mat-option>
+                        <mat-option value="Etc/GMT0">Etc/GMT0</mat-option>
+                        <mat-option value="Etc/Greenwich">Etc/Greenwich</mat-option>
+                        <mat-option value="Etc/UCT">Etc/UCT</mat-option>
+                        <mat-option value="Etc/UTC">Etc/UTC</mat-option>
+                        <mat-option value="Etc/Universal">Etc/Universal</mat-option>
+                        <mat-option value="Etc/Zulu">Etc/Zulu</mat-option>
+                        <mat-option value="GMT">GMT</mat-option>
+                        <mat-option value="GMT+0">GMT+0</mat-option>
+                        <mat-option value="GMT-0">GMT-0</mat-option>
+                        <mat-option value="GMT0">GMT0</mat-option>
+                        <mat-option value="Greenwich">Greenwich</mat-option>
+                        <mat-option value="Iceland">Iceland</mat-option>
+                        <mat-option value="UCT">UCT</mat-option>
+                        <mat-option value="UTC">UTC</mat-option>
+                        <mat-option value="Universal">Universal</mat-option>
+                        <mat-option value="Zulu">Zulu</mat-option>
+                        <mat-option value="Africa/Algiers">Africa/Algiers</mat-option>
+                        <mat-option value="Africa/Bangui">Africa/Bangui</mat-option>
+                        <mat-option value="Africa/Brazzaville">Africa/Brazzaville</mat-option>
+                        <mat-option value="Africa/Douala">Africa/Douala</mat-option>
+                        <mat-option value="Africa/Kinshasa">Africa/Kinshasa</mat-option>
+                        <mat-option value="Africa/Lagos">Africa/Lagos</mat-option>
+                        <mat-option value="Africa/Libreville">Africa/Libreville</mat-option>
+                        <mat-option value="Africa/Luanda">Africa/Luanda</mat-option>
+                        <mat-option value="Africa/Malabo">Africa/Malabo</mat-option>
+                        <mat-option value="Africa/Ndjamena">Africa/Ndjamena</mat-option>
+                        <mat-option value="Africa/Niamey">Africa/Niamey</mat-option>
+                        <mat-option value="Africa/Porto-Novo">Africa/Porto-Novo</mat-option>
+                        <mat-option value="Africa/Tunis">Africa/Tunis</mat-option>
+                        <mat-option value="Atlantic/Canary">Atlantic/Canary</mat-option>
+                        <mat-option value="Atlantic/Faeroe">Atlantic/Faeroe</mat-option>
+                        <mat-option value="Atlantic/Faroe">Atlantic/Faroe</mat-option>
+                        <mat-option value="Atlantic/Madeira">Atlantic/Madeira</mat-option>
+                        <mat-option value="Eire">Eire</mat-option>
+                        <mat-option value="Etc/GMT-1">Etc/GMT-1</mat-option>
+                        <mat-option value="Europe/Belfast">Europe/Belfast</mat-option>
+                        <mat-option value="Europe/Dublin">Europe/Dublin</mat-option>
+                        <mat-option value="Europe/Guernsey">Europe/Guernsey</mat-option>
+                        <mat-option value="Europe/Isle_of_Man">Europe/Isle_of_Man</mat-option>
+                        <mat-option value="Europe/Jersey">Europe/Jersey</mat-option>
+                        <mat-option value="Europe/Lisbon">Europe/Lisbon</mat-option>
+                        <mat-option value="Europe/London">Europe/London</mat-option>
+                        <mat-option value="GB">GB</mat-option>
+                        <mat-option value="GB-Eire">GB-Eire</mat-option>
+                        <mat-option value="Portugal">Portugal</mat-option>
+                        <mat-option value="WET">WET</mat-option>
+                        <mat-option value="Africa/Blantyre">Africa/Blantyre</mat-option>
+                        <mat-option value="Africa/Bujumbura">Africa/Bujumbura</mat-option>
+                        <mat-option value="Africa/Cairo">Africa/Cairo</mat-option>
+                        <mat-option value="Africa/Ceuta">Africa/Ceuta</mat-option>
+                        <mat-option value="Africa/Gaborone">Africa/Gaborone</mat-option>
+                        <mat-option value="Africa/Harare">Africa/Harare</mat-option>
+                        <mat-option value="Africa/Johannesburg">Africa/Johannesburg</mat-option>
+                        <mat-option value="Africa/Kigali">Africa/Kigali</mat-option>
+                        <mat-option value="Africa/Lubumbashi">Africa/Lubumbashi</mat-option>
+                        <mat-option value="Africa/Lusaka">Africa/Lusaka</mat-option>
+                        <mat-option value="Africa/Maputo">Africa/Maputo</mat-option>
+                        <mat-option value="Africa/Maseru">Africa/Maseru</mat-option>
+                        <mat-option value="Africa/Mbabane">Africa/Mbabane</mat-option>
+                        <mat-option value="Africa/Tripoli">Africa/Tripoli</mat-option>
+                        <mat-option value="Africa/Windhoek">Africa/Windhoek</mat-option>
+                        <mat-option value="Antarctica/Troll">Antarctica/Troll</mat-option>
+                        <mat-option value="Arctic/Longyearbyen">Arctic/Longyearbyen</mat-option>
+                        <mat-option value="Asia/Amman">Asia/Amman</mat-option>
+                        <mat-option value="Asia/Damascus">Asia/Damascus</mat-option>
+                        <mat-option value="Atlantic/Jan_Mayen">Atlantic/Jan_Mayen</mat-option>
+                        <mat-option value="CET">CET</mat-option>
+                        <mat-option value="Egypt">Egypt</mat-option>
+                        <mat-option value="Etc/GMT-2">Etc/GMT-2</mat-option>
+                        <mat-option value="Europe/Amsterdam">Europe/Amsterdam</mat-option>
+                        <mat-option value="Europe/Andorra">Europe/Andorra</mat-option>
+                        <mat-option value="Europe/Belgrade">Europe/Belgrade</mat-option>
+                        <mat-option value="Europe/Berlin">Europe/Berlin</mat-option>
+                        <mat-option value="Europe/Bratislava">Europe/Bratislava</mat-option>
+                        <mat-option value="Europe/Brussels">Europe/Brussels</mat-option>
+                        <mat-option value="Europe/Budapest">Europe/Budapest</mat-option>
+                        <mat-option value="Europe/Busingen">Europe/Busingen</mat-option>
+                        <mat-option value="Europe/Copenhagen">Europe/Copenhagen</mat-option>
+                        <mat-option value="Europe/Gibraltar">Europe/Gibraltar</mat-option>
+                        <mat-option value="Europe/Kaliningrad">Europe/Kaliningrad</mat-option>
+                        <mat-option value="Europe/Ljubljana">Europe/Ljubljana</mat-option>
+                        <mat-option value="Europe/Luxembourg">Europe/Luxembourg</mat-option>
+                        <mat-option value="Europe/Madrid">Europe/Madrid</mat-option>
+                        <mat-option value="Europe/Malta">Europe/Malta</mat-option>
+                        <mat-option value="Europe/Monaco">Europe/Monaco</mat-option>
+                        <mat-option value="Europe/Oslo">Europe/Oslo</mat-option>
+                        <mat-option value="Europe/Paris">Europe/Paris</mat-option>
+                        <mat-option value="Europe/Podgorica">Europe/Podgorica</mat-option>
+                        <mat-option value="Europe/Prague">Europe/Prague</mat-option>
+                        <mat-option value="Europe/Rome">Europe/Rome</mat-option>
+                        <mat-option value="Europe/San_Marino">Europe/San_Marino</mat-option>
+                        <mat-option value="Europe/Sarajevo">Europe/Sarajevo</mat-option>
+                        <mat-option value="Europe/Skopje">Europe/Skopje</mat-option>
+                        <mat-option value="Europe/Stockholm">Europe/Stockholm</mat-option>
+                        <mat-option value="Europe/Tirane">Europe/Tirane</mat-option>
+                        <mat-option value="Europe/Vaduz">Europe/Vaduz</mat-option>
+                        <mat-option value="Europe/Vatican">Europe/Vatican</mat-option>
+                        <mat-option value="Europe/Vienna">Europe/Vienna</mat-option>
+                        <mat-option value="Europe/Warsaw">Europe/Warsaw</mat-option>
+                        <mat-option value="Europe/Zagreb">Europe/Zagreb</mat-option>
+                        <mat-option value="Europe/Zurich">Europe/Zurich</mat-option>
+                        <mat-option value="Libya">Libya</mat-option>
+                        <mat-option value="MET">MET</mat-option>
+                        <mat-option value="Poland">Poland</mat-option>
+                        <mat-option value="Africa/Addis_Ababa">Africa/Addis_Ababa</mat-option>
+                        <mat-option value="Africa/Asmara">Africa/Asmara</mat-option>
+                        <mat-option value="Africa/Asmera">Africa/Asmera</mat-option>
+                        <mat-option value="Africa/Dar_es_Salaam">Africa/Dar_es_Salaam</mat-option>
+                        <mat-option value="Africa/Djibouti">Africa/Djibouti</mat-option>
+                        <mat-option value="Africa/Juba">Africa/Juba</mat-option>
+                        <mat-option value="Africa/Kampala">Africa/Kampala</mat-option>
+                        <mat-option value="Africa/Khartoum">Africa/Khartoum</mat-option>
+                        <mat-option value="Africa/Mogadishu">Africa/Mogadishu</mat-option>
+                        <mat-option value="Africa/Nairobi">Africa/Nairobi</mat-option>
+                        <mat-option value="Antarctica/Syowa">Antarctica/Syowa</mat-option>
+                        <mat-option value="Asia/Aden">Asia/Aden</mat-option>
+                        <mat-option value="Asia/Baghdad">Asia/Baghdad</mat-option>
+                        <mat-option value="Asia/Bahrain">Asia/Bahrain</mat-option>
+                        <mat-option value="Asia/Beirut">Asia/Beirut</mat-option>
+                        <mat-option value="Asia/Gaza">Asia/Gaza</mat-option>
+                        <mat-option value="Asia/Hebron">Asia/Hebron</mat-option>
+                        <mat-option value="Asia/Istanbul">Asia/Istanbul</mat-option>
+                        <mat-option value="Asia/Jerusalem">Asia/Jerusalem</mat-option>
+                        <mat-option value="Asia/Kuwait">Asia/Kuwait</mat-option>
+                        <mat-option value="Asia/Nicosia">Asia/Nicosia</mat-option>
+                        <mat-option value="Asia/Qatar">Asia/Qatar</mat-option>
+                        <mat-option value="Asia/Riyadh">Asia/Riyadh</mat-option>
+                        <mat-option value="Asia/Tel_Aviv">Asia/Tel_Aviv</mat-option>
+                        <mat-option value="EET">EET</mat-option>
+                        <mat-option value="Etc/GMT-3">Etc/GMT-3</mat-option>
+                        <mat-option value="Europe/Athens">Europe/Athens</mat-option>
+                        <mat-option value="Europe/Bucharest">Europe/Bucharest</mat-option>
+                        <mat-option value="Europe/Chisinau">Europe/Chisinau</mat-option>
+                        <mat-option value="Europe/Helsinki">Europe/Helsinki</mat-option>
+                        <mat-option value="Europe/Istanbul">Europe/Istanbul</mat-option>
+                        <mat-option value="Europe/Kiev">Europe/Kiev</mat-option>
+                        <mat-option value="Europe/Kirov">Europe/Kirov</mat-option>
+                        <mat-option value="Europe/Mariehamn">Europe/Mariehamn</mat-option>
+                        <mat-option value="Europe/Minsk">Europe/Minsk</mat-option>
+                        <mat-option value="Europe/Moscow">Europe/Moscow</mat-option>
+                        <mat-option value="Europe/Nicosia">Europe/Nicosia</mat-option>
+                        <mat-option value="Europe/Riga">Europe/Riga</mat-option>
+                        <mat-option value="Europe/Simferopol">Europe/Simferopol</mat-option>
+                        <mat-option value="Europe/Sofia">Europe/Sofia</mat-option>
+                        <mat-option value="Europe/Tallinn">Europe/Tallinn</mat-option>
+                        <mat-option value="Europe/Tiraspol">Europe/Tiraspol</mat-option>
+                        <mat-option value="Europe/Uzhgorod">Europe/Uzhgorod</mat-option>
+                        <mat-option value="Europe/Vilnius">Europe/Vilnius</mat-option>
+                        <mat-option value="Europe/Volgograd">Europe/Volgograd</mat-option>
+                        <mat-option value="Europe/Zaporozhye">Europe/Zaporozhye</mat-option>
+                        <mat-option value="Indian/Antananarivo">Indian/Antananarivo</mat-option>
+                        <mat-option value="Indian/Comoro">Indian/Comoro</mat-option>
+                        <mat-option value="Indian/Mayotte">Indian/Mayotte</mat-option>
+                        <mat-option value="Israel">Israel</mat-option>
+                        <mat-option value="Turkey">Turkey</mat-option>
+                        <mat-option value="W-SU">W-SU</mat-option>
+                        <mat-option value="Asia/Baku">Asia/Baku</mat-option>
+                        <mat-option value="Asia/Dubai">Asia/Dubai</mat-option>
+                        <mat-option value="Asia/Muscat">Asia/Muscat</mat-option>
+                        <mat-option value="Asia/Tbilisi">Asia/Tbilisi</mat-option>
+                        <mat-option value="Asia/Yerevan">Asia/Yerevan</mat-option>
+                        <mat-option value="Etc/GMT-4">Etc/GMT-4</mat-option>
+                        <mat-option value="Europe/Astrakhan">Europe/Astrakhan</mat-option>
+                        <mat-option value="Europe/Samara">Europe/Samara</mat-option>
+                        <mat-option value="Europe/Ulyanovsk">Europe/Ulyanovsk</mat-option>
+                        <mat-option value="Indian/Mahe">Indian/Mahe</mat-option>
+                        <mat-option value="Indian/Mauritius">Indian/Mauritius</mat-option>
+                        <mat-option value="Indian/Reunion">Indian/Reunion</mat-option>
+                        <mat-option value="Asia/Kabul">Asia/Kabul</mat-option>
+                        <mat-option value="Asia/Tehran">Asia/Tehran</mat-option>
+                        <mat-option value="Iran">Iran</mat-option>
+                        <mat-option value="Antarctica/Mawson">Antarctica/Mawson</mat-option>
+                        <mat-option value="Asia/Aqtau">Asia/Aqtau</mat-option>
+                        <mat-option value="Asia/Aqtobe">Asia/Aqtobe</mat-option>
+                        <mat-option value="Asia/Ashgabat">Asia/Ashgabat</mat-option>
+                        <mat-option value="Asia/Ashkhabad">Asia/Ashkhabad</mat-option>
+                        <mat-option value="Asia/Dushanbe">Asia/Dushanbe</mat-option>
+                        <mat-option value="Asia/Karachi">Asia/Karachi</mat-option>
+                        <mat-option value="Asia/Oral">Asia/Oral</mat-option>
+                        <mat-option value="Asia/Samarkand">Asia/Samarkand</mat-option>
+                        <mat-option value="Asia/Tashkent">Asia/Tashkent</mat-option>
+                        <mat-option value="Asia/Yekaterinburg">Asia/Yekaterinburg</mat-option>
+                        <mat-option value="Etc/GMT-5">Etc/GMT-5</mat-option>
+                        <mat-option value="Indian/Kerguelen">Indian/Kerguelen</mat-option>
+                        <mat-option value="Indian/Maldives">Indian/Maldives</mat-option>
+                        <mat-option value="Asia/Calcutta">Asia/Calcutta</mat-option>
+                        <mat-option value="Asia/Colombo">Asia/Colombo</mat-option>
+                        <mat-option value="Asia/Kolkata">Asia/Kolkata</mat-option>
+                        <mat-option value="Asia/Kathmandu">Asia/Kathmandu</mat-option>
+                        <mat-option value="Asia/Katmandu">Asia/Katmandu</mat-option>
+                        <mat-option value="Antarctica/Vostok">Antarctica/Vostok</mat-option>
+                        <mat-option value="Asia/Almaty">Asia/Almaty</mat-option>
+                        <mat-option value="Asia/Bishkek">Asia/Bishkek</mat-option>
+                        <mat-option value="Asia/Dacca">Asia/Dacca</mat-option>
+                        <mat-option value="Asia/Dhaka">Asia/Dhaka</mat-option>
+                        <mat-option value="Asia/Novosibirsk">Asia/Novosibirsk</mat-option>
+                        <mat-option value="Asia/Omsk">Asia/Omsk</mat-option>
+                        <mat-option value="Asia/Qyzylorda">Asia/Qyzylorda</mat-option>
+                        <mat-option value="Asia/Thimbu">Asia/Thimbu</mat-option>
+                        <mat-option value="Asia/Thimphu">Asia/Thimphu</mat-option>
+                        <mat-option value="Etc/GMT-6">Etc/GMT-6</mat-option>
+                        <mat-option value="Indian/Chagos">Indian/Chagos</mat-option>
+                        <mat-option value="Asia/Rangoon">Asia/Rangoon</mat-option>
+                        <mat-option value="Indian/Cocos">Indian/Cocos</mat-option>
+                        <mat-option value="Antarctica/Davis">Antarctica/Davis</mat-option>
+                        <mat-option value="Asia/Bangkok">Asia/Bangkok</mat-option>
+                        <mat-option value="Asia/Barnaul">Asia/Barnaul</mat-option>
+                        <mat-option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh</mat-option>
+                        <mat-option value="Asia/Jakarta">Asia/Jakarta</mat-option>
+                        <mat-option value="Asia/Krasnoyarsk">Asia/Krasnoyarsk</mat-option>
+                        <mat-option value="Asia/Novokuznetsk">Asia/Novokuznetsk</mat-option>
+                        <mat-option value="Asia/Phnom_Penh">Asia/Phnom_Penh</mat-option>
+                        <mat-option value="Asia/Pontianak">Asia/Pontianak</mat-option>
+                        <mat-option value="Asia/Saigon">Asia/Saigon</mat-option>
+                        <mat-option value="Asia/Tomsk">Asia/Tomsk</mat-option>
+                        <mat-option value="Asia/Vientiane">Asia/Vientiane</mat-option>
+                        <mat-option value="Etc/GMT-7">Etc/GMT-7</mat-option>
+                        <mat-option value="Indian/Christmas">Indian/Christmas</mat-option>
+                        <mat-option value="Antarctica/Casey">Antarctica/Casey</mat-option>
+                        <mat-option value="Asia/Brunei">Asia/Brunei</mat-option>
+                        <mat-option value="Asia/Chungking">Asia/Chungking</mat-option>
+                        <mat-option value="Asia/Hong_Kong">Asia/Hong_Kong</mat-option>
+                        <mat-option value="Asia/Hovd">Asia/Hovd</mat-option>
+                        <mat-option value="Asia/Irkutsk">Asia/Irkutsk</mat-option>
+                        <mat-option value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur</mat-option>
+                        <mat-option value="Asia/Kuching">Asia/Kuching</mat-option>
+                        <mat-option value="Asia/Macao">Asia/Macao</mat-option>
+                        <mat-option value="Asia/Macau">Asia/Macau</mat-option>
+                        <mat-option value="Asia/Makassar">Asia/Makassar</mat-option>
+                        <mat-option value="Asia/Manila">Asia/Manila</mat-option>
+                        <mat-option value="Asia/Singapore">Asia/Singapore</mat-option>
+                        <mat-option value="Asia/Taipei">Asia/Taipei</mat-option>
+                        <mat-option value="Asia/Ujung_Pandang">Asia/Ujung_Pandang</mat-option>
+                        <mat-option value="Australia/Perth">Australia/Perth</mat-option>
+                        <mat-option value="Australia/West">Australia/West</mat-option>
+                        <mat-option value="Etc/GMT-8">Etc/GMT-8</mat-option>
+                        <mat-option value="Hongkong">Hongkong</mat-option>
+                        <mat-option value="PRC">PRC</mat-option>
+                        <mat-option value="ROC">ROC</mat-option>
+                        <mat-option value="Singapore">Singapore</mat-option>
+                        <mat-option value="Asia/Pyongyang">Asia/Pyongyang</mat-option>
+                        <mat-option value="Australia/Eucla">Australia/Eucla</mat-option>
+                        <mat-option value="Asia/Chita">Asia/Chita</mat-option>
+                        <mat-option value="Asia/Choibalsan">Asia/Choibalsan</mat-option>
+                        <mat-option value="Asia/Dili">Asia/Dili</mat-option>
+                        <mat-option value="Asia/Jayapura">Asia/Jayapura</mat-option>
+                        <mat-option value="Asia/Khandyga">Asia/Khandyga</mat-option>
+                        <mat-option value="Asia/Seoul">Asia/Seoul</mat-option>
+                        <mat-option value="Asia/Tokyo">Asia/Tokyo</mat-option>
+                        <mat-option value="Asia/Ulaanbaatar">Asia/Ulaanbaatar</mat-option>
+                        <mat-option value="Asia/Ulan_Bator">Asia/Ulan_Bator</mat-option>
+                        <mat-option value="Asia/Yakutsk">Asia/Yakutsk</mat-option>
+                        <mat-option value="Etc/GMT-9">Etc/GMT-9</mat-option>
+                        <mat-option value="Japan">Japan</mat-option>
+                        <mat-option value="Pacific/Palau">Pacific/Palau</mat-option>
+                        <mat-option value="ROK">ROK</mat-option>
+                        <mat-option value="Australia/Darwin">Australia/Darwin</mat-option>
+                        <mat-option value="Australia/North">Australia/North</mat-option>
+                        <mat-option value="Antarctica/DumontDUrville">Antarctica/DumontDUrville</mat-option>
+                        <mat-option value="Asia/Ust-Nera">Asia/Ust-Nera</mat-option>
+                        <mat-option value="Asia/Vladivostok">Asia/Vladivostok</mat-option>
+                        <mat-option value="Australia/Brisbane">Australia/Brisbane</mat-option>
+                        <mat-option value="Australia/Lindeman">Australia/Lindeman</mat-option>
+                        <mat-option value="Australia/Queensland">Australia/Queensland</mat-option>
+                        <mat-option value="Etc/GMT-10">Etc/GMT-10</mat-option>
+                        <mat-option value="Pacific/Chuuk">Pacific/Chuuk</mat-option>
+                        <mat-option value="Pacific/Guam">Pacific/Guam</mat-option>
+                        <mat-option value="Pacific/Port_Moresby">Pacific/Port_Moresby</mat-option>
+                        <mat-option value="Pacific/Saipan">Pacific/Saipan</mat-option>
+                        <mat-option value="Pacific/Truk">Pacific/Truk</mat-option>
+                        <mat-option value="Pacific/Yap">Pacific/Yap</mat-option>
+                        <mat-option value="Australia/Adelaide">Australia/Adelaide</mat-option>
+                        <mat-option value="Australia/Broken_Hill">Australia/Broken_Hill</mat-option>
+                        <mat-option value="Australia/South">Australia/South</mat-option>
+                        <mat-option value="Australia/Yancowinna">Australia/Yancowinna</mat-option>
+                        <mat-option value="Antarctica/Macquarie">Antarctica/Macquarie</mat-option>
+                        <mat-option value="Asia/Magadan">Asia/Magadan</mat-option>
+                        <mat-option value="Asia/Sakhalin">Asia/Sakhalin</mat-option>
+                        <mat-option value="Asia/Srednekolymsk">Asia/Srednekolymsk</mat-option>
+                        <mat-option value="Australia/ACT">Australia/ACT</mat-option>
+                        <mat-option value="Australia/Canberra">Australia/Canberra</mat-option>
+                        <mat-option value="Australia/Currie">Australia/Currie</mat-option>
+                        <mat-option value="Australia/Hobart">Australia/Hobart</mat-option>
+                        <mat-option value="Australia/LHI">Australia/LHI</mat-option>
+                        <mat-option value="Australia/Lord_Howe">Australia/Lord_Howe</mat-option>
+                        <mat-option value="Australia/Melbourne">Australia/Melbourne</mat-option>
+                        <mat-option value="Australia/NSW">Australia/NSW</mat-option>
+                        <mat-option value="Australia/Sydney">Australia/Sydney</mat-option>
+                        <mat-option value="Australia/Tasmania">Australia/Tasmania</mat-option>
+                        <mat-option value="Australia/Victoria">Australia/Victoria</mat-option>
+                        <mat-option value="Etc/GMT-11">Etc/GMT-11</mat-option>
+                        <mat-option value="Pacific/Bougainville">Pacific/Bougainville</mat-option>
+                        <mat-option value="Pacific/Efate">Pacific/Efate</mat-option>
+                        <mat-option value="Pacific/Guadalcanal">Pacific/Guadalcanal</mat-option>
+                        <mat-option value="Pacific/Kosrae">Pacific/Kosrae</mat-option>
+                        <mat-option value="Pacific/Norfolk">Pacific/Norfolk</mat-option>
+                        <mat-option value="Pacific/Noumea">Pacific/Noumea</mat-option>
+                        <mat-option value="Pacific/Pohnpei">Pacific/Pohnpei</mat-option>
+                        <mat-option value="Pacific/Ponape">Pacific/Ponape</mat-option>
+                        <mat-option value="Asia/Anadyr">Asia/Anadyr</mat-option>
+                        <mat-option value="Asia/Kamchatka">Asia/Kamchatka</mat-option>
+                        <mat-option value="Etc/GMT-12">Etc/GMT-12</mat-option>
+                        <mat-option value="Kwajalein">Kwajalein</mat-option>
+                        <mat-option value="Pacific/Fiji">Pacific/Fiji</mat-option>
+                        <mat-option value="Pacific/Funafuti">Pacific/Funafuti</mat-option>
+                        <mat-option value="Pacific/Kwajalein">Pacific/Kwajalein</mat-option>
+                        <mat-option value="Pacific/Majuro">Pacific/Majuro</mat-option>
+                        <mat-option value="Pacific/Nauru">Pacific/Nauru</mat-option>
+                        <mat-option value="Pacific/Tarawa">Pacific/Tarawa</mat-option>
+                        <mat-option value="Pacific/Wake">Pacific/Wake</mat-option>
+                        <mat-option value="Pacific/Wallis">Pacific/Wallis</mat-option>
+                        <mat-option value="Antarctica/McMurdo">Antarctica/McMurdo</mat-option>
+                        <mat-option value="Antarctica/South_Pole">Antarctica/South_Pole</mat-option>
+                        <mat-option value="Etc/GMT-13">Etc/GMT-13</mat-option>
+                        <mat-option value="NZ">NZ</mat-option>
+                        <mat-option value="Pacific/Auckland">Pacific/Auckland</mat-option>
+                        <mat-option value="Pacific/Enderbury">Pacific/Enderbury</mat-option>
+                        <mat-option value="Pacific/Fakaofo">Pacific/Fakaofo</mat-option>
+                        <mat-option value="Pacific/Tongatapu">Pacific/Tongatapu</mat-option>
+                        <mat-option value="NZ-CHAT">NZ-CHAT</mat-option>
+                        <mat-option value="Pacific/Chatham">Pacific/Chatham</mat-option>
+                        <mat-option value="Etc/GMT-14">Etc/GMT-14</mat-option>
+                        <mat-option value="Pacific/Apia">Pacific/Apia</mat-option>
+                        <mat-option value="Pacific/Kiritimati">Pacific/Kiritimati</mat-option>
+                        <mat-option value="Atlantic/Cape_Verde">Atlantic/Cape_Verde</mat-option>
+                        <mat-option value="Etc/GMT+1">Etc/GMT+1</mat-option>
+                        <mat-option value="America/Godthab">America/Godthab</mat-option>
+                        <mat-option value="America/Miquelon">America/Miquelon</mat-option>
+                        <mat-option value="America/Noronha">America/Noronha</mat-option>
+                        <mat-option value="Atlantic/South_Georgia">Atlantic/South_Georgia</mat-option>
+                        <mat-option value="Brazil/DeNoronha">Brazil/DeNoronha</mat-option>
+                        <mat-option value="Etc/GMT+2">Etc/GMT+2</mat-option>
+                        <mat-option value="America/St_Johns">America/St_Johns</mat-option>
+                        <mat-option value="Canada/Newfoundland">Canada/Newfoundland</mat-option>
+                        <mat-option value="America/Araguaina">America/Araguaina</mat-option>
+                        <mat-option value="America/Argentina/Buenos_Aires">America/Argentina/Buenos_Aires</mat-option>
+                        <mat-option value="America/Argentina/Catamarca">America/Argentina/Catamarca</mat-option>
+                        <mat-option value="America/Argentina/ComodRivadavia">America/Argentina/ComodRivadavia</mat-option>
+                        <mat-option value="America/Argentina/Cordoba">America/Argentina/Cordoba</mat-option>
+                        <mat-option value="America/Argentina/Jujuy">America/Argentina/Jujuy</mat-option>
+                        <mat-option value="America/Argentina/La_Rioja">America/Argentina/La_Rioja</mat-option>
+                        <mat-option value="America/Argentina/Mendoza">America/Argentina/Mendoza</mat-option>
+                        <mat-option value="America/Argentina/Rio_Gallegos">America/Argentina/Rio_Gallegos</mat-option>
+                        <mat-option value="America/Argentina/Salta">America/Argentina/Salta</mat-option>
+                        <mat-option value="America/Argentina/San_Juan">America/Argentina/San_Juan</mat-option>
+                        <mat-option value="America/Argentina/San_Luis">America/Argentina/San_Luis</mat-option>
+                        <mat-option value="America/Argentina/Tucuman">America/Argentina/Tucuman</mat-option>
+                        <mat-option value="America/Argentina/Ushuaia">America/Argentina/Ushuaia</mat-option>
+                        <mat-option value="America/Bahia">America/Bahia</mat-option>
+                        <mat-option value="America/Belem">America/Belem</mat-option>
+                        <mat-option value="America/Buenos_Aires">America/Buenos_Aires</mat-option>
+                        <mat-option value="America/Catamarca">America/Catamarca</mat-option>
+                        <mat-option value="America/Cayenne">America/Cayenne</mat-option>
+                        <mat-option value="America/Cordoba">America/Cordoba</mat-option>
+                        <mat-option value="America/Fortaleza">America/Fortaleza</mat-option>
+                        <mat-option value="America/Glace_Bay">America/Glace_Bay</mat-option>
+                        <mat-option value="America/Goose_Bay">America/Goose_Bay</mat-option>
+                        <mat-option value="America/Halifax">America/Halifax</mat-option>
+                        <mat-option value="America/Jujuy">America/Jujuy</mat-option>
+                        <mat-option value="America/Maceio">America/Maceio</mat-option>
+                        <mat-option value="America/Mendoza">America/Mendoza</mat-option>
+                        <mat-option value="America/Moncton">America/Moncton</mat-option>
+                        <mat-option value="America/Montevideo">America/Montevideo</mat-option>
+                        <mat-option value="America/Paramaribo">America/Paramaribo</mat-option>
+                        <mat-option value="America/Recife">America/Recife</mat-option>
+                        <mat-option value="America/Rosario">America/Rosario</mat-option>
+                        <mat-option value="America/Santarem">America/Santarem</mat-option>
+                        <mat-option value="America/Santiago">America/Santiago</mat-option>
+                        <mat-option value="America/Sao_Paulo">America/Sao_Paulo</mat-option>
+                        <mat-option value="America/Thule">America/Thule</mat-option>
+                        <mat-option value="Antarctica/Palmer">Antarctica/Palmer</mat-option>
+                        <mat-option value="Antarctica/Rothera">Antarctica/Rothera</mat-option>
+                        <mat-option value="Atlantic/Bermuda">Atlantic/Bermuda</mat-option>
+                        <mat-option value="Atlantic/Stanley">Atlantic/Stanley</mat-option>
+                        <mat-option value="Brazil/East">Brazil/East</mat-option>
+                        <mat-option value="Canada/Atlantic">Canada/Atlantic</mat-option>
+                        <mat-option value="Chile/Continental">Chile/Continental</mat-option>
+                        <mat-option value="Etc/GMT+3">Etc/GMT+3</mat-option>
+                        <mat-option value="America/Anguilla">America/Anguilla</mat-option>
+                        <mat-option value="America/Antigua">America/Antigua</mat-option>
+                        <mat-option value="America/Aruba">America/Aruba</mat-option>
+                        <mat-option value="America/Asuncion">America/Asuncion</mat-option>
+                        <mat-option value="America/Barbados">America/Barbados</mat-option>
+                        <mat-option value="America/Blanc-Sablon">America/Blanc-Sablon</mat-option>
+                        <mat-option value="America/Boa_Vista">America/Boa_Vista</mat-option>
+                        <mat-option value="America/Campo_Grande">America/Campo_Grande</mat-option>
+                        <mat-option value="America/Caracas">America/Caracas</mat-option>
+                        <mat-option value="America/Cuiaba">America/Cuiaba</mat-option>
+                        <mat-option value="America/Curacao">America/Curacao</mat-option>
+                        <mat-option value="America/Detroit">America/Detroit</mat-option>
+                        <mat-option value="America/Dominica">America/Dominica</mat-option>
+                        <mat-option value="America/Fort_Wayne">America/Fort_Wayne</mat-option>
+                        <mat-option value="America/Grand_Turk">America/Grand_Turk</mat-option>
+                        <mat-option value="America/Grenada">America/Grenada</mat-option>
+                        <mat-option value="America/Guadeloupe">America/Guadeloupe</mat-option>
+                        <mat-option value="America/Guyana">America/Guyana</mat-option>
+                        <mat-option value="America/Havana">America/Havana</mat-option>
+                        <mat-option value="America/Indiana/Indianapolis">America/Indiana/Indianapolis</mat-option>
+                        <mat-option value="America/Indiana/Marengo">America/Indiana/Marengo</mat-option>
+                        <mat-option value="America/Indiana/Petersburg">America/Indiana/Petersburg</mat-option>
+                        <mat-option value="America/Indiana/Vevay">America/Indiana/Vevay</mat-option>
+                        <mat-option value="America/Indiana/Vincennes">America/Indiana/Vincennes</mat-option>
+                        <mat-option value="America/Indiana/Winamac">America/Indiana/Winamac</mat-option>
+                        <mat-option value="America/Indianapolis">America/Indianapolis</mat-option>
+                        <mat-option value="America/Iqaluit">America/Iqaluit</mat-option>
+                        <mat-option value="America/Kentucky/Louisville">America/Kentucky/Louisville</mat-option>
+                        <mat-option value="America/Kentucky/Monticello">America/Kentucky/Monticello</mat-option>
+                        <mat-option value="America/Kralendijk">America/Kralendijk</mat-option>
+                        <mat-option value="America/La_Paz">America/La_Paz</mat-option>
+                        <mat-option value="America/Louisville">America/Louisville</mat-option>
+                        <mat-option value="America/Lower_Princes">America/Lower_Princes</mat-option>
+                        <mat-option value="America/Manaus">America/Manaus</mat-option>
+                        <mat-option value="America/Marigot">America/Marigot</mat-option>
+                        <mat-option value="America/Martinique">America/Martinique</mat-option>
+                        <mat-option value="America/Montreal">America/Montreal</mat-option>
+                        <mat-option value="America/Montserrat">America/Montserrat</mat-option>
+                        <mat-option value="America/Nassau">America/Nassau</mat-option>
+                        <mat-option value="America/New_York">America/New_York</mat-option>
+                        <mat-option value="America/Nipigon">America/Nipigon</mat-option>
+                        <mat-option value="America/Pangnirtung">America/Pangnirtung</mat-option>
+                        <mat-option value="America/Port_of_Spain">America/Port_of_Spain</mat-option>
+                        <mat-option value="America/Porto_Velho">America/Porto_Velho</mat-option>
+                        <mat-option value="America/Puerto_Rico">America/Puerto_Rico</mat-option>
+                        <mat-option value="America/Santo_Domingo">America/Santo_Domingo</mat-option>
+                        <mat-option value="America/St_Barthelemy">America/St_Barthelemy</mat-option>
+                        <mat-option value="America/St_Kitts">America/St_Kitts</mat-option>
+                        <mat-option value="America/St_Lucia">America/St_Lucia</mat-option>
+                        <mat-option value="America/St_Thomas">America/St_Thomas</mat-option>
+                        <mat-option value="America/St_Vincent">America/St_Vincent</mat-option>
+                        <mat-option value="America/Thunder_Bay">America/Thunder_Bay</mat-option>
+                        <mat-option value="America/Toronto">America/Toronto</mat-option>
+                        <mat-option value="America/Tortola">America/Tortola</mat-option>
+                        <mat-option value="America/Virgin">America/Virgin</mat-option>
+                        <mat-option value="Brazil/West">Brazil/West</mat-option>
+                        <mat-option value="Canada/Eastern">Canada/Eastern</mat-option>
+                        <mat-option value="Cuba">Cuba</mat-option>
+                        <mat-option value="EST5EDT">EST5EDT</mat-option>
+                        <mat-option value="Etc/GMT+4">Etc/GMT+4</mat-option>
+                        <mat-option value="US/East-Indiana">US/East-Indiana</mat-option>
+                        <mat-option value="US/Eastern">US/Eastern</mat-option>
+                        <mat-option value="US/Michigan">US/Michigan</mat-option>
+                        <mat-option value="America/Atikokan">America/Atikokan</mat-option>
+                        <mat-option value="America/Bogota">America/Bogota</mat-option>
+                        <mat-option value="America/Cancun">America/Cancun</mat-option>
+                        <mat-option value="America/Cayman">America/Cayman</mat-option>
+                        <mat-option value="America/Chicago">America/Chicago</mat-option>
+                        <mat-option value="America/Coral_Harbour">America/Coral_Harbour</mat-option>
+                        <mat-option value="America/Eirunepe">America/Eirunepe</mat-option>
+                        <mat-option value="America/Guayaquil">America/Guayaquil</mat-option>
+                        <mat-option value="America/Indiana/Knox">America/Indiana/Knox</mat-option>
+                        <mat-option value="America/Indiana/Tell_City">America/Indiana/Tell_City</mat-option>
+                        <mat-option value="America/Jamaica">America/Jamaica</mat-option>
+                        <mat-option value="America/Knox_IN">America/Knox_IN</mat-option>
+                        <mat-option value="America/Lima">America/Lima</mat-option>
+                        <mat-option value="America/Matamoros">America/Matamoros</mat-option>
+                        <mat-option value="America/Menominee">America/Menominee</mat-option>
+                        <mat-option value="America/North_Dakota/Beulah">America/North_Dakota/Beulah</mat-option>
+                        <mat-option value="America/North_Dakota/Center">America/North_Dakota/Center</mat-option>
+                        <mat-option value="America/North_Dakota/New_Salem">America/North_Dakota/New_Salem</mat-option>
+                        <mat-option value="America/Panama">America/Panama</mat-option>
+                        <mat-option value="America/Port-au-Prince">America/Port-au-Prince</mat-option>
+                        <mat-option value="America/Porto_Acre">America/Porto_Acre</mat-option>
+                        <mat-option value="America/Rainy_River">America/Rainy_River</mat-option>
+                        <mat-option value="America/Rankin_Inlet">America/Rankin_Inlet</mat-option>
+                        <mat-option value="America/Resolute">America/Resolute</mat-option>
+                        <mat-option value="America/Rio_Branco">America/Rio_Branco</mat-option>
+                        <mat-option value="America/Winnipeg">America/Winnipeg</mat-option>
+                        <mat-option value="Brazil/Acre">Brazil/Acre</mat-option>
+                        <mat-option value="CST6CDT">CST6CDT</mat-option>
+                        <mat-option value="Canada/Central">Canada/Central</mat-option>
+                        <mat-option value="Chile/EasterIsland">Chile/EasterIsland</mat-option>
+                        <mat-option value="EST">EST</mat-option>
+                        <mat-option value="Etc/GMT+5">Etc/GMT+5</mat-option>
+                        <mat-option value="Jamaica">Jamaica</mat-option>
+                        <mat-option value="Pacific/Easter">Pacific/Easter</mat-option>
+                        <mat-option value="US/Central">US/Central</mat-option>
+                        <mat-option value="US/Indiana-Starke">US/Indiana-Starke</mat-option>
+                        <mat-option value="America/Bahia_Banderas">America/Bahia_Banderas</mat-option>
+                        <mat-option value="America/Belize">America/Belize</mat-option>
+                        <mat-option value="America/Boise">America/Boise</mat-option>
+                        <mat-option value="America/Cambridge_Bay">America/Cambridge_Bay</mat-option>
+                        <mat-option value="America/Costa_Rica">America/Costa_Rica</mat-option>
+                        <mat-option value="America/Denver">America/Denver</mat-option>
+                        <mat-option value="America/Edmonton">America/Edmonton</mat-option>
+                        <mat-option value="America/El_Salvador">America/El_Salvador</mat-option>
+                        <mat-option value="America/Guatemala">America/Guatemala</mat-option>
+                        <mat-option value="America/Inuvik">America/Inuvik</mat-option>
+                        <mat-option value="America/Managua">America/Managua</mat-option>
+                        <mat-option value="America/Merida">America/Merida</mat-option>
+                        <mat-option value="America/Mexico_City">America/Mexico_City</mat-option>
+                        <mat-option value="America/Monterrey">America/Monterrey</mat-option>
+                        <mat-option value="America/Ojinaga">America/Ojinaga</mat-option>
+                        <mat-option value="America/Regina">America/Regina</mat-option>
+                        <mat-option value="America/Shiprock">America/Shiprock</mat-option>
+                        <mat-option value="America/Swift_Current">America/Swift_Current</mat-option>
+                        <mat-option value="America/Tegucigalpa">America/Tegucigalpa</mat-option>
+                        <mat-option value="America/Yellowknife">America/Yellowknife</mat-option>
+                        <mat-option value="Canada/East-Saskatchewan">Canada/East-Saskatchewan</mat-option>
+                        <mat-option value="Canada/Mountain">Canada/Mountain</mat-option>
+                        <mat-option value="Canada/Saskatchewan">Canada/Saskatchewan</mat-option>
+                        <mat-option value="Etc/GMT+6">Etc/GMT+6</mat-option>
+                        <mat-option value="MST7MDT">MST7MDT</mat-option>
+                        <mat-option value="Mexico/General">Mexico/General</mat-option>
+                        <mat-option value="Navajo">Navajo</mat-option>
+                        <mat-option value="Pacific/Galapagos">Pacific/Galapagos</mat-option>
+                        <mat-option value="US/Mountain">US/Mountain</mat-option>
+                        <mat-option value="America/Chihuahua">America/Chihuahua</mat-option>
+                        <mat-option value="America/Creston">America/Creston</mat-option>
+                        <mat-option value="America/Dawson">America/Dawson</mat-option>
+                        <mat-option value="America/Dawson_Creek">America/Dawson_Creek</mat-option>
+                        <mat-option value="America/Ensenada">America/Ensenada</mat-option>
+                        <mat-option value="America/Fort_Nelson">America/Fort_Nelson</mat-option>
+                        <mat-option value="America/Hermosillo">America/Hermosillo</mat-option>
+                        <mat-option value="America/Los_Angeles">America/Los_Angeles</mat-option>
+                        <mat-option value="America/Mazatlan">America/Mazatlan</mat-option>
+                        <mat-option value="America/Phoenix">America/Phoenix</mat-option>
+                        <mat-option value="America/Santa_Isabel">America/Santa_Isabel</mat-option>
+                        <mat-option value="America/Tijuana">America/Tijuana</mat-option>
+                        <mat-option value="America/Vancouver">America/Vancouver</mat-option>
+                        <mat-option value="America/Whitehorse">America/Whitehorse</mat-option>
+                        <mat-option value="Canada/Pacific">Canada/Pacific</mat-option>
+                        <mat-option value="Canada/Yukon">Canada/Yukon</mat-option>
+                        <mat-option value="Etc/GMT+7">Etc/GMT+7</mat-option>
+                        <mat-option value="MST">MST</mat-option>
+                        <mat-option value="Mexico/BajaNorte">Mexico/BajaNorte</mat-option>
+                        <mat-option value="Mexico/BajaSur">Mexico/BajaSur</mat-option>
+                        <mat-option value="PST8PDT">PST8PDT</mat-option>
+                        <mat-option value="US/Arizona">US/Arizona</mat-option>
+                        <mat-option value="US/Pacific">US/Pacific</mat-option>
+                        <mat-option value="US/Pacific-New">US/Pacific-New</mat-option>
+                        <mat-option value="America/Anchorage">America/Anchorage</mat-option>
+                        <mat-option value="America/Juneau">America/Juneau</mat-option>
+                        <mat-option value="America/Metlakatla">America/Metlakatla</mat-option>
+                        <mat-option value="America/Nome">America/Nome</mat-option>
+                        <mat-option value="America/Sitka">America/Sitka</mat-option>
+                        <mat-option value="America/Yakutat">America/Yakutat</mat-option>
+                        <mat-option value="Etc/GMT+8">Etc/GMT+8</mat-option>
+                        <mat-option value="Pacific/Pitcairn">Pacific/Pitcairn</mat-option>
+                        <mat-option value="US/Alaska">US/Alaska</mat-option>
+                        <mat-option value="America/Adak">America/Adak</mat-option>
+                        <mat-option value="America/Atka">America/Atka</mat-option>
+                        <mat-option value="Etc/GMT+9">Etc/GMT+9</mat-option>
+                        <mat-option value="Pacific/Gambier">Pacific/Gambier</mat-option>
+                        <mat-option value="US/Aleutian">US/Aleutian</mat-option>
+                        <mat-option value="Pacific/Marquesas">Pacific/Marquesas</mat-option>
+                        <mat-option value="Etc/GMT+10">Etc/GMT+10</mat-option>
+                        <mat-option value="HST">HST</mat-option>
+                        <mat-option value="Pacific/Honolulu">Pacific/Honolulu</mat-option>
+                        <mat-option value="Pacific/Johnston">Pacific/Johnston</mat-option>
+                        <mat-option value="Pacific/Rarotonga">Pacific/Rarotonga</mat-option>
+                        <mat-option value="Pacific/Tahiti">Pacific/Tahiti</mat-option>
+                        <mat-option value="US/Hawaii">US/Hawaii</mat-option>
+                        <mat-option value="Etc/GMT+11">Etc/GMT+11</mat-option>
+                        <mat-option value="Pacific/Midway">Pacific/Midway</mat-option>
+                        <mat-option value="Pacific/Niue">Pacific/Niue</mat-option>
+                        <mat-option value="Pacific/Pago_Pago">Pacific/Pago_Pago</mat-option>
+                        <mat-option value="Pacific/Samoa">Pacific/Samoa</mat-option>
+                        <mat-option value="US/Samoa">US/Samoa</mat-option>
+                        <mat-option value="Etc/GMT+12">Etc/GMT+12</mat-option>
+                    </mat-select>
+                </mat-form-field>
+              </div>
+              <small class="text-danger" >your Default Time Zone is : {{timezone}} </small>
+            </div>
+  </div>
+  </div>  
+  <div class="row mt-4">     
+  <div class="col-md-6 ">
+    <div class="insideshdw">
+        <div class="d-flex">
+            <div class="col-md-8 ">
+          <h5>Address Settings</h5> 
+          <p>Add your new/another address.</p>
+          <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+        <div class="col-md-4">
+            <img src="/assets/images/crm_smtp/address.png" class="img-fluid" alt="" srcset="">
+        </div>
+</div>  
+      
+        <!-- <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button> -->
+        <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor"  >Add New Address <i class="fas fa-plus"></i></a> -->
+      
+    </div>
 </div>
+</div>  
+  </div>
+  </div>

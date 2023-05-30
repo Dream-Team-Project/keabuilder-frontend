@@ -197,35 +197,36 @@ selectedtagForm=new FormControl('');
     this.fetchContacts().then((resp2) => {
       this.fetchLists().then((resp1) => {
         this.fetchTags().then((resp) => {
-          var i = 0;
-          this.contacts.forEach((contact: any) => {
-            contact.temp_lists = [];
-            contact.temp_tags = [];
-            contact.list_name = [];
-            contact.tag_name = [];
-            contact.list_uniqueid.split(',').forEach((lid: any) => {
-              this.lists.forEach((list: any) => {
-                if (lid == list.uniqueid) {
-                  var tl = { uniqueid: lid, list_name: list.list_name };
-                  contact.temp_lists.push(tl);
-                  contact.list_name.push(list.list_name);
-                }
-              });
-            });
-            this.tags.forEach((tag: any) => {
-              contact.tags.split(',').forEach((tid: any) => {
-                if (tid == tag.uniqueid) {
-                  var tt = { uniqueid: tid, tag_name: tag.tag_name };
-                  contact.temp_tags.push(tt);
-                  contact.tag_name.push(tag.tag_name);
-                }
-              });
-            });
-            contact.list_name.toString();
-            contact.tag_name.toString();
-            if (i == this.contacts.length - 1) this.fetchList = true;
-            i++;
-          });
+          this.fetchList = true;
+          // var i = 0;
+          // this.contacts.forEach((contact: any) => {
+          //   contact.temp_lists = [];
+          //   contact.temp_tags = [];
+          //   contact.list_name = [];
+          //   contact.tag_name = [];
+          //   contact.list_uniqueid.split(',').forEach((lid: any) => {
+          //     this.lists.forEach((list: any) => {
+          //       if (lid == list.uniqueid) {
+          //         var tl = { uniqueid: lid, list_name: list.list_name };
+          //         contact.temp_lists.push(tl);
+          //         contact.list_name.push(list.list_name);
+          //       }
+          //     });
+          //   });
+          //   this.tags.forEach((tag: any) => {
+          //     contact.tags.split(',').forEach((tid: any) => {
+          //       if (tid == tag.uniqueid) {
+          //         var tt = { uniqueid: tid, tag_name: tag.tag_name };
+          //         contact.temp_tags.push(tt);
+          //         contact.tag_name.push(tag.tag_name);
+          //       }
+          //     });
+          //   });
+          //   contact.list_name.toString();
+          //   contact.tag_name.toString();
+          //   if (i == this.contacts.length - 1) this.fetchList = true;
+          //   i++;
+          // });
         });
       });
     });
@@ -372,6 +373,7 @@ selectedtagForm=new FormControl('');
       this.crmService.getAllcrmcontacts().subscribe(
         (data) => {
           this.contacts = data.data;
+          console.log(this.contacts)
           resolve(true);
         },
         (error) => {
@@ -439,16 +441,6 @@ selectedtagForm=new FormControl('');
     }, this.sidebar.animtime);
     this.popup = true;
   }
-
-  // hidepopup() {
-  //   this.sidebar.anim.close = true;
-  //   setTimeout((e: any) => {
-  //      this.popup = false;
-  //     this.sidebar.anim.close = false;
-  //     this.sidebar.open = false;
-  //   }, this.sidebar.animtime);
-
-  // }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

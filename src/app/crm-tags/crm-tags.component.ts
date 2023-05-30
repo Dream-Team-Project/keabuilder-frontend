@@ -44,6 +44,7 @@ export class CrmTagsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   populartags:any=[];
+  recenttags:any=[];
   tagexist: any;
   tagchar:any=[];
   currencytype = '';
@@ -51,7 +52,7 @@ export class CrmTagsComponent implements OnInit {
   popupsidebar = false;
   contacts: any = [];
   deltag: any;
-  tags: any = [];
+  tags:any = [];
   filteredtags: any = [];
   temptags: any = [];
   singletag: any;
@@ -84,25 +85,7 @@ export class CrmTagsComponent implements OnInit {
     uniqueid: '',
   });
 
-  ngOnInit(): void {
-    // this.fetchtags();
-   
-    this.fetchtags().then((resp1) => {
-      this.countcrmTags().then((resp2)=>{
-        this.sortTagcontacts().then((resp3)=>{
-          // console.log(this.tags[0].contacts)
-          for(let i=0;i<5;i++){
-            this.populartags[i]=this.temptags[i].tag_name;
-          }
-        }) 
-      })
-    });
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.filteredtags=this.tags;
-    }, 500);
-  }
+ 
   constructor(
     private _crmtagService: CrmTagsService,
     private _frmbuidr: FormBuilder,
@@ -113,6 +96,25 @@ export class CrmTagsComponent implements OnInit {
   ) {
     this.dataSource = new MatTableDataSource(this.tags);
    
+  }
+  ngOnInit(): void {
+    this.fetchtags().then((resp1) => {
+      console.log(resp1)
+    this.sortTagcontacts().then((resp2:any) => {
+      console.log(resp2)
+          for(let i=0;i<5;i++){
+            if(resp2[i])
+            this.populartags[i]=resp2[i].tag_name;
+          }
+         
+    })
+    console.log(this.tags)
+    })
+    // setTimeout(() => {
+    //   this.dataSource.paginator = this.paginator;
+    //   this.dataSource.sort = this.sort;
+    //   this.filteredtags=this.tags;
+    // }, 500);
   }
   sorttag(){
     console.log(this.selectedForm)
@@ -136,25 +138,6 @@ export class CrmTagsComponent implements OnInit {
     this.tagchar=value.trim().split(" ");
     return this.tagchar.length >= 2 ? this.tagchar[0][0]+this.tagchar[1][0] : this.tagchar[0][0]+this.tagchar[0][1];
   }
- countcrmTags(){
-  return new Promise((resolve) => {
-  this.fetchContacts().then((resp2) => {
-    if(this.tags.length==0)resolve(true);
-    for (let i = 0; i < this.tags.length; i++) {
-      let activecontact = 0;
-      this.crmService
-        .countcrmcontacttags(this.tags[i].uniqueid)
-        .subscribe((data) => {
-          let count = data.data[0]['count(*)'];
-          activecontact = count;
-          this.tags[i].contacts = activecontact;
-          this.temptags[i].contacts = activecontact;
-          if(i==this.tags.length-1) resolve(true)
-        }); 
-    }  
-    })    
-  });
- }
   validateTag_name() {
     return new Promise((resolve) => {
       var tag_name = this.crmtagForm.value.tag_name;
@@ -165,12 +148,34 @@ export class CrmTagsComponent implements OnInit {
     });
 
   }
+  fetchtags() {
+    return new Promise((resolve) => {
+      this._crmtagService.getAllcrmtags().subscribe(
+        (data) => {
+          this.tags = data.data;
+          let i=0;
+          for(i=0;i<5;i++){
+           
+            if(this.tags[i])
+            this.recenttags[i]=this.tags[i].tag_name;
+          }
+          // if(i==4){
+          resolve(true);
+          // }
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
   sortTagcontacts() {
     return new Promise((resolve) => {
-      this.temptags.sort((a:any,b:any) =>a.contacts<b.contacts ? 1 :-1);
-        resolve(true);
-    });
-
+      var newtags=JSON.parse(JSON.stringify(this.tags));
+      newtags.sort((a:any,b:any) =>a.activecontacts<b.activecontacts ? 1 :-1);
+        resolve(newtags);
+      },
+      );
   }
 
   openDialog_tag(templateRef: TemplateRef<any>) {
@@ -178,44 +183,6 @@ export class CrmTagsComponent implements OnInit {
       data != 0 ? this.dialog.open(templateRef) : this.addcrmtag();
     })
   }
-  // openDialog_tag1(templateRef: TemplateRef<any>) {
-  //   this.validateTag_name().then((data:any)=>{
-  //     data != 0 ? this.dialog.open(templateRef) : this.updatecrmtag() ;
-  //   })
-  // }
-
-  fetchContacts() {
-    return new Promise((resolve) => {
-      this.crmService.getAllcrmcontacts().subscribe(
-        (data) => {
-          this.contacts = data.data;
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
-
-  fetchtags() {
-    return new Promise((resolve) => {
-      this._crmtagService.getAllcrmtags().subscribe(
-        (data) => {
-          this.tags = data.data;
-          this.temptags = data.data;
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
-  // recenttags(){
-  //   return 
-  // }
-
   openSidebar() {
     this.sidebar.open = true;
     this.sidebar.anim.open = true;
@@ -247,15 +214,6 @@ export class CrmTagsComponent implements OnInit {
   addnewconnect() {
     this.popupsidebar = true;
   }
-
-  // opensidebar() {
-  //   this.popupsidebar = true;
-  // }
-
-  // hidepopupsidebar() {
-  //   this.popupsidebar = false;
-  // }
-
   addcrmtag() {
     // console.log(this.crmtagForm.value);
     // if (this.tagexist== 0) {
@@ -264,7 +222,7 @@ export class CrmTagsComponent implements OnInit {
         .subscribe((data) => {
           // this.crmtagForm.reset();
           this.hidepopupsidebar();
-          this.ngOnInit();
+          this.fetchtags();
           this._snackBar.open('CRM Tag added Succesfully !', 'OK');
         });
     // } else {
@@ -282,7 +240,7 @@ export class CrmTagsComponent implements OnInit {
           // console.log(data.data);
           // this.crmtagForm.reset();
           this.hidepopupsidebar();
-          this.ngOnInit();
+          this.fetchtags();
           this._snackBar.open('CRM Tag updated Succesfully !', 'OK');
         });
     // } else {
@@ -314,7 +272,7 @@ export class CrmTagsComponent implements OnInit {
   deletecrmTag(uniqueid: any) {
     // console.log(uniqueid);
     this._crmtagService.deletecrmtag(uniqueid).subscribe((data) => {
-      this.ngOnInit();
+      this.fetchtags();
       this._snackBar.open('CRM Tag deleted Succesfully !', 'OK');
     });
   }

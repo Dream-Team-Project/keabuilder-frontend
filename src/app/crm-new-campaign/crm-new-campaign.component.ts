@@ -30,7 +30,7 @@ export class CrmNewCampaignComponent implements OnInit {
   zipControl = new FormControl('', [Validators.required]);
 
   config: any = {
-    height: 550,
+    height: 600,
     plugins:
       'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap',
     toolbar:

@@ -366,29 +366,29 @@
                         <b>Design Your Campaign</b>
                         <hr>
                     </h5>
-                    <editor height="400px" [(ngModel)]="fullcampobj.campaigneditor" [init]="config"></editor>
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Subject</mat-label>
+                        <input type="text" matInput name="subject" [(ngModel)]="fullcampobj.subject"  [formControl]="subjectControl" placeholder="Enter the subject(We suggest no more than 65 characters)" required minlength="3" >
+                        <!-- <small>We suggest no more than 65 characters</small> -->
+                        <mat-error *ngIf="subjectControl.hasError('required')">
+                        Name is <strong>required</strong>
+                        </mat-error>
+                        <mat-error *ngIf="subjectControl.hasError('minlength')">
+                        Name must be at least <strong>3</strong> characters
+                        </mat-error>
+                    </mat-form-field>
+
+                    <editor  [(ngModel)]="fullcampobj.campaigneditor" [init]="config"></editor>
                 </div>
             </div>
             <div class="col-md-4">
 
-                <div class="makecard">
+                <div class="makecard ">
                     <form>
                     <h5>
                         <b>Campaign Settings <span class="campstatus" [class.activeme]="campstatus=='Publish'">{{campstatus}}</span></b>
                         <hr>
                     </h5>
-
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Campaign Name</mat-label>
-                        <input type="text" matInput name="campaignname"  [(ngModel)]="fullcampobj.name" [formControl]="campnameControl" placeholder="Ex. New Joining..." required minlength="3" >
-                        <mat-error *ngIf="campnameControl.hasError('required')">
-                        Name is <strong>required</strong>
-                        </mat-error>
-                        <mat-error *ngIf="campnameControl.hasError('minlength')">
-                        Name must be at least <strong>3</strong> characters
-                        </mat-error>
-                    </mat-form-field>
-
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>List</mat-label>
                         <mat-select name="list" required [(ngModel)]="fullcampobj.list" >
@@ -398,29 +398,17 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Subject</mat-label>
-                        <input type="text" matInput name="subject" [(ngModel)]="fullcampobj.subject"  [formControl]="subjectControl" placeholder="Enter the subject" required minlength="3" >
-                        <small>We suggest no more than 65 characters</small>
-                        <mat-error *ngIf="subjectControl.hasError('required')">
-                        Name is <strong>required</strong>
-                        </mat-error>
-                        <mat-error *ngIf="subjectControl.hasError('minlength')">
-                        Name must be at least <strong>3</strong> characters
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>Preheader text</mat-label>
-                        <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader" [formControl]="preheadertextControl" placeholder="Preheader text" minlength="3" >
-                        <small>Text that appears after your subject line. If this field is left blank the first line of your email will display</small>
+                        <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader" [formControl]="preheadertextControl" placeholder="Text that appears after your subject line." minlength="3" >
+                        <!-- <small>Text that appears after your subject line. If this field is left blank the first line of your email will display</small> -->
                         <mat-error *ngIf="preheadertextControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Reply To</mat-label>
+                    <mat-form-field class="kb-full-width " appearance="fill">
+                        <mat-label>From</mat-label>
                         <input type="email" matInput name="replyto" [(ngModel)]="fullcampobj.replyto"  [formControl]="replytoControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
                         <mat-error *ngIf="preheadertextControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
