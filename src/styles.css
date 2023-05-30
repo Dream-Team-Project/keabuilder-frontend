@@ -81,6 +81,11 @@
       }
      */
       /* scrolling */
+
+      html, body, #app, main {
+        height: 100%;
+    }
+
     
 
 .mat-snack-bar-container {

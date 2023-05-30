@@ -38,6 +38,7 @@ export class NavbarComponent implements OnInit {
     
     this.userService.getUsersDetails().subscribe({
       next: data => {
+        console.log(data);
         this.userService.user = {
           name: data.data[0].firstname,
           email: data.data[0].email

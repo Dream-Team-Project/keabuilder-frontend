@@ -84,13 +84,10 @@ export class CrmTagsComponent implements OnInit {
     uniqueid: '',
   });
 
-  ngOnInit(): void {
-    // this.fetchtags();
-   
+  ngOnInit(): void {   
     this.fetchtags().then((resp1) => {
       this.countcrmTags().then((resp2)=>{
         this.sortTagcontacts().then((resp3)=>{
-          // console.log(this.tags[0].contacts)
           for(let i=0;i<5;i++){
             this.populartags[i]=this.temptags[i].tag_name;
           }
