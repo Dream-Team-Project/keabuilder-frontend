@@ -8,6 +8,40 @@ import { EmailService } from '../mailer.service';
   providedIn: 'root'
 })
 export class FormService {
+  workflowList = [
+    {id: 'wrkfl-group-sub', name: 'Subscribe to a list', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>', 
+    workflows: [
+      
+      {id:'wrkfl-sub-to-list', name: 'Subscribe to a List', icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary', active: false},
+      {id:'wrkfl-unsub-to-list', name: 'Unsubscribe to a List', icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary', active: false},
+    ]},
+    {id: 'wrkfl-group-contacts', name: 'Add A Tag', hide: false, icon: '<i class="fa-solid fa-tag"></i>', 
+    workflows: [
+      
+      {id:'wrkfl-tag-add', name: 'Tag Added', icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary', active: false},
+      {id:'wrkfl-tag-remove', name: 'Tag Removed', icon: '<i class="fa-solid fa-tag"></i>', color: 'primary', active: false},
+      
+    ]},
+    {id: 'wrkfl-group-send', name: 'Email Setup', hide: false, icon: '<i class="fa-solid fa-envelope"></i>', 
+    workflows: [
+      {id:'wrkfl-opre-email', name: 'Opens/reads an email', icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary', active: false},
+    ]},
+   
+  ]
+
+  // triggersList:any = this.workflowList;
+  actionsList:any = [
+    {id: 'act-group-condition-workflow', name: 'Conditions and Workflow', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>', 
+    workflows: [
+      {id:'act-if-else', name: 'Condition if/else', icon: '<i class="fa-solid fa-arrows-split-up-and-left"></i>', color: '', active: false},
+      {id:'act-wait', name: 'Wait', icon: '<i class="fa-solid fa-clock"></i>', color: '', active: false},
+    ]},
+  ];
+  // activeTriggers:any = [];
+  activeActions:any = [
+    {id:'act-finished', name: 'Finished', icon: '<i class="fa-solid fa-flag-checkered"></i>', color: 'secondary', active: false},
+  ];
+
   countries:any = [{ name: 'United States' }, { name: 'Canada' }, { name: 'United Kingdom' }, { name: 'Ireland' }, { name: 'Australia' }, { name: 'New Zealand' }, { name: 'Afghanistan' }, { name: 'Aland Islands' }, { name: 'Albania' }, { name: 'Algeria' }, { name: 'American Samoa' }, { name: 'Andorra' }, { name: 'Angola' }, { name: 'Anguilla' }, { name: 'Antarctica' }, { name: 'Antigua and Barbuda' }, { name: 'Argentina' }, { name: 'Armenia' }, { name: 'Aruba' }, { name: 'Australia' }, { name: 'Austria' }, { name: 'Azerbaijan' }, { name: 'Bahamas' }, { name: 'Bahrain' }, { name: 'Bangladesh' }, { name: 'Barbados' }, { name: 'Belarus' }, { name: 'Belgium' }, { name: 'Belize' }, { name: 'Benin' }, { name: 'Bermuda' }, { name: 'Bhutan' }, { name: 'Bolivia' }, { name: 'Bonaire, Saint Eustatius and Saba ' }, { name: 'Bosnia and Herzegovina' }, { name: 'Botswana' }, { name: 'Bouvet Island' }, { name: 'Brazil' }, { name: 'British Indian Ocean Territory' }, { name: 'British Virgin Islands' }, { name: 'Brunei' }, { name: 'Bulgaria' }, { name: 'Burkina Faso' }, { name: 'Burundi' }, { name: 'Cambodia' }, { name: 'Cameroon' }, { name: 'Canada' }, { name: 'Cape Verde' }, { name: 'Cayman Islands' }, { name: 'Central African Republic' }, { name: 'Chad' }, { name: 'Chile' }, { name: 'China' }, { name: 'Christmas Island' }, { name: 'Cocos Islands' }, { name: 'Colombia' }, { name: 'Comoros' }, { name: 'Cook Islands' }, { name: 'Costa Rica' }, { name: 'Croatia' }, { name: 'Cuba' }, { name: 'Curacao' }, { name: 'Cyprus' }, { name: 'Czech Republic' }, { name: 'Democratic Republic of the Congo' }, { name: 'Denmark' }, { name: 'Djibouti' }, { name: 'Dominica' }, { name: 'Dominican Republic' }, { name: 'East Timor' }, { name: 'Ecuador' }, { name: 'Egypt' }, { name: 'El Salvador' }, { name: 'Equatorial Guinea' }, { name: 'Eritrea' }, { name: 'Estonia' }, { name: 'Ethiopia' }, { name: 'Falkland Islands' }, { name: 'Faroe Islands' }, { name: 'Fiji' }, { name: 'Finland' }, { name: 'France' }, { name: 'French Guiana' }, { name: 'French Polynesia' }, { name: 'French Southern Territories' }, { name: 'Gabon' }, { name: 'Gambia' }, { name: 'Georgia' }, { name: 'Germany' }, { name: 'Ghana' }, { name: 'Gibraltar' }, { name: 'Greece' }, { name: 'Greenland' }, { name: 'Grenada' }, { name: 'Guadeloupe' }, { name: 'Guam' }, { name: 'Guatemala' }, { name: 'Guernsey' }, { name: 'Guinea' }, { name: 'Guinea-Bissau' }, { name: 'Guyana' }, { name: 'Haiti' }, { name: 'Heard Island and McDonald Islands' }, { name: 'Honduras' }, { name: 'Hong Kong' }, { name: 'Hungary' }, { name: 'Iceland' }, { name: 'India' }, { name: 'Indonesia' }, { name: 'Iran' }, { name: 'Iraq' }, { name: 'Ireland' }, { name: 'Isle of Man' }, { name: 'Israel' }, { name: 'Italy' }, { name: 'Ivory Coast' }, { name: 'Jamaica' }, { name: 'Japan' }, { name: 'Jersey' }, { name: 'Jordan' }, { name: 'Kazakhstan' }, { name: 'Kenya' }, { name: 'Kiribati' }, { name: 'Kosovo' }, { name: 'Kuwait' }, { name: 'Kyrgyzstan' }, { name: 'Laos' }, { name: 'Latvia' }, { name: 'Lebanon' }, { name: 'Lesotho' }, { name: 'Liberia' }, { name: 'Libya' }, { name: 'Liechtenstein' }, { name: 'Lithuania' }, { name: 'Luxembourg' }, { name: 'Macao' }, { name: 'Macedonia' }, { name: 'Madagascar' }, { name: 'Malawi' }, { name: 'Malaysia' }, { name: 'Maldives' }, { name: 'Mali' }, { name: 'Malta' }, { name: 'Marshall Islands' }, { name: 'Martinique' }, { name: 'Mauritania' }, { name: 'Mauritius' }, { name: 'Mayotte' }, { name: 'Mexico' }, { name: 'Micronesia' }, { name: 'Moldova' }, { name: 'Monaco' }, { name: 'Mongolia' }, { name: 'Montenegro' }, { name: 'Montserrat' }, { name: 'Morocco' }, { name: 'Mozambique' }, { name: 'Myanmar' }, { name: 'Namibia' }, { name: 'Nauru' }, { name: 'Nepal' }, { name: 'Netherlands' }, { name: 'New Caledonia' }, { name: 'New Zealand' }, { name: 'Nicaragua' }, { name: 'Niger' }, { name: 'Nigeria' }, { name: 'Niue' }, { name: 'Norfolk Island' }, { name: 'North Korea' }, { name: 'Northern Mariana Islands' }, { name: 'Norway' }, { name: 'Oman' }, { name: 'Pakistan' }, { name: 'Palau' }, { name: 'Palestinian Territory' }, { name: 'Panama' }, { name: 'Papua New Guinea' }, { name: 'Paraguay' }, { name: 'Peru' }, { name: 'Philippines' }, { name: 'Pitcairn' }, { name: 'Poland' }, { name: 'Portugal' }, { name: 'Puerto Rico' }, { name: 'Qatar' }, { name: 'Republic of the Congo' }, { name: 'Reunion' }, { name: 'Romania' }, { name: 'Russia' }, { name: 'Rwanda' }, { name: 'Saint Barthelemy' }, { name: 'Saint Helena' }, { name: 'Saint Kitts and Nevis' }, { name: 'Saint Lucia' }, { name: 'Saint Martin' }, { name: 'Saint Pierre and Miquelon' }, { name: 'Saint Vincent and the Grenadines' }, { name: 'Samoa' }, { name: 'San Marino' }, { name: 'Sao Tome and Principe' }, { name: 'Saudi Arabia' }, { name: 'Senegal' }, { name: 'Serbia' }, { name: 'Seychelles' }, { name: 'Sierra Leone' }, { name: 'Singapore' }, { name: 'Sint Maarten' }, { name: 'Slovakia' }, { name: 'Slovenia' }, { name: 'Solomon Islands' }, { name: 'Somalia' }, { name: 'South Africa' }, { name: 'South Georgia and the South Sandwich Islands' }, { name: 'South Korea' }, { name: 'South Sudan' }, { name: 'Spain' }, { name: 'Sri Lanka' }, { name: 'Sudan' }, { name: 'Suriname' }, { name: 'Svalbard and Jan Mayen' }, { name: 'Swaziland' }, { name: 'Sweden' }, { name: 'Switzerland' }, { name: 'Syria' }, { name: 'Taiwan' }, { name: 'Tajikistan' }, { name: 'Tanzania' }, { name: 'Thailand' }, { name: 'Togo' }, { name: 'Tokelau' }, { name: 'Tonga' }, { name: 'Trinidad and Tobago' }, { name: 'Tunisia' }, { name: 'Turkey' }, { name: 'Turkmenistan' }, { name: 'Turks and Caicos Islands' }, { name: 'Tuvalu' }, { name: 'U.S. Virgin Islands' }, { name: 'Uganda' }, { name: 'Ukraine' }, { name: 'United Arab Emirates' }, { name: 'United Kingdom' }, { name: 'United States' }, { name: 'United States Minor Outlying Islands' }, { name: 'Uruguay' }, { name: 'Uzbekistan' }, { name: 'Vanuatu' }, { name: 'Vatican' }, { name: 'Venezuela' }, { name: 'Vietnam' }, { name: 'Wallis and Futuna' }, { name: 'Western Sahara' }, { name: 'Yemen' }, { name: 'Zambia' }, { name: 'Zimb' }];
   form = {
     id: '',
@@ -22,6 +56,8 @@ export class FormService {
     emailsubject: '',
     emailmessage: '',
     emailenabled: false,
+    lists:'',
+    tags:[],
     html: '',
     style: '', 
     appendstyle: '',
@@ -166,11 +202,15 @@ export class FormService {
     private _email: EmailService,
     private _file: FileUploadService,
     private _general: GeneralService,
-    public _element: ElementService) { 
+    public _element: ElementService,
+    ) { 
+      this.actionsList = this.actionsList.concat(this.workflowList);
   }
 
   formSubmit() {
     return new Promise((resolve, reject)=>{
+      // this.form.lists.toString();
+      // this.form.tags.toString();
       var json = this.formField.filter((ff:any)=>{if(ff.input) return ff;});
       this.submission.json = this._general.encodeJSON(json);
       this._file.saveform_subm(this.submission).subscribe((resp:any)=>{
@@ -301,6 +341,8 @@ export class FormService {
 
   updateForm() {
     return new Promise((resolve, reject)=>{
+      // this.form.lists.toString();
+      // this.form.tags.toString();
       this.setFormStyle(this.formEleTypes).then(style=>{
         this.form.html = this._general.encodeJSON(this.formField);
         this.form.style = this._general.encodeJSON(this.formEleTypes);
@@ -423,4 +465,29 @@ export class FormService {
       this.formSession.redo++;
     }
   }
+
+  // dialogue
+  addAction(action:any, index:number) {
+    this.activeActions.splice(index, 0, action);
+  }
+  
+  removeAction(index:number) {
+    this.activeActions.splice(index, 1);
+  }
+
+  // addTrigger(trigger:any) {
+  //   trigger.active = true;
+  //   this.activeTriggers.push(trigger);
+  // }
+
+  // removeTrigger(trigger:any) {
+  //   var actT = this.activeTriggers;
+  //   for(var i = 0; i < actT.length; i++) {
+  //     if(trigger.id == actT[i].id) {
+  //       trigger.active = false;
+  //       this.activeTriggers.splice(i, 1);
+  //       break;
+  //     }
+  //   }
+  // }
 }
