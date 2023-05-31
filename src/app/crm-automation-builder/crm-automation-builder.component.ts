@@ -1,9 +1,10 @@
-import { Component, OnInit,TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit,TemplateRef, ViewChild } from '@angular/core';
 import { AutomationService } from '../_services/_builder/automation.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-crm-automation-builder',
@@ -17,6 +18,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   @ViewChild('delTriggerDialog') delTriggerDialog!: TemplateRef<any>;
   @ViewChild('delActionDialog') delActionDialog!: TemplateRef<any>;
 
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   automation = {
     id: '',
     name: '',
@@ -26,16 +28,17 @@ export class CrmAutomationBuilderComponent implements OnInit {
   selAct:any = '';
   searchVal:string = '';
   appendIndex = 0;
+  filteredOptions:any = [];
+  filteredTempIds:any = [];
 
   constructor(
     public _automation: AutomationService,
     public _general: GeneralService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet) { }
+    private _bottomSheet: MatBottomSheet) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   openActionDialog(templateRef: TemplateRef<any>, act:number) {
     this.selAct = act;
@@ -64,6 +67,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   openDialog(templateRef: TemplateRef<any>): void {
+    this.filterJSONData('');
     this.dialog.open(templateRef);
   }
 
@@ -87,5 +91,22 @@ export class CrmAutomationBuilderComponent implements OnInit {
         }
       }
     }
+  }
+
+  filterJSONData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions = this._automation.forms.filter((option:any) => option.name.toLowerCase().includes(value));
+  }
+
+  addSelectedOption(event:any, searchDataInp:any): void {
+    this._automation.selectedWfData.push(event.option.value);
+    this.filteredTempIds.push(event.option.value.id);
+    searchDataInp.value = '';
+    this.filterJSONData('');
+  }
+
+  removeSelectedOption(index:number): void {
+      this._automation.selectedWfData.splice(index, 1);
+      this.filteredTempIds.splice(index, 1);
   }
 }

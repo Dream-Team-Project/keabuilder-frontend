@@ -41,13 +41,41 @@
 </ng-template>
 <ng-template #triggerDialog>
     <h1 mat-dialog-title class="kb-primary">Trigger</h1>
-    <div mat-dialog-content>
-        Add Trigger
+    <div mat-dialog-content class="py-2">
+        <mat-form-field appearance="fill">
+            <mat-label>Search Forms</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip
+                    *ngFor="let data of _automation.selectedWfData, index as i"
+                    (removed)="removeSelectedOption(i)">
+                    {{data.name}}
+                    <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip>
+            </mat-chip-list>
+            <input type="text"
+                #searchDataInp
+                placeholder="Select multiples..."
+                (input)="filterJSONData($event)"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                class="w-100"
+                [class.pt-2]="_automation.selectedWfData.length != 0"
+                matInput>
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addSelectedOption($event, searchDataInp)">
+                <mat-option *ngFor="let option of filteredOptions" [value]="option" [disabled]="filteredTempIds.includes(option.id)">
+                  {{option.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
     </div>
     <div mat-dialog-actions class="justify-content-end">
+        <!-- <button mat-raised-button mat-dialog-close class="bg-danger text-light">Delete</button> -->
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
         <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addTrigger(selTrg)"
-            [color]="'primary'">Add</button>
+            color="primary">Add</button>
     </div>
 </ng-template>
 <ng-template #delTriggerDialog>
