@@ -32,7 +32,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     public _general: GeneralService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet) { }
+    private _bottomSheet: MatBottomSheet,) { }
 
   ngOnInit(): void {
   }

@@ -14,6 +14,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable, map, startWith } from 'rxjs';
 import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-form-builder',
@@ -28,16 +29,27 @@ export class FormBuilderComponent implements OnInit {
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
   @ViewChild('form', { static: false }) screen: any;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
-  
+  @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('actionDialog') actionDialog!: TemplateRef<any>;
+  @ViewChild('delActionDialog') delActionDialog!: TemplateRef<any>;
+
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
   selectedvalue:any;
   tags: any = [];
   newtags: any = [];
   tagarr: any[] = [];
+  listarr: any[] = [];
+  lists: any = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl(['']);
+  listCtrl = new FormControl(['']);
   filteredTag: Observable<any>;
+  filteredList: Observable<any>;
+  selAct:any ;
+  searchVal:string = '';
+  appendIndex = 0;
+  // selTrg:any = '';
 
   urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
@@ -67,7 +79,7 @@ export class FormBuilderComponent implements OnInit {
   dialogData:any;
   drawerPos:any = 'end';
   autoSaveInterval:any;
-  crmlist:any;
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -79,6 +91,7 @@ export class FormBuilderComponent implements OnInit {
     private captureService: NgxCaptureService,
     private _crmlistService: CrmListService,
     private _crmtagService: CrmTagsService,
+    private _bottomSheet: MatBottomSheet,
   ) { 
    
     route.paramMap.subscribe((params: ParamMap) => {
@@ -96,9 +109,7 @@ export class FormBuilderComponent implements OnInit {
       });
       document.addEventListener('contextmenu', event => event.preventDefault());
     });
-    this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
-      this.crmlist=data.data;
-    });
+    this.fetchlists();
     this.fetchTags();
     this.filteredTag = this.tagCtrl.valueChanges.pipe(
       startWith(null),
@@ -106,7 +117,12 @@ export class FormBuilderComponent implements OnInit {
         tag ? this._filterTag(tag) : this.tags.slice()
       )
     );
-
+    this.filteredList = this.listCtrl.valueChanges.pipe(
+      startWith(null),
+      map((list: string | null) =>
+        list ? this._filterList(list) : this.lists.slice()
+      )
+    );
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -312,7 +328,21 @@ export class FormBuilderComponent implements OnInit {
     this.contextMenu.openMenu();
   }
 
-  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];
+}
+
+fetchlists(){
+  return new Promise((resolve) => {
+  this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
+    this.lists=data.data;
+    resolve(true);
+  },
+  (error: any) => {
+    resolve(false);
+  }
+);
+});
+}
 
   fetchTags() {
     return new Promise((resolve) => {
@@ -360,11 +390,87 @@ export class FormBuilderComponent implements OnInit {
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
+  selectedList(event: any): void {
+    var obj: any = {
+      uniqueid: event.option.value,
+      list_name: event.option.viewValue,
+    };
+    this.listarr.push(obj);
+    this.listInput.nativeElement.value = '';
+    this.listCtrl.setValue(null);
+  }
+  removelist(event: string): void {
+    const index = this.listarr.indexOf(event);
+    if (index >= 0) {
+      this.listarr.splice(index, 1);
+      // this.newlists.splice(index, 1);
+    }
+  }
+  private _filterList(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.lists.filter((list: any) =>
+      list.list_name.toLowerCase().includes(filterValue)
+    );
+  }
   private _filterTag(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.tags.filter((tag: any) =>
       tag.tag_name.toLowerCase().includes(filterValue)
     );
   }
-  
+
+  openActionDialog(templateRef: TemplateRef<any>, act:any) {
+    this.selAct = act.id;
+    console.log(this.selAct)
+    this.openDialog(templateRef);
+    // this.closeBottomSheet();
+  }
+
+  // toggleTrigger(trg:any) {
+  //   this.selTrg = trg; 
+  //   if(this.selTrg.active) this.openDialog(this.delTriggerDialog);
+  //   else this.openDialog(this.triggerDialog);
+  // }
+
+  openBottomSheet(templateRef: TemplateRef<any>, index:number): void {
+    var bottomSheet = this._bottomSheet.open(templateRef);
+    this.appendIndex = index;
+    bottomSheet.afterDismissed().subscribe((data:any)=>{
+      this.searchVal = '';
+      this.isFilter('action');
+      // this.isFilter('trigger');
+    })
+  }
+
+  closeBottomSheet(): void {
+    this._bottomSheet.dismiss();
+  }
+
+  openDialog(templateRef: TemplateRef<any>): void {
+    this.dialog.open(templateRef);
+  }
+
+  // setTrigger(value:boolean) {
+  //   this.autosave = value;
+  // }
+
+  isFilter(type:string) {
+    var intial = true;
+    // var wrkfList = type == 'action' ? this._form.actionsList : this._form.triggersList;
+    var wrkfList = this._form.actionsList ;
+    for(let i = 0; i < wrkfList.length; i++) {
+      for(let j = 0; j < wrkfList[i].workflows.length; j++) {
+        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchVal.toLowerCase()) >= 0;
+        wrkfList[i].hide = !cond;
+        if(cond) {
+          if(intial) {
+            this._general.expPanelStep = i;
+            intial = false;
+          }
+          break;
+        }
+      }
+    }
+  }
+
 }

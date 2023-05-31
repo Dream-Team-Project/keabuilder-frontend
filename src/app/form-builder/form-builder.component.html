@@ -68,15 +68,165 @@
         <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid && !validate.relink.invalid ? 'primary' : ''" [disabled]="validate.name.invalid || validate.relink.invalid">Done</button>
     </div>
     </ng-template>
-    <ng-template #emailsetdialog>
+
+    <!-- action templates -->
+<ng-template #actionslist>
+    <h4 class="kb-workflow-selection-title border-bottom py-2">
+        <span>Select Action
+            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the action to add or remove"
+                matTooltipPosition="above"></i>
+        </span>
+        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </h4>
+    <mat-form-field appearance="fill">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search Actions</mat-label>
+        <input matInput placeholder="Search actions..." 
+        [(ngModel)]="searchVal" (input)="isFilter('action')">
+        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <mat-accordion>
+        <mat-expansion-panel [class.d-none]="actiongroup.hide" *ngFor="let actiongroup of _form.workflowList index as agi" [expanded]="_general.expPanelStep === agi" hideToggle>
+                    <mat-expansion-panel-header>
+                <mat-panel-title>{{actiongroup.name}}</mat-panel-title>
+                <mat-panel-description><span [innerHTML]="actiongroup.icon | safeHtml"></span></mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-nav-list class="pt-0">
+                <div (click)="openActionDialog(actionDialog, action)"
+                    *ngFor="let action of actiongroup.workflows | filter:searchVal:'name', index as ai" class="kb-workflow-option" mat-ripple
+                    mat-list-item>
+                    <span class="kb-workflow-option-icon" [innerHTML]="action.icon | safeHtml"></span>
+                    <span class="kb-workflow-option-name">
+                        {{action.name}}
+                    </span>
+                </div>
+            </mat-nav-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+</ng-template>
+<ng-template #actionDialog>
+    <h1 mat-dialog-title class="kb-primary">Action</h1>
+    <div mat-dialog-content >
+        Add action
+    </div>
+    <div *ngIf="selAct=='wrkfl-sub-to-list' || selAct=='wrkfl-unsub-to-list'"  mat-dialog-content class="kb-text-editor"> 
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Add on lists</mat-label>
+            <mat-chip-list #chipGrid aria-label="List selection"  [(ngModel)]="_form.form.lists">
+              <mat-chip *ngFor="let list of listarr" (removed)="removelist(list)">
+                {{ list.list_name }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+            <input
+              placeholder="Search list..."
+              #listInput
+              [formControl]="listCtrl"
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="selectedList($event)"
+            >
+                <mat-option
+                *ngFor="let list of filteredList | async"
+                [value]="list.uniqueid"
+              >
+                {{ list.list_name }}
+              </mat-option>
+            
+            </mat-autocomplete>
+          </mat-form-field> 
+    
+        </div>
+        <div *ngIf="selAct=='wrkfl-tag-add' || selAct=='wrkfl-tag-remove'"  mat-dialog-content class="kb-text-editor"> 
+            <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Add Tag</mat-label> 
+                <mat-chip-list #chipGrid2 aria-label="Tag selection" [(ngModel)]="_form.form.tags">
+                  <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
+                    {{ tag.tag_name }}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                </mat-chip-list>
+                <input
+                  placeholder="Search/add tag..."
+                  #tagInput
+                  [formControl]="tagCtrl"
+                  [matChipInputFor]="chipGrid2"
+                  [matAutocomplete]="auto2"
+                  
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  (matChipInputTokenEnd)="addtag($event)"
+                />
+                <mat-autocomplete
+                  #auto2="matAutocomplete"
+                  (optionSelected)="selectedTag($event)"
+                >
+                  <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
+                    {{ tag.tag_name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+        <!-- </div> -->
+            </div>
+            <div *ngIf="selAct=='wrkfl-opre-email'" mat-dialog-content class="kb-text-editor"> 
+                <mat-error *ngIf="isNotValid(validate.emailsubject)">
+                    Email subject should not be empty
+                </mat-error>
+                <mat-form-field appearance="fill">
+                    <mat-label>Email Subject</mat-label>
+                    <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Send To</mat-label>
+                    <input matInput type="text" placeholder="email To" [formControl]="validate.emailto" [(ngModel)]="_form.form.emailto">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>From</mat-label>
+                    <input matInput type="text" placeholder="email From" [formControl]="validate.emailfrom" [(ngModel)]="_form.form.emailfrom">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>From Name</mat-label>
+                    <input matInput type="text" placeholder="email From Name" [formControl]="validate.emailname" [(ngModel)]="_form.form.emailname">
+                </mat-form-field>
+                <mat-label class="kb-mat-label">Message</mat-label>
+                <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
+            </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="_form.addAction(selAct, appendIndex)"
+            [color]="'primary'">Add</button>
+    </div>
+</ng-template>
+<!-- <ng-template #delActionDialog>
+    <h1 mat-dialog-title class="kb-danger">Remove Action</h1>
+    <div mat-dialog-content>
+        Do you want to remove <span class="text-danger">{{selAct.name}}</span> action?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close [color]="'primary'">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
+            (click)="_form.removeAction(appendIndex)">Yes</button>
+    </div>
+</ng-template> -->
+<!-- action templates
+    
+     <ng-template #emailsetdialog>
         <h1 mat-dialog-title class="kb-text-gap">Add Form Action
-            <!-- <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle> -->
-       
         </h1>
         <mat-form-field>
             <mat-label>Select an Action</mat-label>
             <mat-select [(value)]="selectedvalue">
-              <!-- mmmm <mat-option>None</mat-option> -->
               <mat-option value="3">Subscribe to a list</mat-option>
               <mat-option value="1">Add a tag</mat-option>
               <mat-option value="2">Email Setup</mat-option>
@@ -104,7 +254,6 @@
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   (matChipInputTokenEnd)="addtag($event)"
                 />
-                <!-- [matChipInputAddOnBlur]="addOnBlur" -->
                 <mat-autocomplete
                   #auto2="matAutocomplete"
                   (optionSelected)="selectedTag($event)"
@@ -153,7 +302,8 @@
             <button *ngIf="selectedvalue=='2'" mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
             <button *ngIf="selectedvalue=='3'" mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
         </div>
-        </ng-template>
+        </ng-template> -->
+
     <!-- <ng-template #emailsetdialog>
     <h1 mat-dialog-title class="kb-text-gap">Email Setup 
         <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle></h1>
@@ -264,7 +414,8 @@
                 <mat-menu #stngm>
                     <button mat-menu-item (click)="openSettingDialog(settingdialog)">
                         <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
-                        <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
+                        <!-- <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)"> -->
+                        <button mat-menu-item (click)="openBottomSheet(actionslist, 0)">
                             <i class="far fa-envelope" aria-hidden="true"></i>Actions</button>
                     <!-- <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
                         <i class="far fa-envelope" aria-hidden="true"></i>Email Setup</button> -->

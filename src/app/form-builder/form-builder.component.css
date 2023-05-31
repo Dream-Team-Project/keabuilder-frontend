@@ -429,3 +429,287 @@ button {
 ::ng-deep div#kb-topbar-container.kb-preview-exit .kb-triggers button.mat-button span i {
     font-size: 13px;
 }
+
+/* workflow */
+.kb-workflow-selection-title {
+    color: var(--secondary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kb-workflow-option {
+    font-size: 16px;
+    line-height: 40px;
+    cursor: pointer;
+    display: flex;
+    margin: 10px 0;
+    border-radius: 4px;
+    transition: 0.2s ease;
+}
+
+.kb-workflow-option:hover span.kb-workflow-option-name, .kb-workflow-option-active span.kb-workflow-option-name {
+    color: var(--primary-color);
+}
+
+.kb-workflow-option-active span.kb-workflow-option-icon {
+    background-color: var(--primary-color);
+}
+
+.kb-workflow-option:hover {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+span.kb-workflow-option-remove-icon {
+    top: 0;
+    right: 0;
+    position: absolute;
+    font-size: 24px;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+span.kb-workflow-option-icon {
+    color: var(--kb-light);
+    background-color: var(--secondary-color);
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+span.kb-workflow-option-name {
+    padding: 0 10px;
+    width: 100%;
+    color: var(--secondary-color);
+    transition: 0.2s ease;
+    border: 1px solid var(--kb-dim-black);
+    border-radius: 0px 4px 4px 0px;
+}
+
+.kb-workflow-split-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 150%;
+    margin-top: 40px;
+}
+
+.kb-workflow-split-section-first, .kb-workflow-split-section-last {
+    position: relative;
+    margin-top: 60px;
+}
+
+.kb-workflow-split-node-cont {
+    content: '';
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    top: -60px;
+    border-style: solid;
+    border-color: var(--accent-color);
+}
+
+.kb-workflow-split-node-cont-first {
+    left: 49.9%;
+    border-width: 2px 0px 0 2px;
+    border-top-left-radius: 10px;
+}
+
+.kb-workflow-split-node-cont-last {
+    right: 49.9%;
+    border-width: 2px 2px 0 0px;
+    border-top-right-radius: 10px;
+}
+
+.kb-workflow-split-node {
+    position: absolute;
+    top: 24px;
+    color: var(--kb-light);
+    padding: 10px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 12px;
+    z-index: 9;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.kb-workflow-split-node-cont-first .kb-workflow-split-node {
+    background-color: var(--kb-success);
+    left: -18px;
+}
+
+.kb-workflow-split-node-cont-last .kb-workflow-split-node {
+    background-color: var(--kb-danger);
+    right: -18px;
+}
+
+
+.kb-trigger-section {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.kb-active-triggers {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+}
+
+.kb-add-action {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: var(--kb-white);
+    transition: 0.1s ease-in-out;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.kb-add-action:hover {
+    transform: scale(1.1);
+}
+
+.kb-workflow-node:after, .kb-workflow-node:before {
+    content: '';
+    border-right: 2px solid var(--accent-color);
+    height: 100%;
+    display: block;
+}
+
+.kb-workflow-node {
+    fill: var(--accent-color);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+} 
+
+.kb-workflow-inner-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.kb-workflow-inner-section:after {
+    content: '';
+    border-right: 2px solid var(--accent-color);
+    height: 40px;
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+}
+
+.kb-workflow-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#kb-workflow-head .kb-top-actions {
+    color: #fff;
+    height: 36px;
+    background-color: var(--kb-dark);
+    font-size: 14px;
+}
+
+.kb-top-actions button.mat-button:hover {
+    background-color: rgb(255 255 255 / 10%);
+    color: var(--primary-color);
+}
+
+.kb-top-inp-cont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.kb-top-inp-cont:hover .kb-automation-name {
+    display: none;
+}
+
+.kb-top-inp-cont:hover .kb-top-input {
+    display: block;
+}
+
+.kb-top-input {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(255 255 255 / 10%);
+    border: 0px;
+    display: none;
+}
+
+.kb-automation-name, .kb-top-input {
+    padding: 0 10px;
+    color: var(--kb-light);
+}
+
+#kb-workflow-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 20px;
+    padding-top: 72px;
+}
+
+::ng-deep .kb-add-action svg {
+    fill: var(--secondary-color);
+    width: 10px;
+}
+
+::ng-deep .kb-workflow-section button.mat-raised-button {
+    font-weight: 500;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .kb-workflow-section button.mat-raised-button.kb-trigger-action {
+    color: var(--secondary-color);
+}
+
+::ng-deep .kb-top-actions button.mat-button {
+    font-size: 13px;
+}
+
+::ng-deep .kb-top-actions button.mat-button:hover svg {
+    fill: var(--primary-color);
+}
+
+::ng-deep .kb-top-actions svg {
+    width: 13px;
+    fill: var(--kb-light);
+}
+
+::ng-deep i {
+    display: inline-flex;
+}
