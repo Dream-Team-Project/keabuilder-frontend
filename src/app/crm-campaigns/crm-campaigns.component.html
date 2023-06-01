@@ -1,5 +1,5 @@
 <ng-template #dialog>
-  <h1 mat-dialog-title class="text-primary">Create A Campaign</h1>
+  <h1 mat-dialog-title class="txt">Create A Campaign</h1>
   <div mat-dialog-content>
       <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Campaign Name</mat-label>
@@ -13,8 +13,8 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-info">Close</button>
-      <button mat-button class="text-primary" (click)="createcamp()">Create</button>
+      <button mat-button mat-dialog-close class="text-danger">Close</button>
+      <button mat-button  [color]="'primary'" (click)="createcamp()">Create</button>
   </div>
 </ng-template>
 <ng-template #deletedialog>
@@ -23,7 +23,7 @@
     Would you like to delete this Campaign?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close [color]="'primary'">No</button>
     <button
       mat-button
       mat-dialog-close
