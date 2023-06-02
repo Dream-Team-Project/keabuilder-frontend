@@ -75,6 +75,8 @@ export class FormBuilderComponent implements OnInit {
     lists: [],
     tags: []
   };
+  formlists:any=[];
+  formtags:any=[];
   showEditor:boolean = true;
 
   constructor(
@@ -163,6 +165,8 @@ export class FormBuilderComponent implements OnInit {
   }
 
   saveForm() {
+    this._form.form.lists=this.formlists.toString();
+    this._form.form.tags=this.formtags.toString();
       this._general.saveDisabled = true;
       this._form.updateForm().then((e:any)=>{
         if(e.success == 1) {
@@ -345,6 +349,7 @@ export class FormBuilderComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.id);
+    this.formlists.push(event.option.value.uniqueid)
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -352,6 +357,8 @@ export class FormBuilderComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds.lists.splice(index, 1);
+    this.formlists.splice(index, 1);
+
   }
 
   // end list actions
@@ -366,6 +373,7 @@ export class FormBuilderComponent implements OnInit {
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
+    this.formtags.push(event.option.value.uniqueid)
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -373,6 +381,7 @@ export class FormBuilderComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags.splice(index, 1);
     this.filteredTempIds.tags.splice(index, 1);
+    this.formtags.splice(index, 1);
   }
 
   // end tag actions
