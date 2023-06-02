@@ -33,7 +33,10 @@ export class CrmSmtpService {
     obj.uuid = this.uuid;
     return this.http.post('/api/deletecrmsmtp',obj).pipe(catchError(this.errorHandler));
   }
-
+  globaltimezone(obj:any): Observable<any>{
+  obj.uuid = this.uuid;
+  return this.http.post('/api/globaltimezone',obj).pipe(catchError(this.errorHandler));
+}
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
