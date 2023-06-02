@@ -80,6 +80,11 @@ export class CrmService {
     
   }
 
+  getallcrmdata(): Observable<any> {
+    var obj = {uuid: this.uuid};
+    return this.http.post('/api/getallcrmdata', obj).pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
