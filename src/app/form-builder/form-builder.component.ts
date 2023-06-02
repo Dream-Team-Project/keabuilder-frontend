@@ -10,11 +10,8 @@ import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
 import { CrmListService } from '../_services/_crmservice/crm_list.service';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Observable, map, startWith } from 'rxjs';
 import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-form-builder',
@@ -25,7 +22,7 @@ export class FormBuilderComponent implements OnInit {
 
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
-  @ViewChild('emailsetdialog') emailsetdialog!: TemplateRef<any>;
+  @ViewChild('actiondialog') actiondialog!: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
   @ViewChild('form', { static: false }) screen: any;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
@@ -35,21 +32,8 @@ export class FormBuilderComponent implements OnInit {
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
-  selectedvalue:any;
-  tags: any = [];
-  newtags: any = [];
-  tagarr: any[] = [];
-  listarr: any[] = [];
-  lists: any = [];
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl(['']);
-  listCtrl = new FormControl(['']);
-  filteredTag: Observable<any>;
-  filteredList: Observable<any>;
-  selAct:any ;
-  searchVal:string = '';
-  appendIndex = 0;
-  // selTrg:any = '';
 
   urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
@@ -78,8 +62,20 @@ export class FormBuilderComponent implements OnInit {
   formdialog:string = '';
   dialogData:any;
   drawerPos:any = 'end';
-  autoSaveInterval:any;
-  
+  autoSaveInterval:any = [];
+  lists: any = [];
+  tags: any = [];
+  selectedLists:any = [];
+  selectedTags:any = [];
+  filteredTempIds:any = {
+    lists: [],
+    tags: []
+  };
+  filteredOptions:any = {
+    lists: [],
+    tags: []
+  };
+  showEditor:boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -91,7 +87,6 @@ export class FormBuilderComponent implements OnInit {
     private captureService: NgxCaptureService,
     private _crmlistService: CrmListService,
     private _crmtagService: CrmTagsService,
-    private _bottomSheet: MatBottomSheet,
   ) { 
    
     route.paramMap.subscribe((params: ParamMap) => {
@@ -111,18 +106,6 @@ export class FormBuilderComponent implements OnInit {
     });
     this.fetchlists();
     this.fetchTags();
-    this.filteredTag = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) =>
-        tag ? this._filterTag(tag) : this.tags.slice()
-      )
-    );
-    this.filteredList = this.listCtrl.valueChanges.pipe(
-      startWith(null),
-      map((list: string | null) =>
-        list ? this._filterList(list) : this.lists.slice()
-      )
-    );
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -140,6 +123,33 @@ export class FormBuilderComponent implements OnInit {
       }
     });
   }
+
+    fetchlists(){
+      return new Promise((resolve) => {
+      this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
+        this.lists=data.data;
+        resolve(true);
+      },
+      (error: any) => {
+        resolve(false);
+      }
+    );
+    });
+    }
+  
+    fetchTags() {
+      return new Promise((resolve) => {
+        this._crmtagService.getAllcrmtags().subscribe(
+          (data) => {
+            this.tags = data.data;
+            resolve(true);
+          },
+          (error: any) => {
+            resolve(false);
+          }
+        );
+      });
+    }
 
   autoSaveTrigger(trigger:boolean) {
     clearInterval(this.autoSaveInterval);
@@ -199,7 +209,7 @@ export class FormBuilderComponent implements OnInit {
     else return {};
   }
   
-  // dialogs
+  // start dialogs
 
   openSettingDialog(templateRef: TemplateRef<any>) {
     this.formdialog = 'Setting';
@@ -215,12 +225,18 @@ export class FormBuilderComponent implements OnInit {
     })
   }
 
-  openEmailSetDialog(templateRef: TemplateRef<any>) {
-    this.formdialog = 'Email setup';
+  openActionDialog(templateRef: TemplateRef<any>) {
+    this.filterListData('');
+    this.filterTagData('');
+    this.formdialog = 'Action';
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
-      if(this.validate.emailsubject.errors?.['required']) this.openEmailSetDialog(this.emailsetdialog);
+      if(this.validate.emailsubject.errors?.['required']) {
+        this._general.expPanelStep = 3;
+        this.openActionDialog(this.actiondialog);
+      }
       else {
+        this._general.expPanelStep = 0;
         this.formdialog = '';
         this._form.formSaved = false;
         this.validate.emailsubject.reset();
@@ -254,7 +270,7 @@ export class FormBuilderComponent implements OnInit {
     this.DialogImageToggle = !this.DialogImageToggle;
   }
 
-  // dialogs
+  // end dialogs
 
   itemDropped(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
@@ -319,6 +335,52 @@ export class FormBuilderComponent implements OnInit {
     document.documentElement.scrollTop = 0;
   }
 
+  // start list actions
+
+  filterListData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
+  }
+
+  addSelectedList(event:any, searchListInp:any): void {
+    this.selectedLists.push(event.option.value);
+    this.filteredTempIds.lists.push(event.option.value.id);
+    searchListInp.value = '';
+    this.filterListData('');
+  }
+
+  removeSelectedList(index:number): void {
+    this.selectedLists.splice(index, 1);
+    this.filteredTempIds.lists.splice(index, 1);
+  }
+
+  // end list actions
+
+  // start tag actions
+
+  filterTagData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value));
+  }
+
+  addSelectedTag(event:any, searchTagInp:any): void {
+    this.selectedTags.push(event.option.value);
+    this.filteredTempIds.tags.push(event.option.value.id);
+    searchTagInp.value = '';
+    this.filterTagData('');
+  }
+
+  removeSelectedTag(index:number): void {
+    this.selectedTags.splice(index, 1);
+    this.filteredTempIds.tags.splice(index, 1);
+  }
+
+  // end tag actions
+
+  selectedTabChange(e:any) {
+    this.showEditor = e.index == 0;
+  }
+
   onContextMenu(event: MouseEvent) {
     event.preventDefault();
     this.contextMenuPosition.x = event.clientX + 'px';
@@ -328,149 +390,6 @@ export class FormBuilderComponent implements OnInit {
     this.contextMenu.openMenu();
   }
 
-isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];
-}
-
-fetchlists(){
-  return new Promise((resolve) => {
-  this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
-    this.lists=data.data;
-    resolve(true);
-  },
-  (error: any) => {
-    resolve(false);
-  }
-);
-});
-}
-
-  fetchTags() {
-    return new Promise((resolve) => {
-      this._crmtagService.getAllcrmtags().subscribe(
-        (data) => {
-          this.tags = data.data;
-          resolve(true);
-        },
-        (error: any) => {
-          resolve(false);
-        }
-      );
-    });
-  }
-
-  addtag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      var obj: any = {
-        uniqueid: Math.random().toString(20).slice(2),
-        tag_name: event.value,
-      };
-      this.tagarr.push(obj);
-      this.newtags.push(obj);
-    }
-    // Clear the input value
-    event.chipInput!.clear();
-    this.tagCtrl.setValue(null);
-  }
-
-  removetag(event: string): void {
-    const index = this.tagarr.indexOf(event);
-    if (index >= 0) {
-      this.tagarr.splice(index, 1);
-      this.newtags.splice(index, 1);
-    }
-  }
-
-  selectedTag(event: any): void {
-    var obj: any = {
-      uniqueid: event.option.value,
-      tag_name: event.option.viewValue,
-    };
-    this.tagarr.push(obj);
-    this.tagInput.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
-  }
-  selectedList(event: any): void {
-    var obj: any = {
-      uniqueid: event.option.value,
-      list_name: event.option.viewValue,
-    };
-    this.listarr.push(obj);
-    this.listInput.nativeElement.value = '';
-    this.listCtrl.setValue(null);
-  }
-  removelist(event: string): void {
-    const index = this.listarr.indexOf(event);
-    if (index >= 0) {
-      this.listarr.splice(index, 1);
-      // this.newlists.splice(index, 1);
-    }
-  }
-  private _filterList(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.lists.filter((list: any) =>
-      list.list_name.toLowerCase().includes(filterValue)
-    );
-  }
-  private _filterTag(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.tags.filter((tag: any) =>
-      tag.tag_name.toLowerCase().includes(filterValue)
-    );
-  }
-
-  openActionDialog(templateRef: TemplateRef<any>, act:any) {
-    this.selAct = act.id;
-    console.log(this.selAct)
-    this.openDialog(templateRef);
-    // this.closeBottomSheet();
-  }
-
-  // toggleTrigger(trg:any) {
-  //   this.selTrg = trg; 
-  //   if(this.selTrg.active) this.openDialog(this.delTriggerDialog);
-  //   else this.openDialog(this.triggerDialog);
-  // }
-
-  openBottomSheet(templateRef: TemplateRef<any>, index:number): void {
-    var bottomSheet = this._bottomSheet.open(templateRef);
-    this.appendIndex = index;
-    bottomSheet.afterDismissed().subscribe((data:any)=>{
-      this.searchVal = '';
-      this.isFilter('action');
-      // this.isFilter('trigger');
-    })
-  }
-
-  closeBottomSheet(): void {
-    this._bottomSheet.dismiss();
-  }
-
-  openDialog(templateRef: TemplateRef<any>): void {
-    this.dialog.open(templateRef);
-  }
-
-  // setTrigger(value:boolean) {
-  //   this.autosave = value;
-  // }
-
-  isFilter(type:string) {
-    var intial = true;
-    // var wrkfList = type == 'action' ? this._form.actionsList : this._form.triggersList;
-    var wrkfList = this._form.actionsList ;
-    for(let i = 0; i < wrkfList.length; i++) {
-      for(let j = 0; j < wrkfList[i].workflows.length; j++) {
-        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchVal.toLowerCase()) >= 0;
-        wrkfList[i].hide = !cond;
-        if(cond) {
-          if(intial) {
-            this._general.expPanelStep = i;
-            intial = false;
-          }
-          break;
-        }
-      }
-    }
-  }
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
 }

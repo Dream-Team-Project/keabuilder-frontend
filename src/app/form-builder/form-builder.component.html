@@ -16,377 +16,236 @@
     <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
     <app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
     <ng-template #settingdialog>
-    <h1 mat-dialog-title>Form Setting</h1>
-    <div mat-dialog-content>
-        <mat-error *ngIf="isNotValid(validate.name)">
-            Form name should not be empty
-        </mat-error>
-        <mat-error *ngIf="validate.name.hasError('minlength')">
-            Form name must be at least <strong>3</strong> characters
-        </mat-error>
-        <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" placeholder="form name" [formControl]="validate.name" [(ngModel)]="_form.form.name" minlength="3">
-        </mat-form-field>
-        <mat-label class="kb-mat-label kb-text-gap">Redirection
-            <mat-slide-toggle [(ngModel)]="_form.form.redirenbled" [matTooltip]="_form.form.redirenbled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle>
-        </mat-label>
-        <mat-error *ngIf="validate.relink.touched && validate.relink.invalid && validate.relink.dirty">
-            Redirection link is invalid
-        </mat-error>
-        <mat-form-field appearance="fill">
-            <mat-label>Redirection Link</mat-label>
-            <input matInput type="text" placeholder="form redirection" [formControl]="validate.relink" [(ngModel)]="_form.form.redirection">
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="_general.existwebpages">
-            <mat-label>Website Pages</mat-label>
-            <mat-select [(ngModel)]="_form.form.redirection">
-                <mat-option *ngFor="let page of _general.existwebpages"
-                    [value]="_general.subdomain+page.page_path"
-                    [disabled]="page.publish_status == 0">
-                    {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
-                        *ngIf="page.publish_status == 0"></small>
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="_general.funnels">
-            <mat-label>Funnel Steps</mat-label>
-            <mat-select [(ngModel)]="_form.form.redirection">
-                <mat-optgroup *ngFor="let funnel of _general.funnels"
-                    [label]="funnel.name | titlecase">
-                    <mat-option *ngFor="let step of funnel.steps"
-                        [value]="_general.subdomain+step.page_path"
-                        [disabled]="step.archived == 1">
-                        {{step.title | titlecase}}<small [attr.data]="step.funneltype"
-                            class="infoTxt"></small>
-                    </mat-option>
-                </mat-optgroup>
-            </mat-select>
-        </mat-form-field>
-    </div>
-    <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid && !validate.relink.invalid ? 'primary' : ''" [disabled]="validate.name.invalid || validate.relink.invalid">Done</button>
-    </div>
-    </ng-template>
-
-    <!-- action templates -->
-<ng-template #actionslist>
-    <h4 class="kb-workflow-selection-title border-bottom py-2">
-        <span>Select Action
-            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the action to add or remove"
-                matTooltipPosition="above"></i>
-        </span>
-        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
-            <mat-icon>close</mat-icon>
-        </button>
-    </h4>
-    <mat-form-field appearance="fill">
-        <mat-icon matPrefix>search</mat-icon>
-        <mat-label>Search Actions</mat-label>
-        <input matInput placeholder="Search actions..." 
-        [(ngModel)]="searchVal" (input)="isFilter('action')">
-        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
-    <mat-accordion>
-        <mat-expansion-panel [class.d-none]="actiongroup.hide" *ngFor="let actiongroup of _form.workflowList index as agi" [expanded]="_general.expPanelStep === agi" hideToggle>
-                    <mat-expansion-panel-header>
-                <mat-panel-title>{{actiongroup.name}}</mat-panel-title>
-                <mat-panel-description><span [innerHTML]="actiongroup.icon | safeHtml"></span></mat-panel-description>
-            </mat-expansion-panel-header>
-            <mat-nav-list class="pt-0">
-                <div (click)="openActionDialog(actionDialog, action)"
-                    *ngFor="let action of actiongroup.workflows | filter:searchVal:'name', index as ai" class="kb-workflow-option" mat-ripple
-                    mat-list-item>
-                    <span class="kb-workflow-option-icon" [innerHTML]="action.icon | safeHtml"></span>
-                    <span class="kb-workflow-option-name">
-                        {{action.name}}
-                    </span>
-                </div>
-            </mat-nav-list>
-        </mat-expansion-panel>
-    </mat-accordion>
-</ng-template>
-<ng-template #actionDialog>
-    <h1 mat-dialog-title class="kb-primary">Action</h1>
-    <div mat-dialog-content >
-        Add action
-    </div>
-    <div *ngIf="selAct=='wrkfl-sub-to-list' || selAct=='wrkfl-unsub-to-list'"  mat-dialog-content class="kb-text-editor"> 
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Add on lists</mat-label>
-            <mat-chip-list #chipGrid aria-label="List selection"  [(ngModel)]="_form.form.lists">
-              <mat-chip *ngFor="let list of listarr" (removed)="removelist(list)">
-                {{ list.list_name }}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip>
-            </mat-chip-list>
-            <input
-              placeholder="Search list..."
-              #listInput
-              [formControl]="listCtrl"
-              [matChipInputFor]="chipGrid"
-              [matAutocomplete]="auto"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            />
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              (optionSelected)="selectedList($event)"
-            >
-                <mat-option
-                *ngFor="let list of filteredList | async"
-                [value]="list.uniqueid"
-              >
-                {{ list.list_name }}
-              </mat-option>
-            
-            </mat-autocomplete>
-          </mat-form-field> 
-    
-        </div>
-        <div *ngIf="selAct=='wrkfl-tag-add' || selAct=='wrkfl-tag-remove'"  mat-dialog-content class="kb-text-editor"> 
-            <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Add Tag</mat-label> 
-                <mat-chip-list #chipGrid2 aria-label="Tag selection" [(ngModel)]="_form.form.tags">
-                  <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
-                    {{ tag.tag_name }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip>
-                </mat-chip-list>
-                <input
-                  placeholder="Search/add tag..."
-                  #tagInput
-                  [formControl]="tagCtrl"
-                  [matChipInputFor]="chipGrid2"
-                  [matAutocomplete]="auto2"
-                  
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                  (matChipInputTokenEnd)="addtag($event)"
-                />
-                <mat-autocomplete
-                  #auto2="matAutocomplete"
-                  (optionSelected)="selectedTag($event)"
-                >
-                  <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
-                    {{ tag.tag_name }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-        <!-- </div> -->
-            </div>
-            <div *ngIf="selAct=='wrkfl-opre-email'" mat-dialog-content class="kb-text-editor"> 
-                <mat-error *ngIf="isNotValid(validate.emailsubject)">
-                    Email subject should not be empty
-                </mat-error>
-                <mat-form-field appearance="fill">
-                    <mat-label>Email Subject</mat-label>
-                    <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Send To</mat-label>
-                    <input matInput type="text" placeholder="email To" [formControl]="validate.emailto" [(ngModel)]="_form.form.emailto">
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>From</mat-label>
-                    <input matInput type="text" placeholder="email From" [formControl]="validate.emailfrom" [(ngModel)]="_form.form.emailfrom">
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>From Name</mat-label>
-                    <input matInput type="text" placeholder="email From Name" [formControl]="validate.emailname" [(ngModel)]="_form.form.emailname">
-                </mat-form-field>
-                <mat-label class="kb-mat-label">Message</mat-label>
-                <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
-            </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="_form.addAction(selAct, appendIndex)"
-            [color]="'primary'">Add</button>
-    </div>
-</ng-template>
-<!-- <ng-template #delActionDialog>
-    <h1 mat-dialog-title class="kb-danger">Remove Action</h1>
-    <div mat-dialog-content>
-        Do you want to remove <span class="text-danger">{{selAct.name}}</span> action?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close [color]="'primary'">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
-            (click)="_form.removeAction(appendIndex)">Yes</button>
-    </div>
-</ng-template> -->
-<!-- action templates
-    
-     <ng-template #emailsetdialog>
-        <h1 mat-dialog-title class="kb-text-gap">Add Form Action
-        </h1>
-        <mat-form-field>
-            <mat-label>Select an Action</mat-label>
-            <mat-select [(value)]="selectedvalue">
-              <mat-option value="3">Subscribe to a list</mat-option>
-              <mat-option value="1">Add a tag</mat-option>
-              <mat-option value="2">Email Setup</mat-option>
-             
-            </mat-select>
-          </mat-form-field>
-          <div *ngIf="selectedvalue=='1'" mat-dialog-content class="kb-text-editor"> 
-            <mat-form-field class="kb-full-width" appearance="fill">
-                <mat-label>Add Tag</mat-label>
-                <mat-chip-list #chipGrid2 aria-label="Tag selection">
-                  <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
-                    {{ tag.tag_name }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip>
-                </mat-chip-list>
-                <input
-                  placeholder="Search/add tag..."
-                  #tagInput
-                  [formControl]="tagCtrl"
-                  [matChipInputFor]="chipGrid2"
-                  [matAutocomplete]="auto2"
-                  
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                  (matChipInputTokenEnd)="addtag($event)"
-                />
-                <mat-autocomplete
-                  #auto2="matAutocomplete"
-                  (optionSelected)="selectedTag($event)"
-                >
-                  <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
-                    {{ tag.tag_name }}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-        </div>
-        <div *ngIf="selectedvalue=='2'" mat-dialog-content class="kb-text-editor"> 
-            <mat-error *ngIf="isNotValid(validate.emailsubject)">
-                Email subject should not be empty
+        <h1 mat-dialog-title>Form Setting</h1>
+        <div mat-dialog-content class="kb-text-editor">
+            <mat-error *ngIf="isNotValid(validate.name)">
+                Form name should not be empty
+            </mat-error>
+            <mat-error *ngIf="validate.name.hasError('minlength')">
+                Form name must be at least <strong>3</strong> characters
             </mat-error>
             <mat-form-field appearance="fill">
-                <mat-label>Email Subject</mat-label>
-                <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" placeholder="form name" [formControl]="validate.name" [(ngModel)]="_form.form.name" minlength="3">
             </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Send To</mat-label>
-                <input matInput type="text" placeholder="email To" [formControl]="validate.emailto" [(ngModel)]="_form.form.emailto">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>From</mat-label>
-                <input matInput type="text" placeholder="email From" [formControl]="validate.emailfrom" [(ngModel)]="_form.form.emailfrom">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>From Name</mat-label>
-                <input matInput type="text" placeholder="email From Name" [formControl]="validate.emailname" [(ngModel)]="_form.form.emailname">
-            </mat-form-field>
-            <mat-label class="kb-mat-label">Message</mat-label>
-            <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
-        </div>
-        <div *ngIf="selectedvalue=='3'" mat-dialog-content class="kb-text-editor"> 
-            <mat-form-field>
-                <mat-label>Please select a list</mat-label>
-                <mat-select>
-                  <mat-option *ngFor="let list of crmlist" [value]="list.uniqueid">
-                    {{list.list_name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <mat-label class="kb-mat-label">Thank You Message
+                <i class="fa-regular fa-circle-question small ml-2" matTooltip="It will show only if redirection is off"
+                matTooltipPosition="above"></i>
+            </mat-label>
+            <editor [(ngModel)]="_form.form.thankyoumessage" [init]="_general.config"></editor>
         </div>
         <div mat-dialog-actions>
-            <button *ngIf="selectedvalue=='1'" mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
-            <button *ngIf="selectedvalue=='2'" mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
-            <button *ngIf="selectedvalue=='3'" mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
+            <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid && !validate.relink.invalid ? 'primary' : ''" [disabled]="validate.name.invalid || validate.relink.invalid">Done</button>
         </div>
-        </ng-template> -->
-
-    <!-- <ng-template #emailsetdialog>
-    <h1 mat-dialog-title class="kb-text-gap">Email Setup 
-        <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above"></mat-slide-toggle></h1>
-    <div mat-dialog-content class="kb-text-editor">
-        <mat-error *ngIf="isNotValid(validate.emailsubject)">
-            Email subject should not be empty
-        </mat-error>
-        <mat-form-field appearance="fill">
-            <mat-label>Email Subject</mat-label>
-            <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
-        </mat-form-field>
-        <mat-label class="kb-mat-label">Message</mat-label>
-        <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
-    </div>
-    <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
-    </div>
-    </ng-template> -->
-    <ng-template #elementdialog>
-    <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replaceAll('-',' ')}}</h1>
-    <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
-        <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
-        <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'button'">
-            <mat-label>Text</mat-label>
-            <input matInput type="text" [placeholder]="'button text'" [(ngModel)]="_form.selEle.text">
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="_form.selEle.input">
-            <mat-label>Label</mat-label>
-            <input matInput type="text" [placeholder]="'label'" [(ngModel)]="_form.selEle.label">
-        </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="(_form.selEle.input && !_form.selEle.split) || _form.selEle.type == 'select'">
-            <mat-label>Placeholder</mat-label>
-            <input matInput type="text" [placeholder]="'placeholder'" [(ngModel)]="_form.selEle.placeholder">
-        </mat-form-field>
-        <div cdkDropList
-        [cdkDropListData]="_form.selEle.split" (cdkDropListDropped)="itemDropped($event)">
-            <span *ngFor="let split of _form.selEle.split, index as i">
-                <span cdkDrag *ngIf="!split.subsplit" class="kb-split-fields">
-                    <mat-form-field *ngIf="split.type == 'text' else option" appearance="fill">
-                        <mat-label>Placeholder {{i+1}}</mat-label>
-                        <input matInput type="text" [placeholder]="'placeholder '+(i+1)" [(ngModel)]="split.placeholder">
-                    </mat-form-field>
-                    <ng-template #option>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Option {{i+1}}</mat-label>
-                            <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
-                        </mat-form-field>
-                    </ng-template>
-                    <div *cdkDragPreview class="custom-preview kb-field-preview">
-                        {{split.value ? split.value : split.placeholder}}
+    </ng-template>
+    <ng-template #actiondialog>
+        <h1 mat-dialog-title>Form Actions</h1>
+        <div mat-dialog-content class="kb-action-dialog-content py-2">
+            <mat-accordion>
+                <mat-expansion-panel [expanded]="_general.expPanelStep === 0" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Redirection</mat-panel-title>
+                        <mat-panel-description><i class="fa-solid fa-arrow-up-right-from-square"></i></mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="kb-action-confirmation">
+                        <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above">
+                            Want to redirect the form.
+                        </mat-slide-toggle>
                     </div>
-                    <div *cdkDragPlaceholder class="custom-placeholder"></div>
-                    <span class="kb-form-field-icon">
-                        <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="_form.onSelChng(i, split.selected)" [name]="split.id+'-selected'" matTooltip="Selected" matTooltipPosition="above"></mat-checkbox>
-                        <i *ngIf="_form.selEle.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
-                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="_form.addInput(_form.selEle.split, i)"></i>
-                        <i class="fa fa-times kb-danger" *ngIf="_form.selEle.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="_form.removeField(_form.selEle.split, i)"></i>
-                    </span>
-                </span>
-                <span class="kb-split-fields" *ngFor="let subsplit of split.subsplit, index as j">
+                    <mat-error *ngIf="validate.relink.touched && validate.relink.invalid && validate.relink.dirty">
+                        Redirection link is invalid
+                    </mat-error>
                     <mat-form-field appearance="fill">
-                        <mat-label>Placeholder {{i == 0 ? 1 : i*2+j}}</mat-label>
-                        <input matInput type="text" [placeholder]="'placeholder '+(i == 0 ? 1 : i*2+j)" [(ngModel)]="subsplit.placeholder">
+                        <mat-label>Redirection Link</mat-label>
+                        <input matInput type="text" placeholder="form redirection" [formControl]="validate.relink" [(ngModel)]="_form.form.redirection">
                     </mat-form-field>
-                    <span class="kb-form-field-icon">
-                        <i [ngClass]="subsplit.hide ? 'fa-eye-slash' : 'fa-eye'" class="fa" mat-ripple (click)="subsplit.hide = !subsplit.hide"></i>
+                    <mat-form-field appearance="fill" *ngIf="_general.existwebpages">
+                        <mat-label>Website Pages</mat-label>
+                        <mat-select [(ngModel)]="_form.form.redirection">
+                            <mat-option *ngFor="let page of _general.existwebpages"
+                                [value]="_general.subdomain+page.page_path"
+                                [disabled]="page.publish_status == 0">
+                                {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
+                                    *ngIf="page.publish_status == 0"></small>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" *ngIf="_general.funnels">
+                        <mat-label>Funnel Steps</mat-label>
+                        <mat-select [(ngModel)]="_form.form.redirection">
+                            <mat-optgroup *ngFor="let funnel of _general.funnels"
+                                [label]="funnel.name | titlecase">
+                                <mat-option *ngFor="let step of funnel.steps"
+                                    [value]="_general.subdomain+step.page_path"
+                                    [disabled]="step.archived == 1">
+                                    {{step.title | titlecase}}<small [attr.data]="step.funneltype"
+                                        class="infoTxt"></small>
+                                </mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-expansion-panel>
+                <mat-expansion-panel [expanded]="_general.expPanelStep === 1" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Subscribe to Lists</mat-panel-title>
+                        <mat-panel-description><i class="fa-solid fa-list-ul"></i></mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Search Lists</mat-label>
+                        <mat-chip-list #listChipList aria-label="List selection">
+                            <mat-chip
+                                *ngFor="let data of selectedLists, index as i"
+                                (removed)="removeSelectedList(i)">
+                                {{data.list_name}}
+                                <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip>
+                        </mat-chip-list>
+                        <input type="text"
+                            #searchListInp
+                            placeholder="Select multiples..."
+                            (input)="filterListData($event)"
+                            [matAutocomplete]="listAuto"
+                            [matChipInputFor]="listChipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            class="kb-act-searchinp"
+                            [class.pt-2]="selectedLists.length != 0"
+                            matInput>
+                        <mat-autocomplete autoActiveFirstOption #listAuto="matAutocomplete" (optionSelected)="addSelectedList($event, searchListInp)">
+                            <mat-option *ngFor="let option of filteredOptions.lists" [value]="option" [disabled]="filteredTempIds.lists.includes(option.id)">
+                              {{option.list_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <span class="kb-small">*Leave empty for not subscribing to any list</span>
+                </mat-expansion-panel>
+                <mat-expansion-panel [expanded]="_general.expPanelStep === 2" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Add Tags</mat-panel-title>
+                        <mat-panel-description><i class="fa-solid fa-tag"></i></mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Search Tags</mat-label>
+                        <mat-chip-list #tagChipList aria-label="Tag selection">
+                            <mat-chip
+                                *ngFor="let data of selectedTags, index as i"
+                                (removed)="removeSelectedTag(i)">
+                                {{data.tag_name}}
+                                <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip>
+                        </mat-chip-list>
+                        <input type="text"
+                            #searchTagInp
+                            placeholder="Select multiples..."
+                            (input)="filterTagData($event)"
+                            [matAutocomplete]="tagAuto"
+                            [matChipInputFor]="tagChipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            class="kb-act-searchinp"
+                            [class.pt-2]="selectedTags.length != 0"
+                            matInput>
+                        <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" (optionSelected)="addSelectedTag($event, searchTagInp)">
+                            <mat-option *ngFor="let option of filteredOptions.tags" [value]="option" [disabled]="filteredTempIds.tags.includes(option.id)">
+                              {{option.tag_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <span class="kb-small">*Leave empty for not adding any tag</span>
+                </mat-expansion-panel>
+                <mat-expansion-panel [expanded]="_general.expPanelStep === 3" hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Send Email</mat-panel-title>
+                        <mat-panel-description><i class="fa-solid fa-envelope"></i></mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="kb-action-confirmation">
+                        <mat-slide-toggle [(ngModel)]="_form.form.emailenabled" [matTooltip]="_form.form.emailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above">
+                            Want to send email.
+                        </mat-slide-toggle>
+                    </div>
+                    <mat-error *ngIf="isNotValid(validate.emailsubject)">
+                        Email subject should not be empty
+                    </mat-error>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Email Subject</mat-label>
+                        <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
+                    </mat-form-field>
+                    <mat-label class="kb-mat-label">Message</mat-label>
+                    <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div mat-dialog-actions>
+            <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
+        </div>
+    </ng-template>
+    <ng-template #elementdialog>
+        <h1 mat-dialog-title>{{_form.selEle.label ? _form.selEle.label : _form.selEle.name.replaceAll('-',' ')}}</h1>
+        <div mat-dialog-content [class.kb-text-editor]="_form.selEle.name == 'heading' || _form.selEle.name == 'text'">
+            <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
+            <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'button'">
+                <mat-label>Text</mat-label>
+                <input matInput type="text" [placeholder]="'button text'" [(ngModel)]="_form.selEle.text">
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="_form.selEle.input">
+                <mat-label>Label</mat-label>
+                <input matInput type="text" [placeholder]="'label'" [(ngModel)]="_form.selEle.label">
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="(_form.selEle.input && !_form.selEle.split) || _form.selEle.type == 'select'">
+                <mat-label>Placeholder</mat-label>
+                <input matInput type="text" [placeholder]="'placeholder'" [(ngModel)]="_form.selEle.placeholder">
+            </mat-form-field>
+            <div cdkDropList
+            [cdkDropListData]="_form.selEle.split" (cdkDropListDropped)="itemDropped($event)">
+                <span *ngFor="let split of _form.selEle.split, index as i">
+                    <span cdkDrag *ngIf="!split.subsplit" class="kb-split-fields">
+                        <mat-form-field *ngIf="split.type == 'text' else option" appearance="fill">
+                            <mat-label>Placeholder {{i+1}}</mat-label>
+                            <input matInput type="text" [placeholder]="'placeholder '+(i+1)" [(ngModel)]="split.placeholder">
+                        </mat-form-field>
+                        <ng-template #option>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Option {{i+1}}</mat-label>
+                                <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
+                            </mat-form-field>
+                        </ng-template>
+                        <div *cdkDragPreview class="custom-preview kb-field-preview">
+                            {{split.value ? split.value : split.placeholder}}
+                        </div>
+                        <div *cdkDragPlaceholder class="custom-placeholder"></div>
+                        <span class="kb-form-field-icon">
+                            <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="_form.onSelChng(i, split.selected)" [name]="split.id+'-selected'" matTooltip="Selected" matTooltipPosition="above"></mat-checkbox>
+                            <i *ngIf="_form.selEle.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
+                            <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="_form.addInput(_form.selEle.split, i)"></i>
+                            <i class="fa fa-times kb-danger" *ngIf="_form.selEle.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="_form.removeField(_form.selEle.split, i)"></i>
+                        </span>
+                    </span>
+                    <span class="kb-split-fields" *ngFor="let subsplit of split.subsplit, index as j">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Placeholder {{i == 0 ? 1 : i*2+j}}</mat-label>
+                            <input matInput type="text" [placeholder]="'placeholder '+(i == 0 ? 1 : i*2+j)" [(ngModel)]="subsplit.placeholder">
+                        </mat-form-field>
+                        <span class="kb-form-field-icon">
+                            <i [ngClass]="subsplit.hide ? 'fa-eye-slash' : 'fa-eye'" class="fa" mat-ripple (click)="subsplit.hide = !subsplit.hide"></i>
+                        </span>
                     </span>
                 </span>
-            </span>
+            </div>
+            <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'address'">
+                <mat-label>Selected Country</mat-label>
+                <mat-select [(ngModel)]="_form.selEle.split[2].subsplit[1].placeholder" name="selected-country">
+                    <mat-option *ngFor="let opt of _form.countries" [value]="opt.name">
+                        {{opt.name}}
+                    </mat-option>
+                    </mat-select>
+            </mat-form-field>
         </div>
-        <mat-form-field appearance="fill" *ngIf="_form.selEle.name == 'address'">
-            <mat-label>Selected Country</mat-label>
-            <mat-select [(ngModel)]="_form.selEle.split[2].subsplit[1].placeholder" name="selected-country">
-                <mat-option *ngFor="let opt of _form.countries" [value]="opt.name">
-                    {{opt.name}}
-                </mat-option>
-                </mat-select>
-        </mat-form-field>
-    </div>
-    <div mat-dialog-actions class="kb-dialog-additional">
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
-        <mat-checkbox *ngIf="_form.selEle.input && !_form.selEle.primary" [(ngModel)]="_form.selEle.required">Required</mat-checkbox>
-    </div>
+        <div mat-dialog-actions class="kb-dialog-additional">
+            <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
+            <mat-checkbox *ngIf="_form.selEle.input && !_form.selEle.primary" [(ngModel)]="_form.selEle.required">Required</mat-checkbox>
+        </div>
     </ng-template>
     <div id="kb-main" cdkDropListGroup (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled" [class.loading]="!_general.loading.success">
     <mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
@@ -414,11 +273,8 @@
                 <mat-menu #stngm>
                     <button mat-menu-item (click)="openSettingDialog(settingdialog)">
                         <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
-                        <!-- <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)"> -->
-                        <button mat-menu-item (click)="openBottomSheet(actionslist, 0)">
-                            <i class="far fa-envelope" aria-hidden="true"></i>Actions</button>
-                    <!-- <button mat-menu-item (click)="openEmailSetDialog(emailsetdialog)">
-                        <i class="far fa-envelope" aria-hidden="true"></i>Email Setup</button> -->
+                    <button mat-menu-item (click)="openActionDialog(actiondialog)">
+                        <i class="fa-solid fa-location-crosshairs"></i> Actions</button>
                 </mat-menu>
                 <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger" [class.kb-btn-active]="ast.menuOpen">
                     Auto Save > {{autosave ? 'ON' : 'OFF'}}
