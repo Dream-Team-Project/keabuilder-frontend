@@ -39,9 +39,7 @@ export class CrmSettingsComponent implements OnInit {
   constructor(private crmSmtpService: CrmSmtpService,
               private _snackBar: MatSnackBar,
               public dialog: MatDialog, 
-        private crmUserAddressService: CrmUserAddressService,
-
-              ) { }
+        private crmUserAddressService: CrmUserAddressService,) { }
 
   ngOnInit(): void {
     this.fetchcrmsmtp();
@@ -50,13 +48,15 @@ export class CrmSettingsComponent implements OnInit {
   fetchcrmsmtp(){
     this.crmSmtpService.getsmtpdetails().subscribe({
       next: data => {
-        // console.log(data.data);
+        console.log(data.data[0]);
         if(data.data.length!=0){
          this.allsmtpdata=data.data[0]; 
+         this.timezone=this.allsmtpdata?.global_timezone;
         }
         else{
           this.allsmtpdata=[];
         }
+       
       }
     });
   }
@@ -83,13 +83,13 @@ export class CrmSettingsComponent implements OnInit {
   addsmtpdetails(){
     if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apiid.status=='VALID' && this.apikey.status=='VALID'){
       console.log(this.allsmtpdata.length==0)
-     if(this.allsmtpdata.length==0){
+     if(!this.allsmtpdata?.smtp_type){
         this.crmSmtpService.addsmtpdetails({emailfrom:this.emailfrom,smtp_type:this.smtp_type,api_id:this.api_id,api_key:this.api_key}).subscribe({
           next: data => {
             // console.log(data);
-            
+            this.fetchcrmsmtp();
               this.hidepopupsidebar();
-              this.fetchcrmsmtp();
+              
             
           }
         });
@@ -105,7 +105,8 @@ export class CrmSettingsComponent implements OnInit {
 
   }
   deletesmtp(smtp:any){
-    this.crmSmtpService.deletesmtpdetails({uniqueid:smtp.uniqueid}).subscribe({
+    let obj={uniqueid:smtp.uniqueid,smtp_type:'',emailfrom:'',api_id:'',api_key:''}
+    this.crmSmtpService.updatesmtpdetails(obj).subscribe({
       next: data => {
         this.fetchcrmsmtp();
       }
@@ -212,6 +213,14 @@ export class CrmSettingsComponent implements OnInit {
       this._snackBar.open('All fields are required!!', 'OK');
     }
 
+  }
+  Settimezone(){
+    console.log(this.timezone)
+    let obj={global_timezone:this.timezone};
+    this.crmSmtpService.globaltimezone(obj).subscribe((data:any)=>{
+
+    })
+    this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});
   }
 
 }

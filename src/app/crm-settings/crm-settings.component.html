@@ -8,6 +8,7 @@
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesmtp(allsmtpdata)">Yes</button>
   </div>
 </ng-template>
+
 <ng-template #dialog2>
     <h1 mat-dialog-title >Add an Address</h1>
     <div mat-dialog-content>
@@ -555,7 +556,7 @@
               </div>
                </div>
               <div class="row">
-                <div class="col-md-12" *ngIf="allsmtpdata.length!=0">
+                <div class="col-md-12" *ngIf="allsmtpdata?.smtp_type">
                   <mat-card class="mt-4">
                       <ul class="kb-smtpul">
                           <li>
@@ -1175,7 +1176,9 @@
                         <mat-option value="Etc/GMT+12">Etc/GMT+12</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <button mat-raised-button color="primary" (click)="Settimezone()" >Set Timezone <i class="fas fa-paper-plane"></i></button>
               </div>
+             
               <small class="text-danger" >your Default Time Zone is : {{timezone}} </small>
             </div>
   </div>

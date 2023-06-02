@@ -1,1 +1,11 @@
 <router-outlet></router-outlet>
+<ng-template #dialogtimezone>
+    <h1 mat-dialog-title class="global">Global Timezone</h1>
+    <div mat-dialog-content>
+        Please set Global Timezone from CRM Settings.
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close [color]="'primary'">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" [routerLink]="'/crm/settings'">Yes</button>
+    </div>
+  </ng-template>
