@@ -139,11 +139,13 @@
                         </mat-chip-list>
                         <input type="text"
                             #searchTagInp
+                            [formControl]="tagCtrl"
                             placeholder="Select multiples..."
                             (input)="filterTagData($event)"
                             [matAutocomplete]="tagAuto"
                             [matChipInputFor]="tagChipList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addtag($event)"
                             class="kb-act-searchinp"
                             [class.pt-2]="selectedTags.length != 0"
                             matInput>

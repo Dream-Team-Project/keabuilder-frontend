@@ -440,6 +440,7 @@
                     <mat-form-field class="kb-full-width" appearance="fill" *ngIf="sendoptn">
                         <mat-label>Timezones</mat-label>
                         <mat-select name="timezone" [(ngModel)]="fullcampobj.timezone" (selectionChange)="gettimezone($event)">
+                            <mat-option value="">Please Select a TimeZone</mat-option>
                             <mat-option value="Default">Default</mat-option>
                             <mat-option value="Africa/Abidjan">Africa/Abidjan</mat-option>
                             <mat-option value="Africa/Accra">Africa/Accra</mat-option>

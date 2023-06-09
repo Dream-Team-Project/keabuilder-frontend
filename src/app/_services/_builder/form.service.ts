@@ -341,8 +341,8 @@ export class FormService {
   }
 
   updateForm() {
-    console.log(this.form.lists)
-    console.log(this.form.tags)
+    // console.log(this.form.lists)
+    // console.log(this.form.tags)
     return new Promise((resolve, reject)=>{
       this.form.lists.toString();
       this.form.tags.toString();

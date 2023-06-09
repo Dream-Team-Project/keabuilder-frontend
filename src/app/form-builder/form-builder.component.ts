@@ -12,6 +12,7 @@ import { NgxCaptureService } from 'ngx-capture';
 import { CrmListService } from '../_services/_crmservice/crm_list.service';
 import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-form-builder',
@@ -67,6 +68,7 @@ export class FormBuilderComponent implements OnInit {
   tags: any = [];
   selectedLists:any = [];
   selectedTags:any = [];
+  newtags: any = [];
   filteredTempIds:any = {
     lists: [],
     tags: []
@@ -75,6 +77,7 @@ export class FormBuilderComponent implements OnInit {
     lists: [],
     tags: []
   };
+  tagCtrl = new FormControl(['']);
   formlists:any=[];
   formtags:any=[];
   showEditor:boolean = true;
@@ -106,8 +109,12 @@ export class FormBuilderComponent implements OnInit {
       });
       document.addEventListener('contextmenu', event => event.preventDefault());
     });
-    this.fetchlists();
-    this.fetchTags();
+    this.fetchlists().then((resp)=>{
+      this.patchlistname();
+    });
+    this.fetchTags().then((resp)=>{
+      this.patchtagname();
+    })
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -170,6 +177,7 @@ export class FormBuilderComponent implements OnInit {
       this._general.saveDisabled = true;
       this._form.updateForm().then((e:any)=>{
         if(e.success == 1) {
+          this.tagupdate();
           if(this._form.formField.length != 0) {
             this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
               var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
@@ -383,6 +391,23 @@ export class FormBuilderComponent implements OnInit {
     this.filteredTempIds.tags.splice(index, 1);
     this.formtags.splice(index, 1);
   }
+  addtag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      var obj: any = {
+        uniqueid: Math.random().toString(20).slice(2),
+        tag_name: event.value,
+      };
+      this.selectedTags.push(obj);
+      this.filteredTempIds.tags.push(obj.uniqueid);
+    this.formtags.push(obj.uniqueid);
+    this.newtags.push(obj);
+      
+    }
+    // Clear the input value
+    event.chipInput!.clear();
+    this.tagCtrl.setValue(null);
+  }
 
   // end tag actions
 
@@ -401,4 +426,44 @@ export class FormBuilderComponent implements OnInit {
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
+  tagupdate() {
+    return new Promise((resolve) => {
+      this.newtags.forEach((tag: any) => {
+        this._crmtagService.createcrmtag(tag).subscribe((data: any) => {
+          resolve(true);
+        });
+      });
+    });
+  }
+  patchtagname(){
+    // return new Promise((resolve) => {
+    this.tags.forEach((tag: any) => {
+      this._form.form.tags.split(',').forEach((tid: any) => {
+        if (tid == tag.uniqueid) {
+          var obj = { uniqueid: tid, tag_name: tag.tag_name };
+          this.selectedTags.push(obj);
+      this.filteredTempIds.tags.push(tag.id);
+    this.formtags.push(obj.uniqueid);
+        }
+      });
+    });
+
+
+  }
+  patchlistname(){
+    // return new Promise((resolve) => {
+    this.lists.forEach((list: any) => {
+      this._form.form.lists.split(',').forEach((lid: any) => {
+        if (lid == list.uniqueid) {
+          var obj = { uniqueid: lid, list_name: list.list_name };
+          this.selectedLists.push(obj);
+      this.filteredTempIds.lists.push(list.id);
+    this.formlists.push(obj.uniqueid);
+        }
+      });
+    });
+
+
+  }
+  
 }

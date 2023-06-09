@@ -335,9 +335,10 @@
 <div id="kb-crm">
   <div id="kb-offer-actions " *ngIf="sidebar.open">
       <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-          <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-          <h6><strong>Connect With Your SMTP Server</strong></h6>
-          
+        <div class="d-flex justify-content-between">
+          <h5><strong>Connect With SMTP Server</strong></h5>
+          <i class="fas fa-times crosssidebar" (click)="hidepopupsidebar()"></i>
+          </div>
           <div>   
               <hr>
               <h5>Add your SMTP Server Details</h5>
@@ -591,6 +592,7 @@
                 <mat-form-field appearance="fill" class="kb-full-width">
                     <mat-label>Timezones</mat-label>
                     <mat-select name="timezone" [(ngModel)]="timezone" (selectionChange)="gettimezone($event)">
+                        <mat-option value="">Please Select a TimeZone</mat-option>
                         <mat-option value="Africa/Abidjan">Africa/Abidjan</mat-option>
                         <mat-option value="Africa/Accra">Africa/Accra</mat-option>
                         <mat-option value="Africa/Bamako">Africa/Bamako</mat-option>
@@ -1179,7 +1181,7 @@
                 <button mat-raised-button color="primary" (click)="Settimezone()" >Set Timezone <i class="fas fa-paper-plane"></i></button>
               </div>
              
-              <small class="text-danger" >your Default Time Zone is : {{timezone}} </small>
+              <small class="text-danger" >your Default Time Zone is : <span class="tmzne">{{timezone}}</span> </small>
             </div>
   </div>
   </div>  

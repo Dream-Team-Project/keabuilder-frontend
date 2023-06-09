@@ -44,7 +44,7 @@ export class CrmNewCampaignComponent implements OnInit {
     diskCache: true
   };
   testemail = '';
-  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'Default'};
+  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'Default',};
   sendoptn = false;
 
   alllists:any = [];
