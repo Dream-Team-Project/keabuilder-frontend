@@ -1,8 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FieldService } from '../_services/_builder/field.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FieldService } from '../_services/_builder/field.service';
 
 @Component({
   selector: 'app-form-fields',
@@ -16,10 +17,12 @@ export class FormFieldsComponent implements OnInit {
   selFieldIndx = -1;
 
   constructor(
-    public _field: FieldService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet
-    ) { }
+    private _bottomSheet: MatBottomSheet,
+    private _snackBar: MatSnackBar,
+    public _field: FieldService,
+    ) { 
+    }
 
   ngOnInit(): void {
   }
@@ -54,5 +57,4 @@ export class FormFieldsComponent implements OnInit {
     //   this.adjustdata(resp.data);
     // });
   }
-
 }
