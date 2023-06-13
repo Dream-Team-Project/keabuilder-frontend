@@ -6,7 +6,7 @@
         </button>
     </h4>
     <mat-nav-list>
-        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff)" *ngFor="let ff of _formfields.fieldTypes" role="listitem" mat-ripple>
+        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff,'add')" *ngFor="let ff of _formfields.fieldTypes" role="listitem" mat-ripple>
             <span class="kb-field-list-icon" [innerHTML]="ff.icon | safeHtml"></span>
             <span class="kb-field-list-name">{{ff.label | titlecase}}</span>
         </div>
@@ -71,7 +71,12 @@
     <div mat-dialog-actions class="kb-dialog-additional">
         <mat-checkbox class="mr-auto" [(ngModel)]="_formfields.selField.required">Required</mat-checkbox>
         <button mat-button mat-dialog-close color="secondary">Cancel</button>
+        <span *ngIf="editfield==false">
         <button mat-button mat-dialog-close (click)="addField()" cdkFocusInitial color="primary">Add</button>
+        </span>
+    <span *ngIf="editfield==true">
+        <button mat-button mat-dialog-close (click)=" updateformfield()" cdkFocusInitial color="primary">Update</button>
+    </span>
     </div>
 </ng-template>
 <ng-template #deletefield>
@@ -128,10 +133,10 @@
                     <tr *ngFor="let ff of _formfields.fields">
                         <td>{{ff.label}}</td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
-                        <td>{{ff.tag}}</td>
+                        <td>{{ff.field_tag}}</td>
                         <td>
-                            <i matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
-                            <i matTooltip="Delete" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del" (click)="openDialog1(deletefield,ff)"></i>
+                            <i matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action" (click)="openDialog(fieldsetting, ff,'edit')"></i>
+                            <i matTooltip="Delete" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del" (click)="openDialog(deletefield,ff,'delete')"></i>
                         </td>
                     </tr>
                 </tbody>

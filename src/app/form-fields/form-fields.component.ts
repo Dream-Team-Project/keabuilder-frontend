@@ -15,6 +15,7 @@ export class FormFieldsComponent implements OnInit {
 
   fetching:boolean = true;
   delfield:any;
+  editfield:boolean = false;
   constructor(
     private dialog: MatDialog,
     private _bottomSheet: MatBottomSheet,
@@ -33,21 +34,34 @@ export class FormFieldsComponent implements OnInit {
     })
   }
 
-  openDialog(templateRef: TemplateRef<any>, field: any) {
+  openDialog(templateRef: TemplateRef<any>, field: any,status:string) {
+    if(status=='add'){
       this.closeBottomSheet();
       this._formfields.selField = field;
       this.dialog.open(templateRef);
+    }
+    else if(status=='delete'){
+      this.delfield = field.uniqueid;
+      this.dialog.open(templateRef);
+    }
+    else if(status=='edit'){
+      this.editfield=true;
+      this._formfields.selField = field;
+      this.dialog.open(templateRef);
+    }
   }
-  openDialog1(templateRef: TemplateRef<any>,obj:any): void {
-    this.delfield = obj.uniqueid;
-    this.dialog.open(templateRef);
-  }
+  // openDialog1(templateRef: TemplateRef<any>,obj:any): void {
+  //   this.delfield = obj.uniqueid;
+  //   this.dialog.open(templateRef);
+  // }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
+    this.editfield=false;
   }
 
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
+    this.editfield=false;
   }
 
   itemDropped(event: CdkDragDrop<any[]>) {
@@ -60,9 +74,15 @@ export class FormFieldsComponent implements OnInit {
       search: search.value,
       filter: filter.value,
     }
-    // this._file.searchformquery(obj).subscribe((resp:any)=>{
-    //   this.adjustdata(resp.data);
-    // });
+    console.log(obj)
+    this._formfields.searchFieldsquery(obj).subscribe((resp:any)=>{
+      this.adjustdata(resp.data);
+      console.log(resp.data)
+    });
+  }
+  adjustdata(data:any){
+    this._formfields.fields = data;
+    this.fetching = false;
   }
   addField() {
     var temp = JSON.parse(JSON.stringify(this._formfields.selField));
@@ -71,18 +91,26 @@ export class FormFieldsComponent implements OnInit {
     this._formfields.addField(temp).subscribe((data:any)=>{
       if(data.success==1){
         this.getallformfields();
+        this._snackBar.open("Form Field Added Succesfully","Ok",{duration:2000});
       }
     })
   }
   deleteformfield(){
-    console.log(this.delfield)
-    let obj={uniqueid:this.delfield};
-    this._formfields.deleteformfield(obj).subscribe((data:any)=>{
+    this._formfields.deleteformfield(this.delfield).subscribe((data:any)=>{
       if(data.success==1){
         this.getallformfields();
         this._snackBar.open("Form Field Deleted Succesfully","Ok",{duration:2000});
         
       }
     });
+  }
+  updateformfield(){
+    var temp = JSON.parse(JSON.stringify(this._formfields.selField));
+    this._formfields.updateformfield(temp).subscribe((data:any)=>{
+  if(data.success==1){
+    this.getallformfields();
+    this._snackBar.open("Form Field Updated Succesfully","Ok",{duration:2000});
+  }
+})
   }
 }
