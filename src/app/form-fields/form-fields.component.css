@@ -9,6 +9,7 @@
 
 .kb-field-action {
     cursor: pointer;
+    line-height: inherit;
 }
 
 .kb-field-data th {
@@ -19,6 +20,11 @@
     text-transform: capitalize;
     font-size: 15px;
     color: var(--secondary-color);
+}
+
+.kb-field-data td {
+    padding: 0px 10px;
+    line-height: 42px;
 }
 
 .kb-field-data tbody tr:hover, .kb-field-list:hover {

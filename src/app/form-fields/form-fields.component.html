@@ -6,7 +6,7 @@
         </button>
     </h4>
     <mat-nav-list>
-        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff, -1)" *ngFor="let ff of _field.fieldTypes" role="listitem" mat-ripple>
+        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff, -1)" *ngFor="let ff of fieldTypes" role="listitem" mat-ripple>
             <span class="kb-field-list-icon" [innerHTML]="ff.icon | safeHtml"></span>
             <span class="kb-field-list-name">{{ff.label | titlecase}}</span>
         </div>
@@ -19,13 +19,13 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="_field.deleteField(selField)">Yes</button>
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteField(selField)">Yes</button>
     </div>
 </ng-template>
 <ng-template #fieldsetting>
-    <h1 mat-dialog-title>
+    <h1 mat-dialog-title class="d-flex align-items-center">
         {{selField.label ? selField.label : selField.name.replaceAll('-',' ')}}
-        <span class="kb-info-tag kb-tag">{{selField.name.replaceAll('-',' ') | uppercase}}</span>
+        <span class="kb-info-tag kb-tag ml-2">{{selField.name.replaceAll('-',' ') | uppercase}}</span>
     </h1>
     <div mat-dialog-content>
         <mat-form-field *ngIf="selField.id" appearance="fill">
@@ -43,54 +43,31 @@
         <div cdkDropList
         [cdkDropListData]="selField.split" (cdkDropListDropped)="itemDropped($event)">
             <span *ngFor="let split of selField.split, index as i">
-                <span cdkDrag *ngIf="!split.subsplit" class="kb-split-fields">
-                    <mat-form-field *ngIf="split.type == 'text' else option" appearance="fill">
-                        <mat-label>Placeholder {{i+1}}</mat-label>
-                        <input matInput type="text" [placeholder]="'placeholder '+(i+1)" [(ngModel)]="split.placeholder">
+                <span cdkDrag class="kb-split-fields">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Option {{i+1}}</mat-label>
+                        <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
                     </mat-form-field>
-                    <ng-template #option>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Option {{i+1}}</mat-label>
-                            <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
-                        </mat-form-field>
-                    </ng-template>
                     <div *cdkDragPreview class="custom-preview kb-field-preview">
                         {{split.value ? split.value : split.placeholder}}
                     </div>
                     <div *cdkDragPlaceholder class="custom-placeholder"></div>
                     <span class="kb-form-field-icon">
-                        <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="_field.onSelChng(selField, split.selected, i)" [name]="split.id+'-selected'" matTooltip="Default Selected" matTooltipPosition="above"></mat-checkbox>
+                        <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="onSelChng(selField, split.selected, i)" [name]="split.id+'-selected'" matTooltip="Default Selected" matTooltipPosition="above"></mat-checkbox>
                         <i *ngIf="selField.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
-                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="_field.addInput(selField.split, i)"></i>
-                        <i class="fa fa-times kb-danger" *ngIf="selField.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="_field.removeInput(selField.split, i)"></i>
-                    </span>
-                </span>
-                <span class="kb-split-fields" *ngFor="let subsplit of split.subsplit, index as j">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Placeholder {{i == 0 ? 1 : i*2+j}}</mat-label>
-                        <input matInput type="text" [placeholder]="'placeholder '+(i == 0 ? 1 : i*2+j)" [(ngModel)]="subsplit.placeholder">
-                    </mat-form-field>
-                    <span class="kb-form-field-icon">
-                        <i [ngClass]="subsplit.hide ? 'fa-eye-slash' : 'fa-eye'" class="fa" mat-ripple (click)="subsplit.hide = !subsplit.hide"></i>
+                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="addInput(selField.split, i)"></i>
+                        <i class="fa fa-times kb-danger" *ngIf="selField.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="removeInput(selField.split, i)"></i>
                     </span>
                 </span>
             </span>
         </div>
-        <mat-form-field appearance="fill" *ngIf="selField.name == 'address'">
-            <mat-label>Selected Country</mat-label>
-            <mat-select [(ngModel)]="selField.split[2].subsplit[1].placeholder" name="selected-country">
-                <mat-option *ngFor="let opt of _field.countries" [value]="opt.name">
-                    {{opt.name}}
-                </mat-option>
-                </mat-select>
-        </mat-form-field>
     </div>
     <div mat-dialog-actions class="kb-dialog-additional">
         <mat-checkbox class="mr-auto" [(ngModel)]="selField.required">Required</mat-checkbox>
         <button mat-button mat-dialog-close color="secondary">Cancel</button>
-        <button *ngIf="selField.id else addfield" mat-button mat-dialog-close (click)="_field.updateField(selField, selFieldIndx)" cdkFocusInitial color="primary">Update</button>
+        <button *ngIf="selField.id else addfield" mat-button mat-dialog-close (click)="updateField(selField, selFieldIndx)" cdkFocusInitial color="primary">Update</button>
         <ng-template #addfield>
-            <button mat-button mat-dialog-close (click)="_field.addField(selField)" cdkFocusInitial color="primary">Add</button>
+            <button mat-button mat-dialog-close (click)="addField(selField)" cdkFocusInitial color="primary">Add</button>
         </ng-template>
     </div>
 </ng-template>
@@ -127,14 +104,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let ff of _field.fields, index as i">
+                    <tr *ngFor="let ff of fields, index as i">
                         <td>{{ff.label}}</td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
                         <td>{{'%'+ff.label+'%' | uppercase}}</td>
                         <td>
-                            <i matTooltip="Edit" (click)="openDialog(fieldsetting, ff, i)" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
-                            <i matTooltip="Delete" (click)="openDialog(delfield, ff, i)" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
-                        </td>
+                            <span *ngIf="ff.default else action" class="kb-info-tag kb-tag ml-2">Default</span>
+                            <ng-template #action>
+                                <i matTooltip="Edit" (click)="openDialog(fieldsetting, ff, i)" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
+                                <i matTooltip="Delete" (click)="openDialog(delfield, ff, i)" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
+                            </ng-template>
+                        </td>                        
                     </tr>
                 </tbody>
             </table>
