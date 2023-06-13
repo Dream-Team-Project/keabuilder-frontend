@@ -83,6 +83,7 @@ import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
 import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
 import { AllWebsitesComponent } from './all-websites/all-websites.component';
+import { FormFieldsComponent } from './form-fields/form-fields.component';
 
 import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.component';
 import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
@@ -137,7 +138,6 @@ const routes: Routes = [
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   
   // Coming Soon links==>  ComingSoonComponent
-  
   
   { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
   { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -233,6 +233,7 @@ const routes: Routes = [
     { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
     { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
     { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
+    { path: 'fields', component: FormFieldsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
@@ -343,5 +344,6 @@ export const RoutingComponents =
     ComingSoonComponent,
     FunnelCheckoutComponent,
     AllWebsitesComponent,
+    FormFieldsComponent
   ];
 

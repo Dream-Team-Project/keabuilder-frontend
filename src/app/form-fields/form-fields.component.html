@@ -1,0 +1,123 @@
+<ng-template #fieldlists>
+    <h4 class="kb-field-list-head border-bottom py-2">
+        <span>Select Field</span>
+        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </h4>
+    <mat-nav-list>
+        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff)" *ngFor="let ff of _field.fieldTypes" role="listitem" mat-ripple>
+            <span class="kb-field-list-icon" [innerHTML]="ff.icon | safeHtml"></span>
+            <span class="kb-field-list-name">{{ff.label | titlecase}}</span>
+        </div>
+    </mat-nav-list>
+</ng-template>
+<ng-template #fieldsetting>
+    <h1 mat-dialog-title>{{_field.selField.label ? _field.selField.label : _field.selField.name.replaceAll('-',' ')}}</h1>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Label</mat-label>
+            <input matInput type="text" [placeholder]="'label'" [(ngModel)]="_field.selField.label">
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="!_field.selField.split || _field.selField.type == 'select'">
+            <mat-label>Placeholder</mat-label>
+            <input matInput type="text" [placeholder]="'placeholder'" [(ngModel)]="_field.selField.placeholder">
+        </mat-form-field>
+        <div cdkDropList
+        [cdkDropListData]="_field.selField.split" (cdkDropListDropped)="itemDropped($event)">
+            <span *ngFor="let split of _field.selField.split, index as i">
+                <span cdkDrag *ngIf="!split.subsplit" class="kb-split-fields">
+                    <mat-form-field *ngIf="split.type == 'text' else option" appearance="fill">
+                        <mat-label>Placeholder {{i+1}}</mat-label>
+                        <input matInput type="text" [placeholder]="'placeholder '+(i+1)" [(ngModel)]="split.placeholder">
+                    </mat-form-field>
+                    <ng-template #option>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Option {{i+1}}</mat-label>
+                            <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
+                        </mat-form-field>
+                    </ng-template>
+                    <div *cdkDragPreview class="custom-preview kb-field-preview">
+                        {{split.value ? split.value : split.placeholder}}
+                    </div>
+                    <div *cdkDragPlaceholder class="custom-placeholder"></div>
+                    <span class="kb-form-field-icon">
+                        <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="_field.onSelChng(i, split.selected)" [name]="split.id+'-selected'" matTooltip="Default Selected" matTooltipPosition="above"></mat-checkbox>
+                        <i *ngIf="_field.selField.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
+                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="_field.addInput(_field.selField.split, i)"></i>
+                        <i class="fa fa-times kb-danger" *ngIf="_field.selField.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="_field.removeInput(_field.selField.split, i)"></i>
+                    </span>
+                </span>
+                <span class="kb-split-fields" *ngFor="let subsplit of split.subsplit, index as j">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Placeholder {{i == 0 ? 1 : i*2+j}}</mat-label>
+                        <input matInput type="text" [placeholder]="'placeholder '+(i == 0 ? 1 : i*2+j)" [(ngModel)]="subsplit.placeholder">
+                    </mat-form-field>
+                    <span class="kb-form-field-icon">
+                        <i [ngClass]="subsplit.hide ? 'fa-eye-slash' : 'fa-eye'" class="fa" mat-ripple (click)="subsplit.hide = !subsplit.hide"></i>
+                    </span>
+                </span>
+            </span>
+        </div>
+        <mat-form-field appearance="fill" *ngIf="_field.selField.name == 'address'">
+            <mat-label>Selected Country</mat-label>
+            <mat-select [(ngModel)]="_field.selField.split[2].subsplit[1].placeholder" name="selected-country">
+                <mat-option *ngFor="let opt of _field.countries" [value]="opt.name">
+                    {{opt.name}}
+                </mat-option>
+                </mat-select>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="kb-dialog-additional">
+        <mat-checkbox class="mr-auto" [(ngModel)]="_field.selField.required">Required</mat-checkbox>
+        <button mat-button mat-dialog-close color="secondary">Cancel</button>
+        <button mat-button mat-dialog-close (click)="_field.addField()" cdkFocusInitial color="primary">Add</button>
+    </div>
+</ng-template>
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <mat-form-field appearance="fill" class="col-6 pr-2">
+            <mat-label>Search Fields</mat-label>
+            <input matInput #searchInp (input)="searchFields(searchInp, filterInp)" type="text" placeholder="Search Form Name">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col-2">
+            <mat-label>Sort By</mat-label>
+            <mat-select #filterInp name="kbfilter" (valueChange)="searchFields(searchInp, filterInp)">
+              <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+              <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+              <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+              <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="col-md-4 text-right">
+            <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet(fieldlists)">Add New Field <i
+                class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="kb-field-data table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Field Tag</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ff of _field.fields">
+                        <td>{{ff.label}}</td>
+                        <td>{{ff.name.replaceAll('-', ' ')}}</td>
+                        <td>{{ff.tag}}</td>
+                        <td>
+                            <i matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
+                            <i matTooltip="Delete" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
