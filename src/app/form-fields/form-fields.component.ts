@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
-import { FormFieldsService } from '../_services/_builder/form-fields.service';
+import { FormFieldsService } from '../_services/_crmservice/form-fields.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

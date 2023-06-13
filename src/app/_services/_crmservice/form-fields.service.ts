@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneralService } from './general.service';
+import { GeneralService } from '../_builder/general.service';
 import { TokenStorageService } from '../token-storage.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
