@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FunnelService } from '../_services/funnels.service';
 import {FormControl, Validators} from '@angular/forms'; 
 import { GeneralService } from '../_services/_builder/general.service';
@@ -13,7 +13,27 @@ import { WebsiteService } from '../_services/website.service';
   styleUrls: ['./build-funnel.component.css']
 })
 export class BuildFunnelComponent implements OnInit {
+uniqueid:any;
+@Input()
+set DialogToggle(val: any) {
+    if(this.connectWtParent) {
+        this.createfunnel();
+    }
+    else this.connectWtParent = true;
+}  
 
+form: any = {
+    funnelname: '',
+    funnelfirststep: '',
+    badgecolor:'',
+    funneltype:'',
+    subdomain:''
+};
+userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+stepnameFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+hidefornow = false;
+dataobj:any;
    constructor(private router: Router, 
               private funnelService: FunnelService,
               private route: ActivatedRoute,
@@ -21,7 +41,25 @@ export class BuildFunnelComponent implements OnInit {
               private _snackBar: MatSnackBar,
               private _file: FileUploadService,
               private websiteService: WebsiteService,
-              ) { }
+              private _route: ActivatedRoute,
+              ) { 
+                // this._route.paramMap.subscribe((params: ParamMap) => {
+                //     this.uniqueid = params.get('uniqueid');
+                //     console.log(this.uniqueid)
+                //     this.funnelService.getSingleFunnel(this.uniqueid).subscribe((data:any)=>{
+                //         console.log(data.data[0].name)
+                //     if(data.data.length>0){
+                //         this.form.funnelname=data.data[0]?.name;
+                //         // this.form.funnelfirststep=data.data?.name;
+                //         // this.form.badgecolor=data.data?.name;
+                //         // this.form.funneltype=data.data?.name;
+                //         this.form.subdomain=data.data[0]?.subdomain;
+
+                       
+                //     }
+                //     })
+                // })
+              }
 
     sidebar = {
         open: false,
@@ -31,26 +69,7 @@ export class BuildFunnelComponent implements OnInit {
     connectWtParent:boolean = false;
     isneed = false;
     
-    @Input()
-    set DialogToggle(val: any) {
-        if(this.connectWtParent) {
-            this.createfunnel();
-        }
-        else this.connectWtParent = true;
-    }  
-    
-    form: any = {
-        funnelname: '',
-        funnelfirststep: '',
-        badgecolor:'',
-        funneltype:'',
-        subdomain:''
-    };
-    userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-    subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
-    stepnameFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-    hidefornow = false;
-    
+   
     allcategory = [
         {0:true,
             title:'Survey Funnel',
@@ -167,45 +186,29 @@ export class BuildFunnelComponent implements OnInit {
       var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user'];
       if(this.searchStringInArray(nwsubdomain,notusesub)==1){
         this.searching = true;
-
             this.funnelService.savefunneldb(this.form).subscribe({
                 next: data => {
                     console.log(data);
-
+                    this.dataobj=data.data;
                     if(data.exist ==1){
                         this.searching = false;
                         this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
                      }else{
-
-                        var dataobj = {website_id:data.data.uniqueid};
-                        console.log(dataobj);
-                        this._file.createwebsitefolder(dataobj).subscribe(e=>{
-                            console.log(e);
+                        this.createwebsitefolder().then((resp)=>{
+                            console.log(resp);
+                          this.savepage().then((resp1)=>{
+                            console.log(resp1);
+                            this.websiteService.oncreatesubdomain(this.form.subdomain,data.data.uniqueid).subscribe({
+                                next: datanw => {
+                                    console.log("hello");
+                                this.searching = false;
+                                this._snackBar.open('Funnel Created Successfully!', 'OK');
+                                this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
+                                }
+                              });
+                          })  
                         });
-
-                        var page = {
-                            head: '',
-                            body: '',
-                            style: '',
-                            dir: '/pages',
-                            folder: data.data.pagepath,
-                            prevFolder: data.data.pagepath,
-                            website_id:data.data.uniqueid, 
-                          }
-                          this._general._file.savePage(page).subscribe((event:any) => {
-                            console.log(event);
-                          },error=>{
-                            console.log(error)
-                        });
-                       
-
-                        this.websiteService.oncreatesubdomain(this.form.subdomain,data.data.uniqueid).subscribe({
-                            next: datanw => {
-                            this.searching = false;
-                            this._snackBar.open('Funnel Created Successfully!', 'OK');
-                            this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
-                            }
-                          });
+                        
 
                      }
 
@@ -223,7 +226,42 @@ export class BuildFunnelComponent implements OnInit {
     }
 
   }
-
+  createwebsitefolder(){
+    return new Promise((resolve) => {
+    var dataobj1 = {website_id:this.dataobj.uniqueid};
+    console.log(dataobj1);
+    this._file.createwebsitefolder(dataobj1).subscribe(e=>{
+        console.log(e);
+    resolve(true);
+    // }
+  },
+  (error) => {
+    resolve(false);
+  }
+);
+});
+  }
+  savepage(){
+    return new Promise((resolve) => {
+        var page = {
+            head: '',
+            body: '',
+            style: '',
+            dir: '/pages',
+            folder: this.dataobj.pagepath,
+            prevFolder: this.dataobj.pagepath,
+            website_id:this.dataobj.uniqueid, 
+          }
+          this._general._file.savePage(page).subscribe((event:any) => {
+            console.log(event);
+            resolve(true);
+          },error=>{
+            console.log(error)
+            resolve(false);
+          }
+    );
+});
+  }
   loopthefor(value: any, which: any){
         if(which=='author'){    
             this.author = !this.author;

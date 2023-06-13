@@ -291,23 +291,26 @@ export class AllFunnelsComponent implements OnInit {
       this.funnelnotfound = false;
 
       data.data2.forEach((element: any) => {
-          var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[],updated_at:''};
+          var newob:any = {id:'',uniqueid:'',name:'',grouptags:'',domain:'',subdomain:'',steps:[],created_at:'',updated_at:''};
           newob.uniqueid = element.uniqueid;
           newob.id = element.id;
           newob.name = element.name;
           newob.grouptags = element.grouptags;
+          newob.created_at=element.created_at;
           newob.updated_at=element.updated_at;
 
           newob.domain = element.domain;
           newob.subdomain = element.subdomain;
             data.data.forEach((element2: any) => {
-              var newob2 = {id:'',uniqueid:'',page_name:'',page_path:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
+              var newob2 = {id:'',uniqueid:'',page_name:'',page_path:'',created_at:'',updated_at:'',variation:'',tag:'',color:'',img:'',funnelid:'',funneltype:''};
               if(element2.funnelid==newob.uniqueid){
                 newob2.id = element2.id;
                 newob2.page_name = element2.page_name;
                 newob2.uniqueid = element2.uniqueid;
                 var subdate = element2.updated_at ? (new Date(element2.updated_at).toDateString()) : '';
+                var subdate1 = element2.created_at ? (new Date(element2.created_at).toDateString()) : '';
                 newob2.updated_at = subdate;
+                newob2.created_at = subdate1;
                 newob2.variation = element2.variation;
                 newob2.tag = element2.tags;
                 newob2.color = element2.color;
@@ -317,11 +320,12 @@ export class AllFunnelsComponent implements OnInit {
                 newob2.page_path = element2.page_path;
                 newob.steps.push(newob2);
                 if(new Date(subdate) > new Date(newob.updated_at)) newob.updated_at = subdate;
+                if(new Date(subdate1) > new Date(newob.created_at)) newob.created_at = subdate1;
               }
             });
 
         this.funnels.push(newob);
-        // console.log(this.funnels);
+        console.log(this.funnels);
 
       });
 
@@ -489,7 +493,10 @@ export class AllFunnelsComponent implements OnInit {
   openDialog(e:any) {
     this.DialogParentToggle = !this.DialogParentToggle;
   }
-
+  openDialog1(e:any,funnel:any) {
+    // this.router.navigate(['/funnels/'+funnel.uniqueid],{relativeTo: this.route});
+      this.DialogParentToggle = !this.DialogParentToggle;  
+  }
   dupanotherdes(page:any){
     
     // console.log(page);

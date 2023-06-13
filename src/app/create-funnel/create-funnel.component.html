@@ -338,6 +338,9 @@
                 </button>
                 
                 <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="checkpagesettings('settings')">
+                    <i class="fas fa-pencil-alt mr-2" ></i>Quick Edit
+                </button>
                   <button mat-menu-item (click)="viewpagestep(step)">
                     <i class="fas fa-eye mr-2" ></i> View Step
                   </button>

@@ -74,31 +74,9 @@
   <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="hidepopupsidebar()"
     [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close">
   </div>
-  <div class="container-fluid mb-4">
-    <div class="row ">
-      <div class="col-md-8 ">
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" color="primary"><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
-        
-      </div>
-      <div class="col-md-4 text-right">
-        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="forms.length != 0">
-          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
-        </button>
-        <button mat-raised-button color="primary" (click)="newform('create','')" class="mx-3">Create New <i
-            class="fas fa-plus"></i></button>
-      </div>
-    </div>
-  </div>
+ 
   <div class="container-fluid mt-4">
-    <div class="row align-items-center ">
+    <div class="row  ">
       <!-- <div class="col-md-12"> -->
         <mat-form-field appearance="fill" class="col-6 pr-2">
           <mat-label>Search Forms</mat-label>
@@ -115,6 +93,14 @@
           </mat-select>
         </mat-form-field>
       <!-- </div> -->
+      <div class="col-md-4 text-right mt-2">
+        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="forms.length != 0">
+          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+        </button>
+        <button mat-raised-button color="primary" (click)="newform('create','')" class="mx-3">Create New <i
+            class="fas fa-plus"></i></button>
+      </div>
       
     </div>
     <div [class.px-3]="!toggleview" class="row" *ngIf="forms.length != 0 else nodata">
@@ -122,11 +108,11 @@
         <div [class.row]="!toggleview">
           <div [style.height]="toggleview ? '300px' : '150px'" [class]="toggleview ? 'col-md-12' : 'col-md-6'"
             class="p-0">
-            <!-- <div *ngIf="toggleview" class="kb-title-board line-ellipsis ftsize">
+            <div *ngIf="toggleview" class="kb-title-board line-ellipsis ftsize">
               <span>{{form.name ? form.name : 'form' | titlecase}}</span>
               <input type="text" #formname [value]="form.name" (blur)="rename(form, formname)"
                 matTooltip="Edit form Name" matTooltipPosition="above">
-            </div> -->
+            </div>
             <div [class.kb-disabled]="form.deleting" class="kb-fitimg"
               [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
               <div class="kb-loader" *ngIf="shortwaiting || form.deleting">

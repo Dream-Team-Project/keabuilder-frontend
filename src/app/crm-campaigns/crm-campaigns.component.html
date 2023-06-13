@@ -37,39 +37,9 @@
 </ng-template>
 
 <div id="kb-crm">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-8">
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" ><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" color="primary"><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
-      </div>
-      <div class="col-md-4 text-right">
-        <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
-          <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
-        </button>
-        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog)">
-          <i class="fa fa fa-envelope" aria-hidden="true"></i> Create Campaign
-        </button>
-      </div>
-    </div>
-    <!-- <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-10 mt-4 ">
-             <span ><span style="font-size:35px">Campaigns</span> ({{this.kbcampaigns.length}})</span>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div class=" m-2 ml-3 pl-0 mb-0 pb-0" style="font-size:12px ">Campaigns search by name or email</div> -->
-    <div class="  text-left ml-0 mb-0 pl-0 d-flex mt-4">
-    <div  class=" d-inline mt-2 mb-2 mr-2 searchbox" style="font-size:14px">
-        <mat-form-field  class= "fntilform "  style="width:500px" appearance="fill" >
+    <div class="container-fluid">
+    <div  class="row mt-3">
+        <mat-form-field  class= "col-md-3 fntilform "  appearance="fill" >
           <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Campaigns...</mat-label>
     <input type="email" 
     matInput 
@@ -81,9 +51,7 @@
     placeholder="Search Campaigns..."
          >
         </mat-form-field>
-    </div>
-    <div  class="d-inline m-2" style="font-size:14px">
-        <mat-form-field  class= "fntilform" appearance="fill">
+        <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select [(ngModel)]="selectedForm" (ngModelChange)="filter()">
             <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
@@ -94,19 +62,15 @@
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
-    </div>
-    <div  class="d-inline m-2 " style="font-size:14px">
-        <mat-form-field  class= "fntilform" appearance="fill">
+        <!-- <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
           <mat-label>Filter by Type:</mat-label>
           <mat-select  [(ngModel)]="selectedForm" (ngModelChange)="sort()">
             <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
             <mat-option value="One-Time">One Time</mat-option>
             <mat-option value="Others">Others</mat-option>
           </mat-select>
-        </mat-form-field>
-    </div>
-    <div  class="d-inline m-2 " style="font-size:14px">
-      <mat-form-field  class= "fntilform" appearance="fill">
+        </mat-form-field> -->
+      <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
         <mat-label>Filter by Status:</mat-label>
         <mat-select  [(ngModel)]="selectedForm" (ngModelChange)="sortcampaigns()">
           <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
@@ -115,9 +79,7 @@
           <mat-option [value]="'1'">Sent</mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
-    <div  class="d-inline m-2 " style="font-size:14px">
-      <mat-form-field  class= "fntilform" appearance="fill">
+      <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
         <mat-label>Filter by Lists:</mat-label>
         <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortlist()" >
           <mat-option (click)="fetchAllcampaigns()" value=''>-- None --</mat-option>
@@ -126,6 +88,14 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+    <div class="col-md-3 text-right mt-2">
+      <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
+        <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+        <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+      </button>
+      <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog)">
+        <i class="fa fa fa-envelope" aria-hidden="true"></i> Create Campaign
+      </button>
     </div>
     </div>
     <div [class.px-3]="toggleview" class="row">
@@ -232,7 +202,5 @@
         </div>
       </div>
     </div>
-
   </div>
-
 </div>

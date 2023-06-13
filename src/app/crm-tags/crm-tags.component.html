@@ -59,63 +59,18 @@
     [class.slowHide]="sidebar.anim.close"
   ></div>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-8">
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" ><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" color="primary"><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-          <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
-      </div>
-      <div class="col-md-4 text-right">
-        <button
-        mat-raised-button
-        (click)="openSidebar()"
-        color="primary"
-        class="mr-2 d-inline-block"
-      >
-        <i class="fa fa-tags" aria-hidden="true"></i> Add a tag
-      </button>
-      <!-- <button
-      mat-raised-button  
-      class="mr-2 d-inline-block border border-warning"
-    >
-     Merge
-    </button> -->
-      </div>
-    </div>
-  </div>
-  <!-- <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-10 mt-4 ">
-           <span ><span style="font-size:40px">Tags</span> ({{this.tags.length}})</span>
-      </div>
-    </div>
-  </div> -->
-
-  <div class="  text-left ml-2 mb-0 pl-0 d-flex mt-4">
-    <div  class=" d-inline mr-4 ml-2 searchbox" style="font-size:14px">
-      <!-- <div style="font-size:12px">Tags search by name or contacts</div> -->
-      <mat-form-field class= " fntilform "  style="width:500px" appearance="fill">
+    <div class="row mt-3">
+      <mat-form-field class="col-md-6 "  appearance="fill">
         <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Tags...</mat-label>
-        <input
-        matInput
+        <input matInput
           type="text"
           (keyup)="applyFilter($event)"
-          class=""
+          class="form-control-search"
           id="offer-search"
           #input
-         
-          placeholder="Search Tags..."
-        />
+          placeholder="Search Tags..."/>
       </mat-form-field>
-      </div>
-      <div  class="d-inline " style="font-size:14px">
-        <!-- <mat-label>Sort by:</mat-label> -->
-        <mat-form-field appearance="fill">
+        <mat-form-field class="col-md-2" appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sorttag()">
             <mat-option value="">-- None --</mat-option>
@@ -126,11 +81,17 @@
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
+        <div class="col-md-4 text-right mt-2">
+          <button
+          mat-raised-button
+          (click)="openSidebar()"
+          color="primary"
+          class="mr-2">
+          <i class="fa fa-tags" aria-hidden="true"></i> Add a tag
+        </button>
+        </div>
       </div>
-     
-      </div>
-      
-  
+    </div>
   <ng-template #dialog>
     <h1 mat-dialog-title class="kb-danger">Delete Tag</h1>
     <div mat-dialog-content>
@@ -151,7 +112,7 @@
     </div>
   </ng-template>
   
-    <div class="container-fluid mt-2 ">
+    <div class="container-fluid mt-1 ">
       <div class="row  ">
         <div class="col-md-12 d-flex">
           <table class="table ml-2 ">

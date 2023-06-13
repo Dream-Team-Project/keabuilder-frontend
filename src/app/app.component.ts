@@ -30,7 +30,7 @@ export class AppComponent {
             switch (true) {
               case event instanceof NavigationStart: {
                 var e:any = event;
-                var geturl = e.url.split('/')[2];
+                var geturl = e.url.split('/')[1];
                 var isAutomation = e.url.split('/')[2] == 'automation';
                 console.log(geturl)
                 console.log(!isAutomation)
