@@ -85,17 +85,6 @@ export class FormFieldsComponent implements OnInit {
 
   }
 
-  searchFields(search: any, filter: any) {
-    this.fetching = true;
-    var obj = {
-      search: search.value,
-      filter: filter.value,
-    }
-    // this._file.searchformquery(obj).subscribe((resp:any)=>{
-    //   this.adjustdata(resp.data);
-    // });
-  }
-
   onSelChng(val:boolean, field:any, i:number) {
     if(field.name != 'checkbox') {
       var temp = JSON.stringify(field.split);
@@ -123,18 +112,34 @@ export class FormFieldsComponent implements OnInit {
       this.selField = tempObj;
       this.selFieldIndx = index;
       this.dialog.open(templateRef);
-  }
 
+  }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
+   
   }
-
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
+   
   }
-
   itemDropped(event: CdkDragDrop<any[]>) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
   }
 
+  searchFields(search: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+    }
+    console.log(obj)
+    // this._field.searchFieldsquery(obj).subscribe((resp:any)=>{
+    //   this.adjustdata(resp.data);
+    //   console.log(resp.data)
+    // });
+  }
+  adjustdata(data:any){
+    this.fields = data;
+    this.fetching = false;
+  }
 }
