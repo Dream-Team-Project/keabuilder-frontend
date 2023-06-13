@@ -3,7 +3,6 @@ import { FieldService } from '../_services/_builder/field.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-form-fields',
@@ -13,6 +12,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class FormFieldsComponent implements OnInit {
 
   fetching:boolean = true;
+  selField:any = '';
+  selFieldIndx = -1;
 
   constructor(
     public _field: FieldService,
@@ -23,9 +24,11 @@ export class FormFieldsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openDialog(templateRef: TemplateRef<any>, field: any) {
+  openDialog(templateRef: TemplateRef<any>, field: any, index: number) {
       this.closeBottomSheet();
-      this._field.selField = field;
+      var tempObj = JSON.parse(JSON.stringify(field));
+      this.selField = tempObj;
+      this.selFieldIndx = index;
       this.dialog.open(templateRef);
   }
 

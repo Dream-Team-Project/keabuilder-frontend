@@ -32,8 +32,6 @@ export class AppComponent {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
                 var isAutomation = e.url.split('/')[2] == 'automation';
-                console.log(geturl)
-                console.log(!isAutomation)
                 if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') && !isAutomation) {
                   _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
