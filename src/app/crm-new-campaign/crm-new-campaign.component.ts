@@ -16,7 +16,7 @@ import { CrmCampaignsService } from '../_services/_crmservice/crm-campaigns.serv
 })
 export class CrmNewCampaignComponent implements OnInit {
 
-  campnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+  // campnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   subjectControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   preheadertextControl = new FormControl('',[Validators.minLength(3)]);
   replytoControl = new FormControl('',[Validators.minLength(3),Validators.email]);
@@ -30,7 +30,7 @@ export class CrmNewCampaignComponent implements OnInit {
   zipControl = new FormControl('', [Validators.required]);
 
   config: any = {
-    height: 600,
+    height: 577,
     plugins:
       'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap',
     toolbar:
@@ -44,7 +44,7 @@ export class CrmNewCampaignComponent implements OnInit {
     diskCache: true
   };
   testemail = '';
-  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'America/New_York'};
+  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'Default',};
   sendoptn = false;
 
   alllists:any = [];
@@ -87,8 +87,11 @@ export class CrmNewCampaignComponent implements OnInit {
           this.alladdress = data.data;
       }
     });
-
-    this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
+    if(this.fullcampobj.timezone=='Default' || !this.fullcampobj.timezone ) this.showmytime='Default';
+    else{
+      this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
+    }
+    // this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
 
     this.crmCampaignsService.getSinglecrmdata(this.uniqueidcamp).subscribe({
       next: data => {
@@ -113,12 +116,16 @@ export class CrmNewCampaignComponent implements OnInit {
 
               this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
               // console.log(this.fullcampobj);
-              this.showmytime = this.viewmytimezone(element.timezone);
+              if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
+              else{
+                this.showmytime = this.viewmytimezone(element.timezone);
+              }
+              
 
             });
 
           }else{
-            this.router.navigate(['/crmmain'],{relativeTo: this.route});
+            this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
           }
       }
     });
@@ -131,10 +138,11 @@ export class CrmNewCampaignComponent implements OnInit {
     this.fullcampobj.uniqueid = this.uniqueidcamp;
     this.fullcampobj.publish = 0;
     var getobj = this.fullcampobj;
-    if(this.campnameControl.status=='VALID' && this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
+    // console.log(this.campnameControl.status+'---------'+this.subjectControl.status+'------'+this.preheadertextControl.status+'----------'+this.replytoControl.status+'------')
+    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
-
+        // console.log(this.fullcampobj);
         this.crmCampaignsService.updatecrmcampaignt(getobj).subscribe({
           next: data => {
               console.log(data);
@@ -156,7 +164,7 @@ export class CrmNewCampaignComponent implements OnInit {
     this.fullcampobj.uniqueid = this.uniqueidcamp;
     this.fullcampobj.publish = 1;
     var getobj = this.fullcampobj;
-    if(this.campnameControl.status=='VALID' && this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
+    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
 
@@ -168,7 +176,7 @@ export class CrmNewCampaignComponent implements OnInit {
                 if(data.success==1){
                     this.campstatus = 'Publish';
                     this._snackBar.open('Campaign Publish Successfully!!', 'OK');
-                    this.router.navigate(['/crmmain'],{relativeTo: this.route});
+                    this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
                     
                   }
                 }
@@ -264,7 +272,10 @@ export class CrmNewCampaignComponent implements OnInit {
   gettimezone(event:any){
     this.genaddress.timezone = event.source.triggerValue;
     var timez = event.source.triggerValue;
+    if( event.source.triggerValue=='Default') this.showmytime='Default'
+    else{
     this.showmytime = this.viewmytimezone(timez);
+    }
   }
 
   viewmytimezone(timez:any){
@@ -294,9 +305,9 @@ export class CrmNewCampaignComponent implements OnInit {
     return new Date(year, month, day, hour, minute);
   }
 
-  sendtimezone(){
+  // sendtimezone(){
 
-  }
+  // }
 
 
 }

@@ -3,6 +3,8 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from '../_services/_builder/form.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
+import { CrmService } from '../_services/_crmservice/crm.service';
+import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
   selector: 'app-form-fetch',
@@ -19,7 +21,9 @@ export class FormFetchComponent implements OnInit {
     private route: ActivatedRoute,
     public _form: FormService,
     public _style: StyleService,
-    public _image: ImageService
+    public _image: ImageService,
+    public crmService: CrmService,
+    public _general: GeneralService,
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var prmObj = {
@@ -64,11 +68,15 @@ export class FormFetchComponent implements OnInit {
   }
 
   formSubmit() {
+    console.log(this._form.form);
+    console.log(this._form.submission.email);
+    console.log(this._form.ansjson);
     this.submitting = true;
     this._form.checkFields().then(res=>{
       if(res) {
         this._form.formSubmit().then((res:any)=>{
           if(res.success == 1) {
+            this.createCrmContact();
             var redirection = this._form.form.redirection;
             if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
             else this.thankyou = true;
@@ -83,6 +91,30 @@ export class FormFetchComponent implements OnInit {
       }
     });
   }
+
+  createCrmContact(){
+    let data = this._general.decodeJSON(this._form.submission.json);
+    var temp:any = new Object();  
+    data.forEach((sub:any)=>{
+      if(sub.split && sub.name != 'select' && sub.name != 'checkbox' && sub.name != 'radio') {
+          sub.split?.forEach((spl:any)=>{
+          if(spl.subsplit) {
+            spl.subsplit?.forEach((subspl:any)=>{
+              temp[subspl.placeholder.replace(/\s/g, '')] = subspl.value;
+            })
+          }
+          else temp[spl.placeholder.replace(/\s/g, '')] = spl.value;
+        })
+      } 
+      else temp[sub.label.replace(/\s/g, '')] = sub.value;
+    })
+    console.log(temp);
+    let obj={firstname:temp?.FullName?temp?.FullName:temp?.FirstName,lastname:temp?.FullName?temp?.FullName:temp?.LastName,email:this._form.submission?.email,phone:temp?.Phone,list_uniqueid:this._form.form.lists,tags:this._form.form.tags,};
+    console.log(obj);
+    this.crmService.createcrmcontact(obj).subscribe((data:any)=>{
+
+    });
+    }
 
   getBlockStyle(en:string) {
     if(this._form.formEleTypes[en]) return this._style.getBlockStyle(this._form.formEleTypes[en]?.content.style);

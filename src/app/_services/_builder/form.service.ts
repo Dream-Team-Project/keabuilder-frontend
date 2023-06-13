@@ -57,8 +57,8 @@ export class FormService {
     emailmessage: '',
     emailenabled: false,
     thankyoumessage: '<h4>Thankyou</h4><p>The form has been submitted successfully!</p>',
-    lists:[],
-    tags:[],
+    lists:'',
+    tags:'',
     html: '',
     style: '', 
     appendstyle: '',
@@ -341,9 +341,11 @@ export class FormService {
   }
 
   updateForm() {
+    // console.log(this.form.lists)
+    // console.log(this.form.tags)
     return new Promise((resolve, reject)=>{
-      // this.form.lists.toString();
-      // this.form.tags.toString();
+      this.form.lists.toString();
+      this.form.tags.toString();
       this.setFormStyle(this.formEleTypes).then(style=>{
         this.form.html = this._general.encodeJSON(this.formField);
         this.form.style = this._general.encodeJSON(this.formEleTypes);
