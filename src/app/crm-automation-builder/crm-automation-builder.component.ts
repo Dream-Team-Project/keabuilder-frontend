@@ -3,7 +3,7 @@ import { AutomationService } from '../_services/_builder/automation.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({

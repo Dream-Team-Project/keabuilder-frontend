@@ -98,8 +98,7 @@
     </div>
   </div>
   <div class="container-fluid mt-4">
-    <div class="row align-items-center ">
-      <!-- <div class="col-md-12"> -->
+    <div class="row align-items-center">
         <mat-form-field appearance="fill" class="col-6 pr-2">
           <mat-label>Search Forms</mat-label>
           <input matInput #searchInp type="text" (input)="searchForms(searchInp, filterInp)" placeholder="Search Form Name">
@@ -114,8 +113,6 @@
             <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
           </mat-select>
         </mat-form-field>
-      <!-- </div> -->
-      
     </div>
     <div [class.px-3]="!toggleview" class="row" *ngIf="forms.length != 0 else nodata">
       <div [class]="toggleview ? 'col-md-4' : 'col-md-12'" class="cardpage mt-4" *ngFor="let form of forms">

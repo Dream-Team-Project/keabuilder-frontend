@@ -55,11 +55,6 @@
     padding: 16px!important;
 }
 
-.mat-dialog-actions.kb-dialog-additional {
-    flex-direction: row-reverse;
-    justify-content: space-between!important;
-}
-
 span.kb-split-fields {
     display: flex;
     position: relative;
@@ -452,4 +447,8 @@ button {
 ::ng-deep div#kb-topbar-container.kb-preview-exit .kb-triggers button.mat-button span,
 ::ng-deep div#kb-topbar-container.kb-preview-exit .kb-triggers button.mat-button span i {
     font-size: 13px;
+}
+
+::ng-deep .mat-checkbox label {
+    margin: 0;
 }

@@ -236,6 +236,13 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
+          routerlink: '/crm/fields',
+          img: 'complete.gif',
+          icon: 'far fa-check-square',
+          title: 'Fields',
+        },
+        {
+          0:true,
           routerlink: '/crm/automations',
           img: 'hacker.gif',
           icon: 'fa fa-random',
