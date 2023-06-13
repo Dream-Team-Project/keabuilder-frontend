@@ -1,9 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FieldService } from '../_services/_builder/field.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
+import { FormFieldsService } from '../_services/_builder/form-fields.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-form-fields',
@@ -13,22 +14,34 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class FormFieldsComponent implements OnInit {
 
   fetching:boolean = true;
-
+  delfield:any;
   constructor(
-    public _field: FieldService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet
-    ) { }
+    private _bottomSheet: MatBottomSheet,
+    public _formfields:FormFieldsService,
+    private _snackBar: MatSnackBar,
+    ) { 
+      this.getallformfields();
+    }
 
   ngOnInit(): void {
+  }
+  getallformfields(){
+    this._formfields.allformfields().subscribe((data:any)=>{
+      this._formfields.fields=data.data;
+      console.log(this._formfields.fields);
+    })
   }
 
   openDialog(templateRef: TemplateRef<any>, field: any) {
       this.closeBottomSheet();
-      this._field.selField = field;
+      this._formfields.selField = field;
       this.dialog.open(templateRef);
   }
-
+  openDialog1(templateRef: TemplateRef<any>,obj:any): void {
+    this.delfield = obj.uniqueid;
+    this.dialog.open(templateRef);
+  }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
   }
@@ -51,5 +64,25 @@ export class FormFieldsComponent implements OnInit {
     //   this.adjustdata(resp.data);
     // });
   }
-
+  addField() {
+    var temp = JSON.parse(JSON.stringify(this._formfields.selField));
+    console.log(temp);
+    this._formfields.fields.push(temp);
+    this._formfields.addField(temp).subscribe((data:any)=>{
+      if(data.success==1){
+        this.getallformfields();
+      }
+    })
+  }
+  deleteformfield(){
+    console.log(this.delfield)
+    let obj={uniqueid:this.delfield};
+    this._formfields.deleteformfield(obj).subscribe((data:any)=>{
+      if(data.success==1){
+        this.getallformfields();
+        this._snackBar.open("Form Field Deleted Succesfully","Ok",{duration:2000});
+        
+      }
+    });
+  }
 }
