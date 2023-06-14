@@ -8,38 +8,43 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class FormFieldsService {
   user_id:any = '';
-  allfields = './api/allformfields';
+  allfields = './api/allfields';
   addfields = './api/addfield';
-  deletefields = './api/deleteformfield';
+  updatefields = './api/updatefield';
+  deletefields = './api/deletefield';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;
-   }
+  }
 
-  addformfields(obj:any) {
+  fetchformfields(){
+    return this.http.get(this.allfields+'/'+this.user_id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  addformfield(obj:any) {
     obj.user_id=this.user_id;
-    return this.http.get(this.addfields+'/'+this.user_id)
+    return this.http.post(this.addfields, obj)
     .pipe(catchError(this.errorHandler));    
   }
 
-allformfields(){
-  return this.http.get('/api/allformfields/'+this.user_id)
-  .pipe(catchError(this.errorHandler));
-}
-deleteformfield(uniqueid:any){
-  return this.http.post('/api/deleteformfield/'+uniqueid,{user_id:this.user_id})
-  .pipe(catchError(this.errorHandler));
-}
-searchFieldsquery(obj:any){
-  obj.user_id = this.user_id;
-  return this.http.post('/api/searchFieldsquery',obj)
-  .pipe(catchError(this.errorHandler));
-}
-updateformfield(obj:any){
-  obj.user_id = this.user_id;
-  return this.http.post('/api/updateformfield',obj)
-  .pipe(catchError(this.errorHandler));
-}
+  updateformfield(obj:any){
+    obj.user_id = this.user_id;
+    return this.http.post(this.updatefields,obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteformfield(id:any){
+    return this.http.delete(this.deletefields+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  searchFieldsquery(obj:any){
+    obj.user_id = this.user_id;
+    return this.http.post('/api/searchFieldsquery',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

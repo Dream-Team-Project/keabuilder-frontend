@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -12,43 +12,41 @@ import { GeneralService } from '../_services/_builder/general.service';
 })
 export class FormFieldsComponent implements OnInit {
 
+  @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
+
     fieldTypes:Array<any> = [
-      { name: 'email', label: 'Secondary Email', type: 'email', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true },
-      { name: 'phone', label: 'Secondary Phone', type: 'tel', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: false },
-      { name: 'short-text', label: 'Short Text', type: 'text', tag: '', placeholder: 'Short Text', icon: '<i class="fas fa-text-width"></i>', value: '', required: false},
-      { name: 'long-text', label: 'Long Text', type: 'textarea', tag: '', placeholder: 'Long Text', icon: '<i class="fas fa-text-height"></i>', value: '', required: false},
-      {
-        name: 'checkbox', label: 'Multiple Choice', tag: '', type: 'checkbox', icon: '<i class="far fa-check-square"></i>', value: '', required: false, split: [
+      { name: 'email', label: 'Email 2', type: 'email', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true },
+      { name: 'phone', label: 'Phone 2', type: 'tel', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: false },
+      { name: 'short-text', label: 'Short Text', type: 'text', field_tag: '', placeholder: 'Short Text', icon: '<i class="fas fa-text-width"></i>', value: '', required: false},
+      { name: 'long-text', label: 'Long Text', type: 'textarea', field_tag: '', placeholder: 'Long Text', icon: '<i class="fas fa-text-height"></i>', value: '', required: false},
+      { name: 'multiple-choice', label: 'Multiple Choice', field_tag: '', type: 'checkbox', icon: '<i class="far fa-check-square"></i>', value: '', required: false, options: [
           { value: 'First option', type: 'checkbox-option', selected: false},
           { value: 'Second option', type: 'checkbox-option', selected: false },
           { value: 'Third option', type: 'checkbox-option', selected: false },
-        ]
-      },
-      {
-        name: 'radio', label: 'Single Choice', tag: '', type: 'radio', icon: '<i class="far fa-dot-circle"></i>', value: '', required: false, split: [
+        ] },
+      { name: 'single-choice', label: 'Single Choice', field_tag: '', type: 'radio', icon: '<i class="far fa-dot-circle"></i>', value: '', required: false, options: [
           { value: 'First option', type: 'radio-option', selected: false },
           { value: 'Second option', type: 'radio-option', selected: false },
           { value: 'Third option', type: 'radio-option', selected: false },
-        ]
-      },
-      { name: 'select', label: 'Select Option', tag: '', type: 'select', placeholder: 'Choose Option', icon: '<i class="far fa-list-alt"></i>', value: 'none', required: false, split: [
+        ] },
+      { name: 'dropdown', label: 'Dropdown', field_tag: '', type: 'select', placeholder: 'Choose Option', icon: '<i class="far fa-list-alt"></i>', value: 'none', required: false, options: [
         { value: 'First option', type: 'select-option', selected: false },
         { value: 'Second option', type: 'select-option', selected: false },
         { value: 'Third option', type: 'select-option', selected: false },
       ] },
-      { name: 'number', label: 'Number', tag: '', type: 'number', placeholder: 'Number', icon: '<i class="fas fa-hashtag"></i>', value: '', required: false},
-      { name: 'date', label: 'Date', tag: '', type: 'date', icon: '<i class="far fa-calendar-alt"></i>', value: '', required: false},
-      { name: 'time', label: 'Time', tag: '', type: 'time', icon: '<i class="far fa-clock"></i>', value: '', required: false},
+      { name: 'number', label: 'Number', field_tag: '', type: 'number', placeholder: 'Number', icon: '<i class="fas fa-hashtag"></i>', value: '', required: false},
+      { name: 'date', label: 'Date', field_tag: '', type: 'date', icon: '<i class="far fa-calendar-alt"></i>', value: '', required: false},
+      { name: 'time', label: 'Time', field_tag: '', type: 'time', icon: '<i class="far fa-clock"></i>', value: '', required: false},
     ];
     fields:Array<any> = [
-      { name: 'first-name', label: 'First Name', type: 'text', placeholder: 'First Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default: true },
-      { name: 'last-name', label: 'Last Name', type: 'text', placeholder: 'Last Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default: true },
-      { name: 'email', label: 'Email', type: 'email', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true, default: true },
-      { name: 'phone', label: 'Phone', type: 'tel', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: true, default: true },
+      { name: 'first-name', label: 'First Name', type: 'text', field_tag: '%FIRST_NAME%', placeholder: 'First Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
+      { name: 'last-name', label: 'Last Name', type: 'text', field_tag: '%LAST_NAME%', placeholder: 'Last Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
+      { name: 'email', label: 'Email', type: 'email', field_tag: '%EMAIL%', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true, default_field: true },
+      { name: 'phone', label: 'Phone', type: 'tel', field_tag: '%PHONE%', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: true, default_field: true },
     ];
     fetching:boolean = true;
     selField:any = '';
-    selFieldIndx = -1;
+    field_error:string = '';
 
   constructor(
     private dialog: MatDialog,
@@ -62,57 +60,102 @@ export class FormFieldsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  adjustdata(data:any){
+    if(data) this.fields = data;
+    this.fetching = false;
+  }
+
   fetchFields() {
-    this._formfieldService.allformfields().subscribe((resp:any)=>{
-      // if(resp?.data) this.fields = resp.data;
+    this._formfieldService.fetchformfields().subscribe((resp:any)=>{
+      this.adjustdata(resp?.data);
     })
   }
 
-  addField(field:any) {
-    var tempObj = JSON.parse(JSON.stringify(field));
-    if(!tempObj.type) tempObj.type = tempObj.name;
-    tempObj.id = this._general.createBlockId(tempObj);
-    tempObj?.split?.forEach((split: any) => split.id = this._general.createBlockId(split));
-    this.fields.push(tempObj);
+  searchFields(search: any, sort: any, filter: any) {
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      sort: sort.value,
+      filter: filter.value
+    }
+    console.log(obj);
+    this._formfieldService.searchFieldsquery(obj).subscribe((resp:any)=>{
+      this.adjustdata(resp.data);
+    });
   }
 
-  updateField(field:any, index: number) {
+  setField(field:any) {
+    this.field_error = '';
     var tempObj = JSON.parse(JSON.stringify(field));
-    this.fields.splice(index + 1, 0, tempObj);
+    tempObj.options = tempObj.options ? JSON.stringify(tempObj.options) : null;
+    tempObj.field_tag = '%'+field.label.toUpperCase().replaceAll(' ', '_')+'%';
+    tempObj.required = tempObj.required ? 1 : 0;
+    if(field.id) this.updateField(tempObj);
+    else this.addField(tempObj);
+  }
+
+  addField(field:any) {
+    this._formfieldService.addformfield(field).subscribe((resp:any)=>{
+      if(resp.success) {
+        this.fetchFields();
+        this._general.openSnackBar(false, 'Field has been saved', 'OK', 'center', 'top');
+      }
+      else {
+        this.openDialog(this.fieldsetting, this.selField);
+        this.field_error = resp.message;
+      }
+    });
+  }
+
+  updateField(field:any) {
+    this._formfieldService.updateformfield(field).subscribe((resp:any)=>{
+      if(resp.success) {
+        this.fetchFields();
+        this._general.openSnackBar(false, 'Field has been updated', 'OK', 'center', 'top');
+      }
+      else {
+        this.openDialog(this.fieldsetting, this.selField);
+        this.field_error = resp.message;
+      }
+    });
   }
 
   deleteField(field:any) {
-
+    this._formfieldService.deleteformfield(field.id).subscribe((resp:any)=>{
+      if(resp.success) this.fetchFields();
+      this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+    })
   }
 
   onSelChng(val:boolean, field:any, i:number) {
     if(field.name != 'checkbox') {
-      var temp = JSON.stringify(field.split);
+      var temp = JSON.stringify(field.options);
       temp = temp.replace(/"selected":true/g, '"selected":false');
-      field.split = JSON.parse(temp);
-      field.split[i].selected = val;
+      field.options = JSON.parse(temp);
+      field.options[i].selected = val;
     }
   }
 
-  addInput(split:any, i:number) {
+  addInput(options:any, i:number) {
     var obj:any = new Object();
-    var len =  split.length;
-    obj = { value: 'New option '+len, type: split[0].type};
+    var len =  options.length;
+    obj = { value: 'New option '+len, type: options[0].type};
     obj.id = this._general.createBlockId(obj);
-    split.splice(i+1, 0, obj);
+    options.splice(i+1, 0, obj);
   }
 
-  removeInput(split: any, i: number) {
-    split.splice(i, 1);
+  removeInput(options: any, i: number) {
+    options.splice(i, 1);
   }
 
-  openDialog(templateRef: TemplateRef<any>, field: any, index: number) {
+  // dialogs
+
+  openDialog(templateRef: TemplateRef<any>, field: any) {
       this.closeBottomSheet();
       var tempObj = JSON.parse(JSON.stringify(field));
+      if(tempObj.options && tempObj.id) tempObj.options = JSON.parse(tempObj.options);
       this.selField = tempObj;
-      this.selFieldIndx = index;
       this.dialog.open(templateRef);
-
   }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
@@ -122,24 +165,12 @@ export class FormFieldsComponent implements OnInit {
     this._bottomSheet.dismiss();
    
   }
+
   itemDropped(event: CdkDragDrop<any[]>) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
   }
 
-  searchFields(search: any, filter: any) {
-    this.fetching = true;
-    var obj = {
-      search: search.value,
-      filter: filter.value,
-    }
-    console.log(obj)
-    // this._field.searchFieldsquery(obj).subscribe((resp:any)=>{
-    //   this.adjustdata(resp.data);
-    //   console.log(resp.data)
-    // });
-  }
-  adjustdata(data:any){
-    this.fields = data;
-    this.fetching = false;
+  isPlaceholder(field:any) {
+    return (!field.options && field.type != 'date'  && field.type != 'time') || field.type == 'select';
   }
 }

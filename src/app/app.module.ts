@@ -36,6 +36,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -118,6 +119,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatExpansionModule,
     MatSidenavModule,
     ResizableModule,
+    ClipboardModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
     }),

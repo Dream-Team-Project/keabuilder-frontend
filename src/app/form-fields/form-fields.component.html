@@ -6,57 +6,51 @@
         </button>
     </h4>
     <mat-nav-list>
-        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff, -1)" *ngFor="let ff of fieldTypes" role="listitem" mat-ripple>
+        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff)" *ngFor="let ff of fieldTypes" role="listitem" mat-ripple>
             <span class="kb-field-list-icon" [innerHTML]="ff.icon | safeHtml"></span>
-            <span class="kb-field-list-name">{{ff.label | titlecase}}</span>
+            <span class="kb-field-list-name">{{ff.name.replaceAll('-',' ') | titlecase}}</span>
         </div>
     </mat-nav-list>
 </ng-template>
 <ng-template #delfield>
     <h1 mat-dialog-title class="kb-danger">Delete Field</h1>
     <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{selField.label}}</span> form?
+      Would you like to delete <span class="text-danger">{{selField.label | titlecase}}</span> field?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteField(selField)">Yes</button>
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="deleteField(selField)">Yes</button>
     </div>
 </ng-template>
 <ng-template #fieldsetting>
-    <h1 mat-dialog-title class="d-flex align-items-center">
-        {{selField.label ? selField.label : selField.name.replaceAll('-',' ')}}
-        <span class="kb-info-tag kb-tag ml-2">{{selField.name.replaceAll('-',' ') | uppercase}}</span>
-    </h1>
+    <h1 mat-dialog-title>{{selField.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content>
-        <mat-form-field *ngIf="selField.id" appearance="fill">
-            <mat-label>Field Tag</mat-label>
-            <input matInput type="text" [placeholder]="'field tag'" [(ngModel)]="selField.tag">
-        </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-error *ngIf="field_error">{{field_error}}</mat-error>
+        <mat-form-field appearance="fill" [class.mat-form-field-invalid]="field_error">
             <mat-label>Label</mat-label>
             <input matInput type="text" [placeholder]="'label'" [(ngModel)]="selField.label">
         </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="selField.placeholder">
+        <mat-form-field appearance="fill" *ngIf="isPlaceholder(selField)">
             <mat-label>Placeholder</mat-label>
             <input matInput type="text" [placeholder]="'placeholder'" [(ngModel)]="selField.placeholder">
         </mat-form-field>
         <div cdkDropList
-        [cdkDropListData]="selField.split" (cdkDropListDropped)="itemDropped($event)">
-            <span *ngFor="let split of selField.split, index as i">
+        [cdkDropListData]="selField.options" (cdkDropListDropped)="itemDropped($event)">
+            <span *ngFor="let option of selField.options, index as i">
                 <span cdkDrag class="kb-split-fields">
                     <mat-form-field appearance="fill">
                         <mat-label>Option {{i+1}}</mat-label>
-                        <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="split.value">
+                        <input matInput type="text" [placeholder]="'option '+(i+1)" [(ngModel)]="option.value">
                     </mat-form-field>
                     <div *cdkDragPreview class="custom-preview kb-field-preview">
-                        {{split.value ? split.value : split.placeholder}}
+                        {{option.value ? option.value : option.placeholder}}
                     </div>
                     <div *cdkDragPlaceholder class="custom-placeholder"></div>
                     <span class="kb-form-field-icon">
-                        <mat-checkbox *ngIf="!split.placeholder" [(ngModel)]="split.selected" (ngModelChange)="onSelChng(selField, split.selected, i)" [name]="split.id+'-selected'" matTooltip="Default Selected" matTooltipPosition="above"></mat-checkbox>
-                        <i *ngIf="selField.split.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
-                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="addInput(selField.split, i)"></i>
-                        <i class="fa fa-times kb-danger" *ngIf="selField.split.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="removeInput(selField.split, i)"></i>
+                        <mat-checkbox *ngIf="!option.placeholder" [(ngModel)]="option.selected" (ngModelChange)="onSelChng(option.selected, selField, i)" [name]="option.id+'-selected'" matTooltip="Default Selected" matTooltipPosition="above"></mat-checkbox>
+                        <i *ngIf="selField.options.length > 1" class="fa fa-arrows-alt kb-drag-element"></i>
+                        <i class="fa fa-plus" mat-ripple matTooltip="Add" matTooltipPosition="above" (click)="addInput(selField.options, i)"></i>
+                        <i class="fa fa-times kb-danger" *ngIf="selField.options.length > 2" mat-ripple matTooltip="Remove" matTooltipPosition="above" (click)="removeInput(selField.options, i)"></i>
                     </span>
                 </span>
             </span>
@@ -65,29 +59,34 @@
     <div mat-dialog-actions class="kb-dialog-additional">
         <mat-checkbox class="mr-auto" [(ngModel)]="selField.required">Required</mat-checkbox>
         <button mat-button mat-dialog-close color="secondary">Cancel</button>
-        <button *ngIf="selField.id else addfield" mat-button mat-dialog-close (click)="updateField(selField, selFieldIndx)" cdkFocusInitial color="primary">Update</button>
-        <ng-template #addfield>
-            <button mat-button mat-dialog-close (click)="addField(selField)" cdkFocusInitial color="primary">Add</button>
-        </ng-template>
+        <button mat-button mat-dialog-close (click)="setField(selField)" cdkFocusInitial color="primary">{{selField.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
 <div class="container-fluid mt-4">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row align-items-center">
-        <mat-form-field appearance="fill" class="col-6 pr-2">
+        <mat-form-field appearance="fill" class="col-md-5">
             <mat-label>Search Fields</mat-label>
-            <input matInput #searchInp (input)="searchFields(searchInp, filterInp)" type="text" placeholder="Search Form Name">
+            <input matInput #searchInp (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Form Name">
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-2">
+        <mat-form-field appearance="fill" class="col-md-2">
             <mat-label>Sort By</mat-label>
-            <mat-select #filterInp name="kbfilter" (valueChange)="searchFields(searchInp, filterInp)">
-              <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-              <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-              <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-              <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+            <mat-select #sortInp name="kbfilter" value='created_at ASC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
+                <mat-option [value]="'label ASC'">ASC By Label</mat-option>
+                <mat-option [value]="'label DESC'">DESC By Label</mat-option>
+                <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+                <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
             </mat-select>
         </mat-form-field>
-        <div class="col-md-4 text-right mt-2">
+        <mat-form-field appearance="fill" class="col-md-2">
+            <mat-label>Filter By Name</mat-label>
+            <mat-select #filterInp name="kbfilter" value='' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
+                <mat-option value="" selected>All</mat-option>
+                <mat-option *ngFor="let ft of fieldTypes" [value]="ft.name">{{ft.name.replaceAll('-', ' ') | titlecase}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div class="col-md-3 text-right mt-2">
             <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet(fieldlists)">Add New Field <i
                 class="fas fa-plus"></i></button>
         </div>
@@ -107,12 +106,12 @@
                     <tr *ngFor="let ff of fields, index as i">
                         <td>{{ff.label}}</td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
-                        <td>{{'%'+ff.label+'%' | uppercase}}</td>
+                        <td>{{ff.field_tag | uppercase}}</td>
                         <td>
-                            <span *ngIf="ff.default else action" class="kb-info-tag kb-tag ml-2">Default</span>
+                            <span *ngIf="ff.default_field else action" class="kb-info-tag kb-tag ml-2">Default</span>
                             <ng-template #action>
-                                <i matTooltip="Edit" (click)="openDialog(fieldsetting, ff, i)" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
-                                <i matTooltip="Delete" (click)="openDialog(delfield, ff, i)" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
+                                <i matTooltip="Edit" (click)="openDialog(fieldsetting, ff)" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
+                                <i matTooltip="Delete" (click)="openDialog(delfield, ff)" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
                             </ng-template>
                         </td>                        
                     </tr>
