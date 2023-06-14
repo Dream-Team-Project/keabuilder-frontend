@@ -70,3 +70,50 @@
     border: 1px solid var(--kb-dim-black);
     border-radius: 0px 4px 4px 0px;
 }
+
+span.kb-split-fields {
+    display: flex;
+    position: relative;
+}
+
+.kb-form-field-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.kb-field-preview.custom-preview {
+    z-index: 99999!important;
+    background-color: var(--primary-color);
+}
+
+.custom-placeholder {
+    background-color: var(--primary-color);
+}
+
+.kb-form-field-icon i {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.kb-form-field-icon i:not(.kb-drag-element) {
+    cursor: pointer;
+}
+
+.kb-drag-element {
+    cursor: all-scroll!important;
+}
+
+::ng-deep .kb-split-fields .mat-checkbox-frame {
+    border-color: var(--kb-dim-black)!important;
+}
+
+::ng-deep .mat-checkbox label {
+    margin: 0;
+}

@@ -8,7 +8,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 @Component({
   selector: 'app-form-fields',
   templateUrl: './form-fields.component.html',
-  styleUrls: ['./form-fields.component.css', '../form-builder/form-builder.component.css','../builder/material.component.css']
+  styleUrls: ['./form-fields.component.css', '../builder/material.component.css']
 })
 export class FormFieldsComponent implements OnInit {
 
