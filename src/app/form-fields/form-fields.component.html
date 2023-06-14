@@ -83,7 +83,7 @@
             <mat-label>Filter By Name</mat-label>
             <mat-select #filterInp name="kbfilter" value='' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
                 <mat-option value="" selected>All</mat-option>
-                <mat-option *ngFor="let ft of fieldTypes" [value]="ft.name">{{ft.name.replaceAll('-', ' ') | titlecase}}</mat-option>
+                <mat-option *ngFor="let ft of fieldTypes" [value]="ft.type">{{ft.name.replaceAll('-', ' ') | titlecase}}</mat-option>
             </mat-select>
         </mat-form-field>
         <div class="col-md-3 text-right mt-2">
@@ -98,6 +98,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Type</th>
+                        <th>Field Value</th>
                         <th>Field Tag</th>
                         <th>Action</th>
                     </tr>
@@ -106,6 +107,7 @@
                     <tr *ngFor="let ff of fields, index as i">
                         <td>{{ff.label}}</td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
+                        <td>{{ff.default_value}}</td>
                         <td>{{ff.field_tag | uppercase}}</td>
                         <td>
                             <span *ngIf="ff.default_field else action" class="kb-info-tag kb-tag ml-2">Default</span>
