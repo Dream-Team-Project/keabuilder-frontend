@@ -98,7 +98,6 @@
                     <tr>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Field Value</th>
                         <th>Field Tag</th>
                         <th>Action</th>
                     </tr>
@@ -107,7 +106,6 @@
                     <tr *ngFor="let ff of fields, index as i">
                         <td>{{ff.label}}</td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
-                        <td>{{ff.default_value}}</td>
                         <td>{{ff.field_tag | uppercase}}</td>
                         <td>
                             <span *ngIf="ff.default_field else action" class="kb-info-tag kb-tag ml-2">Default</span>

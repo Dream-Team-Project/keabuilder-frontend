@@ -8,7 +8,7 @@ import { GeneralService } from '../_services/_builder/general.service';
 @Component({
   selector: 'app-form-fields',
   templateUrl: './form-fields.component.html',
-  styleUrls: ['./form-fields.component.css', '../builder/material.component.css']
+  styleUrls: ['./form-fields.component.css']
 })
 export class FormFieldsComponent implements OnInit {
 
@@ -66,6 +66,7 @@ export class FormFieldsComponent implements OnInit {
   }
 
   fetchFields() {
+    this.fetching = true;
     this._formfieldService.fetchformfields().subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
     })
