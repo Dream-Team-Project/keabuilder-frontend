@@ -60,8 +60,11 @@ export class CrmListService {
     return this.http.post('/api/crmDuplicatelistcheck/'+list_name,obj).pipe(catchError(this.errorHandler));
     
   }
-
-
+  searchListsquery(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/searchListsquery',obj).pipe(catchError(this.errorHandler));
+  }
+  
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

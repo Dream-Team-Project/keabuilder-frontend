@@ -50,6 +50,7 @@ export class CrmContactsComponent implements OnInit {
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
 
   // errors= errorMessages;
+  paramvalue:boolean=false;
   uniqueid: any;
   obj: any;
   contactchar:any;
@@ -91,14 +92,14 @@ export class CrmContactsComponent implements OnInit {
   addOnBlur = true;
   // singlecontact: any;
   buttonText = 'Add';
-  order:any=[ 
-    {value: 'ascending', viewValue: 'Ascending'},
-    {value: 'descending', viewValue: 'Descending'},
-  ];
-optionGroup:any=[
-    {value: 'firstname', viewValue: 'Name', order: this.order},
-    {value: 'email', viewValue: 'EmailId', order: this.order},
-]
+//   order:any=[ 
+//     {value: 'ascending', viewValue: 'Ascending'},
+//     {value: 'descending', viewValue: 'Descending'},
+//   ];
+// optionGroup:any=[
+//     {value: 'firstname', viewValue: 'Name', order: this.order},
+//     {value: 'email', viewValue: 'EmailId', order: this.order},
+// ]
 
 selectedForm:string = '';
 filterlistid:any='';
@@ -156,9 +157,8 @@ selectedtagForm=new FormControl('');
       this.uniqueid = params.get('uniqueid');
       // console.log(params.get('list'))
       // console.log(params.get('tag'))
-      this.obj = params.get('name');
-      // if(params.get('name')=='tag'){this.obj = params.get('tag');}
-     
+      this.obj = params.get('name'); 
+      
     })
    
     this.filteredTag = this.tagCtrl.valueChanges.pipe(
@@ -174,23 +174,17 @@ selectedtagForm=new FormControl('');
 
     if(this.uniqueid && this.obj=='list' ){
       this.filterlistid=this.uniqueid;
-      // this.selectedlistForm=this.uniqueid;
-      this.sortlist();
-      // this.sortlist().then((resp1)=>{
-      //   this.patchlistname().then(()=>{
-      //     this.patchtagname();
-      //   }) 
-      // })
+      this.paramvalue=true;
+      this.searchContacts('',this.filterlistid,'' ,'created_at DESC')
+      // this.sortlist();
+     
     }
     else if(this.uniqueid && this.obj=='tag' ){
       this.filtertagid=this.uniqueid;
-      // this.selectedtagForm=this.uniqueid;
-      this.sorttag();
-      // this.sortlist().then((resp1)=>{
-      //   this.patchlistname();
-      //     this.patchtagname();
-        
-      // })
+      this.paramvalue=true;
+      this.searchContacts('','',this.filtertagid,'created_at DESC')
+      // this.sorttag();
+      
     }
   }
   fetchAlldata(){
@@ -285,75 +279,75 @@ selectedtagForm=new FormControl('');
   }
   
 
-  sortcontact(){
-    // console.log(this.selectedForm)
-    if(this.selectedForm[0]=='firstname' && this.selectedForm[1]=='Ascending'){
-      this.contacts.sort((a:any,b:any) =>a.firstname.toLowerCase()>b.firstname.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='firstname' && this.selectedForm[1]=='Descending'){
-      this.contacts.sort((a:any,b:any) =>a.firstname.toLowerCase()<b.firstname.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='email' && this.selectedForm[1]=='Ascending'){
-      this.contacts.sort((a:any,b:any) =>a.email.toLowerCase()>b.email.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='email' && this.selectedForm[1]=='Descending'){
-      this.contacts.sort((a:any,b:any) =>a.email.toLowerCase()<b.email.toLowerCase() ? 1 :-1);
-    }
-    else{
-      this.contacts.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
-    }
-  }
+  // sortcontact(){
+  //   // console.log(this.selectedForm)
+  //   if(this.selectedForm[0]=='firstname' && this.selectedForm[1]=='Ascending'){
+  //     this.contacts.sort((a:any,b:any) =>a.firstname.toLowerCase()>b.firstname.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='firstname' && this.selectedForm[1]=='Descending'){
+  //     this.contacts.sort((a:any,b:any) =>a.firstname.toLowerCase()<b.firstname.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='email' && this.selectedForm[1]=='Ascending'){
+  //     this.contacts.sort((a:any,b:any) =>a.email.toLowerCase()>b.email.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='email' && this.selectedForm[1]=='Descending'){
+  //     this.contacts.sort((a:any,b:any) =>a.email.toLowerCase()<b.email.toLowerCase() ? 1 :-1);
+  //   }
+  //   else{
+  //     this.contacts.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
+  //   }
+  // }
   
-  sortlist(){
-    // console.log(this.filterlistid)
-    // console.log(this.contacts);
-    // return new Promise((resolve) => {
-      if(this.filterlistid){
-      this.crmService.filtercrmcontactlists(this.filterlistid).subscribe((data)=>{
-        if(data.data.length!=0){
+//   sortlist(){
+//     // console.log(this.filterlistid)
+//     // console.log(this.contacts);
+//     // return new Promise((resolve) => {
+//       if(this.filterlistid){
+//       this.crmService.filtercrmcontactlists(this.filterlistid).subscribe((data)=>{
+//         if(data.data.length!=0){
 
-          this.fetchList=true;
-          this.contacts=data.data;
-          // console.log(this.contacts);
+//           this.fetchList=true;
+//           this.contacts=data.data;
+//           // console.log(this.contacts);
 
-          this.patchlistname();
-          this.patchtagname();
-        }
-        else{
-          this._snackBar.open('List Data not Find !', 'OK'); 
-          this.contacts=[];
-        }
-        //   resolve(true);
-        // },
-        // (error) => {
-        //   resolve(false);
-        });      
-        }
+//           this.patchlistname();
+//           this.patchtagname();
+//         }
+//         else{
+//           this._snackBar.open('List Data not Find !', 'OK'); 
+//           this.contacts=[];
+//         }
+//         //   resolve(true);
+//         // },
+//         // (error) => {
+//         //   resolve(false);
+//         });      
+//         }
    
-  }
-  sorttag(){
-    // console.log(this.filtertagid)
-    // return new Promise((resolve) => {
-    if(this.filtertagid){
-    this.crmService.filtercrmcontacttags(this.filtertagid).subscribe((data)=>{
-      if (data.data.length!=0){
-        this.contacts=data.data;
-        this.patchlistname();
-        this.patchtagname(); 
-      }
-      else{
-        this._snackBar.open('Tag Data not Find !', 'OK');
-        this.contacts=[];
+//   }
+//   sorttag(){
+//     // console.log(this.filtertagid)
+//     // return new Promise((resolve) => {
+//     if(this.filtertagid){
+//     this.crmService.filtercrmcontacttags(this.filtertagid).subscribe((data)=>{
+//       if (data.data.length!=0){
+//         this.contacts=data.data;
+//         this.patchlistname();
+//         this.patchtagname(); 
+//       }
+//       else{
+//         this._snackBar.open('Tag Data not Find !', 'OK');
+//         this.contacts=[];
     
-    }
-      //   resolve(true);
-      // },
-      // (error) => {
-      //   resolve(false);
-      }); 
+//     }
+//       //   resolve(true);
+//       // },
+//       // (error) => {
+//       //   resolve(false);
+//       }); 
          
-      }
-}
+//       }
+// }
   gettwochar(value:any){
     this.contactchar=value.trim().split(" ");
     return this.contactchar.length == 2 ? this.contactchar[0][0]+this.contactchar[1][0] : this.contactchar[0][0]+this.contactchar[0][1];
@@ -442,13 +436,13 @@ selectedtagForm=new FormControl('');
     this.popup = true;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
 
   datecusfilter(value: any) {
     var dt = new Date(value);
@@ -638,5 +632,18 @@ selectedtagForm=new FormControl('');
 
   isExistD(str:any) {
     return str && str!='null' ?  str : '--';
+  }
+  searchContacts(search: any, listInp:any,tagInp:any, filter: any) {
+    var obj = {
+      search:this.paramvalue?search: search.value,
+      listInp:this.paramvalue?listInp :listInp.value,
+      tagInp: this.paramvalue?tagInp:tagInp.value,
+      filter: this.paramvalue?filter:filter.value
+    }
+    console.log(obj);
+    this.crmService.searchContactsquery(obj).subscribe((data:any)=>{
+      // console.log(data.data)
+      this.contacts = data.data;
+    });
   }
 }

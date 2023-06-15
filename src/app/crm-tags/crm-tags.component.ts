@@ -116,24 +116,24 @@ export class CrmTagsComponent implements OnInit {
     //   this.filteredtags=this.tags;
     // }, 500);
   }
-  sorttag(){
-    console.log(this.selectedForm)
-    if(this.selectedForm[0]=='tag_name' && this.selectedForm[1]=='Ascending'){
-      this.tags.sort((a:any,b:any) =>a.tag_name.toLowerCase()>b.tag_name.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='tag_name' && this.selectedForm[1]=='Descending'){
-      this.tags.sort((a:any,b:any) =>a.tag_name.toLowerCase()<b.tag_name.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='contacts' && this.selectedForm[1]=='Ascending'){
-      this.tags.sort((a:any,b:any) =>a.contacts>b.contacts ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='contacts' && this.selectedForm[1]=='Descending'){
-      this.tags.sort((a:any,b:any) =>a.contacts<b.contacts ? 1 :-1);
-    }
-    else{
-      this.tags.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
-    }
-  }
+  // sorttag(){
+  //   console.log(this.selectedForm)
+  //   if(this.selectedForm[0]=='tag_name' && this.selectedForm[1]=='Ascending'){
+  //     this.tags.sort((a:any,b:any) =>a.tag_name.toLowerCase()>b.tag_name.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='tag_name' && this.selectedForm[1]=='Descending'){
+  //     this.tags.sort((a:any,b:any) =>a.tag_name.toLowerCase()<b.tag_name.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='contacts' && this.selectedForm[1]=='Ascending'){
+  //     this.tags.sort((a:any,b:any) =>a.contacts>b.contacts ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='contacts' && this.selectedForm[1]=='Descending'){
+  //     this.tags.sort((a:any,b:any) =>a.contacts<b.contacts ? 1 :-1);
+  //   }
+  //   else{
+  //     this.tags.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
+  //   }
+  // }
   gettwochar(value:any){
     this.tagchar=value.trim().split(" ");
     return this.tagchar.length >= 2 ? this.tagchar[0][0]+this.tagchar[1][0] : this.tagchar[0][0]+this.tagchar[0][1];
@@ -315,5 +315,16 @@ export class CrmTagsComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
       row.position + 1
     }`;
+  }
+  searchTags(search: any,filter: any) {
+    var obj = {
+      search:search.value,
+      filter:filter.value
+    }
+    console.log(obj);
+    this._crmtagService.searchTagsquery(obj).subscribe((data:any)=>{
+      // console.log(data.data)
+      this.tags = data.data;
+    });
   }
 }

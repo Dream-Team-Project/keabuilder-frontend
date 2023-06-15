@@ -84,7 +84,10 @@ export class CrmService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getallcrmdata', obj).pipe(catchError(this.errorHandler));
   }
-
+  searchContactsquery(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/searchContactsquery',obj).pipe(catchError(this.errorHandler));
+  }
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

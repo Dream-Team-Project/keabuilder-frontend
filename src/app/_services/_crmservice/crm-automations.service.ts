@@ -39,6 +39,10 @@ export class CrmAutomationsService {
     return this.http.post('/api/crmautomationStatus/'+status,obj).pipe(catchError(this.errorHandler));
     
   }
+  searchAutomationsquery(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/searchAutomationquery',obj).pipe(catchError(this.errorHandler));
+  }
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

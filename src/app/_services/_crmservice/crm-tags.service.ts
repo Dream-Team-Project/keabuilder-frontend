@@ -53,6 +53,10 @@ export class CrmTagsService {
     return this.http.post('/api/crmDuplicatetagcheck/'+tag_name,obj).pipe(catchError(this.errorHandler));
     
   }
+  searchTagsquery(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/searchTagsquery',obj).pipe(catchError(this.errorHandler));
+  }
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

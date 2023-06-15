@@ -197,31 +197,31 @@
     <input  
     matInput 
     type="text"
-    (keyup)="applyFilter($event)"
+    #searchInp 
+    (input)="searchContacts(searchInp, listInp,tagInp, filterInp)"
     class="form-control-search "
     id="offer-search"
-    #input
     placeholder="Search Contacts..."
          >
         </mat-form-field>
         <mat-form-field  class= " col-md-2 fntilform" appearance="fill">
           <mat-label>Filter by:</mat-label>
-          <mat-select [(ngModel)]="selectedForm" (ngModelChange)="sortcontact()">
-            <mat-option value="">-- None --</mat-option>
-            <mat-optgroup *ngFor="let group of optionGroup" [label]="group.viewValue">
-              <mat-option *ngFor="let item of group.order" [value]="[group.value, item.viewValue]">
-                {{item.viewValue}}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
+          <mat-select #filterInp name="kbfilter" value='created_at ASC' (valueChange)="searchContacts(searchInp, listInp,tagInp,filterInp)">
+            <mat-option [value]="'firstname ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'firstname DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'email ASC'">ASC By Email</mat-option>
+            <mat-option [value]="'email DESC'">DESC By Email</mat-option>
+            <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+            <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+        </mat-select>
         </mat-form-field>
         <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
           <mat-label>Filter by Lists:</mat-label>
-          <mat-select 
-          [(ngModel)]="filterlistid"
-            [formControl]="selectedlistForm"
-           (ngModelChange)="sortlist()">
-            <mat-option (click)="fetchAlldata()" value=''>-- None --</mat-option>
+          <!-- <mat-select  [(ngModel)]="filterlistid" [formControl]="selectedlistForm" (ngModelChange)="sortlist()" #listInp> -->
+          <mat-select #listInp  [(ngModel)]="filterlistid" value='' (valueChange)="searchContacts(searchInp, listInp,tagInp,filterInp)" >
+            <mat-option (click)="fetchAlldata()" value=''>All</mat-option>
             <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
                 {{list.list_name | titlecase}}
               </mat-option>
@@ -229,11 +229,18 @@
         </mat-form-field>
         <mat-form-field  class= "col-md-2 fntilform" appearance="fill">
           <mat-label>Filter by Tags:</mat-label>
-          <mat-select
+          <!-- <mat-select
           [(ngModel)]="filtertagid"
           [formControl]="selectedtagForm"
-         (ngModelChange)="sorttag()">
-            <mat-option (click)="fetchAlldata()" value=''>-- None --</mat-option>
+          #tagInp
+         (ngModelChange)="sorttag()"> -->
+         <mat-select
+         value=''
+         [(ngModel)]="filtertagid"
+          #tagInp
+          (valueChange)="searchContacts(searchInp, listInp,tagInp,filterInp)"
+         >
+            <mat-option (click)="fetchAlldata()" value=''>All</mat-option>
             <mat-option *ngFor="let tag of tags" [value]="tag.uniqueid">
                 {{tag.tag_name | titlecase}}
               </mat-option>
@@ -347,7 +354,7 @@
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell" colspan="4">
-                No data matching the filter "{{ input.value }}"
+                <!-- No data matching the filter "{{ input.value }}" -->
               </td>
             </tr>
           </tbody>

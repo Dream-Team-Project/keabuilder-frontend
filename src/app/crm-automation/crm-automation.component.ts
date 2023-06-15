@@ -62,56 +62,59 @@ constructor(private crm_automations_service: CrmAutomationsService,
  }
 
 ngOnInit(): void {
-  this.fetchAutomations().then((resp1)=>{
-    // console.log(resp1)
-    this.sortautomations().then((resp2)=>{
-      // console.log(resp2);  
-    })
-    this.sortautomations1().then((resp3)=>{
-      // console.log(resp3);  
-    })
-  });
+  this.fetchAutomations();
 }
-sortautomations(){
-  // console.log(this.selectedForm)
-  return new Promise((resolve) => {
-  if(this.selectedForm[0]=='automation_name' && this.selectedForm[1]=='Ascending'){
-    this.automations.sort((a:any,b:any) =>a.automation_name.toLowerCase()>b.automation_name.toLowerCase() ? 1 :-1);
-  }
-  else if(this.selectedForm[0]=='automation_name' && this.selectedForm[1]=='Descending'){
-    this.automations.sort((a:any,b:any) =>a.automation_name.toLowerCase()<b.automation_name.toLowerCase() ? 1 :-1);
-  }
-  else if(this.selectedForm[0]=='updated_at' && this.selectedForm[1]=='Ascending'){
-    this.automations.sort((a:any,b:any) =>a.updated_at.toLowerCase()>b.updated_at.toLowerCase() ? 1 :-1);
-  }
-  else if(this.selectedForm[0]=='updated_at' && this.selectedForm[1]=='Descending'){
-    this.automations.sort((a:any,b:any) =>a.updated_at.toLowerCase()<b.updated_at.toLowerCase() ? 1 :-1);
-  }
-  else if(this.selectedForm[0]=='created_at' && this.selectedForm[1]=='Ascending'){
-    this.automations.sort((a:any,b:any) =>a.created_at.toLowerCase()>b.created_at.toLowerCase() ? 1 :-1);
-  }
-  else{
-    this.automations.sort((a:any,b:any) =>a.created_at.toLowerCase()<b.created_at.toLowerCase() ? 1 :-1);
-  }
-  resolve(true);
-})
-}
-sortautomations1(){
-  console.log(this.selectedForm1)
-  return new Promise((resolve) => {
-  if(this.selectedForm1==''){
-    this.fetchAutomations();
+// fetchdata(){
+//   this.fetchAutomations().then((resp1)=>{
+//     // console.log(resp1)
+//     this.sortautomations().then((resp2)=>{
+//       // console.log(resp2);  
+//     })
+//     this.sortautomations1().then((resp3)=>{
+//       // console.log(resp3);  
+//     })
+//   });
+// }
+// sortautomations(){
+//   // console.log(this.selectedForm)
+//   return new Promise((resolve) => {
+//   if(this.selectedForm[0]=='automation_name' && this.selectedForm[1]=='Ascending'){
+//     this.automations.sort((a:any,b:any) =>a.automation_name.toLowerCase()>b.automation_name.toLowerCase() ? 1 :-1);
+//   }
+//   else if(this.selectedForm[0]=='automation_name' && this.selectedForm[1]=='Descending'){
+//     this.automations.sort((a:any,b:any) =>a.automation_name.toLowerCase()<b.automation_name.toLowerCase() ? 1 :-1);
+//   }
+//   else if(this.selectedForm[0]=='updated_at' && this.selectedForm[1]=='Ascending'){
+//     this.automations.sort((a:any,b:any) =>a.updated_at.toLowerCase()>b.updated_at.toLowerCase() ? 1 :-1);
+//   }
+//   else if(this.selectedForm[0]=='updated_at' && this.selectedForm[1]=='Descending'){
+//     this.automations.sort((a:any,b:any) =>a.updated_at.toLowerCase()<b.updated_at.toLowerCase() ? 1 :-1);
+//   }
+//   else if(this.selectedForm[0]=='created_at' && this.selectedForm[1]=='Ascending'){
+//     this.automations.sort((a:any,b:any) =>a.created_at.toLowerCase()>b.created_at.toLowerCase() ? 1 :-1);
+//   }
+//   else{
+//     this.automations.sort((a:any,b:any) =>a.created_at.toLowerCase()<b.created_at.toLowerCase() ? 1 :-1);
+//   }
+//   resolve(true);
+// })
+// }
+// sortautomations1(){
+//   console.log(this.selectedForm1)
+//   return new Promise((resolve) => {
+//   if(this.selectedForm1==''){
+//     this.fetchAutomations();
 
-  }
-  else{
-    this.crm_automations_service.crmautomationStatus(this.selectedForm1).subscribe((data:any)=>{
-      this.automations=data.data;
-      console.log(data.data)
-    })
-  }  
-  resolve(true);
-})
-}
+//   }
+//   else{
+//     this.crm_automations_service.crmautomationStatus(this.selectedForm1).subscribe((data:any)=>{
+//       this.automations=data.data;
+//       console.log(data.data)
+//     })
+//   }  
+//   resolve(true);
+// })
+// }
 fetchAutomations() {
   return new Promise((resolve) => {
     this.crm_automations_service.getAllcrmautomations().subscribe(
@@ -137,7 +140,7 @@ copyAutomation(automation:any){
   this.crm_automations_service
   .createcrmautomation(obj)
   .subscribe((data) => {
-    this.ngOnInit();
+    this.fetchAutomations()
     this._snackBar.open('CRM Automation Copied Succesfully !', 'OK');
   });
 }
@@ -148,13 +151,23 @@ openDialog(templateRef: TemplateRef<any>, automation:any) {
 }
 deleteAutomation(uniqueid:any){
   this.crm_automations_service.deletecrmautomation(uniqueid).subscribe((data)=>{
-    this.ngOnInit();
+    this.fetchAutomations()
     this._snackBar.open('CRM Automation deleted Succesfully !', 'OK');
 
   })
 }
-applyFilter(event:any){
 
+searchAutomations(search: any, sort: any, filter: any) {
+  var obj = {
+    search: search.value,
+    sort: sort.value,
+    filter: filter.value
+  }
+  // console.log(obj);
+  this.crm_automations_service.searchAutomationsquery(obj).subscribe((data:any)=>{
+    console.log(data.data)
+    this.automations = data.data;
+  });
 }
 }
 

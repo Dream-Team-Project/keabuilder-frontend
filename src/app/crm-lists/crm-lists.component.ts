@@ -55,14 +55,14 @@ export class CrmListsComponent implements OnInit {
   listchar:any=[];
   singlelist:any;
   buttonText='add';
-  order:any=[ 
-    {value: 'ascending', viewValue: 'Ascending'},
-    {value: 'descending', viewValue: 'Descending'},
-  ];
-optionGroup:any=[
-    {value: 'list_name', viewValue: 'Name', order: this.order},
-    {value: 'activecontacts', viewValue: 'Contacts', order: this.order},
-]
+//   order:any=[ 
+//     {value: 'ascending', viewValue: 'Ascending'},
+//     {value: 'descending', viewValue: 'Descending'},
+//   ];
+// optionGroup:any=[
+//     {value: 'list_name', viewValue: 'Name', order: this.order},
+//     {value: 'activecontacts', viewValue: 'Contacts', order: this.order},
+// ]
 selectedForm:string = '';
   crmlistForm: any = this._frmbuidr.group({
     list_name: [
@@ -93,24 +93,24 @@ selectedForm:string = '';
      //   this.dataSource.sort = this.sort;
      // }, 500);
    }
-  sortlist(){
-    console.log(this.selectedForm)
-    if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Ascending'){
-      this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()>b.list_name.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Descending'){
-      this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()<b.list_name.toLowerCase() ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Ascending'){
-      this.lists.sort((a:any,b:any) =>a.activecontacts>b.activecontacts ? 1 :-1);
-    }
-    else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Descending'){
-      this.lists.sort((a:any,b:any) =>a.activecontacts<b.activecontacts ? 1 :-1);
-    }
-    else{
-      this.lists.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
-    }
-  }
+  // sortlist(){
+  //   console.log(this.selectedForm)
+  //   if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Ascending'){
+  //     this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()>b.list_name.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Descending'){
+  //     this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()<b.list_name.toLowerCase() ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Ascending'){
+  //     this.lists.sort((a:any,b:any) =>a.activecontacts>b.activecontacts ? 1 :-1);
+  //   }
+  //   else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Descending'){
+  //     this.lists.sort((a:any,b:any) =>a.activecontacts<b.activecontacts ? 1 :-1);
+  //   }
+  //   else{
+  //     this.lists.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
+  //   }
+  // }
   gettwochar(value:any){
     this.listchar=value.trim().split(" ");
     return this.listchar.length >= 2 ? this.listchar[0][0]+this.listchar[1][0] : this.listchar[0][0]+this.listchar[0][1];
@@ -274,5 +274,15 @@ selectedForm:string = '';
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-
+  searchLists(search: any,filter: any) {
+    var obj = {
+      search:search.value,
+      filter:filter.value
+    }
+    console.log(obj);
+    this._crmlistService.searchListsquery(obj).subscribe((data:any)=>{
+      // console.log(data.data)
+      this.lists = data.data;
+    });
+  }
 }
