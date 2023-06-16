@@ -119,10 +119,6 @@ export class FileUploadService {
     return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
   }
 
-  formbypath(obj:any):Observable<any> {
-    return this.http.get(this.getformApi+'/'+obj.user_id+'/'+obj.form_id);
-  }
-
   saveform(obj:any):Observable<any> {
     obj.user_id = this.uuid;
     return this.http.post(this.saveformApi, obj)

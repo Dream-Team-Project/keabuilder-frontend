@@ -10,6 +10,10 @@ main {
     position: relative;
 }
 
+::ng-deep .mat-form-field {
+    font-size: 14px;
+}
+
 ::ng-deep mat-form-field.kb-matinp-text .mat-form-field-infix {
     display: flex;
 }

@@ -229,6 +229,8 @@ const routes: Routes = [
 
   // crm
 
+  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
+
   { path: 'crm', component: CrmComponent, 
   children:[
     { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
@@ -244,7 +246,6 @@ const routes: Routes = [
     { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-    { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
     { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
     { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
     { path: 'fields', component: FormFieldsComponent, canActivate: [AuthGuard] },

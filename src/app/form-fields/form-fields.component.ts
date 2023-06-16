@@ -14,30 +14,7 @@ export class FormFieldsComponent implements OnInit {
 
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
 
-    fieldTypes:Array<any> = [
-      { name: 'email', label: 'Email 2', type: 'email', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true },
-      { name: 'phone', label: 'Phone 2', type: 'tel', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: false },
-      { name: 'short-text', label: 'Short Text', type: 'text', field_tag: '', placeholder: 'Short Text', icon: '<i class="fas fa-text-width"></i>', value: '', required: false},
-      { name: 'long-text', label: 'Long Text', type: 'textarea', field_tag: '', placeholder: 'Long Text', icon: '<i class="fas fa-text-height"></i>', value: '', required: false},
-      { name: 'multiple-choice', label: 'Multiple Choice', field_tag: '', type: 'checkbox', icon: '<i class="far fa-check-square"></i>', value: '', required: false, options: [
-          { value: 'First option', type: 'checkbox-option', selected: false},
-          { value: 'Second option', type: 'checkbox-option', selected: false },
-          { value: 'Third option', type: 'checkbox-option', selected: false },
-        ] },
-      { name: 'single-choice', label: 'Single Choice', field_tag: '', type: 'radio', icon: '<i class="far fa-dot-circle"></i>', value: '', required: false, options: [
-          { value: 'First option', type: 'radio-option', selected: false },
-          { value: 'Second option', type: 'radio-option', selected: false },
-          { value: 'Third option', type: 'radio-option', selected: false },
-        ] },
-      { name: 'dropdown', label: 'Dropdown', field_tag: '', type: 'select', placeholder: 'Choose Option', icon: '<i class="far fa-list-alt"></i>', value: 'none', required: false, options: [
-        { value: 'First option', type: 'select-option', selected: false },
-        { value: 'Second option', type: 'select-option', selected: false },
-        { value: 'Third option', type: 'select-option', selected: false },
-      ] },
-      { name: 'number', label: 'Number', field_tag: '', type: 'number', placeholder: 'Number', icon: '<i class="fas fa-hashtag"></i>', value: '', required: false},
-      { name: 'date', label: 'Date', field_tag: '', type: 'date', icon: '<i class="far fa-calendar-alt"></i>', value: '', required: false},
-      { name: 'time', label: 'Time', field_tag: '', type: 'time', icon: '<i class="far fa-clock"></i>', value: '', required: false},
-    ];
+    fieldTypes:Array<any> = this._formfieldService.fieldTypes;
     fields:Array<any> = [
       { name: 'first-name', label: 'First Name', type: 'text', field_tag: '%FIRST_NAME%', placeholder: 'First Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
       { name: 'last-name', label: 'Last Name', type: 'text', field_tag: '%LAST_NAME%', placeholder: 'Last Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
@@ -79,7 +56,6 @@ export class FormFieldsComponent implements OnInit {
       sort: sort.value,
       filter: filter.value
     }
-    console.log(obj);
     this._formfieldService.searchFieldsquery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
@@ -90,7 +66,6 @@ export class FormFieldsComponent implements OnInit {
     var tempObj = JSON.parse(JSON.stringify(field));
     tempObj.options = tempObj.options ? JSON.stringify(tempObj.options) : null;
     tempObj.field_tag = '%'+field.label.toUpperCase().replaceAll(' ', '_')+'%';
-    tempObj.required = tempObj.required ? 1 : 0;
     if(field.id) this.updateField(tempObj);
     else this.addField(tempObj);
   }
@@ -121,6 +96,13 @@ export class FormFieldsComponent implements OnInit {
     });
   }
 
+  toggleRequired(field:any) {
+    var stus = field.required ? 'required' : 'not required';
+    this._formfieldService.updateformfield(field).subscribe((resp:any)=>{
+      this._general.openSnackBar(false, 'Field changed to '+stus, 'OK', 'center', 'top');
+    });
+  }
+
   deleteField(field:any) {
     this._formfieldService.deleteformfield(field.id).subscribe((resp:any)=>{
       if(resp.success) this.fetchFields();
@@ -129,12 +111,14 @@ export class FormFieldsComponent implements OnInit {
   }
 
   onSelChng(val:boolean, field:any, i:number) {
-    if(field.name != 'checkbox') {
+    if(field.type != 'checkbox') {
       var temp = JSON.stringify(field.options);
       temp = temp.replace(/"selected":true/g, '"selected":false');
       field.options = JSON.parse(temp);
       field.options[i].selected = val;
     }
+    var valArr = field.options.filter((v:any)=> v.selected);
+    field.value = valArr.map((v:any)=> v.value).join(',');
   }
 
   addInput(options:any, i:number) {
@@ -169,6 +153,10 @@ export class FormFieldsComponent implements OnInit {
 
   itemDropped(event: CdkDragDrop<any[]>) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  }
+
+  isDefaultVal(field:any) {
+    return !field.options && field.type != 'date' && field.type != 'time';
   }
 
   isPlaceholder(field:any) {

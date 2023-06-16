@@ -25,3 +25,15 @@
 textarea {
     min-width: 100%;
 }
+
+.kb-form {
+    margin: 0px auto;
+    padding: 20px 0px;
+    border-width: 0px;
+    border-radius: 0px;
+    border-color: rgb(0, 0, 0);
+    border-style: solid;
+    background-color: rgba(0, 0, 0, 0);
+    width: 70%;
+    height: auto;
+}

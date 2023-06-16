@@ -170,7 +170,7 @@ selectedtagForm=new FormControl('');
   }
 
   ngOnInit(): void {
-    this.fetchAlldata();
+    // this.fetchAlldata();
 
     if(this.uniqueid && this.obj=='list' ){
       this.filterlistid=this.uniqueid;

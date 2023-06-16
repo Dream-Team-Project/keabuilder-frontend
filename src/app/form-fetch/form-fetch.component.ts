@@ -16,6 +16,15 @@ export class FormFetchComponent implements OnInit {
   submitting:boolean = false;
   thankyou:boolean = false;
   showErrors:boolean = false;
+  contact = {
+    fistname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    fieldans: '',
+    lists: '',
+    tags: ''
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -26,17 +35,11 @@ export class FormFetchComponent implements OnInit {
     public _general: GeneralService,
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
-      var prmObj = {
-        user_id: params.get('user_id'),
-        form_id: params.get('form_id')
-      }
-      _form.formbypath(prmObj).then((data:any)=>{
+      var form_id = params.get('form_id');
+      _form.getForm(form_id).then((data:any)=>{
         var style = document.createElement('STYLE');
         style.innerHTML = data.appendstyle;
         document.head.appendChild(style);
-        _form.submission.user_id = data.user_id;
-        _form.submission.form_id = data.uniqueid;
-        this.setFormValidation(_form.formField);
       })
     })
   }
@@ -49,40 +52,55 @@ export class FormFetchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  setFormValidation(ff:any) {
-    ff.forEach((e:any)=>{
-      if(e.input) {
-        if(e.name != 'split-text' && e.name != 'name') e.value = e.name == 'select' ? 'none' : '';
-        this._form.inpAns(e);
-        e.split?.forEach((spl:any)=>{
-          this._form.inpAns(spl);
-          spl.subsplit?.forEach((subspl:any)=>{
-            this._form.inpAns(subspl);
-            delete subspl?.error;
-          })
-          delete spl?.error;
-        })
-        delete e?.error;
-      }
+  valChng(ff:any, i:number) {
+    var value:boolean = !ff.options[i].selected;
+    if(ff.type == 'radio') {
+      var temp = JSON.stringify(ff.options);
+      temp = temp.replace(/"selected":true/g, '"selected":false');
+      ff.options = JSON.parse(temp);
+      value = true;
+    }
+    ff.options[i].selected = value;
+    if(ff.type == 'checkbox') {
+        var tempVal = ff.options.filter((v:any)=> v.selected);
+        ff.value = tempVal.map((v:any)=> v.value).join(',');
+    }
+    else ff.value = ff.options[i].value;
+  }
+
+  validateFields() {
+    return new Promise((resolve, reject)=>{
+      var loop = 0;
+      var res = true;
+      this._form.formField.forEach((ff:any)=>{
+        console.log(ff.value);
+        if(ff.field_tag) ff.error = !ff.value && ff.required;
+        if(ff.type == 'email') ff.invalid = !this.validateEmail(ff.value);
+        if(ff.error || ff.invalid) res = false;
+        if(this._form.formField.length-1 == loop) resolve(res);
+        loop++;
+      })
     })
   }
 
+  validateEmail(value:any) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regex.test(value);
+  }
+
   formSubmit() {
-    console.log(this._form.form);
-    console.log(this._form.submission.email);
-    console.log(this._form.ansjson);
     this.submitting = true;
-    this._form.checkFields().then(res=>{
+    this.validateFields().then(res=>{
       if(res) {
-        this._form.formSubmit().then((res:any)=>{
-          if(res.success == 1) {
-            this.createCrmContact();
-            var redirection = this._form.form.redirection;
-            if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
-            else this.thankyou = true;
-          }
-          else this.submitting = false;
-        });
+        console.log(res);
+        // this._form.formSubmit().then((res:any)=>{
+        //   if(res.success == 1) {
+        //     var redirection = this._form.form.redirection;
+        //     if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
+        //     else this.thankyou = true;
+        //   }
+        //   else this.submitting = false;
+        // });
       }
       else {
         var element:any = document.getElementById('kb-form-'+this._form.submission.form_id);
@@ -91,30 +109,6 @@ export class FormFetchComponent implements OnInit {
       }
     });
   }
-
-  createCrmContact(){
-    let data = this._general.decodeJSON(this._form.submission.json);
-    var temp:any = new Object();  
-    data.forEach((sub:any)=>{
-      if(sub.split && sub.name != 'select' && sub.name != 'checkbox' && sub.name != 'radio') {
-          sub.split?.forEach((spl:any)=>{
-          if(spl.subsplit) {
-            spl.subsplit?.forEach((subspl:any)=>{
-              temp[subspl.placeholder.replace(/\s/g, '')] = subspl.value;
-            })
-          }
-          else temp[spl.placeholder.replace(/\s/g, '')] = spl.value;
-        })
-      } 
-      else temp[sub.label.replace(/\s/g, '')] = sub.value;
-    })
-    console.log(temp);
-    let obj={firstname:temp?.FullName?temp?.FullName:temp?.FirstName,lastname:temp?.FullName?temp?.FullName:temp?.LastName,email:this._form.submission?.email,phone:temp?.Phone,list_uniqueid:this._form.form.lists,tags:this._form.form.tags,};
-    console.log(obj);
-    this.crmService.createcrmcontact(obj).subscribe((data:any)=>{
-
-    });
-    }
 
   getBlockStyle(en:string) {
     if(this._form.formEleTypes[en]) return this._style.getBlockStyle(this._form.formEleTypes[en]?.content.style);

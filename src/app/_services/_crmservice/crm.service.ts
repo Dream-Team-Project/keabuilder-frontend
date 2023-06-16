@@ -42,6 +42,7 @@ export class CrmService {
     return this.http.put('/api/updatecrmcontact',obj)
     .pipe(catchError(this.errorHandler));
   }
+  
   updatecrmcontactGenralDeatils(obj:any): Observable<any>{
     obj.user_id = this.uuid;
     return this.http.put('/api/updatecrmcontactGenralDeatils',obj)
