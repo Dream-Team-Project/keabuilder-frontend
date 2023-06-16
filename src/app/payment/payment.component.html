@@ -1,90 +1,21 @@
 <div id="kb-domain">
-
-    <div id="kb-offer-actions" *ngIf="sidebar.open">
-        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-            
-            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-            <h6><strong><img [src]="stripecontentactive==true?'/assets/images/payment/stripe-logo.png':'/assets/images/payment/paypal-logo.png'" width="20" alt="" srcset=""> {{stripecontentactive==true?'Stripe':'Paypal'}}</strong></h6>
-            <hr>
-            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
-                <mat-label>Stripe Key</mat-label>
-                <input type="text" matInput required [formControl]="stripekey" >
-                <mat-error *ngIf="stripekey.hasError('required')">
-                    Stripe Key is <strong>required</strong>
-                  </mat-error>
-            </mat-form-field>
-            
-            
-            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
-            <mat-label>Stripe Secret</mat-label>
-            <input type="text" matInput required [formControl]="stripesecret" >
-            <mat-error *ngIf="stripesecret.hasError('required')">
-                Stripe secret is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paypalcontentactive">
-                <mat-label>Paypal Account Email</mat-label>
-                <input type="email" matInput required minlength="3" maxlength="140" >
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paypalcontentactive">
-                <mat-label>Client Id</mat-label>
-                <input type="text" matInput required >                
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill" *ngIf="paypalcontentactive">
-                <mat-label>Secret</mat-label>
-                <input type="text" matInput required >
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" (click)="connectpayment()" >Connect <i class="fas fa-plus"></i></button>
-
-            <hr>
-            <p>Account details</p>
-            <div *ngIf="stripecontentactive">
-                <small>Integrate your Stripe account and allow your customers to use their credit cards during checkout.</small>
-                <br> <br>
-                <small>Before detaching your payment integration, please review this article for the impact this action will have on your account. If you would like to proceed with the detachment, please contact Support. </small>
-                <a href="https://stripe.com/docs/keys" target="_blank" matTooltip="Where can i find this?" matTooltipPosition="left" class="wherehelp d-inline-block"><i class="fas fa-question-circle"></i></a>
-            </div>
-
-            <div *ngIf="paypalcontentactive">
-                <small>Connect your account to Keabuilder to let customers check out with PayPal. </small>
-                <span matTooltip="Where can i find this?" matTooltipPosition="left" class="wherehelp"><i class="fas fa-question-circle"></i></span>
-            </div>
-                
-        </div>
-    </div>
-    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
-    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
-
     <div class="container-fluid">
-        <div class="row mt-4">
-            <div class="col-md-6 mt-4">
-                <h2>Payment Integrations</h2>
-                <p>Collect payments on the Offers you sell in Keabuilder. We offer a variety of ways your members will be able to pay for your products.</p>
-
-                 <mat-card class="mt-4">
-                     <ul class="kb-paymentul">
-                         <li> <img src="/assets/images/payment/stripe-logo.png" width="20" alt="" srcset=""> Stripe</li>
-                         <li>Keabuilder with Stripe to provide you with the easiest way to accept credit cards from your members.</li>
-                         <li><button mat-raised-button (click)="addnewconnect('stripe')">{{getstatus}} <i class="fa fa-paper-plane" aria-hidden="true"></i></button></li>
-                     </ul>
-                 </mat-card>
-
-                 <!-- <mat-card class="mt-4">
-                    <ul class="kb-paymentul">
-                        <li><img src="/assets/images/payment/paypal-logo.png" width="20" alt="" srcset=""> Paypal</li>
-                        <li>Connect your account to Keabuilder to let customers check out with PayPal.</li>
-                        <li><button mat-raised-button (click)="addnewconnect('paypal')">Connect <i class="fa fa-paper-plane" aria-hidden="true"></i></button></li>
-                    </ul>
-                </mat-card> -->
-
+        <div class="row ">
+            <div class="col-md-6 mt-5 kb-txt-post">
+                <span class="text-center">
+                <h2>Connect a payment provider</h2>
+                <p>You will find your payments here once you start making sales.</p>
+            </span>
+                <span class="d-flex justify-content-center">
+                <button class="mr-2" mat-raised-button color="primary" [routerLink]="'/sales/payment-integrations'">Get Started<i class="fa fa-paper-plane ml-1" aria-hidden="true"></i></button>
+                <button mat-raised-button [color]="'accent'" >Learn More <i class="fa-brands fa-leanpub ml-1" aria-hidden="true"></i></button>
+            </span>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6 ">
                 <img src="/assets/images/payment/payment-integration.png" class="img-fluid" alt="" srcset="">
             </div>
+            
         </div>
     </div>
+   
 </div>

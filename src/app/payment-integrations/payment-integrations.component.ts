@@ -5,11 +5,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css']
+  selector: 'app-payment-integrations',
+  templateUrl: './payment-integrations.component.html',
+  styleUrls: ['./payment-integrations.component.css']
 })
-export class PaymentComponent implements OnInit {
+export class PaymentIntegrationsComponent implements OnInit {
 
   sidebar = {
     open: false,
@@ -133,3 +133,4 @@ export class PaymentComponent implements OnInit {
   }
 
 }
+

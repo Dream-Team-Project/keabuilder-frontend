@@ -91,6 +91,8 @@ import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
 import { CrmAutomationComponent } from './crm-automation/crm-automation.component';
 import { CrmAutomationBuilderComponent } from './crm-automation-builder/crm-automation-builder.component';
 
+import { SalesComponent } from './sales/sales.component';
+import { PaymentIntegrationsComponent } from './payment-integrations/payment-integrations.component';
 const routes: Routes = [
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -134,6 +136,18 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
 
+  // sales 
+  { path: 'sales', component: SalesComponent, 
+  children: [
+    { path: '', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'offers', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
+    { path: 'payment-integrations', component: PaymentIntegrationsComponent, canActivate: [AuthGuard] },
+    { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  ],
+  canActivate: [AuthGuard] },
+ 
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
   
@@ -344,6 +358,8 @@ export const RoutingComponents =
     ComingSoonComponent,
     FunnelCheckoutComponent,
     AllWebsitesComponent,
-    FormFieldsComponent
+    FormFieldsComponent,
+    SalesComponent,
+    PaymentIntegrationsComponent,
   ];
 

@@ -115,6 +115,41 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
+      routerlink: '/sales',
+      img: 'payment.gif',
+      icon: 'fa fa-tags',
+      title: 'Sales',
+      submenu:[{
+        0:true,
+        routerlink: '/sales/offers',
+        img: 'payment.gif',
+        icon: 'fa fa-percentage',
+        title: 'Offers'
+      },
+      {
+        0:true,
+        routerlink: '/sales/coupons',
+        img: 'payment.gif',
+        icon: 'fa fa-file-alt',
+        title: 'Coupons'
+      },
+      {
+        0:true,
+        routerlink: '/sales/payment',
+        img: 'payment.gif',
+        icon: 'fa fa-dollar-sign',
+        title: 'Payments'
+      },
+      {
+        0:true,
+        routerlink: '/sales/affiliates',
+        img: 'payment.gif',
+       icon: 'fas fa-search-dollar',
+        title: 'Affiliates'
+      },
+    ],
+  },{
+      0:true,
       routerlink: '/payment',
       img: 'payment.gif',
       icon: 'fa fa-dollar-sign',
@@ -409,6 +444,20 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
     }
+    else if(myhref=='/sales'){
+
+      this.extramenus = false;
+      
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
+      
+      this.allmenu[3][0] = true;
+
+      this.allmenu[3].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
     // else if(myhref=='/membership'){
 
     //   this.extramenus = false;
@@ -431,9 +480,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[6][0] = true;
+      this.allmenu[7][0] = true;
 
-      this.allmenu[6].submenu.forEach((element: any) => {
+      this.allmenu[7].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -454,7 +503,7 @@ export class SidebarComponent implements OnInit {
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/sales' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
       this.backme = false;
     } 
 

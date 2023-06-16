@@ -256,8 +256,11 @@
                                   subscription plans with the same ID in Stripe in Test mode and Live mode. In test mode disc
                                   delivered will not operate.</small>
                               </p>
-                              <small>
-                                <a target="_blank" href="javascript:void(0)" routerLink="/payment">Edit Stripe Details</a>
+                              <small *ngIf="accountconnect=='Connected'">
+                                <a target="_blank" href="javascript:void(0)" routerLink="/sales/payment-integrations">Edit Stripe Details</a>
+                              </small>
+                              <small *ngIf="accountconnect == 'Not connnected'">
+                                <a target="_blank" href="javascript:void(0)" routerLink="/sales/payment">Add Stripe Details</a>
                               </small>
                             </div>
                           </div>

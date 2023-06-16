@@ -467,7 +467,8 @@ label {
   text-align: center;
 }
 .showstatdomain {
-  background: var(--secondary);
+  background: var(--primary-color);
+  /* background: var(--secondary); */
   color: #fff;
   font-size: 12px;
 }
