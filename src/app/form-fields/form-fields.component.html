@@ -6,9 +6,9 @@
         </button>
     </h4>
     <mat-nav-list>
-        <div class="kb-field-list" (click)="openDialog(fieldsetting, ff)" *ngFor="let ff of fieldTypes" role="listitem" mat-ripple>
-            <span class="kb-field-list-icon" [innerHTML]="ff.icon | safeHtml"></span>
-            <span class="kb-field-list-name">{{ff.name.replaceAll('-',' ') | titlecase}}</span>
+        <div class="kb-field-list" (click)="openDialog(fieldsetting, ft)" *ngFor="let ft of fieldTypes" role="listitem" mat-ripple>
+            <span class="kb-field-list-icon" [innerHTML]="ft.icon | safeHtml"></span>
+            <span class="kb-field-list-name">{{ft.name.replaceAll('-',' ') | titlecase}}</span>
         </div>
     </mat-nav-list>
 </ng-template>
@@ -26,13 +26,20 @@
     <h1 mat-dialog-title>{{selField.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content>
         <mat-error *ngIf="field_error">{{field_error}}</mat-error>
-        <mat-form-field appearance="fill" [class.mat-form-field-invalid]="field_error">
+        <mat-form-field appearance="fill" *ngIf="!selField.default_field" [class.mat-form-field-invalid]="field_error">
             <mat-label>Label</mat-label>
-            <input matInput type="text" [placeholder]="'label'" [(ngModel)]="selField.label">
+            <input matInput type="text" placeholder="label" [(ngModel)]="selField.label">
         </mat-form-field>
-        <mat-form-field appearance="fill" *ngIf="isPlaceholder(selField)">
+        <mat-form-field appearance="fill" *ngIf="isPlaceholder(selField) && !selField.default_field">
             <mat-label>Placeholder</mat-label>
-            <input matInput type="text" [placeholder]="'placeholder'" [(ngModel)]="selField.placeholder">
+            <input matInput type="text" placeholder="placeholder" [(ngModel)]="selField.placeholder">
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="isDefaultVal(selField)">
+            <mat-label>Default Value <span class="kb-info-tag kb-tag">Optional</span></mat-label>
+            <textarea *ngIf="selField.type == 'textarea' else input" matInput placeholder="default value"></textarea>
+            <ng-template #input>
+                <input matInput type="text" placeholder="default value" [(ngModel)]="selField.value">
+            </ng-template>
         </mat-form-field>
         <div cdkDropList
         [cdkDropListData]="selField.options" (cdkDropListDropped)="itemDropped($event)">
@@ -72,7 +79,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-md-2">
             <mat-label>Sort By</mat-label>
-            <mat-select #sortInp name="kbfilter" value='created_at ASC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
+            <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
                 <mat-option [value]="'label ASC'">ASC By Label</mat-option>
                 <mat-option [value]="'label DESC'">DESC By Label</mat-option>
                 <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -82,8 +89,11 @@
         <mat-form-field appearance="fill" class="col-md-2">
             <mat-label>Filter By Name</mat-label>
             <mat-select #filterInp name="kbfilter" value='' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
-                <mat-option value="" selected>All</mat-option>
-                <mat-option *ngFor="let ft of fieldTypes" [value]="ft.type">{{ft.name.replaceAll('-', ' ') | titlecase}}</mat-option>
+                <mat-option value="" selected><i class="fas fa-bars mr-1"></i> All</mat-option>
+                <mat-option *ngFor="let ft of fieldTypes" [value]="ft.type">
+                    <span class="mr-1" [innerHTML]="ft.icon | safeHtml"></span>
+                    {{ft.name.replaceAll('-', ' ') | titlecase}}
+                </mat-option>
             </mat-select>
         </mat-form-field>
         <div class="col-md-3 text-right mt-2">
@@ -104,15 +114,13 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ff of fields, index as i">
-                        <td>{{ff.label}}</td>
+                        <td>{{ff.label}}<span *ngIf="ff.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
                         <td>{{ff.name.replaceAll('-', ' ')}}</td>
                         <td>{{ff.field_tag | uppercase}}</td>
                         <td>
-                            <span *ngIf="ff.default_field else action" class="kb-info-tag kb-tag ml-2">Default</span>
-                            <ng-template #action>
-                                <i matTooltip="Edit" (click)="openDialog(fieldsetting, ff)" matTooltipPosition="above" class="fa fa-pencil px-4 kb-field-action"></i>
-                                <i matTooltip="Delete" (click)="openDialog(delfield, ff)" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-field-action kb-field-action-del"></i>
-                            </ng-template>
+                            <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
+                            <i matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil px-3 kb-field-action"></i>
+                            <i *ngIf="!ff.default_field" matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt px-3 kb-field-action kb-field-action-del"></i>
                         </td>                        
                     </tr>
                 </tbody>

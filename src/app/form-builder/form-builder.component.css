@@ -51,19 +51,14 @@
     margin: 0 !important;
 }
 
+mat-drawer.mat-drawer {
+    position: fixed;
+    height: 100%;
+    top: 32px;
+}
+
 .kb-tabs-component .kb-inner-tab-component {
     padding: 16px!important;
-}
-
-span.kb-split-fields {
-    display: flex;
-    position: relative;
-}
-
-.kb-form-field-icon {
-    position: absolute;
-    right: 0px;
-    top: 0px;
 }
 
 .kb-field-preview.custom-preview {
@@ -71,27 +66,14 @@ span.kb-split-fields {
     background-color: var(--primary-color);
 }
 
-.kb-form-field-icon i {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-    border-radius: 4px;
-}
-
-.kb-form-field-icon i:not(.kb-drag-element) {
-    cursor: pointer;
-}
-
 .kb-drag-element {
     cursor: all-scroll!important;
 }
 
-::ng-deep .kb-split-fields .mat-checkbox-frame {
-    border-color: var(--kb-dim-black)!important;
+.kb-field-opt-trg {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
 }
 
 #kb-topbar-container {
@@ -109,7 +91,7 @@ span.kb-split-fields {
     position: relative;
     width: 100%;
     height: auto;
-    margin: 20px auto;
+    margin: 0px auto;
     transition: width 0.3s ease-out;
 }
 
@@ -124,6 +106,11 @@ span.kb-split-fields {
 
 .cdk-drag:active {
     cursor: grabbing;
+}
+
+.kb-field-list.cdk-drag.cdk-drag-disabled {
+    background-color: var(--kb-gray);
+    pointer-events: none;
 }
 
 .custom-preview-icon {
@@ -227,28 +214,6 @@ img.kb-form-image {
     max-width: 100%;
 }
 
-div#kb-element-drag {
-    position: relative;
-    height: 500px;
-}
-
-div#kb-element-drag:after {
-    content: 'Drag Elements Here';
-    border: 2px dashed #aeaeae;
-    color: #aeaeae;
-    font-size: 22px;
-    position: absolute;
-    left: 10%;
-    top: 10%;
-    border-radius: 4px;
-    margin-top: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    height: 80%;
-}
-
 /*  input styling  */
 
 .kb-form-inp-reqired{
@@ -292,20 +257,6 @@ div#kb-element-drag:after {
 
 div.kb-form-divder {
     border: 1px solid var(--kb-light);
-}
-
-.kb-form-inp-split {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 10px;
-    justify-content: space-between;
-}
-
-.kb-form-inp-split>* {
-    flex: 1;
-    -webkit-flex: 1;
-    min-width: calc(25% - 10px);
 }
 
 .kb-form-btn button{
@@ -452,3 +403,57 @@ button {
 ::ng-deep .mat-checkbox label {
     margin: 0;
 }
+
+.kb-field-list-head {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kb-field-data tbody tr:hover, .kb-field-list:hover {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.kb-field-data tbody tr:hover, .kb-field-list:hover .kb-field-list-name {
+    color: var(--primary-color);
+}
+
+.kb-field-list {
+    font-size: 14px;
+    line-height: normal;
+    display: flex;
+    margin: 10px 0;
+    transition: 0.2s ease;
+    padding: 8px 10px;
+    width: 100%;
+    color: var(--secondary-color);
+    border: 1px solid var(--kb-dim-black);
+    border-radius: 4px;
+    background-color: var(--kb-white);
+}
+
+#kb-field-group {
+    width: 300px;
+    min-height: 100%;
+    padding: 10px 10px 40px;
+    background-color: var(--kb-gray);
+}
+
+.mr-1 {
+    margin-right: 0.25rem!important;
+}
+
+.kb-field-filter-opt {
+    padding-top: 20px;
+    height: 220px;
+    overflow: hidden;
+    animation: slidedown 0.2s ease;
+}
+
+@keyframes slidedown {
+    from { height: 0px;}
+    to { height: 220px;}
+  }

@@ -30,6 +30,7 @@ export class FormBuilderComponent implements OnInit {
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   @ViewChild('actionDialog') actionDialog!: TemplateRef<any>;
   @ViewChild('delActionDialog') delActionDialog!: TemplateRef<any>;
+  @ViewChild('fieldsdrawer') fieldsdrawer: any;
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
@@ -81,6 +82,7 @@ export class FormBuilderComponent implements OnInit {
   formlists:any=[];
   formtags:any=[];
   showEditor:boolean = true;
+  showFilter:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -109,12 +111,12 @@ export class FormBuilderComponent implements OnInit {
       });
       document.addEventListener('contextmenu', event => event.preventDefault());
     });
-    this.fetchlists().then((resp)=>{
-      this.patchlistname();
-    });
-    this.fetchTags().then((resp)=>{
-      this.patchtagname();
-    })
+    // this.fetchlists().then((resp)=>{
+    //   if(resp) this.patchlistname();
+    // });
+    // this.fetchTags().then((resp)=>{
+    //   this.patchtagname();
+    // })
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -133,32 +135,31 @@ export class FormBuilderComponent implements OnInit {
     });
   }
 
-    fetchlists(){
-      return new Promise((resolve) => {
+  fetchlists(){
+    return new Promise((resolve) => {
       this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
         this.lists=data.data;
         resolve(true);
       },
       (error: any) => {
         resolve(false);
-      }
-    );
-    });
-    }
-  
-    fetchTags() {
-      return new Promise((resolve) => {
-        this._crmtagService.getAllcrmtags().subscribe(
-          (data) => {
-            this.tags = data.data;
-            resolve(true);
-          },
-          (error: any) => {
-            resolve(false);
-          }
-        );
       });
-    }
+    });
+  }
+
+  fetchTags() {
+    return new Promise((resolve) => {
+      this._crmtagService.getAllcrmtags().subscribe(
+        (data) => {
+          this.tags = data.data;
+          resolve(true);
+        },
+        (error: any) => {
+          resolve(false);
+        }
+      );
+    });
+  }
 
   autoSaveTrigger(trigger:boolean) {
     clearInterval(this.autoSaveInterval);
@@ -223,6 +224,13 @@ export class FormBuilderComponent implements OnInit {
   
   // start dialogs
 
+  openBtnDialog(templateRef: TemplateRef<any>) {
+    this.dialogData = this.dialog.open(templateRef);
+    this.dialogData.afterClosed().subscribe((data:any)=>{
+      if(this._form.form.btntxt == '') this._form.form.btntxt = 'Submit';
+    })
+  }
+
   openSettingDialog(templateRef: TemplateRef<any>) {
     this.formdialog = 'Setting';
     this.dialogData = this.dialog.open(templateRef);
@@ -258,16 +266,18 @@ export class FormBuilderComponent implements OnInit {
 
   openElementDialog(templateRef: TemplateRef<any>, element:any) {
     this._form.selEle = element;
-    if(element.name == 'image') {
-      this.openImageDialog();
-      this._form.formSaved = false;
-    }
-    else {
-      this.dialogData = this.dialog.open(templateRef);
-      this.dialogData.afterClosed().subscribe((data:any)=>{
+    if(element.name != 'divider' && !element.field_tag) {
+      if(element.name == 'image') {
+        this.openImageDialog();
         this._form.formSaved = false;
-        this._form.selEle = '';
-      })
+      }
+      else {
+        this.dialogData = this.dialog.open(templateRef);
+        this.dialogData.afterClosed().subscribe((data:any)=>{
+          this._form.formSaved = false;
+          this._form.selEle = '';
+        })
+      }
     }
   }
 
@@ -291,6 +301,11 @@ export class FormBuilderComponent implements OnInit {
     } else {
       this._form.addField(event.item.data, event.currentIndex);
     }
+  }
+
+  isDisabled(field:any) {
+    var res = this._form.formField.filter(ff=>field.id == ff.id);
+    return res.length != 0;
   }
 
   nextSlide() {
@@ -323,6 +338,8 @@ export class FormBuilderComponent implements OnInit {
   selectTab(value:string) {
     if(this.waitST) {
       this.waitST = false;
+      if(value == 'fields' || this.fieldsdrawer.opened) this.fieldsdrawer.toggle();
+      if(this.fieldsdrawer.opened) this._form.fetchFields();
       var temp = this.selectedTab != value;
       if(temp) {
         var isEmpty = this.selectedTab == '';
@@ -339,6 +356,11 @@ export class FormBuilderComponent implements OnInit {
         this.waitST = true;
       }, 200);
     }
+  }
+
+  toggleFieldsFilter() {
+    this.showFilter = !this.showFilter;
+    if(!this.showFilter) this._form.fetchFields();
   }
 
   switchPreviewMode() {
@@ -391,6 +413,7 @@ export class FormBuilderComponent implements OnInit {
     this.filteredTempIds.tags.splice(index, 1);
     this.formtags.splice(index, 1);
   }
+  
   addtag(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
@@ -435,10 +458,11 @@ export class FormBuilderComponent implements OnInit {
       });
     });
   }
+
   patchtagname(){
     // return new Promise((resolve) => {
     this.tags.forEach((tag: any) => {
-      this._form.form.tags.split(',').forEach((tid: any) => {
+      this._form.form.tags?.split(',').forEach((tid: any) => {
         if (tid == tag.uniqueid) {
           var obj = { uniqueid: tid, tag_name: tag.tag_name };
           this.selectedTags.push(obj);
@@ -450,10 +474,12 @@ export class FormBuilderComponent implements OnInit {
 
 
   }
+  
   patchlistname(){
+    console.log(this.lists);
     // return new Promise((resolve) => {
     this.lists.forEach((list: any) => {
-      this._form.form.lists.split(',').forEach((lid: any) => {
+      this._form.form.lists?.split(',').forEach((lid: any) => {
         if (lid == list.uniqueid) {
           var obj = { uniqueid: lid, list_name: list.list_name };
           this.selectedLists.push(obj);
