@@ -19,28 +19,37 @@ export class ContactService {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
-  getAllcrmcontacts(): Observable<any> {
+  fetchcontacts(): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getAllcrmcontacts', obj)
     .pipe(catchError(this.errorHandler));
   }
-  getsinglecrmcontact(uniqueid:any): Observable<any> {
+
+  singlecontact(uniqueid:any): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getsinglecrmcontact/'+uniqueid,obj).pipe(catchError(this.errorHandler));
   }
 
-  createcrmcontact(obj:any): Observable<any> {
+  createcontact(obj:any): Observable<any> {
     obj.user_id = this.uuid;
     return this.http.post('/api/createcrmcontact',obj).pipe(catchError(this.errorHandler));
   }
-  deletecrmcontact(uniqueid:any): Observable<any>{
+
+  deletecontact(uniqueid:any): Observable<any>{
     var obj = {uuid: this.uuid};
     return this.http.post('/api/deletecrmcontact/'+uniqueid,obj).pipe(catchError(this.errorHandler));
     
   }
-  updatecrmcontact(obj:any): Observable<any>{
+
+  updatecontact(obj:any): Observable<any>{
     obj.user_id = this.uuid;
     return this.http.put('/api/updatecrmcontact',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  searchcontacts(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/searchContactsquery',obj)
     .pipe(catchError(this.errorHandler));
   }
   
@@ -48,14 +57,9 @@ export class ContactService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getallcrmdata', obj).pipe(catchError(this.errorHandler));
   }
-  searchContactsquery(obj:any){
-    obj.user_id = this.uuid;
-    return this.http.post('/api/searchContactsquery',obj).pipe(catchError(this.errorHandler));
-  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
-
-
-
+  
 }
