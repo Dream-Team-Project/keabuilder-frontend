@@ -24,6 +24,7 @@ export class FormFieldsComponent implements OnInit {
     fetching:boolean = true;
     selField:any = '';
     field_error:string = '';
+    isCopied:boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -61,11 +62,15 @@ export class FormFieldsComponent implements OnInit {
     });
   }
 
+  getFieldTag(field:any) {
+    return '%'+field.label.toUpperCase().replaceAll(' ', '_')+'%';
+  }
+
   setField(field:any) {
     this.field_error = '';
     var tempObj = JSON.parse(JSON.stringify(field));
     tempObj.options = tempObj.options ? JSON.stringify(tempObj.options) : null;
-    tempObj.field_tag = '%'+field.label.toUpperCase().replaceAll(' ', '_')+'%';
+    tempObj.field_tag = this.getFieldTag(field);
     if(field.id) this.updateField(tempObj);
     else this.addField(tempObj);
   }
@@ -161,5 +166,10 @@ export class FormFieldsComponent implements OnInit {
 
   isPlaceholder(field:any) {
     return (!field.options && field.type != 'date'  && field.type != 'time') || field.type == 'select';
+  }
+
+  textCopied(e:any) {
+    this.isCopied = true;
+    setTimeout(()=>this.isCopied = false, 1000)
   }
 }

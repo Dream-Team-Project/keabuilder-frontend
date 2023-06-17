@@ -38,13 +38,13 @@
     background-color: var(--secondary-color);
 }
 
-::ng-deep h1,
-::ng-deep h2,
-::ng-deep h3,
-::ng-deep h4,
-::ng-deep h5,
-::ng-deep h6,
-::ng-deep p {
+::ng-deep #kb-form-container h1,
+::ng-deep #kb-form-container h2,
+::ng-deep #kb-form-container h3,
+::ng-deep #kb-form-container h4,
+::ng-deep #kb-form-container h5,
+::ng-deep #kb-form-container h6,
+::ng-deep #kb-form-container p {
     font-family: inherit;
     font-weight: inherit;
     font-size: inherit;

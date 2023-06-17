@@ -233,6 +233,7 @@ export class FormBuilderComponent implements OnInit {
 
   openSettingDialog(templateRef: TemplateRef<any>) {
     this.formdialog = 'Setting';
+    this._form.form.thankyoumessage = this._form.getThankyouMsg();
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       if(this.validate.name.invalid || this.validate.relink.invalid) this.openSettingDialog(this.settingdialog);
@@ -339,7 +340,7 @@ export class FormBuilderComponent implements OnInit {
     if(this.waitST) {
       this.waitST = false;
       if(value == 'fields' || this.fieldsdrawer.opened) this.fieldsdrawer.toggle();
-      if(this.fieldsdrawer.opened) this._form.fetchFields();
+      if(this.fieldsdrawer.opened) this.toggleFieldsFilter(true);
       var temp = this.selectedTab != value;
       if(temp) {
         var isEmpty = this.selectedTab == '';
@@ -358,8 +359,8 @@ export class FormBuilderComponent implements OnInit {
     }
   }
 
-  toggleFieldsFilter() {
-    this.showFilter = !this.showFilter;
+  toggleFieldsFilter(toggle:boolean) {
+    this.showFilter = !toggle;
     if(!this.showFilter) this._form.fetchFields();
   }
 
