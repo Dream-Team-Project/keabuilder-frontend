@@ -144,9 +144,9 @@
                       minlength="3"
                       maxlength="140"
                       formControlName="email"
-                      (blur)="validateEmail($event)"
+                     
                     />
-    
+                    <!-- (blur)="validateEmail($event)" -->
                     <mat-error
                       *ngIf="crmcontactForm.controls.email.hasError('required')"
                       >Please enter email</mat-error
@@ -217,8 +217,9 @@
               <button
               mat-raised-button color="primary"
               matTooltip='Update button'
-                (click)="updatecrmcontactLists()"
+                (click)="updatecrmcontact()"
               >
+              <!-- (click)="updatecrmcontactLists()" -->
                 Update
               </button> 
             </div>
@@ -282,8 +283,10 @@
               <button
               mat-raised-button color="primary"
               matTooltip='Update button'
-                (click)="updatecrmcontactTags()"
+              (click)="updatecrmcontact()"
+               
               >
+              <!-- (click)="updatecrmcontactTags()" -->
                 Update
               </button> 
             </div>

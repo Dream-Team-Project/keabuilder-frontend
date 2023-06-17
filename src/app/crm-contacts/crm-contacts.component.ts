@@ -9,7 +9,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { CrmService } from '../_services/_crmservice/crm.service';
 import { A, B, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { CrmListService } from '../_services/_crmservice/crm_list.service';
 import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
@@ -20,7 +19,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-
+import { ContactService } from '../_services/_crm/contact.service';
 import {
   FormGroup,
   FormControl,
@@ -28,6 +27,7 @@ import {
   Validators,
   Form,
 } from '@angular/forms';
+
 
 export interface CrmData {
   fullname: string;
@@ -89,18 +89,8 @@ export class CrmContactsComponent implements OnInit {
   popup: any;
   userId: any;
   contacts: any = [];
-  addOnBlur = true;
-  // singlecontact: any;
+  // addOnBlur = true;
   buttonText = 'Add';
-//   order:any=[ 
-//     {value: 'ascending', viewValue: 'Ascending'},
-//     {value: 'descending', viewValue: 'Descending'},
-//   ];
-// optionGroup:any=[
-//     {value: 'firstname', viewValue: 'Name', order: this.order},
-//     {value: 'email', viewValue: 'EmailId', order: this.order},
-// ]
-
 selectedForm:string = '';
 filterlistid:any='';
 filtertagid:any='';
@@ -133,13 +123,13 @@ selectedtagForm=new FormControl('');
       '',
       Validators.compose([Validators.minLength(10), Validators.maxLength(50)]),
     ],
-    list_uniqueid: [''],
+    lists: [''],
     tags: [''],
     uniqueid: '',
   });
   constructor(
     private _crmtagService: CrmTagsService,
-    private crmService: CrmService,
+    private _contactService: ContactService,
     private _frmbuidr: FormBuilder,
     private _crmlistService: CrmListService,
     private _snackBar: MatSnackBar,
@@ -170,7 +160,7 @@ selectedtagForm=new FormControl('');
   }
 
   ngOnInit(): void {
-    // this.fetchAlldata();
+    this.fetchAlldata();
 
     if(this.uniqueid && this.obj=='list' ){
       this.filterlistid=this.uniqueid;
@@ -192,91 +182,62 @@ selectedtagForm=new FormControl('');
       this.fetchLists().then((resp1) => {
         this.fetchTags().then((resp) => {
           this.fetchList = true;
-          // var i = 0;
-          // this.contacts.forEach((contact: any) => {
-          //   contact.temp_lists = [];
-          //   contact.temp_tags = [];
-          //   contact.list_name = [];
-          //   contact.tag_name = [];
-          //   contact.list_uniqueid.split(',').forEach((lid: any) => {
-          //     this.lists.forEach((list: any) => {
-          //       if (lid == list.uniqueid) {
-          //         var tl = { uniqueid: lid, list_name: list.list_name };
-          //         contact.temp_lists.push(tl);
-          //         contact.list_name.push(list.list_name);
-          //       }
-          //     });
-          //   });
-          //   this.tags.forEach((tag: any) => {
-          //     contact.tags.split(',').forEach((tid: any) => {
-          //       if (tid == tag.uniqueid) {
-          //         var tt = { uniqueid: tid, tag_name: tag.tag_name };
-          //         contact.temp_tags.push(tt);
-          //         contact.tag_name.push(tag.tag_name);
-          //       }
-          //     });
-          //   });
-          //   contact.list_name.toString();
-          //   contact.tag_name.toString();
-          //   if (i == this.contacts.length - 1) this.fetchList = true;
-          //   i++;
-          // });
         });
       });
     });
   }
-  patchlistname(){
-    // return new Promise((resolve) => {
-    this.contacts.forEach((contact: any) => {
-      var i=0;
-      contact.temp_lists = [];
-      // contact.temp_tags = [];
-      contact.list_name = [];
-      // contact.tag_name = [];
-      contact.list_uniqueid.split(',').forEach((lid: any) => {
-        // console.log(this.lists); 
-        this.lists.forEach((list: any) => {
-          if (lid == list.uniqueid) {
-            var tl = { uniqueid: lid, list_name: list.list_name };
-            contact.temp_lists.push(tl);
-            contact.list_name.push(list.list_name);
-          }
-        });
-      });
-      if (i == this.contacts.length - 1) this.fetchList = true;
-      i++;
-    //   resolve(true);
-    // },
-    // (error:any) => {
-    //   resolve(false);
-    // }
-  // );
-});
-  }
-  patchtagname(){
-    // return new Promise((resolve) => {
-    this.contacts.forEach((contact: any) => {
-      // contact.temp_lists = [];
-      contact.temp_tags = [];
-      // contact.list_name = [];
-      contact.tag_name = [];
-    this.tags.forEach((tag: any) => {
-      contact.tags.split(',').forEach((tid: any) => {
-        if (tid == tag.uniqueid) {
-          var tt = { uniqueid: tid, tag_name: tag.tag_name };
-          contact.temp_tags.push(tt);
-          contact.tag_name.push(tag.tag_name);
-        }
-      });
-    });
-//     resolve(true);
-//   },
-//   (error:any) => {
-//     resolve(false);
+//   patchlistname(){
+//     // return new Promise((resolve) => {
+//     this.contacts.forEach((contact: any) => {
+//       var i=0;
+//       contact.temp_lists = [];
+//       // contact.temp_tags = [];
+//       contact.list_name = [];
+//       // contact.tag_name = [];
+//       contact.list.split(',').forEach((lid: any) => {
+//         // console.log(this.lists); 
+//         this.lists.forEach((list: any) => {
+//           if (lid == list.uniqueid) {
+//             var tl = { uniqueid: lid, list_name: list.list_name };
+//             contact.temp_lists.push(tl);
+//             contact.list_name.push(list.list_name);
+//           }
+//         });
+//       });
+//       if (i == this.contacts.length - 1) this.fetchList = true;
+//       i++;
+//     //   resolve(true);
+//     // },
+//     // (error:any) => {
+//     //   resolve(false);
+//     // }
+//   // );
+// });
 //   }
-// );
-});
-  }
+//   patchtagname(){
+//     // return new Promise((resolve) => {
+//     this.contacts.forEach((contact: any) => {
+//       // contact.temp_lists = [];
+//       contact.temp_tags = [];
+//       // contact.list_name = [];
+//       contact.tag_name = [];
+//     this.tags.forEach((tag: any) => {
+//       contact.tags.split(',').forEach((tid: any) => {
+//         if (tid == tag.uniqueid) {
+//           var tt = { uniqueid: tid, tag_name: tag.tag_name };
+//           contact.temp_tags.push(tt);
+//           contact.tag_name.push(tag.tag_name);
+//         }
+//       });
+//     });
+// //     resolve(true);
+// //   },
+// //   (error:any) => {
+// //     resolve(false);
+// //   }
+// // );
+// });
+//   }
   
 
   // sortcontact(){
@@ -353,18 +314,18 @@ selectedtagForm=new FormControl('');
     return this.contactchar.length == 2 ? this.contactchar[0][0]+this.contactchar[1][0] : this.contactchar[0][0]+this.contactchar[0][1];
   }
 
-  validateEmail(event: any) {
-    var email = event.target.value;
-    this.crmService.crmcontactCheckEmail(email).subscribe((data) => {
-      this.uniqueEmail = data.data[0]['count(*)'];
-      // console.log(this.uniqueEmail);
-      // return this.uniqueEmail;
-    });
-  }
+  // validateEmail(event: any) {
+  //   var email = event.target.value;
+  //   this.c.crmcontactCheckEmail(email).subscribe((data) => {
+  //     this.uniqueEmail = data.data[0]['count(*)'];
+  //     // console.log(this.uniqueEmail);
+  //     // return this.uniqueEmail;
+  //   });
+  // }
 
   fetchContacts() {
     return new Promise((resolve) => {
-      this.crmService.getAllcrmcontacts().subscribe(
+      this._contactService.getAllcrmcontacts().subscribe(
         (data) => {
           this.contacts = data.data;
           console.log(this.contacts)
@@ -457,26 +418,31 @@ selectedtagForm=new FormControl('');
     this.tagupdate().then((resp2: any) => {
       // console.log('tag updated');
     });
-    this.crmcontactForm.value.list_uniqueid = this.listarr
+    this.crmcontactForm.value.lists = this.listarr
       .map((la: any) => la.uniqueid)
       .toString();
     this.crmcontactForm.value.tags = this.tagarr
       .map((ta: any) => ta.uniqueid)
       .toString();
     // console.log(this.crmcontactForm.value);
-    this.crmService
+    this._contactService
       .createcrmcontact(this.crmcontactForm.value)
       .subscribe((data) => {
+        if(data.success==true){
         this.hidepopupsidebar();
-        this.ngOnInit();
+        this.fetchAlldata();
         this._snackBar.open('CRM Contact added Succesfully !', 'OK');
+        }
+        else{
+          this._snackBar.open('Please enter Unique Email Id !', 'OK');
+        }
       });
   }
 
   editcrmContact(user: any) {
-    // console.log(user);
-    this.listarr = user.temp_lists.map((tl: any) => tl);
-    this.tagarr = user.temp_tags.map((tt: any) => tt);
+    console.log(user);
+    this.listarr =user.temp_lists[0]==null?this.listarr: user?.temp_lists?.map((tl: any) => tl);
+    this.tagarr =user?.temp_tags[0]==null? this.tagarr:user?.temp_tags?.map((tt: any) => tt);
     // console.log(this.listarr)
     // console.log(this.tagarr)
     this.crmcontactForm.patchValue(user);
@@ -515,19 +481,24 @@ selectedtagForm=new FormControl('');
     this.tagupdate().then((resp2: any) => {
       // console.log('tag updated');
     });
-    this.crmcontactForm.value.list_uniqueid = this.listarr
+    this.crmcontactForm.value.lists = this.listarr
       .map((la: any) => la.uniqueid)
       .toString();
     this.crmcontactForm.value.tags = this.tagarr
       .map((ta: any) => ta.uniqueid)
       .toString();
     // console.log(this.crmcontactForm.value);
-    this.crmService
+    this._contactService
       .updatecrmcontact(this.crmcontactForm.value)
       .subscribe((data) => {
+        if(data.success==true){
         this.hidepopupsidebar();
-        this.ngOnInit();
+        this.fetchAlldata();
         this._snackBar.open('CRM Contact updated Succesfully !', 'OK');
+        }
+        else{
+          this._snackBar.open('Please enter Unique Email Id !', 'OK');
+        }
       });
   }
 
@@ -537,8 +508,8 @@ selectedtagForm=new FormControl('');
   }
 
   deletecrmContact(uniqueid: any) {
-    this.crmService.deletecrmcontact(uniqueid).subscribe((data) => {
-      this.ngOnInit();
+    this._contactService.deletecrmcontact(uniqueid).subscribe((data) => {
+      this.fetchAlldata();
       this._snackBar.open('CRM Contact deleted Succesfully !', 'OK');
     });
   }
@@ -641,7 +612,7 @@ selectedtagForm=new FormControl('');
       filter: this.paramvalue?filter:filter.value
     }
     console.log(obj);
-    this.crmService.searchContactsquery(obj).subscribe((data:any)=>{
+    this._contactService.searchContactsquery(obj).subscribe((data:any)=>{
       // console.log(data.data)
       this.contacts = data.data;
     });

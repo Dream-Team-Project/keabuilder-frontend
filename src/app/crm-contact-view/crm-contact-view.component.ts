@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { FormBuilder, FormControl, RequiredValidator, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
-import { CrmService } from '../_services/_crmservice/crm.service';
 import { CrmListService } from '../_services/_crmservice/crm_list.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -13,6 +12,7 @@ import { map, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { CrmUserAddressService } from '../_services/_crmservice/crm-user-address.service';
+import { ContactService } from '../_services/_crm/contact.service';
 
 @Component({
   selector: 'app-crm-contact-view',
@@ -81,12 +81,12 @@ export class CrmContactViewComponent implements OnInit {
       '',
       Validators.compose([Validators.minLength(10), Validators.maxLength(50)]),
     ],
-    // list_uniqueid: [''],
-    // tags: [''],
+    lists:'',
+    tags:'',
     uniqueid: '',
   });
   crmcontactListForm: any = this._frmbuidr.group({
-    list_uniqueid: [''],
+    lists: [''],
     uniqueid: '',
   });
   crmcontactTagForm: any = this._frmbuidr.group({
@@ -98,7 +98,7 @@ export class CrmContactViewComponent implements OnInit {
   tagCtrl = new FormControl([''], Validators.compose([Validators.minLength(2)]),);
   constructor(
     private _crmtagService: CrmTagsService,
-    private crmService: CrmService,
+    private _contactService: ContactService,
     private _crmlistService: CrmListService,
     private crmAddressService: CrmUserAddressService,
     private _route: ActivatedRoute,
@@ -127,47 +127,21 @@ export class CrmContactViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchAddress().then((resp5)=>{console.log(resp5)});
-    this.fetchContact(this.uniqueid).then((resp2) => {
+   this.fetchAlldata();
+  }
+  fetchAlldata(){
+     // this.fetchAddress().then((resp5)=>{console.log(resp5)});
+     this.fetchContact(this.uniqueid).then((resp2) => {
       this.fetchLists().then((resp1) => {
         this.fetchTags().then((resp) => {
-          var i = 0;
-          this.contact.temp_lists = [];
-          this.contact.temp_tags = [];
-          this.contact.list_name = [];
-          this.contact.tag_name = [];
-          this.contact.list_uniqueid.split(',').forEach((lid: any) => {
-            this.lists.forEach((list: any) => {
-              if (lid == list.uniqueid) {
-                 var tl = { uniqueid: lid, list_name: list.list_name };
-                this.contact.temp_lists.push(tl);
-                this.contact.list_name.push(list.list_name);
-              
-              }
-            });
-            
-          });
-          this.tags.forEach((tag: any) => {
-            this.contact.tags.split(',').forEach((tid: any) => {
-              if (tid == tag.uniqueid) {
-                 var tt = { uniqueid: tid, tag_name: tag.tag_name };
-                 this.contact.temp_tags.push(tt);
-                this.contact.tag_name.push(tag.tag_name);
-              }
-            });
-          });
-           
-          this.contact.list_name.toString();
-          this.contact.tag_name.toString();
-          if (i == this.contact.length - 1) this.fetchList = true;
-          i++;
-
           this.listarr= this.contact.temp_lists.map((tl: any) => tl);
           this.tagarr= this.contact.temp_tags.map((tt: any) => tt);
-         
-        });
-        
+          this.fetchList = true;
+          // console.log(this.listarr)
+          // console.log(this.tagarr)
+        }); 
       });
+     
     });
     this.hideany = true;
     this.buttontext=true;
@@ -175,26 +149,20 @@ export class CrmContactViewComponent implements OnInit {
     this.tagbuttontext=true;
     this.listhideany = true;
     this.listbuttontext=true;
-   
-      // this.newlists = [];
-      // this.newtags = [];
-      this.listarr = [];
-      this.tagarr = [];
-      this.uniqueEmail=0;
   }
-  validateEmail(event: any) {
-    var email = event.target.value;
-    this.crmService.crmcontactCheckEmail(email).subscribe((data) => {
-      this.uniqueEmail = data.data[0]['count(*)'];
+  // validateEmail(event: any) {
+  //   var email = event.target.value;
+  //   this._contactService.crmcontactCheckEmail(email).subscribe((data) => {
+  //     this.uniqueEmail = data.data[0]['count(*)'];
       
-    });
-  }
+  //   });
+  // }
   fetchContact(uniqueid: any) {
     return new Promise((resolve) => {
-      this.crmService.getcrmcontact(uniqueid).subscribe(
+      this._contactService.getsinglecrmcontact(uniqueid).subscribe(
         (data) => {
           this.contact = data.data[0];
-          // console.log(this.contact)
+          console.log(this.contact)
           resolve(true);
         },
         (error) => {
@@ -229,92 +197,119 @@ export class CrmContactViewComponent implements OnInit {
       );
     });
   }
-  fetchAddress(){
-    return new Promise((resolve) => {
-      this.crmAddressService.getAlluserAddress().subscribe(
-        (data) => {
-          console.log(data.data[0])
-          this.userAddress = data.data[0];
+  // fetchAddress(){
+  //   return new Promise((resolve) => {
+  //     this.crmAddressService.getAlluserAddress().subscribe(
+  //       (data) => {
+  //         console.log(data.data[0])
+  //         this.userAddress = data.data[0];
            
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
+  //         resolve(true);
+  //       },
+  //       (error) => {
+  //         resolve(false);
+  //       }
+  //     );
+  //   });
+  // }
   editcrmContact(user: any) {
     this.crmcontactForm.patchValue(user);
     this.buttontext=false;
     this.hideany = false;
   }
   editcrmContactTags(user:any){
-    this.crmcontactTagForm.patchValue(user);
+    if(user.tags){
+      this.crmcontactForm.patchValue(user);
+      // this.tagarr=user.tags.split(',');
+      console.log('hello')
+    }
+    else{
+      this.crmcontactForm.patchValue(user);
+      this.tagarr=[];
+    }
+    // this.crmcontactTagForm.patchValue(user.lists);
     this.tagbuttontext=false;
     this.taghideany = false;
 
   }
-  updatecrmcontactTags(){
-    this.tagupdate().then((resp2: any) => {
-      // console.log('tag updated');
-    });
-    this.crmcontactTagForm.value.tags = this.tagarr
-      .map((ta: any) => ta.uniqueid)
-      .toString();
-      this.crmService
-      .updatecrmcontactTags(this.crmcontactTagForm.value)
-      .subscribe((data) => {
-        // this.hidepopupsidebar();
-        this.crmcontactTagForm.reset();
-        this.ngOnInit();
-        this._snackBar.open('CRM Tags updated Succesfully !', 'OK');
-      });
-  }
+  // updatecrmcontactTags(){
+  //   this.tagupdate().then((resp2: any) => {
+  //     // console.log('tag updated');
+  //   });
+  //   // this.crmcontactTagForm.value.tags = this.tagarr
+  //   //   .map((ta: any) => ta.uniqueid)
+  //   //   .toString();
+  //   //   this.crmService
+  //   //   .updatecrmcontactTags(this.crmcontactTagForm.value)
+  //   //   .subscribe((data) => {
+  //   //     // this.hidepopupsidebar();
+  //   //     this.crmcontactTagForm.reset();
+  //   //     this.ngOnInit();
+  //   //     this._snackBar.open('CRM Tags updated Succesfully !', 'OK');
+  //   //   });
+  // }
   editcrmContactLists(user:any){
-    this.crmcontactListForm.patchValue(user);
+    if(user.lists){
+      this.crmcontactForm.patchValue(user);
+      // this.listarr=user.lists.split(',');
+      console.log('hello')
+    }
+    else{
+      this.crmcontactForm.patchValue(user);
+      this.listarr=[];
+    }
+    // this.crmcontactListForm.patchValue(user);
     this.listbuttontext=false;
     this.listhideany = false;
 
   }
-  updatecrmcontactLists(){
-    this.crmcontactListForm.value.list_uniqueid = this.listarr
-    .map((la: any) => la.uniqueid)
-    .toString();
-    this.crmService
-    .updatecrmcontactLists(this.crmcontactListForm.value)
-    .subscribe((data) => {
-      // this.hidepopupsidebar();
-      this.crmcontactListForm.reset();
-      this.ngOnInit();
-      this._snackBar.open('CRM List updated Succesfully !', 'OK');
-    });
-  }
+  // updatecrmcontactLists(){
+    
+  //   // this.crmcontactListForm.value.lists= this.listarr
+  //   // .map((la: any) => la.uniqueid)
+  //   // .toString();
+  //   // console.log(this.crmcontactListForm.value.lists)
+  //   // this.crmService
+  //   // .updatecrmcontactLists(this.crmcontactListForm.value)
+  //   // .subscribe((data) => {
+  //   //   // this.hidepopupsidebar();
+  //   //   this.crmcontactListForm.reset();
+  //   //   this.ngOnInit();
+  //   //   this._snackBar.open('CRM List updated Succesfully !', 'OK');
+  //   // });
+  // }
   updatecrmcontact() {
-    // console.log(this.crmcontactForm.value);
-    this.crmService
-      .updatecrmcontactGenralDeatils(this.crmcontactForm.value)
+    console.log(this.tagarr)
+    console.log(this.listarr)
+    this.crmcontactForm.value.lists=!this.listarr[0]?'':this.listarr.map((la: any) => la.uniqueid).toString();
+    this.crmcontactForm.value.tags =!this.tagarr[0]?'':this.tagarr.map((ta: any) => ta.uniqueid).toString();
+    console.log(this.crmcontactForm.value);
+    if(this.newtags.length>0)
+    this.tagupdate().then((resp2: any) => {
+      // console.log('tag updated');
+    });
+    this._contactService
+      .updatecrmcontact(this.crmcontactForm.value)
       .subscribe((data) => {
-        // this.hidepopupsidebar();
-        this.crmcontactForm.reset();
-        this.ngOnInit();
+        console.log(data)
+        this.fetchAlldata();
         this._snackBar.open('CRM Contact updated Succesfully !', 'OK');
       });
       
   }
   editcancel(){
     this.crmcontactForm.reset();
-    this.ngOnInit();
+   this.fetchAlldata();
    
    
   }
   resetlist(){
     this.crmcontactListForm.reset();
-    this.ngOnInit();
+    this.fetchAlldata();
   }
   resettag(){
     this.crmcontactTagForm.reset();
-    this.ngOnInit();
+    this.fetchAlldata();
   }
   tagupdate() {
     return new Promise((resolve) => {
@@ -324,7 +319,6 @@ export class CrmContactViewComponent implements OnInit {
           if (i == this.lists.length - 1) 
           resolve(true);
           i++;
-        // this.ngOnInit();
         });
       });
     });
@@ -338,7 +332,6 @@ export class CrmContactViewComponent implements OnInit {
   //         if (i == this.lists.length - 1) resolve(true);
   //         i++;
   //       });
-  //     // this.ngOnInit();
   //      });
   //   });
   // }

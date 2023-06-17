@@ -50,8 +50,9 @@
             minlength="3"
             maxlength="140"
             formControlName="email"
-            (blur)="validateEmail($event)"
+           
           />
+          <!-- (blur)="validateEmail($event)" -->
           <mat-error *ngIf="crmcontactForm.controls.email.hasError('required')">Please enter email</mat-error>
           <mat-error *ngIf="crmcontactForm.controls.email.hasError('minlength')">Please enter more than 8 characters</mat-error>
           <mat-error *ngIf="crmcontactForm.controls.email.hasError('maxlength')">Please enter less than 50 characters</mat-error>
@@ -156,40 +157,6 @@
     [class.slowHide]="sidebar.anim.close"
   ></div>
 
-  <!-- <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-8">
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']"  ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" color="primary"><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" ><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" ><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" ><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" ><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" ><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
-        
-      </div>
-      <div class="col-md-4 text-right">
-        <button
-        mat-raised-button
-        color="primary"
-        class="mr-2 d-inline-block"
-        (click)="openSidebar()"
-      >
-        <i class="fa fa-users" aria-hidden="true"></i> Add a contact
-      </button>
-      </div>
-    </div>
-  </div> -->
-  <!-- <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-10 mt-4 ">
-           <span ><span style="font-size:35px">Contacts</span> ({{this.contacts.length}})</span>
-      </div>
-    </div>
-  </div> -->
-  <!-- <div class="col-md-4 text-right"> -->
-    <!-- <div class=" m-2 ml-3 pl-0 mb-0 pb-0" style="font-size:12px ">Contacts search by name or email</div> -->
     <div class="container-fluid ">
     <div class="row ">
         <mat-form-field  class= "fntilform col-md-4 "   appearance="fill" >
@@ -283,12 +250,12 @@
         <table *ngIf="fetchList" class="md-0">
           <thead>
             <tr>
-              <td class="border-bottom border-warning text-center">Name</td>
-              <td class="border-bottom border-warning text-center">Email</td>
-              <td class="border-bottom border-warning text-center">Phone</td>
-              <td class="border-bottom border-warning text-center">List</td>
+              <th class="border-bottom border-warning text-left ">Name</th>
+              <th class="border-bottom border-warning text-left">Email</th>
+              <th class="border-bottom border-warning text-left">Phone</th>
+              <!-- <td class="border-bottom border-warning text-center">List</td> -->
               <!-- <td class="border-bottom border-warning text-center">Date</td> -->
-              <td class="border-bottom border-warning text-center">Actions</td>
+              <th class="border-bottom border-warning text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -302,9 +269,9 @@
                   <div class="text-left funlist1 " ><span class="text-warning">Created On: </span> {{contact.created_at | date : "mediumDate"}}</div>
                 </div>
               </td>
-              <td  class="text-center">{{ contact.email }}</td>
-              <td class="text-center">{{ isNaN(contact.phone) }}</td>
-              <td  class="text-center">
+              <td  class="text-left">{{ contact.email }}</td>
+              <td class="text-left">{{ isNaN(contact.phone) }}</td>
+              <!-- <td  class="text-center">
                 <div *ngIf="contact?.list_name?.length>1; else elseTemplateName">
                   {{ contact?.list_name[0]+' '+'(+'+ (contact?.list_name?.length-1)+')' }}
               </div>
@@ -312,25 +279,26 @@
                 {{ isExistD(contact?.list_name[0])}}
               </ng-template>
                 
-              </td>
+              </td> -->
               <!-- <td>{{ contact.created_at | date: "fullDate" }}</td>
               <td> -->
               <!-- <td  class="text-center">{{ contact.created_at |  date : "mediumDate" }}</td> -->
-              <td  class="text-center">
+              <td  class="text-left">
                
                 <button
                   mat-raised-button
                   class="mr-2"
                   [routerLink]="['/crm/contact/view/'+contact.uniqueid]" 
                 >
-                  View <i class="fa fa-eye" aria-hidden="true"></i>
+                  Manage <i class="fa fa-pen" aria-hidden="true"></i>
+                   <!-- <i class="fa fa-eye" aria-hidden="true"></i> -->
                 </button>
                 <button
                   mat-raised-button
                   class="mr-2"
                   (click)="editcrmContact(contact)"
                 >
-                  Edit <i class="fa fa-pen" aria-hidden="true"></i>
+                  Edit <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
                 </button>
                 <!-- <button mat-raised-button class="mr-2" (click)="copycrmContact(contact)">Copy <i class="fa fa-copy" aria-hidden="true"></i></button> -->
                 <button
