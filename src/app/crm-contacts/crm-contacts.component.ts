@@ -325,7 +325,7 @@ selectedtagForm=new FormControl('');
 
   fetchContacts() {
     return new Promise((resolve) => {
-      this._contactService.getAllcrmcontacts().subscribe(
+      this._contactService.fetchcontacts().subscribe(
         (data) => {
           this.contacts = data.data;
           console.log(this.contacts)
@@ -426,7 +426,7 @@ selectedtagForm=new FormControl('');
       .toString();
     // console.log(this.crmcontactForm.value);
     this._contactService
-      .createcrmcontact(this.crmcontactForm.value)
+      .createcontact(this.crmcontactForm.value)
       .subscribe((data) => {
         if(data.success==true){
         this.hidepopupsidebar();
@@ -489,7 +489,7 @@ selectedtagForm=new FormControl('');
       .toString();
     // console.log(this.crmcontactForm.value);
     this._contactService
-      .updatecrmcontact(this.crmcontactForm.value)
+      .updatecontact(this.crmcontactForm.value)
       .subscribe((data) => {
         if(data.success==true){
         this.hidepopupsidebar();
@@ -508,7 +508,7 @@ selectedtagForm=new FormControl('');
   }
 
   deletecrmContact(uniqueid: any) {
-    this._contactService.deletecrmcontact(uniqueid).subscribe((data) => {
+    this._contactService.deletecontact(uniqueid).subscribe((data) => {
       this.fetchAlldata();
       this._snackBar.open('CRM Contact deleted Succesfully !', 'OK');
     });
@@ -612,7 +612,7 @@ selectedtagForm=new FormControl('');
       filter: this.paramvalue?filter:filter.value
     }
     console.log(obj);
-    this._contactService.searchContactsquery(obj).subscribe((data:any)=>{
+    this._contactService.searchcontacts(obj).subscribe((data:any)=>{
       // console.log(data.data)
       this.contacts = data.data;
     });
