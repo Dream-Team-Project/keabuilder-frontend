@@ -16,6 +16,7 @@ export class FormFetchComponent implements OnInit {
   submitting:boolean = false;
   thankyou:boolean = false;
   showErrors:boolean = false;
+  formans:Array<any> = [];
   contact = {
     fistname: '',
     lastname: '',
@@ -72,12 +73,12 @@ export class FormFetchComponent implements OnInit {
     return new Promise((resolve, reject)=>{
       var loop = 0;
       var res = true;
-      this._form.formField.forEach((ff:any)=>{
-        console.log(ff.value);
-        if(ff.field_tag) ff.error = !ff.value && ff.required;
+      this.formans = this._form.formField.filter((fe:any)=> fe.field_tag);
+      this.formans.forEach((ff:any)=>{
+        ff.error = !ff.value && ff.required;
         if(ff.type == 'email') ff.invalid = !this.validateEmail(ff.value);
         if(ff.error || ff.invalid) res = false;
-        if(this._form.formField.length-1 == loop) resolve(res);
+        if(this.formans.length-1 == loop) resolve(res);
         loop++;
       })
     })
@@ -89,10 +90,12 @@ export class FormFetchComponent implements OnInit {
   }
 
   formSubmit() {
-    this.submitting = true;
+    // this.submitting = true;
     this.validateFields().then(res=>{
       if(res) {
-        console.log(res);
+        var formAnsJSON = this.formans.map((obj:any)=>{return {id: obj.id, value: obj.value}});
+        this.contact.fieldans = this._general.encodeJSON(formAnsJSON);
+        console.log(this.contact.fieldans);
         // this._form.formSubmit().then((res:any)=>{
         //   if(res.success == 1) {
         //     var redirection = this._form.form.redirection;

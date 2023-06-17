@@ -25,6 +25,12 @@
 <ng-template #fieldsetting>
     <h1 mat-dialog-title>{{selField.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content>
+        <div class="rounded overflow-hidden d-flex mb-3 ">
+            <input #fieldTagInp matTooltip="Field Tag" matTooltipPosition="above" class="kb-field-tag border-0 px-2" name="field_tag" (input)="fieldTagInp.value = getFieldTag(selField)" [value]="getFieldTag(selField)">
+            <span class="kb-field-tag-copy px-2" mat-ripple [matTooltip]="isCopied ? 'Copied' : 'Copy'" matTooltipPosition="above" color="primary" (cdkCopyToClipboardCopied)="textCopied($event)" [cdkCopyToClipboard]="fieldTagInp.value">
+                <i class="fa-regular fa-copy"></i>
+            </span>
+        </div>
         <mat-error *ngIf="field_error">{{field_error}}</mat-error>
         <mat-form-field appearance="fill" *ngIf="!selField.default_field" [class.mat-form-field-invalid]="field_error">
             <mat-label>Label</mat-label>
@@ -114,9 +120,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ff of fields, index as i">
-                        <td>{{ff.label}}<span *ngIf="ff.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
-                        <td>{{ff.name.replaceAll('-', ' ')}}</td>
-                        <td>{{ff.field_tag | uppercase}}</td>
+                        <td class="kb-text-overflow">{{ff.label}}<span *ngIf="ff.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
+                        <td class="kb-text-overflow">{{ff.name.replaceAll('-', ' ')}}</td>
+                        <td class="kb-text-overflow">{{ff.field_tag | uppercase}}</td>
                         <td>
                             <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
                             <i matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil px-3 kb-field-action"></i>

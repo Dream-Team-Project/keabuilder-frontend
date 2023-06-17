@@ -1,19 +1,14 @@
-#thankumsg {
-    display: flex;
-    justify-self: center;
-    align-items: center;
-    flex-direction: column;
-    margin: auto;
-    text-align: center;
-}
-
-#thankumsg h4 {
-    font-size: xx-large;
-    font-weight: 700;
-}
-
-#thankumsg p {
-    font-size: large;
+::ng-deep .kb-form h1,
+::ng-deep .kb-form h2,
+::ng-deep .kb-form h3,
+::ng-deep .kb-form h4,
+::ng-deep .kb-form h5,
+::ng-deep .kb-form h6,
+::ng-deep .kb-form p {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    margin: 0 !important;
 }
 
 #form-not-found {

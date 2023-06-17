@@ -330,10 +330,12 @@
                         Form Fields
                         <i mat-ripple [matMenuTriggerFor]="ffoptm" #ffoptt="matMenuTrigger" class="kb-field-opt-trg fa-solid fa-bars"></i>
                         <mat-menu #ffoptm>
-                            <button (click)="toggleFieldsFilter()" [class.kb-btn-active]="showFilter" mat-menu-item>
+                            <button (click)="toggleFieldsFilter(showFilter)" [class.kb-btn-active]="showFilter" mat-menu-item>
                                 <i [innerHTML]="'filter' | svg | safeHtml"></i> Filter</button>
                             <button (click)="_general.redirectLink('/crm/fields')" mat-menu-item>
                                 <i [innerHTML]="'setting' | svg | safeHtml"></i> Customize</button>
+                            <button (click)="selectTab('fields')" mat-menu-item>
+                                <i class="fa fa-times"></i> Close</button>                                
                         </mat-menu>
                     </h2>
                     <div *ngIf="showFilter" class="kb-field-filter-opt">

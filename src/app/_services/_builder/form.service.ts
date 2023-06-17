@@ -25,12 +25,14 @@ export class FormService {
     emailsubject: '',
     emailmessage: '',
     emailenabled: false,
-    thankyoumessage: '<h4>Thankyou</h4><p>The form has been submitted successfully!</p>',
+    thankyoumessage: '',
     lists:'',
     tags:'',
     style: '', 
     appendstyle: '',
-  }
+  };
+  thankyoumessage:string = `<h1 style="text-align: center;"><span style="font-size: 36pt;">Thank you</span></h1>
+                            <p style="text-align: center;"><span style="font-size: 18pt;">The form has been submitted successfully!</span></p>`;
   formEle: any = [
     { name: 'heading', html: '<h2>Heading goes here</h2>', iconCls: 'fas fa-heading' },
     { name: 'text', html: '<p>Paragraph goes here</p>', iconCls: 'fas fa-paragraph' },
@@ -219,12 +221,17 @@ export class FormService {
       this.setFormStyle(this.formEleTypes).then(style=>{
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = this._general.encodeJSON(style);
+        this.form.thankyoumessage = this.getThankyouMsg();
         this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
           this.getForm(this.form.uniqueid);
         })
       });
     })
+  }
+
+  getThankyouMsg() {
+    return this.form.thankyoumessage ? this.form.thankyoumessage : this.thankyoumessage;
   }
 
   setFormStyle(ele:any) {

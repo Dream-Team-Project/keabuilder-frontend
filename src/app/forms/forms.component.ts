@@ -3,7 +3,7 @@ import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface DialogData {
   name: string;
@@ -32,6 +32,7 @@ export class FormsComponent implements OnInit {
   selstatusshow = 'all';
   form: any = {
     name: '',
+    thankyoumessage: '<h2>Thankyou</h2><p>The form has been submitted successfully!</p>',
   };
   sidebar = {
     open: false,

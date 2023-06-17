@@ -29,8 +29,10 @@
                 <label [for]="'kb-'+fe.type+'-'+fe.id" class="kb-form-label"
                     [style.justifyContent]="_form.justifyContent('label')">{{fe.label}}<span *ngIf="fe.required"
                         class="kb-form-inp-reqired">*
-                        <mat-error *ngIf="fe.error">This field is required</mat-error>
-                        <mat-error *ngIf="fe.invalid">Email is invalid</mat-error>
+                        <mat-error *ngIf="fe.error else invalid">This field is required</mat-error>
+                        <ng-template #invalid>
+                            <mat-error *ngIf="fe.invalid && fe.value">Email is invalid</mat-error>
+                        </ng-template>
                     </span></label>
                 <textarea *ngIf="fe.type == 'textarea' else input" [name]="'kb-'+fe.type+'-'+fe.id"
                     [(ngModel)]="fe.value" [required]="fe.required"
@@ -60,13 +62,13 @@
         </div>
     </form>
     <ng-template #thankumsg>
-        <div id="thankumsg" [style.margin]="getBlockStyle('form')['margin']"
-            [style.padding]="getBlockStyle('form')['padding']">
-            <div><img src="./assets/default/images/kbtick.png" width="100px" height="auto"></div>
-            <h4>Thankyou</h4>
+        <div [innerHTML]="_form.getThankyouMsg() | safeHtml" 
+            [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
+            <!-- <div><img src="./assets/default/images/kbtick.png" width="100px" height="auto"></div> -->
+            <!-- <h4>Thankyou</h4>
             <div>
                 <p>The form has been submitted successfully!</p>
-            </div>
+            </div> -->
         </div>
     </ng-template>
 </div>

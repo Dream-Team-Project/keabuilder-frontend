@@ -24,8 +24,12 @@
 }
 
 .kb-field-data td {
-    line-height: normal;
-    max-width: 50px;
+    padding: 0px 10px;
+    line-height: 40px;
+}
+
+.kb-field-data td.kb-text-overflow {
+    max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -45,6 +49,22 @@
 
 .kb-field-data tbody tr {
     transition: 0.2s ease;
+}
+
+.kb-field-tag, .kb-field-tag-copy {
+    line-height: 30px;
+    font-size: 13px;
+}
+
+.kb-field-tag {
+    width: 100%;
+    background-color: var(--kb-gray);
+}
+
+.kb-field-tag-copy {
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    color: var(--kb-white);
 }
 
 .kb-field-list {
