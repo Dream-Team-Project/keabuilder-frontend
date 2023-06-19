@@ -1,5 +1,5 @@
 <!-- dialog for duplicate tag on add tag button -->
-<ng-template #dialog_tag>
+<!-- <ng-template #dialog_tag>
   <h1 mat-dialog-title class="kb-danger">Alert Message</h1>
   <div mat-dialog-content>
     this tag Name already exist ?
@@ -7,222 +7,162 @@
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-info">OK</button>
   </div>
-</ng-template>
-<div id="kb-crmtags">
-  <div id="kb-offer-actions" *ngIf="sidebar.open">
-    <div
-      class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar"
-      [class.loadEffectFromLeftsidebar]="sidebar.anim.open"
-      [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close"
-    >
-      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-      <h6><b>Add a Tag</b></h6>
-      <hr />
-
-      <form
-        [formGroup]="crmtagForm"
-        (ngSubmit)="buttonText === 'add' ? openDialog_tag(dialog_tag) : updatecrmtag()"
-      >
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Tags</mat-label>
-          <input
-            type="text"
-            matInput
-            placeholder="Ex. tag"
-            formControlName="tag_name"
-            required
-           
-          />
-          <mat-error *ngIf="crmtagForm.controls.tag_name.hasError('required')">Please enter Tag Name</mat-error>
-          <mat-error *ngIf="crmtagForm.controls.tag_name.hasError('minlength')">Please enter more than 3 characters</mat-error>
-          <mat-error *ngIf="crmtagForm.controls.tag_name.hasError('maxlength')">Please enter less than 50 characters</mat-error>
-        </mat-form-field>
-        <!-- <mat-error *ngIf="tagexist == 1">Tag Name is already exist. </mat-error> -->
-       
-
-        <button
-          mat-raised-button
-          color="primary"
-          type="Submit"
-          [disabled]="crmtagForm.invalid"
-        >
-        {{ buttonText }}
-        </button>
-      </form>
-    </div>
+</ng-template> -->
+<!-- dialog for delete tag  -->
+<ng-template #deldialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Tag</h1>
+  <div mat-dialog-content>
+    Would you like to delete this Tag ?
+    <!-- Would you like to delete <span class="text-danger">{{this.delcontact.name}}</span> Contact? -->
   </div>
-  <div
-    class="offcanvas-overlay"
-    *ngIf="sidebar.open"
-    (click)="hidepopupsidebar()"
-    [class.slowVisible]="sidebar.anim.open"
-    [class.slowHide]="sidebar.anim.close"
-  ></div>
-  <div class="container-fluid">
-    <div class="row">
-      <mat-form-field class="col-md-6 "  appearance="fill">
-        <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Tags...</mat-label>
-        <input matInput
-          type="text"
-        
-          class="form-control-search"
-          id="offer-search"
-          #searchInp 
-         (input)="searchTags(searchInp,filterInp)"
-          placeholder="Search Tags..."/>
-      </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="fill">
-          <mat-label>Filter by:</mat-label>
-          <mat-select  #filterInp name="kbfilter" value='created_at ASC' (valueChange)="searchTags(searchInp,filterInp)">
-            <mat-option [value]="'tag_name ASC'">ASC By Name</mat-option>
-            <mat-option [value]="'tag_name DESC'">DESC By Name</mat-option>
-            <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-            <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div class="col-md-4 text-right mt-2">
-          <button
-          mat-raised-button
-          (click)="openSidebar()"
-          color="primary"
-          class="mr-2">
-          <i class="fa fa-tags" aria-hidden="true"></i> Add a tag
-        </button>
-        </div>
-      </div>
-    </div>
-  <ng-template #dialog>
-    <h1 mat-dialog-title class="kb-danger">Delete Tag</h1>
-    <div mat-dialog-content>
-      Would you like to delete this Tag ?
-      <!-- Would you like to delete <span class="text-danger">{{this.delcontact.name}}</span> Contact? -->
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button
-        mat-button
-        mat-dialog-close
-        cdkFocusInitial
-        class="text-danger"
-        (click)="deletecrmTag(this.deltag)"
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close [color]="'primary'">No</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      class="text-danger"
+      (click)="deletetag(tag.id)"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
+<!-- dialog for new  entry on add Or Update Tag -->
+<ng-template #adddialog>
+  <h1 mat-dialog-title>Add Tag</h1>
+  <div mat-dialog-content>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Tag Name</mat-label>
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="tag.tag_name"
+        placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+        required
+      />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+    <button
+      mat-button
+      mat-dialog-close
+      (click)="tag.uniqueid ? updatetag() : addtag()"
+      cdkFocusInitial
+      color="primary"
+    >
+      <span *ngIf="!tag.uniqueid">Add</span>
+      <span *ngIf="tag.uniqueid">Update</span>
+    </button>
+  </div>
+</ng-template>
+
+<div class="container-fluid">
+  <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
+  <div class="row">
+    <mat-form-field class="col-md-6" appearance="fill">
+      <mat-label>Search Tags...</mat-label>
+      <input
+        matInput
+        type="text"
+        class="form-control-search"
+        id="offer-search"
+        #searchInp
+        (input)="searchTags(searchInp, filterInp)"
+        placeholder="Search Tags..."
+      />
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </mat-form-field>
+    <mat-form-field class="col-md-2" appearance="fill">
+      <mat-label>Filter by:</mat-label>
+      <mat-select
+        #filterInp
+        name="kbfilter"
+        value="created_at DESC"
+        (valueChange)="searchTags(searchInp, filterInp)"
       >
-        Yes
+        <mat-option [value]="'tag_name ASC'">ASC By Name</mat-option>
+        <mat-option [value]="'tag_name DESC'">DESC By Name</mat-option>
+        <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+        <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+        <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+        <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="col-md-4 text-right mt-2">
+      <button
+        mat-raised-button
+        (click)="openDialog(adddialog, tagObj)"
+        color="primary"
+        class="mr-2"
+      >
+        <i class="fa fa-tags" aria-hidden="true"></i> Add a tag
       </button>
     </div>
-  </ng-template>
-  
-    <div class="container-fluid mt-1 ">
-      <div class="row  ">
-        <div class="col-md-12 d-flex">
-          <table class="table ml-2 ">
-            <thead>
-              <tr >
-                <td class="border-bottom border-warning text-center">Name</td>
-                <td class="border-bottom border-warning text-center">Contacts</td>
-                <!-- <td class="border-bottom border-warning text-center">Automations</td> -->
-                <td class="border-bottom border-warning text-center" >Actions</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr  *ngFor="let tag of tags; index as i">
-                <td class="d-flex">
-                  <div>
-                    <div class="namebox1">{{ gettwochar(tag.tag_name) | uppercase }}</div>
-                  </div>
-                  <div>
-                  <div class="text-left funtag">{{ tag.tag_name | titlecase   }} </div>
-                  <div class="text-left funtag1 " ><span class="text-warning">Created On: </span> {{tag.created_at | date : "mediumDate"}}</div>
-                </div>
-                </td>
-                <!-- <td class="text-center" >{{ tag.tag_name }}</td> -->
-                <td class="text-center text-warning">{{ tag.activecontacts }}</td>
-                <!-- <td>{{ tag.created_at | date : "fullDate" }}</td> -->
-                <!-- <td class="text-center text-warning"></td> -->
-                <td class="text-center text-warning">
-                  <button
-                  mat-raised-button
-                  class="mr-2"
-                  [routerLink]="['/crm/contacts/'+tag.uniqueid+'/tag']" 
-                >
-                  View <i class="fa fa-eye" aria-hidden="true"></i>
-                </button>
-                  <button mat-raised-button class="mr-2"  (click)="editcrmTag(tag)">
-                  Edit <i class="fa fa-pen" aria-hidden="true"></i>
-                </button>
-                <button
-                  mat-raised-button
-                  (click)="openDialog(dialog, tag.uniqueid)"
-                >
-                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
-                </button></td>
-  
-                <!-- <td class="text-center" ><button mat-icon-button aria-label="true" [matMenuTriggerFor]="menu"> <mat-icon  aria-hidden="true">more_horiz
-                    </mat-icon>
-                 
-                  <mat-menu #menu="matMenu">
-                    <button
-                    mat-menu-item
-                    class="mr-2"
-                    (click)="editcrmTag(tag)"
-                  >
-                    Edit <i class="fa fa-pen" aria-hidden="true"></i>
-                  </button>
-                  
-                  <button
-                  mat-menu-item
-                    (click)="openDialog(dialog, tag.uniqueid)"
-                  >
-                    Delete <i class="fa fa-trash" aria-hidden="true"></i>
-                  </button>
-                  </mat-menu>
-                </button>
-                </td> -->
-              </tr>
-            </tbody>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: displayedColumns"
-              (click)="selection.toggle(row)"
-            ></tr>
-  
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">
-                <!-- No data matching the filter "{{ input.value }}" -->
-              </td>
-            </tr>
-          </table>
-          <div class="ml-5 mt-3"style="width:30%">
-            <div class="ml-4 mt-5 fntlitag" >
-              <span>Recent Tags</span>
-              <div class="border border-3 fntli-box" >
-                <ul class="d-inline-block fntli "><li class="d-inline fntilitem" *ngFor="let tag of recenttags ">
-                  {{tag}}
-                </li></ul>
-              </div>
-            </div>
-            <div class="ml-4 mt-5 fntlitag ">
-              <span>Popular Tags</span>
-              <div class="border border-3 fntli-box" >
-                <ul class="d-inline-block fntli"><li class="d-inline fntilitem" *ngFor="let tag of populartags ">
-                  {{tag}}
-                </li></ul>
-              </div>
-            </div>
-           
-            
-        </div>
-        </div>
-       
-      </div>
-      </div>
-      <!-- <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page of users"
-    ></mat-paginator> -->
   </div>
- 
-<!-- </div> -->
+  <div class="row">
+    <div class="col-md-12 d-flex">
+      <table class="table kb-table col-md-8">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contacts</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tag of tags; index as i">
+            <td>
+              <span class="kb-table mr-1">{{ tag.tag_name | titlecase }} </span>
+            </td>
+            <td>{{ tag.activecontacts }}</td>
+            <td>{{ tag.created_at | date : "medium" }}</td>
+            <td>
+              <span class="d-flex">
+                <i
+                  mat-ripple
+                  matTooltip="Edit"
+                  matTooltipPosition="above"
+                  class="fa fa-pencil px-4 kb-table-action-icon rounded"
+                  (click)="openDialog(adddialog, tag)"
+                ></i>
+                <!-- <i mat-ripple matTooltip="Copy" matTooltipPosition="above" class="fa fa-copy px-4 kb-table-action-icon rounded" (click)="copyList(tag.tag_name)"></i> -->
+                <i
+                  mat-ripple
+                  matTooltip="Delete"
+                  matTooltipPosition="above"
+                  (click)="openDialog(deldialog, tag)"
+                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"
+                ></i>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-md-4">
+        <div class="ml-2 fntlitag">
+          <span>Recent Tags</span>
+          <div class="border border-3 fntli-box">
+            <ul class="d-inline-block fntli">
+              <li class="d-inline fntilitem" *ngFor="let tag of recenttags">
+                {{ tag }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ml-2 mt-5 fntlitag">
+          <span>Popular Tags</span>
+          <div class="border border-3 fntli-box">
+            <ul class="d-inline-block fntli">
+              <li class="d-inline fntilitem" *ngFor="let tag of populartags">
+                {{ tag }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,28 +1,14 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {SelectionModel} from '@angular/cdk/collections';
-import { CrmListService } from '../_services/_crmservice/crm_list.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CrmService } from '../_services/_crmservice/crm.service';
-import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
 import { MatDialog } from '@angular/material/dialog';
+import { ListService } from '../_services/_crm/list.service';
+import { GeneralService } from '../_services/_builder/general.service';
 
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  Form,
-} from '@angular/forms';
 export interface UserData {
   position:number;
   list_name: string;
   activecontacts: any;
   actions:string;
 }
-
 
 @Component({
   selector: 'app-crm-lists',
@@ -31,93 +17,28 @@ export interface UserData {
 })
 export class CrmListsComponent implements OnInit {
 
- 
-  displayedColumns: string[] = ['checkbox','list_name', 'activecontacts','actions'];
-  selection = new SelectionModel<UserData>(true, []);
-  dataSource: MatTableDataSource<UserData>;
-  
-  @ViewChild(MatPaginator) paginator!: MatPaginator; 
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
 
-  currencytype = '';
-  kbduration = '';
-  listexist: any;
-  popup: any;
-  // popupsidebar = false;
-  sidebar = {
-    open: false,
-    anim: { open: false, close: false, time: 500 },
-    animtime: 300,
-  };
-  dellist:any;
+  fetching:boolean = true;
   lists:any=[];
-  contacts: any = [];
-  listchar:any=[];
-  singlelist:any;
-  buttonText='add';
-//   order:any=[ 
-//     {value: 'ascending', viewValue: 'Ascending'},
-//     {value: 'descending', viewValue: 'Descending'},
-//   ];
-// optionGroup:any=[
-//     {value: 'list_name', viewValue: 'Name', order: this.order},
-//     {value: 'activecontacts', viewValue: 'Contacts', order: this.order},
-// ]
-selectedForm:string = '';
-  crmlistForm: any = this._frmbuidr.group({
-    list_name: [
-      '',
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
-    ],
-    uniqueid: ''
-  });
-  constructor(private _crmlistService: CrmListService,private _frmbuidr: FormBuilder,
-    private _snackBar: MatSnackBar, 
-    private _crmtagService: CrmTagsService,
-    private crmService: CrmService,
-    private dialog: MatDialog,
-    ) {
-    
-    this.dataSource = new MatTableDataSource(this.lists);
+  list:any = {};
+  listObj = {
+    list_name: '',
+    uniqueid: '',
+    id:'',
+  }
+  hasError:string = '';
+  constructor( private _listservice:ListService, private dialog: MatDialog,private _general: GeneralService ) {}
 
-  }
   ngOnInit(): void {
-    // this.fetchLists().then((resp1) => {
-    // });
-     // setTimeout(() => {
-     //   this.dataSource.paginator = this.paginator;
-     //   this.dataSource.sort = this.sort;
-     // }, 500);
+    this.fetchLists().then((resp1) => {
+      this.fetching = false;
+    });
    }
-  // sortlist(){
-  //   console.log(this.selectedForm)
-  //   if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Ascending'){
-  //     this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()>b.list_name.toLowerCase() ? 1 :-1);
-  //   }
-  //   else if(this.selectedForm[0]=='list_name' && this.selectedForm[1]=='Descending'){
-  //     this.lists.sort((a:any,b:any) =>a.list_name.toLowerCase()<b.list_name.toLowerCase() ? 1 :-1);
-  //   }
-  //   else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Ascending'){
-  //     this.lists.sort((a:any,b:any) =>a.activecontacts>b.activecontacts ? 1 :-1);
-  //   }
-  //   else if(this.selectedForm[0]=='activecontacts' && this.selectedForm[1]=='Descending'){
-  //     this.lists.sort((a:any,b:any) =>a.activecontacts<b.activecontacts ? 1 :-1);
-  //   }
-  //   else{
-  //     this.lists.sort((a:any,b:any) =>a.created_at<b.created_at ? 1 :-1);
-  //   }
-  // }
-  gettwochar(value:any){
-    this.listchar=value.trim().split(" ");
-    return this.listchar.length >= 2 ? this.listchar[0][0]+this.listchar[1][0] : this.listchar[0][0]+this.listchar[0][1];
-  }
+ 
   fetchLists() {
     return new Promise((resolve) => {
-      this._crmlistService.getAllcrmlists().subscribe(
+      this._listservice.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
           resolve(true);
@@ -127,162 +48,87 @@ selectedForm:string = '';
         }
       );
     });
+  } 
+  addlist() {
+    if(this.list.list_name && this.isListNameValid(this.list.list_name)) {
+      this.hasError = '';
+      delete this.list.error;
+      console.log(this.list);
+    this._listservice
+      .addlist(this.list)
+      .subscribe((resp) => {
+       if(resp.success==true){
+        this.fetchLists();
+        this._general.openSnackBar(false, 'List has been saved', 'OK', 'center', 'top');
+        }
+        else this.setError(resp.message);
+      })
+    }
+    else {
+      let msg = this.list.list_name ? 'List Name is  invalid' : 'List Name should not be empty';
+      this.setError(msg)
+    }
   }
-  openpopup(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e: any) => {
-      this.sidebar.anim.open = false;
-      
-    }, this.sidebar.animtime);
-    this.popup = true;
-  }
-  opensidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e: any) => {
-      this.sidebar.anim.open = false;
-    }, this.sidebar.animtime);
-
-  }
-
-  hidepopupsidebar(){
-    this.sidebar.anim.close = true;
-    setTimeout((e: any) => {
-      this.popup = false;
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-      this.crmlistForm.reset();
-      this.listexist=0;
-      this.buttonText = 'Add';
-      this.singlelist=[];
-    }, this.sidebar.animtime);
-    
-  }
-  
-  addcrmlist() {
-    this._crmlistService
-      .createcrmlist(this.crmlistForm.value)
-      .subscribe((data) => {
-        this.hidepopupsidebar();
-        this.ngOnInit();
-        // this.crmlistForm.reset();
-        this._snackBar.open('CRM List added Succesfully !', 'OK');
-      });
-  }
-
-  updatecrmlist(){
-    // console.log(this.crmlistForm.value);
-    this._crmlistService.updatecrmlist(this.crmlistForm.value).subscribe((data)=>{
-      console.log(data.data)
-      // this.crmlistForm.reset();
-      this.hidepopupsidebar();
-      this.ngOnInit();
-      this._snackBar.open('CRM List updated Succesfully !', 'OK');
-
-    })
-  }
-//   viewList(list:any){
- 
-//   // this._crmlistService.getcrmlists(uniqueid).subscribe((data)=>{
-//   //   this.singlelist=data.data[0];
-//     this.singlelist=list;
-//     this.openpopup();
-//     // console.log(this.singlelist);
-//     this.ngOnInit();
-//   // })
-// }
-
-  editList(list:any) {
-  
-    this.crmlistForm.patchValue(list);
-    this.opensidebar();
-    this.buttonText='update';
+  updatelist(){
+    if(this.list.list_name && this.isListNameValid(this.list.list_name)) {
+    this._listservice.updatelist(this.list).subscribe((resp)=>{
+      console.log(resp.data)
+      if(resp.success==true){
+        this.fetchLists();
+        this._general.openSnackBar(false, 'List has been Updated', 'OK', 'center', 'top');
+        }
+        else this.setError(resp.message);
+      })
+    }
+    else {
+      let msg = this.list.list_name ? 'List Name is  invalid' : 'List Name should not be empty';
+      this.setError(msg)
+    }
   }
   copyList(list:any){
     
     let obj={list_name:list+' '+'copy'};
-    this._crmlistService
-    .createcrmlist(obj)
-    .subscribe((data) => {
-      this.ngOnInit();
-      this._snackBar.open('CRM List Copied Succesfully !', 'OK');
+    this._listservice
+    .addlist(obj)
+    .subscribe((resp) => {
+      if(resp.success) this.fetchLists();
+      this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
-  
-  openDialog(templateRef: TemplateRef<any>, list:any) {
-    this.dellist = list;
+  openDialog(templateRef: TemplateRef<any>, list: any) {
+    if(!list.error) {
+      delete list.error;
+      this.hasError = '';
+      this.list = JSON.parse(JSON.stringify(list));
+    }
     this.dialog.open(templateRef);
-
   }
-
-  validatelist_name() {
-    return new Promise((resolve) => {
-      var list_name = this.crmlistForm.value.list_name;
-      this._crmlistService.crmDuplicatelistcheck(list_name).subscribe((data) => {
-        this.listexist = data.data[0]['count(*)'];
-        resolve(this.listexist);
-      });
+  deletelist(id:any){
+    this._listservice.deletelist(id).subscribe((resp) => {
+      if(resp.success) this.fetchLists();
+      this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
-  }
-
-  openDialog_addlist(templateRef: TemplateRef<any>) {
-    this.validatelist_name().then((data:any)=>{
-      data != 0 ? this.dialog.open(templateRef) : this.addcrmlist();
-    })
-  }
-
-  deletecrmlist(uniqueid:any){
-    this._crmlistService.deletecrmlist(uniqueid).subscribe((data)=>{
-      this.ngOnInit();
-      this._snackBar.open('CRM List deleted Succesfully !', 'OK');
-
-    })
 
   }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource.data);
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: UserData): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
-
   searchLists(search: any,filter: any) {
     var obj = {
       search:search.value,
       filter:filter.value
     }
     console.log(obj);
-    this._crmlistService.searchListsquery(obj).subscribe((data:any)=>{
+    this._listservice.searchlists(obj).subscribe((data:any)=>{
       // console.log(data.data)
       this.lists = data.data;
     });
+  }
+  setError(msg:string) {
+    this.hasError = msg;
+    this.list.error = true;
+    this.openDialog(this.adddialog, this.list);
+  }
+  isListNameValid(value:any) {
+    // let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let regex =/^[\w-_.]{4,}$/
+    return regex.test(value);
   }
 }

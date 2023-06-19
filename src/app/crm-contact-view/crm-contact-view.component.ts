@@ -25,6 +25,7 @@ export class CrmContactViewComponent implements OnInit {
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   
+  id:any;
   panelOpenState = false;
   fetchList = false;
   lists: any = [];
@@ -84,6 +85,7 @@ export class CrmContactViewComponent implements OnInit {
     lists:'',
     tags:'',
     uniqueid: '',
+    id:'',
   });
   crmcontactListForm: any = this._frmbuidr.group({
     lists: [''],
@@ -106,8 +108,8 @@ export class CrmContactViewComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
-      this.uniqueid = params.get('uniqueid');
-      // console.log(this.uniqueid);
+      this.id = params.get('id');
+      console.log(this.id);
     });
     
     this.filteredList = this.listCtrl.valueChanges.pipe(
@@ -131,7 +133,7 @@ export class CrmContactViewComponent implements OnInit {
   }
   fetchAlldata(){
      // this.fetchAddress().then((resp5)=>{console.log(resp5)});
-     this.fetchContact(this.uniqueid).then((resp2) => {
+     this.fetchContact(this.id).then((resp2) => {
       this.fetchLists().then((resp1) => {
         this.fetchTags().then((resp) => {
           this.listarr= this.contact.temp_lists.map((tl: any) => tl);
@@ -157,9 +159,10 @@ export class CrmContactViewComponent implements OnInit {
       
   //   });
   // }
-  fetchContact(uniqueid: any) {
+  fetchContact(id: any) {
+    console.log(id)
     return new Promise((resolve) => {
-      this._contactService.singlecontact(uniqueid).subscribe(
+      this._contactService.singlecontact(id).subscribe(
         (data) => {
           this.contact = data.data[0];
           console.log(this.contact)

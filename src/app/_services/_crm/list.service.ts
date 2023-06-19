@@ -11,60 +11,49 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class ContactService {
-
+export class ListService {
   uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
-  fetchcontacts(): Observable<any> {
+  fetchlists(): Observable<any> {
     var obj = {uuid: this.uuid};
-    return this.http.post('/api/allcontacts', obj)
+    return this.http.post('/api/alllists', obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  singlecontact(id:any): Observable<any> {
+  singlelist(id:any): Observable<any> {
     var obj = {uuid: this.uuid};
-    return this.http.post('/api/singlecontact/'+id,obj)
+    return this.http.post('/api/singlelist/'+id,obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  addcontact(obj:any): Observable<any> {
+  addlist(obj:any): Observable<any> {
     obj.user_id = this.uuid;
-    return this.http.post('/api/addcontact',obj)
+    return this.http.post('/api/addlist',obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  updatecontact(obj:any): Observable<any>{
+  updatelist(obj:any): Observable<any>{
     obj.user_id = this.uuid;
-    return this.http.put('/api/updatecontact',obj)
+    return this.http.put('/api/updatelist',obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  deletecontact(id:any): Observable<any>{
-    return this.http.delete('/api/deletecontact/'+id)
+  deletelist(id:any): Observable<any>{
+    return this.http.delete('/api/deletelist/'+id+'/'+this.uuid)
     .pipe(catchError(this.errorHandler));
   }
 
-  searchcontacts(obj:any){
+  searchlists(obj:any){
     obj.user_id = this.uuid;
-    return this.http.post('/api/searchcontact',obj)
+    return this.http.post('/api/searchlists',obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  formsubmission(obj:any): Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post('/api/formsubmission',obj)
-    .pipe(catchError(this.errorHandler));
-  }
-  
-  getallcrmdata(): Observable<any> {
-    var obj = {uuid: this.uuid};
-    return this.http.post('/api/getallcrmdata', obj).pipe(catchError(this.errorHandler));
-  }
-
+ 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

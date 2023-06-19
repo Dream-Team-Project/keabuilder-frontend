@@ -238,7 +238,7 @@ const routes: Routes = [
     { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
     { path: 'newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
     { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-    { path: 'contact/view/:uniqueid', component: CrmContactViewComponent, canActivate: [AuthGuard] },
+    { path: 'contact/view/:id', component: CrmContactViewComponent, canActivate: [AuthGuard] },
     { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
     // { path: 'contacts/view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
     { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
