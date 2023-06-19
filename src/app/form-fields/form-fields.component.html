@@ -19,7 +19,7 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close class="text-danger" (click)="deleteField(selField)">Yes</button>
+      <button mat-button mat-dialog-close (click)="deleteField(selField)" class="text-danger">Yes</button>
     </div>
 </ng-template>
 <ng-template #fieldsetting>
@@ -69,15 +69,15 @@
             </span>
         </div>
     </div>
-    <div mat-dialog-actions class="kb-dialog-additional">
+    <div mat-dialog-actions>
         <mat-checkbox class="mr-auto" [(ngModel)]="selField.required">Required</mat-checkbox>
-        <button mat-button mat-dialog-close color="secondary">Cancel</button>
+        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
         <button mat-button mat-dialog-close (click)="setField(selField)" cdkFocusInitial color="primary">{{selField.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
 <div class="container-fluid mt-4">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-    <div class="row align-items-center">
+    <div class="row">
         <mat-form-field appearance="fill" class="col-md-5">
             <mat-label>Search Fields</mat-label>
             <input matInput #searchInp (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Form Name">
@@ -86,10 +86,12 @@
         <mat-form-field appearance="fill" class="col-md-2">
             <mat-label>Sort By</mat-label>
             <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
-                <mat-option [value]="'label ASC'">ASC By Label</mat-option>
-                <mat-option [value]="'label DESC'">DESC By Label</mat-option>
                 <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
                 <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+                <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+                <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+                <mat-option [value]="'label ASC'">ASC By Label</mat-option>
+                <mat-option [value]="'label DESC'">DESC By Label</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-md-2">
@@ -103,13 +105,13 @@
             </mat-select>
         </mat-form-field>
         <div class="col-md-3 text-right mt-2">
-            <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet(fieldlists)">Add New Field <i
+            <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet(fieldlists)">Add Field <i
                 class="fas fa-plus"></i></button>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
-            <table class="kb-field-data table">
+            <table class="table kb-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -120,13 +122,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ff of fields, index as i">
-                        <td class="kb-text-overflow">{{ff.label}}<span *ngIf="ff.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
+                        <td (click)="openDialog(fieldsetting, ff)" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
                         <td class="kb-text-overflow">{{ff.name.replaceAll('-', ' ')}}</td>
                         <td class="kb-text-overflow">{{ff.field_tag | uppercase}}</td>
                         <td>
-                            <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
-                            <i matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil px-3 kb-field-action"></i>
-                            <i *ngIf="!ff.default_field" matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt px-3 kb-field-action kb-field-action-del"></i>
+                            <span class="d-flex"> 
+                                <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
+                                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil px-3 kb-table-action-icon rounded"></i>
+                                <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del rounded"></i>
+                            </span>    
                         </td>                        
                     </tr>
                 </tbody>

@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from '../_services/_builder/form.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
-import { CrmService } from '../_services/_crmservice/crm.service';
+import { ContactService } from '../_services/_crm/contact.service';
 import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
@@ -17,22 +17,14 @@ export class FormFetchComponent implements OnInit {
   thankyou:boolean = false;
   showErrors:boolean = false;
   formans:Array<any> = [];
-  contact = {
-    fistname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    fieldans: '',
-    lists: '',
-    tags: ''
-  }
+  contact:any = {};
 
   constructor(
     private route: ActivatedRoute,
     public _form: FormService,
     public _style: StyleService,
     public _image: ImageService,
-    public crmService: CrmService,
+    public _contact: ContactService,
     public _general: GeneralService,
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
@@ -50,8 +42,7 @@ export class FormFetchComponent implements OnInit {
     this._form.currentScrWdth = window.innerWidth;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   valChng(ff:any, i:number) {
     var value:boolean = !ff.options[i].selected;
@@ -76,7 +67,7 @@ export class FormFetchComponent implements OnInit {
       this.formans = this._form.formField.filter((fe:any)=> fe.field_tag);
       this.formans.forEach((ff:any)=>{
         ff.error = !ff.value && ff.required;
-        if(ff.type == 'email') ff.invalid = !this.validateEmail(ff.value);
+        if(ff.type == 'email') ff.invalid = !this.isEmailValid(ff.value);
         if(ff.error || ff.invalid) res = false;
         if(this.formans.length-1 == loop) resolve(res);
         loop++;
@@ -84,26 +75,28 @@ export class FormFetchComponent implements OnInit {
     })
   }
 
-  validateEmail(value:any) {
+  isEmailValid(value:any) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regex.test(value);
   }
 
   formSubmit() {
-    // this.submitting = true;
+    this.submitting = true;
     this.validateFields().then(res=>{
       if(res) {
-        var formAnsJSON = this.formans.map((obj:any)=>{return {id: obj.id, value: obj.value}});
+        var formAnsJSON = this.formans.map((obj:any)=>{
+          this.contact[obj.name.replaceAll('-', '')] = obj.value;
+          return {id: obj.id, value: obj.value}
+        });
         this.contact.fieldans = this._general.encodeJSON(formAnsJSON);
-        console.log(this.contact.fieldans);
-        // this._form.formSubmit().then((res:any)=>{
-        //   if(res.success == 1) {
-        //     var redirection = this._form.form.redirection;
-        //     if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
-        //     else this.thankyou = true;
-        //   }
-        //   else this.submitting = false;
-        // });
+        this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
+          if(resp.success) {
+            var redirection = this._form.form.redirection;
+            if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
+            else this.thankyou = true;
+          }
+          else this.submitting = false;
+        });
       }
       else {
         var element:any = document.getElementById('kb-form-'+this._form.submission.form_id);

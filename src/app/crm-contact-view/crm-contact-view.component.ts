@@ -159,7 +159,7 @@ export class CrmContactViewComponent implements OnInit {
   // }
   fetchContact(uniqueid: any) {
     return new Promise((resolve) => {
-      this._contactService.getsinglecrmcontact(uniqueid).subscribe(
+      this._contactService.singlecontact(uniqueid).subscribe(
         (data) => {
           this.contact = data.data[0];
           console.log(this.contact)
@@ -289,7 +289,7 @@ export class CrmContactViewComponent implements OnInit {
       // console.log('tag updated');
     });
     this._contactService
-      .updatecrmcontact(this.crmcontactForm.value)
+      .updatecontact(this.crmcontactForm.value)
       .subscribe((data) => {
         console.log(data)
         this.fetchAlldata();

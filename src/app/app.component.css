@@ -10,6 +10,12 @@ main {
     position: relative;
 }
 
+::ng-deep .mat-dialog-title {
+    margin-bottom: 16px!important;
+    color: var(--primary-color);
+    text-transform: capitalize;
+}
+
 ::ng-deep .mat-form-field {
     font-size: 14px;
 }

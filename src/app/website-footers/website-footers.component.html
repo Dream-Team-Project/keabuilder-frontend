@@ -4,8 +4,8 @@
       Would you like to delete <span class="text-danger">{{delfooter.name}}</span> footer?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="delete(delfooter)">Yes</button>
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="delete(delfooter)">Yes</button>
   </div>
 </ng-template>
 <ng-template #createdialog>
@@ -51,7 +51,7 @@
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
-        <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create New </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Footer </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>
   <div [class.px-3]="!toggleview" class="row" *ngIf="footers.length != 0 else nodata">

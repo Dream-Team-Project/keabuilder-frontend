@@ -41,8 +41,8 @@
         Would you like to delete <span class="kb-danger">{{seltemp.name}}</span> template?
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close color="primary">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteTemplate()" class="kb-danger">Yes</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary">No</button>
+        <button mat-button mat-dialog-close (click)="deleteTemplate()" class="kb-danger">Yes</button>
     </div>
 </ng-template>
 <div id="kb-topbar" [class.pagedisabled]="_general.saveDisabled">

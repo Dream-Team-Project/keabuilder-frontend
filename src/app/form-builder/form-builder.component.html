@@ -191,7 +191,7 @@
                 <input matInput type="text" [placeholder]="'button text'" [(ngModel)]="_form.form.btntxt">
             </mat-form-field>
         </div>
-        <div mat-dialog-actions class="kb-dialog-additional">
+        <div mat-dialog-actions>
             <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
         </div>
     </ng-template>
@@ -200,7 +200,7 @@
         <div mat-dialog-content class="kb-text-editor">
             <editor *ngIf="_form.selEle.name == 'heading' || _form.selEle.name == 'text'" [(ngModel)]="_form.selEle.html" [init]="_general.config"></editor>
         </div>
-        <div mat-dialog-actions class="kb-dialog-additional">
+        <div mat-dialog-actions>
             <button mat-button mat-dialog-close cdkFocusInitial color="primary">Done</button>
         </div>
     </ng-template>

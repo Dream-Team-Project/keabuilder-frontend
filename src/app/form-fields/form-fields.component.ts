@@ -44,7 +44,6 @@ export class FormFieldsComponent implements OnInit {
   }
 
   fetchFields() {
-    this.fetching = true;
     this._formfieldService.fetchformfields().subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
     })
@@ -67,12 +66,16 @@ export class FormFieldsComponent implements OnInit {
   }
 
   setField(field:any) {
-    this.field_error = '';
-    var tempObj = JSON.parse(JSON.stringify(field));
-    tempObj.options = tempObj.options ? JSON.stringify(tempObj.options) : null;
-    tempObj.field_tag = this.getFieldTag(field);
-    if(field.id) this.updateField(tempObj);
-    else this.addField(tempObj);
+    if(field.label) {
+      this.field_error = '';
+      delete field.error;
+      var tempObj = JSON.parse(JSON.stringify(field));
+      tempObj.options = tempObj.options ? JSON.stringify(tempObj.options) : null;
+      tempObj.field_tag = this.getFieldTag(field);
+      if(field.id) this.updateField(tempObj);
+      else this.addField(tempObj);
+    }
+    else this.setError('Field lable should not be empty');
   }
 
   addField(field:any) {
@@ -81,10 +84,7 @@ export class FormFieldsComponent implements OnInit {
         this.fetchFields();
         this._general.openSnackBar(false, 'Field has been saved', 'OK', 'center', 'top');
       }
-      else {
-        this.openDialog(this.fieldsetting, this.selField);
-        this.field_error = resp.message;
-      }
+      else this.setError(resp.message);
     });
   }
 
@@ -94,11 +94,14 @@ export class FormFieldsComponent implements OnInit {
         this.fetchFields();
         this._general.openSnackBar(false, 'Field has been updated', 'OK', 'center', 'top');
       }
-      else {
-        this.openDialog(this.fieldsetting, this.selField);
-        this.field_error = resp.message;
-      }
+      else this.setError(resp.message);
     });
+  }
+
+  setError(msg:string) {
+    this.field_error = msg;
+    this.selField.error = true;
+    this.openDialog(this.fieldsetting, this.selField);
   }
 
   toggleRequired(field:any) {
@@ -141,16 +144,22 @@ export class FormFieldsComponent implements OnInit {
   // dialogs
 
   openDialog(templateRef: TemplateRef<any>, field: any) {
+    if(!field.error) {
       this.closeBottomSheet();
+      this.field_error = '';
+      delete field.error;
       var tempObj = JSON.parse(JSON.stringify(field));
       if(tempObj.options && tempObj.id) tempObj.options = JSON.parse(tempObj.options);
       this.selField = tempObj;
-      this.dialog.open(templateRef);
+    }
+    this.dialog.open(templateRef);
   }
+  
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
    
   }
+
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
    

@@ -21,35 +21,42 @@ export class ContactService {
 
   fetchcontacts(): Observable<any> {
     var obj = {uuid: this.uuid};
-    return this.http.post('/api/getAllcrmcontacts', obj)
+    return this.http.post('/api/allcontacts', obj)
     .pipe(catchError(this.errorHandler));
   }
 
   singlecontact(uniqueid:any): Observable<any> {
     var obj = {uuid: this.uuid};
-    return this.http.post('/api/getsinglecrmcontact/'+uniqueid,obj).pipe(catchError(this.errorHandler));
+    return this.http.post('/api/singlecontact/'+uniqueid,obj)
+    .pipe(catchError(this.errorHandler));
   }
 
-  createcontact(obj:any): Observable<any> {
+  addcontact(obj:any): Observable<any> {
     obj.user_id = this.uuid;
-    return this.http.post('/api/createcrmcontact',obj).pipe(catchError(this.errorHandler));
-  }
-
-  deletecontact(uniqueid:any): Observable<any>{
-    var obj = {uuid: this.uuid};
-    return this.http.post('/api/deletecrmcontact/'+uniqueid,obj).pipe(catchError(this.errorHandler));
-    
+    return this.http.post('/api/addcontact',obj)
+    .pipe(catchError(this.errorHandler));
   }
 
   updatecontact(obj:any): Observable<any>{
     obj.user_id = this.uuid;
-    return this.http.put('/api/updatecrmcontact',obj)
+    return this.http.put('/api/updatecontact',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deletecontact(id:any): Observable<any>{
+    return this.http.delete('/api/deletecontact/'+id)
     .pipe(catchError(this.errorHandler));
   }
 
   searchcontacts(obj:any){
     obj.user_id = this.uuid;
-    return this.http.post('/api/searchContactsquery',obj)
+    return this.http.post('/api/searchcontact',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  formsubmission(obj:any): Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post('/api/formsubmission',obj)
     .pipe(catchError(this.errorHandler));
   }
   
@@ -61,5 +68,5 @@ export class ContactService {
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }
-  
+
 }
