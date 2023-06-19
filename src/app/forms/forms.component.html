@@ -99,114 +99,52 @@
               class="fas fa-plus"></i></button>
         </div>
     </div>
-    <div [class.px-3]="!toggleview" class="row" *ngIf="forms.length != 0 else nodata">
-      <div [class]="toggleview ? 'col-md-4' : 'col-md-12'" class="cardpage mt-4" *ngFor="let form of forms">
-        <div [class.row]="!toggleview">
-          <div [style.height]="toggleview ? '300px' : '150px'" [class]="toggleview ? 'col-md-12' : 'col-md-6'"
+    <div [class.px-3]="toggleview" class="row" *ngIf="forms.length != 0 else nodata">
+      <div [class]="toggleview ? 'col-md-12' : 'col-md-4'" class="cardpage mt-4" *ngFor="let form of forms">
+        <div [class.row]="toggleview">
+          <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'"
             class="p-0">
-            <div *ngIf="toggleview" class="kb-title-board line-ellipsis ftsize">
-              <span>{{form.name ? form.name : 'form' | titlecase}}</span>
-              <input type="text" #formname [value]="form.name" (blur)="rename(form, formname)"
-                matTooltip="Edit form Name" matTooltipPosition="above">
-            </div>
             <div [class.kb-disabled]="form.deleting" class="kb-fitimg"
-              [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-              <div class="kb-loader" *ngIf="shortwaiting || form.deleting">
-                <div class="kb-loader-shadow"></div>
-                <div class="kb-loader-box"></div>
-              </div>
+            [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('form-'+form.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+            <div class="kb-loader" *ngIf="shortwaiting || form.deleting">
+              <div class="kb-loader-shadow"></div>
+              <div class="kb-loader-box"></div>
+            </div>
             </div>
           </div>
-          <div *ngIf="toggleview" [class]="'col-md-12 pt-3'">
+          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
             <div class="row align-items-center p-0 h-100">
-              <div [class.p-0]="toggleview" class="col-md-12">
-                <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i><span class="ml-1">Last Updated On :</span><span class="colr"> {{_general.dateformat(form.updated_at)}}</span>
-                </p>
-              </div>
-          </div>
-              <div [class.p-0]="toggleview" class="row mt-1 d-flex justify-content-between">
-                <button mat-raised-button color="accent" [routerLink]="'/crm/form/submissions/'+form.uniqueid" [disabled]="form.deleting">Submissions <i
-                    class="fa fa-paper-plane"></i></button>
-                <!-- <button mat-raised-button color="primary" [disabled]="form.deleting"
-                  (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i
-                    class="fas fa-pencil-alt"></i></button> -->
-                    <button mat-raised-button color="primary" matTooltip="Settings" matTooltipPosition="above"  [matMenuTriggerFor]="menu">More<i class="fas fa-cog ml-1"></i></button>
-                    <mat-menu #menu="matMenu">
-                      <button mat-menu-item  [disabled]="form.deleting"
-                          (click)="_general.redirectToBuilder(form.uniqueid, 'form')"> <i class="fas fa-pencil-alt  pr-2"></i>Edit</button>
-                      <button mat-menu-item (click)="_general.redirectLink('/fetch-form/'+form.user_id+'/'+form.uniqueid)">
-                        <i class="far fa-eye pr-2"></i>View</button>
-                      <button mat-menu-item (click)="newform('update',form)">
-                        <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
-                      </button>
-                      <button mat-menu-item (click)="duplicateform(form)">
-                        <i class="far fa-copy pr-2"></i>Duplicate
-                      </button>
-                      <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)">
-                        <i class="far fa-trash-alt pr-2"></i>Delete
-                      </button>
-                    </mat-menu>
-              </div>
-             
-          </div>
-          <div *ngIf="!toggleview" [class]="'col-md-6'">
-            <div class="row align-items-center p-0 h-100">
-              <div [class.p-0]="toggleview" class="col-md-12">
-                <div  class="kb-title-board line-ellipsis ftsize">
+              <div [class.p-0]="!toggleview" class="col-md-12">
+                <div class="kb-title-board line-ellipsis ftsize">
                   <span>{{form.name ? form.name : 'form' | titlecase}}</span>
-                  <input type="text" #formname [value]="form.name" (blur)="rename(form, formname)"
-                    matTooltip="Edit form Name" matTooltipPosition="above">
+                  <input type="text" #formname [value]="form.name" 
+                    (blur)="rename(form, formname)" matTooltip="Edit Form Name"
+                    matTooltipPosition="above">
                 </div>
                 <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i><span class="ml-1">Last Updated On :</span><span class="colr"> {{_general.dateformat(form.updated_at)}}</span>
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(form.updated_at)}}
                 </p>
               </div>
-            <div  class=" col-md-12 d-flex justify-content-between">
-              <button mat-raised-button color="accent" [routerLink]="'/crm/form/submissions/'+form.uniqueid" [disabled]="form.deleting">Submissions <i
-                  class="fa fa-paper-plane"></i></button>
-              <!-- <button mat-raised-button color="primary" [disabled]="form.deleting"
-                (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i
-                  class="fas fa-pencil-alt"></i></button> -->
-                  <button mat-raised-button color="primary" matTooltip="Settings" matTooltipPosition="above"  [matMenuTriggerFor]="menu">More<i class="fas fa-cog ml-1"></i></button>
-                    <mat-menu #menu="matMenu">
-                      <button mat-menu-item  [disabled]="form.deleting"
-                          (click)="_general.redirectToBuilder(form.uniqueid, 'form')"> <i class="fas fa-pencil-alt  pr-2"></i>Edit</button>
-                      <button mat-menu-item (click)="_general.redirectLink('/crm/fetch-form/'+form.user_id+'/'+form.uniqueid)">
-                        <i class="far fa-eye pr-2"></i>View</button>
-                      <button mat-menu-item (click)="newform('update',form)">
-                        <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
-                      </button>
-                      <button mat-menu-item (click)="duplicateform(form)">
-                        <i class="far fa-copy pr-2"></i>Duplicate
-                      </button>
-                      <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)">
-                        <i class="far fa-trash-alt pr-2"></i>Delete
-                      </button>
-                    </mat-menu>
+              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
+                <button (click)="_general.redirectLink('/fetch-form/'+form.user_id+'/'+form.uniqueid)" mat-raised-button color="accent"
+                  [disabled]="form.deleting" class="mr-2"> View <i class="far fa-eye"></i></button>
+                <button (click)="_general.redirectToBuilder(form.uniqueid, 'form')" mat-raised-button color="primary"
+                  [disabled]="form.deleting">Edit <i class="fas fa-pencil-alt"></i></button>
+                <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu" [disabled]="form.deleting"> More <i class="fas fa-cog"></i></button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="newform('update',form)" [disabled]="form.deleting">
+                    <i class="far fa-edit pr-2"></i>Quick Edit
+                  </button>
+                  <button mat-menu-item (click)="duplicateform(form)" [disabled]="form.deleting">
+                    <i class="far fa-copy pr-2"></i>Duplicate
+                  </button>
+                  <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)" [disabled]="form.deleting">
+                    <i class="far fa-trash-alt pr-2"></i>Delete
+                  </button>
+                </mat-menu>
+              </div>
             </div>
           </div>
-        </div>
-          
-          <!-- <div class="statbadg">
-            <button mat-raised-button class="statusbadge1" matTooltip="Settings" matTooltipPosition="above" [matMenuTriggerFor]="menu">More<i class="fas fa-cog ml-1"></i></button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item  [disabled]="form.deleting"
-                  (click)="_general.redirectToBuilder(form.uniqueid, 'form')" class="mx-2">Edit <i
-                    class="fas fa-pencil-alt"></i></button>
-              <button mat-menu-item (click)="_general.redirectLink('/crm/fetch-form/'+form.user_id+'/'+form.uniqueid)">
-                <i class="far fa-eye pr-2"></i>View</button>
-              <button mat-menu-item (click)="newform('update',form)">
-                <i class="fas fa-pencil-alt pr-2"></i>Quick Edit
-              </button>
-              <button mat-menu-item (click)="duplicateform(form)">
-                <i class="far fa-copy pr-2"></i>Duplicate
-              </button>
-              <button mat-menu-item class="text-danger" (click)="openDialog(dialog, form)">
-                <i class="far fa-trash-alt pr-2"></i>Delete
-              </button>
-            </mat-menu>
-          </div> -->
         </div>
       </div>
     </div>

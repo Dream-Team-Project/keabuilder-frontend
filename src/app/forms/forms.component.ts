@@ -146,7 +146,7 @@ export class FormsComponent implements OnInit {
               msg = 'Server Error';
             }
             else {
-              msg = 'Name update successfully!';
+              msg = 'Form name updated successfully!';
               this.hidepopupsidebar();
               this.fetformdata();
             }
@@ -154,11 +154,10 @@ export class FormsComponent implements OnInit {
           }
         }); 
       }else{
-      this._general.openSnackBar(true, 'Name must be at least 3 characters!', 'OK', 'center', 'top');
+      this._general.openSnackBar(true, 'Form name must be at least 3 characters!', 'OK', 'center', 'top');
         inp.value = data.name;
       }
     }
-
   }
 
   deleteform(form:any){

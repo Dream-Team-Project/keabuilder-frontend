@@ -685,7 +685,6 @@ export class WebsitePagesComponent implements OnInit {
 
   togglepageview(){
     this.toggleview = !this.toggleview; 
-    console.log(this.toggleview);
     this._general.setStorage('page_toggle',this.toggleview);
   }
   
