@@ -18,6 +18,37 @@
     </button>
   </div>
 </ng-template>
+<ng-template #duplicatedialog>
+  <h1 mat-dialog-title class="kb-primary">Duplicate List</h1>
+  <div mat-dialog-content>
+    <div>Would you like to duplicate this List ?</div>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>List Name</mat-label>
+      <input
+        type="text"
+        matInput
+        [(ngModel)]="list.list_name"
+        placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+        required
+      />
+    </mat-form-field>
+    <!-- <div class="text-center mt-2">
+    <mat-checkbox class="kb-dup" [color]="'primary'" [(ngModel)]="duplicateList">Duplicate List with Contacts</mat-checkbox>
+  </div> -->
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button
+      mat-button
+      mat-dialog-close
+      cdkFocusInitial
+      [color]="'primary'"
+      (click)="copyList(this.list)"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
 <!-- dialog for new  entry on add  Or update list button -->
 <ng-template #adddialog>
   <h1 mat-dialog-title>Add List</h1>
@@ -121,10 +152,10 @@
                 ></i>
                 <i
                   mat-ripple
-                  matTooltip="Copy"
+                  matTooltip="Duplicate"
                   matTooltipPosition="above"
                   class="fa fa-copy px-4 kb-table-action-icon rounded"
-                  (click)="copyList(list.list_name)"
+                  (click)="openDialog(duplicatedialog,list)"
                 ></i>
                 <i
                   mat-ripple

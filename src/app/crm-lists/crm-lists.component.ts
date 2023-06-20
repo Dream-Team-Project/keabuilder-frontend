@@ -20,6 +20,7 @@ export class CrmListsComponent implements OnInit {
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
 
   fetching:boolean = true;
+  duplicateList:boolean = false;
   lists:any=[];
   list:any = {};
   listObj = {
@@ -86,11 +87,13 @@ export class CrmListsComponent implements OnInit {
     }
   }
   copyList(list:any){
-    
-    let obj={list_name:list+' '+'copy'};
+    // let obj={list_name:list.list_name,duplicateList:true};
+    list.duplicateList=true;
+    console.log(list)
     this._listservice
-    .addlist(obj)
+    .addlist(list)
     .subscribe((resp) => {
+      console.log(resp.data)
       if(resp.success) this.fetchLists();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
@@ -128,7 +131,7 @@ export class CrmListsComponent implements OnInit {
   }
   isListNameValid(value:any) {
     // let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    let regex =/^[\w-_.]{4,}$/
+    let regex =/^[\w-_. ]{4,}$/
     return regex.test(value);
   }
 }
