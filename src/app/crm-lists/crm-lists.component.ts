@@ -19,9 +19,10 @@ export class CrmListsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
 
-  fetching: boolean = true;
-  lists: any = [];
-  list: any = {};
+  fetching:boolean = true;
+  duplicateList:boolean = false;
+  lists:any=[];
+  list:any = {};
   listObj = {
     list_name: '',
     uniqueid: '',
@@ -82,14 +83,17 @@ export class CrmListsComponent implements OnInit {
         else this.setError(resp.message);
       })
   }
-
-  // duplicate function need to be changed
-  copyList(list: any) {
-    let obj = { list_name: list + ' ' + 'copy' };
-    this._listservice.addlist(obj).subscribe((resp) => {
-        if (resp.success) this.fetchLists();
-        this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
-      });
+  copyList(list:any){
+    // let obj={list_name:list.list_name,duplicateList:true};
+    list.duplicateList=true;
+    console.log(list)
+    this._listservice
+    .addlist(list)
+    .subscribe((resp) => {
+      console.log(resp.data)
+      if(resp.success) this.fetchLists();
+      this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+    });
   }
   // duplicate function need to be changed
 
@@ -118,9 +122,9 @@ export class CrmListsComponent implements OnInit {
     this.list.error = true;
     this.openDialog(this.adddialog, this.list);
   }
-
-  isListNameValid(value: any) {
-    let regex = /^[\w-_.]{4,}$/
+  isListNameValid(value:any) {
+    // let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let regex =/^[\w-_. ]{4,}$/
     return regex.test(value);
   }
 

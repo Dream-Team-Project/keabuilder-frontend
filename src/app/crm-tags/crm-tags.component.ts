@@ -158,7 +158,7 @@ export class CrmTagsComponent implements OnInit {
     this.openDialog(this.adddialog, this.tag);
   }
   isTagNameValid(value:any) {
-    let regex =/^[\w-_.]{4,}$/
+    let regex =/^[\w-_. ]{4,}$/
     return regex.test(value);
   }
   searchTags(search: any,filter: any) {
