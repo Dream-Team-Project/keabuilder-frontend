@@ -13,7 +13,8 @@
 </ng-template>
 <!-- dialog for new  entry on add Or Update Tag -->
 <ng-template #adddialog>
-  <h1 mat-dialog-title>Add Tag</h1>
+  <span mat-dialog-title *ngIf="!tag.uniqueid">Add Tag</span>
+  <span mat-dialog-title *ngIf="tag.uniqueid">Update Tag</span>
   <div mat-dialog-content>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Tag Name</mat-label>
