@@ -1,47 +1,17 @@
-.fntli li{
-  font-size: 11px;
-  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
-  border-radius: 8px;
-  padding: 5px;
-  margin: 2px;
-  background-color: rgb(233, 231, 231);
-}
-.fntilitem{
-  font-size: 11px;
-  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
-  border-radius: 8px;  
-  align-items: center;
-  background-color: rgb(233, 231, 231);
-}
-.fntli{
-  justify-items: center;
-  padding-left: 5px;
-}
-.fntlitag{
- margin: 1px;
- padding: 1px;
-
-}
-.fntli-box{
-  display: inline-block;
-  width: 100%;
-  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
-  border-radius: 8px;
-  padding: 10px;
-  margin: 8px;
-  
- 
-}
-.funtag1{
-  margin-left: 10px;
-  padding-left: 10px;
-  font-size: 12px;
-}
-.funtag{
-  font-weight: 400;
-  font-size: 18px;
-  margin-left: 10px;
-  padding-left: 10px;
+.kb-tag-prgrs-list {
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
-
+.kb-tag-prgrs-list span {
+  background-color: rgb(216 200 152 / 30%);
+  padding: 6px 12px;
+  margin: 6px;
+  border-radius: 10px;
+}

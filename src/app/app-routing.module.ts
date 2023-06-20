@@ -37,7 +37,6 @@ import { MembershipPaymentComponent } from './membership-payment/membership-paym
 import { MembershipMembersComponent } from './membership-members/membership-members.component';
 import { MembershipTagsComponent } from './membership-tags/membership-tags.component';
 import { MembershipMarketplaceComponent } from './membership-marketplace/membership-marketplace.component';
-import { FormSubmissionsComponent } from './form-submissions/form-submissions.component';
 import { FormFetchComponent } from './form-fetch/form-fetch.component';
 import { FormsComponent } from './forms/forms.component';
 import { DomainComponent } from './domain/domain.component';
@@ -246,7 +245,6 @@ const routes: Routes = [
     { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-    { path: 'form/submissions/:form_id', component: FormSubmissionsComponent, canActivate: [AuthGuard] },
     { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
     { path: 'fields', component: FormFieldsComponent, canActivate: [AuthGuard] },
   ],
@@ -312,7 +310,6 @@ export const RoutingComponents =
     MembershipMarketplaceComponent,
     FormsComponent,
     FormFetchComponent,
-    FormSubmissionsComponent,
     DomainComponent,
     PaymentComponent,
     CrmComponent,

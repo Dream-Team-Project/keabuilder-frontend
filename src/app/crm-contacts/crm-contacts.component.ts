@@ -50,7 +50,6 @@ export class CrmContactsComponent implements OnInit {
   adjustdata(data:any){
     if(data) this.contacts = data;
     this.fetching = false;
-    
   }
 
   fetchContacts() {

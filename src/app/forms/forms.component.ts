@@ -1,4 +1,5 @@
 import { Component, OnInit,TemplateRef } from '@angular/core';
+import { FormService } from '../_services/_crm/form.service';
 import { FileUploadService } from '../_services/file-upload.service';
 import { ImageService } from '../_services/image.service';
 import { GeneralService } from '../_services/_builder/general.service';
@@ -45,7 +46,8 @@ export class FormsComponent implements OnInit {
   fetching:boolean = true;
   selecteduid:any = [];
 
-  constructor(private _file: FileUploadService,
+  constructor(private _form: FormService,
+              private _file: FileUploadService,
               public _image: ImageService,
               public _general: GeneralService,
               public dialog: MatDialog, 
@@ -53,7 +55,7 @@ export class FormsComponent implements OnInit {
                   this.toggleview = _general.getStorage('form_toggle');
                   this._general.getAllWebPages();
                   this._general.getAllFunnels();
-                  this.fetformdata();
+                  this.fetchForms();
                }
 
   ngOnInit(): void {
@@ -62,9 +64,9 @@ export class FormsComponent implements OnInit {
     }, 1000);
   }
 
-  fetformdata(){
+  fetchForms(){
     this.fetching = true;
-    this._file.fetchforms().subscribe((resp:any)=>{
+    this._form.fetchforms().subscribe((resp:any)=>{
         this.adjustdata(resp.data);
     });
   }
@@ -99,7 +101,7 @@ export class FormsComponent implements OnInit {
 
   onformSubmit(): void {
     if(!this.validate.name.invalid && !this.validate.relink.invalid){
-      this._file.saveform(this.form).subscribe({
+      this._form.saveform(this.form).subscribe({
         next: data => {
           var msg, err = data.success==0;
           if(err){
@@ -117,7 +119,7 @@ export class FormsComponent implements OnInit {
 
   onformUpdate(){
       if(!this.validate.name.invalid && !this.validate.relink.invalid){
-          this._file.updateform(this.form).subscribe({
+          this._form.updateform(this.form).subscribe({
             next: data => {
               var msg, err = data.success==0;
               if(err){
@@ -126,7 +128,7 @@ export class FormsComponent implements OnInit {
               else {
                 msg = 'Form has been update successfully!';
                 this.hidepopupsidebar();
-                this.fetformdata();
+                this.fetchForms();
               }
               this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
             }
@@ -139,7 +141,7 @@ export class FormsComponent implements OnInit {
     if(data.name !== newname) {
       if(newname.length>3){
         data.name = newname;
-        this._file.updateform(data).subscribe({
+        this._form.updateform(data).subscribe({
           next: data => {
             var msg, err = data.success==0;
             if(err){
@@ -148,7 +150,7 @@ export class FormsComponent implements OnInit {
             else {
               msg = 'Form name updated successfully!';
               this.hidepopupsidebar();
-              this.fetformdata();
+              this.fetchForms();
             }
             this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
           }
@@ -162,7 +164,7 @@ export class FormsComponent implements OnInit {
 
   deleteform(form:any){
     form.deleting = true;
-    this._file.deleteform(form.id).subscribe({
+    this._form.deleteform(form.id).subscribe({
       next: data => {        
         var genscrn = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
         this._file.validateimg(genscrn).subscribe({
@@ -171,13 +173,13 @@ export class FormsComponent implements OnInit {
               this._file.deleteimage('keaimage-form-'+form.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
                   this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
-                  this.fetformdata();
+                  this.fetchForms();
                 }
               });
             }
             else {
               this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
-              this.fetformdata();
+              this.fetchForms();
             }
           }
         });
@@ -199,7 +201,7 @@ export class FormsComponent implements OnInit {
     var decode = this._general.decodeData(datadup.appendstyle);
     var newapsty = decode.replace(regex, datadup.uniqueid);
     datadup.appendstyle = this._general.encodeData(newapsty);
-    this._file.duplicateform(datadup).subscribe({
+    this._form.duplicateform(datadup).subscribe({
       next: data => {
           if(data.uniqueid!=''){
             var oldimg = 'keaimage-form-'+form.uniqueid+'-screenshot.png';
@@ -209,12 +211,12 @@ export class FormsComponent implements OnInit {
                   var imgobj  = {oldname:oldimg, newname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png'};
                   this._file.copyimage(imgobj).subscribe({
                     next: data => {
-                      this.fetformdata();
+                      this.fetchForms();
                       this._general.openSnackBar(false, 'Form Duplicated Successfully!', 'OK', 'center', 'top');
                     }
                   });
                 }else{
-                  this.fetformdata();
+                  this.fetchForms();
                   this._general.openSnackBar(false, 'Form Duplicated Successfully!', 'OK', 'center', 'top');
                 }
   
@@ -231,7 +233,7 @@ export class FormsComponent implements OnInit {
       search: search.value,
       filter: filter.value,
     }
-    this._file.searchformquery(obj).subscribe((resp:any)=>{
+    this._form.searchformquery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
   }

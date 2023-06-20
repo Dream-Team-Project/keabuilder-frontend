@@ -257,13 +257,6 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
-          routerlink: '/crm/lists',
-          img: 'hacker.gif',
-          icon: 'fa fa-list',
-          title: 'List'
-        },
-        {
-          0:true,
           routerlink: '/crm/forms',
           img: 'complete.gif',
           icon: 'fas fa-address-card',
@@ -275,6 +268,20 @@ export class SidebarComponent implements OnInit {
           img: 'complete.gif',
           icon: 'far fa-check-square',
           title: 'Fields',
+        },
+        {
+          0:true,
+          routerlink: '/crm/lists',
+          img: 'hacker.gif',
+          icon: 'fa fa-list',
+          title: 'List'
+        },
+        {
+          0:true,
+          routerlink: '/crm/tags',
+          img: 'hacker.gif',
+          icon: 'fa fa-tags',
+          title: 'Tags'
         },
         {
           0:true,
@@ -290,34 +297,6 @@ export class SidebarComponent implements OnInit {
           icon: 'fa fa-envelope',
           title: 'Campaigns'
         },
-        // {
-        //   0:true,
-        //   routerlink: '/no-link',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-bars',
-        //   title: 'Pipelines'
-        // },
-       {
-          0:true,
-          routerlink: '/crm/tags',
-          img: 'hacker.gif',
-          icon: 'fa fa-tags',
-          title: 'Tags'
-        },
-        // {
-        //   0:true,
-        //   routerlink: '/crm/crm-reports',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-chart-bar',
-        //   title: 'Reports'
-        // }, 
-        // {
-        //   0:true,
-        //   routerlink: '/crm/crm-smtp',
-        //   img: 'hacker.gif',
-        //   icon: 'fa-solid fa-server',
-        //   title: 'SMTP Config'
-        // },
         {
           0:true,
           routerlink: '/crm/settings',

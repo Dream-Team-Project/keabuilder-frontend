@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { FormService } from '../_services/_builder/form.service';
+import { FormService } from '../_services/_crm/form.service';
 import { GeneralService } from '../_services/_builder/general.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
