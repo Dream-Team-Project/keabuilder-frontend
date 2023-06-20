@@ -1,8 +1,8 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { CrmListService } from '../_services/_crmservice/crm_list.service';
-import { CrmTagsService } from '../_services/_crmservice/crm-tags.service';
+import { ListService } from '../_services/_crm/list.service';
+import { TagService } from '../_services/_crm/tag.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactService } from '../_services/_crm/contact.service';
@@ -14,8 +14,7 @@ import { GeneralService } from '../_services/_builder/general.service';
   styleUrls: ['./crm-contacts.component.css'],
 })
 export class CrmContactsComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
 
   fetching:boolean = true;
@@ -33,8 +32,8 @@ export class CrmContactsComponent implements OnInit {
 
   constructor(
     private _contactService: ContactService,
-    private _crmlistService: CrmListService,
-    private _crmtagService: CrmTagsService,
+    private _listService: ListService,
+    private _tagService: TagService,
     private dialog: MatDialog,
     private _route: ActivatedRoute,
     private _general: GeneralService
@@ -60,7 +59,7 @@ export class CrmContactsComponent implements OnInit {
 
   fetchLists() {
     return new Promise((resolve) => {
-      this._crmlistService.getAllcrmlists().subscribe(
+      this._listService.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
           resolve(true);
@@ -74,7 +73,7 @@ export class CrmContactsComponent implements OnInit {
 
   fetchTags() {
     return new Promise((resolve) => {
-      this._crmtagService.getAllcrmtags().subscribe(
+      this._tagService.fetchtags().subscribe(
         (data) => {
           this.tags = data.data;
           resolve(true);
