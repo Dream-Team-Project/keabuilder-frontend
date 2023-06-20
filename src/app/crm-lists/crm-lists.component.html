@@ -18,6 +18,7 @@
     </button>
   </div>
 </ng-template>
+<!-- dialog for duplicate liost with contacts list button -->
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title class="kb-primary">Duplicate List</h1>
   <div mat-dialog-content>
@@ -51,7 +52,8 @@
 </ng-template>
 <!-- dialog for new  entry on add  Or update list button -->
 <ng-template #adddialog>
-  <h1 mat-dialog-title>Add List</h1>
+  <span mat-dialog-title  *ngIf="!list.uniqueid">Add List</span> 
+  <span mat-dialog-title *ngIf="list.uniqueid">Update List</span>
   <div mat-dialog-content>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>List Name</mat-label>
