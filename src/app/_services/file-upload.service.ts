@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse,HttpHeaders} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import { TokenStorageService } from './token-storage.service';
+// import { FormService } from './_crm/form.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,6 +18,15 @@ export class FileUploadService {
   createuserfolderApi = "./api/create-user";
   createlogofaviApi = "./api/create-user-logofavi";
   // user
+  // forms
+  searchformqueryApi = './api/searchformquery';
+  getformApi = "./api/getform";
+  allformsApi = "./api/allforms";
+  saveformApi = "./api/saveform";
+  updateformApi = "./api/updateform";
+  duplicateformApi = './api/duplicateform';
+  deleteformApi = "./api/deleteform";
+  // forms
   // document
   getAllDocumentsApi = "./api/getalldocuments";
   uploadDocumentApi = "./api/uploaddocument";
@@ -85,7 +95,10 @@ export class FileUploadService {
 
   uuid:any = '';
 
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
+  constructor(private http: HttpClient, 
+    private tokenStorage: TokenStorageService, 
+    // private _form: FormService
+    ) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
@@ -102,6 +115,47 @@ export class FileUploadService {
   }
 
   // user
+
+  // forms
+
+  fetchforms():Observable<any> {
+    return this.http.get(this.allformsApi+'/'+this.uuid);
+  }
+
+  getform(uniqueid:any):Observable<any> {
+    return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
+  }
+
+  saveform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.saveformApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  searchformquery(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.searchformqueryApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  duplicateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.duplicateformApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updateform(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.updateformApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteform(id:any):Observable<any> {
+    return this.http.delete(this.deleteformApi+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+  
+  // forms
 
   // website
 

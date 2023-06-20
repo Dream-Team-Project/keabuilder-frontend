@@ -1,26 +1,13 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-import { TokenStorageService } from '../token-storage.service';
 import { GeneralService } from '../_builder/general.service';
 import { ElementService } from '../_builder/element.service';
 import { FormFieldsService } from '../_crm/field.service';
+import { FileUploadService } from '../file-upload.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormService {
-
-   // apis
-  searchformqueryApi = './api/searchformquery';
-  getformApi = "./api/getform";
-  allformsApi = "./api/allforms";
-  saveformApi = "./api/saveform";
-  updateformApi = "./api/updateform";
-  duplicateformApi = './api/duplicateform';
-  deleteformApi = "./api/deleteform";
-  uuid:any = '';
-   // apis
 
   countries:any = [{ name: 'United States' }, { name: 'Canada' }, { name: 'United Kingdom' }, { name: 'Ireland' }, { name: 'Australia' }, { name: 'New Zealand' }, { name: 'Afghanistan' }, { name: 'Aland Islands' }, { name: 'Albania' }, { name: 'Algeria' }, { name: 'American Samoa' }, { name: 'Andorra' }, { name: 'Angola' }, { name: 'Anguilla' }, { name: 'Antarctica' }, { name: 'Antigua and Barbuda' }, { name: 'Argentina' }, { name: 'Armenia' }, { name: 'Aruba' }, { name: 'Australia' }, { name: 'Austria' }, { name: 'Azerbaijan' }, { name: 'Bahamas' }, { name: 'Bahrain' }, { name: 'Bangladesh' }, { name: 'Barbados' }, { name: 'Belarus' }, { name: 'Belgium' }, { name: 'Belize' }, { name: 'Benin' }, { name: 'Bermuda' }, { name: 'Bhutan' }, { name: 'Bolivia' }, { name: 'Bonaire, Saint Eustatius and Saba ' }, { name: 'Bosnia and Herzegovina' }, { name: 'Botswana' }, { name: 'Bouvet Island' }, { name: 'Brazil' }, { name: 'British Indian Ocean Territory' }, { name: 'British Virgin Islands' }, { name: 'Brunei' }, { name: 'Bulgaria' }, { name: 'Burkina Faso' }, { name: 'Burundi' }, { name: 'Cambodia' }, { name: 'Cameroon' }, { name: 'Canada' }, { name: 'Cape Verde' }, { name: 'Cayman Islands' }, { name: 'Central African Republic' }, { name: 'Chad' }, { name: 'Chile' }, { name: 'China' }, { name: 'Christmas Island' }, { name: 'Cocos Islands' }, { name: 'Colombia' }, { name: 'Comoros' }, { name: 'Cook Islands' }, { name: 'Costa Rica' }, { name: 'Croatia' }, { name: 'Cuba' }, { name: 'Curacao' }, { name: 'Cyprus' }, { name: 'Czech Republic' }, { name: 'Democratic Republic of the Congo' }, { name: 'Denmark' }, { name: 'Djibouti' }, { name: 'Dominica' }, { name: 'Dominican Republic' }, { name: 'East Timor' }, { name: 'Ecuador' }, { name: 'Egypt' }, { name: 'El Salvador' }, { name: 'Equatorial Guinea' }, { name: 'Eritrea' }, { name: 'Estonia' }, { name: 'Ethiopia' }, { name: 'Falkland Islands' }, { name: 'Faroe Islands' }, { name: 'Fiji' }, { name: 'Finland' }, { name: 'France' }, { name: 'French Guiana' }, { name: 'French Polynesia' }, { name: 'French Southern Territories' }, { name: 'Gabon' }, { name: 'Gambia' }, { name: 'Georgia' }, { name: 'Germany' }, { name: 'Ghana' }, { name: 'Gibraltar' }, { name: 'Greece' }, { name: 'Greenland' }, { name: 'Grenada' }, { name: 'Guadeloupe' }, { name: 'Guam' }, { name: 'Guatemala' }, { name: 'Guernsey' }, { name: 'Guinea' }, { name: 'Guinea-Bissau' }, { name: 'Guyana' }, { name: 'Haiti' }, { name: 'Heard Island and McDonald Islands' }, { name: 'Honduras' }, { name: 'Hong Kong' }, { name: 'Hungary' }, { name: 'Iceland' }, { name: 'India' }, { name: 'Indonesia' }, { name: 'Iran' }, { name: 'Iraq' }, { name: 'Ireland' }, { name: 'Isle of Man' }, { name: 'Israel' }, { name: 'Italy' }, { name: 'Ivory Coast' }, { name: 'Jamaica' }, { name: 'Japan' }, { name: 'Jersey' }, { name: 'Jordan' }, { name: 'Kazakhstan' }, { name: 'Kenya' }, { name: 'Kiribati' }, { name: 'Kosovo' }, { name: 'Kuwait' }, { name: 'Kyrgyzstan' }, { name: 'Laos' }, { name: 'Latvia' }, { name: 'Lebanon' }, { name: 'Lesotho' }, { name: 'Liberia' }, { name: 'Libya' }, { name: 'Liechtenstein' }, { name: 'Lithuania' }, { name: 'Luxembourg' }, { name: 'Macao' }, { name: 'Macedonia' }, { name: 'Madagascar' }, { name: 'Malawi' }, { name: 'Malaysia' }, { name: 'Maldives' }, { name: 'Mali' }, { name: 'Malta' }, { name: 'Marshall Islands' }, { name: 'Martinique' }, { name: 'Mauritania' }, { name: 'Mauritius' }, { name: 'Mayotte' }, { name: 'Mexico' }, { name: 'Micronesia' }, { name: 'Moldova' }, { name: 'Monaco' }, { name: 'Mongolia' }, { name: 'Montenegro' }, { name: 'Montserrat' }, { name: 'Morocco' }, { name: 'Mozambique' }, { name: 'Myanmar' }, { name: 'Namibia' }, { name: 'Nauru' }, { name: 'Nepal' }, { name: 'Netherlands' }, { name: 'New Caledonia' }, { name: 'New Zealand' }, { name: 'Nicaragua' }, { name: 'Niger' }, { name: 'Nigeria' }, { name: 'Niue' }, { name: 'Norfolk Island' }, { name: 'North Korea' }, { name: 'Northern Mariana Islands' }, { name: 'Norway' }, { name: 'Oman' }, { name: 'Pakistan' }, { name: 'Palau' }, { name: 'Palestinian Territory' }, { name: 'Panama' }, { name: 'Papua New Guinea' }, { name: 'Paraguay' }, { name: 'Peru' }, { name: 'Philippines' }, { name: 'Pitcairn' }, { name: 'Poland' }, { name: 'Portugal' }, { name: 'Puerto Rico' }, { name: 'Qatar' }, { name: 'Republic of the Congo' }, { name: 'Reunion' }, { name: 'Romania' }, { name: 'Russia' }, { name: 'Rwanda' }, { name: 'Saint Barthelemy' }, { name: 'Saint Helena' }, { name: 'Saint Kitts and Nevis' }, { name: 'Saint Lucia' }, { name: 'Saint Martin' }, { name: 'Saint Pierre and Miquelon' }, { name: 'Saint Vincent and the Grenadines' }, { name: 'Samoa' }, { name: 'San Marino' }, { name: 'Sao Tome and Principe' }, { name: 'Saudi Arabia' }, { name: 'Senegal' }, { name: 'Serbia' }, { name: 'Seychelles' }, { name: 'Sierra Leone' }, { name: 'Singapore' }, { name: 'Sint Maarten' }, { name: 'Slovakia' }, { name: 'Slovenia' }, { name: 'Solomon Islands' }, { name: 'Somalia' }, { name: 'South Africa' }, { name: 'South Georgia and the South Sandwich Islands' }, { name: 'South Korea' }, { name: 'South Sudan' }, { name: 'Spain' }, { name: 'Sri Lanka' }, { name: 'Sudan' }, { name: 'Suriname' }, { name: 'Svalbard and Jan Mayen' }, { name: 'Swaziland' }, { name: 'Sweden' }, { name: 'Switzerland' }, { name: 'Syria' }, { name: 'Taiwan' }, { name: 'Tajikistan' }, { name: 'Tanzania' }, { name: 'Thailand' }, { name: 'Togo' }, { name: 'Tokelau' }, { name: 'Tonga' }, { name: 'Trinidad and Tobago' }, { name: 'Tunisia' }, { name: 'Turkey' }, { name: 'Turkmenistan' }, { name: 'Turks and Caicos Islands' }, { name: 'Tuvalu' }, { name: 'U.S. Virgin Islands' }, { name: 'Uganda' }, { name: 'Ukraine' }, { name: 'United Arab Emirates' }, { name: 'United Kingdom' }, { name: 'United States' }, { name: 'United States Minor Outlying Islands' }, { name: 'Uruguay' }, { name: 'Uzbekistan' }, { name: 'Vanuatu' }, { name: 'Vatican' }, { name: 'Venezuela' }, { name: 'Vietnam' }, { name: 'Wallis and Futuna' }, { name: 'Western Sahara' }, { name: 'Yemen' }, { name: 'Zambia' }, { name: 'Zimb' }];
   form = {
@@ -123,16 +110,13 @@ export class FormService {
   ansjson:any = {};
   preview:boolean = false;
   fields:Array<any> = [];
-  fieldTypes:Array<any> = this._formfieldService.fieldTypes;
+  fieldTypes:Array<any> = this._field.fieldTypes;
 
   constructor(
-    private http: HttpClient, 
-    private tokenStorage: TokenStorageService,
     private _general: GeneralService,
     public _element: ElementService,
-    private _formfieldService: FormFieldsService) { 
-    this.uuid = this.tokenStorage.getUser().uniqueid;
-  }
+    private _field: FormFieldsService,
+    private _file: FileUploadService) { }
 
   searchFields(search: any, sort: any, filter: any) {
     var obj = {
@@ -140,7 +124,7 @@ export class FormService {
       sort: sort.value,
       filter: filter.value
     }
-    this._formfieldService.searchFieldsquery(obj).subscribe((resp:any)=>{
+    this._field.searchFieldsquery(obj).subscribe((resp:any)=>{
       console.log(resp);
       this.fields = resp.data;
     });
@@ -148,7 +132,7 @@ export class FormService {
 
   fetchFields() {
     return new Promise((resolve, reject)=>{
-      this._formfieldService.fetchformfields().subscribe((resp:any)=>{
+      this._field.fetchformfields().subscribe((resp:any)=>{
         if(resp?.data) this.fields = resp.data;
         resolve(resp);
       })
@@ -166,7 +150,7 @@ export class FormService {
 
   getForm(uniqueid:any) {
     return new Promise((resolve, reject)=>{
-      this.getform(uniqueid).subscribe((resp:any)=>{
+      this._file.getform(uniqueid).subscribe((resp:any)=>{
         this.fetchFields().then(()=>{
           this.setForm(resp).then(data=>{
             this.createFields();
@@ -214,7 +198,7 @@ export class FormService {
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = this._general.encodeJSON(style);
         this.form.thankyoumessage = this.getThankyouMsg();
-        this.updateform(this.form).subscribe((resp:any)=>{
+        this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
           this.getForm(this.form.uniqueid);
         })
@@ -318,50 +302,4 @@ export class FormService {
       this.formSession.redo++;
     }
   }
-
-  // apis
-
-  fetchforms():Observable<any> {
-    return this.http.get(this.allformsApi+'/'+this.uuid);
-  }
-
-  getform(uniqueid:any):Observable<any> {
-    return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
-  }
-
-  saveform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.saveformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  searchformquery(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.searchformqueryApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  duplicateform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.duplicateformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  updateform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.updateformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  deleteform(id:any):Observable<any> {
-    return this.http.delete(this.deleteformApi+'/'+id)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(()=>error.message || "Sever Error")
-  }
-
-   // apis
-
 }

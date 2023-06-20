@@ -42,8 +42,8 @@ import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './_components/sidebar/sidebar.component';
+import { NavbarComponent } from './_components/navbar/navbar.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SortablejsModule } from 'ngx-sortablejs';

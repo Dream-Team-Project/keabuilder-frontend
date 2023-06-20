@@ -1,74 +1,85 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
-import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProfileComponent } from './profile/profile.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './_guard/auth.guard';
-import { BuilderComponent } from './builder/builder.component';
-import { BuilderSettingComponent } from './builder-setting/builder-setting.component';
-import { BulderWireframeComponent } from './bulder-wireframe/bulder-wireframe.component';
-import { FunnelComponent } from './funnel/funnel.component';
-import { FunnelArchiveComponent } from './funnel-archive/funnel-archive.component';
-import { FunnelMarketplaceComponent } from './funnel-marketplace/funnel-marketplace.component';
-import { StrategiesComponent } from './strategies/strategies.component';
-import { AnalyticsComponent } from './analytics/analytics.component';
-import { HeatmapsComponent } from './heatmaps/heatmaps.component';
-import { AllFunnelsComponent } from './all-funnels/all-funnels.component';
-import { BuildFunnelComponent } from './build-funnel/build-funnel.component';
-import { CreateFunnelComponent } from './create-funnel/create-funnel.component';
-import { CreateFunnelStatsComponent } from './create-funnel-stats/create-funnel-stats.component';
-import { CreateFunnelContactsComponent } from './create-funnel-contacts/create-funnel-contacts.component';
-import { CreateFunnelSalesComponent } from './create-funnel-sales/create-funnel-sales.component';
-import { CreateFunnelSettingsComponent } from './create-funnel-settings/create-funnel-settings.component';
-import { HeatmapsRecordingsComponent } from './heatmaps-recordings/heatmaps-recordings.component';
-import { CoursesComponent } from './courses/courses.component';
-import { ModulesComponent } from './modules/modules.component';
-import { LessonComponent } from './lesson/lesson.component';
-import { MembershipComponent } from './membership/membership.component';
-import { MembershipProductComponent } from './membership-product/membership-product.component';
-import { MembershipOffersComponent } from './membership-offers/membership-offers.component';
-import { MembershipCouponsComponent } from './membership-coupons/membership-coupons.component';
-import { MembershipPaymentComponent } from './membership-payment/membership-payment.component';
-import { MembershipMembersComponent } from './membership-members/membership-members.component';
-import { MembershipTagsComponent } from './membership-tags/membership-tags.component';
-import { MembershipMarketplaceComponent } from './membership-marketplace/membership-marketplace.component';
-import { FormFetchComponent } from './form-fetch/form-fetch.component';
-import { FormsComponent } from './forms/forms.component';
-import { DomainComponent } from './domain/domain.component';
-import { PaymentComponent } from './payment/payment.component';
-import { CrmComponent } from './crm/crm.component';
-import { CrmCampaignsComponent } from './crm-campaigns/crm-campaigns.component';
-import { CrmContactsComponent } from './crm-contacts/crm-contacts.component';
-import { CrmListsComponent } from './crm-lists/crm-lists.component';
-import { CrmTagsComponent } from './crm-tags/crm-tags.component';
-import { CrmReportsComponent } from './crm-reports/crm-reports.component';
-import { CrmSettingsComponent } from './crm-settings/crm-settings.component';
-import { AffiliatesComponent } from './affiliates/affiliates.component';
-import { AffiliateUsersComponent } from './affiliate-users/affiliate-users.component';
-import { AffiliateCommissionComponent } from './affiliate-commission/affiliate-commission.component';
-import { AffiliateTransactionsComponent } from './affiliate-transactions/affiliate-transactions.component';
-import { AffiliateShareComponent } from './affiliate-share/affiliate-share.component';
-import { AffiliateAnnouncementsComponent } from './affiliate-announcements/affiliate-announcements.component';
-import { AffiliateExportsComponent } from './affiliate-exports/affiliate-exports.component';
-import { AffiliateSettingsComponent } from './affiliate-settings/affiliate-settings.component';
-import { WebsiteComponent } from './website/website.component';
-import { WebsitePagesComponent } from './website-pages/website-pages.component';
-import { WebsiteDesignComponent } from './website-design/website-design.component';
-import { WebsiteDetailsComponent } from './website-details/website-details.component';
-import { WebsiteMarketplaceComponent } from './website-marketplace/website-marketplace.component';
-import { WebsiteHeadersComponent } from './website-headers/website-headers.component';
-import { WebsiteFootersComponent } from './website-footers/website-footers.component';
-import { IntegrationsComponent } from './integrations/integrations.component';
-import { FunnelWizardNavComponent } from './funnel-wizard-nav/funnel-wizard-nav.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { FormBuilderComponent } from './form-builder/form-builder.component';
-import { BuilderTopbarComponent } from './builder-topbar/builder-topbar.component';
-import { ImageComponent } from './image/image.component';
+
+import { AnalyticsComponent } from './_components/analytics/analytics.component';
+import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
+import { DomainComponent } from './_components/domain/domain.component';
+import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
+import { ImageComponent } from './_components/image/image.component';
+import { IntegrationsComponent } from './_components/integrations/integrations.component';
+import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
+import { StrategiesComponent } from './_components/strategies/strategies.component';
+
+// auth
+import { DashboardComponent } from './_components/dashboard/dashboard.component';
+import { ForgotPasswordComponent } from './_components/_auth/forgot-password/forgot-password.component';
+import { LoginComponent } from './_components/_auth/login/login.component';
+import { ProfileComponent } from './_components/_auth/profile/profile.component';
+import { RegisterComponent } from './_components/_auth/register/register.component';
+// auth
+// builder
+import { BuilderComponent } from './_components/_builder/builder/builder.component';
+import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
+import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
+import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
+// builder
+// websites
+import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
+import { WebsiteDetailsComponent } from './_components/_websites/details/details.component';
+import { WebsiteFootersComponent } from './_components/_websites/footers/footers.component';
+import { WebsiteHeadersComponent } from './_components/_websites/headers/headers.component';
+import { WebsiteMarketplaceComponent } from './_components/_websites/marketplace/marketplace.component';
+import { WebsiteNavigationComponent } from './_components/_websites/navigation/navigation.component';
+import { WebsitePagesComponent } from './_components/_websites//pages/pages.component';
+import { WebsiteComponent } from './_components/_websites/website/website.component';
+import { WebsitesComponent } from './_components/_websites/websites/websites.component';
+// websites
+// funnels
+import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
+import { FunnelArchiveComponent } from './_components/_funnels/funnel-archive/funnel-archive.component';
+import { FunnelMarketplaceComponent } from './_components/_funnels/funnel-marketplace/funnel-marketplace.component';
+import { FunnelsComponent } from './_components/_funnels/funnels/funnels.component';
+import { BuildFunnelComponent } from './_components/_funnels/build-funnel/build-funnel.component';
+import { CreateFunnelComponent } from './_components/_funnels/create-funnel/create-funnel.component';
+import { CreateFunnelStatsComponent } from './_components/_funnels/create-funnel-stats/create-funnel-stats.component';
+import { CreateFunnelContactsComponent } from './_components/_funnels/create-funnel-contacts/create-funnel-contacts.component';
+import { CreateFunnelSalesComponent } from './_components/_funnels/create-funnel-sales/create-funnel-sales.component';
+import { CreateFunnelSettingsComponent } from './_components/_funnels/create-funnel-settings/create-funnel-settings.component';
+import { FunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/funnel-checkout.component';
+import { FunnelWizardNavComponent } from './_components/_funnels/funnel-wizard-nav/funnel-wizard-nav.component';
+// funnels
+// crm
+import { CrmAutomationComponent } from './_components/_crm/automation/automation.component';
+import { CrmAutomationBuilderComponent } from './_components/_crm/automation-builder/automation-builder.component';
+import { CrmCampaignBuilderComponent } from './_components/_crm/campaign-builder/campaign-builder.component';
+import { CrmCampaignsComponent } from './_components/_crm/campaigns/campaigns.component';
+import { CrmContactComponent } from './_components/_crm/contact/contact.component';
+import { CrmContactsComponent } from './_components/_crm/contacts/contacts.component';
+import { CrmComponent } from './_components/_crm/crm/crm.component';
+import { CrmFieldsComponent } from './_components/_crm/fields/fields.component';
+import { CrmFormBuilderComponent } from './_components/_crm/form-builder/form-builder.component';
+import { CrmFormFetchComponent } from './_components/_crm/form-fetch/form-fetch.component';
+import { CrmFormsComponent } from './_components/_crm/forms/forms.component';
+import { CrmListsComponent } from './_components/_crm/lists/lists.component';
+import { CrmReportsComponent } from './_components/_crm/reports/reports.component';
+import { CrmSettingsComponent } from './_components/_crm/settings/settings.component';
+import { CrmSmtpComponent } from './_components/_crm/smtp/smtp.component';
+import { CrmTagsComponent } from './_components/_crm/tags/tags.component';
+// crm
+// membership
+import { MembershipCoursesComponent } from './_components/_membership/courses/courses.component';
+import { MembershipModulesComponent } from './_components/_membership/modules/modules.component';
+import { MembershipLessonComponent } from './_components/_membership/lesson/lesson.component';
+import { MembershipComponent } from './_components/_membership/membership/membership.component';
+import { MembershipProductComponent } from './_components/_membership/product/product.component';
+import { MembershipOffersComponent } from './_components/_membership/offers/offers.component';
+import { MembershipCouponsComponent } from './_components/_membership/coupons/membership-coupons.component';
+import { MembershipPaymentComponent } from './_components/_membership/payment/payment.component';
+import { MembershipMembersComponent } from './_components/_membership/members/members.component';
+import { MembershipTagsComponent } from './_components/_membership/tags/tags.component';
+import { MembershipMarketplaceComponent } from './_components/_membership/marketplace/marketplace.component';
+// theme
 import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
 import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
 import { CourseUserModulesComponent } from './course-user/modules/modules.component';
@@ -78,48 +89,64 @@ import { CourseUserModulesPostComponent } from './course-user/modules-post/modul
 import { CourseUserCourseLoginComponent } from './course-user/course-login/course-login.component';
 import { CourseUserCourseHeaderComponent } from './course-user/course-header/course-header.component';
 import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
-import { DashboardNewComponent } from './dashboard-new/dashboard-new.component';
-import { ComingSoonComponent } from './coming-soon/coming-soon.component';
-import { FunnelCheckoutComponent } from './funnel-checkout/funnel-checkout.component';
-import { AllWebsitesComponent } from './all-websites/all-websites.component';
-import { FormFieldsComponent } from './form-fields/form-fields.component';
+// theme
+// membership
+// affiliate
+import { AffiliatesComponent } from './_components/_affiliate/affiliates/affiliates.component';
+import { AffiliateUsersComponent } from './_components/_affiliate/users/users.component';
+import { AffiliateCommissionComponent } from './_components/_affiliate/commission/commission.component';
+import { AffiliateTransactionsComponent } from './_components/_affiliate/transactions/transactions.component';
+import { AffiliateShareComponent } from './_components/_affiliate/share/share.component';
+import { AffiliateAnnouncementsComponent } from './_components/_affiliate/announcements/announcements.component';
+import { AffiliateExportsComponent } from './_components/_affiliate/exports/exports.component';
+import { AffiliateSettingsComponent } from './_components/_affiliate/settings/settings.component';
+// affiliate
+// heatmap
+import { HeatmapsComponent } from './_components/_heatmap/heatmaps/heatmaps.component';
+import { HeatmapsRecordingsComponent } from './_components/_heatmap/recordings/recordings.component';
+// heatmap
+// sales
+import { SalesComponent } from './_components/_sales/sales/sales.component';
+import { PaymentComponent } from './_components/_sales/payment/payment.component';
+import { PaymentIntegrationsComponent } from './_components/_sales/payment-integrations/payment-integrations.component';
+// sales
 
-import { CrmContactViewComponent } from './crm-contact-view/crm-contact-view.component';
-import { CrmNewCampaignComponent } from './crm-new-campaign/crm-new-campaign.component';
-import { CrmSmtpComponent } from './crm-smtp/crm-smtp.component';
-import { CrmAutomationComponent } from './crm-automation/crm-automation.component';
-import { CrmAutomationBuilderComponent } from './crm-automation-builder/crm-automation-builder.component';
-
-import { SalesComponent } from './sales/sales.component';
-import { PaymentIntegrationsComponent } from './payment-integrations/payment-integrations.component';
 const routes: Routes = [
+
+  // auth
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
-  { path: 'forget', component: ForgetPasswordComponent },
+  { path: 'forget', component: ForgotPasswordComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  
+  // auth
 
   // website 
+
   {path: 'websites', component: WebsiteComponent,
     children: [
       // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
-      {path: '', component: AllWebsitesComponent, canActivate: [AuthGuard]},
+      {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
       {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
-      {path:'navigation', component: NavigationComponent, canActivate: [AuthGuard]},
+      {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
       {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
       {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
 
+  // website 
+
   // funnels
+
   { path: 'funnels', component: FunnelComponent,
   children: [
-    { path: '', component: AllFunnelsComponent, canActivate: [AuthGuard] },
-    // { path: ':uniqueid', component: AllFunnelsComponent, canActivate: [AuthGuard] },
+    { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
     { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
     { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
     { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
@@ -135,6 +162,8 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
 
+  // funnels
+  
   // sales 
   { path: 'sales', component: SalesComponent, 
   children: [
@@ -149,41 +178,14 @@ const routes: Routes = [
  
   { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
-  
-  // Coming Soon links==>  ComingSoonComponent
-  
-  { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
-  { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  // builder
 
-  { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
-
-  // { path: 'crm', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-campaigns', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-contacts', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-lists', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-tags', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-reports', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  // { path: 'crm-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
-
-  { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-commission', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-transactions', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-share', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-announcements', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-exports', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'affiliates-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
-  { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
-
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-
-  // builder routes
   { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
-  { path: 'builder/form/:id', component: FormBuilderComponent, canActivate: [AuthGuard] },
+  { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  
+  // builder
   
   // User Course
   { path: 'course/dashboard', component: CourseUserDashboardComponent},
@@ -193,29 +195,41 @@ const routes: Routes = [
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
-  { path: 'dashboard-new', component: DashboardNewComponent},
-  
   { path: 'checkout/:id', component: FunnelCheckoutComponent},
-  
 
+  // crm
 
-  // Coming Soon Features ==>
+  { path: 'fetch-form/:user_id/:form_id', component: CrmFormFetchComponent},
 
-  // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-  // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
-  // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+  { path: 'crm', component: CrmComponent, 
+  children:[
+    { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
+    { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
+    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
+    { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
+    { path: 'contact/:id', component: CrmContactComponent, canActivate: [AuthGuard] },
+    { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
+    { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+    { path: 'fields', component: CrmFieldsComponent, canActivate: [AuthGuard] },
+    { path: 'forms', component: CrmFormsComponent, canActivate: [AuthGuard] },
+    { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
+    { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
+    { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
+    { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
+  ],
+  canActivate: [AuthGuard] },
 
+  // crm
 
-  // { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
-
-  // Membership
+  // membership
 
   // { path: 'membership', component: MembershipComponent,
   //   children:[
-  //     { path: '', component: CoursesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id', component: ModulesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: LessonComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: LessonComponent, canActivate: [AuthGuard] },
+  //     { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
   //     { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
   //     { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
   //     { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
@@ -226,29 +240,40 @@ const routes: Routes = [
   // ],
   //  canActivate: [AuthGuard] },
 
-  // crm
+  // membership
 
-  { path: 'fetch-form/:user_id/:form_id', component: FormFetchComponent},
+      // Coming Soon links==>  ComingSoonComponent
+  
+    // { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  
+    // { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
+  
+    // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+  
+    // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-commission', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-transactions', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-share', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-announcements', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-exports', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates-settings', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
 
-  { path: 'crm', component: CrmComponent, 
-  children:[
-    { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-    { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
-    { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
-    { path: 'newcampaign/:uniqueid', component: CrmNewCampaignComponent, canActivate: [AuthGuard] },
-    { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-    { path: 'contact/view/:id', component: CrmContactViewComponent, canActivate: [AuthGuard] },
-    { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
-    // { path: 'contacts/view/:uniqueid', component: CrmContactsViewComponent, canActivate: [AuthGuard] },
-    { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-    { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-    { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
-    { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-    { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-    { path: 'forms', component: FormsComponent, canActivate: [AuthGuard] },
-    { path: 'fields', component: FormFieldsComponent, canActivate: [AuthGuard] },
-  ],
-  canActivate: [AuthGuard] },
+    // Coming Soon Features ==>
+
+  // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
+  // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+  // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
+
+
+  // { path: 'strategies', component: StrategiesComponent, canActivate: [AuthGuard] },
+
+
+  // affiliate
+
   // { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-users', component: AffiliateUsersComponent, canActivate: [AuthGuard] },
   // { path: 'affiliates-commission', component: AffiliateCommissionComponent, canActivate: [AuthGuard] },
@@ -259,6 +284,7 @@ const routes: Routes = [
   // { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
   // { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
 
+  // affiliate
 
 
   // page not found
@@ -275,7 +301,7 @@ export const RoutingComponents =
     FeedbackFormComponent,
     LoginComponent, 
     RegisterComponent, 
-    ForgetPasswordComponent,
+    ForgotPasswordComponent,
     DashboardComponent, 
     FunnelComponent,
     FunnelArchiveComponent,
@@ -284,7 +310,7 @@ export const RoutingComponents =
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
-    AllFunnelsComponent,
+    FunnelsComponent,
     BuildFunnelComponent,
     CreateFunnelComponent,
     CreateFunnelStatsComponent,
@@ -297,9 +323,9 @@ export const RoutingComponents =
     BulderWireframeComponent, 
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
-    CoursesComponent,
-    ModulesComponent,
-    LessonComponent,
+    MembershipCoursesComponent,
+    MembershipModulesComponent,
+    MembershipLessonComponent,
     MembershipComponent,
     MembershipProductComponent,
     MembershipOffersComponent,
@@ -308,19 +334,19 @@ export const RoutingComponents =
     MembershipMembersComponent,
     MembershipTagsComponent,
     MembershipMarketplaceComponent,
-    FormsComponent,
-    FormFetchComponent,
+    CrmFormsComponent,
+    CrmFormFetchComponent,
     DomainComponent,
     PaymentComponent,
     CrmComponent,
     CrmCampaignsComponent,
     CrmContactsComponent,
-    CrmContactViewComponent,
+    CrmContactComponent,
     CrmListsComponent,
     CrmTagsComponent,
     CrmReportsComponent,
     CrmSettingsComponent,
-    CrmNewCampaignComponent,
+    CrmCampaignBuilderComponent,
     CrmSmtpComponent,
     CrmAutomationComponent,
     CrmAutomationBuilderComponent,
@@ -339,9 +365,9 @@ export const RoutingComponents =
     WebsiteMarketplaceComponent,
     WebsiteHeadersComponent,
     WebsiteFootersComponent,
-    NavigationComponent,
+    WebsiteNavigationComponent,
     IntegrationsComponent,
-    FormBuilderComponent,
+    CrmFormBuilderComponent,
     BuilderTopbarComponent,
     ImageComponent,
     CourseUserDashboardComponent,
@@ -355,8 +381,8 @@ export const RoutingComponents =
     CourseUserCourseForgotpassComponent,
     ComingSoonComponent,
     FunnelCheckoutComponent,
-    AllWebsitesComponent,
-    FormFieldsComponent,
+    WebsitesComponent,
+    CrmFieldsComponent,
     SalesComponent,
     PaymentIntegrationsComponent,
   ];
