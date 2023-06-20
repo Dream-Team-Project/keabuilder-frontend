@@ -72,7 +72,7 @@ export class GeneralService {
     toolbar:
       'undo redo | formatselect fontselect fontsizeselect | bold italic underline strikethrough link blockquote | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | code',
     content_css: [
-      // '../builder/material.component.css',
+      // '../../_components/material.component.css',
       // '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
       // '//www.tinymce.com/css/codepen.min.css',
     ],
@@ -178,14 +178,6 @@ export class GeneralService {
     })
   }
 
-  fetchForms() {
-    return new Promise<any>((resolve, reject) => {
-      // this._form.fetchforms().subscribe((resp:any)=>{
-      //   resolve(resp.data);
-      // })
-    })
-  }
-
   fetchHeaders() {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchheaders().subscribe((resp:any)=>{
@@ -197,6 +189,14 @@ export class GeneralService {
   fetchFooters() {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchfooters().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
+  fetchForms() {
+    return new Promise<any>((resolve, reject) => {
+      this._file.fetchforms().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
