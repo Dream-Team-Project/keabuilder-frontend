@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef, ViewConta
 import { GeneralService } from '../_services/_builder/general.service';
 import { ImageService } from '../_services/image.service';
 import { StyleService } from '../_services/_builder/style.service';
-import { FormService } from '../_services/_builder/form.service';
+import { FormService } from '../_services/_crm/form.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';

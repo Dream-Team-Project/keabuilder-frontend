@@ -1,14 +1,3 @@
-<!-- dialog for duplicate tag on add tag button -->
-<!-- <ng-template #dialog_tag>
-  <h1 mat-dialog-title class="kb-danger">Alert Message</h1>
-  <div mat-dialog-content>
-    this tag Name already exist ?
-  </div>
-  <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-info">OK</button>
-  </div>
-</ng-template> -->
-<!-- dialog for delete tag  -->
 <ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete Tag</h1>
   <div mat-dialog-content>
@@ -17,13 +6,7 @@
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'">No</button>
-    <button
-      mat-button
-      mat-dialog-close
-      cdkFocusInitial
-      class="text-danger"
-      (click)="deletetag(tag.id)"
-    >
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletetag(tag.id)">
       Yes
     </button>
   </div>
@@ -34,24 +17,13 @@
   <div mat-dialog-content>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Tag Name</mat-label>
-      <input
-        type="text"
-        matInput
-        [(ngModel)]="tag.tag_name"
-        placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
-        required
-      />
+      <input type="text" matInput [(ngModel)]="tag.tag_name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+        required />
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-    <button
-      mat-button
-      mat-dialog-close
-      (click)="tag.uniqueid ? updatetag() : addtag()"
-      cdkFocusInitial
-      color="primary"
-    >
+    <button mat-button mat-dialog-close (click)="tag.uniqueid ? updatetag() : addtag()" cdkFocusInitial color="primary">
       <span *ngIf="!tag.uniqueid">Add</span>
       <span *ngIf="tag.uniqueid">Update</span>
     </button>
@@ -63,25 +35,13 @@
   <div class="row">
     <mat-form-field class="col-md-6" appearance="fill">
       <mat-label>Search Tags...</mat-label>
-      <input
-        matInput
-        type="text"
-        class="form-control-search"
-        id="offer-search"
-        #searchInp
-        (input)="searchTags(searchInp, filterInp)"
-        placeholder="Search Tags..."
-      />
+      <input matInput type="text" class="form-control-search" id="offer-search" #searchInp
+        (input)="searchTags(searchInp, filterInp)" placeholder="Search Tags..." />
       <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
     <mat-form-field class="col-md-2" appearance="fill">
       <mat-label>Filter by:</mat-label>
-      <mat-select
-        #filterInp
-        name="kbfilter"
-        value="created_at DESC"
-        (valueChange)="searchTags(searchInp, filterInp)"
-      >
+      <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchTags(searchInp, filterInp)">
         <mat-option [value]="'tag_name ASC'">ASC By Name</mat-option>
         <mat-option [value]="'tag_name DESC'">DESC By Name</mat-option>
         <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -91,19 +51,14 @@
       </mat-select>
     </mat-form-field>
     <div class="col-md-4 text-right mt-2">
-      <button
-        mat-raised-button
-        (click)="openDialog(adddialog, tagObj)"
-        color="primary"
-        class="mr-2"
-      >
-        <i class="fa fa-tags" aria-hidden="true"></i> Add a tag
+      <button mat-raised-button (click)="openDialog(adddialog, tagObj)" color="primary" class="mr-2">
+        Add Tag <i class="fas fa-plus"></i>
       </button>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12 d-flex">
-      <table class="table kb-table col-md-8">
+    <div class="col-md-8">
+      <table class="table kb-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -121,46 +76,31 @@
             <td>{{ tag.created_at | date : "medium" }}</td>
             <td>
               <span class="d-flex">
-                <i
-                  mat-ripple
-                  matTooltip="Edit"
-                  matTooltipPosition="above"
-                  class="fa fa-pencil px-4 kb-table-action-icon rounded"
-                  (click)="openDialog(adddialog, tag)"
-                ></i>
-                <!-- <i mat-ripple matTooltip="Copy" matTooltipPosition="above" class="fa fa-copy px-4 kb-table-action-icon rounded" (click)="copyList(tag.tag_name)"></i> -->
-                <i
-                  mat-ripple
-                  matTooltip="Delete"
-                  matTooltipPosition="above"
-                  (click)="openDialog(deldialog, tag)"
-                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"
-                ></i>
+                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(adddialog, tag)"
+                  class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>
+                <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, tag)"
+                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
               </span>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="col-md-4">
-        <div class="ml-2 fntlitag">
-          <span>Recent Tags</span>
-          <div class="border border-3 fntli-box">
-            <ul class="d-inline-block fntli">
-              <li class="d-inline fntilitem" *ngFor="let tag of recenttags">
-                {{ tag }}
-              </li>
-            </ul>
-          </div>
+    </div>
+    <div class="col-md-4">
+      <div class="kb-tag-prgrs">
+        <h5>Recent Tags</h5>
+        <div class="kb-tag-prgrs-list p-2">
+            <span *ngFor="let rtag of recenttags">
+              {{ rtag }}
+            </span>
         </div>
-        <div class="ml-2 mt-5 fntlitag">
-          <span>Popular Tags</span>
-          <div class="border border-3 fntli-box">
-            <ul class="d-inline-block fntli">
-              <li class="d-inline fntilitem" *ngFor="let tag of populartags">
-                {{ tag }}
-              </li>
-            </ul>
-          </div>
+      </div>
+      <div class="kb-tag-prgrs mt-5">
+        <h5>Popular Tags</h5>
+        <div class="kb-tag-prgrs-list p-2">
+            <span *ngFor="let ptag of populartags">
+              {{ ptag }}
+            </span>
         </div>
       </div>
     </div>

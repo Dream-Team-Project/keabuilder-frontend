@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FileUploadService } from '../file-upload.service';
+import { FormService } from '../_crm/form.service';
 import { CrmListService } from '../_crmservice/crm_list.service';
 import { CrmTagsService } from '../_crmservice/crm-tags.service';
 
@@ -62,11 +62,11 @@ export class AutomationService {
   lists: any = [];
   tags: any = [];
 
-  constructor(private _file: FileUploadService,
+  constructor(private _form: FormService,
     private _crm_list: CrmListService,
     private _crm_tag: CrmTagsService) {
     this.actionsList = this.actionsList.concat(this.workflowList);
-    this._file.fetchforms().subscribe((resp: any) => {
+    this._form.fetchforms().subscribe((resp: any) => {
       this.forms = resp?.data;
     });
     this._crm_list.getAllcrmlists().subscribe((resp: any) => {

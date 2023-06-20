@@ -2,48 +2,30 @@
 <ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete List</h1>
   <div mat-dialog-content>
-    Would you like to delete this List?
-    <!-- Would you like to delete <span class="text-danger">{{this.delcontact.name}}</span> Contact? -->
+    Would you like to delete <span class="text-danger">{{list.list_name}}</span> List?
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'">No</button>
-    <button
-      mat-button
-      mat-dialog-close
-      cdkFocusInitial
-      class="text-danger"
-      (click)="deletelist(this.list.id)"
-    >
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteList(list.id)">
       Yes
     </button>
   </div>
 </ng-template>
 <!-- dialog for new  entry on add  Or update list button -->
 <ng-template #adddialog>
-  <h1 mat-dialog-title>Add List</h1>
+  <h1 mat-dialog-title>{{list.id ? 'Update' : 'Add'}} List</h1>
   <div mat-dialog-content>
-    <mat-form-field class="kb-full-width" appearance="fill">
+    <mat-error *ngIf="hasError">{{hasError}}</mat-error>
+    <mat-form-field appearance="fill" [class.mat-form-field-invalid]="hasError">
       <mat-label>List Name</mat-label>
-      <input
-        type="text"
-        matInput
-        [(ngModel)]="list.list_name"
-        placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
-        required
-      />
+      <input type="text" matInput [(ngModel)]="list.list_name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+        required>
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-    <button
-      mat-button
-      mat-dialog-close
-      (click)="list.uniqueid ? updatelist() : addlist()"
-      cdkFocusInitial
-      color="primary"
-    >
-      <span *ngIf="!list.uniqueid">Add</span>
-      <span *ngIf="list.uniqueid">Update</span>
+    <button mat-button mat-dialog-close (click)="setList(list)" cdkFocusInitial color="primary">
+      {{list.id ? 'Update' : 'Add'}}
     </button>
   </div>
 </ng-template>
@@ -51,26 +33,14 @@
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
     <mat-form-field class="col-md-6" appearance="fill">
-      <mat-label>Search Lists...</mat-label>
-      <input
-        matInput
-        type="text"
-        #searchInp
-        (input)="searchLists(searchInp, filterInp)"
-        class="form-control-search"
-        id="offer-search"
-        placeholder="Search Lists..."
-      />
+      <mat-label>Search Lists</mat-label>
+      <input matInput type="text" #searchInp (input)="searchLists(searchInp, filterInp)" class="form-control-search"
+        id="offer-search" placeholder="Search Lists" />
       <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
     <mat-form-field class="col-md-2" appearance="fill">
       <mat-label>Filter by:</mat-label>
-      <mat-select
-        #filterInp
-        name="kbfilter"
-        value="created_at DESC"
-        (valueChange)="searchLists(searchInp, filterInp)"
-      >
+      <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchLists(searchInp, filterInp)">
         <mat-option [value]="'list_name ASC'">ASC By Name</mat-option>
         <mat-option [value]="'list_name DESC'">DESC By Name</mat-option>
         <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -80,13 +50,8 @@
       </mat-select>
     </mat-form-field>
     <div class="col-md-4 text-right mt-2">
-      <button
-        mat-raised-button
-        (click)="openDialog(adddialog, listObj)"
-        color="primary"
-        class="mr-2"
-      >
-        <i class="fa fa-list mr-1" aria-hidden="true"></i> Add a list
+      <button mat-raised-button (click)="openDialog(adddialog, listObj)" color="primary" class="mr-2">Add List <i
+          class="fas fa-plus"></i>
       </button>
     </div>
   </div>
@@ -104,35 +69,19 @@
         <tbody>
           <tr *ngFor="let list of lists; index as i">
             <td>
-              <span class="kb-table mr-1"
-                >{{ list.list_name | titlecase }}
+              <span class="kb-table mr-1">{{ list.list_name | titlecase }}
               </span>
             </td>
             <td>{{ list.activecontacts }}</td>
             <td>{{ list.created_at | date : "medium" }}</td>
             <td>
               <span class="d-flex">
-                <i
-                  mat-ripple
-                  matTooltip="Edit"
-                  matTooltipPosition="above"
-                  class="fa fa-pencil px-4 kb-table-action-icon rounded"
-                  (click)="openDialog(adddialog, list)"
-                ></i>
-                <i
-                  mat-ripple
-                  matTooltip="Copy"
-                  matTooltipPosition="above"
-                  class="fa fa-copy px-4 kb-table-action-icon rounded"
-                  (click)="copyList(list.list_name)"
-                ></i>
-                <i
-                  mat-ripple
-                  matTooltip="Delete"
-                  matTooltipPosition="above"
-                  (click)="openDialog(deldialog, list)"
-                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"
-                ></i>
+                <i mat-ripple matTooltip="Edit" matTooltipPosition="above"
+                  class="fa fa-pencil px-4 kb-table-action-icon rounded" (click)="openDialog(adddialog, list)"></i>
+                <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"
+                  class="fa fa-copy px-4 kb-table-action-icon rounded" (click)="copyList(list.list_name)"></i>
+                <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, list)"
+                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
               </span>
             </td>
           </tr>

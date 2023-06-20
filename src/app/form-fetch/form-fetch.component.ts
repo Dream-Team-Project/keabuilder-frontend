@@ -1,6 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { FormService } from '../_services/_builder/form.service';
+import { FormService } from '../_services/_crm/form.service';
 import { StyleService } from '../_services/_builder/style.service';
 import { ImageService } from '../_services/image.service';
 import { ContactService } from '../_services/_crm/contact.service';

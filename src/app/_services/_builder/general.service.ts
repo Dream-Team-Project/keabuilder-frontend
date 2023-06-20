@@ -8,7 +8,6 @@ import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
 import { UserService } from '../user.service';
-import { FormControl, Validators } from '@angular/forms';
 import { NgxCaptureService } from 'ngx-capture';
 import { BehaviorSubject } from 'rxjs';
 
@@ -181,9 +180,9 @@ export class GeneralService {
 
   fetchForms() {
     return new Promise<any>((resolve, reject) => {
-      this._file.fetchforms().subscribe((resp:any)=>{
-        resolve(resp.data);
-      })
+      // this._form.fetchforms().subscribe((resp:any)=>{
+      //   resolve(resp.data);
+      // })
     })
   }
 

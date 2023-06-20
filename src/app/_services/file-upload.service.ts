@@ -60,23 +60,6 @@ export class FileUploadService {
   updatefooterApi = "./api/updatefooter";
   deletefooterApi = "./api/deletefooter";
   // footers
-  // forms
-  searchformqueryApi = './api/searchformquery';
-  getformApi = "./api/getform";
-  allformsApi = "./api/allforms";
-  saveformApi = "./api/saveform";
-  updateformApi = "./api/updateform";
-  duplicateformApi = './api/duplicateform';
-  deleteformApi = "./api/deleteform";
-  // forms
-  // form submissions
-  searchformsubmApi = './api/searchformsubms';
-  allformssubmApi = "./api/allformssubm";
-  singleformsubm = "./api/singleformsubm";
-  saveformsubmApi = "./api/saveformsubm";
-  updateformsubmApi = "./api/updateformsubm";
-  deleteformsubmApi = "./api/deleteformsubm";
-  // form submissions
   // website
   createwebsitefolderApi = "./api/create-website";
   renamewebsitefolderApi = "./api/rename-website";
@@ -100,89 +83,11 @@ export class FileUploadService {
   fileExistApi = "./api/file-exist";
   // file
 
-
- 
-
   uuid:any = '';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
-
-  // forms
-
-  fetchforms():Observable<any> {
-    return this.http.get(this.allformsApi+'/'+this.uuid);
-  }
-
-  getform(uniqueid:any):Observable<any> {
-    return this.http.get(this.getformApi+'/'+this.uuid+'/'+uniqueid);
-  }
-
-  saveform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.saveformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  searchformquery(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.searchformqueryApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  duplicateform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.duplicateformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  updateform(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.updateformApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  deleteform(id:any):Observable<any> {
-    return this.http.delete(this.deleteformApi + '/' + id)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  // form
-
-  // form submissions
-
-  searchformsubm(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.searchformsubmApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  fetchforms_subm():Observable<any> {
-    return this.http.get(this.allformssubmApi+'/'+this.uuid);
-  }
-
-  singleform_subm(uniqueid:any):Observable<any> {
-    return this.http.get(this.singleformsubm+'/'+this.uuid+'/'+uniqueid);
-  }
-
-  saveform_subm(obj:any):Observable<any> {
-    return this.http.post(this.saveformsubmApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  updateform_subm(obj:any):Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post(this.updateformsubmApi, obj)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  deleteform_subm(id:any):Observable<any> {
-    return this.http.delete(this.deleteformsubmApi + '/' + id)
-    .pipe(catchError(this.errorHandler));
-  }
-
-  // form submissions
 
   // user
 
@@ -501,7 +406,7 @@ export class FileUploadService {
 
   // document
   
-  
+  // error handler
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

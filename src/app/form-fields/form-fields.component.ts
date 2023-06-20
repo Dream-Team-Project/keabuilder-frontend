@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormFieldsService } from '../_services/_crmservice/form-fields.service';
+import { FormFieldsService } from '../_services/_crm/field.service';
 import { GeneralService } from '../_services/_builder/general.service';
 
 @Component({
