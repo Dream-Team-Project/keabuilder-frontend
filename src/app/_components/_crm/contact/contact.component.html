@@ -21,7 +21,7 @@
               </div>
             </div>
           </div>
-          <div class="row kb-contact-details pt-4 mt-3 mx-0">
+          <div class="row kb-contact-details py-3 mx-0">
             <div class="col-md-8">
               <div class="kb-contact-details-card rounded">
                 <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
@@ -38,7 +38,7 @@
                       <td class="col-4">
                         <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
                       </td>
-                      <td class="col-7" (dblclick)="cf.edit = true">
+                      <td class="col-7 px-0" (dblclick)="cf.edit = true">
                         <span *ngIf="!cf.edit else inp">{{cf.value}}</span>
                         <ng-template #inp>
                           <input type="text" (keydown.enter)="verifyField(cf, i)" [(ngModel)]="cf.value" [id]="cf.name + '-' + i" [name]="cf.name + '-' + i" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
@@ -46,8 +46,8 @@
                           <mat-error *ngIf="cf.uniqueErr">Email address already exists</mat-error>
                         </ng-template>
                       </td>
-                      <td class="col-1 text-center p-0 pr-1">
-                        <span class="kb-contact-field-action d-flex">
+                      <td class="col-1 text-center p-0">
+                        <span class="kb-contact-field-action d-flex px-1">
                           <i *ngIf="!cf.edit else edit" mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil hideaction"></i>
                           <ng-template #edit>
                               <i mat-ripple (click)="undoField(cf, i)" matTooltip="Undo" matTooltipPosition="above" class="fa-solid fa-rotate-left"></i>

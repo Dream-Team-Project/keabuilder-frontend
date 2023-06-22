@@ -37,7 +37,7 @@ export class CrmContactComponent implements OnInit {
       this._contactService.singlecontact(this.contact.id).subscribe((resp) => {
           this.contact = resp?.data[0];
           this.contact.icon = this.contactIcon(this.contact);
-          if(this.contact.fieldans) this.contactFieldJSON = this._general.decodeJSON(this.contact.fieldans);
+          if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);
           this.fetchFields();
         }
       );
@@ -92,7 +92,7 @@ export class CrmContactComponent implements OnInit {
   updateContact(cf:any, i:number) {
     var contact = JSON.parse(JSON.stringify(this.contact));
     this.contactFieldJSON[i].value = cf.value;
-    contact.fieldans = this._general.encodeJSON(this.contactFieldJSON);
+    contact.fieldans = JSON.stringify(this.contactFieldJSON);
     if(cf.default_field) contact[cf.name.replaceAll('-', '')] = cf.value;
     this._contactService.updatecontact(contact).subscribe(resp => {
       var msg;

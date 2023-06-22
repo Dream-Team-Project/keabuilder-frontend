@@ -88,7 +88,7 @@ export class CrmFormFetchComponent implements OnInit {
           if(obj.default_field) this.contact[obj.name.replaceAll('-', '')] = obj.value;
           return {id: obj.id, value: obj.value}
         });
-        this.contact.fieldans = this._general.encodeJSON(formAnsJSON);
+        this.contact.fieldans = JSON.stringify(formAnsJSON);
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
             this.emailSent().then(resp=>{
