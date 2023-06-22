@@ -48,10 +48,10 @@
                       </td>
                       <td class="col-1 text-center p-0 pr-1">
                         <span class="kb-contact-field-action d-flex">
-                          <i *ngIf="!cf.edit else edit" mat-ripple (click)="cf.edit = true" class="fa fa-pencil hideaction"></i>
+                          <i *ngIf="!cf.edit else edit" mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil hideaction"></i>
                           <ng-template #edit>
-                              <i mat-ripple (click)="undoField(cf, i)"class="fa-solid fa-rotate-left"></i>
-                              <i mat-ripple (click)="verifyField(cf, i)" class="fa fa-check"></i>
+                              <i mat-ripple (click)="undoField(cf, i)" matTooltip="Undo" matTooltipPosition="above" class="fa-solid fa-rotate-left"></i>
+                              <i mat-ripple (click)="verifyField(cf, i)" matTooltip="Save" matTooltipPosition="above" class="fa fa-check"></i>
                           </ng-template>
                         </span>
                       </td>           

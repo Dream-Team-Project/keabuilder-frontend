@@ -70,6 +70,11 @@
     align-items: center;
 }
 
+.kb-contact-field-action i:hover {
+    background-color: rgb(216 200 152 / 20%);
+    color: var(--primary-color);
+}
+
 .kb-contact-field-inp {
     border-radius: 4px;
     width: 100%;

@@ -110,11 +110,11 @@
             <td>
               <span class="d-flex">
                 <i mat-ripple matTooltip="Edit" matTooltipPosition="above"
-                  class="fa fa-pencil px-4 kb-table-action-icon rounded" (click)="openDialog(adddialog, list)"></i>
+                  class="fa fa-pencil kb-table-action-icon" (click)="openDialog(adddialog, list)"></i>
                 <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"
-                  class="fa fa-copy px-4 kb-table-action-icon rounded" (click)="copyList(list.list_name)"></i>
+                  class="fa fa-copy kb-table-action-icon" (click)="copyList(list.list_name)"></i>
                 <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, list)"
-                  class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
+                  class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
               </span>
             </td>
           </tr>

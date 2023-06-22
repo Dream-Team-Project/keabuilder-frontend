@@ -128,8 +128,8 @@
                         <td>
                             <span class="d-flex"> 
                                 <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
-                                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil px-3 kb-table-action-icon rounded"></i>
-                                <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del rounded"></i>
+                                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil kb-table-action-icon"></i>
+                                <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
                             </span>    
                         </td>                        
                     </tr>
