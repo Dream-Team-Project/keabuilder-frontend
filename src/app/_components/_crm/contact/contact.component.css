@@ -104,6 +104,7 @@
 
 .kb-contact-search-inp .icon-remove {
     cursor: pointer;
+    font-size: 16px;
     color: var(--kb-danger);
 }
 

@@ -95,7 +95,6 @@ export class CrmContactsComponent implements OnInit {
       this._listService.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
-          console.log(this.lists)
           resolve(true);
         },
         (error) => {
@@ -174,7 +173,7 @@ export class CrmContactsComponent implements OnInit {
     var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
     var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
     if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
-    return str;
+    return str.toUpperCase();
   }
 
   isEmailValid(value:any) {
@@ -200,7 +199,6 @@ export class CrmContactsComponent implements OnInit {
             if(e==data.data.uniqueid) e=data.data.id;
             return e;
           })
-          // console.log(data.data)
           if(i=this.newtags.length-1)resolve(data.data);
         });
         i++;

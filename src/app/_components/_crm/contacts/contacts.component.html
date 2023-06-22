@@ -151,7 +151,7 @@
           <tbody>
             <tr *ngFor="let contact of contacts; index as i">
               <td [routerLink]="['/crm/contact/'+contact.id]" class="kb-td-link">
-                  <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
+                  <span class="kb-table-icon mr-1">{{contactIcon(contact)}}</span>
                   {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}
               </td>
               <td [routerLink]="['/crm/contact/'+contact.id]" class="kb-td-link"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
