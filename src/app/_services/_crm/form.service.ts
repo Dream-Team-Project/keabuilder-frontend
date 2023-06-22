@@ -167,7 +167,7 @@ export class FormService {
         this.form = resp.data[0];
         this.formField = [];
         var index = 0;
-        this.form.fields.split(',').forEach((fval:any)=>{
+        this.form.fields?.split(',').forEach((fval:any)=>{
           var tempfield:any;
           if(isNaN(fval)) tempfield = [this._general.decodeJSON(fval)];
           else tempfield = this.fields.filter((val:any)=> val.id == fval);

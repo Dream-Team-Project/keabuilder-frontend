@@ -67,10 +67,10 @@
                             [matChipInputFor]="listChipList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             class="kb-act-searchinp"
-                            [class.pt-2]="selectedLists.length != 0"
+                            [class.pt-2]="selectedLists?.length != 0"
                             matInput>
                         <mat-autocomplete autoActiveFirstOption #listAuto="matAutocomplete" (optionSelected)="addSelectedList($event, searchListInp)">
-                            <mat-option *ngFor="let option of filteredOptions?.lists" [value]="option" [disabled]="filteredTempIds.lists?.includes(option.id)">
+                            <mat-option *ngFor="let option of filteredOptions?.lists" [value]="option" [disabled]="filteredTempIds?.lists?.includes(option.id)">
                               {{option?.list_name}}
                             </mat-option>
                         </mat-autocomplete>
@@ -104,10 +104,10 @@
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             (matChipInputTokenEnd)="addtag($event)"
                             class="kb-act-searchinp"
-                            [class.pt-2]="selectedTags.length != 0"
+                            [class.pt-2]="selectedTags?.length != 0"
                             matInput>
                         <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" (optionSelected)="addSelectedTag($event, searchTagInp)">
-                            <mat-option *ngFor="let option of filteredOptions.tags" [value]="option" [disabled]="filteredTempIds.tags.includes(option.id)">
+                            <mat-option *ngFor="let option of filteredOptions?.tags" [value]="option" [disabled]="filteredTempIds?.tags?.includes(option.id)">
                               {{option.tag_name}}
                             </mat-option>
                         </mat-autocomplete>
