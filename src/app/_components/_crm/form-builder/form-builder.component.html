@@ -26,7 +26,7 @@
             </mat-error>
             <mat-form-field appearance="fill">
                 <mat-label>Name</mat-label>
-                <input matInput type="text" placeholder="form name" [formControl]="validate.name" [(ngModel)]="_form.form.name" minlength="3">
+                <input matInput type="text" placeholder="form name" [formControl]="validate.name" [(ngModel)]="_form.form.name" minlength="3" required>
             </mat-form-field>
             <mat-label class="kb-mat-label">Thank You Message
                 <i class="fa-regular fa-circle-question small ml-2" matTooltip="It will show only if redirection is off"
@@ -48,7 +48,7 @@
                         <mat-panel-description><i class="fa-solid fa-list-ul"></i></mat-panel-description>
                     </mat-expansion-panel-header>
                     <mat-form-field appearance="fill">
-                        <mat-label>Search Lists</mat-label>
+                        <mat-label>Subscribe to Lists</mat-label>
                         <mat-chip-list #listChipList aria-label="List selection">
                             <mat-chip
                                 *ngFor="let data of selectedLists, index as i"

@@ -26,16 +26,8 @@ export class CrmFormsComponent implements OnInit {
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
-  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
-  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
-  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
-  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
-  '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
   validate = {
-    name: new FormControl('',[Validators.required,Validators.minLength(3)]),
-    
+    name: new FormControl('',[Validators.required]),
   }
   forms:any[] = [];
   toggleview = true;
@@ -80,6 +72,9 @@ export class CrmFormsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchData();
+    setTimeout(() => {
+      this.shortwaiting = false;
+    }, 1000)
     
   }
 
@@ -93,10 +88,10 @@ export class CrmFormsComponent implements OnInit {
       }) 
     })
   }
+  
   fetchForms(){
     return new Promise((resolve) => {
     this._file.fetchforms().subscribe((resp:any)=>{
-      console.log(resp)
         this.adjustdata(resp.data);
         resolve(true);
       },
@@ -106,12 +101,12 @@ export class CrmFormsComponent implements OnInit {
     );
   });
   }
+
   fetchLists() {
     return new Promise((resolve) => {
       this._listService.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
-          console.log(this.lists)
           resolve(true);
         },
         (error) => {
@@ -135,8 +130,7 @@ export class CrmFormsComponent implements OnInit {
     });
   }
 
-  onformSubmit(): void {
-    console.log(this.form)
+  createForm(): void {
     if(!this.validate.name.invalid ){
       if(this.newtags.length>0){
         this.tagupdate().then((resp)=>{
@@ -149,22 +143,22 @@ export class CrmFormsComponent implements OnInit {
   }
 
   addform(){
-  this.form.lists=this.filteredTempIds.lists.toString();
-  this.form.tags=this.filteredTempIds.tags.toString();
-  this._file.saveform(this.form).subscribe({
-    next: data => {
-      var msg, err = data.success==0;
-      if(err){
-        msg = 'Server Error';
+    this.form.lists=this.filteredTempIds.lists.toString();
+    this.form.tags=this.filteredTempIds.tags.toString();
+    this._file.saveform(this.form).subscribe({
+      next: data => {
+        var msg, err = data.success==0;
+        if(err){
+          msg = 'Server Error';
+        }
+        else {
+          msg = 'Form has been successfully created!';
+          this._general.redirectToBuilder(data.uniqueid, 'form');
+        }
+        this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
       }
-      else {
-        msg = 'Form has been successfully created!';
-        this._general.redirectToBuilder(data.uniqueid, 'form');
-      }
-      this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
-    }
-  }); 
-}
+    }); 
+  }
 
   rename(data:any, inp:any){
     var newname = inp.value;
@@ -220,7 +214,10 @@ export class CrmFormsComponent implements OnInit {
 
   openDialog(templateRef: TemplateRef<any>, form:any ): void {
     this.delform = form;
-    this.dialog.open(templateRef);
+    var dialog  = this.dialog.open(templateRef);
+    dialog.afterClosed().subscribe((data:any) => {
+      this.validate.name.reset();
+    })
   }
 
   duplicateform(form:any){
@@ -281,8 +278,6 @@ export class CrmFormsComponent implements OnInit {
     this._general.setStorage('form_toggle',this.toggleview);
   }
 
-  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
-
   tagupdate() {
     return new Promise((resolve) => {
       let i=0;
@@ -293,7 +288,6 @@ export class CrmFormsComponent implements OnInit {
             return e;
           })
           if(i==this.newtags.length-1)resolve(data.data);
-         
         });
         i++;
       });
@@ -302,7 +296,7 @@ export class CrmFormsComponent implements OnInit {
 
    // start list actions
 
-   filterListData(event:any) {
+  filterListData(event:any) {
     var value = event ? event.target.value : '';
     this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
   }
@@ -361,5 +355,7 @@ export class CrmFormsComponent implements OnInit {
   }
 
   // end tag actions
+  
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
   
 }

@@ -34,7 +34,7 @@
                 </div>
                 <table class="table">
                   <tbody>
-                    <tr *ngFor="let cf of contact.fieldans | filter:searchField:'label'; index as i">
+                    <tr *ngFor="let cf of contactFields | filter:searchField:'label'; index as i">
                       <td class="col-5">
                         <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
                       </td>

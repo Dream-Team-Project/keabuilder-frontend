@@ -93,35 +93,31 @@ export class CrmFormBuilderComponent implements OnInit {
     private dialog: MatDialog,
     private captureService: NgxCaptureService,
     private _listService: ListService,
-    private _tagService: TagService,
-  ) { 
-   
-    route.paramMap.subscribe((params: ParamMap) => {
-      this._general.getAllWebPages();
-      this._general.getAllFunnels();
-      _general.target = {
-        id: params.get('id'),
-        type: 'form'
-      }
-      _general.loading.success = false;
-      _form.getForm(_general.target.id).then((e:any)=>{
-        console.log(e)
-        this._general.loading.success = true;
-        _form.formSessionArr = [];
-        _form.saveFormSession();
-        if(e.temp_lists.length>0)this.selectedLists=e.temp_lists;
-        if(e.listid.length>0)this.filteredTempIds.lists=e.listid;
-        if(e.temp_tags.length>0)this.selectedTags=e.temp_tags;
-        if(e.tagid.length>0)this.filteredTempIds.tags=e.tagid;
+    private _tagService: TagService) { 
+      route.paramMap.subscribe((params: ParamMap) => {
+        this._general.getAllWebPages();
+        this._general.getAllFunnels();
+        _general.target = {
+          id: params.get('id'),
+          type: 'form'
+        }
+        _general.loading.success = false;
+        _form.getForm(_general.target.id).then((e:any)=>{
+          this._general.loading.success = true;
+          _form.formSessionArr = [];
+          _form.saveFormSession();
+          this.selectedLists=e.temp_lists;
+          this.filteredTempIds.lists=e.listid;
+          this.selectedTags=e.temp_tags;
+          this.filteredTempIds.tags=e.tagid;
+        });
+        document.addEventListener('contextmenu', event => event.preventDefault());
       });
-      document.addEventListener('contextmenu', event => event.preventDefault());
-    });
-    this.fetchlists().then((resp)=>{
-      this.fetchTags().then((resp)=>{
-      }) 
-    });
-    
-  }
+      this.fetchlists().then((resp)=>{
+        this.fetchTags().then((resp)=>{
+        }) 
+      });
+    }
 
   @HostListener('document:keydown.control.s', ['$event'])  
   onKeydownHandler(event:KeyboardEvent) {
@@ -466,7 +462,6 @@ export class CrmFormBuilderComponent implements OnInit {
     this.contextMenu.openMenu();
   }
 
-  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
   tagupdate() {
     return new Promise((resolve) => {
@@ -491,6 +486,7 @@ export class CrmFormBuilderComponent implements OnInit {
     });
   }
 
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
  
   
 }

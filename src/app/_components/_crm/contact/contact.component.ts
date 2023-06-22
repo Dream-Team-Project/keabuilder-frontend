@@ -14,6 +14,7 @@ export class CrmContactComponent implements OnInit {
   
   contact:any = {};
   fields:Array<any> = [];
+  contactFields:Array<any> = [];
   searchField:string = '';
 
   constructor(
@@ -35,17 +36,17 @@ export class CrmContactComponent implements OnInit {
       this._contactService.singlecontact(this.contact.id).subscribe((resp) => {
           this.contact = resp?.data[0];
           this.contact.icon = this.contactIcon(this.contact);
-          this.contact.fieldans = this._general.decodeJSON(this.contact.fieldans);
-          if(this.contact.fieldans) this.fetchFields();
+          if(this.contact.fieldans) this.fetchFields(this.contact.fieldans);
         }
       );
   }
 
-  fetchFields() {
+  fetchFields(fieldAns:any) {
+    this.contactFields = this._general.decodeJSON(fieldAns);
     this._field.fetchfields().subscribe((resp:any)=>{
       if(resp?.data) {
         this.fields = resp.data;
-        this.contact.fieldans.forEach((cf:any)=>{
+        this.contactFields.forEach((cf:any)=>{
           for(let i = 0; i < this.fields.length - 1; i++) {
             var ff = this.fields[i];
             if(cf.id === ff.id) {
@@ -55,14 +56,6 @@ export class CrmContactComponent implements OnInit {
             }
           }
         })
-        // this.fields.forEach((ff:any)=>{
-        //   for(let i = 0; i < cfArr.length - 1; i++) {
-        //     if(cfArr[i].id === ff.id) {
-        //       ff.value = cfArr[i].value;
-        //       break;
-        //     }
-        //   }
-        // })
       }
     })
   }

@@ -67,6 +67,7 @@ export class CrmContactsComponent implements OnInit {
     if(data) this.contacts = data;
     this.fetching = false;
   }
+  
   fetchData(){
     this.fetchContacts().then((resp1:any)=>{
       this.fetchLists().then((resp2:any)=>{
@@ -135,29 +136,15 @@ export class CrmContactsComponent implements OnInit {
     if(this.contact.email && this.isEmailValid(this.contact.email)) {
       this.hasError = '';
       delete this.contact.error;
-      this._contactService.addcontact(this.contact).subscribe((resp) => {
-        if(resp.success) {
-          this.fetchContacts();
-          this._general.openSnackBar(false, 'Contact has been saved', 'OK', 'center', 'top');
-        }
-        else this.setError(resp.message);
-      })
-      console.log(this.contact);
-      if(this.newtags.length>0){
-        this.tagupdate().then((resp)=>{
-          this.addContactFunction();
-        })
-      }else{
-        this.addContactFunction();
-      }
-      
-     
+      if(this.newtags.length>0) this.tagupdate().then((resp)=>this.addContactFunction());
+      else this.addContactFunction();
     }
     else {
       let msg = this.contact.email ? 'Email is invalid' : 'Email should not be empty';
       this.setError(msg)
     }
   }
+
   addContactFunction(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();
