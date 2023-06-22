@@ -7,8 +7,8 @@ import { FormService } from 'src/app/_services/_crm/form.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { StyleService } from 'src/app/_services/_builder/style.service';
 import { ImageService } from 'src/app/_services/image.service';
-import { CrmListService } from 'src/app/_services/_crmservice/crm_list.service';
-import { CrmTagsService } from 'src/app/_services/_crmservice/crm-tags.service';
+import { ListService } from '../../../_services/_crm/list.service';
+import { TagService } from '../../../_services/_crm/tag.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -92,8 +92,8 @@ export class CrmFormBuilderComponent implements OnInit {
     public _image: ImageService,
     private dialog: MatDialog,
     private captureService: NgxCaptureService,
-    private _crmlistService: CrmListService,
-    private _crmtagService: CrmTagsService,
+    private _listService: ListService,
+    private _tagService: TagService,
   ) { 
    
     route.paramMap.subscribe((params: ParamMap) => {
@@ -104,19 +104,23 @@ export class CrmFormBuilderComponent implements OnInit {
         type: 'form'
       }
       _general.loading.success = false;
-      _form.getForm(_general.target.id).then(e=>{
+      _form.getForm(_general.target.id).then((e:any)=>{
+        console.log(e)
         this._general.loading.success = true;
         _form.formSessionArr = [];
         _form.saveFormSession();
+        if(e.temp_lists.length>0)this.selectedLists=e.temp_lists;
+        if(e.listid.length>0)this.filteredTempIds.lists=e.listid;
+        if(e.temp_tags.length>0)this.selectedTags=e.temp_tags;
+        if(e.tagid.length>0)this.filteredTempIds.tags=e.tagid;
       });
       document.addEventListener('contextmenu', event => event.preventDefault());
     });
-    // this.fetchlists().then((resp)=>{
-    //   if(resp) this.patchlistname();
-    // });
-    // this.fetchTags().then((resp)=>{
-    //   this.patchtagname();
-    // })
+    this.fetchlists().then((resp)=>{
+      this.fetchTags().then((resp)=>{
+      }) 
+    });
+    
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -137,7 +141,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   fetchlists(){
     return new Promise((resolve) => {
-      this._crmlistService.getAllcrmlists().subscribe((data:any)=>{
+      this._listService.fetchlists().subscribe((data:any)=>{
         this.lists=data.data;
         resolve(true);
       },
@@ -149,7 +153,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   fetchTags() {
     return new Promise((resolve) => {
-      this._crmtagService.getAllcrmtags().subscribe(
+      this._tagService.fetchtags().subscribe(
         (data) => {
           this.tags = data.data;
           resolve(true);
@@ -173,39 +177,53 @@ export class CrmFormBuilderComponent implements OnInit {
   }
 
   saveForm() {
-    this._form.form.lists=this.formlists.toString();
-    this._form.form.tags=this.formtags.toString();
-      this._general.saveDisabled = true;
-      this._form.updateForm().then((e:any)=>{
-        if(e.success == 1) {
-          this.tagupdate();
-          if(this._form.formField.length != 0) {
-            this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-              var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-              this._general._file.upload(file).subscribe(
-                (event: any) => {
-                  if (typeof (event) === 'object') {
-                    var msg =  'Form has been saved';
-                    this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-                    this._general.saveDisabled = false;
-                    this._form.formSaved = true;
-                  }
-                })
-            })
+    // console.log(this.newtags.length)
+    if(this.newtags.length>0){
+      this.tagupdate().then((resp:any)=>{
+        console.log("hello")
+        console.log(resp)
+      this.save();
+      });
+    }
+    else{
+      this.save();
+    }
+    
+    
+  }
+  save(){
+    this._form.form.lists=this.filteredTempIds.lists.toString();
+      this._form.form.tags=this.filteredTempIds.tags.toString();
+        this._general.saveDisabled = true;
+        this._form.updateForm().then((e:any)=>{
+          if(e.success == 1) {
+            if(this._form.formField.length != 0) {
+              this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+                var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
+                this._general._file.upload(file).subscribe(
+                  (event: any) => {
+                    if (typeof (event) === 'object') {
+                      var msg =  'Form has been saved';
+                      this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+                      this._general.saveDisabled = false;
+                      this._form.formSaved = true;
+                    }
+                  })
+              })
+            }
+            else {
+              var msg =  'Form has been saved';
+              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+              this._general.saveDisabled = false;
+              this._form.formSaved = true;
+            }
           }
           else {
-            var msg =  'Form has been saved';
-            this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+            var msg =  'Server Error';
+            this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
             this._general.saveDisabled = false;
-            this._form.formSaved = true;
-          }
-        }
-        else {
-          var msg =  'Server Error';
-          this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
-          this._general.saveDisabled = false;
-        };
-      })
+          };
+        })
   }
 
   getBlockStyle(en:string) {
@@ -380,7 +398,7 @@ export class CrmFormBuilderComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.id);
-    this.formlists.push(event.option.value.uniqueid)
+    // this.formlists.push(event.option.value.id)
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -388,7 +406,7 @@ export class CrmFormBuilderComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds.lists.splice(index, 1);
-    this.formlists.splice(index, 1);
+    // this.formlists.splice(index, 1);
 
   }
 
@@ -404,7 +422,7 @@ export class CrmFormBuilderComponent implements OnInit {
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
-    this.formtags.push(event.option.value.uniqueid)
+    // this.formtags.push(event.option.value.id)
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -412,7 +430,7 @@ export class CrmFormBuilderComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags.splice(index, 1);
     this.filteredTempIds.tags.splice(index, 1);
-    this.formtags.splice(index, 1);
+    // this.formtags.splice(index, 1);
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -424,7 +442,7 @@ export class CrmFormBuilderComponent implements OnInit {
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
-    this.formtags.push(obj.uniqueid);
+    // this.formtags.push(obj.uniqueid);
     this.newtags.push(obj);
       
     }
@@ -452,45 +470,27 @@ export class CrmFormBuilderComponent implements OnInit {
 
   tagupdate() {
     return new Promise((resolve) => {
+      let i=0;
       this.newtags.forEach((tag: any) => {
-        this._crmtagService.createcrmtag(tag).subscribe((data: any) => {
-          resolve(true);
+        this._tagService.addtag(tag).subscribe((data:any) => {
+          console.log(data.data)
+          if(data.success==true){
+            this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
+              if(e==data.data.uniqueid) e=data.data.id;
+              return e;
+            })
+            // this.filteredTempIds.tags.push(data.data.id);
+            // this.formtags.push(data.data.id);
+            if(i==this.newtags.length-1) {resolve(true)};
+          }
+          i++;
         });
+       
+        
       });
     });
   }
 
-  patchtagname(){
-    // return new Promise((resolve) => {
-    this.tags.forEach((tag: any) => {
-      this._form.form.tags?.split(',').forEach((tid: any) => {
-        if (tid == tag.uniqueid) {
-          var obj = { uniqueid: tid, tag_name: tag.tag_name };
-          this.selectedTags.push(obj);
-      this.filteredTempIds.tags.push(tag.id);
-    this.formtags.push(obj.uniqueid);
-        }
-      });
-    });
-
-
-  }
-  
-  patchlistname(){
-    console.log(this.lists);
-    // return new Promise((resolve) => {
-    this.lists.forEach((list: any) => {
-      this._form.form.lists?.split(',').forEach((lid: any) => {
-        if (lid == list.uniqueid) {
-          var obj = { uniqueid: lid, list_name: list.list_name };
-          this.selectedLists.push(obj);
-      this.filteredTempIds.lists.push(list.id);
-    this.formlists.push(obj.uniqueid);
-        }
-      });
-    });
-
-
-  }
+ 
   
 }
