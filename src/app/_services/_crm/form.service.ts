@@ -186,8 +186,8 @@ export class FormService {
 
   updateForm() {
     return new Promise((resolve, reject)=>{
-      this.form.lists.toString();
-      this.form.tags.toString();
+      // this.form.lists.toString();
+      // this.form.tags.toString();
       var ffArr:Array<any> = [];
       this.formField.forEach((ff:any)=>{
         if(ff.field_tag) ffArr.push(ff.id);
@@ -198,6 +198,7 @@ export class FormService {
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = this._general.encodeJSON(style);
         this.form.thankyoumessage = this.getThankyouMsg();
+        console.log(this.form)
         this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
           this.getForm(this.form.uniqueid);

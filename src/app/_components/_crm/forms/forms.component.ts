@@ -1,13 +1,18 @@
-import { Component, OnInit,TemplateRef } from '@angular/core';
+import { Component, ElementRef, OnInit,TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { ImageService } from 'src/app/_services/image.service';
+import { ListService } from '../../../_services/_crm/list.service';
+import { TagService } from '../../../_services/_crm/tag.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
-export interface DialogData {
-  name: string;
-}
+
+// export interface DialogData {
+//   name: string;
+// }
 
 @Component({
   selector: 'app-crm-forms',
@@ -15,6 +20,12 @@ export interface DialogData {
   styleUrls: ['./forms.component.css']
 })
 export class CrmFormsComponent implements OnInit {
+  
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
@@ -23,116 +34,137 @@ export class CrmFormsComponent implements OnInit {
   '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
   '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
   validate = {
-    name: new FormControl('', [Validators.required]),
-    relink: new FormControl('', [Validators.pattern(this.urlPattern)]),
+    name: new FormControl('',[Validators.required,Validators.minLength(3)]),
+    
   }
   forms:any[] = [];
   toggleview = true;
   shortwaiting = true;
-  selstatusshow = 'all';
   form: any = {
     name: '',
+    lists:'',
+    tags:'',
     thankyoumessage: '<h2>Thankyou</h2><p>The form has been submitted successfully!</p>',
   };
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
+
   delform:any;
   nodata = true;
-  updatemode = false;
-  fetching:boolean = true;
-  selecteduid:any = [];
+  fetching:boolean = true;;
+  lists:any= [];
+  tags:any= [];
+  selectedLists:any = [];
+  selectedTags:any = [];
+  newtags: any = [];
+  filteredTempIds:any = {
+    lists: [],
+    tags: []
+  };
+  filteredOptions:any = {
+    lists: [],
+    tags: []
+  };
+  tagCtrl = new FormControl(['']);
+  
 
   constructor(private _file: FileUploadService,
               public _image: ImageService,
               public _general: GeneralService,
               public dialog: MatDialog, 
+              private _listService: ListService,
+              private _tagService: TagService,
               ) {
                   this.toggleview = _general.getStorage('form_toggle');
                   this._general.getAllWebPages();
                   this._general.getAllFunnels();
-                  this.fetchForms();
                }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000);
+    this.fetchData();
+    
   }
 
-  fetchForms(){
+  fetchData(){
     this.fetching = true;
+    this.fetchForms().then((resp1:any)=>{
+      this.fetchLists().then((resp2:any)=>{
+        this.fetchTags().then((resp3:any)=>{
+          this.fetching = false;
+        })
+      }) 
+    })
+  }
+  fetchForms(){
+    return new Promise((resolve) => {
     this._file.fetchforms().subscribe((resp:any)=>{
+      console.log(resp)
         this.adjustdata(resp.data);
+        resolve(true);
+      },
+      (error) => {
+        resolve(false);
+      }
+    );
+  });
+  }
+  fetchLists() {
+    return new Promise((resolve) => {
+      this._listService.fetchlists().subscribe(
+        (data) => {
+          this.lists = data.data;
+          console.log(this.lists)
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
     });
   }
 
-  newform(value:any, data:any){
-   if(value=='update'){
-      this.updatemode = true;
-      this.form = JSON.parse(JSON.stringify(data));
-      this.selecteduid = data.uniqueid;
-  }else{
-      this.updatemode = false;
-      this.form.name = '';
-    }
-    this.openSidebar();
-  }
-
-  openSidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
-
-  hidepopupsidebar(){
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
+  fetchTags() {
+    return new Promise((resolve) => {
+      this._tagService.fetchtags().subscribe(
+        (data) => {
+          this.tags = data.data;
+          resolve(true);
+        },
+        (error: any) => {
+          resolve(false);
+        }
+      );
+    });
   }
 
   onformSubmit(): void {
-    if(!this.validate.name.invalid && !this.validate.relink.invalid){
-      this._file.saveform(this.form).subscribe({
-        next: data => {
-          var msg, err = data.success==0;
-          if(err){
-            msg = 'Server Error';
-          }
-          else {
-            msg = 'Form has been successfully created!';
-            this._general.redirectToBuilder(data.uniqueid, 'form');
-          }
-          this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
-        }
-      });  
+    console.log(this.form)
+    if(!this.validate.name.invalid ){
+      if(this.newtags.length>0){
+        this.tagupdate().then((resp)=>{
+          this.addform();
+        })
+      }else{
+        this.addform();
+      }
     }
   }
 
-  onformUpdate(){
-      if(!this.validate.name.invalid && !this.validate.relink.invalid){
-          this._file.updateform(this.form).subscribe({
-            next: data => {
-              var msg, err = data.success==0;
-              if(err){
-                msg = 'Server Error';
-              }
-              else {
-                msg = 'Form has been update successfully!';
-                this.hidepopupsidebar();
-                this.fetchForms();
-              }
-              this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
-            }
-          }); 
+  addform(){
+  this.form.lists=this.filteredTempIds.lists.toString();
+  this.form.tags=this.filteredTempIds.tags.toString();
+  this._file.saveform(this.form).subscribe({
+    next: data => {
+      var msg, err = data.success==0;
+      if(err){
+        msg = 'Server Error';
       }
-  }
+      else {
+        msg = 'Form has been successfully created!';
+        this._general.redirectToBuilder(data.uniqueid, 'form');
+      }
+      this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
+    }
+  }); 
+}
 
   rename(data:any, inp:any){
     var newname = inp.value;
@@ -147,7 +179,7 @@ export class CrmFormsComponent implements OnInit {
             }
             else {
               msg = 'Form name updated successfully!';
-              this.hidepopupsidebar();
+              // this.hidepopupsidebar();
               this.fetchForms();
             }
             this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
@@ -240,7 +272,8 @@ export class CrmFormsComponent implements OnInit {
     this.forms = [];
     this.nodata = data.length == 0;
     this.forms = data;
-    this.fetching = false;
+    console.log(this.forms)
+    // this.fetching = false;
   }
 
   toggleView() {
@@ -250,4 +283,83 @@ export class CrmFormsComponent implements OnInit {
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
+  tagupdate() {
+    return new Promise((resolve) => {
+      let i=0;
+      this.newtags.forEach((tag: any) => {
+        this._tagService.addtag(tag).subscribe((data: any) => {
+          this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
+            if(e==data.data.uniqueid) e=data.data.id;
+            return e;
+          })
+          if(i==this.newtags.length-1)resolve(data.data);
+         
+        });
+        i++;
+      });
+    });
+  }
+
+   // start list actions
+
+   filterListData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
+  }
+
+  addSelectedList(event:any, searchListInp:any): void {
+    this.selectedLists.push(event.option.value);
+    this.filteredTempIds.lists.push(event.option.value.id);
+    searchListInp.value = '';
+    this.filterListData('');
+  }
+
+  removeSelectedList(index:number): void {
+    this.selectedLists.splice(index, 1);
+    this.filteredTempIds.lists.splice(index, 1);
+  }
+
+  // end list actions
+
+  // start tag actions
+
+  filterTagData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value));
+  }
+
+  addSelectedTag(event:any, searchTagInp:any): void {
+    this.selectedTags.push(event.option.value);
+    this.filteredTempIds.tags.push(event.option.value.id);
+    // this.formtags.push(event.option.value.uniqueid)
+    searchTagInp.value = '';
+    this.filterTagData('');
+  }
+
+  removeSelectedTag(index:number): void {
+    this.selectedTags.splice(index, 1);
+    this.filteredTempIds.tags.splice(index, 1);
+    // this.formtags.splice(index, 1);
+  }
+  
+  addtag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      var obj: any = {
+        uniqueid: Math.random().toString(20).slice(2),
+        tag_name: event.value,
+      };
+      this.selectedTags.push(obj);
+      this.filteredTempIds.tags.push(obj.uniqueid);
+    // this.formtags.push(obj.uniqueid);
+    this.newtags.push(obj);
+      
+    }
+    // Clear the input value
+    event.chipInput!.clear();
+    this.tagCtrl.setValue(null);
+  }
+
+  // end tag actions
+  
 }
