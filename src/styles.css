@@ -237,7 +237,7 @@ a{
     color: var(--kb-white);
 }
 
-main.insidecont .box {
+main.kb-main-container .box {
     margin-top: 30px;
 }
 

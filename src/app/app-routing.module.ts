@@ -207,7 +207,6 @@ const routes: Routes = [
     { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
     { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
     { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-    { path: 'contact/:id', component: CrmContactComponent, canActivate: [AuthGuard] },
     { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
     { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
     { path: 'fields', component: CrmFieldsComponent, canActivate: [AuthGuard] },
@@ -219,6 +218,7 @@ const routes: Routes = [
     { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
+  { path: 'crm/contact/:id', component: CrmContactComponent, canActivate: [AuthGuard] },
 
   // crm
 

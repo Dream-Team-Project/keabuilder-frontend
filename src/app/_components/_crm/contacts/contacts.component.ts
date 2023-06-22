@@ -103,7 +103,6 @@ export class CrmContactsComponent implements OnInit {
     if(this.contact.email && this.isEmailValid(this.contact.email)) {
       this.hasError = '';
       delete this.contact.error;
-      console.log(this.contact);
       this._contactService.addcontact(this.contact).subscribe((resp) => {
         if(resp.success) {
           this.fetchContacts();

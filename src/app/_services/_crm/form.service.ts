@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from '../_builder/general.service';
 import { ElementService } from '../_builder/element.service';
-import { FormFieldsService } from '../_crm/field.service';
+import { FieldsService } from '../_crm/field.service';
 import { FileUploadService } from '../file-upload.service';
 
 @Injectable({
@@ -115,7 +115,7 @@ export class FormService {
   constructor(
     private _general: GeneralService,
     public _element: ElementService,
-    private _field: FormFieldsService,
+    private _field: FieldsService,
     private _file: FileUploadService) { }
 
   searchFields(search: any, sort: any, filter: any) {
@@ -124,7 +124,7 @@ export class FormService {
       sort: sort.value,
       filter: filter.value
     }
-    this._field.searchFieldsquery(obj).subscribe((resp:any)=>{
+    this._field.searchFields(obj).subscribe((resp:any)=>{
       console.log(resp);
       this.fields = resp.data;
     });
@@ -132,7 +132,7 @@ export class FormService {
 
   fetchFields() {
     return new Promise((resolve, reject)=>{
-      this._field.fetchformfields().subscribe((resp:any)=>{
+      this._field.fetchfields().subscribe((resp:any)=>{
         if(resp?.data) this.fields = resp.data;
         resolve(resp);
       })

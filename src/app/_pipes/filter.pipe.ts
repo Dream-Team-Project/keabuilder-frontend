@@ -13,6 +13,9 @@ export class FilterPipe implements PipeTransform {
         else if(column == 'name') {
           return items?.filter((val:any) => val.name?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
         }
+        else if(column == 'label') {
+          return items?.filter((val:any) => val.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+        }
         else if(column == 'title') {
           return items.filter((val:any) => val.title?.toLowerCase().indexOf(input.toLowerCase()) >= 0)
         }

@@ -1,562 +1,69 @@
-
-<mat-tab-group fitInkBarToContent>
-  <mat-tab label="General">
-    <div class="contact-info">
-          <div class="mat-tab-header ">
-            <div class="contact-icon"><i class="fa fa-user"></i></div>
-            <div class="mat-user">
-              <h5 class="mb-4">{{ contact.firstname + " " + contact.lastname |titlecase }}</h5>
-              <!-- <span class="address">
-                {{(userAddress.company_name + ' ' + userAddress.address_1 +' '+ userAddress.city + ' ' + userAddress.state+' '+userAddress.zip+' '+userAddress.country) | titlecase  }}
-               </span> -->
-               <div class="d-flex mt-2">
-              <p class="mr-1"><i class="far fa-envelope text-warning mr-2 "></i>: {{ contact.email |titlecase }}</p>
-              <span>|</span>
-              <p class="ml-2"><i class="fas fa-phone-alt text-warning  mr-2"></i>:  {{ contact.phone }}</p>
-            </div>
-            </div>
-          </div>
-        <div class="details-tab">
-          <div class="mat-user-header">
-            <span><h6>Details</h6></span>
-            <div class="mat-button-edit "> 
-            <div class="mat-button-edit-update" *ngIf="buttontext; else update_contact">
-              <button
-              class="m-1"
-              mat-raised-button color="primary"
-              matTooltip='Edit button'
-                (click)="editcrmContact(contact)"
-              >
-              <i class="fa fa-pen" aria-hidden="true"></i> Edit
-              </button> 
-            </div> 
-            <ng-template #update_contact>
-              <div class="mat-header ">
-                <button
-                class="m-1"
-                mat-raised-button color="primary"
-                matTooltip='Update button'
-                  (click)="updatecrmcontact()"
-                
-                >
-                <!-- [routerLink]="['/crm-contacts']" -->
-                  Update
-                </button> 
-              </div> 
-            </ng-template>
-            <div class="mat-header ">
-              <button class="cancel  "
-              mat-raised-button color="warn"
-              matTooltip="Reset button"
-                (click)="editcancel()"
-              >Reset
-              <!-- <i class="fas fa-redo" aria-hidden="true"></i> -->
-              </button>
-            </div>
-            </div>
-          </div>
-            <div class="contact-gen-detail" *ngIf="hideany; else contact_edit">
-              <div class="contact-detail">
-                <div class="contact">
-                  <span class="contact-label">First Name</span
-                  ><span class="contact-input">{{ contact.firstname |titlecase  }}</span>
-                </div>
-                <div class="contact">
-                  <span class="contact-label">Last Name</span
-                  ><span class="contact-input">{{ contact.lastname |titlecase  }}</span>
-                </div>
-                <div class="contact">
-                  <span class="contact-label">Email Id</span
-                  ><span class="contact-input">{{ contact.email |titlecase }}</span>
-                </div>
-                <div class="contact">
-                  <span class="contact-label">Phone</span
-                  ><span class="contact-input">{{ contact.phone }}</span>
-                </div>
-                <div class="contact">
-                  <span class="contact-label">Date Created </span
-                  ><span class="contact-input">{{ contact.created_at| date: "fullDate" }}</span>
-                </div>
-                <!-- <div class="contact">
-                  <span class="contact-label">Updated At</span
-                  ><span class="contact-input">{{ contact.updated_at| date: "fullDate" }}</span>
-                </div> -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 kb-contact-content">
+      <mat-tab-group>
+        <mat-tab label="Personal Details">
+          <div class="row kb-contact-card my-3 mx-0">
+            <div class="col-sm-1">
+              <div class="kb-contact-icon">
+                {{contact.icon}}
               </div>
             </div>
-          </div>  
-            <ng-template #contact_edit>
-              <div class="edit-contact">
-              
-                <form [formGroup]="crmcontactForm">
-                  <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>First Name</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      required
-                      minlength="3"
-                      maxlength="140"
-                      formControlName="firstname"
-                    />
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.firstname.hasError('required')"
-                      >Please enter Firstname</mat-error
-                    >
-                    <mat-error
-                      *ngIf="
-                        crmcontactForm.controls.firstname.hasError('minlength')
-                      "
-                      >Please enter more than 3 characters</mat-error
-                    >
-                    <mat-error
-                      *ngIf="
-                        crmcontactForm.controls.firstname.hasError('maxlength')
-                      "
-                      >Please enter less than 140 characters</mat-error
-                    >
-                  </mat-form-field>
-    
-                  <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Last Name</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      minlength="3"
-                      maxlength="140"
-                      formControlName="lastname"
-                    />
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.lastname.hasError('minlength')"
-                      >Please enter more than 3 characters</mat-error
-                    >
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.lastname.hasError('maxlength')"
-                      >Please enter less than 50 characters</mat-error
-                    >
-                  </mat-form-field>
-    
-                  <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Email</mat-label>
-                    <input
-                      type="email"
-                      matInput
-                      required
-                      minlength="3"
-                      maxlength="140"
-                      formControlName="email"
-                     
-                    />
-                    <!-- (blur)="validateEmail($event)" -->
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.email.hasError('required')"
-                      >Please enter email</mat-error
-                    >
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.email.hasError('minlength')"
-                      >Please enter more than 8 characters</mat-error
-                    >
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.email.hasError('maxlength')"
-                      >Please enter less than 50 characters</mat-error
-                    >
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.email.hasError('email')"
-                      >Please enter valid email</mat-error
-                    >
-                    <mat-error *ngIf="uniqueEmail == 1"
-                      >Email is already exist.</mat-error
-                    >
-                  </mat-form-field>
-    
-                  <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Phone Number</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      minlength="10"
-                      maxlength="50"
-                      formControlName="phone"
-                    />
-    
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.phone.hasError('minlength')"
-                      >Please enter more than 10 digits</mat-error
-                    >
-                    <mat-error
-                      *ngIf="crmcontactForm.controls.phone.hasError('maxlength')"
-                      >Please enter less than 50 digits</mat-error
-                    >
-                  </mat-form-field>
-                </form>
-              </div>
-            </ng-template>
-         <div class="others d-flex">
-        <div class="list-header">
-            <div class="List-detail" *ngIf="listhideany; else List_edit">
-              <div class="border-1 border-bottom d-flex "><h6>Lists</h6>
-                <i class="fa fa-plus m-1 " aria-hidden="true" matTooltip='Edit button'  (click)="editcrmContactLists(contact)"></i> 
-              </div>
-              <div class=" fntli-box  d-inline" >
-                <ul class="d-inline-block  fntli"><li class="d-inline-block border border-1 text-primary" *ngFor="let list of contact.list_name; index as i">
-                  {{list | titlecase}}
-                </li></ul>
-              </div>
-            </div>
-          </div>
-            <ng-template #List_edit>
-              <div class="border-1 border-bottom d-flex align-items-center justify-content-between  ">
-                <h6>Lists</h6>
+            <div class="col-sm-11">
+              <div class="kb-contact-info">
+                <h5>{{contact.firstname}} {{contact.lastname}}</h5>
                 <div>
-                <button class="cancel  "
-              mat-raised-button color="warn"
-              matTooltip="Reset button"
-                (click)="resetlist()"
-              >Reset
-              <!-- <i class="fas fa-redo" aria-hidden="true"></i> -->
-              </button>
-              <button
-              mat-raised-button color="primary"
-              matTooltip='Update button'
-                (click)="updatecrmcontact()"
-              >
-              <!-- (click)="updatecrmcontactLists()" -->
-                Update
-              </button> 
-            </div>
-              </div>
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Add on lists</mat-label>
-              <mat-chip-list #chipGrid aria-label="List selection">
-                <mat-chip *ngFor="let list of listarr" (removed)="removelist(list)">
-                  {{ list.list_name }}
-                  <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                </mat-chip>
-              </mat-chip-list>
-              <input
-                placeholder="Search list..."
-                #listInput
-                [formControl]="listCtrl"
-                [matChipInputFor]="chipGrid"
-                [matAutocomplete]="auto"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              
-              />
-              <!-- (matChipInputTokenEnd)="addlist($event)" -->
-              <mat-autocomplete
-                #auto="matAutocomplete"
-                (optionSelected)="selectedList($event)"
-              >
-                <mat-option
-                  *ngFor="let list of filteredList | async"
-                  [value]="list.uniqueid"
-                >
-                  {{ list.list_name }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            </ng-template>
-            <div class="tag-header">
-            <div class="Tag-detail" *ngIf="taghideany; else Tag_edit">
-              <div class="border-1 border-bottom d-flex"><h6>Tags</h6>
-                <i class="fa fa-plus m-1" aria-hidden="true" matTooltip='Edit button' (click)="editcrmContactTags(contact)"></i> 
-              </div>
-              <div class="fntli-box d-inline " >
-                <ul class="d-inline-block fntli "><li class="d-inline-block  border border-1 text-primary" *ngFor="let tag of contact.tag_name; index as i">
-                  {{tag | titlecase}}
-                </li></ul>
+                  <span class="border-right pr-3 mr-3">
+                    <i class="fa fa-envelope mr-2"></i>{{contact.email}}
+                  </span>
+                  <span><i class="fa fa-phone mr-2"></i>{{contact.phone ? contact.phone : '....'}}</span>
+                </div>
               </div>
             </div>
           </div>
-            <ng-template #Tag_edit>
-              <div class="border-1 border-bottom d-flex align-items-center justify-content-between  ">
-                <h6>Tags</h6>
-                <div>
-                  <button class="cancel  "
-              mat-raised-button color="warn"
-              matTooltip="Reset button"
-                (click)="resettag()"
-              >Reset
-              <!-- <i class="fas fa-redo" aria-hidden="true"></i> -->
-              </button>
-              <button
-              mat-raised-button color="primary"
-              matTooltip='Update button'
-              (click)="updatecrmcontact()"
-               
-              >
-              <!-- (click)="updatecrmcontactTags()" -->
-                Update
-              </button> 
-            </div>
+          <div class="row kb-contact-details pt-4 mt-3 mx-0">
+            <div class="col-md-8 pl-0">
+              <div class="kb-contact-details-card rounded">
+                <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
+                  <h5 class="col-md-4 p-0 m-0">General Details</h5>
+                  <div class="kb-contact-search-inp col-md-4 p-0">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input [(ngModel)]="searchField" type="text" placeholder="Search questions" class="w-100 h-100 p-0">
+                    <i mat-ripple *ngIf="searchField" (click)="searchField = ''" class="fa-regular fa-circle-xmark icon-remove"></i>
+                  </div>
+                </div>
+                <table class="table">
+                  <tbody>
+                    <tr *ngFor="let cf of contact.fieldans | filter:searchField:'label'; index as i">
+                      <td class="col-5">
+                        <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
+                      </td>
+                      <td class="col-7">
+                        <span *ngIf="!cf.edit else inp">{{cf.value}}</span>
+                        <ng-template #inp>
+                          <input type="text" [(ngModel)]="cf.value" class="kb-contact-field-inp px-2 py-1">
+                        </ng-template>
+                      </td>
+                      <td (click)="cf.edit = !cf.edit" class="col-1 text-center kb-contact-field-action p-0 pr-1">
+                        <i *ngIf="cf.edit else edit" mat-ripple class="fa fa-check"></i>
+                        <ng-template #edit>
+                          <i mat-ripple class="fa fa-pencil hideaction"></i>
+                        </ng-template>
+                      </td>           
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            <mat-form-field class="kb-full-width" appearance="fill" >
-              <mat-label>Add Tags</mat-label>
-              <mat-chip-list #chipGrid2 aria-label="Tag selection">
-                <mat-chip *ngFor="let tag of tagarr" (removed)="removetag(tag)">
-                  {{ tag.tag_name }}
-                  <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                </mat-chip>
-              </mat-chip-list>
-              <input
-                placeholder="Search/add tag..."
-                #tagInput
-                [formControl]="tagCtrl"
-                [matChipInputFor]="chipGrid2"
-                [matAutocomplete]="auto2"
-                
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addtag($event)"
-              
-              />
-              <!-- [matChipInputAddOnBlur]="addOnBlur" -->
-              <mat-autocomplete
-                #auto2="matAutocomplete"
-                (optionSelected)="selectedTag($event)"
-              >
-                <mat-option *ngFor="let tag of filteredTag | async" [value]="tag.uniqueid">
-                  {{ tag.tag_name }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-            </ng-template>
-            <div class="automation-header">
-              <div class="border-1 border-bottom d-flex"><h6>Automations</h6>
-              <i class="fa fa-plus m-1" aria-hidden="true" matTooltip='Edit button' ></i> 
             </div>
+            <div class="col-md-4 pr-0">
+              <div class="kb-contact-details-card rounded p-2">
+                Lists<br>Tags
+              </div>
             </div>
           </div>
-          
-    </div>
-  </mat-tab>
-  <mat-tab label="Recent Activity">
-      <span class="activity-head ml-3">Filter</span>
-    <mat-form-field class="col-md-2 fntilform" appearance="fill">
-      <mat-label>Filter by:</mat-label>
-      <!-- <mat-select [(ngModel)]="selectedValue" name="activity"> -->
-      <mat-select  name="activity">
-        <mat-option value="">Please Select</mat-option>
-        <mat-option *ngFor="let activity of activities" [value]="activity.value">
-          {{activity.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div class="activities">
-      <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-solid fa-list-ul listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div>
-      <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-solid fa-list-ul listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div>
-      <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-solid fa-list-ul listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div>
-      <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-solid fa-list-ul listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div>
-      <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-solid fa-list-ul listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div>
-       <!-- <div class="activity-1">
-        <div class="activity-heading">
-          <div class="heading-icon"><i class="fa fa-regular fa-command listicon"></i></div>
-          <div class="heading-name">
-            <h6>Subscribed to list</h6>
-            <div class="listtype">Subsribed to List - Getwise Website Partnership From via Contact Partnership</div>
-            <div class="listtime">5 Days Ago</div>
-          </div>
-
-        </div>
-      </div> -->
-
-    </div>
-  </mat-tab>
-  <!-- <mat-tab label="Emails">
-    <div class="emails">
-      <div class="inbox">
-        <div>
-          <h4 class="inbox-head">Inbox</h4>
-        </div>
-      <div class="inbox-emails"> 
-          <div class="recieve-email">
-            <div class="recieve-email-icon"><i class="far fa-file emailicon"></i></div>
-            <div class="recieve-email-name">S Kumar</div>
-          </div>
-          <div class="recieve-email-content">
-            <div><i class="fas fa-paperclip clipbtn"></i></div>
-            <div class="recieve-email-body ">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-          Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        </div>  
-        </div>
-        </div>
-
-        <div class="inbox-emails"> 
-          <div class="recieve-email">
-            <div class="recieve-email-icon"><i class="far fa-file emailicon"></i></div>
-            <div class="recieve-email-name">V Kumar</div>
-          </div>
-          <div class="recieve-email-content">
-            <div><i class="fas fa-paperclip clipbtn"></i></div>
-            <div class="recieve-email-body ">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-          Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        </div>  
-        </div>
-        </div>
-
-
-    </div>
-   
-    <div class="email-desgn">
-      <div class="emailsend-header">
-        <div class="header-left">
-          <div class=" header-icon"><i class="far fa-file"></i></div>
-          <div class="header-title"> Title</div>
-        </div>
-        <div class="header-right">
-          <div class="right-btn"><i class="far fa-save "></i></div>
-          <div class="right-btn"><i class="fas fa-share"></i></div>
-          <div class="right-btn"><i class="fas fa-trash-alt"></i></div>
-          <div class="right-btn"><i class="fas fa-ellipsis-h"></i></div>
-        </div>
-      </div>
-      <div class="emailsend-footer">
-        <button mat-raised-button class="text-primary btn_save_note">Save Note</button>
-        <i class="fas fa-text-width footericon"></i>
-        <i class="fas fa-paperclip footericon"></i>
-        <i class="far fa-smile footericon"></i> 
-        <i class="far fa-file-image footericon"></i>
-      </div>
-
+        </mat-tab>
+        <mat-tab label="Emails & Recent Activities"></mat-tab>
+      </mat-tab-group>
     </div>
   </div>
-  </mat-tab>
-  <mat-tab label="Notes">
-    <div class="notes">
-      <h6 >All Notes</h6>
-      <div class="template-notes">
-      <div class="template"> 
-        <div class=" template-head">
-          <div class=" tempalte-icon"><i class="far fa-file"></i></div>
-          <div class=" tempalte-name">Products</div>
-        </div>
-        <div class="template-body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-        Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        Repudiandae veniam sapiente harum dolor vel ipsam voluptate excepturi minus voluptas, repellat beatae repellendus nemo dolorem natus dolores nesciunt, alias, provident similique nulla qui corporis? Quae asperiores ea nulla quas.
-        Aspernatur ullam libero sint nulla neque accusamus ab unde quam similique quibusdam non, id illo, ipsam repellat architecto laborum deserunt aliquam, cumque aut odio optio necessitatibus debitis perspiciatis! Hic, corrupti!
-        Ab sunt provident explicabo cupiditate corporis, quisquam perferendis sapiente dolore repellat ut enim a itaque aspernatur totam amet? Magnam consequuntur aliquam nulla enim dolor asperiores numquam non nobis molestiae nisi?</div>
-      </div>
-      <div class="template"> 
-        <div class=" template-head">
-          <div class=" tempalte-icon"><i class="far fa-file"></i></div>
-          <div class=" tempalte-name">Products</div>
-        </div>
-        <div class="template-body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-        Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        Repudiandae veniam sapiente harum dolor vel ipsam voluptate excepturi minus voluptas, repellat beatae repellendus nemo dolorem natus dolores nesciunt, alias, provident similique nulla qui corporis? Quae asperiores ea nulla quas.
-        Aspernatur ullam libero sint nulla neque accusamus ab unde quam similique quibusdam non, id illo, ipsam repellat architecto laborum deserunt aliquam, cumque aut odio optio necessitatibus debitis perspiciatis! Hic, corrupti!
-        Ab sunt provident explicabo cupiditate corporis, quisquam perferendis sapiente dolore repellat ut enim a itaque aspernatur totam amet? Magnam consequuntur aliquam nulla enim dolor asperiores numquam non nobis molestiae nisi?</div>
-      </div>
-      <div class="template"> 
-        <div class=" template-head">
-          <div class=" tempalte-icon"><i class="far fa-file"></i></div>
-          <div class=" tempalte-name">Products</div>
-        </div>
-        <div class="template-body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-        Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        Repudiandae veniam sapiente harum dolor vel ipsam voluptate excepturi minus voluptas, repellat beatae repellendus nemo dolorem natus dolores nesciunt, alias, provident similique nulla qui corporis? Quae asperiores ea nulla quas.
-        Aspernatur ullam libero sint nulla neque accusamus ab unde quam similique quibusdam non, id illo, ipsam repellat architecto laborum deserunt aliquam, cumque aut odio optio necessitatibus debitis perspiciatis! Hic, corrupti!
-        Ab sunt provident explicabo cupiditate corporis, quisquam perferendis sapiente dolore repellat ut enim a itaque aspernatur totam amet? Magnam consequuntur aliquam nulla enim dolor asperiores numquam non nobis molestiae nisi?</div>
-      </div>
-      <div class="template"> 
-        <div class=" template-head">
-          <div class=" tempalte-icon"><i class="far fa-file"></i></div>
-          <div class=" tempalte-name">Products</div>
-        </div>
-        <div class="template-body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-        Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        Repudiandae veniam sapiente harum dolor vel ipsam voluptate excepturi minus voluptas, repellat beatae repellendus nemo dolorem natus dolores nesciunt, alias, provident similique nulla qui corporis? Quae asperiores ea nulla quas.
-        Aspernatur ullam libero sint nulla neque accusamus ab unde quam similique quibusdam non, id illo, ipsam repellat architecto laborum deserunt aliquam, cumque aut odio optio necessitatibus debitis perspiciatis! Hic, corrupti!
-        Ab sunt provident explicabo cupiditate corporis, quisquam perferendis sapiente dolore repellat ut enim a itaque aspernatur totam amet? Magnam consequuntur aliquam nulla enim dolor asperiores numquam non nobis molestiae nisi?</div>
-      </div>
-      <div class="template"> 
-        <div class=" template-head">
-          <div class=" tempalte-icon"><i class="far fa-file"></i></div>
-          <div class=" tempalte-name">Products</div>
-        </div>
-        <div class="template-body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit sint officiis tenetur asperiores ratione. Impedit doloremque, officia odio nam unde id, nulla, culpa reiciendis at laudantium aut omnis assumenda facilis.
-        Quam adipisci neque suscipit a totam optio accusantium nesciunt doloremque autem exercitationem, nostrum consectetur! Labore iure laboriosam, temporibus architecto illum atque ea sapiente soluta, voluptates recusandae quod itaque minima fugiat!
-        Repudiandae veniam sapiente harum dolor vel ipsam voluptate excepturi minus voluptas, repellat beatae repellendus nemo dolorem natus dolores nesciunt, alias, provident similique nulla qui corporis? Quae asperiores ea nulla quas.
-        Aspernatur ullam libero sint nulla neque accusamus ab unde quam similique quibusdam non, id illo, ipsam repellat architecto laborum deserunt aliquam, cumque aut odio optio necessitatibus debitis perspiciatis! Hic, corrupti!
-        Ab sunt provident explicabo cupiditate corporis, quisquam perferendis sapiente dolore repellat ut enim a itaque aspernatur totam amet? Magnam consequuntur aliquam nulla enim dolor asperiores numquam non nobis molestiae nisi?</div>
-      </div>
-    </div>
-    </div>
-    <div class="notes-desgn">
-      <div class="notes-header">
-        <div class="header-left">
-          <div class=" header-icon"><i class="far fa-file"></i></div>
-          <div class="header-title"> Title</div>
-        </div>
-        <div class="header-right">
-          <div class="right-btn"><i class="far fa-save "></i></div>
-          <div class="right-btn"><i class="fas fa-share"></i></div>
-          <div class="right-btn"><i class="fas fa-trash-alt"></i></div>
-          <div class="right-btn"><i class="fas fa-ellipsis-h"></i></div>
-        </div>
-      </div>
-      <div class="notes-footer">
-        <button mat-raised-button class="text-primary btn_save_note">Save Note</button>
-        <i class="fas fa-text-width footericon"></i>
-        <i class="fas fa-paperclip footericon"></i>
-        <i class="far fa-smile footericon"></i> 
-        <i class="far fa-file-image footericon"></i>
-      </div>
-
-    </div>
-  </mat-tab> -->
-</mat-tab-group>
-
-  
+</div>

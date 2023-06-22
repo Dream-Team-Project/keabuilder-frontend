@@ -243,7 +243,6 @@ image-cropper {
 ::ng-deep .mat-tab-labels .mat-tab-label, ::ng-deep .mat-button-toggle, .kb-imgUploadPreview button{
     color: var(--secondary-color);
     font-size: 13px;
-    font-weight: 600;
     line-height: 36px;
     height: 36px;
     transition: background .2s ease, transform .2s ease, opacity .2s;

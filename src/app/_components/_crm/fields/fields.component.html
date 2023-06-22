@@ -80,12 +80,12 @@
     <div class="row">
         <mat-form-field appearance="fill" class="col-md-5">
             <mat-label>Search Fields</mat-label>
-            <input matInput #searchInp (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Form Name">
+            <input matInput #searchInp (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Field Name">
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-md-2">
             <mat-label>Sort By</mat-label>
-            <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
+            <mat-select #sortInp name="kbfilter" value='created_at ASC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
                 <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
                 <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
                 <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>

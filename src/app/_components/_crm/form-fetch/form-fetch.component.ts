@@ -55,7 +55,7 @@ export class CrmFormFetchComponent implements OnInit {
     ff.options[i].selected = value;
     if(ff.type == 'checkbox') {
         var tempVal = ff.options.filter((v:any)=> v.selected);
-        ff.value = tempVal.map((v:any)=> v.value).join(',');
+        ff.value = tempVal.map((v:any)=> v.value).join(', ');
     }
     else ff.value = ff.options[i].value;
   }

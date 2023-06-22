@@ -6,7 +6,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FormFieldsService {
+export class FieldsService {
 
   fieldTypes:Array<any> = [
     { name: 'email', label: 'Email 2', type: 'email', placeholder: 'Email Address', icon: '<i class="far fa-envelope"></i>', value: '', required: true },
@@ -43,31 +43,31 @@ export class FormFieldsService {
     this.user_id = this.tokenStorage.getUser().uniqueid;
   }
 
-  fetchformfields(){
+  fetchfields(){
     return this.http.get(this.allfields+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
 
-  addformfield(obj:any) {
+  addfield(obj:any) {
     obj.user_id=this.user_id;
     return this.http.post(this.addfields, obj)
     .pipe(catchError(this.errorHandler));    
   }
 
-  updateformfield(obj:any){
+  updatefield(obj:any){
     obj.user_id = this.user_id;
     return this.http.post(this.updatefields,obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  deleteformfield(id:any){
+  deletefield(id:any){
     return this.http.delete(this.deletefields+'/'+id)
     .pipe(catchError(this.errorHandler));
   }
 
-  searchFieldsquery(obj:any){
+  searchFields(obj:any){
     obj.user_id = this.user_id;
-    return this.http.post('/api/searchFieldsquery',obj)
+    return this.http.post('/api/searchFields',obj)
     .pipe(catchError(this.errorHandler));
   }
 

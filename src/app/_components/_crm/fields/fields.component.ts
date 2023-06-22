@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormFieldsService } from 'src/app/_services/_crm/field.service';
+import { FieldsService } from 'src/app/_services/_crm/field.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class CrmFieldsComponent implements OnInit {
 
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
 
-    fieldTypes:Array<any> = this._formfieldService.fieldTypes;
+    fieldTypes:Array<any> = this._field.fieldTypes;
     fields:Array<any> = [
       { name: 'first-name', label: 'First Name', type: 'text', field_tag: '%FIRST_NAME%', placeholder: 'First Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
       { name: 'last-name', label: 'Last Name', type: 'text', field_tag: '%LAST_NAME%', placeholder: 'Last Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
@@ -29,7 +29,7 @@ export class CrmFieldsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _bottomSheet: MatBottomSheet,
-    private _formfieldService: FormFieldsService,
+    private _field: FieldsService,
     private _general: GeneralService
     ) { 
       this.fetchFields();
@@ -44,7 +44,7 @@ export class CrmFieldsComponent implements OnInit {
   }
 
   fetchFields() {
-    this._formfieldService.fetchformfields().subscribe((resp:any)=>{
+    this._field.fetchfields().subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
     })
   }
@@ -56,7 +56,7 @@ export class CrmFieldsComponent implements OnInit {
       sort: sort.value,
       filter: filter.value
     }
-    this._formfieldService.searchFieldsquery(obj).subscribe((resp:any)=>{
+    this._field.searchFields(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
     });
   }
@@ -79,7 +79,7 @@ export class CrmFieldsComponent implements OnInit {
   }
 
   addField(field:any) {
-    this._formfieldService.addformfield(field).subscribe((resp:any)=>{
+    this._field.addfield(field).subscribe((resp:any)=>{
       if(resp.success) {
         this.fetchFields();
         this._general.openSnackBar(false, 'Field has been saved', 'OK', 'center', 'top');
@@ -89,7 +89,7 @@ export class CrmFieldsComponent implements OnInit {
   }
 
   updateField(field:any) {
-    this._formfieldService.updateformfield(field).subscribe((resp:any)=>{
+    this._field.updatefield(field).subscribe((resp:any)=>{
       if(resp.success) {
         this.fetchFields();
         this._general.openSnackBar(false, 'Field has been updated', 'OK', 'center', 'top');
@@ -106,13 +106,13 @@ export class CrmFieldsComponent implements OnInit {
 
   toggleRequired(field:any) {
     var stus = field.required ? 'required' : 'not required';
-    this._formfieldService.updateformfield(field).subscribe((resp:any)=>{
+    this._field.updatefield(field).subscribe((resp:any)=>{
       this._general.openSnackBar(false, 'Field changed to '+stus, 'OK', 'center', 'top');
     });
   }
 
   deleteField(field:any) {
-    this._formfieldService.deleteformfield(field.id).subscribe((resp:any)=>{
+    this._field.deletefield(field.id).subscribe((resp:any)=>{
       if(resp.success) this.fetchFields();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     })
@@ -126,7 +126,7 @@ export class CrmFieldsComponent implements OnInit {
       field.options[i].selected = val;
     }
     var valArr = field.options.filter((v:any)=> v.selected);
-    field.value = valArr.map((v:any)=> v.value).join(',');
+    field.value = valArr.map((v:any)=> v.value).join(', ');
   }
 
   addInput(options:any, i:number) {

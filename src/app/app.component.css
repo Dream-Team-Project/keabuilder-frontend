@@ -2,11 +2,11 @@ main {
     position: relative;
 }
 
-.insidecont{
+.kb-main-container{
     padding: 20px 0px;
-    width: 96.7%;
+    width: calc(100% - 50px);
     margin-left: auto;
-    top: 70px;
+    top: 60px;
     position: relative;
 }
 
@@ -106,7 +106,7 @@ main {
 }
 
 @media only screen and (max-width:500px){
-    .insidecont{
+    .kb-main-container{
         padding: 20px 0px;
         width: 100%;
     }
