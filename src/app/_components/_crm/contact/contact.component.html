@@ -38,16 +38,17 @@
                       <td class="col-5">
                         <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
                       </td>
-                      <td class="col-7">
+                      <td class="col-7" (dblclick)="cf.edit = true">
                         <span *ngIf="!cf.edit else inp">{{cf.value}}</span>
                         <ng-template #inp>
-                          <input type="text" [(ngModel)]="cf.value" class="kb-contact-field-inp px-2 py-1">
+                          <input type="text" (keydown.enter)="verifyField(cf, i)" [(ngModel)]="cf.value" [id]="cf.name + '-' + i" [name]="cf.name + '-' + i" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error">
+                          <mat-error *ngIf="cf.error">This field is required</mat-error>
                         </ng-template>
                       </td>
-                      <td (click)="cf.edit = !cf.edit" class="col-1 text-center kb-contact-field-action p-0 pr-1">
-                        <i *ngIf="cf.edit else edit" mat-ripple class="fa fa-check"></i>
+                      <td class="col-1 text-center kb-contact-field-action p-0 pr-1">
+                        <i *ngIf="cf.edit else edit" (click)="verifyField(cf, i)" mat-ripple class="fa fa-check"></i>
                         <ng-template #edit>
-                          <i mat-ripple class="fa fa-pencil hideaction"></i>
+                          <i mat-ripple (click)="cf.edit = true" class="fa fa-pencil hideaction"></i>
                         </ng-template>
                       </td>           
                     </tr>
@@ -57,7 +58,13 @@
             </div>
             <div class="col-md-4 pr-0">
               <div class="kb-contact-details-card rounded p-2">
-                Lists<br>Tags
+                Lists
+              </div>
+              <div class="kb-contact-details-card rounded p-2 my-4">
+                Tags
+              </div>
+              <div class="kb-contact-details-card rounded p-2">
+                Notes
               </div>
             </div>
           </div>

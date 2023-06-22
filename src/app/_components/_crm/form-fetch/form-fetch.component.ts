@@ -85,15 +85,17 @@ export class CrmFormFetchComponent implements OnInit {
     this.validateFields().then(res=>{
       if(res) {
         var formAnsJSON = this.formans.map((obj:any)=>{
-          this.contact[obj.name.replaceAll('-', '')] = obj.value;
+          if(obj.default_field) this.contact[obj.name.replaceAll('-', '')] = obj.value;
           return {id: obj.id, value: obj.value}
         });
         this.contact.fieldans = this._general.encodeJSON(formAnsJSON);
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
-            var redirection = this._form.form.redirection;
-            if(this._form.form.redirenbled && redirection) window.location.replace(redirection);
-            else this.thankyou = true;
+            this.emailSent().then(resp=>{
+              var redirection = this._form.form.redirection;
+              if(this._form.form.redirectionenabled && redirection) window.location.replace(redirection);
+              else this.thankyou = true;
+            })
           }
           else this.submitting = false;
         });
@@ -104,6 +106,22 @@ export class CrmFormFetchComponent implements OnInit {
         this.submitting = false;
       }
     });
+  }
+
+  emailSent() {
+    return new Promise((resolve, reject)=>{
+      if(this._form.form.emailenabled) {
+        var maildata = {
+          tomailid: this.contact.email, 
+          frommailid: 'info', 
+          subject: this._form.form.emailsubject, 
+          html: this._form.form.emailmessage, 
+        }
+        // mail sent api
+        resolve(true);
+      }
+      else resolve(true);
+    })
   }
 
   getBlockStyle(en:string) {
