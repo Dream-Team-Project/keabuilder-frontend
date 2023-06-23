@@ -3,7 +3,7 @@
     <div class="col-12 kb-contact-content">
       <mat-tab-group>
         <mat-tab label="Personal Details">
-          <div class="row kb-contact-card my-3 mx-0">
+          <div class="row kb-contact-card m-3">
             <div class="col-sm-1">
               <div class="kb-contact-icon">
                 {{contact.icon}}
@@ -21,43 +21,54 @@
               </div>
             </div>
           </div>
-          <div class="row kb-contact-details pt-4 mt-3 mx-0">
-            <div class="col-md-8 pl-0">
+          <div class="row kb-contact-details py-3 mx-0">
+            <div class="col-md-8">
               <div class="kb-contact-details-card rounded">
                 <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
                   <h5 class="col-md-4 p-0 m-0">General Details</h5>
                   <div class="kb-contact-search-inp col-md-4 p-0">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input [(ngModel)]="searchField" type="text" placeholder="Search questions" class="w-100 h-100 p-0">
-                    <i mat-ripple *ngIf="searchField" (click)="searchField = ''" class="fa-regular fa-circle-xmark icon-remove"></i>
+                    <i mat-ripple *ngIf="searchField" (click)="searchField = ''" class="fa-solid fa-xmark icon-remove"></i>
                   </div>
                 </div>
                 <table class="table">
                   <tbody>
                     <tr *ngFor="let cf of contactFields | filter:searchField:'label'; index as i">
-                      <td class="col-5">
+                      <td class="col-4">
                         <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
                       </td>
-                      <td class="col-7">
+                      <td class="col-7 px-0" (dblclick)="cf.edit = true">
                         <span *ngIf="!cf.edit else inp">{{cf.value}}</span>
                         <ng-template #inp>
-                          <input type="text" [(ngModel)]="cf.value" class="kb-contact-field-inp px-2 py-1">
+                          <input type="text" (keydown.enter)="verifyField(cf, i)" [(ngModel)]="cf.value" [id]="cf.name + '-' + i" [name]="cf.name + '-' + i" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                          <mat-error *ngIf="cf.error">This field is required</mat-error>
+                          <mat-error *ngIf="cf.uniqueErr">Email address already exists</mat-error>
                         </ng-template>
                       </td>
-                      <td (click)="cf.edit = !cf.edit" class="col-1 text-center kb-contact-field-action p-0 pr-1">
-                        <i *ngIf="cf.edit else edit" mat-ripple class="fa fa-check"></i>
-                        <ng-template #edit>
-                          <i mat-ripple class="fa fa-pencil hideaction"></i>
-                        </ng-template>
+                      <td class="col-1 text-center p-0">
+                        <span class="kb-contact-field-action d-flex px-1">
+                          <i *ngIf="!cf.edit else edit" mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil hideaction"></i>
+                          <ng-template #edit>
+                              <i mat-ripple (click)="undoField(cf, i)" matTooltip="Undo" matTooltipPosition="above" class="fa-solid fa-rotate-left"></i>
+                              <i mat-ripple (click)="verifyField(cf, i)" matTooltip="Save" matTooltipPosition="above" class="fa fa-check"></i>
+                          </ng-template>
+                        </span>
                       </td>           
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <div class="col-md-4 pr-0">
+            <div class="col-md-4">
               <div class="kb-contact-details-card rounded p-2">
-                Lists<br>Tags
+                Lists
+              </div>
+              <div class="kb-contact-details-card rounded p-2 my-4">
+                Tags
+              </div>
+              <div class="kb-contact-details-card rounded p-2">
+                Notes
               </div>
             </div>
           </div>

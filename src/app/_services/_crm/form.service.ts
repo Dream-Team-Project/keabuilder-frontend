@@ -18,10 +18,8 @@ export class FormService {
     btntxt: 'Submit',
     fields: '',
     redirection: '',
-    redirenbled: false,
+    redirectionenabled: false,
     emailfrom: 'info',
-    emailto: '',
-    emailname: '',
     emailsubject: '',
     emailmessage: '',
     emailenabled: false,
@@ -179,7 +177,6 @@ export class FormService {
         if(!this.form.emailsubject) this.form.emailsubject = 'Thankyou';
         if(!this.form.emailmessage) this.form.emailmessage = '<p>Your form has been submitted successfully</p>';
       } 
-      // if(!this.form.emailfrom) this.form.emailfrom = 'info';
       resolve(this.form);
     })
   }

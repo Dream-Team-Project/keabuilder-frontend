@@ -7,6 +7,7 @@
 
 .kb-contact-info {
     color: var(--kb-white);
+    font-size: 14px;
 }
 
 .kb-contact-info i {
@@ -39,6 +40,7 @@
 .kb-contact-details-card .table tr {
     font-size: 14px;
     color: var(--secondary-color);
+    transition: 0.2s ease;
 }
 
 .kb-contact-details-card .table td {
@@ -48,6 +50,11 @@
 .kb-contact-details-card .table label { 
     font-weight: 500;
     margin: 0;
+}
+
+.kb-contact-details-card .table tr:hover {
+    color: var(--primary-color);
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .kb-contact-details-card .table tr:hover .kb-contact-field-action .hideaction {
@@ -60,7 +67,6 @@
 
 .kb-contact-field-action i {
     cursor: pointer;
-    transition: 0.2s ease;
     width: 40px;
     height: 40px;
     margin: auto;
@@ -68,6 +74,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.2s ease;
+}
+
+.kb-contact-field-action i:hover {
+    color: var(--primary-color);
+    background-color: rgb(216 200 152 / 20%);
 }
 
 .kb-contact-field-inp {
@@ -104,18 +116,6 @@
 
 .kb-contact-search-inp .icon-remove {
     cursor: pointer;
-    color: var(--kb-danger);
-}
-
-::ng-deep .kb-contact-content .mat-tab-labels .mat-tab-label {
     font-size: 16px;
-    height: 42px;
-}
-
-::ng-deep .kb-contact-content .mat-tab-labels {
-    border: 0px;
-}
-
-::ng-deep .kb-contact-content  .mat-tab-body-wrapper .mat-tab-body {
-    height: 100%;
+    color: var(--kb-danger);
 }

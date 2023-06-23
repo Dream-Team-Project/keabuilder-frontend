@@ -49,6 +49,18 @@
 ::ng-deep .kb-table-action-icon {
     cursor: pointer;
     line-height: inherit;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: 0.2s ease;
+}
+
+::ng-deep .kb-table-action-icon:hover {
+    background-color: rgb(216 200 152 / 20%);
+    color: var(--primary-color);
 }
 
 ::ng-deep .kb-td-link {

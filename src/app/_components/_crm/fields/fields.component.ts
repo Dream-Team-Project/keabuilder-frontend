@@ -15,12 +15,7 @@ export class CrmFieldsComponent implements OnInit {
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
 
     fieldTypes:Array<any> = this._field.fieldTypes;
-    fields:Array<any> = [
-      { name: 'first-name', label: 'First Name', type: 'text', field_tag: '%FIRST_NAME%', placeholder: 'First Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
-      { name: 'last-name', label: 'Last Name', type: 'text', field_tag: '%LAST_NAME%', placeholder: 'Last Name', icon: '<i class="fas fa-user"></i>', value: '', required: true, default_field: true },
-      { name: 'email', label: 'Email', type: 'email', field_tag: '%EMAIL%', placeholder: 'Email Address', icon: '<i class="fas fa-envelope"></i>', value: '', required: true, default_field: true },
-      { name: 'phone', label: 'Phone', type: 'tel', field_tag: '%PHONE%', placeholder: 'Phone Number', icon: '<i class="fas fa-phone"></i>', value: '', required: true, default_field: true },
-    ];
+    fields:Array<any> = this._field.defaultFields;
     fetching:boolean = true;
     selField:any = '';
     field_error:string = '';
