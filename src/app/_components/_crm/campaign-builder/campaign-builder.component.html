@@ -392,8 +392,8 @@
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>List</mat-label>
                         <mat-select name="list" required [(ngModel)]="fullcampobj.list" >
-                            <mat-option [value]="alllist.uniqueid" [disabled]="alllist.contactcount=='0'"  *ngFor="let alllist of alllists; index as i;" >
-                                {{alllist.list_name}} ({{alllist.contactcount}})
+                            <mat-option [value]="list.id" [disabled]="list.activecontacts=='0'"  *ngFor="let list of lists; index as i;" >
+                                {{list.list_name}} ({{list.activecontacts}})
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

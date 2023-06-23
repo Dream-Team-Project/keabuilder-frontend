@@ -150,16 +150,16 @@
           </thead>
           <tbody>
             <tr *ngFor="let contact of contacts; index as i">
-              <td [routerLink]="['/crm/contact/'+contact.id]" class="kb-td-link">
+              <td [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
                   <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
                   {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}
               </td>
-              <td [routerLink]="['/crm/contact/'+contact.id]" class="kb-td-link"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
+              <td [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
               <td>{{ contact.phone ? contact.phone : '--' }}</td>
               <td>{{ contact.created_at | date:'medium' }}</td>
               <td>
                 <span class="d-flex">
-                  <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="['/crm/contact/'+contact.id]" class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>
+                  <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="['/crm/contact/'+contact.uniqueid]" class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>
                   <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, contact)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
                 </span>
               </td>                        

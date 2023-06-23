@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { CrmListService } from 'src/app/_services/_crmservice/crm_list.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { EmailService } from 'src/app/_services/mailer.service';
-import { CrmUserAddressService } from 'src/app/_services/_crmservice/crm-user-address.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CrmCampaignsService } from 'src/app/_services/_crmservice/crm-campaigns.service';
+import { AddressService } from 'src/app/_services/_crm/address.service';
+import { CampaignService } from 'src/app/_services/_crm/campaign.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { ListService } from 'src/app/_services/_crm/list.service';
 
 @Component({
   selector: 'app-crm-campaign-builder',
@@ -20,9 +20,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
   subjectControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   preheadertextControl = new FormControl('',[Validators.minLength(3)]);
   replytoControl = new FormControl('',[Validators.minLength(3),Validators.email]);
-
   testemailControl = new FormControl('', [Validators.required, Validators.email]);
-  
   companynameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
   addressline1Control = new FormControl('', [Validators.required,Validators.minLength(3)]);
   cityControl = new FormControl('', [Validators.required]);
@@ -30,7 +28,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
   zipControl = new FormControl('', [Validators.required]);
 
   config: any = {
-    height: 577,
+    height: 518,
     plugins:
       'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap',
     toolbar:
@@ -47,95 +45,95 @@ export class CrmCampaignBuilderComponent implements OnInit {
   fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'Default',};
   sendoptn = false;
 
-  alllists:any = [];
+  lists:any = [];
   alladdress:any = [];
   genaddress:any = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
 
-  uniqueidcamp:any = '';
+  uniqueid:any = '';
   campstatus = 'Draft';
   showmytime:any = '';
 
   constructor(public _general:GeneralService,
-        private crmListService :CrmListService,
+        private _listService :ListService,
         private _snackBar: MatSnackBar, 
         public dialog: MatDialog, 
         private emailService: EmailService,
-        private crmUserAddressService: CrmUserAddressService,
+        private _addressService: AddressService,
         private route: ActivatedRoute,
-        private crmCampaignsService: CrmCampaignsService,
+        private _campaignService: CampaignService,
         private router: Router,
       ) { 
 
       this.route.paramMap.subscribe((params: ParamMap) => {
-        this.uniqueidcamp = params.get('uniqueid');
+        this.uniqueid = params.get('uniqueid');
       });
 
   }
  
   ngOnInit(): void {
-
-    this.crmListService.getAllcrmliststagcnt().subscribe({
-      next: data => {
-          // console.log(data);
-          this.alllists = data.data;
-      }
-    });
-
-    this.crmUserAddressService.getAlluserAddress().subscribe({
-      next: data => {
-          // console.log(data);
-          this.alladdress = data.data;
-      }
-    });
+    this.fetchcampaign();
+    this.fetchList();
+    this.fetchAddress();
     if(this.fullcampobj.timezone=='Default' || !this.fullcampobj.timezone ) this.showmytime='Default';
     else{
       this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
     }
-    // this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
-
-    this.crmCampaignsService.getSinglecrmdata(this.uniqueidcamp).subscribe({
-      next: data => {
-          console.log(data);
-          if(data.data?.length!=0){
-
-            data.data.forEach((element:any) => {
-              this.fullcampobj.name = element.campaign_name;
-              this.fullcampobj.subject = element.subject;
-              this.fullcampobj.preheader = element.preheader_text;
-              this.fullcampobj.replyto = element.replyto;
-              this.fullcampobj.sendoption = element.sendoption;
-              this.fullcampobj.campaigneditor = element.emaildata;
-
-              this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
-
-              this.fullcampobj.campaigndate = element.senddate;
-              this.fullcampobj.list = element.lists_uniqueid;
-              this.fullcampobj.addressid = element.addressid;
-
-              this.fullcampobj.timezone = element.timezone;
-
-              this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
-              // console.log(this.fullcampobj);
-              if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
-              else{
-                this.showmytime = this.viewmytimezone(element.timezone);
-              }
-              
-
-            });
-
-          }else{
-            this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
-          }
-      }
-    });
-
-
+    this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
   }
+fetchcampaign(){
+  this._campaignService.singlecampaign(this.uniqueid).subscribe({
+    next: data => {
+        console.log(data);
+        if(data.data?.length!=0){
+          data.data.forEach((element:any) => {
+            this.fullcampobj.name = element.campaign_name;
+            this.fullcampobj.subject = element.subject;
+            this.fullcampobj.preheader = element.preheader_text;
+            this.fullcampobj.replyto = element.replyto;
+            this.fullcampobj.sendoption = element.sendoption;
+            this.fullcampobj.campaigneditor = element.emaildata;
 
+            this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
+
+            this.fullcampobj.campaigndate = element.senddate;
+            this.fullcampobj.list = element.lists;
+            this.fullcampobj.addressid = element.addressid;
+
+            this.fullcampobj.timezone = element.timezone;
+
+            this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
+           
+            if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
+            else{
+              this.showmytime = this.viewmytimezone(element.timezone);
+            }
+            
+
+          });
+
+        }else{
+          this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
+        }
+    }
+  });
+}
+fetchList(){
+  this._listService.fetchlists().subscribe({
+    next: data => {
+        this.lists = data.data;
+    }
+  });
+}
+fetchAddress(){
+  this._addressService.fetchaddress().subscribe({
+    next: data => {
+        this.alladdress = data.data;
+    }
+  });
+}
   campaigndraft(){
     console.log(this.fullcampobj);
-    this.fullcampobj.uniqueid = this.uniqueidcamp;
+    this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish = 0;
     var getobj = this.fullcampobj;
     // console.log(this.campnameControl.status+'---------'+this.subjectControl.status+'------'+this.preheadertextControl.status+'----------'+this.replytoControl.status+'------')
@@ -143,7 +141,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
         // console.log(this.fullcampobj);
-        this.crmCampaignsService.updatecrmcampaignt(getobj).subscribe({
+        this._campaignService.updatecampaign(getobj).subscribe({
           next: data => {
               console.log(data);
               if(data.success==1){
@@ -161,7 +159,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
   publishcampaign(){
 
-    this.fullcampobj.uniqueid = this.uniqueidcamp;
+    this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish = 1;
     var getobj = this.fullcampobj;
     if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
@@ -170,7 +168,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
         if(getobj.campaigneditor!=''){
 
-          this.crmCampaignsService.updatecrmcampaignt(getobj).subscribe({
+          this._campaignService.updatecampaign(getobj).subscribe({
             next: data => {
                 console.log(data);
                 if(data.success==1){
@@ -232,13 +230,14 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
       if(nwaddress.company_name!=''&& nwaddress.country!='' && nwaddress.address_1!='' && nwaddress.city!='' && nwaddress.state!='' && nwaddress.zip!=''){
 
-        this.crmUserAddressService.createuserAddress(nwaddress).subscribe({
+        this._addressService.addaddress(nwaddress).subscribe({
           next: data => {
               // console.log(data);
               if(data.success==1){
                 this.genaddress = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
                 this._snackBar.open('User Address added Successfully!', 'OK');
-                this.alladdress = data.fulldata;
+                // this.alladdress = data.fulldata;
+                this.fetchAddress();
                 this.dialog.closeAll();
 
               }else{
@@ -304,10 +303,4 @@ export class CrmCampaignBuilderComponent implements OnInit {
     const minute = now.getMinutes();
     return new Date(year, month, day, hour, minute);
   }
-
-  // sendtimezone(){
-
-  // }
-
-
 }

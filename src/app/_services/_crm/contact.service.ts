@@ -25,9 +25,9 @@ export class ContactService {
     .pipe(catchError(this.errorHandler));
   }
 
-  singlecontact(id:any): Observable<any> {
+  singlecontact(uniqueid:any): Observable<any> {
     var obj = {uuid: this.uuid};
-    return this.http.post('/api/singlecontact/'+id,obj)
+    return this.http.post('/api/singlecontact/'+uniqueid,obj)
     .pipe(catchError(this.errorHandler));
   }
 
@@ -44,7 +44,7 @@ export class ContactService {
   }
 
   deletecontact(id:any): Observable<any>{
-    return this.http.delete('/api/deletecontact/'+id)
+    return this.http.delete('/api/deletecontact/'+id+'/'+this.uuid)
     .pipe(catchError(this.errorHandler));
   }
 

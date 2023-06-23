@@ -69,53 +69,28 @@ export class CrmContactsComponent implements OnInit {
   }
   
   fetchData(){
-    this.fetchContacts().then((resp1:any)=>{
-      this.fetchLists().then((resp2:any)=>{
-        this.fetchTags().then((resp3:any)=>{
-        })
-      }) 
-    })
+    this.fetchContacts();
+      this.fetchLists();
+        this.fetchTags();
   }
 
   fetchContacts() {
-    return new Promise((resolve) => {
     this._contactService.fetchcontacts().subscribe((resp) => {
       this.adjustdata(resp?.data);
-      resolve(true);
-    },
-    (error) => {
-      resolve(false);
-    }
-  );
 });
   }
 
   fetchLists() {
-    return new Promise((resolve) => {
       this._listService.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
-          console.log(this.lists)
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
     });
   }
 
   fetchTags() {
-    return new Promise((resolve) => {
       this._tagService.fetchtags().subscribe(
         (data) => {
           this.tags = data.data;
-          resolve(true);
-        },
-        (error: any) => {
-          resolve(false);
-        }
-      );
     });
   }
 
