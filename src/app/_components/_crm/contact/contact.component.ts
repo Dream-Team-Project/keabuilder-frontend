@@ -25,7 +25,7 @@ export class CrmContactComponent implements OnInit {
     private _field: FieldService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
-      this.contact.id = params.get('id');
+      this.contact.uniqueid = params.get('uniqueid');
       this.fetchContact();
     });    
   }
@@ -34,7 +34,7 @@ export class CrmContactComponent implements OnInit {
   }
 
   fetchContact() {
-      this._contactService.singlecontact(this.contact.id).subscribe((resp) => {
+      this._contactService.singlecontact(this.contact.uniqueid).subscribe((resp) => {
           this.contact = resp?.data[0];
           this.contact.icon = this.contactIcon(this.contact);
           if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);

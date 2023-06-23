@@ -1,14 +1,12 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { CrmCampaignsService } from 'src/app/_services/_crmservice/crm-campaigns.service';
+import { Router,ActivatedRoute } from '@angular/router';
+import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import {FormControl, Validators} from '@angular/forms';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { CrmListService } from 'src/app/_services/_crmservice/crm_list.service';
-import { CrmService } from 'src/app/_services/crm.service';
-
+import { ListService } from 'src/app/_services/_crm/list.service';
+import { CampaignService } from 'src/app/_services/_crm/campaign.service';
 
 @Component({
   selector: 'app-crm-campaigns',
@@ -17,28 +15,19 @@ import { CrmService } from 'src/app/_services/crm.service';
 })
 export class CrmCampaignsComponent implements OnInit {
 
+  fetching:boolean = true;
   campaignname ='';
   campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   toggleview = true;
   kbcampaigns:any = [];
   shortwaiting = true;
-  campoption = '';
   selectedForm:string = '';
   lists: any = [];
   delcampaign:any;
-  order:any=[ 
-    {value: 'ascending', viewValue: 'Ascending'},
-    {value: 'descending', viewValue: 'Descending'},
-  ];
-optionGroup:any=[
-    {value: 'campaign_name', viewValue: 'Name', order: this.order},
-    {value: 'senddate', viewValue: 'Sent On', order: this.order},
-]
 
   constructor(
-      private crmCampaignservice: CrmCampaignsService,
-      private crmService: CrmService,
-      private _crmlistService: CrmListService,
+      private _campaignservice: CampaignService,
+      private _listService: ListService,
       private _snackBar: MatSnackBar, 
       private dialog: MatDialog,
       private route: ActivatedRoute,
@@ -47,49 +36,53 @@ optionGroup:any=[
       public _general: GeneralService,
     ) {
       this.toggleview = _general.getStorage('campaign_toggle');
-     
-
-
   }
 
   ngOnInit(): void {
-
+    this.fetchcampaigns();
+    this.fetchLists();
     setTimeout(() => {
         this.shortwaiting = false;
     }, 1000);
-    
-    this.fetchAllcampaigns();
-    this.fetchLists();
   }
-fetchAllcampaigns(){
-  this.crmCampaignservice.getAllcrmcampaigns().subscribe({
-    next: data => {
-      console.log(data);
-      this.kbcampaigns = data.data;
+fetchcampaigns(){
+  this.fetching=true;
+  this._campaignservice.fetchcampaigns().subscribe({
+    next: resp => {
+      // console.log(data);
+     this.adjustdata(resp?.data)
     }
   });
 }
-  dateformat(value:any){
+adjustdata(data:any){
+  if(data) this.kbcampaigns = data;
+  this.fetching = false;
+}
+fetchLists() {
+  this._listService.fetchlists().subscribe((data:any) => {
+      this.lists = data.data;  
+
+})
+}
+dateformat(value:any){
     if(value=='') return '';
     var mycustomdate =  new Date(value);
     var text1 = mycustomdate.toDateString();    
     var text2 = mycustomdate.toLocaleTimeString();
     return text1+' '+text2;
   }
-
-  createcamp(){
+createcamp(){
 
     if(this.campaignnameControl.status=='VALID'){
       
       if(this.campaignname!=''){
         
         var data = {name:this.campaignname};
-        this.crmCampaignservice.createcrmcampaign(data).subscribe({
+        this._campaignservice.addcampaign(data).subscribe({
           next: data => {
             // console.log(data);
             this.dialog.closeAll();
             this._snackBar.open('Campaign Created Successfully!', 'OK');
-
             this.router.navigate(['/crm/campaign/'+data.uniqueid],{relativeTo: this.route});
           }
         });
@@ -99,17 +92,11 @@ fetchAllcampaigns(){
     }
 
   }
-
-  openDialog(templateRef: TemplateRef<any>): void {
+openDialog(templateRef: TemplateRef<any>,id:any): void {
+    if(id)  this.delcampaign = id;
     this.dialog.open(templateRef);
-  }
-  openDialog1(templateRef: TemplateRef<any>,uniqueid:any): void {
-    this.delcampaign = uniqueid;
-    this.dialog.open(templateRef);
-  }
-  
-  changepagename(dataobj:any, title:any){
-
+  } 
+changepagename(dataobj:any, title:any){
   }
 
   togglepageview(){
@@ -117,67 +104,22 @@ fetchAllcampaigns(){
     console.log(this.toggleview);
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
-  deletecampaign(uniqueid:any){
-    this.crmCampaignservice.deletecrmcampaign(uniqueid).subscribe((data:any)=>{
-      this.fetchAllcampaigns();
+  deletecampaign(id:any){
+    this._campaignservice.deletecampaign(id).subscribe((data:any)=>{
+      this.fetchcampaigns();
     })
   }
-  
-  applyFilter(event: Event) {
-    var SearchValue = {search:(event.target as HTMLInputElement).value};
-    console.log(SearchValue)
-    this.crmCampaignservice.getSinglecrmcampaigns(SearchValue).subscribe({
-      next: data => {
-        // console.log(data);
-        this.kbcampaigns=data.data;
-        
-      }
-    });
-    
-  }
-  sortcampaigns(){
-    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'other'}).subscribe({
-      next: data => {
-        // console.log(data);
-        this.kbcampaigns=data.data;
-        
-      }
+  searchCampaigns(search: any, sortInp:any, sentInp:any, listInp:any) {
+    this.fetching=true;
+    var obj = {
+      search: search.value,
+      sortInp: sortInp.value,
+      sentInp: sentInp.value,
+      listInp: listInp.value,
+    }
+    this._campaignservice.searchcampaigns(obj).subscribe((resp:any)=>{
+      this.adjustdata(resp?.data);
     });
   }
-  sort(){
-    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'sort'}).subscribe({
-      next: data => {
-        // console.log(data);
-        this.kbcampaigns=data.data;
-        
-      }
-    });
-  }
-  filter(){
-    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm[0],order1:this.selectedForm[1],search:'filter'}).subscribe({
-      next: data => {
-        // console.log(data);
-        this.kbcampaigns=data.data;
-        
-      }
-    });
-  }
-  sortlist(){
-    // console.log(this.selectedForm)
-    this.crmCampaignservice.filtercrmcampaigns({order:this.selectedForm,search:'list'}).subscribe({
-      next: data => {
-        // console.log(data);
-        this.kbcampaigns=data.data;
-        
-      }
-    });
-  }
-  fetchLists() {
-    
-      this._crmlistService.getAllcrmlists().subscribe(
-        (data) => {
-          this.lists = data.data;
-         
-  })
-}
+
 }

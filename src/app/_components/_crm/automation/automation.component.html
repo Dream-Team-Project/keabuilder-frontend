@@ -1,6 +1,6 @@
 
-<!-- dialog for delete campaign button -->
-<ng-template #dialog>
+<!-- dialog for delete automation button -->
+<ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Automation</h1>
     <div mat-dialog-content>Would you like to delete this Automation?</div>
     <div mat-dialog-actions class="justify-content-end">
@@ -16,11 +16,30 @@
       </button>
     </div>
   </ng-template>
-  <div id="kb-crm">
+  <!-- dialog for add automation button -->
+  <ng-template #dialog>
+    <h1 mat-dialog-title class="txt">Create An Automation</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Automation Name</mat-label>
+          <input type="text" matInput name="automationname" [(ngModel)]="automationname" [formControl]="automationnameControl" required minlength="3" >
+          <mat-error *ngIf="automationnameControl.hasError('required')">
+              Automation Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="automationnameControl.hasError('minlength')">
+              Name must be at least <strong>3</strong> characters
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">Close</button>
+        <button mat-button  [color]="'primary'" (click)="addautomation()">Create</button>
+    </div>
+  </ng-template>
     <div class="container-fluid ">
     <div class="row">
-        <mat-form-field class= "col-md-4 fntilform " appearance="fill">
-          <mat-label> <i class="fab fa-searchengin mt-1"></i>Search Automations...</mat-label>
+        <mat-form-field class= "col-md-4" appearance="fill">
+          <mat-label>Search Automations...</mat-label>
           <input
           matInput 
             type="text"
@@ -30,8 +49,9 @@
             (input)="searchAutomations(searchInp, sortInp, filterInp)"
             placeholder="Search Automations..."
           />
+          <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+        <mat-form-field class="col-md-2 " appearance="fill">
           <mat-label>Status :</mat-label>
           <mat-select #sortInp name="kbfilter" value='' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
             <mat-option value="" selected>All</mat-option>
@@ -39,9 +59,9 @@
               <mat-option [value]="'Inactive'">Inactive</mat-option>
           </mat-select>
         </mat-form-field> 
-        <mat-form-field class="col-md-2 fntilform" appearance="fill">
+        <mat-form-field class="col-md-2 " appearance="fill">
           <mat-label>Filter by:</mat-label>
-          <mat-select #filterInp name="kbfilter" value='created_at ASC' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
+          <mat-select #filterInp name="kbfilter" value='created_at DESC' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
             <mat-option [value]="'automation_name ASC'">ASC By Name</mat-option>
             <mat-option [value]="'automation_name DESC'">DESC By Name</mat-option>
             <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -56,25 +76,12 @@
             <span *ngIf="togglebutton==false">List View <i class="fas fa-th-list ml-1"></i></span>
              <span *ngIf="togglebutton==true">Grid View <i class="fas fa-th ml-1"></i></span>
           </button>
-          <button mat-raised-button color="primary" class="mr-2 d-inline-block">
+          <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
             <i class="fa fa-random" aria-hidden="true"></i> Create an automation
           </button>
         </div>
       </div>
-      <!-- <div  class="d-inline " style="font-size:14px">
-        <mat-label
-          (click)="toggleView()"
-          matTooltip="List view"
-          class="ml-2 viewicon"
-          ><i
-            [class]="togglebutton == false ? 'fa fa-th-large' : 'fa fa-bars'"
-          ></i
-        ></mat-label>
-      </div> -->
-    </div>
-    <div class="mt-0 pt-0" *ngIf="togglebutton; else gridview">
-      <div class="container-fluid">
-        <div class="row">
+        <div class="row" *ngIf="togglebutton; else gridview">
           <div class="table m-2">
             <table class="col-md-12 border border-1 m-center">
               <thead>
@@ -124,14 +131,14 @@
                         </span>
                       </div>
                       <div class="text-left funlist1">
-                        <button mat-raised-button color="primary">
+                        <button mat-raised-button color="primary" [routerLink]="'/builder/automation/'+automation.uniqueid">
                           Edit <i class="fas fa-pencil-alt"></i>
                         </button>
                         <button
                           class="m-1"
                           mat-raised-button
                           color="danger"
-                          (click)="openDialog(dialog, automation.uniqueid)"
+                          (click)="openDialog(deldialog, automation.id)"
                         >
                           Delete
                           <i class="far fa-trash-alt pr-2"></i>
@@ -190,7 +197,7 @@
                       <button
                         mat-menu-item
                         class="text-danger"
-                        (click)="openDialog(dialog, automation.uniqueid)"
+                        (click)="openDialog(deldialog, automation.id)"
                       >
                         <mat-icon><i class="far fa-trash-alt pr-2"></i></mat-icon>
                         <span>Delete</span>
@@ -202,9 +209,7 @@
             </table>
           </div>
         </div>
-      </div>
-    </div>
-    <ng-template #gridview class="container-fluid ">
+    <ng-template #gridview >
       <div class="row w-100">
         <div
           class="col-md-4 cardpage mt-5 mb-5 loadEffect"
@@ -229,7 +234,7 @@
                 <input type="text" [(ngModel)]="automation.automation_name" />
               </div>
               <div class="text-center mt-2">
-              <button   mat-raised-button color="primary">
+              <button   mat-raised-button color="primary" [routerLink]="'/builder/automation/'+automation.uniqueid">
                 Edit <i class="fas fa-pencil-alt"></i>
               </button>
           </div >
@@ -268,7 +273,7 @@
                     <i class="fas fa-link pr-2"></i>Copy URL
                   </button> -->
                   <button mat-menu-item class="text-danger"
-                  (click)="openDialog(dialog, automation.uniqueid)">
+                  (click)="openDialog(deldialog, automation.id)">
                     <i
                       class="far fa-trash-alt pr-2"
                      
@@ -338,14 +343,5 @@
       </div>
   
     </ng-template>
-    <div class="col-md-12">
-      <mat-paginator
-        [length]="100"
-        [pageSize]="10"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        aria-label="Select page"
-      >
-      </mat-paginator>
-    </div>
   </div>
   

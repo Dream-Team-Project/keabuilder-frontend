@@ -113,10 +113,8 @@ export class CrmFormBuilderComponent implements OnInit {
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
-      this.fetchlists().then((resp)=>{
-        this.fetchTags().then((resp)=>{
-        }) 
-      });
+      this.fetchlists();
+        this.fetchTags();
     }
 
   @HostListener('document:keydown.control.s', ['$event'])  
@@ -136,28 +134,15 @@ export class CrmFormBuilderComponent implements OnInit {
   }
 
   fetchlists(){
-    return new Promise((resolve) => {
       this._listService.fetchlists().subscribe((data:any)=>{
         this.lists=data.data;
-        resolve(true);
-      },
-      (error: any) => {
-        resolve(false);
-      });
-    });
+      })
   }
 
   fetchTags() {
-    return new Promise((resolve) => {
       this._tagService.fetchtags().subscribe(
         (data) => {
           this.tags = data.data;
-          resolve(true);
-        },
-        (error: any) => {
-          resolve(false);
-        }
-      );
     });
   }
 
@@ -474,8 +459,6 @@ export class CrmFormBuilderComponent implements OnInit {
               if(e==data.data.uniqueid) e=data.data.id;
               return e;
             })
-            // this.filteredTempIds.tags.push(data.data.id);
-            // this.formtags.push(data.data.id);
             if(i==this.newtags.length-1) {resolve(true)};
           }
           i++;

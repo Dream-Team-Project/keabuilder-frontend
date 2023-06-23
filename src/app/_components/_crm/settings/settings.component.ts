@@ -2,8 +2,9 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { CrmSmtpService } from 'src/app/_services/_crmservice/crm-smtp.service';
-import { CrmUserAddressService } from 'src/app/_services/_crmservice/crm-user-address.service';
+import { SettingService } from 'src/app/_services/_crm/setting.service';
+import { AddressService } from 'src/app/_services/_crm/address.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
   selector: 'app-crm-settings',
@@ -11,12 +12,6 @@ import { CrmUserAddressService } from 'src/app/_services/_crmservice/crm-user-ad
   styleUrls: ['./settings.component.css']
 })
 export class CrmSettingsComponent implements OnInit {
-
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
 
   email = new FormControl('', [Validators.required]);
   smtp = new FormControl('', [Validators.required]);
@@ -34,25 +29,24 @@ export class CrmSettingsComponent implements OnInit {
   api_key:any;
   api_id:any;
   showmytime:any = '';
-  timezone:any='America/New_York';
+  timezone:any='';
   genaddress:any = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
   allsmtpdata:any = [];
-  constructor(private crmSmtpService: CrmSmtpService,
-              private _snackBar: MatSnackBar,
+  constructor(private _settingService: SettingService,
               public dialog: MatDialog, 
-        private crmUserAddressService: CrmUserAddressService,) { }
+        private _addressService: AddressService, public _general: GeneralService,) { }
 
   ngOnInit(): void {
-    this.fetchcrmsmtp();
+    this.fetchsmtp();
    
   }
-  fetchcrmsmtp(){
-    this.crmSmtpService.getsmtpdetails().subscribe({
+  fetchsmtp(){
+    this._settingService.singlesetting().subscribe({
       next: data => {
         console.log(data.data[0]);
         if(data.data.length!=0){
          this.allsmtpdata=data.data[0]; 
-         this.timezone=this.allsmtpdata?.global_timezone;
+         this.timezone=this.allsmtpdata?.global_timezone?this.allsmtpdata?.global_timezone:this.timezone;
         }
         else{
           this.allsmtpdata=[];
@@ -62,62 +56,57 @@ export class CrmSettingsComponent implements OnInit {
     });
   }
 
-  addnewsmtp(){
-    this.openSidebar();
-  }
-
-  openSidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
-
-  hidepopupsidebar(){
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
-  }
   addsmtpdetails(){
     if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apiid.status=='VALID' && this.apikey.status=='VALID'){
-      console.log(this.allsmtpdata.length==0)
      if(!this.allsmtpdata?.smtp_type){
-        this.crmSmtpService.addsmtpdetails({emailfrom:this.emailfrom,smtp_type:this.smtp_type,api_id:this.api_id,api_key:this.api_key}).subscribe({
+        this._settingService.addsetting({emailfrom:this.emailfrom,smtp_type:this.smtp_type,api_id:this.api_id,api_key:this.api_key}).subscribe({
           next: data => {
-            // console.log(data);
-            this.fetchcrmsmtp();
-              this.hidepopupsidebar();
-              
-            
+            if(data.success==true){
+              this.fetchsmtp();
+              var msg =  'Settings has been saved';
+              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+            }
+            else{
+              this.fetchsmtp();
+              var msg =  'Server Error';
+              this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+            }
+         
           }
         });
       }
       else{
-        this._snackBar.open('Delete previous SMTP data from database!', 'OK');
+        var msg =  'Delete previous SMTP data from database!';
+        this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
       }else{
-        this._snackBar.open('Something went Wrong!!', 'OK');
+        var msg =  'Somethin went wrong';
+              this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
 
     
 
   }
   deletesmtp(smtp:any){
-    let obj={uniqueid:smtp.uniqueid,smtp_type:'',emailfrom:'',api_id:'',api_key:''}
-    this.crmSmtpService.updatesmtpdetails(obj).subscribe({
+    let obj={id:smtp.id,uniqueid:smtp.uniqueid,smtp_type:'',emailfrom:'',api_id:'',api_key:''}
+    this._settingService.updatesetting(obj).subscribe({
       next: data => {
-        this.fetchcrmsmtp();
+        if(data.success==true){
+          this.fetchsmtp();
+          var msg =  'Settings has been remove';
+          this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        }
+        else{
+          this.fetchsmtp();
+          var msg =  'Server Error';
+          this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+        }
       }
     });
   }
   openDialog(templateRef: TemplateRef<any>): void {
     this.dialog.open(templateRef);
   }
-
- 
 
   removespecialchar(data:any){
 
@@ -191,37 +180,48 @@ export class CrmSettingsComponent implements OnInit {
 
       if(nwaddress.company_name!=''&& nwaddress.country!='' && nwaddress.address_1!='' && nwaddress.city!='' && nwaddress.state!='' && nwaddress.zip!=''){
 
-        this.crmUserAddressService.createuserAddress(nwaddress).subscribe({
+        this._addressService.addaddress(nwaddress).subscribe({
           next: data => {
               // console.log(data);
               if(data.success==1){
                 this.genaddress = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-                this._snackBar.open('User Address added Successfully!', 'OK');
-                // this.alladdress = data.fulldata;
+                var msg =  'Address save successfully!';
+               this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
                 this.dialog.closeAll();
 
               }else{
-                this._snackBar.open('Something went wrong!', 'OK');
+                var msg =  'Server Error!';
+               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
               }
           }
         });
 
       }else{
-        this._snackBar.open('Incorrect Address Details!!', 'OK');
+        var msg =  'Incorrect Address Details!';
+               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
       
     }else{
-      this._snackBar.open('All fields are required!!', 'OK');
+      var msg =  'All fields are required!';
+      this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
     }
 
   }
   Settimezone(){
     console.log(this.timezone)
     let obj={global_timezone:this.timezone};
-    this.crmSmtpService.globaltimezone(obj).subscribe((data:any)=>{
-
+    this._settingService.globaltimezone(obj).subscribe((data:any)=>{
+      if(data.success==true){
+        var msg =  'Global TimeZone Set Successfully';
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+      }
+      else{
+        var msg =  'server error!';
+        this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+      }
     })
-    this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});
+   
+   
   }
 
 }
