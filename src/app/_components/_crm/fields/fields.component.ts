@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FieldsService } from 'src/app/_services/_crm/field.service';
+import { FieldService } from 'src/app/_services/_crm/field.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class CrmFieldsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private _bottomSheet: MatBottomSheet,
-    private _field: FieldsService,
+    private _field: FieldService,
     private _general: GeneralService
     ) { 
       this.fetchFields();

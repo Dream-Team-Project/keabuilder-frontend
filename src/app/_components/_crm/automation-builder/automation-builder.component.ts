@@ -4,7 +4,6 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-crm-automation-builder',
@@ -13,23 +12,16 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 })
 export class CrmAutomationBuilderComponent implements OnInit {
 
-  @ViewChild('triggerDialog') triggerDialog!: TemplateRef<any>;
-  @ViewChild('actionDialog') actionDialog!: TemplateRef<any>;
-  @ViewChild('delTriggerDialog') delTriggerDialog!: TemplateRef<any>;
-  @ViewChild('delActionDialog') delActionDialog!: TemplateRef<any>;
-
-  separatorKeysCodes: number[] = [ENTER, COMMA];
   automation = {
     id: '',
     name: '',
   }
   autosave:boolean = false;
-  selTrg:any = '';
-  selAct:any = '';
   searchVal:string = '';
-  appendIndex = 0;
-  filteredOptions:any = [];
-  filteredTempIds:any = [];
+  appendIndex = -1;
+  isAction:boolean = false;
+  selWf:any;
+  workflowList:Array<any> = [];
 
   constructor(
     public _automation: AutomationService,
@@ -40,44 +32,28 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  openActionDialog(templateRef: TemplateRef<any>, act:number) {
-    this.selAct = act;
-    this.openDialog(templateRef);
+  openDialog(templateRef: TemplateRef<any>, wf:any): void {
+    this.selWf = wf;
+    this.dialog.open(templateRef);
     this.closeBottomSheet();
   }
 
-  toggleTrigger(trg:any) {
-    this.selTrg = trg; 
-    if(this.selTrg.active) this.openDialog(this.delTriggerDialog);
-    else this.openDialog(this.triggerDialog);
-  }
-
-  openBottomSheet(templateRef: TemplateRef<any>, index:number): void {
-    var bottomSheet = this._bottomSheet.open(templateRef);
+  openBottomSheet(templateRef: TemplateRef<any>, isAction:boolean, index:number): void {
+    this.workflowList = JSON.parse(JSON.stringify(
+      isAction ? 
+      this._automation.actionList :
+      this._automation.triggerList));
+    this.isAction = isAction;
     this.appendIndex = index;
+    var bottomSheet = this._bottomSheet.open(templateRef);
     bottomSheet.afterDismissed().subscribe((data:any)=>{
       this.searchVal = '';
-      this.isFilter('action');
-      this.isFilter('trigger');
     })
   }
 
-  closeBottomSheet(): void {
-    this._bottomSheet.dismiss();
-  }
-
-  openDialog(templateRef: TemplateRef<any>): void {
-    this.filterJSONData('');
-    this.dialog.open(templateRef);
-  }
-
-  setTrigger(value:boolean) {
-    this.autosave = value;
-  }
-
-  isFilter(type:string) {
+  isFilter() {
     var intial = true;
-    var wrkfList = type == 'action' ? this._automation.actionsList : this._automation.triggersList;
+    var wrkfList = this.workflowList;
     for(let i = 0; i < wrkfList.length; i++) {
       for(let j = 0; j < wrkfList[i].workflows.length; j++) {
         let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchVal.toLowerCase()) >= 0;
@@ -93,20 +69,11 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
   }
 
-  filterJSONData(event:any) {
-    var value = event ? event.target.value : '';
-    this.filteredOptions = this._automation.forms.filter((option:any) => option.name.toLowerCase().includes(value));
+  closeBottomSheet(): void {
+    this._bottomSheet.dismiss();
   }
 
-  addSelectedOption(event:any, searchDataInp:any): void {
-    this._automation.selectedWfData.push(event.option.value);
-    this.filteredTempIds.push(event.option.value.id);
-    searchDataInp.value = '';
-    this.filterJSONData('');
-  }
-
-  removeSelectedOption(index:number): void {
-      this._automation.selectedWfData.splice(index, 1);
-      this.filteredTempIds.splice(index, 1);
+  toggleAutoSave(value:boolean) {
+    this.autosave = value;
   }
 }

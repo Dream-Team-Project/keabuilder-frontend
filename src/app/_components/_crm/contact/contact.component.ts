@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { FieldsService } from 'src/app/_services/_crm/field.service';
+import { FieldService } from 'src/app/_services/_crm/field.service';
 
 @Component({
   selector: 'app-crm-contact',
@@ -22,7 +22,7 @@ export class CrmContactComponent implements OnInit {
     private _route: ActivatedRoute,
     private _general: GeneralService,
     private _contactService: ContactService,
-    private _field: FieldsService,
+    private _field: FieldService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.contact.id = params.get('id');

@@ -1,156 +1,82 @@
-<!-- trigger templates -->
-<ng-template #triggerslist>
+<!-- workflow list -->
+<ng-template #wfsheet>
     <h4 class="kb-workflow-selection-title border-bottom py-2">
-        <span>Select Trigger
-            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the trigger to add or remove"
-                matTooltipPosition="above"></i>
-        </span>
+        <span>Add {{isAction ? 'Action' : 'Trigger'}}</span>
         <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
             <mat-icon>close</mat-icon>
         </button>
     </h4>
     <mat-form-field appearance="fill">
         <mat-icon matPrefix>search</mat-icon>
-        <mat-label>Search Triggers</mat-label>
-        <input matInput placeholder="Search triggers..." [(ngModel)]="searchVal" (input)="isFilter('trigger')">
+        <mat-label>Search {{isAction ? 'Action' : 'Trigger'}}</mat-label>
+        <input matInput [placeholder]="'Search '+isAction ? 'Action' : 'Trigger'" [(ngModel)]="searchVal" (input)="isFilter()">
         <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
     <mat-accordion>
-        <mat-expansion-panel [class.d-none]="triggergroup.hide" *ngFor="let triggergroup of _automation.triggersList, index as tgi" [expanded]="_general.expPanelStep === tgi" hideToggle>
+        <mat-expansion-panel [class.d-none]="wfgroup.hide" *ngFor="let wfgroup of workflowList, index as wfi" [expanded]="_general.expPanelStep === wfi" hideToggle>
             <mat-expansion-panel-header>
-                <mat-panel-title>{{triggergroup.name}}</mat-panel-title>
-                <mat-panel-description><span [innerHTML]="triggergroup.icon | safeHtml"></span></mat-panel-description>
+                <mat-panel-title>{{wfgroup.name}}</mat-panel-title>
+                <mat-panel-description><span [innerHTML]="wfgroup.icon | safeHtml"></span></mat-panel-description>
             </mat-expansion-panel-header>
             <mat-nav-list class="pt-0">
-                <div (click)="toggleTrigger(trigger)" [class.kb-workflow-option-active]="trigger.active"
-                    *ngFor="let trigger of triggergroup.workflows | filter:searchVal:'name', index as ti" class="kb-workflow-option" mat-ripple
+                <div (click)="openDialog(wfDialog, wf)"
+                    *ngFor="let wf of wfgroup.workflows | filter:searchVal:'name', index as ti" class="kb-workflow-option" mat-ripple
                     mat-list-item>
-                    <span class="kb-workflow-option-icon" [innerHTML]="trigger.icon | safeHtml"></span>
+                    <span class="kb-workflow-option-icon" [innerHTML]="wf.icon | safeHtml"></span>
                     <span class="kb-workflow-option-name">
-                        {{trigger.name}}
-                        <span *ngIf="trigger.active" class="kb-workflow-option-remove-icon">
-                            <i class="fa-regular fa-circle-xmark kb-danger"></i>
-                        </span>
+                        {{wf.name}}
                     </span>
                 </div>
             </mat-nav-list>
         </mat-expansion-panel>
     </mat-accordion>
 </ng-template>
-<ng-template #triggerDialog>
-    <h1 mat-dialog-title class="kb-primary">Trigger</h1>
-    <div mat-dialog-content class="py-2">
-        <mat-form-field appearance="fill">
-            <mat-label>Search Forms</mat-label>
-            <mat-chip-list #chipList aria-label="Fruit selection">
-                <mat-chip
-                    *ngFor="let data of _automation.selectedWfData, index as i"
-                    (removed)="removeSelectedOption(i)">
-                    {{data.name}}
-                    <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                    </button>
-                </mat-chip>
-            </mat-chip-list>
-            <input type="text"
-                #searchDataInp
-                placeholder="Select multiples..."
-                (input)="filterJSONData($event)"
-                [matAutocomplete]="auto"
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                class="w-100"
-                [class.pt-2]="_automation.selectedWfData.length != 0"
-                matInput>
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addSelectedOption($event, searchDataInp)">
-                <mat-option *ngFor="let option of filteredOptions" [value]="option" [disabled]="filteredTempIds.includes(option.id)">
-                  {{option.name}}
+<!-- workflow list -->
+<!-- workflow dialog -->
+<ng-template #wfDialog>
+    <h1 mat-dialog-title class="kb-primary">{{selWf.name}}<span class="kb-tag kb-info-tag">{{isAction ? 'Action' : 'Trigger'}}</span></h1>
+    <div mat-dialog-content [ngSwitch]="selWf.type" class="py-2">
+        <div *ngSwitchCase="'form'">
+            <mat-form-field appearance="fill">
+                <mat-label>Select a Form</mat-label>
+                <mat-select name="form">
+                <mat-option *ngFor="let form of _automation.forms" [value]="form">
+                    {{form.name}}
                 </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngSwitchCase="'list'">
+            <mat-form-field appearance="fill">
+                <mat-label>Select a List</mat-label>
+                <mat-select name="list">
+                <mat-option *ngFor="let list of _automation.lists" [value]="list">
+                    {{list.list_name}}
+                </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngSwitchCase="'tag'">
+            <mat-form-field appearance="fill">
+                <mat-label>Select a Tag</mat-label>
+                <mat-select name="tag">
+                <mat-option *ngFor="let tag of _automation.tags" [value]="tag">
+                    {{tag.tag_name}}
+                </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <!-- <button mat-raised-button mat-dialog-close class="bg-danger text-light">Delete</button> -->
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addTrigger(selTrg)"
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addTrigger('')"
             color="primary">Add</button>
     </div>
 </ng-template>
-<ng-template #delTriggerDialog>
-    <h1 mat-dialog-title class="kb-danger">Remove Trigger</h1>
-    <div mat-dialog-content>
-        Do you want to remove <span class="text-danger">{{selTrg.name}}</span> trigger?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close [color]="'primary'">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
-            (click)="_automation.removeTrigger(selTrg)">Yes</button>
-    </div>
-</ng-template>
-<!-- trigger templates -->
-<!-- action templates -->
-<ng-template #actionslist>
-    <h4 class="kb-workflow-selection-title border-bottom py-2">
-        <span>Select Action
-            <i class="fa-regular fa-circle-question small ml-2" matTooltip="Click on the action to add or remove"
-                matTooltipPosition="above"></i>
-        </span>
-        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
-            <mat-icon>close</mat-icon>
-        </button>
-    </h4>
-    <mat-form-field appearance="fill">
-        <mat-icon matPrefix>search</mat-icon>
-        <mat-label>Search Actions</mat-label>
-        <input matInput placeholder="Search actions..." [(ngModel)]="searchVal" (input)="isFilter('action')">
-        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
-    <mat-accordion>
-        <mat-expansion-panel [class.d-none]="actiongroup.hide" *ngFor="let actiongroup of _automation.actionsList, index as agi" [expanded]="_general.expPanelStep === agi" hideToggle>
-            <mat-expansion-panel-header>
-                <mat-panel-title>{{actiongroup.name}}</mat-panel-title>
-                <mat-panel-description><span [innerHTML]="actiongroup.icon | safeHtml"></span></mat-panel-description>
-            </mat-expansion-panel-header>
-            <mat-nav-list class="pt-0">
-                <div (click)="openActionDialog(actionDialog, action)"
-                    *ngFor="let action of actiongroup.workflows | filter:searchVal:'name', index as ai" class="kb-workflow-option" mat-ripple
-                    mat-list-item>
-                    <span class="kb-workflow-option-icon" [innerHTML]="action.icon | safeHtml"></span>
-                    <span class="kb-workflow-option-name">
-                        {{action.name}}
-                    </span>
-                </div>
-            </mat-nav-list>
-        </mat-expansion-panel>
-    </mat-accordion>
-</ng-template>
-<ng-template #actionDialog>
-    <h1 mat-dialog-title class="kb-primary">Action</h1>
-    <div mat-dialog-content>
-        Add action
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="_automation.addAction(selAct, appendIndex)"
-            [color]="'primary'">Add</button>
-    </div>
-</ng-template>
-<ng-template #delActionDialog>
-    <h1 mat-dialog-title class="kb-danger">Remove Action</h1>
-    <div mat-dialog-content>
-        Do you want to remove <span class="text-danger">{{selAct.name}}</span> action?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close [color]="'primary'">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger"
-            (click)="_automation.removeAction(appendIndex)">Yes</button>
-    </div>
-</ng-template>
-<!-- action templates -->
+<!-- workflow dialog -->
 <!-- worflow starts -->
 <div id="kb-workflow-main">
     <!-- worflow head -->
@@ -162,13 +88,13 @@
                 <button mat-button (click)="_general.backBtn()" class="kb-backBtn">
                     <i [innerHTML]="'left_circle_arrow' | svg | safeHtml" class="mr-1"></i>Back
                 </button>
-                <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger"
-                    [class.kb-btn-active]="autosavet.menuOpen">
-                    Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
+                <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger"
+                    [class.kb-btn-active]="ast.menuOpen">
+                    Auto Save > {{autosave ? 'ON' : 'OFF'}}
                 </button>
-                <mat-menu #autosave>
-                    <button mat-menu-item (click)="setTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
-                    <button mat-menu-item (click)="setTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
+                <mat-menu #asm>
+                    <button mat-menu-item (click)="autosave = true" [class.kb-btn-active]="autosave">ON</button>
+                    <button mat-menu-item (click)="autosave = false" [class.kb-btn-active]="!autosave">OFF</button>
                 </mat-menu>
                 <button mat-button>
                     <i class="fa-solid fa-vial"></i> Test
@@ -211,7 +137,7 @@
                         {{trigger.name}}
                     </button>
                 </span>
-                <button mat-raised-button (click)="openBottomSheet(triggerslist, 0)" class="kb-trigger-action m-1">Add New
+                <button mat-raised-button (click)="openBottomSheet(wfsheet, false, -1)" class="kb-trigger-action m-1">Add New
                     Trigger</button>
             </span>
         </div>
@@ -219,9 +145,9 @@
         <!-- action sections starts -->
         <div class="kb-workflow-section" *ngFor="let action of _automation.activeActions, index as acti">
             <span class="kb-workflow-node">
-                <i (click)="openBottomSheet(actionslist, acti)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                <i (click)="openBottomSheet(wfsheet, true, acti)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
             </span>
-            <button mat-raised-button [color]="action.color" (click)="openActionDialog(delActionDialog, action)">
+            <button mat-raised-button [color]="action.color" (click)="openDialog(wfDialog, action)">
                 <span class="mr-1" [innerHTML]="action.icon | safeHtml"></span>
                 {{action.name}}
             </button>
@@ -268,7 +194,7 @@
         </div>
         <!-- <div class="kb-workflow-section">
             <span class="kb-workflow-node">
-                <i (click)="openBottomSheet(actionslist, 0)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml"
+                <i (click)="openBottomSheet(actionList, 0)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml"
                     mat-ripple></i>
             </span>
             <button mat-raised-button><i class="fa-solid fa-arrows-split-up-and-left mr-1"></i>Condition</button>

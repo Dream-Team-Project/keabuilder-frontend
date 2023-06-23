@@ -162,14 +162,6 @@ export class SidebarComponent implements OnInit {
       title: 'Domains',
       submenu:null
     },
-    // {
-    //   0:true,
-    //   routerlink: '/nolink',
-    //   img: 'complete.gif',
-    //   icon: 'fas fa-address-card',
-    //   title: 'Forms',
-    //   submenu:null
-    // },
     {
       0:true,
       routerlink: '/membership',

@@ -25,33 +25,17 @@
     line-height: 40px;
     cursor: pointer;
     display: flex;
-    margin: 10px 0;
+    margin-bottom: 10px;
     border-radius: 4px;
     transition: 0.2s ease;
 }
 
-.kb-workflow-option:hover span.kb-workflow-option-name, .kb-workflow-option-active span.kb-workflow-option-name {
+.kb-workflow-option:hover span.kb-workflow-option-name {
     color: var(--primary-color);
-}
-
-.kb-workflow-option-active span.kb-workflow-option-icon {
-    background-color: var(--primary-color);
 }
 
 .kb-workflow-option:hover {
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-}
-
-span.kb-workflow-option-remove-icon {
-    top: 0;
-    right: 0;
-    position: absolute;
-    font-size: 24px;
-    padding: 0px 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
 }
 
 span.kb-workflow-option-icon {
@@ -261,6 +245,14 @@ span.kb-workflow-option-name {
     flex-direction: column;
     padding: 30px 20px;
     padding-top: 72px;
+}
+
+.kb-tag.kb-info-tag {
+    margin-left: 10px;
+}
+
+::ng-deep .mat-dialog-title {
+    text-transform: none!important;
 }
 
 ::ng-deep .kb-add-action svg {

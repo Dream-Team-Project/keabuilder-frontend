@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from '../_builder/general.service';
 import { ElementService } from '../_builder/element.service';
-import { FieldsService } from '../_crm/field.service';
+import { FieldService } from '../_crm/field.service';
 import { FileUploadService } from '../file-upload.service';
 
 @Injectable({
@@ -113,7 +113,7 @@ export class FormService {
   constructor(
     private _general: GeneralService,
     public _element: ElementService,
-    private _field: FieldsService,
+    private _field: FieldService,
     private _file: FileUploadService) { }
 
   searchFields(search: any, sort: any, filter: any) {
