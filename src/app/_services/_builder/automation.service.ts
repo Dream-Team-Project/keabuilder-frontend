@@ -98,6 +98,17 @@ export class AutomationService {
     })
   }
 
+  fetchWfTarget(wf:any) {
+    if(wf.working.target) {
+      var resp = [];
+      if(wf.type == 'form') resp = this.forms.filter((f:any) => f.id == wf.working.target.id);
+      if(wf.type == 'list') resp = this.lists.filter((l:any) => l.id == wf.working.target.id);
+      if(wf.type == 'tag') resp = this.tags.filter((t:any) => t.id == wf.working.target.id);
+      return ': '+resp[0]?.name;
+    }
+    else return '';
+  }
+
   addAction(action: any, index: number) {
     this.activeActions.splice(index, 0, action);
   }

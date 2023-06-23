@@ -17,11 +17,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
     name: '',
   }
   autosave:boolean = false;
-  searchVal:string = '';
-  appendIndex = -1;
   isAction:boolean = false;
   selWf:any;
+  selOption:any;
+  appendIndex = -1;
+  searchVal:string = '';
   workflowList:Array<any> = [];
+  filteredData:Array<any> = [];
 
   constructor(
     public _automation: AutomationService,
@@ -33,9 +35,9 @@ export class CrmAutomationBuilderComponent implements OnInit {
   ngOnInit(): void {}
 
   openDialog(templateRef: TemplateRef<any>, wf:any): void {
+    this.closeBottomSheet();
     this.selWf = wf;
     this.dialog.open(templateRef);
-    this.closeBottomSheet();
   }
 
   openBottomSheet(templateRef: TemplateRef<any>, isAction:boolean, index:number): void {
@@ -51,7 +53,17 @@ export class CrmAutomationBuilderComponent implements OnInit {
     })
   }
 
-  isFilter() {
+  addWorkflow(workflow:any, option:any, isAction:boolean, index:number) {
+    if(isAction) {
+      this._automation.activeActions.filter((act:any)=>act.id);
+    } 
+    workflow.working = {
+      target: option,
+    };
+    isAction ? this._automation.addAction(workflow, index) : this._automation.addTrigger(workflow);
+  }
+
+  filterWorkflow() {
     var intial = true;
     var wrkfList = this.workflowList;
     for(let i = 0; i < wrkfList.length; i++) {
@@ -67,6 +79,16 @@ export class CrmAutomationBuilderComponent implements OnInit {
         }
       }
     }
+  }
+
+  filterData(event:any, data:any) {
+    var value = event ? event.target.value : '';
+    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+  }
+
+  selectedOption(e:any, searchDataInp:any) {
+    this.selOption = {id: e.option.value.id};
+    searchDataInp.value = e.option.value.name;
   }
 
   closeBottomSheet(): void {

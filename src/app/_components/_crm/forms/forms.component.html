@@ -55,6 +55,7 @@
         #searchListInp
         placeholder="Select multiples..."
         (input)="filterListData($event)"
+        (click)="filterListData($event)"
         [matAutocomplete]="listAuto"
         [matChipInputFor]="listChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

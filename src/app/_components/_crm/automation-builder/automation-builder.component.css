@@ -247,10 +247,6 @@ span.kb-workflow-option-name {
     padding-top: 72px;
 }
 
-.kb-tag.kb-info-tag {
-    margin-left: 10px;
-}
-
 ::ng-deep .mat-dialog-title {
     text-transform: none!important;
 }
@@ -262,7 +258,6 @@ span.kb-workflow-option-name {
 
 ::ng-deep .kb-workflow-section button.mat-raised-button {
     font-weight: 500;
-    max-width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
