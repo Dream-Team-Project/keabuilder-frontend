@@ -6,7 +6,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FieldsService {
+export class FieldService {
 
   fieldTypes:Array<any> = [
     { name: 'email', label: 'Email 2', type: 'email', placeholder: 'Email Address', icon: '<i class="far fa-envelope"></i>', value: '', required: true },

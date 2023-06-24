@@ -34,6 +34,8 @@
     margin-bottom: 16px!important;
     color: var(--primary-color);
     text-transform: capitalize;
+    display: flex;
+    align-items: center;
 }
 
 ::ng-deep .mat-option-text {

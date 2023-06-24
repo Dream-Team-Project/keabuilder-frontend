@@ -5,7 +5,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { FieldsService } from 'src/app/_services/_crm/field.service';
+import { FieldService } from 'src/app/_services/_crm/field.service';
 import { ListService } from '../../../_services/_crm/list.service';
 import { TagService } from '../../../_services/_crm/tag.service';
 
@@ -44,7 +44,7 @@ export class CrmContactComponent implements OnInit {
     private _route: ActivatedRoute,
     private _general: GeneralService,
     private _contactService: ContactService,
-    private _field: FieldsService,
+    private _field: FieldService,
     private _listService: ListService,
     private _tagService: TagService,
   ) {

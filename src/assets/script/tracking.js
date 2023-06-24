@@ -11,11 +11,11 @@ window.onload = function(a){
             var custmid = window.location.hash.split('?')[0]?.split('=')[0]=='#customerid'?window.location.hash.split('?')[0]?.split('=')[1]:'';
             var userid = window.location.hash.split('?')[1]?.split('=')[0]=='userid'?window.location.hash.split('?')[1]?.split('=')[1]:'';
             if(custmid && userid && productid) {
-                var itemscustm = { customerid: custmid, user_id:userid,productid:productid };
+                var itemscustm = { customerid: custmid, user_id:userid, productid:productid };
                 const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(itemscustm ),
+                    body: JSON.stringify(itemscustm),
                 });
                 var getresponse = await response.json();
                 var gopath = getresponse.path;
