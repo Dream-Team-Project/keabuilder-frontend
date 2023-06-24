@@ -114,64 +114,6 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/sales',
-      img: 'payment.gif',
-      icon: 'fa fa-tags',
-      title: 'Sales',
-      submenu:[{
-        0:true,
-        routerlink: '/sales/offers',
-        img: 'payment.gif',
-        icon: 'fa fa-percentage',
-        title: 'Offers'
-      },
-      {
-        0:true,
-        routerlink: '/sales/coupons',
-        img: 'payment.gif',
-        icon: 'fa fa-file-alt',
-        title: 'Coupons'
-      },
-      {
-        0:true,
-        routerlink: '/sales/payment',
-        img: 'payment.gif',
-        icon: 'fa fa-dollar-sign',
-        title: 'Payments'
-      },
-      {
-        0:true,
-        routerlink: '/sales/affiliates',
-        img: 'payment.gif',
-       icon: 'fas fa-search-dollar',
-        title: 'Affiliates'
-      },
-    ],
-  },{
-      0:true,
-      routerlink: '/payment',
-      img: 'payment.gif',
-      icon: 'fa fa-dollar-sign',
-      title: 'Payment',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/domain',
-      img: 'worldwide.gif',
-      icon: 'fas fa-globe-americas',
-      title: 'Domains',
-      submenu:null
-    },
-    // {
-    //   0:true,
-    //   routerlink: '/nolink',
-    //   img: 'complete.gif',
-    //   icon: 'fas fa-address-card',
-    //   title: 'Forms',
-    //   submenu:null
-    // },
-    {
-      0:true,
       routerlink: '/membership',
       img: 'shield.gif',
       icon: 'fas fa-shield-alt',
@@ -306,6 +248,66 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
+      routerlink: '/sales',
+      img: 'payment.gif',
+      icon: 'fa fa-tags',
+      title: 'Sales',
+      submenu:[{
+        0:true,
+        routerlink: '/sales/offers',
+        img: 'payment.gif',
+        icon: 'fa fa-percentage',
+        title: 'Offers'
+      },
+      {
+        0:true,
+        routerlink: '/sales/coupons',
+        img: 'payment.gif',
+        icon: 'fa fa-file-alt',
+        title: 'Coupons'
+      },
+      {
+        0:true,
+        routerlink: '/sales/payment',
+        img: 'payment.gif',
+        icon: 'fa fa-dollar-sign',
+        title: 'Payments'
+      },
+      {
+        0:true,
+        routerlink: '/sales/affiliates',
+        img: 'payment.gif',
+       icon: 'fas fa-search-dollar',
+        title: 'Affiliates'
+      },
+    ],
+  }
+  // ,{
+  //     0:true,
+  //     routerlink: '/payment',
+  //     img: 'payment.gif',
+  //     icon: 'fa fa-dollar-sign',
+  //     title: 'Payment',
+  //     submenu:null
+  //   }
+    ,{
+      0:true,
+      routerlink: '/domain',
+      img: 'worldwide.gif',
+      icon: 'fas fa-globe-americas',
+      title: 'Domains',
+      submenu:null
+    },
+    // {
+    //   0:true,
+    //   routerlink: '/nolink',
+    //   img: 'complete.gif',
+    //   icon: 'fas fa-address-card',
+    //   title: 'Forms',
+    //   submenu:null
+    // },
+    {
+      0:true,
       routerlink: '/strategies',
       img: 'chess.gif',
       icon: 'fas fa-chess-knight',
@@ -325,58 +327,60 @@ export class SidebarComponent implements OnInit {
       icon: 'fas fa-chart-pie',
       title: 'Analytics',
       submenu:null
-    },{
-      0:true,
-      routerlink: '/affiliates',
-      img: 'money-bag.gif',
-      icon: 'fas fa-search-dollar',
-      title: 'Affiliates',
-      submenu:[
-        {
-          0:true,
-          routerlink: '/affiliates-users',
-          img: 'money-bag.gif',
-          icon: 'fa fa-users',
-          title: 'Users'
-        },{
-          0:true,
-          routerlink: '/affiliates-commission',
-          img: 'money-bag.gif',
-          icon: 'fas fa-hand-holding-usd',
-          title: 'Commission Setup'
-        },{
-          0:true,
-          routerlink: '/affiliates-transactions',
-          img: 'money-bag.gif',
-          icon: 'fas fa-credit-card',
-          title: 'Transactions'
-        },{
-          0:true,
-          routerlink: '/affiliates-share',
-          img: 'money-bag.gif',
-          icon: 'fas fa-share',
-          title: 'Share Links'
-        },{
-          0:true,
-          routerlink: '/affiliates-announcements',
-          img: 'money-bag.gif',
-          icon: 'fas fa-bullhorn',
-          title: 'Announcements'
-        },{
-          0:true,
-          routerlink: '/affiliates-exports',
-          img: 'money-bag.gif',
-          icon: 'fas fa-file-download',
-          title: 'Exports'
-        },{
-          0:true,
-          routerlink: '/affiliates-settings',
-          img: 'money-bag.gif',
-          icon: 'fas fa-cogs',
-          title: 'Settings'
-        }
-      ]
-    },{
+    },
+    // {
+    //   0:true,
+    //   routerlink: '/affiliates',
+    //   img: 'money-bag.gif',
+    //   icon: 'fas fa-search-dollar',
+    //   title: 'Affiliates',
+    //   submenu:[
+    //     {
+    //       0:true,
+    //       routerlink: '/affiliates-users',
+    //       img: 'money-bag.gif',
+    //       icon: 'fa fa-users',
+    //       title: 'Users'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-commission',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-hand-holding-usd',
+    //       title: 'Commission Setup'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-transactions',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-credit-card',
+    //       title: 'Transactions'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-share',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-share',
+    //       title: 'Share Links'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-announcements',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-bullhorn',
+    //       title: 'Announcements'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-exports',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-file-download',
+    //       title: 'Exports'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-settings',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-cogs',
+    //       title: 'Settings'
+    //     }
+    //   ]
+    // },
+    {
       0:true,
       routerlink: '/integrations',
       img: 'cloud-network.gif',
@@ -386,7 +390,7 @@ export class SidebarComponent implements OnInit {
     }
   ];
 
-  extramenus = false;
+  extramenus = true;
   backme = false;
 
   ngOnInit(): void {  }
@@ -422,20 +426,6 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
     }
-    else if(myhref=='/sales'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[3][0] = true;
-
-      this.allmenu[3].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
     // else if(myhref=='/membership'){
 
     //   this.extramenus = false;
@@ -458,9 +448,23 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[7][0] = true;
+      this.allmenu[4][0] = true;
 
-      this.allmenu[7].submenu.forEach((element: any) => {
+      this.allmenu[4].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
+    else if(myhref=='/sales'){
+
+      this.extramenus = false;
+      
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
+      
+      this.allmenu[5][0] = true;
+
+      this.allmenu[5].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -485,9 +489,9 @@ export class SidebarComponent implements OnInit {
       this.backme = false;
     } 
 
-    if(myhref=='/membership' || myhref=='/affiliates'){
-      this.backme = false;
-    }
+    // if(myhref=='/membership' || myhref=='/affiliates'){
+    //   this.backme = false;
+    // }
 
   }
 

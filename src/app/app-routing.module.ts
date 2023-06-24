@@ -245,13 +245,14 @@ const routes: Routes = [
 
       // Coming Soon links==>  ComingSoonComponent
   
-    // { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
-    // { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    // { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+    { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
   
     // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },

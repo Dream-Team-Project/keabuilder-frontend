@@ -11,7 +11,7 @@
     </button>
   </div>
 </ng-template>
-<!-- dialog for duplicate liost with contacts list button -->
+<!-- dialog for duplicate list with contacts list button -->
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title class="kb-primary">Duplicate List</h1>
   <div mat-dialog-content>
@@ -37,7 +37,7 @@
       mat-dialog-close
       cdkFocusInitial
       [color]="'primary'"
-      (click)="copyList(this.list)"
+      (click)="DuplicateList(this.list)"
     >
       Yes
     </button>
@@ -112,7 +112,7 @@
                 <i mat-ripple matTooltip="Edit" matTooltipPosition="above"
                   class="fa fa-pencil kb-table-action-icon" (click)="openDialog(adddialog, list)"></i>
                 <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"
-                  class="fa fa-copy kb-table-action-icon" (click)="copyList(list.list_name)"></i>
+                  class="fa fa-copy kb-table-action-icon" (click)="openDialog(duplicatedialog,list)"></i>
                 <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, list)"
                   class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
               </span>

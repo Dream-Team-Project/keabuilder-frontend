@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CrmSmtpService } from 'src/app/_services/_crmservice/crm-smtp.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SettingService } from 'src/app/_services/_crm/setting.service';
 
 @Component({
   selector: 'app-crm',
@@ -13,7 +13,7 @@ export class CrmComponent implements OnInit {
   timezone:any='America/New_York';
   constructor(
     private dialog: MatDialog,
-    private crmSmtpService: CrmSmtpService,
+    private _settingService: SettingService,
     private _snackBar: MatSnackBar,
   ) { 
     this.fetchcrmsmtp();
@@ -25,7 +25,7 @@ export class CrmComponent implements OnInit {
     this.dialog.open(templateRef);
   }
   fetchcrmsmtp(){
-    this.crmSmtpService.getsmtpdetails().subscribe({
+    this._settingService.singlesetting().subscribe({
       next: data => {
         if(!data.data[0]?.global_timezone)this.openDialog(this.dialogtimezone);
       }
@@ -34,7 +34,7 @@ export class CrmComponent implements OnInit {
   Settimezone(){
     console.log(this.timezone)
     let obj={global_timezone:this.timezone};
-    this.crmSmtpService.globaltimezone(obj).subscribe((data:any)=>{
+    this._settingService.globaltimezone(obj).subscribe((data:any)=>{
 
     })
     this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});

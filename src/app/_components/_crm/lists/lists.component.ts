@@ -83,8 +83,7 @@ export class CrmListsComponent implements OnInit {
         else this.setError(resp.message);
       })
   }
-  copyList(list:any){
-    // let obj={list_name:list.list_name,duplicateList:true};
+  DuplicateList(list:any){
     list.duplicateList=true;
     console.log(list)
     this._listservice
@@ -95,8 +94,6 @@ export class CrmListsComponent implements OnInit {
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
-  // duplicate function need to be changed
-
   deleteList(id: any) {
     this._listservice.deletelist(id).subscribe((resp) => {
       if (resp.success) this.fetchLists();

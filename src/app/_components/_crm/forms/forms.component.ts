@@ -9,11 +9,6 @@ import { ListService } from '../../../_services/_crm/list.service';
 import { TagService } from '../../../_services/_crm/tag.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
-
-// export interface DialogData {
-//   name: string;
-// }
-
 @Component({
   selector: 'app-crm-forms',
   templateUrl: './forms.component.html',
@@ -41,7 +36,7 @@ export class CrmFormsComponent implements OnInit {
 
   delform:any;
   nodata = true;
-  fetching:boolean = true;;
+  fetching:boolean = true;
   lists:any= [];
   tags:any= [];
   selectedLists:any = [];
@@ -274,7 +269,7 @@ export class CrmFormsComponent implements OnInit {
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -295,13 +290,12 @@ export class CrmFormsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
-    // this.formtags.push(event.option.value.uniqueid)
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -309,7 +303,6 @@ export class CrmFormsComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags.splice(index, 1);
     this.filteredTempIds.tags.splice(index, 1);
-    // this.formtags.splice(index, 1);
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -321,7 +314,6 @@ export class CrmFormsComponent implements OnInit {
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
-    // this.formtags.push(obj.uniqueid);
     this.newtags.push(obj);
       
     }

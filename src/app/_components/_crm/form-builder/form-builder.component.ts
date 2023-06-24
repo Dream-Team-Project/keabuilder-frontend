@@ -158,7 +158,6 @@ export class CrmFormBuilderComponent implements OnInit {
   }
 
   saveForm() {
-    // console.log(this.newtags.length)
     if(this.newtags.length>0){
       this.tagupdate().then((resp:any)=>{
         console.log("hello")
@@ -379,7 +378,6 @@ export class CrmFormBuilderComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.id);
-    // this.formlists.push(event.option.value.id)
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -387,8 +385,6 @@ export class CrmFormBuilderComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds.lists.splice(index, 1);
-    // this.formlists.splice(index, 1);
-
   }
 
   // end list actions
@@ -397,13 +393,12 @@ export class CrmFormBuilderComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
-    // this.formtags.push(event.option.value.id)
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -411,7 +406,6 @@ export class CrmFormBuilderComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags.splice(index, 1);
     this.filteredTempIds.tags.splice(index, 1);
-    // this.formtags.splice(index, 1);
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -423,7 +417,6 @@ export class CrmFormBuilderComponent implements OnInit {
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
-    // this.formtags.push(obj.uniqueid);
     this.newtags.push(obj);
       
     }

@@ -95,7 +95,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   filterJSONData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions = this._automation.forms.filter((option:any) => option.name.toLowerCase().includes(value));
+    this.filteredOptions = this._automation.forms.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedOption(event:any, searchDataInp:any): void {

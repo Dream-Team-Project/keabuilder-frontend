@@ -186,7 +186,7 @@ export class CrmContactsComponent implements OnInit {
 
    filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -210,7 +210,7 @@ export class CrmContactsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {

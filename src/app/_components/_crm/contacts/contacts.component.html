@@ -44,6 +44,7 @@
           #searchListInp
           placeholder="Select multiples..."
           (input)="filterListData($event)"
+          (click)="filterListData($event)"
           [matAutocomplete]="listAuto"
           [matChipInputFor]="listChipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -73,6 +74,7 @@
         [formControl]="tagCtrl"
         placeholder="Select multiples..."
         (input)="filterTagData($event)"
+        (click)="filterTagData($event)"
         [matAutocomplete]="tagAuto"
         [matChipInputFor]="tagChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
