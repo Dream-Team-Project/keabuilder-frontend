@@ -64,7 +64,6 @@ import { CrmFormsComponent } from './_components/_crm/forms/forms.component';
 import { CrmListsComponent } from './_components/_crm/lists/lists.component';
 import { CrmReportsComponent } from './_components/_crm/reports/reports.component';
 import { CrmSettingsComponent } from './_components/_crm/settings/settings.component';
-import { CrmSmtpComponent } from './_components/_crm/smtp/smtp.component';
 import { CrmTagsComponent } from './_components/_crm/tags/tags.component';
 // crm
 // membership
@@ -215,7 +214,6 @@ const routes: Routes = [
     { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
     { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-    { path: 'smtp', component: CrmSmtpComponent, canActivate: [AuthGuard] },
     { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
@@ -349,7 +347,6 @@ export const RoutingComponents =
     CrmReportsComponent,
     CrmSettingsComponent,
     CrmCampaignBuilderComponent,
-    CrmSmtpComponent,
     CrmAutomationComponent,
     CrmAutomationBuilderComponent,
     AffiliatesComponent,

@@ -114,8 +114,6 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-<<<<<<< HEAD
-=======
       routerlink: '/sales',
       img: 'payment.gif',
       icon: 'fa fa-tags',
@@ -166,7 +164,6 @@ export class SidebarComponent implements OnInit {
     },
     {
       0:true,
->>>>>>> d43259a4066bc7912ffb010e5e03f7671ac0097e
       routerlink: '/membership',
       img: 'shield.gif',
       icon: 'fas fa-shield-alt',

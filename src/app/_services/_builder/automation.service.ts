@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
-import { ListService } from '../_crm/list.service';
-import { TagService } from '../_crm/tag.service';
-=======
->>>>>>> d43259a4066bc7912ffb010e5e03f7671ac0097e
 import { FileUploadService } from '../file-upload.service';
 import { ListService } from '../_crm/list.service';
 import { TagService } from '../_crm/tag.service';
@@ -70,14 +65,9 @@ export class AutomationService {
 
   constructor(private _file: FileUploadService,
     private _list: ListService,
-<<<<<<< HEAD
-    private _tag: TagService) {
-      this.actionsList = this.actionsList.concat(this.workflowList);
-=======
     private _tag: TagService,
     private _field: FieldService) {
       this.actionList = this.actionList.concat(this.defaultWfList);
->>>>>>> d43259a4066bc7912ffb010e5e03f7671ac0097e
       this.fetchForms();
       this.fetchLists();
       this.fetchTags();
