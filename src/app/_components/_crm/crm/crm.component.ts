@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { SettingService } from 'src/app/_services/_crm/setting.service';
 
 @Component({
@@ -10,11 +11,13 @@ import { SettingService } from 'src/app/_services/_crm/setting.service';
 })
 export class CrmComponent implements OnInit {
   @ViewChild('dialogtimezone') dialogtimezone!: TemplateRef<any>;
-  timezone:any='America/New_York';
+  timezone:any='';
+  filteredtimezone:any=[];
   constructor(
     private dialog: MatDialog,
     private _settingService: SettingService,
     private _snackBar: MatSnackBar,
+    public _general: GeneralService,
   ) { 
     this.fetchcrmsmtp();
   }
@@ -31,13 +34,18 @@ export class CrmComponent implements OnInit {
       }
     });
   }
-  Settimezone(){
-    console.log(this.timezone)
-    let obj={global_timezone:this.timezone};
+  Settimezone(timezone:any){
+    let obj={global_timezone:timezone};
     this._settingService.globaltimezone(obj).subscribe((data:any)=>{
+      if(data.success==true){
+        this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});
+      }
+      else{
+        this._snackBar.open("Something went wrong","Ok",{duration:3000});
+      }
 
     })
-    this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});
+    
   }
   gettimezone(event:any){
     var timez = event.source.triggerValue;
@@ -58,6 +66,10 @@ export class CrmComponent implements OnInit {
       });
 
       return dt;
+  }
+  filtertimezoneData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
   }
 
 }

@@ -166,6 +166,7 @@ export class CrmFormBuilderComponent implements OnInit {
       });
     }
     else{
+      console.log("hello1")
       this.save();
     }
     
@@ -173,7 +174,7 @@ export class CrmFormBuilderComponent implements OnInit {
   }
   save(){
     this._form.form.lists=this.filteredTempIds.lists.toString();
-      this._form.form.tags=this.filteredTempIds.tags.toString();
+      this._form.form.tags=this.filteredTempIds?.tags.toString();
         this._general.saveDisabled = true;
         this._form.updateForm().then((e:any)=>{
           if(e.success == 1) {
@@ -373,7 +374,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -394,7 +395,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
@@ -414,7 +415,7 @@ export class CrmFormBuilderComponent implements OnInit {
     if (value) {
       var obj: any = {
         uniqueid: Math.random().toString(20).slice(2),
-        tag_name: event.value,
+        name: event.value,
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);

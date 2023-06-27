@@ -62,8 +62,7 @@
         </div>
     </form>
     <ng-template #thankumsg>
-        <div [innerHTML]="_form.getThankyouMsg() | safeHtml" 
-            [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
+       <div id="thanku" [innerHTML]="_form.getThankyouMsg() | safeHtml" [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
             <!-- <div><img src="./assets/default/images/kbtick.png" width="100px" height="auto"></div> -->
             <!-- <h4>Thankyou</h4>
             <div>

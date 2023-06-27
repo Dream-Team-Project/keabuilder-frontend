@@ -111,7 +111,9 @@ export class CrmContactsComponent implements OnInit {
     if(this.contact.email && this.isEmailValid(this.contact.email)) {
       this.hasError = '';
       delete this.contact.error;
-      if(this.newtags.length>0) this.tagupdate().then((resp)=>this.addContactFunction());
+      if(this.newtags.length>0) this.tagupdate().then((resp:any)=>{
+        console.log(resp)
+      this.addContactFunction()});
       else this.addContactFunction();
     }
     else {
@@ -126,6 +128,7 @@ export class CrmContactsComponent implements OnInit {
     this._contactService.addcontact(this.contact).subscribe((resp) => {
       if(resp.success) {
         this.fetchContacts();
+        this.resetobj();
         this._general.openSnackBar(false, 'Contact has been saved', 'OK', 'center', 'top');
       }
       else this.setError(resp.message);
@@ -169,15 +172,16 @@ export class CrmContactsComponent implements OnInit {
   tagupdate() {
     return new Promise((resolve) => {
       let i=0;
+      console.log(this.newtags)
       this.newtags.forEach((tag: any) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
-          this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
-            if(e==data.data.uniqueid) e=data.data.id;
-            return e;
-          })
-          if(i=this.newtags.length-1)resolve(data.data);
+          if(data.success){
+          if(data.success==true) this.filteredTempIds.tags.push(data.data.id);
+          if(i==this.newtags.length-1) resolve(true);
+          i++;
+          }
         });
-        i++;
+       
       });
     });
   }
@@ -186,13 +190,12 @@ export class CrmContactsComponent implements OnInit {
 
    filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.id);
-    // this.formlists.push(event.option.value.uniqueid)
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -200,8 +203,6 @@ export class CrmContactsComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds.lists.splice(index, 1);
-    // this.formlists.splice(index, 1);
-
   }
 
   // end list actions
@@ -210,13 +211,12 @@ export class CrmContactsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
-    // this.formtags.push(event.option.value.uniqueid)
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -224,7 +224,6 @@ export class CrmContactsComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags.splice(index, 1);
     this.filteredTempIds.tags.splice(index, 1);
-    // this.formtags.splice(index, 1);
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -232,12 +231,11 @@ export class CrmContactsComponent implements OnInit {
     if (value) {
       var obj: any = {
         uniqueid: Math.random().toString(20).slice(2),
-        tag_name: event.value,
+        name: event.value,
       };
       this.selectedTags.push(obj);
-      this.filteredTempIds.tags.push(obj.uniqueid);
-    // this.formtags.push(obj.uniqueid);
-    this.newtags.push(obj);
+      // this.filteredTempIds.tags.push(obj.uniqueid);
+      this.newtags.push(obj);
       
     }
     // Clear the input value
@@ -246,5 +244,18 @@ export class CrmContactsComponent implements OnInit {
   }
 
   // end tag actions
-
+// reset objects
+resetobj(){
+  this.selectedLists=[];
+        this.selectedTags=[];
+        this.filteredTempIds= {
+          lists: [],
+          tags: []
+        };
+        this.filteredOptions = {
+          lists: [],
+          tags: []
+        };
+        this.newtags=[];
+}
 }

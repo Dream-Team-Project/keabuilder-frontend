@@ -62,8 +62,8 @@
         <mat-form-field class="col-md-2 " appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select #filterInp name="kbfilter" value='created_at DESC' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
-            <mat-option [value]="'automation_name ASC'">ASC By Name</mat-option>
-            <mat-option [value]="'automation_name DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
             <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
             <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
             <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -112,7 +112,7 @@
                     ></div>
                     <div>
                       <div class="text-left funlist p-1">
-                        {{ automation.automation_name | titlecase }}
+                        {{ automation.name | titlecase }}
                         <span
                           class="statusbadge"
                           [class]="
@@ -230,8 +230,8 @@
                 matTooltip="Edit Automation Name"
                 matTooltipPosition="above"
               >
-                <span>Automation : {{ automation.automation_name }}</span>
-                <input type="text" [(ngModel)]="automation.automation_name" />
+                <span>Automation : {{ automation.name }}</span>
+                <input type="text" [(ngModel)]="automation.name" />
               </div>
               <div class="text-center mt-2">
               <button   mat-raised-button color="primary" [routerLink]="'/builder/automation/'+automation.uniqueid">

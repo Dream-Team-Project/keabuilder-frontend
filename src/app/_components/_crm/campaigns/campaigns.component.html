@@ -46,8 +46,8 @@
         <mat-form-field  class="col-md-2" appearance="fill">
           <mat-label>Filter by:</mat-label>
           <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchCampaigns(searchInp, sortInp,sentInp,listInp)">
-            <mat-option [value]="'campaign_name ASC'">ASC By Name</mat-option>
-            <mat-option [value]="'campaign_name DESC'">DESC By Name</mat-option>
+            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
             <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
             <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
             <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -67,7 +67,7 @@
             <mat-select #listInp name="listfilter" value='' (valueChange)="searchCampaigns(searchInp, sortInp,sentInp,listInp)">
                 <mat-option value="" selected>All</mat-option>
                 <mat-option *ngFor="let list of lists" [value]="list.id">
-                    {{list?.list_name | titlecase}}
+                    {{list?.name | titlecase}}
                   </mat-option>
             </mat-select>
       </mat-form-field>
@@ -85,9 +85,9 @@
       <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
         <div [class.row]="toggleview">
           <div *ngIf="!toggleview" class="keabuilder-title-board line-ellipsis mt-2 mb-2">
-            <span class="fntwt">{{kbcampaign.campaign_name | titlecase}}</span>
-            <input type="text" [(ngModel)]="kbcampaign.campaign_name"
-              (blur)="changepagename(kbcampaign,kbcampaign.campaign_name)" matTooltip="Edit Campaign Name"
+            <span class="fntwt">{{kbcampaign.name | titlecase}}</span>
+            <input type="text" [(ngModel)]="kbcampaign.name"
+              (blur)="changepagename(kbcampaign,kbcampaign.name)" matTooltip="Edit Campaign Name"
               matTooltipPosition="above">
           </div>
           <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
@@ -106,20 +106,20 @@
               <div [class.p-0]="!toggleview" class="col-md-12">
 
                 <div *ngIf="toggleview" class="keabuilder-title-board line-ellipsis ">
-                  <span class="fntwt">{{kbcampaign.campaign_name | titlecase}}</span>
-                  <input type="text" [(ngModel)]="kbcampaign.campaign_name"
-                    (blur)="changepagename(kbcampaign,kbcampaign.campaign_name)" matTooltip="Edit Campaign Name"
+                  <span class="fntwt">{{kbcampaign.name | titlecase}}</span>
+                  <input type="text" [(ngModel)]="kbcampaign.name"
+                    (blur)="changepagename(kbcampaign,kbcampaign.name)" matTooltip="Edit Campaign Name"
                     matTooltipPosition="above">
                 </div>
                 <div class="d-flex justify-content-between">
-                  <button *ngIf="kbcampaign.campaign_sent=='1'" class="view-btn align" mat-raised-button><i class="fa-solid fa-chart-pie mr-1" aria-hidden="true"></i>View Report</button>
+                  <button *ngIf="kbcampaign.campaign_sent=='1'" class="view-btn3 align" mat-raised-button>View Report<i class="fa-solid fa-chart-pie ml-1" aria-hidden="true"></i></button>
                   <button  *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button  [routerLink]="'/crm/campaign/'+kbcampaign.uniqueid" class="view-btn3 mr-2 "> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
                   <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
                 <mat-menu #menu2="matMenu">
                   <button mat-menu-item [routerLink]="'/crm/campaign/'+kbcampaign.uniqueid" >
                     <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
                   </button>
-                  <button mat-menu-item>
+                  <button mat-menu-item  (click)="duplicatecampaign(kbcampaign)">
                     <i class="far fa-copy mr-2"></i>Duplicate
                   </button>
                  

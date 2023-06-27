@@ -32,13 +32,15 @@ export class CrmSettingsComponent implements OnInit {
   timezone:any='';
   genaddress:any = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
   allsmtpdata:any = [];
+  filteredtimezone:any=[];
+  filteredcountry:any=[];
   constructor(private _settingService: SettingService,
               public dialog: MatDialog, 
-        private _addressService: AddressService, public _general: GeneralService,) { }
+        public _addressService: AddressService,
+         public _general: GeneralService,) { }
 
   ngOnInit(): void {
     this.fetchsmtp();
-   
   }
   fetchsmtp(){
     this._settingService.singlesetting().subscribe({
@@ -67,7 +69,6 @@ export class CrmSettingsComponent implements OnInit {
               this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
             }
             else{
-              this.fetchsmtp();
               var msg =  'Server Error';
               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
             }
@@ -80,7 +81,7 @@ export class CrmSettingsComponent implements OnInit {
         this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
       }else{
-        var msg =  'Somethin went wrong';
+        var msg =  'Something went wrong';
               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
 
@@ -174,7 +175,6 @@ export class CrmSettingsComponent implements OnInit {
 
   }
   sendaddress(){
-    // console.log(this.genaddress);
     var nwaddress = this.genaddress;
     if(this.companynameControl.status=='VALID' && this.addressline1Control.status=='VALID'){
 
@@ -222,6 +222,14 @@ export class CrmSettingsComponent implements OnInit {
     })
    
    
+  }
+  filtertimezoneData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+  }
+  filtercountryData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
   }
 
 }

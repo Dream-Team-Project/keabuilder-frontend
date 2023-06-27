@@ -44,7 +44,7 @@
         <mat-chip
           *ngFor="let data of selectedLists; index as i"
           (removed)="removeSelectedList(i)">
-          {{ data?.list_name }}
+          {{ data?.name }}
           <button matChipRemove>
           <mat-icon>cancel</mat-icon>
           </button>
@@ -70,7 +70,7 @@
           *ngFor="let option of filteredOptions?.lists"
           [value]="option"
           [disabled]="filteredTempIds?.lists.includes(option.id)">
-          {{ option?.list_name }}
+          {{ option?.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -80,7 +80,7 @@
         <mat-chip
           *ngFor="let data of selectedTags; index as i"
           (removed)="removeSelectedTag(i)">
-          {{ data?.tag_name }}
+          {{ data?.name }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
@@ -111,7 +111,7 @@
           [value]="option"
           [disabled]="filteredTempIds.tags.includes(option.id)"
         >
-          {{ option.tag_name }}
+          {{ option.name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

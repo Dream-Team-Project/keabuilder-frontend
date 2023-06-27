@@ -60,7 +60,7 @@
                 <mat-label>Select a List</mat-label>
                 <mat-select name="list">
                 <mat-option *ngFor="let list of _automation.lists" [value]="list">
-                    {{list.list_name}}
+                    {{list.name}}
                 </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -70,7 +70,7 @@
                 <mat-label>Select a Tag</mat-label>
                 <mat-select name="tag">
                 <mat-option *ngFor="let tag of _automation.tags" [value]="tag">
-                    {{tag.tag_name}}
+                    {{tag.name}}
                 </mat-option>
                 </mat-select>
             </mat-form-field>

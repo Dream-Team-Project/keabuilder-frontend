@@ -2,7 +2,7 @@
 <ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete List</h1>
   <div mat-dialog-content>
-    Would you like to delete <span class="text-danger">{{list.list_name}}</span> List?
+    Would you like to delete <span class="text-danger">{{list.name}}</span> List?
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'">No</button>
@@ -15,13 +15,14 @@
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title class="kb-primary">Duplicate List</h1>
   <div mat-dialog-content>
-    <div>Would you like to duplicate this List ?</div>
+    <!-- <div>Would you like to duplicate this List ?</div> -->
+    <mat-error *ngIf="hasError">{{hasError}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>List Name</mat-label>
       <input
         type="text"
         matInput
-        [(ngModel)]="list.list_name"
+        [(ngModel)]="list.name"
         placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
         required
       />
@@ -51,7 +52,7 @@
     <mat-error *ngIf="hasError">{{hasError}}</mat-error>
     <mat-form-field appearance="fill" [class.mat-form-field-invalid]="hasError">
       <mat-label>List Name</mat-label>
-      <input type="text" matInput [(ngModel)]="list.list_name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+      <input type="text" matInput [(ngModel)]="list.name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
         required>
     </mat-form-field>
   </div>
@@ -74,8 +75,8 @@
     <mat-form-field class="col-md-2" appearance="fill">
       <mat-label>Filter by:</mat-label>
       <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchLists(searchInp, filterInp)">
-        <mat-option [value]="'list_name ASC'">ASC By Name</mat-option>
-        <mat-option [value]="'list_name DESC'">DESC By Name</mat-option>
+        <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+        <mat-option [value]="'name DESC'">DESC By Name</mat-option>
         <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
         <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -102,7 +103,7 @@
         <tbody>
           <tr *ngFor="let list of lists; index as i">
             <td>
-              <span class="kb-table mr-1">{{ list.list_name | titlecase }}
+              <span class="kb-table mr-1">{{ list.name | titlecase }}
               </span>
             </td>
             <td>{{ list.activecontacts }}</td>

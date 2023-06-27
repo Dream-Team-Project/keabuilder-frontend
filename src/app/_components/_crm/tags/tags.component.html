@@ -18,7 +18,7 @@
   <div mat-dialog-content>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Tag Name</mat-label>
-      <input type="text" matInput [(ngModel)]="tag.tag_name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
+      <input type="text" matInput [(ngModel)]="tag.name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
         required />
     </mat-form-field>
   </div>
@@ -43,8 +43,8 @@
     <mat-form-field class="col-md-2" appearance="fill">
       <mat-label>Filter by:</mat-label>
       <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchTags(searchInp, filterInp)">
-        <mat-option [value]="'tag_name ASC'">ASC By Name</mat-option>
-        <mat-option [value]="'tag_name DESC'">DESC By Name</mat-option>
+        <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+        <mat-option [value]="'name DESC'">DESC By Name</mat-option>
         <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
         <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -71,7 +71,7 @@
         <tbody>
           <tr *ngFor="let tag of tags; index as i">
             <td>
-              <span class="kb-table mr-1">{{ tag.tag_name | titlecase }} </span>
+              <span class="kb-table mr-1">{{ tag.name | titlecase }} </span>
             </td>
             <td>{{ tag.activecontacts }}</td>
             <td>{{ tag.created_at | date : "medium" }}</td>

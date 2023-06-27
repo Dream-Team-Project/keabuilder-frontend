@@ -74,9 +74,7 @@ dateformat(value:any){
 createcamp(){
 
     if(this.campaignnameControl.status=='VALID'){
-      
       if(this.campaignname!=''){
-        
         var data = {name:this.campaignname};
         this._campaignservice.addcampaign(data).subscribe({
           next: data => {
@@ -121,5 +119,12 @@ changepagename(dataobj:any, title:any){
       this.adjustdata(resp?.data);
     });
   }
-
+duplicatecampaign(campaign:any){
+  campaign.publish=0;
+  this._campaignservice.duplicatecampaign(campaign).subscribe((data:any) => {
+        if(data.success==true){
+            this._snackBar.open('Campaign Duplicate Successfully !', 'OK',{duration:2000});
+        }
+    })   
+}
 }

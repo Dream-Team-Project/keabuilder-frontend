@@ -53,7 +53,7 @@ addautomation(){
 }
 copyAutomation(automation:any){
   let obj=automation;
-  obj.automation_name=obj.automation_name+' '+'copy';
+  obj.name=obj.name+' '+'copy';
   // console.log(obj)
   this._automationservice
   .addautomation(obj)

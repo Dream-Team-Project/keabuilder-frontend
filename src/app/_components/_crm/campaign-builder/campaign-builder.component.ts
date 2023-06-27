@@ -16,7 +16,6 @@ import { ListService } from 'src/app/_services/_crm/list.service';
 })
 export class CrmCampaignBuilderComponent implements OnInit {
 
-  // campnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   subjectControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   preheadertextControl = new FormControl('',[Validators.minLength(3)]);
   replytoControl = new FormControl('',[Validators.minLength(3),Validators.email]);
@@ -42,7 +41,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     diskCache: true
   };
   testemail = '';
-  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'Default',};
+  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'',};
   sendoptn = false;
 
   lists:any = [];
@@ -52,16 +51,18 @@ export class CrmCampaignBuilderComponent implements OnInit {
   uniqueid:any = '';
   campstatus = 'Draft';
   showmytime:any = '';
-
+  filteredtimezone:any=[];
+  filteredcountry:any=[];
   constructor(public _general:GeneralService,
         private _listService :ListService,
         private _snackBar: MatSnackBar, 
         public dialog: MatDialog, 
         private emailService: EmailService,
-        private _addressService: AddressService,
+        public _addressService: AddressService,
         private route: ActivatedRoute,
         private _campaignService: CampaignService,
         private router: Router,
+        
       ) { 
 
       this.route.paramMap.subscribe((params: ParamMap) => {
@@ -80,29 +81,28 @@ export class CrmCampaignBuilderComponent implements OnInit {
     }
     this.showmytime = this.viewmytimezone(this.fullcampobj.timezone);
   }
-fetchcampaign(){
+ fetchcampaign(){
   this._campaignService.singlecampaign(this.uniqueid).subscribe({
     next: data => {
-        console.log(data);
         if(data.data?.length!=0){
           data.data.forEach((element:any) => {
-            this.fullcampobj.name = element.campaign_name;
+            this.fullcampobj.name = element.name;
             this.fullcampobj.subject = element.subject;
             this.fullcampobj.preheader = element.preheader_text;
             this.fullcampobj.replyto = element.replyto;
             this.fullcampobj.sendoption = element.sendoption;
             this.fullcampobj.campaigneditor = element.emaildata;
-
+            this.fullcampobj.id=element.id;
             this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
 
             this.fullcampobj.campaigndate = element.senddate;
-            this.fullcampobj.list = element.lists;
+            this.fullcampobj.list = element.list;
             this.fullcampobj.addressid = element.addressid;
 
             this.fullcampobj.timezone = element.timezone;
 
             this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
-           
+            console.log(this.fullcampobj);
             if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
             else{
               this.showmytime = this.viewmytimezone(element.timezone);
@@ -116,27 +116,25 @@ fetchcampaign(){
         }
     }
   });
-}
-fetchList(){
+  }
+ fetchList(){
   this._listService.fetchlists().subscribe({
     next: data => {
         this.lists = data.data;
     }
   });
-}
-fetchAddress(){
+ }
+ fetchAddress(){
   this._addressService.fetchaddress().subscribe({
     next: data => {
         this.alladdress = data.data;
     }
   });
-}
-  campaigndraft(){
-    console.log(this.fullcampobj);
+ }
+ campaigndraft(){
     this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish = 0;
     var getobj = this.fullcampobj;
-    // console.log(this.campnameControl.status+'---------'+this.subjectControl.status+'------'+this.preheadertextControl.status+'----------'+this.replytoControl.status+'------')
     if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
@@ -144,21 +142,27 @@ fetchAddress(){
         this._campaignService.updatecampaign(getobj).subscribe({
           next: data => {
               console.log(data);
-              if(data.success==1){
+              if(data.success==true){
                   this.campstatus = 'Draft';
                   this._snackBar.open('Campaign Update Successfully!!', 'OK');
+                  this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
               }
           }
         });    
 
       }
-      
+    else{
+      this._snackBar.open('Missing Campaign details!!', 'OK');
     }
+    }
+  else{
+    this._snackBar.open('Missing Campaign details!!', 'OK');
+  }
 
   }
 
-  publishcampaign(){
-
+ publishcampaign(){
+    console.log(this.fullcampobj);
     this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish = 1;
     var getobj = this.fullcampobj;
@@ -171,7 +175,7 @@ fetchAddress(){
           this._campaignService.updatecampaign(getobj).subscribe({
             next: data => {
                 console.log(data);
-                if(data.success==1){
+                if(data.success==true){
                     this.campstatus = 'Publish';
                     this._snackBar.open('Campaign Publish Successfully!!', 'OK');
                     this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});
@@ -192,7 +196,7 @@ fetchAddress(){
 
   }
 
-  sendatestemail(){
+ sendatestemail(){
     var getobj = this.fullcampobj;
     if(this.testemailControl.status=='VALID'){
       
@@ -302,5 +306,13 @@ fetchAddress(){
     const hour = now.getHours();
     const minute = now.getMinutes();
     return new Date(year, month, day, hour, minute);
+  }
+  filtertimezoneData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+  }
+  filtercountryData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
   }
 }

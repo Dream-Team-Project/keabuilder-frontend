@@ -269,7 +269,7 @@ export class CrmFormsComponent implements OnInit {
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.list_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -290,7 +290,7 @@ export class CrmFormsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.tag_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
@@ -310,7 +310,7 @@ export class CrmFormsComponent implements OnInit {
     if (value) {
       var obj: any = {
         uniqueid: Math.random().toString(20).slice(2),
-        tag_name: event.value,
+        name: event.value,
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
