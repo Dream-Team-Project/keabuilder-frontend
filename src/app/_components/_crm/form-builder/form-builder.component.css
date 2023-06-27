@@ -436,7 +436,7 @@ button {
 }
 
 #kb-field-group {
-    width: 300px;
+    width: 320px;
     min-height: 100%;
     padding: 10px 10px 40px;
     background-color: var(--kb-gray);

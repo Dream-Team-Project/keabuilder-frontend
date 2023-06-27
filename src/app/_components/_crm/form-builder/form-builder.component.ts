@@ -363,6 +363,7 @@ export class CrmFormBuilderComponent implements OnInit {
   }
 
   switchPreviewMode() {
+    if(this.fieldsdrawer?.opened) this.selectTab('fields');
     this._form.preview = !this._form.preview;
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;

@@ -9,8 +9,8 @@
     <mat-form-field appearance="fill">
         <mat-icon matPrefix>search</mat-icon>
         <mat-label>Search {{isAction ? 'Action' : 'Trigger'}}</mat-label>
-        <input matInput [placeholder]="'Search '+isAction ? 'Action' : 'Trigger'" [(ngModel)]="searchVal" (input)="filterWorkflow()">
-        <button *ngIf="searchVal" matSuffix mat-icon-button aria-label="Clear" (click)="searchVal=''">
+        <input matInput [placeholder]="'Search '+isAction ? 'Action' : 'Trigger'" [(ngModel)]="searchWf" (input)="filterWorkflow()">
+        <button *ngIf="searchWf" matSuffix mat-icon-button aria-label="Clear" (click)="searchWf=''">
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
@@ -21,8 +21,8 @@
                 <mat-panel-description><span [innerHTML]="wfgroup.icon | safeHtml"></span></mat-panel-description>
             </mat-expansion-panel-header>
             <mat-nav-list class="pt-0">
-                <div (click)="openDialog(wfDialog, wf)"
-                    *ngFor="let wf of wfgroup.workflows | filter:searchVal:'name', index as ti" class="kb-workflow-option" mat-ripple
+                <div (click)="selectedWf(wf)"
+                    *ngFor="let wf of wfgroup.workflows | filter:searchWf:'name', index as ti" class="kb-workflow-option" mat-ripple
                     mat-list-item>
                     <span class="kb-workflow-option-icon" [innerHTML]="wf.icon | safeHtml"></span>
                     <span class="kb-workflow-option-name">
@@ -36,24 +36,19 @@
 <!-- workflow list -->
 <!-- workflow dialog -->
 <ng-template #wfDialog>
-    <h1 mat-dialog-title class="kb-primary">{{selWf.name}}<span class="kb-tag kb-info-tag ml-2">{{isAction ? 'Action' : 'Trigger'}}</span></h1>
-    <div mat-dialog-content [ngSwitch]="selWf.type" class="py-2">
+    <h1 mat-dialog-title class="kb-primary">{{tempWf.name}}<span class="kb-tag kb-info-tag ml-2">{{isAction ? 'Action' : 'Trigger'}}</span></h1>
+    <div mat-dialog-content [ngSwitch]="tempWf.type" class="py-2">
         <div *ngSwitchCase="'form'">
-            <mat-form-field appearance="fill">
+            <mat-error *ngIf="tempTrgtErr">{{tempTrgtErr}}</mat-error>
+            <mat-form-field appearance="fill" (click)="filterTarget(_automation.forms)" [class.mat-form-field-invalid]="tempTrgtErr">
                 <mat-label>Select a Form</mat-label>
-                <input type="text"
-                name="form"
-                #searchDataInp
-                placeholder="Search form"
-                (click)="filterData($event, _automation.forms)"
-                (input)="filterData($event, _automation.forms)"
-                [matAutocomplete]="matAuto"
-                class="kb-act-searchinp"
-                matInput>
-                <button *ngIf="searchDataInp.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchDataInp.value=''; searchDataInp.click()">
+                <input type="text" name="form" placeholder="Search form" class="kb-act-searchinp"
+                [(ngModel)]="searchTrgtInp" (input)="filterTarget(_automation.forms)"
+                [matAutocomplete]="matAuto" matInput>
+                <button *ngIf="searchTrgtInp" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterTarget(_automation.forms)">
                     <mat-icon>close</mat-icon>
                 </button>
-                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectedOption($event, searchDataInp)">
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectedOption($event)">
                     <mat-option *ngFor="let option of filteredData" [value]="option" [disabled]="false">
                     {{option?.name}}
                     </mat-option>
@@ -84,7 +79,7 @@
     <div mat-dialog-actions class="justify-content-end">
         <!-- <button mat-raised-button mat-dialog-close class="bg-danger text-light">Delete</button> -->
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="addWorkflow(selWf, selOption, isAction, appendIndex)"
+        <button mat-button mat-dialog-close cdkFocusInitial (click)="addWorkflow(tempWf, isAction, appendIndex)"
             color="primary">Add</button>
     </div>
 </ng-template>
@@ -144,7 +139,7 @@
             <span class="kb-trigger-section">
                 <span class="kb-active-triggers">
                     <button *ngFor="let trigger of _automation.activeTriggers" mat-raised-button class="m-1"
-                        (click)="openDialog(wfDialog, trigger)" [color]="trigger.color">
+                        (click)="selectedWf(trigger)" [color]="trigger.color">
                         <span class="mr-1" [innerHTML]="trigger.icon | safeHtml"></span>
                         {{trigger.name}} {{_automation.fetchWfTarget(trigger)}}
                     </button>
@@ -159,7 +154,7 @@
             <span class="kb-workflow-node">
                 <i (click)="openBottomSheet(wfsheet, true, acti)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
             </span>
-            <button mat-raised-button [color]="action.color" (click)="openDialog(wfDialog, action)">
+            <button mat-raised-button [color]="action.color" (click)="selectedWf(action)">
                 <span class="mr-1" [innerHTML]="action.icon | safeHtml"></span>
                 {{action.name}}
             </button>

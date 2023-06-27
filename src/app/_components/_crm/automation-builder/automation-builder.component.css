@@ -75,7 +75,7 @@ span.kb-workflow-option-name {
     height: 60px;
     position: absolute;
     top: -60px;
-    border-style: solid;
+    border-style: dashed;
     border-color: var(--accent-color);
 }
 
@@ -125,7 +125,7 @@ span.kb-workflow-option-name {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    border: 2px solid var(--accent-color);
+    border: 2px dashed var(--accent-color);
     border-radius: 10px;
     padding: 8px;
 }
@@ -157,7 +157,7 @@ span.kb-workflow-option-name {
 
 .kb-workflow-node:after, .kb-workflow-node:before {
     content: '';
-    border-right: 2px solid var(--accent-color);
+    border-right: 2px dashed var(--accent-color);
     height: 100%;
     display: block;
 }
@@ -181,7 +181,7 @@ span.kb-workflow-option-name {
 
 .kb-workflow-inner-section:after {
     content: '';
-    border-right: 2px solid var(--accent-color);
+    border-right: 2px dashed var(--accent-color);
     height: 40px;
     display: block;
     position: absolute;
