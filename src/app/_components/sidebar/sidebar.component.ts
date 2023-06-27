@@ -114,56 +114,6 @@ export class SidebarComponent implements OnInit {
       ]
     },{
       0:true,
-      routerlink: '/sales',
-      img: 'payment.gif',
-      icon: 'fa fa-tags',
-      title: 'Sales',
-      submenu:[{
-        0:true,
-        routerlink: '/sales/offers',
-        img: 'payment.gif',
-        icon: 'fa fa-percentage',
-        title: 'Offers'
-      },
-      {
-        0:true,
-        routerlink: '/sales/coupons',
-        img: 'payment.gif',
-        icon: 'fa fa-file-alt',
-        title: 'Coupons'
-      },
-      {
-        0:true,
-        routerlink: '/sales/payment',
-        img: 'payment.gif',
-        icon: 'fa fa-dollar-sign',
-        title: 'Payments'
-      },
-      {
-        0:true,
-        routerlink: '/sales/affiliates',
-        img: 'payment.gif',
-       icon: 'fas fa-search-dollar',
-        title: 'Affiliates'
-      },
-    ],
-  },{
-      0:true,
-      routerlink: '/payment',
-      img: 'payment.gif',
-      icon: 'fa fa-dollar-sign',
-      title: 'Payment',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/domain',
-      img: 'worldwide.gif',
-      icon: 'fas fa-globe-americas',
-      title: 'Domains',
-      submenu:null
-    },
-    {
-      0:true,
       routerlink: '/membership',
       img: 'shield.gif',
       icon: 'fas fa-shield-alt',
@@ -225,7 +175,16 @@ export class SidebarComponent implements OnInit {
         title: 'Marketplace'
       }
       ]
-    },{
+    },
+    // {
+    //   0:true,
+    //   routerlink: '/payment',
+    //   img: 'payment.gif',
+    //   icon: 'fa fa-dollar-sign',
+    //   title: 'Payment',
+    //   submenu:null
+    // },
+   {
       0:true,
       routerlink: '/crm',
       img: 'hacker.gif',
@@ -340,14 +299,14 @@ export class SidebarComponent implements OnInit {
   //     title: 'Payment',
   //     submenu:null
   //   }
-    ,{
-      0:true,
-      routerlink: '/domain',
-      img: 'worldwide.gif',
-      icon: 'fas fa-globe-americas',
-      title: 'Domains',
-      submenu:null
-    },
+  ,{
+    0:true,
+    routerlink: '/domain',
+    img: 'worldwide.gif',
+    icon: 'fas fa-globe-americas',
+    title: 'Domains',
+    submenu:null
+  },
     // {
     //   0:true,
     //   routerlink: '/nolink',
@@ -539,9 +498,9 @@ export class SidebarComponent implements OnInit {
       this.backme = false;
     } 
 
-    // if(myhref=='/membership' || myhref=='/affiliates'){
-    //   this.backme = false;
-    // }
+    if(myhref=='/membership' || myhref=='/affiliates'){
+      this.backme = false;
+    }
 
   }
 

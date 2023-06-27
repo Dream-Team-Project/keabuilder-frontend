@@ -38,13 +38,16 @@ export class CampaignService {
     return this.http.put('/api/updatecampaign',obj).pipe(catchError(this.errorHandler));
   }
   deletecampaign(id:any): Observable<any>{
-    // var obj = {uuid: this.uuid};
     return this.http.delete('/api/deletecampaign/'+id+'/'+this.uuid).pipe(catchError(this.errorHandler));
     
   }
   searchcampaigns(obj:any){
     obj.user_id = this.uuid;
     return this.http.post('/api/searchcampaigns',obj).pipe(catchError(this.errorHandler));
+  }
+  duplicatecampaign(obj:any){
+    obj.user_id = this.uuid;
+    return this.http.post('/api/duplicatecampaign',obj).pipe(catchError(this.errorHandler));
   }
 
 //   crmcampaignStatus(status:any): Observable<any>{

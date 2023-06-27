@@ -15,6 +15,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+#thanku{
+    text-align: center;
 }
 
 textarea {

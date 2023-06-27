@@ -67,6 +67,7 @@ export class CrmContactComponent implements OnInit {
   fetchContact() {
       this._contactService.singlecontact(this.contact.uniqueid).subscribe((resp) => {
           this.contact = resp?.data[0];
+          console.log(this.contact)
           this.contact.icon = this.contactIcon(this.contact);
           if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);
           this.fetchFields();
@@ -74,6 +75,8 @@ export class CrmContactComponent implements OnInit {
           this.filteredTempIds.lists=resp?.data[0].listid;
           this.selectedTags=resp?.data[0].temp_tags;
           this.filteredTempIds.tags=resp?.data[0].tagid;
+          // console.log(this.selectedLists)
+          // console.log(this.selectedTags)
         }
       );
   }
@@ -137,6 +140,8 @@ export class CrmContactComponent implements OnInit {
   }
 
   updateContact(cf:any, i:number) {
+    this.contact.lists=this.filteredTempIds.lists.toString();
+    this.contact.tags=this.filteredTempIds.tags.toString();
     var contact = JSON.parse(JSON.stringify(this.contact));
     this.contactFieldJSON[i].value = cf.value;
     contact.fieldans = JSON.stringify(this.contactFieldJSON);
@@ -164,33 +169,30 @@ export class CrmContactComponent implements OnInit {
     if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
     return str.toUpperCase();
   }
-  tagupdate() {
+  tagupdate(tag:any) {
     return new Promise((resolve) => {
-      let i=0;
-      this.newtags.forEach((tag: any) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
           this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
             if(e==data.data.uniqueid) e=data.data.id;
             return e;
           })
-          if(i==this.newtags.length-1)resolve(data.data);
+          resolve(data.data);
         });
-        i++;
       });
-    });
   }
 
    // start list actions
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists?.filter((option:any) => option?.list_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
    
   }
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.id);
+    this.updatelist_tag();
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -198,6 +200,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds?.lists?.splice(index, 1);
+    this.updatelist_tag();
   }
 
   // end list actions
@@ -205,15 +208,14 @@ export class CrmContactComponent implements OnInit {
   // start tag actions
 
   filterTagData(event:any) {
-    console.log(event)
-    console.log(event.target.value)
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags =this.tags.filter((option:any) => option?.tag_name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags =this.tags.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.id);
+    this.updatelist_tag();
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -221,6 +223,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags?.splice(index, 1);
     this.filteredTempIds?.tags?.splice(index, 1);
+    this.updatelist_tag();
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -228,15 +231,29 @@ export class CrmContactComponent implements OnInit {
     if (value) {
       var obj: any = {
         uniqueid: Math.random().toString(20).slice(2),
-        tag_name: event.value,
+        name: event.value,
       };
       this.selectedTags.push(obj); 
       this.filteredTempIds.tags.push(obj.uniqueid);
-      this.newtags.push(obj);
+      this.tagupdate(obj).then((resp:any)=>{this.updatelist_tag()})
+      this.newtags=[];
          
     }
     // Clear the input value
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
+  }
+  updatelist_tag(){
+    this.contact.lists=this.filteredTempIds.lists.toString();
+    this.contact.tags=this.filteredTempIds.tags.toString();
+    var contact = JSON.parse(JSON.stringify(this.contact));
+    contact.fieldans = JSON.stringify(this.contactFieldJSON);
+    // console.log(this.contact)
+    this._contactService.updatecontact(contact).subscribe(resp => {
+      if(resp.success==true){
+        let msg = 'List & Tag Updated Successfully!';
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+      }
+    })
   }
 }

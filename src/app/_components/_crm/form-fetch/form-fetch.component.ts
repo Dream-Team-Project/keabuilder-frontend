@@ -5,6 +5,7 @@ import { StyleService } from 'src/app/_services/_builder/style.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { EmailService } from 'src/app/_services/mailer.service';
 
 @Component({
   selector: 'app-crm-form-fetch',
@@ -26,10 +27,12 @@ export class CrmFormFetchComponent implements OnInit {
     public _image: ImageService,
     public _contact: ContactService,
     public _general: GeneralService,
+    private emailService: EmailService,
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var form_id = params.get('form_id');
       _form.getForm(form_id).then((data:any)=>{
+        this.contact=data
         var style = document.createElement('STYLE');
         style.innerHTML = data.appendstyle;
         document.head.appendChild(style);
@@ -113,11 +116,13 @@ export class CrmFormFetchComponent implements OnInit {
       if(this._form.form.emailenabled) {
         var maildata = {
           tomailid: this.contact.email, 
-          frommailid: 'info', 
+          frommailid: 'support@keasolution.com', 
           subject: this._form.form.emailsubject, 
           html: this._form.form.emailmessage, 
         }
-        // mail sent api
+        this.emailService.sendmailform(maildata).subscribe((data:any) => {
+          if(data.success==1)this._general.openSnackBar(false,'Email Sent successfully!', 'OK', 'center', 'top');
+        })
         resolve(true);
       }
       else resolve(true);

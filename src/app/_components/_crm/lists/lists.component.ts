@@ -5,7 +5,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 export interface UserData {
   position: number;
-  list_name: string;
+  name: string;
   activecontacts: any;
   actions: string;
 }
@@ -18,13 +18,14 @@ export interface UserData {
 export class CrmListsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
 
   fetching:boolean = true;
   duplicateList:boolean = false;
   lists:any=[];
   list:any = {};
   listObj = {
-    list_name: '',
+    name: '',
     uniqueid: '',
     id: '',
   }
@@ -44,6 +45,7 @@ export class CrmListsComponent implements OnInit {
       this._listservice.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
+          console.log(data.data)
           resolve(true);
         },
         (error) => {
@@ -54,7 +56,7 @@ export class CrmListsComponent implements OnInit {
   }
 
   setList(list:any) {
-    if(this.list.list_name && this.isListNameValid(this.list.list_name)) {
+    if(this.list.name && this.isListNameValid(this.list.name)) {
       this.hasError = '';
       delete this.list.error;
       var tempObj = JSON.parse(JSON.stringify(list));
@@ -89,9 +91,12 @@ export class CrmListsComponent implements OnInit {
     this._listservice
     .addlist(list)
     .subscribe((resp) => {
-      console.log(resp.data)
-      if(resp.success) this.fetchLists();
+      console.log(resp)
+      if(resp.success) {
+        this.fetchLists();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+      }
+      else this.setErrordup(resp.message);
     });
   }
   deleteList(id: any) {
@@ -119,8 +124,12 @@ export class CrmListsComponent implements OnInit {
     this.list.error = true;
     this.openDialog(this.adddialog, this.list);
   }
+  setErrordup(msg: string) {
+    this.hasError = msg;
+    this.list.error = true;
+    this.openDialog(this.duplicatedialog, this.list);
+  }
   isListNameValid(value:any) {
-    // let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let regex =/^[\w-_. ]{4,}$/
     return regex.test(value);
   }

@@ -183,8 +183,6 @@ export class FormService {
 
   updateForm() {
     return new Promise((resolve, reject)=>{
-      // this.form.lists.toString();
-      // this.form.tags.toString();
       var ffArr:Array<any> = [];
       this.formField.forEach((ff:any)=>{
         if(ff.field_tag) ffArr.push(ff.id);

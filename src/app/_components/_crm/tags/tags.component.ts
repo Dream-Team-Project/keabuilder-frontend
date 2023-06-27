@@ -5,7 +5,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 export interface UserData {
   position: number;
-  tag_name: string;
+  name: string;
   contacts: string;
   automations: string;
   actions: string;
@@ -19,7 +19,7 @@ export interface UserData {
 export class CrmTagsComponent implements OnInit {
   displayedColumns: string[] = [
     'checkbox',
-    'tag_name',
+    'name',
     'contacts',
     'automations',
     'actions',
@@ -30,7 +30,7 @@ export class CrmTagsComponent implements OnInit {
   tags:any=[];
   tag:any = {};
   tagObj = {
-    tag_name: '',
+    name: '',
     uniqueid: '',
     id:'',
     
@@ -52,7 +52,7 @@ export class CrmTagsComponent implements OnInit {
       console.log(resp2)
           for(let i=0;i<5;i++){
             if(resp2[i])
-            this.populartags[i]=resp2[i].tag_name;
+            this.populartags[i]=resp2[i].name;
           }
           this.fetching = false;  
     })
@@ -67,7 +67,7 @@ export class CrmTagsComponent implements OnInit {
           let i=0;
           for(i=0;i<5;i++){
             if(this.tags[i])
-            this.recenttags[i]=this.tags[i].tag_name;
+            this.recenttags[i]=this.tags[i].name;
           }
           resolve(true);
         },
@@ -86,7 +86,7 @@ export class CrmTagsComponent implements OnInit {
       );
   }
   addtag() {
-    if(this.tag.tag_name && this.isTagNameValid(this.tag.tag_name)) {
+    if(this.tag.name && this.isTagNameValid(this.tag.name)) {
       this.hasError = '';
       delete this.tag.error;
       this._tagService
@@ -100,13 +100,13 @@ export class CrmTagsComponent implements OnInit {
           })
         }
         else {
-          let msg = this.tag.tag_name ? 'Tag Name is  invalid' : 'Tag Name should not be empty';
+          let msg = this.tag.name ? 'Tag Name is  invalid' : 'Tag Name should not be empty';
           this.setError(msg)
         }
   }
 
   updatetag() {
-    if(this.tag.tag_name && this.isTagNameValid(this.tag.tag_name)) {
+    if(this.tag.name && this.isTagNameValid(this.tag.name)) {
       console.log(this.tag)
       this._tagService.updatetag(this.tag).subscribe((resp) => {
         console.log(resp.data)
@@ -118,7 +118,7 @@ export class CrmTagsComponent implements OnInit {
       })
     }
     else {
-      let msg = this.tag.tag_name ? 'Tag Name is  invalid' : 'Tag Name should not be empty';
+      let msg = this.tag.name ? 'Tag Name is  invalid' : 'Tag Name should not be empty';
       this.setError(msg)
     }
   }

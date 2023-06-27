@@ -1,26 +1,31 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse,HttpHeaders} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailService {
-
+  uuid:any = '';
   sendmailApi = './api/sendmail';
   sendmailcampaignApi = './api/sendmailcampaign';
+  sendmailformApi = './api/sendmailform';
   
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {  this.uuid = this.tokenStorage.getUser().uniqueid;}
 
   sendmail(maildata:any) {
-    // request maildata = {tomailid: 'send to', frommailid: 'send from', subject: 'string', html: 'html body'}
     return this.http.post(this.sendmailApi, maildata)
     .pipe(catchError(this.errorHandler));
   }
-
   sendmailcampaign(maildata:any) {
     return this.http.post(this.sendmailcampaignApi, maildata)
+    .pipe(catchError(this.errorHandler));
+  }
+  sendmailform(maildata:any) {
+    maildata.user_id=this.uuid;
+    return this.http.post(this.sendmailformApi, maildata)
     .pipe(catchError(this.errorHandler));
   }
 

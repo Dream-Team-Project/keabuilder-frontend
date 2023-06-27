@@ -204,11 +204,9 @@ const routes: Routes = [
   children:[
     { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
     { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
-    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
     { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
     { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-    { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
-    { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
+    // { path: 'contacts/:uniqueid/:name', component: CrmContactsComponent, canActivate: [AuthGuard] },
     { path: 'fields', component: CrmFieldsComponent, canActivate: [AuthGuard] },
     { path: 'forms', component: CrmFormsComponent, canActivate: [AuthGuard] },
     { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
@@ -217,7 +215,8 @@ const routes: Routes = [
     { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
- 
+  { path: 'crm/contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+  { path: 'crm/campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
 
   // crm
 
