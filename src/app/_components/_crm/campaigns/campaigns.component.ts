@@ -69,7 +69,8 @@ dateformat(value:any){
     var mycustomdate =  new Date(value);
     var text1 = mycustomdate.toDateString();    
     var text2 = mycustomdate.toLocaleTimeString();
-    return text1+' '+text2;
+    return text1;
+    // return text1+' '+text2;
   }
 createcamp(){
 
@@ -96,7 +97,6 @@ openDialog(templateRef: TemplateRef<any>,id:any): void {
   } 
 changepagename(dataobj:any, title:any){
   }
-
   togglepageview(){
     this.toggleview = !this.toggleview; 
     console.log(this.toggleview);
@@ -120,9 +120,11 @@ changepagename(dataobj:any, title:any){
     });
   }
 duplicatecampaign(campaign:any){
-  campaign.publish=0;
+  campaign.publish_status=0;
+  // console.log(campaign)
   this._campaignservice.duplicatecampaign(campaign).subscribe((data:any) => {
         if(data.success==true){
+          this.fetchcampaigns();
             this._snackBar.open('Campaign Duplicate Successfully !', 'OK',{duration:2000});
         }
     })   

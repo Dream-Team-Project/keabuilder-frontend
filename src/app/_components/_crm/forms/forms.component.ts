@@ -254,13 +254,11 @@ export class CrmFormsComponent implements OnInit {
       let i=0;
       this.newtags.forEach((tag: any) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
-          this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
-            if(e==data.data.uniqueid) e=data.data.id;
-            return e;
-          })
-          if(i==this.newtags.length-1)resolve(data.data);
+          if(data.success){
+            if(i==this.newtags.length-1) resolve(true);
+            i++;
+            }
         });
-        i++;
       });
     });
   }
@@ -274,7 +272,7 @@ export class CrmFormsComponent implements OnInit {
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
-    this.filteredTempIds.lists.push(event.option.value.id);
+    this.filteredTempIds.lists.push(event.option.value.uniqueid);
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -295,7 +293,7 @@ export class CrmFormsComponent implements OnInit {
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
-    this.filteredTempIds.tags.push(event.option.value.id);
+    this.filteredTempIds.tags.push(event.option.value.uniqueid);
     searchTagInp.value = '';
     this.filterTagData('');
   }

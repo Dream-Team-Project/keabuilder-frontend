@@ -2,7 +2,7 @@
 <!-- dialog for delete automation button -->
 <ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Automation</h1>
-    <div mat-dialog-content>Would you like to delete this Automation?</div>
+    <div mat-dialog-content>Would you like to delete <span class="text-danger mr-1 ml-1">{{this.delautomation.name}}</span> Automation?</div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close [color]="'primary'">No</button>
       <button
@@ -10,7 +10,7 @@
         mat-dialog-close
         cdkFocusInitial
         class="text-danger"
-        (click)="deleteAutomation(this.delautomation)"
+        (click)="deleteAutomation(this.delautomation.id)"
       >
         Yes
       </button>
@@ -138,7 +138,7 @@
                           class="m-1"
                           mat-raised-button
                           color="danger"
-                          (click)="openDialog(deldialog, automation.id)"
+                          (click)="openDialog(deldialog, automation)"
                         >
                           Delete
                           <i class="far fa-trash-alt pr-2"></i>

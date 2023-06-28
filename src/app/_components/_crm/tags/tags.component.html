@@ -1,8 +1,8 @@
+<!-- dialog for delete Tag -->
 <ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete Tag</h1>
   <div mat-dialog-content>
-    Would you like to delete this Tag ?
-    <!-- Would you like to delete <span class="text-danger">{{this.delcontact.name}}</span> Contact? -->
+    Would you like to delete <span class="text-danger">{{tag.name}}</span> Tag ?
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'">No</button>

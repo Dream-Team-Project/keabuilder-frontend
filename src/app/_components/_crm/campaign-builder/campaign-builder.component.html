@@ -142,18 +142,51 @@
                         <b>Campaign Settings <span class="campstatus" [class.activeme]="campstatus=='Publish'">{{campstatus}}</span></b>
                         <hr>
                     </h5>
-                    <mat-form-field appearance="fill" class="kb-full-width" >
+                    <!-- <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>List</mat-label>
-                        <mat-select name="list" required [(ngModel)]="fullcampobj.list" >
-                            <mat-option [value]="list.id" [disabled]="list.activecontacts=='0'"  *ngFor="let list of lists; index as i;" >
-                                {{list.name}} ({{list.activecontacts}})
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
+                        <input required matInput type="text" [(ngModel)]="listname" [ngModelOptions]="{standalone: true}" placeholder="Please enter list name" [matAutocomplete]="listAuto"  class="kb-act-searchinp w-100" (input)="filterlistData($event)" (click)="filterlistData($event)">
+                        <mat-autocomplete #listAuto="matAutocomplete" >
+                          <mat-option  *ngFor="let list of filteredlist; index as i;" [disabled]="list.activecontacts=='0'"  [value]="list.name" (onSelectionChange)="patchlistid(list)">{{list.name}} ({{list.activecontacts}})</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field> -->
+                    <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
+                        <mat-label>Subscribe to Lists</mat-label>
+                        <mat-chip-list #listChipList aria-label="List selection">
+                          <mat-chip
+                            *ngFor="let data of selectedLists; index as i"
+                            (removed)="removeSelectedList(i)">
+                            {{ data?.name }}
+                            <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                            </button>
+                          </mat-chip>
+                        </mat-chip-list>
+                        <input
+                          type="text"
+                          #searchListInp
+                          placeholder="Select multiples..."
+                          (input)="filterListData($event)"
+                          [matAutocomplete]="listAuto"
+                          [matChipInputFor]="listChipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          class="kb-act-searchinp w-100"
+                          [class.pt-2]="selectedLists.length != 0"
+                          matInput>
+                        <mat-autocomplete
+                          autoActiveFirstOption
+                          #listAuto="matAutocomplete"
+                          (optionSelected)="addSelectedList($event, searchListInp)">
+                          <mat-option
+                            *ngFor="let option of filteredOptions?.lists"
+                            [value]="option"
+                            [disabled]="filteredTempIds?.lists.includes(option.uniqueid)">
+                            {{ option?.name }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>Preheader text</mat-label>
-                        <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader" [formControl]="preheadertextControl" placeholder="Text that appears after your subject line." minlength="3" >
+                        <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader_text" [formControl]="preheadertextControl" placeholder="Text that appears after your subject line." minlength="3" >
                         <!-- <small>Text that appears after your subject line. If this field is left blank the first line of your email will display</small> -->
                         <mat-error *ngIf="preheadertextControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
@@ -162,11 +195,11 @@
 
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>From</mat-label>
-                        <input type="email" matInput name="replyto" [(ngModel)]="fullcampobj.replyto"  [formControl]="replytoControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
-                        <mat-error *ngIf="replytoControl.hasError('minlength')">
+                        <input type="email" matInput name="replyto" [(ngModel)]="fullcampobj.emailfrom"  [formControl]="emailfromControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
+                        <mat-error *ngIf="emailfromControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
                         </mat-error>
-                        <mat-error *ngIf="replytoControl.hasError('email') && !replytoControl.hasError('required')">
+                        <mat-error *ngIf="emailfromControl.hasError('email') && !emailfromControl.hasError('required')">
                             Please enter a valid email address
                           </mat-error>
                     </mat-form-field>
@@ -200,7 +233,7 @@
 
                     <mat-form-field class="kb-full-width" appearance="fill" *ngIf="sendoptn">
                         <mat-label>Chooose a date</mat-label>
-                        <input type="datetime-local" [(ngModel)]="fullcampobj.campaigndate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
+                        <input type="datetime-local" [(ngModel)]="fullcampobj.senddate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
                     </mat-form-field>
 
                     <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
@@ -215,4 +248,3 @@
             </div>
         </div>
     </div>
-</div>
