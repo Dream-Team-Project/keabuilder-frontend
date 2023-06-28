@@ -21,7 +21,7 @@
 }
 
 .kb-workflow-option {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 40px;
     cursor: pointer;
     display: flex;
@@ -253,7 +253,7 @@ span.kb-workflow-option-name {
 
 ::ng-deep .kb-add-action svg {
     fill: var(--secondary-color);
-    width: 10px;
+    width: 12px;
 }
 
 ::ng-deep .kb-workflow-section button.mat-raised-button {

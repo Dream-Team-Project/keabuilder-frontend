@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit,TemplateRef, ViewChild } from '@angular/core';
 import { AutomationService } from 'src/app/_services/_builder/automation.service';
-import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -31,7 +30,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   constructor(
     public _automation: AutomationService,
-    public _general: GeneralService,
     public _image: ImageService,
     private dialog: MatDialog,
     private _bottomSheet: MatBottomSheet) {}
@@ -39,8 +37,14 @@ export class CrmAutomationBuilderComponent implements OnInit {
   ngOnInit(): void {}
 
   selectedWf(wf:any) {
-    this.tempWf = wf;
+    this.tempWf = JSON.parse(JSON.stringify(wf));
     this.openDialog(this.wfDialog, '');
+  }
+
+  editWf(wf:any, i:number) {
+    this.searchTrgtInp = this._automation.fetchWfTarget(wf);
+    this.appendIndex = i;
+    this.selectedWf(wf);
   }
 
   openDialog(templateRef: TemplateRef<any>, err:string): void {
@@ -62,15 +66,20 @@ export class CrmAutomationBuilderComponent implements OnInit {
     })
   }
 
-  addWorkflow(workflow:any, isAction:boolean, index:number) {
-    if(workflow.target) {
+  addWorkflow(workflow:any, isAction:boolean) {
+    this._automation.addTrigger(workflow, this.appendIndex);
+    return false;
+    if(workflow.target && this.searchTrgtInp) {
       var exst = '';
-      if(isAction) exst = this._automation.activeActions.filter((act:any)=> workflow.target.id == act.target.id);
-      else exst = this._automation.activeTriggers.filter((trg:any)=> workflow.target.id == trg.target.id);
+      if(isAction) exst = this._automation.activeActions.filter((act:any)=> workflow.target.id == act.target.id && workflow.name == act.name);
+      else exst = this._automation.activeTriggers.filter((trg:any)=> workflow.target.id == trg.target.id && workflow.name == trg.name);
       if(exst.length == 0) {
+        isAction ? this._automation.addAction(workflow, this.appendIndex) : this._automation.addTrigger(workflow, this.appendIndex);
+        this.filteredData = [];
+        this.searchTrgtInp=''; 
         this.tempWf = '';
-        isAction ? this._automation.addAction(workflow, index) : this._automation.addTrigger(workflow);
       }
+      // else this.openDialog(this.wfDialog, (isAction ? 'Action' : 'Trigger')+' allready added');
     }
     else this.openDialog(this.wfDialog, 'Please select a '+workflow.type);
   }
@@ -84,7 +93,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
         wrkfList[i].hide = !cond;
         if(cond) {
           if(intial) {
-            this._general.expPanelStep = i;
+            this._automation._general.expPanelStep = i;
             intial = false;
           }
           break;
@@ -99,6 +108,9 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   filterTarget(data:any) {
+    data = JSON.parse(JSON.stringify(data));
+    this._automation.anyTarget.name = 'Any ' + this.tempWf.type;
+    data.unshift(this._automation.anyTarget);
     this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
   }
 

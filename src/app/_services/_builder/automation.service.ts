@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FileUploadService } from '../file-upload.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ListService } from '../_crm/list.service';
 import { TagService } from '../_crm/tag.service';
 import { FieldService } from '../_crm/field.service';
@@ -41,7 +42,7 @@ export class AutomationService {
       id: 'wrkfl-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
       workflows: [
         { id: 'wrkfl-form-submtd', name: 'Form Submitted', type: 'form', icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        { id: 'wrkfl-chckot-submtd', name: 'Checkout Submitted', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+        // { id: 'wrkfl-chckot-submtd', name: 'Checkout Submitted', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
       ]
     }
   ];
@@ -63,8 +64,11 @@ export class AutomationService {
   lists: Array<any> = [];
   tags: Array<any> = [];
   fields: Array<any> = [];
+  anyTarget:any = {id: 'all', name: 'Any'};
+  allWorkFlowIds:Array<number> = [];
 
-  constructor(private _file: FileUploadService,
+  constructor(public _general: GeneralService,
+    private _file: FileUploadService,
     private _list: ListService,
     private _tag: TagService,
     private _field: FieldService) {
@@ -103,15 +107,17 @@ export class AutomationService {
   fetchWfTarget(wf:any) {
     if(wf?.target) {
       var resp = [];
-      if(wf.type == 'form') resp = this.forms.filter((f:any) => f.id == wf.target.id);
-      if(wf.type == 'list') resp = this.lists.filter((l:any) => l.id == wf.target.id);
-      if(wf.type == 'tag') resp = this.tags.filter((t:any) => t.id == wf.target.id);
-      return ': '+resp[0]?.name;
+      if(wf.target.id == 'all') resp.push(this.anyTarget);
+      else if(wf.type == 'form') resp = this.forms.filter((f:any) => f.id == wf.target.id);
+      else if(wf.type == 'list') resp = this.lists.filter((l:any) => l.id == wf.target.id);
+      else if(wf.type == 'tag') resp = this.tags.filter((t:any) => t.id == wf.target.id);
+      return resp[0]?.name;
     }
     else return '';
   }
 
   addAction(action: any, index: number) {
+    action.id = this.createWorkflowId(action);
     this.activeActions.splice(index, 0, action);
   }
 
@@ -119,11 +125,22 @@ export class AutomationService {
     this.activeActions.splice(index, 1);
   }
 
-  addTrigger(trigger: any) {
-    this.activeTriggers.push(trigger);
+  addTrigger(trigger: any, index: number) {
+    console.log(index);
+    trigger.id = this.createWorkflowId(trigger);
+    this.activeTriggers.splice(index, 0, trigger);
   }
 
   removeTrigger(index: number) {
     this.activeTriggers.splice(index, 1);
+  }
+
+  createWorkflowId(temp:any):any {
+    temp.id += '-'+this._general.makeid(20);
+    if(this.allWorkFlowIds.includes(temp.id)) {
+      return this.createWorkflowId(temp);
+    }
+    this.allWorkFlowIds.push(temp.id);
+    return temp.id;
   }
 }
