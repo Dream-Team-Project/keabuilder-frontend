@@ -12,18 +12,22 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 })
 export class CrmAutomationBuilderComponent implements OnInit {
 
+  @ViewChild('wfDialog') wfDialog!: TemplateRef<any>;
+
   automation = {
     id: '',
     name: '',
   }
   autosave:boolean = false;
   isAction:boolean = false;
-  selWf:any;
-  selOption:any;
+  tempWf:any;
   appendIndex = -1;
-  searchVal:string = '';
+  searchWf:string = '';
   workflowList:Array<any> = [];
   filteredData:Array<any> = [];
+  tempTrgtErr = '';
+  searchTrgtInp = '';
+
 
   constructor(
     public _automation: AutomationService,
@@ -34,9 +38,14 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  openDialog(templateRef: TemplateRef<any>, wf:any): void {
+  selectedWf(wf:any) {
+    this.tempWf = wf;
+    this.openDialog(this.wfDialog, '');
+  }
+
+  openDialog(templateRef: TemplateRef<any>, err:string): void {
     this.closeBottomSheet();
-    this.selWf = wf;
+    this.tempTrgtErr = err;
     this.dialog.open(templateRef);
   }
 
@@ -49,18 +58,21 @@ export class CrmAutomationBuilderComponent implements OnInit {
     this.appendIndex = index;
     var bottomSheet = this._bottomSheet.open(templateRef);
     bottomSheet.afterDismissed().subscribe((data:any)=>{
-      this.searchVal = '';
+      this.searchWf = '';
     })
   }
 
-  addWorkflow(workflow:any, option:any, isAction:boolean, index:number) {
-    if(isAction) {
-      this._automation.activeActions.filter((act:any)=>act.id);
-    } 
-    workflow.working = {
-      target: option,
-    };
-    isAction ? this._automation.addAction(workflow, index) : this._automation.addTrigger(workflow);
+  addWorkflow(workflow:any, isAction:boolean, index:number) {
+    if(workflow.target) {
+      var exst = '';
+      if(isAction) exst = this._automation.activeActions.filter((act:any)=> workflow.target.id == act.target.id);
+      else exst = this._automation.activeTriggers.filter((trg:any)=> workflow.target.id == trg.target.id);
+      if(exst.length == 0) {
+        this.tempWf = '';
+        isAction ? this._automation.addAction(workflow, index) : this._automation.addTrigger(workflow);
+      }
+    }
+    else this.openDialog(this.wfDialog, 'Please select a '+workflow.type);
   }
 
   filterWorkflow() {
@@ -68,7 +80,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     var wrkfList = this.workflowList;
     for(let i = 0; i < wrkfList.length; i++) {
       for(let j = 0; j < wrkfList[i].workflows.length; j++) {
-        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchVal.toLowerCase()) >= 0;
+        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchWf.toLowerCase()) >= 0;
         wrkfList[i].hide = !cond;
         if(cond) {
           if(intial) {
@@ -81,14 +93,19 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
   }
 
-  filterData(event:any, data:any) {
-    var value = event ? event.target.value : '';
-    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+  resetFilterTarget(data:any) {
+    this.searchTrgtInp=''; 
+    this.filterTarget(data);
   }
 
-  selectedOption(e:any, searchDataInp:any) {
-    this.selOption = {id: e.option.value.id};
-    searchDataInp.value = e.option.value.name;
+  filterTarget(data:any) {
+    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
+  }
+
+  selectedOption(e:any) {
+    this.tempWf.target = {id: e.option.value.id};
+    this.searchTrgtInp = e.option.value.name;
+    this.tempTrgtErr = '';
   }
 
   closeBottomSheet(): void {

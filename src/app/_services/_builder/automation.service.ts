@@ -11,13 +11,6 @@ export class AutomationService {
 
   defaultWfList = [
     {
-      id: 'wrkfl-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
-      workflows: [
-        { id: 'wrkfl-form-submtd', name: 'Form Submitted', type: 'form', icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        { id: 'wrkfl-chckot-submtd', name: 'Checkout Submitted', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
-      ]
-    },
-    {
       id: 'wrkfl-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
       workflows: [
         { id: 'wrkfl-sub-to-list', name: 'Subscribe to a List', type: 'list', icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
@@ -43,7 +36,15 @@ export class AutomationService {
       ]
     },
   ]
-  triggerList: any = this.defaultWfList;
+  triggerList: any = [
+    {
+      id: 'wrkfl-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
+      workflows: [
+        { id: 'wrkfl-form-submtd', name: 'Form Submitted', type: 'form', icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
+        { id: 'wrkfl-chckot-submtd', name: 'Checkout Submitted', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+      ]
+    }
+  ];
   actionList: any = [
     {
       id: 'act-group-condition-workflow', name: 'Conditions and Workflow', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
@@ -68,6 +69,7 @@ export class AutomationService {
     private _tag: TagService,
     private _field: FieldService) {
       this.actionList = this.actionList.concat(this.defaultWfList);
+      this.triggerList = this.triggerList.concat(this.defaultWfList);
       this.fetchForms();
       this.fetchLists();
       this.fetchTags();
@@ -99,11 +101,11 @@ export class AutomationService {
   }
 
   fetchWfTarget(wf:any) {
-    if(wf.working.target) {
+    if(wf?.target) {
       var resp = [];
-      if(wf.type == 'form') resp = this.forms.filter((f:any) => f.id == wf.working.target.id);
-      if(wf.type == 'list') resp = this.lists.filter((l:any) => l.id == wf.working.target.id);
-      if(wf.type == 'tag') resp = this.tags.filter((t:any) => t.id == wf.working.target.id);
+      if(wf.type == 'form') resp = this.forms.filter((f:any) => f.id == wf.target.id);
+      if(wf.type == 'list') resp = this.lists.filter((l:any) => l.id == wf.target.id);
+      if(wf.type == 'tag') resp = this.tags.filter((t:any) => t.id == wf.target.id);
       return ': '+resp[0]?.name;
     }
     else return '';
