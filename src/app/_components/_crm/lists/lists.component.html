@@ -15,21 +15,18 @@
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title class="kb-primary">Duplicate List</h1>
   <div mat-dialog-content>
-    <!-- <div>Would you like to duplicate this List ?</div> -->
+    <div>Would you like to duplicate<span class="kb-dup pl-1 pr-1">{{list.name}}</span>List ?</div>
     <mat-error *ngIf="hasError">{{hasError}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>List Name</mat-label>
       <input
         type="text"
         matInput
-        [(ngModel)]="list.name"
+       [(ngModel)]="duplist"
         placeholder="Eg: Monthly Newsletter, Sales Leads, etc."
         required
       />
     </mat-form-field>
-    <!-- <div class="text-center mt-2">
-    <mat-checkbox class="kb-dup" [color]="'primary'" [(ngModel)]="duplicateList">Duplicate List with Contacts</mat-checkbox>
-  </div> -->
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger">No</button>

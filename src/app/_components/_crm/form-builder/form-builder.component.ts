@@ -160,13 +160,10 @@ export class CrmFormBuilderComponent implements OnInit {
   saveForm() {
     if(this.newtags.length>0){
       this.tagupdate().then((resp:any)=>{
-        console.log("hello")
-        console.log(resp)
       this.save();
       });
     }
     else{
-      console.log("hello1")
       this.save();
     }
     
@@ -379,7 +376,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
-    this.filteredTempIds.lists.push(event.option.value.id);
+    this.filteredTempIds.lists.push(event.option.value.uniqueid);
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -400,7 +397,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
-    this.filteredTempIds.tags.push(event.option.value.id);
+    this.filteredTempIds.tags.push(event.option.value.uniqueid);
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -419,7 +416,7 @@ export class CrmFormBuilderComponent implements OnInit {
       };
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
-    this.newtags.push(obj);
+      this.newtags.push(obj);
       
     }
     // Clear the input value
@@ -448,19 +445,10 @@ export class CrmFormBuilderComponent implements OnInit {
       let i=0;
       this.newtags.forEach((tag: any) => {
         this._tagService.addtag(tag).subscribe((data:any) => {
-          console.log(data.data)
-          if(data.success==true){
-            this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
-              if(e==data.data.uniqueid) e=data.data.id;
-              return e;
-            })
-            if(i==this.newtags.length-1) {resolve(true)};
-          }
+          })
+          if(i==this.newtags.length-1) {resolve(true)};
           i++;
         });
-       
-        
-      });
     });
   }
 

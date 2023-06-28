@@ -172,11 +172,9 @@ export class CrmContactsComponent implements OnInit {
   tagupdate() {
     return new Promise((resolve) => {
       let i=0;
-      console.log(this.newtags)
       this.newtags.forEach((tag: any) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
           if(data.success){
-          if(data.success==true) this.filteredTempIds.tags.push(data.data.id);
           if(i==this.newtags.length-1) resolve(true);
           i++;
           }
@@ -195,7 +193,7 @@ export class CrmContactsComponent implements OnInit {
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
-    this.filteredTempIds.lists.push(event.option.value.id);
+    this.filteredTempIds.lists.push(event.option.value.uniqueid);
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -216,7 +214,7 @@ export class CrmContactsComponent implements OnInit {
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
-    this.filteredTempIds.tags.push(event.option.value.id);
+    this.filteredTempIds.tags.push(event.option.value.uniqueid);
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -234,7 +232,7 @@ export class CrmContactsComponent implements OnInit {
         name: event.value,
       };
       this.selectedTags.push(obj);
-      // this.filteredTempIds.tags.push(obj.uniqueid);
+      this.filteredTempIds.tags.push(obj.uniqueid);
       this.newtags.push(obj);
       
     }

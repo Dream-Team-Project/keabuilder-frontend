@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
+
 export interface UserData {
   position: number;
   name: string;
@@ -22,7 +23,9 @@ export class CrmListsComponent implements OnInit {
 
   fetching:boolean = true;
   duplicateList:boolean = false;
-  lists:any=[];
+
+  duplist:any='';
+;  lists:any=[];
   list:any = {};
   listObj = {
     name: '',
@@ -86,8 +89,9 @@ export class CrmListsComponent implements OnInit {
       })
   }
   DuplicateList(list:any){
+    if(this.duplist){
+      list.name=this.duplist;
     list.duplicateList=true;
-    console.log(list)
     this._listservice
     .addlist(list)
     .subscribe((resp) => {
@@ -95,10 +99,19 @@ export class CrmListsComponent implements OnInit {
       if(resp.success) {
         this.fetchLists();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+      this.duplist='';
       }
-      else this.setErrordup(resp.message);
-    });
+      else { 
+        this.setErrordup(resp.message);
+        this.duplist='';
+      }
+    })
+  } else {
+    let msg='Please Enter List name'
+    this.setErrordup(msg);
   }
+  }
+
   deleteList(id: any) {
     this._listservice.deletelist(id).subscribe((resp) => {
       if (resp.success) this.fetchLists();

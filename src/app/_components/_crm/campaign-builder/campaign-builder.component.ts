@@ -1,4 +1,5 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {FormControl, Validators} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,9 +17,12 @@ import { ListService } from 'src/app/_services/_crm/list.service';
 })
 export class CrmCampaignBuilderComponent implements OnInit {
 
+  @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  
   subjectControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   preheadertextControl = new FormControl('',[Validators.minLength(3)]);
-  replytoControl = new FormControl('',[Validators.minLength(3),Validators.email]);
+  emailfromControl = new FormControl('',[Validators.minLength(3),Validators.email]);
   testemailControl = new FormControl('', [Validators.required, Validators.email]);
   companynameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
   addressline1Control = new FormControl('', [Validators.required,Validators.minLength(3)]);
@@ -41,7 +45,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     diskCache: true
   };
   testemail = '';
-  fullcampobj:any = {name:'',list:'',subject:'',preheader:'',replyto:'',sendoption:'',campaigndate:'',campaigneditor:'', addressid:'', timezone:'',};
+  fullcampobj:any = {name:'',lists:'',subject:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailbody:'', addressid:'', timezone:'',};
   sendoptn = false;
 
   lists:any = [];
@@ -53,6 +57,13 @@ export class CrmCampaignBuilderComponent implements OnInit {
   showmytime:any = '';
   filteredtimezone:any=[];
   filteredcountry:any=[];
+  selectedLists:any = [];
+  filteredTempIds:any = {
+    lists: [],
+  };
+  filteredOptions:any = {
+    lists: [],
+  };
   constructor(public _general:GeneralService,
         private _listService :ListService,
         private _snackBar: MatSnackBar, 
@@ -88,19 +99,18 @@ export class CrmCampaignBuilderComponent implements OnInit {
           data.data.forEach((element:any) => {
             this.fullcampobj.name = element.name;
             this.fullcampobj.subject = element.subject;
-            this.fullcampobj.preheader = element.preheader_text;
-            this.fullcampobj.replyto = element.replyto;
+            this.fullcampobj.preheader_text = element.preheader_text;
+            this.fullcampobj.emailfrom = element.emailfrom;
             this.fullcampobj.sendoption = element.sendoption;
-            this.fullcampobj.campaigneditor = element.emaildata;
+            this.fullcampobj.emailbody = element.emailbody;
             this.fullcampobj.id=element.id;
             this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
-
-            this.fullcampobj.campaigndate = element.senddate;
+            this.fullcampobj.senddate = element.senddate;
             this.fullcampobj.list = element.list;
             this.fullcampobj.addressid = element.addressid;
-
             this.fullcampobj.timezone = element.timezone;
-
+            this.selectedLists=element.temp_lists;
+            this.filteredTempIds.lists=element.listid;
             this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
             console.log(this.fullcampobj);
             if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
@@ -132,10 +142,11 @@ export class CrmCampaignBuilderComponent implements OnInit {
   });
  }
  campaigndraft(){
+  this.fullcampobj.lists=this.filteredTempIds.lists.toString();
     this.fullcampobj.uniqueid = this.uniqueid;
-    this.fullcampobj.publish = 0;
+    this.fullcampobj.publish_status = 0;
     var getobj = this.fullcampobj;
-    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
+    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
         // console.log(this.fullcampobj);
@@ -163,14 +174,15 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
  publishcampaign(){
     console.log(this.fullcampobj);
+    this.fullcampobj.lists=this.filteredTempIds.lists.toString();
     this.fullcampobj.uniqueid = this.uniqueid;
-    this.fullcampobj.publish = 1;
+    this.fullcampobj.publish_status = 1;
     var getobj = this.fullcampobj;
-    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.replytoControl.status=='VALID'){
+    if(this.subjectControl.status=='VALID' && this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){
       
       if(getobj.name!='' && getobj.list!='' && getobj.subject!='' && getobj.addressid!='' && getobj.sendoption!=''){
 
-        if(getobj.campaigneditor!=''){
+        if(getobj.emailbody!=''){
 
           this._campaignService.updatecampaign(getobj).subscribe({
             next: data => {
@@ -200,11 +212,11 @@ export class CrmCampaignBuilderComponent implements OnInit {
     var getobj = this.fullcampobj;
     if(this.testemailControl.status=='VALID'){
       
-      if(getobj.subject!='' && getobj.campaigneditor!='' && this.testemail!='' && getobj.addressid!=''){
+      if(getobj.subject!='' && getobj.emailbody!='' && this.testemail!='' && getobj.addressid!=''){
 
-        getobj.preheader = getobj.preheader!=''? getobj.preheader+' - ' : '';
+        getobj.preheader_text = getobj.preheader_text!=''? getobj.preheader_text+' - ' : '';
       
-        var maildata = {tomailid: this.testemail,preheader:getobj.preheader, subject: getobj.subject,replyto:getobj.replyto, html: getobj.campaigneditor, addressid:getobj.addressid};
+        var maildata = {tomailid: this.testemail,preheader:getobj.preheader_text, subject: getobj.subject,replyto:getobj.emailfrom, html: getobj.emailbody, addressid:getobj.addressid};
         this.emailService.sendmailcampaign(maildata).subscribe({
           next: data1 => {
             this.dialog.closeAll();
@@ -315,4 +327,24 @@ export class CrmCampaignBuilderComponent implements OnInit {
     var value = event ? event.target.value : '';
     this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
   }
+   // start list actions
+
+   filterListData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+  }
+
+  addSelectedList(event:any, searchListInp:any): void {
+    this.selectedLists.push(event.option.value);
+    this.filteredTempIds.lists.push(event.option.value.uniqueid);
+    searchListInp.value = '';
+    this.filterListData('');
+  }
+
+  removeSelectedList(index:number): void {
+    this.selectedLists.splice(index, 1);
+    this.filteredTempIds.lists.splice(index, 1);
+  }
+
+  // end list actions
 }

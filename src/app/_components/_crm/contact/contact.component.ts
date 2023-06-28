@@ -172,11 +172,7 @@ export class CrmContactComponent implements OnInit {
   tagupdate(tag:any) {
     return new Promise((resolve) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
-          this.filteredTempIds.tags=this.filteredTempIds.tags.map((e:any)=>{
-            if(e==data.data.uniqueid) e=data.data.id;
-            return e;
-          })
-          resolve(data.data);
+          if(data.success==true) resolve(data.data);
         });
       });
   }
@@ -191,7 +187,7 @@ export class CrmContactComponent implements OnInit {
 
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
-    this.filteredTempIds.lists.push(event.option.value.id);
+    this.filteredTempIds.lists.push(event.option.value.uniqueid);
     this.updatelist_tag();
     searchListInp.value = '';
     this.filterListData('');
@@ -214,7 +210,7 @@ export class CrmContactComponent implements OnInit {
 
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
-    this.filteredTempIds.tags.push(event.option.value.id);
+    this.filteredTempIds.tags.push(event.option.value.uniqueid);
     this.updatelist_tag();
     searchTagInp.value = '';
     this.filterTagData('');
@@ -248,7 +244,6 @@ export class CrmContactComponent implements OnInit {
     this.contact.tags=this.filteredTempIds.tags.toString();
     var contact = JSON.parse(JSON.stringify(this.contact));
     contact.fieldans = JSON.stringify(this.contactFieldJSON);
-    // console.log(this.contact)
     this._contactService.updatecontact(contact).subscribe(resp => {
       if(resp.success==true){
         let msg = 'List & Tag Updated Successfully!';
