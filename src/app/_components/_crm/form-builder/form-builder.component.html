@@ -174,14 +174,32 @@
                         <mat-label>Email Subject</mat-label>
                         <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
                     </mat-form-field>
-                    <div class="kb-action-confirmation">
-                        <mat-slide-toggle [(ngModel)]="_form.form.notifyemailenabled" [matTooltip]="_form.form.notifyemailenabled ? 'Enabled' : 'Disabled'" matTooltipPosition="above">
-                            Want to send Notification email.
-                        </mat-slide-toggle>
-                    </div>
-                    <mat-form-field appearance="fill" *ngIf="_form.form.notifyemailenabled">
+                    <!-- <mat-form-field appearance="fill" >
                         <mat-label>Notify Email's</mat-label>
                         <input matInput type="text" placeholder="use multiple emails seperated by ," [formControl]="validate.notifyemail" [(ngModel)]="_form.form.notifyemail">
+                    </mat-form-field> -->
+                    <mat-form-field appearance="fill">
+                        <mat-label>Notify Emails</mat-label>
+                        <mat-chip-list #notifyemailChipList aria-label="nofifyemails selection">
+                            <mat-chip
+                                *ngFor="let data of notifyemail, index as i"
+                                (removed)="removenotifyemail(i)">
+                                {{data}}
+                                <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip>
+                        </mat-chip-list>
+                        <input type="email"
+                            #notifyemailInp
+                            [formControl]="notifyemailCtrl"
+                            placeholder="Add multiple Emails..."
+                            [matChipInputFor]="notifyemailChipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="addnotifyemail($event)"
+                            class="kb-act-searchinp"
+                            [class.pt-2]="notifyemail?.length != 0"
+                            matInput>
                     </mat-form-field>
                     
                     <mat-label class="kb-mat-label">Message</mat-label>

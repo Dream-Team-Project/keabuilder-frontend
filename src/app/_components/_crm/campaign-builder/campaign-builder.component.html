@@ -116,7 +116,7 @@
             <div class="col-md-8">
                 <div class="makecard h-100 p-3">
                     <h5>
-                        <b>Design Your Campaign</b>
+                        <span class="kp-colr">Design Your Campaign</span>
                         <hr>
                     </h5>
                     <mat-form-field class="kb-full-width" appearance="fill">
@@ -140,7 +140,7 @@
                 <div class="makecard h-100 p-3">
                     <form>
                     <h5>
-                        <b>Campaign Settings <span class="campstatus" [class.activeme]="campstatus=='Publish'">{{campstatus}}</span></b>
+                        <span class="kp-colr">Campaign Settings <span class="kb-info-tag kb-tag ml-2">{{campstatus}}</span></span>
                         <hr>
                     </h5>
                     <!-- <mat-form-field appearance="fill" class="kb-full-width" >
@@ -180,11 +180,12 @@
                           <mat-option
                             *ngFor="let option of filteredOptions?.lists"
                             [value]="option"
-                            [disabled]="(filteredTempIds?.lists.includes(option.uniqueid) || option?.activecontacts<1)">
+                            [disabled]="filteredTempIds?.lists.includes(option.uniqueid)">
                             {{ option?.name }} {{'('+option?.activecontacts+')'}}
                           </mat-option>
                         </mat-autocomplete>
                       </mat-form-field>
+
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>Preheader text</mat-label>
                         <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader_text" [formControl]="preheadertextControl" placeholder="Text that appears after your subject line." minlength="3" >
@@ -208,12 +209,13 @@
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>Address</mat-label>
                         <mat-select name="address" required [(ngModel)]="fullcampobj.addressid" >
+                            <mat-option  (click)="openDialog(dialog2)"><span style="color: var(--primary-color)">Add New Address<i class="fas fa-plus ml-1"></i></span></mat-option>
                             <mat-option [value]="alladd.uniqueid" *ngFor="let alladd of alladdress; index as i;" >
                                 {{alladd.company_name}}, {{alladd.address_1}} {{alladd.address_2}}, {{alladd.city}}, {{alladd.state}}, {{alladd.zip}}, {{alladd.country}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus"></i></a>
+                    <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus"></i></a> -->
 
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>Send</mat-label>
@@ -236,7 +238,7 @@
                         <mat-label>Chooose a date</mat-label>
                         <input type="datetime-local" [(ngModel)]="fullcampobj.senddate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
                     </mat-form-field>
-                       <div class="mt-4">
+                       <div>
                     <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
                     <button mat-raised-button color="primary" (click)="openDialog(dialog3)" >Publish <i class="fas fa-paper-plane"></i></button>
                     <button mat-raised-button color="accent"  class="ml-2" (click)="campaigndraft()">Save Draft <i class="fa fa-file"></i></button>

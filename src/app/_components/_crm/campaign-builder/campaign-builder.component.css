@@ -25,3 +25,6 @@
 .campstatus.activeme{
     background-color: var(--primary-color);
 }
+.kp-colr{
+    color: var(--primary-color);
+}

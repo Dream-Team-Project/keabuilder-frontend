@@ -50,7 +50,6 @@ export class CrmFormBuilderComponent implements OnInit {
     emailto:new FormControl('', [Validators.required]),
     emailfrom:new FormControl('', [Validators.required]),
     emailname:new FormControl('', [Validators.required]),
-    notifyemail:new FormControl('',[Validators.email]),
   }
   contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};
@@ -79,6 +78,8 @@ export class CrmFormBuilderComponent implements OnInit {
     tags: []
   };
   tagCtrl = new FormControl(['']);
+  notifyemailCtrl = new FormControl(['']);
+  notifyemail:any=[];
   formlists:any=[];
   formtags:any=[];
   showEditor:boolean = true;
@@ -110,6 +111,7 @@ export class CrmFormBuilderComponent implements OnInit {
           this.filteredTempIds.lists=e.listid;
           this.selectedTags=e.temp_tags;
           this.filteredTempIds.tags=e.tagid;
+          this.notifyemail=e.notifyemail.split(',')
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
@@ -170,6 +172,7 @@ export class CrmFormBuilderComponent implements OnInit {
     
   }
   save(){
+   this._form.form.notifyemail=this.notifyemail.toString();
     this._form.form.lists=this.filteredTempIds.lists.toString();
       this._form.form.tags=this.filteredTempIds?.tags.toString();
         this._general.saveDisabled = true;
@@ -454,5 +457,20 @@ export class CrmFormBuilderComponent implements OnInit {
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
  
+  // notify emails
+  addnotifyemail(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.notifyemail.push(value); 
+    }
+    console.log(this.notifyemail)
+    // Clear the input value
+    event.chipInput!.clear();
+    this.notifyemailCtrl.setValue(null);
+  }
+  removenotifyemail(index:number): void {
+    this.notifyemail.splice(index, 1);
+  }
   
+  // notify emails
 }
