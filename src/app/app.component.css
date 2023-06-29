@@ -24,6 +24,13 @@ main {
     display: flex;
 }
 
+::ng-deep .mat-option {
+    font-size: 15px!important;
+    line-height: 42px!important;
+    height: 42px!important;
+    transition: 0.2s ease;
+}
+
 ::ng-deep .mat-option-text small.infoTxt, ::ng-deep small.infoTxt {
     background-color: rgb(217 201 153 / 30%);
     margin-left: 10px;

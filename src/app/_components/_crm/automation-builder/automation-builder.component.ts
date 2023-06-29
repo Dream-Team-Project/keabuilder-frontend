@@ -24,6 +24,21 @@ export class CrmAutomationBuilderComponent implements OnInit {
   searchWf:string = '';
   workflowList:Array<any> = [];
   filteredData:Array<any> = [];
+  formField:any = {
+    selected: [],
+    filter: [],
+    error: ''
+  }
+  listField:any = {
+    value: '',
+    error: '',
+    filter: []
+  }
+  tagField:any = {
+    value: '',
+    error: '',
+    filter: []
+  }
   tempTrgtErr = '';
   searchTrgtInp = '';
   updateTempTrgt = false;
@@ -56,8 +71,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
     })
   }
 
+  validateFormField() {
+    return this.formField.selected.length != 0 || this.listField.selected.length != 0 || this.tagField.selected.length != 0;
+  }
+
   addWorkflow(isAction:boolean) {
-    if(this.tempWf.target && this.searchTrgtInp) {
+    var isValid = this.validateFormField();
+    if(isValid) {
       if(isAction) {
         this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
           if(resp) this.resetWorkflow();
@@ -71,42 +91,31 @@ export class CrmAutomationBuilderComponent implements OnInit {
         })
       }
     }
-    else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.type);
+    else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.target);
   }
 
   deleteWorkflow(isAction:boolean) {
     isAction ? this._automation.deleteAction(this.appendIndex) : this._automation.deleteTrigger(this.appendIndex); 
   }
 
-  selectedWf(wf:any, update:boolean) {
-    if(!update) this.searchTrgtInp = '';
+  selectWf(wf:any, update:boolean) {
+    if(!update) this.resetWorkflow();
     this.updateTempTrgt = update;
     this.tempWf = JSON.parse(JSON.stringify(wf));
     this.openDialog(this.wfDialog, '');
   }
   
   editWf(wf:any, i:number) {
-    this.searchTrgtInp = this._automation.fetchWfTarget(wf);
+    this.searchTrgtInp = this._automation.fetchTargetName(wf);
     this.appendIndex = i;
-    this.selectedWf(wf, true);
+    this.selectWf(wf, true);
   }
 
   resetWorkflow() {
-    this.filteredData = [];
-    this.searchTrgtInp=''; 
+    this.formField.selected = [];
+    this.formField.filter = [];
+    this.formField.error = '';
     this.tempWf = '';
-  }
-
-  resetFilterTarget(data:any) {
-    this.searchTrgtInp=''; 
-    this.filterTarget(data);
-  }
-
-  filterTarget(data:any) {
-    data = JSON.parse(JSON.stringify(data));
-    this._automation.anyTarget.name = 'Any ' + this.tempWf.type;
-    data.unshift(this._automation.anyTarget);
-    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
   }
 
   filterWorkflow() {
@@ -127,11 +136,86 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
   }
 
+  resetFilterTarget(data:any) {
+    this.searchTrgtInp=''; 
+    this.filterTarget(data);
+  }
+
+  filterTarget(data:any) {
+    data = JSON.parse(JSON.stringify(data));
+    this._automation.anyTarget.name = 'Any ' + this.tempWf.target;
+    data.unshift(this._automation.anyTarget);
+    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
+  }
+
   selectedOption(e:any) {
     this.tempWf.target = {id: e.option.value.id};
     this.searchTrgtInp = e.option.value.name;
     this.tempTrgtErr = '';
   }
+
+  // form
+
+  filterForm(formInp:any) {
+    var data = JSON.parse(JSON.stringify(this._automation.forms));
+    this.formField.filter = data.filter((option:any) => option.name.toLowerCase().includes(formInp.value.toLowerCase()));
+  }
+
+  selectForm(e:any, formInp:any) {
+    this.formField.selected.push(e.option.value.id);
+    formInp.value = '';
+    this.formField.error = '';
+  }
+
+  removeForm(index:number) {
+    this.formField.selected.splice(index, 1);
+  }
+
+  // form
+
+  // list
+
+  resetFilterList() {
+    this.listField.value=''; 
+    this.filterList();
+  }
+
+  filterList() {
+    var data = JSON.parse(JSON.stringify(this._automation.lists));
+    this._automation.anyTarget.name = 'Any List';
+    data.unshift(this._automation.anyTarget);
+    this.listField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.listField.value.toLowerCase()));
+  }
+
+  selectedList(e:any) {
+    this.tempWf.list = {id: e.option.value.id};
+    this.listField.value = e.option.value.name;
+    this.listField.error = '';
+  }
+
+  // list
+
+  // tag
+
+  resetFilterTag() {
+    this.formField.value=''; 
+    this.filterTag();
+  }
+
+  filterTag() {
+    var data = JSON.parse(JSON.stringify(this._automation.tags));
+    this._automation.anyTarget.name = 'Any Tag';
+    data.unshift(this._automation.anyTarget);
+    this.tagField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.tagField.value.toLowerCase()));
+  }
+
+  selectedTag(e:any) {
+    this.tempWf.tag = {id: e.option.value.id};
+    this.tagField.value = e.option.value.name;
+    this.tagField.error = '';
+  }
+
+  // tag
 
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
