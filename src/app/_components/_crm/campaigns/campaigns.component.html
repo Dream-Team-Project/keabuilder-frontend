@@ -81,7 +81,7 @@
       </button>
     </div>
     </div>
-    <div [class.px-3]="toggleview" class="row">
+    <div [class.px-3]="toggleview" class="row" *ngIf="kbcampaigns?.length != 0; else nodata">
       <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
         <div [class.row]="toggleview">
           <div *ngIf="!toggleview" class="keabuilder-title-board line-ellipsis mt-2 mb-2">
@@ -100,7 +100,7 @@
               </div>
             </div>
           </div>
-           <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
             <div class="row align-items-center p-0 h-100">
               <div [class.p-0]="!toggleview" class="col-md-12">
                 <div *ngIf="toggleview" class="keabuilder-title-board line-ellipsis ">
@@ -144,8 +144,8 @@
               </div>
               </div>
             </div>
-          </div> 
-    <div class="d-flex justify-content-between">
+          </div>
+            <div class="d-flex justify-content-between">
           <div class="statbadg">
             <span class="statusbadge" [class]="kbcampaign.publish_status==1 ? 'active1':'active2'" *ngIf="kbcampaign.campaign_sent=='0'">
               <i class="fas" [class]="kbcampaign.publish_status==1 ? 'fa-check':'fa-file'"></i>
@@ -157,6 +157,7 @@
             </span>
 
           </div>
+
           <div class="statbadg2">
             <span class="statusbadge2">{{kbcampaign.sendoption=='immediately'?'Immediately':'Specific Time'}}</span>
           </div>
@@ -164,5 +165,16 @@
         </div>
       </div>
     </div>
+    <ng-template #nodata>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-4">
+          <img
+            src="/assets/images/website/website-empty.png"
+            class="img-fluid"
+            alt="No Campaign Found"
+          />
+        </div>
+      </div>
+    </ng-template>
   </div>
 

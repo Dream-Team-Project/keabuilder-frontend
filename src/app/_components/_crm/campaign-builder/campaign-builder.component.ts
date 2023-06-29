@@ -30,28 +30,14 @@ export class CrmCampaignBuilderComponent implements OnInit {
   stateControl = new FormControl('', [Validators.required]);
   zipControl = new FormControl('', [Validators.required]);
 
-  config: any = {
-    height: 518,
-    plugins:
-      'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap',
-    toolbar:
-      'undo redo | image | bold italic underline strikethrough link blockquote | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | formatselect fontselect fontsizeselect | code',
-    content_css: [],
-    importcss_append: true,
-    menubar: false,
-    statusbar: false,
-    branding: false,
-    setup: (editor: { ui: any; }) => {},
-    diskCache: true
-  };
+  
+ 
   testemail = '';
-  fullcampobj:any = {name:'',lists:'',subject:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailbody:'', addressid:'', timezone:'',};
   sendoptn = false;
-
   lists:any = [];
   alladdress:any = [];
   genaddress:any = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-
+  fullcampobj:any = {name:'',lists:'',subject:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailbody:'', addressid:'', timezone:'',};
   uniqueid:any = '';
   campstatus = 'Draft';
   showmytime:any = '';
@@ -101,6 +87,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
             this.fullcampobj.subject = element.subject;
             this.fullcampobj.preheader_text = element.preheader_text;
             this.fullcampobj.emailfrom = element.emailfrom;
+            this.fullcampobj.notifyemail = element.notifyemail;
             this.fullcampobj.sendoption = element.sendoption;
             this.fullcampobj.emailbody = element.emailbody;
             this.fullcampobj.id=element.id;
