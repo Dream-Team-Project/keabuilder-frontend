@@ -128,7 +128,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   selectedOption(e:any) {
-    console.log(e.option.value);
     this.tempWf.target = {id: e.option.value.id};
     this.searchTrgtInp = e.option.value.name;
     this.tempTrgtErr = '';

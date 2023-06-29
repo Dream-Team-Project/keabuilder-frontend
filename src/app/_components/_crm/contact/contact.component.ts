@@ -188,7 +188,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.uniqueid);
-    this.updatelist_tag();
+    this.update_list_tag();
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -196,7 +196,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds?.lists?.splice(index, 1);
-    this.updatelist_tag();
+    this.update_list_tag();
   }
 
   // end list actions
@@ -211,7 +211,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.uniqueid);
-    this.updatelist_tag();
+    this.update_list_tag();
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -219,7 +219,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags?.splice(index, 1);
     this.filteredTempIds?.tags?.splice(index, 1);
-    this.updatelist_tag();
+    this.update_list_tag();
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -231,7 +231,7 @@ export class CrmContactComponent implements OnInit {
       };
       this.selectedTags.push(obj); 
       this.filteredTempIds.tags.push(obj.uniqueid);
-      this.tagupdate(obj).then((resp:any)=>{this.updatelist_tag()})
+      this.tagupdate(obj).then((resp:any)=>{this.update_list_tag()})
       this.newtags=[];
          
     }
@@ -239,16 +239,14 @@ export class CrmContactComponent implements OnInit {
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
   }
-  updatelist_tag(){
+  update_list_tag(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();
     var contact = JSON.parse(JSON.stringify(this.contact));
     contact.fieldans = JSON.stringify(this.contactFieldJSON);
     this._contactService.updatecontact(contact).subscribe(resp => {
-      if(resp.success==true){
-        let msg = 'List & Tag Updated Successfully!';
-        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-      }
+      let msg = resp.success ? 'Contact has been Updated' : 'Server Error';
+      this._general.openSnackBar(!resp.success, msg, 'OK', 'center', 'top');
     })
   }
 }
