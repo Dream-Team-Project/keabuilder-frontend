@@ -30,13 +30,11 @@ export class CrmCampaignBuilderComponent implements OnInit {
   stateControl = new FormControl('', [Validators.required]);
   zipControl = new FormControl('', [Validators.required]);
   testemail = '';
-  fullcampobj:any = {name:'',lists:'',subject:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailbody:'', addressid:'', timezone:'',};
   sendoptn = false;
-
   lists:any = [];
   alladdress:any = [];
   genaddress:any = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-
+  fullcampobj:any = {name:'',lists:'',subject:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailbody:'', addressid:'', timezone:'',};
   uniqueid:any = '';
   campstatus = 'Draft';
   showmytime:any = '';
@@ -86,6 +84,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
             this.fullcampobj.subject = element.subject;
             this.fullcampobj.preheader_text = element.preheader_text;
             this.fullcampobj.emailfrom = element.emailfrom;
+            this.fullcampobj.notifyemail = element.notifyemail;
             this.fullcampobj.sendoption = element.sendoption;
             this.fullcampobj.emailbody = element.emailbody;
             this.fullcampobj.id=element.id;

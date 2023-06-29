@@ -50,7 +50,7 @@ export class CrmFormBuilderComponent implements OnInit {
     emailto:new FormControl('', [Validators.required]),
     emailfrom:new FormControl('', [Validators.required]),
     emailname:new FormControl('', [Validators.required]),
-
+    notifyemail:new FormControl('',[Validators.email]),
   }
   contextMenuPosition = { x: '0px', y: '0px' };
   dragBoxAnime:any = {open: false, close: false};

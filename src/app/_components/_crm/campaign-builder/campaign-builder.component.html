@@ -180,8 +180,8 @@
                           <mat-option
                             *ngFor="let option of filteredOptions?.lists"
                             [value]="option"
-                            [disabled]="filteredTempIds?.lists.includes(option.uniqueid)">
-                            {{ option?.name }}
+                            [disabled]="(filteredTempIds?.lists.includes(option.uniqueid) || option?.activecontacts<1)">
+                            {{ option?.name }} {{'('+option?.activecontacts+')'}}
                           </mat-option>
                         </mat-autocomplete>
                       </mat-form-field>
@@ -196,7 +196,7 @@
 
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>From</mat-label>
-                        <input type="email" matInput name="replyto" [(ngModel)]="fullcampobj.emailfrom"  [formControl]="emailfromControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
+                        <input type="email" matInput name="from" [(ngModel)]="fullcampobj.emailfrom"  [formControl]="emailfromControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
                         <mat-error *ngIf="emailfromControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
                         </mat-error>
@@ -236,10 +236,11 @@
                         <mat-label>Chooose a date</mat-label>
                         <input type="datetime-local" [(ngModel)]="fullcampobj.senddate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
                     </mat-form-field>
-
+                       <div class="mt-4">
                     <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
                     <button mat-raised-button color="primary" (click)="openDialog(dialog3)" >Publish <i class="fas fa-paper-plane"></i></button>
                     <button mat-raised-button color="accent"  class="ml-2" (click)="campaigndraft()">Save Draft <i class="fa fa-file"></i></button>
+                </div> 
                 </form>
                     
                 </div>

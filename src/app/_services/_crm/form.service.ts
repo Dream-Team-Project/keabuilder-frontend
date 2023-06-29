@@ -23,6 +23,8 @@ export class FormService {
     emailsubject: '',
     emailmessage: '',
     emailenabled: false,
+    notifyemailenabled:false,
+    notifyemail:'',
     thankyoumessage: '',
     lists:'',
     tags:'',
