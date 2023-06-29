@@ -10,50 +10,68 @@ import { FieldService } from '../_crm/field.service';
 })
 export class AutomationService {
 
-  defaultWfList = [
-    {
-      id: 'wrkfl-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
-      workflows: [
-        { id: 'wrkfl-sub-to-list', name: 'Subscribe to a List', type: 'list', icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
-        { id: 'wrkfl-unsub-to-list', name: 'Unsubscribe to a List', type: 'list', icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
-        { id: 'wrkfl-tag-add', name: 'Tag Added', type: 'tag', icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'wrkfl-tag-remove', name: 'Tag Removed', type: 'tag', icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
-        { id: 'wrkfl-cont-add', name: 'Contact Added', type: 'contact', icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
-        { id: 'wrkfl-cont-updt', name: 'Contact Updated', type: 'contact', icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
-        { id: 'wrkfl-cont-dnd', name: 'Contact DND (Do Not Disturbed)', type: 'contact', icon: '<i class="fa-solid fa-user-lock"></i>', color: 'primary'},
-      ]
-    },
-    {
-      id: 'wrkfl-group-send', name: 'Sending', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
-      workflows: [
-        { id: 'wrkfl-opre-email', name: 'Opens/reads an email', type: 'email', icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
-      ]
-    },
-    {
-      id: 'wrkfl-group-others', name: 'Others', hide: false, icon: '<i class="fa-solid fa-ellipsis-vertical"></i>',
-      workflows: [
-        { id: 'wrkfl-date-bsd', name: 'Date Based', type: 'date', icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
-        { id: 'wrkfl-pg-vstd', name: 'Page Visited', type: 'page', icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
-      ]
-    },
-  ]
   triggerList: any = [
     {
-      id: 'wrkfl-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
+      id: 'trg-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
       workflows: [
-        { id: 'wrkfl-form-submtd', name: 'Form Submitted', type: 'form', icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        // { id: 'wrkfl-chckot-submtd', name: 'Checkout Submitted', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+        { id: 'trg-form-sub', name: 'Form Submitted', group: 'trigger', type: 'form', icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
+        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', group: 'trigger', type: 'form', icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+      ]
+    },
+    {
+      id: 'trg-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
+      workflows: [
+        { id: 'trg-sub-to-list', name: 'Subscribed to a List', group: 'trigger', type: 'list', icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
+        { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', group: 'trigger', type: 'list', icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
+        { id: 'trg-tag-add', name: 'Tag Added', group: 'trigger', type: 'tag', icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'trg-tag-rm', name: 'Tag Removed', group: 'trigger', type: 'tag', icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
+        { id: 'trg-cont-up', name: 'Contact Updated', group: 'trigger', type: 'contact', icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
+      ]
+    },
+    {
+      id: 'trg-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
+      workflows: [
+        { id: 'trg-opre-email', name: 'Opens/reads an email', group: 'trigger', type: 'email', icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+        { id: 'trg-reply-email', name: 'Replies to an email', group: 'trigger', type: 'email', icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
+      ]
+    },
+    {
+      id: 'trg-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
+      workflows: [
+        { id: 'trg-date', name: 'Date', group: 'trigger', type: 'date', icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
+        { id: 'trg-pg-vstd', name: 'Page Visited', group: 'trigger', type: 'page', icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
       ]
     }
   ];
   actionList: any = [
     {
-      id: 'act-group-condition-workflow', name: 'Conditions and Workflow', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
+      id: 'act-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
       workflows: [
-        { id: 'act-if-else', name: 'Condition if/else', type: 'condition', icon: '<i class="fa-solid fa-arrows-split-up-and-left"></i>', color: '' },
-        { id: 'act-wait', name: 'Wait', type: 'wait', icon: '<i class="fa-solid fa-clock"></i>', color: '' },
+        { id: 'act-sub-to-list', name: 'Subscribe to a List', group: 'action', type: 'list', icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
+        { id: 'act-unsub-to-list', name: 'Unsubscribe to a List', group: 'action', type: 'list', icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
+        { id: 'act-add-tag', name: 'Add a Tag', group: 'action', type: 'tag', icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'act-rm-tag', name: 'Remove a Tag', group: 'action', type: 'tag', icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
+        { id: 'act-add-cont', name: 'Add a Contact', group: 'trigger', type: 'contact', icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
+        { id: 'act-up-cont', name: 'Update a Contact', group: 'trigger', type: 'contact', icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
+        { id: 'act-rm-cont', name: 'Remove a Contact', group: 'trigger', type: 'contact', icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
+        { id: 'act-add-note', name: 'Add a Note', group: 'trigger', type: 'Note', icon: '<i class="fa-solid fa-file-pen"></i>', color: 'primary'},
       ]
     },
+    {
+      id: 'act-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
+      workflows: [
+        { id: 'act-send-email', name: 'Send an email', group: 'action', type: 'email', icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+      ]
+    },
+    {
+      id: 'act-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
+      workflows: [
+        { id: 'act-if-else', name: 'Condition if/else', group: 'action', type: 'condition', icon: '<i class="fa-solid fa-arrows-split-up-and-left"></i>', color: '' },
+        { id: 'act-wait', name: 'Wait', group: 'action', type: 'wait', icon: '<i class="fa-solid fa-clock"></i>', color: '' },
+        { id: 'act-date', name: 'Date', group: 'action', type: 'date', icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
+        { id: 'act-pg-vstd', name: 'Page Visited', group: 'action', type: 'page', icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
+      ]
+    }
   ];
   activeTriggers: any = [];
   activeActions: any = [
@@ -72,8 +90,6 @@ export class AutomationService {
     private _list: ListService,
     private _tag: TagService,
     private _field: FieldService) {
-      this.actionList = this.actionList.concat(this.defaultWfList);
-      this.triggerList = this.triggerList.concat(this.defaultWfList);
       this.fetchForms();
       this.fetchLists();
       this.fetchTags();
@@ -116,22 +132,41 @@ export class AutomationService {
     else return '';
   }
 
-  addAction(action: any, index: number) {
-    action.id = this.createWorkflowId(action);
-    this.activeActions.splice(index, 0, action);
+  addAction(action: any, index: number, update:boolean) {
+    return new Promise<any>((resolve, reject) => {
+      var exst = this.activeActions.filter((act:any)=> action.target.id == act.target.id && action.name == act.name && action.id != act.id);
+      if(exst.length == 0) {
+        if(update) this.activeActions[index] = action;
+        else {
+          action.id = this.createWorkflowId(action);
+          this.activeActions.splice(index, 0, action);
+        }
+        resolve(true);
+      }
+      else reject(false);
+    });
   }
 
-  removeAction(index: number) {
+  deleteAction(index: number) {
     this.activeActions.splice(index, 1);
   }
 
-  addTrigger(trigger: any, index: number) {
-    console.log(index);
-    trigger.id = this.createWorkflowId(trigger);
-    this.activeTriggers.splice(index, 0, trigger);
+  addTrigger(trigger: any, index: number, update:boolean) {
+    return new Promise<any>((resolve, reject) => {
+      var exst = this.activeTriggers.filter((trg:any)=> trigger.target.id == trg.target.id && trigger.name == trg.name && trigger.id != trg.id);
+      if(exst.length == 0) {
+        if(update) this.activeTriggers[index] = trigger;
+        else {
+          trigger.id = this.createWorkflowId(trigger);
+          this.activeTriggers.splice(index, 0, trigger);
+        }
+        resolve(true);
+      }
+      else resolve(false);
+    });
   }
 
-  removeTrigger(index: number) {
+  deleteTrigger(index: number) {
     this.activeTriggers.splice(index, 1);
   }
 

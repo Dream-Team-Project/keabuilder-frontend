@@ -29,9 +29,6 @@ export class CrmCampaignBuilderComponent implements OnInit {
   cityControl = new FormControl('', [Validators.required]);
   stateControl = new FormControl('', [Validators.required]);
   zipControl = new FormControl('', [Validators.required]);
-
-  
- 
   testemail = '';
   sendoptn = false;
   lists:any = [];

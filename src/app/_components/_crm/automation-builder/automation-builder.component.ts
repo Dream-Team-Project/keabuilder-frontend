@@ -26,6 +26,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   filteredData:Array<any> = [];
   tempTrgtErr = '';
   searchTrgtInp = '';
+  updateTempTrgt = false;
 
 
   constructor(
@@ -35,17 +36,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
     private _bottomSheet: MatBottomSheet) {}
 
   ngOnInit(): void {}
-
-  selectedWf(wf:any) {
-    this.tempWf = JSON.parse(JSON.stringify(wf));
-    this.openDialog(this.wfDialog, '');
-  }
-
-  editWf(wf:any, i:number) {
-    this.searchTrgtInp = this._automation.fetchWfTarget(wf);
-    this.appendIndex = i;
-    this.selectedWf(wf);
-  }
 
   openDialog(templateRef: TemplateRef<any>, err:string): void {
     this.closeBottomSheet();
@@ -66,22 +56,57 @@ export class CrmAutomationBuilderComponent implements OnInit {
     })
   }
 
-  addWorkflow(workflow:any, isAction:boolean) {
-    this._automation.addTrigger(workflow, this.appendIndex);
-    return false;
-    if(workflow.target && this.searchTrgtInp) {
-      var exst = '';
-      if(isAction) exst = this._automation.activeActions.filter((act:any)=> workflow.target.id == act.target.id && workflow.name == act.name);
-      else exst = this._automation.activeTriggers.filter((trg:any)=> workflow.target.id == trg.target.id && workflow.name == trg.name);
-      if(exst.length == 0) {
-        isAction ? this._automation.addAction(workflow, this.appendIndex) : this._automation.addTrigger(workflow, this.appendIndex);
-        this.filteredData = [];
-        this.searchTrgtInp=''; 
-        this.tempWf = '';
+  addWorkflow(isAction:boolean) {
+    if(this.tempWf.target && this.searchTrgtInp) {
+      if(isAction) {
+        this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
+          if(resp) this.resetWorkflow();
+          else this.openDialog(this.wfDialog, 'Action allready added');
+        })
       }
-      // else this.openDialog(this.wfDialog, (isAction ? 'Action' : 'Trigger')+' allready added');
+      else {
+        this._automation.addTrigger(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
+          if(resp) this.resetWorkflow();
+          else this.openDialog(this.wfDialog, 'Trigger allready added');
+        })
+      }
     }
-    else this.openDialog(this.wfDialog, 'Please select a '+workflow.type);
+    else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.type);
+  }
+
+  deleteWorkflow(isAction:boolean) {
+    isAction ? this._automation.deleteAction(this.appendIndex) : this._automation.deleteTrigger(this.appendIndex); 
+  }
+
+  selectedWf(wf:any, update:boolean) {
+    if(!update) this.searchTrgtInp = '';
+    this.updateTempTrgt = update;
+    this.tempWf = JSON.parse(JSON.stringify(wf));
+    this.openDialog(this.wfDialog, '');
+  }
+  
+  editWf(wf:any, i:number) {
+    this.searchTrgtInp = this._automation.fetchWfTarget(wf);
+    this.appendIndex = i;
+    this.selectedWf(wf, true);
+  }
+
+  resetWorkflow() {
+    this.filteredData = [];
+    this.searchTrgtInp=''; 
+    this.tempWf = '';
+  }
+
+  resetFilterTarget(data:any) {
+    this.searchTrgtInp=''; 
+    this.filterTarget(data);
+  }
+
+  filterTarget(data:any) {
+    data = JSON.parse(JSON.stringify(data));
+    this._automation.anyTarget.name = 'Any ' + this.tempWf.type;
+    data.unshift(this._automation.anyTarget);
+    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
   }
 
   filterWorkflow() {
@@ -100,18 +125,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
         }
       }
     }
-  }
-
-  resetFilterTarget(data:any) {
-    this.searchTrgtInp=''; 
-    this.filterTarget(data);
-  }
-
-  filterTarget(data:any) {
-    data = JSON.parse(JSON.stringify(data));
-    this._automation.anyTarget.name = 'Any ' + this.tempWf.type;
-    data.unshift(this._automation.anyTarget);
-    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
   }
 
   selectedOption(e:any) {

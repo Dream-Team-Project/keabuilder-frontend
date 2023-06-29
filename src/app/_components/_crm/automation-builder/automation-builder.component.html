@@ -21,7 +21,7 @@
                 <mat-panel-description><span [innerHTML]="wfgroup.icon | safeHtml"></span></mat-panel-description>
             </mat-expansion-panel-header>
             <mat-nav-list class="pt-0">
-                <div (click)="selectedWf(wf)"
+                <div (click)="selectedWf(wf, false)"
                     *ngFor="let wf of wfgroup.workflows | filter:searchWf:'name', index as ti" class="kb-workflow-option" mat-ripple
                     mat-list-item>
                     <span class="kb-workflow-option-icon" [innerHTML]="wf.icon | safeHtml"></span>
@@ -90,11 +90,15 @@
             </mat-form-field>
         </div>
     </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <!-- <button mat-raised-button mat-dialog-close class="bg-danger text-light">Delete</button> -->
-        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial (click)="addWorkflow(tempWf, isAction)"
-            color="primary">Add</button>
+    <div mat-dialog-actions class="justify-content-between">
+        <div>
+            <button *ngIf="updateTempTrgt" mat-raised-button mat-dialog-close (click)="deleteWorkflow(isAction)" class="bg-danger text-light">Delete</button>
+        </div>
+        <div>
+            <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
+            <button mat-button mat-dialog-close cdkFocusInitial (click)="addWorkflow(isAction)"
+                color="primary">{{updateTempTrgt ? 'Update' : 'Add'}}</button>
+        </div>
     </div>
 </ng-template>
 <!-- workflow dialog -->
