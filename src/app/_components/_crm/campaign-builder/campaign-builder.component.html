@@ -114,7 +114,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
-                <div class="makecard">
+                <div class="makecard h-100 p-3">
                     <h5>
                         <b>Design Your Campaign</b>
                         <hr>
@@ -130,13 +130,14 @@
                         Name must be at least <strong>3</strong> characters
                         </mat-error>
                     </mat-form-field>
-
-                    <editor  [(ngModel)]="fullcampobj.campaigneditor" [init]="config"></editor>
+                    <div class="col-12 p-0">
+                        <editor [(ngModel)]="fullcampobj.campaigneditor" [init]="_general.config" class="h-100"></editor>
+                    </div>    
                 </div>
             </div>
             <div class="col-md-4">
 
-                <div class="makecard ">
+                <div class="makecard h-100 p-3">
                     <form>
                     <h5>
                         <b>Campaign Settings <span class="campstatus" [class.activeme]="campstatus=='Publish'">{{campstatus}}</span></b>
