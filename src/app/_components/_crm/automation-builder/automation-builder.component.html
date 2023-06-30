@@ -21,7 +21,7 @@
                 <mat-panel-description><span [innerHTML]="wfgroup.icon | safeHtml"></span></mat-panel-description>
             </mat-expansion-panel-header>
             <mat-nav-list class="pt-0">
-                <div (click)="selectWf(wf, false)"
+                <div (click)="selectWf(wf, -1, false)"
                     *ngFor="let wf of wfgroup.workflows | filter:searchWf:'name', index as ti" class="kb-workflow-option" mat-ripple
                     mat-list-item>
                     <span class="kb-workflow-option-icon" [innerHTML]="wf.icon | safeHtml"></span>
@@ -37,25 +37,18 @@
 <!-- workflow dialog -->
 <ng-template #wfDialog>
     <h1 mat-dialog-title class="kb-primary">{{tempWf.name}}<span class="kb-tag kb-info-tag ml-2">{{isAction ? 'Action' : 'Trigger'}}</span></h1>
-    <div mat-dialog-content [ngSwitch]="tempWf.target" class="py-2">
+    <div mat-dialog-content [ngSwitch]="tempWf?.target?.name" class="py-2">
         <div *ngSwitchCase="'form'">
-            <mat-error *ngIf="tempTrgtErr">{{formField.error}}</mat-error>
-            <mat-form-field appearance="fill" (click)="filterForm(formInp)" [class.mat-form-field-invalid]="formField.error">
+            <mat-error *ngIf="formField.error">{{formField.error}}</mat-error>
+            <mat-form-field appearance="fill" (click)="filterForm()" [class.mat-form-field-invalid]="formField.error">
                 <mat-label>Select Forms</mat-label>
-                <mat-chip-list #formChip aria-label="Fruit selection">
-                    <mat-chip
-                      *ngFor="let id of formField.selected, index as i"
-                      (removed)="removeForm(i)">
-                      {{_automation.fetchFormName(id)}}
-                      <button matChipRemove>
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip>
-                </mat-chip-list>
-                <input #formInp type="text" name="form" placeholder="Search form" class="w-100 pt-1"
-                (input)="filterForm(formInp)" [matAutocomplete]="matAuto" [matChipInputFor]="formChip" matInput>
-                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectForm($event, formInp)">
-                    <mat-option *ngFor="let option of formField.filter" [value]="option" [disabled]="formField.selected.includes(option.id)">
+                <input type="text" name="form" placeholder="Search form" [(ngModel)]="formField.value" 
+                (input)="filterForm()" [matAutocomplete]="matAuto" matInput>
+                <button *ngIf="formField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterForm()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectForm($event)">
+                    <mat-option *ngFor="let option of formField.filter" [value]="option" [disabled]="formField.id == option.id">
                     {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
@@ -65,14 +58,13 @@
             <mat-error *ngIf="listField.error">{{listField.error}}</mat-error>
             <mat-form-field appearance="fill" (click)="filterList()" [class.mat-form-field-invalid]="listField.error">
                 <mat-label>Select a List</mat-label>
-                <input type="text" name="list" placeholder="Search list" class="kb-act-searchinp"
-                [(ngModel)]="listField.value" (input)="filterList()"
-                [matAutocomplete]="matAuto" matInput>
+                <input type="text" name="list" placeholder="Search list" [(ngModel)]="listField.value" 
+                (input)="filterList()" [matAutocomplete]="matAuto" matInput>
                 <button *ngIf="listField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterList()">
                     <mat-icon>close</mat-icon>
                 </button>
-                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectedList($event)">
-                    <mat-option *ngFor="let option of listField.filter" [value]="option" [disabled]="false">
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectList($event)">
+                    <mat-option *ngFor="let option of listField.filter" [value]="option" [disabled]="listField.id == option.id">
                     {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
@@ -82,14 +74,13 @@
             <mat-error *ngIf="tagField.error">{{tagField.error}}</mat-error>
             <mat-form-field appearance="fill" (click)="filterTag()" [class.mat-form-field-invalid]="tagField.error">
                 <mat-label>Select a Tag</mat-label>
-                <input type="text" name="tag" placeholder="Search tag" class="kb-act-searchinp"
-                [(ngModel)]="tagField.value" (input)="filterTag()"
-                [matAutocomplete]="matAuto" matInput>
+                <input type="text" name="tag" placeholder="Search tag" [(ngModel)]="tagField.value" 
+                (input)="filterTag()" [matAutocomplete]="matAuto" matInput>
                 <button *ngIf="tagField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterTag()">
                     <mat-icon>close</mat-icon>
                 </button>
-                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectedTag($event)">
-                    <mat-option *ngFor="let option of tagField.filter" [value]="option" [disabled]="false">
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectTag($event)">
+                    <mat-option *ngFor="let option of tagField.filter" [value]="option"  [disabled]="tagField.id == option.id">
                     {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
@@ -163,9 +154,9 @@
             <span class="kb-trigger-section">
                 <span class="kb-active-triggers">
                     <button *ngFor="let trigger of _automation.activeTriggers, index as trgi" mat-raised-button class="m-1"
-                        (click)="editWf(trigger, trgi)" [color]="trigger.color">
+                        (click)="selectWf(trigger, trgi, true)" [color]="trigger.color">
                         <span class="mr-1" [innerHTML]="trigger.icon | safeHtml"></span>
-                        {{trigger.name}} : {{_automation.fetchTargetName(trigger)}}
+                        {{trigger.name}} ({{_automation.fetchTargetName(trigger)}})
                     </button>
                 </span>
                 <button mat-raised-button (click)="openBottomSheet(wfsheet, false, 0)" class="kb-trigger-action m-1">Add New
@@ -178,9 +169,9 @@
             <span class="kb-workflow-node">
                 <i (click)="openBottomSheet(wfsheet, true, acti)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
             </span>
-            <button mat-raised-button [color]="action.color" (click)="editWf(action, acti)">
+            <button mat-raised-button [color]="action.color" (click)="selectWf(action, acti, true)">
                 <span class="mr-1" [innerHTML]="action.icon | safeHtml"></span>
-                {{action.name}}
+                {{action.name}} ({{_automation.fetchTargetName(action)}})
             </button>
             <div *ngIf="action.id == 'act-if-else'" class="kb-workflow-inner-section">
                 <div class="kb-workflow-split-section">
@@ -222,6 +213,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="kb-workflow-section">
+            <span class="kb-workflow-node">
+                <i (click)="openBottomSheet(wfsheet, true, _automation.activeActions.length)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+            </span>
+            <button mat-raised-button color="secondary">
+                <span class="mr-1"><i class="fa-solid fa-flag-checkered"></i></span>Finished
+            </button>
         </div>
         <!-- <div class="kb-workflow-section">
             <span class="kb-workflow-node">
