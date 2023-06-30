@@ -165,13 +165,12 @@
                         <h5>Add your own SMTP Server Details </h5>
                         <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
                         <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1)" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
-                </div>
-                 </div>
-                <div class="row">
-                  <div class="col-md-12" *ngIf="allsmtpdata?.smtp_type">
+                <div class="col-12" *ngIf="allsmtpdata?.smtp_type">
                     <mat-card class="mt-4">
                         <ul class="kb-smtpul">
                             <li>
@@ -186,52 +185,39 @@
                             </li>   
                         </ul>
                     </mat-card>
+                </div>
             </div>
-                <!-- </div> -->
-            </div>
-            </div>
-            </div>
-            <div class="col-md-6 ">
-              <div class="insideshdw">
+        </div> 
+        <div class="col-md-6">
+            <div class="insideshdw">
                 <div class="row">
-                  <div class="col-md-12">
-                    <h5>Default Time Zone Settings</h5> 
-                  </div>
-                </div>
+                    <div class="col-md-8">
+                        <h5>Address Settings</h5> 
+                        <p>Add your new/another address.</p>
+                        <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="/assets/images/crm_smtp/address.png" class="img-fluid" alt="" srcset="">
+                    </div>
+                </div>  
+                <!-- <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button> -->
+                <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor"  >Add New Address <i class="fas fa-plus"></i></a> -->
+            </div>
+        </div>  
+        <div class="col-md-6 mt-1">
+            <div class="insideshdw">
+                <h5>Default Time Zone Settings</h5> 
                 <p>Edit your timezone settings.</p>
-                <div class="form-group ">
-                  <mat-form-field appearance="fill" class="kb-full-width">
-                      <mat-label>Timezones</mat-label>
-                      <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter timezone name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
-                          <mat-autocomplete #timezoneAuto="matAutocomplete" >
+                <div class="form-group">
+                    <mat-form-field appearance="fill" class="kb-full-width">
+                        <mat-label>Timezones</mat-label>
+                        <input matInput type="text" [(ngModel)]="timezone" placeholder="Please enter timezone name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
+                            <mat-autocomplete #timezoneAuto="matAutocomplete" (optionSelected)="settimezone()">
                             <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{ option.name }}</mat-option>
-                          </mat-autocomplete>
-                  </mat-form-field>
-                  <button mat-raised-button color="primary" (click)="Settimezone()">Set Timezone <i class="fas fa-paper-plane"></i></button>
+                            </mat-autocomplete>
+                    </mat-form-field>
                 </div>
-               
-                <small class="text-danger" >your Default Time Zone is : <span class="tmzne">{{timezone}}</span> </small>
-              </div>
-    </div>
+            </div>
+        </div>
     </div>  
-    <div class="row mb-4">     
-    <div class="col-md-6 ">
-      <div class="insideshdw">
-          <div class="d-flex">
-              <div class="col-md-8 ">
-            <h5>Address Settings</h5> 
-            <p>Add your new/another address.</p>
-            <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button>
-          </div>
-          <div class="col-md-4">
-              <img src="/assets/images/crm_smtp/address.png" class="img-fluid" alt="" srcset="">
-          </div>
-  </div>  
-        
-          <!-- <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button> -->
-          <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor"  >Add New Address <i class="fas fa-plus"></i></a> -->
-        
-      </div>
-  </div>
-  </div>  
-    </div>
+</div>
