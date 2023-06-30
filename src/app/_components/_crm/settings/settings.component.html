@@ -71,6 +71,85 @@
                 </mat-form-field>
             </div>
         </div>
+        <div mat-dialog-actions class="justify-content-end">
+            <button mat-button mat-dialog-close  class="text-danger">Close</button>
+            <button mat-button [color]="'primary'" (click)="sendaddress()">Add </button>
+        </div>
+</ng-template>
+ <!-- add new address setting-->
+ <ng-template #dialog2>
+    <h1 mat-dialog-title >Add Address</h1>
+    <div mat-dialog-content>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Country</mat-label>
+            <input matInput type="text" [(ngModel)]="genaddress.country" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" (click)="filtercountryData($event)">
+            <mat-autocomplete #countryAuto="matAutocomplete" >
+              <mat-option (selectionChange)="getcountrynm($event)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
+            </mat-autocomplete>
+            <!-- <mat-select  (selectionChange)="getcountrynm($event)">
+              <mat-option *ngFor="let item of _addressService.country; index as i" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select> -->
+        </mat-form-field> 
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Company Name</mat-label>
+            <input type="text" matInput name="companyname" [(ngModel)]="genaddress.company_name" [formControl]="companynameControl" required minlength="3" >
+            <mat-error *ngIf="companynameControl.hasError('required')">
+                Company Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="companynameControl.hasError('minlength')">
+                Name must be at least <strong>3</strong> characters
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address Line 1</mat-label>
+            <input type="text" matInput name="addressline1" [(ngModel)]="genaddress.address_1"  [formControl]="addressline1Control" required minlength="3" >
+            <small>Street address, P.O. box</small>
+            <mat-error *ngIf="addressline1Control.hasError('required')">
+                Address Line 1 is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="addressline1Control.hasError('minlength')">
+                Address Line 1 must be at least <strong>3</strong> characters
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Address Line 2</mat-label>
+            <input type="text" matInput name="addressline2" [(ngModel)]="genaddress.address_2" >
+            <small>Apartment, suite, unit, building, floor, etc.</small>
+        </mat-form-field>
+
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>City</mat-label>
+                    <input type="text" matInput name="city" [(ngModel)]="genaddress.city"  [formControl]="cityControl" required  >
+                    <mat-error *ngIf="cityControl.hasError('required')">
+                        City is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>State / Province / Region</mat-label>
+                    <input type="text" matInput name="state" [(ngModel)]="genaddress.state"  [formControl]="stateControl" required  >
+                    <mat-error *ngIf="stateControl.hasError('required')">
+                        State is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>ZIP/Postal Code</mat-label>
+                    <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
+                    <mat-error *ngIf="zipControl.hasError('required')">
+                        Zip is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close  class="text-danger">Close</button>

@@ -386,5 +386,7 @@ export const RoutingComponents =
     CrmFieldsComponent,
     SalesComponent,
     PaymentIntegrationsComponent,
+    PaymentComponent,
+    DomainComponent
   ];
 
