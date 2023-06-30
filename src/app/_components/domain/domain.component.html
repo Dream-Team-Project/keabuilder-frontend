@@ -10,7 +10,6 @@
   </ng-template>
 <div id="kb-domain">
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-
     <div id="kb-offer-actions" *ngIf="sidebar.open">
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
@@ -64,7 +63,6 @@
     </div>
     <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
     [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
-
     <div class="container-fluid">
         <div class="row mt-4">
             <div class="col-md-8 mt-4">
