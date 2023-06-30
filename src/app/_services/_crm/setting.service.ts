@@ -38,6 +38,10 @@ export class SettingService {
     obj.user_id = this.uuid;
     return this.http.post('/api/globaltimezone',obj).pipe(catchError(this.errorHandler));
   }
+  setdefaultaddress(obj:any): Observable<any>{
+    obj.user_id = this.uuid;
+    return this.http.post('/api/setdefaultaddress',obj).pipe(catchError(this.errorHandler));
+  }
  
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
