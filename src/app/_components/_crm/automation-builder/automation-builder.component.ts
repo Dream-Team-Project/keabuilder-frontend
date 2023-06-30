@@ -25,16 +25,19 @@ export class CrmAutomationBuilderComponent implements OnInit {
   workflowList:Array<any> = [];
   filteredData:Array<any> = [];
   formField:any = {
-    selected: [],
-    filter: [],
-    error: ''
+    id: '',
+    value: '',
+    error: '',
+    filter: []
   }
   listField:any = {
+    id: '',
     value: '',
     error: '',
     filter: []
   }
   tagField:any = {
+    id: '',
     value: '',
     error: '',
     filter: []
@@ -52,9 +55,9 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  openDialog(templateRef: TemplateRef<any>, err:string): void {
+  openDialog(templateRef: TemplateRef<any>, error:string): void {
+    if(error) this.showFieldError(error);
     this.closeBottomSheet();
-    this.tempTrgtErr = err;
     this.dialog.open(templateRef);
   }
 
@@ -71,50 +74,86 @@ export class CrmAutomationBuilderComponent implements OnInit {
     })
   }
 
-  validateFormField() {
-    return this.formField.selected.length != 0 || this.listField.selected.length != 0 || this.tagField.selected.length != 0;
+  showFieldError(error:string) {
+    var trgtNm = this.tempWf.target.name;
+    if(trgtNm == 'form') this.formField.error = error;
+    if(trgtNm == 'list')  this.listField.error = error;
+    if(trgtNm == 'tag') this.tagField.error = error;
+  }
+
+  validateTarget() {
+    return new Promise<any>((resolve, reject) => {
+      var trgtNm = this.tempWf.target.name;
+      if(trgtNm == 'form') this.tempWf.target.id = this.formField.id;
+      if(trgtNm == 'list') this.tempWf.target.id = this.listField.id;
+      if(trgtNm == 'tag') this.tempWf.target.id = this.tagField.id;
+      resolve(true);
+    });
   }
 
   addWorkflow(isAction:boolean) {
-    var isValid = this.validateFormField();
-    if(isValid) {
-      if(isAction) {
-        this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-          if(resp) this.resetWorkflow();
-          else this.openDialog(this.wfDialog, 'Action allready added');
-        })
+    this.validateTarget().then(resp=>{
+      if(this.tempWf.target.id) {
+        if(isAction) {
+          this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
+            if(!resp) this.openDialog(this.wfDialog, 'Action allready added');
+          })
+        }
+        else {
+          this._automation.addTrigger(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
+            if(!resp) this.openDialog(this.wfDialog, 'Trigger allready added');
+          })
+        }
       }
-      else {
-        this._automation.addTrigger(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-          if(resp) this.resetWorkflow();
-          else this.openDialog(this.wfDialog, 'Trigger allready added');
-        })
-      }
-    }
-    else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.target);
+      else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.target.name);
+    })
   }
 
   deleteWorkflow(isAction:boolean) {
     isAction ? this._automation.deleteAction(this.appendIndex) : this._automation.deleteTrigger(this.appendIndex); 
   }
 
-  selectWf(wf:any, update:boolean) {
-    if(!update) this.resetWorkflow();
+  selectWf(wf:any, index:number, update:boolean) {
+    this.resetWorkflow();
+    if(update) {
+      if(wf.target.name == 'form') {
+        this.formField.id = wf.target.id;
+        this.formField.value = this._automation.fetchTargetName(wf);
+      }
+      if(wf.target.name == 'list') {
+        this.listField.id = wf.target.id;
+        this.listField.value = this._automation.fetchTargetName(wf);
+      }
+      if(wf.target.name == 'tag') {
+        this.tagField.id = wf.target.id;
+        this.tagField.value = this._automation.fetchTargetName(wf);
+      }
+      this.appendIndex = index;
+    }
     this.updateTempTrgt = update;
     this.tempWf = JSON.parse(JSON.stringify(wf));
     this.openDialog(this.wfDialog, '');
   }
-  
-  editWf(wf:any, i:number) {
-    this.searchTrgtInp = this._automation.fetchTargetName(wf);
-    this.appendIndex = i;
-    this.selectWf(wf, true);
-  }
 
   resetWorkflow() {
-    this.formField.selected = [];
-    this.formField.filter = [];
-    this.formField.error = '';
+    this.formField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: []
+    }
+    this.listField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: []
+    }
+    this.tagField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: []
+    }
     this.tempWf = '';
   }
 
@@ -136,39 +175,24 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
   }
 
-  resetFilterTarget(data:any) {
-    this.searchTrgtInp=''; 
-    this.filterTarget(data);
-  }
-
-  filterTarget(data:any) {
-    data = JSON.parse(JSON.stringify(data));
-    this._automation.anyTarget.name = 'Any ' + this.tempWf.target;
-    data.unshift(this._automation.anyTarget);
-    this.filteredData = data.filter((option:any) => option.name.toLowerCase().includes(this.searchTrgtInp.toLowerCase()));
-  }
-
-  selectedOption(e:any) {
-    this.tempWf.target = {id: e.option.value.id};
-    this.searchTrgtInp = e.option.value.name;
-    this.tempTrgtErr = '';
-  }
-
   // form
 
-  filterForm(formInp:any) {
+  resetFilterForm() {
+    this.formField.value = '';
+    this.formField.id = ''; 
+    this.filterForm();
+  }
+
+  filterForm() {
     var data = JSON.parse(JSON.stringify(this._automation.forms));
-    this.formField.filter = data.filter((option:any) => option.name.toLowerCase().includes(formInp.value.toLowerCase()));
+    data.unshift(this._automation.anyTarget);
+    this.formField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.formField.value.toLowerCase()));
   }
 
-  selectForm(e:any, formInp:any) {
-    this.formField.selected.push(e.option.value.id);
-    formInp.value = '';
+  selectForm(e:any) {
+    this.formField.value = e.option.value.name;
+    this.formField.id = e.option.value.id;
     this.formField.error = '';
-  }
-
-  removeForm(index:number) {
-    this.formField.selected.splice(index, 1);
   }
 
   // form
@@ -177,19 +201,19 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   resetFilterList() {
     this.listField.value=''; 
+    this.listField.id = ''; 
     this.filterList();
   }
 
   filterList() {
     var data = JSON.parse(JSON.stringify(this._automation.lists));
-    this._automation.anyTarget.name = 'Any List';
     data.unshift(this._automation.anyTarget);
     this.listField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.listField.value.toLowerCase()));
   }
 
-  selectedList(e:any) {
-    this.tempWf.list = {id: e.option.value.id};
+  selectList(e:any) {
     this.listField.value = e.option.value.name;
+    this.listField.id = e.option.value.id;
     this.listField.error = '';
   }
 
@@ -198,20 +222,20 @@ export class CrmAutomationBuilderComponent implements OnInit {
   // tag
 
   resetFilterTag() {
-    this.formField.value=''; 
+    this.tagField.value=''; 
+    this.tagField.id = ''; 
     this.filterTag();
   }
 
   filterTag() {
     var data = JSON.parse(JSON.stringify(this._automation.tags));
-    this._automation.anyTarget.name = 'Any Tag';
     data.unshift(this._automation.anyTarget);
     this.tagField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.tagField.value.toLowerCase()));
   }
 
-  selectedTag(e:any) {
-    this.tempWf.tag = {id: e.option.value.id};
+  selectTag(e:any) {
     this.tagField.value = e.option.value.name;
+    this.tagField.id = e.option.value.id;
     this.tagField.error = '';
   }
 

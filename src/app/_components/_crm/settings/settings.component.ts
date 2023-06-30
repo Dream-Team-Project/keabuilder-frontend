@@ -207,8 +207,7 @@ export class CrmSettingsComponent implements OnInit {
     }
 
   }
-  Settimezone(){
-    console.log(this.timezone)
+  settimezone(){
     let obj={global_timezone:this.timezone};
     this._settingService.globaltimezone(obj).subscribe((data:any)=>{
       if(data.success==true){
