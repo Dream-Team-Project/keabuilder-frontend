@@ -84,6 +84,7 @@ export class CrmFormBuilderComponent implements OnInit {
   formtags:any=[];
   showEditor:boolean = true;
   showFilter:boolean = false;
+  emailerror:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -460,17 +461,25 @@ export class CrmFormBuilderComponent implements OnInit {
   // notify emails
   addnotifyemail(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value) {
+    if (value && this.isEmailValid(value)==true) {
       this.notifyemail.push(value); 
+      this.emailerror=false;
+       // Clear the input value
+      event.chipInput!.clear();
+      this.notifyemailCtrl.setValue(null);
     }
-    console.log(this.notifyemail)
-    // Clear the input value
-    event.chipInput!.clear();
-    this.notifyemailCtrl.setValue(null);
+     else if(this.isEmailValid(value)==false && value){
+      this.notifyemailCtrl.setValue(value);
+      this.emailerror=true;
+    }
   }
   removenotifyemail(index:number): void {
     this.notifyemail.splice(index, 1);
   }
   
   // notify emails
+  isEmailValid(value:any) {
+    let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    return regex.test(value);
+  }
 }

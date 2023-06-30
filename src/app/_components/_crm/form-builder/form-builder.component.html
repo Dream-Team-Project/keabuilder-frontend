@@ -167,18 +167,15 @@
                             Want to send email.
                         </mat-slide-toggle>
                     </div>
-                    <mat-error *ngIf="isNotValid(validate.emailsubject)">
+                    <mat-error *ngIf="validate.emailsubject.invalid">
                         Email subject should not be empty
                     </mat-error>
                     <mat-form-field appearance="fill">
                         <mat-label>Email Subject</mat-label>
                         <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject">
                     </mat-form-field>
-                    <!-- <mat-form-field appearance="fill" >
-                        <mat-label>Notify Email's</mat-label>
-                        <input matInput type="text" placeholder="use multiple emails seperated by ," [formControl]="validate.notifyemail" [(ngModel)]="_form.form.notifyemail">
-                    </mat-form-field> -->
-                    <mat-form-field appearance="fill">
+                    <mat-error *ngIf="emailerror">Email not Valid </mat-error>
+                    <mat-form-field appearance="fill"  [class.mat-form-field-invalid]="emailerror">
                         <mat-label>Notify Emails</mat-label>
                         <mat-chip-list #notifyemailChipList aria-label="nofifyemails selection">
                             <mat-chip
@@ -200,8 +197,7 @@
                             class="kb-act-searchinp"
                             [class.pt-2]="notifyemail?.length != 0"
                             matInput>
-                    </mat-form-field>
-                    
+                        </mat-form-field>
                     <mat-label class="kb-mat-label">Message</mat-label>
                     <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
                 </mat-expansion-panel>

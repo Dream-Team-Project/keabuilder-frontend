@@ -1,210 +1,210 @@
   <!-- delete smtp setting-->
-<ng-template #dialog>
-  <h1 mat-dialog-title class="kb-danger">Delete SMTP</h1>
-  <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{allsmtpdata.smtp_type}}</span> smtp?
-  </div>
-  <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesmtp(allsmtpdata)">Yes</button>
-  </div>
-</ng-template>
- <!-- add new smtp setting-->
-<ng-template #dialog1>
-    <h1 mat-dialog-title class="txt">Connect With SMTP Server</h1>
+  <ng-template #dialog>
+    <h1 mat-dialog-title class="kb-danger">Delete SMTP</h1>
     <div mat-dialog-content>
-         <span class="">Add your SMTP Server Details</span>
+        Would you like to delete <span class="text-danger">{{allsmtpdata.smtp_type}}</span> smtp?
     </div>
-    <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Choose an option</mat-label>
-        <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
-          <mat-option value="sendgrid">SendGrid</mat-option>
-          <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
-          <mat-option value="mailchimp">Mailchimp</mat-option>
-        </mat-select>
-      </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>Email From</mat-label>
-        <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
-        <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
-            Email is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>API KEY ID</mat-label>
-        <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
-        <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
-            API Key Id is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>API KEY </mat-label>
-        <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
-        <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
-            API Key is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial  color="primary" (click)="addsmtpdetails()" >ADD</button>
+        <button mat-button mat-dialog-close [color]="'primary'">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletesmtp(allsmtpdata)">Yes</button>
     </div>
   </ng-template>
-  <!-- add new address setting-->
-<ng-template #dialog2>
-    <h1 mat-dialog-title >Add Address</h1>
-    <div mat-dialog-content>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Country</mat-label>
-            <input matInput type="text" [(ngModel)]="genaddress.country" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" (click)="filtercountryData($event)">
-            <mat-autocomplete #countryAuto="matAutocomplete" >
-              <mat-option (selectionChange)="getcountrynm($event)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
-            </mat-autocomplete>
-            <!-- <mat-select  (selectionChange)="getcountrynm($event)">
-              <mat-option *ngFor="let item of _addressService.country; index as i" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select> -->
-        </mat-form-field> 
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Company Name</mat-label>
-            <input type="text" matInput name="companyname" [(ngModel)]="genaddress.company_name" [formControl]="companynameControl" required minlength="3" >
-            <mat-error *ngIf="companynameControl.hasError('required')">
-                Company Name is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="companynameControl.hasError('minlength')">
-                Name must be at least <strong>3</strong> characters
-            </mat-error>
+   <!-- add new smtp setting-->
+  <ng-template #dialog1>
+      <h1 mat-dialog-title class="txt">Connect With SMTP Server</h1>
+      <div mat-dialog-content>
+           <span class="">Add your SMTP Server Details</span>
+      </div>
+      <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Choose an option</mat-label>
+          <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
+            <mat-option value="sendgrid">SendGrid</mat-option>
+            <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
+            <mat-option value="mailchimp">Mailchimp</mat-option>
+          </mat-select>
         </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address Line 1</mat-label>
-            <input type="text" matInput name="addressline1" [(ngModel)]="genaddress.address_1"  [formControl]="addressline1Control" required minlength="3" >
-            <small>Street address, P.O. box</small>
-            <mat-error *ngIf="addressline1Control.hasError('required')">
-                Address Line 1 is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="addressline1Control.hasError('minlength')">
-                Address Line 1 must be at least <strong>3</strong> characters
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address Line 2</mat-label>
-            <input type="text" matInput name="addressline2" [(ngModel)]="genaddress.address_2" >
-            <small>Apartment, suite, unit, building, floor, etc.</small>
-        </mat-form-field>
-
-        <div class="row">
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>City</mat-label>
-                    <input type="text" matInput name="city" [(ngModel)]="genaddress.city"  [formControl]="cityControl" required  >
-                    <mat-error *ngIf="cityControl.hasError('required')">
-                        City is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>State / Province / Region</mat-label>
-                    <input type="text" matInput name="state" [(ngModel)]="genaddress.state"  [formControl]="stateControl" required  >
-                    <mat-error *ngIf="stateControl.hasError('required')">
-                        State is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>ZIP/Postal Code</mat-label>
-                    <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
-                    <mat-error *ngIf="zipControl.hasError('required')">
-                        Zip is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-        </div>
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close  class="text-danger">Close</button>
-        <button mat-button [color]="'primary'" (click)="sendaddress()">Add </button>
-    </div>
-</ng-template>
-      <div class="container-fluid">
-       <div class="row mb-4">     
-            <div class="col-md-6 ">
-            <div class="insideshdw">
-              <div class="d-flex">
-              <div class="col-md-8 ">
-                      <h5>Add your own SMTP Server Details </h5>
-                      <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
-                      <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1)" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+      <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Email From</mat-label>
+          <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
+          <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
+              Email is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>API KEY ID</mat-label>
+          <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
+          <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
+              API Key Id is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>API KEY </mat-label>
+          <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
+          <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
+              API Key is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+      <div mat-dialog-actions class="justify-content-end">
+          <button mat-button mat-dialog-close class="text-danger">No</button>
+          <button mat-button mat-dialog-close cdkFocusInitial  color="primary" (click)="addsmtpdetails()" >ADD</button>
+      </div>
+    </ng-template>
+    <!-- add new address setting-->
+  <ng-template #dialog2>
+      <h1 mat-dialog-title >Add Address</h1>
+      <div mat-dialog-content>
+  
+          <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Country</mat-label>
+              <input matInput type="text" [(ngModel)]="genaddress.country" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" (click)="filtercountryData($event)">
+              <mat-autocomplete #countryAuto="matAutocomplete" >
+                <mat-option (selectionChange)="getcountrynm($event)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
+              </mat-autocomplete>
+              <!-- <mat-select  (selectionChange)="getcountrynm($event)">
+                <mat-option *ngFor="let item of _addressService.country; index as i" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select> -->
+          </mat-form-field> 
+  
+          <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Company Name</mat-label>
+              <input type="text" matInput name="companyname" [(ngModel)]="genaddress.company_name" [formControl]="companynameControl" required minlength="3" >
+              <mat-error *ngIf="companynameControl.hasError('required')">
+                  Company Name is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="companynameControl.hasError('minlength')">
+                  Name must be at least <strong>3</strong> characters
+              </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Address Line 1</mat-label>
+              <input type="text" matInput name="addressline1" [(ngModel)]="genaddress.address_1"  [formControl]="addressline1Control" required minlength="3" >
+              <small>Street address, P.O. box</small>
+              <mat-error *ngIf="addressline1Control.hasError('required')">
+                  Address Line 1 is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="addressline1Control.hasError('minlength')">
+                  Address Line 1 must be at least <strong>3</strong> characters
+              </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field class="kb-full-width" appearance="fill">
+              <mat-label>Address Line 2</mat-label>
+              <input type="text" matInput name="addressline2" [(ngModel)]="genaddress.address_2" >
+              <small>Apartment, suite, unit, building, floor, etc.</small>
+          </mat-form-field>
+  
+          <div class="row">
+              <div class="col-md-4">
+                  <mat-form-field class="kb-full-width" appearance="fill">
+                      <mat-label>City</mat-label>
+                      <input type="text" matInput name="city" [(ngModel)]="genaddress.city"  [formControl]="cityControl" required  >
+                      <mat-error *ngIf="cityControl.hasError('required')">
+                          City is <strong>required</strong>
+                      </mat-error>
+                  </mat-form-field>
               </div>
               <div class="col-md-4">
-                  <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+                  <mat-form-field class="kb-full-width" appearance="fill">
+                      <mat-label>State / Province / Region</mat-label>
+                      <input type="text" matInput name="state" [(ngModel)]="genaddress.state"  [formControl]="stateControl" required  >
+                      <mat-error *ngIf="stateControl.hasError('required')">
+                          State is <strong>required</strong>
+                      </mat-error>
+                  </mat-form-field>
               </div>
-               </div>
-              <div class="row">
-                <div class="col-md-12" *ngIf="allsmtpdata?.smtp_type">
-                  <mat-card class="mt-4">
-                      <ul class="kb-smtpul">
-                          <li>
-                              <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span>
-                          </li>
-                          <li>{{allsmtpdata.smtp_type}}</li>
-                          <li>{{allsmtpdata.emailfrom}}</li>
-                          <li>
-                              <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
-                                  Delete <i class="fa fa-trash" aria-hidden="true"></i>
-                              </button>
-                          </li>   
-                      </ul>
-                  </mat-card>
+              <div class="col-md-4">
+                  <mat-form-field class="kb-full-width" appearance="fill">
+                      <mat-label>ZIP/Postal Code</mat-label>
+                      <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
+                      <mat-error *ngIf="zipControl.hasError('required')">
+                          Zip is <strong>required</strong>
+                      </mat-error>
+                  </mat-form-field>
+              </div>
           </div>
-              <!-- </div> -->
-          </div>
-          </div>
-          </div>
-          <div class="col-md-6 ">
-            <div class="insideshdw">
-              <div class="row">
-                <div class="col-md-12">
-                  <h5>Default Time Zone Settings</h5> 
+      </div>
+      <div mat-dialog-actions class="justify-content-end">
+          <button mat-button mat-dialog-close  class="text-danger">Close</button>
+          <button mat-button [color]="'primary'" (click)="sendaddress()">Add </button>
+      </div>
+  </ng-template>
+        <div class="container-fluid">
+         <div class="row mb-4">     
+              <div class="col-md-6 ">
+              <div class="insideshdw">
+                <div class="d-flex">
+                <div class="col-md-8 ">
+                        <h5>Add your own SMTP Server Details </h5>
+                        <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
+                        <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1)" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
-              </div>
-              <p>Edit your timezone settings.</p>
-              <div class="form-group ">
-                <mat-form-field appearance="fill" class="kb-full-width">
-                    <mat-label>Timezones</mat-label>
-                    <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter timezone name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
-                        <mat-autocomplete #timezoneAuto="matAutocomplete" >
-                          <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{ option.name }}</mat-option>
-                        </mat-autocomplete>
-                </mat-form-field>
-                <button mat-raised-button color="primary" (click)="Settimezone()">Set Timezone <i class="fas fa-paper-plane"></i></button>
-              </div>
-             
-              <small class="text-danger" >your Default Time Zone is : <span class="tmzne">{{timezone}}</span> </small>
+                <div class="col-md-4">
+                    <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid" alt="" srcset="">
+                </div>
+                 </div>
+                <div class="row">
+                  <div class="col-md-12" *ngIf="allsmtpdata?.smtp_type">
+                    <mat-card class="mt-4">
+                        <ul class="kb-smtpul">
+                            <li>
+                                <span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span>
+                            </li>
+                            <li>{{allsmtpdata.smtp_type}}</li>
+                            <li>{{allsmtpdata.emailfrom}}</li>
+                            <li>
+                                <button mat-raised-button (click)="openDialog(dialog)" class="text-danger">
+                                    Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </li>   
+                        </ul>
+                    </mat-card>
             </div>
+                <!-- </div> -->
+            </div>
+            </div>
+            </div>
+            <div class="col-md-6 ">
+              <div class="insideshdw">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5>Default Time Zone Settings</h5> 
+                  </div>
+                </div>
+                <p>Edit your timezone settings.</p>
+                <div class="form-group ">
+                  <mat-form-field appearance="fill" class="kb-full-width">
+                      <mat-label>Timezones</mat-label>
+                      <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter timezone name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
+                          <mat-autocomplete #timezoneAuto="matAutocomplete" >
+                            <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{ option.name }}</mat-option>
+                          </mat-autocomplete>
+                  </mat-form-field>
+                  <button mat-raised-button color="primary" (click)="Settimezone()">Set Timezone <i class="fas fa-paper-plane"></i></button>
+                </div>
+               
+                <small class="text-danger" >your Default Time Zone is : <span class="tmzne">{{timezone}}</span> </small>
+              </div>
+    </div>
+    </div>  
+    <div class="row mb-4">     
+    <div class="col-md-6 ">
+      <div class="insideshdw">
+          <div class="d-flex">
+              <div class="col-md-8 ">
+            <h5>Address Settings</h5> 
+            <p>Add your new/another address.</p>
+            <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button>
+          </div>
+          <div class="col-md-4">
+              <img src="/assets/images/crm_smtp/address.png" class="img-fluid" alt="" srcset="">
+          </div>
+  </div>  
+        
+          <!-- <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button> -->
+          <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor"  >Add New Address <i class="fas fa-plus"></i></a> -->
+        
+      </div>
   </div>
   </div>  
-  <div class="row mb-4">     
-  <div class="col-md-6 ">
-    <div class="insideshdw">
-        <div class="d-flex">
-            <div class="col-md-8 ">
-          <h5>Address Settings</h5> 
-          <p>Add your new/another address.</p>
-          <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button>
-        </div>
-        <div class="col-md-4">
-            <img src="/assets/images/crm_smtp/address.png" class="img-fluid" alt="" srcset="">
-        </div>
-</div>  
-      
-        <!-- <button mat-raised-button color="primary" class=" mt-3 mr-2 outer-card-add" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus" aria-hidden="true"></i></button> -->
-        <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor"  >Add New Address <i class="fas fa-plus"></i></a> -->
-      
     </div>
-</div>
-</div>  
-  </div>
