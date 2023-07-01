@@ -269,7 +269,7 @@ export class FormService {
     else return {}
   }
 
-  // ṣession
+  // session
 
   saveFormSession() {
     var sessionStr = JSON.stringify(this.formField).replace(/"setting":true/g, '"setting":false');

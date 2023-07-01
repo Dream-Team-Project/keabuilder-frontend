@@ -28,8 +28,6 @@ export class CrmFormBuilderComponent implements OnInit {
   @ViewChild('form', { static: false }) screen: any;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('actionDialog') actionDialog!: TemplateRef<any>;
-  @ViewChild('delActionDialog') delActionDialog!: TemplateRef<any>;
   @ViewChild('fieldsdrawer') fieldsdrawer: any;
 
   DialogParentToggle:boolean = false;
@@ -52,7 +50,6 @@ export class CrmFormBuilderComponent implements OnInit {
     emailname:new FormControl('', [Validators.required]),
   }
   contextMenuPosition = { x: '0px', y: '0px' };
-  dragBoxAnime:any = {open: false, close: false};
   waitST = true;
   searchText:string = '';
   selectedTab:string = '';
@@ -112,7 +109,7 @@ export class CrmFormBuilderComponent implements OnInit {
           this.filteredTempIds.lists=e.listid;
           this.selectedTags=e.temp_tags;
           this.filteredTempIds.tags=e.tagid;
-          this.notifyemail=e.notifyemail.split(',')
+          this.notifyemail=e.notifyemail?.split(',');
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
@@ -123,7 +120,7 @@ export class CrmFormBuilderComponent implements OnInit {
   @HostListener('document:keydown.control.s', ['$event'])  
   onKeydownHandler(event:KeyboardEvent) {
     event.preventDefault();
-    this.saveForm();
+    this.addNewTags();
   }
 
   ngOnInit(): void {
@@ -160,52 +157,49 @@ export class CrmFormBuilderComponent implements OnInit {
     this.autosave = trigger;
   }
 
-  saveForm() {
+  addNewTags() {
     if(this.newtags.length>0){
-      this.tagupdate().then((resp:any)=>{
-      this.save();
-      });
+      this.tagupdate().then((resp:any)=>this.saveForm());
     }
     else{
-      this.save();
-    }
-    
-    
+      this.saveForm();
+    }    
   }
-  save(){
-   this._form.form.notifyemail=this.notifyemail.toString();
-    this._form.form.lists=this.filteredTempIds.lists.toString();
+  
+  saveForm(){
+      this._form.form.notifyemail=this.notifyemail.toString();
+      this._form.form.lists=this.filteredTempIds.lists.toString();
       this._form.form.tags=this.filteredTempIds?.tags.toString();
-        this._general.saveDisabled = true;
-        this._form.updateForm().then((e:any)=>{
-          if(e.success == 1) {
-            if(this._form.formField.length != 0) {
-              this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
-                var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-                this._general._file.upload(file).subscribe(
-                  (event: any) => {
-                    if (typeof (event) === 'object') {
-                      var msg =  'Form has been saved';
-                      this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-                      this._general.saveDisabled = false;
-                      this._form.formSaved = true;
-                    }
-                  })
-              })
-            }
-            else {
-              var msg =  'Form has been saved';
-              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-              this._general.saveDisabled = false;
-              this._form.formSaved = true;
-            }
+      this._general.saveDisabled = true;
+      this._form.updateForm().then((e:any)=>{
+        if(e.success == 1) {
+          if(this._form.formField.length != 0) {
+            this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+              var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
+              this._general._file.upload(file).subscribe(
+                (event: any) => {
+                  if (typeof (event) === 'object') {
+                    var msg =  'Form has been saved';
+                    this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+                    this._general.saveDisabled = false;
+                    this._form.formSaved = true;
+                  }
+                })
+            })
           }
           else {
-            var msg =  'Server Error';
-            this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+            var msg =  'Form has been saved';
+            this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
             this._general.saveDisabled = false;
-          };
-        })
+            this._form.formSaved = true;
+          }
+        }
+        else {
+          var msg =  'Server Error';
+          this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+          this._general.saveDisabled = false;
+        };
+      })
   }
 
   getBlockStyle(en:string) {

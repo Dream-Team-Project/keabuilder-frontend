@@ -13,6 +13,7 @@ import { ImageService } from 'src/app/_services/image.service';
   styleUrls: ['./builder-topbar.component.css', '../../material.component.css'],
 })
 export class BuilderTopbarComponent implements OnInit {
+  
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
   @ViewChild('renamehfdialog') renamehfdialog!: TemplateRef<any>;
