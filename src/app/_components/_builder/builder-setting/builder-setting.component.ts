@@ -32,6 +32,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   code_block_ht:string = '200px';
   searchText:string = '';
 
+  @Output('saveEmailSession') saveEmailSession: EventEmitter<any> = new EventEmitter();
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()
   set DialogToggle(val: any) {
@@ -129,7 +130,10 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this.searchText = '';
     this.searchType = '';
     this.searchTglCls = '';
-    if(this._general.blockSelection == '') this._section.savePageSession();
+    if(this._general.blockSelection == '') {
+      this._section.savePageSession();
+      this.saveEmailSession.emit(true);
+    }
   }
   
   ngOnDestroy() {

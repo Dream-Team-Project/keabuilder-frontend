@@ -5,13 +5,13 @@
     [matMenuTriggerFor]="contextMenu">
     </div>
     <mat-menu #contextMenu="matMenu" class="kb-builder-options">
-    <ng-template matMenuContent let-item="item">
-        <button mat-menu-item (click)="switchPreviewMode()"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
-        <button mat-menu-item (click)="saveForm()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
-        <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
-        <button mat-menu-item (click)="_form.undo()" *ngIf="_form.formSessionArr[_form.formSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
-        <button mat-menu-item (click)="_form.redo()" *ngIf="_form.formSessionArr[_form.formSession.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
-    </ng-template>
+        <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="switchPreviewMode()"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
+            <button mat-menu-item (click)="saveForm()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
+            <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
+            <button mat-menu-item (click)="_form.undo()" *ngIf="_form.formSessionArr[_form.formSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
+            <button mat-menu-item (click)="_form.redo()" *ngIf="_form.formSessionArr[_form.formSession.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
+        </ng-template>
     </mat-menu>
     <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
     <app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>

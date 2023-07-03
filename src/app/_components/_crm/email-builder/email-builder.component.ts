@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { StyleService } from 'src/app/_services/_builder/style.service';
@@ -6,6 +6,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ElementService } from 'src/app/_services/_builder/element.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-crm-email-builder',
@@ -17,13 +18,17 @@ export class CrmEmailBuilderComponent implements OnInit {
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
+  @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
 
+  contextMenuPosition = { x: '0px', y: '0px' };
   sectionObj:any = {id: '', type: 'section', setting: false,  style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
-  section:any;
-  emailElements:Array<any> = [];
+  emailElements:any = {
+    section: {},
+    elements: [],
+  };
   emailElementList: any = {
     // heading
     heading: {
@@ -107,6 +112,9 @@ export class CrmEmailBuilderComponent implements OnInit {
   settingdialogOpen:boolean = false;
   dialogData:any;
   emailSaved:boolean = true;
+  session:any = {undo: 0, redo: 0}
+  sessionArr:any = [];
+  initial:boolean = true;
   
   constructor(
     public _style: StyleService,
@@ -121,6 +129,24 @@ export class CrmEmailBuilderComponent implements OnInit {
         if(this.selectedTab == 'elements' && this.selectedElement == 'image') 
         setTimeout((e:any)=>this.setElementShift());
       })
+      this.sessionArr = [];
+      this.saveSession();
+      document.addEventListener('contextmenu', event => event.preventDefault());
+  }
+
+  @HostListener('document:keydown.control.s', ['$event'])  
+  onKeydownHandler(event:KeyboardEvent) {
+    event.preventDefault();
+    this.save();
+  }
+
+  onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { 'item': '' };
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
   }
 
   ngOnInit(): void {
@@ -143,11 +169,10 @@ export class CrmEmailBuilderComponent implements OnInit {
       mobile: ''
     }
     tempObj.id = this._general.createBlockId(tempObj);
-    this.section = tempObj;
+    this.emailElements.section = tempObj;
   }
 
-  saveEmail() {
-    console.log(this.section);
+  save() {
     console.log(this.emailElements);
   }
 
@@ -174,7 +199,7 @@ export class CrmEmailBuilderComponent implements OnInit {
   itemDropped(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      // this.saveFormSession();
+      this.saveSession();
     } else {
       this.addElement(event.item.data, event.currentIndex);
     }
@@ -198,8 +223,8 @@ export class CrmEmailBuilderComponent implements OnInit {
       tempObj.id = this._general.createBlockId(tempObj);
       tempObj.setting = false;
       tempObj.email = true;
-      if(tempObj) this.emailElements.splice(index, 0, tempObj);
-      // this.saveFormSession();
+      if(tempObj) this.emailElements.elements.splice(index, 0, tempObj);
+      this.saveSession();
     }
   }
 
@@ -207,11 +232,13 @@ export class CrmEmailBuilderComponent implements OnInit {
     var tempObj = JSON.parse(JSON.stringify(element));
     tempObj.id = this._general.createBlockId(tempObj);
     tempObj.setting = false;
-    this.emailElements.splice(index + 1, 0, tempObj);
+    this.emailElements.elements.splice(index + 1, 0, tempObj);
+    this.saveSession();
   }
 
   deleteElement(index:number) {
-    this.emailElements.splice(index, 1);
+    this.emailElements.elements.splice(index, 1);
+    this.saveSession();
   }
 
   isBlockActive(block:any) {
@@ -331,4 +358,35 @@ export class CrmEmailBuilderComponent implements OnInit {
   }
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+
+  // session
+
+  saveSession() {
+    var sessionStr = JSON.stringify(this.emailElements).replace(/"setting":true/g, '"setting":false');
+    if(this.sessionArr[this.sessionArr.length-1] != sessionStr && this.sessionArr[this.session.undo] != sessionStr) {
+      this.sessionArr.push(sessionStr);
+      this.session.undo = this.sessionArr.length-1; 
+      this.session.redo = this.sessionArr.length; 
+      if(!this.initial) this.emailSaved = false;
+      else this.initial = false;
+    }
+  }
+
+  undo() {
+    var sObj = this.sessionArr[this.session.undo-1];
+    if(sObj) {
+      this.emailElements = JSON.parse(sObj);
+      this.session.undo--;
+      this.session.redo--;
+    }
+  }
+
+  redo() {
+    var sObj = this.sessionArr[this.session.redo];
+    if(sObj) {
+      this.emailElements = JSON.parse(sObj);
+      this.session.undo++;
+      this.session.redo++;
+    }
+  }
 }
