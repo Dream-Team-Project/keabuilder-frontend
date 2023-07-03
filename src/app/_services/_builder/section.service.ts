@@ -44,6 +44,13 @@ export class SectionService {
     this.addSection(0);
   }
 
+  createDefaultSections() {
+    for(var s=0; s<5; s++) {
+      var obj = {type: 'section', width: 100-(s*10)+'%'};
+      this.sectionTypes.push(obj);
+    }
+  }
+
   // session storage
 
   savePageSession() {

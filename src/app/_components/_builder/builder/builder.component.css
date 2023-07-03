@@ -652,7 +652,7 @@ div.kb-element-content iframe, div.kb-element-content video {
     max-height: 100%;
 }
 
-div.kb-row div.kb-element:hover:before {
+div.kb-element.kb-block-container:hover:before {
     border-color: var(--primary-color);
 }
 
@@ -832,7 +832,7 @@ div.kb-section div.kb-row>.kb-module-setting {
 }
 
 div.kb-row span.kb-ispan-add.add-element,
-div.kb-section div.kb-row div.kb-element div.kb-module-setting {
+div.kb-section div.kb-row div.kb-element div.kb-module-setting, div.kb-element.kb-block-container div.kb-module-setting {
     background-color: var(--primary-color);
 }
 

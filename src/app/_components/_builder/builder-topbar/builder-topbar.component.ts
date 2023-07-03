@@ -58,8 +58,8 @@ export class BuilderTopbarComponent implements OnInit {
     public _image:ImageService,
     private dialog: MatDialog
     ) {
-      this.createDefaultSections();
-      this.createDefaultElements();
+      this._section.createDefaultSections();
+      this._element.createDefaultElements();
       _general.fetchSectionTemplates();
       _general.templatesUpdated.subscribe(value => {
         if(this.selectedTab == 'l-templates') 
@@ -98,73 +98,7 @@ export class BuilderTopbarComponent implements OnInit {
   isMoreActive(moret:any) {
     return moret.menuOpen || this._general.selectedBlock.type == 'main' || this.hfdialogOpen || this.wftgl || this.urdo || this.zoom.active;
   }
-
-  createDefaultSections() {
-    for(var s=0; s<5; s++) {
-      var obj = {type: 'section', width: 100-(s*10)+'%'};
-      this._section.sectionTypes.push(obj);
-    }
-  }
-
-  createDefaultElements() {
-    Object.values(this._element.elementList).forEach((e:any)=>{
-      if(e.content.name == 'heading') {
-        var types = ['h1','h2','h3','h4','h5','h6'];
-        var size = 42;
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.size = size;
-          obj.content.html = '<'+types[i]+'>Heading Goes Here</'+types[i]+'>';
-          this._element.default.headings.push(obj);
-          size = size - 4;
-        }
-      }
-      if(e.content.name == 'text') {
-        var types = ['xl','l','m','s','xs'];
-        var size = 22;
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.size = size;
-          this._element.default.texts.push(obj);
-          size = size - 2;
-        }
-      }
-      if(e.content.name == 'button') {
-        let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}];
-        let upsBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}];
-        let dwnsBtn = [{name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}];
-        
-        if(this._general.target.type == 'funnel') {
-          if(this._general.webpage.funneltype == 'upsell') types = types.concat(upsBtn);
-          if(this._general.webpage.funneltype == 'downsell') types = types.concat(dwnsBtn);
-        }
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.btntype = types[i].name;
-          obj.content.text = types[i].name[0].toUpperCase() + types[i].name.slice(1) + ' Button';
-          if(types[i].name == 'upsell' || types[i].name == 'downsell') obj.content.productid = '';
-          if(types[i].subtext) obj.content.subtext = 'Extra Text';
-          this._element.default.buttons.push(obj);
-        }        
-      }
-      if(e.content.name == 'code') {
-        this._element.default.codes.push(e);
-      }
-      if(e.content.name == 'video') {
-        this._element.default.videos.push(e);
-      }
-      if(e.content.name == 'divider') {
-        this._element.default.dividers.push(e);
-      }
-      if(e.content.name == 'iframe' && e.content.type == 'checkout') {
-        this._element.default.checkouts.push(e);
-      }
-    })
-  }
-
+  
   openRenameHFDialog(templateRef: TemplateRef<any>) {
     this.hfdialogOpen = true;
     this.dialogData = this.dialog.open(templateRef);

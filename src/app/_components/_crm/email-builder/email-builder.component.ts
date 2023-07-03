@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
+import { StyleService } from 'src/app/_services/_builder/style.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { SectionService } from 'src/app/_services/_builder/section.service';
-import { RowService } from 'src/app/_services/_builder/row.service';
 import { ElementService } from 'src/app/_services/_builder/element.service';
 import { ImageService } from 'src/app/_services/image.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-crm-email-builder',
@@ -16,19 +16,78 @@ export class CrmEmailBuilderComponent implements OnInit {
   
   @ViewChild('selection') selection!: ElementRef;
   @ViewChild('element') element!: ElementRef;
-  @ViewChild('renamehfdialog') renamehfdialog!: TemplateRef<any>;
-  @ViewChild('renametempdialog') renametempdialog!: TemplateRef<any>;
-  @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
-  @Output('wireframeToggle') wireframeToggle: EventEmitter<any> = new EventEmitter();
-  @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
-  @Output('transferData') transferData: EventEmitter<any> = new EventEmitter();
-  @Output('zoomPage') zoomPage: EventEmitter<any> = new EventEmitter();
-  @Input('wftgl') wftgl:any;
-  @Input('ishf') ishf:any;
+  @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
 
+  DialogParentToggle:boolean = false;
+  DialogImageToggle:boolean = false;
+
+  sectionObj:any = {id: '', type: 'section', setting: false,  style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
+  section:any;
+  emailElements:Array<any> = [];
+  emailElementList: any = {
+    // heading
+    heading: {
+      content: {
+        name: 'heading',
+        html: `<h2>Heading goes here</h2>`,
+        size: 38,
+        editor: false,
+      }, iconCls: 'fas fa-heading'
+    },
+    // heading
+    // text
+    text: {
+      content: {
+        name: 'text',
+        html: `<p>Kea Builder is named after the parrot Kea. Kea is one of the smartest birds on earth. The Kea is a species of largest parrot in the family Nestoridae found in the forested and alpine regions of the South Island of New Zealand.</p>`,
+        size: 16,
+        editor: false,
+      }, iconCls: 'fas fa-font'
+    },
+    // text
+    // image
+    image: { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
+    // image
+    // video
+    video: {
+      content: {
+        name: 'video',
+        type: 'video',
+        iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+        src: 'http://localhost:4200/assets/videos/movie.mp4',
+        autoplay: false,
+        muted: false,
+        loop: false,
+        controls: true
+      }, iconCls: 'fas fa-video'
+    },
+    // video
+    // button
+    button: {
+      content: {
+        name: 'button', size: 14, btntype: 'regular',
+        text: 'Read More', subtext: '', subfont_size: '80%',
+        link: '#no-link', target: '_self'
+      }, iconCls: 'fas fa-toggle-off'
+    },
+    // button
+    // divider
+    divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
+    // divider
+    // icon
+    icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
+    // icon
+    // checkout form
+    // append
+    // checkout form
+  };
+  autoSaveInterval:any;
+  autosave:boolean = false;
   validate = {
-    targetname: new FormControl('', [Validators.required]),
-    tempname: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+  }
+  email = {
+    name: 'Email name',
   }
   selectedTab:string = '';
   selectedElement:string = '';
@@ -45,172 +104,118 @@ export class CrmEmailBuilderComponent implements OnInit {
   searchRowFilter:any = this.rowtypes[0];
   searchText:string = '';
   seltemp:any;
-  hfdialogOpen:boolean = false;
+  settingdialogOpen:boolean = false;
   dialogData:any;
-  urdo:boolean = false;
-  zoom:any = {value: 100, active: false};
+  emailSaved:boolean = true;
   
   constructor(
+    public _style: StyleService,
     public _general:GeneralService,
-    public _section:SectionService,
-    public _row: RowService,
     public _element: ElementService,
     public _image:ImageService,
     private dialog: MatDialog
     ) {
-      this.createDefaultSections();
-      this.createDefaultElements();
-      _general.fetchSectionTemplates();
-      _general.templatesUpdated.subscribe(value => {
-        if(this.selectedTab == 'l-templates') 
-        setTimeout((e:any)=>this.setShift());
-      })
+      this.createSection();
+      this._element.createDefaultElements();
       _image.imagesUpdated.subscribe(value => {
         if(this.selectedTab == 'elements' && this.selectedElement == 'image') 
         setTimeout((e:any)=>this.setElementShift());
       })
   }
 
-  ngOnInit(): void {}
-
-  zoomPg(e:any) {
-    var z = this.zoom;
-    if(e == '+' && z.value <= 100) z.value = z.value+10;
-    else if(e == '-' && z.value >= 10) z.value = z.value-10;
-    this.zoomEmit(z.active);
+  ngOnInit(): void {
+    var vm = this;
+    window.addEventListener('beforeunload', function (e) {
+      if(!vm.emailSaved) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
   }
 
-  zoomEmit(active:any) {
-    this.zoom.active = active;
-    this.zoomPage.emit(this.zoom);
-  }
-
-  getMoreState() {
-    var sel = '';
-    if(this._general.selectedBlock.type == 'main') sel = 'Setting';
-    else if(this.hfdialogOpen) sel = 'Rename';
-    else if(this.wftgl) sel = 'Wireframe';
-    else if(this.urdo) sel = 'Done';
-    else if(this.zoom.active) sel = 'Zoom';
-    return sel ? '> '+sel : '';
-  }  
-
-  isMoreActive(moret:any) {
-    return moret.menuOpen || this._general.selectedBlock.type == 'main' || this.hfdialogOpen || this.wftgl || this.urdo || this.zoom.active;
-  }
-
-  createDefaultSections() {
-    for(var s=0; s<5; s++) {
-      var obj = {type: 'section', width: 100-(s*10)+'%'};
-      this._section.sectionTypes.push(obj);
+  createSection() {
+    var tempObj = JSON.parse(JSON.stringify(this.sectionObj));
+    tempObj.email = true;
+    tempObj.style = {
+      desktop: this._style.defaultStyling(tempObj),
+      tablet_h: '',
+      tablet_v: '',
+      mobile: ''
     }
+    tempObj.id = this._general.createBlockId(tempObj);
+    this.section = tempObj;
   }
 
-  createDefaultElements() {
-    Object.values(this._element.elementList).forEach((e:any)=>{
-      if(e.content.name == 'heading') {
-        var types = ['h1','h2','h3','h4','h5','h6'];
-        var size = 42;
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.size = size;
-          obj.content.html = '<'+types[i]+'>Heading Goes Here</'+types[i]+'>';
-          this._element.default.headings.push(obj);
-          size = size - 4;
-        }
-      }
-      if(e.content.name == 'text') {
-        var types = ['xl','l','m','s','xs'];
-        var size = 22;
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.size = size;
-          this._element.default.texts.push(obj);
-          size = size - 2;
-        }
-      }
-      if(e.content.name == 'button') {
-        let types:any = [{name: 'regular', subtext: false}, {name: 'regular', subtext: true}];
-        let upsBtn = [{name: 'upsell', subtext: false},  {name: 'upsell', subtext: true}];
-        let dwnsBtn = [{name: 'downsell', subtext: false}, {name: 'downsell', subtext: true}];
-        
-        if(this._general.target.type == 'funnel') {
-          if(this._general.webpage.funneltype == 'upsell') types = types.concat(upsBtn);
-          if(this._general.webpage.funneltype == 'downsell') types = types.concat(dwnsBtn);
-        }
-        for(var i=0; i<types.length; i++) {
-          var obj = JSON.parse(JSON.stringify(e));
-          obj.content.type = types[i];
-          obj.content.btntype = types[i].name;
-          obj.content.text = types[i].name[0].toUpperCase() + types[i].name.slice(1) + ' Button';
-          if(types[i].name == 'upsell' || types[i].name == 'downsell') obj.content.productid = '';
-          if(types[i].subtext) obj.content.subtext = 'Extra Text';
-          this._element.default.buttons.push(obj);
-        }        
-      }
-      if(e.content.name == 'code') {
-        this._element.default.codes.push(e);
-      }
-      if(e.content.name == 'video') {
-        this._element.default.videos.push(e);
-      }
-      if(e.content.name == 'divider') {
-        this._element.default.dividers.push(e);
-      }
-      if(e.content.name == 'iframe' && e.content.type == 'checkout') {
-        this._element.default.checkouts.push(e);
-      }
-    })
+  saveEmail() {
+    console.log(this.section);
+    console.log(this.emailElements);
   }
 
-  openRenameHFDialog(templateRef: TemplateRef<any>) {
-    this.hfdialogOpen = true;
+  autoSaveTrigger(trigger:boolean) {
+    clearInterval(this.autoSaveInterval);
+    if(trigger) {
+      this.autoSaveInterval = setInterval(()=>{
+        // this._form.updateForm();
+      }, 2000);
+      this.autoSaveInterval;
+    }
+    this.autosave = trigger;
+  }
+
+  openSettingDialog(templateRef: TemplateRef<any>) {
+    this.settingdialogOpen = true;
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
-      this.hfdialogOpen = false;
-      if(this.validate.targetname.invalid) this.openRenameHFDialog(this.renamehfdialog);
+      this.settingdialogOpen = false;
+      if(this.validate.name.invalid) this.openSettingDialog(this.settingdialog);
     })
   }
 
-  openTempDialog(templateRef: TemplateRef<any>, temp:any) {
-    this.seltemp = JSON.parse(JSON.stringify(temp));
-    this.dialog.open(templateRef);
-  }  
-  
-  deleteTemplate() {
-    this._general._file.deletetemplate(this.seltemp.id).subscribe(e=>{
-      this._general.fetchSectionTemplates().then(e=>{
-        this.snackBar('deleted');
-      });
-      this._general._file.deleteimage('keaimage-section-'+this.seltemp.uniqueid+'-screenshot.png').subscribe(e=>{});
-    })
-  }
-
-  updateTemplate() {
-    if(!this.validate.tempname.invalid) {
-      this._general._file.updatetemplate(this.seltemp).subscribe(e=>{
-        this._general.fetchSectionTemplates().then(e=>{
-          this.snackBar('renamed');
-        });
-      })
+  itemDropped(event: CdkDragDrop<any[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      // this.saveFormSession();
+    } else {
+      this.addElement(event.item.data, event.currentIndex);
     }
-    else this.openTempDialog(this.renametempdialog, this.seltemp);
   }
 
-  snackBar(msg:string) {
-    this._general.openSnackBar(false, 'Template has been '+msg, 'OK', 'center', 'top');
+  addElement(element: any, index: number) {
+    if(element.type == 'icon') {
+      var appendIcon = JSON.parse(JSON.stringify(this.emailElementList.icon));
+      appendIcon.content.icon_html = this._element.setIcon(element);
+      element = appendIcon;
+    }
+    if(element.type == 'image') {
+      var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
+      image.content.src = element.ext_link ? element.path : this._image.uploadImgPath+element.path;
+      image.content.itemset = true;
+      element = image;
+    }
+    if(element.content) {
+      element.content.email = true;
+      var tempObj = this._element.addElement(element.content);
+      tempObj.id = this._general.createBlockId(tempObj);
+      tempObj.setting = false;
+      tempObj.email = true;
+      if(tempObj) this.emailElements.splice(index, 0, tempObj);
+      // this.saveFormSession();
+    }
   }
 
-  emitIcon(icon:any) {
-    var appendIcon = JSON.parse(JSON.stringify(this._element.elementList.icon));
-    appendIcon.content.icon_html = this._element.setIcon(icon);
-    this.dragDataEmit(appendIcon);
+  duplicateElement(element: any, index: number) {
+    var tempObj = JSON.parse(JSON.stringify(element));
+    tempObj.id = this._general.createBlockId(tempObj);
+    tempObj.setting = false;
+    this.emailElements.splice(index + 1, 0, tempObj);
   }
 
-  dragDataEmit(data:any) {
-    this.transferData.emit(data);
+  deleteElement(index:number) {
+    this.emailElements.splice(index, 1);
+  }
+
+  isBlockActive(block:any) {
+    return this._general.selectedBlock.id == block.id && this._general.selectedBlock.type == block.type;
   }
 
   nextSlide() {
@@ -251,7 +256,6 @@ export class CrmEmailBuilderComponent implements OnInit {
         this.searchText = '';
         this.waitST = true;
       }, 200);
-      this._section.sectionDrop = value == 'l-sections' || value == 'l-templates' ? true : false;
     }
   }
 
@@ -311,30 +315,19 @@ export class CrmEmailBuilderComponent implements OnInit {
     }, 200)
   }
 
-  setTrigger(value:any) {
-    this.parentTrigger.emit(value);
+  openDialog() {
+    this.DialogParentToggle = !this.DialogParentToggle;
   }
 
-  openImgDialog() {
-    this._image.imageSelectionAllow = false;
-    this._image.imgMatTabIndex = 0;
-    this.openImageDialog.emit(true);
+  openImageDialog() {
+    this.DialogImageToggle = !this.DialogImageToggle;
   }
 
-  setHeader(headid:any) {
-    if(headid) this._general.setHeader(headid).then((e:any)=>this.setTrigger('preview'));
-    else {
-      this._general.includeLayout.header = false;
-      this.setTrigger('preview');
-    }
-  }
-
-  setFooter(footid:any) {
-    if(footid) this._general.setFooter(footid).then((e:any)=>this.setTrigger('preview'));
-    else {
-      this._general.includeLayout.footer = false;
-      this.setTrigger('preview');
-    }
+  openSetting(block:any) {
+    this._general.blockSelection = ''; 
+    this._general.selectedBlock = block; 
+    this._style.blockSetting(block); 
+    this.openDialog();
   }
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}

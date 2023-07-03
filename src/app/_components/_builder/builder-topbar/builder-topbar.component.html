@@ -118,19 +118,19 @@
                 <i [innerHTML]="'zoomin' | svg | safeHtml"></i>
             </button>
         </span>
-        <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
-            Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
-        </button>
-        <mat-menu #autosave>
-            <button mat-menu-item *ngFor="let opt of _general.autosaveopt" (click)="_general.autosave = opt; setTrigger('autosave')" [class.kb-btn-active]="_general.autosave.value == opt.value">{{opt ? 'Every '+opt.value+' '+opt.unit : 'Off'}}</button>
-            <button mat-menu-item (click)="_general.autosave=''" [class.kb-btn-active]="!_general.autosave.value">OFF</button>
-        </mat-menu>
         <button mat-button *ngIf="!ishf" (click)="_general.preview()">
             <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
         </button>
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
         </button>
+        <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
+            <i class="far fa-clock"></i> Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
+        </button>
+        <mat-menu #autosave>
+            <button mat-menu-item *ngFor="let opt of _general.autosaveopt" (click)="_general.autosave = opt; setTrigger('autosave')" [class.kb-btn-active]="_general.autosave.value == opt.value">{{opt ? 'Every '+opt.value+' '+opt.unit : 'Off'}}</button>
+            <button mat-menu-item (click)="_general.autosave=''" [class.kb-btn-active]="!_general.autosave.value">OFF</button>
+        </mat-menu>
         <button mat-button *ngIf="_general.target.type == 'website'" [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status" #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
             <i [innerHTML]="(_general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}
         </button>

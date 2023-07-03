@@ -36,7 +36,7 @@ export class FormService {
     { name: 'heading', html: '<h2>Heading goes here</h2>', iconCls: 'fas fa-heading' },
     { name: 'text', html: '<p>Paragraph goes here</p>', iconCls: 'fas fa-paragraph' },
     { name: 'image', src: '', iconCls: 'far fa-image' },
-    { name: 'divider', iconCls: 'fas fa-grip-lines' },
+    { name: 'divider', iconCls: 'fas fa-grip-lines' }
   ];
   formEleTypes: any = {};
   formEleTypesObj: Array<any> = [

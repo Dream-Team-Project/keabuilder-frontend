@@ -884,7 +884,7 @@ export class StyleService {
       var ele:any = document.getElementById('kb-append-style');
       if(ele) ele.innerHTML = this._general.page_code;
     }
-    else this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
+    else if(this._general.selectedBlock.hide) this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     if(this._general.selectedBlock.type == 'row') {
       this._general.selectedBlock.columnGap = JSON.parse(JSON.stringify(this.columnGap));
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
@@ -1090,8 +1090,14 @@ export class StyleService {
         mlr = 'auto';
       }
       mt = '0px';
-      ptb = block.type == 'section' ? '60px' : (block.type == 'row' ? '30px' : '0px');
-      plr = block.type == 'column' ? '20px' : '0px';
+      if(block.email) {
+        ptb = '40px';
+        plr = '40px';
+      }
+      else {
+        ptb = block.type == 'section' ? '60px' : (block.type == 'row' ? '30px' : '0px');
+        plr = block.type == 'column' ? '20px' : '0px';
+      }
       bw = '0px';
       br = '0px';
       bclr = 'rgba(0,0,0,1)';
@@ -1245,6 +1251,8 @@ export class StyleService {
       return this.inputStyling();
     }
     else if(block.content.name == 'image') {
+      this.width.value = '500px';
+      this.widthRange.value = '500';
       return this.imageStyling();
     }
     else {

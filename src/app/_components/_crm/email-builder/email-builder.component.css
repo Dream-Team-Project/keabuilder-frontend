@@ -1,0 +1,14 @@
+.kb-drag-zone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 450px;
+    height: 50px;
+    border: 2px dashed var(--primary-color);
+    border-radius: 4px;
+    color: var(--primary-color);
+    background-color: rgb(216 200 152 / 20%);
+    font-size: 15px;
+    font-weight: 500;
+}
