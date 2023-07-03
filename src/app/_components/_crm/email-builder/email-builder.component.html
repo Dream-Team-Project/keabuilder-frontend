@@ -16,9 +16,22 @@
         <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid ? 'primary' : ''" [disabled]="validate.name.invalid">Done</button>
     </div>
 </ng-template>
+<div style="visibility: hidden; position: fixed"
+[style.left]="contextMenuPosition.x"
+[style.top]="contextMenuPosition.y"
+[matMenuTriggerFor]="contextMenu">
+</div>
+<mat-menu #contextMenu="matMenu" class="kb-builder-options">
+    <ng-template matMenuContent let-item="item">
+        <button mat-menu-item (click)="save()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
+        <button mat-menu-item (click)="openSettingDialog(settingdialog)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
+        <button mat-menu-item (click)="undo()" *ngIf="sessionArr[session.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
+        <button mat-menu-item (click)="redo()" *ngIf="sessionArr[session.redo]"><i [innerHTML]="'redo' | svg | safeHtml"></i> Redo</button>
+    </ng-template>
+</mat-menu>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
-<app-builder-setting (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<div id="kb-main" cdkDropListGroup>
+<app-builder-setting (saveEmailSession)="saveSession()" (openImageDialog)="openImageDialog()" [DialogToggle]="DialogParentToggle"></app-builder-setting>
+<div id="kb-main" (contextmenu)="onContextMenu($event)" cdkDropListGroup>
     <div id="kb-topbar" [class.pagedisabled]="_general.saveDisabled">
         <div class="kb-triggers">
             <button mat-button (click)="_general.redirectLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
@@ -31,7 +44,7 @@
             <button mat-button (click)="openSettingDialog(settingdialog)" [class.kb-btn-active]="settingdialogOpen">
                 <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
             </button>
-            <button mat-button (click)="!_general.saveDisabled ? saveEmail() : ''" [disabled]="_general.saveDisabled">
+            <button mat-button (click)="!_general.saveDisabled ? save() : ''" [disabled]="_general.saveDisabled">
                 <i [innerHTML]="'save' | svg | safeHtml"></i> Save
             </button>
             <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger" [class.kb-btn-active]="ast.menuOpen">
@@ -42,10 +55,10 @@
                 <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
             </mat-menu>
             <span class="kb-more-opt">
-                <button mat-button matTooltip="Undo">
+                <button mat-button matTooltip="Undo" [disabled]="!sessionArr[session.undo-1]" (click)="undo()">
                     <i [innerHTML]="'undo' | svg | safeHtml"></i>
                 </button>
-                <button mat-button matTooltip="Redo">
+                <button mat-button matTooltip="Redo" [disabled]="!sessionArr[session.redo]" (click)="redo()">
                     <i [innerHTML]="'redo' | svg | safeHtml"></i>
                 </button>
             </span>
@@ -162,15 +175,15 @@
         <div class="kb-block-prev-img" [style.backgroundImage]="'url('+_image.uploadImgPath+prevImg+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'"></div>
     </div>
     <div id="kb-email-container">
-        <div [id]="section.id" [ngStyle]="isBlockActive(section) ? _style.currentStyling() : _style.getBlockStyle(section.style)" 
-        (mouseenter)="section.setting = true;" (mouseleave)="section.setting = false" class="kb-section kb-block-container">
-            <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
-                <span (click)="openSetting(section)"
+        <div [id]="emailElements.section.id" [ngStyle]="isBlockActive(emailElements.section) ? _style.currentStyling() : _style.getBlockStyle(emailElements.section.style)" 
+        (mouseenter)="emailElements.section.setting = true;" (mouseleave)="emailElements.section.setting = false" class="kb-section kb-block-container">
+            <div class="kb-module-setting" *ngIf="emailElements.section.setting && !_general.showInlineEditor">
+                <span (click)="openSetting(emailElements.section)"
                     matTooltip="Section Setting" matTooltipPosition="above"><i
                         class="far fa-edit"></i></span>
             </div>
-            <div class="kb-drag-container" cdkDropList [cdkDropListData]="emailElements" (cdkDropListDropped)="itemDropped($event)">
-                <div class="kb-element kb-block-container" cdkDrag *ngFor="let element of emailElements, index as ei" [id]=" element.id"
+            <div class="kb-drag-container" cdkDropList [cdkDropListData]="emailElements.elements" (cdkDropListDropped)="itemDropped($event)">
+                <div class="kb-element kb-block-container" cdkDrag *ngFor="let element of emailElements.elements, index as ei" [id]=" element.id"
                 [style.margin]="isBlockActive(element) ? _style.getMargin() : _style.getBlockStyle( element.content.style)['margin']"
                 [style.justifyContent]="isBlockActive(element) ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue( element.item_alignment)"
                 (dblclick)="openSetting(element)" (mouseenter)="element.setting = true" (mouseleave)="element.setting = false" [ngSwitch]="element.content.name">
@@ -260,10 +273,15 @@
                         </ng-template>
                     </div>
                 </div>
-                <div *ngIf="emailElements.length == 0" cdkDrag>
+                <div *ngIf="emailElements.elements.length == 0" cdkDrag>
                     <div class="kb-drag-zone">Drag Elements Here</div>
                 </div>
             </div>
         </div>
+    </div>
+    <div mat-ripple *ngIf="_general.minimize" id="kb-minimize-setting" (click)="_general.minimize = !_general.minimize" matTooltip="Maximize" matTooltipPosition="above">
+        <i class ='far fa-window-maximize'></i>
+        <span>{{(_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
+            _general.selectedBlock.type) : _general.selectedBlock.content.name) | titlecase}}</span>
     </div>
 </div>

@@ -201,7 +201,7 @@
                     <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && !_style.setDropDownStyle.main">
                         <!-- image -->
                         <div *ngIf="_general.selectedBlock.content.name == 'image'">
-                            <div *ngIf="searchingDeep('Content Choose Image') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
+                            <div *ngIf="searchingDeep('Content Choose Image') && !_general.selectedBlock?.content?.form" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Choose Image</div>
                                 <div class="kb-tab-content">
                                     <div (click)="openImgDialog()"
@@ -497,7 +497,7 @@
                         <!-- text styling/editor -->
                         <div
                             *ngIf="isText(_general.selectedBlock.content.name)">
-                            <div *ngIf="(_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading') && !_general.selectedBlock.content.form" class="kb-inner-tab-component">
+                            <div *ngIf="(_general.selectedBlock.content.name == 'text' || _general.selectedBlock.content.name == 'heading') && !_general.selectedBlock?.content?.form" class="kb-inner-tab-component">
                                 <mat-button-toggle-group name="contentStyle" [(ngModel)]="_general.showEditor"
                                     aria-label="Text Styling">
                                     <mat-button-toggle [value]="false"><i class="fa fa-pen"></i>Styling
@@ -508,7 +508,7 @@
                             </div>
                             <div *ngIf="!_general.showEditor else editor" class="kb-tabChange">
                                 <mat-accordion>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form" [expanded]="_general.expPanelStep === 0"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 0"
                                     (opened)="_general.setExpPanelStep(0)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -536,7 +536,7 @@
                                                 (click)="_general.nextExpPanelStep()">Next</button>
                                         </mat-action-row>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form" [expanded]="_general.expPanelStep === 1"
+                                    <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 1"
                                     (opened)="_general.setExpPanelStep(1)" hideToggle>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
@@ -653,7 +653,7 @@
                                             </div>
                                         </div>
                                         <mat-action-row>
-                                            <button mat-button color="secondary" *ngIf="_general.selectedBlock.content.name == 'button' && !_general.selectedBlock.content.form"
+                                            <button mat-button color="secondary" *ngIf="_general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>
                                             <button mat-button color="primary"
                                                 (click)="_general.nextExpPanelStep()">Next</button>
@@ -1964,7 +1964,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Redirection" *ngIf="_general.selectedBlock.type != 'main' && _general.respToggleDevice.name != 'hover' && !_general.selectedBlock.content.form && !_general.selectedBlock.email && searchingTab('Redirection')">
+                    <mat-tab label="Redirection" *ngIf="_general.selectedBlock.type != 'main' && _general.respToggleDevice.name != 'hover' && !_general.selectedBlock?.content?.form && !_general.selectedBlock.email && searchingTab('Redirection')">
                         <div *ngIf="searchingDeep('Redirection Link')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Link</div>
                             <div class="kb-tab-content kb-inp-left">
@@ -2015,7 +2015,7 @@
                     </mat-tab>
                     <mat-tab label="Advanced" *ngIf="_general.respToggleDevice.name != 'hover' && !_general.selectedBlock.email && searchingTab('Advanced')">
                         <div *ngIf="_general.selectedBlock.type != 'main' else customcss">
-                            <div *ngIf="!_general.selectedBlock.content.form && searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
+                            <div *ngIf="!_general.selectedBlock?.content?.form && searchingDeep('Advanced Visibility')" class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Visibility Off</div>
                                 <div class="kb-tab-content kb-resp-ask">
                                     <div class="kb-resp-ask-inner">
