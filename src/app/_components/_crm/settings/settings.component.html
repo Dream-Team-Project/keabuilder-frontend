@@ -82,11 +82,11 @@
     <div mat-dialog-content>
         <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Address Name</mat-label>
-            <input type="text" matInput name="name" [(ngModel)]="genaddress.name" [formControl]="nameControl" required minlength="3" >
-            <mat-error *ngIf="nameControl.hasError('required')">
+            <input type="text" matInput name="addressname" [(ngModel)]="genaddress.name" [formControl]="addressnameControl" required minlength="3" >
+            <mat-error *ngIf="addressnameControl.hasError('required')">
                 Address Name is <strong>required</strong>
             </mat-error>
-            <mat-error *ngIf="nameControl.hasError('minlength')">
+            <mat-error *ngIf="addressnameControl.hasError('minlength')">
                 Address Name must be at least <strong>3</strong> characters
             </mat-error>
         </mat-form-field>

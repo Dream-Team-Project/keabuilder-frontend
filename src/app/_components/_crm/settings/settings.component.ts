@@ -19,7 +19,7 @@ export class CrmSettingsComponent implements OnInit {
   apiid = new FormControl('', [Validators.required]);
   apikey = new FormControl('', [Validators.required]);
 
-  nameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
+  addressnameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
   companynameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
   addressline1Control = new FormControl('', [Validators.required,Validators.minLength(3)]);
   cityControl = new FormControl('', [Validators.required]);
@@ -33,7 +33,7 @@ export class CrmSettingsComponent implements OnInit {
   api_id:any;
   showmytime:any = '';
   timezone:any='Default';
-  genaddress = {id: '', name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
+  genaddress = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
   filteredcountry:any=[];
@@ -143,7 +143,7 @@ export class CrmSettingsComponent implements OnInit {
     });
   }
   openDialog(templateRef: TemplateRef<any>,value:any,action:any): void {
-   if(action=='edit' || action=='delete' || action=='default') this.genaddress=value;
+   if(action=='edit' || action=='delete' || action=='default')  this.genaddress=value;
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
       this.genaddress.name='';
       this.genaddress.company_name='';
@@ -275,11 +275,11 @@ export class CrmSettingsComponent implements OnInit {
   }
   filtertimezoneData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
   }
   filtercountryData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
   }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
