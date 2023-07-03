@@ -272,11 +272,11 @@ export class CrmSettingsComponent implements OnInit {
   }
   filtertimezoneData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
   }
   filtercountryData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
   }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);
