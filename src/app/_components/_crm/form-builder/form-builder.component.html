@@ -174,7 +174,7 @@
                         <mat-label>Email Subject</mat-label>
                         <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject" required>
                     </mat-form-field>
-                    <mat-error *ngIf="emailerror">Email not Valid </mat-error>
+                    <mat-error *ngIf="notifyemailCtrl.invalid">Email not Valid </mat-error>
                     <mat-form-field appearance="fill"  [class.mat-form-field-invalid]="emailerror">
                         <mat-label>Notify Emails</mat-label>
                         <mat-chip-list #notifyemailChipList aria-label="nofifyemails selection">

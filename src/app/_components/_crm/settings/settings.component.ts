@@ -32,7 +32,7 @@ export class CrmSettingsComponent implements OnInit {
   api_key:any;
   api_id:any;
   showmytime:any = '';
-  timezone:any='';
+  timezone:any='Default';
   genaddress:any = {name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
@@ -55,7 +55,7 @@ export class CrmSettingsComponent implements OnInit {
   fetchsmtp(){
     this._settingService.singlesetting().subscribe({
       next: data => {
-        console.log(data.data[0]);
+        // console.log(data.data[0]);
         if(data.data.length!=0){
          this.allsmtpdata=data.data[0]; 
          this.timezone=this.allsmtpdata?.global_timezone?this.allsmtpdata?.global_timezone:this.timezone;
@@ -140,8 +140,17 @@ export class CrmSettingsComponent implements OnInit {
     });
   }
   openDialog(templateRef: TemplateRef<any>,value:any,action:any): void {
-   if(action=='edit' || action=='delete' || action=='default') this.genaddress={};this.genaddress=value;
-    this.dialog.open(templateRef);
+   if(action=='edit' || action=='delete' || action=='default') this.genaddress=value;
+    this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
+      this.genaddress.name='';
+      this.genaddress.comapny_name='';
+      this.genaddress.country='';
+      this.genaddress.address_1='';
+      this.genaddress.address_2='';
+      this.genaddress.city='';
+      this.genaddress.state='';
+      this.genaddress.zip='';
+    })
   }
 
   removespecialchar(data:any){
@@ -221,7 +230,6 @@ export class CrmSettingsComponent implements OnInit {
               if(data.success==1){
                 this.fetchdata();
                 this.dialog.closeAll();
-                this.genaddress={};
                 var msg =  'Address save successfully!';
                this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
               }else{
@@ -244,6 +252,7 @@ export class CrmSettingsComponent implements OnInit {
   }
   settimezone(){
     // console.log(this.timezone)
+    if(this.timezone){
     let obj={global_timezone:this.timezone};
     this._settingService.globaltimezone(obj).subscribe((data:any)=>{
       if(data.success==true){
@@ -255,7 +264,10 @@ export class CrmSettingsComponent implements OnInit {
         this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
     })
-   
+  }else{
+    var msg =  'Please Select Timezone!';
+    this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+  }
    
   }
   filtertimezoneData(event:any) {
@@ -272,7 +284,6 @@ export class CrmSettingsComponent implements OnInit {
   }
 
   closeBottomSheet(): void {
-    this.genaddress={};
     this._bottomSheet.dismiss();
    
   }
@@ -281,11 +292,9 @@ export class CrmSettingsComponent implements OnInit {
       if(data.success=true){
         this.fetchaddress();
         this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top'); 
-        this.genaddress={};
       }
       else{
         this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
-        this.genaddress={};
       }
 
     })
@@ -295,11 +304,9 @@ export class CrmSettingsComponent implements OnInit {
     if(data.success=true){
       this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top'); 
       this.fetchdata();
-      this.genaddress={};
     }
     else{
       this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
-      this.genaddress={};
     }
   })
 }

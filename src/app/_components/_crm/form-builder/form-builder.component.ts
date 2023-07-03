@@ -75,7 +75,7 @@ export class CrmFormBuilderComponent implements OnInit {
     tags: []
   };
   tagCtrl = new FormControl(['']);
-  notifyemailCtrl = new FormControl(['']);
+  notifyemailCtrl = new FormControl('', [Validators.email]);
   notifyemail:any=[];
   formlists:any=[];
   formtags:any=[];
@@ -246,6 +246,7 @@ export class CrmFormBuilderComponent implements OnInit {
     this.formdialog = 'Action';
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
+      this.notifyemailCtrl.reset();
       if(this.validate.emailsubject.errors?.['required']) {
         this._general.expPanelStep = 3;
         this.openActionDialog(this.actiondialog);
@@ -457,14 +458,14 @@ export class CrmFormBuilderComponent implements OnInit {
     const value = (event.value || '').trim();
     if (value && this.isEmailValid(value)==true) {
       this.notifyemail.push(value); 
-      this.emailerror=false;
+      // this.emailerror=false;
        // Clear the input value
       event.chipInput!.clear();
-      this.notifyemailCtrl.setValue(null);
+      this.notifyemailCtrl.reset();
     }
      else if(this.isEmailValid(value)==false && value){
       this.notifyemailCtrl.setValue(value);
-      this.emailerror=true;
+      // this.emailerror=true;
     }
   }
   removenotifyemail(index:number): void {
