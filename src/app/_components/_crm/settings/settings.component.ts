@@ -33,7 +33,7 @@ export class CrmSettingsComponent implements OnInit {
   api_id:any;
   showmytime:any = '';
   timezone:any='Default';
-  genaddress:any = {name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
+  genaddress = {id: '', name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
   filteredcountry:any=[];
@@ -146,7 +146,7 @@ export class CrmSettingsComponent implements OnInit {
    if(action=='edit' || action=='delete' || action=='default') this.genaddress=value;
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
       this.genaddress.name='';
-      this.genaddress.comapny_name='';
+      this.genaddress.company_name='';
       this.genaddress.country='';
       this.genaddress.address_1='';
       this.genaddress.address_2='';

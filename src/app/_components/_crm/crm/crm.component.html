@@ -20,7 +20,7 @@
     <div mat-dialog-content>
       <div class="form-group ">
         <mat-error *ngIf="hasError">{{hasError}}</mat-error>
-        <mat-form-field appearance="fill" class="kb-full-width" (click)="filtertimezoneData($event)" [class.mat-form-field-invalid]="hasError">
+        <mat-form-field appearance="fill" class="kb-full-width" [class.mat-form-field-invalid]="hasError" (click)="filtertimezoneData($event)">
             <mat-label>Timezones</mat-label>
             <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter country name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" >
             <mat-autocomplete #timezoneAuto="matAutocomplete" >

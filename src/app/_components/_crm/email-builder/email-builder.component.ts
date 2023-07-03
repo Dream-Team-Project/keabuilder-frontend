@@ -180,7 +180,7 @@ export class CrmEmailBuilderComponent implements OnInit {
     clearInterval(this.autoSaveInterval);
     if(trigger) {
       this.autoSaveInterval = setInterval(()=>{
-        // this._form.updateForm();
+        this.save();
       }, 2000);
       this.autoSaveInterval;
     }
