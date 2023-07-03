@@ -50,7 +50,14 @@ export class CrmSettingsComponent implements OnInit {
   }
   fetchdata(){
     this.fetchsmtp();
-    this.fetchaddress();
+    this.fetchaddress().then(resp=>{
+      this.alladdress.filter((element:any)=>{
+        if(element.uniqueid==this.allsmtpdata.addressid){
+          this.defaultadd=element;
+          this.fetch=true;
+        }
+       })
+    })
   }
   fetchsmtp(){
     this._settingService.singlesetting().subscribe({
@@ -68,23 +75,19 @@ export class CrmSettingsComponent implements OnInit {
     });
   }
   fetchaddress(){
+    return new Promise((resolve, reject)=>{
     this._addressService.fetchaddress().subscribe({
       next: data => {
         if(data.data.length!=0){
          this.alladdress=data.data; 
-         this.alladdress.filter((element:any)=>{
-          if(element.uniqueid==this.allsmtpdata.addressid){
-            this.defaultadd=element;
-            this.fetch=true;
-          }
-         })
-        
+         resolve(true);
         }
         else{
           this.alladdress=[];
         } 
       }
-});
+    })
+})
   }
 
   addsmtpdetails(){
