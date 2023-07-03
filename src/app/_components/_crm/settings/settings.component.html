@@ -177,10 +177,10 @@
     <mat-nav-list>
         <div class="kb-field-list"  *ngFor="let addrs of alladdress" role="listitem" mat-ripple>
             <span  class="kb-field-list-name d-flex justify-content-between text-center">
-                <span class="d-inline-flex">
+                <span class="d-inline-flex text-align-center">
                     <!-- <mat-radio-button class="mt-1 mr-1" color="primary" [(ngModel)]="addrs.uniqueid==allsmtpdata.addressid"></mat-radio-button> -->
                     <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="addrs.uniqueid==allsmtpdata.addressid"></mat-checkbox>
-                    <span (click)="openDialog(dialog2,addrs,'edit')" style="font-size:16px">{{addrs.name | titlecase}}</span></span>
+                    <span  (click)="openDialog(dialog2,addrs,'edit')" style="font-size:16px">{{addrs.name | titlecase}}</span></span>
             <span class="d-flex">
                 <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(dialog2,addrs,'edit')" class="fa fa-pencil kb-table-action-icon"></i>
                 <i  mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deladdress,addrs,'delete')" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
@@ -226,8 +226,7 @@
                     </div>
                 </div>
                 <div class="col-12" *ngIf="allsmtpdata?.smtp_type">
-                    <mat-card class="mt-4">
-                        <ul class="kb-smtpul">
+                        <ul class="kb-smtpul align-items-center mt-4 ">
                             <li><span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span></li>
                             <li>{{allsmtpdata.smtp_type}}</li>
                             <li>{{allsmtpdata.emailfrom}}</li>
@@ -237,7 +236,6 @@
                                 </button>
                             </li>   
                         </ul>
-                    </mat-card>
                 </div>
             </div>
         </div> 
@@ -254,9 +252,8 @@
                     </div>
                 </div> 
                 <div class="col-12" *ngIf="fetch">
-                    <mat-card class="mt-4">
-                        <ul class="kb-smtpul">
-                            <li><span ><i class="fa-solid fa-house" aria-hidden="true"></i></span></li>
+                        <ul class="kb-smtpul align-items-center mt-4 ">
+                            <li><span >Default<i class="fa-solid fa-house" aria-hidden="true"></i></span></li>
                             <li>{{defaultadd.name | titlecase}}</li>
                             <li>
                                 <button mat-raised-button (click)="openBottomSheet(addresslists)" [color]="'primary'">
@@ -264,7 +261,6 @@
                                 </button>
                             </li>   
                         </ul>
-                    </mat-card>
                 </div> 
             </div>
         </div>  

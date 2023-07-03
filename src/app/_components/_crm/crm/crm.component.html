@@ -19,9 +19,10 @@
     <h1 mat-dialog-title class="global">Global Timezone</h1>
     <div mat-dialog-content>
       <div class="form-group ">
-        <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-error *ngIf="hasError">{{hasError}}</mat-error>
+        <mat-form-field appearance="fill" class="kb-full-width" (click)="filtertimezoneData($event)">
             <mat-label>Timezones</mat-label>
-            <input matInput type="text" [(ngModel)]="timezone" placeholder="Please enter country name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
+            <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter country name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" >
             <mat-autocomplete #timezoneAuto="matAutocomplete" >
               <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{option.name}}</mat-option>
             </mat-autocomplete>

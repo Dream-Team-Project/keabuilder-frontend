@@ -13,6 +13,7 @@ export class CrmComponent implements OnInit {
   @ViewChild('dialogtimezone') dialogtimezone!: TemplateRef<any>;
   timezone:any='';
   filteredtimezone:any=[];
+  hasError: string = '';
   constructor(
     private dialog: MatDialog,
     private _settingService: SettingService,
@@ -30,21 +31,31 @@ export class CrmComponent implements OnInit {
   fetchcrmsmtp(){
     this._settingService.singlesetting().subscribe({
       next: data => {
-        if(!data.data[0]?.global_timezone)this.openDialog(this.dialogtimezone);
+        if(!data.data[0]?.global_timezone) this.openDialog(this.dialogtimezone);
+        else this.timezone=data.data[0]?.global_timezone;
       }
     });
   }
   Settimezone(timezone:any){
+    if(timezone){
     let obj={global_timezone:timezone};
     this._settingService.globaltimezone(obj).subscribe((data:any)=>{
       if(data.success==true){
-        this._snackBar.open("Global TimeZone Set Successfully","Ok",{duration:3000});
+        var msg =  'Global TimeZone Set Successfully';
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        
       }
       else{
-        this._snackBar.open("Something went wrong","Ok",{duration:3000});
+        var msg =  'Something went wrong !';
+        this.hasError = msg;
+        this.openDialog(this.dialogtimezone);
       }
-
     })
+  }else{
+    var msg =  'Please Select Timezone!';
+    this.hasError = msg;
+    this.openDialog(this.dialogtimezone);
+  }
     
   }
   gettimezone(event:any){
