@@ -476,35 +476,4 @@ export class CrmFormBuilderComponent implements OnInit {
     let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     return regex.test(value);
   }
-
-  // session
-
-  // saveSession() {
-  //   var sessionStr = JSON.stringify(this.formField).replace(/"setting":true/g, '"setting":false');
-  //   if(this.formSessionArr[this.formSessionArr.length-1] != sessionStr && this.formSessionArr[this.formSession.undo] != sessionStr) {
-  //     this.formSessionArr.push(sessionStr);
-  //     this.formSession.undo = this.formSessionArr.length-1; 
-  //     this.formSession.redo = this.formSessionArr.length; 
-  //     if(!this.initial) this.formSaved = false;
-  //     else this.initial = false;
-  //   }
-  // }
-
-  // undo() {
-  //   var sObj = this.formSessionArr[this.formSession.undo-1];
-  //   if(sObj) {
-  //     this.formField = JSON.parse(sObj);
-  //     this.formSession.undo--;
-  //     this.formSession.redo--;
-  //   }
-  // }
-
-  // redo() {
-  //   var sObj = this.formSessionArr[this.formSession.redo];
-  //   if(sObj) {
-  //     this.formField = JSON.parse(sObj);
-  //     this.formSession.undo++;
-  //     this.formSession.redo++;
-  //   }
-  // }
 }
