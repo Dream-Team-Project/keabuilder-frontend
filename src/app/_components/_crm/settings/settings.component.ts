@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -13,8 +13,8 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
   styleUrls: ['./settings.component.css']
 })
 export class CrmSettingsComponent implements OnInit {
-
-  email = new FormControl('', [Validators.required]);
+  
+  email = new FormControl('', [Validators.required,Validators.email]);
   smtp = new FormControl('', [Validators.required]);
   apiid = new FormControl('', [Validators.required]);
   apikey = new FormControl('', [Validators.required]);
@@ -32,7 +32,7 @@ export class CrmSettingsComponent implements OnInit {
   api_key:any;
   api_id:any;
   showmytime:any = '';
-  timezone:any='Default';
+  timezone:any='';
   genaddress = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
@@ -52,7 +52,7 @@ export class CrmSettingsComponent implements OnInit {
     this.fetchsmtp();
     this.fetchaddress().then(resp=>{
       this.alladdress.filter((element:any)=>{
-        if(element.uniqueid==this.allsmtpdata.addressid){
+        if(element.uniqueid==this.allsmtpdata?.addressid){
           this.defaultadd=element;
           this.fetch=true;
         }
@@ -109,7 +109,6 @@ export class CrmSettingsComponent implements OnInit {
               var msg =  'Server Error';
               this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top');
             }
-         
           }
         });
       }
@@ -118,7 +117,7 @@ export class CrmSettingsComponent implements OnInit {
         this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
       }else{
-        var msg =  'Something went wrong';
+        var msg =  'Please Fill All Details!';
               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
 
@@ -145,6 +144,7 @@ export class CrmSettingsComponent implements OnInit {
   openDialog(templateRef: TemplateRef<any>,value:any,action:any): void {
    if(action=='edit' || action=='delete' || action=='default')  this.genaddress=value;
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
+      this.genaddress.id='';
       this.genaddress.name='';
       this.genaddress.company_name='';
       this.genaddress.country='';
@@ -153,6 +153,7 @@ export class CrmSettingsComponent implements OnInit {
       this.genaddress.city='';
       this.genaddress.state='';
       this.genaddress.zip='';
+      this.fetchaddress();
     })
   }
 
@@ -223,10 +224,8 @@ export class CrmSettingsComponent implements OnInit {
   }
   sendaddress(){
     var nwaddress = this.genaddress;
-    if(this.companynameControl.status=='VALID' && this.addressline1Control.status=='VALID'){
-
+    if(this.addressnameControl.status=='VALID' && this.companynameControl.status=='VALID' && this.addressline1Control.status=='VALID' && this.cityControl.status=='VALID' && this.stateControl.status=='VALID' && this.zipControl.status=='VALID'){
       if(nwaddress.company_name!=''&& nwaddress.country!='' && nwaddress.address_1!='' && nwaddress.city!='' && nwaddress.state!='' && nwaddress.zip!=''){
-
         this._addressService.addaddress(nwaddress).subscribe({
           next: data => {
               // console.log(data);
@@ -241,10 +240,10 @@ export class CrmSettingsComponent implements OnInit {
               }
           }
         });
-
       }else{
             var msg =  'Incorrect Address Details!';
                this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+             
       }
       
     }else{
@@ -275,11 +274,11 @@ export class CrmSettingsComponent implements OnInit {
   }
   filtertimezoneData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
   filtercountryData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name.toLowerCase().includes(value?.toLowerCase()));
+    this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
   openBottomSheet(templateRef: TemplateRef<any>): void {
     this._bottomSheet.open(templateRef);

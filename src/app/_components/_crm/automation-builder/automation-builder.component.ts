@@ -4,6 +4,7 @@ import { ImageService } from 'src/app/_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
+
 @Component({
   selector: 'app-crm-automation-builder',
   templateUrl: './automation-builder.component.html',
@@ -51,7 +52,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     public _automation: AutomationService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet) {}
+    private _bottomSheet: MatBottomSheet,) {}
 
   ngOnInit(): void {}
 
@@ -162,7 +163,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     var wrkfList = this.workflowList;
     for(let i = 0; i < wrkfList.length; i++) {
       for(let j = 0; j < wrkfList[i].workflows.length; j++) {
-        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchWf.toLowerCase()) >= 0;
+        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchWf?.toLowerCase()) >= 0;
         wrkfList[i].hide = !cond;
         if(cond) {
           if(intial) {
@@ -186,7 +187,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   filterForm() {
     var data = JSON.parse(JSON.stringify(this._automation.forms));
     data.unshift(this._automation.anyTarget);
-    this.formField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.formField.value.toLowerCase()));
+    this.formField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.formField?.value?.toLowerCase()));
   }
 
   selectForm(e:any) {
@@ -208,7 +209,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   filterList() {
     var data = JSON.parse(JSON.stringify(this._automation.lists));
     data.unshift(this._automation.anyTarget);
-    this.listField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.listField.value.toLowerCase()));
+    this.listField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.listField?.value?.toLowerCase()));
   }
 
   selectList(e:any) {
@@ -230,7 +231,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   filterTag() {
     var data = JSON.parse(JSON.stringify(this._automation.tags));
     data.unshift(this._automation.anyTarget);
-    this.tagField.filter = data.filter((option:any) => option.name.toLowerCase().includes(this.tagField.value.toLowerCase()));
+    this.tagField.filter = data.filter((option:any) => option.name?.toLowerCase().includes(this.tagField?.value?.toLowerCase()));
   }
 
   selectTag(e:any) {

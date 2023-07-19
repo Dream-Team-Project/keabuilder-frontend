@@ -73,7 +73,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
 
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;  
 
@@ -196,10 +196,10 @@ export class CreateFunnelSettingsComponent implements OnInit {
       grouptags: this.tags.toString()
     };
 
-    console.log(obj);
+    // console.log(obj);
     this.funnelService.updatebasicdetails(obj).subscribe({
       next: data => {
-          console.log(data);
+          // console.log(data);
 
           this.funnelname = data.newfunnelname;
           this.funnelService.funnelname = data.newfunnelname;

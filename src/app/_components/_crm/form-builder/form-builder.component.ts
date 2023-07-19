@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxCaptureService } from 'ngx-capture';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { EmailService } from 'src/app/_services/_crm/email.service';
 
 @Component({
   selector: 'app-crm-form-builder',
@@ -44,10 +45,10 @@ export class CrmFormBuilderComponent implements OnInit {
   validate = {
     name: new FormControl('', [Validators.required]),
     relink: new FormControl('', [Validators.pattern(this.urlPattern)]),
-    emailsubject: new FormControl('', [Validators.required]),
-    emailto:new FormControl('', [Validators.required]),
-    emailfrom:new FormControl('', [Validators.required]),
-    emailname:new FormControl('', [Validators.required]),
+    // emailsubject: new FormControl('', [Validators.required]),
+    // emailto:new FormControl('', [Validators.required]),
+    // emailfrom:new FormControl('', [Validators.required]),
+    // emailname:new FormControl('', [Validators.required]),
   }
   contextMenuPosition = { x: '0px', y: '0px' };
   waitST = true;
@@ -82,6 +83,9 @@ export class CrmFormBuilderComponent implements OnInit {
   showEditor:boolean = true;
   showFilter:boolean = false;
   emailerror:boolean = false;
+  emails:any=[];
+  filteredemails:any=[];
+  emailid:any='';
 
   constructor(
     private route: ActivatedRoute,
@@ -92,7 +96,8 @@ export class CrmFormBuilderComponent implements OnInit {
     private dialog: MatDialog,
     private captureService: NgxCaptureService,
     private _listService: ListService,
-    private _tagService: TagService) { 
+    private _tagService: TagService,
+    private email:EmailService,) { 
       route.paramMap.subscribe((params: ParamMap) => {
         this._general.getAllWebPages();
         this._general.getAllFunnels();
@@ -109,9 +114,9 @@ export class CrmFormBuilderComponent implements OnInit {
           this.filteredTempIds.lists=e.listid;
           this.selectedTags=e.temp_tags;
           this.filteredTempIds.tags=e.tagid;
-          this.notifyemail=e.notifyemail?.split(',');
-          this.fetchlists();
-          this.fetchTags();
+          this.notifyemail=e.notifyemail?e.notifyemail?.split(','):this.notifyemail;
+          this.emailid=e.emailid;
+          this.fetchdata();
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
@@ -132,7 +137,25 @@ export class CrmFormBuilderComponent implements OnInit {
       }
     });
   }
-
+fetchdata(){
+  this.fetchlists();
+  this.fetchTags();
+  this.fetchEmails();
+  this.fetchsingleemail();
+}
+fetchsingleemail(){
+  if(this.emailid){
+  this.email.getsingleemail({uniqueid:this.emailid}).subscribe((data:any)=>{
+    if(data.success==true){
+    this._form.singleemail.id=data.data[0].id;
+    this._form.singleemail.uniqueid=data.data[0].uniqueid;
+    this._form.singleemail.name=data.data[0].name;
+    this._form.singleemail.subject=data.data[0].subject;
+    this._form.singleemail.body=data.data[0].body;
+    }
+  })
+}
+}
   fetchlists(){
       this._listService.fetchlists().subscribe((data:any)=>{
         this.lists=data.data;
@@ -144,6 +167,11 @@ export class CrmFormBuilderComponent implements OnInit {
         (data) => {
           this.tags = data.data;
     });
+  }
+  fetchEmails(){
+    this.email.fetchemails().subscribe((data:any)=>{
+      this.emails=data.data;
+    })
   }
 
   autoSaveTrigger(trigger:boolean) {
@@ -167,9 +195,12 @@ export class CrmFormBuilderComponent implements OnInit {
   }
   
   saveForm(){
-      this._form.form.notifyemail=this.notifyemail.toString();
-      this._form.form.lists=this.filteredTempIds.lists.toString();
-      this._form.form.tags=this.filteredTempIds?.tags.toString();
+      if(this._form.form.emailenabled){
+      this._form.form.notifyemail=this.notifyemail?.toString();
+      this._form.form.emailid=this._form.singleemail.uniqueid;
+      }
+      this._form.form.lists=this.filteredTempIds.lists?.toString();
+      this._form.form.tags=this.filteredTempIds.tags?.toString();
       this._general.saveDisabled = true;
       this._form.updateForm().then((e:any)=>{
         if(e.success == 1) {
@@ -183,6 +214,7 @@ export class CrmFormBuilderComponent implements OnInit {
                     this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
                     this._general.saveDisabled = false;
                     this._form.formSaved = true;
+                    // this._form.singleemail={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
                   }
                 })
             })
@@ -192,6 +224,7 @@ export class CrmFormBuilderComponent implements OnInit {
             this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
             this._general.saveDisabled = false;
             this._form.formSaved = true;
+            // this._form.singleemail={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
           }
         }
         else {
@@ -247,7 +280,7 @@ export class CrmFormBuilderComponent implements OnInit {
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       this.notifyemailCtrl.reset();
-      if(this.validate.emailsubject.errors?.['required']) {
+      if(this._form.form.emailenabled && (!this.notifyemail || !this._form.singleemail.uniqueid)) {
         this._general.expPanelStep = 3;
         this.openActionDialog(this.actiondialog);
       }
@@ -255,7 +288,7 @@ export class CrmFormBuilderComponent implements OnInit {
         this._general.expPanelStep = 0;
         this.formdialog = '';
         this._form.formSaved = false;
-        this.validate.emailsubject.reset();
+        // this.validate.emailsubject.reset();
       }
     })
   }
@@ -370,7 +403,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -391,7 +424,7 @@ export class CrmFormBuilderComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
@@ -458,14 +491,12 @@ export class CrmFormBuilderComponent implements OnInit {
     const value = (event.value || '').trim();
     if (value && this.isEmailValid(value)==true) {
       this.notifyemail.push(value); 
-      // this.emailerror=false;
        // Clear the input value
       event.chipInput!.clear();
       this.notifyemailCtrl.reset();
     }
      else if(this.isEmailValid(value)==false && value){
       this.notifyemailCtrl.setValue(value);
-      // this.emailerror=true;
     }
   }
   removenotifyemail(index:number): void {
@@ -476,5 +507,18 @@ export class CrmFormBuilderComponent implements OnInit {
   isEmailValid(value:any) {
     let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     return regex.test(value);
+  }
+  filteremailData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredemails=this.emails?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+  getemaildata(email:any){
+    if(email && this._form.form.emailenabled){
+    this._form.singleemail.id=email.id;
+    this._form.singleemail.uniqueid=email.uniqueid;
+    this._form.singleemail.name=email.name;
+    this._form.singleemail.subject=email.subject;
+    this._form.singleemail.body=email.body;
+    }
   }
 }

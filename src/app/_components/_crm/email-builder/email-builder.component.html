@@ -11,9 +11,19 @@
             <mat-label>Email name</mat-label>
             <input matInput type="text" [formControl]="validate.name" placeholder="email name" [(ngModel)]="email.name" required minlength="3">
         </mat-form-field>
+        <mat-error *ngIf="isNotValid(validate.subject)">
+            Email Subject should not be empty
+        </mat-error>
+        <mat-error *ngIf="validate.subject.hasError('minlength')">
+            Email Subject must be at least <strong>3</strong> characters
+        </mat-error>
+        <mat-form-field appearance="fill">
+            <mat-label>Email Subject</mat-label>
+            <input matInput type="text" [formControl]="validate.subject" placeholder="email subject" [(ngModel)]="email.subject" required minlength="3">
+        </mat-form-field>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid ? 'primary' : ''" [disabled]="validate.name.invalid">Done</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.name.invalid|| !validate.subject.invalid ? 'primary' : ''" [disabled]="validate.name.invalid || validate.subject.invalid">Done</button>
     </div>
 </ng-template>
 <div style="visibility: hidden; position: fixed"
@@ -174,7 +184,7 @@
     <div *ngIf="prevImg" class="kb-block-preview">
         <div class="kb-block-prev-img" [style.backgroundImage]="'url('+_image.uploadImgPath+prevImg+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'"></div>
     </div>
-    <div id="kb-email-container">
+    <div #emailbody id="kb-email-container">
         <div [id]="emailElements.section.id" [ngStyle]="isBlockActive(emailElements.section) ? _style.currentStyling() : _style.getBlockStyle(emailElements.section.style)" 
         (mouseenter)="emailElements.section.setting = true;" (mouseleave)="emailElements.section.setting = false" class="kb-section kb-block-container">
             <div class="kb-module-setting" *ngIf="emailElements.section.setting && !_general.showInlineEditor">

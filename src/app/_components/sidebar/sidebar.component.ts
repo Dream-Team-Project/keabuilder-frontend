@@ -246,6 +246,12 @@ export class SidebarComponent implements OnInit {
           img: 'hacker.gif',
           icon: 'fa fa-envelope',
           title: 'Campaigns'
+        },{
+          0:true,
+          routerlink: '/crm/emails',
+          img: 'hacker.gif',
+          icon: 'fa-solid fa-envelope-open-text',
+          title: 'Emails'
         },
         {
           0:true,
@@ -498,6 +504,7 @@ export class SidebarComponent implements OnInit {
       this.backme = false;
     } 
 
+    // if(myhref=='/affiliates'){
     if(myhref=='/membership' || myhref=='/affiliates'){
       this.backme = false;
     }

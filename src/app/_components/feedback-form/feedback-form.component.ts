@@ -1,7 +1,7 @@
 import { Component,Input, OnInit, ViewChild, TemplateRef, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { EmailService } from 'src/app/_services/mailer.service';
+import { MailerService } from 'src/app/_services/mailer.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
@@ -42,7 +42,7 @@ export class FeedbackFormComponent implements OnInit {
   
   constructor(
     private _general: GeneralService,
-    private _mail: EmailService,
+    private _mail: MailerService,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
   ) {}

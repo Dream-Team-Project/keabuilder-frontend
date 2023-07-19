@@ -1,8 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AutomationService } from 'src/app/_services/_crm/automation.service';
+
 
 
 @Component({
@@ -17,7 +19,8 @@ delautomation:any;
 automations:any=[];
 automationname ='';
 automationnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-constructor(private _automationservice: AutomationService,private _snackBar: MatSnackBar, private dialog: MatDialog,
+constructor(private _automationservice: AutomationService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
+  private router: Router,
   ) {
   this.togglebutton=true; 
  }
@@ -43,13 +46,20 @@ toggleView(){
   this.togglebutton=!this.togglebutton; 
 }
 addautomation(){
- 
-  // this._automationservice
-  // .addautomation(obj)
-  // .subscribe((data) => {
-  //   this.fetchAutomations()
-  //   this._snackBar.open('Automation Added Succesfully !', 'OK');
-  // });
+  if(this.automationnameControl.status=='VALID'){
+    if(this.automationname!=''){
+      var data = {name:this.automationname};
+  this._automationservice
+  .addautomation(data)
+  .subscribe((data) => {
+    console.log(data.uniqueid)
+    this.fetchAutomations()
+    this.dialog.closeAll();
+    this._snackBar.open('Automation Added Succesfully !', 'OK');
+    this.router.navigate(['/builder/automation/'+data.uniqueid],{relativeTo: this.route});
+  });
+    }
+  }
 }
 copyAutomation(automation:any){
   let obj=automation;
@@ -83,7 +93,7 @@ searchAutomations(search: any, sort: any, filter: any) {
   }
   // console.log(obj);
   this._automationservice.searchautomations(obj).subscribe((data:any)=>{
-    console.log(data.data)
+    // console.log(data.data)
     this.automations = data.data;
   });
 }

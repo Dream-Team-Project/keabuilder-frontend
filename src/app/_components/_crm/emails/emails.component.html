@@ -1,1 +1,237 @@
-<p>emails works!</p>
+<ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Email Template</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{ delemail.name }}</span> email template?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button
+        mat-button
+        mat-dialog-close
+        cdkFocusInitial
+        class="text-danger"
+        (click)="deleteemail(delemail)"
+      >
+        Yes
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #adddialog>
+    <h1 mat-dialog-title class="txt">Create Template</h1>
+    <div mat-dialog-content>
+      <mat-error *ngIf="isNotValid(validate.name)">
+        Name should not be empty
+      </mat-error>
+      <mat-error *ngIf="validate.name.hasError('minlength')">
+       Name must be at least <strong>3</strong> characters
+      </mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input
+          type="text"
+          matInput
+          name="emailname"
+          [(ngModel)]="email.name"
+          [formControl]="validate.name"
+          minlength="3"
+          required
+        />
+      </mat-form-field>
+      <mat-error *ngIf="isNotValid(validate.subject)">
+        subject should not be empty
+    </mat-error>
+    <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Subject</mat-label>
+        <input matInput type="text" placeholder="email subject" [formControl]="validate.subject" [(ngModel)]="email.subject" required>
+    </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger">Close</button>
+      <button
+        mat-button
+        mat-dialog-close
+        (click)="createemailtemplate()"
+        [color]="!validate.name.invalid ? 'primary' : ''" 
+        [disabled]="validate.name.invalid || validate.subject.invalid "
+      >
+        Create
+      </button>
+    </div>
+  </ng-template>
+  <div class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
+    <div class="row">
+      <mat-form-field appearance="fill" class="col-6 pr-2">
+        <mat-label>Search emails</mat-label>
+        <input
+          matInput
+          #searchInp
+          type="text"
+          (input)="searchemails(searchInp, filterInp)"
+          placeholder="Search email Name"
+        />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="col-2">
+        <mat-label>Sort By</mat-label>
+        <mat-select
+          #filterInp
+          name="kbfilter"
+          [value]="'updated_at DESC'"
+          (valueChange)="searchemails(searchInp, filterInp)"
+        >
+          <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+          <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+          <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+          <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="col-md-4 mt-2 text-right">
+        <button
+          mat-raised-button
+          [color]="'accent'"
+          (click)="toggleView()"
+          *ngIf="emails.length != 0"
+        >
+          <span *ngIf="toggleview; else listview"
+            >Grid View <i class="fas fa-th"></i
+          ></span>
+          <ng-template #listview
+            ><span>List View <i class="fas fa-th-list"></i></span
+          ></ng-template>
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openDialog(adddialog, email)"
+          class="mx-3"
+        >
+        <i class="fa-solid fa-envelope-open-text"></i> Create email 
+        </button>
+      </div>
+    </div>
+    <div
+      [class.px-3]="toggleview"
+      class="row"
+      *ngIf="emails.length != 0; else nodata"
+    >
+      <div
+        [class]="toggleview ? 'col-md-12' : 'col-md-4'"
+        class="cardpage mt-4"
+        *ngFor="let email of emails"
+      >
+        <div [class.row]="toggleview">
+          <div
+            [style.height]="toggleview ? '150px' : '300px'"
+            [class]="toggleview ? 'col-md-6' : 'col-md-12'"
+            class="p-0"
+          >
+            <div
+              [class.kb-disabled]="email.deleting"
+              class="kb-fitimg"
+              [ngStyle]="{
+                'background-image':
+                  'url(' +
+                  _image.uploadImgPath +
+                  _general.getSSPath('email-' + email.uniqueid) +
+                  '), url(' +
+                  _image.uploadImgPath +
+                  'webpage_thumbnail.jpg' +
+                  ')'
+              }">
+              <div class="kb-loader" *ngIf="shortwaiting || email.deleting">
+                <div class="kb-loader-shadow"></div>
+                <div class="kb-loader-box"></div>
+              </div>
+            </div>
+          </div>
+          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+            <div class="row align-items-center p-0 h-100">
+              <div [class.p-0]="!toggleview" class="col-md-12">
+                <div class="kb-title-board line-ellipsis ftsize ">
+                  <span >{{ email.name ? email.name : ("email" | titlecase) }}</span>
+                  <input
+                    type="text"
+                    #emailname
+                    [value]="email.name"
+                    (blur)="rename(email, emailname)"
+                    matTooltip="Edit Email Template Name"
+                    matTooltipPosition="above"
+                  />
+                </div>
+                <p
+                  class="kb-pagedate mt-2 mb-3"
+                  matTooltip="Last Updated"
+                  matTooltipPosition="above"
+                >
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  {{ _general.dateformat(email.updated_at) }}
+                </p>
+              </div>
+              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
+                <!-- <button
+                  (click)="
+                    _general.redirectLink(
+                      '/fetch-email/' + email.user_id + '/' + email.uniqueid
+                    )
+                  "
+                  mat-raised-button
+                  color="accent"
+                  [disabled]="email.deleting"
+                  class="mr-2"
+                >
+                  View <i class="far fa-eye"></i>
+                </button> -->
+                <button
+                  (click)="_general.redirectToBuilder(email.uniqueid, 'email')"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="email.deleting"
+                >
+                  Edit <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button
+                  mat-raised-button
+                  color="accent"
+                  class="ml-2"
+                  [matMenuTriggerFor]="menu"
+                  [disabled]="email.deleting"
+                >
+                  More <i class="fas fa-cog"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="duplicateemail(email)"
+                    [disabled]="email.deleting"
+                  >
+                    <i class="far fa-copy pr-2"></i>Duplicate
+                  </button>
+                  <button
+                    mat-menu-item
+                    class="text-danger"
+                    (click)="openDialog(deldialog, email)"
+                    [disabled]="email.deleting"
+                  >
+                    <i class="far fa-trash-alt pr-2"></i>Delete
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #nodata>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-4">
+          <img
+            src="/assets/images/website/website-empty.png"
+            class="img-fluid"
+            alt="No Email Template Found"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  

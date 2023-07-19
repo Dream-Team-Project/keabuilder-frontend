@@ -1,7 +1,7 @@
 <ng-template #dialog>
   <h1 mat-dialog-title class="txt">Create A Campaign</h1>
   <div mat-dialog-content>
-      <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-form-field class="kb-full-width mb-2" appearance="fill">
         <mat-label>Campaign Name</mat-label>
         <input type="text" matInput name="campaignname" [(ngModel)]="campaignname" [formControl]="campaignnameControl" required minlength="3" >
         <mat-error *ngIf="campaignnameControl.hasError('required')">
@@ -14,13 +14,16 @@
   </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger">Close</button>
-      <button mat-button  [color]="'primary'" (click)="createcamp()">Create</button>
+      <button mat-button
+      [color]="!campaignnameControl.invalid ? 'primary' : ''"  
+      [disabled]="campaignnameControl.invalid"
+      (click)="createcamp()">Create</button>
   </div>
 </ng-template>
 <ng-template #deletedialog>
   <h1 mat-dialog-title class="kb-danger">Delete Campaign</h1>
   <div mat-dialog-content>
-    Would you like to delete this Campaign?
+    Would you like to delete <span class="text-danger">{{delcampaign.name}}</span> campaign?
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'">No</button>
@@ -92,7 +95,16 @@
           </div>
           <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
             <div class="kb-fitimg"
-              [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbcampaign.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"
+            [ngStyle]="{
+              'background-image':
+                'url(' +
+                _image.uploadImgPath +
+                _general.getSSPath('campaign-' + kbcampaign.uniqueid) +
+                '), url(' +
+                _image.uploadImgPath +
+                'webpage_thumbnail.jpg' +
+                ')'
+            }"
               >
               <div class="kb-loader" *ngIf="shortwaiting">
                 <div class="kb-loader-shadow"></div>
@@ -114,14 +126,14 @@
                   <button  *ngIf="kbcampaign.campaign_sent=='0'" mat-raised-button  [routerLink]="'/crm/campaign/'+kbcampaign.uniqueid" class="view-btn3 mr-2 "> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
                   <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
                 <mat-menu #menu2="matMenu">
-                  <button mat-menu-item [routerLink]="'/crm/campaign/'+kbcampaign.uniqueid" >
+                  <button mat-menu-item [routerLink]="'/crm/campaign/'+kbcampaign.uniqueid" *ngIf="(kbcampaign.sendoption =='recurring' || kbcampaign.campaignsent =='0')">
                     <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
                   </button>
                   <button mat-menu-item  (click)="duplicatecampaign(kbcampaign)">
                     <i class="far fa-copy mr-2"></i>Duplicate
                   </button>
                  
-                  <button class="text-danger" mat-menu-item (click)="openDialog(deletedialog,kbcampaign.id)">
+                  <button class="text-danger" mat-menu-item (click)="openDialog(deletedialog,kbcampaign)">
                     <i class="far fa-trash-alt mr-2"></i>Delete
                   </button>
                 </mat-menu>
@@ -130,7 +142,7 @@
                 <div class="sentoption">
                   <hr>
                   <div class="d-flex justify-content-between">
-                    <span class="fnt"><i class="fa fa-user mr-2 colr" aria-hidden="true"></i>Sent To: <span *ngIf="kbcampaign.sento>0"> {{kbcampaign.sento}}</span>
+                    <span class="fnt"><i class="fa fa-user mr-2 colr" aria-hidden="true"></i>Sent To: <span *ngIf="kbcampaign.sentto>0"> {{kbcampaign.sentto}}</span>
                     <span *ngIf="kbcampaign.sentto==0">--</span></span>
                   <span class="fnt">Sent On: 
                     <span *ngIf="kbcampaign.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kbcampaign.deliverdate)}}</span>

@@ -10,72 +10,45 @@
     </div>
   </ng-template>
    <!-- add new smtp setting-->
-  <ng-template #dialog1>
-      <h1 mat-dialog-title > Connect With SMTP Server</h1>
-      <div mat-dialog-content>
-           <span class="">Add your SMTP Server Details</span>
-      </div>
-      <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Choose an option</mat-label>
-          <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
-            <mat-option value="sendgrid">SendGrid</mat-option>
-            <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
-            <mat-option value="mailchimp">Mailchimp</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address Line 1</mat-label>
-            <input type="text" matInput name="addressline1" [(ngModel)]="genaddress.address_1"  [formControl]="addressline1Control" required minlength="3" >
-            <small>Street address, P.O. box</small>
-            <mat-error *ngIf="addressline1Control.hasError('required')">
-                Address Line 1 is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="addressline1Control.hasError('minlength')">
-                Address Line 1 must be at least <strong>3</strong> characters
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Address Line 2</mat-label>
-            <input type="text" matInput name="addressline2" [(ngModel)]="genaddress.address_2" >
-            <small>Apartment, suite, unit, building, floor, etc.</small>
-        </mat-form-field>
-
-        <div class="row">
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>City</mat-label>
-                    <input type="text" matInput name="city" [(ngModel)]="genaddress.city"  [formControl]="cityControl" required  >
-                    <mat-error *ngIf="cityControl.hasError('required')">
-                        City is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>State / Province / Region</mat-label>
-                    <input type="text" matInput name="state" [(ngModel)]="genaddress.state"  [formControl]="stateControl" required  >
-                    <mat-error *ngIf="stateControl.hasError('required')">
-                        State is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-4">
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>ZIP/Postal Code</mat-label>
-                    <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
-                    <mat-error *ngIf="zipControl.hasError('required')">
-                        Zip is <strong>required</strong>
-                    </mat-error>
-                </mat-form-field>
-            </div>
-        </div>
-        <div mat-dialog-actions class="justify-content-end">
-            <button mat-button mat-dialog-close  class="text-danger">Close</button>
-            <button mat-button [color]="'primary'" (click)="sendaddress()">Add </button>
-        </div>
-</ng-template>
+   <ng-template #dialog1>
+    <h1 mat-dialog-title class="txt">Connect With SMTP Server</h1>
+    <div mat-dialog-content>
+         <span class="">Add your SMTP Server Details</span>
+    </div>
+    <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Choose an option</mat-label>
+        <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
+          <mat-option value="sendgrid">SendGrid</mat-option>
+          <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
+          <mat-option value="mailchimp">Mailchimp</mat-option>
+        </mat-select>
+      </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Email From</mat-label>
+        <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
+        <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>API KEY ID</mat-label>
+        <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
+        <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
+            API Key Id is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>API KEY </mat-label>
+        <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
+        <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
+            API Key is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">No</button>
+        <button mat-button  cdkFocusInitial  color="primary" (click)="addsmtpdetails()">ADD</button>
+    </div>
+  </ng-template>
  <!-- add new address setting-->
  <ng-template #dialog2>
     <h1 mat-dialog-title >{{genaddress.id ? 'Update' : 'Add'}} Address</h1>
@@ -150,7 +123,7 @@
             <div class="col-md-4">
                 <mat-form-field class="kb-full-width" appearance="fill">
                     <mat-label>ZIP/Postal Code</mat-label>
-                    <input type="number" matInput name="city" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
+                    <input type="number" matInput name="zip" [(ngModel)]="genaddress.zip"  [formControl]="zipControl" required  >
                     <mat-error *ngIf="zipControl.hasError('required')">
                         Zip is <strong>required</strong>
                     </mat-error>
@@ -182,6 +155,7 @@
                     <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="addrs.uniqueid==allsmtpdata.addressid"></mat-checkbox>
                     <span  (click)="openDialog(dialog2,addrs,'edit')" style="font-size:16px">{{addrs.name | titlecase}}</span></span>
             <span class="d-flex">
+                <i mat-ripple matTooltip="Set Default Address" matTooltipPosition="above" (click)="openDialog(defaultaddress,addrs,'default')" class="fa fa-solid fa-house-user kb-table-action-icon"></i>
                 <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(dialog2,addrs,'edit')" class="fa fa-pencil kb-table-action-icon"></i>
                 <i  mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deladdress,addrs,'delete')" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
         </span>
@@ -202,9 +176,9 @@
 </ng-template>
 <!--default address-->
 <ng-template #defaultaddress>
-    <h1 mat-dialog-title ><i class="fa-solid fa-house mr-1"></i> Default Address</h1>
+    <h1 mat-dialog-title > Default Address</h1>
     <div mat-dialog-content>
-      Would you like to use <span class="kb-txt"><i class="fa-solid fa-house mr-1"></i>{{this.genaddress.name | titlecase}}</span> address to default address?
+      Would you like to use <span class="kb-txt">{{this.genaddress.name | titlecase}}</span> address to default address?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>

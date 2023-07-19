@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -8,6 +8,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FieldService } from 'src/app/_services/_crm/field.service';
 import { ListService } from '../../../_services/_crm/list.service';
 import { TagService } from '../../../_services/_crm/tag.service';
+import { MailerService } from 'src/app/_services/mailer.service';
 
 @Component({
   selector: 'app-crm-contact',
@@ -15,16 +16,19 @@ import { TagService } from '../../../_services/_crm/tag.service';
   styleUrls: ['./contact.component.css']
 })
 export class CrmContactComponent implements OnInit {
+
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  fetching:boolean = true;;
+  
+  fetching:boolean = true;
   contact:any = {};
   fields:Array<any> = [];
   contactFields:Array<any> = [];
   contactFieldJSON:Array<any> = [];
   searchField:string = '';
+  searchactivity:string = '';
+  activitylist:Array<any> = ['activity1','activity2','activity3','activity4','activity5','activity6','activity7','activity8'];
   lists:any= [];
   tags:any= [];
   selectedLists:any = [];
@@ -40,13 +44,24 @@ export class CrmContactComponent implements OnInit {
   };
   tagCtrl = new FormControl(['']);
   listCtrl = new FormControl(['']);
+  emailsubject = new FormControl('', [Validators.required]);
+  emailtoCtrl = new FormControl('', [Validators.email]);
+  emailto:any=[];
+  emailerror:boolean = false;
+  email={
+    subject:'',
+    emailbody:'',
+    emailto:[],
+  }
+ 
   constructor(
     private _route: ActivatedRoute,
-    private _general: GeneralService,
+    public _general: GeneralService,
     private _contactService: ContactService,
     private _field: FieldService,
     private _listService: ListService,
     private _tagService: TagService,
+    private MailerService: MailerService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.contact.uniqueid = params.get('uniqueid');
@@ -67,7 +82,6 @@ export class CrmContactComponent implements OnInit {
   fetchContact() {
       this._contactService.singlecontact(this.contact.uniqueid).subscribe((resp) => {
           this.contact = resp?.data[0];
-          console.log(this.contact)
           this.contact.icon = this.contactIcon(this.contact);
           if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);
           this.fetchFields();
@@ -75,8 +89,6 @@ export class CrmContactComponent implements OnInit {
           this.filteredTempIds.lists=resp?.data[0].listid;
           this.selectedTags=resp?.data[0].temp_tags;
           this.filteredTempIds.tags=resp?.data[0].tagid;
-          // console.log(this.selectedLists)
-          // console.log(this.selectedTags)
         }
       );
   }
@@ -107,7 +119,7 @@ export class CrmContactComponent implements OnInit {
         }
         this.contactFields = JSON.parse(JSON.stringify(this.contactFieldJSON));
         this.contactFields.forEach((cf:any)=>{
-          for(let i = 0; i < this.fields.length - 1; i++) {
+          for(let i = 0; i < this.fields.length; i++) {
             var ff = this.fields[i];
             if(cf.id === ff.id) {
                 cf.name = ff.name;
@@ -120,6 +132,7 @@ export class CrmContactComponent implements OnInit {
         })
       }
     })
+   
   }
 
   undoField(cf:any, i:number) {
@@ -176,12 +189,33 @@ export class CrmContactComponent implements OnInit {
         });
       });
   }
+  sendemail(){
+    // console.log(this.email)
+    this.email.emailto=this.emailto;
+    if(this.email.subject && this.email.emailbody && this.email.emailto){
+      let obj={
+        tomailid:this.email.emailto, 
+        frommailid:'Support@keasolution.com',
+        subject:this.email.subject,
+        html:this.email.emailbody,
+        };
+        this.MailerService.sendmailform(obj).subscribe((data:any)=>{
+        if(data.success){ 
+          this._general.openSnackBar(false, 'Email has been send', 'OK', 'center', 'top');
+          this.resetemail();
+        }
+      })
+    }
+    else{
+      this._general.openSnackBar(true, 'Please Fill All Details', 'OK', 'center', 'top');
+    }
 
+  }
    // start list actions
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
    
   }
 
@@ -205,7 +239,7 @@ export class CrmContactComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags =this.tags.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags =this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
@@ -248,5 +282,38 @@ export class CrmContactComponent implements OnInit {
       let msg = resp.success ? 'Contact has been Updated' : 'Server Error';
       this._general.openSnackBar(!resp.success, msg, 'OK', 'center', 'top');
     })
+  }
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+ 
+  //  emails send
+  addemailto(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value && this.isEmailValid(value)==true) {
+      this.emailto.push(value); 
+       // Clear the input value
+      event.chipInput!.clear();
+      this.emailtoCtrl.reset();
+    }
+     else if(this.isEmailValid(value)==false && value){
+      this.emailtoCtrl.setValue(value);
+    }
+  }
+  removeemailto(index:number): void {
+    this.emailto.splice(index, 1);
+  }
+  //  emails send
+
+  isEmailValid(value:any) {
+    let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    return regex.test(value);
+  }
+  resetemail(){
+    this.email.subject='';
+    this.email.emailbody='';
+    this.emailto=[];
+    this.email.emailto=[];
+  }
+  getactivetab(event:any){
+    if(event==1) this._general.showEditor=true;
   }
 }

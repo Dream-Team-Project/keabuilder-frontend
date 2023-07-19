@@ -62,7 +62,7 @@ export class CreateFunnelContactsComponent implements OnInit {
     });
     this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.funnelname = data.data2[0].name;
         this.uniqueidstep = data.data[0].uniqueid;
 
@@ -112,7 +112,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue?.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -136,7 +136,7 @@ export class CreateFunnelContactsComponent implements OnInit {
         var genobj = {fullname:element.fullname,email: element.email,phone:element.phone,address:element.address,city:element.city,state:element.state,zip:element.zip,country:element.country,created_at:element.created_at};
         generateobj.push(genobj);
       });
-      console.log(generateobj);
+      // console.log(generateobj);
 
         if(generateobj?.length!=0){
           const ws: XLSX.WorkSheet =  XLSX.utils.json_to_sheet(generateobj);
@@ -180,7 +180,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
     this.funnelService.getfunnelcontacts(this.uniqueid,this.showingcontacts,this.selectedfunnelsteps).subscribe({
       next: data => {
-        console.log(data); 
+        // console.log(data); 
         this.users = data.data;
         this.dataSource = new MatTableDataSource(this.users);
 
@@ -211,7 +211,7 @@ export class CreateFunnelContactsComponent implements OnInit {
 
   openDialog(templateRef: TemplateRef<any>, contact:any): void {
 
-    console.log(contact);
+    // console.log(contact);
     this.contactname = contact.fullname;
     this.contactid = contact.id;
 

@@ -112,7 +112,6 @@ export class CrmContactsComponent implements OnInit {
       this.hasError = '';
       delete this.contact.error;
       if(this.newtags.length>0) this.tagupdate().then((resp:any)=>{
-        console.log(resp)
       this.addContactFunction()});
       else this.addContactFunction();
     }
@@ -188,7 +187,7 @@ export class CrmContactsComponent implements OnInit {
 
    filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -209,7 +208,7 @@ export class CrmContactsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {

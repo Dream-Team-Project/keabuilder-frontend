@@ -149,7 +149,7 @@ export class FunnelsComponent implements OnInit {
           
           this.searching = true;
           var obj:any = {uniqueid:this.selfunnelid, funnelname:this.form.funnelname, subdomain:this.form.subdomain, type:'duplicatefunnel'}
-          console.log(obj);
+          // console.log(obj);
 
           this.funnelService.makefunnelstepduplicate(obj).subscribe({
             next: data => {
@@ -165,13 +165,13 @@ export class FunnelsComponent implements OnInit {
                 if(data.success==1){
 
                   this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
-                    console.log(e);
+                    // console.log(e);
                   });
   
                   if(data.uniqueid!=''){
                     var dataobj = {old_website_id:this.selfunnelid, new_website_id:data.uniqueid};
                     this._file.copywebsitefolder(dataobj).subscribe(e=>{
-                      console.log(e);
+                      // console.log(e);
                     });
                   }
   
@@ -324,7 +324,7 @@ export class FunnelsComponent implements OnInit {
             });
 
         this.funnels.push(newob);
-        console.log(this.funnels);
+        // console.log(this.funnels);
 
       });
 

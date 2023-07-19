@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 kb-contact-content">
-      <mat-tab-group>
+    <div class="col-md-12 kb-contact-content"> 
+      <mat-tab-group (selectedIndexChange)="getactivetab($event)">
         <mat-tab label="Personal Details">
           <div class="row kb-contact-card m-3">
             <div class="col-sm-1">
@@ -159,6 +159,74 @@
                 <div class="col-md-2"></div>
             </div>
         </div>
+        <!-- <div class="container-fluid">
+            <div class="row kb-contact-details py-3 mx-0">
+              <div class="col-md-8">
+                <div class="kb-contact-details-card rounded">
+                <div class="">
+                <mat-error *ngIf="emailtoCtrl.invalid">Email not Valid </mat-error>
+                <mat-form-field appearance="fill" class="kb-full-width " [class.mat-form-field-invalid]="emailerror">
+                    <mat-label>To</mat-label>
+                    <mat-chip-list #emailtoChipList aria-label="emailto selection">
+                        <mat-chip
+                            *ngFor="let data of emailto, index as i"
+                            (removed)="removeemailto(i)">
+                            {{data}}
+                            <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <input type="email"
+                        #emailtoInp
+                        [formControl]="emailtoCtrl"
+                        placeholder="Add multiple Emails..."
+                        [matChipInputFor]="emailtoChipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="addemailto($event)"
+                        class="kb-act-searchinp"
+                        [class.pt-2]="emailto?.length != 0"
+                        matInput>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-error *ngIf="isNotValid(emailsubject)"> Email subject should not be empty</mat-error>
+              <mat-form-field appearance="fill" class="kb-full-width">
+                  <mat-label>Subject</mat-label>
+                  <input matInput type="text" placeholder="Email Subject" [formControl]="emailsubject" [(ngModel)]="email.subject" required>
+              </mat-form-field>
+            </div>
+                <mat-label class="kb-mat-label">Message</mat-label>
+                <div class="kb-editor-container" *ngIf="_general.showEditor">
+                  <editor [(ngModel)]="email.emailbody" [init]="_general.config" class="h-100"></editor>
+              </div>
+              <div class='float-right mt-3'>
+              <button class='mr-1' mat-raised-button (click)="resetemail()"> Clear</button>
+              <button class='ml-1' mat-raised-button (click)="sendemail()" color="primary"> Send</button>
+              </div>
+              </div>
+              </div>
+              <div class="col-md-4">
+                <div class="kb-contact-details-card rounded py-2 px-3">
+                  <div class="row px-0 py-2 m-0 d-flex justify-content-between align-items-center">
+                    <h6 class="col-md-4 p-0 m-0">Recent Activities</h6>
+                    <div class="kb-contact-search-inp col-md-6 p-0 ">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                      <input [(ngModel)]="searchactivity" type="text" placeholder="Search questions" class="w-100 h-100 p-0">
+                      <i mat-ripple *ngIf="searchactivity"  class="fa-solid fa-xmark icon-remove"></i>
+                    </div>
+                    </div>
+                    <table class="table">
+                      <tbody>
+                        <tr *ngFor="let al of activitylist | filter:searchactivity:'name'; index as i">
+                          <td><label>{{al | titlecase}}</label></td>        
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              </div> -->
         </mat-tab>
       </mat-tab-group>
     </div>

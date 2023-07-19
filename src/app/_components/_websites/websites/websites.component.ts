@@ -190,7 +190,7 @@ export class WebsitesComponent implements OnInit {
               this.searching = false;
               // console.log(data);
               this._snackBar.open('Website Created Successfully!', 'OK');
-              this.router.navigate(['/websites/'+data.uniqueid],{relativeTo: this.route});
+              this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
 
               }
             });

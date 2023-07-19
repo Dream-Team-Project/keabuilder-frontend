@@ -123,3 +123,6 @@
     color: var(--kb-danger);
     background-color: rgb(220 53 69 / 10%);
 }
+.kb-editor-container {
+    height: calc(100% - 130px);
+}

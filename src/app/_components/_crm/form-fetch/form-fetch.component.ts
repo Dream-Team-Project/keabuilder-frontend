@@ -5,7 +5,8 @@ import { StyleService } from 'src/app/_services/_builder/style.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { EmailService } from 'src/app/_services/mailer.service';
+import { MailerService } from 'src/app/_services/mailer.service';
+import { EmailService } from 'src/app/_services/_crm/email.service';
 
 @Component({
   selector: 'app-crm-form-fetch',
@@ -27,17 +28,20 @@ export class CrmFormFetchComponent implements OnInit {
     public _image: ImageService,
     public _contact: ContactService,
     public _general: GeneralService,
-    private emailService: EmailService,
+    private mailerService: MailerService,
+    private email:EmailService,
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var form_id = params.get('form_id');
       _form.getForm(form_id).then((data:any)=>{
-        this.contact=data
+        this.contact=data;
         var style = document.createElement('STYLE');
         style.innerHTML = data.appendstyle;
         document.head.appendChild(style);
+        this.fetchsingleemail();
       })
     })
+    
   }
 
   @HostListener('window:resize', ['$event'])
@@ -45,8 +49,21 @@ export class CrmFormFetchComponent implements OnInit {
     this._form.currentScrWdth = window.innerWidth;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    
+  };
 
+  fetchsingleemail(){
+    this.email.getsingleemail({uniqueid:this.contact.emailid}).subscribe((data:any)=>{
+      if(data.success==true){
+      this._form.singleemail.id=data.data[0].id;
+      this._form.singleemail.uniqueid=data.data[0].uniqueid;
+      this._form.singleemail.name=data.data[0].name;
+      this._form.singleemail.subject=data.data[0].subject;
+      this._form.singleemail.body=data.data[0].body;
+      }
+    })
+  }
   valChng(ff:any, i:number) {
     var value:boolean = !ff.options[i].selected;
     if(ff.type == 'radio') {
@@ -127,15 +144,14 @@ export class CrmFormFetchComponent implements OnInit {
         <br>
         Thanks & regards<br>
         Kea Team`;
-        console.log(emailhtmlbody)
         var maildata = {
           tomailid: this.contact.notifyemail.split(','), 
           frommailid: 'support@keasolution.com',  
           subject: 'New Contact Added ', 
           html: emailhtmlbody,
         }
-        this.emailService.sendmailform(maildata).subscribe((data:any) => {
-          if(data.success==1)this._general.openSnackBar(false,'Notify Email Sent successfully!', 'OK', 'center', 'top');
+        this.mailerService.sendmailform(maildata).subscribe((data:any) => {
+          // if(data.success==1)this._general.openSnackBar(false,'Notify Email Sent successfully!', 'OK', 'center', 'top');
         })
         resolve(true);
       }
@@ -149,11 +165,11 @@ export class CrmFormFetchComponent implements OnInit {
         var maildata = {
           tomailid: this.contact.email, 
           frommailid: 'support@keasolution.com', 
-          subject: this._form.form.emailsubject, 
-          html: this._form.form.emailmessage, 
+          subject: this._form.singleemail.subject, 
+          html: this._form.singleemail.body, 
         }
-        this.emailService.sendmailform(maildata).subscribe((data:any) => {
-          if(data.success==1)this._general.openSnackBar(false,'Email Sent successfully!', 'OK', 'center', 'top');
+        this.mailerService.sendmailform(maildata).subscribe((data:any) => {
+          // if(data.success==1)this._general.openSnackBar(false,'Email Sent successfully!', 'OK', 'center', 'top');
         })
         resolve(true);
       }
