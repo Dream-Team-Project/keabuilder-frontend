@@ -1,5 +1,5 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,12 @@ import { TagService } from '../../../_services/_crm/tag.service';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FileUploadService } from 'src/app/_services/file-upload.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import * as XLSX from 'xlsx';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-crm-contacts',
@@ -17,10 +23,15 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 export class CrmContactsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('importdialog') importdialog!: TemplateRef<any>;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('paginator') paginator!: MatPaginator;
+
+  // dataSource: MatTableDataSource<contacts> | undefined;
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  fileFormControl= new FormControl('',[Validators.required]);
   fetching:boolean = true;
   contacts:Array<any> = [];
   lists:Array<any> = [];
@@ -47,20 +58,34 @@ export class CrmContactsComponent implements OnInit {
     tags: []
   };
   tagCtrl = new FormControl(['']);
+  error=false;
+  errormessage='';
+  document:any=[];
+  uuid:any;
+  listid:any;
+  spinner=false;
+ 
   constructor(
     private _contactService: ContactService,
     private _listService: ListService,
     private _tagService: TagService,
     private dialog: MatDialog,
     private _route: ActivatedRoute,
-    private _general: GeneralService
+    private _general: GeneralService,
+    private file:FileUploadService,
+    private tokenStorage: TokenStorageService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
     })
+    this.uuid = this.tokenStorage.getUser().uniqueid;
+    this.fetchData(); 
   }
+ 
 
   ngOnInit(): void {
-   this.fetchData(); 
+   
+  //  this.dataSource = new MatTableDataSource(this.contacts);
+  //   this.dataSource.paginator = this.paginator;
   }
 
   adjustdata(data:any){
@@ -254,5 +279,93 @@ resetobj(){
           tags: []
         };
         this.newtags=[];
+}
+// file upload
+documentChangeEvent(event:any,listInp:any){
+  this.error=false;
+  this.errormessage='';
+  this.listid=listInp.value;
+    if(event.target.files[0] && this.listid) {
+      this.error=false;
+      this.errormessage='';
+      // console.log(event.target.files[0].name)
+      let ext=[];
+       ext=event.target.files[0].name.split('.');
+       let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
+      //  console.log(event.target.files[0].type);
+      let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+      if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
+      this.document= event.target.files[0];
+      //  this.document.filename=filename;
+         
+    }
+    else{
+      this.dialog.open(this.importdialog);
+        this.error=true;
+        this.errormessage='File is not correct format'
+        this.fileFormControl.reset();
+        }
+      }
+  else{
+    this.dialog.open(this.importdialog);
+    this.error=true;
+    this.errormessage='Please Select File & List'
+    this.fileFormControl.reset();
+  }
+}
+uploadcontacts(){
+  this.error=false;
+  this.errormessage='';
+  this.spinner=true;
+  const reader = new FileReader();
+  reader.onload = e => {reader.result}
+  reader.readAsDataURL(this.document);
+  this.file.uploadDocument(this.document,this.uuid).subscribe((file:any)=>{
+    if(file){
+this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
+  // console.log(data.errordata)
+        if(data.success){
+          this.spinner=false;
+          this.dialog.closeAll();
+          if(data?.errordata?.length > 0) {
+            this._general.openSnackBar(true,data?.errordata?.length+' '+'contacts not Uploads','Ok','center','top');
+          }
+          else{
+            this._general.openSnackBar(false,data?.message,'Ok','center','top');
+          }
+          this.fetchContacts();
+        }
+        else{
+          this.dialog.open(this.importdialog);
+          if(data.errordata?.length>0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
+          this.error=true;
+          this.errormessage=data?.error;
+          this.spinner=false;
+        }
+      
+      })
+    }
+    else{
+      this.spinner=false;
+      this.dialog.open(this.importdialog);
+      this.error=true;
+      this.errormessage='Error';
+    }
+  })
+  
+  
+}
+exportcontact(){
+  this._contactService.exportcontacts().subscribe((data:any)=>{
+    if(data.success){
+    const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(data.data);
+    const workbook:XLSX.WorkBook=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
+    XLSX.writeFile(workbook,'contacts.xlsx');
+    }else{
+      this._general.openSnackBar(true,data?.message,'Ok','center','top');
+    }
+  })
+  
 }
 }

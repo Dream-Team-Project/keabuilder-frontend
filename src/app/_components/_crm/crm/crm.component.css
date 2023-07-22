@@ -74,10 +74,16 @@
 }
 
 
+::ng-deep .global{
+    color: var(--primary-color);
+}
 .global{
     color: var(--primary-color);
 }
-
+::ng-deep .active{
+    background-color: var(--primary-color);
+    color: #ffff;
+}
 .active{
     background-color: var(--primary-color);
     color: #ffff;

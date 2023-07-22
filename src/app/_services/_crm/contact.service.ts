@@ -64,6 +64,14 @@ export class ContactService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/getallcrmdata', obj).pipe(catchError(this.errorHandler));
   }
+  uploadcontacts(file:any) : Observable<any> {
+    // const formData = new FormData();
+    // formData.append('uploadedImage', file, file.filename);
+    return this.http.post('/api/uploadcontacts/'+this.uuid,file).pipe(catchError(this.errorHandler));
+  }
+  exportcontacts(): Observable<any> {
+    return this.http.get('/api/exportcontacts/'+this.uuid).pipe(catchError(this.errorHandler));
+  }
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

@@ -92,10 +92,52 @@
       <button mat-button mat-dialog-close (click)="addContact()" cdkFocusInitial color="primary">Add</button>
   </div>
 </ng-template>
+<ng-template #importdialog>
+  <h1 mat-dialog-title >Import Contacts</h1>
+  <div mat-dialog-content>
+    <span class="mb-1">Would you like to <span class="global">{{contact}}</span> contact?</span>
+    <mat-form-field appearance="fill" class="kb-full-width">
+      <mat-label>Select List</mat-label>
+      <mat-select #listInp name="listfilter" value='' >
+          <mat-option value="" selected>Please Select a list</mat-option>
+          <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
+              {{list.name | titlecase}}
+            </mat-option>
+      </mat-select>
+      </mat-form-field>
+      <div class="row">
+      <div class="col-md-12">
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
+          <div class="mb-1">Select File <span class="global">(Only in Excel type)</span> </div>
+          <input #downloadInp name="download" type="file" accept=".xlsx" (change)="documentChangeEvent($event,listInp)" [formControl]="fileFormControl"> 
+          <ng-template *ngIf="fileFormControl.hasError('required')">
+            Please Upload File.
+          </ng-template> 
+        </div>
+        </div>
+  </div>
+  <div class="kb-spinner" *ngIf="spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
+    <button mat-button   [color]="'primary'" [disabled]="this.fileFormControl.invalid || document.length==0" (click)="uploadcontacts()">Upload</button>
+  </div>
+</ng-template>
+<ng-template #exportdialog>
+  <h1 mat-dialog-title>Export Contact</h1>
+  <div mat-dialog-content>
+    Would you like to download your contacts?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close (click)="exportcontact()" class="text-danger">Yes</button>
+  </div>
+</ng-template>
 <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field appearance="fill" class="col-md-4">
+        <mat-form-field appearance="fill" class="col-md-3">
             <mat-label>Search Contacts</mat-label>
             <input matInput #searchInp (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -131,9 +173,11 @@
                 </mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="col-md-2 text-right mt-2">
+        <div class="col-md-3  mt-2">
             <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="mx-3">Add Contact <i
                 class="fas fa-plus"></i></button>
+                <button mat-raised-button color="primary" class="mx-2" (click)="openDialog(importdialog,'Import')">Import <i class="fa-solid fa-upload ml-1"></i></button>
+                  <button matTooltip="Download Contacts" matTooltipPosition="above" mat-icon-button (click)="openDialog(exportdialog,'export')" color="primary" class="mx-1 kb-export"><i class="fa-solid fa-download global"></i></button>
         </div>
     </div>
     <div class="row">
@@ -164,8 +208,12 @@
                 </span>
               </td>                        
             </tr>
+            
           </tbody>
+          <mat-paginator #paginator [length]="contacts.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page"></mat-paginator>
+         
         </table>
       </div>
+      
     </div>
 </div>
