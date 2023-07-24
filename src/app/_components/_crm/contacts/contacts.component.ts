@@ -28,7 +28,7 @@ export class CrmContactsComponent implements OnInit {
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   @ViewChild('paginator') paginator!: MatPaginator;
 
-  // dataSource: MatTableDataSource<contacts> | undefined;
+ 
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fileFormControl= new FormControl('',[Validators.required]);
@@ -83,10 +83,10 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
+   console.log(this.paginator)
    
-  //  this.dataSource = new MatTableDataSource(this.contacts);
-  //   this.dataSource.paginator = this.paginator;
   }
+  
 
   adjustdata(data:any){
     if(data) this.contacts = data;
@@ -292,6 +292,7 @@ documentChangeEvent(event:any,listInp:any){
       let ext=[];
        ext=event.target.files[0].name.split('.');
        let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
+      //  let filename='uploadcontacts'+'.'+ext[ext.length-1];
       //  console.log(event.target.files[0].type);
       let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
       if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
@@ -356,16 +357,40 @@ this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((d
   
 }
 exportcontact(){
-  this._contactService.exportcontacts().subscribe((data:any)=>{
+  let lists=this.filteredTempIds.lists.toString();
+  if(lists){
+  this._contactService.exportcontacts({lists:lists}).subscribe((data:any)=>{
+    // console.log(data.data)
     if(data.success){
     const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(data.data);
     const workbook:XLSX.WorkBook=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
     XLSX.writeFile(workbook,'contacts.xlsx');
+    this.resetobj();
     }else{
       this._general.openSnackBar(true,data?.message,'Ok','center','top');
     }
   })
-  
+}
+};
+
+downloaduploadformat(){
+this.file.getuploadfileformat().subscribe((data:any)=>{
+  console.log(data.path);
+  if(data?.success){
+   
+  }
+})
+};
+
+getpagecontacts(){
+console.log(this.paginator);
+let obj={pageIndex:this.paginator.pageIndex,pageSize:this.paginator.pageSize};
+this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
+  // console.log(data)
+  if(data?.success){
+  this.adjustdata(data?.data);
+  }
+});
 }
 }

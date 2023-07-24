@@ -6,6 +6,9 @@
     background-color: var(--primary-color);
     color: white;
 }
+.global1{
+    color: var(--primary-color);
+}
 .kb-spinner{
     position: absolute;
     display: flex;

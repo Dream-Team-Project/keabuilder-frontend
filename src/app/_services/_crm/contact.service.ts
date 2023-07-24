@@ -30,6 +30,11 @@ export class ContactService {
     return this.http.post('/api/singlecontact/'+uniqueid,obj)
     .pipe(catchError(this.errorHandler));
   }
+  getpagecontacts(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpagecontacts', obj)
+    .pipe(catchError(this.errorHandler));
+  }
 
   addcontact(obj:any): Observable<any> {
     obj.user_id = this.uuid;
@@ -69,8 +74,8 @@ export class ContactService {
     // formData.append('uploadedImage', file, file.filename);
     return this.http.post('/api/uploadcontacts/'+this.uuid,file).pipe(catchError(this.errorHandler));
   }
-  exportcontacts(): Observable<any> {
-    return this.http.get('/api/exportcontacts/'+this.uuid).pipe(catchError(this.errorHandler));
+  exportcontacts(obj:any): Observable<any> {
+    return this.http.post('/api/exportcontacts/'+this.uuid,obj).pipe(catchError(this.errorHandler));
   }
 
   errorHandler(error: HttpErrorResponse) {
