@@ -80,7 +80,7 @@ export class CrmComponent implements OnInit {
   }
   filtertimezoneData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredtimezone = this._general.timezone?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
 }

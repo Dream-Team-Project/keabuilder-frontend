@@ -47,9 +47,7 @@ export class CrmTagsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchtags().then((resp1) => {
-      console.log(resp1)
     this.sortTagcontacts().then((resp2:any) => {
-      console.log(resp2)
           for(let i=0;i<5;i++){
             if(resp2[i])
             this.populartags[i]=resp2[i].name;
@@ -107,9 +105,7 @@ export class CrmTagsComponent implements OnInit {
 
   updatetag() {
     if(this.tag.name && this.isTagNameValid(this.tag.name)) {
-      console.log(this.tag)
       this._tagService.updatetag(this.tag).subscribe((resp) => {
-        console.log(resp.data)
         if(resp.success==true){
           this.fetchtags();
         this._general.openSnackBar(false, 'Tag has been Updated', 'OK', 'center', 'top');
@@ -122,18 +118,6 @@ export class CrmTagsComponent implements OnInit {
       this.setError(msg)
     }
   }
- 
-  // copycrmTag(tag: any) {
-  //   // this.crmlistForm.patchValue(list);
-  //   console.log(tag);
-  //   this._crmtagService.createcrmtag(tag).subscribe((data) => {
-  //     this.crmtagForm.reset();
-  //     // this.hidepopupsidebar();
-  //     this.ngOnInit();
-  //     this._snackBar.open('CRM Tag Copied Succesfully !', 'OK');
-  //   });
-  // }
-
   
   openDialog(templateRef: TemplateRef<any>, tag: any) {
     if(!tag.error) {
@@ -166,9 +150,7 @@ export class CrmTagsComponent implements OnInit {
       search:search.value,
       filter:filter.value
     }
-    console.log(obj);
     this._tagService.searchtags(obj).subscribe((data:any)=>{
-      // console.log(data.data)
       this.tags = data.data;
     });
   }

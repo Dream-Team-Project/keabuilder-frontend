@@ -20,8 +20,6 @@ export class FormService {
     redirection: '',
     redirectionenabled: false,
     emailfrom: 'info',
-    emailsubject: '',
-    emailmessage: '',
     emailenabled: false,
     notifyemail:'',
     thankyoumessage: '',
@@ -29,6 +27,7 @@ export class FormService {
     tags:'',
     style: '', 
     appendstyle: '',
+    emailid:'',
   };
   thankyoumessage:string = `<h1 style="text-align: center;"><span style="font-size: 36pt;">Thank you</span></h1>
                             <p style="text-align: center;"><span style="font-size: 18pt;">The form has been submitted successfully!</span></p>`;
@@ -110,6 +109,7 @@ export class FormService {
   preview:boolean = false;
   fields:Array<any> = [];
   fieldTypes:Array<any> = this._field.fieldTypes;
+  singleemail:any={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
 
   constructor(
     private _general: GeneralService,
@@ -124,7 +124,6 @@ export class FormService {
       filter: filter.value
     }
     this._field.searchFields(obj).subscribe((resp:any)=>{
-      console.log(resp);
       this.fields = resp.data;
     });
   }  
@@ -175,8 +174,8 @@ export class FormService {
         })
         if(this.form.style) this.formEleTypes = this._general.decodeJSON(this.form.style);
         if(this.form.appendstyle) this.form.appendstyle = this._general.decodeJSON(this.form.appendstyle);
-        if(!this.form.emailsubject) this.form.emailsubject = 'Thankyou';
-        if(!this.form.emailmessage) this.form.emailmessage = '<p>Your form has been submitted successfully</p>';
+        // if(!this.form.emailsubject) this.form.emailsubject = 'Thankyou';
+        // if(!this.form.emailmessage) this.form.emailmessage = '<p>Your form has been submitted successfully</p>';
       } 
       resolve(this.form);
     })
@@ -194,7 +193,6 @@ export class FormService {
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = this._general.encodeJSON(style);
         this.form.thankyoumessage = this.getThankyouMsg();
-        console.log(this.form)
         this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
           this.getForm(this.form.uniqueid);

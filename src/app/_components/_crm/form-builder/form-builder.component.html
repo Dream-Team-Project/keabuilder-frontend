@@ -167,13 +167,20 @@
                             Want to send email.
                         </mat-slide-toggle>
                     </div>
-                    <mat-error *ngIf="isNotValid(validate.emailsubject)">
+                    <mat-form-field  appearance="fill" (click)="filteremailData($event)">
+                        <mat-label>Email Templates</mat-label>               
+                            <input matInput type="text" [(ngModel)]="this._form.singleemail.name" name="emailtempalte" placeholder="Please enter template name" [matAutocomplete]="emailAuto"  class="kb-act-searchinp w-100" (input)="filteremailData($event)">
+                          <mat-autocomplete #emailAuto="matAutocomplete">
+                            <mat-option (onSelectionChange)="getemaildata(option)" *ngFor="let option of filteredemails" [value]="option.name">{{option.name}}</mat-option>
+                          </mat-autocomplete>
+                    </mat-form-field>
+                    <!-- <mat-error *ngIf="isNotValid(validate.emailsubject)">
                         Email subject should not be empty
                     </mat-error>
                     <mat-form-field appearance="fill">
                         <mat-label>Email Subject</mat-label>
                         <input matInput type="text" placeholder="email subject" [formControl]="validate.emailsubject" [(ngModel)]="_form.form.emailsubject" required>
-                    </mat-form-field>
+                    </mat-form-field> -->
                     <mat-error *ngIf="notifyemailCtrl.invalid">Email not Valid </mat-error>
                     <mat-form-field appearance="fill"  [class.mat-form-field-invalid]="emailerror">
                         <mat-label>Notify Emails</mat-label>
@@ -198,13 +205,14 @@
                             [class.pt-2]="notifyemail?.length != 0"
                             matInput>
                     </mat-form-field>
-                    <mat-label class="kb-mat-label">Message</mat-label>
-                    <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor>
+                    <!-- <mat-label class="kb-mat-label">Message</mat-label>
+                    <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor> -->
+                 
                 </mat-expansion-panel>
             </mat-accordion>
         </div>
         <div mat-dialog-actions>
-            <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.emailsubject.invalid ? 'primary' : ''" [disabled]="validate.emailsubject.invalid">Done</button>
+            <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">Done</button>
         </div>
     </ng-template>
     <ng-template #btndialog>

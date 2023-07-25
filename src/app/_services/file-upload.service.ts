@@ -34,6 +34,7 @@ export class FileUploadService {
   renameDocumentApi = "./api/renamedocument";
   uploadDocumentPath = '/assets/uploads/documents/';
   checkDocumentApi = '/api/checkdocuments';
+  downloaduploadfileApi = '/api/downloaduploadfileformat';
   // document
   // media
   uploadMediaApi = "./api/uploadmedia";
@@ -435,7 +436,10 @@ export class FileUploadService {
     return this.http.get(this.getAllDocumentsApi+'/'+folder)
     .pipe(catchError(this.errorHandler));
   }
-
+  
+  getuploadfileformat():Observable<any> {
+    return this.http.get(this.downloaduploadfileApi).pipe(catchError(this.errorHandler));
+  }
   uploadDocument(file: any, folder:string):Observable<any> {
     const formData = new FormData();
     formData.append('uploadedDocument', file, file.name);

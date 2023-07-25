@@ -18,9 +18,9 @@
   </ng-template>
   <!-- dialog for add automation button -->
   <ng-template #dialog>
-    <h1 mat-dialog-title class="txt">Create An Automation</h1>
+    <h1 mat-dialog-title class="txt">Create A Automation</h1>
     <div mat-dialog-content>
-        <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-form-field class="kb-full-width mb-2" appearance="fill">
           <mat-label>Automation Name</mat-label>
           <input type="text" matInput name="automationname" [(ngModel)]="automationname" [formControl]="automationnameControl" required minlength="3" >
           <mat-error *ngIf="automationnameControl.hasError('required')">
@@ -33,7 +33,9 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">Close</button>
-        <button mat-button  [color]="'primary'" (click)="addautomation()">Create</button>
+        <button mat-button  (click)="addautomation()" 
+        [color]="!automationnameControl.invalid ? 'primary' : ''"  
+        [disabled]="automationnameControl.invalid">Create</button>
     </div>
   </ng-template>
     <div class="container-fluid ">
@@ -77,7 +79,7 @@
              <span *ngIf="togglebutton==true">Grid View <i class="fas fa-th ml-1"></i></span>
           </button>
           <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
-            <i class="fa fa-random" aria-hidden="true"></i> Create an automation
+            <i class="fa fa-random" aria-hidden="true"></i> Create Automation
           </button>
         </div>
       </div>
@@ -127,7 +129,7 @@
                                 : 'fa-clock'
                             "
                           ></i>
-                          {{ automation.quick_status }}
+                          {{ automation.publish_status == 1 ? "Active" : "Inactive" }}
                         </span>
                       </div>
                       <div class="text-left funlist1">
@@ -181,7 +183,7 @@
                     >
                       <mat-icon><i class="fas fa-ellipsis-h"></i></mat-icon>
                     </button>
-                    <mat-menu #menu="matMenu">
+                    <mat-menu #menu="matMenu" style="background-color: wheat;">
                       <button mat-menu-item (click)="copyAutomation(automation)">
                         <mat-icon> <i class="far fa-copy pr-2"></i></mat-icon>
                         <span>Duplicate</span>

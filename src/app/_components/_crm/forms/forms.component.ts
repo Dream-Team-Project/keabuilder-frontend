@@ -144,7 +144,6 @@ export class CrmFormsComponent implements OnInit {
             }
             else {
               msg = 'Form name updated successfully!';
-              // this.hidepopupsidebar();
               this.fetchForms();
             }
             this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
@@ -237,11 +236,10 @@ export class CrmFormsComponent implements OnInit {
   }
 
   adjustdata(data:any){
+    this.fetching = false;
     this.forms = [];
     this.nodata = data.length == 0;
     this.forms = data;
-    console.log(this.forms)
-    // this.fetching = false;
   }
 
   toggleView() {
@@ -267,7 +265,7 @@ export class CrmFormsComponent implements OnInit {
 
   filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -288,7 +286,7 @@ export class CrmFormsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {

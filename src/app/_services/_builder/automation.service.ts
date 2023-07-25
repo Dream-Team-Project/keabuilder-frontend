@@ -174,4 +174,7 @@ export class AutomationService {
     this.allWorkFlowIds.push(temp.id);
     return temp.id;
   }
+  backBtn(){
+    
+  }
 }

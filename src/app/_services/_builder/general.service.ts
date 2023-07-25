@@ -678,7 +678,7 @@ export class GeneralService {
     setup: (editor: { ui: any; }) => {
       // console.log(editor.ui);
     },
-    diskCache: true
+    diskCache: true,
   };
   includeCond:string = `if(file_exists('../'.$path)) include('../'.$path); else if(file_exists($path)) include($path);`;
   pagehtml:any;

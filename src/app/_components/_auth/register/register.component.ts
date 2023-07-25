@@ -5,7 +5,7 @@ import {FormControl, Validators} from '@angular/forms';
 import { AuthService } from 'src/app/_services//auth.service';
 import { WistiaService } from 'src/app/_services//wistia.service';
 import { FileUploadService } from 'src/app/_services//file-upload.service';
-import { EmailService } from 'src/app/_services//mailer.service';
+import { MailerService } from 'src/app/_services/mailer.service';
 import { GeneralService } from 'src/app/_services//_builder/general.service';
 
 @Component({
@@ -43,19 +43,20 @@ export class RegisterComponent implements OnInit {
   max = 3;
   bgImg = 'url(./assets/images/login/login-bk1.jpg)';
 
-  changestep = true;
-
+  changestep = false;
+  
   constructor(private authService: AuthService,
               public _general: GeneralService,
               private router: Router,
               private route: ActivatedRoute,
               private _file: FileUploadService,
               private _wistia: WistiaService,
-              private emailService: EmailService,
+              private emailService: MailerService,
               private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     this.createNewImg();
+    
   }
 
   onSubmit(): void {
@@ -132,7 +133,7 @@ export class RegisterComponent implements OnInit {
     }
 
     if(this.userFormControl.status!='VALID' || this.emailFormControl.status!='VALID' || this.firstnameFormControl.status!='VALID'){
-      this.changestep = true;
+      this.changestep = !this.changestep;
     }
 
   }
@@ -201,6 +202,6 @@ export class RegisterComponent implements OnInit {
   fillnext(){
     this.changestep = !this.changestep;
   }
-
+ 
 
 }

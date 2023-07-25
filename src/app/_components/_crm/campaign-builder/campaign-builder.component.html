@@ -1,6 +1,4 @@
-<div id="crmnewcampaign">
-    
-    <!-- test email -->
+   <!-- test email -->
     <ng-template #dialog>
         <h1 mat-dialog-title >Send A Test Email</h1>
         <div mat-dialog-content>
@@ -12,7 +10,7 @@
                   </mat-error>
             </mat-form-field>
         </div>
-        <div mat-dialog-actions class="justify-content-end">
+        <div mat-dialog-actions class="justify-content-end mt-1">
             <button mat-button mat-dialog-close class="text-danger">Close</button>
             <button mat-button [color]="'primary'" (click)="sendatestemail()">Send</button>
         </div>
@@ -24,10 +22,21 @@
         <div mat-dialog-content>
 
             <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Address Name</mat-label>
+                <input type="text" matInput name="addressname" [(ngModel)]="genaddress.name" [formControl]="addressnameControl" required minlength="3" >
+                <mat-error *ngIf="addressnameControl.hasError('required')">
+                    Address Name is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="addressnameControl.hasError('minlength')">
+                    Address Name must be at least <strong>3</strong> characters
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="kb-full-width" appearance="fill" (click)="filtercountryData($event)">
                 <mat-label>Country</mat-label>               
-                    <input matInput type="text" [(ngModel)]="genaddress.country" name="country" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" (click)="filtercountryData($event)">
+                    <input matInput type="text" [(ngModel)]="genaddress.country" name="country" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" >
                   <mat-autocomplete #countryAuto="matAutocomplete" >
-                    <mat-option (selectionChange)="getcountrynm($event)" *ngFor="let option of filteredcountry" [value]="option.name">{{option.name}}</mat-option>
+                    <mat-option (onSelectionChange)="getcountrynm($event)" *ngFor="let option of filteredcountry" [value]="option.name">{{option.name}}</mat-option>
                   </mat-autocomplete>
             </mat-form-field> 
 
@@ -112,17 +121,30 @@
     </ng-template>
 
     <div class="container-fluid">
-        <div class="row">
+        <div #campaignbody class="row">
             <div class="col-md-8">
                 <div class="makecard h-100 p-3">
                     <h5>
                         <span class="kp-colr">Design Your Campaign</span>
                         <hr>
                     </h5>
-                    <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-form-field class="kb-full-width" appearance="fill" (click)="filteremailData($event)">
+                        <mat-label>Email Templates</mat-label>               
+                            <input matInput type="text" [(ngModel)]="this.singleemail.name" name="emailtempalte" placeholder="Please enter template name" [matAutocomplete]="emailAuto"  class="kb-act-searchinp w-100" (input)="filteremailData($event)">
+                          <mat-autocomplete #emailAuto="matAutocomplete">
+                            <mat-option [routerLink]="'/crm/emails'">
+                                <span mat-raised-button  class="kp-colr">Add Email <i class="fa-solid fa-envelope-open-text"></i></span>
+                                <!-- <button class="ml-2" mat-raised-button [routerLink]="'/crm/emails/'+singleemail?.uniqueid" [color]="'primary'">Edit <i class="fas fa-pencil-alt"></i></button> -->
+                            </mat-option>
+                            <mat-option (click)="getemaildata(option)" *ngFor="let option of filteredemails" [value]="option.name">{{option.name}}</mat-option>
+                          </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="kb-fitimg"
+              [ngStyle]="{'background-image':'url(' + _image.uploadImgPath + _general.getSSPath('email-' + singleemail?.uniqueid) +'), url(' + _image.uploadImgPath +'webpage_thumbnail.jpg' +')'}" *ngIf="singleemail?.uniqueid">
+            </div>
+                    <!-- <mat-form-field class="kb-full-width" appearance="fill">
                         <mat-label>Subject</mat-label>
                         <input type="text" matInput name="subject" [(ngModel)]="fullcampobj.subject"  [formControl]="subjectControl" placeholder="Enter the subject(We suggest no more than 65 characters)" required minlength="3" >
-                        <!-- <small>We suggest no more than 65 characters</small> -->
                         <mat-error *ngIf="subjectControl.hasError('required')">
                         Name is <strong>required</strong>
                         </mat-error>
@@ -131,8 +153,8 @@
                         </mat-error>
                     </mat-form-field>
                     <div class="kb-editor-container">
-                        <editor [(ngModel)]="fullcampobj.campaigneditor" [init]="_general.config" class="h-100"></editor>
-                    </div>    
+                        <editor [(ngModel)]="fullcampobj.emailbody" [init]="_general.config" class="h-100"></editor>
+                    </div>     -->
                 </div>
             </div>
             <div class="col-md-4">
@@ -219,25 +241,37 @@
 
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>Send</mat-label>
-                        <mat-select name="sendoption" required [(ngModel)]="fullcampobj.sendoption" (ngModelChange)="sendchange(fullcampobj.sendoption)" >
+                        <mat-select name="sendoption" required [(ngModel)]="fullcampobj.sendoption">
                             <mat-option value="immediately">Immediately</mat-option>
                             <mat-option value="specifictime">After a specific timeframe</mat-option>
+                            <mat-option value="recurring">Recurring</mat-option>
                         </mat-select>
                     </mat-form-field>
 
                     <!-- <small *ngIf="sendoptn">Current Time from timezone: <b style="color:var(--primary-color);">{{showmytime}}</b></small><br> -->
-                    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="sendoptn">
+                    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="fullcampobj.sendoption =='recurring'">
+                        <mat-label>Recurring Type</mat-label>
+                        <mat-select name="recurring"  required [(ngModel)]="fullcampobj.recurring">
+                            <mat-option value="daily">Daily</mat-option>
+                            <mat-option value="weekly">Weekly</mat-option>
+                            <mat-option value="monthly">Monthly</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="kb-full-width" appearance="fill" (click)="filtertimezoneData($event)" *ngIf="(fullcampobj.sendoption =='specifictime' || fullcampobj.sendoption =='recurring')">
                         <mat-label>Timezones</mat-label>
-                        <input matInput type="text"  [(ngModel)]="fullcampobj.timezone" name="timezone" placeholder="Please enter timezone" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" (click)="filtertimezoneData($event)">
+                        <input matInput type="text"  [(ngModel)]="fullcampobj.timezone" name="timezone" placeholder="Please enter timezone" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)">
                         <mat-autocomplete #timezoneAuto="matAutocomplete" >
-                          <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{option.name}}</mat-option>
+                          <mat-option (onSelectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{option.name}}</mat-option>
                         </mat-autocomplete>
                     </mat-form-field> 
 
-                    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="sendoptn">
+                    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="(fullcampobj.sendoption =='specifictime' || fullcampobj.sendoption =='recurring')">
                         <mat-label>Chooose a date</mat-label>
-                        <input type="datetime-local" [(ngModel)]="fullcampobj.senddate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
+                        <input required type="datetime-local" [(ngModel)]="fullcampobj.senddate" min="{{dateToday() | date:'yyyy-MM-ddTHH:mm:ss.sss'}}"  matInput name="chooseadate">
                     </mat-form-field>
+
+                   
                        <div>
                     <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
                     <button mat-raised-button color="primary" (click)="openDialog(dialog3)" >Publish <i class="fas fa-paper-plane"></i></button>

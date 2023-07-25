@@ -236,3 +236,9 @@
   color: #fff;
   font-weight: bold;
 }
+.paybtn {
+  background-color: #f84b07;
+  color: #fff;
+  font-weight: bold;
+  align-items: center;
+}

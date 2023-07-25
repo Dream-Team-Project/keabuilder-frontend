@@ -1,5 +1,5 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,12 @@ import { TagService } from '../../../_services/_crm/tag.service';
 import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FileUploadService } from 'src/app/_services/file-upload.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import * as XLSX from 'xlsx';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-crm-contacts',
@@ -17,12 +23,18 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 export class CrmContactsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('importdialog') importdialog!: TemplateRef<any>;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('paginator') paginator!: MatPaginator;
+
+ 
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  fileFormControl= new FormControl('',[Validators.required]);
   fetching:boolean = true;
   contacts:Array<any> = [];
+  pagecontacts:Array<any> = [];
   lists:Array<any> = [];
   tags:Array<any> = [];
   contact:any = {};
@@ -47,35 +59,51 @@ export class CrmContactsComponent implements OnInit {
     tags: []
   };
   tagCtrl = new FormControl(['']);
+  error=false;
+  errormessage='';
+  document:any=[];
+  uuid:any;
+  listid:any;
+  spinner=false;
+ 
   constructor(
     private _contactService: ContactService,
     private _listService: ListService,
     private _tagService: TagService,
     private dialog: MatDialog,
     private _route: ActivatedRoute,
-    private _general: GeneralService
+    private _general: GeneralService,
+    private file:FileUploadService,
+    private tokenStorage: TokenStorageService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
     })
+    this.uuid = this.tokenStorage.getUser().uniqueid;
+    this.fetchData(); 
   }
+ 
 
   ngOnInit(): void {
-   this.fetchData(); 
+    // this.getpagecontacts({pageIndex:0,pageSize:20});
+ 
   }
+  
 
   adjustdata(data:any){
-    if(data) this.contacts = data;
+    if(data) this.pagecontacts = data;
     this.fetching = false;
   }
   
   fetchData(){
     this.fetchContacts();
+    this.getpagecontacts({pageIndex:0,pageSize:20});
       this.fetchLists();
         this.fetchTags();
   }
 
   fetchContacts() {
     this._contactService.fetchcontacts().subscribe((resp) => {
+      this.contacts=resp?.data;
       this.adjustdata(resp?.data);
 });
   }
@@ -95,12 +123,16 @@ export class CrmContactsComponent implements OnInit {
   }
 
   searchContacts(search: any, sortInp:any, listInp:any, tagInp:any) {
+    console.log(this.paginator)
     this.fetching = true;
     var obj = {
       search: search.value,
       sortInp: sortInp.value,
       listInp: listInp.value,
       tagInp: tagInp.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
+
     }
     this._contactService.searchcontacts(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
@@ -112,7 +144,6 @@ export class CrmContactsComponent implements OnInit {
       this.hasError = '';
       delete this.contact.error;
       if(this.newtags.length>0) this.tagupdate().then((resp:any)=>{
-        console.log(resp)
       this.addContactFunction()});
       else this.addContactFunction();
     }
@@ -128,6 +159,7 @@ export class CrmContactsComponent implements OnInit {
     this._contactService.addcontact(this.contact).subscribe((resp) => {
       if(resp.success) {
         this.fetchContacts();
+        this.getpagecontacts({pageIndex:0,pageSize:20});
         this.resetobj();
         this._general.openSnackBar(false, 'Contact has been saved', 'OK', 'center', 'top');
       }
@@ -143,7 +175,9 @@ export class CrmContactsComponent implements OnInit {
 
   deleteContact() {
     this._contactService.deletecontact(this.contact.id).subscribe((resp) => {
-      if(resp.success) this.fetchContacts();
+      if(resp.success) 
+      this.getpagecontacts({pageIndex:0,pageSize:20});
+       this.fetchContacts();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
@@ -188,7 +222,7 @@ export class CrmContactsComponent implements OnInit {
 
    filterListData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.lists = this.lists.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.lists = this.lists.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedList(event:any, searchListInp:any): void {
@@ -209,7 +243,7 @@ export class CrmContactsComponent implements OnInit {
 
   filterTagData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.tags = this.tags.filter((option:any) => option.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
   addSelectedTag(event:any, searchTagInp:any): void {
@@ -255,5 +289,119 @@ resetobj(){
           tags: []
         };
         this.newtags=[];
+}
+// file upload
+documentChangeEvent(event:any,listInp:any){
+  this.error=false;
+  this.errormessage='';
+  this.listid=listInp.value;
+    if(event.target.files[0] && this.listid) {
+      this.error=false;
+      this.errormessage='';
+      // console.log(event.target.files[0].name)
+      let ext=[];
+       ext=event.target.files[0].name.split('.');
+       let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
+      //  let filename='uploadcontacts'+'.'+ext[ext.length-1];
+      //  console.log(event.target.files[0].type);
+      let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+      if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
+      this.document= event.target.files[0];
+      //  this.document.filename=filename;
+         
+    }
+    else{
+      this.dialog.open(this.importdialog);
+        this.error=true;
+        this.errormessage='File is not correct format'
+        this.fileFormControl.reset();
+        }
+      }
+  else{
+    this.dialog.open(this.importdialog);
+    this.error=true;
+    this.errormessage='Please Select File & List'
+    this.fileFormControl.reset();
+  }
+}
+uploadcontacts(){
+  this.error=false;
+  this.errormessage='';
+  this.spinner=true;
+  const reader = new FileReader();
+  reader.onload = e => {reader.result}
+  reader.readAsDataURL(this.document);
+  this.file.uploadDocument(this.document,this.uuid).subscribe((file:any)=>{
+    if(file){
+this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
+  // console.log(data.errordata)
+        if(data.success){
+          this.spinner=false;
+          this.dialog.closeAll();
+          if(data?.errordata?.length > 0) {
+            this._general.openSnackBar(true,data?.errordata?.length+' '+'contacts not Uploads','Ok','center','top');
+          }
+          else{
+            this._general.openSnackBar(false,data?.message,'Ok','center','top');
+          }
+          this.fetchContacts();
+          this.getpagecontacts({pageIndex:0,pageSize:20});
+        }
+        else{
+          this.dialog.open(this.importdialog);
+          if(data.errordata?.length>0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
+          this.error=true;
+          this.errormessage=data?.error;
+          this.spinner=false;
+        }
+      
+      })
+    }
+    else{
+      this.spinner=false;
+      this.dialog.open(this.importdialog);
+      this.error=true;
+      this.errormessage='Error';
+    }
+  })
+  
+  
+}
+exportcontact(){
+  let lists=this.filteredTempIds.lists.toString();
+  if(lists){
+  this._contactService.exportcontacts({lists:lists}).subscribe((data:any)=>{
+    // console.log(data.data)
+    if(data.success){
+    const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(data.data);
+    const workbook:XLSX.WorkBook=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
+    XLSX.writeFile(workbook,'contacts.xlsx');
+    this.resetobj();
+    }else{
+      this._general.openSnackBar(true,data?.message,'Ok','center','top');
+    }
+  })
+}
+};
+
+downloaduploadformat(){
+this.file.getuploadfileformat().subscribe((data:any)=>{
+  console.log(data.path);
+  if(data?.success){
+   
+  }
+})
+};
+
+getpagecontacts(event:any){
+// console.log(event);
+let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
+  
+  if(data?.success){
+  this.pagecontacts=data?.data;
+  }
+});
 }
 }

@@ -172,12 +172,12 @@ const routes: Routes = [
     { path: 'offers', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-    { path: 'payment-integrations', component: PaymentIntegrationsComponent, canActivate: [AuthGuard] },
+    // { path: 'payment-integrations', component: PaymentIntegrationsComponent, canActivate: [AuthGuard] },
     { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
  
-  { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
+  // { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
 
   // builder

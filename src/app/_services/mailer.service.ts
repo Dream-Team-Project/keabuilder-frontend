@@ -3,10 +3,12 @@ import {HttpClient, HttpErrorResponse,HttpHeaders} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 import { TokenStorageService } from './token-storage.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class EmailService {
+export class MailerService {
+
   uuid:any = '';
   sendmailApi = './api/sendmail';
   sendmailcampaignApi = './api/sendmailcampaign';

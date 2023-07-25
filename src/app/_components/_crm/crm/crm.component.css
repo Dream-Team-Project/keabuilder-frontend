@@ -74,6 +74,9 @@
 }
 
 
+::ng-deep .global{
+    color: var(--primary-color);
+}
 .global{
     color: var(--primary-color);
 }

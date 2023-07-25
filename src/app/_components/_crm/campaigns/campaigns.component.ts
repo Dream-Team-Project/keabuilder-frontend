@@ -7,6 +7,7 @@ import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { CampaignService } from 'src/app/_services/_crm/campaign.service';
+import { FileUploadService } from 'src/app/_services/file-upload.service';
 
 @Component({
   selector: 'app-crm-campaigns',
@@ -34,6 +35,7 @@ export class CrmCampaignsComponent implements OnInit {
       private router: Router,
       public _image: ImageService,
       public _general: GeneralService,
+      private _file: FileUploadService,
     ) {
       this.toggleview = _general.getStorage('campaign_toggle');
   }
@@ -102,9 +104,25 @@ changepagename(dataobj:any, title:any){
     console.log(this.toggleview);
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
-  deletecampaign(id:any){
-    this._campaignservice.deletecampaign(id).subscribe((data:any)=>{
-      this.fetchcampaigns();
+  deletecampaign(campaign:any){
+    this._campaignservice.deletecampaign(campaign.id).subscribe((data:any)=>{
+      var genscrn = 'keaimage-campaign-'+campaign.uniqueid+'-screenshot.png';
+        this._file.validateimg(genscrn).subscribe({
+          next: datagen => {
+            if(datagen.data==1){
+              this._file.deleteimage('keaimage-campaign-'+campaign.uniqueid+'-screenshot.png').subscribe({
+                next: data => {
+                  this.fetchcampaigns();
+                  this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
+                }
+              });
+            }
+            else {
+              this.fetchcampaigns();
+              this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
+            }
+          }
+        });
     })
   }
   searchCampaigns(search: any, sortInp:any, sentInp:any, listInp:any) {
@@ -121,11 +139,28 @@ changepagename(dataobj:any, title:any){
   }
 duplicatecampaign(campaign:any){
   campaign.publish_status=0;
-  // console.log(campaign)
+  campaign.olduid = campaign.uniqueid;
+  campaign.uniqueid = this._general.makeid(20);
   this._campaignservice.duplicatecampaign(campaign).subscribe((data:any) => {
         if(data.success==true){
-          this.fetchcampaigns();
-            this._snackBar.open('Campaign Duplicate Successfully !', 'OK',{duration:2000});
+          var oldimg = 'keaimage-campaign-'+campaign.olduid+'-screenshot.png';
+          this._file.validateimg(oldimg).subscribe({
+            next: datagen => {
+              if(datagen.data==1){
+                var imgobj  = {oldname:oldimg, newname:'keaimage-campaign-'+campaign.uniqueid+'-screenshot.png'};
+                this._file.copyimage(imgobj).subscribe({
+                  next: data => {
+                    this.fetchcampaigns();
+                    this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
+                  }
+                });
+              }else{
+                this.fetchcampaigns();
+                this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
+              }
+
+            }
+          });
         }
     })   
 }

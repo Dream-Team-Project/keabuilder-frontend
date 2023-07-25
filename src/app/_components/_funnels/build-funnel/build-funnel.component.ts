@@ -182,25 +182,25 @@ dataobj:any;
 // console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '+this.stepnameFormControl.status);
     if(this.userFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID' && this.stepnameFormControl.status=='VALID'){
 
-        var nwsubdomain:any = this.form.subdomain.toLowerCase();
+        var nwsubdomain:any = this.form.subdomain?.toLowerCase();
       var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user'];
       if(this.searchStringInArray(nwsubdomain,notusesub)==1){
         this.searching = true;
             this.funnelService.savefunneldb(this.form).subscribe({
                 next: data => {
-                    console.log(data);
+                    // console.log(data);
                     this.dataobj=data.data;
                     if(data.exist ==1){
                         this.searching = false;
                         this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
                      }else{
                         this.createwebsitefolder().then((resp)=>{
-                            console.log(resp);
+                            // console.log(resp);
                           this.savepage().then((resp1)=>{
-                            console.log(resp1);
+                            // console.log(resp1);
                             this.websiteService.oncreatesubdomain(this.form.subdomain,data.data.uniqueid).subscribe({
                                 next: datanw => {
-                                    console.log("hello");
+                                    // console.log("hello");
                                 this.searching = false;
                                 this._snackBar.open('Funnel Created Successfully!', 'OK');
                                 this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
@@ -229,9 +229,9 @@ dataobj:any;
   createwebsitefolder(){
     return new Promise((resolve) => {
     var dataobj1 = {website_id:this.dataobj.uniqueid};
-    console.log(dataobj1);
+    // console.log(dataobj1);
     this._file.createwebsitefolder(dataobj1).subscribe(e=>{
-        console.log(e);
+        // console.log(e);
     resolve(true);
     // }
   },
@@ -253,7 +253,7 @@ dataobj:any;
             website_id:this.dataobj.uniqueid, 
           }
           this._general._file.savePage(page).subscribe((event:any) => {
-            console.log(event);
+            // console.log(event);
             resolve(true);
           },error=>{
             console.log(error)

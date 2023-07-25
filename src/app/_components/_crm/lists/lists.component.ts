@@ -48,7 +48,6 @@ export class CrmListsComponent implements OnInit {
       this._listservice.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
-          console.log(data.data)
           resolve(true);
         },
         (error) => {
@@ -95,7 +94,6 @@ export class CrmListsComponent implements OnInit {
     this._listservice
     .addlist(list)
     .subscribe((resp) => {
-      console.log(resp)
       if(resp.success) {
         this.fetchLists();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
@@ -125,9 +123,7 @@ export class CrmListsComponent implements OnInit {
       search: search.value,
       filter: filter.value
     }
-    console.log(obj);
     this._listservice.searchlists(obj).subscribe((data: any) => {
-      // console.log(data.data)
       this.lists = data.data;
     });
   }

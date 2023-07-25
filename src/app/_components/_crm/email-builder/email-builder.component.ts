@@ -7,6 +7,9 @@ import { ElementService } from 'src/app/_services/_builder/element.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { EmailService } from 'src/app/_services/_crm/email.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { NgxCaptureService } from 'ngx-capture';
 
 @Component({
   selector: 'app-crm-email-builder',
@@ -19,6 +22,7 @@ export class CrmEmailBuilderComponent implements OnInit {
   @ViewChild('element') element!: ElementRef;
   @ViewChild('settingdialog') settingdialog!: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+  @ViewChild('emailbody', { static: false }) screen: any;
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
@@ -90,9 +94,15 @@ export class CrmEmailBuilderComponent implements OnInit {
   autosave:boolean = false;
   validate = {
     name: new FormControl('', [Validators.required]),
+    subject: new FormControl('', [Validators.required]),
   }
-  email = {
-    name: 'Email name',
+  email:any = {
+    id:'',
+    uniqueid:'',
+    name: '',
+    subject:'',
+    body:'',
+    json:'',
   }
   selectedTab:string = '';
   selectedElement:string = '';
@@ -115,14 +125,18 @@ export class CrmEmailBuilderComponent implements OnInit {
   session:any = {undo: 0, redo: 0}
   sessionArr:any = [];
   initial:boolean = true;
-  
+  uniqueid:any;
   constructor(
     public _style: StyleService,
     public _general:GeneralService,
     public _element: ElementService,
     public _image:ImageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public _email:EmailService,
+    private route: ActivatedRoute,
+    private captureService: NgxCaptureService,
     ) {
+      route.paramMap.subscribe((params: ParamMap) => {this.uniqueid=params.get('id')});
       this.createSection();
       this._element.createDefaultElements();
       _image.imagesUpdated.subscribe(value => {
@@ -150,6 +164,7 @@ export class CrmEmailBuilderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.fetchsingleemail();
     var vm = this;
     window.addEventListener('beforeunload', function (e) {
       if(!vm.emailSaved) {
@@ -158,7 +173,19 @@ export class CrmEmailBuilderComponent implements OnInit {
       }
     });
   }
-
+  fetchsingleemail(){
+  if(this.uniqueid){
+  this._email.getsingleemail({uniqueid:this.uniqueid}).subscribe((data:any)=>{
+    if(data.success){
+    this.email.name=data?.data[0]?.name;
+    this.email.subject=data?.data[0]?.subject;
+    this.email.id=data?.data[0]?.id;
+    this.email.uniqueid=data?.data[0]?.uniqueid;
+    this.emailElements=data?.data[0].json ? this._general.decodeJSON(data?.data[0]?.json) : this.emailElements;
+    }
+  });
+}
+  }
   createSection() {
     var tempObj = JSON.parse(JSON.stringify(this.sectionObj));
     tempObj.email = true;
@@ -173,7 +200,34 @@ export class CrmEmailBuilderComponent implements OnInit {
   }
 
   save() {
-    console.log(this.emailElements);
+    // console.log(this.emailElements);
+    if(this.email.name && this.email.subject && this.emailElements){
+    this.email.json=this._general.encodeJSON(this.emailElements);
+    this.email.body=this.screen.nativeElement.outerHTML;
+    this._email.updateemail(this.email).subscribe((data:any)=>{
+      if(data.success) {
+        this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
+          var file:any = this._image.base64ToFile(e, 'email-'+this.email.uniqueid+'-screenshot.png');
+          this._general._file.upload(file).subscribe(
+            (event: any) => {
+              if (typeof (event) === 'object') {
+                var msg =  'Email has been saved';
+                this._general.openSnackBar(false, data?.message, 'OK', 'center', 'top');
+               
+              }
+            })
+        })
+      // this._general.openSnackBar(false, data?.message, 'OK', 'center', 'top');
+      }
+      else{
+        var msg =  'Server Error';
+      this._general.openSnackBar(false, data?.message, 'OK', 'center', 'top');
+      }
+    })
+  }else{
+    var msg =  'Please Fill All Details';
+  this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+  }
   }
 
   autoSaveTrigger(trigger:boolean) {

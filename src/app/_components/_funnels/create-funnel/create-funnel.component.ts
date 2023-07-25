@@ -223,7 +223,7 @@ export class CreateFunnelComponent implements OnInit {
         filterdrag.push(element.id);
       });
 
-      console.log(filterdrag);
+      // console.log(filterdrag);
 
       this.funnelService.funnelandstepshorting(filterdrag,'funnelsteponly').subscribe({
         next: data => {
