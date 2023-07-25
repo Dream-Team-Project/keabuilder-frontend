@@ -230,7 +230,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let contact of contacts; index as i">
+            <tr *ngFor="let contact of pagecontacts; index as i">
               <td [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
                   <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
                   {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}

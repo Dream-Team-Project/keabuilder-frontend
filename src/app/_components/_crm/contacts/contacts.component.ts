@@ -34,6 +34,7 @@ export class CrmContactsComponent implements OnInit {
   fileFormControl= new FormControl('',[Validators.required]);
   fetching:boolean = true;
   contacts:Array<any> = [];
+  pagecontacts:Array<any> = [];
   lists:Array<any> = [];
   tags:Array<any> = [];
   contact:any = {};
@@ -83,8 +84,12 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
-   console.log(this.paginator)
-   
+   let obj={pageIndex:0,pageSize:20};
+    this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
+     if(data?.success){
+      this.pagecontacts=data?.data;
+        }
+});  
   }
   
 
@@ -385,11 +390,11 @@ this.file.getuploadfileformat().subscribe((data:any)=>{
 
 getpagecontacts(){
 console.log(this.paginator);
-let obj={pageIndex:this.paginator.pageIndex,pageSize:this.paginator.pageSize};
+let obj={pageIndex:this.paginator.pageIndex,pageSize:this.paginator.pageSize,pageoptions:this.paginator.pageSizeOptions};
 this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
   // console.log(data)
   if(data?.success){
-  this.adjustdata(data?.data);
+  this.pagecontacts=data?.data;
   }
 });
 }
