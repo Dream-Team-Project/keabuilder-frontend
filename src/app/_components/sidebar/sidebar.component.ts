@@ -15,9 +15,6 @@ export class SidebarComponent implements OnInit {
   isOpen = false;
   isOpen2 = false;
   isOpen3 = false;
-
-  
-
   allmenu:any = [
     {
       0:true,
@@ -404,7 +401,6 @@ export class SidebarComponent implements OnInit {
       submenu:null
     }
   ];
-
   extramenus = true;
   backme = false;
 
@@ -512,10 +508,8 @@ export class SidebarComponent implements OnInit {
   }
 
   backFn(event:any){
-
     this.allmenu.forEach((element: any) => {
       element[0] = true;
-
       if(element.submenu!=null){
         element.submenu.forEach((element2: any) => {
           element2[0] = true;
@@ -524,7 +518,6 @@ export class SidebarComponent implements OnInit {
     });
     this.extramenus = true;
     this.backme = false;
-
   }
 
 }
