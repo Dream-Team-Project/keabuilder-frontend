@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { ImageService } from 'src/app/_services/image.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -40,6 +41,7 @@ export class ProfileComponent implements OnInit {
               public imageService: ImageService,
               private _snackBar: MatSnackBar,
               private _auth: AuthService, 
+              public _location: Location
               ) { }
 
   ngOnInit(): void {
