@@ -5,7 +5,7 @@
       <div class="d-flex align-items-center">
         <!--begin::Button-->
 
-        <button [routerLink]="[userService.navPath[0]]" mat-button>
+        <button mat-button (click)="_location.back()">
           Back
         </button>
         <!--end::Button-->
@@ -29,7 +29,7 @@
           <ul class="nav nav-tabs nav-bold nav-tabs-line nav-tabs-line-3x">
             <!--begin::Item-->
             <li class="nav-item mr-3">
-              <a class="nav-link" [class]="activem=='profile'?'active':''" href="javascript:void(0)" (click)="activeme('profile')" mat-button >
+              <a mat-button class="nav-link" [class.active]="activem == 'profile'" href="javascript:void(0)" (click)="activeme('profile')">
                 <span class="nav-icon">
                   <span class="svg-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -593,7 +593,7 @@
 
   <div class="container text-right">
       <div class="btn-group">
-        <button [routerLink]="[userService.navPath[0]]" mat-button>
+        <button mat-button (click)="_location.back()">
           Back
         </button>
         <button type="button" mat-raised-button color="primary" (click)="kbsavechange()" class="ml-3">Save</button>

@@ -1,38 +1,37 @@
 
 <div class="container-fluid mb-4">
-    <div class="row">
-      <div class="col-md-12">
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']" routerLinkActive="active" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" routerLinkActive="active" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" routerLinkActive="active"><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/fields']" routerLinkActive="active"><i class="far fa-check-square" aria-hidden="true"></i> Fields</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" routerLinkActive="active"><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" routerLinkActive="active"><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" routerLinkActive="active"><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" routerLinkActive="active"><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/emails']" routerLinkActive="active"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Emails</button>
-        <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" routerLinkActive="active"><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/reports']" routerLinkActive="active" ><i class="fa fa-chart-bar" aria-hidden="true"></i> Reports</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/contacts']" routerLinkActive="active" ><i class="fa fa-users" aria-hidden="true"></i> Contacts</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/forms']" routerLinkActive="active"><i class="fa-solid fa-address-card" aria-hidden="true"></i> Forms</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/fields']" routerLinkActive="active"><i class="far fa-check-square" aria-hidden="true"></i> Fields</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/lists']" routerLinkActive="active"><i class="fa fa-list" aria-hidden="true"></i> Lists</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/tags']" routerLinkActive="active"><i class="fa fa-tags" aria-hidden="true"></i> Tags</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/automations']" routerLinkActive="active"><i class="fa fa-random" aria-hidden="true"></i> Automations</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/campaigns']" routerLinkActive="active"><i class="fa fa-envelope" aria-hidden="true"></i> Campaigns</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/emails']" routerLinkActive="active"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Emails</button>
+      <button mat-raised-button class="mr-2" [routerLink]="['/crm/settings']" routerLinkActive="active"><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
     </div>
   </div>
-  <router-outlet></router-outlet>
+</div>
+<router-outlet></router-outlet>
 <ng-template #dialogtimezone>
-    <h1 mat-dialog-title class="global">Global Timezone</h1>
-    <div mat-dialog-content>
-      <div class="form-group ">
-        <mat-error *ngIf="hasError">{{hasError}}</mat-error>
-        <mat-form-field appearance="fill" class="kb-full-width" [class.mat-form-field-invalid]="hasError" (click)="filtertimezoneData($event)">
-            <mat-label>Timezones</mat-label>
-            <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter country name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" >
-            <mat-autocomplete #timezoneAuto="matAutocomplete" >
-              <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{option.name}}</mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-      </div>
+  <h1 mat-dialog-title class="global">Global Timezone</h1>
+  <div mat-dialog-content>
+    <div class="form-group ">
+      <mat-error *ngIf="hasError">{{hasError}}</mat-error>
+      <mat-form-field appearance="fill" class="kb-full-width" [class.mat-form-field-invalid]="hasError" (click)="filtertimezoneData($event)">
+          <mat-label>Timezones</mat-label>
+          <input matInput type="text"  [(ngModel)]="timezone" placeholder="Please enter country name" [matAutocomplete]="timezoneAuto"  class="kb-act-searchinp w-100" (input)="filtertimezoneData($event)" >
+          <mat-autocomplete #timezoneAuto="matAutocomplete" >
+            <mat-option (selectionChange)="gettimezone($event)" *ngFor="let option of filteredtimezone" [value]="option.value">{{option.name}}</mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
     </div>
-    
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger" (click)="Settimezone('Default')">Not Now</button>
-        <button mat-button mat-dialog-close cdkFocusInitial  [color]="'primary'"  (click)="Settimezone(this.timezone)">Update</button>
-    </div>
-  </ng-template>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger" (click)="Settimezone('Default')">Not Now</button>
+      <button mat-button mat-dialog-close cdkFocusInitial  [color]="'primary'"  (click)="Settimezone(this.timezone)">Update</button>
+  </div>
+</ng-template>

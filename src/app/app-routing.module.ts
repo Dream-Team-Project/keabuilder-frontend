@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './_guard/auth.guard';
+import { SignedInGuard } from './_guard/signed-in.guard';
 
 import { AnalyticsComponent } from './_components/analytics/analytics.component';
 import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
@@ -120,9 +121,9 @@ const routes: Routes = [
   // auth
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent },
-  { path: 'forget', component: ForgotPasswordComponent },
+  { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
+  { path: 'register', component: RegisterComponent, canActivate: [SignedInGuard]},
+  { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   

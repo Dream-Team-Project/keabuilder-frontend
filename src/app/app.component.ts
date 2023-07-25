@@ -45,14 +45,6 @@ export class AppComponent {
                 break;
               }
               case event instanceof NavigationEnd: {
-                var e:any = event;
-                var navpath:any = sessionStorage.getItem('route');
-                if(_user.navPath.length == 0 && navpath) _user.navPath = atob(navpath).split(',');
-                else {
-                  if(_user.navPath.length == 2) _user.navPath.shift();
-                  _user.navPath.push(e.url);
-                }
-                sessionStorage.setItem('route', btoa(_user.navPath.join(',')));
                 this.loading = false;
                 break;
               }

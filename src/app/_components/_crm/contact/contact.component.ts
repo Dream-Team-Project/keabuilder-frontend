@@ -19,8 +19,9 @@ export class CrmContactComponent implements OnInit {
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+
+  selIndex = 1;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  
   fetching:boolean = true;
   contact:any = {};
   fields:Array<any> = [];
@@ -313,7 +314,8 @@ export class CrmContactComponent implements OnInit {
     this.emailto=[];
     this.email.emailto=[];
   }
-  getactivetab(event:any){
-    if(event==1) this._general.showEditor=true;
+  getactivetab(e:any){
+    if(e == 0) this._general.prevRoute();
+    this._general.showEditor = e == 2;
   }
 }

@@ -10,6 +10,7 @@ import { FunnelService } from '../funnels.service';
 import { UserService } from '../user.service';
 import { NgxCaptureService } from 'ngx-capture';
 import { BehaviorSubject } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -713,7 +714,7 @@ export class GeneralService {
   searchFilter:any = this.filterOrder[3];
   pageSaved:boolean = true;
 
-  constructor(public userService: UserService, private _snackBar: MatSnackBar, public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
+  constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -1499,10 +1500,8 @@ export class GeneralService {
     return 'keaimage-'+path+ '-screenshot.png'
   }
 
-  backBtn() {
-    var link:any = this.userService.navPath[1];
-    if(!link) link = '/';
-    window.open(window.origin+link, '_self');
+  prevRoute() {
+    this._location.back();
   }
 
   redirectLink(link:string) {

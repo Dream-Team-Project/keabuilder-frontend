@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/_services/user.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-website-marketplace',
@@ -34,7 +34,7 @@ export class WebsiteMarketplaceComponent implements OnInit {
 
   ];
   
-  constructor(public userService: UserService) { }
+  constructor(public _location: Location) { }
 
   ngOnInit(): void {
   }

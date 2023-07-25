@@ -75,7 +75,7 @@
         <button mat-button mat-dialog-close (click)="setField(selField)" cdkFocusInitial color="primary">{{selField.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
-<div class="container-fluid mt-4">
+<div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
         <mat-form-field appearance="fill" class="col-md-5">

@@ -1,7 +1,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12 kb-contact-content"> 
-      <mat-tab-group (selectedIndexChange)="getactivetab($event)">
+      <mat-tab-group (selectedIndexChange)="getactivetab($event)" [(selectedIndex)]="selIndex">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>keyboard_arrow_left</mat-icon> Back
+          </ng-template>
+        </mat-tab>
         <mat-tab label="Personal Details">
           <div class="row kb-contact-card m-3">
             <div class="col-sm-1">

@@ -17,7 +17,6 @@ export class UserService {
     name: '',
     email: ''
   };
-  navPath:any = [];
   navVisible:boolean = false;
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
