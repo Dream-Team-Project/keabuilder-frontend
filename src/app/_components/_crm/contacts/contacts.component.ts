@@ -84,25 +84,26 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
-   let page={pageIndex:0,pageSize:20};
-    this.getpagecontacts(page);
+    // this.getpagecontacts({pageIndex:0,pageSize:20});
  
   }
   
 
   adjustdata(data:any){
-    if(data) this.contacts = data;
+    if(data) this.pagecontacts = data;
     this.fetching = false;
   }
   
   fetchData(){
     this.fetchContacts();
+    this.getpagecontacts({pageIndex:0,pageSize:20});
       this.fetchLists();
         this.fetchTags();
   }
 
   fetchContacts() {
     this._contactService.fetchcontacts().subscribe((resp) => {
+      this.contacts=resp?.data;
       this.adjustdata(resp?.data);
 });
   }
@@ -122,12 +123,16 @@ export class CrmContactsComponent implements OnInit {
   }
 
   searchContacts(search: any, sortInp:any, listInp:any, tagInp:any) {
+    console.log(this.paginator)
     this.fetching = true;
     var obj = {
       search: search.value,
       sortInp: sortInp.value,
       listInp: listInp.value,
       tagInp: tagInp.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
+
     }
     this._contactService.searchcontacts(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
@@ -154,6 +159,7 @@ export class CrmContactsComponent implements OnInit {
     this._contactService.addcontact(this.contact).subscribe((resp) => {
       if(resp.success) {
         this.fetchContacts();
+        this.getpagecontacts({pageIndex:0,pageSize:20});
         this.resetobj();
         this._general.openSnackBar(false, 'Contact has been saved', 'OK', 'center', 'top');
       }
@@ -169,7 +175,9 @@ export class CrmContactsComponent implements OnInit {
 
   deleteContact() {
     this._contactService.deletecontact(this.contact.id).subscribe((resp) => {
-      if(resp.success) this.fetchContacts();
+      if(resp.success) 
+      this.getpagecontacts({pageIndex:0,pageSize:20});
+       this.fetchContacts();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
@@ -337,6 +345,7 @@ this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((d
             this._general.openSnackBar(false,data?.message,'Ok','center','top');
           }
           this.fetchContacts();
+          this.getpagecontacts({pageIndex:0,pageSize:20});
         }
         else{
           this.dialog.open(this.importdialog);

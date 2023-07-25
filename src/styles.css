@@ -776,14 +776,7 @@ input[type=number] {
   border-radius: 50%;
   animation: shadow .5s linear infinite;
 }
-.kb-text-overflow {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 200px;
-  display: inline-block;
-  vertical-align: middle;
-}
+
 @keyframes shadow {
   50% {
     transform: scale(1.2,1);
