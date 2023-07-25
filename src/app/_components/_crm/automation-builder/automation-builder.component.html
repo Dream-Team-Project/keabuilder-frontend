@@ -107,7 +107,7 @@
             <div class="col-8 p-0">
                 <button mat-button (click)="_automation._general.redirectLink('/')"><img
                         [src]="_image.imgPath+'logo/kblogo-white.png'" width="18px"></button>
-                <button mat-button (click)="_automation._general.backBtn()" class="kb-backBtn">
+                <button mat-button (click)="_automation._general.prevRoute()" class="kb-backBtn">
                     <i [innerHTML]="'left_circle_arrow' | svg | safeHtml" class="mr-1"></i>Back
                 </button>
                 <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger"

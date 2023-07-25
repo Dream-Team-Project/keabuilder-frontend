@@ -1500,7 +1500,7 @@ export class GeneralService {
     return 'keaimage-'+path+ '-screenshot.png'
   }
 
-  backBtn() {
+  prevRoute() {
     this._location.back();
   }
 

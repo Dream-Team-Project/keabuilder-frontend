@@ -45,7 +45,7 @@
     <div id="kb-topbar" [class.pagedisabled]="_general.saveDisabled">
         <div class="kb-triggers">
             <button mat-button (click)="_general.redirectLink('/')"><img [src]="_image.imgPath+'logo/kblogo-white.png'"></button>
-            <button mat-button (click)="_general.backBtn()" class="kb-backBtn">
+            <button mat-button (click)="_general.prevRoute()" class="kb-backBtn">
                 <i [innerHTML]="'left_circle_arrow' | svg | safeHtml"></i><p class="kb-bb-text">Back</p>
             </button>
             <button mat-button (click)="selectTab('elements')" [class.kb-btn-active]="selectedTab == 'elements'">
