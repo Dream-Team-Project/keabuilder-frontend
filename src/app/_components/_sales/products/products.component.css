@@ -1,0 +1,34 @@
+.global{
+    color: var(--primary-color);
+}
+.kb-title-board {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .kb-title-board input {
+    display: none;
+    background-color: #475F7B;
+    color: #FFFFFF;
+    border-radius: 0.267rem;
+    outline: none;
+    text-overflow: clip;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .kb-title-board:hover span {
+    display: none;
+  }
+  
+  .kb-title-board:hover input {
+    display: block;
+  }
+  .ftsize{
+    font-weight: 500;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }  

@@ -269,6 +269,13 @@ export class SidebarComponent implements OnInit {
       title: 'Sales',
       submenu:[{
         0:true,
+        routerlink: '/sales/products',
+        img: 'payment.gif',
+        icon: 'fa fa-product-hunt',
+        title: 'Products'
+      },
+        {
+        0:true,
         routerlink: '/sales/offers',
         img: 'payment.gif',
         icon: 'fa fa-percentage',

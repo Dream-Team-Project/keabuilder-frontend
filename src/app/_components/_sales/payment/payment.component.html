@@ -1,5 +1,5 @@
   <!-- add strip-->
-<ng-template #addstripe>
+  <ng-template #addstripe>
     <h6 mat-dialog-title><strong><img [src]="stripecontentactive==true?'/assets/images/payment/stripe-logo.png':'/assets/images/payment/paypal-logo.png'" width="20" alt="" srcset=""> {{stripecontentactive==true?'Stripe':'Paypal'}}</strong></h6>
     <div mat-dialog-content>
         <mat-form-field class="kb-full-width" appearance="fill" *ngIf="stripecontentactive">
@@ -56,7 +56,7 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button  cdkFocusInitial [color]="'primary'" (click)="connectpayment()">Yes</button>
+        <button mat-button  cdkFocusInitial [color]="'primary'" (click)="stripecontentactive==true ? connectstripe() : connectpaypal()">Yes</button>
     </div>
     </ng-template>
     <div class="container-fluid">

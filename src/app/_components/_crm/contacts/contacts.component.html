@@ -210,8 +210,8 @@
           <mat-label>Actions</mat-label>
           <mat-select value=''>
             <mat-option value="" selected>Please select an action</mat-option>
-            <mat-option  matTooltip="Upload Contacts" matTooltipPosition="above" (click)="openDialog(importdialog,'Import')">Import Contacts<i class="fa-solid fa-upload pl-2"></i></mat-option>
-            <mat-option  matTooltip="Download Contacts" matTooltipPosition="above" (click)="openDialog(exportdialog,'export')">Export Contacts<i class="fa-solid fa-download pl-2"></i></mat-option>
+            <mat-option (click)="openDialog(importdialog,'Import')">Import Contacts<i class="fa-solid fa-upload pl-2"></i></mat-option>
+            <mat-option (click)="openDialog(exportdialog,'export')">Export Contacts<i class="fa-solid fa-download pl-2"></i></mat-option>
                 </mat-select>
         </mat-form-field>
          <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="col-md-5 float-right mt-2">Add Contact <i class="fas fa-plus"></i></button>

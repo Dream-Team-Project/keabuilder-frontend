@@ -9,7 +9,7 @@ import {MatAccordion} from '@angular/material/expansion';
 import { FunnelService } from 'src/app/_services/funnels.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
-import { CheckoutService } from 'src/app/_services/checkout.service';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 import { UserService } from 'src/app/_services/user.service';
 import { ImageService } from 'src/app/_services/image.service';
 

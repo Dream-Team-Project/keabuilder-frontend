@@ -13,7 +13,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import * as XLSX from 'xlsx';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-crm-contacts',
@@ -84,8 +84,6 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
-    // this.getpagecontacts({pageIndex:0,pageSize:20});
- 
   }
   
 
@@ -123,7 +121,7 @@ export class CrmContactsComponent implements OnInit {
   }
 
   searchContacts(search: any, sortInp:any, listInp:any, tagInp:any) {
-    console.log(this.paginator)
+   
     this.fetching = true;
     var obj = {
       search: search.value,
@@ -389,7 +387,13 @@ downloaduploadformat(){
 this.file.getuploadfileformat().subscribe((data:any)=>{
   console.log(data.path);
   if(data?.success){
-   
+    let link = document.createElement('a');
+    link.setAttribute('type', 'hidden');
+    link.href =data?.path;
+    link.download = 'excelFileNam.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 })
 };

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FunnelService } from 'src/app/_services/funnels.service';
-import { CheckoutService } from 'src/app/_services/checkout.service';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 
 @Component({
   selector: 'app-funnel-checkout',
