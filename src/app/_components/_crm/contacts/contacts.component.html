@@ -247,7 +247,7 @@
             </tr>
             
           </tbody>
-          <mat-paginator #paginator [length]="contacts.length" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (click)="getpagecontacts()"></mat-paginator>
+          <mat-paginator #paginator [length]="contacts.length" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagecontacts($event)"></mat-paginator>
          
         </table>
       </div>

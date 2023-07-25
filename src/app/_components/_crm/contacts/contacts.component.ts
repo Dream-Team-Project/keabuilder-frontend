@@ -84,12 +84,9 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
-   let obj={pageIndex:0,pageSize:20};
-    this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
-     if(data?.success){
-      this.pagecontacts=data?.data;
-        }
-});  
+   let page={pageIndex:0,pageSize:20};
+    this.getpagecontacts(page);
+ 
   }
   
 
@@ -388,11 +385,11 @@ this.file.getuploadfileformat().subscribe((data:any)=>{
 })
 };
 
-getpagecontacts(){
-console.log(this.paginator);
-let obj={pageIndex:this.paginator.pageIndex,pageSize:this.paginator.pageSize,pageoptions:this.paginator.pageSizeOptions};
+getpagecontacts(event:any){
+// console.log(event);
+let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
 this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
-  // console.log(data)
+  
   if(data?.success){
   this.pagecontacts=data?.data;
   }
