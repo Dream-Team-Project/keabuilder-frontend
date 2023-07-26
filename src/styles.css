@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;500;600;700;800;900&display=swap');
 
 
-:root {
+  :root {
     /* builder root */
         --opacity-primary: rgb(216 200 152 / 90%);
         --opacity-success: rgb(27 197 189 / 70%);
