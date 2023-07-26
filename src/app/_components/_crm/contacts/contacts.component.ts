@@ -322,8 +322,7 @@ uploadcontacts(){
   reader.readAsDataURL(this.document);
   this.file.uploadDocument(this.document,this.uuid).subscribe((file:any)=>{
     if(file){
-this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
-  // console.log(data.errordata)
+      this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
         if(data.success){
           this.spinner=false;
           this.dialog.closeAll();
@@ -365,7 +364,7 @@ exportcontact(isList:boolean){
         const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(resp.data);
         const workbook:XLSX.WorkBook=XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
-        XLSX.writeFile(workbook,'contacts.xlsx');
+        XLSX.writeFile(workbook,'Contacts-export.xlsx');
         this.resetobj();
       }
       else{
@@ -377,7 +376,7 @@ exportcontact(isList:boolean){
 
 downloaduploadformat(){
   this.file.getuploadfileformat().subscribe((blob:any)=>{
-    saveAs(blob, 'Export-contacts.xlsx');
+    saveAs(blob, 'Contacts-template.xlsx');
   })
 }
 
