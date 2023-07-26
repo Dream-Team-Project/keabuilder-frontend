@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { CheckoutService } from 'src/app/_services/checkout.service';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 
 @Component({
   selector: 'app-payment',
@@ -32,9 +32,20 @@ export class PaymentComponent implements OnInit {
       next: data => {
         // console.log(data);
         if(data.data.length!=0){
-          this.stripekey.setValue(data.data[0].publish_key);
-          this.stripesecret.setValue(data.data[0].secret_key);
-          this.sripestatus =  'Connected';
+          data.data.forEach((element:any) => {
+            if(element.method =="stripe"){
+              this.stripekey.setValue(element.publish_key);
+              this.stripesecret.setValue(element.secret_key);
+              this.sripestatus =  'Connected';
+              }
+              else if(element.method=="paypal"){
+                this.paypalclientid.setValue(element.publish_key);
+              this.paypalsecret.setValue(element.secret_key);
+              this.paypalemail.setValue(element.email);
+              this.paypalstatus =  'Connected';
+              }
+          });
+          
         }
       }
     });    
@@ -42,11 +53,12 @@ export class PaymentComponent implements OnInit {
   }
 
 
-  connectpayment(){
+  connectstripe(){
+    
     if(this.sripestatus == 'Connect'){
-      if(this.stripekey.status=='VALID' && this.stripesecret.status=='VALID'){
-          var data = {key:this.stripekey.value, secret: this.stripesecret.value, method:'insert'};
-          this.checkoutService.updatepayment(data).subscribe({
+      if(this.stripekey.status=='VALID' && this.stripesecret.status=='VALID'){ 
+       let obj = {key:this.stripekey.value, secret: this.stripesecret.value, method:'insert'};
+        this.checkoutService.updatepayment(obj).subscribe({
             next: data => {
               // console.log(data);
               if(data.success==1){
@@ -62,7 +74,7 @@ export class PaymentComponent implements OnInit {
 
     }else{
       if(this.stripekey.status=='VALID' && this.stripesecret.status=='VALID'){
-          var data = {key:this.stripekey.value, secret: this.stripesecret.value, method: 'update'};
+          let data = {key:this.stripekey.value, secret: this.stripesecret.value, method: 'update'};
           this.checkoutService.updatepayment(data).subscribe({
             next: data => {
               // console.log(data);
@@ -78,6 +90,44 @@ export class PaymentComponent implements OnInit {
       }
     }
   }
+  connectpaypal(){
+    if(this.paypalstatus == 'Connect'){
+      if(this.paypalemail.status=='VALID' && this.paypalclientid.status=='VALID' && this.paypalsecret.status=='VALID'){
+        let obj = {key:this.paypalclientid.value, secret: this.paypalsecret.value, method:'insert' ,email:this.paypalemail.value};
+       
+        this.checkoutService.updatepayment(obj).subscribe({
+            next: data => {
+              // console.log(data);
+              if(data.success==1){
+                this.dialog.closeAll();
+                this.paypalstatus = 'Connected';
+                this._snackBar.open('Paypal Keys Connected Successfully!', 'OK');
+
+              }
+          }
+        });
+
+      }
+
+    }else{
+      if(this.paypalemail.status=='VALID' && this.paypalclientid.status=='VALID' && this.paypalsecret.status=='VALID'){
+        let obj = {key:this.paypalclientid.value, secret: this.paypalsecret.value, method:'update' ,email:this.paypalemail.value};
+          this.checkoutService.updatepayment(obj).subscribe({
+            next: data => {
+              // console.log(data);
+              if(data.success==1){
+                this.dialog.closeAll();
+                this.paypalstatus = 'Connected';
+                this._snackBar.open('Paypal Keys Updated Successfully!', 'OK');
+
+              }
+          }
+        });
+
+      }
+    }
+  }
+
   openDialog(templateRef: TemplateRef<any>,value:any) {
     if(value=='stripe'){
       this.stripecontentactive = true;

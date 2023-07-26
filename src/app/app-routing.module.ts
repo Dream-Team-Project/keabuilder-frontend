@@ -110,7 +110,10 @@ import { HeatmapsRecordingsComponent } from './_components/_heatmap/recordings/r
 // sales
 import { SalesComponent } from './_components/_sales/sales/sales.component';
 import { PaymentComponent } from './_components/_sales/payment/payment.component';
-import { PaymentIntegrationsComponent } from './_components/_sales/payment-integrations/payment-integrations.component';
+import { ProductsComponent } from './_components/_sales/products/products.component';
+import { ProductComponent } from './_components/_sales/product/product.component';
+import { OffersComponent } from './_components/_sales/offers/offers.component';
+
 // sales
 
 const routes: Routes = [
@@ -169,14 +172,17 @@ const routes: Routes = [
   // sales 
   { path: 'sales', component: SalesComponent, 
   children: [
-    { path: '', component: ComingSoonComponent, canActivate: [AuthGuard] },
-    { path: 'offers', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: '', component:  ProductsComponent, canActivate: [AuthGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+    { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
     { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-    // { path: 'payment-integrations', component: PaymentIntegrationsComponent, canActivate: [AuthGuard] },
     { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
+  { path: 'sales/product/:uniqueid', component: ProductComponent, canActivate: [AuthGuard] },
+ 
+  // sales 
  
   // { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
   { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
@@ -386,8 +392,10 @@ export const RoutingComponents =
     WebsitesComponent,
     CrmFieldsComponent,
     SalesComponent,
-    PaymentIntegrationsComponent,
     PaymentComponent,
+    ProductsComponent,
+    ProductComponent,
+    OffersComponent,
     DomainComponent
   ];
 

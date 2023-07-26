@@ -83,8 +83,6 @@ export class CrmContactsComponent implements OnInit {
  
 
   ngOnInit(): void {
-    // this.getpagecontacts({pageIndex:0,pageSize:20});
- 
   }
   
 
@@ -122,7 +120,7 @@ export class CrmContactsComponent implements OnInit {
   }
 
   searchContacts(search: any, sortInp:any, listInp:any, tagInp:any) {
-    console.log(this.paginator)
+   
     this.fetching = true;
     var obj = {
       search: search.value,

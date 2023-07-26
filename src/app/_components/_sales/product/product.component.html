@@ -1,0 +1,66 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 kb-contact-content"> 
+        <div class="row kb-contact-details py-3 mx-0">
+            <div class="col-md-8">
+              <div class="kb-contact-details-card rounded">
+                <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
+                  <h5 class="col-md-4 p-0 m-0">Product Details</h5>
+                </div>
+                <table class="table">
+                  <tbody>
+                    <tr >
+                      <td class="col-4"><label>Name</label></td>
+                      <td class="col-8 px-0" *ngIf="!edit else inp">{{product?.name | titlecase}}</td>  
+                      <ng-template #inp>
+                      <input type="text" [(ngModel)]="product.name" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
+                    </ng-template>
+                    </tr>
+                    <tr >
+                      <td class="col-4"><label>Title</label></td>
+                      <td class="col-8 px-0" *ngIf="!edit else inpt">{{product?.title}}</td> 
+                      <ng-template #inpt>
+                        <input type="text" [(ngModel)]="product.title" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
+                      </ng-template>  
+                    </tr>
+                    <tr >
+                      <td class="col-4"><label>Description</label></td>
+                      <td class="col-8 px-0" *ngIf="!edit else inpd">{{product?.description}}</td>
+                      <ng-template #inpd>
+                        <input type="text" [(ngModel)]="product.description" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
+                      </ng-template>   
+                    </tr>
+                    <tr >
+                      <td class="col-4"><label>Thumbnail</label></td>
+                      <td class="col-8 px-0" *ngIf="!edit else inpth">{{product?.thumbnail}}</td>  
+                      <ng-template #inpth>
+                        <input type="text" [(ngModel)]="product.thumbnail" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
+                      </ng-template> 
+                    </tr>
+                    <tr >
+                      <td class="col-4"><label>Type</label></td>
+                      <td class="col-8 px-0"  *ngIf="!edit else inpty">{{product?.type}}</td> 
+                      <ng-template #inpty>
+                      <mat-select class="kb-contact-field-inp px-2 py-1" [(ngModel)]="product.type" required>
+                        <mat-option value="physical">Physical</mat-option>
+                        <mat-option value="virtual">Virtual</mat-option>
+                    </mat-select> 
+                  </ng-template> 
+                    </tr>
+                    <tr >
+                      <td class="col-4"><label>Created</label></td>
+                      <td class="col-8 px-0" >{{product?.created_at | date :'mediumDate'}}</td>   
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+             <div class="d-flex justify-content-center">
+              <button mat-raised-button color="primary" (click)="edit == false ? btnchange() : updateproduct()">{{btntext}}</button>
+            </div>
+            </div>
+            
+          </div>
+          </div>
+          </div>
+          </div>
+

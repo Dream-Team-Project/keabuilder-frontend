@@ -4,7 +4,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl, Validators} from '@angular/forms';
 import { FunnelService } from 'src/app/_services/funnels.service';
-import { CheckoutService } from 'src/app/_services/checkout.service';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
