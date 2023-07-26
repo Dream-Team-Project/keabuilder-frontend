@@ -438,8 +438,10 @@ export class FileUploadService {
   }
   
   getuploadfileformat():Observable<any> {
-    return this.http.get(this.downloaduploadfileApi).pipe(catchError(this.errorHandler));
+    return this.http.get(this.downloaduploadfileApi,{responseType:'blob'})
+    .pipe(catchError(this.errorHandler));
   }
+  
   uploadDocument(file: any, folder:string):Observable<any> {
     const formData = new FormData();
     formData.append('uploadedDocument', file, file.name);

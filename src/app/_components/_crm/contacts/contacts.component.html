@@ -87,46 +87,77 @@
     </mat-autocomplete>
 </mat-form-field>
   </div>
-  <div mat-dialog-actions>
+  <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger">Cancel</button>
       <button mat-button mat-dialog-close (click)="addContact()" cdkFocusInitial color="primary">Add</button>
   </div>
 </ng-template>
 <ng-template #importdialog>
-  <h1 mat-dialog-title>Import Contacts <i matTooltip="Upload format" matTooltipPosition="above" class="fa-solid fa-file-export" (click)="downloaduploadformat()"></i></h1>
+  <h1 mat-dialog-title>Import Contacts</h1>
   <div mat-dialog-content>
-    <mat-form-field appearance="fill" class="kb-full-width">
-      <mat-label>Select List</mat-label>
-      <mat-select #listInp name="listfilter" value='' >
-          <mat-option value="" selected>Please Select a list</mat-option>
-          <mat-option *ngIf="lists?.length == 0" [routerLink]="'/crm/lists'">Plesae add a list</mat-option>
-          <mat-option *ngFor="let list of lists" [value]="list.uniqueid"> {{list.name | titlecase}}
-            </mat-option>
-      </mat-select>
-      </mat-form-field>
-    <div class="row">
-      <div class="col-md-12">
+    <div class="mb-3">
+      <div>
+        <button mat-raised-button color="primary" (click)="downloadInp.click()" class="mr-3">Select File (.xlsx)</button>
+        <button mat-raised-button color="accent" (click)="downloaduploadformat()"><i class="fa-solid fa-download mr-2"></i>Template</button>
+      </div>
+      <div class="mt-2">
+        <span *ngIf="document" class="kb-info-tag small rounded px-2 py-1">{{document.name}}</span>
+        <input #downloadInp name="download" type="file" accept=".xlsx" (change)="documentChangeEvent($event)" [formControl]="fileFormControl" class="d-none"> 
         <mat-error *ngIf="error">{{errormessage}}</mat-error>
-        <div class="py-2">Select File <span class="kb-info-tag kb-tag">(Only in .xlsx type)</span> </div>
-          <input #downloadInp name="download" type="file" accept=".xlsx" (change)="documentChangeEvent($event,listInp)" [formControl]="fileFormControl"> 
-          <ng-template *ngIf="fileFormControl.hasError('required')">
-            Please Upload File.
-          </ng-template> 
-        </div>
-        </div>  
-  </div>
-  <div class="kb-spinner" *ngIf="spinner">
-    <mat-spinner></mat-spinner>
+        <ng-template *ngIf="fileFormControl.hasError('required')">
+          Please Upload File.
+        </ng-template> 
+      </div>
+    </div>
+    <mat-form-field *ngIf="document" class="kb-full-width" appearance="fill" (click)="filterListData($event)">
+      <mat-label>Select Lists</mat-label>
+      <mat-chip-list #listChipList aria-label="List selection">
+        <mat-chip
+          *ngFor="let data of selectedLists; index as i"
+          (removed)="removeSelectedList(i)">
+          {{ data?.name }}
+          <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+      <input
+        type="text"
+        #searchListInp
+        placeholder="Select multiples..."
+        (input)="filterListData($event)"
+        [matAutocomplete]="listAuto"
+        [matChipInputFor]="listChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        class="kb-act-searchinp w-100"
+        [class.pt-2]="selectedLists.length != 0"
+        matInput>
+      <mat-autocomplete
+        #listAuto="matAutocomplete"
+        (optionSelected)="addSelectedList($event, searchListInp)">
+        <mat-option
+          *ngFor="let option of filteredOptions.lists"
+          [value]="option"
+          [disabled]="filteredTempIds.lists?.includes(option.uniqueid)">
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>      
+    <!-- <span>Leave empty if you don't want to subscribe to any list</span> -->
+    <div class="kb-spinner" *ngIf="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
-    <button mat-button   [color]="'primary'" [disabled]="this.fileFormControl.invalid || document.length==0" (click)="uploadcontacts()">Upload</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">Cancel</button>
+    <button mat-button [color]="'primary'" [disabled]="fileFormControl.invalid || document.length==0" (click)="uploadcontacts()">Import</button>
+    <button mat-raised-button mat-dialog-close [color]="'primary'">Import All</button>
   </div>
 </ng-template>
 <ng-template #exportdialog>
-  <h1 mat-dialog-title>Export Contact</h1>
+  <h1 mat-dialog-title>Export Contacts</h1>
   <div mat-dialog-content>
-    <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
+    <mat-form-field class="kb-full-width" appearance="fill" (click)="filterListData($event)">
       <mat-label>Select Lists</mat-label>
       <mat-chip-list #listChipList aria-label="List selection">
         <mat-chip
@@ -162,8 +193,9 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
-    <button mat-button mat-dialog-close (click)="exportcontact()" class="text-danger" [disabled]="filteredTempIds?.lists?.length == 0">Yes</button>
+    <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+    <button mat-button mat-dialog-close [color]="'primary'" (click)="exportcontact(true)" [disabled]="filteredTempIds?.lists?.length == 0">Export</button>
+    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="exportcontact(false)">Export All</button>
   </div>
 </ng-template>
 <div class="container-fluid">
@@ -205,16 +237,21 @@
                 </mat-option>
           </mat-select>
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill" class="col-md-7">
-          <mat-label>Actions</mat-label>
-          <mat-select value=''>
-            <mat-option value="" selected>Please select an action</mat-option>
-            <mat-option  matTooltip="Upload Contacts" matTooltipPosition="above" (click)="openDialog(importdialog,'Import')">Import Contacts<i class="fa-solid fa-upload pl-2"></i></mat-option>
-            <mat-option  matTooltip="Download Contacts" matTooltipPosition="above" (click)="openDialog(exportdialog,'export')">Export Contacts<i class="fa-solid fa-download pl-2"></i></mat-option>
-                </mat-select>
-        </mat-form-field> -->
-        <div class="col-md-3">
-         <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="col-md-5 float-right mt-2">Add Contact <i class="fas fa-plus"></i></button>
+        <div class="col-md-3 mt-2 text-right">
+          <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
+            Import/Export <mat-icon>import_export</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="openDialog(importdialog, '')">
+              <span>Import</span>
+              <i class="fa-solid fa-upload ml-2"></i>
+            </button>
+            <button mat-menu-item (click)="openDialog(exportdialog, '')">
+              <span>Export</span>
+              <i class="fa-solid fa-download ml-2"></i>
+            </button>
+          </mat-menu>
+          <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="ml-3">Add Contact <i class="fas fa-plus"></i></button>
         </div>
     </div>
     <div class="row">

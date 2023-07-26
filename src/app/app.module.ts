@@ -46,7 +46,6 @@ import { SidebarComponent } from './_components/sidebar/sidebar.component';
 import { NavbarComponent } from './_components/navbar/navbar.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { SortablejsModule } from 'ngx-sortablejs';
 import { ColorMaterialModule } from 'ngx-color/material';
 import { ColorCircleModule } from 'ngx-color/circle';
 import { NgxColorsModule } from 'ngx-colors';
@@ -63,9 +62,6 @@ import { SvgPipe } from './_pipes/svg.pipe';
 
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
-
-
 
 @NgModule({
   declarations: [
@@ -87,7 +83,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    SortablejsModule,
     DragDropModule,
     NgxMatColorPickerModule,
     NgxColorsModule,

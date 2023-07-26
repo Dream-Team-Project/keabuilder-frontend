@@ -10,10 +10,9 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import * as XLSX from 'xlsx';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-crm-contacts',
@@ -61,7 +60,7 @@ export class CrmContactsComponent implements OnInit {
   tagCtrl = new FormControl(['']);
   error=false;
   errormessage='';
-  document:any=[];
+  document:any = '';
   uuid:any;
   listid:any;
   spinner=false;
@@ -291,32 +290,24 @@ resetobj(){
         this.newtags=[];
 }
 // file upload
-documentChangeEvent(event:any,listInp:any){
+documentChangeEvent(event:any){
   this.error=false;
   this.errormessage='';
-  this.listid=listInp.value;
-    if(event.target.files[0] && this.listid) {
-      this.error=false;
-      this.errormessage='';
-      // console.log(event.target.files[0].name)
-      let ext=[];
-       ext=event.target.files[0].name.split('.');
-       let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
-      //  let filename='uploadcontacts'+'.'+ext[ext.length-1];
-      //  console.log(event.target.files[0].type);
-      let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-      if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
-      this.document= event.target.files[0];
-      //  this.document.filename=filename;
-         
-    }
-    else{
-      this.dialog.open(this.importdialog);
-        this.error=true;
-        this.errormessage='File is not correct format'
-        this.fileFormControl.reset();
-        }
+  if(event.target.files[0]) {
+    let ext=[];
+    ext=event.target.files[0].name.split('.');
+    let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
+    let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
+    this.document= event.target.files[0];
+  }
+  else{
+    this.dialog.open(this.importdialog);
+      this.error=true;
+      this.errormessage='File is not correct format'
+      this.fileFormControl.reset();
       }
+  }
   else{
     this.dialog.open(this.importdialog);
     this.error=true;
@@ -367,35 +358,32 @@ this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((d
   
   
 }
-exportcontact(){
-  let lists=this.filteredTempIds.lists.toString();
-  if(lists){
-  this._contactService.exportcontacts({lists:lists}).subscribe((data:any)=>{
-    // console.log(data.data)
-    if(data.success){
-    const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(data.data);
-    const workbook:XLSX.WorkBook=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
-    XLSX.writeFile(workbook,'contacts.xlsx');
-    this.resetobj();
-    }else{
-      this._general.openSnackBar(true,data?.message,'Ok','center','top');
-    }
-  })
+
+exportcontact(isList:boolean){
+  let lists = isList ? this.filteredTempIds.lists.toString() : '';
+  if(lists || !isList) {
+    this._contactService.exportcontacts({lists:lists}).subscribe((resp:any)=>{
+      if(resp.success){
+        const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(resp.data);
+        const workbook:XLSX.WorkBook=XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
+        XLSX.writeFile(workbook,'contacts.xlsx');
+        this.resetobj();
+      }
+      else{
+        this._general.openSnackBar(true,resp?.message,'Ok','center','top');
+      }
+    })
+  }
 }
-};
 
 downloaduploadformat(){
-this.file.getuploadfileformat().subscribe((data:any)=>{
-  console.log(data.path);
-  if(data?.success){
-   
-  }
-})
-};
+  this.file.getuploadfileformat().subscribe((blob:any)=>{
+    saveAs(blob, 'Export-contacts.xlsx');
+  })
+}
 
 getpagecontacts(event:any){
-// console.log(event);
 let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
 this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
   

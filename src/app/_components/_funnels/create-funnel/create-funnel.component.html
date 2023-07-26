@@ -314,7 +314,7 @@
       <div class="col-md-3 pb-3 pt-3 rightbrder">
         <button class="mt-2 btn-block mb-3" (click)="addsteps()" mat-raised-button color="primary" ><i class="fas fa-plus"></i> Add A Step</button>
         
-          <div [sortablejs]="steps" [sortablejsOptions]="parentOptions" >
+          <div>
             <div class="Keabuilder-item infome keamaindropitem" [class]="step.color" [class.selectedstep]="selectedstep==step.id" *ngFor="let step of steps; index as i;" >
 
               <div class="keatitlebox" (click)="kb_substeps2(step.id)" [attr.key]="step.id"
