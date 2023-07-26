@@ -6,6 +6,10 @@
               <div class="kb-contact-details-card rounded">
                 <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
                   <h5 class="col-md-4 p-0 m-0">Product Details</h5>
+                  <div>
+                    <button mat-raised-button class="text---kb-black" class="mr-2" (click)="back()"><i class="fa-solid fa-angle-left"></i> Back </button>
+                    <button mat-raised-button color="primary" (click)="edit == false ? btnchange() : updateproduct()">{{btntext}}</button>
+                  </div>
                 </div>
                 <table class="table">
                   <tbody>
@@ -54,13 +58,13 @@
                   </tbody>
                 </table>
               </div>
-             <div class="d-flex justify-content-center">
+             <!-- <div class="d-flex justify-content-center">
               <button mat-raised-button color="primary" (click)="edit == false ? btnchange() : updateproduct()">{{btntext}}</button>
-            </div>
+            </div> -->
             </div>
             
           </div>
           </div>
           </div>
-          </div>
+</div>
 

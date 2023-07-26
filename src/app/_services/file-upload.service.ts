@@ -448,6 +448,12 @@ export class FileUploadService {
     return this.http.post(this.uploadDocumentApi + '/' + folder, formData)
     .pipe(catchError(this.errorHandler));
   }
+  uploadcontactsDocument(file: any, folder:string):Observable<any> {
+    const formData = new FormData();
+    formData.append('uploadedDocument', file, file.filename);
+    return this.http.post(this.uploadDocumentApi +'/' + folder, formData)
+    .pipe(catchError(this.errorHandler));
+  }
 
   deleteDocument(path:string, folder:string):Observable<any> {
     return this.http.delete(this.deleteDocumentApi + '/' + path + '/' + folder)

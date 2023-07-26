@@ -143,7 +143,7 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>      
-    <!-- <span>Leave empty if you don't want to subscribe to any list</span> -->
+   <span *ngIf="document" class="kb-fnt">(Leave empty if you don't want to subscribe to any list)</span>
     <div class="kb-spinner" *ngIf="spinner">
       <mat-spinner></mat-spinner>
     </div>
@@ -151,7 +151,7 @@
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">Cancel</button>
     <button mat-button [color]="'primary'" [disabled]="fileFormControl.invalid || document.length==0" (click)="uploadcontacts()">Import</button>
-    <button mat-raised-button mat-dialog-close [color]="'primary'">Import All</button>
+    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="uploadAlllistid()">Import All</button>
   </div>
 </ng-template>
 <ng-template #exportdialog>
@@ -191,11 +191,12 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    <span class="kb-fnt">(Leave empty if you don't want to subscribe to any list)</span>
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-    <button mat-button mat-dialog-close [color]="'primary'" (click)="exportcontact(true)" [disabled]="filteredTempIds?.lists?.length == 0">Export</button>
-    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="exportcontact(false)">Export All</button>
+    <button mat-button mat-dialog-close [color]="'primary'" (click)="exportcontact(true,'single')">Export</button>
+    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="exportcontact(false,'all')">Export All</button>
   </div>
 </ng-template>
 <div class="container-fluid">
@@ -223,6 +224,7 @@
             <mat-label>Filter By List</mat-label>
             <mat-select #listInp name="listfilter" value='' (valueChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
                 <mat-option value="" selected>All</mat-option>
+                <mat-option value="NULL" selected>None</mat-option>
                 <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
                     {{list.name | titlecase}}
                   </mat-option>

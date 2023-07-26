@@ -1,1 +1,195 @@
-<p>offers works!</p>
+<!-- create offer dialog -->
+<ng-template #dialog>
+    <h1 mat-dialog-title class="txt">Create A Offer</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width mb-2" appearance="fill">
+          <mat-label>Offer Name</mat-label>
+          <input type="text" matInput name="offername" [(ngModel)]="offername" [formControl]="offernameControl" required minlength="3" >
+          <mat-error *ngIf="offernameControl.hasError('required')">
+              offer Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="offernameControl.hasError('minlength')">
+              Name must be at least <strong>3</strong> characters
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">Close</button>
+        <button mat-button
+        [color]="!offernameControl.invalid ? 'primary' : ''"  
+        [disabled]="offernameControl.invalid"
+        (click)="createcamp()">Create</button>
+    </div>
+  </ng-template>
+  <!-- close create offer dialog -->
+  <!-- delete offer dialog -->
+  <ng-template #deletedialog>
+    <h1 mat-dialog-title class="kb-danger">Delete offer</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{deloffer.name}}</span> offer?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button
+        mat-button
+        mat-dialog-close
+        cdkFocusInitial
+        class="text-danger"
+        (click)="deleteoffer(deloffer)"
+      >
+        Yes
+      </button>
+    </div>
+  </ng-template>
+  <!-- close delete offer dialog -->
+      <div class="container-fluid">
+        <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+      <div  class="row">
+          <mat-form-field  class="col-md-3 "  appearance="fill" >
+            <mat-label>Search offers...</mat-label>
+              <input matInput #searchInp (input)="searchoffers(searchInp, sortInp,sentInp,listInp)" type="text" placeholder="Search offers">
+              <i class="fa-solid fa-magnifying-glass"></i>
+          </mat-form-field>
+          <mat-form-field  class="col-md-2" appearance="fill">
+            <mat-label>Filter by:</mat-label>
+            <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchoffers(searchInp, sortInp,sentInp,listInp)">
+              <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+              <mat-option [value]="'name DESC'">DESC By Name</mat-option>
+              <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+              <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+              <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+              <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+          </mat-select>
+          </mat-form-field>
+        <mat-form-field  class="col-md-2" appearance="fill">
+          <mat-label>Filter by Status:</mat-label>
+          <mat-select #sentInp name="kbfilter" value='' (valueChange)="searchoffers(searchInp, sortInp,sentInp, listInp)">
+            <mat-option value="" selected>All</mat-option>
+            <mat-option [value]="'0'" >Drafts</mat-option>
+            <mat-option [value]="'1'">Sent</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field  class="col-md-2" appearance="fill">
+          <mat-label>Filter By List</mat-label>
+              <mat-select #listInp name="listfilter" value='' (valueChange)="searchoffers(searchInp, sortInp,sentInp,listInp)">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let list of lists" [value]="list.id">
+                      {{list?.name | titlecase}}
+                    </mat-option>
+              </mat-select>
+        </mat-form-field>
+      <div class="col-md-3 text-right mt-2">
+        <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
+          <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
+          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
+        </button>
+        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
+          <i class="fa fa fa-envelope" aria-hidden="true"></i> Create offer
+        </button>
+      </div>
+      </div>
+      <div [class.px-3]="toggleview" class="row" *ngIf="kboffers?.length != 0; else nodata">
+        <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kboffer of kboffers; index as i;">
+          <div [class.row]="toggleview">
+            <div
+            [style.height]="toggleview ? '150px' : '300px'"
+            [class]="toggleview ? 'col-md-6' : 'col-md-12'"
+            class="p-0"
+          >
+          <div [class.kb-disabled]="kboffer.deleting" class="kb-fitimg"
+              [ngStyle]="{
+                'background-image':
+                  'url(' +
+                  _image.uploadImgPath +
+                  _general.getSSPath('offer-' + kboffer.uniqueid) +
+                  '), url(' +
+                  _image.uploadImgPath +
+                  'webpage_thumbnail.jpg' +
+                  ')'
+              }"
+                >
+                <div class="kb-loader" *ngIf="shortwaiting">
+                  <div class="kb-loader-shadow"></div>
+                  <div class="kb-loader-box"></div>
+                </div>
+              </div>
+              </div>
+            <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+              <div class="row align-items-center p-0 h-100">
+                <div [class.p-0]="!toggleview" class="col-md-12">
+                  <div class="keabuilder-title-board line-ellipsis ftsize">
+                    <span>{{kboffer.name | titlecase}}</span>  
+                    <input type="text" [(ngModel)]="kboffer.name"
+                      (blur)="changepagename(kboffer,kboffer.name)" matTooltip="Edit offer Name"
+                      matTooltipPosition="above">
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <button *ngIf="kboffer.offer_sent=='1'" class="view-btn3 align" mat-raised-button>View Report<i class="fa-solid fa-chart-pie ml-1" aria-hidden="true"></i></button>
+                    <button  *ngIf="kboffer.offer_sent=='0'" mat-raised-button  [routerLink]="'/crm/offer/'+kboffer.uniqueid" class="view-btn3 mr-2 "> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
+                    <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
+                  <mat-menu #menu2="matMenu">
+                    <button mat-menu-item [routerLink]="'/crm/offer/'+kboffer.uniqueid" *ngIf="(kboffer.sendoption =='recurring' || kboffer.offersent =='0')">
+                      <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
+                    </button>
+                    <button mat-menu-item  (click)="duplicateoffer(kboffer)">
+                      <i class="far fa-copy mr-2"></i>Duplicate
+                    </button>
+                   
+                    <button class="text-danger" mat-menu-item (click)="openDialog(deletedialog,kboffer)">
+                      <i class="far fa-trash-alt mr-2"></i>Delete
+                    </button>
+                  </mat-menu>
+                  </div>
+  
+                  <div class="sentoption">
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                      <span class="fnt"><i class="fa fa-user mr-2 colr" aria-hidden="true"></i>Sent To: <span *ngIf="kboffer.sentto>0"> {{kboffer.sentto}}</span>
+                      <span *ngIf="kboffer.sentto==0">--</span></span>
+                    <span class="fnt">Sent On: 
+                      <span *ngIf="kboffer.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.deliverdate)}}</span>
+                      <span *ngIf="!kboffer.deliverdate">--</span>
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1 mb-1">
+                      <span class="fnt">Created On: <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.created_at)}}</span></span>
+                      <span class="fnt">Last Modified On: <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.updated_at)}}</span></span>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+              <div class="d-flex justify-content-between">
+            <div class="statbadg">
+              <span class="statusbadge" [class]="kboffer.publish_status==1 ? 'active1':'active2'" *ngIf="kboffer.offer_sent=='0'">
+                <i class="fas" [class]="kboffer.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                {{kboffer.publish_status==1?'Schedule':'Draft'}}
+              </span>
+  
+              <span class="statusbadge1" [class]="kboffer.publish_status==1 ? 'active1':'active2'" *ngIf="kboffer.offer_sent=='1'">
+                <i class="fas fa-paper-plane"></i> Sent
+              </span>
+  
+            </div>
+  
+            <div class="statbadg2">
+              <span class="statusbadge2">{{kboffer.sendoption=='immediately'?'Immediately':'Specific Time'}}</span>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #nodata>
+        <div class="row justify-content-center mt-5">
+          <div class="col-md-4">
+            <img
+              src="/assets/images/website/website-empty.png"
+              class="img-fluid"
+              alt="No Offer Found"
+            />
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  
+  

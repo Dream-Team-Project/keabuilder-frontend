@@ -197,7 +197,10 @@ export class CrmContactsComponent implements OnInit {
       this.hasError = '';
       this.contact = JSON.parse(JSON.stringify(contact));
     }
-    this.dialog.open(templateRef);
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any) => {
+     this.fileFormControl.reset();
+     this.resetobj();
+    })
   }
 
   tagupdate() {
@@ -286,6 +289,7 @@ resetobj(){
           tags: []
         };
         this.newtags=[];
+        this.document='';
 }
 // file upload
 documentChangeEvent(event:any){
@@ -294,10 +298,11 @@ documentChangeEvent(event:any){
   if(event.target.files[0]) {
     let ext=[];
     ext=event.target.files[0].name.split('.');
-    let filename=Math.random().toString(20).slice(2)+ext[0]+'.'+ext[ext.length-1];
+    let filename='upload-contacts'+'.'+ext[ext.length-1];
     let allowedExtension = ['application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
     if (ext.length==2 && allowedExtension.indexOf(event.target.files[0].type)>-1 && filename.match(/\.(xlsx)$/)) {
     this.document= event.target.files[0];
+    this.document.filename=filename;
   }
   else{
     this.dialog.open(this.importdialog);
@@ -320,15 +325,17 @@ uploadcontacts(){
   const reader = new FileReader();
   reader.onload = e => {reader.result}
   reader.readAsDataURL(this.document);
-  this.file.uploadDocument(this.document,this.uuid).subscribe((file:any)=>{
+  this.file.uploadcontactsDocument(this.document,this.uuid).subscribe((file:any)=>{
     if(file){
-this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
+      this.listid= this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : '';
+      this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
   // console.log(data.errordata)
         if(data.success){
           this.spinner=false;
           this.dialog.closeAll();
           if(data?.errordata?.length > 0) {
             this._general.openSnackBar(true,data?.errordata?.length+' '+'contacts not Uploads','Ok','center','top');
+            this.resetobj();
           }
           else{
             this._general.openSnackBar(false,data?.message,'Ok','center','top');
@@ -356,16 +363,26 @@ this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((d
   
   
 }
+uploadAlllistid(){
+  this.lists.forEach(element =>{
+    this.filteredTempIds?.lists.push(element?.uniqueid);
+  })
+  if(this.lists?.length == this.filteredTempIds.lists?.length){
+    this.uploadcontacts();
+  }
+}
 
-exportcontact(isList:boolean){
-  let lists = isList ? this.filteredTempIds.lists.toString() : '';
+exportcontact(isList:boolean,type:any){
+  console.log(isList,type)
+  let lists = isList ? this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : 'NULL' : 'NULL';
   if(lists || !isList) {
-    this._contactService.exportcontacts({lists:lists}).subscribe((resp:any)=>{
+    console.log(lists)
+    this._contactService.exportcontacts({type:type,lists:lists}).subscribe((resp:any)=>{
       if(resp.success){
         const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(resp.data);
         const workbook:XLSX.WorkBook=XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
-        XLSX.writeFile(workbook,'contacts.xlsx');
+        XLSX.writeFile(workbook,'Contacts-export.xlsx');
         this.resetobj();
       }
       else{
@@ -377,14 +394,13 @@ exportcontact(isList:boolean){
 
 downloaduploadformat(){
   this.file.getuploadfileformat().subscribe((blob:any)=>{
-    saveAs(blob, 'Export-contacts.xlsx');
+    saveAs(blob, 'Contacts-template.xlsx');
   })
 }
 
 getpagecontacts(event:any){
 let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
-this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
-  
+this._contactService.getpagecontacts(obj).subscribe((data:any)=>{ 
   if(data?.success){
   this.pagecontacts=data?.data;
   }
