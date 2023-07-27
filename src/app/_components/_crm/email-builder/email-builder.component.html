@@ -184,7 +184,7 @@
     <div *ngIf="prevImg" class="kb-block-preview">
         <div class="kb-block-prev-img" [style.backgroundImage]="'url('+_image.uploadImgPath+prevImg+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'"></div>
     </div>
-    <div #emailbody id="kb-email-container">
+    <div #emailbody id="kb-email-container" style="display: flex;">
         <div [id]="emailElements.section.id" [ngStyle]="isBlockActive(emailElements.section) ? _style.currentStyling() : _style.getBlockStyle(emailElements.section.style)" 
         (mouseenter)="emailElements.section.setting = true;" (mouseleave)="emailElements.section.setting = false" class="kb-section kb-block-container">
             <div class="kb-module-setting" *ngIf="emailElements.section.setting && !_general.showInlineEditor">

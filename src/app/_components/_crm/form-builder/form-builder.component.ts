@@ -280,16 +280,15 @@ fetchsingleemail(){
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       this.notifyemailCtrl.reset();
-      if(this._form.form.emailenabled && (!this.notifyemail || !this._form.singleemail.uniqueid)) {
-        this._general.expPanelStep = 3;
-        this.openActionDialog(this.actiondialog);
-      }
-      else {
+      // if(this._form.form.emailenabled && (!this.notifyemail || !this._form.singleemail.uniqueid)) {
+      //   this._general.expPanelStep = 3;
+      //   this.openActionDialog(this.actiondialog);
+      // }
+      // else {
         this._general.expPanelStep = 0;
         this.formdialog = '';
         this._form.formSaved = false;
-        // this.validate.emailsubject.reset();
-      }
+      // }
     })
   }
 

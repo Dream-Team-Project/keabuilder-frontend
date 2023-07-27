@@ -111,12 +111,12 @@ export class CrmFormFetchComponent implements OnInit {
         this.contact.fieldans = JSON.stringify(formAnsJSON);
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
-            this.notifyemailSent().then(resp=>{
             this.emailSent().then(resp=>{
-              var redirection = this._form.form.redirection;
-              if(this._form.form.redirectionenabled && redirection) window.location.replace(redirection);
-              else this.thankyou = true;
-            })
+              this.notifyemailSent().then(resp=>{
+                var redirection = this._form.form.redirection;
+                if(this._form.form.redirectionenabled && redirection) window.location.replace(redirection);
+                else this.thankyou = true;
+              })
             })
           }
           else this.submitting = false;
@@ -131,7 +131,7 @@ export class CrmFormFetchComponent implements OnInit {
   }
   notifyemailSent() {
     return new Promise((resolve, reject)=>{
-      if(this._form.form.notifyemail && this._form.form.notifyemail!='') {
+      if(this._form.form.notifyemail) {
         var emailhtmlbody=`Hello Admin,<br>
         <br>
         New Contact is added/updated in your Contact list.The detail of your new contact are as follows-<br>

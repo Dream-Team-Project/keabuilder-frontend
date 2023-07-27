@@ -200,10 +200,11 @@ export class CrmEmailBuilderComponent implements OnInit {
   }
 
   save() {
-    // console.log(this.emailElements);
     if(this.email.name && this.email.subject && this.emailElements){
+    var trackImg = '<img src="'+window.origin+'/api/recipient_email/'+this.email.id+'" style="display:none">';
     this.email.json=this._general.encodeJSON(this.emailElements);
-    this.email.body=this.screen.nativeElement.outerHTML;
+    this.screen.nativeElement.style.display = 'flex';
+    this.email.body=this.screen.nativeElement.outerHTML + trackImg;
     this._email.updateemail(this.email).subscribe((data:any)=>{
       if(data.success) {
         this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{

@@ -9,7 +9,7 @@
     <mat-form-field appearance="fill">
         <mat-icon matPrefix>search</mat-icon>
         <mat-label>Search {{isAction ? 'Action' : 'Trigger'}}</mat-label>
-        <input matInput [placeholder]="'Search '+isAction ? 'Action' : 'Trigger'" [(ngModel)]="searchWf" (input)="filterWorkflow()">
+        <input matInput [placeholder]="(isAction ? 'Action' : 'Trigger')+' name'" [(ngModel)]="searchWf" (input)="filterWorkflow()">
         <button *ngIf="searchWf" matSuffix mat-icon-button aria-label="Clear" (click)="searchWf=''">
             <mat-icon>close</mat-icon>
         </button>
@@ -82,6 +82,38 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectTag($event)">
                     <mat-option *ngFor="let option of tagField.filter" [value]="option"  [disabled]="tagField.id == option.id">
                     {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div *ngSwitchCase="'email'">
+            <mat-error *ngIf="emailField.error">{{emailField.error}}</mat-error>
+            <mat-form-field appearance="fill" (click)="filterEmail()" [class.mat-form-field-invalid]="emailField.error">
+                <mat-label>Select an Email</mat-label>
+                <input type="text" name="email" placeholder="Search email" [(ngModel)]="emailField.value" 
+                (input)="filterEmail()" [matAutocomplete]="matAuto" matInput>
+                <button *ngIf="emailField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterEmail()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectEmail($event)">
+                    <mat-option *ngFor="let option of emailField.filter" [value]="option" [disabled]="emailField.id == option.id">
+                    {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div *ngSwitchCase="'webpage'">
+            <mat-error *ngIf="webpageField.error">{{webpageField.error}}</mat-error>
+            <mat-form-field appearance="fill" (click)="filterWebpage()" [class.mat-form-field-invalid]="webpageField.error">
+                <mat-label>Select a Website page</mat-label>
+                <input type="text" name="webpage" placeholder="Search webpage" [(ngModel)]="webpageField.value" 
+                (input)="filterWebpage()" [matAutocomplete]="matAuto" matInput>
+                <button *ngIf="webpageField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterWebpage()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectWebpage($event)">
+                    <mat-option *ngFor="let option of webpageField.filter" [value]="option" [disabled]="webpageField.id == option.id">
+                    {{option?.page_name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>

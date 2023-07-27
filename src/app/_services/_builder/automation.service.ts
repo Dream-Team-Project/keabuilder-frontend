@@ -4,6 +4,8 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ListService } from '../_crm/list.service';
 import { TagService } from '../_crm/tag.service';
 import { FieldService } from '../_crm/field.service';
+import { EmailService } from '../_crm/email.service';
+import { WebpagesService } from '../webpages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +40,7 @@ export class AutomationService {
       id: 'trg-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
       workflows: [
         { id: 'trg-date', name: 'Date', group: 'trigger', target: {id: '', name: 'date'}, icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
-        { id: 'trg-pg-vstd', name: 'Page Visited', group: 'trigger', target: {id: '', name: 'page'}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
+        { id: 'trg-webpg-vstd', name: 'Web Page Visited', group: 'trigger', target: {id: '', name: 'webpage'}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
       ]
     }
   ];
@@ -74,22 +76,35 @@ export class AutomationService {
   ];
   activeTriggers: any = [];
   activeActions: any = [];
+  webpages: Array<any> = [];
   forms: Array<any> = [];
   lists: Array<any> = [];
   tags: Array<any> = [];
   fields: Array<any> = [];
+  emails: Array<any> = [];
   anyTarget:any = {id: 'all', name: 'Any'};
+  anyPgTarget:any = {id: 'all', page_name: 'Any'};
   allWorkFlowIds:Array<number> = [];
 
   constructor(public _general: GeneralService,
     private _file: FileUploadService,
     private _list: ListService,
     private _tag: TagService,
-    private _field: FieldService) {
+    private _field: FieldService,
+    private _email: EmailService,
+    private _webpage: WebpagesService) {
+      this.fetchWebpages();
       this.fetchForms();
       this.fetchLists();
       this.fetchTags();
       this.fetchFields();
+      this.fetchEmails();
+  }
+
+  fetchWebpages() {
+    this._webpage.getWebpages().subscribe((resp:any)=>{
+      this.webpages = resp?.data;
+    })
   }
 
   fetchForms() {
@@ -116,6 +131,12 @@ export class AutomationService {
     })
   }
 
+  fetchEmails() {
+    this._email.fetchemails().subscribe((resp:any)=>{
+      this.emails = resp?.data;
+    })
+  }
+
   fetchTargetName(wf:any) {
     if(wf?.target) {
       var resp = [];
@@ -123,7 +144,9 @@ export class AutomationService {
       else if(wf.target.name == 'form') resp = this.forms.filter((f:any) => f.id == wf.target.id);
       else if(wf.target.name == 'list') resp = this.lists.filter((l:any) => l.id == wf.target.id);
       else if(wf.target.name == 'tag') resp = this.tags.filter((t:any) => t.id == wf.target.id);
-      return resp[0]?.name;
+      else if(wf.target.name == 'email') resp = this.emails.filter((t:any) => t.id == wf.target.id);
+      else if(wf.target.name == 'webpage') resp = this.webpages.filter((t:any) => t.id == wf.target.id);
+      return resp[0]?.page_name ? resp[0]?.page_name : resp[0]?.name;
     }
     else return '';
   }

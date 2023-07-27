@@ -43,6 +43,18 @@ export class CrmAutomationBuilderComponent implements OnInit {
     error: '',
     filter: []
   }
+  emailField:any = {
+    id: '',
+    value: '',
+    error: '',
+    filter: []
+  }
+  webpageField:any = {
+    id: '',
+    value: '',
+    error: '',
+    filter: []
+  }
   tempTrgtErr = '';
   searchTrgtInp = '';
   updateTempTrgt = false;
@@ -78,16 +90,20 @@ export class CrmAutomationBuilderComponent implements OnInit {
   showFieldError(error:string) {
     var trgtNm = this.tempWf.target.name;
     if(trgtNm == 'form') this.formField.error = error;
-    if(trgtNm == 'list')  this.listField.error = error;
-    if(trgtNm == 'tag') this.tagField.error = error;
+    else if(trgtNm == 'list')  this.listField.error = error;
+    else if(trgtNm == 'tag') this.tagField.error = error;
+    else if(trgtNm == 'email') this.emailField.error = error;
+    else if(trgtNm == 'webpage') this.webpageField.error = error;
   }
 
   validateTarget() {
     return new Promise<any>((resolve, reject) => {
       var trgtNm = this.tempWf.target.name;
       if(trgtNm == 'form') this.tempWf.target.id = this.formField.id;
-      if(trgtNm == 'list') this.tempWf.target.id = this.listField.id;
-      if(trgtNm == 'tag') this.tempWf.target.id = this.tagField.id;
+      else if(trgtNm == 'list') this.tempWf.target.id = this.listField.id;
+      else if(trgtNm == 'tag') this.tempWf.target.id = this.tagField.id;
+      else if(trgtNm == 'email') this.tempWf.target.id = this.emailField.id;
+      else if(trgtNm == 'webpage') this.tempWf.target.id = this.webpageField.id;
       resolve(true);
     });
   }
@@ -121,13 +137,21 @@ export class CrmAutomationBuilderComponent implements OnInit {
         this.formField.id = wf.target.id;
         this.formField.value = this._automation.fetchTargetName(wf);
       }
-      if(wf.target.name == 'list') {
+      else if(wf.target.name == 'list') {
         this.listField.id = wf.target.id;
         this.listField.value = this._automation.fetchTargetName(wf);
       }
-      if(wf.target.name == 'tag') {
+      else if(wf.target.name == 'tag') {
         this.tagField.id = wf.target.id;
         this.tagField.value = this._automation.fetchTargetName(wf);
+      }
+      else if(wf.target.name == 'email') {
+        this.emailField.id = wf.target.id;
+        this.emailField.value = this._automation.fetchTargetName(wf);
+      }
+      else if(wf.target.name == 'webpage') {
+        this.webpageField.id = wf.target.id;
+        this.webpageField.value = this._automation.fetchTargetName(wf);
       }
       this.appendIndex = index;
     }
@@ -150,6 +174,18 @@ export class CrmAutomationBuilderComponent implements OnInit {
       filter: []
     }
     this.tagField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: []
+    }
+    this.emailField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: []
+    }
+    this.webpageField = {
       id: '',
       value: '',
       error: '',
@@ -241,6 +277,50 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   // tag
+
+  // email
+
+  resetFilterEmail() {
+    this.emailField.value=''; 
+    this.emailField.id = ''; 
+    this.filterEmail();
+  }
+
+  filterEmail() {
+    var data = JSON.parse(JSON.stringify(this._automation.emails));
+    data.unshift(this._automation.anyTarget);
+    this.emailField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.emailField?.value?.toLowerCase()));
+  }
+
+  selectEmail(e:any) {
+    this.emailField.value = e.option.value.name;
+    this.emailField.id = e.option.value.id;
+    this.emailField.error = '';
+  }
+
+  // email
+
+  // webpage
+
+resetFilterWebpage() {
+  this.webpageField.value=''; 
+  this.webpageField.id = ''; 
+  this.filterWebpage();
+}
+
+filterWebpage() {
+  var data = JSON.parse(JSON.stringify(this._automation.webpages));
+  data.unshift(this._automation.anyPgTarget);
+  this.webpageField.filter = data.filter((option:any) => option?.page_name?.toLowerCase().includes(this.webpageField?.value?.toLowerCase()));
+}
+
+selectWebpage(e:any) {
+  this.webpageField.value = e.option.value.page_name;
+  this.webpageField.id = e.option.value.id;
+  this.webpageField.error = '';
+}
+
+// webpage
 
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
