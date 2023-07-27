@@ -11,10 +11,8 @@
   </ng-template>
    <!-- add new smtp setting-->
    <ng-template #dialog1>
-    <h1 mat-dialog-title class="txt">Connect With SMTP Server</h1>
+    <h1 mat-dialog-title >Add your SMTP Details</h1>
     <div mat-dialog-content>
-         <span class="">Add your SMTP Server Details</span>
-    </div>
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Choose an option</mat-label>
         <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
@@ -44,9 +42,10 @@
             API Key is <strong>required</strong>
         </mat-error>
     </mat-form-field>
+    </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button  cdkFocusInitial  color="primary" (click)="addsmtpdetails()">ADD</button>
+        <button mat-button  cdkFocusInitial  color="primary" (click)="addsmtpdetails()">Add</button>
     </div>
   </ng-template>
  <!-- add new address setting-->

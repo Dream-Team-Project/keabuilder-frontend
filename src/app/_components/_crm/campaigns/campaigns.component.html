@@ -1,3 +1,4 @@
+<!-- create campaign dialog -->
 <ng-template #dialog>
   <h1 mat-dialog-title class="txt">Create A Campaign</h1>
   <div mat-dialog-content>
@@ -20,6 +21,8 @@
       (click)="createcamp()">Create</button>
   </div>
 </ng-template>
+<!-- close create campaign dialog -->
+<!-- delete campaign dialog -->
 <ng-template #deletedialog>
   <h1 mat-dialog-title class="kb-danger">Delete Campaign</h1>
   <div mat-dialog-content>
@@ -38,6 +41,7 @@
     </button>
   </div>
 </ng-template>
+<!-- close delete campaign dialog -->
     <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div  class="row">
@@ -87,14 +91,12 @@
     <div [class.px-3]="toggleview" class="row" *ngIf="kbcampaigns?.length != 0; else nodata">
       <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
         <div [class.row]="toggleview">
-          <div *ngIf="!toggleview" class="keabuilder-title-board line-ellipsis mt-2 mb-2">
-            <div class="fntwt">{{kbcampaign.name | titlecase}}</div>
-            <input type="text" [(ngModel)]="kbcampaign.name"
-              (blur)="changepagename(kbcampaign,kbcampaign.name)" matTooltip="Edit Campaign Name"
-              matTooltipPosition="above">
-          </div>
-          <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
-            <div class="kb-fitimg"
+          <div
+          [style.height]="toggleview ? '150px' : '300px'"
+          [class]="toggleview ? 'col-md-6' : 'col-md-12'"
+          class="p-0"
+        >
+        <div [class.kb-disabled]="kbcampaign.deleting" class="kb-fitimg"
             [ngStyle]="{
               'background-image':
                 'url(' +
@@ -111,12 +113,12 @@
                 <div class="kb-loader-box"></div>
               </div>
             </div>
-          </div>
+            </div>
           <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
             <div class="row align-items-center p-0 h-100">
               <div [class.p-0]="!toggleview" class="col-md-12">
-                <div *ngIf="toggleview" class="keabuilder-title-board line-ellipsis ">
-                  <div class="fntwt">{{kbcampaign.name | titlecase}}</div>
+                <div class="keabuilder-title-board line-ellipsis ftsize">
+                  <span>{{kbcampaign.name | titlecase}}</span>  
                   <input type="text" [(ngModel)]="kbcampaign.name"
                     (blur)="changepagename(kbcampaign,kbcampaign.name)" matTooltip="Edit Campaign Name"
                     matTooltipPosition="above">

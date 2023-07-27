@@ -76,7 +76,9 @@ product :any = {
   this.btntext='Update';
 }
 }
-
+back(){
+  this._general.prevRoute();
+}
 };
 
 

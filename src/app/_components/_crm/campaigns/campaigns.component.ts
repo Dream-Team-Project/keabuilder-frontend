@@ -137,7 +137,7 @@ changepagename(dataobj:any, title:any){
       this.adjustdata(resp?.data);
     });
   }
-duplicatecampaign(campaign:any){
+  duplicatecampaign(campaign:any){
   campaign.publish_status=0;
   campaign.olduid = campaign.uniqueid;
   campaign.uniqueid = this._general.makeid(20);
@@ -163,5 +163,5 @@ duplicatecampaign(campaign:any){
           });
         }
     })   
-}
-}
+  }
+} 

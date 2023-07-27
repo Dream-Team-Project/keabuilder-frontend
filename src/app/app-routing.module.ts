@@ -113,6 +113,7 @@ import { PaymentComponent } from './_components/_sales/payment/payment.component
 import { ProductsComponent } from './_components/_sales/products/products.component';
 import { ProductComponent } from './_components/_sales/product/product.component';
 import { OffersComponent } from './_components/_sales/offers/offers.component';
+import { OfferComponent } from './_components/_sales/offer/offer.component';
 
 // sales
 
@@ -181,6 +182,7 @@ const routes: Routes = [
   ],
   canActivate: [AuthGuard] },
   { path: 'sales/product/:uniqueid', component: ProductComponent, canActivate: [AuthGuard] },
+  { path: 'sales/offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
  
   // sales 
  
@@ -396,6 +398,7 @@ export const RoutingComponents =
     ProductsComponent,
     ProductComponent,
     OffersComponent,
+    OfferComponent,
     DomainComponent
   ];
 
