@@ -13,10 +13,8 @@ export class SignedInGuard implements CanActivate {
   canActivate(): boolean {
     if(this._authService.loggedIn()) {
       this._router.navigate(['/']);
-      return true;
-    }
-    else {
       return false;
     }
+    return true;
   }  
 }
