@@ -73,8 +73,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe,
-   
+    SvgPipe, 
   ],
   imports: [
     AppRoutingModule,

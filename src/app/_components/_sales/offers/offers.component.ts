@@ -74,7 +74,7 @@ dateformat(value:any){
     return text1;
     // return text1+' '+text2;
   }
-createcamp(){
+createoffer(){
 
     if(this.offernameControl.status=='VALID'){
       if(this.offername!=''){
@@ -83,8 +83,8 @@ createcamp(){
           next: data => {
             // console.log(data);
             this.dialog.closeAll();
-            this._snackBar.open('offer Created Successfully!', 'OK');
-            this.router.navigate(['/crm/offer/'+data.uniqueid],{relativeTo: this.route});
+            this._snackBar.open('Offer Created Successfully!', 'OK');
+            this.router.navigate(['/sales/offer/'+data.uniqueid],{relativeTo: this.route});
           }
         });
 
