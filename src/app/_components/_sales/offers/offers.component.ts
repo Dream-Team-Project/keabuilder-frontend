@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,7 +25,9 @@ export class OffersComponent implements OnInit {
   selectedForm:string = '';
   lists: any = [];
   deloffer:any;
-
+  error=false;
+  errormessage:any;
+  
   constructor(
       private _offerservice: OfferService,
       private _listService: ListService,
@@ -75,17 +77,21 @@ dateformat(value:any){
     // return text1+' '+text2;
   }
 createoffer(){
-
     if(this.offernameControl.status=='VALID'){
       if(this.offername!=''){
         var data = {name:this.offername};
         this._offerservice.addoffer(data).subscribe({
           next: data => {
-            // console.log(data);
+            if(data?.success){
             this.dialog.closeAll();
             this._snackBar.open('Offer Created Successfully!', 'OK');
             this.router.navigate(['/sales/offer/'+data.uniqueid],{relativeTo: this.route});
           }
+          else{
+            this.error=true;
+            this.errormessage=data?.message;
+          }
+        }
         });
 
       }
@@ -95,7 +101,12 @@ createoffer(){
   }
 openDialog(templateRef: TemplateRef<any>,id:any): void {
     if(id)  this.deloffer = id;
-    this.dialog.open(templateRef);
+    this.dialog.open(templateRef).afterClosed().subscribe((data)=>{
+      this.offername='';
+      this.deloffer='';
+      this.error=false;
+      this.errormessage='';
+    })
   } 
 changepagename(dataobj:any, title:any){
   }
@@ -139,6 +150,7 @@ changepagename(dataobj:any, title:any){
   }
 duplicateoffer(offer:any){
   offer.publish_status=0;
+  offer.status='opened';
   offer.olduid = offer.uniqueid;
   offer.uniqueid = this._general.makeid(20);
   this._offerservice.duplicateoffer(offer).subscribe((data:any) => {

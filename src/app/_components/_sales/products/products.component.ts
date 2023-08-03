@@ -11,11 +11,7 @@ import { ProductService } from 'src/app/_services/_sales/product.service';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
-
-  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
-  
-  
-  
+ 
   fetching:boolean = true;
   products:Array<any> = [];
 
@@ -25,6 +21,7 @@ export class ProductsComponent implements OnInit {
     description: '',
     thumbnail: '',
     type: '',
+    price:'',
   }
   hasError:string = '';
   
@@ -71,7 +68,7 @@ export class ProductsComponent implements OnInit {
   }
 
   addproduct() {
-    if(this.product.name && this.product.title && this.product.description && this.product.thumbnail && this.product.type) {
+    if(this.product.name && this.product.title && this.product.type) {
       this.hasError = '';
       delete this.product.error;
       this._productservice.addproduct(this.product).subscribe((resp:any) => {
@@ -92,7 +89,7 @@ export class ProductsComponent implements OnInit {
   setError(msg:string) {
     this.hasError = msg;
     this.product.error = true;
-    this.openDialog(this.adddialog, this.product);
+   
   }
 
   deleteproduct() {

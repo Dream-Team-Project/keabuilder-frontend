@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,7 +15,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
   styleUrls: ['./campaigns.component.css']
 })
 export class CrmCampaignsComponent implements OnInit {
-
+  
   fetching:boolean = true;
   campaignname ='';
   campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
@@ -25,7 +25,9 @@ export class CrmCampaignsComponent implements OnInit {
   selectedForm:string = '';
   lists: any = [];
   delcampaign:any;
-
+  error=false;
+  errormessage:any;
+  
   constructor(
       private _campaignservice: CampaignService,
       private _listService: ListService,
@@ -81,10 +83,15 @@ createcamp(){
         var data = {name:this.campaignname};
         this._campaignservice.addcampaign(data).subscribe({
           next: data => {
-            // console.log(data);
+            if(data?.success){
             this.dialog.closeAll();
             this._snackBar.open('Campaign Created Successfully!', 'OK');
             this.router.navigate(['/crm/campaign/'+data.uniqueid],{relativeTo: this.route});
+            } else{
+              this.error=true;
+              this.errormessage=data?.message;
+             
+            }
           }
         });
 
@@ -95,7 +102,11 @@ createcamp(){
   }
 openDialog(templateRef: TemplateRef<any>,id:any): void {
     if(id)  this.delcampaign = id;
-    this.dialog.open(templateRef);
+    this.dialog.open(templateRef).afterClosed().subscribe((data)=>{
+      this.campaignname='';
+      this.error=false;
+      this.errormessage='';
+    })
   } 
 changepagename(dataobj:any, title:any){
   }

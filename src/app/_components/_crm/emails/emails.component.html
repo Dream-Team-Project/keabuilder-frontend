@@ -19,6 +19,7 @@
   <ng-template #adddialog>
     <h1 mat-dialog-title class="txt">Create Template</h1>
     <div mat-dialog-content>
+      <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-error *ngIf="isNotValid(validate.name)">
         Name should not be empty
       </mat-error>
@@ -49,7 +50,6 @@
       <button mat-button mat-dialog-close class="text-danger">Close</button>
       <button
         mat-button
-        mat-dialog-close
         (click)="createemailtemplate()"
         [color]="!validate.name.invalid ? 'primary' : ''" 
         [disabled]="validate.name.invalid || validate.subject.invalid "

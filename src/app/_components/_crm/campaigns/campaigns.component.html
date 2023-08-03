@@ -1,13 +1,11 @@
 <!-- create campaign dialog -->
-<ng-template #dialog>
+<ng-template #adddialog>
   <h1 mat-dialog-title class="txt">Create A Campaign</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-form-field class="kb-full-width mb-2" appearance="fill">
         <mat-label>Campaign Name</mat-label>
         <input type="text" matInput name="campaignname" [(ngModel)]="campaignname" [formControl]="campaignnameControl" required minlength="3" >
-        <mat-error *ngIf="campaignnameControl.hasError('required')">
-            Campaign Name is <strong>required</strong>
-        </mat-error>
         <mat-error *ngIf="campaignnameControl.hasError('minlength')">
             Name must be at least <strong>3</strong> characters
         </mat-error>
@@ -83,7 +81,7 @@
         <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
         <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
       </button>
-      <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
+      <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(adddialog,false)">
         <i class="fa fa fa-envelope" aria-hidden="true"></i> Create Campaign
       </button>
     </div>
