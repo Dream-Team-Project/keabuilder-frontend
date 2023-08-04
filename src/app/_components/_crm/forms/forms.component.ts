@@ -249,12 +249,10 @@ export class CrmFormsComponent implements OnInit {
 
   tagupdate() {
     return new Promise((resolve) => {
-      let i=0;
-      this.newtags.forEach((tag: any) => {
+      this.newtags.forEach((tag: any, index:number) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
           if(data.success){
-            if(i==this.newtags.length-1) resolve(true);
-            i++;
+            if(index==this.newtags.length-1) resolve(true);
             }
         });
       });

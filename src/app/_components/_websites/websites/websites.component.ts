@@ -74,7 +74,7 @@ export class WebsitesComponent implements OnInit {
     if(data.data?.length != 0) {
       this.nodata = false;
       this.allwebsites = [];
-      data.data.forEach((element:any, index:any) => {
+      data.data.forEach((element:any, index:number) => {
         var genobj = {uniqueid:'',title:'',created:'',publishpages:'',totalpage:'',thumbnail:'',subdomain:''};
 
         genobj.title = element.title;

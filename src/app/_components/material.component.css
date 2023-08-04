@@ -48,6 +48,10 @@
     pointer-events: none;
 }
 
+::ng-deep button.mat-button-disabled span svg {
+    fill: rgb(255 255 255 / 26%)!important;
+}
+
 ::ng-deep .mat-progress-spinner {
     margin: auto;
 }

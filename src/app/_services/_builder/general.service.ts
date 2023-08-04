@@ -743,24 +743,20 @@ export class GeneralService {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchFiles('menus').subscribe((data:any)=>{
         if(!data.success) resolve(menus);
-        var ulc = 0;
-        data.data.forEach((html:any)=>{
+        data.data.forEach((html:any, uindex:number)=>{
           var doc = this.parser.parseFromString(html, 'text/html');
           var ul = doc.querySelector('ul');
           var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', html: html, items: []}
-          var lic = 0;
           var list:any = ul?.querySelectorAll('li');
-          list.forEach((li:any) => {
+          list.forEach((li:any, lindex:number) => {
             var anc:any = li.querySelector('a');
             var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
             menu.items.push(item);
-            if(ulc == data.data.length-1 && lic == list.length-1) {
+            if(uindex == data.data.length-1 && lindex == list.length-1) {
               resolve(menus);
             }
-            lic++;
           })
           menus.push(menu);
-          ulc++;
         })
       })
     })
@@ -848,20 +844,18 @@ export class GeneralService {
 
   setMenu(html:any) {
     return new Promise<any>((resolve, reject) => {
-      var i = 0;
       var doc = this.parser.parseFromString(html, 'text/html');
       var appendmenus = doc.querySelectorAll('[data-name="menu"]');
       if(appendmenus.length == 0) resolve(doc);
-      appendmenus.forEach((data:any)=>{
+      appendmenus.forEach((data:any, index:number)=>{
         if(data) {
           var menu = this.menus.filter((m:any)=>m.id == data.getAttribute('data-id'))
           if(menu.length != 0) {
             data.innerHTML = menu[0].html;
-            if(appendmenus.length-1 == i) {
+            if(appendmenus.length-1 == index) {
               resolve(doc);
             }
           }
-          i++;
         }
       })
     })

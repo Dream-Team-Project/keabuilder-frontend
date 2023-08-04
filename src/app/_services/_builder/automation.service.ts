@@ -16,31 +16,31 @@ export class AutomationService {
     {
       id: 'trg-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
       workflows: [
-        { id: 'trg-sub-to-list', name: 'Subscribed to a List', group: 'trigger', target: {id: '', name: 'list'}, icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
-        { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', group: 'trigger', target: {id: '', name: 'list'}, icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
-        { id: 'trg-tag-add', name: 'Tag Added', group: 'trigger', target: {id: '', name: 'tag'}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'trg-tag-rm', name: 'Tag Removed', group: 'trigger', target: {id: '', name: 'tag'}, icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
+        { id: 'trg-sub-to-list', name: 'Subscribed to a List', group: 'trigger', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
+        { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', group: 'trigger', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
+        { id: 'trg-tag-add', name: 'Tag Added', group: 'trigger', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'trg-tag-rm', name: 'Tag Removed', group: 'trigger', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
       workflows: [
-        { id: 'trg-form-sub', name: 'Form Submitted', group: 'trigger', target: {id: '', name: 'form'}, icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', group: 'trigger', target: {id: '', name: 'form'}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+        { id: 'trg-form-sub', name: 'Form Submitted', group: 'trigger', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
+        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', group: 'trigger', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
       workflows: [
-        { id: 'trg-opre-email', name: 'Opens/reads an email', group: 'trigger', target: {id: '', name: 'email'}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
-        { id: 'trg-reply-email', name: 'Replies to an email', group: 'trigger', target: {id: '', name: 'email'}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
+        { id: 'trg-opre-email', name: 'Opens/reads an email', group: 'trigger', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+        { id: 'trg-reply-email', name: 'Replies to an email', group: 'trigger', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
       workflows: [
-        { id: 'trg-date', name: 'Date', group: 'trigger', target: {id: '', name: 'date'}, icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
-        { id: 'trg-webpg-vstd', name: 'Web Page Visited', group: 'trigger', target: {id: '', name: 'webpage'}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
+        { id: 'trg-field-chng', name: 'Field Updated', group: 'trigger', target: {id: '', name: 'field', change: { from: {any: true, value: ''}, to: {any: true, value: ''}}, run_once: true}, icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
+        { id: 'trg-webpg-vstd', name: 'Web Page Visited', group: 'trigger', target: {id: '', name: 'webpage', run_once: true}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
       ]
     }
   ];
@@ -82,9 +82,13 @@ export class AutomationService {
   tags: Array<any> = [];
   fields: Array<any> = [];
   emails: Array<any> = [];
-  anyTarget:any = {id: 'all', name: 'Any'};
-  anyPgTarget:any = {id: 'all', page_name: 'Any'};
+  anyNameTarget:any = {id: '*', name: 'Any'};
+  anyPageTarget:any = {id: '*', page_name: 'Any'};
+  anyLabelTarget:any = {id: '*', label: 'Any'};
   allWorkFlowIds:Array<number> = [];
+
+  wfSession:any = {undo: 0, redo: 0}
+  wfSessionArr:any = [];
 
   constructor(public _general: GeneralService,
     private _file: FileUploadService,
@@ -99,6 +103,7 @@ export class AutomationService {
       this.fetchTags();
       this.fetchFields();
       this.fetchEmails();
+      this.saveWfSession();
   }
 
   fetchWebpages() {
@@ -140,13 +145,32 @@ export class AutomationService {
   fetchTargetName(wf:any) {
     if(wf?.target) {
       var resp = [];
-      if(wf.target.id == 'all') resp.push(this.anyTarget);
-      else if(wf.target.name == 'form') resp = this.forms.filter((f:any) => f.id == wf.target.id);
-      else if(wf.target.name == 'list') resp = this.lists.filter((l:any) => l.id == wf.target.id);
-      else if(wf.target.name == 'tag') resp = this.tags.filter((t:any) => t.id == wf.target.id);
-      else if(wf.target.name == 'email') resp = this.emails.filter((t:any) => t.id == wf.target.id);
-      else if(wf.target.name == 'webpage') resp = this.webpages.filter((t:any) => t.id == wf.target.id);
-      return resp[0]?.page_name ? resp[0]?.page_name : resp[0]?.name;
+      if(wf.target.id == '*') return 'Any';
+      else if(wf.target.name == 'form') {
+        resp = this.forms.filter((f:any) => f.id == wf.target.id);
+        return resp[0]?.name;
+      }
+      else if(wf.target.name == 'field') {
+        resp = this.fields.filter((f:any) => f.id == wf.target.id);
+        return resp[0]?.label;
+      }
+      else if(wf.target.name == 'list') {
+        resp = this.lists.filter((l:any) => l.id == wf.target.id);
+        return resp[0]?.name;
+      }
+      else if(wf.target.name == 'tag') {
+        resp = this.tags.filter((t:any) => t.id == wf.target.id);
+        return resp[0]?.name;
+      }
+      else if(wf.target.name == 'email') {
+        resp = this.emails.filter((t:any) => t.id == wf.target.id);
+        return resp[0]?.name;
+      }
+      else if(wf.target.name == 'webpage') {
+        resp = this.webpages.filter((t:any) => t.id == wf.target.id);
+        return resp[0]?.page_name;
+      }
+      else return '';
     }
     else return '';
   }
@@ -196,5 +220,38 @@ export class AutomationService {
     }
     this.allWorkFlowIds.push(temp.id);
     return temp.id;
+  }
+
+  saveWfSession() {
+    var sessionArr = {actTrg: this.activeTriggers, actAct: this.activeActions};
+    var sessionStr = JSON.stringify(sessionArr);
+    if(this.wfSessionArr[this.wfSessionArr.length-1] != sessionStr && this.wfSessionArr[this.wfSession.undo] != sessionStr) {
+      this.wfSessionArr.push(sessionStr);
+      this.wfSession.undo = this.wfSessionArr.length-1; 
+      this.wfSession.redo = this.wfSessionArr.length; 
+    }
+  }
+
+  undo() {
+    var sObj = this.wfSessionArr[this.wfSession.undo-1];
+    if(sObj) {
+      this.setPrevSession(JSON.parse(sObj));
+      this.wfSession.undo--;
+      this.wfSession.redo--;
+    }
+  }
+
+  redo() {
+    var sObj = this.wfSessionArr[this.wfSession.redo];
+    if(sObj) {
+      this.setPrevSession(JSON.parse(sObj));
+      this.wfSession.undo++;
+      this.wfSession.redo++;
+    }
+  }
+
+  setPrevSession(sObj:any) {
+    this.activeTriggers = sObj.actTrg;
+    this.activeActions = sObj.actAct;
   }
 }

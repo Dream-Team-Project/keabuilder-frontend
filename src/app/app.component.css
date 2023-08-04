@@ -138,6 +138,10 @@ main {
     background-color: rgb(217 201 153 / 30%)!important;
 }
 
+::ng-deep .mat-menu-panel {
+    min-height: 40px!important;
+}
+
 @media only screen and (max-width:500px){
     .kb-main-container{
         padding: 20px 0px;

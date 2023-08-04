@@ -82,15 +82,13 @@ export class CrmFormFetchComponent implements OnInit {
 
   validateFields() {
     return new Promise((resolve, reject)=>{
-      var loop = 0;
       var res = true;
       this.formans = this._form.formField.filter((fe:any)=> fe.field_tag);
-      this.formans.forEach((ff:any)=>{
+      this.formans.forEach((ff:any, index:number)=>{
         ff.error = !ff.value && ff.required;
         if(ff.type == 'email') ff.invalid = !this.isEmailValid(ff.value);
         if(ff.error || ff.invalid) res = false;
-        if(this.formans.length-1 == loop) resolve(res);
-        loop++;
+        if(this.formans.length-1 == index) resolve(res);
       })
     })
   }

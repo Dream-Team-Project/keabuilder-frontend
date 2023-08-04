@@ -96,7 +96,7 @@
                 <i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe
             </button>
             <button mat-menu-item (click)="urdo = !urdo; zoom.active = false" [class.kb-btn-active]="urdo">
-                <i [innerHTML]="'refresh' | svg | safeHtml"></i> Done
+                <i class="fa-solid fa-clock-rotate-left"></i> Recent
             </button>
             <button mat-menu-item *ngIf="!wftgl" (click)="zoomEmit(!zoom.active); urdo = false" [class.kb-btn-active]="zoom.active">
                 <i [innerHTML]="'zoomin' | svg | safeHtml"></i> Zoom
@@ -125,11 +125,11 @@
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
         </button>
         <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
-            <i class="far fa-clock"></i> Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
+            <i class="fa-regular fa-clock"></i> Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}
         </button>
         <mat-menu #autosave>
             <button mat-menu-item *ngFor="let opt of _general.autosaveopt" (click)="_general.autosave = opt; setTrigger('autosave')" [class.kb-btn-active]="_general.autosave.value == opt.value">{{opt ? 'Every '+opt.value+' '+opt.unit : 'Off'}}</button>
-            <button mat-menu-item (click)="_general.autosave=''" [class.kb-btn-active]="!_general.autosave.value">OFF</button>
+            <button mat-menu-item (click)="_general.autosave=''" [class.kb-btn-active]="!_general.autosave.value"><i class="fa-solid fa-power-off"></i> OFF</button>
         </mat-menu>
         <button mat-button *ngIf="_general.target.type == 'website'" [disabled]="_general.saveDisabled" [matMenuTriggerFor]="status" #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
             <i [innerHTML]="(_general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status > {{_general.main.publish_status ? 'Published' : 'Draft'}}

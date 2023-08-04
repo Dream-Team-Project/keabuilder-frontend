@@ -114,7 +114,6 @@ import { ProductsComponent } from './_components/_sales/products/products.compon
 import { ProductComponent } from './_components/_sales/product/product.component';
 import { OffersComponent } from './_components/_sales/offers/offers.component';
 import { OfferComponent } from './_components/_sales/offer/offer.component';
-
 // sales
 
 const routes: Routes = [
