@@ -30,7 +30,9 @@ export class CrmContactsComponent implements OnInit {
  
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fileFormControl= new FormControl('',[Validators.required]);
+  fileFormControl= new FormControl('');
+  tagsFormControl= new FormControl('');
+  fieldsFormControl= new FormControl('');
   fetching:boolean = true;
   contacts:Array<any> = [];
   pagecontacts:Array<any> = [];
@@ -64,7 +66,8 @@ export class CrmContactsComponent implements OnInit {
   uuid:any;
   listid:any;
   spinner=false;
- 
+  exportname:any;
+
   constructor(
     private _contactService: ContactService,
     private _listService: ListService,
@@ -287,6 +290,9 @@ resetobj(){
         };
         this.newtags=[];
         this.document='';
+        this.exportname='';
+        this.tagsFormControl.reset();
+        this.fieldsFormControl.reset();
 }
 // file upload
 documentChangeEvent(event:any){
@@ -360,30 +366,26 @@ uploadcontacts(){
   
   
 }
-uploadAlllistid(){
-  this.lists.forEach(element =>{
-    this.filteredTempIds?.lists.push(element?.uniqueid);
-  })
-  if(this.lists?.length == this.filteredTempIds.lists?.length){
-    this.uploadcontacts();
-  }
-}
 
 exportcontact(isList:boolean,type:any){
-  console.log(isList,type)
+  // console.log(isList,type)
+  this.spinner=true;
   let lists = isList ? this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : 'NULL' : 'NULL';
   if(lists || !isList) {
-    console.log(lists)
-    this._contactService.exportcontacts({type:type,lists:lists}).subscribe((resp:any)=>{
+    // console.log(lists)
+    this._contactService.exportcontacts({type:type,lists:lists,tags:this.tagsFormControl.value,fields:this.fieldsFormControl.value}).subscribe((resp:any)=>{
       if(resp.success){
         const worksheet:XLSX.WorkSheet=XLSX.utils.json_to_sheet(resp.data);
         const workbook:XLSX.WorkBook=XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook,worksheet,'Sheet1');
-        XLSX.writeFile(workbook,'Contacts-export.xlsx');
+        XLSX.writeFile(workbook,this.exportname ? this.exportname+'.xlsx' :'Contacts-export.xlsx');
         this.resetobj();
+        this.spinner=false;
+        this.dialog.closeAll();
       }
       else{
         this._general.openSnackBar(true,resp?.message,'Ok','center','top');
+        this.spinner=false;
       }
     })
   }

@@ -1,68 +1,81 @@
 <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12 kb-contact-content"> 
-        <div class="row kb-contact-details py-3 mx-0">
-            <div class="col-md-8">
-              <div class="kb-contact-details-card rounded">
-                <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
-                  <h5 class="col-md-4 p-0 m-0">Product Details</h5>
-                  <div>
-                    <button mat-raised-button class="text---kb-black" class="mr-2" (click)="back()"><i class="fa-solid fa-angle-left"></i> Back </button>
-                    <button mat-raised-button color="primary" (click)="edit == false ? btnchange() : updateproduct()">{{btntext}}</button>
+      <div class="col-md-12 kb-product-content"> 
+        <div class="row kb-product-card m-3">
+          <div class="col-sm-1">
+            <div class="kb-product-icon">
+              <img [src]=" product?.thumbnail ? this._image.uploadImgPath+_image.getImgPath(product?.thumbnail) : this._image.uploadImgPath+_image.getImgPath('webpage_thumbnail.jpg')" class="img-fluid kb-product-icon rounded">
+            </div>
+          </div>
+          <div class="col-sm-11">
+            <div class="kb-product-info d-flex justify-content-between">
+              <div>
+              <h5>{{product.name }}</h5>
+              <div>
+                <span class="border-right pr-3 mr-3" matTooltip="Type" matTooltipPosition="above">
+                  <i class="fa-brands fa-product-hunt mr-2"></i>{{product?.type | titlecase}}
+                </span>
+                <span matTooltip="Price" matTooltipPosition="above"><i class="fa-solid fa-dollar-sign mr-2" ></i>{{product.price ? product.price : '---'}}</span>
+              </div>
+            </div>
+            <div>
+              <button mat-icon-button matTooltip="More Options" matTooltipPosition="above"><i class="fa-solid fa-ellipsis mr-2"></i></button>
+              <button mat-icon-button matTooltip="View" matTooltipPosition="above"><i class="fa-regular fa-eye mr-2"></i></button>
+              <button mat-raised-button color="primary" (click)="updateproduct()">Save</button>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row kb-product-details px-3 py-3">
+          <div class="col-md-12 d-flex justify-content-between py-3">
+              <div class="col-sm-4 kb-product-details-card rounded px-3 py-3">
+               <h5>Details</h5> 
+                <span class="text-align-justify">Give your product a title, add a description, add a price and upload a product thumbnail image. This image will show in your customer's library of products they have purchased from you.</span>
+              </div>
+              <div class="col-sm-8 kb-product-details-card rounded">  
+                    <div class="px-4 py-3 kb-product-field-action">
+                      <div class="px-1 py-2 kb-product-field-action">
+                      <mat-label class="">Name</mat-label>
+                      <input matInput type="text" [(ngModel)]="product.name" class="kb-product-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
+                      </div>
+                    <div class="px-1 py-2 kb-product-field-action">
+                    <mat-label>Title</mat-label>
+                        <textarea matInput type="text" [(ngModel)]="product.title" class="kb-product-field-inp px-2 py-1" style="height : 60px;" [class.border-danger]="product.title.error || product.title.uniqueErr" required></textarea> 
+                    </div> 
+                    <div class="px-1 py-2 kb-product-field-action">
+                        <mat-label>Description</mat-label>
+                        <textarea type="text" [(ngModel)]="product.description" class="kb-product-field-inp px-2 py-1" style="height : 100px;" [class.border-danger]="product.description.error || product.description.uniqueErr" required></textarea>
+                      </div>
+                     <div class="imgFormField p-3 border kb-product-field-action">
+                      <mat-label>Thumbnail</mat-label>
+                      <div *ngIf="!thumbnail.path" class="text-center py-2">
+                      <img [src]=" product.thumbnail ? this._image.uploadImgPath+_image.getImgPath(product.thumbnail) : this._image.uploadImgPath+_image.getImgPath('webpage_thumbnail.jpg')" class="img-fluid rounded">
+                       </div>
+                      <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+                          <img class="img-fluid" [src]="_image.timeStamp && !thumbnail.type  ? thumbnail.path + '?' + _image.timeStamp : thumbnail.path"/>
+                      </div>
+                      <span class="kb-thumbnail-info">This image will be used to display this product when your members view their library.</span>
+                      <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg" class="drop-zone__input">
+                      <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+                      <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
+                     
                   </div>
-                </div>
-                <table class="table">
-                  <tbody>
-                    <tr >
-                      <td class="col-4"><label>Name</label></td>
-                      <td class="col-8 px-0" *ngIf="!edit else inp">{{product?.name | titlecase}}</td>  
-                      <ng-template #inp>
-                      <input type="text" [(ngModel)]="product.name" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
-                    </ng-template>
-                    </tr>
-                    <tr >
-                      <td class="col-4"><label>Title</label></td>
-                      <td class="col-8 px-0" *ngIf="!edit else inpt">{{product?.title}}</td> 
-                      <ng-template #inpt>
-                        <input type="text" [(ngModel)]="product.title" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
-                      </ng-template>  
-                    </tr>
-                    <tr >
-                      <td class="col-4"><label>Description</label></td>
-                      <td class="col-8 px-0" *ngIf="!edit else inpd">{{product?.description}}</td>
-                      <ng-template #inpd>
-                        <input type="text" [(ngModel)]="product.description" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
-                      </ng-template>   
-                    </tr>
-                    <tr >
-                      <td class="col-4"><label>Thumbnail</label></td>
-                      <td class="col-8 px-0" *ngIf="!edit else inpth">{{product?.thumbnail}}</td>  
-                      <ng-template #inpth>
-                        <input type="text" [(ngModel)]="product.thumbnail" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="product.name.error || product.name.uniqueErr" required> 
-                      </ng-template> 
-                    </tr>
-                    <tr >
-                      <td class="col-4"><label>Type</label></td>
-                      <td class="col-8 px-0"  *ngIf="!edit else inpty">{{product?.type}}</td> 
-                      <ng-template #inpty>
-                      <mat-select class="kb-contact-field-inp px-2 py-1" [(ngModel)]="product.type" required>
+                     <div class="row px-1 py-2 kb-product-field-action">
+                      <div class="col-md-6">
+                        <mat-label>Type</mat-label>
+                      <mat-select class="kb-product-field-inp px-2 py-1" [(ngModel)]="product.type" required>
                         <mat-option value="physical">Physical</mat-option>
                         <mat-option value="virtual">Virtual</mat-option>
                     </mat-select> 
-                  </ng-template> 
-                    </tr>
-                    <tr >
-                      <td class="col-4"><label>Created</label></td>
-                      <td class="col-8 px-0" >{{product?.created_at | date :'mediumDate'}}</td>   
-                    </tr>
-                  </tbody>
-                </table>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-label>Price</mat-label>
+                    <input type="text" [(ngModel)]="product.price" class="kb-product-field-inp px-2 py-1" [class.border-danger]="product.price.error || product.price.uniqueErr" required> 
+                    </div>
+                  
+                  </div>
               </div>
-             <!-- <div class="d-flex justify-content-center">
-              <button mat-raised-button color="primary" (click)="edit == false ? btnchange() : updateproduct()">{{btntext}}</button>
-            </div> -->
-            </div>
-            
+            </div>           
           </div>
           </div>
           </div>

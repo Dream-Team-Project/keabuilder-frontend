@@ -150,8 +150,8 @@
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">Cancel</button>
-    <button mat-button [color]="'primary'" [disabled]="fileFormControl.invalid || document.length==0" (click)="uploadcontacts()">Import</button>
-    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="uploadAlllistid()">Import All</button>
+    <button mat-button [color]="'primary'" [disabled]="fileFormControl.invalid || document?.length == 0" (click)="uploadcontacts()">Import</button>
+    <!-- <button mat-raised-button mat-dialog-close [color]="'primary'" [disabled]="filteredTempIds.lists?.length > 0" (click)="uploadcontacts('all')">Import All</button> -->
   </div>
 </ng-template>
 <ng-template #exportdialog>
@@ -192,11 +192,24 @@
       </mat-autocomplete>
     </mat-form-field>
     <span class="kb-fnt">(Leave empty if you don't want to subscribe to any list)</span>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Export name (Optional)</mat-label>
+      <input matInput type="text" placeholder="Enter export name" [(ngModel)]="exportname">
+    </mat-form-field>
+    <span class="kb-fnt">(This is the name given to exported excel file)</span>
+    <div class="kb-fnt py-4">
+      <div >Select fields to export (Optional)</div>
+  <div><mat-checkbox [formControl]="tagsFormControl">Tags</mat-checkbox></div>
+  <div><mat-checkbox [formControl]="fieldsFormControl">Fields</mat-checkbox></div>
+    </div>
+    <div class="kb-spinner" *ngIf="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-    <button mat-button mat-dialog-close [color]="'primary'" (click)="exportcontact(true,'single')">Export</button>
-    <button mat-raised-button mat-dialog-close [color]="'primary'" (click)="exportcontact(false,'all')">Export All</button>
+    <button mat-button  [color]="'primary'" (click)="exportcontact(true,'single')">Export</button>
+    <!-- <button mat-raised-button mat-dialog-close [color]="'primary'" [disabled]="filteredTempIds.lists?.length > 0" (click)="exportcontact(false,'all')">Export All</button> -->
   </div>
 </ng-template>
 <div class="container-fluid">

@@ -276,7 +276,7 @@ export class SidebarComponent implements OnInit {
         routerlink: '/sales/offers',
         img: 'payment.gif',
         icon: 'fa fa-percentage',
-        title: 'Offers'
+        title: 'Checkout'
       },
       {
         0:true,

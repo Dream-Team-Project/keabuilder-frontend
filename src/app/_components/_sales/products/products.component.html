@@ -26,15 +26,16 @@
     <ng-template #adddialog>
       <h1 mat-dialog-title>Add Product</h1>
       <div mat-dialog-content>
+        <mat-error *ngIf="this.product.error">{{this.hasError}}</mat-error>
         <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
           <mat-label>Name</mat-label>
-          <input matInput type="text" placeholder="product name" [(ngModel)]="product.name" required [minlength]="3">
+          <input matInput type="text" placeholder="Product name" [(ngModel)]="product.name" required [minlength]="3">
         </mat-form-field>
         <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
           <mat-label>Title</mat-label>
           <input matInput type="text" placeholder="title name" [(ngModel)]="product.title" required [minlength]="3">
         </mat-form-field>
-        <mat-error *ngIf="hasError">{{hasError}}</mat-error>
+        <!-- <mat-error *ngIf="hasError">{{hasError}}</mat-error>
         <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
           <mat-label>Description</mat-label>
           <input matInput type="text" placeholder="description" [(ngModel)]="product.description" required [minlength]="3">
@@ -42,7 +43,7 @@
         <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
           <mat-label>Thumbnail</mat-label>
           <input matInput type="text" placeholder="thumbnail" [(ngModel)]="product.thumbnail" required [minlength]="3">
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
           <mat-label> Type</mat-label>
           <mat-select [(ngModel)]="product.type" required>

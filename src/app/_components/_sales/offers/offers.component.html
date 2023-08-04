@@ -1,13 +1,11 @@
 <!-- create offer dialog -->
-<ng-template #dialog>
+<ng-template #adddialog>
     <h1 mat-dialog-title class="txt">Create A Offer</h1>
     <div mat-dialog-content>
+      <mat-error *ngIf="error">{{errormessage}}</mat-error>
         <mat-form-field class="kb-full-width mb-2" appearance="fill">
           <mat-label>Offer Name</mat-label>
           <input type="text" matInput name="offername" [(ngModel)]="offername" [formControl]="offernameControl" required minlength="3" >
-          <mat-error *ngIf="offernameControl.hasError('required')">
-              offer Name is <strong>required</strong>
-          </mat-error>
           <mat-error *ngIf="offernameControl.hasError('minlength')">
               Name must be at least <strong>3</strong> characters
           </mat-error>
@@ -83,7 +81,7 @@
           <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
         </button>
-        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
+        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(adddialog,false)">
           <i class="fa fa fa-envelope" aria-hidden="true"></i> Create offer
         </button>
       </div>
@@ -144,8 +142,9 @@
                   <div class="sentoption">
                     <hr>
                     <div class="d-flex justify-content-between">
-                      <span class="fnt"><i class="fa fa-user mr-2 colr" aria-hidden="true"></i>Sent To: <span *ngIf="kboffer.sentto>0"> {{kboffer.sentto}}</span>
-                      <span *ngIf="kboffer.sentto==0">--</span></span>
+                      <span class="fnt"><i class="fa-brands fa-product-hunt mr-2 colr" aria-hidden="true"></i>Products : <span *ngIf="kboffer.productid"> {{kboffer.productid?.split(',')?.length}}</span>
+                      <span *ngIf="!kboffer.productid">--</span>
+                    </span>
                     <span class="fnt">Publish On: 
                       <span *ngIf="kboffer.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.deliverdate)}}</span>
                       <span *ngIf="!kboffer.deliverdate">--</span>
@@ -168,7 +167,7 @@
             </div>
   
             <div class="statbadg2">
-              <span class="statusbadge2">{{kboffer.sendoption=='immediately'?'Immediately':'Specific Time'}}</span>
+              <span class="statusbadge2">{{kboffer?.status=='opened'?'Opened':'Closed'}}</span>
             </div>
           </div>
           </div>

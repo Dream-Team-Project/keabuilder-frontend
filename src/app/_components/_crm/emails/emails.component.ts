@@ -13,7 +13,7 @@ import { EmailService } from 'src/app/_services/_crm/email.service';
 })
 export class CrmEmailsComponent implements OnInit {
 
-  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  // @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   
   validate = {
     name: new FormControl('',[Validators.required]),
@@ -32,6 +32,9 @@ export class CrmEmailsComponent implements OnInit {
   delemail:any;
   nodata = true;
   fetching:boolean = true;
+  error=false;
+  errormessage:any;
+  
  
   constructor(private _file: FileUploadService,
               public _email:EmailService,
@@ -68,12 +71,14 @@ export class CrmEmailsComponent implements OnInit {
         var msg, err = data.success==0;
         if(err){
           msg = 'Server Error';
+          this.error=true;
+          this.errormessage='Name must be unique';
         }
         else {
           msg = 'Email Template has been successfully created!';
           this._general.redirectToBuilder(data.uniqueid, 'email');
         }
-        this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
+        // this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
       }); 
   }
 
@@ -128,6 +133,8 @@ export class CrmEmailsComponent implements OnInit {
     var dialog  = this.dialog.open(templateRef);
     dialog.afterClosed().subscribe((data:any) => {
       this.validate.name.reset();
+      this.error=false;
+      this.errormessage='';
     })
   }
 
