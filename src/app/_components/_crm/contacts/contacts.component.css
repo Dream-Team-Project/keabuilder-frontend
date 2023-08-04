@@ -26,4 +26,10 @@
     position: relative;
     top: -15px;
 }
-  
+.kb-check{
+    font-size:12px ;
+    color: var(--primary-color);
+}
+.kb-fnt-fields{
+    display: none;
+}  
