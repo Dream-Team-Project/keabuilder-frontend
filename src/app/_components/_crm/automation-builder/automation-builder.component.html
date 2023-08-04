@@ -49,10 +49,62 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectForm($event)">
                     <mat-option *ngFor="let option of formField.filter" [value]="option" [disabled]="formField.id == option.id">
-                    {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="formField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div *ngSwitchCase="'field'">
+            <mat-error *ngIf="fieldField.error">{{fieldField.error}}</mat-error>
+            <mat-form-field appearance="fill" (click)="filterField()" [class.mat-form-field-invalid]="fieldField.error">
+                <mat-label>Select an Field</mat-label>
+                <input type="text" name="field" placeholder="Search field" [(ngModel)]="fieldField.value" 
+                (input)="filterField()" [matAutocomplete]="matAuto" matInput>
+                <button *ngIf="fieldField.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetFilterField()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectField($event)">
+                    <mat-option *ngFor="let option of fieldField.filter" [value]="option" [disabled]="fieldField.id == option.id">
+                    {{option?.label}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <div>
+                <label id="field-changes-from" class="kb-wf-radio-label">Changes From</label>
+                <mat-radio-group aria-labelledby="field-changes-from" [(ngModel)]="fieldField.change.from.any" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">Any Value</mat-radio-button>
+                    <mat-radio-button [value]="false">Specific Value</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field *ngIf="!fieldField.change.from.any" appearance="fill">
+                    <mat-label>Type a value</mat-label>
+                    <input type="text" name="change-from-specific" [(ngModel)]="fieldField.change.from.value" matInput>
+                </mat-form-field>
+            </div>
+            <div>
+                <label id="field-changes-to" class="kb-wf-radio-label">Changes To</label>
+                <mat-radio-group aria-labelledby="field-changes-to" [(ngModel)]="fieldField.change.to.any" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">Any Value</mat-radio-button>
+                    <mat-radio-button [value]="false">Specific Value</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field *ngIf="!fieldField.change.to.any" appearance="fill">
+                    <mat-label>Type a value</mat-label>
+                    <input type="text" name="change-from-specific" [(ngModel)]="fieldField.change.to.value" matInput>
+                </mat-form-field>
+            </div>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="fieldField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
         <div *ngSwitchCase="'list'">
             <mat-error *ngIf="listField.error">{{listField.error}}</mat-error>
@@ -65,10 +117,17 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectList($event)">
                     <mat-option *ngFor="let option of listField.filter" [value]="option" [disabled]="listField.id == option.id">
-                    {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="listField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
         <div *ngSwitchCase="'tag'">
             <mat-error *ngIf="tagField.error">{{tagField.error}}</mat-error>
@@ -81,10 +140,17 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectTag($event)">
                     <mat-option *ngFor="let option of tagField.filter" [value]="option"  [disabled]="tagField.id == option.id">
-                    {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="tagField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
         <div *ngSwitchCase="'email'">
             <mat-error *ngIf="emailField.error">{{emailField.error}}</mat-error>
@@ -97,10 +163,17 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectEmail($event)">
                     <mat-option *ngFor="let option of emailField.filter" [value]="option" [disabled]="emailField.id == option.id">
-                    {{option?.name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="emailField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
         <div *ngSwitchCase="'webpage'">
             <mat-error *ngIf="webpageField.error">{{webpageField.error}}</mat-error>
@@ -113,10 +186,17 @@
                 </button>
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete" (optionSelected)="selectWebpage($event)">
                     <mat-option *ngFor="let option of webpageField.filter" [value]="option" [disabled]="webpageField.id == option.id">
-                    {{option?.page_name}} <span *ngIf="option.id == 'all'" class="kb-tag kb-info-tag ml-2">Default</span>
+                    {{option?.page_name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <div *ngIf="tempWf.group == 'trigger'">
+                <label id="kb-wf-runs-label" class="kb-wf-radio-label">Runs</label>
+                <mat-radio-group aria-labelledby="kb-wf-runs-label" [(ngModel)]="webpageField.run_once" class="kb-radio-flex my-2">
+                    <mat-radio-button [value]="true">One Time</mat-radio-button>
+                    <mat-radio-button [value]="false">Each Time</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
     </div>
     <div mat-dialog-actions class="justify-content-between">
@@ -140,35 +220,38 @@
                 <button mat-button (click)="_automation._general.redirectLink('/')"><img
                         [src]="_image.imgPath+'logo/kblogo-white.png'" width="18px"></button>
                 <button mat-button (click)="_automation._general.prevRoute()" class="kb-backBtn">
-                    <i [innerHTML]="'left_circle_arrow' | svg | safeHtml" class="mr-1"></i>Back
+                    <i [innerHTML]="'left_circle_arrow' | svg | safeHtml"></i>Back
                 </button>
                 <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger"
                     [class.kb-btn-active]="ast.menuOpen">
-                    Auto Save > {{autosave ? 'ON' : 'OFF'}}
+                    <i class="fa-regular fa-clock"></i>Auto Save > {{autosave ? 'ON' : 'OFF'}}
                 </button>
                 <mat-menu #asm>
-                    <button mat-menu-item (click)="autosave = true" [class.kb-btn-active]="autosave">ON</button>
-                    <button mat-menu-item (click)="autosave = false" [class.kb-btn-active]="!autosave">OFF</button>
+                    <button mat-menu-item (click)="autosave = true" [class.kb-btn-active]="autosave"><i class="fa-solid fa-toggle-on"></i>ON</button>
+                    <button mat-menu-item (click)="autosave = false" [class.kb-btn-active]="!autosave"><i class="fa-solid fa-toggle-off"></i>OFF</button>
                 </mat-menu>
                 <button mat-button>
-                    <i class="fa-solid fa-vial"></i> Test
-                </button>
-                <button mat-button>
-                    <i [innerHTML]="'save' | svg | safeHtml"></i> Save
+                    <i [innerHTML]="'save' | svg | safeHtml"></i>Save
                 </button>
                 <button mat-button [disabled]="_automation._general.saveDisabled" [matMenuTriggerFor]="status"
                     #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
-                    <i [innerHTML]="(_automation._general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i> Status >
+                    <i [innerHTML]="(_automation._general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i>Status >
                     {{_automation._general.main.publish_status ? 'Published' : 'Draft'}}
                 </button>
                 <mat-menu #status="matMenu" xPosition="after" yPosition="below">
                     <button mat-menu-item [class.kb-btn-active]="_automation._general.main.publish_status">
-                        <i [innerHTML]="'publish' | svg | safeHtml"></i> Publish
+                        <i [innerHTML]="'publish' | svg | safeHtml"></i>Publish
                     </button>
                     <button mat-menu-item [class.kb-btn-active]="!_automation._general.main.publish_status">
-                        <i [innerHTML]="'draft' | svg | safeHtml"></i> Draft
+                        <i [innerHTML]="'draft' | svg | safeHtml"></i>Draft
                     </button>
                 </mat-menu>
+                <button mat-button matTooltip="Undo" [disabled]="!_automation.wfSessionArr[_automation.wfSession.undo-1]" (click)="_automation.undo()">
+                    <i [innerHTML]="'undo' | svg | safeHtml"></i>
+                </button>
+                <button mat-button matTooltip="Redo" [disabled]="!_automation.wfSessionArr[_automation.wfSession.redo]" (click)="_automation.redo()">
+                    <i [innerHTML]="'redo' | svg | safeHtml"></i>
+                </button>
             </div>
             <div class="col-4 p-0">
                 <div class="kb-top-inp-cont">
@@ -185,11 +268,13 @@
         <div class="kb-workflow-section">
             <span class="kb-trigger-section">
                 <span class="kb-active-triggers">
-                    <button *ngFor="let trigger of _automation.activeTriggers, index as trgi" mat-raised-button class="m-1"
-                        (click)="selectWf(trigger, trgi, true)" [color]="trigger.color">
-                        <span class="mr-1" [innerHTML]="trigger.icon | safeHtml"></span>
-                        {{trigger.name}} ({{_automation.fetchTargetName(trigger)}})
-                    </button>
+                    <span *ngFor="let trigger of _automation.activeTriggers, index as trgi" [attr.data-runs]="trigger.target.run_once ? 'One Time' : 'Each Time'" class="kb-active-trigger-btn">
+                        <button mat-raised-button class="m-1"
+                            (click)="selectWf(trigger, trgi, true)" [color]="trigger.color">
+                            <span class="mr-1" [innerHTML]="trigger.icon | safeHtml"></span>
+                            {{trigger.name}} ({{_automation.fetchTargetName(trigger)}})
+                        </button>
+                    </span>
                 </span>
                 <button mat-raised-button (click)="openBottomSheet(wfsheet, false, 0)" class="kb-trigger-action m-1">Add New
                     Trigger</button>

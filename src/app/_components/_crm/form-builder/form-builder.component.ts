@@ -107,16 +107,19 @@ export class CrmFormBuilderComponent implements OnInit {
         }
         _general.loading.success = false;
         _form.getForm(_general.target.id).then((e:any)=>{
-          this._general.loading.success = true;
-          _form.formSessionArr = [];
-          _form.saveFormSession();
-          this.selectedLists=e.temp_lists;
-          this.filteredTempIds.lists=e.listid;
-          this.selectedTags=e.temp_tags;
-          this.filteredTempIds.tags=e.tagid;
-          this.notifyemail=e.notifyemail?e.notifyemail?.split(','):this.notifyemail;
-          this.emailid=e.emailid;
-          this.fetchdata();
+          if(e.id) {
+            this._general.loading.success = true;
+            _form.formSessionArr = [];
+            _form.saveFormSession();
+            this.selectedLists=e.temp_lists;
+            this.filteredTempIds.lists=e.listid;
+            this.selectedTags=e.temp_tags;
+            this.filteredTempIds.tags=e.tagid;
+            this.notifyemail=e.notifyemail?e.notifyemail?.split(','):this.notifyemail;
+            this.emailid=e.emailid;
+            this.fetchdata();
+          }
+          else _general.redirectToPageNotFound();
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
@@ -473,12 +476,10 @@ fetchsingleemail(){
 
   tagupdate() {
     return new Promise((resolve) => {
-      let i=0;
-      this.newtags.forEach((tag: any) => {
+      this.newtags.forEach((tag: any, index:number) => {
         this._tagService.addtag(tag).subscribe((data:any) => {
           })
-          if(i==this.newtags.length-1) {resolve(true)};
-          i++;
+          if(index==this.newtags.length-1) {resolve(true)};
         });
     });
   }

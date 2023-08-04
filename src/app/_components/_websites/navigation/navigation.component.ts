@@ -68,19 +68,15 @@ export class WebsiteNavigationComponent {
   getAllFunnels() {
     this.fetching.funnel = true;
     this._general.funnelService.getallfunnelandstep().subscribe(data=>{
-      let i = 0;
       var steps = data.data;
       this.funnels = data.data2;
       if(steps?.length>0){
-        this.funnels.forEach((fp:any)=>{
-          let j = 0;
+        this.funnels.forEach((fp:any, findex:number)=>{
           fp.steps = [];
-          steps.forEach((s:any)=>{
+          steps.forEach((s:any, sindex:number)=>{
             if(fp.uniqueid == s.funnelid) fp.steps.push(s);
-            if(i == this.funnels.length-1 && j == steps.length-1) this.fetching.funnel = false;
-            j++;
+            if(findex == this.funnels.length-1 && sindex == steps.length-1) this.fetching.funnel = false;
           })
-            i++;
         })
       }else{
         this.fetching.funnel = false;
@@ -125,13 +121,12 @@ export class WebsiteNavigationComponent {
     if(menuobj.name && menuobj.items.length != 0) {
       if(!this.action) this.action = 'saved';
       this.fetching.menu = true;
-      var count = 0;
       var m = menuobj;
       var ul = document.createElement('UL');
       ul.id = m.id;
       ul.setAttribute('data-name',m.name);
       ul.className = 'kb-menu';
-      m.items.forEach((i:any)=>{
+      m.items.forEach((i:any, index:number)=>{
         var li:any = document.createElement('LI');
         var a =  document.createElement('A');
         a.id = i.id;
@@ -140,7 +135,7 @@ export class WebsiteNavigationComponent {
         a.innerHTML = i.name;
         li.innerHTML = a.outerHTML;
         ul.innerHTML = ul.innerHTML + li.outerHTML;
-        if(count == m.items.length-1) {
+        if(index == m.items.length-1) {
           var obj = {
             id: m.id,
             html: ul.outerHTML,
@@ -149,7 +144,6 @@ export class WebsiteNavigationComponent {
              resp.success ? this.fetchMenus() : this.openSB(true);
           })
         }
-        count++;
       })
     }
     else {
@@ -161,15 +155,13 @@ export class WebsiteNavigationComponent {
   duplicateMenu(menuobj:any) {
     this.action = 'duplicated';
     var tempmenu = JSON.parse(JSON.stringify(menuobj));
-    var count = 0;
     tempmenu.id = this._general.createBlockId(tempmenu);
     tempmenu.name = tempmenu.name + ' copy';
-    tempmenu.items.forEach((item:any)=>{
+    tempmenu.items.forEach((item:any, index:number)=>{
       item.id = this._general.createBlockId(item);
-      if(count == tempmenu.items.length-1) {
+      if(index == tempmenu.items.length-1) {
         this.saveMenu(tempmenu);
       }
-      count++;
     })
   }
 

@@ -15,6 +15,6 @@ export class SignedInGuard implements CanActivate {
       this._router.navigate(['/']);
       return false;
     }
-    return true;
+    else return true;
   }  
 }

@@ -269,11 +269,11 @@
                             <i class="fa-solid fa-location-crosshairs"></i> Actions</button>
                     </mat-menu>
                     <button mat-button [matMenuTriggerFor]="asm" #ast="matMenuTrigger" [class.kb-btn-active]="ast.menuOpen">
-                        Auto Save > {{autosave ? 'ON' : 'OFF'}}
+                        <i class="fa-regular fa-clock"></i> Auto Save > {{autosave ? 'ON' : 'OFF'}}
                     </button>
                     <mat-menu #asm>
-                        <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave">ON</button>
-                        <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave">OFF</button>
+                        <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave"><i class="fa-solid fa-toggle-on"></i> ON</button>
+                        <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave"><i class="fa-solid fa-toggle-off"></i> OFF</button>
                     </mat-menu>
                     <button mat-button [class.kb-btn-active]="_form.preview" (click)="switchPreviewMode()">
                         <i [innerHTML]="'preview' | svg | safeHtml"></i> Preview
@@ -281,12 +281,14 @@
                     <button mat-button (click)="saveForm()">
                         <i [innerHTML]="'save' | svg | safeHtml"></i> Save
                     </button>
-                    <button mat-button matTooltip="Undo" [disabled]="!_form.formSessionArr[_form.formSession.undo-1] && !_form.formStyleSessionArr[_form.formSession.undo-1]" (click)="_form.undo()">
-                        <i [innerHTML]="'undo' | svg | safeHtml"></i>
-                    </button>
-                    <button mat-button matTooltip="Redo" [disabled]="!_form.formSessionArr[_form.formSession.redo] && !_form.formStyleSessionArr[_form.formSession.redo]" (click)="_form.redo()">
-                        <i [innerHTML]="'redo' | svg | safeHtml"></i>
-                    </button>
+                    <span class="kb-more-opt">
+                        <button mat-button matTooltip="Undo" [disabled]="!_form.formSessionArr[_form.formSession.undo-1] && !_form.formStyleSessionArr[_form.formSession.undo-1]" (click)="_form.undo()">
+                            <i [innerHTML]="'undo' | svg | safeHtml"></i>
+                        </button>
+                        <button mat-button matTooltip="Redo" [disabled]="!_form.formSessionArr[_form.formSession.redo] && !_form.formStyleSessionArr[_form.formSession.redo]" (click)="_form.redo()">
+                            <i [innerHTML]="'redo' | svg | safeHtml"></i>
+                        </button>
+                    </span>
                     <button *ngIf="selectedTab && selectedTab != 'fields'" mat-button (click)="hideBar()">
                         <mat-icon>keyboard_arrow_up</mat-icon>
                     </button>

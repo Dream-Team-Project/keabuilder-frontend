@@ -164,13 +164,11 @@ export class FormService {
       if(resp.data[0]) {
         this.form = resp.data[0];
         this.formField = [];
-        var index = 0;
-        this.form.fields?.split(',').forEach((fval:any)=>{
+        this.form.fields?.split(',').forEach((fval:any, index:number)=>{
           var tempfield:any;
           if(isNaN(fval)) tempfield = [this._general.decodeJSON(fval)];
           else tempfield = this.fields.filter((val:any)=> val.id == fval);
           if(tempfield.length != 0) this.addField(tempfield[0], index);
-          index++;
         })
         if(this.form.style) this.formEleTypes = this._general.decodeJSON(this.form.style);
         if(this.form.appendstyle) this.form.appendstyle = this._general.decodeJSON(this.form.appendstyle);
@@ -207,8 +205,7 @@ export class FormService {
 
   setFormStyle(ele:any) {
     return new Promise((resolve, reject)=>{
-      var loop = 0;
-      Object.values(ele).forEach((e:any)=>{
+      Object.values(ele).forEach((e:any, index:number)=>{
         var style = JSON.parse(JSON.stringify(e.content.style));
         var selector = e.content.name == 'form' ? '#kb-form-'+this.form.uniqueid : '#kb-form-'+this.form.uniqueid+' .kb-form-'+e.content.name;
         this.formStyle.desktop += selector +'{'+Object.entries(style.desktop).map(([a, b]) => `${a}:${b}`).join(';')+';}';
@@ -216,7 +213,7 @@ export class FormService {
         if(!this._general.isObjEmpty(e.content.style.tablet_v)) this.formStyle.tablet_v += selector +'{'+Object.entries(style.tablet_v).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.mobile)) this.formStyle.mobile += selector +'{'+Object.entries(style.mobile).map(([a, b]) => `${a}:${b}`).join(';')+';}';
         if(!this._general.isObjEmpty(e.content.style.hover)) this.formStyle.hover += selector +':hover{'+Object.entries(style.hover).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-        if(Object.values(ele).length-1 == loop) {
+        if(Object.values(ele).length-1 == index) {
           var querry = '@media only screen and (max-width:';
           var data = this.formStyle.desktop + this.formStyle.hover +
           querry + '1024px) and (min-width:769px){'+this.formStyle.tablet_h+'}' +
@@ -224,7 +221,6 @@ export class FormService {
           querry + '426px){'+this.formStyle.mobile+'}';
           resolve(data);
         }
-        loop++;
       })
     })
   }

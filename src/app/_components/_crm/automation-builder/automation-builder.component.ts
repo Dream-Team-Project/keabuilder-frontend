@@ -29,31 +29,47 @@ export class CrmAutomationBuilderComponent implements OnInit {
     id: '',
     value: '',
     error: '',
-    filter: []
+    filter: [],
+    run_once: true
   }
   listField:any = {
     id: '',
     value: '',
     error: '',
-    filter: []
+    filter: [],
+    run_once: true
   }
   tagField:any = {
     id: '',
     value: '',
     error: '',
-    filter: []
+    filter: [],
+    run_once: true
+  }
+  fieldField:any = {
+    id: '',
+    value: '',
+    error: '',
+    filter: [],
+    run_once: true,
+    change: {
+      from: {any: true, value: ''},
+      to: {any: true, value: ''},
+    }
   }
   emailField:any = {
     id: '',
     value: '',
     error: '',
-    filter: []
+    filter: [],
+    run_once: true
   }
   webpageField:any = {
     id: '',
     value: '',
     error: '',
-    filter: []
+    filter: [],
+    run_once: true
   }
   tempTrgtErr = '';
   searchTrgtInp = '';
@@ -90,6 +106,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   showFieldError(error:string) {
     var trgtNm = this.tempWf.target.name;
     if(trgtNm == 'form') this.formField.error = error;
+    if(trgtNm == 'field') this.fieldField.error = error;
     else if(trgtNm == 'list')  this.listField.error = error;
     else if(trgtNm == 'tag') this.tagField.error = error;
     else if(trgtNm == 'email') this.emailField.error = error;
@@ -98,27 +115,36 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   validateTarget() {
     return new Promise<any>((resolve, reject) => {
-      var trgtNm = this.tempWf.target.name;
-      if(trgtNm == 'form') this.tempWf.target.id = this.formField.id;
-      else if(trgtNm == 'list') this.tempWf.target.id = this.listField.id;
-      else if(trgtNm == 'tag') this.tempWf.target.id = this.tagField.id;
-      else if(trgtNm == 'email') this.tempWf.target.id = this.emailField.id;
-      else if(trgtNm == 'webpage') this.tempWf.target.id = this.webpageField.id;
-      resolve(true);
+      var tWfTrg = this.tempWf.target;
+      if(tWfTrg.name == 'form') tWfTrg = JSON.parse(JSON.stringify(this.formField));
+      else if(tWfTrg.name == 'field') tWfTrg = JSON.parse(JSON.stringify(this.fieldField));
+      else if(tWfTrg.name == 'list') tWfTrg = JSON.parse(JSON.stringify(this.listField));
+      else if(tWfTrg.name == 'tag') tWfTrg = JSON.parse(JSON.stringify(this.tagField));
+      else if(tWfTrg.name == 'email') tWfTrg = JSON.parse(JSON.stringify(this.emailField));
+      else if(tWfTrg.name == 'webpage') tWfTrg = JSON.parse(JSON.stringify(this.webpageField));
+      if(tWfTrg.id) {
+        this.tempWf.target.id = tWfTrg.id;
+        this.tempWf.target.run_once = tWfTrg.run_once;
+        if(tWfTrg.change) this.tempWf.target.change = JSON.parse(JSON.stringify(tWfTrg.change));
+        resolve(true);
+      }
+      else resolve(false);
     });
   }
 
   addWorkflow(isAction:boolean) {
     this.validateTarget().then(resp=>{
-      if(this.tempWf.target.id) {
+      if(resp) {
         if(isAction) {
           this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-            if(!resp) this.openDialog(this.wfDialog, 'Action allready added');
+            if(resp) this._automation.saveWfSession();
+            else this.openDialog(this.wfDialog, 'Action allready added');
           })
         }
         else {
           this._automation.addTrigger(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-            if(!resp) this.openDialog(this.wfDialog, 'Trigger allready added');
+            if(resp) this._automation.saveWfSession();
+            else this.openDialog(this.wfDialog, 'Trigger allready added');
           })
         }
       }
@@ -136,22 +162,33 @@ export class CrmAutomationBuilderComponent implements OnInit {
       if(wf.target.name == 'form') {
         this.formField.id = wf.target.id;
         this.formField.value = this._automation.fetchTargetName(wf);
+        this.formField.run_once = wf.target.run_once;
+      }
+      else if(wf.target.name == 'field') {
+        this.fieldField.id = wf.target.id;
+        this.fieldField.value = this._automation.fetchTargetName(wf);
+        this.fieldField.change = JSON.parse(JSON.stringify(wf.target.change));
+        this.fieldField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'list') {
         this.listField.id = wf.target.id;
         this.listField.value = this._automation.fetchTargetName(wf);
+        this.listField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'tag') {
         this.tagField.id = wf.target.id;
         this.tagField.value = this._automation.fetchTargetName(wf);
+        this.tagField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'email') {
         this.emailField.id = wf.target.id;
         this.emailField.value = this._automation.fetchTargetName(wf);
+        this.emailField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'webpage') {
         this.webpageField.id = wf.target.id;
         this.webpageField.value = this._automation.fetchTargetName(wf);
+        this.webpageField.run_once = wf.target.run_once;
       }
       this.appendIndex = index;
     }
@@ -165,32 +202,48 @@ export class CrmAutomationBuilderComponent implements OnInit {
       id: '',
       value: '',
       error: '',
-      filter: []
-    }
+      filter: [],
+      run_once: true
+    };
+    this.fieldField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: [],
+      change: {
+        from: {any: true, value: ''},
+        to: {any: true, value: ''},
+      },
+      run_once: true
+    };
     this.listField = {
       id: '',
       value: '',
       error: '',
-      filter: []
-    }
+      filter: [],
+      run_once: true
+    };
     this.tagField = {
       id: '',
       value: '',
       error: '',
-      filter: []
-    }
+      filter: [],
+      run_once: true
+    };
     this.emailField = {
       id: '',
       value: '',
       error: '',
-      filter: []
-    }
+      filter: [],
+      run_once: true
+    };
     this.webpageField = {
       id: '',
       value: '',
       error: '',
-      filter: []
-    }
+      filter: [],
+      run_once: true
+    };
     this.tempWf = '';
   }
 
@@ -222,7 +275,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   filterForm() {
     var data = JSON.parse(JSON.stringify(this._automation.forms));
-    data.unshift(this._automation.anyTarget);
+    data.unshift(this._automation.anyNameTarget);
     this.formField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.formField?.value?.toLowerCase()));
   }
 
@@ -234,6 +287,28 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   // form
 
+  // field
+
+  resetFilterField() {
+    this.fieldField.value=''; 
+    this.fieldField.id = ''; 
+    this.filterField();
+  }
+
+  filterField() {
+    var data = JSON.parse(JSON.stringify(this._automation.fields));
+    data.unshift(this._automation.anyLabelTarget);
+    this.fieldField.filter = data.filter((option:any) => option?.label?.toLowerCase().includes(this.fieldField?.value?.toLowerCase()));
+  }
+
+  selectField(e:any) {
+    this.fieldField.value = e.option.value.label;
+    this.fieldField.id = e.option.value.id;
+    this.fieldField.error = '';
+  }
+
+  // field
+
   // list
 
   resetFilterList() {
@@ -244,7 +319,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   filterList() {
     var data = JSON.parse(JSON.stringify(this._automation.lists));
-    data.unshift(this._automation.anyTarget);
+    data.unshift(this._automation.anyNameTarget);
     this.listField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.listField?.value?.toLowerCase()));
   }
 
@@ -266,7 +341,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   filterTag() {
     var data = JSON.parse(JSON.stringify(this._automation.tags));
-    data.unshift(this._automation.anyTarget);
+    data.unshift(this._automation.anyNameTarget);
     this.tagField.filter = data.filter((option:any) => option.name?.toLowerCase().includes(this.tagField?.value?.toLowerCase()));
   }
 
@@ -288,7 +363,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   filterEmail() {
     var data = JSON.parse(JSON.stringify(this._automation.emails));
-    data.unshift(this._automation.anyTarget);
+    data.unshift(this._automation.anyNameTarget);
     this.emailField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.emailField?.value?.toLowerCase()));
   }
 
@@ -310,7 +385,7 @@ resetFilterWebpage() {
 
 filterWebpage() {
   var data = JSON.parse(JSON.stringify(this._automation.webpages));
-  data.unshift(this._automation.anyPgTarget);
+  data.unshift(this._automation.anyPageTarget);
   this.webpageField.filter = data.filter((option:any) => option?.page_name?.toLowerCase().includes(this.webpageField?.value?.toLowerCase()));
 }
 
