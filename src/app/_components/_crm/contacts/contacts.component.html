@@ -40,16 +40,14 @@
               </button>
           </mat-chip>
       </mat-chip-list>
-      <input type="text"
+      <input matInput type="text"
           #searchListInp
           placeholder="Select multiples..."
           (input)="filterListData($event)"
           [matAutocomplete]="listAuto"
           [matChipInputFor]="listChipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          class="kb-act-searchinp"
-          [class.pt-2]="selectedLists.length != 0"
-          matInput>
+          class="kb-act-searchinp pt-1">
       <mat-autocomplete autoActiveFirstOption #listAuto="matAutocomplete" (optionSelected)="addSelectedList($event, searchListInp)">
           <mat-option *ngFor="let option of filteredOptions.lists" [value]="option" [disabled]="filteredTempIds.lists.includes(option.uniqueid)">
             {{option.name}}
@@ -68,7 +66,7 @@
             </button>
         </mat-chip>
     </mat-chip-list>
-    <input type="text"
+    <input matInput type="text"
         #searchTagInp
         [formControl]="tagCtrl"
         placeholder="Select multiples..."
@@ -77,9 +75,7 @@
         [matChipInputFor]="tagChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         (matChipInputTokenEnd)="addtag($event)"
-        class="kb-act-searchinp"
-        [class.pt-2]="selectedTags.length != 0"
-        matInput>
+        class="kb-act-searchinp pt-1">
     <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" (optionSelected)="addSelectedTag($event, searchTagInp)">
         <mat-option *ngFor="let option of filteredOptions.tags" [value]="option" [disabled]="filteredTempIds.tags.includes(option.uniqueid)">
           {{option.name}}
@@ -121,7 +117,7 @@
           </button>
         </mat-chip>
       </mat-chip-list>
-      <input
+      <input matInput
         type="text"
         #searchListInp
         placeholder="Select multiples..."
@@ -129,9 +125,7 @@
         [matAutocomplete]="listAuto"
         [matChipInputFor]="listChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        class="kb-act-searchinp w-100"
-        [class.pt-2]="selectedLists.length != 0"
-        matInput>
+        class="kb-act-searchinp w-100 pt-1">
       <mat-autocomplete
         #listAuto="matAutocomplete"
         (optionSelected)="addSelectedList($event, searchListInp)">
@@ -170,6 +164,7 @@
         </mat-chip>
       </mat-chip-list>
       <input
+        matInput
         type="text"
         #searchListInp
         placeholder="Select multiples..."
@@ -177,9 +172,7 @@
         [matAutocomplete]="listAuto"
         [matChipInputFor]="listChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        class="kb-act-searchinp w-100"
-        [class.pt-2]="selectedLists.length != 0"
-        matInput>
+        class="kb-act-searchinp w-100 pt-1">
       <mat-autocomplete
         #listAuto="matAutocomplete"
         (optionSelected)="addSelectedList($event, searchListInp)">

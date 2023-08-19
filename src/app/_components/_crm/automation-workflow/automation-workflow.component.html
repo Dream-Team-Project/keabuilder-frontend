@@ -1,0 +1,52 @@
+<ng-container *ngIf="action.id">
+    <div class="kb-workflow-section">
+      <span class="kb-workflow-node">
+          <i (click)="openNodeActionSheet(nodes, acti)" class="kb-add-action"
+              [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+      </span>
+      <button mat-raised-button (click)="selectActionEmit(nodes, action, acti)" [color]="action.color">
+          <span class="mr-1" [innerHTML]="action.icon | safeHtml"></span>
+          {{action.name}} {{_automation.fetchMultipleTargetName(action)}}
+      </button>
+      <div class="kb-workflow-inner-section" *ngIf="action.target.name == 'ifelse'">
+          <div class="kb-workflow-split-section">
+              <div class="kb-workflow-split-section-first">
+                  <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-first">
+                      <span class="kb-workflow-split-node">Yes</span>
+                  </div>
+                  <ng-container *ngFor="let fnact of action.node.first, index as fnacti">
+                    <app-crm-automation-workflow [action]="fnact" [acti]="fnacti" [nodes]="action.node.first"
+                    (openActionSheet)="openActionSheet.emit($event)" (selectAction)="selectAction.emit($event)"></app-crm-automation-workflow>
+                  </ng-container>
+                  <div *ngIf="action.node.first[action.node.first.length-1]?.target.name != 'ifelse'" class="kb-workflow-section">
+                      <span class="kb-workflow-node">
+                          <i (click)="openNodeActionSheet(action.node.first, action.node.first.length)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                      </span>
+                      <button mat-raised-button color="secondary" disabled><i
+                              class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                  </div>
+              </div>
+              <div class="kb-workflow-split-section-last">
+                  <div class="kb-workflow-split-node-cont kb-workflow-split-node-cont-last">
+                      <span class="kb-workflow-split-node">No</span>
+                  </div>
+                  <ng-container *ngFor="let lnact of action.node.last, index as lnacti">
+                    <app-crm-automation-workflow [action]="lnact" [acti]="lnacti" [nodes]="action.node.last" 
+                    (openActionSheet)="openActionSheet.emit($event)" (selectAction)="selectAction.emit($event)"></app-crm-automation-workflow>
+                  </ng-container>
+                  <div *ngIf="action.node.last[action.node.last.length-1]?.target.name != 'ifelse'" class="kb-workflow-section">
+                      <span class="kb-workflow-node">
+                          <i (click)="openNodeActionSheet(action.node.last, action.node.last.length)" class="kb-add-action" [innerHTML]="'add' | svg | safeHtml" mat-ripple></i>
+                      </span>
+                      <button mat-raised-button color="secondary" disabled><i
+                              class="fa-solid fa-flag-checkered mr-1"></i>Finished</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</ng-container>
+<ng-container *ngFor="let action of activeActions, index as acti">
+  <app-crm-automation-workflow [action]="action" [acti]="acti" 
+  (openActionSheet)="openActionSheet.emit($event)" (selectAction)="selectAction.emit($event)"></app-crm-automation-workflow>
+</ng-container>

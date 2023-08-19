@@ -5,7 +5,6 @@ import { ListService } from '../_crm/list.service';
 import { TagService } from '../_crm/tag.service';
 import { FieldService } from '../_crm/field.service';
 import { EmailService } from '../_crm/email.service';
-import { WebpagesService } from '../webpages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,31 +15,30 @@ export class AutomationService {
     {
       id: 'trg-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
       workflows: [
-        { id: 'trg-sub-to-list', name: 'Subscribed to a List', group: 'trigger', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
-        { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', group: 'trigger', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
-        { id: 'trg-tag-add', name: 'Tag Added', group: 'trigger', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'trg-tag-rm', name: 'Tag Removed', group: 'trigger', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
+        { id: 'trg-sub-to-list', name: 'Subscribed to a List', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
+        { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
+        { id: 'trg-tag-add', name: 'Tag Added', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'trg-tag-rm', name: 'Tag Removed', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
       workflows: [
-        { id: 'trg-form-sub', name: 'Form Submitted', group: 'trigger', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', group: 'trigger', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+        { id: 'trg-form-sub', name: 'Form Submitted', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
+        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
       workflows: [
-        { id: 'trg-opre-email', name: 'Opens/reads an email', group: 'trigger', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
-        { id: 'trg-reply-email', name: 'Replies to an email', group: 'trigger', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
+        { id: 'trg-opre-email', name: 'Opens/reads an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+        { id: 'trg-reply-email', name: 'Replies to an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
       workflows: [
-        { id: 'trg-field-chng', name: 'Field Updated', group: 'trigger', target: {id: '', name: 'field', change: { from: {any: true, value: ''}, to: {any: true, value: ''}}, run_once: true}, icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
-        { id: 'trg-webpg-vstd', name: 'Web Page Visited', group: 'trigger', target: {id: '', name: 'webpage', run_once: true}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
+        { id: 'trg-field-chng', name: 'Field Updated', target: {id: '', name: 'field', change: { from: {any: true, value: ''}, to: {any: true, value: ''}}, run_once: true}, icon: '<i class="fa-solid fa-pen-to-square"></i>', color: 'primary'},
       ]
     }
   ];
@@ -48,68 +46,52 @@ export class AutomationService {
     {
       id: 'act-group-contacts', name: 'Contacts', hide: false, icon: '<i class="fa-solid fa-user"></i>',
       workflows: [
-        { id: 'act-sub-to-list', name: 'Subscribe to a List', group: 'action', target: {id: '', name: 'list'}, icon: '<i class="fa-solid fa-list-check"></i>', color: 'primary'},
-        { id: 'act-unsub-to-list', name: 'Unsubscribe to a List', group: 'action', target: {id: '', name: 'list'}, icon: '<i class="fa-solid fa-list-ul"></i>', color: 'primary'},
-        { id: 'act-add-tag', name: 'Add a Tag', group: 'action', target: {id: '', name: 'tag'}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'act-rm-tag', name: 'Remove a Tag', group: 'action', target: {id: '', name: 'tag'}, icon: '<i class="fa-solid fa-tag"></i>', color: 'primary'},
-        { id: 'act-add-cont', name: 'Add a Contact', group: 'trigger', target: {id: '', name: 'contact'}, icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
-        { id: 'act-up-cont', name: 'Update a Contact', group: 'trigger', target: {id: '', name: 'contact'}, icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
-        { id: 'act-rm-cont', name: 'Remove a Contact', group: 'trigger', target: {id: '', name: 'contact'}, icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
-        { id: 'act-add-note', name: 'Add a Note', group: 'trigger', target: {id: '', name: 'contact'}, icon: '<i class="fa-solid fa-file-pen"></i>', color: 'primary'},
+        { id: 'act-sub-to-list', name: 'Subscribe to Lists', target: {ids: [], name: 'list'}, icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
+        { id: 'act-unsub-to-list', name: 'Unsubscribe to Lists', target: {ids: [], name: 'list'}, icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
+        { id: 'act-add-tag', name: 'Add Tags', target: {ids: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'act-rm-tag', name: 'Remove Tags', target: {ids: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
+        { id: 'act-up-cont', name: 'Update a Contact', target: {values: [], name: 'field'}, icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
+        { id: 'act-add-note', name: 'Add a Note', target: {value: '', name: 'note'}, icon: '<i class="fa-solid fa-file-pen"></i>', color: 'primary'},
       ]
     },
     {
       id: 'act-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
       workflows: [
-        { id: 'act-send-email', name: 'Send an email', group: 'action', target: {id: '', name: 'email'}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+        { id: 'act-send-email', name: 'Send Emails', target: {id: '', name: 'email'}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
       ]
     },
     {
       id: 'act-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
       workflows: [
-        { id: 'act-if-else', name: 'Condition if/else', group: 'action', target: {id: '', name: 'condition'}, icon: '<i class="fa-solid fa-arrows-split-up-and-left"></i>', color: '' },
-        { id: 'act-wait', name: 'Wait', group: 'action', target: {id: '', name: 'wait'}, icon: '<i class="fa-solid fa-clock"></i>', color: '' },
-        { id: 'act-date', name: 'Date', group: 'action', target: {id: '', name: 'date'}, icon: '<i class="fa-solid fa-calendar-days"></i>', color: 'primary'},
-        { id: 'act-pg-vstd', name: 'Page Visited', group: 'action', target: {id: '', name: 'page'}, icon: '<i class="fa-solid fa-plane-arrival"></i>', color: 'primary'},
+        { id: 'act-wait', name: 'Wait', target: {type: {}, unit: '', name: 'wait'}, icon: '<i class="fa-regular fa-clock"></i>', color: 'primary'},
+        { id: 'act-if-else', name: 'If & else', target: {types: [], logic: '', name: 'ifelse'}, node: {first: [], last: []}, icon: '<i class="fa-solid fa-arrows-split-up-and-left"></i>', color: 'primary'},
       ]
     }
   ];
   activeTriggers: any = [];
   activeActions: any = [];
-  webpages: Array<any> = [];
   forms: Array<any> = [];
   lists: Array<any> = [];
   tags: Array<any> = [];
   fields: Array<any> = [];
   emails: Array<any> = [];
-  anyNameTarget:any = {id: '*', name: 'Any'};
-  anyPageTarget:any = {id: '*', page_name: 'Any'};
-  anyLabelTarget:any = {id: '*', label: 'Any'};
   allWorkFlowIds:Array<number> = [];
-
   wfSession:any = {undo: 0, redo: 0}
   wfSessionArr:any = [];
+  nodeActions:any = null;
 
   constructor(public _general: GeneralService,
     private _file: FileUploadService,
     private _list: ListService,
     private _tag: TagService,
     private _field: FieldService,
-    private _email: EmailService,
-    private _webpage: WebpagesService) {
-      this.fetchWebpages();
+    private _email: EmailService) {
       this.fetchForms();
       this.fetchLists();
       this.fetchTags();
       this.fetchFields();
       this.fetchEmails();
       this.saveWfSession();
-  }
-
-  fetchWebpages() {
-    this._webpage.getWebpages().subscribe((resp:any)=>{
-      this.webpages = resp?.data;
-    })
   }
 
   fetchForms() {
@@ -142,56 +124,128 @@ export class AutomationService {
     })
   }
 
-  fetchTargetName(wf:any) {
+  fetchData(name:string) {
+    if(name == 'list') return this.lists;
+    else if(name == 'tag') return this.tags;
+    else if(name == 'field') return this.fields;
+    else if(name == 'form') return this.forms;
+    else if(name == 'emails') return this.emails;
+    else return [];
+  }
+
+  fetchTargetName(wf:any, field:boolean) {
     if(wf?.target) {
+      var name = '';
       var resp = [];
-      if(wf.target.id == '*') return 'Any';
-      else if(wf.target.name == 'form') {
-        resp = this.forms.filter((f:any) => f.id == wf.target.id);
-        return resp[0]?.name;
-      }
-      else if(wf.target.name == 'field') {
-        resp = this.fields.filter((f:any) => f.id == wf.target.id);
-        return resp[0]?.label;
-      }
+      if(wf.target.id == '*') name = 'Any';
       else if(wf.target.name == 'list') {
         resp = this.lists.filter((l:any) => l.id == wf.target.id);
-        return resp[0]?.name;
+        name = resp[0]?.name;
       }
       else if(wf.target.name == 'tag') {
         resp = this.tags.filter((t:any) => t.id == wf.target.id);
-        return resp[0]?.name;
+        name = resp[0]?.name;
+      }
+      else if(wf.target.name == 'form') {
+        resp = this.forms.filter((f:any) => f.id == wf.target.id);
+        name = resp[0]?.name;
+      }
+      else if(wf.target.name == 'field') {
+        resp = this.fields.filter((f:any) => f.id == wf.target.id);
+        name = resp[0]?.label;
       }
       else if(wf.target.name == 'email') {
         resp = this.emails.filter((t:any) => t.id == wf.target.id);
-        return resp[0]?.name;
+        name = resp[0]?.name;
       }
-      else if(wf.target.name == 'webpage') {
-        resp = this.webpages.filter((t:any) => t.id == wf.target.id);
-        return resp[0]?.page_name;
-      }
-      else return '';
+      return name ? (field ? name : '('+name+')') : '';
     }
     else return '';
   }
 
-  addAction(action: any, index: number, update:boolean) {
-    return new Promise<any>((resolve, reject) => {
-        var exst = this.activeActions.filter((act:any)=> action.target.id == act.target.id && action.name == act.name && action.id != act.id);
-        if(exst.length == 0) {
-          if(update) this.activeActions[index] = action;
-          else {
-            action.id = this.createWorkflowId(action);
-            this.activeActions.splice(index, 0, action);
-          }
-          resolve(true);
+  fetchMultipleTargetName(wf:any) {
+    if(wf?.target) {
+      var name = '';
+      var resp = [];
+      var allid = wf.target.ids ?  wf.target.ids[0] : '';
+      if(allid == '*' && wf.target.ids?.length == 1) name = 'Select All';
+      else if(wf.target.name == 'list') {
+        let lLen =  wf.target.ids.length;
+        resp = this.lists.filter((l:any) => l.id == wf.target.ids[0]);
+        name = resp[0]?.name + (lLen == 1 ? '' : '+' + (lLen - 1));
+      }
+      else if(wf.target.name == 'tag') {
+        let tLen =  wf.target.ids.length;
+        resp = this.tags.filter((t:any) => t.id == wf.target.ids[0]);
+        name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
+      }
+      else if(wf.target.name == 'field') {
+        let fLen =  wf.target.values.length;
+        resp = this.fields.filter((f:any) => f.id == wf.target.values[0].id);
+        name = resp[0]?.label + (fLen == 1 ? '' : '+' + (fLen - 1));
+      }
+      else if(wf.target.name == 'email') {
+        let tLen =  wf.target.ids.length;
+        resp = this.emails.filter((e:any) => e.id == wf.target.ids[0]);
+        name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
+      }
+      else if(wf.target.name == 'note') {
+        name = wf.target.value;
+      }
+      else if(wf.target.name == 'wait') {
+        let type = wf.target.type;
+        if(type.id == 'wait-spot') {
+          name = type.value + ' ' + type.unit + (type.value > 1 ? 's' : '');
         }
-        else resolve(false);
-    });
+        else if(type.id == 'wait-sd&t') {
+          name = type.date.toDateString() + ' | ' + type.time.hh + ':' + type.time.mm + ':' + type.time.ap;
+        }
+      }
+      return name ? '('+name+')' : '';
+    }
+    else return '';
   }
-
-  deleteAction(index: number) {
-    this.activeActions.splice(index, 1);
+ 
+  fetchMultipleTargets(wf:any) {
+    if(wf?.target) {
+      var resp = [];
+      var allid = wf.target.ids ?  wf.target.ids[0] : '';
+      if(allid == '*' && wf.target.ids?.length == 1) return [{id: '*', name: 'Select All'}];
+      else if(wf.target.name == 'list') {
+        resp = this.lists.filter((l:any) => wf.target.ids.includes(l.id));
+        return resp.map((l:any)=> {
+          return {id: l.id, name: l.name};
+        });
+      }
+      else if(wf.target.name == 'tag') {
+        resp = this.tags.filter((t:any) => wf.target.ids.includes(t.id));
+        return resp.map((t:any)=> {
+          return {id: t.id, name: t.name};
+        });
+      }
+      else if(wf.target.name == 'field') {
+        resp = this.fields.filter((f:any) => {
+          return wf.target.values.some((tv:any) => {
+            if(f.id == tv.id) {
+              f.updatedvalue = tv.updatedvalue;
+              return true;
+            }
+            else return false;
+          });
+        });
+        return resp.map((f:any)=> {
+          return {id: f.id, label: f.label, updatedvalue: f.updatedvalue};
+        });
+      }
+      else if(wf.target.name == 'email') {
+        resp = this.emails.filter((e:any) => wf.target.ids.includes(e.id));
+        return resp.map((e:any)=> {
+          return {id: e.id, name: e.name};
+        });
+      }
+      else return '';
+    }
+    else return '';
   }
 
   addTrigger(trigger: any, index: number, update:boolean) {
@@ -211,6 +265,47 @@ export class AutomationService {
 
   deleteTrigger(index: number) {
     this.activeTriggers.splice(index, 1);
+    this.saveWfSession();
+  }
+
+  addAction(action: any, index: number, update:boolean) {
+    return new Promise<any>((resolve, reject) => {
+        if(update) {
+          if(this.nodeActions) this.nodeActions[index] = action;
+          else this.activeActions[index] = action;
+        }
+        else {
+          action.id = this.createWorkflowId(action);
+          if(this.nodeActions) {
+            if(action.target.name == 'ifelse') {
+              var tempaction = this.nodeActions.slice(0, index);
+              var tempNode = this.nodeActions.slice(index);
+              action.node.first = tempNode;
+              tempaction.push(action);
+              this.nodeActions.splice(0, this.nodeActions.length);
+              this.nodeActions.push(...tempaction);
+            }
+            else this.nodeActions.splice(index, 0, action);
+          }
+          else {
+            if(action.target.name == 'ifelse') {
+              var tempaction = this.activeActions.slice(0, index);
+              var tempNode = this.activeActions.slice(index);
+              action.node.first = tempNode;
+              tempaction.push(action);
+              this.activeActions = tempaction;
+            }
+            else this.activeActions.splice(index, 0, action);
+          }
+        }
+        resolve(true);
+    });
+  }
+
+  deleteAction(index: number) {
+    if(this.nodeActions) this.nodeActions.splice(index, 1);
+    else this.activeActions.splice(index, 1);
+    this.saveWfSession();
   }
 
   createWorkflowId(temp:any):any {

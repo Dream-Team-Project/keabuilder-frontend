@@ -54,6 +54,7 @@ export class CrmContactComponent implements OnInit {
     emailbody:'',
     emailto:[],
   }
+  noteEdit:boolean = false;
  
   constructor(
     private _route: ActivatedRoute,
@@ -118,39 +119,45 @@ export class CrmContactComponent implements OnInit {
             return cf;
           })
         }
-        this.contactFields = JSON.parse(JSON.stringify(this.contactFieldJSON));
-        this.contactFields.forEach((cf:any)=>{
-          for(let i = 0; i < this.fields.length; i++) {
-            var ff = this.fields[i];
-            if(cf.id === ff.id) {
-                cf.name = ff.name;
-                cf.label = ff.label;
-                cf.required = ff.required;
-                cf.default_field = ff.default_field;
-                break;
+        this.fields.forEach((ff:any, findex)=>{
+          this.contactFields[findex] = JSON.parse(JSON.stringify(ff));
+          for(let i = 0; i < this.contactFieldJSON.length; i++) {
+            let cf = this.contactFieldJSON[i];
+            if(ff.id == cf.id) {
+              this.contactFields[findex].value = cf.value;
+              break;
+            }
+            else if(i == this.contactFieldJSON.length-1) {
+              this.contactFields[findex].value = ff.value;
             }
           }
         })
+        this.contactFieldJSON = this.contactFields.map((cf:any) => {
+          return  {id: cf.id, value: cf.value};
+        });
+        console.log(this.contactFieldJSON);
       }
     })
    
   }
 
   undoField(cf:any, i:number) {
-    if(cf.default_field && cf.name == 'email') cf.value = this.contact.email;
-    else cf.value = this.contactFieldJSON[i].value;
+    cf.value = this.contactFieldJSON[i].value;
     cf.edit = false;
     delete cf.error;
     delete cf.uniqueErr;
+    delete cf.invalid;
   }
 
   verifyField(cf:any, i:number) {
-    if(this.contactFieldJSON[i].value === cf.value && !cf.uniqueErr) cf.edit = false;
-    else if(cf.required) {
-      if(cf.value) this.updateContact(cf, i);
-      else cf.error = true;
+    if(this.contactFieldJSON[i].value == cf.value && !cf.uniqueErr) this.undoField(cf, i);
+    else if(cf.type == 'email' && !this.isEmailValid(cf.value)) cf.invalid = true;
+    else if(cf.required && !cf.value) cf.error = true;
+    else {
+      cf.invalid = false;
+      cf.error = false;
+      this.updateContact(cf, i);
     }
-    else this.updateContact(cf, i);
   }
 
   updateContact(cf:any, i:number) {
@@ -169,6 +176,7 @@ export class CrmContactComponent implements OnInit {
           this.contact = contact;
           delete cf.error;
           delete cf.uniqueErr;
+          delete cf.invalid;
         }
         else msg = 'Server Error';
         this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
@@ -183,6 +191,7 @@ export class CrmContactComponent implements OnInit {
     if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
     return str.toUpperCase();
   }
+
   tagupdate(tag:any) {
     return new Promise((resolve) => {
         this._tagService.addtag(tag).subscribe((data: any) => {
@@ -223,7 +232,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.uniqueid);
-    this.update_list_tag();
+    this.update_list_tag_note();
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -231,7 +240,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds?.lists?.splice(index, 1);
-    this.update_list_tag();
+    this.update_list_tag_note();
   }
 
   // end list actions
@@ -246,7 +255,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.uniqueid);
-    this.update_list_tag();
+    this.update_list_tag_note();
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -254,7 +263,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags?.splice(index, 1);
     this.filteredTempIds?.tags?.splice(index, 1);
-    this.update_list_tag();
+    this.update_list_tag_note();
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -266,7 +275,7 @@ export class CrmContactComponent implements OnInit {
       };
       this.selectedTags.push(obj); 
       this.filteredTempIds.tags.push(obj.uniqueid);
-      this.tagupdate(obj).then((resp:any)=>{this.update_list_tag()})
+      this.tagupdate(obj).then((resp:any)=>{this.update_list_tag_note()})
       this.newtags=[];
          
     }
@@ -274,7 +283,7 @@ export class CrmContactComponent implements OnInit {
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
   }
-  update_list_tag(){
+  update_list_tag_note(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();
     var contact = JSON.parse(JSON.stringify(this.contact));
@@ -282,8 +291,10 @@ export class CrmContactComponent implements OnInit {
     this._contactService.updatecontact(contact).subscribe(resp => {
       let msg = resp.success ? 'Contact has been Updated' : 'Server Error';
       this._general.openSnackBar(!resp.success, msg, 'OK', 'center', 'top');
+      this.noteEdit = false;
     })
   }
+  
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
  
   //  emails send
@@ -308,6 +319,7 @@ export class CrmContactComponent implements OnInit {
     let regex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     return regex.test(value);
   }
+
   resetemail(){
     this.email.subject='';
     this.email.emailbody='';

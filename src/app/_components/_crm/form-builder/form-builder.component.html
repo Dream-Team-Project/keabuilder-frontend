@@ -59,16 +59,14 @@
                                 </button>
                             </mat-chip>
                         </mat-chip-list>
-                        <input type="text"
+                        <input matInput type="text"
                             #searchListInp
                             placeholder="Select multiples..."
                             (input)="filterListData($event)"
                             [matAutocomplete]="listAuto"
                             [matChipInputFor]="listChipList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                            class="kb-act-searchinp"
-                            [class.pt-2]="selectedLists?.length != 0"
-                            matInput>
+                            class="kb-act-searchinp pt-1">
                         <mat-autocomplete autoActiveFirstOption #listAuto="matAutocomplete" (optionSelected)="addSelectedList($event, searchListInp)">
                             <mat-option *ngFor="let option of filteredOptions?.lists" [value]="option" [disabled]="filteredTempIds?.lists?.includes(option.uniqueid)">
                               {{option?.name}}
@@ -94,7 +92,7 @@
                                 </button>
                             </mat-chip>
                         </mat-chip-list>
-                        <input type="text"
+                        <input matInput type="text"
                             #searchTagInp
                             [formControl]="tagCtrl"
                             placeholder="Select multiples..."
@@ -103,9 +101,7 @@
                             [matChipInputFor]="tagChipList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             (matChipInputTokenEnd)="addtag($event)"
-                            class="kb-act-searchinp"
-                            [class.pt-2]="selectedTags?.length != 0"
-                            matInput>
+                            class="kb-act-searchinp pt-1">
                         <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" (optionSelected)="addSelectedTag($event, searchTagInp)">
                             <mat-option *ngFor="let option of filteredOptions?.tags" [value]="option" [disabled]="filteredTempIds?.tags?.includes(option.uniqueid)">
                               {{option.name}}
@@ -194,16 +190,14 @@
                                 </button>
                             </mat-chip>
                         </mat-chip-list>
-                        <input type="email"
+                        <input matInput type="email"
                             #notifyemailInp
                             [formControl]="notifyemailCtrl"
                             placeholder="Add multiple Emails..."
                             [matChipInputFor]="notifyemailChipList"
                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             (matChipInputTokenEnd)="addnotifyemail($event)"
-                            class="kb-act-searchinp"
-                            [class.pt-2]="notifyemail?.length != 0"
-                            matInput>
+                            class="kb-act-searchinp pt-1">
                     </mat-form-field>
                     <!-- <mat-label class="kb-mat-label">Message</mat-label>
                     <editor [(ngModel)]="_form.form.emailmessage" [init]="_general.config"></editor> -->

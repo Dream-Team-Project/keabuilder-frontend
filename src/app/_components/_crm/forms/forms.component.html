@@ -51,6 +51,7 @@
         </mat-chip>
       </mat-chip-list>
       <input
+        matInput
         type="text"
         #searchListInp
         placeholder="Select multiples..."
@@ -58,9 +59,7 @@
         [matAutocomplete]="listAuto"
         [matChipInputFor]="listChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        class="kb-act-searchinp w-100"
-        [class.pt-2]="selectedLists.length != 0"
-        matInput>
+        class="kb-act-searchinp w-100 pt-1">
       <mat-autocomplete
         autoActiveFirstOption
         #listAuto="matAutocomplete"
@@ -86,6 +85,7 @@
         </mat-chip>
       </mat-chip-list>
       <input
+        matInput
         type="text"
         #searchTagInp
         [formControl]="tagCtrl"
@@ -95,9 +95,7 @@
         [matChipInputFor]="tagChipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         (matChipInputTokenEnd)="addtag($event)"
-        class="kb-act-searchinp w-100"
-        [class.pt-2]="selectedTags.length != 0"
-        matInput
+        class="kb-act-searchinp w-100 pt-1"
       />
       <mat-autocomplete
         autoActiveFirstOption

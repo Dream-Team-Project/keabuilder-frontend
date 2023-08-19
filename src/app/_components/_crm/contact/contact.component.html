@@ -30,7 +30,7 @@
             <div class="col-md-8">
               <div class="kb-contact-details-card rounded">
                 <div class="row px-3 py-2 m-0 d-flex justify-content-between align-items-center">
-                  <h5 class="col-md-4 p-0 m-0">General Details</h5>
+                  <h6 class="col-md-4 p-0 m-0">General Details</h6>
                   <div class="kb-contact-search-inp col-md-4 p-0">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input [(ngModel)]="searchField" type="text" placeholder="Search questions" class="w-100 h-100 p-0">
@@ -44,11 +44,15 @@
                         <label>{{cf.label | titlecase}}<span *ngIf="cf.required" class="kb-form-inp-reqired">*</span></label>
                       </td>
                       <td class="col-7 px-0" (dblclick)="cf.edit = true">
-                        <span *ngIf="!cf.edit else inp">{{cf.value}}</span>
+                        <span *ngIf="!cf.edit else inp">
+                          <span *ngIf="!cf.value else showval" class="text-black-50">Double click to add</span>
+                          <ng-template #showval>{{cf.value}}</ng-template>
+                        </span>
                         <ng-template #inp>
                           <input type="text" (keydown.enter)="verifyField(cf, i)" [(ngModel)]="cf.value" [id]="cf.name + '-' + i" [name]="cf.name + '-' + i" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
                           <mat-error *ngIf="cf.error">This field is required</mat-error>
                           <mat-error *ngIf="cf.uniqueErr">Email address already exists</mat-error>
+                          <mat-error *ngIf="cf.invalid">Please enter a valid email address</mat-error>
                         </ng-template>
                       </td>
                       <td class="col-1 text-center p-0">
@@ -66,8 +70,8 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="kb-contact-details-card rounded py-2 px-3">
-                  <h5 class="p-1">Subscribe to Lists</h5>
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-4">
+                <h6>Subscribe to Lists</h6>
                 <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
                   <mat-label>Subscribe to Lists</mat-label>
                   <mat-chip-list #listChipList aria-label="List selection">
@@ -80,17 +84,15 @@
                       </button>
                     </mat-chip>
                   </mat-chip-list>
-                  <input
+                  <input matInput
                     type="text"
                     #searchListInp
-                    placeholder="Select multiples..."
+                    placeholder="Select multiple lists..."
                     (input)="filterListData($event)"
                     [matAutocomplete]="listAuto"
                     [matChipInputFor]="listChipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    class="kb-act-searchinp w-100"
-                    [class.pt-2]="selectedLists.length != 0"
-                    matInput>
+                    class="kb-act-searchinp w-100 pt-1">
                   <mat-autocomplete
                     #listAuto="matAutocomplete"
                     (optionSelected)="addSelectedList($event, searchListInp)">
@@ -103,8 +105,8 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-              <div class="kb-contact-details-card rounded py-2 px-3 my-4">
-                <h5 class="p-1">Add Tags</h5>
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-4">
+                <h6>Add Tags</h6>
                 <mat-form-field class="kb-full-width" appearance="fill" (click)="filterTagData($event)">
                   <mat-label>Add Tags</mat-label>
                   <mat-chip-list #tagChipList aria-label="Tag selection">
@@ -117,20 +119,17 @@
                       </button>
                     </mat-chip>
                   </mat-chip-list>
-                  <input
+                  <input matInput
                     type="text"
                     #searchTagInp
                     [formControl]="tagCtrl"
-                    placeholder="Select multiples..."
+                    placeholder="Select multiple tags..."
                     (input)="filterTagData($event)"
                     [matAutocomplete]="tagAuto"
                     [matChipInputFor]="tagChipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     (matChipInputTokenEnd)="addtag($event)"
-                    class="kb-act-searchinp w-100"
-                    [class.pt-2]="selectedTags.length != 0"
-                    matInput
-                  />
+                    class="kb-act-searchinp w-100 pt-1">
                   
                   <mat-autocomplete
                     autoActiveFirstOption
@@ -147,9 +146,26 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-              <!-- <div class="kb-contact-details-card rounded p-2">
-                Notes
-              </div> -->
+              <div class="kb-contact-details-card rounded pt-3 px-3">
+                <h6>Note</h6>
+                <div class="pb-3">
+                  <div *ngIf="!noteEdit else edit">
+                    <p>{{contact.note ? contact.note : 'Add a note by clicking on the edit button below.'}}</p>
+                    <div class="text-right">
+                      <button mat-raised-button color="primary" (click)="noteEdit = true">Edit</button>
+                    </div>
+                  </div>
+                  <ng-template #edit>
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                      <mat-label>Write a note</mat-label>
+                      <textarea matInput [(ngModel)]="contact.note" (keydown.enter)="update_list_tag_note()"></textarea>
+                    </mat-form-field>
+                    <div class="text-right">
+                      <button mat-raised-button color="primary" (click)="update_list_tag_note()">Add</button>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
             </div>
           </div>
         </mat-tab>
@@ -182,16 +198,14 @@
                             </button>
                         </mat-chip>
                     </mat-chip-list>
-                    <input type="email"
+                    <input matInput type="email"
                         #emailtoInp
                         [formControl]="emailtoCtrl"
                         placeholder="Add multiple Emails..."
                         [matChipInputFor]="emailtoChipList"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                         (matChipInputTokenEnd)="addemailto($event)"
-                        class="kb-act-searchinp"
-                        [class.pt-2]="emailto?.length != 0"
-                        matInput>
+                        class="kb-act-searchinp pt-1">
                 </mat-form-field>
               </div>
               <div>
