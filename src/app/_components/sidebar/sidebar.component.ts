@@ -406,6 +406,36 @@ export class SidebarComponent implements OnInit {
       icon: 'fas fa-cogs',
       title: 'Integrations',
       submenu:null
+    },
+    {
+      0:true,
+      routerlink: '/account',
+      img: 'shield.gif',
+      icon: 'fa-solid fa-gear',
+      title: 'Account Settings',
+      submenu:[
+            {
+              0:true,
+              routerlink: '/account/settings',
+              img: 'shield.gif',
+              icon: 'fa-regular fa-user',
+              title: 'Profile Details'
+            },
+            {
+              0:true,
+              routerlink: '/account/sign-in-security',
+              img: 'shield.gif',
+              icon: 'fa-solid fa-shield-halved',
+              title: 'Sign in & Security'
+            },
+            {
+              0:true,
+              routerlink: '/account/billing',
+              img: 'shield.gif',
+              icon: 'fa-regular fa-credit-card',
+              title: 'Billing'
+            },
+          ]
     }
   ];
   extramenus = true;
@@ -500,10 +530,24 @@ export class SidebarComponent implements OnInit {
     //     element[0] = false;
     //   });
     // }
+    else if(myhref=='/account'){
+
+      this.extramenus = false;
+      
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
+      
+      this.allmenu[11][0] = true;
+
+      this.allmenu[11].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
 
     this.backme = true;
     
-    if(myhref!='/funnels' && myhref!='/sales' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates'){
+    if(myhref!='/funnels' && myhref!='/sales' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates' && myhref!='/account'){
       this.backme = false;
     } 
 

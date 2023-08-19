@@ -116,13 +116,22 @@ import { OffersComponent } from './_components/_sales/offers/offers.component';
 import { OfferComponent } from './_components/_sales/offer/offer.component';
 // sales
 
+// account-setting
+
+import { AccountComponent } from './_components/_account-settings/account/account.component';
+import { ProfileSettingsComponent } from './_components/_account-settings/profile-settings/profile-settings.component';
+import { SignInSecurityComponent } from './_components/_account-settings/sign-in-security/sign-in-security.component';
+import { BillingComponent } from './_components/_account-settings/billing/billing.component';
+
+//account-settings
+
 const routes: Routes = [
 
   // auth
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
-  { path: 'register', component: RegisterComponent, canActivate: [SignedInGuard]},
+  { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -135,6 +144,7 @@ const routes: Routes = [
     children: [
       // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
       {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
+      {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
       {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
       {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
       {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
@@ -296,6 +306,18 @@ const routes: Routes = [
 
   // affiliate
 
+  // account-settings
+  
+  { path: 'account', component: AccountComponent,
+  children: [
+    { path: '', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
+    { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
+    { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
+  ],
+   canActivate: [AuthGuard] },
+  //account-settings
+
 
   // page not found
   { path: '**', component: PageNotFoundComponent },
@@ -398,6 +420,10 @@ export const RoutingComponents =
     ProductComponent,
     OffersComponent,
     OfferComponent,
-    DomainComponent
+    DomainComponent,
+    AccountComponent,
+    BillingComponent, 
+    ProfileSettingsComponent,
+    SignInSecurityComponent,
   ];
 

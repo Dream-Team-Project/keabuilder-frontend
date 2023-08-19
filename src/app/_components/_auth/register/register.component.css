@@ -1,7 +1,3 @@
-.bw-login {
-  margin-top: -24px;
-}
-
 .alert {
   position: fixed;
   top: 20px;
@@ -63,41 +59,12 @@
   }
 }
 
-.bw-login img {
-  width: 100px;
-}
-
 .login-form {
   width: 100%;
-  max-width: 450px;
   color: rgb(0, 0, 0);
-  text-align: left;
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
-
-.login-form h5 {
-  font-size: 19px;
-  margin-top: 15px;
-}
-
-.login-form p {
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-.signup-btn {
-  border: none;
-  font-size: 13px;
-}
-
-.login-btn {
-  padding: 10px 50px !important;
-}
-
-.txt-light {
-  font-size: 13px;
-  opacity: 0.7;
-}
-
 .signup-btn:hover {
   color: #000;
   background: transparent !important;
@@ -117,14 +84,6 @@
   color: rgb(0, 0, 0);
   font-size: 13px;
 }
-
-/* .bu-forlogin input,
-.bu-forregister input,
-.bw-forforget input {
-  opacity: 0.7;
-  padding: 13px 26px;
-  height: 40px;
-} */
 
 .toastnew .fa-thumbs-up {
   display: none;
@@ -160,75 +119,16 @@
   width: 50%;
 }
 
-.bw-container__divider {
-  position: relative;
-  width: 50%;
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-
-.bw-container__divider:before {
-  content: "";
-  height: 1px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  background-color: #a9a8b3;
-  top: 14px;
-}
-
-.bw-container__divider-text {
-  color: #6f7287;
-  border: 1px solid #a9a8b3;
-  border-radius: 100px;
-  background: #fff;
-  position: relative;
-  display: inline-block;
-  padding: 0 12px 3px;
-  min-width: 20px;
-  text-align: center;
-  left: 41%;
-}
-
-.bw-container__bg {
-  background-position: 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.bw-colside {
-  flex: 1;
-  -ms-flex: 1 0 0px;
-  height: 99.9vh;
-  overflow: hidden;
-}
-
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-}
-
 .example-full-width {
   width: 100%;
 }
 
 .ar-eyeicon {
   border: none;
-  background: transparent;
-  top: -6px;
-  position: relative;
-}
-
-.mat-raised-button {
-  width: 50%;
-  height: 50px;
+  color: transparent;
+  /* background: transparent; */
+  /* top: -6px;
+  position: relative; */
 }
 
 .registerbtn {
@@ -242,3 +142,118 @@
   font-weight: bold;
   align-items: center;
 }
+.kb-strip{
+  border:1px solid hsl(0deg 0% 0% / 13%);
+  padding:10px 10px 30px 10px;
+  border-radius: 5px;
+}
+.kb-strip:hover{
+  border : 1px solid black;
+  cursor: pointer;
+}
+.colr{
+  color: var(--primary-color);
+}
+.kb-strip-cardbox{
+  box-sizing: border-box;
+  height: 36px;
+}
+.kb-strip-cardbox:focus{
+  border : 1px solid var(--primary-color);
+  
+}
+.kb-strip-mesg{
+  margin-top: 8PX;
+  font-size: 10px;
+  font-weight: 400;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 140%;
+  font-size: 0.75rem;
+  text-align: left;
+  color: rgb(77, 82, 86);
+}
+.kb-spinner{
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--kb-dim-black);
+  justify-content: center;
+  align-items: center;
+}
+.kb-review-text{
+  font-weight: 700;
+  font-size: 28px;
+}
+.kb-review-img{
+border-radius: 10px;
+width: 100%;
+max-height: 300px;
+}
+.kb-review-mesge{
+  font-style: italic;
+  font-weight: 500;
+}
+.kb-check{
+  font-size:10px ;
+  align-items: center;
+  position: relative;
+  top: -2px;
+  text-wrap: wrap;
+  
+}
+.kb-check-wrap-text{
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+.kb-check-wrap-text:hover{
+  cursor: pointer;
+  z-index: 1;
+  zoom: 120%;
+}
+
+.bw-sidebar-logo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 25px 5px;
+  min-height: 60px;
+  transition: 0.3s ease-in;
+}
+
+.bw-sidebar-logo img {
+  height: 46px;
+}
+
+.bw-logo__item__text {
+  position: relative;
+  line-height: 2em;
+  overflow: hidden;
+  font-size: 24px;
+  font-family: cursive;
+  /* font-style: italic; */
+  font-weight: 500;
+}
+.bw-container__bg {
+  background-position: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+

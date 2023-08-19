@@ -10,6 +10,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  product:any='plan-xTn8SqarYE0eVIEaSdkM';
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   hide = true;
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit {
 
     const { username, password } = this.form;
     if(this.userFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
-      this.authService.login(username, password).subscribe({
+      this.authService.login(btoa(username), btoa(password)).subscribe({
         next: data => {
           this.tokenStorage.saveToken(data.accessToken);
           var userdata = {

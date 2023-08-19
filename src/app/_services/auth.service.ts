@@ -23,16 +23,8 @@ export class AuthService {
     }, httpOptions);
   }
 
-  register(username: string, firstname:string, lastname:string, company:string, email:string, phone:string, password: string): Observable<any> {
-    return this.http.post(this.AUTH_API + 'signup', {
-      username,
-      firstname,
-      lastname,
-      company,
-      email,
-      phone,
-      password,
-    }, httpOptions);
+  register(obj:any): Observable<any> {
+    return this.http.post(this.AUTH_API + 'signup',obj, httpOptions);
   }
 
   loggedIn() {
@@ -64,6 +56,7 @@ export class AuthService {
       wistiaid
     }, httpOptions);
   }
-
-
+  duplicatecheck(obj:any): Observable<any>{
+    return this.http.post('/api/duplicateemail_username',obj);
+  }
 }

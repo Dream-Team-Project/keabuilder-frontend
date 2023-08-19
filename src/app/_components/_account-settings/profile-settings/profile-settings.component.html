@@ -1,0 +1,70 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          
+              <div class="row d-flex ">
+                  <div class="col-md-2 col-2 symbol pb-4 pr-0 pl-4">
+                      <div class="symbol-label" [style.backgroundImage]="'url('+imageService.getImgPath(userimgpath)+')'" style="background-image:url('/assets/images/profile/avatar.png')"></div>
+                  </div>
+                  <div class="col-sm-5 ml-5 col-5 mt-3 mt-md-5">
+                 <button mat-raised-button color="primary" (click)="downloadInp.click()" class="mr-3">Select File</button>
+                 <div class="mt-2">
+                  <span *ngIf="selectfilenm" class="kb-info-tag small rounded px-2 py-1">{{selectfilenm}}</span>
+                  <input #downloadInp name="download" type="file" accept=".png, .jpg, .jpeg" (change)="changeme($event)" class="d-none" [formControl]="imageFormControl"> 
+                </div>
+               </div>
+                </div>
+          
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" required [(ngModel)]="profileobj.email">
+            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('pattern')">
+              Please enter <strong>Valid Email</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>First Name</mat-label>
+            <input type="text" matInput [formControl]="firstnameFormControl" placeholder="Ex. firstname" required [(ngModel)]="profileobj.firstname">
+            <mat-error *ngIf="firstnameFormControl.hasError('required')">
+              First Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+           
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <input type="text" matInput [formControl]="lastnameFormControl" placeholder="Ex. lastname" [(ngModel)]="profileobj.lastname">
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Company Name</mat-label>
+            <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. company name" required [(ngModel)]="profileobj.company">
+            <mat-error *ngIf="companynameFormControl.hasError('required')">
+              Company Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Phone Number</mat-label>
+            <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. Phone Number" required [(ngModel)]="profileobj.phone">
+            <mat-error *ngIf="phoneFormControl.hasError('required')">
+              Phone Number is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <div class="d-flex justify-content-center">
+          <button mat-raised-button color="primary" (click)="updateprofile()" [disabled]="emailFormControl.invalid || firstnameFormControl.invalid || companynameFormControl.invalid || phoneFormControl.invalid">Update</button>
+        </div>
+
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+</div>
+

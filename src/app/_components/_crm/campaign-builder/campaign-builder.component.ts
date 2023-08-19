@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {FormControl, Validators} from '@angular/forms';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MailerService } from 'src/app/_services/mailer.service';
@@ -13,6 +13,7 @@ import { NgxCaptureService } from 'ngx-capture';
 import { ImageService } from 'src/app/_services/image.service';
 import { FormService } from 'src/app/_services/_crm/form.service';
 import { EmailService } from 'src/app/_services/_crm/email.service';
+import { SettingService } from 'src/app/_services/_crm/setting.service';
 
 @Component({
   selector: 'app-crm-campaign-builder',
@@ -57,6 +58,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
   filteredemails:any=[];
   emailid:any='';
   singleemail:any={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
+  smtpstatus=false;
 
   constructor(public _general:GeneralService,
         private _listService :ListService,
@@ -71,6 +73,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
         public _image:ImageService,
         public _form: FormService,
         private email:EmailService,
+        private _settingService: SettingService,
       ) { 
 
       this.route.paramMap.subscribe((params: ParamMap) => {
@@ -92,7 +95,18 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.fetchList();
     this.fetchAddress();
     this.fetchEmails();
+    this.fetchsmtp();
     
+  }
+  fetchsmtp(){
+    this._settingService.singlesetting().subscribe({
+      next: data => {
+        // console.log(data.data[0]);
+        if(data?.data?.length!=0 && data?.data[0]?.smtp_type && data?.data[0]?.emailfrom ){
+         this.smtpstatus=true;    
+        }
+      }
+    });
   }
  fetchcampaign(){
   this._campaignService.singlecampaign(this.uniqueid).subscribe({
@@ -189,15 +203,15 @@ export class CrmCampaignBuilderComponent implements OnInit {
         });    
       }
       else{
-        this._snackBar.open('Please select Email Template !', 'OK');
+         this._general.openSnackBar(true,'Please select Email Template !', 'OK','center','top');
       }
       }
     else{
-      this._snackBar.open('Missing Campaign details!!', 'OK');
+       this._general.openSnackBar(true,'Missing Campaign details!!', 'OK','center','top');
     }
     }
   else{
-    this._snackBar.open('Missing Campaign details!!', 'OK');
+     this._general.openSnackBar(true,'Missing Campaign details!!', 'OK','center','top');
   }
 
   }
@@ -208,8 +222,8 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish_status = 1;
     var getobj = this.fullcampobj;
-    if(this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){
-      
+    if(this.smtpstatus){
+    if(this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){  
       if(getobj.name!='' && getobj.preheader_text!='' && getobj.emailfrom!='' && getobj.list!='' && getobj.addressid!='' && getobj.sendoption!='' && getobj.emailid!=''){
 
         if(this.singleemail.subject!='' && this.singleemail.body!=''){
@@ -235,20 +249,23 @@ export class CrmCampaignBuilderComponent implements OnInit {
               }); 
               
         }else{
-          this._snackBar.open("Please select Email tempalte!", 'OK');
-        }
-        
+           this._general.openSnackBar(true,"Please select Email tempalte!", 'OK','center','top');
+        }  
       }else{
-        this._snackBar.open('Missing Campaign details!!', 'OK');
+         this._general.openSnackBar(true,'Missing Campaign details!!', 'OK','center','top');
       }
-      
     }
+    }else{
+       this._general.openSnackBar(true,'Please Connect with SMTP First from CRM settings!', 'OK','center','top');
+    }
+    
 
   }
 
  sendatestemail(){
 
   let getobj=this.fullcampobj;
+  if(this.smtpstatus){
     if(this.testemailControl.status=='VALID'){
       
       if(this.singleemail.subject!='' && this.singleemail.body!='' && this.testemail!='' && getobj.addressid!=''){
@@ -259,17 +276,21 @@ export class CrmCampaignBuilderComponent implements OnInit {
         this.MailerService.sendmailcampaign(maildata).subscribe({
           next: data1 => {
             this.dialog.closeAll();
-              this._snackBar.open('Email Sent Successfully!', 'OK');
+               this._general.openSnackBar(false,'Email Sent Successfully!', 'OK','center','top');
           }
         });
 
       }else{
-        this._snackBar.open('Please fix the errors!', 'OK');
+         this._general.openSnackBar(true,'Please fix the errors!', 'OK','center','top');
       }
 
     }else{
-      this._snackBar.open('Incorrect Email Address!!', 'OK');
+       this._general.openSnackBar(true,'Incorrect Email Address!!', 'OK','center','top');
     }
+  }
+    else{
+      this._general.openSnackBar(true,'Please Connect with SMTP First from CRM settings!', 'OK','center','top');
+   }
 
 
   }
@@ -290,23 +311,23 @@ export class CrmCampaignBuilderComponent implements OnInit {
               // console.log(data);
               if(data.success==1){
                 this.genaddress = {company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-                this._snackBar.open('User Address added Successfully!', 'OK');
+                 this._general.openSnackBar(false,'User Address added Successfully!', 'OK','center','top');
                 // this.alladdress = data.fulldata;
                 this.fetchAddress();
                 this.dialog.closeAll();
 
               }else{
-                this._snackBar.open('Something went wrong!', 'OK');
+                 this._general.openSnackBar(true,'Something went wrong!', 'OK','center','top');
               }
           }
         });
 
       }else{
-        this._snackBar.open('Incorrect Address Details!!', 'OK');
+         this._general.openSnackBar(true,'Incorrect Address Details!!', 'OK','center','top');
       }
       
     }else{
-      this._snackBar.open('All fields are required!!', 'OK');
+       this._general.openSnackBar(true,'All fields are required!!', 'OK','center','top');
     }
 
   }
