@@ -190,10 +190,10 @@
       <input matInput type="text" placeholder="Enter export name" [(ngModel)]="exportname">
     </mat-form-field>
     <span class="kb-fnt">(This is the name given to exported excel file)</span>
-    <div class="kb-fnt py-4">
+    <div class="kb-check py-1">
       <div >Select fields to export (Optional)</div>
   <div><mat-checkbox [formControl]="tagsFormControl">Tags</mat-checkbox></div>
-  <div><mat-checkbox [formControl]="fieldsFormControl">Fields</mat-checkbox></div>
+  <div class="kb-fnt-fields"><mat-checkbox [formControl]="fieldsFormControl">Fields</mat-checkbox></div>
     </div>
     <div class="kb-spinner" *ngIf="spinner">
       <mat-spinner></mat-spinner>

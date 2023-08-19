@@ -337,7 +337,7 @@ uploadcontacts(){
           this.spinner=false;
           this.dialog.closeAll();
           if(data?.errordata?.length > 0) {
-            this._general.openSnackBar(true,data?.errordata?.length+' '+'contacts not Uploads','Ok','center','top');
+            this._general.openSnackBar(true,data?.errordata?.length+' '+'contact not uploaded','Ok','center','top');
             this.resetobj();
           }
           else{
