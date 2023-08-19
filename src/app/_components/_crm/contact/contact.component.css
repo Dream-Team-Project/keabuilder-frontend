@@ -38,13 +38,14 @@
 }
 
 .kb-contact-details-card .table tr {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--secondary-color);
     transition: 0.2s ease;
 }
 
 .kb-contact-details-card .table td {
     vertical-align: middle;
+    padding: 10px 16px;
 }
 
 .kb-contact-details-card .table label { 
@@ -66,8 +67,8 @@
 
 .kb-contact-field-action i {
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     margin: auto;
     border-radius: 50%;
     display: flex;

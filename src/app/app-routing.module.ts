@@ -53,6 +53,7 @@ import { FunnelWizardNavComponent } from './_components/_funnels/funnel-wizard-n
 // crm
 import { CrmAutomationComponent } from './_components/_crm/automation/automation.component';
 import { CrmAutomationBuilderComponent } from './_components/_crm/automation-builder/automation-builder.component';
+import { CrmAutomationWorkflowComponent } from './_components/_crm/automation-workflow/automation-workflow.component';
 import { CrmCampaignBuilderComponent } from './_components/_crm/campaign-builder/campaign-builder.component';
 import { CrmCampaignsComponent } from './_components/_crm/campaigns/campaigns.component';
 import { CrmContactComponent } from './_components/_crm/contact/contact.component';
@@ -243,21 +244,21 @@ const routes: Routes = [
 
   // membership
 
-  // { path: 'membership', component: MembershipComponent,
-  //   children:[
-  //     { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-  //     { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
-  //     { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-  //     { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-  //     { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
-  //     { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-  //     { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
-  //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-  // ],
-  //  canActivate: [AuthGuard] },
+  { path: 'membership', component: MembershipComponent,
+    children:[
+      { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
+      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+      { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+      { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+  ],
+   canActivate: [AuthGuard] },
 
   // membership
 
@@ -270,7 +271,7 @@ const routes: Routes = [
   
     { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+    // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
   
     // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -381,6 +382,7 @@ export const RoutingComponents =
     CrmCampaignBuilderComponent,
     CrmAutomationComponent,
     CrmAutomationBuilderComponent,
+    CrmAutomationWorkflowComponent, 
     AffiliatesComponent,
     AffiliateUsersComponent,
     AffiliateCommissionComponent,

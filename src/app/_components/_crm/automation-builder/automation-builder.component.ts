@@ -3,209 +3,328 @@ import { AutomationService } from 'src/app/_services/_builder/automation.service
 import { ImageService } from 'src/app/_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
+export interface TriggerGroup {
+  list: Array<any>,
+  search: String,
+  index: number,
+  update: boolean,
+  temp: any,
+  listField: any,
+  tagField: any,
+  formField: any,
+  fieldField: any,
+  emailField: any,
+}
+
+export interface ActionGroup {
+  list: Array<any>,
+  search: String,
+  index: number,
+  update: boolean,
+  temp: any,
+  listField: any,
+  tagField: any,
+  fieldField: any,
+  emailField: any,
+  noteField: any,
+  waitField: any,
+  ifelseField: any
+}
+
+export const _filter = (opt: any[], key: string, value: string): any[] => {
+  const filterValue = value.toLowerCase();
+  return opt.filter((item:any) => item[key].toLowerCase().includes(filterValue));
+};
 
 @Component({
   selector: 'app-crm-automation-builder',
   templateUrl: './automation-builder.component.html',
   styleUrls: ['./automation-builder.component.css', '../../material.component.css']
 })
+
 export class CrmAutomationBuilderComponent implements OnInit {
 
-  @ViewChild('wfDialog') wfDialog!: TemplateRef<any>;
+  @ViewChild('triggerSheet') triggerSheet!: TemplateRef<any>;
+  @ViewChild('actionSheet') actionSheet!: TemplateRef<any>;
+  @ViewChild('triggerDialog') triggerDialog!: TemplateRef<any>;
+  @ViewChild('actionDialog') actionDialog!: TemplateRef<any>;
+
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   automation = {
     id: '',
     name: '',
   }
   autosave:boolean = false;
-  isAction:boolean = false;
-  tempWf:any;
-  appendIndex = -1;
-  searchWf:string = '';
-  workflowList:Array<any> = [];
-  filteredData:Array<any> = [];
-  formField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true
+  trigger:TriggerGroup = {
+    list: [],
+    search: '',
+    index: -1,
+    update: false,
+    temp: '',
+    listField: {},
+    tagField: {},
+    formField: {},
+    fieldField: {},
+    emailField: {}
   }
-  listField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true
+  action:ActionGroup = {
+    list: [],
+    search: '',
+    index: -1,
+    update: false,
+    temp: '',
+    listField: {},
+    tagField: {},
+    fieldField: {},
+    emailField: {},
+    noteField: {},
+    waitField: {},
+    ifelseField: []
   }
-  tagField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true
+  ifelseFieldGroup = [{
+    id: 'ifelse-list',
+    label: 'List',
+    expanded: false,
+    types: [{
+      id: 'subs-list',
+      name: 'Subscribed to list',
+      group: 'list'
+    }, {
+      id: 'not-subs-list',
+      name: 'Not subscribed to list',
+      group: 'list'
+    }, {
+      id: 'unsubs-list',
+      name: 'Unsubscribed to list',
+      group: 'list'
+    }, {
+      id: 'subs-list-on-date',
+      name: 'Subscribed on date',
+      group: 'list'
+    }, {
+      id: 'subs-list-at-time',
+      name: 'Subscribed at time',
+      group: 'list'
+    }, {
+      id: 'subs-list-with-form',
+      name: 'Subscribed with form',
+      group: 'list'
+    }, {
+      id: 'not-subs-list-with-form',
+      name: 'Not subscribed with form',
+      group: 'list'
+    }]
+    }, {
+      id: 'ifelse-tag',
+      label: 'Tag',
+      expanded: false,
+      types: [{
+        id: 'tag-added',
+        name: 'tag added',
+        group: 'tag'
+      }, {
+        id: 'tag-not-added',
+        name: 'tag not added',
+        group: 'tag'
+      }, {
+        id: 'tag-removed',
+        name: 'tag removed',
+        group: 'tag'
+      }]
+    }, {
+    id: 'ifelse-field',
+    label: 'Field',
+    expanded: false,
+    types: [{
+      id: 'is-field',
+      name: 'Is',
+      group: 'field'
+    }, {
+      id: 'is-field-not',
+      name: 'Is not',
+      group: 'field'
+    }, {
+      id: 'is-field-contains',
+      name: 'Is contains',
+      group: 'field'
+    }, {
+      id: 'does-field-not-contains',
+      name: 'Does not contain',
+      group: 'field'
+    }]
+  },{
+    id: 'ifelse-form',
+    label: 'Form',
+    expanded: false,
+    types: [{
+      id: 'submitted-form',
+      name: 'Submitted Form',
+      group: 'form'
+    }, {
+      id: 'not-submitted-form',
+      name: 'Not sumbmited form',
+      group: 'form'
+    }]
+  }]
+  ifelseFieldTypeObj:any = {
+    type: {
+      name: ''
+    },
+    filterGroup: [],
   }
-  fieldField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true,
-    change: {
-      from: {any: true, value: ''},
-      to: {any: true, value: ''},
-    }
+  timepicker:any = {
+    hours: [],
+    minutes: [],
+    ampm: ['AM', 'PM'],
   }
-  emailField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true
-  }
-  webpageField:any = {
-    id: '',
-    value: '',
-    error: '',
-    filter: [],
-    run_once: true
-  }
-  tempTrgtErr = '';
-  searchTrgtInp = '';
-  updateTempTrgt = false;
-
+  currentDate:Date = new Date();
+  timeUnits:Array<string> = ['Minute','Hour','Day','Week','Month','Year'];
+  wfExpPanel:number = 0;
 
   constructor(
     public _automation: AutomationService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet,) {}
+    private _bottomSheet: MatBottomSheet) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.resetTrigger();
+    this.resetAction();
+    this.createTimePicker();
+  }
 
-  openDialog(templateRef: TemplateRef<any>, error:string): void {
-    if(error) this.showFieldError(error);
+  createTimePicker() {
+    let h = 1, m = 0;
+    while (h <= 12) {
+      this.timepicker.hours.push((h < 10 ? '0' : '')+h);
+      h++;
+    }
+    while (m < 60) {
+      this.timepicker.minutes.push((m < 10 ? '0' : '')+m);
+      m++;
+    }
+  }
+
+  // start trigger
+
+  openTriggerDialog(templateRef: TemplateRef<any>, error:string): void {
+    if(error) this.showTriggerFieldError(error);
     this.closeBottomSheet();
     this.dialog.open(templateRef);
   }
 
-  openBottomSheet(templateRef: TemplateRef<any>, isAction:boolean, index:number): void {
-    this.workflowList = JSON.parse(JSON.stringify(
-      isAction ? 
-      this._automation.actionList :
-      this._automation.triggerList));
-    this.isAction = isAction;
-    this.appendIndex = index;
+  openTriggerSheet(templateRef: TemplateRef<any>, index:number): void {
+    this.trigger.list = JSON.parse(JSON.stringify(this._automation.triggerList));
+    this.trigger.index = index;
     var bottomSheet = this._bottomSheet.open(templateRef);
     bottomSheet.afterDismissed().subscribe((data:any)=>{
-      this.searchWf = '';
+      this.trigger.search = '';
+      this.wfExpPanel = 0;
     })
   }
 
-  showFieldError(error:string) {
-    var trgtNm = this.tempWf.target.name;
-    if(trgtNm == 'form') this.formField.error = error;
-    if(trgtNm == 'field') this.fieldField.error = error;
-    else if(trgtNm == 'list')  this.listField.error = error;
-    else if(trgtNm == 'tag') this.tagField.error = error;
-    else if(trgtNm == 'email') this.emailField.error = error;
-    else if(trgtNm == 'webpage') this.webpageField.error = error;
+  showTriggerFieldError(error:string) {
+    var trgtNm = this.trigger.temp.target.name;
+    if(trgtNm == 'list')  this.trigger.listField.error = error;
+    else if(trgtNm == 'tag') this.trigger.tagField.error = error;
+    else if(trgtNm == 'form') this.trigger.formField.error = error;
+    else if(trgtNm == 'field') this.trigger.fieldField.error = error;
+    else if(trgtNm == 'email') this.trigger.emailField.error = error;
   }
 
-  validateTarget() {
+  validateTrigger() {
     return new Promise<any>((resolve, reject) => {
-      var tWfTrg = this.tempWf.target;
-      if(tWfTrg.name == 'form') tWfTrg = JSON.parse(JSON.stringify(this.formField));
-      else if(tWfTrg.name == 'field') tWfTrg = JSON.parse(JSON.stringify(this.fieldField));
-      else if(tWfTrg.name == 'list') tWfTrg = JSON.parse(JSON.stringify(this.listField));
-      else if(tWfTrg.name == 'tag') tWfTrg = JSON.parse(JSON.stringify(this.tagField));
-      else if(tWfTrg.name == 'email') tWfTrg = JSON.parse(JSON.stringify(this.emailField));
-      else if(tWfTrg.name == 'webpage') tWfTrg = JSON.parse(JSON.stringify(this.webpageField));
-      if(tWfTrg.id) {
-        this.tempWf.target.id = tWfTrg.id;
-        this.tempWf.target.run_once = tWfTrg.run_once;
-        if(tWfTrg.change) this.tempWf.target.change = JSON.parse(JSON.stringify(tWfTrg.change));
+      var tempTrgt = this.trigger.temp.target;
+      if(tempTrgt.name == 'list') tempTrgt = JSON.parse(JSON.stringify(this.trigger.listField));
+      else if(tempTrgt.name == 'tag') tempTrgt = JSON.parse(JSON.stringify(this.trigger.tagField));
+      else if(tempTrgt.name == 'form') tempTrgt = JSON.parse(JSON.stringify(this.trigger.formField));
+      else if(tempTrgt.name == 'field') tempTrgt = JSON.parse(JSON.stringify(this.trigger.fieldField));
+      else if(tempTrgt.name == 'email') tempTrgt = JSON.parse(JSON.stringify(this.trigger.emailField));
+      if(tempTrgt.id) {
+        this.trigger.temp.target.id = tempTrgt.id;
+        this.trigger.temp.target.run_once = tempTrgt.run_once;
+        if(tempTrgt.change) this.trigger.temp.target.change = JSON.parse(JSON.stringify(tempTrgt.change));
         resolve(true);
       }
       else resolve(false);
     });
   }
 
-  addWorkflow(isAction:boolean) {
-    this.validateTarget().then(resp=>{
+  addTrigger() {
+    this.validateTrigger().then(resp=>{
       if(resp) {
-        if(isAction) {
-          this._automation.addAction(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-            if(resp) this._automation.saveWfSession();
-            else this.openDialog(this.wfDialog, 'Action allready added');
-          })
-        }
-        else {
-          this._automation.addTrigger(this.tempWf, this.appendIndex, this.updateTempTrgt).then(resp=>{
-            if(resp) this._automation.saveWfSession();
-            else this.openDialog(this.wfDialog, 'Trigger allready added');
-          })
-        }
+        this._automation.addTrigger(this.trigger.temp, this.trigger.index, this.trigger.update).then(resp=>{
+          if(resp) this._automation.saveWfSession();
+          else this.openTriggerDialog(this.triggerDialog, 'Trigger allready added');
+        })
       }
-      else this.openDialog(this.wfDialog, 'Please select a '+this.tempWf.target.name);
+      else this.openTriggerDialog(this.triggerDialog, 'Please select a '+this.trigger.temp.target.name);
     })
   }
 
-  deleteWorkflow(isAction:boolean) {
-    isAction ? this._automation.deleteAction(this.appendIndex) : this._automation.deleteTrigger(this.appendIndex); 
-  }
-
-  selectWf(wf:any, index:number, update:boolean) {
-    this.resetWorkflow();
+  selectTrigger(wf:any, index:number, update:boolean) {
+    this.resetTrigger();
     if(update) {
-      if(wf.target.name == 'form') {
-        this.formField.id = wf.target.id;
-        this.formField.value = this._automation.fetchTargetName(wf);
-        this.formField.run_once = wf.target.run_once;
-      }
-      else if(wf.target.name == 'field') {
-        this.fieldField.id = wf.target.id;
-        this.fieldField.value = this._automation.fetchTargetName(wf);
-        this.fieldField.change = JSON.parse(JSON.stringify(wf.target.change));
-        this.fieldField.run_once = wf.target.run_once;
-      }
-      else if(wf.target.name == 'list') {
-        this.listField.id = wf.target.id;
-        this.listField.value = this._automation.fetchTargetName(wf);
-        this.listField.run_once = wf.target.run_once;
+      if(wf.target.name == 'list') {
+        this.trigger.listField.id = wf.target.id;
+        this.trigger.listField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.listField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'tag') {
-        this.tagField.id = wf.target.id;
-        this.tagField.value = this._automation.fetchTargetName(wf);
-        this.tagField.run_once = wf.target.run_once;
+        this.trigger.tagField.id = wf.target.id;
+        this.trigger.tagField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.tagField.run_once = wf.target.run_once;
+      }
+      else if(wf.target.name == 'form') {
+        this.trigger.formField.id = wf.target.id;
+        this.trigger.formField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.formField.run_once = wf.target.run_once;
+      }
+      else if(wf.target.name == 'field') {
+        this.trigger.fieldField.id = wf.target.id;
+        this.trigger.fieldField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.fieldField.change = JSON.parse(JSON.stringify(wf.target.change));
+        this.trigger.fieldField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'email') {
-        this.emailField.id = wf.target.id;
-        this.emailField.value = this._automation.fetchTargetName(wf);
-        this.emailField.run_once = wf.target.run_once;
+        this.trigger.emailField.id = wf.target.id;
+        this.trigger.emailField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.emailField.run_once = wf.target.run_once;
       }
-      else if(wf.target.name == 'webpage') {
-        this.webpageField.id = wf.target.id;
-        this.webpageField.value = this._automation.fetchTargetName(wf);
-        this.webpageField.run_once = wf.target.run_once;
-      }
-      this.appendIndex = index;
+      this.trigger.index = index;
     }
-    this.updateTempTrgt = update;
-    this.tempWf = JSON.parse(JSON.stringify(wf));
-    this.openDialog(this.wfDialog, '');
+    this.trigger.update = update;
+    this.trigger.temp = JSON.parse(JSON.stringify(wf));
+    this.openTriggerDialog(this.triggerDialog, '');
   }
 
-  resetWorkflow() {
-    this.formField = {
+  resetTrigger() {
+    this.trigger.temp = '';
+    this.trigger.listField = {
       id: '',
       value: '',
       error: '',
       filter: [],
       run_once: true
     };
-    this.fieldField = {
+    this.trigger.tagField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: [],
+      run_once: true
+    };
+    this.trigger.formField = {
+      id: '',
+      value: '',
+      error: '',
+      filter: [],
+      run_once: true
+    };
+    this.trigger.fieldField = {
       id: '',
       value: '',
       error: '',
@@ -216,47 +335,304 @@ export class CrmAutomationBuilderComponent implements OnInit {
       },
       run_once: true
     };
-    this.listField = {
+    this.trigger.emailField = {
       id: '',
       value: '',
       error: '',
       filter: [],
       run_once: true
     };
-    this.tagField = {
-      id: '',
-      value: '',
-      error: '',
-      filter: [],
-      run_once: true
-    };
-    this.emailField = {
-      id: '',
-      value: '',
-      error: '',
-      filter: [],
-      run_once: true
-    };
-    this.webpageField = {
-      id: '',
-      value: '',
-      error: '',
-      filter: [],
-      run_once: true
-    };
-    this.tempWf = '';
   }
 
-  filterWorkflow() {
+  // end trigger
+
+  // start action
+
+  openActionDialog(templateRef: TemplateRef<any>, error:string): void {
+    if(error) this.showActionFieldError(error);
+    this.closeBottomSheet();
+    this.dialog.open(templateRef);
+  }
+
+  openActionSheet(templateRef: TemplateRef<any>, index:number): void {
+    this.action.list = JSON.parse(JSON.stringify(this._automation.actionList));
+    this.action.index = index;
+    var bottomSheet = this._bottomSheet.open(templateRef);
+    bottomSheet.afterDismissed().subscribe((data:any)=>{
+      this.action.search = '';
+      this.wfExpPanel = 0;
+    })
+  }
+
+  showActionFieldError(error:string) {
+    var actNm = this.action.temp.target.name;
+    if(actNm == 'list')  this.action.listField.error = error;
+    else if(actNm == 'tag') this.action.tagField.error = error;
+    else if(actNm == 'field') this.action.fieldField.error = error;
+    else if(actNm == 'email') this.action.emailField.error = error;
+    else if(actNm == 'note') this.action.noteField.error = 'Please write a note';
+    else if(actNm == 'wait') this.action.waitField.error = 'Please write or select a valid input';
+    else if(actNm == 'ifelse') this.action.ifelseField.error = 'Please fill all the required fields';
+  }
+
+  validateAction() {
+    return new Promise<any>((resolve, reject) => {
+      var resp:boolean = false;
+      var tempTrgt = this.action.temp.target;
+      if(tempTrgt.name == 'list') {
+        let ids = this.action.listField.values.map((lf:any) => lf.id);
+        if(ids?.length != 0) {
+          this.action.temp.target.ids = ids;
+          resp = true;
+        }
+      }
+      else if(tempTrgt.name == 'tag') {
+        let ids = this.action.tagField.values.map((tf:any) => tf.id);
+        if(ids?.length != 0) {
+          this.action.temp.target.ids = ids;
+          resp = true;
+        }
+      }
+      else if(tempTrgt.name == 'field') {
+        let values = this.action.fieldField.values.map((ff:any) => {
+          return {id: ff.id, updatedvalue: ff.updatedvalue};
+        });
+        if(values?.length != 0) {
+          this.action.temp.target.values = values;
+          resp = true;
+        }
+      }
+      else if(tempTrgt.name == 'email') {
+        let ids = this.action.emailField.values.map((ef:any) => ef.id);
+        if(ids?.length != 0) {
+          this.action.temp.target.ids = ids;
+          resp = true;
+        }
+      }
+      else if(tempTrgt.name == 'note') {
+        let value = this.action.noteField.value;
+        if(value) {
+          this.action.temp.target.value = value;
+          resp = true;
+        }
+      }
+      else if(tempTrgt.name == 'wait') {
+        let type = {};
+        let awtype = this.action.waitField.type;
+        if(awtype.id == 'wait-spot' && awtype?.value && (awtype?.value >= 5 || awtype?.unit.toLowerCase() != 'minute')) type = this.action.waitField.type;
+        else if(awtype.id == 'wait-sd&t' && awtype.date && awtype.time) type = awtype;
+        if(JSON.stringify(type) != '{}' && type) {
+          this.action.temp.target.type = type;
+          resp = true;          
+        }
+      }
+      else if(tempTrgt.name == 'ifelse') {
+        let types = this.action.ifelseField.types.filter((ft:any)=>ft.type.id);
+        if(types.length == this.action.ifelseField.types.length) {
+          this.action.temp.target.types = types.map((ft:any)=>{
+            let t = ft.type;
+            return {
+              id: t.id, 
+              name: t.name, 
+              value: t.value, 
+              match: t.match ? t.match : null, 
+              type_id: t.type_id, 
+              group: t.group
+            }
+          });
+          this.action.temp.target.logic = this.action.ifelseField.logic;
+          resp = true;
+        }
+      }
+      resolve(resp);
+    });
+  }
+
+  addAction() {
+    this.validateAction().then(resp=>{
+      if(resp) {
+        this._automation.addAction(this.action.temp, this.action.index, this.action.update).then(resp=>{
+          if(resp) this._automation.saveWfSession();
+        })
+      }
+      else this.openActionDialog(this.actionDialog, 'Please select '+this.action.temp.target.name);
+    })
+  }
+
+  selectActionGet(e:any) {
+    this.selectAction(e.action, e.index, true);
+  }
+
+  selectAction(wf:any, index:number, update:boolean) {
+    this.resetAction();
+    if(update) {
+      if(wf.target.name == 'list') {
+        this.action.listField.values = this._automation.fetchMultipleTargets(wf);
+      }
+      else if(wf.target.name == 'tag') {
+        this.action.tagField.values = this._automation.fetchMultipleTargets(wf);
+      }
+      else if(wf.target.name == 'field') {
+        this.action.fieldField.values = this._automation.fetchMultipleTargets(wf);
+      }
+      else if(wf.target.name == 'email') {
+        this.action.emailField.values = this._automation.fetchMultipleTargets(wf);
+      }
+      else if(wf.target.name == 'note') {
+        this.action.noteField.value = wf.target.value;
+      }
+      else if(wf.target.name == 'wait') {
+        this.action.waitField.type = this.action.waitField.types.filter((wt:any) => wt.id == wf.target.type.id)[0];
+        if(wf.target.type.id == 'wait-spot') {
+          this.action.waitField.type.value = wf.target.type.value;
+          this.action.waitField.type.unit = wf.target.type.unit;
+        }
+        else if(wf.target.type.id == 'wait-sd&t') {
+          this.action.waitField.type.date = wf.target.type.date;
+          this.action.waitField.type.time = wf.target.type.time;
+        }
+      }
+      else if(wf.target.name == 'ifelse') {
+        this.action.ifelseField.logic = wf.target.logic;
+        this.action.ifelseField.types = wf.target.types.map((t:any) => {
+          let temp = JSON.parse(JSON.stringify(this.ifelseFieldTypeObj));
+          t.data = this._automation.fetchData(t.group);
+          temp.type = t;
+          return temp;
+        })
+      }
+      this.action.index = index;
+    }
+    this.action.update = update;
+    this.action.temp = JSON.parse(JSON.stringify(wf));
+    this.openActionDialog(this.actionDialog, '');
+  }
+
+  resetAction() {
+    this.action.temp = '';
+    this.action.listField = {
+      values: [],
+      error: '',
+      filter: []
+    };
+    this.action.tagField = {
+      values: [],
+      error: '',
+      filter: []
+    };
+    this.action.fieldField = {
+      values: [],
+      error: '',
+      filter: []
+    };
+    this.action.emailField = {
+      values: [],
+      error: '',
+      filter: []
+    };
+    this.action.noteField = {
+      value: '',
+      error: '',
+    }
+    this.action.waitField = {
+      type: {},
+      types: [{
+        id: 'wait-spot',
+        name: 'Specific period of time',
+        value: 5,
+        unit: this.timeUnits[0]
+      }, { 
+        id: 'wait-sd&t',
+        name: 'Specific data & time', 
+        date:  new Date(),
+        time: {
+          hh: '12',
+          mm: '30',
+          ap: 'AM',
+        },
+      }],
+      error: '',
+    }
+    this.action.waitField.type = this.action.waitField.types[0];
+    this.action.waitField.types[1].date.setDate(this.currentDate.getDate() + 1);
+    this.action.ifelseField = {logic: 'and', types: [], group: this.ifelseFieldGroup, error: ''};
+    this.addCondition(this.action.ifelseField);
+  }
+
+  // end action
+
+  // start single target selection
+
+  selectTarget(e:any, field:any, key:string) {
+    let opt = e.option.value;
+    field.value = opt[key];
+    field.id = opt.id;
+    field.error = '';
+  }
+
+  filterTarget(data:any, field:any, key:string) {
+    let anyObj:any = {id: '*'};
+    anyObj[key] = 'Any';
+    var data = JSON.parse(JSON.stringify(data));
+    data.unshift(anyObj);
+    field.filter = _filter(data, key, field?.value);
+  }
+
+  resetTarget(data:any, field:any, key:string) {
+    field.value=''; 
+    field.id = ''; 
+    this.filterTarget(data, field, key);
+  }
+
+  // end single target selection
+
+  // start multiple target selection
+
+  selectMultipleTarget(e:any, data:any, field:any, inp:any, key:string) {
+    let opt = e.option.value;
+    let obj:any = {id: opt.id};
+    obj[key] = opt[key];
+    if(key == 'label') obj['updatedvalue'] = '';
+    if(obj.id == '*') field.values = [];
+    field.values.push(obj);
+    inp.value = '';
+    this.filterMultipleTarget(data, field, inp, key);
+    field.error = '';
+  }
+
+  filterMultipleTarget(data:any, field:any, inp:any, key:string) {
+    let anyObj:any = {id: '*'};
+    anyObj[key] = 'Select All';
+    var data = JSON.parse(JSON.stringify(data));
+    if(key != 'label') data.unshift(anyObj);
+    field.filter = _filter(data, key, inp?.value);
+  }
+
+  removeSelectedTarget(field:any, index:number): void {
+    field.values.splice(index, 1);
+  }
+
+  isTargetDisabled(values:any, id:any) {
+    if(values[0]?.id == '*' && values.length == 1) return true;
+    else {
+      let vArr = values.filter((v:any) => v.id == id);
+      return vArr.length != 0;
+    }
+  }
+
+  // end multiple target selection
+
+  // start workflow selection
+
+  filterWorkflows(wf:any) {
     var intial = true;
-    var wrkfList = this.workflowList;
-    for(let i = 0; i < wrkfList.length; i++) {
-      for(let j = 0; j < wrkfList[i].workflows.length; j++) {
-        let cond = wrkfList[i].workflows[j].name?.toLowerCase().indexOf(this.searchWf?.toLowerCase()) >= 0;
-        wrkfList[i].hide = !cond;
+    for(let i = 0; i < wf.list.length; i++) {
+      for(let j = 0; j < wf.list[i].workflows.length; j++) {
+        let cond = wf.list[i].workflows[j].name?.toLowerCase().indexOf(wf.search?.toLowerCase()) >= 0;
+        wf.list[i].hide = !cond;
         if(cond) {
           if(intial) {
-            this._automation._general.expPanelStep = i;
+            this.wfExpPanel = i;
             intial = false;
           }
           break;
@@ -265,143 +641,66 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
   }
 
-  // form
-
-  resetFilterForm() {
-    this.formField.value = '';
-    this.formField.id = ''; 
-    this.filterForm();
+  resetWorkflows(wf:any) {
+    wf.search = '';
+    this.filterWorkflows(wf);
   }
 
-  filterForm() {
-    var data = JSON.parse(JSON.stringify(this._automation.forms));
-    data.unshift(this._automation.anyNameTarget);
-    this.formField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.formField?.value?.toLowerCase()));
+  // end workflow selection
+
+  // start group autocomplete
+
+  filterGroup(field: any, group: any) {
+    let value = field.type.name;
+    field.filterGroup = group
+      .map((group:any) => ({id: group.id, label: group.label, expanded: value ? true : group.expanded, types: _filter(group.types, 'name', value)}))
+      .filter((group:any) => group.types.length > 0);
   }
 
-  selectForm(e:any) {
-    this.formField.value = e.option.value.name;
-    this.formField.id = e.option.value.id;
-    this.formField.error = '';
+  groupExpand(fg:any, gi:number) {
+    fg.forEach((group:any, index:number)=> {
+      if(index == gi) group.expanded = !group.expanded;
+      else group.expanded = false;
+    });
   }
 
-  // form
-
-  // field
-
-  resetFilterField() {
-    this.fieldField.value=''; 
-    this.fieldField.id = ''; 
-    this.filterField();
+  selectGroup(e:any, field:any) {
+    let opt = e.option.value;
+    opt['type_id'] = opt.id;
+    delete opt.id;
+    let subSelObj:any = {id: '', value: '', filter: [], data: []}
+    subSelObj.data = this._automation.fetchData(opt.group);
+    field.type = {...JSON.parse(JSON.stringify(opt)), ...subSelObj};
   }
 
-  filterField() {
-    var data = JSON.parse(JSON.stringify(this._automation.fields));
-    data.unshift(this._automation.anyLabelTarget);
-    this.fieldField.filter = data.filter((option:any) => option?.label?.toLowerCase().includes(this.fieldField?.value?.toLowerCase()));
+  removeSelectedGroup(field:any) {
+    field.type = {name: ''};
   }
 
-  selectField(e:any) {
-    this.fieldField.value = e.option.value.label;
-    this.fieldField.id = e.option.value.id;
-    this.fieldField.error = '';
+  setGroupTargetAction(e:any, type:any, action:string) {
+    let key = type.group == 'field' ? 'label' : 'name';
+    if(action == 'filter') this.filterTarget(type.data, type, key) 
+    else if(action == 'reset') this.resetTarget(type.data, type, key);
+    else if(action == 'select') this.selectTarget(e, type, key);
   }
 
-  // field
-
-  // list
-
-  resetFilterList() {
-    this.listField.value=''; 
-    this.listField.id = ''; 
-    this.filterList();
+  addCondition(field:any) {
+    let temp = JSON.parse(JSON.stringify(this.ifelseFieldTypeObj));
+    field.types.push(temp);
+    field.error = '';
   }
 
-  filterList() {
-    var data = JSON.parse(JSON.stringify(this._automation.lists));
-    data.unshift(this._automation.anyNameTarget);
-    this.listField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.listField?.value?.toLowerCase()));
+  removeCondition(fieldGroup:any, index:any) {
+    fieldGroup.splice(index, 1);
   }
 
-  selectList(e:any) {
-    this.listField.value = e.option.value.name;
-    this.listField.id = e.option.value.id;
-    this.listField.error = '';
-  }
-
-  // list
-
-  // tag
-
-  resetFilterTag() {
-    this.tagField.value=''; 
-    this.tagField.id = ''; 
-    this.filterTag();
-  }
-
-  filterTag() {
-    var data = JSON.parse(JSON.stringify(this._automation.tags));
-    data.unshift(this._automation.anyNameTarget);
-    this.tagField.filter = data.filter((option:any) => option.name?.toLowerCase().includes(this.tagField?.value?.toLowerCase()));
-  }
-
-  selectTag(e:any) {
-    this.tagField.value = e.option.value.name;
-    this.tagField.id = e.option.value.id;
-    this.tagField.error = '';
-  }
-
-  // tag
-
-  // email
-
-  resetFilterEmail() {
-    this.emailField.value=''; 
-    this.emailField.id = ''; 
-    this.filterEmail();
-  }
-
-  filterEmail() {
-    var data = JSON.parse(JSON.stringify(this._automation.emails));
-    data.unshift(this._automation.anyNameTarget);
-    this.emailField.filter = data.filter((option:any) => option?.name?.toLowerCase().includes(this.emailField?.value?.toLowerCase()));
-  }
-
-  selectEmail(e:any) {
-    this.emailField.value = e.option.value.name;
-    this.emailField.id = e.option.value.id;
-    this.emailField.error = '';
-  }
-
-  // email
-
-  // webpage
-
-resetFilterWebpage() {
-  this.webpageField.value=''; 
-  this.webpageField.id = ''; 
-  this.filterWebpage();
-}
-
-filterWebpage() {
-  var data = JSON.parse(JSON.stringify(this._automation.webpages));
-  data.unshift(this._automation.anyPageTarget);
-  this.webpageField.filter = data.filter((option:any) => option?.page_name?.toLowerCase().includes(this.webpageField?.value?.toLowerCase()));
-}
-
-selectWebpage(e:any) {
-  this.webpageField.value = e.option.value.page_name;
-  this.webpageField.id = e.option.value.id;
-  this.webpageField.error = '';
-}
-
-// webpage
-
-  closeBottomSheet(): void {
-    this._bottomSheet.dismiss();
-  }
+  // end group autocomplete
 
   toggleAutoSave(value:boolean) {
     this.autosave = value;
+  }
+
+  closeBottomSheet(): void {
+    this._bottomSheet.dismiss();
   }
 }

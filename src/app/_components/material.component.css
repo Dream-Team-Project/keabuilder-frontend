@@ -1,3 +1,19 @@
+::ng-deep .mat-calendar-body-selected {
+    background-color: var(--primary-color);
+}
+
+::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: rgb(216 200 152 / 40%);
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: var(--opacity-primary);
+}
+
+::ng-deep .mat-datepicker-toggle-active {
+    color: var(--primary-color);
+}
+
 ::ng-deep .mat-drawer-container {
     position: fixed;
     top: 0px;
@@ -184,6 +200,10 @@ image-cropper {
     transition: 0.2s ease;
 }
 
+::ng-deep .mat-optgroup-label .mat-icon {
+    margin-right: 6px!important;
+}
+
 ::ng-deep .mat-slider.mat-accent .mat-slider-track-fill,
 ::ng-deep .mat-slider.mat-accent .mat-slider-thumb,
 ::ng-deep .mat-slider.mat-accent .mat-slider-thumb-label,
@@ -254,7 +274,6 @@ image-cropper {
     transition: background .2s ease, transform .2s ease, opacity .2s;
     min-width: auto;
     user-select: none;
-    transform: translateY(1px);
     font-weight: 500;
     opacity: 1;
 }
@@ -317,10 +336,11 @@ image-cropper {
 }
 
 ::ng-deep .mat-button-toggle-appearance-standard {
-    background: transparent;
+    background: var(--kb-gray);
+    border: 1px solid #e2e2e2;
 }
 
-::ng-deep .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle, ::ng-deep .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+::ng-deep .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
     border: none;
 }
 

@@ -61,7 +61,7 @@ span.kb-workflow-option-name {
     justify-content: space-between;
     align-items: flex-start;
     width: 150%;
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 .kb-workflow-split-section-first, .kb-workflow-split-section-last {
@@ -80,13 +80,13 @@ span.kb-workflow-option-name {
 }
 
 .kb-workflow-split-node-cont-first {
-    left: 49.9%;
+    left: 50%;
     border-width: 2px 0px 0 2px;
     border-top-left-radius: 10px;
 }
 
 .kb-workflow-split-node-cont-last {
-    right: 49.9%;
+    right: 50%;
     border-width: 2px 2px 0 0px;
     border-top-right-radius: 10px;
 }
@@ -97,8 +97,8 @@ span.kb-workflow-option-name {
     color: var(--kb-light);
     padding: 10px;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -110,12 +110,12 @@ span.kb-workflow-option-name {
 
 .kb-workflow-split-node-cont-first .kb-workflow-split-node {
     background-color: var(--kb-success);
-    left: -18px;
+    left: -18.5px;
 }
 
 .kb-workflow-split-node-cont-last .kb-workflow-split-node {
     background-color: var(--kb-danger);
-    right: -18px;
+    right: -18.5px;
 }
 
 
@@ -139,8 +139,8 @@ span.kb-workflow-option-name {
 }
 
 .kb-add-action {
-    min-width: 28px;
-    min-height: 28px;
+    min-width: 25px;
+    min-height: 25px;
     border-radius: 50%;
     display: inline-flex;
     justify-content: center;
@@ -164,7 +164,7 @@ span.kb-workflow-option-name {
 
 .kb-workflow-node {
     fill: var(--accent-color);
-    height: 80px;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -182,7 +182,7 @@ span.kb-workflow-option-name {
 .kb-workflow-inner-section:after {
     content: '';
     border-right: 2px dashed var(--accent-color);
-    height: 40px;
+    height: 30px;
     display: block;
     position: absolute;
     top: 0px;
@@ -255,7 +255,7 @@ span.kb-workflow-option-name {
     background: rgb(69 69 69 / 60%);
     border-radius: 4px;
     font-size: 8px;
-    padding: 4px;
+    padding: 2px 5px;
     color: #fff;
     font-weight: 500;
 }
@@ -265,33 +265,33 @@ span.kb-workflow-option-name {
     z-index: 9;
 }
 
-.kb-wf-radio-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--secondary-color);
+/* data & time picker */
+
+.kb-dt-picker-trigger {
     display: flex;
-    align-items: center;
-    column-gap: 5px;
+    flex-wrap: wrap;
 }
 
-.kb-radio-flex {
-    font-size: 14px;
-    display: flex;
-    flex-direction: row;
-    column-gap: 32px;
+.kb-dt-picker-trigger .kb-date-picker-trigger {
+    width: 300px;
 }
 
-::ng-deep .kb-radio-flex .mat-radio-container, ::ng-deep .kb-radio-flex .mat-radio-outer-circle, ::ng-deep .kb-radio-flex .mat-radio-inner-circle{
-    width: 14px;
-    height: 14px;
+.kb-dt-picker-trigger .kb-time-picker-trigger {
+    width: 100px;
 }
 
-::ng-deep .kb-radio-flex .mat-radio-button .mat-radio-ripple {
-    height: 28px;
-    width: 28px;
-    left: calc(50% - 14px);
-    top: calc(50% - 14px);
-    border-radius: 50%;
+/* data & time picker */
+
+::ng-deep .kb-matgroup-isexpanded>span {
+    padding: 0px;
+}
+
+::ng-deep .kb-matgroup-isexpanded>span>button {
+    font-weight: 600;
+}
+
+::ng-deep .kb-matgroup-isexpanded {
+    text-transform: capitalize;
 }
 
 ::ng-deep .mat-dialog-title {

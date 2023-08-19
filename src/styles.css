@@ -85,6 +85,10 @@
       html, body, #app, main {
         height: 100%;
     }
+  
+    p {
+      font-size: 14px;
+    }
 
 .mat-snack-bar-container {
     color: #ffffff;
