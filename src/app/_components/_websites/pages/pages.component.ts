@@ -299,6 +299,7 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.found==0){
+            if(data?.success){
             var page = {
               head: '',
               body: '',
@@ -317,6 +318,11 @@ export class WebsitePagesComponent implements OnInit {
             this._general.redirectToBuilder(data.uniqueid, 'website');
             this.dialog.closeAll();
           }
+        }else{
+            this.searching = false;
+            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.dialog.closeAll();
+        }
 
         }
       });
@@ -613,7 +619,7 @@ export class WebsitePagesComponent implements OnInit {
             this.showwebpages();
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'OK');
+            this._general.openSnackBar(true,data?.message, 'OK','center','top');
           }
 
         }

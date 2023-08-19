@@ -1,7 +1,9 @@
 <div *ngIf="_form.form else notfound">
+   
     <form *ngIf="!thankyou else thankumsg" (ngSubmit)="!submitting ? formSubmit() : ''" class="kb-form"
         [style.width]="_form.currentScrWdth < 800 ? '100%' : ''" [id]="'kb-form-'+_form.form.uniqueid"
         [name]="'kb-form-'+_form.form.uniqueid">
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
         <div *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
             [style.justifyContent]="!fe.input ? _form.justifyContent(fe.name) : ''" [id]="'kb-'+fe.type+'-'+fe.id"
             class="kb-form-element" [ngSwitch]="fe.name">

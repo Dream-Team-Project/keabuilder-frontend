@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
     subscriptionid:'', 
     uniqueid:'',
     cardid:'',
-    usertype:'',
+    registration_type:'',
 
   };
   stripe:any={
@@ -200,7 +200,10 @@ specialuser=false;
   onSubmit(): void {
     this.form.uniqueid=this.makeid(20);
     this.form.password=hashSync(this.form.password,8);
-    if(this.specialuser) this.form.usertype='free';
+    if(this.specialuser) {
+      this.form.registration_type='free';
+      this.form.productid='price_F562mZCjrALoDTQbCR5pF562mZC';
+  }
     const { username,firstname,lastname,company, email,phone, password} = this.form;
     if(this.specialuser || (this.form.customerid && this.form.productid && this.form.subscriptionid)){
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID'){
@@ -403,7 +406,7 @@ specialuser=false;
            this.form.subscriptionid=data?.subscription?.id;
            this.form.cardid=data?.customer?.default_source;
            this.form.productid=this.productid;
-           this.form.usertype='paid';
+           this.form.registration_type='paid';
           this.successMessage=data?.status;
           // this._snackBar.open(data.status,'OK',{duration:2000});
           this.onSubmit();

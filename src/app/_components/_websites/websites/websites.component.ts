@@ -150,7 +150,7 @@ export class WebsitesComponent implements OnInit {
               this.searching = false;
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
            }else{
-
+            if(data?.success){
             var dataobj = {website_id:data.uniqueid};
             this._file.createwebsitefolder(dataobj).subscribe(e=>{
               console.log(e);
@@ -171,6 +171,11 @@ export class WebsitesComponent implements OnInit {
 
               }
             });
+          }else{
+            this.searching = false;
+            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.dialog.closeAll();
+          }
 
            }
     
@@ -306,7 +311,7 @@ export class WebsitesComponent implements OnInit {
              if(data.exist ==1){
                 this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
              }else{
-
+              if(data?.success){
                 this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
                   console.log(e);
                 });
@@ -327,6 +332,11 @@ export class WebsitesComponent implements OnInit {
                     this.searching = false;
                   }
                 });
+              }else{
+                this.searching = false;
+                this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+                this.dialog.closeAll();
+              }
 
 
              }
