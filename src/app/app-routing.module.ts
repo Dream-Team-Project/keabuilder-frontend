@@ -121,7 +121,6 @@ import { HeatmapsRecordingsComponent } from './_components/_heatmap/recordings/r
 import { SalesComponent } from './_components/_sales/sales/sales.component';
 import { PaymentComponent } from './_components/_sales/payment/payment.component';
 import { ProductsComponent } from './_components/_sales/products/products.component';
-import { ProductComponent } from './_components/_sales/product/product.component';
 import { OffersComponent } from './_components/_sales/offers/offers.component';
 import { OfferComponent } from './_components/_sales/offer/offer.component';
 // sales
@@ -145,6 +144,8 @@ const routes: Routes = [
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+
+  // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url
   
   // auth
 
@@ -212,7 +213,6 @@ const routes: Routes = [
     { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
-  { path: 'sales/product/:uniqueid', component: ProductComponent, canActivate: [AuthGuard] },
   { path: 'sales/offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
  
   // sales 
@@ -440,7 +440,6 @@ export const RoutingComponents =
     SalesComponent,
     PaymentComponent,
     ProductsComponent,
-    ProductComponent,
     OffersComponent,
     OfferComponent,
     DomainComponent,

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
 import { UserService } from './_services/user.service';
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
-import { environment } from './../environments/environment';
 
 @Component({
   selector: 'app-root',

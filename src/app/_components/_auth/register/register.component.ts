@@ -140,7 +140,7 @@ subscriptionplans:any=[
   {id:'plan-bCR5pF562mZCjrALoDTQ',name:'Agency',type:'Annual',value:'price_1Ndr8LBFKaDgAHCw7jph534I',},
   {id:'plan-xTn8SqarYE0eVIEaSdkM',name:'Beta',type:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa',},
 ];
-specialroute:string='bCR5pF562mZCjrALoDTQbCR5pF562mZCjrALoDTQbCR5pF562mZCjrALoDTQ';
+secret_route:string='8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV';
 specialuser=false;
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -155,7 +155,7 @@ specialuser=false;
               private _route: ActivatedRoute,
              ) { 
               this._route.paramMap.subscribe((params: ParamMap) => {
-                if(params.get('id') == this.specialroute ){
+                if(params.get('id') == this.secret_route ){
                   this.specialuser=true;
                 }
                this.subscriptionplans.map((element:any)=>{
@@ -171,7 +171,7 @@ specialuser=false;
                   });
                 }
                })
-               if(!this.productid && (params.get('id') != this.specialroute )){
+               if(!this.productid && (params.get('id') != this.secret_route )){
                 window.location.href='/login';
                }
               }); 

@@ -20,6 +20,10 @@ main {
     font-size: 14px;
 }
 
+::ng-deep .mat-form-field textarea {
+    line-height: 18px;
+}
+
 ::ng-deep .mat-chip {
     font-size: 13px;
 }

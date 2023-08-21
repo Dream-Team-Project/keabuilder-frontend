@@ -1,6 +1,7 @@
-.global{
+.kb-temp-text-primary{
     color: var(--primary-color);
 }
+
 .kb-title-board {
     min-height: 28px;
     display: flex;

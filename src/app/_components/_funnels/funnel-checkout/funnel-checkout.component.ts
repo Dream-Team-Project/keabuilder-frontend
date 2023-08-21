@@ -62,7 +62,7 @@ export class FunnelCheckoutComponent implements OnInit {
         if(data?.data?.length!=0){
 
           data.data.forEach((element:any) => {
-            var convertdata = {name:element.productname, price: element.productprice, priceoverride: element.priceoverride};
+            var convertdata = {name: element.productname, price: element.productprice, priceoverride: element.priceoverride};
             this.productdata.push(convertdata);
           });
           this.totalprice = parseFloat(data.data[0].productprice);
