@@ -37,6 +37,9 @@ export class WebsitePagesComponent implements OnInit {
   
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('deldialog') deldialog!: TemplateRef<any>;
+  @ViewChild('quickeditdialog') quickeditdialog!: TemplateRef<any>;
 
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -269,7 +272,8 @@ export class WebsitePagesComponent implements OnInit {
     // this.showpageurl = false;
     // this.confirmarchivepage = false;
     this.createfromscratch();
-    this.openSidebar();
+    // this.openSidebar();
+    this.dialog.open(this.adddialog);
   }
 
   openSidebar(){
@@ -295,6 +299,7 @@ export class WebsitePagesComponent implements OnInit {
           }
 
           if(data.found==0){
+            if(data?.success){
             var page = {
               head: '',
               body: '',
@@ -311,7 +316,13 @@ export class WebsitePagesComponent implements OnInit {
             // create page/folder
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
+            this.dialog.closeAll();
           }
+        }else{
+            this.searching = false;
+            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.dialog.closeAll();
+        }
 
         }
       });
@@ -424,13 +435,13 @@ export class WebsitePagesComponent implements OnInit {
 
   changepagename(dataobj:any, title:any, type:any){
 
-    console.log(dataobj);
+    // console.log(dataobj);
       this.pageurl = '';
       this.seotitle = '';
       this.seodescr = '';
       this.seoauthor = '';
       this.keywords = [];
-    console.log(title);
+    // console.log(title);
       this.webpagesService.namepathchanges(dataobj.id,title,type).subscribe({
         next: data => {
           // console.log(data);
@@ -472,8 +483,8 @@ export class WebsitePagesComponent implements OnInit {
 
                 this.togglestatus = data.data[0].publish_status;
 
-                this.openSidebar();
-
+                // this.openSidebar();
+                this.dialog.open(this.quickeditdialog)
                 this.showmytemplates = false;
                 this.addnewpagepopup = false;
                   this.insidepagefirst = true;
@@ -608,7 +619,7 @@ export class WebsitePagesComponent implements OnInit {
             this.showwebpages();
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'OK');
+            this._general.openSnackBar(true,data?.message, 'OK','center','top');
           }
 
         }
@@ -697,8 +708,7 @@ export class WebsitePagesComponent implements OnInit {
 
 
   archive_popup(dataobj:any){
-    this.openSidebar();
-
+    this.openDialog(this.deldialog,dataobj,'')
     this.showmytemplates = false;
     this.addnewpagepopup = false;
     this.insidepagefirst = true;
@@ -814,7 +824,8 @@ export class WebsitePagesComponent implements OnInit {
             });
 
           }
-          this.hidepopupsidebar();
+          // this.hidepopupsidebar();
+          this.dialog.closeAll();
           this.showwebpages();
           this.applykbfilter();
 
@@ -866,27 +877,11 @@ export class WebsitePagesComponent implements OnInit {
     }
     this.actionname = acn;
     this.delpage = page;
-    this.dialog.open(templateRef);
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+
+    });
   }
   
 }
 
 
-
-// @Component({
-//   selector: 'tags-dialog',
-//   templateUrl: '../delete-dialog/delete-dialog.html',
-// })
-// export class DialogOverviewExampleDialog {
-//   constructor(
-//     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-//     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-//   ) {}
-
-//   onNoClick(): void {
-//     this.dialogRef.close({event:'nothanks'});
-//   }
-//   onClick(){
-//     this.dialogRef.close({event:'Delete'});
-//   }
-// }

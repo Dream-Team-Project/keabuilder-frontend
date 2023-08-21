@@ -62,6 +62,9 @@ import { SvgPipe } from './_pipes/svg.pipe';
 
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { NgxStripeModule } from 'ngx-stripe';
+import {environment} from '../environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -129,7 +132,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatDialogModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     AngularSvgIconModule.forRoot(),
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    NgxStripeModule.forRoot(environment.stripekey),
   ],
   providers: [authInterceptorProviders, { 
     provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },

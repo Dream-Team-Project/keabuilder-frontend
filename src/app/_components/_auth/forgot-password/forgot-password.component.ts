@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/_services/auth.service';
   styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent implements OnInit {
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  emailFormControl = new FormControl('', [Validators.required, Validators.email,Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   hide = true;
 

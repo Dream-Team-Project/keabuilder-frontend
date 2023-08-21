@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { WebsiteService } from 'src/app/_services/website.service';
 import {FormControl, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -15,14 +15,11 @@ import { ImageService } from 'src/app/_services/image.service';
 })
 export class WebsitesComponent implements OnInit {
 
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+
   allwebsites:any = []; 
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
   delwebsite:any;
-  
+  website:any;
   webtitleFormControl = new FormControl('',[Validators.required]);
   subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
   subdomain:any = '';
@@ -104,15 +101,10 @@ export class WebsitesComponent implements OnInit {
   searchpage(event: Event) {
     this.searching = true;
     var SearchValue = {search:(event.target as HTMLInputElement).value};
-    // console.log(SearchValue);
     this.selstatusshow = 'all';
-
     this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
       next: data => {
-
-        // console.log(data);
         this.fetweb(data);
-        // this.shortdata(data);
       }
     });
   }
@@ -121,8 +113,6 @@ export class WebsitesComponent implements OnInit {
     var dt:any = {order:this.selstatusshow};
     this.websiteService.shortbypaginatorwebsite(dt).subscribe({
       next: data => {
-        // console.log(data);
-
         this.fetweb(data);
       },
       error: err => {
@@ -131,28 +121,14 @@ export class WebsitesComponent implements OnInit {
     });
   }
 
-  newwebsite(){
-    this.websitetitle = '';
-    this.createweb = true;
-    this.duplicateweb = false;
-    this.openSidebar();
-  }
+  // newwebsite(){
+  //   this.websitetitle = '';
+  //   this.createweb = true;
+  //   this.duplicateweb = false;
+  //   this.dialog.open(this.adddialog);
+  // }
 
-  openSidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
-
-  hidepopupsidebar(){
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
-  }
+ 
 
   createnewweb(){
     
@@ -174,7 +150,7 @@ export class WebsitesComponent implements OnInit {
               this.searching = false;
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
            }else{
-
+            if(data?.success){
             var dataobj = {website_id:data.uniqueid};
             this._file.createwebsitefolder(dataobj).subscribe(e=>{
               console.log(e);
@@ -191,9 +167,15 @@ export class WebsitesComponent implements OnInit {
               // console.log(data);
               this._snackBar.open('Website Created Successfully!', 'OK');
               this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
+              this.dialog.closeAll();
 
               }
             });
+          }else{
+            this.searching = false;
+            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.dialog.closeAll();
+          }
 
            }
     
@@ -208,18 +190,16 @@ export class WebsitesComponent implements OnInit {
 
   }
 
-  updatewebsite(data:any){
-    // console.log(data);
-    this.websitetitle = data.title;
-    this.selecteduid = data.uniqueid;
-    this.createweb = false;
-    this.openSidebar();
-  }
+  // updatewebsite(data:any,templateRef: TemplateRef<any>){
+
+  //   this.websitetitle = data.title;
+  //   this.selecteduid = data.uniqueid;
+  //   this.createweb = false;
+  //   this.dialog.open(templateRef);
+  // }
 
   updatenewweb(){
-
     if(this.websitetitle!='' && this.selecteduid!=''){
-
       var obj = {
         onlysite: true,
         title: this.websitetitle,
@@ -229,8 +209,8 @@ export class WebsitesComponent implements OnInit {
         next: data => {  
           // console.log(data);
           this._snackBar.open("Changes has been updated!", 'OK');
+          this.dialog.closeAll();
           this.fetwebfull();
-
         }
       });
 
@@ -240,10 +220,22 @@ export class WebsitesComponent implements OnInit {
 
   }
 
-  openDialog(templateRef: TemplateRef<any>, page:any): void {
-    this.confirmpass = '';
-    this.delwebsite = page;
-    this.dialog.open(templateRef);
+  openDialog(templateRef: TemplateRef<any>, data:any): void {
+
+    if(data !='add') {
+      this.website=data;
+      this.duplicatewebid = data.uniqueid;
+      this.selectedwebsite = data.title;
+      this.websitetitle = data.title;
+      this.selecteduid = data.uniqueid;
+    }
+
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+      this.subdomain= '';
+      this.websitetitle = '';
+      this.subdomainFormControl.reset();
+      this.webtitleFormControl.reset();
+    })
   }
 
   restoredeleteme(web:any){
@@ -282,18 +274,18 @@ export class WebsitesComponent implements OnInit {
       this._snackBar.open("Password Can't be blank!", 'OK');
     }
 
-  }
+  }  
 
-  requestdupliwebsite(data:any){
-    // console.log(data);
-    this.duplicatewebid = data.uniqueid;
-    this.selectedwebsite = data.title;
-    this.duplicateweb = true;
-    this.createweb = false;
-    this.websitetitle = '';
-    this.subdomain = '';
-    this.openSidebar();
-  }
+  // requestdupliwebsite(data:any,templateRef: TemplateRef<any>){
+  //   // console.log(data);
+  //   this.duplicatewebid = data.uniqueid;
+  //   this.selectedwebsite = data.title;
+  //   this.duplicateweb = true;
+  //   this.createweb = false;
+  //   this.websitetitle = '';
+  //   this.subdomain = '';
+  //   this.dialog.open(templateRef);
+  // }
 
   duplicatewebsite(){
     // console.log(this.websitetitle);
@@ -319,7 +311,7 @@ export class WebsitesComponent implements OnInit {
              if(data.exist ==1){
                 this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
              }else{
-
+              if(data?.success){
                 this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
                   console.log(e);
                 });
@@ -335,11 +327,16 @@ export class WebsitesComponent implements OnInit {
                   next: data => {
                     // console.log(data);
                     this._snackBar.open("Website Successfylly Duplicate!", 'OK');
+                    this.dialog.closeAll();
                     this.fetwebfull();
-                    this.hidepopupsidebar();
                     this.searching = false;
                   }
                 });
+              }else{
+                this.searching = false;
+                this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+                this.dialog.closeAll();
+              }
 
 
              }
@@ -367,7 +364,7 @@ export class WebsitesComponent implements OnInit {
         if (strArray[j] == str) return 0;
     }
     return 1;
-``}
+}
 
   removespecialchar(data:any){
     var datagen = data.replace(/[^a-zA-Z0-9]/g, "");

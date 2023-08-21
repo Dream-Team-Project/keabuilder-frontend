@@ -173,6 +173,9 @@ changepagename(dataobj:any, title:any){
             }
           });
         }
+        else{
+          this._general.openSnackBar(true,data?.message,'Ok','center','top');
+        }
     })   
   }
 } 

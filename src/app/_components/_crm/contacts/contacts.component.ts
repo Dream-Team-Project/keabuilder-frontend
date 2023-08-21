@@ -308,14 +308,14 @@ documentChangeEvent(event:any){
     this.document.filename=filename;
   }
   else{
-    this.dialog.open(this.importdialog);
+    // this.dialog.open(this.importdialog);
       this.error=true;
       this.errormessage='File is not correct format'
       this.fileFormControl.reset();
       }
   }
   else{
-    this.dialog.open(this.importdialog);
+    // this.dialog.open(this.importdialog);
     this.error=true;
     this.errormessage='Please Select File & List'
     this.fileFormControl.reset();
@@ -347,7 +347,7 @@ uploadcontacts(){
           this.getpagecontacts({pageIndex:0,pageSize:20});
         }
         else{
-          this.dialog.open(this.importdialog);
+          // this.dialog.open(this.importdialog);
           if(data.errordata?.length>0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
           this.error=true;
           this.errormessage=data?.error;
@@ -358,7 +358,7 @@ uploadcontacts(){
     }
     else{
       this.spinner=false;
-      this.dialog.open(this.importdialog);
+      // this.dialog.open(this.importdialog);
       this.error=true;
       this.errormessage='Error';
     }

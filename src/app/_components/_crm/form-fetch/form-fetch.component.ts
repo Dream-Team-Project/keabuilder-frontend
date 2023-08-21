@@ -20,6 +20,9 @@ export class CrmFormFetchComponent implements OnInit {
   showErrors:boolean = false;
   formans:Array<any> = [];
   contact:any = {};
+  error=false;
+  errormessage:any;
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -109,6 +112,8 @@ export class CrmFormFetchComponent implements OnInit {
         this.contact.fieldans = JSON.stringify(formAnsJSON);
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
+            this.error=false;
+            this.errormessage='';
             this.emailSent().then(resp=>{
               this.notifyemailSent().then(resp=>{
                 var redirection = this._form.form.redirection;
@@ -117,7 +122,12 @@ export class CrmFormFetchComponent implements OnInit {
               })
             })
           }
-          else this.submitting = false;
+          else {
+            this.submitting = false;
+            this.error=true;
+            this.errormessage=resp?.message;
+            
+          }
         });
       }
       else {
