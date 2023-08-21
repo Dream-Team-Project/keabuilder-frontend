@@ -12,6 +12,7 @@ import {hashSync} from 'bcryptjs';
   templateUrl: './sign-in-security.component.html',
   styleUrls: ['./sign-in-security.component.css']
 })
+
 export class SignInSecurityComponent implements OnInit {
 
   usernameFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
@@ -80,8 +81,6 @@ export class SignInSecurityComponent implements OnInit {
         this.incrpwdlng = false;
         // console.log(hashSync(this.newpassword, 8))
         this._auth.onupdatePassword(hashSync(this.newpassword, 8), this.chktoken).subscribe(resp=>{
-          console.log(resp);
-
           if(resp[0]=='error'){
           this.error=true;
           this.errormessage='Invalid Token; please try again!';
