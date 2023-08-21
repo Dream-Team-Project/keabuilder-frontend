@@ -1,4 +1,4 @@
-<ng-template #dialog>
+<ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Domain</h1>
     <div mat-dialog-content>
         Would you like to delete <span class="text-danger">{{deldomain.name}}</span> domain?
@@ -8,9 +8,50 @@
         <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletedomain(deldomain)">Yes</button>
     </div>
   </ng-template>
+  <ng-template #adddialog>
+    <h1 mat-dialog-title >Connect Your Domain</h1>
+    <div mat-dialog-content *ngIf="!shownamehint">
+        <h4>Add your own domain</h4>
+        <p>Enter the domain name you already own below and we'll take care of the rest.</p>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Domain Name</mat-label>
+            <input type="text" placeholder="mydomain.com" matInput required [formControl]="domainname" (keyup)="gendomainname = removespecialchar(gendomainname)" [(ngModel)]="gendomainname">
+            <mat-error *ngIf="domainname.hasError('required')" class="errdmrgn">
+                Domain Name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div mat-dialog-content class="outerdivnm" *ngIf="shownamehint">
+                <p><strong>How to connect your domain to Kea</strong></p>
+                <p><small>In order for your custom domain to work you'll need to log in to where you bought your domain and add the nameservers details: <span *ngFor="let name of nameservers" >{{name}}&nbsp;&nbsp;</span></small></p>
+                
+                <ul class="mynsdetails">
+                    <li>
+                        <strong>Domain: </strong> <span>{{gendomainname}}</span>
+                    </li>
+                    <li>
+                        <strong>Nameservers: </strong> <span *ngFor="let name of nameservers" >{{name}}</span> 
+                    </li>
+                    <li> 
+                        <strong>Status: </strong> <span>{{cldstatus}}</span>
+                    </li>
+                    <li *ngIf="createdatdomain!=''"> 
+                        <strong>Connected At: </strong> <span>{{datecusfilter(createdatdomain)}}</span>
+                    </li>
+                </ul>
+                <!-- <br>
+                <button mat-raised-button color="primary" (click)="donestep1()" >I've done this step <i class="fas fa-check"></i></button> -->
+            </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">No</button>
+        <button mat-button cdkFocusInitial color="primary" (click)="!shownamehint ? connectdomain() : donestep1()" >connect</button>
+    </div>
+  </ng-template>
 <div id="kb-domain">
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-    <div id="kb-offer-actions" *ngIf="sidebar.open">
+    <!-- <div id="kb-offer-actions" *ngIf="sidebar.open">
         <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
             
             <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
@@ -62,7 +103,7 @@
         </div>
     </div>
     <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()"
-    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
+    [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div> -->
     <div class="container-fluid">
         <div class="row mt-4">
             <div class="col-md-8 mt-4">
@@ -86,7 +127,7 @@
                                         Verify SSl <i class="fa fa-unlock" aria-hidden="true"></i>
                                     </button>
                                     <button mat-raised-button class="mr-2" (click)="viewdomain(alldomains)" >View <i class="fa fa-eye" aria-hidden="true"></i></button>
-                                    <button mat-raised-button (click)="openDialog(dialog,alldomains)">
+                                    <button mat-raised-button (click)="openDialog(deldialog,alldomains)">
                                         Delete <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </li>   

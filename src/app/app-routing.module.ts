@@ -50,6 +50,15 @@ import { CreateFunnelSettingsComponent } from './_components/_funnels/create-fun
 import { FunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/funnel-checkout.component';
 import { FunnelWizardNavComponent } from './_components/_funnels/funnel-wizard-nav/funnel-wizard-nav.component';
 // funnels
+
+// new-funnels
+import { NewFunnelsComponent } from './_components/_new-funnels/new-funnels/new-funnels.component';
+import { NewFunnelComponent } from './_components/_new-funnels/new-funnel/new-funnel.component';
+import { NewFunnelBuildComponent } from './_components/_new-funnels/new-funnel-build/new-funnel-build.component';
+import { NewFunnelArchiveComponent } from './_components/_new-funnels/new-funnel-archive/new-funnel-archive.component';
+
+// new-funnels
+
 // crm
 import { CrmAutomationComponent } from './_components/_crm/automation/automation.component';
 import { CrmAutomationBuilderComponent } from './_components/_crm/automation-builder/automation-builder.component';
@@ -160,25 +169,37 @@ const routes: Routes = [
 
   // funnels
 
-  { path: 'funnels', component: FunnelComponent,
+  // { path: 'funnels', component: FunnelComponent,
+  // children: [
+  //   { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
+  //   { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
+  //   { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
+  //   { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
+  //   { path: ':funnel_id', component: FunnelWizardNavComponent, 
+  //   children: [
+  //     { path: 'steps/:step_id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
+  //     { path: 'stats', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
+  //     { path: 'contacts', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
+  //     { path: 'sales', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
+  //     { path: 'settings', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] }
+  //   ],
+  //   canActivate: [AuthGuard]},
+  // ],
+  // canActivate: [AuthGuard] },
+
+  // funnels
+
+  // new-funnels
+
+  { path: 'funnels', component: NewFunnelComponent,
   children: [
-    { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
-    { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-    { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
-    { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
-    { path: ':funnel_id', component: FunnelWizardNavComponent, 
-    children: [
-      { path: 'steps/:step_id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
-      { path: 'stats', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
-      { path: 'contacts', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
-      { path: 'sales', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
-      { path: 'settings', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] }
-    ],
-    canActivate: [AuthGuard]},
+    { path: '', component: NewFunnelsComponent, canActivate: [AuthGuard] },
+    { path: 'build', component: NewFunnelBuildComponent, canActivate: [AuthGuard] },
+    { path: 'archive', component: NewFunnelArchiveComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
 
-  // funnels
+  // new-funnels
   
   // sales 
   { path: 'sales', component: SalesComponent, 
@@ -427,5 +448,9 @@ export const RoutingComponents =
     BillingComponent, 
     ProfileSettingsComponent,
     SignInSecurityComponent,
+    NewFunnelsComponent,
+    NewFunnelComponent,
+    NewFunnelBuildComponent,
+    NewFunnelArchiveComponent,
   ];
 

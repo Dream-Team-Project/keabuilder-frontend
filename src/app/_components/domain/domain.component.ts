@@ -1,8 +1,9 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DomainService } from 'src/app/_services/domain.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
   selector: 'app-domain',
@@ -11,6 +12,8 @@ import { DomainService } from 'src/app/_services/domain.service';
 })
 export class DomainComponent implements OnInit {
 
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  
   sidebar = {
     open: false,
     anim: {open: false, close: false, time: 500},
@@ -34,6 +37,7 @@ export class DomainComponent implements OnInit {
   constructor(private domainService: DomainService,
               private _snackBar: MatSnackBar,
               public dialog: MatDialog, 
+              public _general: GeneralService,
               ) { }
 
   ngOnInit(): void {
@@ -52,24 +56,25 @@ export class DomainComponent implements OnInit {
   addnewdomain(){
     this.shownamehint = false;
     this.gendomainname = '';
-    this.openSidebar();
+    // this.openSidebar();
+    this.dialog.open(this.adddialog);
   }
 
-  openSidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
+  // openSidebar(){
+  //   this.sidebar.open = true;
+  //   this.sidebar.anim.open = true;
+  //   setTimeout((e:any)=>{
+  //     this.sidebar.anim.open = false;
+  //   },this.sidebar.animtime)
+  // }
 
-  hidepopupsidebar(){
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
-  }
+  // hidepopupsidebar(){
+  //   this.sidebar.anim.close = true;
+  //   setTimeout((e:any)=>{
+  //     this.sidebar.anim.close = false;
+  //     this.sidebar.open = false;
+  //   },this.sidebar.animtime)
+  // }
 
   connectdomain(){
     // console.log(this.gendomainname);
@@ -78,7 +83,7 @@ export class DomainComponent implements OnInit {
       this.domainconn++;
       // console.log(this.domainname.value);
       if(this.domainconn==1){
-        this._snackBar.open('Domain is now processing... Don not close the browser until process is complete.', 'OK');
+        this._general.openSnackBar(false,'Domain is now processing... Don not close the browser until process is complete.', 'OK','center','top');
 
         this.domainService.oncreatedomain(this.domainname.value).subscribe({
           next: data => {
@@ -92,13 +97,14 @@ export class DomainComponent implements OnInit {
                   // console.log(data);
                   this.searching = false;
                   this.domainconn = 0;
-                  this._snackBar.open('Domain has been Successfully added. Please check the given nameservers and update it!', 'OK');
+                  this._general.openSnackBar(false,'Domain has been Successfully added. Please check the given nameservers and update it!', 'OK','center','top');
                   if(data.success==true){
                     this.alldomainsdata = [];
                     data.data.forEach((element:any) => {
                       this.alldomainsdata.push(element);
                     });
                       this.shownamehint = true;
+                      this.dialog.closeAll();
                     }
                   }
                 });
@@ -106,7 +112,7 @@ export class DomainComponent implements OnInit {
               }else{
                 this.searching = false;
                 this.domainconn = 0;
-                this._snackBar.open('Something went Wrong!!', 'OK');
+                this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
               }
 
           }
@@ -118,7 +124,7 @@ export class DomainComponent implements OnInit {
   }
 
   donestep1(){
-    this.hidepopupsidebar();
+    this.dialog.closeAll();
     setTimeout(() => {
       this.gendomainname = '';
       this.nameservers = [];
@@ -147,7 +153,7 @@ export class DomainComponent implements OnInit {
                 // console.log(data);
                 if(data.success==true){
                   this.alldomainsdata[0].verifyssl=1;
-                  this._snackBar.open('SSL Verified Successfully. Your domain is live now!', 'OK');
+                  this._general.openSnackBar(false,'SSL Verified Successfully. Your domain is live now!', 'OK','center','top');
                 }
               }
             });
@@ -155,7 +161,7 @@ export class DomainComponent implements OnInit {
           }else{
             this.ssldomconn = 0;
             this.searching = false;
-            this._snackBar.open('Your domain is on pending State, Try again in few minutes!', 'OK');
+            this._general.openSnackBar(true,'Your domain is on pending State, Try again in few minutes!', 'OK','center','top');
           }
         }
       });
@@ -193,9 +199,9 @@ export class DomainComponent implements OnInit {
                           this.alldomainsdata.push(element);
                         });
                       }
-                      this._snackBar.open('Domain has been Successfully removed!', 'OK');
+                      this._general.openSnackBar(false,'Domain has been Successfully removed!', 'OK','center','top');
                     }else{
-                      this._snackBar.open('Something Went Wrong!', 'OK');
+                      this._general.openSnackBar(true,'Something Went Wrong!', 'OK','center','top');
                     }
                     
                   }
@@ -226,7 +232,8 @@ export class DomainComponent implements OnInit {
     this.nameservers = data.nameserver.split(',');
     this.createdatdomain = data.created_at;
     this.cldstatus = data.verifyssl == 1 ? 'Active' : 'Pending';
-    this.openSidebar();
+    // this.openSidebar();
+    this.dialog.open(this.adddialog);
   }
 
   removespecialchar(data:any){

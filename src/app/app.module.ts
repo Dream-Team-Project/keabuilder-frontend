@@ -66,6 +66,8 @@ import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
