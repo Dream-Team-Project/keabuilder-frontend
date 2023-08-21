@@ -79,6 +79,7 @@ export class AutomationService {
   wfSession:any = {undo: 0, redo: 0}
   wfSessionArr:any = [];
   nodeActions:any = null;
+  wfChildLen = 0;
 
   constructor(public _general: GeneralService,
     private _file: FileUploadService,

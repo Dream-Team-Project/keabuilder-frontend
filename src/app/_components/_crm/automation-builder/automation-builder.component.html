@@ -615,7 +615,7 @@
     </div>
     <!-- end worflow head -->
     <!-- start worflow body -->
-    <div id="kb-workflow-body">
+    <div id="kb-workflow-body" [style.width]="'calc(100% + '+_automation.wfChildLen+'px)'">
         <!-- start trigger section -->
         <div class="kb-workflow-section">
             <span class="kb-trigger-section">

@@ -47,6 +47,6 @@
     </div>
 </ng-container>
 <ng-container *ngFor="let action of activeActions, index as acti">
-  <app-crm-automation-workflow [action]="action" [acti]="acti" 
+  <app-crm-automation-workflow [action]="action" [acti]="acti"
   (openActionSheet)="openActionSheet.emit($event)" (selectAction)="selectAction.emit($event)"></app-crm-automation-workflow>
 </ng-container>
