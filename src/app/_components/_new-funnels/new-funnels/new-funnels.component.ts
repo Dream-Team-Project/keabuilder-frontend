@@ -16,6 +16,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
   styleUrls: ['./new-funnels.component.css']
 })
 export class NewFunnelsComponent implements OnInit {
+  @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
   panelOpenState = false;
   form: any = {
@@ -124,7 +125,6 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
       this.duplpopupfunnel = true;
      
     }else{
-
       var obj = {uniqueid:uniqueid, id:id, type: type};
       this.funnelService.makefunnelsettings(obj).subscribe({
         next: data => {
@@ -134,7 +134,8 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
             this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
           }else if(type=='copy'){
             this.firstpart = true;
-            this.openSidebar();
+            // this.openSidebar();
+            this.dialog.open(this.copyurldialog);
             this.funneltostep = true;
             this.colortheme = false;
             this.funnelurl = window.origin+'/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;

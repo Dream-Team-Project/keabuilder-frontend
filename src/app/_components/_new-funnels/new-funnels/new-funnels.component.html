@@ -1,4 +1,5 @@
 
+<!-- Duplicate funnels -->
 <ng-template #dialogduplicate>
     <h1 mat-dialog-title >{{actionname}} Step</h1>
     <div mat-dialog-content>
@@ -21,6 +22,7 @@
   
     </div>
 </ng-template>
+<!-- Add New Funnel -->
 <ng-template #adddialog>
     <h1 mat-dialog-title >NEW FUNNEL STEPS</h1>
     <div mat-dialog-content>
@@ -87,8 +89,40 @@
           </mat-form-field>
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger" mat-dialog-close >No</button>
+        <button mat-button mat-dialog-close class="text-danger">No</button>
         <button mat-button color="primary" (click)="onSubmit()">Create</button>
+  
+    </div>
+</ng-template>
+<!-- Copy funnel url -->
+<ng-template #copyurldialog>
+    <h1 mat-dialog-title >Copy Funnel URL</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Funnel Url</mat-label>
+            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
+        </mat-form-field>
+        
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">No</button>
+        <button mat-button mat-dialog-close color="primary" (click)="copyInputMessage(userinput)">Copy</button>
+  
+    </div>
+</ng-template>
+<!-- copy steps url -->
+<ng-template #copystepurldialog>
+    <h1 mat-dialog-title >Copy Funnel URL</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Funnel Url</mat-label>
+            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
+        </mat-form-field>
+        
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">No</button>
+        <button mat-button mat-dialog-close color="primary" (click)="copyInputMessage(userinput)">Copy</button>
   
     </div>
 </ng-template>
@@ -231,13 +265,12 @@
     
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
-              <mat-form-field  appearance="fill" class="col-8">
+              <mat-form-field  appearance="fill" class="col-md-6">
                 <mat-label>Search Funnel</mat-label>
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Funnel">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </mat-form-field>
-              <mat-form-field appearance="fill" class="col-4">
+              <mat-form-field appearance="fill" class="col-md-2">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
                   <mat-option value="nameasc" >ASC By Name</mat-option>
@@ -246,7 +279,7 @@
                   <mat-option value="datedesc">DESC By Date</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+
             <div class="col-md-4 text-right">
                 <button mat-raised-button color="primary" (click)="openDialog(adddialog)">
                     Create Funnel <i class="far fas fa-plus"></i>
@@ -268,23 +301,12 @@
                         <div class="keabuilder-board">
                             <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
                             <mat-expansion-panel-header>          
-                    <!-- <header class="keabuilder-board-header"> -->
                         <mat-panel-title class="row"  > 
                         <div class="keabuilder-title-board line-ellipsis col-md-4"><span class="fnt">{{funnel.name | titlecase}}</span> <input type="text" [(ngModel)]="funnel.name" name="funnelname" (blur)="changestepnamesoutside(funnel.id,funnel.name)" ></div>
-                        <!-- <div class="keabuilder-attachment d-flex align-items-center font-size-small pr-2 col-md-2"  matTooltip="Group Tags" matTooltipPosition="above" *ngIf="funnel.grouptags!='' && funnel.grouptags!=null" >
-                            <i class="fas fa-tags mr-1"></i> {{funnel.grouptags}}
-                        </div> -->
                         <div class=" col-md-2"><span>Steps: </span><span class="colr">{{funnel.steps.length }}</span></div>
                         <div class=" col-md-4"><span>Last Updated: </span><span class="colr">{{funnel.updated_at | date:'mediumDate'}}</span></div>
-                        <!-- <div class="btn-group "> -->
                             <div class="cursor-pointer col-md-2 d-flex justify-content-between" role="button">
-                                <!-- <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
-                                   More <i class="fas fa-ellipsis-v"></i>
-                                </button> -->
-                                <!-- <mat-menu #menu="matMenu"> -->
-                                    <!-- <button mat-icon-button matTooltip="Quick Edit" [routerLink]="['/funnels/'+funnel.uniqueid]" (click)="openDialog1($event,funnel)">
-                                    <i class="fa-regular fa-pen-to-square mr-2" aria-hidden="true"></i>
-                                      </button> -->
+                               
                                     <button mat-icon-button matTooltip="Edit" (click)="funneledit(funnel.uniqueid, funnel.id,'edit')" >
                                         <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i>
                                     </button>
@@ -297,21 +319,16 @@
                                     <button mat-icon-button matTooltip="Delete" class="text-danger" (click)="funneledit(funnel.uniqueid, funnel.id,'archive')" >
                                         <i class="far fa-trash-alt mr-2"></i>
                                     </button>
-                                <!-- </mat-menu> -->
-                            <!-- </div> -->
+                              
 
                         </div>
                     </mat-panel-title> 
-                       
-                    <!-- </header> -->
             </mat-expansion-panel-header>
                     <div class="m-2" *ngFor="let funnelstep of funnel.steps; index as j" [class]="'kbstep-'+funnelstep.uniqueid"  [ngStyle]="{'background-image': 'url(/assets/uploads/images/webpage_thumbnail.jpg)'}" >
                         <div class="keatopstep" [attr.data-border]="funnelstep.color">
                             <div class="keabuilder-item is-moving  row" >
                                 <div class="col-sm-4">
                                 <h6 class="mb-0 pb-0">{{funnelstep.page_name}}</h6>
-                                <!-- <div class="keabuilder-footer d-flex justify-content-between mt-1">
-                                    <div class="keabuilder-footer-left d-flex justify-content-between"> -->
                                         <div class="keabuilder-due-date  mt-0 pt-0" matTooltip="Last Updated At" matTooltipPosition="above" >
                                              <span class="font-size-small">Created on: <span class="colr">{{funnelstep.created_at | date:'mediumDate'}}</span></span>
                                         </div>
@@ -334,7 +351,6 @@
                                     <div class="col-sm-1 text-right">  
                                         <button  mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            <!-- <i class="fas fa-cog"></i> -->
                                         </button>
                                         <mat-menu #menu="matMenu">
                                             
