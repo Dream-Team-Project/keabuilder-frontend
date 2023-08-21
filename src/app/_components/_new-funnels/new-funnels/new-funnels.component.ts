@@ -16,36 +16,11 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
   styleUrls: ['./new-funnels.component.css']
 })
 export class NewFunnelsComponent implements OnInit {
-  @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
   panelOpenState = false;
-  form: any = {
-    funnelname: '',
-    funnelfirststep: '',
-    badgecolor:'',
-    funneltype:'',
-    subdomain:''
-};
-dataobj:any;
-errorMessage = '';
-  constructor(private funnelService: FunnelService,
-              private router: Router, 
-              private route: ActivatedRoute,
-              private _snackBar: MatSnackBar,
-              public _general: GeneralService,
-              private userService: UserService,
-              private _file: FileUploadService,
-              private websiteService: WebsiteService,
-              public dialog: MatDialog, 
-              ) { }
-
+  dataobj:any;
+  errorMessage = '';
   funnels:any = [];
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
-  popupsidebar = false;
   funnelurl = '';
   reason = '';
   firstpart = true;
@@ -64,78 +39,75 @@ errorMessage = '';
 
   // MatPaginator Output
   pageEvent!: PageEvent;
-  DialogParentToggle:boolean = false;
+ 
 
   mydomain = '';
   selstatusshow = 'all';
   searching = false;
-
   selfunnelid = '';
-  duplpopupfunnel = false;
   dupfunnelname = '';
   funnelarchid = '';
 
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
-stepnameFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+  subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+  stepnameFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   funneltitleFormControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-  // subdomainFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
-
-  // form: any = {
-  //   funnelname: '',
-  //   subdomain:''
-  // };
-
+  form: any = {
+    funnelname: '',
+    funnelfirststep: '',
+    badgecolor:'',
+    funneltype:'',
+    subdomain:''
+};
   selfunnelstep:any;
   actionname:any = '';
   newfunnelid:any = '';
   dialogfunnelset = '';
 
-  getServerData(event?:PageEvent){
-      var length = event?.length;
-      var pageindex = event?.pageIndex;
-      var pageSize = event?.pageSize;
-      var previousPageIndex = event?.previousPageIndex;
-      // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
-  }
+  constructor(private funnelService: FunnelService,
+    private router: Router, 
+    private route: ActivatedRoute,
+    public _general: GeneralService,
+    private userService: UserService,
+    private _file: FileUploadService,
+    private websiteService: WebsiteService,
+    public dialog: MatDialog, 
+    ) { }
+
+  
 
   ngOnInit(): void {
     this.showfunnels();
   }
-
+  getServerData(event?:PageEvent){
+    var length = event?.length;
+    var pageindex = event?.pageIndex;
+    var pageSize = event?.pageSize;
+    var previousPageIndex = event?.previousPageIndex;
+    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
+}
   isDraggable(item: any) {
       return item != 1;
   }
 
-  funneledit(uniqueid: any, id: any, type:any){
-
-    if(type=='archive'){
-      this.forarchiveid = uniqueid;
-      this.openSidebar();
-      this.firstpart = false;
-      this.shwobtnfirst = true;
-      this.colortheme = false;
-    }else if(type=='duplicate'){
-
+  funneledit(uniqueid: any, id: any, type:any,templateRef: TemplateRef<any>){
+    if(type !='edit') this.dialog.open(templateRef);
+    if(type=='duplicate'){
       this.form.funnelname = '';
       this.form.subdomain = '';
       this.dupfunnelname = uniqueid;
       this.selfunnelid = id;
-      this.openSidebar();
-      this.duplpopupfunnel = true;
      
-    }else{
+    }else if(type=='archive'){
+      this.forarchiveid=uniqueid;
+    }else {
       var obj = {uniqueid:uniqueid, id:id, type: type};
       this.funnelService.makefunnelsettings(obj).subscribe({
-        next: data => {
-          // console.log(data); 
-          
+        next: data => {  
           if(type=='edit'){
             this.router.navigate(['/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid],{relativeTo: this.route});
           }else if(type=='copy'){
-            this.firstpart = true;
-            // this.openSidebar();
-            this.dialog.open(this.copyurldialog);
+            this.firstpart = true;   
             this.funneltostep = true;
             this.colortheme = false;
             this.funnelurl = window.origin+'/funnels/'+uniqueid+'/steps/'+data.data[0].uniqueid;
@@ -172,7 +144,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
               if(data.exist ==1){
 
                 this.searching = false;
-                this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+               this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK','center','top');
 
               }else{
               
@@ -193,7 +165,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
                     next: data => {
                       // console.log(data);
                       this.showfunnels();
-                      this._snackBar.open('Funnel Duplicate Successfully!', 'Close');
+                     this._general.openSnackBar(false,'Funnel Duplicate Successfully!', 'Ok','center','top');
                       this.searching = false;
                     }
                   });
@@ -206,11 +178,11 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
           });
 
         }else{
-          this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+         this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK','center','top');
         }
 
       }else{
-          this._snackBar.open("Error in Title & subdomain Fields!", 'OK');
+         this._general.openSnackBar(false,"Error in Title & subdomain Fields!", 'OK','center','top');
       }
 
   }
@@ -220,7 +192,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
         if (strArray[j] == str) return 0;
     }
     return 1;
-``}
+  }
 
   makearchive(){
 
@@ -228,17 +200,15 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
     // console.log(obj);
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        // console.log(data);
+        console.log(data);
         if(data.status==1){
-
           data.data.forEach((element:any) => {
               this.draftpublish('0', element.page_path, this.forarchiveid);
           });
 
           this.reason = '';
-          this.hidepopupsidebar();
           this.showfunnels();
-
+          this.dialog.closeAll();
         }
       }
     });
@@ -254,31 +224,11 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
 
   }
 
-  hidepopupsidebar(){
-    this.popupsidebar = false;
-
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
-  }
-
-  openSidebar(){
-    this.duplpopupfunnel = false; 
-
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
-
   copyInputMessage(inputElement:any){
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Successfully Copied!', 'Close');
+   this._general.openSnackBar(false,'Successfully Copied!', 'Ok','center','top');
   }
 
   showfunnels(){
@@ -348,14 +298,12 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
 
   }
 
-  funnelstepedit(unique1:any, unique2:any,type:any){
-    // console.log(unique1+' - '+unique2+' - '+type);
-
+  funnelstepedit(unique1:any, unique2:any,type:any,templateRef: TemplateRef<any>){
     if(type=='edit'){
       this.router.navigate(['/funnels/'+unique1+'/steps/'+unique2],{relativeTo: this.route});
     }else if(type=='copy'){
       this.firstpart = true;
-      this.openSidebar();
+      this.dialog.open(templateRef);
       this.funneltostep = false;
       this.colortheme = false;
       this.funnelurl = window.origin+'/funnels/'+unique1.uniqueid+'/steps/'+unique2.uniqueid;
@@ -369,7 +317,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
     }else if(type=='archive'){
       this.funnelarchid = unique1;
       this.forarchiveid = unique2;
-      this.openSidebar();
+      this.dialog.open(templateRef);
       this.firstpart = false;
       this.shwobtnfirst = false;
       this.colortheme = false;
@@ -386,7 +334,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
                 next: data => {
 
                   this.showfunnels();
-                  this._snackBar.open('Step Duplicate Successfully!', 'Close');
+                 this._general.openSnackBar(false,'Step Duplicate Successfully!', 'Ok','center','top');
                 }
               });
 
@@ -409,10 +357,26 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
     }else if(type=='colortheme'){
       this.forarchiveid = unique2;
       this.badgecolor = unique1;
-      this.openSidebar();
+      this.dialog.open(templateRef);
       this.firstpart = false;
       this.colortheme = true;
     } 
+    else if(type=='move'){
+      this.actionname = 'Move';
+    this.selfunnelstep = unique2;
+      this.dialog.open(templateRef);
+    }else if(type=='copymove'){
+      this.actionname = 'Copy & Move';
+    this.selfunnelstep = unique2;
+      this.dialog.open(templateRef);
+    }
+    else{
+      this.actionname = '';
+      
+    this.selfunnelstep = unique2;
+      this.dialog.open(templateRef);
+    }
+
 
   }
 
@@ -436,16 +400,14 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
         // console.log(data);
 
         if(data.status==1){
-
           this.draftpublish('0', data.page_path, this.funnelarchid);
-
           this.reason = '';
-          this.hidepopupsidebar();
+          this.dialog.closeAll();
           this.showfunnels();
-          this._snackBar.open('Successfully Archived!', 'Close');
+         this._general.openSnackBar(false,'Successfully Archived!', 'Ok','center','top');
         }else if(data.status==0){
           if(data.notallow==1){
-            this._snackBar.open('Single Step Can not be Archived!', 'Close');
+           this._general.openSnackBar(false,'Single Step Can not be Archived!', 'Ok','center','top');
           }
         }
 
@@ -460,7 +422,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
       next: data => {
         // console.log(data);
         if(data.success==1){
-          this._snackBar.open('Successfully Name Changed!', 'Close');
+         this._general.openSnackBar(false,'Successfully Name Changed!', 'Ok','center','top');
           this.showfunnels();
         }
       }
@@ -476,39 +438,12 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
         // console.log(data);
 
         if(data.status==1){
-          this.popupsidebar = false;
           this.showfunnels();
-          this._snackBar.open('Color Successfully Updated!', 'Close');
+         this._general.openSnackBar(false,'Color Successfully Updated!', 'Ok','center','top');
         }
 
       }
     });
-  }
-
-  // getthumbnail(id:any){
-  //   var genscrn = '/assets/uploads/images/keaimage-'+id+'-screenshot.png';
-  //   return genscrn;
-
-  //   // this.fileuploadService.validateimg(genscrn).subscribe({
-  //   //   next: data => {
-
-  //   //    if(data.data==1){
-  //   //       return '/assets/uploads/images/'+genscrn;
-  //   //     }else{
-  //   //       return ' ';
-  //   //     }
-
-  //   //   }
-  //   // });
-
-  // }
-
-  // openDialog(e:any) {
-  //   this.DialogParentToggle = !this.DialogParentToggle;
-  // }
-  openDialog1(e:any,funnel:any) {
-    // this.router.navigate(['/funnels/'+funnel.uniqueid],{relativeTo: this.route});
-      this.DialogParentToggle = !this.DialogParentToggle;  
   }
   openDialog(templateRef: TemplateRef<any>): void {
     this.dialog.open(templateRef);
@@ -539,20 +474,20 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
             this._file.transferPage(pathobj).subscribe({
               next: data => {
                 // console.log(data);
-                this.actionname=='Move' ? this._snackBar.open('Funnel Step Move Successfully!', 'OK'): this._snackBar.open('Funnel Step Copy & Move Successfully!', 'OK');
+                this.actionname=='Move' ?this._general.openSnackBar(false,'Funnel Step Move Successfully!', 'OK','center','top'):this._general.openSnackBar(false,'Funnel Step Copy & Move Successfully!', 'OK','center','top');
                 this.showfunnels();
               }
             });
 
           }else{
-            this.actionname=='Move' ? this._snackBar.open("Single Step Can't be Move!", 'OK'): this._snackBar.open("Single Step Can't be Copy & Move!", 'OK');
+            this.actionname=='Move' ?this._general.openSnackBar(false,"Single Step Can't be Move!", 'OK','center','top'):this._general.openSnackBar(false,"Single Step Can't be Copy & Move!", 'OK','center','top');
           }
 
         }
       });
 
     }else{
-      this._snackBar.open("Can't find the Funnel!", 'OK');
+     this._general.openSnackBar(false,"Can't find the Funnel!", 'OK','center','top');
     }
 
   }
@@ -567,21 +502,6 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
     return result;
   }
 
-  openDialog2(templateRef: TemplateRef<any>, page:any , type:any): void {
-
-    if(type=='move'){
-      this.actionname = 'Move';
-    }else if(type=='copymove'){
-      this.actionname = 'Copy & Move';
-    }else{
-      this.actionname = '';
-    }
-
-    this.selfunnelstep = page;
-    this.dialog.open(templateRef);
-
-  }
-  
   searchpage(event: Event) {
     this.searching = true;
     var SearchValue = {search:(event.target as HTMLInputElement).value};
@@ -627,7 +547,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
                         this.dataobj=data.data;
                         if(data.exist ==1){
                             this.searching = false;
-                            this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+                           this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK','center','top');
                          }else{
                             this.createwebsitefolder().then((resp)=>{
                                 // console.log(resp);
@@ -637,7 +557,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
                                     next: datanw => {
                                         // console.log("hello");
                                     this.searching = false;
-                                    this._snackBar.open('Funnel Created Successfully!', 'OK');
+                                   this._general.openSnackBar(false,'Funnel Created Successfully!', 'OK','center','top');
                                     this.router.navigate(['/funnels/'+data.data.uniqueid+'/steps/'+data.data.uniqueid2],{relativeTo: this.route});
                                     }
                                   });
@@ -655,7 +575,7 @@ stepnameFormControl = new FormControl('',[Validators.required,Validators.minLeng
                 });
     
             }else{
-                this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+               this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK','center','top');
             }
     
         }

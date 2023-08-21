@@ -1,30 +1,29 @@
 
-<!-- Duplicate funnels -->
-<ng-template #dialogduplicate>
+<!-- Duplicate funnel steps -->
+<ng-template #stepduplicatedialog>
     <h1 mat-dialog-title >{{actionname}} Step</h1>
     <div mat-dialog-content>
-        Would you like to {{actionname}} <span class="text-primary">{{selfunnelstep.page_name}}</span> Step?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-  
+        Would you like to {{actionname}} <span class="colr">{{selfunnelstep.page_name}}</span> Step?
         <mat-form-field appearance="fill" class="kb-full-width">
-          <mat-label>Funnels</mat-label>
-          <mat-select name="newfunnelid" [(ngModel)]="newfunnelid" >
-            <span *ngFor="let funnel of funnels">
-                <mat-option *ngIf="dialogfunnelset!=funnel.uniqueid"  [value]="funnel.uniqueid">
-                    {{funnel.name}}
-                </mat-option>
-            </span>
-          </mat-select>
-        </mat-form-field>
-        <button mat-button mat-dialog-close class="text-info" mat-dialog-close >No</button>
-        <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(selfunnelstep)">Yes</button>
+            <mat-label>Funnels</mat-label>
+            <mat-select name="newfunnelid" [(ngModel)]="newfunnelid" >
+              <span *ngFor="let funnel of funnels">
+                  <mat-option *ngIf="dialogfunnelset!=funnel.uniqueid"  [value]="funnel.uniqueid">
+                      {{funnel.name}}
+                  </mat-option>
+              </span>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">        
+        <button mat-button mat-dialog-close class="text-danger" >No</button>
+        <button mat-button mat-dialog-close color="primary" (click)="dupanotherdes(selfunnelstep)">Yes</button>
   
     </div>
 </ng-template>
 <!-- Add New Funnel -->
 <ng-template #adddialog>
-    <h1 mat-dialog-title >NEW FUNNEL STEPS</h1>
+    <h1 mat-dialog-title >New Funnel Steps</h1>
     <div mat-dialog-content>
         <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Name</mat-label>
@@ -102,167 +101,126 @@
             <mat-label>Funnel Url</mat-label>
             <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
         </mat-form-field>
-        
+        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+            <i class="far fa-copy"></i> Copy Funnel Url
+        </button>
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button mat-dialog-close color="primary" (click)="copyInputMessage(userinput)">Copy</button>
+        <button mat-button mat-dialog-close class="text-danger">Close</button>
+        
   
     </div>
 </ng-template>
 <!-- copy steps url -->
 <ng-template #copystepurldialog>
-    <h1 mat-dialog-title >Copy Funnel URL</h1>
+    <h1 mat-dialog-title >Copy Step URL</h1>
     <div mat-dialog-content>
         <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Funnel Url</mat-label>
+            <mat-label>Step Url</mat-label>
             <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
-        </mat-form-field>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
+                <i class="far fa-copy"></i> Copy Step Url
+            </button>
+            
+            <hr>
+            
+            <h6><strong>Copy Page URL</strong></h6>
+            <hr>
+            <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Page Url</mat-label>
+            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
+                <i class="far fa-copy"></i> Copy Url
+            </button>
         
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button mat-dialog-close color="primary" (click)="copyInputMessage(userinput)">Copy</button>
+        <button mat-button mat-dialog-close class="text-danger" >Close</button>
   
     </div>
 </ng-template>
+<!-- Delete funnel & funnel steps -->
+<ng-template #deletedialog>
+    <h1 mat-dialog-title class="text-danger">Archive</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Archive Reason</mat-label>
+            <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
+            <small>Optional</small>
+        </mat-form-field>
+
+        <p>It will help you remember why you archive it!</p>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close color="primary" >No</button>
+        <button mat-button  class="text-danger" (click)="shwobtnfirst ? makearchive() : makearchivestep()"><span *ngIf="shwobtnfirst">Archive Funnel</span><span *ngIf="!shwobtnfirst">Archive Funnel Step</span></button>
+    </div>
+</ng-template>
+<!-- color badge -->
+<ng-template #colorbadgedialog>
+    <h1 mat-dialog-title>Change Color Badge</h1>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill" class="kb-full-width" >
+            <mat-label>Badge Color</mat-label>
+            <mat-select name="badgecolor" [(ngModel)]="badgecolor">
+            <mat-option value="">None</mat-option>
+            <mat-option value="primary">Primary</mat-option>
+            <mat-option value="secondary">Secondary</mat-option>
+            <mat-option value="success">Success</mat-option>
+            <mat-option value="warning">Warning</mat-option>
+            <mat-option value="info">Info</mat-option>
+            <mat-option value="danger">Danger</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">No</button>
+        <button mat-button color="primary" (click)="savesteptheme()">Save</button>
+  
+    </div>
+</ng-template>
+<!-- Duplicate Funnels with steps-->
+<ng-template #funnelduplicatedialog>
+    <h1 mat-dialog-title >Duplicate {{dupfunnelname}} Funnel</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="funneltitleFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
+            <mat-error *ngIf="funneltitleFormControl.hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="funneltitleFormControl.hasError('minlength')">
+              Name must be at least <strong>3</strong> characters
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label> Subdomain</mat-label>
+            <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
+            <span matSuffix>.keapages.com</span>
+            <mat-error *ngIf="subdomainFormControl.hasError('required')">
+              Subdomain Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
+              Subdomain must be at least <strong>3</strong> characters
+            </mat-error>
+            <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
+              Subdomain must be at most <strong>20</strong> characters
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger" >No</button>
+        <button mat-button mat-dialog-close color="primary" (click)="makeduplicatefunnel()">Yes</button>
+    </div>
+</ng-template>
+
 <div id="funnelcontainer">
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>    
-
-    <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-        <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close">
-            
-            <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-
-            <span *ngIf="!duplpopupfunnel">
-
-                <div *ngIf="firstpart">
-                        <div *ngIf="funneltostep">
-                            <h6><strong>Copy Funnel URL</strong></h6>
-                            <hr>
-                            
-                        <mat-form-field class="kb-full-width" appearance="fill">
-                            <mat-label>Funnel Url</mat-label>
-                            <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
-                        </mat-form-field>
-                        
-                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                            <i class="far fa-copy"></i> Copy Funnel Url
-                        </button>
-                    </div>
-
-                    <div *ngIf="!funneltostep">
-                        <h6><strong>Copy Step URL</strong></h6>
-                        <hr>
-                        <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Step Url</mat-label>
-                        <textarea matInput readonly rows="3" name="funnelurlonly" #userinput >{{funnelurl}}</textarea>
-                        </mat-form-field>
-                        
-                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)" >
-                            <i class="far fa-copy"></i> Copy Step Url
-                        </button>
-                        
-                        <hr>
-                        
-                        <h6><strong>Copy Page URL</strong></h6>
-                        <hr>
-                        <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Page Url</mat-label>
-                        <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
-                        </mat-form-field>
-                        
-                        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-                            <i class="far fa-copy"></i> Copy Url
-                        </button>
-                    </div>
-                </div>
-
-                <div *ngIf="!firstpart && !colortheme">
-                    <h6><strong>Archive</strong></h6>
-                    <hr>
-                    
-                    <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Archive Reason</mat-label>
-                        <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
-                        <small>Optional</small>
-                    </mat-form-field>
-            
-                    <p>It will help you remember why you archive it!</p>
-                    
-                    <button mat-raised-button color="primary" type="submit" (click)="makearchive()" *ngIf="shwobtnfirst" >
-                        <i class="fas fa-archive"></i> Archive Funnel
-                    </button>
-
-                    <button mat-raised-button color="primary" type="submit" (click)="makearchivestep()" *ngIf="!shwobtnfirst" >
-                        <i class="fas fa-archive"></i> Archive Funnel Step
-                    </button>
-                </div>
-
-                <div *ngIf="colortheme">
-                    <h6><strong>Change Color Badge</strong></h6>
-                    <hr>
-
-                    <mat-form-field appearance="fill" class="kb-full-width" >
-                        <mat-label>Badge Color</mat-label>
-                        <mat-select name="badgecolor" [(ngModel)]="badgecolor">
-                        <mat-option value="">None</mat-option>
-                        <mat-option value="primary">Primary</mat-option>
-                        <mat-option value="secondary">Secondary</mat-option>
-                        <mat-option value="success">Success</mat-option>
-                        <mat-option value="warning">Warning</mat-option>
-                        <mat-option value="info">Info</mat-option>
-                        <mat-option value="danger">Danger</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <button mat-raised-button color="primary" (click)="savesteptheme()" ><i class="fas fa-check-circle"></i> Save Color</button>
-
-                </div>
-
-            </span>
-
-            <div *ngIf="duplpopupfunnel">
-
-                <h6><strong>Duplicate '{{dupfunnelname}}' Funnel</strong></h6>
-                <hr>
-
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label>Name</mat-label>
-                    <input type="text" matInput [(ngModel)]="form.funnelname" name="funnelname" [formControl]="funneltitleFormControl" placeholder="Ex. 10 Days to Productivity" required minlength="3" >
-                    <mat-error *ngIf="funneltitleFormControl.hasError('required')">
-                      Name is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="funneltitleFormControl.hasError('minlength')">
-                      Name must be at least <strong>3</strong> characters
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field class="kb-full-width" appearance="fill">
-                    <mat-label> Subdomain</mat-label>
-                    <input type="text" (keyup)="form.subdomain = removespecialcharwithsmall(form.subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.subdomain">
-                    <span matSuffix>.keapages.com</span>
-                    <mat-error *ngIf="subdomainFormControl.hasError('required')">
-                      Subdomain Name is <strong>required</strong>
-                    </mat-error>
-                    <mat-error *ngIf="subdomainFormControl.hasError('minlength')">
-                      Subdomain must be at least <strong>3</strong> characters
-                    </mat-error>
-                    <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
-                      Subdomain must be at most <strong>20</strong> characters
-                    </mat-error>
-                </mat-form-field>
-
-                <button mat-raised-button color="primary" (click)="makeduplicatefunnel()" >Duplicate <i class="fas fa-copy"></i></button>
-
-            </div>
-
-            <img src="/assets/images/funnel/funnel1.png" class="img-fluid" alt="">
-
-        </div>
-    </div>
-    <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
-    
     <div class="container-fluid">
         <div class="row">
               <mat-form-field  appearance="fill" class="col-md-6">
@@ -270,6 +228,7 @@
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Funnel">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </mat-form-field>
+
               <mat-form-field appearance="fill" class="col-md-2">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
@@ -280,22 +239,13 @@
                 </mat-select>
               </mat-form-field>
 
-            <div class="col-md-4 text-right">
+            <div class="col-md-4 text-right mt-2">
                 <button mat-raised-button color="primary" (click)="openDialog(adddialog)">
                     Create Funnel <i class="far fas fa-plus"></i>
                 </button>
             </div>
         </div>
-
-        <div class="row" *ngIf="funnelnotfound">
-            <div class="col-md-4"></div>
-            <div class="col-md-4 text-center">
-                <img width="" src="/assets/images/funnel/funnel2.png" class="img-fluid" alt="">
-            </div>
-        </div>
-
-        <div class="steps-group row keabuilder-container mt-5">
-            
+        <div class="steps-group row keabuilder-container mt-3">
             <div class="col-md-12 mb-4" *ngFor="let funnel of funnels; index as i">
                     <mat-accordion>
                         <div class="keabuilder-board">
@@ -307,16 +257,16 @@
                         <div class=" col-md-4"><span>Last Updated: </span><span class="colr">{{funnel.updated_at | date:'mediumDate'}}</span></div>
                             <div class="cursor-pointer col-md-2 d-flex justify-content-between" role="button">
                                
-                                    <button mat-icon-button matTooltip="Edit" (click)="funneledit(funnel.uniqueid, funnel.id,'edit')" >
+                                    <button mat-icon-button matTooltip="Edit" matTooltipPosition="above" (click)="funneledit(funnel.uniqueid, funnel.id,'edit',adddialog)" >
                                         <i class="fas fa-pencil-alt mr-2" aria-hidden="true"></i>
                                     </button>
-                                    <button mat-icon-button matTooltip="Copy" (click)="funneledit(funnel.uniqueid, funnel.id,'copy')" >
+                                    <button mat-icon-button matTooltip="Copy" matTooltipPosition="above" (click)="funneledit(funnel.uniqueid, funnel.id,'copy',copyurldialog)" >
                                         <i class="fas fa-link mr-2"></i>
                                     </button>
-                                    <button mat-icon-button matTooltip="Duplicate"  (click)="funneledit(funnel.name, funnel.uniqueid,'duplicate')" >
+                                    <button mat-icon-button matTooltip="Duplicate" matTooltipPosition="above"  (click)="funneledit(funnel.name, funnel.uniqueid,'duplicate',funnelduplicatedialog)" >
                                         <i class="far fa-clone mr-2"></i>
                                     </button>
-                                    <button mat-icon-button matTooltip="Delete" class="text-danger" (click)="funneledit(funnel.uniqueid, funnel.id,'archive')" >
+                                    <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" class="text-danger" (click)="funneledit(funnel.uniqueid, funnel.id,'archive',deletedialog)" >
                                         <i class="far fa-trash-alt mr-2"></i>
                                     </button>
                               
@@ -357,25 +307,25 @@
                                             <button mat-menu-item (click)="viewpagestep(funnel.domain, funnel.subdomain, funnelstep.page_path)">
                                                 <i class="fas fa-eye mr-2 "></i> View Step
                                             </button>
-                                            <button mat-menu-item (click)="funnelstepedit(funnel,funnelstep,'copy')">   
+                                            <button mat-menu-item (click)="funnelstepedit(funnel,funnelstep,'copy',copystepurldialog)">   
                                                 <i class="fas fa-link mr-2"></i> Copy Step Link
                                             </button>
-                                            <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'edit')">
+                                            <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'edit',copystepurldialog)">
                                                 <i class="fas fa-pencil-alt mr-2" aria-hidden="true" ></i> Edit
                                             </button>
-                                            <button mat-menu-item (click)="funnelstepedit(funnelstep.page_path,funnelstep.uniqueid,'duplicate')">
+                                            <button mat-menu-item (click)="funnelstepedit(funnelstep.page_path,funnelstep.uniqueid,'duplicate',copystepurldialog)">
                                                 <i class="far fa-clone mr-2"></i> Duplicate
                                             </button>
-                                            <button mat-menu-item (click)="openDialog2(dialogduplicate, funnelstep, 'move'); dialogfunnelset=funnel.uniqueid;">
+                                            <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid, funnelstep, 'move',stepduplicatedialog); dialogfunnelset=funnel.uniqueid;">
                                                 <i class="fa fa-paste mr-2"></i> Move
                                             </button>
-                                            <button mat-menu-item (click)="openDialog2(dialogduplicate, funnelstep, 'copymove'); dialogfunnelset=funnel.uniqueid;">
+                                            <button mat-menu-item (click)="funnelstepedit(funnel.uniqueid, funnelstep, 'copymove',stepduplicatedialog); dialogfunnelset=funnel.uniqueid;">
                                                 <i class="fa fa-paste mr-2"></i> Copy & Move
                                             </button>
-                                            <button mat-menu-item (click)="funnelstepedit(funnelstep.color,funnelstep.uniqueid,'colortheme')">
+                                            <button mat-menu-item (click)="funnelstepedit(funnelstep.color,funnelstep.uniqueid,'colortheme',colorbadgedialog)">
                                                 <i class="far fa-check-circle mr-2"></i> Change Color Badge
                                             </button>
-                                            <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'archive')">
+                                            <button mat-menu-item class="text-danger" (click)="funnelstepedit(funnel.uniqueid,funnelstep.uniqueid,'archive',deletedialog)">
                                                 <i class="far fa-trash-alt mr-2"></i> Archive
                                             </button>
                                         </mat-menu>
@@ -389,12 +339,14 @@
                 </mat-expansion-panel>
             </div>
             </mat-accordion>
-               
-            
             </div>
-        
         </div>
-
+        <div class="row" *ngIf="funnelnotfound">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 text-center">
+                <img width="" src="/assets/images/funnel/funnel2.png" class="img-fluid" alt="">
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <!-- <mat-paginator 
@@ -406,6 +358,6 @@
                 </mat-paginator> -->
             </div>
         </div>
-
+        
     </div>
 </div>

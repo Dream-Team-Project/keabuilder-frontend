@@ -1,62 +1,61 @@
+<ng-template #dialogduplicate>
+  <h1 mat-dialog-title >{{actionname}} Step</h1>
+  <div mat-dialog-content>
+      Would you like to {{actionname}} <span class="colr">{{selfunnelstep.page_name}}</span> Step?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+
+      <mat-form-field appearance="fill" class="kb-full-width">
+        <mat-label>Funnels</mat-label>
+        <mat-select name="newfunnelid" [(ngModel)]="newfunnelid" >
+          <span *ngFor="let funnel of funnels">
+              <mat-option *ngIf="uniqueid!=funnel.uniqueid" [value]="funnel.uniqueid">
+                  {{funnel.name}}
+              </mat-option>
+          </span>
+        </mat-select>
+      </mat-form-field>
+      <button mat-button class="text-info" mat-dialog-close >No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(selfunnelstep)">Yes</button>
+
+  </div>
+</ng-template>
+
+<ng-template #dialog>
+<h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
+<div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{delfunnel.page_name}}</span> Funnel Step?
+</div>
+<div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep(delfunnel);">Yes</button>
+</div>
+</ng-template>
+
+<ng-template #dialog2>
+<h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
+<div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{funnelstepname}}</span> Funnel Step? <br>
+</div>
+<div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep2();">Yes</button>
+</div>
+</ng-template>
+
+<ng-template #dialogdeletepro>
+<h1 mat-dialog-title class="kb-danger">Delete Product</h1>
+<div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{selectedproductname}}</span> Product? <br>
+</div>
+<div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-info">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletemyproduct()">Yes</button>
+</div>
+</ng-template>
+
 <div id="createfunnel">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-
-  <ng-template #dialogduplicate>
-      <h1 mat-dialog-title >{{actionname}} Step</h1>
-      <div mat-dialog-content>
-          Would you like to {{actionname}} <span class="text-primary">{{selfunnelstep.page_name}}</span> Step?
-      </div>
-      <div mat-dialog-actions class="justify-content-end">
-    
-          <mat-form-field appearance="fill" class="kb-full-width">
-            <mat-label>Funnels</mat-label>
-            <mat-select name="newfunnelid" [(ngModel)]="newfunnelid" >
-              <span *ngFor="let funnel of funnels">
-                  <mat-option *ngIf="uniqueid!=funnel.uniqueid" [value]="funnel.uniqueid">
-                      {{funnel.name}}
-                  </mat-option>
-              </span>
-            </mat-select>
-          </mat-form-field>
-          <button mat-button class="text-info" mat-dialog-close >No</button>
-          <button mat-button mat-dialog-close class="text-danger" (click)="dupanotherdes(selfunnelstep)">Yes</button>
-    
-      </div>
-  </ng-template>
-
-  <ng-template #dialog>
-    <h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
-    <div mat-dialog-content>
-        Would you like to delete <span class="text-danger">{{delfunnel.page_name}}</span> Funnel Step?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep(delfunnel);">Yes</button>
-    </div>
-  </ng-template>
-
-  <ng-template #dialog2>
-    <h1 mat-dialog-title class="kb-danger">Delete Funnel Step</h1>
-    <div mat-dialog-content>
-        Would you like to delete <span class="text-danger">{{funnelstepname}}</span> Funnel Step? <br>
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep2();">Yes</button>
-    </div>
-  </ng-template>
-
-  <ng-template #dialogdeletepro>
-    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
-    <div mat-dialog-content>
-        Would you like to delete <span class="text-danger">{{selectedproductname}}</span> Product? <br>
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletemyproduct()">Yes</button>
-    </div>
-  </ng-template>
-
   <div id="kb-automation-actions" *ngIf="sidebar.open">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
       <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
