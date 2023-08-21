@@ -12,12 +12,14 @@ import { RegistrationpaymentService } from 'src/app/_services/registrationpaymen
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
-import {hashSync} from 'bcryptjs'
+import {hashSync} from 'bcryptjs';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
 export class RegisterComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
@@ -322,14 +324,8 @@ specialuser=false;
   }
 
   removespecialchar(data:any){
-    // console.log(data);
-    var datagen = data.replace(/[^a-zA-Z0-9]/g, "");
-    return datagen;
-  }
-
-  removespecialcharwithsmall(data:any){
-    var datagen = this.removespecialchar(data).toLowerCase();
-    return datagen;
+    let un = data.username.replace(/[^a-zA-Z0-9]/g, "");
+    data.username = un.toLowerCase();
   }
 
   redirectToDashboard(): void {
