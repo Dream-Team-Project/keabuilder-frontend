@@ -195,6 +195,7 @@ const routes: Routes = [
   { path: 'funnels', component: NewFunnelComponent,
   children: [
     { path: '', component: NewFunnelsComponent, canActivate: [AuthGuard] },
+    { path: 'all', component: NewFunnelsComponent, canActivate: [AuthGuard] },
     { path: 'build', component: NewFunnelBuildComponent, canActivate: [AuthGuard] },
     { path: 'archive', component: NewFunnelArchiveComponent, canActivate: [AuthGuard] },
   ],

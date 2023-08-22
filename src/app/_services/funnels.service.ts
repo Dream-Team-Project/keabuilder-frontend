@@ -201,6 +201,10 @@ export class FunnelService {
       data
     }, httpOptions);
   }
+  searchqueryFunnel(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("./api/searchqueryFunnel",data, httpOptions);
+  }
 
   shortbypaginatorfunnnel(data:any):Observable<any> {
     return this.http.post("./api/shortbypaginatorfunnel/"+this.uuid, {

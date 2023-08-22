@@ -96,6 +96,13 @@ export class SidebarComponent implements OnInit {
         // },
         {
           0:true,
+          routerlink: '/funnels/all',
+          img: 'funnel.gif',
+          icon: 'fa fa-filter',
+          title: 'All Funnels'
+        },
+        {
+          0:true,
           routerlink: '/funnels/archive',
           img: 'funnel.gif',
           icon: 'fas fa-archive',
