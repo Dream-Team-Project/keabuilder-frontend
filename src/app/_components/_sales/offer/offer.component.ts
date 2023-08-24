@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-offer',
   templateUrl: './offer.component.html',
-  styleUrls: ['./offer.component.css', '../../material.component.css']
+  styleUrls: ['./offer.component.css']
 })
 export class OfferComponent implements OnInit {
 
