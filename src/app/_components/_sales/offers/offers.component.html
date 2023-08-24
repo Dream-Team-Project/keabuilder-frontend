@@ -1,189 +1,108 @@
-<!-- create offer dialog -->
-<ng-template #adddialog>
-    <h1 mat-dialog-title class="txt">Create A Offer</h1>
+  <!-- add new offer -->
+  <ng-template #adddialog>
+    <h1 mat-dialog-title>Add Offer</h1>
     <div mat-dialog-content>
-      <mat-error *ngIf="error">{{errormessage}}</mat-error>
-        <mat-form-field class="kb-full-width mb-2" appearance="fill">
-          <mat-label>Offer Name</mat-label>
-          <input type="text" matInput name="offername" [(ngModel)]="offername" [formControl]="offernameControl" required minlength="3" >
-          <mat-error *ngIf="offernameControl.hasError('minlength')">
-              Name must be at least <strong>3</strong> characters
-          </mat-error>
+      <mat-error *ngIf="hasError.name">{{hasError.name}}</mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError.name">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Offer name" [(ngModel)]="offerObj.name" required [minlength]="3">
+      </mat-form-field>
+      <mat-error *ngIf="!offerObj.type && hasError.type">{{hasError.type}}</mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="!offerObj.type && hasError.type">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="offerObj.type" name="offer-type" placeholder="Choose offer type" required>
+          <mat-option value="checkout">Checkout</mat-option>
+          <mat-option value="upsell">Upsell</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger">Close</button>
-        <button mat-button
-        [color]="!offernameControl.invalid ? 'primary' : ''"  
-        [disabled]="offernameControl.invalid"
-        (click)="createoffer()">Create</button>
+    <div mat-dialog-actions class="float-right">
+        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+        <button mat-button (click)="addoffer()" color="primary" [disabled]="!offerObj.name || !offerObj.type">Add</button>
     </div>
   </ng-template>
-  <!-- close create offer dialog -->
-  <!-- delete offer dialog -->
-  <ng-template #deletedialog>
-    <h1 mat-dialog-title class="kb-danger">Delete offer</h1>
+  <!-- add new offer -->
+  <!-- duplicate offer -->
+  <ng-template #dupdialog>
+    <h1 mat-dialog-title >Duplicate Product</h1>
     <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{deloffer.name}}</span> offer?
+      Would you like to duplicate <span class="kb-temp-text-primary">{{offerObj.name}}</span> offer?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger">No</button>
+      <button mat-button mat-dialog-close (click)="duplicateoffer(offerObj)" [color]="'primary'">Yes</button>
+    </div>
+  </ng-template>
+  <!-- duplicate offer -->
+  <!-- delete offer -->
+  <ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{offerObj.name}}</span> offer?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button
-        mat-button
-        mat-dialog-close
-        cdkFocusInitial
-        class="text-danger"
-        (click)="deleteoffer(deloffer)"
-      >
-        Yes
-      </button>
+      <button mat-button mat-dialog-close (click)="deleteoffer()" class="text-danger">Yes</button>
     </div>
   </ng-template>
-  <!-- close delete offer dialog -->
-      <div class="container-fluid">
-        <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-      <div  class="row">
-          <mat-form-field  class="col-md-3 "  appearance="fill" >
-            <mat-label>Search offers...</mat-label>
-              <input matInput #searchInp (input)="searchoffers(searchInp, sortInp,sentInp,listInp)" type="text" placeholder="Search offers">
-              <i class="fa-solid fa-magnifying-glass"></i>
-          </mat-form-field>
-          <mat-form-field  class="col-md-2" appearance="fill">
-            <mat-label>Filter by:</mat-label>
-            <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchoffers(searchInp, sortInp,sentInp,listInp)">
-              <mat-option [value]="'name ASC'">ASC By Name</mat-option>
+  <!-- delete offer -->
+  <div class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    <div class="row">
+        <mat-form-field appearance="fill" class="col-md-4">
+            <mat-label>Search offers by name</mat-label>
+            <input matInput [(ngModel)]="search.value" (input)="searchoffers()" name="searchvalue" type="text" placeholder="Search offers">
+            <button *ngIf="search.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
+              <mat-icon>close</mat-icon>
+            </button>
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="col-md-3">
+            <mat-label>Sort By</mat-label>
+            <mat-select [(ngModel)]="search.sortby" name="sortby" (valueChange)="searchoffers()">
+                <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+                <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+                <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+                <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+                <mat-option [value]="'name ASC'">ASC By Name</mat-option>
               <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-              <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-              <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-              <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-              <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-          </mat-select>
-          </mat-form-field>
-        <mat-form-field  class="col-md-2" appearance="fill">
-          <mat-label>Filter by Status:</mat-label>
-          <mat-select #sentInp name="kbfilter" value='' (valueChange)="searchoffers(searchInp, sortInp,sentInp, listInp)">
-            <mat-option value="" selected>All</mat-option>
-            <mat-option [value]="'0'" >Drafts</mat-option>
-            <mat-option [value]="'1'">Publish</mat-option>
-          </mat-select>
+            </mat-select>
         </mat-form-field>
-        <mat-form-field  class="col-md-2" appearance="fill">
-          <mat-label>Filter By List</mat-label>
-              <mat-select #listInp name="listfilter" value='' (valueChange)="searchoffers(searchInp, sortInp,sentInp,listInp)">
-                  <mat-option value="" selected>All</mat-option>
-                  <mat-option *ngFor="let list of lists" [value]="list.id">
-                      {{list?.name | titlecase}}
-                    </mat-option>
-              </mat-select>
-        </mat-form-field>
-      <div class="col-md-3 text-right mt-2">
-        <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
-          <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
-        </button>
-        <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(adddialog,false)">
-          <i class="fa fa fa-envelope" aria-hidden="true"></i> Create offer
-        </button>
-      </div>
-      </div>
-      <div [class.px-3]="toggleview" class="row" *ngIf="kboffers?.length != 0; else nodata">
-        <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kboffer of kboffers; index as i;">
-          <div [class.row]="toggleview">
-            <div
-            [style.height]="toggleview ? '150px' : '300px'"
-            [class]="toggleview ? 'col-md-6' : 'col-md-12'"
-            class="p-0"
-          >
-          <div [class.kb-disabled]="kboffer.deleting" class="kb-fitimg"
-              [ngStyle]="{
-                'background-image':
-                  'url(' +
-                  _image.uploadImgPath +
-                  _general.getSSPath('offer-' + kboffer.uniqueid) +
-                  '), url(' +
-                  _image.uploadImgPath +
-                  'webpage_thumbnail.jpg' +
-                  ')'
-              }"
-                >
-                <div class="kb-loader" *ngIf="shortwaiting">
-                  <div class="kb-loader-shadow"></div>
-                  <div class="kb-loader-box"></div>
-                </div>
-              </div>
-              </div>
-            <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
-              <div class="row align-items-center p-0 h-100">
-                <div [class.p-0]="!toggleview" class="col-md-12">
-                  <div class="keabuilder-title-board line-ellipsis ftsize">
-                    <span>{{kboffer.name | titlecase}}</span>  
-                    <input type="text" [(ngModel)]="kboffer.name"
-                      (blur)="changepagename(kboffer,kboffer.name)" matTooltip="Edit offer Name"
-                      matTooltipPosition="above">
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <button *ngIf="kboffer.publish_status=='1'" class="view-btn3 align" mat-raised-button>View Report<i class="fa-solid fa-chart-pie ml-1" aria-hidden="true"></i></button>
-                    <button  *ngIf="kboffer.publish_status=='0'" mat-raised-button  [routerLink]="'/sales/offer/'+kboffer.uniqueid" class="view-btn3 mr-2 "> Continue <i class="fa fa-arrow-alt-circle-right"></i></button> 
-                    <button mat-raised-button  class=" view-btn1 ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
-                  <mat-menu #menu2="matMenu">
-                    <button mat-menu-item [routerLink]="'/sales/offer/'+kboffer.uniqueid" *ngIf="(kboffer.publish_status== '0')">
-                      <i class="fa-regular fa-pen-to-square mr-2"></i>Edit
-                    </button>
-                    <button mat-menu-item  (click)="duplicateoffer(kboffer)">
-                      <i class="far fa-copy mr-2"></i>Duplicate
-                    </button>
-                   
-                    <button class="text-danger" mat-menu-item (click)="openDialog(deletedialog,kboffer)">
-                      <i class="far fa-trash-alt mr-2"></i>Delete
-                    </button>
-                  </mat-menu>
-                  </div>
-  
-                  <div class="sentoption">
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                      <span class="fnt"><i class="fa-brands fa-product-hunt mr-2 colr" aria-hidden="true"></i>Products : <span *ngIf="kboffer.productid"> {{kboffer.productid?.split(',')?.length}}</span>
-                      <span *ngIf="!kboffer.productid">--</span>
-                    </span>
-                    <span class="fnt">Publish On: 
-                      <span *ngIf="kboffer.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.deliverdate)}}</span>
-                      <span *ngIf="!kboffer.deliverdate">--</span>
-                    </span>
-                  </div>
-                  <div class="d-flex justify-content-between mt-1 mb-1">
-                      <span class="fnt">Created On: <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.created_at)}}</span></span>
-                      <span class="fnt">Last Modified On: <span><i class="far fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kboffer.updated_at)}}</span></span>
-                    </div>
-                </div>
-                </div>
-              </div>
-            </div>
-              <div class="d-flex justify-content-between">
-            <div class="statbadg">
-              <span class="statusbadge" [class]="kboffer.publish_status==0 ? 'active1':'active2'">
-                <i class="fas" [class]="kboffer.publish_status==0 ? 'fa-file' : 'fa-check'"></i>
-                {{kboffer.publish_status==0 ? 'Draft' : 'Publish'}}
-              </span>
-            </div>
-  
-            <div class="statbadg2">
-              <span class="statusbadge2">{{kboffer?.status=='opened'?'Opened':'Closed'}}</span>
-            </div>
-          </div>
-          </div>
+        <div class="col-md-5 text-right">
+            <button mat-raised-button (click)="openDialog(adddialog, offerObj)" color="primary" class="mx-3">Add Offer <i
+                class="fas fa-plus"></i></button>
         </div>
-      </div>
-      <ng-template #nodata>
-        <div class="row justify-content-center mt-5">
-          <div class="col-md-4">
-            <img
-              src="/assets/images/website/website-empty.png"
-              class="img-fluid"
-              alt="No Offer Found"
-            />
-          </div>
-        </div>
-      </ng-template>
     </div>
-  
-  
+    <div class="row">
+      <div class="col-12">
+        <table class="table kb-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Last Modified</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let offer of offers; index as i">
+              <td [routerLink]="offerLink+offer.uniqueid" class="kb-td-link">
+                <span>{{offer.name | titlecase}}</span>
+              </td>
+              <td [routerLink]="offerLink+offer.uniqueid" class="kb-td-link kb-text-overflow">
+                <span>{{offer.type | titlecase}}</span>
+              </td>
+              <td>{{ offer.updated_at | date:'medium' }}</td>
+              <td>
+                <span class="d-flex">
+                  <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>
+                  <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"  (click)="openDialog(dupdialog, offer)" class="fa fa-copy px-4 kb-table-action-icon rounded"></i>
+                  <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, offer)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
+                </span>
+              </td>                        
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

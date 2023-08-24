@@ -99,7 +99,6 @@ export class NavbarComponent implements OnInit {
         this.events = false;
         this.logs = true;
       }
-      
   }
 
     // drag drop box

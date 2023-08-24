@@ -2,18 +2,24 @@
     <div class="container-fluid kb-details-container kb-scroll" [class.dragBox]="dragBoxAnime.open" [class.dragBoxClose]="dragBoxAnime.close" cdkDrag cdkDragBoundary=".cdk-overlay-container">
         <div class="row py-4 px-4">
             <div cdkDragHandle class="kb-details-head col-12 pb-2 px-0 border-bottom">
-                <h5>Please help us to improve</h5>
+                <h5>Help us to improve</h5>
             </div> 
-            <div class="col-12 pt-3 px-0 inp-contain">
-                <mat-error *ngIf="mailStatus.error">Please write your message before sending</mat-error>
-                <mat-form-field class="kb-full-width" appearance="outline">
-                    <mat-label>Feedback</mat-label>
-                    <textarea name="message" [(ngModel)]="feedback.message" required matInput placeholder="Write your feedback here" [style.minHeight]="'150px'" [style.maxHeight]="'300px'"></textarea>
+            <div class="row col-12 star-rating py-3 align-items-center">
+                <h6 class="m-0 mr-2">Rate us <span class="kb-danger">*</span></h6>
+                <ng-container *ngFor="let star of stars; let i = index">
+                    <span class="star" [class.filled]="i < feedback.rating" (click)="rate(i + 1)"> &#9733; </span>
+                </ng-container>
+            </div>
+            <div class="col-12"><mat-error *ngIf="mailStatus.error">Please rate us</mat-error></div>
+            <div class="col-12 px-0">
+                <mat-form-field class="kb-full-width" appearance="fill">
+                    <mat-label>Write your feedback here</mat-label>
+                    <textarea name="message" [(ngModel)]="feedback.feedback" matInput placeholder="It will help us to improve and give you a better experience" [style.minHeight]="'100px'"></textarea>
                 </mat-form-field>
             </div>
             <div class="col-12 pt-3 px-0 text-right border-top">
                 <button (click)="overlayRefDetach()" mat-raised-button color="accent" class="mr-3">Not now</button>
-                <button [disabled]="mailStatus.sending" (click)="sendFeedback()" mat-raised-button color="primary">Send<i class="pl-2 far fa-paper-plane"></i></button>
+                <button [disabled]="mailStatus.sending || feedback.rating == 0" (click)="sendFeedback()" mat-raised-button color="primary">Send<i class="pl-2 far fa-paper-plane"></i></button>
             </div>
         </div>
     </div>

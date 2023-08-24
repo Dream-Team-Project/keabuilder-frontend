@@ -1,3 +1,19 @@
 ::ng-deep mat-error {
     font-size: 14px;
 }
+  
+.star {
+    cursor: pointer;
+    color: #ccc;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    line-height: 30px;
+    transition: 0.2s ease;
+}
+
+.star.filled {
+color: var(--primary-color);
+}
+  

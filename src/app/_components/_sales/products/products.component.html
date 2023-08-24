@@ -1,28 +1,4 @@
-  <!-- duplicate product -->
-  <ng-template #dupdialog>
-    <h1 mat-dialog-title >Duplicate Product</h1>
-    <div mat-dialog-content>
-      Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> product?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
-      <button mat-button mat-dialog-close (click)="duplicateproduct(productObj)" [color]="'primary'">Yes</button>
-    </div>
-  </ng-template>
-  <!-- duplicate product -->
-  <!-- delete product -->
-  <ng-template #deldialog>
-    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
-    <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{productObj.name}}</span> product?
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close (click)="deleteproduct()" class="text-danger">Yes</button>
-    </div>
-  </ng-template>
-  <!-- delete product -->
-  <!-- Add new product -->
+  <!-- add new product -->
   <ng-template #adddialog>
     <h1 mat-dialog-title>Add Product</h1>
     <div mat-dialog-content>
@@ -38,11 +14,11 @@
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="addproduct()" cdkFocusInitial color="primary">Add</button>
+        <button mat-button (click)="validateproduct('add')" color="primary" [disabled]="!productObj.name">Add</button>
     </div>
   </ng-template>
-  <!-- Add new product -->
-  <!-- Update product -->
+  <!-- add new product -->
+  <!-- update product -->
   <ng-template #updatedialog>
     <h1 mat-dialog-title>Update Product</h1>
     <div mat-dialog-content>
@@ -58,21 +34,48 @@
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="updateproduct()" cdkFocusInitial color="primary">Update</button>
+        <button mat-button (click)="validateproduct('update')" color="primary" [disabled]="!productObj.name">Update</button>
     </div>
   </ng-template>
-  <!-- Update product -->
+  <!-- update product -->
+  <!-- duplicate product -->
+  <ng-template #dupdialog>
+    <h1 mat-dialog-title >Duplicate Product</h1>
+    <div mat-dialog-content>
+      Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> product?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger">No</button>
+      <button mat-button mat-dialog-close (click)="duplicateproduct(productObj)" [color]="'primary'">Yes</button>
+    </div>
+  </ng-template>
+  <!-- duplicate product -->
+  <!-- delete product -->
+  <ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{productObj.name}}</span> product?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close (click)="deleteproduct()" class="text-danger">Yes</button>
+    </div>
+  </ng-template>
+  <!-- delete product -->
   <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
       <div class="row">
           <mat-form-field appearance="fill" class="col-md-4">
               <mat-label>Search products by name</mat-label>
-              <input matInput #searchInp (input)="searchproducts(searchInp, sortInp)" type="text" placeholder="Search products">
+              <input matInput [(ngModel)]="search.value" (input)="searchproducts()" name="searchvalue" type="text" placeholder="Search products">
+              <button *ngIf="search.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
+                <mat-icon>close</mat-icon>
+              </button>
               <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
           <mat-form-field appearance="fill" class="col-md-3">
               <mat-label>Sort By</mat-label>
-              <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchproducts(searchInp, sortInp)">
+              <mat-select [(ngModel)]="search.sortby" name="sortby" (valueChange)="searchproducts()">
                   <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
                   <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
                   <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
@@ -81,8 +84,8 @@
                 <mat-option [value]="'name DESC'">DESC By Name</mat-option>
               </mat-select>
           </mat-form-field>
-          <div class="col-md-5 text-right mt-2">
-              <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-3">Add product <i
+          <div class="col-md-5 text-right">
+              <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-3">Add Product <i
                   class="fas fa-plus"></i></button>
           </div>
       </div>
@@ -93,16 +96,16 @@
               <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Updated At</th>
+                <th>Last Modified</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let product of products; index as i">
-                <td [routerLink]="['/sales/product/'+product.uniqueid]" class="kb-td-link">
+                <td (click)="openDialog(updatedialog, product)" class="kb-td-link">
                   <span>{{product.name | titlecase}}</span>
                 </td>
-                <td [routerLink]="['/sales/product/'+product.uniqueid]" class="kb-td-link kb-text-overflow">
+                <td (click)="openDialog(updatedialog, product)" class="kb-td-link kb-text-overflow">
                   <span>{{product.description ? product.description : '--' | titlecase}}</span>
                 </td>
                 <td>{{ product.updated_at | date:'medium' }}</td>

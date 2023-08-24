@@ -210,8 +210,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   // start trigger
 
-  openTriggerDialog(templateRef: TemplateRef<any>, error:string): void {
-    if(error) this.showTriggerFieldError(error);
+  openTriggerDialog(templateRef: TemplateRef<any>): void {
     this.closeBottomSheet();
     this.dialog.open(templateRef);
   }
@@ -257,11 +256,14 @@ export class CrmAutomationBuilderComponent implements OnInit {
     this.validateTrigger().then(resp=>{
       if(resp) {
         this._automation.addTrigger(this.trigger.temp, this.trigger.index, this.trigger.update).then(resp=>{
-          if(resp) this._automation.saveWfSession();
-          else this.openTriggerDialog(this.triggerDialog, 'Trigger allready added');
+          if(resp) {
+            this._automation.saveWfSession();
+            this.dialog.closeAll();
+          }
+          else this.showTriggerFieldError('Trigger allready added');
         })
       }
-      else this.openTriggerDialog(this.triggerDialog, 'Please select a '+this.trigger.temp.target.name);
+      else this.showTriggerFieldError('Please select a '+this.trigger.temp.target.name);
     })
   }
 
@@ -298,7 +300,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
     this.trigger.update = update;
     this.trigger.temp = JSON.parse(JSON.stringify(wf));
-    this.openTriggerDialog(this.triggerDialog, '');
+    this.openTriggerDialog(this.triggerDialog);
   }
 
   resetTrigger() {
@@ -348,8 +350,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   // start action
 
-  openActionDialog(templateRef: TemplateRef<any>, error:string): void {
-    if(error) this.showActionFieldError(error);
+  openActionDialog(templateRef: TemplateRef<any>): void {
     this.closeBottomSheet();
     this.dialog.open(templateRef);
   }
@@ -452,10 +453,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
     this.validateAction().then(resp=>{
       if(resp) {
         this._automation.addAction(this.action.temp, this.action.index, this.action.update).then(resp=>{
-          if(resp) this._automation.saveWfSession();
+          if(resp) {
+            this._automation.saveWfSession();
+            this.dialog.closeAll();
+          }
         })
       }
-      else this.openActionDialog(this.actionDialog, 'Please select '+this.action.temp.target.name);
+      else this.showActionFieldError('Please select '+this.action.temp.target.name);
     })
   }
 
@@ -505,7 +509,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
     this.action.update = update;
     this.action.temp = JSON.parse(JSON.stringify(wf));
-    this.openActionDialog(this.actionDialog, '');
+    this.openActionDialog(this.actionDialog);
   }
 
   resetAction() {

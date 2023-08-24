@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12 kb-contact-content"> 
+    <div class="col-md-12 kb-contact-content">
       <mat-tab-group (selectedIndexChange)="getactivetab($event)" [(selectedIndex)]="selIndex">
         <mat-tab>
           <ng-template mat-tab-label>
@@ -92,8 +92,8 @@
                     [matAutocomplete]="listAuto"
                     [matChipInputFor]="listChipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    class="kb-act-searchinp w-100 pt-1">
-                  <mat-autocomplete
+                    class="w-100">
+                  <mat-autocomplete autoActiveFirstOption
                     #listAuto="matAutocomplete"
                     (optionSelected)="addSelectedList($event, searchListInp)">
                     <mat-option
@@ -129,10 +129,9 @@
                     [matChipInputFor]="tagChipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     (matChipInputTokenEnd)="addtag($event)"
-                    class="kb-act-searchinp w-100 pt-1">
+                    class="w-100">
                   
-                  <mat-autocomplete
-                    autoActiveFirstOption
+                  <mat-autocomplete autoActiveFirstOption
                     #tagAuto="matAutocomplete"
                     (optionSelected)="addSelectedTag($event, searchTagInp)"
                   >
@@ -205,7 +204,7 @@
                         [matChipInputFor]="emailtoChipList"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                         (matChipInputTokenEnd)="addemailto($event)"
-                        class="kb-act-searchinp pt-1">
+                        class="pt-1">
                 </mat-form-field>
               </div>
               <div>

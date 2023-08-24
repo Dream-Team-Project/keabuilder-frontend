@@ -143,13 +143,12 @@ export class CrmContactsComponent implements OnInit {
     if(this.contact.email && this.isEmailValid(this.contact.email)) {
       this.hasError = '';
       delete this.contact.error;
-      if(this.newtags.length>0) this.tagupdate().then((resp:any)=>{
-      this.addContactFunction()});
+      if(this.newtags.length>0) this.tagupdate().then((resp:any)=>this.addContactFunction());
       else this.addContactFunction();
     }
     else {
       let msg = this.contact.email ? 'Email is invalid' : 'Email should not be empty';
-      this.setError(msg)
+      this.setError(msg);
     }
   }
 
@@ -332,7 +331,6 @@ uploadcontacts(){
     if(file){
       this.listid= this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : '';
       this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
-  // console.log(data.errordata)
         if(data.success){
           this.spinner=false;
           this.dialog.closeAll();
@@ -347,7 +345,6 @@ uploadcontacts(){
           this.getpagecontacts({pageIndex:0,pageSize:20});
         }
         else{
-          // this.dialog.open(this.importdialog);
           if(data.errordata?.length>0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
           this.error=true;
           this.errormessage=data?.error;
@@ -363,8 +360,6 @@ uploadcontacts(){
       this.errormessage='Error';
     }
   })
-  
-  
 }
 
 exportcontact(isList:boolean,type:any){

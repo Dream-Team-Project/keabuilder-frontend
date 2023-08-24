@@ -1,6 +1,4 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ProductService } from 'src/app/_services/_sales/product.service';
@@ -11,7 +9,7 @@ import { ProductService } from 'src/app/_services/_sales/product.service';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent implements OnInit {
- 
+
   fetching:boolean = true;
   hasError:string = '';
   products:Array<any> = [];
@@ -20,8 +18,11 @@ export class ProductsComponent implements OnInit {
     name: '',
     description: '',
   }
+  search = {
+    value: '',
+    sortby: 'updated_at DESC',
+  }
   
-
   constructor(
     private _productservice: ProductService,
     private dialog: MatDialog,
@@ -50,54 +51,59 @@ export class ProductsComponent implements OnInit {
   fetchproducts() {
     this._productservice.fetchproducts().subscribe((resp:any) => {
       this.adjustdata(resp?.data);
+      this.search.value = '';
+      this.search.sortby = 'updated_at DESC';
     });
   }
 
-  searchproducts(search: any, sortInp:any) {
+  resetSearch() {
+    this.search.value = '';
+    this.searchproducts();
+  }
+
+  searchproducts() {
     this.fetching = true;
     var obj = {
-      search: search.value,
-      sortInp: sortInp.value,
+      value: this.search.value,
+      sortby: this.search.sortby,
     }
     this._productservice.searchproducts(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
     });
   }
 
-  addproduct() {
-    if(this.productObj.name) {
+  validateproduct(action: string) {
+    if(this.productObj.name && this.productObj.name.length >= 3) {
       this.hasError = '';
-      this._productservice.addproduct(this.productObj).subscribe((resp:any) => {
-        if(resp.success) {
-          this.fetchproducts();
-          this.dialog.closeAll();
-          this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
-        }
-        else this.setError(resp?.message);
-      })
+      if(action == 'add') this.addproduct();
+      else this.updateproduct();
     }
     else {
-      let msg = 'Please write the name of the product';
-      this.setError(msg)
+      let msg = this.productObj.name ? 'Minimum 3 characters required' : 'Please write the name of the product';
+      this.setError(msg);
     }
   }
 
+  addproduct() {
+    this._productservice.addproduct(this.productObj).subscribe((resp:any) => {
+      if(resp.success) {
+        this.fetchproducts();
+        this.dialog.closeAll();
+        this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
+      }
+      else this.setError(resp?.message);
+    })
+  }
+
   updateproduct() {
-    if(this.productObj.name) {
-      this.hasError = '';
-      this._productservice.updateproduct(this.productObj).subscribe((resp:any) => {
-        if(resp.success) {
-          this.fetchproducts();
-          this.dialog.closeAll();
-          this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
-        }
-        else this.setError(resp?.message);
-      })
-    }
-    else {
-      let msg = 'Please write the name of the product';
-      this.setError(msg)
-    }
+    this._productservice.updateproduct(this.productObj).subscribe((resp:any) => {
+      if(resp.success) {
+        this.fetchproducts();
+        this.dialog.closeAll();
+        this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
+      }
+      else this.setError(resp?.message);
+    })
   }
 
   duplicateproduct(product:any){
@@ -120,4 +126,4 @@ export class ProductsComponent implements OnInit {
     this.hasError = msg;
   }
 
-  };
+}

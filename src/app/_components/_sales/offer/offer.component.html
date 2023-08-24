@@ -1,1 +1,189 @@
-<p>offer works!</p>
+<!-- delete offer -->
+<ng-template #deldialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Offer</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{offer.name}}</span> offer?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close (click)="deleteoffer()" class="text-danger">Yes</button>
+  </div>
+</ng-template>
+<!-- delete offer -->
+<div class="container-fluid pb-5 px-5">
+  <div class="row align-items-center pb-4">
+    <div class="col-md-6 d-flex">
+      <h4 class="d-inline mb-0">
+        {{(offer.name ? offer.name : 'Offer') | titlecase}} 
+      </h4>
+      <span class="kb-info-tag rounded py-1 px-2 ml-3 mr-1" style="font-size: 13px;">{{offer.type | titlecase}}</span>
+      <span class="kb-offer-head-icon px-2" [matTooltip]="usage[offer.type]"><i class="fa-regular fa-lightbulb"></i></span>
+    </div>
+    <div class="col-md-6 text-right">
+      <button mat-raised-button color="accent" (click)="_general.prevRoute()"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+      <button mat-raised-button color="primary" (click)="updateOffer()" class="mx-3">Save
+        <i class="far fa-save ml-1"></i>
+      </button>
+      <button mat-raised-button (click)="openDialog(deldialog)" color="danger">Delete
+        <i class="far fa-trash-alt ml-1"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="kb-offer-card rounded px-3 pt-3 mb-4">
+        <h6>Details</h6>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" placeholder="Offer name" [(ngModel)]="offer.name" required [minlength]="3">
+        </mat-form-field>
+        <mat-form-field class="kb-full-width mb-3" appearance="fill" [class.mat-form-field-invalid]="hasError.title">
+          <mat-label>Title<span class="kb-tag kb-info-tag ml-1">Optional</span></mat-label>
+          <input matInput type="text" placeholder="Offer Title" [(ngModel)]="offer.title" [minlength]="3">
+          <mat-hint>Title will appear on checkout instead of name</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea matInput placeholder="Offer description" [(ngModel)]="offer.description" [style.minHeight]="'60px'"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="kb-offer-card rounded p-3">
+        <h6>Emails</h6>
+        <mat-button-toggle-group [(ngModel)]="offer.email_type" aria-label="Email type" class="mb-3">
+          <mat-button-toggle *ngFor="let et of emailTypes" [value]="et.value">{{et.name}}</mat-button-toggle>
+        </mat-button-toggle-group>
+        <ng-container *ngIf="offer.email_type == 'custom'">
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Email Subject</mat-label>
+            <input matInput type="text" placeholder="Email subject" [(ngModel)]="offer.email_subject" required>
+          </mat-form-field>
+          <editor [(ngModel)]="offer.email_content" [init]="_general.config" class="rounded"></editor>
+        </ng-container>
+        <ng-container *ngIf="offer.email_type == 'template'">
+          <mat-form-field class="kb-full-width" appearance="fill" (click)="filterEmailData()">
+            <mat-label>Select an email template</mat-label>
+            <input matInput type="text" [(ngModel)]="selectedEmail.name" placeholder="Search by template name"
+              (input)="filterEmailData()" [matAutocomplete]="emailAuto" class="w-100">
+            <button *ngIf="selectedEmail.name" matSuffix mat-icon-button aria-label="Clear"
+              (click)="resetEmail()">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #emailAuto="matAutocomplete"
+              (optionSelected)="selectEmail($event)">
+              <mat-option
+                *ngFor="let option of filteredEmails"
+                [value]="option" [disabled]="selectedEmail.id == option.id">
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ng-container>
+        <ng-container *ngIf="offer.email_type == 'none'">
+          <div class="text-center"><span class="kb-info-tag rounded p-2 d-block">Email is deactivated for this offer</span></div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="kb-offer-card rounded p-3 mb-4">
+        <h6>Pricing</h6>
+        <mat-button-toggle-group [(ngModel)]="offer.payment_type" aria-label="Price type" class="mb-3">
+          <mat-button-toggle *ngFor="let pt of paymentTypes" [value]="pt.value">{{pt.name}}</mat-button-toggle>
+        </mat-button-toggle-group>
+        <ng-container *ngIf="offer.payment_type == 'free' else paid">
+          <div class="text-center"><span class="kb-info-tag rounded p-2 d-block">This offer is free</span></div>
+        </ng-container>
+        <ng-template #paid>
+          <ng-container *ngIf="isPaymentConnected else notConnected">
+            <ng-container *ngIf="offer.payment_type == 'onetime'">
+              <div class="row">
+                <mat-form-field class="col-6 pr-0" appearance="fill">
+                  <mat-label>Currency</mat-label>
+                  <mat-select [(ngModel)]="offer.currency" name="offer-type" placeholder="currency" required>
+                    <mat-option *ngFor="let cur of currencies" [value]="cur">{{cur.name}} ({{cur.code}})</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-6" appearance="fill">
+                  <mat-label>Price</mat-label>
+                  <span class="d-flex">
+                    <span *ngIf="offer.price" matTextPrefix class="mr-1" required>{{offer.currency.symbol}}</span>
+                    <input matInput type="number" placeholder="0.00" [(ngModel)]="offer.price">
+                  </span>
+                </mat-form-field>
+              </div>
+              <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Override Price<span class="kb-tag kb-info-tag ml-1">Optional</span></mat-label>
+                <span class="d-flex">
+                  <span *ngIf="offer.override_price" matTextPrefix class="mr-1">{{offer.currency.symbol}}</span>
+                  <input matInput type="number" placeholder="0.00" [(ngModel)]="offer.override_price">
+                </span>
+                <mat-hint>Override price will be used to display on checkout instead of the actual price</mat-hint>
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngIf="offer.payment_type == 'recurring'">
+              <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-label>Subscription Id</mat-label>
+                <input matInput type="text" placeholder="Add your subscription id" [(ngModel)]="offer.subscription_id" required>
+                <mat-hint>This will bind the offer with your stripe subscription product</mat-hint>
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
+          <ng-template #notConnected>
+            <div>
+              <h6 class="kb-danger"><i class="fa fa-exclamation-circle mr-2"></i>Please set up payment gateway to access 
+                {{offer.payment_type == 'onetime' ? 'One Time' : 'Recurring'}} offer</h6>
+              <button mat-raised-button color="accent" (click)="_general.redirectLink('/sales/payment')">
+                Payment Integration<i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></button>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+      <div class="kb-offer-card rounded px-3 pt-3 mb-4">
+        <h6>Products</h6>
+        <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterProductData($event)">
+          <mat-label>Select products</mat-label>
+          <mat-chip-list #chipList aria-label="Product selection">
+            <mat-chip
+              *ngFor="let data of selectedProducts; index as i"
+              (removed)="removeSelectedProduct(i)">
+              {{ data?.name }}
+              <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-list>
+          <input matInput
+            type="text"
+            #searchChipInp
+            placeholder="Select multiple products"
+            (input)="filterProductData($event)"
+            [matAutocomplete]="listAuto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            class="w-100">
+          <mat-autocomplete
+            #listAuto="matAutocomplete"
+            (optionSelected)="addSelectedProduct($event, searchChipInp)">
+            <mat-option
+              *ngFor="let option of filteredProducts"
+              [value]="option" [disabled]="isProductDisabled(selectedProducts, option.id)">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="kb-offer-card rounded p-3">
+        <h6>Checkout</h6>
+        <div class="kb-checkout-img rounded my-3" [ngStyle]= "{'background-image':'url('+
+        _image.uploadImgPath+_general.getSSPath('checkout-'+offer.uniqueid)+'), 
+          url('+_image.uploadImgPath+'webpage_thumbnail.jpg'+')'}">
+        </div>
+        <div class="text-right">
+          <button mat-raised-button color="accent" class="mr-3">
+            Preview <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></button>
+          <button mat-raised-button color="primary">
+            Edit <i class="far fa-edit ml-1"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

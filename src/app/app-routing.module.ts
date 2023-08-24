@@ -205,11 +205,11 @@ const routes: Routes = [
   // sales 
   { path: 'sales', component: SalesComponent, 
   children: [
-    { path: '', component:  ProductsComponent, canActivate: [AuthGuard] },
-    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+    { path: '', component:  OffersComponent, canActivate: [AuthGuard] },
     { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
-    { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
     { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
+    { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },

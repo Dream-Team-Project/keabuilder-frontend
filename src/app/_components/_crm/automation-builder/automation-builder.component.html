@@ -255,7 +255,7 @@
         </div>
         <div>
             <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-            <button mat-button mat-dialog-close cdkFocusInitial (click)="addTrigger()" color="primary">{{trigger.update
+            <button mat-button cdkFocusInitial (click)="addTrigger()" color="primary">{{trigger.update
                 ? 'Update' : 'Add'}}</button>
         </div>
     </div>
@@ -552,7 +552,7 @@
         </div>
         <div>
             <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-            <button mat-button mat-dialog-close cdkFocusInitial (click)="addAction()" color="primary">{{action.update ?
+            <button mat-button cdkFocusInitial (click)="addAction()" color="primary">{{action.update ?
                 'Update' : 'Add'}}</button>
         </div>
     </div>

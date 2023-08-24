@@ -13,6 +13,7 @@ export class MailerService {
   sendmailApi = './api/sendmail';
   sendmailcampaignApi = './api/sendmailcampaign';
   sendmailformApi = './api/sendmailform';
+  userfeedbackApi = './api/addfeedback';
   
 
   constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {  this.uuid = this.tokenStorage.getUser().uniqueid;}
@@ -28,6 +29,11 @@ export class MailerService {
   sendmailform(maildata:any) {
     maildata.user_id=this.uuid;
     return this.http.post(this.sendmailformApi, maildata)
+    .pipe(catchError(this.errorHandler));
+  }
+  adduserfeedback(data:any) {
+    data.user_id = this.uuid;
+    return this.http.post(this.userfeedbackApi, data)
     .pipe(catchError(this.errorHandler));
   }
 

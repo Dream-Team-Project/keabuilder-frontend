@@ -67,8 +67,7 @@ export class CrmContactComponent implements OnInit {
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.contact.uniqueid = params.get('uniqueid');
-    });    
-   
+    });   
   }
 
   ngOnInit(): void {
@@ -226,7 +225,6 @@ export class CrmContactComponent implements OnInit {
   filterListData(event:any) {
     var value = event ? event.target.value : '';
     this.filteredOptions.lists = this.lists?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
-   
   }
 
   addSelectedList(event:any, searchListInp:any): void {
