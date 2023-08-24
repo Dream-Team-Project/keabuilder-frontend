@@ -135,7 +135,7 @@ export class CrmContactComponent implements OnInit {
         this.contactFieldJSON = this.contactFields.map((cf:any) => {
           return  {id: cf.id, value: cf.value};
         });
-        console.log(this.contactFieldJSON);
+        // console.log(this.contactFieldJSON);
       }
     })
    

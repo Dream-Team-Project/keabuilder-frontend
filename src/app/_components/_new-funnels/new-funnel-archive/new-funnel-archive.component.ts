@@ -39,7 +39,7 @@ export class NewFunnelArchiveComponent implements OnInit {
             private websiteService: WebsiteService,
             public _general: GeneralService,
             ) { 
-    
+             
   }
 
   ngOnInit(): void {
@@ -84,16 +84,16 @@ export class NewFunnelArchiveComponent implements OnInit {
     var data = {id:row.id,type:type, password:'', funnelid:row.uniqueid};
 
     if(type=="restore"){
-
+      this.searching=true;
       this.funnelService.restoredeletefunnel(data).subscribe({
         next: data => {
-          console.log(data);
+          // console.log(data);
           if(data.success==1){
 
             data.data.forEach((element:any) => {
               this.draftpublish('1', element.page_path, row.id);
             });
-
+            this.searching=false;
             this.applykbfilter();
 
           }
@@ -133,8 +133,9 @@ export class NewFunnelArchiveComponent implements OnInit {
                   }
                 });
                 this.dialog.closeAll();
+              
             }
-
+            this.searching=false;
             this.applykbfilter();
 
   

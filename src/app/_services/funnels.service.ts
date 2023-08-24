@@ -16,6 +16,9 @@ export class FunnelService {
   uniquestepId:any;
   uuid:any = '';
   funnelname:any = '';
+  funnel_id:any;
+  step_id:any;
+  funnel:any;
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
@@ -41,7 +44,10 @@ export class FunnelService {
   getSingleFunnelpage(uniqueid:string): Observable<any> {
     return this.http.get('./api/getsinglefunnelstep/'+this.uuid+'/'+uniqueid);
   }
-
+  getSingleFunnelpages(obj:any): Observable<any> {
+    obj.user_id=this.uuid;
+    return this.http.post('./api/getsinglefunnelsteps',obj);
+  }
   setfunnelstep(id:string):Observable<any> {
     return this.http.post("./api/selectedtemplate/"+this.uuid, {
       id
@@ -93,7 +99,10 @@ export class FunnelService {
       which
     }, httpOptions);
   }
-
+  
+  updatesteppath(obj:any):Observable<any> {
+    return this.http.post("./api/updatesteppath/"+this.uuid, obj, httpOptions);
+  }
   getfunnelcontacts(id:string, showing:string, steps:string):Observable<any> {
     return this.http.post("./api/selectfunnelcontacts/"+this.uuid, {
       id,
@@ -205,7 +214,10 @@ export class FunnelService {
     data.user_id=this.uuid;
     return this.http.post("./api/searchqueryFunnel",data, httpOptions);
   }
-
+  searchqueryFunnelsteps(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("./api/searchqueryFunnelsteps",data, httpOptions);
+  }
   shortbypaginatorfunnnel(data:any):Observable<any> {
     return this.http.post("./api/shortbypaginatorfunnel/"+this.uuid, {
       data

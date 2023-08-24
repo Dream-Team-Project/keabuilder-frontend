@@ -30,6 +30,12 @@ export class NewFunnelsComponent implements OnInit {
   pageurl = '';
   colortheme = false;
   badgecolor = '';
+  mydomain = '';
+  selstatusshow = 'all';
+  searching = false;
+  selfunnelid = '';
+  dupfunnelname = '';
+  funnelarchid = '';
 
   // MatPaginator Inputs
   length = 100;
@@ -39,13 +45,7 @@ export class NewFunnelsComponent implements OnInit {
   // MatPaginator Output
   pageEvent!: PageEvent;
 
-  mydomain = '';
-  selstatusshow = 'all';
-  searching = false;
-  selfunnelid = '';
-  dupfunnelname = '';
-  funnelarchid = '';
-
+  
   userFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3),
@@ -85,7 +85,9 @@ export class NewFunnelsComponent implements OnInit {
     private _file: FileUploadService,
     private websiteService: WebsiteService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit(): void {
     this.showfunnels();
@@ -112,6 +114,8 @@ export class NewFunnelsComponent implements OnInit {
       this.funnelService.makefunnelsettings(obj).subscribe({
         next: (data) => {
           if (type == 'edit') {
+            this.funnelService.funnel_id=uniqueid;
+            this.funnelService.step_id=id;
             this.router.navigate(
               ['/funnels/' + uniqueid + '/steps/' + data.data[0].uniqueid],
               { relativeTo: this.route }
@@ -167,7 +171,7 @@ export class NewFunnelsComponent implements OnInit {
         this.funnelService.makefunnelstepduplicate(obj).subscribe({
           next: (data) => {
             // console.log(data);
-            this.dialog.closeAll();
+            
             if (data.exist == 1) {
               this.searching = false;
               this._general.openSnackBar(
@@ -178,6 +182,7 @@ export class NewFunnelsComponent implements OnInit {
                 'top'
               );
             } else {
+
               if (data.success == 1) {
                 this._file.createuserlogofavi(data.uniqueid).subscribe((e) => {
                   // console.log(e);
@@ -209,6 +214,17 @@ export class NewFunnelsComponent implements OnInit {
                       this.searching = false;
                     },
                   });
+                  this.dialog.closeAll();
+              }
+              else{
+                this._general.openSnackBar(
+                  true,
+                  data?.message,
+                  'Ok',
+                  'center',
+                  'top'
+                );
+                this.searching = false;
               }
             }
           },
@@ -576,13 +592,13 @@ export class NewFunnelsComponent implements OnInit {
     if (this.newfunnelid != '') {
       // console.log(page);
       var getvl = 'pages';
-      // var newpath = page.page_path+'-'+this.makeid(20);
+      var newpath = page.page_path+'-'+this.makeid(20);
 
       var dtobj = {
         type: this.actionname,
         newfunnelid: this.newfunnelid,
         uniqueid: page.uniqueid,
-        newpath: page.page_path,
+        newpath: newpath,
       };
       this.funnelService.movecopyfunnel(dtobj).subscribe({
         next: (data) => {
@@ -718,6 +734,7 @@ export class NewFunnelsComponent implements OnInit {
                 'top'
               );
             } else {
+              if(data.success){
               this.createwebsitefolder().then((resp) => {
                 // console.log(resp);
                 this.savepage().then((resp1) => {
@@ -749,6 +766,18 @@ export class NewFunnelsComponent implements OnInit {
                     });
                 });
               });
+            }
+              else{
+                this._general.openSnackBar(
+                  true,
+                  data?.message,
+                  'Ok',
+                  'center',
+                  'top'
+                );
+                this.searching = false;
+                this.dialog.closeAll();
+              }
             }
           },
           error: (err) => {

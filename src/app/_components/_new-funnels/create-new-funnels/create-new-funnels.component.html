@@ -1,0 +1,12 @@
+<div class="container-fluid mb-4" *ngIf="fetch">
+    <div class="row">
+      <div class="col-md-12">
+        <button mat-raised-button class="mr-2" [routerLink]="['/funnels/all']"><i class="fa-solid fa-angle-left" aria-hidden="true"></i> Back</button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/steps/'+this.funnelService.uniquestepId]" routerLinkActive="active" ><i class="fa fa-filter" aria-hidden="true"></i> Steps</button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/settings']" routerLinkActive="active" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
+        <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/archive']" routerLinkActive="active" ><i class="fas fa-archive" aria-hidden="true"></i> Archived Steps</button>
+      </div>
+    </div>
+  </div>
+<router-outlet></router-outlet>
+

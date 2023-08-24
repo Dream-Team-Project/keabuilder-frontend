@@ -454,7 +454,7 @@
               >
                 <div class="keatopstep" [attr.data-border]="funnelstep.color">
                   <div class="keabuilder-item is-moving row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                       <h6 class="mb-0 pb-0">{{ funnelstep.page_name }}</h6>
                       <div
                         class="keabuilder-due-date mt-0 pt-0"
@@ -474,7 +474,7 @@
                                                 class="font-size-small"><span class="colr">{{funnelstep.variation}}</span></span>
                                         </div> -->
                     <div
-                      class="col-sm-2"
+                      class="col-sm-5"
                       matTooltip="Step Type"
                       matTooltipPosition="above"
                     >
@@ -486,7 +486,7 @@
                         }}</span></span
                       >
                     </div>
-                    <div
+                    <!-- <div
                       class="col-sm-5"
                       matTooltip="Tags"
                       matTooltipPosition="above"
@@ -499,16 +499,71 @@
                           >
                         </span>
                       </span>
-                    </div>
-                    <div class="col-sm-1 text-right">
-                      <button
-                        mat-icon-button
-                        [matMenuTriggerFor]="menu"
-                        matTooltip="Settings"
+                    </div> -->
+                    <div class="col-sm-2 d-flex justify-content-between">
+                      <i
+                      mat-ripple 
+                        matTooltip="View Step"
                         matTooltipPosition="above"
-                      >
-                        <i class="fa-solid fa-gear"></i>
-                      </button>
+                        (click)="
+                        viewpagestep(
+                          funnel.domain,
+                          funnel.subdomain,
+                          funnelstep.page_path
+                        )
+                      "
+                      class="fas fa-eye px-4 kb-table-action-icon rounded" aria-hidden="true">
+                  </i>
+                      <i
+                      mat-ripple 
+                        matTooltip="Edit Step"
+                        matTooltipPosition="above"
+                        (click)="
+                            funnelstepedit(
+                              funnel.uniqueid,
+                              funnelstep.uniqueid,
+                              'edit',
+                              copystepurldialog
+                            )
+                          "
+                      class="fas fa-pencil-alt px-4 kb-table-action-icon rounded" aria-hidden="true">
+                  </i>
+                  <!-- <i
+                      mat-ripple 
+                        matTooltip="Copy Step Link"
+                        matTooltipPosition="above"
+                        (click)="
+                        funnelstepedit(
+                          funnel,
+                          funnelstep,
+                          'copy',
+                          copystepurldialog
+                        )
+                      "
+                      class="fas fa-link px-4 kb-table-action-icon rounded" aria-hidden="true">
+                  </i> -->
+                  <i
+                      mat-ripple 
+                        matTooltip="Step Duplicate"
+                        matTooltipPosition="above"
+                        (click)="
+                            funnelstepedit(
+                              funnelstep.page_path,
+                              funnelstep.uniqueid,
+                              'duplicate',
+                              copystepurldialog
+                            )
+                      "
+                      class="fa fa-copy px-4 kb-table-action-icon rounded" aria-hidden="true">
+                  </i>
+                      <i
+                      mat-ripple
+                        [matMenuTriggerFor]="menu"
+                        matTooltip="Step Settings"
+                        matTooltipPosition="above"
+                      class="fa-solid fa-gear px-4 kb-table-action-icon rounded">
+                    </i>
+                      
                       <mat-menu #menu="matMenu">
                         <button
                           mat-menu-item
