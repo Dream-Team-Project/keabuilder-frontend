@@ -60,21 +60,6 @@ export class DomainComponent implements OnInit {
     this.dialog.open(this.adddialog);
   }
 
-  // openSidebar(){
-  //   this.sidebar.open = true;
-  //   this.sidebar.anim.open = true;
-  //   setTimeout((e:any)=>{
-  //     this.sidebar.anim.open = false;
-  //   },this.sidebar.animtime)
-  // }
-
-  // hidepopupsidebar(){
-  //   this.sidebar.anim.close = true;
-  //   setTimeout((e:any)=>{
-  //     this.sidebar.anim.close = false;
-  //     this.sidebar.open = false;
-  //   },this.sidebar.animtime)
-  // }
 
   connectdomain(){
     // console.log(this.gendomainname);
@@ -153,6 +138,7 @@ export class DomainComponent implements OnInit {
                 // console.log(data);
                 if(data.success==true){
                   this.alldomainsdata[0].verifyssl=1;
+                  this.dialog.closeAll();
                   this._general.openSnackBar(false,'SSL Verified Successfully. Your domain is live now!', 'OK','center','top');
                 }
               }
