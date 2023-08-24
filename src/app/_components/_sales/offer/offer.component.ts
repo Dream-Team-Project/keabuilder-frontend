@@ -101,7 +101,7 @@ export class OfferComponent implements OnInit {
           this.offer.override_price=resp?.data[0]?.override_price;
         }
         else if(resp.data[0].email_type == 'template') {
-        this.selectedEmail.name=resp?.data[0]?.email[0]?.name;
+        this.selectedEmail=resp?.data[0]?.email[0].name;
         this.selectedEmail.uniqueid=resp?.data[0]?.email;
         }
         else if(resp.data[0].email_type =='custom') {
