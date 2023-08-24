@@ -5,8 +5,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { ImageService } from 'src/app/_services/image.service';
-import { ListService } from '../../../_services/_crm/list.service';
-import { TagService } from '../../../_services/_crm/tag.service';
+import { ListService } from 'src/app/_services/_crm/list.service';
+import { TagService } from 'src/app/_services/_crm/tag.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({

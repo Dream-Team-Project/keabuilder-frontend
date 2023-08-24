@@ -43,9 +43,7 @@ export class NewFunnelsComponent implements OnInit {
   pageSizeOptions: number[] = [8, 16, 24, 100];
 
   // MatPaginator Output
-  pageEvent!: PageEvent;
-
-  
+  pageEvent!: PageEvent;  
   userFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3),

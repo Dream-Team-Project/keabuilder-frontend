@@ -54,9 +54,8 @@
         Name must be at least <strong>3</strong> characters
       </mat-error>
     </mat-form-field>
-
     <mat-form-field class="kb-full-width" appearance="fill">
-      <mat-label>Step Name</mat-label>
+      <mat-label>First Step Name</mat-label>
       <input
         type="text"
         matInput
@@ -74,7 +73,6 @@
         Step Name must be at least <strong>3</strong> characters
       </mat-error>
     </mat-form-field>
-
     <mat-form-field appearance="fill" class="kb-full-width">
       <mat-label>Step Type</mat-label>
       <mat-select name="funneltype" [(ngModel)]="form.funneltype" required>
@@ -85,7 +83,6 @@
         <mat-option value="thankyou">Thank you Page</mat-option>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field appearance="fill" class="kb-full-width">
       <mat-label>Badge Color (Optional)</mat-label>
       <mat-select name="badgecolor" [(ngModel)]="form.badgecolor">
@@ -98,7 +95,6 @@
         <mat-option value="danger">Danger</mat-option>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label> Subdomain</mat-label>
       <input
@@ -301,7 +297,6 @@
     </button>
   </div>
 </ng-template>
-
 <div id="funnelcontainer">
   <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
   <div class="container-fluid">
@@ -318,7 +313,6 @@
         />
         <i class="fa-solid fa-magnifying-glass"></i>
       </mat-form-field>
-
       <mat-form-field appearance="fill" class="col-md-2">
         <mat-label>Sort By</mat-label>
         <mat-select
@@ -335,13 +329,11 @@
         <mat-option [value]="'created_at ASC'">ASC By Created</mat-option>
         </mat-select>
       </mat-form-field>
-
       <div class="col-md-4 text-right mt-2">
         <button
           mat-raised-button
           color="primary"
-          (click)="openDialog(adddialog)"
-        >
+          (click)="openDialog(adddialog)">
           Create Funnel <i class="far fas fa-plus"></i>
         </button>
       </div>

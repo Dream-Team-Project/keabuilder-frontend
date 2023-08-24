@@ -127,6 +127,7 @@ import { PaymentComponent } from './_components/_sales/payment/payment.component
 import { ProductsComponent } from './_components/_sales/products/products.component';
 import { OffersComponent } from './_components/_sales/offers/offers.component';
 import { OfferComponent } from './_components/_sales/offer/offer.component';
+import { CheckoutComponent } from './_components/_sales/checkout/checkout.component';
 // sales
 
 // account-setting
@@ -226,6 +227,7 @@ canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
   { path: 'sales/offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
+  { path: 'builder/checkout/:offer_id', component: CheckoutComponent, canActivate: [AuthGuard] },
  
   // sales 
  
@@ -454,6 +456,7 @@ export const RoutingComponents =
     ProductsComponent,
     OffersComponent,
     OfferComponent,
+    CheckoutComponent,
     DomainComponent,
     AccountComponent,
     BillingComponent, 
