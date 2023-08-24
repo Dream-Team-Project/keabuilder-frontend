@@ -117,18 +117,26 @@ main {
     min-width: 460px;
 }
 
-::ng-deep .mat-tab-labels .mat-tab-label {
+::ng-deep .mat-tab-labels .mat-tab-label, ::ng-deep .mat-button-toggle {
     color: var(--secondary-color);
-    font-size: 14px!important;
-    line-height: 40px;
-    height: 40px;
     transition: background .2s ease, transform .2s ease, opacity .2s;
     min-width: auto;
     -webkit-user-select: none;
     user-select: none;
-    transform: translateY(1px);
     font-weight: 500;
     opacity: 1;
+}
+
+::ng-deep .mat-tab-labels .mat-tab-label {
+    font-size: 15px;
+    line-height: 42px;
+    height: 42px;
+}
+
+::ng-deep .mat-button-toggle {
+    font-size: 13px;
+    line-height: 36px;
+    height: 36px;
 }
 
 ::ng-deep .mat-tab-body-wrapper .mat-tab-body {
@@ -137,17 +145,38 @@ main {
 
 ::ng-deep .mat-dialog-actions .mat-button.mat-primary, ::ng-deep .mat-dialog-title,
 ::ng-deep .mat-tab-labels .mat-tab-label-active .mat-tab-label-content, 
-::ng-deep .mat-tab-labels .mat-tab-label:hover .mat-tab-label-content {
+::ng-deep .mat-tab-labels .mat-tab-label:hover .mat-tab-label-content,
+::ng-deep .mat-button-toggle-checked button {
     color: var(--primary-color);
 }
 
-::ng-deep .mat-tab-labels .mat-tab-label:hover {
-    transform: translateY(0);
+::ng-deep .mat-tab-labels .mat-tab-label:hover, ::ng-deep .mat-button-toggle:hover, ::ng-deep .mat-button-toggle-checked {
+    color: var(--primary-color);
     background-color: rgb(217 201 153 / 30%)!important;
 }
 
 ::ng-deep .mat-menu-panel {
     min-height: 40px!important;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+    line-height: 36px!important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard {
+    background: var(--kb-gray);
+    border: 1px solid #e2e2e2;
+}
+
+::ng-deep .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+    border: none;
+}
+
+::ng-deep .mat-option:hover:not(.mat-option-disabled), 
+::ng-deep .mat-option:focus:not(.mat-option-disabled),
+::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+    background-color: var(--kb-gray);
+    color: var(--primary-color);
 }
 
 @media only screen and (max-width:500px){
