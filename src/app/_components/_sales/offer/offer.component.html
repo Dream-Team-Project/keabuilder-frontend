@@ -68,11 +68,11 @@
               (click)="resetEmail()">
               <mat-icon>close</mat-icon>
             </button>
-            <mat-autocomplete #emailAuto="matAutocomplete">
+            <mat-autocomplete #emailAuto="matAutocomplete"
+              (optionSelected)="selectEmail($event)">
               <mat-option
-              (optionSelected)="selectEmail($event)"
                 *ngFor="let option of filteredEmails"
-                [value]="option.name" [disabled]="filteredEmails.includes(option.id)">
+                [value]="option" [disabled]="filteredEmails.includes(option.id)">
                 {{ option.name }}
               </mat-option>
             </mat-autocomplete>
