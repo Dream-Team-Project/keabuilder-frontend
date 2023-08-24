@@ -90,9 +90,10 @@ export class OfferComponent implements OnInit {
 
   fetchOffer() {
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
+      console.log(resp);
       if(resp.success) {
         this.offer = resp.data[0];
-        console.log(resp.data[0])
+        console.log(this.offer.name);
         this.selectedProducts=resp?.data[0]?.temp_products;
         if(resp.data[0].payment_type =='recurring') this.offer.subscription_id=resp.data[0]?.subscription_id;
         else if(resp.data[0].payment_type =='onetime') {

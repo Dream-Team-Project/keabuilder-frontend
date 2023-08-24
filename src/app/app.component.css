@@ -133,10 +133,10 @@ main {
     height: 42px;
 }
 
-::ng-deep .mat-button-toggle {
+::ng-deep .mat-button-toggle, ::ng-deep .mat-button-toggle .mat-button-toggle-label-content {
     font-size: 13px;
-    line-height: 36px;
-    height: 36px;
+    line-height: 34px!important;
+    height: 34px;
 }
 
 ::ng-deep .mat-tab-body-wrapper .mat-tab-body {
@@ -157,10 +157,6 @@ main {
 
 ::ng-deep .mat-menu-panel {
     min-height: 40px!important;
-}
-
-::ng-deep .mat-button-toggle-label-content {
-    line-height: 36px!important;
 }
 
 ::ng-deep .mat-button-toggle-appearance-standard {
