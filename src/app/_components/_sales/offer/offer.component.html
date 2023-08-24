@@ -68,11 +68,11 @@
               (click)="resetEmail()">
               <mat-icon>close</mat-icon>
             </button>
-            <mat-autocomplete #emailAuto="matAutocomplete"
-              (optionSelected)="selectEmail($event)">
+            <mat-autocomplete #emailAuto="matAutocomplete">
               <mat-option
+              (optionSelected)="selectEmail($event)"
                 *ngFor="let option of filteredEmails"
-                [value]="option" [disabled]="selectedEmail.id == option.id">
+                [value]="option.name" [disabled]="filteredEmails.includes(option.id)">
                 {{ option.name }}
               </mat-option>
             </mat-autocomplete>
@@ -165,7 +165,7 @@
             (optionSelected)="addSelectedProduct($event, searchChipInp)">
             <mat-option
               *ngFor="let option of filteredProducts"
-              [value]="option" [disabled]="isProductDisabled(selectedProducts, option.id)">
+              [value]="option" [disabled]="filteredProducts.includes(option?.id)">
               {{ option.name }}
             </mat-option>
           </mat-autocomplete>

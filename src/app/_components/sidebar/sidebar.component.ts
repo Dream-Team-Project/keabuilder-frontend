@@ -265,7 +265,8 @@ export class SidebarComponent implements OnInit {
           title: 'Settings'
         },
       ]
-    },{
+    },
+    {
       0:true,
       routerlink: '/sales',
       img: 'payment.gif',
@@ -273,17 +274,23 @@ export class SidebarComponent implements OnInit {
       title: 'Sales',
       submenu:[{
         0:true,
+        routerlink: '/sales/offers',
+        img: 'payment.gif',
+        icon: 'fa fa-percentage',
+        title: 'Offers'
+      },
+        {
+        0:true,
         routerlink: '/sales/products',
         img: 'payment.gif',
         icon: 'fa fa-product-hunt',
         title: 'Products'
-      },
-        {
+      },{
         0:true,
-        routerlink: '/sales/offers',
+        routerlink: '/sales/payment',
         img: 'payment.gif',
-        icon: 'fa fa-percentage',
-        title: 'Checkout'
+        icon: 'fa fa-dollar-sign',
+        title: 'Payments'
       },
       {
         0:true,
@@ -291,13 +298,6 @@ export class SidebarComponent implements OnInit {
         img: 'payment.gif',
         icon: 'fa fa-file-alt',
         title: 'Coupons'
-      },
-      {
-        0:true,
-        routerlink: '/sales/payment',
-        img: 'payment.gif',
-        icon: 'fa fa-dollar-sign',
-        title: 'Payments'
       },
       {
         0:true,

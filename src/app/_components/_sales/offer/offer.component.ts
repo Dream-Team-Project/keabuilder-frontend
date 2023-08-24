@@ -26,7 +26,7 @@ export class OfferComponent implements OnInit {
   }
   emails:Array<any> = [];
   selectedEmail:any = {
-    id: '',
+    uniqueid: '',
     name: ''
   };
   filteredEmails:Array<any> = [];
@@ -92,22 +92,54 @@ export class OfferComponent implements OnInit {
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
       if(resp.success) {
         this.offer = resp.data[0];
+        console.log(resp.data[0])
+        this.selectedProducts=resp?.data[0]?.temp_products;
+        if(resp.data[0].payment_type =='recurring') this.offer.subscription_id=resp.data[0]?.subscription_id;
+        else if(resp.data[0].payment_type =='onetime') {
+          this.offer.currency=resp.data[0].currency;
+          this.offer.price=resp.data[0].price;
+          this.offer.override_price=resp?.data[0]?.override_price;
+        }
+        else if(resp.data[0].email_type == 'template') {
+        this.selectedEmail.name=resp?.data[0]?.email[0]?.name;
+        this.selectedEmail.uniqueid=resp?.data[0]?.email;
+        }
+        else if(resp.data[0].email_type =='custom') {
+          this.offer.email_subject=resp.data[0].email_subject;
+          this.offer.email_content=resp.data[0].email_content;
+          }
       }
     });
   }
 
   updateOffer() {
     this.offer.custom_email = JSON.stringify(this.customEmail);
-    console.log(this.selectedEmail);
-    console.log(this.selectedProducts);
-    this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.id).join(',');
-    this.offer.email_id = this.selectedEmail.id;
-    console.log(this.offer);
-    return false;
+    // console.log(this.selectedEmail);
+    // console.log(this.selectedProducts);
+    this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.uniqueid).join(',');
+    this.offer.email_id = this.selectedEmail.uniqueid;
+    // console.log(this.offer);
+   
+    if(this.offer.name){
+      if((this.offer.email_type == 'none') || (this.offer.email_type =='template' && this.offer.email_id) || (this.offer.email_type =='custom' && this.offer.email_subject && this.offer.email_content)){
+        if((this.offer.payment_type =='free') || (this.offer.payment_type == 'recurring' && this.offer.subscription_id) || (this.offer.payment_type == 'onetime' && this.offer.currency && this.offer.price)){
+          // if(this.offer.product_id){
     this._offer.updateoffer(this.offer).subscribe((resp:any) => {
       if(resp.success) this.fetchOffer();
       this._general.openSnackBar(!resp.success, resp?.message, 'OK', 'center', 'top');
     })
+  // }else{
+  //   this._general.openSnackBar(true, 'Choose a product first', 'OK', 'center', 'top');
+  // }
+  }else{
+    this._general.openSnackBar(true, 'Pricing details required', 'OK', 'center', 'top');
+  }
+  }else{
+    this._general.openSnackBar(true, 'Email details required', 'OK', 'center', 'top');
+  }
+  }else{
+    this._general.openSnackBar(true, 'Offer name required', 'OK', 'center', 'top');
+  }
   }
 
   deleteoffer() {
@@ -142,8 +174,8 @@ export class OfferComponent implements OnInit {
     this.selectedProducts.splice(index, 1);
   }
 
-  isProductDisabled(values:any, id:any) {
-      let vArr = values.filter((v:any) => v.id == id);
+  isProductDisabled(values:any, uniqueid:any) {
+      let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
       return vArr.length != 0;
   }
 
@@ -161,15 +193,15 @@ export class OfferComponent implements OnInit {
 
   filterEmailData() {
     var value = this.selectedEmail.name;
-    console.log(this.emails);
+    // console.log(this.emails);
     this.filteredEmails = this.emails?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
-    console.log(this.filteredEmails);
+    // console.log(this.filteredEmails);
   }
 
   selectEmail(event:any): void {
     let value = event.option.value;
     this.selectedEmail.name = value.name;
-    this.selectedEmail.id = value.id;
+    this.selectedEmail.uniqueid = value.uniqueid;
   }
 
   resetEmail() {
