@@ -53,9 +53,8 @@ export class OfferComponent implements OnInit {
     {name: 'None', value: 'none'}
   ]
   offerCurrency = this.currencies[0];
-  usage:string = `To use this offer, kindly proceed to the funnel step in the funnels, 
-  where you'll find the 'Checkout' element associated with the offer's name or 
-  the 'Button' element, choose the 'Upsell' button and select the offer by name.`;
+  usage:string = `To use this offer, go to the funnel step in the funnels and 
+  select the 'Checkout' element or the 'Upsell' button to choose the offer by name.`;
 
   constructor(private _route: ActivatedRoute, 
     private _router:Router,
