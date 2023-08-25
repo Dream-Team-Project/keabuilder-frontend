@@ -14,6 +14,7 @@ funnel_id:any;
 funnel:any;
 funnel_step:any;
 fetch=false;
+
   constructor(private route: ActivatedRoute,
     public funnelService: FunnelService,
     public _general: GeneralService,) {
@@ -41,7 +42,7 @@ fetch=false;
   fetchsinglefunnelsteps(){
     this.funnelService.getSingleFunnelpages({funnelid:this.funnel_id,archived:'0'}).subscribe((data:any)=>{
       this.funnel_step=data?.data[0];
-      this.funnelService.uniquestepId=data?.data[0].uniqueid;
+      this.funnelService.uniquestepId=data?.data[0]?.uniqueid;
       // console.log(this.funnel_step)
       this.fetch=true;
     })

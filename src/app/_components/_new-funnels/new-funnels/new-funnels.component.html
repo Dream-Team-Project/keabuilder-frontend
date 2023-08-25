@@ -349,14 +349,14 @@
             >
               <mat-expansion-panel-header>
                 <mat-panel-title class="row">
-                  <div class="keabuilder-title-board line-ellipsis col-md-4">
+                  <div class="col-md-4">
                     <span class="fnt">{{ funnel.name | titlecase }}</span>
-                    <input
+                    <!-- <input
                       type="text"
                       [(ngModel)]="funnel.name"
                       name="funnelname"
                       (blur)="changestepnamesoutside(funnel.id, funnel.name)"
-                    />
+                    /> -->
                   </div>
                   <div class="col-md-2">
                     <span>Steps: </span
@@ -389,7 +389,7 @@
                    
                     <i
                     mat-ripple
-                      matTooltip="Copy"
+                      matTooltip="Copy Link"
                       matTooltipPosition="above"
                       (click)="
                         funneledit(
@@ -419,7 +419,7 @@
                    
                     <i
                     mat-ripple
-                      matTooltip="Delete"
+                      matTooltip="Archive"
                       matTooltipPosition="above"
                       class="text-danger"
                       (click)="

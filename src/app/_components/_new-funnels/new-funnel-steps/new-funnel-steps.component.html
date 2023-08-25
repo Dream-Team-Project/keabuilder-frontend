@@ -312,7 +312,7 @@
   <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
     <div class="row">
-      <mat-form-field appearance="fill" class="col-6 pr-2">
+      <!-- <mat-form-field appearance="fill" class="col-6 pr-2">
         <mat-label>Search Steps</mat-label>
         <input
           matInput
@@ -336,171 +336,53 @@
           <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
           <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
         </mat-select>
-      </mat-form-field>
-      <div class="col-md-4 mt-2 text-right">
+      </mat-form-field> -->
+     
+      <div class="col-md-12">
         <button
           mat-raised-button
           color="primary"
           (click)="openDialog(adddialog, 'addstep')"
-          class="mx-3"
+         
         >
           Add Step <i class="fas fa-plus"></i>
         </button>
       </div>
-    </div>
-    <!-- <div
-      [class.px-3]="toggleview"
-      class="row"
-      *ngIf="steps.length != 0; else nodata"
-    >
-      <div
-        [class]="toggleview ? 'col-md-12' : 'col-md-4'"
-        class="cardpage mt-4"
-        *ngFor="let step of steps"
-      >
-        <div [class.row]="toggleview">
-          <div
-            [style.height]="toggleview ? '150px' : '300px'"
-            [class]="toggleview ? 'col-md-6' : 'col-md-12'"
-            class="p-0"
-          >
-            <div
-              [class.kb-disabled]="step.deleting"
-              class="kb-fitimg"
-              [ngStyle]="{
-                'background-image':
-                  'url(' +
-                  _image.uploadImgPath +
-                  _general.getSSPath('step-' + step.uniqueid) +
-                  '), url(' +
-                  _image.uploadImgPath +
-                  'webpage_thumbnail.jpg' +
-                  ')'
-              }"
-            >
-              <div class="kb-loader" *ngIf="shortwaiting || step.deleting">
-                <div class="kb-loader-shadow"></div>
-                <div class="kb-loader-box"></div>
-              </div>
-            </div>
-          </div>
-          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
-            <div class="row align-items-center p-0 h-100">
-              <div [class.p-0]="!toggleview" class="col-md-12">
-                <div class="kb-title-board line-ellipsis ftsize ">
-                  <span >{{ step.page_name ? step.page_name : ("step" | titlecase) }}</span>
-                  <input
-                    type="text"
-                    #stepname
-                    [value]="step.page_name"
-                    (blur)="rename(step, stepname)"
-                    matTooltip="Edit step Name"
-                    matTooltipPosition="above"
-                  />
-                </div>
-                <p
-                  class="kb-pagedate mt-2 mb-3"
-                  matTooltip="Last Updated"
-                  matTooltipPosition="above"
-                >
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  {{step.created_at | date:'mediumDate'}}
-                </p>
-              </div>
-              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
-                <button
-                (click)="
-                viewpagestep(
-                  funnel.domain,
-                  funnel.subdomain,
-                  step.page_path
-                )
-              "
-                  mat-raised-button
-                  color="accent"
-                  [disabled]="step.deleting"
-                  class="mr-2"
-                >
-                  View <i class="far fa-eye"></i>
-                </button>
-                <button
-                  (click)="_general.redirectToBuilder(step.uniqueid, 'funnel')"
-                  mat-raised-button
-                  color="primary"
-                  [disabled]="step.deleting"
-                >
-                  Edit <i class="fas fa-pencil-alt"></i>
-                </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="ml-2"
-                  [matMenuTriggerFor]="menu"
-                  [disabled]="step.deleting"
-                >
-                  More <i class="fas fa-cog"></i>
-                </button>
-                <mat-menu #menu="matMenu">
-                  (click)="newstep('update',step)"
-                  <button mat-menu-item  (click)="newstep('update',step)" [disabled]="step.deleting">
-                      <i class="far fa-edit pr-2"></i>Quick Edit
-                    </button>
-                  <button
-                    mat-menu-item
-                    (click)="funnelstepedit(
-                              step.page_path,
-                              step.uniqueid,
-                              'duplicate',
-                              copystepurldialog
-                            )
-                          "
-                    [disabled]="step.deleting"
-                  >
-                    <i class="far fa-copy pr-2"></i>Duplicate
-                  </button>
-                  <button
-                    mat-menu-item
-                    class="text-danger"
-                    (click)="
-                    funnelstepedit(
-                      funnel.uniqueid,
-                      step.uniqueid,
-                      'archive',
-                      deletedialog
-                    )
-                  "
-                    [disabled]="step.deleting"
-                  >
-                  <i class="fa fa-trash-alt pr-2"></i> Archive
-                  </button>
-                </mat-menu>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-   
-    <div class="container-fluid" *ngIf="steps.length != 0; else nodata">
-      <div class="row" >
-        <div class="col-md-3 pb-3 pt-3 rightbrder">
-              <div class="Keabuilder-item" (click)="kb_substeps2(step.id)" [class]="step.color" [class.selectedstep]="selectedstep==step.id" *ngFor="let step of steps; index as i;" >
-                <div class="keatitlebox"  [attr.key]="step.id"
+    </div> 
+      <div class="row pt-3" *ngIf="steps.length != 0; else nodata">
+        <div class="col-md-5">
+          <div class="card rightbrder px-4 py-4 h-100">
+              <div class="Keabuilder-item d-flex align-items-center" (click)="kb_substeps2(step.id)" [class]="step.color" [class.selectedstep]="selectedstep==step.id" *ngFor="let step of steps; index as i;" >
+                <div class="col-md-7 d-flex" [attr.key]="step.id"
                 [attr.data-listid]="step.id">
-                  <div class="keabuilder-title-board">
-                    <span>{{ step.page_name }}</span>
-                    <!-- <input type="text" [(ngModel)]="step.page_name" (blur)="changestepnamesoutside(step.id,step.page_name)" > -->
-                  </div>
-                  <div class="kea-selectarea" >
-                    <span class="funneltypesty">{{step.funneltype}}</span>
-                  </div>
-                  <i class="fas fa-grip-lines float-right mt-1"></i>
+                    <span class="col-md-7">{{ step.page_name | titlecase}}</span>
+                    <span class="col-md-5">{{step.funneltype | titlecase}}</span>
                 </div>
-                <div class="btn-group">
-  
-                  <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above">
-                    <i class="fas fa-cog"></i>
-                  </button>
+                <div class="d-flex justify-content-between col-md-5">
+                  <i
+                      mat-ripple 
+                        matTooltip="View Step"
+                        matTooltipPosition="above"
+                        (click)="viewpagestep(funnel.domain,funnel.subdomain,step.page_path)"
+                      class="fas fa-eye px-4 kb-table-action-icon rounded" aria-hidden="true">
+                  </i>
+                  <i
+                  mat-ripple 
+                    matTooltip="Quck Edit Step"
+                    matTooltipPosition="above"
+                    (click)="funnelstepedit(step.page_path, step, 'quickedit',quickeditdialog)"
+                  class="fas fa-pencil-alt px-4 kb-table-action-icon rounded" aria-hidden="true">
+              </i>
+              <i
+              mat-ripple 
+                matTooltip="Step Duplicate"
+                matTooltipPosition="above"
+                (click)="funnelstepedit(step.page_path, step.uniqueid, 'duplicate',copystepurldialog)"
+              class="fa fa-copy px-4 kb-table-action-icon rounded" aria-hidden="true">
+          </i>
+              <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above"
+              class="fa-solid fa-gear px-4 kb-table-action-icon rounded">
+            </i>
                   <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="funnelstepedit(step.page_path, step, 'quickedit',quickeditdialog)">
                       <i class="fas fa-pencil-alt mr-2" ></i> Quick Edit
@@ -556,8 +438,9 @@
                 </div>
               </div>
         </div>
+      </div>
         <!-- col -->
-        <div class="col-md-9">
+        <div class="col-md-7">
           <!-- <div class="kb-templates text-center mt-5">
           <button mat-raised-button (click)="usertemplateselected('start')" class="mt-4">
             <i class="fas fa-plus"></i> Build Funnel With Keabuilder
@@ -569,18 +452,14 @@
             </div>
           </div>
           </div> -->
-          <div class="kb-overview " >
-          <div class="kb-insidebodycard row pb-5">
-            <div class="kb-insidecard col-md-4" >
-              <div class=" kb-internalshadow ">
-                <div class="toast toast-light toast-translucent mr-auto ml-auto pt-2 pb-2" role="alert"
-                  aria-live="assertive" aria-atomic="true">
-                  <div class="toast-header">
+          <div class="card h-100">
+                <div class="border px-4 pt-4 col-md-12 " role="alert">
+                  <!-- <div class="toast-header">
                     <span class="mr-auto toast-title">Main</span>
                     <i class="fas fa-history pr-2"></i>
-                    <!-- <small class="d-sm-block d-none">{{maintime}}</small> -->
-                  </div>
-                  <div class="toast-body yesdeclarewinner kb-webpreviewer "
+                    <small class="d-sm-block d-none">{{maintime}}</small>
+                  </div> -->
+                  <div class="toast-body yesdeclarewinner kb-webpreviewer h-75"
                   [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+getthumbnail + ')'}"
                   >
                   
@@ -591,19 +470,17 @@
                       </a>
                     </div> -->
                   </div>
-                  <div class="toast-header">
-                    <button mat-raised-button color="accent" class="btn-block mr-2" matTooltip="Edit with Keabuilder" matTooltipPosition="above" (click)="usertemplateselected('start')" ><i class="fas fa-pen"></i> Edit Page</button>
+                  <div class="d-flex justify-content-end">
+                    <button mat-raised-button color="accent" class="mr-2" matTooltip="Go To Builder" matTooltipPosition="above" (click)="usertemplateselected('start')" ><i class="fas fa-pen"></i> Edit Page</button>
                     <!-- <button mat-raised-button color="accent" matTooltip="View Step" matTooltipPosition="above" (click)="checkpagesettings('redirect')" class="mr-2"><i class="fas fa-external-link-alt"></i></button> -->
                     <!-- <button mat-raised-button color="accent" matTooltip="Settings" matTooltipPosition="above" (click)="checkpagesettings('settings')" ><i class="fas fa-cog"></i></button> -->
                   </div>
                 </div>
-              </div>
-            </div>
-        </div>
+             
+        <!-- </div> -->
       </div>
       </div>
       </div>
-    </div>
     <ng-template #nodata>
       <div class="row justify-content-center mt-5">
         <div class="col-md-4">
