@@ -30,11 +30,6 @@ export class OfferComponent implements OnInit {
   selectedProducts:Array<any> = [];
   filteredProducts:Array<any> = [];
   isPaymentConnected:boolean = true;
-  paymentTypes = [
-    {name: 'One Time', value: 'onetime'},
-    {name: 'Recurring', value: 'recurring'},
-    {name: 'Free', value: 'free'},
-  ]
   currencies = [
     { name: "United States Dollar", code: "USD", symbol: "$" },
     { name: "Euro", code: "EUR", symbol: "€" },
@@ -47,15 +42,20 @@ export class OfferComponent implements OnInit {
     { name: "Australian Dollar", code: "AUD", symbol: "A$" },
     { name: "Brazilian Real", code: "BRL", symbol: "R$" },
   ];  
+  paymentTypes = [
+    {name: 'One Time', value: 'onetime'},
+    {name: 'Recurring', value: 'recurring'},
+    {name: 'Free', value: 'free'},
+  ]
   emailTypes = [
     {name: 'Custom Email', value: 'custom'},
     {name: 'Email Template', value: 'template'},
     {name: 'None', value: 'none'}
   ]
-  usage:any = {
-    checkout: `To use this offer, kindly proceed to the funnel step in the funnels where you'll find the 'Checkout' element associated with the offer's name.`,
-    upsell: `To use this offer, kindly proceed to the funnel step in the funnels, where you'll find the 'Button' element choose 'Upsell' button and select the offer by name.`,
-  }
+  offerCurrency = this.currencies[0];
+  usage:string = `To use this offer, kindly proceed to the funnel step in the funnels, 
+  where you'll find the 'Checkout' element associated with the offer's name or 
+  the 'Button' element, choose the 'Upsell' button and select the offer by name.`;
 
   constructor(private _route: ActivatedRoute, 
     private _router:Router,
@@ -67,13 +67,13 @@ export class OfferComponent implements OnInit {
     public _image: ImageService) {
     this._route.paramMap.subscribe((params: ParamMap) => {
         this.offer.uniqueid = params.get('uniqueid');
-        this.fetchOffer();
-        this.fetchProducts();
-        this.fetchEmails();
     });   
    }
 
   ngOnInit(): void {
+    this.fetchOffer();
+    this.fetchProducts();
+    this.fetchEmails();
   }
 
   openDialog(templateRef: TemplateRef<any>) {
@@ -85,6 +85,10 @@ export class OfferComponent implements OnInit {
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
       if(resp.success) {
         this.offer = resp.data;
+        if(this.offer.currency) {
+          let cur = JSON.parse(this.offer.currency);
+          this.offerCurrency = this.currencies.filter((c:any) => c.code == cur.code)[0];
+        }
         if(this.offer.product_id && this.offer.offer_products?.length != 0) this.selectedProducts = this.offer.offer_products;
         if(this.offer.email_id && this.offer.template_email) this.selectedEmail = this.offer.template_email.name;
       }
@@ -135,6 +139,10 @@ export class OfferComponent implements OnInit {
       if(resp.success) this._router.navigate(['/sales/offers']);
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
+  }
+
+  currencySelect(event:any) {
+    this.offer.currency = JSON.stringify(event.value);
   }
 
   // start product actions

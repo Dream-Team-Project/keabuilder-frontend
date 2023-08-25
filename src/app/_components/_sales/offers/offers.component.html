@@ -5,20 +5,12 @@
       <mat-error *ngIf="hasError.name">{{hasError.name}}</mat-error>
       <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError.name">
         <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Offer name" [(ngModel)]="offerObj.name" required [minlength]="3">
-      </mat-form-field>
-      <mat-error *ngIf="!offerObj.type && hasError.type">{{hasError.type}}</mat-error>
-      <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="!offerObj.type && hasError.type">
-        <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="offerObj.type" name="offer-type" placeholder="Choose offer type" required>
-          <mat-option value="checkout">Checkout</mat-option>
-          <mat-option value="upsell">Upsell</mat-option>
-        </mat-select>
+        <input matInput type="text" placeholder="Offer name" [(ngModel)]="offerObj.name" required>
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="addoffer()" color="primary" [disabled]="!offerObj.name || !offerObj.type">Add</button>
+        <button mat-button (click)="addoffer()" color="primary" [disabled]="!offerObj.name">Add</button>
     </div>
   </ng-template>
   <!-- add new offer -->
@@ -79,8 +71,10 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Type</th>
-              <th>Last Modified</th>
+              <th>Products</th>
+              <th>Price</th>
+              <th>Sold</th>
+              <th>Revenue</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -90,9 +84,11 @@
                 <span>{{offer.name | titlecase}}</span>
               </td>
               <td [routerLink]="offerLink+offer.uniqueid" class="kb-td-link kb-text-overflow">
-                <span>{{offer.type | titlecase}}</span>
+                <span>{{offer.product_id ? offer.product_id.split(',').length : 0}}</span>
               </td>
-              <td>{{ offer.updated_at | date:'medium' }}</td>
+              <td>{{ offer.payment_type == 'onetime' ? offer.price : ( offer.payment_type == 'recurring' ? 'Subscribed' : 'free' ) }}</td>
+              <td>0</td>
+              <td>{{convertToJSON(offer.currency)?.symbol}}0 {{convertToJSON(offer.currency)?.code}}</td>
               <td>
                 <span class="d-flex">
                   <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>

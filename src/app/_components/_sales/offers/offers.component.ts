@@ -14,13 +14,11 @@ export class OffersComponent implements OnInit {
   fetching:boolean = true;
   hasError:any = {
     name: '',
-    type: '',
   };
   offers:Array<any> = [];
   offerObj = {
     id: '',
     name: '',
-    type: '',
   }
   search = {
     value: '',
@@ -37,7 +35,7 @@ export class OffersComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchoffers(); 
-   }
+  }
  
    openDialog(templateRef: TemplateRef<any>, offer: any) {
      this.hasError.name = '';
@@ -46,7 +44,6 @@ export class OffersComponent implements OnInit {
      this.dialog.open(templateRef).afterClosed().subscribe((resp :any)=>{
        this.offerObj.id = '';
        this.offerObj.name = '';
-       this.offerObj.type = '';
      })
    }
  
@@ -80,9 +77,8 @@ export class OffersComponent implements OnInit {
    }
  
   addoffer() {
-    if(this.offerObj.name && this.offerObj.name.length >= 3 && this.offerObj.type) {
+    if(this.offerObj.name) {
       this.hasError.name = '';
-      this.hasError.type = '';
       this._offerservice.addoffer(this.offerObj).subscribe((resp:any) => {
         if(resp.success) {
           this.fetchoffers();
@@ -93,9 +89,7 @@ export class OffersComponent implements OnInit {
       })
     }
     else {
-      if(!this.offerObj.name) this.hasError.name = 'Please write the name of the offer';
-      else if(this.offerObj.name.length < 3) this.hasError.name = 'Minimum 3 characters required for offer name';
-      else if(!this.offerObj.type) this.hasError.type = 'Please select an offer type';
+      this.hasError.name = 'Please write the name of the offer';
     }
   }
  
@@ -113,5 +107,10 @@ export class OffersComponent implements OnInit {
        if(resp.success) this.fetchoffers();
        this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
      });
+   }
+
+   convertToJSON(str:string) {
+     if(str) return JSON.parse(str);
+     else return '';
    }
 }

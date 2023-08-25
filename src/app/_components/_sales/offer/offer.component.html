@@ -17,8 +17,7 @@
       <h4 class="d-inline mb-0">
         {{(offer.name ? offer.name : 'Offer') | titlecase}}
       </h4>
-      <span class="kb-info-tag rounded py-1 px-2 ml-3 mr-1" style="font-size: 13px;">{{offer.type | titlecase}}</span>
-      <span class="kb-offer-head-icon px-2" [matTooltip]="usage[offer.type]"><i
+      <span class="kb-offer-head-icon px-2 ml-2" [matTooltip]="usage"><i
           class="fa-regular fa-lightbulb"></i></span>
     </div>
     <div class="col-md-6 text-right">
@@ -101,16 +100,16 @@
           <ng-container *ngIf="isPaymentConnected else notConnected">
             <ng-container *ngIf="offer.payment_type == 'onetime'">
               <div class="row">
-                <mat-form-field class="col-6 pr-0" appearance="fill" [class.mat-form-field-invalid]="!offer.currency && hasError">
+                <mat-form-field class="col-6 pr-0" appearance="fill" [class.mat-form-field-invalid]="!offerCurrency && hasError">
                   <mat-label>Currency</mat-label>
-                  <mat-select [(ngModel)]="offer.currency" name="currency" placeholder="currency" required>
+                  <mat-select [value]="offerCurrency" name="currency" placeholder="currency" (selectionChange)="currencySelect($event)" required>
                     <mat-option *ngFor="let cur of currencies" [value]="cur">{{cur.name}} ({{cur.code}})</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field class="col-6" appearance="fill" [class.mat-form-field-invalid]="!offer.price && hasError">
                   <mat-label>Price</mat-label>
                   <span class="d-flex">
-                    <span *ngIf="offer.price" matTextPrefix class="mr-1">{{offer.currency.symbol}}</span>
+                    <span *ngIf="offer.price" matTextPrefix class="mr-1">{{offerCurrency.symbol}}</span>
                     <input matInput type="number" name="price" placeholder="0.00" [(ngModel)]="offer.price" required>
                   </span>
                 </mat-form-field>
@@ -118,7 +117,7 @@
               <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Override Price<span class="kb-tag kb-info-tag ml-1">Optional</span></mat-label>
                 <span class="d-flex">
-                  <span *ngIf="offer.override_price" matTextPrefix class="mr-1">{{offer.currency.symbol}}</span>
+                  <span *ngIf="offer.override_price" matTextPrefix class="mr-1">{{offerCurrency.symbol}}</span>
                   <input matInput type="number" name="override_price" placeholder="0.00"
                     [(ngModel)]="offer.override_price">
                 </span>
