@@ -6,8 +6,8 @@
   line-height: 2em;
   overflow: hidden;
   font-size: 24px;
-  font-family: cursive;
-  font-style: italic;
+  /* font-family: cursive; */
+  /* font-style: italic; */
   font-weight: 500;
 }
 
@@ -295,10 +295,11 @@ div#topbar_notifications_logs {
 }
 
 #bw-sidebar.bw-sidebar-content.hoveropen {
-  border-radius: 0 30px 30px 0;
+  border-radius: 0 12px 12px 0;
 }
 
 .bw-sidebar-content {
+  overflow: hidden;
   position: fixed;
   left: 0;
   top: 0;

@@ -16,19 +16,15 @@ import { MatDialog } from '@angular/material/dialog';
 export class OfferComponent implements OnInit {
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  fetching:boolean = true;
   offer:any = {
     uniqueid: '',
     email_type: 'none',
     payment_type: 'free'
   }
-  hasError:any = {
-    name: ''
-  }
+  hasError:boolean = false;
   emails:Array<any> = [];
-  selectedEmail:any = {
-    uniqueid: '',
-    name: ''
-  };
+  selectedEmail = '';
   filteredEmails:Array<any> = [];
   products:Array<any> = [];
   selectedProducts:Array<any> = [];
@@ -56,10 +52,6 @@ export class OfferComponent implements OnInit {
     {name: 'Email Template', value: 'template'},
     {name: 'None', value: 'none'}
   ]
-  customEmail = {
-    subject: 'Offer Granted',
-    content: '<h2>Thank You for purchasing the offer!</h2>'
-  }
   usage:any = {
     checkout: `To use this offer, kindly proceed to the funnel step in the funnels where you'll find the 'Checkout' element associated with the offer's name.`,
     upsell: `To use this offer, kindly proceed to the funnel step in the funnels, where you'll find the 'Button' element choose 'Upsell' button and select the offer by name.`,
@@ -89,58 +81,53 @@ export class OfferComponent implements OnInit {
   }
 
   fetchOffer() {
+    this.fetching = true;
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
-      console.log(resp);
       if(resp.success) {
-        this.offer = resp.data[0];
-        console.log(this.offer.name);
-        this.selectedProducts=resp?.data[0]?.temp_products;
-        if(resp.data[0].payment_type =='recurring') this.offer.subscription_id=resp.data[0]?.subscription_id;
-        else if(resp.data[0].payment_type =='onetime') {
-          this.offer.currency=resp.data[0].currency;
-          this.offer.price=resp.data[0].price;
-          this.offer.override_price=resp?.data[0]?.override_price;
-        }
-        else if(resp.data[0].email_type == 'template') {
-        this.selectedEmail=resp?.data[0]?.email[0].name;
-        this.selectedEmail.uniqueid=resp?.data[0]?.email;
-        }
-        else if(resp.data[0].email_type =='custom') {
-          this.offer.email_subject=resp.data[0].email_subject;
-          this.offer.email_content=resp.data[0].email_content;
-          }
+        this.offer = resp.data;
+        if(this.offer.product_id && this.offer.offer_products?.length != 0) this.selectedProducts = this.offer.offer_products;
+        if(this.offer.email_id && this.offer.template_email) this.selectedEmail = this.offer.template_email.name;
       }
+      else {
+        this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+      }
+      this.fetching = false;
     });
   }
 
+  isEmailValid() {
+    return this.offer.email_type == 'none' || (this.offer.email_type =='template' && this.offer.email_id) || (this.offer.email_type =='custom' && this.offer.email_subject && this.offer.email_content);
+  }
+
+  isPaymentValid() {
+    return this.offer.payment_type =='free' || (this.offer.payment_type == 'recurring' && this.offer.subscription_id) || (this.offer.payment_type == 'onetime' && this.offer.currency && this.offer.price);
+  }
+
   updateOffer() {
-    this.offer.custom_email = JSON.stringify(this.customEmail);
-    // console.log(this.selectedEmail);
-    // console.log(this.selectedProducts);
-    this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.uniqueid).join(',');
-    this.offer.email_id = this.selectedEmail.uniqueid;
-    // console.log(this.offer);
-   
+    this.hasError = false;
     if(this.offer.name){
-      if((this.offer.email_type == 'none') || (this.offer.email_type =='template' && this.offer.email_id) || (this.offer.email_type =='custom' && this.offer.email_subject && this.offer.email_content)){
-        if((this.offer.payment_type =='free') || (this.offer.payment_type == 'recurring' && this.offer.subscription_id) || (this.offer.payment_type == 'onetime' && this.offer.currency && this.offer.price)){
-          // if(this.offer.product_id){
-    this._offer.updateoffer(this.offer).subscribe((resp:any) => {
-      if(resp.success) this.fetchOffer();
-      this._general.openSnackBar(!resp.success, resp?.message, 'OK', 'center', 'top');
-    })
-  // }else{
-  //   this._general.openSnackBar(true, 'Choose a product first', 'OK', 'center', 'top');
-  // }
-  }else{
-    this._general.openSnackBar(true, 'Pricing details required', 'OK', 'center', 'top');
-  }
-  }else{
-    this._general.openSnackBar(true, 'Email details required', 'OK', 'center', 'top');
-  }
-  }else{
-    this._general.openSnackBar(true, 'Offer name required', 'OK', 'center', 'top');
-  }
+      if(this.isPaymentValid()){
+        if(this.isEmailValid()){
+          if(this.selectedProducts.length != 0) this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.uniqueid).join(',');
+          this._offer.updateoffer(this.offer).subscribe((resp:any) => {
+            if(resp.success) this.fetchOffer();
+            this._general.openSnackBar(!resp.success, resp?.message, 'OK', 'center', 'top');
+          })
+        }
+        else{
+          this._general.openSnackBar(true, 'Email details are required', 'OK', 'center', 'top');
+          this.hasError = true;
+        }
+      }
+      else{
+        this._general.openSnackBar(true, 'Pricing details are required', 'OK', 'center', 'top');
+        this.hasError = true;
+      }
+    }
+    else{
+      this._general.openSnackBar(true, 'Offer name is required', 'OK', 'center', 'top');
+      this.hasError = true;
+    }
   }
 
   deleteoffer() {
@@ -166,18 +153,14 @@ export class OfferComponent implements OnInit {
   }
 
   addSelectedProduct(event:any, searchListInp:any): void {
-    this.selectedProducts.push(event.option.value);
+    let value = JSON.parse(JSON.stringify(event.option.value))
+    this.selectedProducts.push(value);
     searchListInp.value = '';
     this.filterProductData('');
   }
 
   removeSelectedProduct(index:number): void {
     this.selectedProducts.splice(index, 1);
-  }
-
-  isProductDisabled(values:any, uniqueid:any) {
-      let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
-      return vArr.length != 0;
   }
 
   // end product actions
@@ -193,22 +176,26 @@ export class OfferComponent implements OnInit {
   }
 
   filterEmailData() {
-    var value = this.selectedEmail.name;
-    // console.log(this.emails);
+    var value = this.selectedEmail;
     this.filteredEmails = this.emails?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
-    // console.log(this.filteredEmails);
   }
 
   selectEmail(event:any): void {
     let value = event.option.value;
-    this.selectedEmail.name = value.name;
-    this.selectedEmail.uniqueid = value.uniqueid;
+    this.selectedEmail = value.name;
+    this.offer.email_id = value.uniqueid;
   }
 
   resetEmail() {
-    this.selectedEmail.name = '';
-    this.selectedEmail.id = '';
+    this.selectedEmail = '';
+    this.offer.email_id = '';
+    this.filterEmailData();
   }
 
   // end email actions
+
+  isOptionDisabled(values:any, uniqueid:any) {
+    let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
+    return vArr.length != 0;
+  }
 }
