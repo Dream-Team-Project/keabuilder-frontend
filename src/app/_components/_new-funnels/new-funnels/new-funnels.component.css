@@ -144,7 +144,7 @@ background-color: #FF5B5C;
  display: block;
 }
 
-.keabuilder-title-board input {
+/* .keabuilder-title-board input {
     display:none;
     background-color: #475F7B;
     color: #FFFFFF;
@@ -152,7 +152,7 @@ background-color: #FF5B5C;
     outline: none;
     text-overflow: clip;
     font-size: 14px;
-}
+} */
 /* .kea-barfunnelsearch {
     margin: 0;
     padding: 0;

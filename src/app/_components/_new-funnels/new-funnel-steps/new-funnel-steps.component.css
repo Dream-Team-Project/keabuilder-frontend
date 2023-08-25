@@ -1,7 +1,3 @@
-/* #createfunnel {
-  margin-top: -20px;
-  background: #F2F4F4;
-} */
 
 /* nav */
 .rightbrder {
@@ -664,15 +660,6 @@ input[type=range]::-webkit-slider-runnable-track {
   left: -8px;
 }
 
-.Keabuilder-item >div:first-child {
-  width: 89%;
-}
-.Keabuilder-item >div:last-child {
-  width: 11%;
-  position: absolute;
-  top: 4px;
-  right:5px;
-}
 .keabuilder-title-board span, .keabuilder-title-board-archived span {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1357,7 +1344,7 @@ select#users-list-verified {
 }
 .funneltypesty {
   position: relative;
-  top: 13px;
+  top: 11px;
   right: -61px;
   text-transform: uppercase;
   font-size: 10px;

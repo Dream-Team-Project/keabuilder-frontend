@@ -537,26 +537,26 @@ export class NewFunnelsComponent implements OnInit {
     });
   }
 
-  changestepnamesoutside(id: any, title: any) {
-    // console.log(id+''+title);
-    this.funnelService
-      .namepathchanges(id, title, 'changefunnelname')
-      .subscribe({
-        next: (data) => {
-          // console.log(data);
-          if (data.success == 1) {
-            this._general.openSnackBar(
-              false,
-              'Successfully Name Changed!',
-              'Ok',
-              'center',
-              'top'
-            );
-            this.showfunnels();
-          }
-        },
-      });
-  }
+  // changestepnamesoutside(id: any, title: any) {
+  //   // console.log(id+''+title);
+  //   this.funnelService
+  //     .namepathchanges(id, title, 'changefunnelname')
+  //     .subscribe({
+  //       next: (data) => {
+  //         // console.log(data);
+  //         if (data.success == 1) {
+  //           this._general.openSnackBar(
+  //             false,
+  //             'Successfully Name Changed!',
+  //             'Ok',
+  //             'center',
+  //             'top'
+  //           );
+  //           this.showfunnels();
+  //         }
+  //       },
+  //     });
+  // }
 
   savesteptheme() {
     var obj = {

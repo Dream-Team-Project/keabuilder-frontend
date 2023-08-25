@@ -1,7 +1,14 @@
 <div class="container-fluid mb-4" *ngIf="fetch">
-    <div class="row">
-      <div class="col-md-12">
-        <button mat-raised-button class="mr-2" [routerLink]="['/funnels/all']"><i class="fa-solid fa-angle-left" aria-hidden="true"></i> Back</button>
+  <div class="row align-items-center">
+    <div class="col-md-6 d-flex">
+      <h4 class="d-inline ml-3" matTooltip="Funnel Name" matTooltipPosition="above">
+        {{(funnel.name ? funnel.name : 'Funnel') | titlecase}} 
+      </h4>
+      <!-- <span class="kb-info-tag rounded py-1 px-2 ml-3 mr-1" style="font-size: 13px;">{{steps_length}}</span> -->
+      <!-- <span class="kb-offer-head-icon px-2" [matTooltip]="usage[offer.type]"><i class="fa-regular fa-lightbulb"></i></span> -->
+    </div>
+    <div class="col-md-6 text-right">
+        <button mat-raised-button color="accent" class="mr-2" [routerLink]="['/funnels/all']"><i class="fa fa-arrow-left mr-2" aria-hidden="true"></i> Back</button>
         <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/steps/'+this.funnelService.uniquestepId]" routerLinkActive="active" ><i class="fa fa-filter" aria-hidden="true"></i> Steps</button>
         <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/settings']" routerLinkActive="active" ><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</button>
         <button mat-raised-button class="mr-2" [routerLink]="['/funnels/'+funnel_id+'/archive']" routerLinkActive="active" ><i class="fas fa-archive" aria-hidden="true"></i> Archived Steps</button>
