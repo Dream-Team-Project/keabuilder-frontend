@@ -1,23 +1,26 @@
-.card {
+.card, .funnel-step-list {
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+  border: 0px;
 }
-/* nav */
-.rightbrder {
-  border-right: 4px solid #f2f4f4;
-}
-.Keabuilder-item {
-  border-radius: 0.267rem;
-  border-bottom: 1px solid hsl(0, 3%, 73%);
+
+.funnel-step-list {
+  border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
   position: relative;
-}
-.Keabuilder-item:hover{
-cursor: pointer;
-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  overflow: hidden;
 }
 
-.Keabuilder-item:before {
+.funnel-step-list:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.funnel-step-list:not(.selectedstep):hover {
+  background: rgba(0,0,0,.04);
+}
+
+.funnel-step-list:before {
   content: "";
   width: 3px;
   height: 100%;
@@ -25,6 +28,11 @@ box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   left: 0;
   top: 0;
   border-radius: 0.5rem;
+}
+
+.funnel-step-list.selectedstep {
+  background: rgba(0,0,0,.1);
+  font-weight: 500;
 }
 
 /* progressbar */
@@ -67,22 +75,22 @@ box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 6px 0 rgb(57 218 138 / 60%);
 }
 
-.rightbrder .success:before {
+.funnel-step-list.success:before {
   background-color: #39DA8A;
 }
-.rightbrder .warning:before {
+.funnel-step-list.warning:before {
   background-color: #FDAC41;
 }
-.rightbrder .info:before {
+.funnel-step-list.info:before {
   background-color: #00CFDD;
 }
-.rightbrder .primary:before {
+.funnel-step-list.primary:before {
   background-color: #5A8DEE;
 }
-.rightbrder .secondary::before {
+.funnel-step-list.secondary::before {
   background-color: #475F7B!important;
 }
-.rightbrder .danger:before {
+.funnel-step-list.danger:before {
   background-color: #FF5B5C;
 }
 
@@ -97,11 +105,6 @@ box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   background: transparent;
   height: 100%;
   top: 0px;
-}
-
-.selectedstep{
-  border: 1px solid var(--primary-color);
-  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
 }
 
 .kb-archivebtn {
@@ -140,8 +143,8 @@ box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 2px rgb(0 0 0 / 8%);
   background-position: center top;
   width: 100%;
-  border-radius: 0px 0px 8px 8px;
-  background-size: cover;
+  border-radius: 8px;
+  background-size: contain;
   height: 220px;
   margin-bottom: 10px;
   background-repeat: no-repeat;

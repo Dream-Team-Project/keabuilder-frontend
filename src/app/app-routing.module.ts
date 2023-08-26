@@ -207,10 +207,10 @@ const routes: Routes = [
   canActivate: [AuthGuard] },
 { path: 'funnels/:funnel_id', component: CreateNewFunnelsComponent,
 children: [ 
-{ path: 'steps/:step_id', component: NewFunnelStepsComponent, canActivate: [AuthGuard] },
-// { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
-{ path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
-{ path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
+  { path: 'steps/:step_id', component: NewFunnelStepsComponent, canActivate: [AuthGuard] },
+  // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
 ],
 canActivate: [AuthGuard] },
   // new-funnels

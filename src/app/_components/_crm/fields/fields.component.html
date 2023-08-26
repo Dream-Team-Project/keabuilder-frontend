@@ -122,13 +122,13 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ff of fields, index as i">
-                        <td (click)="openDialog(fieldsetting, ff)" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
+                        <td (click)="editdialog.click()" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
                         <td class="kb-text-overflow">{{ff?.name.replaceAll('-', ' ')}}</td>
                         <td class="kb-text-overflow">{{ff?.field_tag | uppercase}}</td>
                         <td>
                             <span class="d-flex"> 
                                 <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
-                                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil kb-table-action-icon"></i>
+                                <i #editdialog mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil kb-table-action-icon"></i>
                                 <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
                             </span>    
                         </td>                        

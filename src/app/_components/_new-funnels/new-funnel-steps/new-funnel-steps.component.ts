@@ -86,18 +86,17 @@ export class NewFunnelStepsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchsinglefunnel();
-    this.fetchsteps();
-    this.showfunnels();
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000)
     
   }
   fetchsinglefunnel(){
     this.funnelService.getSingleFunnel(this.uniqueid).subscribe({
       next: data => {
-        // console.log(data.data);
         this.funnel=data?.data[0];
+        this.fetchsteps();
+        this.showfunnels();
+        setTimeout(() => {
+          this.shortwaiting = false;
+        }, 1000)
       }
     });
   }
@@ -106,9 +105,9 @@ export class NewFunnelStepsComponent implements OnInit {
     this.fetching = true;
     this.funnelService.getSingleFunnelpages({funnelid:this.uniqueid,archived:'0'}).subscribe((data:any) => {
        if(data.success){
-        // console.log(data.data);
         this.fetching = false;
         this.adjustdata(data.data);
+        this.kb_substeps2(data.data[0].id);
       }
       else{
         this.fetching = false;
@@ -242,7 +241,7 @@ export class NewFunnelStepsComponent implements OnInit {
                 this._general.openSnackBar(
                   false,
                   'Step Duplicate Successfully!',
-                  'Ok',
+                  'OK',
                   'center',
                   'top'
                 );
@@ -296,7 +295,7 @@ export class NewFunnelStepsComponent implements OnInit {
     this._general.openSnackBar(
       false,
       'Successfully Copied!',
-      'Ok',
+      'OK',
       'center',
       'top'
     );
@@ -319,7 +318,7 @@ export class NewFunnelStepsComponent implements OnInit {
           this._general.openSnackBar(
             false,
             'Successfully Archived!',
-            'Ok',
+            'OK',
             'center',
             'top'
           );
@@ -328,7 +327,7 @@ export class NewFunnelStepsComponent implements OnInit {
             this._general.openSnackBar(
               false,
               'Single Step Can not be Archived!',
-              'Ok',
+              'OK',
               'center',
               'top'
             );
@@ -361,7 +360,7 @@ export class NewFunnelStepsComponent implements OnInit {
           this._general.openSnackBar(
             false,
             'Color Successfully Updated!',
-            'Ok',
+            'OK',
             'center',
             'top'
           );
@@ -602,7 +601,7 @@ export class NewFunnelStepsComponent implements OnInit {
   }
   kb_substeps2(value: any) {
     // this.tabOpen2 = value;
-    // console.log(value);
+    console.log(value);
 
     this.funnelService.setfunnelselect(value).subscribe({
       next: data => {

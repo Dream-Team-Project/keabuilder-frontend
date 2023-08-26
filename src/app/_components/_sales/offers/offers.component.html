@@ -80,20 +80,20 @@
           </thead>
           <tbody>
             <tr *ngFor="let offer of offers; index as i">
-              <td [routerLink]="offerLink+offer.uniqueid" class="kb-td-link">
+              <td (click)="editlink.click()" class="kb-td-link">
                 <span>{{offer.name | titlecase}}</span>
               </td>
-              <td [routerLink]="offerLink+offer.uniqueid" class="kb-td-link kb-text-overflow">
+              <td class="kb-td-link kb-text-overflow">
                 <span>{{offer.product_id ? offer.product_id.split(',').length : 0}}</span>
               </td>
-              <td>{{ offer.payment_type == 'onetime' ? offer.price : ( offer.payment_type == 'recurring' ? 'Subscribed' : 'free' ) }}</td>
+              <td>{{ offer.payment_type == 'onetime' ? (convertToJSON(offer.currency)?.symbol + offer.price) : (offer.payment_type == 'recurring' ? 'Subscribed' : 'free') }}</td>
               <td>0</td>
               <td>{{convertToJSON(offer.currency)?.symbol}}0 {{convertToJSON(offer.currency)?.code}}</td>
               <td>
                 <span class="d-flex">
-                  <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon rounded"></i>
-                  <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"  (click)="openDialog(dupdialog, offer)" class="fa fa-copy px-4 kb-table-action-icon rounded"></i>
-                  <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, offer)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del rounded"></i>
+                  <i #editlink mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon"></i>
+                  <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"  (click)="openDialog(dupdialog, offer)" class="fa fa-copy px-4 kb-table-action-icon"></i>
+                  <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, offer)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
                 </span>
               </td>                        
             </tr>
