@@ -27,6 +27,9 @@ export class OfferComponent implements OnInit {
   selectedEmail = '';
   filteredEmails:Array<any> = [];
   products:Array<any> = [];
+  stripeproducts:Array<any> = [];
+  selectedstripeproduct = '';
+  filteredstripeproducts:Array<any> = [];
   selectedProducts:Array<any> = [];
   filteredProducts:Array<any> = [];
   isPaymentConnected:boolean = true;
@@ -73,10 +76,12 @@ export class OfferComponent implements OnInit {
     this.fetchOffer();
     this.fetchProducts();
     this.fetchEmails();
+    this.fetchstripeProducts();
   }
 
   openDialog(templateRef: TemplateRef<any>) {
     this._dialog.open(templateRef).afterClosed().subscribe((resp :any)=>{})
+     
   }
 
   fetchOffer() {
@@ -174,7 +179,44 @@ export class OfferComponent implements OnInit {
 
   // start email actions
 
-  fetchEmails() {
+  fetchstripeProducts() {
+    this._product.fetchstripeproducts().subscribe((resp:any)=>{
+      // console.log(resp.data.data);
+      if(resp.success) {
+        this.stripeproducts = resp?.data?.data;
+        if(this.offer.subscription_id){
+          this.stripeproducts.filter((c:any) => {
+          if (c.id == this.offer.subscription_id) {
+            this.selectedstripeproduct = c.description;
+        }
+        });
+      }
+      }
+    })
+  }
+
+  filterstripeData() {
+    var value = this.selectedstripeproduct;
+    this.filteredstripeproducts = this.stripeproducts?.filter((option:any) => option?.description?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  selectstripeproduct(event:any): void {
+    let value = event.option.value;
+    this.selectedstripeproduct = value.description;
+    this.offer.subscription_id = value.id;
+  }
+
+  resetstripeproduct() {
+    this.selectedstripeproduct = '';
+    this.offer.subscription_id = '';
+    this.filterstripeData();
+  }
+
+  // end email actions
+
+   // start stripe data actions
+
+   fetchEmails() {
     this._email.fetchemails().subscribe((resp:any)=>{
       if(resp.success) {
         this.emails = resp.data;
@@ -199,10 +241,13 @@ export class OfferComponent implements OnInit {
     this.filterEmailData();
   }
 
-  // end email actions
+  // end stripe products actions
 
   isOptionDisabled(values:any, uniqueid:any) {
     let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
     return vArr.length != 0;
+  }
+  gotobuilder(){
+    this._general.redirectToBuilder(this.offer.uniqueid, 'checkout');
   }
 }

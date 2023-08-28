@@ -125,10 +125,21 @@
               </mat-form-field>
             </ng-container>
             <ng-container *ngIf="offer.payment_type == 'recurring'">
-              <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="!offer.subscription_id && hasError">
-                <mat-label>Subscription Id</mat-label>
-                <input matInput type="text" name="subscription_id" placeholder="Add your subscription id"
-                  [(ngModel)]="offer.subscription_id" required>
+              <mat-form-field class="kb-full-width" appearance="fill" (click)="filterstripeData()" [class.mat-form-field-invalid]="!offer.subscription_id && hasError" >
+                <mat-label>Subscription Plan</mat-label>
+                <input matInput type="text" [(ngModel)]="selectedstripeproduct" placeholder="Search by plan name"
+              (input)="filterstripeData()" [matAutocomplete]="stripeAuto" required class="w-100">
+            <button *ngIf="selectedstripeproduct" matSuffix mat-icon-button aria-label="Clear" (click)="resetstripeproduct()">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #stripeAuto="matAutocomplete" (optionSelected)="selectstripeproduct($event)">
+              <mat-option *ngFor="let option of filteredstripeproducts" [value]="option"
+                [disabled]="option.id == offer.subscription_id">
+                {{ option.description | titlecase }}
+              </mat-option>
+            </mat-autocomplete>
+                <!-- <input matInput type="text" name="subscription_id" placeholder="Add your subscription id"
+                  [(ngModel)]="offer.subscription_id" required> -->
                 <mat-hint>This will bind the offer with your stripe subscription product</mat-hint>
               </mat-form-field>
             </ng-container>
@@ -175,7 +186,7 @@
         <div class="text-right">
           <button mat-raised-button color="accent" class="mr-3">
             Preview <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></button>
-          <button mat-raised-button color="primary">
+          <button mat-raised-button color="primary"  (click)="gotobuilder()">
             Edit <i class="far fa-edit ml-1"></i></button>
         </div>
       </div>

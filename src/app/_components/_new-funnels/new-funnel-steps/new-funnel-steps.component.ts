@@ -264,6 +264,15 @@ export class NewFunnelStepsComponent implements OnInit {
               },
             });
           }
+          else{
+            this._general.openSnackBar(
+              true,
+              data?.message,
+              'OK',
+              'center',
+              'top'
+            ); 
+          }
         },
       });
     } else if (type == 'colortheme') {

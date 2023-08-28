@@ -465,6 +465,15 @@ export class NewFunnelsComponent implements OnInit {
               },
             });
           }
+          else{
+            this._general.openSnackBar(
+              true,
+              data?.message,
+              'OK',
+              'center',
+              'top'
+            ); 
+          }
         },
       });
     } else if (type == 'colortheme') {
