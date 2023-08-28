@@ -40,6 +40,7 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('deldialog') deldialog!: TemplateRef<any>;
   @ViewChild('quickeditdialog') quickeditdialog!: TemplateRef<any>;
+  @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
@@ -639,7 +640,7 @@ export class WebsitePagesComponent implements OnInit {
           if(data.success==1){
 
             // this.openSidebar();
-
+            this.dialog.open(this.copyurldialog);
             this.showmytemplates = false;
             this.addnewpagepopup = false;
             this.insidepagefirst = true;
@@ -711,6 +712,14 @@ export class WebsitePagesComponent implements OnInit {
   archivepages(){
     // console.log('test'+this.fetchdatastatus);
     this.showarchivemode = !this.showarchivemode;
+    if(this.showarchivemode){
+      if(this.form.website_id){
+      this.router.navigate(['/websites/'+this.form.website_id+'/pages/archive'],{relativeTo: this.route});
+      }
+      else{
+        this.router.navigate(['/websites/pages/archive'],{relativeTo: this.route});
+      }
+    }
   }
 
 
@@ -780,7 +789,7 @@ export class WebsitePagesComponent implements OnInit {
     }
     
     // console.log(this.arpageobj);
-    console.log(gendata);
+    // console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);

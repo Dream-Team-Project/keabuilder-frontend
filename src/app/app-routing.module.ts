@@ -35,6 +35,7 @@ import { WebsiteNavigationComponent } from './_components/_websites/navigation/n
 import { WebsitePagesComponent } from './_components/_websites//pages/pages.component';
 import { WebsiteComponent } from './_components/_websites/website/website.component';
 import { WebsitesComponent } from './_components/_websites/websites/websites.component';
+import { WebpagesArchiveComponent } from './_components/_websites/webpages-archive/webpages-archive.component';
 // websites
 // funnels
 import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
@@ -168,6 +169,8 @@ const routes: Routes = [
       {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
       {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+      {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+      {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
 
@@ -434,6 +437,7 @@ export const RoutingComponents =
     WebsiteHeadersComponent,
     WebsiteFootersComponent,
     WebsiteNavigationComponent,
+    WebpagesArchiveComponent,
     IntegrationsComponent,
     CrmFormBuilderComponent,
     BuilderTopbarComponent,

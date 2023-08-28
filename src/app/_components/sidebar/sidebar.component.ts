@@ -332,28 +332,28 @@ export class SidebarComponent implements OnInit {
     //   title: 'Forms',
     //   submenu:null
     // },
-    {
-      0:true,
-      routerlink: '/strategies',
-      img: 'chess.gif',
-      icon: 'fas fa-chess-knight',
-      title: 'Strategies',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/heatmap',
-      img: 'way.gif',
-      icon: 'fas fa-fire',
-      title: 'HeatMap',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/analytics',  
-      img: 'growth.gif',
-      icon: 'fas fa-chart-pie',
-      title: 'Analytics',
-      submenu:null
-    },
+    // {
+    //   0:true,
+    //   routerlink: '/strategies',
+    //   img: 'chess.gif',
+    //   icon: 'fas fa-chess-knight',
+    //   title: 'Strategies',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/heatmap',
+    //   img: 'way.gif',
+    //   icon: 'fas fa-fire',
+    //   title: 'HeatMap',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/analytics',  
+    //   img: 'growth.gif',
+    //   icon: 'fas fa-chart-pie',
+    //   title: 'Analytics',
+    //   submenu:null
+    // },
     // {
     //   0:true,
     //   routerlink: '/affiliates',
@@ -406,14 +406,14 @@ export class SidebarComponent implements OnInit {
     //     }
     //   ]
     // },
-    {
-      0:true,
-      routerlink: '/integrations',
-      img: 'cloud-network.gif',
-      icon: 'fas fa-cogs',
-      title: 'Integrations',
-      submenu:null
-    },
+    // {
+    //   0:true,
+    //   routerlink: '/integrations',
+    //   img: 'cloud-network.gif',
+    //   icon: 'fas fa-cogs',
+    //   title: 'Integrations',
+    //   submenu:null
+    // },
     {
       0:true,
       routerlink: '/account',
@@ -545,9 +545,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[11][0] = true;
+      this.allmenu[7][0] = true;
 
-      this.allmenu[11].submenu.forEach((element: any) => {
+      this.allmenu[7].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
