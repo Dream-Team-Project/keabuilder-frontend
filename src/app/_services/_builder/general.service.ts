@@ -1028,10 +1028,10 @@ export class GeneralService {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
         body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
         style: this.getAllStyle(),
-        website_id: websiteid
+        website_id: websiteid,
+        page_id: this.webpage.uniqueid
       }
       if(preview) {
-        // var prevObj = JSON.parse(JSON.stringify(this.pageObj));
         this.pageObj.prevFolder = this.webpage.uniqueid;
         this.pageObj.folder = this.webpage.uniqueid;
         this.pageObj.dir = 'previews';
@@ -1146,11 +1146,9 @@ export class GeneralService {
 
   removeExtra(preview:boolean) {
     var body = this.pagehtml.querySelector('BODY');
-
     // encode text
     body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.encodeData(text.innerHTML);})
     // encoded text
-
     // remvoe extras
     var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
     /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
@@ -1160,11 +1158,9 @@ export class GeneralService {
     body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
     regExpArr.forEach((re:any)=>{body.innerHTML = body.innerHTML.replace(re, '');})
     // remvoed extras
-
     // decode text
     body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.decodeData(text.innerHTML);})
     // decoded text
-
     if(!preview) body.querySelectorAll('.kb-menu').forEach((item:any)=>{
       item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
     });

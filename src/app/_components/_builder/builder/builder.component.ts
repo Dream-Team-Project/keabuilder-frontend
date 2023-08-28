@@ -7,13 +7,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { NgxCaptureService } from 'ngx-capture';
 import { asapScheduler} from 'rxjs';
+import { ImageService } from 'src/app/_services/image.service';
+import { StyleService } from 'src/app/_services/_builder/style.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { SectionService } from 'src/app/_services/_builder/section.service';
 import { RowService } from 'src/app/_services/_builder/row.service';
 import { ColumnService } from 'src/app/_services/_builder/column.service';
 import { ElementService } from 'src/app/_services/_builder/element.service';
-import { StyleService } from 'src/app/_services/_builder/style.service';
-import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { ImageService } from 'src/app/_services/image.service';
 
 @Component({
   selector: 'app-builder',
@@ -221,20 +221,12 @@ export class BuilderComponent implements OnInit {
   }
 
   saveHTML(main:any, tglDraft:boolean) {
-    if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
     this._general.saveHTML(main, this._section.sections, false, tglDraft).then(res =>{
       if(!this.autoSaving) {
-        if(this._general.pathError) {
-          this._general.saveDisabled = false;
-          this.openPageSetting(null);
-        }
-        else if(!res) {
-          console.log(res);
-          this._general.saveDisabled = false;
-          this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        }
-        else this.takePageSS('page-'+this._general.webpage.uniqueid, 'Page');
+        if(this._general.pathError) this.openPageSetting(null);
+        else if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+        else this.successMsg('Page');
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
       }
@@ -255,6 +247,13 @@ export class BuilderComponent implements OnInit {
         this.initial = false;
       }
     });
+  }
+
+  successMsg(stxt:any) {
+    var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;
+    this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+    this._general.saveDisabled = false;
+    this.trigger = 'saved';
   }
 
   openPageSetting(event:any) {
