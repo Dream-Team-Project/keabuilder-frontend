@@ -741,7 +741,8 @@ export class NewFunnelsComponent implements OnInit {
                 'top'
               );
             } else {
-              if(data.success){
+              if(data.data.success){
+                console.log(data);
               this.createwebsitefolder().then((resp) => {
                 // console.log(resp);
                 this.savepage().then((resp1) => {
@@ -777,7 +778,7 @@ export class NewFunnelsComponent implements OnInit {
               else{
                 this._general.openSnackBar(
                   true,
-                  data?.message,
+                  data?.data.message,
                   'Ok',
                   'center',
                   'top'

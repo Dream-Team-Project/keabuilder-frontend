@@ -20,7 +20,7 @@
         <mat-label>Websites</mat-label>
         <mat-select name="newwebsiteid" [(ngModel)]="newwebsiteid" >
           <span *ngFor="let website of websites">
-            <mat-option [value]="website.uniqueid" *ngIf="websiteid != website.uniqueid">
+            <mat-option [value]="website.uniqueid" *ngIf="form.website_id != website.uniqueid">
               {{website.title}}
             </mat-option>
           </span>
@@ -61,6 +61,21 @@
       <mat-error *ngIf="userFormControl2.hasError('minlength')">
         Page Name must be at least <strong>3</strong> characters
       </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="kb-full-width" appearance="fill" (click)="filterwebData()" [class.mat-form-field-invalid]="hasError">
+      <mat-label>Website</mat-label>
+      <input matInput type="text" [(ngModel)]="selectedweb" placeholder="Search by website name"
+    (input)="filterwebData()" [matAutocomplete]="websiteAuto" required class="w-100">
+  <button *ngIf="selectedweb" matSuffix mat-icon-button aria-label="Clear" (click)="resetweb()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-autocomplete #websiteAuto="matAutocomplete" (optionSelected)="selectweb($event)">
+    <mat-option *ngFor="let option of filteredweb" [value]="option"
+      [disabled]="option.uniqueid == form.website_id">
+      {{ option.title | titlecase }}
+    </mat-option>
+  </mat-autocomplete>
     </mat-form-field>
 
   </div>
