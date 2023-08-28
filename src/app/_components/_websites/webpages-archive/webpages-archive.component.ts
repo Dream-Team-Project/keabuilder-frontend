@@ -59,9 +59,9 @@ export class WebpagesArchiveComponent implements OnInit {
       
     })
   }
-  deletepage(selectdata:any){
+  deletepage(selectdata:any,type:any){
     this.searching = true;
-    this.webpagesService.restoredeletepage({id:selectdata.id, type:'delete'}).subscribe({
+    this.webpagesService.restoredeletepage({id:selectdata.id, type:type}).subscribe({
       next: data => {
         this.searching = false;
         if(data.success==1){
