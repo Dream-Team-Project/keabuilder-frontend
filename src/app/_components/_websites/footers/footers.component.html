@@ -30,13 +30,14 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row align-items-center">
-      <div class="col-md-8">
-        <mat-form-field appearance="fill" class="col-8 pr-2">
+     
+        <mat-form-field appearance="fill" class="col-6">
           <mat-label>Search Footers</mat-label>
           <input matInput #searchInp type="text" (input)="searchfooters(searchInp, filterInp)" placeholder="Search Footer Name">
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-4">
+
+        <mat-form-field appearance="fill" class="col-2">
           <mat-label>Sort By</mat-label>
           <mat-select #filterInp name="kbfilter" (valueChange)="searchfooters(searchInp, filterInp)">
             <mat-option [value]="'name ASC'">ASC By Name</mat-option>
@@ -45,7 +46,7 @@
             <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+    
       <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="footers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>

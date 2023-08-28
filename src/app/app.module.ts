@@ -66,7 +66,6 @@ import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,7 +76,7 @@ import {environment} from '../environments/environment';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe
+    SvgPipe, 
   ],
   imports: [
     AppRoutingModule,
