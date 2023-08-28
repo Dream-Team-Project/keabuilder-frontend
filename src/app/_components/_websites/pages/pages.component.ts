@@ -54,17 +54,18 @@ export class WebsitePagesComponent implements OnInit {
                 this.toggleview = _general.getStorage('page_toggle');
                 this.dataSource = new MatTableDataSource(this.users);
                 this.route.paramMap.subscribe((params: ParamMap) => {
-                  this.websiteid = params.get('website_id');
+                  this.form.website_id = params.get('website_id');
                 });
                }
 
   delpage:any;
+  hasError:boolean = false;
   displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
+  // sidebar = {
+  //   open: false,
+  //   anim: {open: false, close: false, time: 500},
+  //   animtime: 300,
+  // }
   selection = new SelectionModel<WebpageData>(true, []);
   dataSource: MatTableDataSource<WebpageData>;
   users:any = [];
@@ -72,15 +73,19 @@ export class WebsitePagesComponent implements OnInit {
   actionname:any = '';
   newwebsiteid:any = '';
   websites:any = [];
+  allwebsites:any = [];
+  selectedweb = '';
+  filteredweb:Array<any> = [];
   searchpagetxt = 'Search Pages';
   form: any = {
     pagename: null,
     pagepath:null,
+    website_id:'',
   };
   userFormControl = new FormControl('',[Validators.required]);
   userFormControl2 = new FormControl('',[Validators.required]);
 
-  websiteid:any = '';
+  // websiteid:any = '';
   kbpages:any[] = [];
   popupsidebar = false;
   quickeditpopup = true;
@@ -179,6 +184,7 @@ export class WebsitePagesComponent implements OnInit {
   ngOnInit(): void {
     this.showwebpages();
     this.getWebsites();
+    this.fetchallwebsites();
 
     setTimeout(() => {
         this.shortwaiting = false;
@@ -221,7 +227,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   getWebsites() {
-    if(this.websiteid) this.websiteService.getWebsite().subscribe({
+    if(this.form.website_id) this.websiteService.getWebsite().subscribe({
       next: webdata => {
         this.websites = [];
         webdata.data.forEach((element:any) => {
@@ -231,7 +237,6 @@ export class WebsitePagesComponent implements OnInit {
         }
     });
   }
-
   pathuniqueremove(){
     this.pathcheck = false;
     this.pathcheck2 = false;
@@ -276,20 +281,21 @@ export class WebsitePagesComponent implements OnInit {
     this.dialog.open(this.adddialog);
   }
 
-  openSidebar(){
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.open = false;
-    },this.sidebar.animtime)
-  }
+  // openSidebar(){
+  //   this.sidebar.open = true;
+  //   this.sidebar.anim.open = true;
+  //   setTimeout((e:any)=>{
+  //     this.sidebar.anim.open = false;
+  //   },this.sidebar.animtime)
+  // }
 
   onSubmit(): void {
     const { pagename, pagepath } = this.form;
+    this.hasError = false;
 
-    if(this.userFormControl.status=='VALID'){
+    if(this.userFormControl.status=='VALID' && this.form.website_id){
 
-      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.websiteid};
+      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.form.website_id};
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
           // console.log(data);
@@ -307,7 +313,7 @@ export class WebsitePagesComponent implements OnInit {
               dir: '/drafts',
               folder: pagepath,
               prevFolder: pagepath,
-              website_id:this.websiteid, 
+              website_id:this.form.website_id, 
             }
             this._general._file.savePage(page).subscribe((event:any) => {
               console.log(event);
@@ -328,7 +334,10 @@ export class WebsitePagesComponent implements OnInit {
       });
       
     }
-
+    else{
+      this._general.openSnackBar(true, 'Website is required', 'OK', 'center', 'top');
+      this.hasError = true;
+    }
   }
 
   changemyname(event:any){
@@ -338,8 +347,8 @@ export class WebsitePagesComponent implements OnInit {
 
   showwebpages(){
     this.searching = true;
-    if(this.websiteid) {
-      this.webpagesService.getWebpagesById(this.websiteid).subscribe({
+    if(this.form.website_id) {
+      this.webpagesService.getWebpagesById(this.form.website_id).subscribe({
         next: data => {
           // console.log(data);
           this.shortdata(data);
@@ -373,7 +382,7 @@ export class WebsitePagesComponent implements OnInit {
       }else{
         this.nodata = false;
 
-        var dt = {webid:this.websiteid};
+        var dt = {webid:this.form.website_id};
         this.websiteService.getuniqwebsites(dt).subscribe({
           next: data => {
     
@@ -466,7 +475,7 @@ export class WebsitePagesComponent implements OnInit {
                         // console.log(data);
                         if(data.success==1){
 
-                          var webobj:any = {website_id:this.websiteid};
+                          var webobj:any = {website_id:this.form.website_id};
                           this._general._file.createdefaulthome(webobj).subscribe(e=>{
                             // console.log(e);
                           })
@@ -507,7 +516,7 @@ export class WebsitePagesComponent implements OnInit {
 
                   this.quickeditid = data.data[0].id;
                 
-                  this.openSidebar();
+                  // this.openSidebar();
 
                 this.oldpagepath = this.pageurl;
 
@@ -523,7 +532,7 @@ export class WebsitePagesComponent implements OnInit {
 
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {status:getvl, path:page_path, website_id:this.websiteid};
+    var newobjdt = {status:getvl, path:page_path, website_id:this.form.website_id};
     this._general._file.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
@@ -540,7 +549,7 @@ export class WebsitePagesComponent implements OnInit {
         }else if(data.found==0){
 
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
-          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.websiteid, dir:getvl};
+          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.form.website_id, dir:getvl};
           this._general._file.renamepage(pathobj).subscribe({
             next: data => {
               // console.log(data);
@@ -549,8 +558,6 @@ export class WebsitePagesComponent implements OnInit {
           // this.popupsidebar = false;
           this.showwebpages();
 
-          this.hidepopupsidebar();
-
         }
 
       }
@@ -558,16 +565,16 @@ export class WebsitePagesComponent implements OnInit {
 
   }
 
-  hidepopupsidebar(){
-    this.popupsidebar = false;
-    this.pathcheck2 = false;
+  // hidepopupsidebar(){
+  //   this.popupsidebar = false;
+  //   this.pathcheck2 = false;
 
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-    },this.sidebar.animtime)
-  }
+  //   this.sidebar.anim.close = true;
+  //   setTimeout((e:any)=>{
+  //     this.sidebar.anim.close = false;
+  //     this.sidebar.open = false;
+  //   },this.sidebar.animtime)
+  // }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -590,7 +597,7 @@ export class WebsitePagesComponent implements OnInit {
 
   shortsettings(page:any, type:any){
     console.log(page);
-    var dtobj = {pageid:page.id, type:type, webid: this.websiteid};
+    var dtobj = {pageid:page.id, type:type, webid: this.form.website_id};
     if(type=='duplicate'){
       // console.log(id);
       this.webpagesService.dupldelpage(dtobj).subscribe({
@@ -600,7 +607,7 @@ export class WebsitePagesComponent implements OnInit {
             this._snackBar.open('Processing...', 'OK');
 
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
-            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.websiteid, dir:getvl};
+            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.form.website_id, dir:getvl};
             console.log(pathobj);
          
             this._general._file.copypage(pathobj).subscribe({
@@ -631,7 +638,7 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.success==1){
 
-            this.openSidebar();
+            // this.openSidebar();
 
             this.showmytemplates = false;
             this.addnewpagepopup = false;
@@ -666,7 +673,7 @@ export class WebsitePagesComponent implements OnInit {
       this.webpagesService.movecopywebpage(dtobj).subscribe({
         next: data => {
           // console.log(data);
-          var pathobj = {old_website_id:this.websiteid, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
+          var pathobj = {old_website_id:this.form.website_id, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
 
           this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
 
@@ -723,7 +730,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   applykbfilter(){
-    var dt:any = {showing:this.showingcontacts, webid:this.websiteid};
+    var dt:any = {showing:this.showingcontacts, webid:this.form.website_id};
     this.webpagesService.getarchivepages(dt).subscribe({
       next: data => {
         this.users = data.data;
@@ -741,7 +748,7 @@ export class WebsitePagesComponent implements OnInit {
       search: search.value,
       filter: filter.value,
       visibility: visibility.value,
-      id:this.websiteid
+      id:this.form.website_id
     }
     // console.log(obj);
     this.webpagesService.pagevisibility(obj).subscribe({
@@ -799,7 +806,7 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
 
                 if(data.success==1){
-                  var webobj:any = {website_id:this.websiteid};
+                  var webobj:any = {website_id:this.form.website_id};
                   this._general._file.createdefaulthome(webobj).subscribe(e=>{
                     // console.log(e);
                   })
@@ -811,7 +818,7 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.deleteme==1){
             
-            var newpathobj:any = {website_id:this.websiteid, path:data.path};
+            var newpathobj:any = {website_id:this.form.website_id, path:data.path};
             this._general._file.deletepage(newpathobj).subscribe({
               next: data => {
                 // console.log(data);
@@ -850,7 +857,7 @@ export class WebsitePagesComponent implements OnInit {
 
   searchpage(event: Event) {
     this.searching = true;
-    var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.websiteid};
+    var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.form.website_id};
     // console.log(SearchValue);
     this.selstatusshow = 'all';
 
@@ -878,9 +885,51 @@ export class WebsitePagesComponent implements OnInit {
     this.actionname = acn;
     this.delpage = page;
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-
+      this.form.pagename='';
+      this.form.pagepath='';
+      this.form.website_id='';
     });
   }
+   // start all websites data actions
+
+   fetchallwebsites(){
+    this.websiteService.getWebsite().subscribe({
+      next: data => {
+        this.allwebsites=data.data;
+        if(this.form.website_id){
+          this.allwebsites.filter((c:any) => {
+          if (c.uniqueid == this.form.website_id) {
+            this.selectedweb = c.title;
+        }
+      })
+    }
+      },
+      error: err => {
+        // console.log(err);
+      }
+    });
+  }
+
+
+  filterwebData() {
+    var value = this.selectedweb;
+    this.filteredweb = this.allwebsites?.filter((option:any) => option?.title?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  selectweb(event:any): void {
+    let value = event.option.value;
+    this.selectedweb = value.title;
+    this.form.website_id = value.uniqueid;
+  }
+
+  resetweb() {
+    this.selectedweb = '';
+    this.form.website_id = '';
+    this.filterwebData();
+  }
+
+  // end all webistes actions
+
   
 }
 
