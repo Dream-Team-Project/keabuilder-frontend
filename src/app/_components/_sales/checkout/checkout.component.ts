@@ -119,7 +119,7 @@ export class CheckoutComponent implements OnInit {
             this.emailid=e.emailid;
             this.fetchdata();
           }
-          // else _general.redirectToPageNotFound();
+          else _general.redirectToPageNotFound();
         });
         document.addEventListener('contextmenu', event => event.preventDefault());
       });
