@@ -161,8 +161,8 @@ export class FormService {
 
   setForm(resp:any) {
     return new Promise((resolve, reject)=>{
-      if(resp.data[0]) {
-        this.form = resp.data[0];
+      if(resp.data) {
+        this.form = resp.data;
         this.formField = [];
         this.form.fields?.split(',').forEach((fval:any, index:number)=>{
           var tempfield:any;

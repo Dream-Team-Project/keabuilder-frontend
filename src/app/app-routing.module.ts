@@ -227,7 +227,7 @@ canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
   { path: 'sales/offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
-  { path: 'builder/checkout/:offer_id', component: CheckoutComponent, canActivate: [AuthGuard] },
+  { path: 'builder/checkout/:id', component: CheckoutComponent, canActivate: [AuthGuard] },
  
   // sales 
  

@@ -112,7 +112,8 @@ export class CrmCampaignBuilderComponent implements OnInit {
   this._campaignService.singlecampaign(this.uniqueid).subscribe({
     next: data => {
         if(data.data?.length!=0){
-          data.data.forEach((element:any) => {
+          // data.data.forEach((element:any) => {
+            let element=data.data;
             this.fullcampobj.name = element.name;
             this.fullcampobj.preheader_text = element.preheader_text;
             this.fullcampobj.emailfrom = element.emailfrom;
@@ -133,7 +134,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
             }
             this.emailid=element.emailid;
             this.fetchsingleemail();
-          });
+          // });
 
         }else{
           this.router.navigate(['/crm/campaigns'],{relativeTo: this.route});

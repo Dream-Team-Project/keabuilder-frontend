@@ -10,6 +10,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class ProductService {
   user_id:any = '';
   allproducts = './api/allproducts';
+  allstripeproducts = './api/allstripeproducts';
   product = './api/singleproduct';
   addproducts = './api/addproduct';
   updateproducts = './api/updateproduct';
@@ -22,6 +23,10 @@ export class ProductService {
 
   fetchproducts(){
     return this.http.get(this.allproducts+'/'+this.user_id)
+    .pipe(catchError(this.errorHandler));
+  }
+  fetchstripeproducts(){
+    return this.http.get(this.allstripeproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
   singleproduct(uniqueid:any){
