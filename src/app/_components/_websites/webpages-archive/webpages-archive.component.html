@@ -6,7 +6,7 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close color="primary">No</button>
-        <button mat-button  cdkFocusInitial class="text-danger" (click)="deletepage(delpage)" >Yes</button>
+        <button mat-button  cdkFocusInitial class="text-danger" (click)="deletepage(delpage,'delete')" >Yes</button>
     </div>
   </ng-template>
   
@@ -50,7 +50,7 @@
                 <td>{{ page.created_at | date:'medium' }}</td>
                 <td> 
                     <span class="d-flex">
-                    <i mat-ripple matTooltip="Restore" matTooltipPosition="above" (click)="deletepage(page)"
+                    <i mat-ripple matTooltip="Restore" matTooltipPosition="above" (click)="deletepage(page,'restore')"
                         class="fa fa-trash-restore kb-table-action-icon" aria-hidden="true"></i>
                         <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, page)" class="far fa-trash-alt  kb-table-action-icon kb-icon-del"
                         aria-hidden="true"></i>

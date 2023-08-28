@@ -439,7 +439,7 @@
       </div>
 
       <div class="col-md-4 pagemainlink text-right" >
-        <span *ngIf="!showarchivemode">
+        <span>
           <button mat-raised-button [color]="'accent'" (click)="togglepageview()" *ngIf="!nodata" class="mr-3">
             <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
             <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
@@ -452,9 +452,8 @@
         <button mat-raised-button (click)="archivepages()" > Archive Pages <i class="fas fa-archive"></i></button>
        
       </div>
-      
     </div>
-    <ng-template #pages>
+   
       <!-- no pages -->
       <div class="row" *ngIf="nodata else showpages">
         <div class="col-md-4"></div>
@@ -551,7 +550,7 @@
         
       </ng-template>
       <!-- pages to show -->
-    </ng-template>
+   
     <!-- pages -->
     <!-- pagination -->
     <div class="row" *ngIf="!nodata">
