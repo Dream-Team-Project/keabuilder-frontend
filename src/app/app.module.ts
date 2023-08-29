@@ -65,10 +65,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9ac18abecab373f1fc7f9733a758c9d1cda9899f
 @NgModule({
   declarations: [
     AppComponent,
