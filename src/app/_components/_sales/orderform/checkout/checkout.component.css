@@ -1,0 +1,157 @@
+.kb-offer-card {
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+.o2step_step1 label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.o2step_step1 input, .o2step_step1 select {
+    -webkit-font-smoothing: antialiased;
+    font-family: Lato,sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    line-height: 32px;
+    padding: 0 15px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: #666;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    background: #fff;
+}
+.allfldreq{
+    color: #9b9b9b;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 30px;
+    letter-spacing: .5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: block;
+}
+.paywthcard{
+    font-weight: 600;
+    color: #333;
+}
+.stripe-card{
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+.st-paycard{
+    float: right;
+    width: 235px;
+    text-align: right;
+}
+.iconsty{
+    margin-top: 6px;
+    color: #444;
+    font-size: 13px;
+}
+/* order summary */
+.Checkout_Summary {
+    background-color: #fff;
+    color: #333;
+    padding: 20px 2px;
+}
+.Checkout_Summary_Table {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 100%;
+}
+.Checkout_Summary_Table_Row_Cell {
+    line-height: 28px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .5px;
+    vertical-align: top;
+}
+.Checkout_Summary_Table_Row_Cell:last-child {
+    text-align: right;
+}
+.Checkout_Summary_Monetary {
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+.Checkout_Summary_OrderTotal {
+    background-color: #cecece;
+    padding: 0 20px;
+}
+.Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell {
+    font-weight: 700;
+    line-height: 50px;
+    text-transform: uppercase;
+}
+.Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary {
+    font-size: 13px;
+    font-weight: 700;
+}
+.Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary_Currency {
+    display: inline-block;
+    margin: 0 4px 0 0;
+}
+.Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary_Units {
+    font-size: 20px;
+}
+.Checkout_Summary_Table_Row_Cell label {
+    margin: 0;
+}
+/* order summary */
+
+.kb-prev{
+    background-color: #eee;
+}
+.kbmncont{
+    background-color: #fff;
+}
+.btnkeacheckout {
+    background-color: #dea641;
+    background-image: none;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 27px 15px -17px rgba(0,0,0,.3), 0 2px 4px rgba(0,0,0,.3);
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    height: 50px;
+    letter-spacing: 2px;
+    line-height: 50px;
+    outline: none;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color .2s ease,box-shadow .2s ease;
+    width: 100%;
+}
+.btnkeacheckout:hover {
+    background-color: #af8333;
+    background-image: none;
+    box-shadow: 0 20px 15px -17px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.3);
+    text-decoration: none;
+}
+.order2ButtonSubText {
+    line-height: 1.5;
+    padding: 20px 0 0;
+    font-size: 12px;
+    color: #8a8a8a;
+}
+.kb-back {
+    font-weight: 700;
+    line-height: 50px;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: -10px;
+    display: block;
+    color: #444;
+    text-decoration: underline;
+}

@@ -742,7 +742,7 @@ export class NewFunnelsComponent implements OnInit {
               );
             } else {
               if(data.data.success){
-                console.log(data);
+                // console.log(data);
               this.createwebsitefolder().then((resp) => {
                 // console.log(resp);
                 this.savepage().then((resp1) => {
