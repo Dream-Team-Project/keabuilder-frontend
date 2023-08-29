@@ -221,12 +221,14 @@ export class BuilderComponent implements OnInit {
   }
 
   saveHTML(main:any, tglDraft:boolean) {
+    if(!this.autoSaving) this._general.savingPage = true;
     this._general.pathError = false;
     this._general.saveHTML(main, this._section.sections, false, tglDraft).then(res =>{
       if(!this.autoSaving) {
         if(this._general.pathError) this.openPageSetting(null);
         else if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         else this.successMsg('Page');
+        this._general.savingPage = false;
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
       }

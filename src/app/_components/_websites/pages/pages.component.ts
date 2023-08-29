@@ -430,7 +430,6 @@ website_id:any;
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      // console.log(this.mydomain);
       var url = 'https://'+this.mydomain+'/'+data;
       window.open(url, '_blank');
     }

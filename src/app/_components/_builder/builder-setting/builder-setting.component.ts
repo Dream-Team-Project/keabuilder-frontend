@@ -215,6 +215,5 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     }
     return true;
   }
-
 }
 

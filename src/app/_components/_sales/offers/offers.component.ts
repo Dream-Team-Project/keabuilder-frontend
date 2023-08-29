@@ -16,7 +16,8 @@ export class OffersComponent implements OnInit {
   offerObj = {
     id: '',
     name: '',
-    currency: JSON.stringify(this.defaultCurrency)
+    currency: JSON.stringify(this.defaultCurrency),
+    email_content: '<h2>Thank You for purchasing the offer!</h2>'
   }
   hasError:any = {
     name: '',

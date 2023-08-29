@@ -35,7 +35,7 @@
                 </div>
                 <div class="kb-element-inner-group">
                     <div class="kb-searchFeild">
-                        <input placeholder="Search icons..." [(ngModel)]="searchText">
+                        <input placeholder="Search elements..." [(ngModel)]="searchText">
                         <span mat-ripple class="kb-clear" (click)="searchText=''"><i class="fa fa-times"></i></span>
                     </div>
                     <ul class="kb-element-list">
@@ -2094,6 +2094,22 @@
                                             [displayWith]="_style.formatLabel" tickInterval="0" step="1" min="-999"
                                             max="999" class="slider" aria-label="units">
                                         </mat-slider>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Advanced Custom Css Selectors Id Class')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">CSS Selector
+                                    <span class="kb-bulb-icon px-2 ml-2" [matTooltip]="'Use selector to add custom css in the Page setting>Advanced'" matTooltipPosition="above"><i
+                                        class="fa-regular fa-lightbulb"></i></span>
+                                </div>
+                                <div class="kb-tab-content">
+                                    <div class="kb-css-selector-group">
+                                        <div #csel [attr.id]="'#'+_general.selectedBlock.id + ' ' + (_general.selectedBlock?.content ? _general.getSelector(_general.selectedBlock) : '')" 
+                                            [cdkCopyToClipboard]="csel.id" matTooltip="Click to copy" matTooltipPosition="above" 
+                                            class="kb-css-selector" style="column-gap: 10px;">
+                                            <span class="kb-copy-content-text">Id</span>
+                                            {{csel.id}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

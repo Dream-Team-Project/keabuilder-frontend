@@ -690,6 +690,7 @@ export class GeneralService {
     success: false,
     error: false
   };
+  savingPage:boolean = false;
   saveDisabled:boolean = false;
   pathError:boolean = false;
   sectionTemplates:any = [];
@@ -1222,26 +1223,18 @@ export class GeneralService {
     }
   }
 
+  getSelector(ele:any) {
+    if(ele.content.name == 'text' || ele.content.name == 'heading') return '> div';
+    else if(ele.content.name == 'divider') return '> hr';
+    else if(ele.content.name == 'image') return 'img';
+    else if(ele.content.name == 'button') return 'a';
+    else if(ele.content.name == 'menu') return '>ul.kb-menu';
+    else if(ele.content.name == 'video') return ele.type == 'video' ? 'video' : '> div';
+    else return '';
+  }
+
   elementStyling(ele:any) {
-    var pseudoEle:string = '';
-    if(ele.content.name == 'text' || ele.content.name == 'heading') {
-      pseudoEle = '> div';
-    }
-    if(ele.content.name == 'divider') {
-      pseudoEle = '> hr';
-    }
-    else if(ele.content.name == 'image') {
-      pseudoEle = 'img';
-    }
-    else if(ele.content.name == 'button') {
-      pseudoEle = 'a';
-    }
-    else if(ele.content.name == 'menu') {
-      pseudoEle = '>ul.kb-menu';
-    }
-    else if(ele.content.name == 'video') {
-      pseudoEle = ele.type == 'video' ? 'video' : '> div';
-    }
+    var pseudoEle:string = this.getSelector(ele);
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',

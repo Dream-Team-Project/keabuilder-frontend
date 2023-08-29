@@ -27,7 +27,7 @@
     <div mat-dialog-content>
         <div class="rounded overflow-hidden d-flex mb-3 ">
             <input #fieldTagInp matTooltip="Field Tag" matTooltipPosition="above" class="kb-field-tag border-0 px-2" name="field_tag" (input)="fieldTagInp.value = getFieldTag(selField)" [value]="getFieldTag(selField)">
-            <span class="kb-field-tag-copy px-2" mat-ripple [matTooltip]="isCopied ? 'Copied' : 'Copy'" matTooltipPosition="above" color="primary" (cdkCopyToClipboardCopied)="textCopied($event)" [cdkCopyToClipboard]="fieldTagInp.value">
+            <span class="kb-field-tag-copy" mat-ripple [matTooltip]="isCopied ? 'Copied' : 'Copy'" matTooltipPosition="above" color="primary" (cdkCopyToClipboardCopied)="textCopied($event)" [cdkCopyToClipboard]="fieldTagInp.value">
                 <i class="fa-regular fa-copy"></i>
             </span>
         </div>
