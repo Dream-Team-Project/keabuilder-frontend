@@ -60,7 +60,7 @@ export class PaymentComponent implements OnInit {
        let obj = {key:this.stripekey.value, secret: this.stripesecret.value, method:'insert'};
         this.checkoutService.updatepayment(obj).subscribe({
             next: data => {
-              // console.log(data);
+              console.log(data);
               if(data.success==1){
                 this.dialog.closeAll();
                 this.sripestatus = 'Connected';

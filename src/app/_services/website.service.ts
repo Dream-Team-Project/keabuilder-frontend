@@ -13,6 +13,8 @@ const httpOptions = {
 export class WebsiteService {
 
   uuid:any = '';
+  websitename:any='';
+  website_id:any='';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) { 
     this.uuid = this.tokenStorage.getUser().uniqueid;

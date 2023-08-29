@@ -48,8 +48,8 @@ import { CreateFunnelStatsComponent } from './_components/_funnels/create-funnel
 import { CreateFunnelContactsComponent } from './_components/_funnels/create-funnel-contacts/create-funnel-contacts.component';
 import { CreateFunnelSalesComponent } from './_components/_funnels/create-funnel-sales/create-funnel-sales.component';
 import { CreateFunnelSettingsComponent } from './_components/_funnels/create-funnel-settings/create-funnel-settings.component';
-import { FunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/funnel-checkout.component';
 import { FunnelWizardNavComponent } from './_components/_funnels/funnel-wizard-nav/funnel-wizard-nav.component';
+import { NewFunnelCheckoutComponent } from './_components/_new-funnels/new-funnel-checkout/new-funnel-checkout.component';
 // funnels
 
 // new-funnels
@@ -61,7 +61,6 @@ import { CreateNewFunnelsComponent } from './_components/_new-funnels/create-new
 import { FunnelSettingsComponent } from './_components/_new-funnels/funnel-settings/funnel-settings.component';
 import { FunnelStepArchiveComponent } from './_components/_new-funnels/funnel-step-archive/funnel-step-archive.component';
 import { NewFunnelStepsComponent } from './_components/_new-funnels/new-funnel-steps/new-funnel-steps.component';
-
 // new-funnels
 
 // crm
@@ -129,6 +128,8 @@ import { ProductsComponent } from './_components/_sales/products/products.compon
 import { OffersComponent } from './_components/_sales/offers/offers.component';
 import { OfferComponent } from './_components/_sales/offer/offer.component';
 import { CheckoutComponent } from './_components/_sales/checkout/checkout.component';
+import { OrderFormComponent } from './_components/_sales/orderform/orderform.component';
+import { OrderFormCheckoutComponent } from './_components/_sales/orderform/checkout/checkout.component';
 // sales
 
 // account-setting
@@ -227,8 +228,10 @@ canActivate: [AuthGuard] },
     { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
     { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    { path: 'orderform', component: OrderFormComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
+  { path: 'sales/orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
   { path: 'sales/offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
   { path: 'builder/checkout/:id', component: CheckoutComponent, canActivate: [AuthGuard] },
  
@@ -254,7 +257,7 @@ canActivate: [AuthGuard] },
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
-  { path: 'checkout/:id', component: FunnelCheckoutComponent},
+  { path: 'checkout/:id', component: NewFunnelCheckoutComponent},
 
   // crm
 
@@ -452,13 +455,15 @@ export const RoutingComponents =
     CourseUserCourseHeaderComponent,
     CourseUserCourseForgotpassComponent,
     ComingSoonComponent,
-    FunnelCheckoutComponent,
+    NewFunnelCheckoutComponent,
     WebsitesComponent,
     CrmFieldsComponent,
     SalesComponent,
     PaymentComponent,
     ProductsComponent,
     OffersComponent,
+    OrderFormComponent,
+    OrderFormCheckoutComponent,
     OfferComponent,
     CheckoutComponent,
     DomainComponent,
