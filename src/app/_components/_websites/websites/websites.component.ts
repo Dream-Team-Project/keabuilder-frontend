@@ -16,6 +16,7 @@ import { ImageService } from 'src/app/_services/image.service';
 export class WebsitesComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
   allwebsites:any = []; 
   delwebsite:any;
@@ -34,8 +35,9 @@ export class WebsitesComponent implements OnInit {
   duplicatewebid  = '';
   selectedwebsite = '';
   confirmpass = '';
+  pageurl:any='';
 
-  constructor(private websiteService: WebsiteService,
+  constructor(public websiteService: WebsiteService,
               private _snackBar: MatSnackBar,
               private router: Router,
               private route: ActivatedRoute,
@@ -72,9 +74,10 @@ export class WebsitesComponent implements OnInit {
       this.nodata = false;
       this.allwebsites = [];
       data.data.forEach((element:any, index:number) => {
-        var genobj = {uniqueid:'',title:'',created:'',publishpages:'',totalpage:'',thumbnail:'',subdomain:''};
+        var genobj = {uniqueid:'',title:'',created:'',publishpages:'',totalpage:'',thumbnail:'',subdomain:'',domain:''};
 
         genobj.title = element.title;
+        genobj.domain = element.domain;
         var mycustomdate =  new Date(element.created_at);
         var text1 = mycustomdate.toDateString();
         var newspl = text1.split(' ');
@@ -375,5 +378,16 @@ export class WebsitesComponent implements OnInit {
     var datagen = this.removespecialchar(data).toLowerCase();
     return datagen;
   }
-
+  copyurl(website:any){
+    console.log(website)
+  this.pageurl = 'https://'+website?.domain;
+  this.dialog.open(this.copyurldialog)
+  }
+  
+  copyInputMessage(inputElement:any){
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+    this._snackBar.open('Successfully Copied!', 'OK');
+  }
 }
