@@ -1,4 +1,4 @@
-<ng-template #deldialog>
+<!-- <ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete Page</h1>
   <div mat-dialog-content>
       Would you like to delete the <span class="text-danger">{{delpage.page_name}}</span> page?
@@ -7,7 +7,7 @@
       <button mat-button mat-dialog-close cdkFocusInitial color="primary">No</button>
       <button mat-button class="text-danger" (click)="restoredeleteme(delpage,'delete');">Yes</button>
   </div>
-</ng-template>
+</ng-template> -->
 
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title >{{actionname}} Page</h1>
@@ -88,8 +88,6 @@
 <ng-template #quickeditdialog>
   <h1 mat-dialog-title >Quick Edit</h1>
   <div mat-dialog-content>
-
-    
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Page Url</mat-label>
       <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()"
@@ -136,6 +134,53 @@
   </div>
 </ng-template>
 
+<ng-template #deldialog>
+  <h1 mat-dialog-title class="text-danger">Archive</h1>
+  <div mat-dialog-content>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Archive Reason (Optional)</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="reason"
+        rows="8"
+        name="reasons"
+      ></textarea>
+    </mat-form-field>
+
+    <span class="kb-fnt">(It will help you remember why you archive it !)</span>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close color="primary">No</button>
+    <button
+      mat-button
+      class="text-danger"
+      (click)="restoredeleteme(delpage,'archived')"
+    >Archive Web Page
+    </button>
+  </div>
+</ng-template>
+<!-- Copy webpage url -->
+<ng-template #copyurldialog>
+  <h1 mat-dialog-title>Copy Web Page URL</h1>
+  <div mat-dialog-content>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Web Page Url</mat-label>
+      <textarea matInput readonly rows="3" name="funnelurlonly" #userinput>{{
+        pageurl
+      }}</textarea>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="copyInputMessage(userinput)"
+    >
+      <i class="far fa-copy"></i> Copy Page Url
+    </button>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">Close</button>
+  </div>
+</ng-template>
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <!-- <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
@@ -345,7 +390,7 @@
     <div class="row align-items-center mobkeaadjust">
       <div class="col-md-8 adjustmatfrm">
 
-        <div *ngIf="!showarchivemode else showarchived">
+        <div>
           <mat-form-field  appearance="fill" class="w-100">
             <mat-label>{{searchpagetxt}}</mat-label>
             <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility)" placeholder="Search Pages">
@@ -369,7 +414,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <ng-template #showarchived>
+        <!-- <ng-template #showarchived>
           <div class="adjustarchivesort">
 
             <mat-form-field  appearance="fill" class="w-100">
@@ -390,11 +435,11 @@
             </mat-form-field>
 
           </div>
-        </ng-template>
+        </ng-template> -->
       </div>
 
       <div class="col-md-4 pagemainlink text-right" >
-        <span *ngIf="!showarchivemode">
+        <span>
           <button mat-raised-button [color]="'accent'" (click)="togglepageview()" *ngIf="!nodata" class="mr-3">
             <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
             <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
@@ -404,71 +449,11 @@
         <button mat-raised-button (click)="addnewpage()" color="primary" class="mr-3"><span class="keamobhd">Create Page </span> <i
           class="fas fa-plus"></i></button>
 
-        <button mat-raised-button (click)="archivepages()" >
-          <span class="keamobhd">{{!showarchivemode ?'Archive':'View'}} Pages </span>
-          <i class="fas" [ngClass]="!showarchivemode ? 'fa-archive' : 'fa-file'"></i>
-        </button>
+        <button mat-raised-button (click)="archivepages()" > Archive Pages <i class="fas fa-archive"></i></button>
        
-      <!-- <button mat-raised-button class="ml-2" [routerLink]="['/website']" color="primary">Pages <i class="far fa-window-restore"></i></button> -->
-    
-    
-      <!-- <button mat-raised-button [routerLink]="['/website/details']">
-        <span class="keamobhd">Site Details </span>
-        <i class="fas fa-palette"></i>
-      </button> -->
-
-      </div>
-      
-    </div>
-    <!-- archive -->
-    <div class="row pt-4" *ngIf="showarchivemode else pages">
-      <div class="col-md-12">
-
-        <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" matSort>
-
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Page Name </th>
-              <td mat-cell *matCellDef="let row"> {{row.page_name}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="created_at">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-              <td mat-cell *matCellDef="let row"> {{_general.dateformat(row.created_at)}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="archive_reason">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Archive Reason </th>
-              <td mat-cell *matCellDef="let row"> {{row.archive_reason}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-              <td mat-cell *matCellDef="let row">
-                <button mat-raised-button [color]="'accent'" class="mr-2" (click)="restoredeleteme(row,'restore')">Restore <i
-                    class="fa fa-trash-restore" aria-hidden="true"></i></button>
-                <button mat-raised-button [color]="'danger'" (click)="openDialog(deldialog, row, '')">Delete <i class="far fa-trash-alt"
-                    aria-hidden="true"></i></button>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
-
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{searchval}}"</td>
-            </tr>
-          </table>
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-        </div>
-
       </div>
     </div>
-    <!-- archive -->
-    <!-- pages -->
-    <ng-template #pages>
+   
       <!-- no pages -->
       <div class="row" *ngIf="nodata else showpages">
         <div class="col-md-4"></div>
@@ -565,7 +550,7 @@
         
       </ng-template>
       <!-- pages to show -->
-    </ng-template>
+   
     <!-- pages -->
     <!-- pagination -->
     <div class="row" *ngIf="!nodata">

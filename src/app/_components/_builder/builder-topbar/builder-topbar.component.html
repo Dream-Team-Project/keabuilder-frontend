@@ -96,7 +96,7 @@
                 <i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe
             </button>
             <button mat-menu-item (click)="urdo = !urdo; zoom.active = false" [class.kb-btn-active]="urdo">
-                <i class="fa-solid fa-clock-rotate-left"></i> Recent
+                <i class="fa-solid fa-clock-rotate-left"></i> Changes
             </button>
             <button mat-menu-item *ngIf="!wftgl" (click)="zoomEmit(!zoom.active); urdo = false" [class.kb-btn-active]="zoom.active">
                 <i [innerHTML]="'zoomin' | svg | safeHtml"></i> Zoom

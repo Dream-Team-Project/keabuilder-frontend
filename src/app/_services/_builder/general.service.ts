@@ -690,6 +690,7 @@ export class GeneralService {
     success: false,
     error: false
   };
+  savingPage:boolean = false;
   saveDisabled:boolean = false;
   pathError:boolean = false;
   sectionTemplates:any = [];
@@ -1028,10 +1029,10 @@ export class GeneralService {
         head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
         body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
         style: this.getAllStyle(),
-        website_id: websiteid
+        website_id: websiteid,
+        page_id: this.webpage.uniqueid
       }
       if(preview) {
-        // var prevObj = JSON.parse(JSON.stringify(this.pageObj));
         this.pageObj.prevFolder = this.webpage.uniqueid;
         this.pageObj.folder = this.webpage.uniqueid;
         this.pageObj.dir = 'previews';
@@ -1146,11 +1147,9 @@ export class GeneralService {
 
   removeExtra(preview:boolean) {
     var body = this.pagehtml.querySelector('BODY');
-
     // encode text
     body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.encodeData(text.innerHTML);})
     // encoded text
-
     // remvoe extras
     var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
     /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
@@ -1160,11 +1159,9 @@ export class GeneralService {
     body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
     regExpArr.forEach((re:any)=>{body.innerHTML = body.innerHTML.replace(re, '');})
     // remvoed extras
-
     // decode text
     body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.decodeData(text.innerHTML);})
     // decoded text
-
     if(!preview) body.querySelectorAll('.kb-menu').forEach((item:any)=>{
       item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
     });
@@ -1226,26 +1223,18 @@ export class GeneralService {
     }
   }
 
+  getSelector(ele:any) {
+    if(ele.content.name == 'text' || ele.content.name == 'heading') return '> div';
+    else if(ele.content.name == 'divider') return '> hr';
+    else if(ele.content.name == 'image') return 'img';
+    else if(ele.content.name == 'button') return 'a';
+    else if(ele.content.name == 'menu') return '>ul.kb-menu';
+    else if(ele.content.name == 'video') return ele.type == 'video' ? 'video' : '> div';
+    else return '';
+  }
+
   elementStyling(ele:any) {
-    var pseudoEle:string = '';
-    if(ele.content.name == 'text' || ele.content.name == 'heading') {
-      pseudoEle = '> div';
-    }
-    if(ele.content.name == 'divider') {
-      pseudoEle = '> hr';
-    }
-    else if(ele.content.name == 'image') {
-      pseudoEle = 'img';
-    }
-    else if(ele.content.name == 'button') {
-      pseudoEle = 'a';
-    }
-    else if(ele.content.name == 'menu') {
-      pseudoEle = '>ul.kb-menu';
-    }
-    else if(ele.content.name == 'video') {
-      pseudoEle = ele.type == 'video' ? 'video' : '> div';
-    }
+    var pseudoEle:string = this.getSelector(ele);
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',

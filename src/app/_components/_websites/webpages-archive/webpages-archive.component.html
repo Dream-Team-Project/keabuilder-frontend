@@ -1,0 +1,69 @@
+<ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Page</h1>
+    <div mat-dialog-content>
+        Would you like to delete <span class="text-danger">{{delpage.page_name}}</span> page?<br>
+        All data with this page will be deleted and can't be restored!
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close color="primary">No</button>
+        <button mat-button  cdkFocusInitial class="text-danger" (click)="deletepage(delpage,'delete')" >Yes</button>
+    </div>
+  </ng-template>
+  
+  <div id="archivepages">
+      <div class="container-fluid">
+        <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+            <div class="row">
+              
+                <mat-form-field  appearance="fill" class="col-md-6">
+                  <mat-label>Search Archive Pages</mat-label>
+                  <input #searchInp matInput type="text"  (input)="searchpages(searchInp,filterInp)" id="offer-search" placeholder="Search by page name">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </mat-form-field>
+    
+                <mat-form-field appearance="fill" class="col-md-3 ">
+                  <mat-label>Showing Archive For</mat-label>
+                  <mat-select  #filterInp name="showingcontacts" value='created_at DESC' (valueChange)="searchpages(searchInp, filterInp)">
+                    <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+                <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+                <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+                <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+                  </mat-select>
+                </mat-form-field>
+             
+            </div>
+              <div class="row">
+                <div class="col-12">
+        <table class="table kb-table">
+          <thead>
+            <tr>
+                <th>Page Name</th>
+                <th>Archived Reason</th>
+                <th>Archived Date</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let page of archivepages; index as i">
+                <td>{{ page.page_name | titlecase}}</td>
+                <td>{{ page.archive_reason}}</td>
+                <td>{{ page.created_at | date:'medium' }}</td>
+                <td> 
+                    <span class="d-flex">
+                    <i mat-ripple matTooltip="Restore" matTooltipPosition="above" (click)="deletepage(page,'restore')"
+                        class="fa fa-trash-restore kb-table-action-icon" aria-hidden="true"></i>
+                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, page)" class="far fa-trash-alt  kb-table-action-icon kb-icon-del"
+                        aria-hidden="true"></i>
+                    </span>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+               
+                  </div>
+  
+              </div>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+  </div>
+

@@ -41,10 +41,10 @@
     color: #ffffff;
     background-color: var(--accent-color);
     font-size: 12px;
-    padding: 2px 12px;
-    border-radius: 50px 0px 0px 50px;
+    padding: 5px 8px;
+    border-radius: 0px 0px 0px 8px;
     cursor: pointer;
-    transition: .5s ease-in-out;
+    transition: .2s ease-in-out;
 }
 .statusbadge.active2 {
     background-color: #e0e0e0;

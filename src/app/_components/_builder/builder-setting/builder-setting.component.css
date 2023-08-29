@@ -313,6 +313,51 @@ i.kb-danger {
     }
 }
 
+.kb-tab-content.kb-css-selector-content {
+    flex-direction: column!important;
+}
+
+.kb-tab-content span.highlight {
+    width: 100%!important;
+    color: var(--primary-color);
+    text-align: right;
+    padding-right: 5px;
+}
+
+.kb-css-selector-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    grid-gap: 12px;
+    margin-bottom: 12px;
+}
+
+.kb-css-selector {
+    background: var(--kb-gray);
+    width: 100%;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.kb-copy-content-text {
+    background-color: var(--secondary-color);
+    color: var(--kb-white);
+    padding: 0 10px;
+}
+
+.kb-bulb-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--primary-color);
+    font-size: 16px;
+    padding: 0 10px;
+}
+
 span.kb-setting-icon .kb-handle-block {
     cursor: n-resize;
 }

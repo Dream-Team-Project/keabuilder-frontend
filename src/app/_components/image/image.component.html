@@ -29,7 +29,7 @@
                     <div *ngIf="!_image.loading else loading">
                         <div>
                         <input #imgInp class="kb-d-none" name="image" type="file" (change)="_image.fileChangeEvent($event, true)" accept=".jpg, .jpeg, .png">
-                        <button mat-raised-button (click)="imgInp.click();" color="primary" class="kb-btn">
+                        <button mat-raised-button (click)="imgInp.click();" color="primary">
                             <span>Upload a new image</span></button><br><br>
                         <span>File suported png, jpg, jpeg only</span>    
                         </div>
@@ -48,7 +48,7 @@
                                 Please paste a valid image link
                             </mat-error>
                         </div>
-                        <button mat-raised-button [disabled]="_image.extImgLinkInp.invalid" (click)="_image.loading = true; _image.saveImageOnDb(_image.extImgLink)" color="primary" class="kb-btn">
+                        <button mat-raised-button [disabled]="_image.extImgLinkInp.invalid" (click)="_image.loading = true; _image.saveImageOnDb(_image.extImgLink)" color="secondary">
                             <span>Add as external path</span></button> 
                         </div>                         
                     </div>

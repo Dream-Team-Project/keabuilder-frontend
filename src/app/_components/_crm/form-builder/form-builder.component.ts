@@ -199,8 +199,8 @@ fetchsingleemail(){
   
   saveForm(){
       if(this._form.form.emailenabled){
-      this._form.form.notifyemail=this.notifyemail?.toString();
-      this._form.form.emailid=this._form.singleemail.uniqueid;
+        this._form.form.notifyemail=this.notifyemail?.toString();
+        this._form.form.emailid=this._form.singleemail.uniqueid;
       }
       this._form.form.lists=this.filteredTempIds.lists?.toString();
       this._form.form.tags=this.filteredTempIds.tags?.toString();

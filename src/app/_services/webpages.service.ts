@@ -93,7 +93,7 @@ export class WebpagesService {
     }, httpOptions);
   }
 
-  getarchivepages(data:string):Observable<any> {
+  getarchivepages(data:any):Observable<any> {
     return this.http.post(this.getarchivepagesApi+this.uuid, {
       data,
     }, httpOptions);
@@ -135,6 +135,10 @@ export class WebpagesService {
     return this.http.post(this.movecopywebpageApi+this.uuid, {
       data
     }, httpOptions);
+  }
+  searchquerywebpages(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("./api/searchquerywebpages",data, httpOptions);
   }
 
 }

@@ -42,13 +42,13 @@
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferData)="transferData = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferData)="transferData = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled || _general.savingPage" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
     <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
         <app-bulder-wireframe (dialogToggle)="openDialog()" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
     </mat-drawer>
 </mat-drawer-container>
-<mat-progress-bar *ngIf="_general.saveDisabled" mode='indeterminate'></mat-progress-bar>
+<mat-progress-bar *ngIf="_general.saveDisabled || _general.savingPage" mode='indeterminate'></mat-progress-bar>
 <div cdkDropListGroup id="kb-page-container" [style.transform]="zoom.active ? 'scale('+zoom.value+'%)' : ''" (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled"
     (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : ''">
     <div id="kb-block-container" [class.loading]="!_general.loading.success">

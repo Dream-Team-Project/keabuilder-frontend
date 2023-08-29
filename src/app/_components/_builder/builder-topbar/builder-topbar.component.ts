@@ -90,7 +90,7 @@ export class BuilderTopbarComponent implements OnInit {
     if(this._general.selectedBlock.type == 'main') sel = 'Setting';
     else if(this.hfdialogOpen) sel = 'Rename';
     else if(this.wftgl) sel = 'Wireframe';
-    else if(this.urdo) sel = 'Recent';
+    else if(this.urdo) sel = 'Changes';
     else if(this.zoom.active) sel = 'Zoom';
     return sel ? '> '+sel : '';
   }  

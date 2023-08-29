@@ -40,7 +40,9 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('deldialog') deldialog!: TemplateRef<any>;
   @ViewChild('quickeditdialog') quickeditdialog!: TemplateRef<any>;
+  @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
+website_id:any;
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               public dialog: MatDialog, 
@@ -54,13 +56,14 @@ export class WebsitePagesComponent implements OnInit {
                 this.toggleview = _general.getStorage('page_toggle');
                 this.dataSource = new MatTableDataSource(this.users);
                 this.route.paramMap.subscribe((params: ParamMap) => {
-                  this.form.website_id = params.get('website_id');
+                  this.website_id = params.get('website_id');
+                  this.website_id = params.get('website_id');
                 });
                }
 
   delpage:any;
   hasError:boolean = false;
-  displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
+  // displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
   // sidebar = {
   //   open: false,
   //   anim: {open: false, close: false, time: 500},
@@ -227,7 +230,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   getWebsites() {
-    if(this.form.website_id) this.websiteService.getWebsite().subscribe({
+    if(this.website_id) this.websiteService.getWebsite().subscribe({
       next: webdata => {
         this.websites = [];
         webdata.data.forEach((element:any) => {
@@ -293,9 +296,9 @@ export class WebsitePagesComponent implements OnInit {
     const { pagename, pagepath } = this.form;
     this.hasError = false;
 
-    if(this.userFormControl.status=='VALID' && this.form.website_id){
+    if(this.userFormControl.status=='VALID' && this.website_id){
 
-      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.form.website_id};
+      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.website_id};
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
           // console.log(data);
@@ -313,7 +316,7 @@ export class WebsitePagesComponent implements OnInit {
               dir: '/drafts',
               folder: pagepath,
               prevFolder: pagepath,
-              website_id:this.form.website_id, 
+              website_id:this.website_id, 
             }
             this._general._file.savePage(page).subscribe((event:any) => {
               console.log(event);
@@ -347,10 +350,9 @@ export class WebsitePagesComponent implements OnInit {
 
   showwebpages(){
     this.searching = true;
-    if(this.form.website_id) {
-      this.webpagesService.getWebpagesById(this.form.website_id).subscribe({
+    if(this.website_id) {
+      this.webpagesService.getWebpagesById(this.website_id).subscribe({
         next: data => {
-          // console.log(data);
           this.shortdata(data);
           // console.log(data);
         },
@@ -381,27 +383,21 @@ export class WebsitePagesComponent implements OnInit {
         this.searching = false;
       }else{
         this.nodata = false;
-
-        var dt = {webid:this.form.website_id};
+        var dt = {webid:this.website_id};
         this.websiteService.getuniqwebsites(dt).subscribe({
           next: data => {
-    
             if(data?.length != 0) {
               // console.log(data);
               data.data.forEach((element:any) => {
-
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
                 // console.log(this.searchpagetxt);
-    
                 if(element.domain!='' && element.domain!=null){
                   this.mydomain = element.domain;
                 }else{
                   this.mydomain = element.subdomain+'.'+data.globalsubdomain;
                 }
-    
                 // console.log(this.mydomain);
               });
-
               // console.log(data);
               var tempsearch = [];
               for(var i = 0; i < dataA.data.length; i++) {
@@ -413,18 +409,16 @@ export class WebsitePagesComponent implements OnInit {
                 element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
                 element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
                 tempsearch.push(element);
+                // console.log(dataA.data.length-1 == i)
                 if(dataA.data.length-1 == i) {
                   this.kbpages = tempsearch;
                   this.searching = false;
+                  // console.log(this.kbpages)
                 }
               }
-
-
             }
           }
-        });
-        
-    
+        });    
       }
     }else{
       this.nodata = true;
@@ -436,7 +430,6 @@ export class WebsitePagesComponent implements OnInit {
 
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      // console.log(this.mydomain);
       var url = 'https://'+this.mydomain+'/'+data;
       window.open(url, '_blank');
     }
@@ -475,7 +468,7 @@ export class WebsitePagesComponent implements OnInit {
                         // console.log(data);
                         if(data.success==1){
 
-                          var webobj:any = {website_id:this.form.website_id};
+                          var webobj:any = {website_id:this.website_id};
                           this._general._file.createdefaulthome(webobj).subscribe(e=>{
                             // console.log(e);
                           })
@@ -532,7 +525,7 @@ export class WebsitePagesComponent implements OnInit {
 
   draftpublish(status:any, page_path:any){
     var getvl = status == '0' ? 'draft' : 'publish';
-    var newobjdt = {status:getvl, path:page_path, website_id:this.form.website_id};
+    var newobjdt = {status:getvl, path:page_path, website_id:this.website_id};
     this._general._file.toggleDraft(newobjdt).subscribe((data:any)=>{
     })
   }
@@ -549,7 +542,7 @@ export class WebsitePagesComponent implements OnInit {
         }else if(data.found==0){
 
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
-          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.form.website_id, dir:getvl};
+          var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.website_id, dir:getvl};
           this._general._file.renamepage(pathobj).subscribe({
             next: data => {
               // console.log(data);
@@ -596,8 +589,8 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   shortsettings(page:any, type:any){
-    console.log(page);
-    var dtobj = {pageid:page.id, type:type, webid: this.form.website_id};
+    // console.log(page);
+    var dtobj = {pageid:page.id, type:type, webid: page.website_id};
     if(type=='duplicate'){
       // console.log(id);
       this.webpagesService.dupldelpage(dtobj).subscribe({
@@ -607,8 +600,8 @@ export class WebsitePagesComponent implements OnInit {
             this._snackBar.open('Processing...', 'OK');
 
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
-            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:this.form.website_id, dir:getvl};
-            console.log(pathobj);
+            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
+            // console.log(pathobj);
          
             this._general._file.copypage(pathobj).subscribe({
               next: data => {
@@ -639,7 +632,7 @@ export class WebsitePagesComponent implements OnInit {
           if(data.success==1){
 
             // this.openSidebar();
-
+            this.dialog.open(this.copyurldialog);
             this.showmytemplates = false;
             this.addnewpagepopup = false;
             this.insidepagefirst = true;
@@ -673,7 +666,7 @@ export class WebsitePagesComponent implements OnInit {
       this.webpagesService.movecopywebpage(dtobj).subscribe({
         next: data => {
           // console.log(data);
-          var pathobj = {old_website_id:this.form.website_id, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
+          var pathobj = {old_website_id:this.website_id, new_website_id:this.newwebsiteid,dir:getvl, oldpath:page.page_path, newpath:data.newpath, trigger:''};
 
           this.actionname=='Move' ? pathobj.trigger = 'move' : pathobj.trigger = 'copy';
 
@@ -711,6 +704,14 @@ export class WebsitePagesComponent implements OnInit {
   archivepages(){
     // console.log('test'+this.fetchdatastatus);
     this.showarchivemode = !this.showarchivemode;
+    if(this.showarchivemode){
+      if(this.website_id){
+      this.router.navigate(['/websites/'+this.website_id+'/pages/archive'],{relativeTo: this.route});
+      }
+      else{
+        this.router.navigate(['/websites/pages/archive'],{relativeTo: this.route});
+      }
+    }
   }
 
 
@@ -730,7 +731,7 @@ export class WebsitePagesComponent implements OnInit {
   }
 
   applykbfilter(){
-    var dt:any = {showing:this.showingcontacts, webid:this.form.website_id};
+    var dt:any = {showing:this.showingcontacts, webid:this.website_id};
     this.webpagesService.getarchivepages(dt).subscribe({
       next: data => {
         this.users = data.data;
@@ -748,7 +749,7 @@ export class WebsitePagesComponent implements OnInit {
       search: search.value,
       filter: filter.value,
       visibility: visibility.value,
-      id:this.form.website_id
+      id:this.website_id
     }
     // console.log(obj);
     this.webpagesService.pagevisibility(obj).subscribe({
@@ -761,7 +762,7 @@ export class WebsitePagesComponent implements OnInit {
   
   // changevisibility(value:any){
   //   this.searching = true;
-  //   var dt = {order:value, id:this.websiteid};
+  //   var dt = {order:value, id:this.website_id};
   //   this.webpagesService.pagevisibility(dt).subscribe({
   //     next: data => {
   //       this.shortdata(data);
@@ -780,7 +781,7 @@ export class WebsitePagesComponent implements OnInit {
     }
     
     // console.log(this.arpageobj);
-    console.log(gendata);
+    // console.log(gendata);
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
@@ -806,7 +807,7 @@ export class WebsitePagesComponent implements OnInit {
                 // console.log(data);
 
                 if(data.success==1){
-                  var webobj:any = {website_id:this.form.website_id};
+                  var webobj:any = {website_id:this.website_id};
                   this._general._file.createdefaulthome(webobj).subscribe(e=>{
                     // console.log(e);
                   })
@@ -818,7 +819,7 @@ export class WebsitePagesComponent implements OnInit {
 
           if(data.deleteme==1){
             
-            var newpathobj:any = {website_id:this.form.website_id, path:data.path};
+            var newpathobj:any = {website_id:this.website_id, path:data.path};
             this._general._file.deletepage(newpathobj).subscribe({
               next: data => {
                 // console.log(data);
@@ -857,7 +858,7 @@ export class WebsitePagesComponent implements OnInit {
 
   searchpage(event: Event) {
     this.searching = true;
-    var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.form.website_id};
+    var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.website_id};
     // console.log(SearchValue);
     this.selstatusshow = 'all';
 
@@ -887,7 +888,7 @@ export class WebsitePagesComponent implements OnInit {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
       this.form.pagename='';
       this.form.pagepath='';
-      this.form.website_id='';
+      this.website_id='';
     });
   }
    // start all websites data actions
@@ -896,9 +897,9 @@ export class WebsitePagesComponent implements OnInit {
     this.websiteService.getWebsite().subscribe({
       next: data => {
         this.allwebsites=data.data;
-        if(this.form.website_id){
+        if(this.website_id){
           this.allwebsites.filter((c:any) => {
-          if (c.uniqueid == this.form.website_id) {
+          if (c.uniqueid == this.website_id) {
             this.selectedweb = c.title;
         }
       })
@@ -919,12 +920,12 @@ export class WebsitePagesComponent implements OnInit {
   selectweb(event:any): void {
     let value = event.option.value;
     this.selectedweb = value.title;
-    this.form.website_id = value.uniqueid;
+    this.website_id = value.uniqueid;
   }
 
   resetweb() {
     this.selectedweb = '';
-    this.form.website_id = '';
+    this.website_id = '';
     this.filterwebData();
   }
 

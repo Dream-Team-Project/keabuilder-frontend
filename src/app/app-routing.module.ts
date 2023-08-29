@@ -35,6 +35,7 @@ import { WebsiteNavigationComponent } from './_components/_websites/navigation/n
 import { WebsitePagesComponent } from './_components/_websites//pages/pages.component';
 import { WebsiteComponent } from './_components/_websites/website/website.component';
 import { WebsitesComponent } from './_components/_websites/websites/websites.component';
+import { WebpagesArchiveComponent } from './_components/_websites/webpages-archive/webpages-archive.component';
 // websites
 // funnels
 import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
@@ -169,6 +170,8 @@ const routes: Routes = [
       {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
       {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
       {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+      {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+      {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
     ],
   canActivate: [AuthGuard] },
 
@@ -282,21 +285,21 @@ canActivate: [AuthGuard] },
 
   // membership
 
-  { path: 'membership', component: MembershipComponent,
-    children:[
-      { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
-      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
-      { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
-      { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-  ],
-   canActivate: [AuthGuard] },
+  // { path: 'membership', component: MembershipComponent,
+  //   children:[
+  //     { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+  //     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+  //     { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
+  //     { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
+  //     { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
+  //     { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+  //     { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+  //     { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
+  //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+  // ],
+  //  canActivate: [AuthGuard] },
 
   // membership
 
@@ -309,7 +312,7 @@ canActivate: [AuthGuard] },
   
     { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+    { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
   
     // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -437,6 +440,7 @@ export const RoutingComponents =
     WebsiteHeadersComponent,
     WebsiteFootersComponent,
     WebsiteNavigationComponent,
+    WebpagesArchiveComponent,
     IntegrationsComponent,
     CrmFormBuilderComponent,
     BuilderTopbarComponent,

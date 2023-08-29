@@ -116,70 +116,71 @@ export class SidebarComponent implements OnInit {
         //   title: 'Marketplace'
         // }
       ]
-    },{
-      0:true,
-      routerlink: '/membership',
-      img: 'shield.gif',
-      icon: 'fas fa-shield-alt',
-      title: 'Membership',
-      submenu:[{
-        0:true,
-        routerlink: '/nolink',
-        img: 'shield.gif',
-        icon: 'fa fa-file-alt',
-        title: 'Landing Page'
-      },
-      {
-        0:true,
-        routerlink: '/nolink',
-        img: 'shield.gif',
-        icon: 'fa fa-file-alt',
-        title: 'Library Page'
-      },
-      {
-        0:true,
-        routerlink: '/membership/offers',
-        img: 'shield.gif',
-        icon: 'fa fa-percentage',
-        title: 'Offers'
-      },
-      {
-        0:true,
-        routerlink: '/membership/coupons',
-        img: 'shield.gif',
-        icon: 'fa fa-percent',
-        title: 'Coupons'
-      },
-      {
-        0:true,
-        routerlink: '/membership/payments',
-        img: 'shield.gif',
-        icon: 'fa fa-dollar-sign',
-        title: 'Payments'
-      },
-      {
-        0:true,
-        routerlink: '/membership/members',
-        img: 'shield.gif',
-        icon: 'fa fa-users',
-        title: 'Members'
-      },
-      {
-        0:true,
-        routerlink: '/membership/tags',
-        img: 'shield.gif',
-        icon: 'fa fa-tags',
-        title: 'Tags'
-      },
-      {
-        0:true,
-        routerlink: '/membership/marketplace',
-        img: 'shield.gif',
-        icon: 'fa fa-shopping-cart',
-        title: 'Marketplace'
-      }
-      ]
     },
+    // {
+    //   0:true,
+    //   routerlink: '/membership',
+    //   img: 'shield.gif',
+    //   icon: 'fas fa-shield-alt',
+    //   title: 'Membership',
+    //   submenu:[{
+    //     0:true,
+    //     routerlink: '/nolink',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-file-alt',
+    //     title: 'Landing Page'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/nolink',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-file-alt',
+    //     title: 'Library Page'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/offers',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-percentage',
+    //     title: 'Offers'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/coupons',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-percent',
+    //     title: 'Coupons'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/payments',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-dollar-sign',
+    //     title: 'Payments'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/members',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-users',
+    //     title: 'Members'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/tags',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-tags',
+    //     title: 'Tags'
+    //   },
+    //   {
+    //     0:true,
+    //     routerlink: '/membership/marketplace',
+    //     img: 'shield.gif',
+    //     icon: 'fa fa-shopping-cart',
+    //     title: 'Marketplace'
+    //   }
+    //   ]
+    // },
     // {
     //   0:true,
     //   routerlink: '/payment',
@@ -332,28 +333,28 @@ export class SidebarComponent implements OnInit {
     //   title: 'Forms',
     //   submenu:null
     // },
-    {
-      0:true,
-      routerlink: '/strategies',
-      img: 'chess.gif',
-      icon: 'fas fa-chess-knight',
-      title: 'Strategies',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/heatmap',
-      img: 'way.gif',
-      icon: 'fas fa-fire',
-      title: 'HeatMap',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/analytics',  
-      img: 'growth.gif',
-      icon: 'fas fa-chart-pie',
-      title: 'Analytics',
-      submenu:null
-    },
+    // {
+    //   0:true,
+    //   routerlink: '/strategies',
+    //   img: 'chess.gif',
+    //   icon: 'fas fa-chess-knight',
+    //   title: 'Strategies',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/heatmap',
+    //   img: 'way.gif',
+    //   icon: 'fas fa-fire',
+    //   title: 'HeatMap',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/analytics',  
+    //   img: 'growth.gif',
+    //   icon: 'fas fa-chart-pie',
+    //   title: 'Analytics',
+    //   submenu:null
+    // },
     // {
     //   0:true,
     //   routerlink: '/affiliates',
@@ -406,14 +407,14 @@ export class SidebarComponent implements OnInit {
     //     }
     //   ]
     // },
-    {
-      0:true,
-      routerlink: '/integrations',
-      img: 'cloud-network.gif',
-      icon: 'fas fa-cogs',
-      title: 'Integrations',
-      submenu:null
-    },
+    // {
+    //   0:true,
+    //   routerlink: '/integrations',
+    //   img: 'cloud-network.gif',
+    //   icon: 'fas fa-cogs',
+    //   title: 'Integrations',
+    //   submenu:null
+    // },
     {
       0:true,
       routerlink: '/account',
@@ -503,9 +504,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[4][0] = true;
+      this.allmenu[3][0] = true;
 
-      this.allmenu[4].submenu.forEach((element: any) => {
+      this.allmenu[3].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -517,9 +518,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[5][0] = true;
+      this.allmenu[4][0] = true;
 
-      this.allmenu[5].submenu.forEach((element: any) => {
+      this.allmenu[4].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -545,9 +546,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[11][0] = true;
+      this.allmenu[6][0] = true;
 
-      this.allmenu[11].submenu.forEach((element: any) => {
+      this.allmenu[6].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }

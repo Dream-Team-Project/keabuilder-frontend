@@ -191,7 +191,6 @@ div.kb-column.kb-block-container:not(:last-child)::after {
 
 .kb-cs-contain {
     margin: auto;
-    margin-top: 14px;
 }
 
 .kb-cs-prev {
