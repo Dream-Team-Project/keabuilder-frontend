@@ -612,7 +612,7 @@ website_id:any;
 
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
             var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
-            console.log(pathobj);
+            // console.log(pathobj);
          
             this._general._file.copypage(pathobj).subscribe({
               next: data => {
