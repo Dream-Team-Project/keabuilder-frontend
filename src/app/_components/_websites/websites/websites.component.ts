@@ -50,7 +50,7 @@ export class WebsitesComponent implements OnInit {
     this.fetwebfull();
     setTimeout(() => {
           this.shortwaiting = false;
-      }, 1500);
+      }, 1000);
 
   }
 
