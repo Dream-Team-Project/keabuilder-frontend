@@ -12,14 +12,16 @@ import { ImageService } from 'src/app/_services/image.service';
 export class OffersComponent implements OnInit {
 
   fetching:boolean = true;
+  defaultCurrency = { name: "United States Dollar", code: "USD", symbol: "$" };
+  offerObj = {
+    id: '',
+    name: '',
+    currency: JSON.stringify(this.defaultCurrency)
+  }
   hasError:any = {
     name: '',
   };
   offers:Array<any> = [];
-  offerObj = {
-    id: '',
-    name: '',
-  }
   search = {
     value: '',
     sortby: 'updated_at DESC',

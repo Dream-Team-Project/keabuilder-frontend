@@ -353,7 +353,6 @@ website_id:any;
     if(this.website_id) {
       this.webpagesService.getWebpagesById(this.website_id).subscribe({
         next: data => {
-          // console.log(data);
           this.shortdata(data);
           // console.log(data);
         },
@@ -387,23 +386,18 @@ website_id:any;
         var dt = {webid:this.website_id};
         this.websiteService.getuniqwebsites(dt).subscribe({
           next: data => {
-    
             if(data?.length != 0) {
               // console.log(data);
               data.data.forEach((element:any) => {
-
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
                 // console.log(this.searchpagetxt);
-    
                 if(element.domain!='' && element.domain!=null){
                   this.mydomain = element.domain;
                 }else{
                   this.mydomain = element.subdomain+'.'+data.globalsubdomain;
                 }
-    
                 // console.log(this.mydomain);
               });
-
               // console.log(data);
               var tempsearch = [];
               for(var i = 0; i < dataA.data.length; i++) {
@@ -422,13 +416,9 @@ website_id:any;
                   // console.log(this.kbpages)
                 }
               }
-
-
             }
           }
-        });
-        
-    
+        });    
       }
     }else{
       this.nodata = true;
