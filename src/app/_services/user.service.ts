@@ -15,7 +15,8 @@ export class UserService {
   updateuserdetailsApi = '/api/updateUsersDetailsdata/';
   user = {
     name: '',
-    email: ''
+    email: '',
+    
   };
   navVisible:boolean = false;
 

@@ -7,6 +7,7 @@ import { ImageService } from 'src/app/_services/image.service';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatDialog } from '@angular/material/dialog';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 
 @Component({
   selector: 'app-offer',
@@ -66,7 +67,8 @@ export class OfferComponent implements OnInit {
     private _product: ProductService,
     private _email: EmailService,
     public _general: GeneralService,
-    public _image: ImageService) {
+    public _image: ImageService,
+    private checkoutService: CheckoutService,) {
     this._route.paramMap.subscribe((params: ParamMap) => {
         this.offer.uniqueid = params.get('uniqueid');
     });   
@@ -77,11 +79,25 @@ export class OfferComponent implements OnInit {
     this.fetchProducts();
     this.fetchEmails();
     this.fetchstripeProducts();
+    this. fetchpaymentdetails();
   }
 
   openDialog(templateRef: TemplateRef<any>) {
     this._dialog.open(templateRef).afterClosed().subscribe((resp :any)=>{})
      
+  }
+  fetchpaymentdetails(){
+    this.checkoutService.getpaymentinteg().subscribe({
+      next: data => {
+      if(data.data.length!=0){
+        if(data.data.secret_key) this.isPaymentConnected=true;
+        else this.isPaymentConnected=false;
+      }
+      else{
+        this.isPaymentConnected=false;
+      }
+    }
+    })
   }
 
   fetchOffer() {
