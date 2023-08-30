@@ -16,7 +16,7 @@ export class ProfileSettingsComponent implements OnInit {
   emailFormControl = new FormControl('', [Validators.required, Validators.email,Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)]);
   firstnameFormControl = new FormControl('',[Validators.required]);
   lastnameFormControl = new FormControl('');
-  companynameFormControl = new FormControl('',[Validators.required]);
+  companynameFormControl = new FormControl('');
   phoneFormControl = new FormControl('',[Validators.required]);
 
   imageFormControl=new FormControl('');
