@@ -74,7 +74,7 @@ export class OrderFormComponent implements OnInit {
     if(this.productObj.name && this.productObj.name.length >= 3) {
       this.hasError = '';
       if(action == 'add') this.addorderform();
-      else this.updateproduct();
+      // else this.updateproduct();
     }
     else {
       let msg = this.productObj.name ? 'Minimum 3 characters required' : 'Please write the name of the Checkout';
@@ -93,16 +93,16 @@ export class OrderFormComponent implements OnInit {
     })
   }
 
-  updateproduct() {
-    this._orderformservice.updateproduct(this.productObj).subscribe((resp:any) => {
-      if(resp.success) {
-        this.fetchorderforms();
-        this.dialog.closeAll();
-        this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
-      }
-      else this.setError(resp?.message);
-    })
-  }
+  // updateproduct() {
+  //   this._orderformservice.updateproduct(this.productObj).subscribe((resp:any) => {
+  //     if(resp.success) {
+  //       this.fetchorderforms();
+  //       this.dialog.closeAll();
+  //       this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
+  //     }
+  //     else this.setError(resp?.message);
+  //   })
+  // }
 
   duplicateproduct(product:any){
     var temp = JSON.parse(JSON.stringify(product));

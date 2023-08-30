@@ -11,9 +11,9 @@ export class OrderformService {
   user_id:any = '';
   allorderforms = './api/allorderforms';
   allstripeproducts = './api/allstripeproducts';
-  product = './api/singleproduct';
+  singleorder = './api/singleorderform';
   addorderforms = './api/addorderform';
-  updateproducts = './api/updateproduct';
+  updateorderforms = './api/updateorderform';
   duplicateproducts = './api/duplicateproduct';
   deleteproducts = './api/deleteproduct';
 
@@ -29,8 +29,8 @@ export class OrderformService {
     return this.http.get(this.allstripeproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
-  singleproduct(uniqueid:any){
-    return this.http.get(this.product+'/'+this.user_id+'/'+uniqueid)
+  singleorderform(uniqueid:any){
+    return this.http.get(this.singleorder+'/'+this.user_id+'/'+uniqueid)
     .pipe(catchError(this.errorHandler));
   }
 
@@ -40,11 +40,12 @@ export class OrderformService {
     .pipe(catchError(this.errorHandler));    
   }
 
-  updateproduct(obj:any){
+  updateorderform(obj:any){
     obj.user_id = this.user_id;
-    return this.http.post(this.updateproducts,obj)
+    return this.http.post(this.updateorderforms,obj)
     .pipe(catchError(this.errorHandler));
   }
+
   duplicateproduct(obj:any){
     obj.user_id = this.user_id;
     return this.http.post(this.duplicateproducts,obj)

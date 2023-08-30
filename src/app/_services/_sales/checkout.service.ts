@@ -57,8 +57,6 @@ export class CheckoutService {
     }, httpOptions);
   }
 
-
-  
   
 
 }

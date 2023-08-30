@@ -9,7 +9,7 @@
       <div class="col-md-6 text-right">
         <button mat-raised-button color="accent" (click)="_general.prevRoute()"><i
             class="fa fa-arrow-left mr-2"></i>Back</button>
-        <button mat-raised-button color="primary" class="mx-3">Save
+        <button mat-raised-button color="primary" (click)="saveorder()" class="mx-3">Save
           <i class="far fa-save ml-1"></i>
         </button>
         <button mat-raised-button color="danger">Delete
@@ -345,7 +345,7 @@
                                     <div class="order2ButtonSubText">{{checkoutstyle.step1footertext}}</div>
                                 </div>
 
-                                <div class="o2step_step3 mt-4" *ngIf="switchstep">
+                                <div class="o2step_step3" *ngIf="switchstep">
                                     <a class="kb-back" (click)="switchstep = !switchstep" href="javascript:void(0)">Back</a>
                                     <h5 class="mb-4">PAYMENT METHOD <i class="fa-lock fas float-right iconsty"></i></h5>
                                     <small class="allfldreq paywthcard">Pay with card <img class="st-paycard"
@@ -363,23 +363,19 @@
 
                                     <div class="Checkout_Summary">
                                         <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table"> 
-                                            <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-lineitem">
-                                                <td class="Checkout_Summary_Table_Row_Cell">
-                                                    <label for=""><input type="checkbox" name="" id=""> 1 x Venture Sling 6L, Nightsky</label>
+                                            <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-lineitem"
+                                            *ngFor="let product of myproductarr; index as i;">
+                                                <td class="Checkout_Summary_Table_Row_Cell kbprname">
+                                                    <label [for]="'kbchk'+i">
+                                                      <input type="checkbox" [value]="product.price" [checked]="i==0" 
+                                                      (change)="maketotalprice($event)" [name]="product.name" [id]="'kbchk'+i">
+                                                      <span>{{product.name}}</span>
+                                                    </label>
                                                 </td>
-                                                <td class="Checkout_Summary_Table_Row_Cell">
+                                                <td class="Checkout_Summary_Table_Row_Cell kbprprice">
                                                     <span class="Checkout_Summary_Monetary">
-                                                        <span class="Checkout_Summary_Monetary_Units">$129</span>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-lineitem">
-                                                <td class="Checkout_Summary_Table_Row_Cell">
-                                                    <label for=""><input type="checkbox" name="" id=""> 1 x Venture Sling 6L, Nightsky</label>
-                                                </td>
-                                                <td class="Checkout_Summary_Table_Row_Cell">
-                                                    <span class="Checkout_Summary_Monetary">
-                                                        <span class="Checkout_Summary_Monetary_Units">$129</span>
+                                                        <span class="Checkout_Summary_Monetary_Units">
+                                                          {{product.symbol}}{{product.price!=0?product.price:'FREE'}}</span>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -388,11 +384,11 @@
                                     <div class="Checkout_Summary_OrderTotal">
                                         <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table Checkout_Summary_Table-ordertotal">
                                             <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-ordertotal">
-                                                <td class="Checkout_Summary_Table_Row_Cell">Order total</td>
-                                                <td class="Checkout_Summary_Table_Row_Cell">
+                                                <td class="Checkout_Summary_Table_Row_Cell kbprname2">Order total</td>
+                                                <td class="Checkout_Summary_Table_Row_Cell kbprprice2">
                                                     <span class="Checkout_Summary_Monetary">
-                                                        <span class="Checkout_Summary_Monetary_Currency">USD</span>
-                                                        <span class="Checkout_Summary_Monetary_Units">$259</span>
+                                                        <span class="Checkout_Summary_Monetary_Currency">{{symbolcode | uppercase}}</span>
+                                                        <span class="Checkout_Summary_Monetary_Units">{{totalprice}}</span>
                                                     </span>
                                                 </td>
                                             </tr>
@@ -402,7 +398,7 @@
                                 </div>
 
                                 <div class="o2step_step5 mt-4" *ngIf="switchstep">
-                                    <button type="button" class="btnkeacheckout" (click)="nextstep()">
+                                    <button type="button" class="btnkeacheckout">
                                         <span class="elButtonMainStep1">{{checkoutstyle.step2btntext}}</span>
                                       </button>
                                       <div class="order2ButtonSubText">{{checkoutstyle.step2footertext}}</div>
@@ -419,7 +415,44 @@
         <div class="col-md-8">
             <div class="kb-offer-card rounded px-3 pt-3 mb-4 pb-2">
                 <h6>Customize</h6>
+                <hr>
+                <br>
+
+              <div class="kb-offer-card rounded px-3 pt-3 mb-4">
+                <h6>Offers</h6>
+                <mat-form-field class="kb-full-width" appearance="fill" (click)="filterProductData($event)">
+                  <mat-label>Select offers</mat-label>
+                  <mat-chip-list #chipList aria-label="Product selection">
+                    <mat-chip *ngFor="let data of selectedProducts; index as i" (removed)="removeSelectedProduct(i)">
+                      {{ data?.name }}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <input matInput type="text" #searchChipInp placeholder="Select multiple offers"
+                    (input)="filterProductData($event)" [matAutocomplete]="listAuto" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100">
+                  <mat-autocomplete #listAuto="matAutocomplete" (optionSelected)="addSelectedProduct($event, searchChipInp)">
+                    <mat-option *ngFor="let option of filteredProducts" [value]="option"
+                      [disabled]="isOptionDisabled(selectedProducts, option.uniqueid)">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+
+              <div class="kb-offer-card rounded px-3 pt-3 mb-4">
+                <h6>Redirection</h6>
+                <mat-form-field class="kb-full-width">
+                  <mat-label>Redirection Url here...</mat-label>
+                  <input [(ngModel)]="redirection" matInput placeholder="Ex. https://abc.com/newpage/" value="">
+                </mat-form-field>
+
+              </div>
+
             </div>
+
         </div>
     </div>
 </div>

@@ -68,7 +68,6 @@
     width: 100%;
 }
 .Checkout_Summary_Table_Row_Cell {
-    line-height: 28px;
     font-size: 13px;
     font-weight: 400;
     letter-spacing: .5px;
@@ -88,12 +87,13 @@
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell {
     font-weight: 700;
-    line-height: 50px;
     text-transform: uppercase;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary {
     font-size: 13px;
     font-weight: 700;
+    display: flex;
+    align-items: center;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary_Currency {
     display: inline-block;
@@ -104,6 +104,7 @@
 }
 .Checkout_Summary_Table_Row_Cell label {
     margin: 0;
+    display:flex;
 }
 /* order summary */
 
@@ -147,11 +148,47 @@
 }
 .kb-back {
     font-weight: 700;
-    line-height: 50px;
+    line-height: 25px;
     text-transform: uppercase;
     font-size: 12px;
-    margin-bottom: -10px;
     display: block;
     color: #444;
     text-decoration: underline;
+}
+td.Checkout_Summary_Table_Row_Cell label span {
+    margin-left: 4px;
+    text-transform: capitalize;
+    line-height: 15px;
+}
+td.Checkout_Summary_Table_Row_Cell label{
+    cursor: pointer;
+    width: 100%;
+}
+.Checkout_Summary_Table_Row-lineitem {
+    margin-top: 10px;
+    display: inline-block;
+    width: 100%;
+}
+.kbprname{
+    width:80%;
+    display: inline-block;
+}
+.kbprprice{
+    width:20%;
+    display: inline-block;
+}
+.kbprname2{
+    width:70%;
+    display: inline-block;
+}
+.kbprprice2{
+    width:30%;
+    display: flex;
+    justify-content: flex-end;
+}
+.Checkout_Summary_Table_Row.Checkout_Summary_Table_Row-ordertotal {
+    margin: 10px 0px;
+    display: flex;
+    width: 100%;
+    align-items: center;
 }
