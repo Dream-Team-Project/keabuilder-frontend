@@ -12,6 +12,7 @@ import {
   ApexFill,
   ApexTooltip
 } from "ng-apexcharts";
+import { ReportingService } from 'src/app/_services/reporting.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -36,25 +37,40 @@ export class CrmReportsComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent | any;
   public chartOptions: Partial<ChartOptions> | any;
   public chartOptions2: Partial<ChartOptions> | any;
+  filtercontacts:any='WEEK';
+  contacts:any=[];
+  contactsduration:any=[];
+  fetch=false;
+  crmdata:any;
+  constructor(private _reportingService : ReportingService,) { 
+    this.fetchcrmdata();
+    this.fetchcontactsdata(this.filtercontacts).then((resp)=>{
+      this.chartsReload();
+      this.fetch=true;
+  })
+  }
 
-
-  constructor() { 
+  ngOnInit(): void {
+   
+  }
+  chartsReload(){
+    
     this.chartOptions = {
       series: [
         {
           name: "Contacts",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66,10,500]
+          data: this.contacts,
         },
       ],
       chart: {
-        type: "bar",
+        type: "area",
         height: 350
       },
       plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "55%",
-        }
+        stroke: {
+          curve: 'smooth',
+        },
+        colors:'#dea641',
       },
       dataLabels: {
         enabled: false
@@ -62,91 +78,107 @@ export class CrmReportsComponent implements OnInit {
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ['#dea641']
       },
       xaxis: {
-        categories: [
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
-        ]
+        categories: this.contactsduration
+         
       },
       yaxis: {
         title: {
-          text: "Contacts Per Month"
+          text: "Contacts Per Month",
         }
       },
       fill: {
-        opacity: 1
+        opacity: 1,
+        colors:'#dea641',
       },
       tooltip: {
         y: {
           formatter: function(val: string) {
             return val;
-          }
-        }
+          },
+        },
       }
     };
 
     this.chartOptions2 = {
       series: [
         {
-          data: [
-            {
-              x: "Automation",
-              y: [
-                new Date("2019-03-02").getTime(),
-                new Date("2019-03-04").getTime()
-              ]
-            },
-            {
-              x: "Campaign",
-              y: [
-                new Date("2019-03-04").getTime(),
-                new Date("2019-03-08").getTime()
-              ]
-            },
-            {
-              x: "Contacts",
-              y: [
-                new Date("2019-03-08").getTime(),
-                new Date("2019-03-12").getTime()
-              ]
-            },
-            {
-              x: "Forms",
-              y: [
-                new Date("2019-03-12").getTime(),
-                new Date("2019-03-18").getTime()
-              ]
-            }
-          ]
+          name: 'No',
+          data: [this.crmdata.automations,this.crmdata.campaigns,this.crmdata.contacts,this.crmdata.lists,this.crmdata.tags,this.crmdata.address]
         }
       ],
       chart: {
-        height: 350,
-        type: "rangeBar"
+        height: 400,
+        type: "bar"
       },
       plotOptions: {
         bar: {
-          horizontal: true
+          horizontal: true,
+          columnWidth: '55%',
+          endingShape: 'rounded',
         }
       },
+      fill: {
+        opacity: 1,
+        colors:'#dea641',
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
       xaxis: {
-        type: "datetime"
-      }
+        // type: "datetime"
+        categories: ['Automations','Campaigns','Contacts','Lists','Tags','Address']
+      },
+      tooltip: {
+        x: {
+          formatter: function (val: any) {
+            return val;
+          },
+        },
+      },
     };
   }
-
-  ngOnInit(): void {
-  }
+fetchcrmdata(){
+  this._reportingService.getcrmData().subscribe((data:any)=>{
+    if(data.success){
+      this.crmdata=data.data;
+      // console.log(this.crmdata)
+    }
+  })
+}
+  fetchcontactsdata(value:any){
+    this.contacts=[];
+  this.contactsduration=[];
+    let obj={duration:this.filtercontacts};
+    return new Promise((resolve) => {
+    this._reportingService.getcontactsData(obj).subscribe((data:any)=>{
+      if(data.success){
+        let i=0;
+        data.data.map((element:any) =>{
+          if(i < 20){
+          this.contacts.push(element.contacts);
+          this.contactsduration.push(element.week);
+          }
+          i++;
+        });
+        // console.log(this.contacts)
+        //   console.log(this.contactsduration)
+          }
+          resolve(true);
+        });
+    })
+}
+getdata(event:any){
+  // console.log(event)
+  this.filtercontacts=event;
+  this.fetchcontactsdata(this.filtercontacts).then((resp)=> this.chartsReload());
+}
 
 }

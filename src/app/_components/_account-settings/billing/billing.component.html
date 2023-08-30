@@ -279,7 +279,7 @@
   <div class="row">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="col-md-3"></div>
-    <div class="col-md-6" *ngIf="usertype !='free'; else nodata">
+    <div class="card col-md-6" *ngIf="usertype !='free'; else nodata">
       <div
         matTooltip="Billing Details :"
         matTooltipPosition="left"

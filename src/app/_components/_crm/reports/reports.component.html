@@ -1,8 +1,53 @@
 <div id="kb-crmreport">
-  <div class="container-fluid">
+  <div class="container-fluid" *ngIf="fetch">
         <div class="row mt-5">
             <div class="col-md-6">
-                <div class="kb-user-detail-box px-4 py-4 h-100">
+                <div class="card kb-user-detail-box px-4 py-4 h-100" >
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Please Select</mat-label>
+                        <mat-select  (valueChange)="getdata($event)" [(ngModel)]="filtercontacts">
+                            <mat-option value="WEEK">Weekly</mat-option>
+                          <mat-option value="Month" selected>Monthly</mat-option>
+                          <mat-option value="YEAR">Yearly</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                <apx-chart
+                    [series]="chartOptions.series"
+                    [chart]="chartOptions.chart"
+                    [dataLabels]="chartOptions.dataLabels"
+                    [plotOptions]="chartOptions.plotOptions"
+                    [yaxis]="chartOptions.yaxis"
+                    [legend]="chartOptions.legend"
+                    [fill]="chartOptions.fill"
+                    [stroke]="chartOptions.stroke"
+                    [tooltip]="chartOptions.tooltip"
+                    [xaxis]="chartOptions.xaxis"
+                ></apx-chart>
+            </div>
+        </div>
+            <div class="col-md-6">
+                <div class="card kb-user-detail-box px-4 py-4 h-100">
+                    <!-- <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>Please Select</mat-label>
+                        <mat-select value="month">
+                            <mat-option value="6">Weekly</mat-option>
+                          <mat-option value="30" selected>Monthly</mat-option>
+                          <mat-option value="365" selected>Yearly</mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                <apx-chart
+                    [series]="chartOptions2.series"
+                    [chart]="chartOptions2.chart"
+                    [plotOptions]="chartOptions2.plotOptions"
+                    [xaxis]="chartOptions2.xaxis"
+                    [fill]="chartOptions2.fill"
+                ></apx-chart>
+            </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 mb-5">
+                <div class="card kb-user-detail-box px-4 py-4 h-100">
                 <apx-chart
                 
                     [series]="chartOptions.series"
@@ -18,42 +63,14 @@
                 ></apx-chart>
             </div>
         </div>
-            <div class="col-md-6">
-                <div class="kb-user-detail-box py-2 h-100">
+            <div class="col-md-6 mb-5">
+                <div class="card kb-user-detail-box py-2 h-100">
                 <apx-chart
                     [series]="chartOptions2.series"
                     [chart]="chartOptions2.chart"
                     [plotOptions]="chartOptions2.plotOptions"
                     [xaxis]="chartOptions2.xaxis"
-                ></apx-chart>
-            </div>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-6 mb-5">
-                <div class="kb-user-detail-box px-4 py-4 h-100">
-                <apx-chart
-                
-                    [series]="chartOptions.series"
-                    [chart]="chartOptions.chart"
-                    [dataLabels]="chartOptions.dataLabels"
-                    [plotOptions]="chartOptions.plotOptions"
-                    [yaxis]="chartOptions.yaxis"
-                    [legend]="chartOptions.legend"
-                    [fill]="chartOptions.fill"
-                    [stroke]="chartOptions.stroke"
-                    [tooltip]="chartOptions.tooltip"
-                    [xaxis]="chartOptions.xaxis"
-                ></apx-chart>
-            </div>
-        </div>
-            <div class="col-md-6 mb-5">
-                <div class="kb-user-detail-box py-2 h-100">
-                <apx-chart
-                    [series]="chartOptions2.series"
-                    [chart]="chartOptions2.chart"
-                    [plotOptions]="chartOptions2.plotOptions"
-                    [xaxis]="chartOptions2.xaxis"
+                    [fill]="chartOptions2.fill"
                 ></apx-chart>
             </div>
             </div>
