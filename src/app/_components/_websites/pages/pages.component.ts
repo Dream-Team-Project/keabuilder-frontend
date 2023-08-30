@@ -57,7 +57,6 @@ website_id:any;
                 this.dataSource = new MatTableDataSource(this.users);
                 this.route.paramMap.subscribe((params: ParamMap) => {
                   this.website_id = params.get('website_id');
-                  this.website_id = params.get('website_id');
                 });
                }
 
@@ -188,6 +187,7 @@ website_id:any;
     this.showwebpages();
     this.getWebsites();
     this.fetchallwebsites();
+    this.author = this.userService?.user?.name;
 
     setTimeout(() => {
         this.shortwaiting = false;
@@ -198,7 +198,7 @@ website_id:any;
       this.dataSource.sort = this.sort;
     }, 500);
 
-    this.applykbfilter();
+    // this.applykbfilter();
 
     // this.websiteService.getWebsite().subscribe({
     //   next: data => {
@@ -212,18 +212,18 @@ website_id:any;
     //   }
     // });
 
-    this.userService.getUsersDetails().subscribe({
-      next: data => {
+    // this.userService.getUsersDetails().subscribe({
+    //   next: data => {
 
-        // if(data.realdomain!=''){
-        //   this.mydomain = data.realdomain;
-        // }else{
-        //   this.mydomain = data.data[0].subdomain+'.'+data.domain;
-        // }
-
-        this.author = data.data[0].firstname;
-      }
-    });
+    //     // if(data.realdomain!=''){
+    //     //   this.mydomain = data.realdomain;
+    //     // }else{
+    //     //   this.mydomain = data.data[0].subdomain+'.'+data.domain;
+    //     // }
+    // this.author = data.data[0].firstname;
+        
+    //   }
+    // });
 
     // console.log(this.toggleview);
 
@@ -255,10 +255,6 @@ website_id:any;
     this.addnewpagepopup = false;
 
     this.showmytemplates = true;
-  }
-
-  usetemplate(id:any){
-
   }
 
   createfromscratch(){
@@ -558,17 +554,6 @@ website_id:any;
 
   }
 
-  // hidepopupsidebar(){
-  //   this.popupsidebar = false;
-  //   this.pathcheck2 = false;
-
-  //   this.sidebar.anim.close = true;
-  //   setTimeout((e:any)=>{
-  //     this.sidebar.anim.close = false;
-  //     this.sidebar.open = false;
-  //   },this.sidebar.animtime)
-  // }
-
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
@@ -730,18 +715,18 @@ website_id:any;
     this.arpageobj = dataobj;
   }
 
-  applykbfilter(){
-    var dt:any = {showing:this.showingcontacts, webid:this.website_id};
-    this.webpagesService.getarchivepages(dt).subscribe({
-      next: data => {
-        this.users = data.data;
-        this.dataSource = new MatTableDataSource(this.users);
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
-  }
+  // applykbfilter(){
+  //   var dt:any = {showing:this.showingcontacts, webid:this.website_id};
+  //   this.webpagesService.getarchivepages(dt).subscribe({
+  //     next: data => {
+  //       this.users = data.data;
+  //       this.dataSource = new MatTableDataSource(this.users);
+  //     },
+  //     error: err => {
+  //       console.log(err);
+  //     }
+  //   });
+  // }
 
   searchpages(search: any, filter: any, visibility:any) {
     this.searching = true;
@@ -835,7 +820,7 @@ website_id:any;
           // this.hidepopupsidebar();
           this.dialog.closeAll();
           this.showwebpages();
-          this.applykbfilter();
+          // this.applykbfilter();
 
         }
 

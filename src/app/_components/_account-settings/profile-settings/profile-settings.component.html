@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-          
+          <div class="kb-profile-card rounded px-4 py-4">
               <div class="row d-flex ">
                   <div class="col-md-2 col-2 symbol pb-4 pr-0 pl-4">
                       <div class="symbol-label" [style.backgroundImage]="'url('+imageService.getImgPath(userimgpath)+')'" style="background-image:url('/assets/images/profile/avatar.png')"></div>
@@ -15,7 +15,20 @@
                 </div>
                </div>
                 </div>
-          
+          <div class="row">
+            <mat-form-field class="kb-full-width col-6" appearance="fill">
+              <mat-label>First Name</mat-label>
+              <input type="text" matInput [formControl]="firstnameFormControl" placeholder="Ex. firstname" required [(ngModel)]="profileobj.firstname">
+              <mat-error *ngIf="firstnameFormControl.hasError('required')">
+                First Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+             
+            <mat-form-field class="kb-full-width col-6" appearance="fill">
+              <mat-label>Last Name</mat-label>
+              <input type="text" matInput [formControl]="lastnameFormControl" placeholder="Ex. lastname" [(ngModel)]="profileobj.lastname">
+            </mat-form-field>
+          </div>
         <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Email</mat-label>
             <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" required [(ngModel)]="profileobj.email">
@@ -31,27 +44,6 @@
           </mat-form-field>
 
           <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>First Name</mat-label>
-            <input type="text" matInput [formControl]="firstnameFormControl" placeholder="Ex. firstname" required [(ngModel)]="profileobj.firstname">
-            <mat-error *ngIf="firstnameFormControl.hasError('required')">
-              First Name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-           
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Last Name</mat-label>
-            <input type="text" matInput [formControl]="lastnameFormControl" placeholder="Ex. lastname" [(ngModel)]="profileobj.lastname">
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Company Name</mat-label>
-            <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. company name" required [(ngModel)]="profileobj.company">
-            <mat-error *ngIf="companynameFormControl.hasError('required')">
-              Company Name is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Phone Number</mat-label>
             <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. Phone Number" required [(ngModel)]="profileobj.phone">
             <mat-error *ngIf="phoneFormControl.hasError('required')">
@@ -59,10 +51,20 @@
             </mat-error>
           </mat-form-field>
 
-          <div class="d-flex justify-content-center">
-          <button mat-raised-button color="primary" (click)="updateprofile()" [disabled]="emailFormControl.invalid || firstnameFormControl.invalid || companynameFormControl.invalid || phoneFormControl.invalid">Update</button>
-        </div>
+          <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Company Name<span class="kb-tag kb-info-tag ml-1">Optional</span></mat-label>
+            <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. company name"  [(ngModel)]="profileobj.company">
+            <!-- <mat-error *ngIf="companynameFormControl.hasError('required')">
+              Company Name is <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
 
+         
+
+          <div class="d-flex justify-content-center">
+          <button mat-raised-button color="primary" (click)="updateprofile()" [disabled]="emailFormControl.invalid || firstnameFormControl.invalid || phoneFormControl.invalid">Update</button>
+        </div>
+      </div>
         </div>
         <div class="col-md-3"></div>
       </div>
