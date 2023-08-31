@@ -1,0 +1,127 @@
+<ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Template</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{deltemplate.name}}</span> template?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close (click)="deleteTemplate()" class="text-danger">Yes</button>
+    </div>
+  </ng-template>
+  <ng-template #editdialog>
+    <h1 mat-dialog-title >Update Template</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Template Name</mat-label>
+            <input
+              type="text"
+              matInput
+              required
+              minlength="3"
+              [formControl]="templatenameFormControl"
+              [(ngModel)]="templatename"
+              name="template name"
+              placeholder="Ex. My First Optin"
+            />
+            <mat-error *ngIf="templatenameFormControl.hasError('required')">
+            Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="templatenameFormControl.hasError('minlength')">
+             Name must be at least <strong>3</strong> characters
+            </mat-error>
+          </mat-form-field>
+      </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
+      <button mat-button mat-dialog-close (click)="updateTemplate()" [color]="'primary'" [disabled]="templatenameFormControl.invalid">Update</button>
+    </div>
+  </ng-template>
+  <!-- <ng-template #adddialog>
+    <h1 mat-dialog-title >Select Website</h1>
+    <div mat-dialog-content>
+      <mat-form-field class="kb-full-width" appearance="fill" (click)="filterwebData()" [class.mat-form-field-invalid]="hasError">
+        <mat-label>Website</mat-label>
+        <input matInput type="text" [(ngModel)]="selectedweb" placeholder="Search by website name"
+      (input)="filterwebData()" [matAutocomplete]="websiteAuto" required class="w-100">
+    <button *ngIf="selectedweb" matSuffix mat-icon-button aria-label="Clear" (click)="resetweb()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-autocomplete #websiteAuto="matAutocomplete" (optionSelected)="selectweb($event)">
+      <mat-option *ngFor="let option of filteredweb" [value]="option"
+        [disabled]="option.uniqueid == website_id">
+        {{ option.title | titlecase }}
+      </mat-option>
+    </mat-autocomplete>
+      </mat-form-field>
+  
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button class="kb-danger" mat-dialog-close >Cancel</button>
+        <button mat-button  color="primary" (click)="copytemplate()">Create</button>
+    </div>
+  </ng-template> -->
+<div class="container-fluid p-0">
+    <div class="row align-items-center border-bottom pb-3 m-0">
+        <div class="col-md-7">
+            <span class="kb-template-heading">Choose a Template to Start</span>
+        </div>
+        <div class="col-md-5 text-right">
+            <button mat-raised-button color="accent" (click)="closeDialog.emit()" class="mr-3">
+                <i class="fa fa-arrow-left mr-2"></i>Back</button>
+            <button mat-raised-button color="primary" (click)="createDialog.emit()">
+                <i class="fa-solid fa-file-circle-plus mr-2" ></i>Create from scratch</button>
+        </div>
+    </div>
+    <mat-tab-group class="kb-template-container">
+        <mat-tab label="System Templates">
+            <div class="row m-0" *ngIf="systemplates?.length > 0">
+                <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
+                    <div class="kb-template-card">
+                        <div class="kb-template-thumbnail"
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                        </div>
+                        <div class="text-center p-2">{{temp.name | titlecase}}</div>
+                    </div>
+                </div>
+            </div>
+                <div class="mt-5" *ngIf="systemplates?.length == 0">
+                    <div class="kb-img-fluid">
+                      <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
+                    </div>
+                    
+                  </div>
+            
+        </mat-tab>
+        <mat-tab label="Saved Templates">
+            <div class="row mx-0" *ngIf="templates?.length > 0">
+                <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
+                    <div class="kb-template-card">
+                        <div class="kb-template-thumbnail"
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2">
+                            <span class="ftoverflow">{{temp.name | titlecase}}</span>
+                            <span class="d-flex justify-content-end">
+                                <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true"(click)="templatepreview(temp)"></i>
+                                <i mat-ripple matTooltip="Copy" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
+                                <!-- <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, temp)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del" aria-hidden="true"></i> -->
+                                <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
+                                    <button mat-menu-item (click)="templatepreview(temp)"><i class="fas fa-eye mr-2" ></i> View</button>
+                                    <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button>
+                                    <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
+                                    </mat-menu>  
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="mt-5" *ngIf="templates?.length == 0">
+                    <div class="kb-img-fluid">
+                      <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
+                    </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

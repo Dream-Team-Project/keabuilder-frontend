@@ -23,6 +23,7 @@ export class BuilderTopbarComponent implements OnInit {
   @Output('parentTrigger') parentTrigger: EventEmitter<any> = new EventEmitter();
   @Output('transferData') transferData: EventEmitter<any> = new EventEmitter();
   @Output('zoomPage') zoomPage: EventEmitter<any> = new EventEmitter();
+  @Output('saveastemp') saveastemp: EventEmitter<any> = new EventEmitter();
   @Input('wftgl') wftgl:any;
   @Input('ishf') ishf:any;
 
@@ -113,8 +114,8 @@ export class BuilderTopbarComponent implements OnInit {
     this.dialog.open(templateRef);
   }  
   
-  deleteTemplate() {
-    this._general._file.deletetemplate(this.seltemp.id).subscribe(e=>{
+  deletesectiontemplate() {
+    this._general._file.deletesectiontemplate(this.seltemp.id).subscribe(e=>{
       this._general.fetchSectionTemplates().then(e=>{
         this.snackBar('deleted');
       });
@@ -122,9 +123,9 @@ export class BuilderTopbarComponent implements OnInit {
     })
   }
 
-  updateTemplate() {
+  updatesectiontemplate() {
     if(!this.validate.tempname.invalid) {
-      this._general._file.updatetemplate(this.seltemp).subscribe(e=>{
+      this._general._file.updatesectiontemplate(this.seltemp).subscribe(e=>{
         this._general.fetchSectionTemplates().then(e=>{
           this.snackBar('renamed');
         });

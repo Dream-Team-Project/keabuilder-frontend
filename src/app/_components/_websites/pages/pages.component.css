@@ -167,6 +167,7 @@
     -ms-transition: all 2s linear;
     -o-transition: all 2s linear;
     transition: all 2s linear;
+    background-image: url('/assets/uploads/images/webpage_thumbnail.jpg');
   }
   
   .kb-fitimg:hover {

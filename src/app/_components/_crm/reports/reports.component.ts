@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReportingService } from 'src/app/_services/reporting.service';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -34,27 +35,66 @@ export type ChartOptions = {
 export class CrmReportsComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent | any;
-  public chartOptions: Partial<ChartOptions> | any;
+  public chartContactOptions: Partial<ChartOptions> | any;
   public chartOptions2: Partial<ChartOptions> | any;
 
+  fetched=false;
+  recentContacts:any = [];
+  monthlyContacts:any = [];
+  contactLimit = 8;
+  contactData = {
+    x: [],
+    y: [],
+  }
 
-  constructor() { 
-    this.chartOptions = {
+  crmdata:any;
+  filtercontacts:any='WEEK';
+  contacts:any=[];
+  contactsduration:any=[];
+  campaigns:any;
+
+  constructor(private _reportingService : ReportingService) { }
+
+  ngOnInit(): void {
+    this.fetchRecentContacts();
+    this.fetchMonthlyContacts();
+  }
+
+  fetchRecentContacts() {
+    this._reportingService.recentContacts(this.contactLimit).subscribe((resp:any)=>{
+      if(resp.success) this.recentContacts = resp.data;
+    })
+  }
+
+  fetchMonthlyContacts() {
+    this._reportingService.monthlyContacts().subscribe((resp:any)=>{
+      if(resp.success) {
+        this.monthlyContacts = resp.data;
+        this.contactData.x = this.monthlyContacts.map((m:any) => m.date);
+        this.contactData.y = this.monthlyContacts.map((m:any) => m.count);
+        console.log(this.contactData);
+        this.contactChartOption();
+      }
+    })
+  }
+
+  contactChartOption() {
+    this.chartContactOptions = {
       series: [
         {
           name: "Contacts",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66,10,500]
+          data: this.contactData.y,
         },
       ],
       chart: {
-        type: "bar",
+        type: "area",
         height: 350
       },
       plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: "55%",
-        }
+        stroke: {
+          curve: 'smooth',
+        },
+        colors:'#dea641',
       },
       dataLabels: {
         enabled: false
@@ -62,91 +102,81 @@ export class CrmReportsComponent implements OnInit {
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ['#dea641']
       },
       xaxis: {
-        categories: [
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
-        ]
+        categories: this.contactData.x
       },
       yaxis: {
         title: {
-          text: "Contacts Per Month"
+          text: "Contacts Per Month",
         }
       },
       fill: {
-        opacity: 1
+        opacity: 1,
+        colors:'#dea641',
       },
       tooltip: {
         y: {
           formatter: function(val: string) {
             return val;
-          }
-        }
+          },
+        },
       }
     };
+    console.log(this.chartContactOptions);
+    this.fetched = true;
+  }
 
+  chartsReload(){
     this.chartOptions2 = {
       series: [
         {
-          data: [
-            {
-              x: "Automation",
-              y: [
-                new Date("2019-03-02").getTime(),
-                new Date("2019-03-04").getTime()
-              ]
-            },
-            {
-              x: "Campaign",
-              y: [
-                new Date("2019-03-04").getTime(),
-                new Date("2019-03-08").getTime()
-              ]
-            },
-            {
-              x: "Contacts",
-              y: [
-                new Date("2019-03-08").getTime(),
-                new Date("2019-03-12").getTime()
-              ]
-            },
-            {
-              x: "Forms",
-              y: [
-                new Date("2019-03-12").getTime(),
-                new Date("2019-03-18").getTime()
-              ]
-            }
-          ]
+          name: 'No',
+          data: [this.crmdata.automations,this.crmdata.campaigns,this.crmdata.contacts,this.crmdata.lists,this.crmdata.tags,this.crmdata.address]
         }
       ],
       chart: {
-        height: 350,
-        type: "rangeBar"
+        height: 400,
+        type: "bar"
       },
       plotOptions: {
         bar: {
-          horizontal: true
+          horizontal: true,
+          columnWidth: '55%',
+          endingShape: 'rounded',
         }
       },
+      fill: {
+        opacity: 1,
+        colors:'#dea641',
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
       xaxis: {
-        type: "datetime"
-      }
+        // type: "datetime"
+        categories: ['Automations','Campaigns','Contacts','Lists','Tags','Address']
+      },
+      tooltip: {
+        x: {
+          formatter: function (val: any) {
+            return val;
+          },
+        },
+      },
     };
   }
 
-  ngOnInit(): void {
+  contactIcon(contact:any){
+    var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
+    var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
+    if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
+    return str.toUpperCase();
   }
-
 }

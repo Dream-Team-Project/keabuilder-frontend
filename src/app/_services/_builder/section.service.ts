@@ -30,7 +30,7 @@ export class SectionService {
   sectionObj:any = {id: '', type: 'section', rowArr: [], setting:false, redirection: {link: '', target: '_self' }, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}, hide: {desktop:false, tablet_h:false, tablet_v:false, mobile:false}};
   selectedSectionRows = [];
 
-  pageSession:any = {undo: 0, redo: 0}
+  pageSession:any = {undo: 0, redo: 0};
   pageSessionArr:any = [];
 
   constructor(private _general: GeneralService, private _style:StyleService) { 

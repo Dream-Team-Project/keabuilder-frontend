@@ -49,7 +49,7 @@
     /* scrolling */
     
     * ::-webkit-scrollbar, .kb-scroll ::-webkit-scrollbar {
-        width: 6px!important;
+        width: 8px!important;
         transition: 0.2s ease-in-out;
         z-index: 9999;
     }
@@ -59,20 +59,24 @@
     }
 
     *:hover ::-webkit-scrollbar , #bw-sidebar:hover ::-webkit-scrollbar, .kb-scroll:hover ::-webkit-scrollbar, *:hover .kb-scroll ::-webkit-scrollbar {
-      width: 6px!important;
+      width: 8px!important;
     }
 
       
       /* Track */
 
         * ::-webkit-scrollbar-track, .kb-scroll ::-webkit-scrollbar-track {
-            background-color: transparent;
+            background-color: var(--kb-gray);
         }
        
       /* Handle */
 
       * ::-webkit-scrollbar-thumb {
-        background-color: var(--secondary-color);
+        background-color: rgb(69 69 69 / 30%);
+      }
+
+      * ::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(69 69 69 / 50%);
       }
 
       /* Handle on hover */

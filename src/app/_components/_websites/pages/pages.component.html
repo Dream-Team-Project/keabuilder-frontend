@@ -1,13 +1,8 @@
-<!-- <ng-template #deldialog>
-  <h1 mat-dialog-title class="kb-danger">Delete Page</h1>
-  <div mat-dialog-content>
-      Would you like to delete the <span class="text-danger">{{delpage.page_name}}</span> page?
-  </div>
-  <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close cdkFocusInitial color="primary">No</button>
-      <button mat-button class="text-danger" (click)="restoredeleteme(delpage,'delete');">Yes</button>
-  </div>
-</ng-template> -->
+<!-- templates -->
+<ng-template #templatedialog>
+  <app-template (createDialog)="addnewpage($event)" (closeDialog)="dialog.closeAll()"></app-template>
+</ng-template>
+<!-- templates -->
 
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title >{{actionname}} Page</h1>
@@ -32,6 +27,7 @@
 </ng-template>
 
 <ng-template #adddialog>
+  
   <h1 mat-dialog-title >Create A Page</h1>
   <div mat-dialog-content>
 
@@ -159,6 +155,7 @@
     </button>
   </div>
 </ng-template>
+
 <!-- Copy webpage url -->
 <ng-template #copyurldialog>
   <h1 mat-dialog-title>Copy Web Page URL</h1>
@@ -181,6 +178,7 @@
     <button mat-button mat-dialog-close class="text-danger">Close</button>
   </div>
 </ng-template>
+
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <!-- <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
@@ -446,7 +444,7 @@
           </button>
         </span>
        
-        <button mat-raised-button (click)="addnewpage()" color="primary" class="mr-3"><span class="keamobhd">Create Page </span> <i
+        <button mat-raised-button (click)="templateDialog(templatedialog)" color="primary" class="mr-3"><span class="keamobhd">Create Page </span> <i
           class="fas fa-plus"></i></button>
 
         <button mat-raised-button (click)="archivepages()" > Archive Pages <i class="fas fa-archive"></i></button>
