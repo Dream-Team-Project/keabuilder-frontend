@@ -56,31 +56,43 @@
         <mat-button-toggle-group [(ngModel)]="offer.email_type" aria-label="Email type" class="mb-3">
           <mat-button-toggle *ngFor="let et of emailTypes" [value]="et.value">{{et.name}}</mat-button-toggle>
         </mat-button-toggle-group>
-        <ng-container *ngIf="offer.email_type == 'custom'">
-          <mat-form-field class="kb-full-width" appearance="fill"
-            [class.mat-form-field-invalid]="!offer.email_subject && hasError">
-            <mat-label>Email Subject</mat-label>
-            <input matInput type="text" placeholder="Email subject" [(ngModel)]="offer.email_subject" required>
-          </mat-form-field>
-          <editor [(ngModel)]="offer.email_content" [init]="_general.config"
-            [class]="!offer.email_content && hasError ? 'border border-danger' : ''" class="rounded"></editor>
+
+        <ng-container *ngIf="issmtpConnected else notConnectedsmtp">
+          <ng-container *ngIf="offer.email_type == 'custom'">
+            <mat-form-field class="kb-full-width" appearance="fill"
+              [class.mat-form-field-invalid]="!offer.email_subject && hasError">
+              <mat-label>Email Subject</mat-label>
+              <input matInput type="text" placeholder="Email subject" [(ngModel)]="offer.email_subject" required>
+            </mat-form-field>
+            <editor [(ngModel)]="offer.email_content" [init]="_general.config"
+              [class]="!offer.email_content && hasError ? 'border border-danger' : ''" class="rounded"></editor>
+          </ng-container>
+          <ng-container *ngIf="offer.email_type == 'template'">
+            <mat-form-field class="kb-full-width" appearance="fill" (click)="filterEmailData()" [class.mat-form-field-invalid]="!offer.email_id && hasError">
+              <mat-label>Select an email template</mat-label>
+              <input matInput type="text" [(ngModel)]="selectedEmail" placeholder="Search by template name"
+                (input)="filterEmailData()" [matAutocomplete]="emailAuto" required class="w-100">
+              <button *ngIf="selectedEmail" matSuffix mat-icon-button aria-label="Clear" (click)="resetEmail()">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-autocomplete #emailAuto="matAutocomplete" (optionSelected)="selectEmail($event)">
+                <mat-option *ngFor="let option of filteredEmails" [value]="option"
+                  [disabled]="option.uniqueid == offer.email_id">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </ng-container>
         </ng-container>
-        <ng-container *ngIf="offer.email_type == 'template'">
-          <mat-form-field class="kb-full-width" appearance="fill" (click)="filterEmailData()" [class.mat-form-field-invalid]="!offer.email_id && hasError">
-            <mat-label>Select an email template</mat-label>
-            <input matInput type="text" [(ngModel)]="selectedEmail" placeholder="Search by template name"
-              (input)="filterEmailData()" [matAutocomplete]="emailAuto" required class="w-100">
-            <button *ngIf="selectedEmail" matSuffix mat-icon-button aria-label="Clear" (click)="resetEmail()">
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-autocomplete #emailAuto="matAutocomplete" (optionSelected)="selectEmail($event)">
-              <mat-option *ngFor="let option of filteredEmails" [value]="option"
-                [disabled]="option.uniqueid == offer.email_id">
-                {{ option.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-        </ng-container>
+        <ng-template #notConnectedsmtp>
+          <div *ngIf="offer.email_type != 'none'">
+            <h6 class="kb-danger"><i class="fa fa-exclamation-circle mr-2"></i>Please set up SMTP gateway to access
+              {{offer.email_type == 'custom' ? 'Custom Email' : 'Email Template'}}</h6>
+            <button mat-raised-button color="accent" (click)="_general.redirectLink('/crm/settings')">
+              SMTP Integration<i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></button>
+          </div>
+        </ng-template>
+
         <ng-container *ngIf="offer.email_type == 'none'">
           <div class="text-center"><span class="kb-info-tag rounded p-2 d-block">Email is deactivated for this
               offer</span></div>

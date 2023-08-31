@@ -39,6 +39,10 @@ export class CheckoutService {
     return this.http.post('/api/getpaymentinteg/'+this.uuid, {}, httpOptions);
   }
 
+  getsmtpinteg(): Observable<any>{
+    return this.http.post('/api/getsmtpinteg/'+this.uuid, {}, httpOptions);
+  }
+
   updatecheckoutstyle(data:any): Observable<any>{
     return this.http.post('/api/updatecheckoutstyle/'+this.uuid, {
       data,
@@ -53,6 +57,13 @@ export class CheckoutService {
 
   getnextstepurl(data:any): Observable<any>{
     return this.http.post('/api/getnextstepurl', {
+      data,
+    }, httpOptions);
+  }
+
+  
+  orderformgetuserid(data:any):Observable<any> {
+    return this.http.post("./api/orderformgetuserid/", {
       data,
     }, httpOptions);
   }

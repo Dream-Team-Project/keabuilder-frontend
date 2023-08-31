@@ -11,6 +11,7 @@ export class ProductService {
   user_id:any = '';
   allproducts = './api/allproducts';
   allstripeproducts = './api/allstripeproducts';
+  fetchrecurringdetails = './api/fetchrecurringdetail';
   product = './api/singleproduct';
   addproducts = './api/addproduct';
   updateproducts = './api/updateproduct';
@@ -29,6 +30,12 @@ export class ProductService {
     return this.http.get(this.allstripeproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+  fetchrecurringdetail(key:any){
+    return this.http.get(this.fetchrecurringdetails+'/'+this.user_id+'/'+key)
+    .pipe(catchError(this.errorHandler));
+  }
+  
+
   singleproduct(uniqueid:any){
     return this.http.get(this.product+'/'+this.user_id+'/'+uniqueid)
     .pipe(catchError(this.errorHandler));
@@ -63,6 +70,11 @@ export class ProductService {
 
   fetchproductsbyid(obj:any){
     obj.user_id = this.user_id;
+    return this.http.post('/api/fetchproductsbyid',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  fetchproductsusinguserid(obj:any){
     return this.http.post('/api/fetchproductsbyid',obj)
     .pipe(catchError(this.errorHandler));
   }

@@ -33,6 +33,10 @@ export class OrderformService {
     return this.http.get(this.singleorder+'/'+this.user_id+'/'+uniqueid)
     .pipe(catchError(this.errorHandler));
   }
+  singleorderformusingid(user_id:any,uniqueid:any){
+    return this.http.get(this.singleorder+'/'+user_id+'/'+uniqueid)
+    .pipe(catchError(this.errorHandler));
+  }
 
   addorderform(obj:any) {
     obj.user_id=this.user_id;

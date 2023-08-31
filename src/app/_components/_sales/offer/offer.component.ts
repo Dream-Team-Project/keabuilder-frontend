@@ -34,6 +34,7 @@ export class OfferComponent implements OnInit {
   selectedProducts:Array<any> = [];
   filteredProducts:Array<any> = [];
   isPaymentConnected:boolean = true;
+  issmtpConnected:boolean = true;
   currencies = [
     { name: "United States Dollar", code: "USD", symbol: "$" },
     { name: "Euro", code: "EUR", symbol: "€" },
@@ -79,7 +80,8 @@ export class OfferComponent implements OnInit {
     this.fetchProducts();
     this.fetchEmails();
     this.fetchstripeProducts();
-    this. fetchpaymentdetails();
+    this.fetchpaymentdetails();
+    this.fetchsmtpdetails();
   }
 
   openDialog(templateRef: TemplateRef<any>) {
@@ -90,11 +92,24 @@ export class OfferComponent implements OnInit {
     this.checkoutService.getpaymentinteg().subscribe({
       next: data => {
       if(data.data.length!=0){
-        if(data.data.secret_key) this.isPaymentConnected=true;
+        if(data.data[0].secret_key) this.isPaymentConnected=true;
         else this.isPaymentConnected=false;
       }
       else{
         this.isPaymentConnected=false;
+      }
+    }
+    })
+  }
+  fetchsmtpdetails(){
+    this.checkoutService.getsmtpinteg().subscribe({
+      next: data => {
+      if(data.data.length!=0){
+        if(data.data[0].api_key) this.issmtpConnected=true;
+        else this.issmtpConnected=false;
+      }
+      else{
+        this.issmtpConnected=false;
       }
     }
     })
@@ -202,7 +217,7 @@ export class OfferComponent implements OnInit {
         this.stripeproducts = resp?.data?.data;
         if(this.offer.subscription_id){
           this.stripeproducts.filter((c:any) => {
-          if (c.id == this.offer.subscription_id) {
+          if (c.default_price == this.offer.subscription_id) {
             this.selectedstripeproduct = c.description;
         }
         });
@@ -219,7 +234,16 @@ export class OfferComponent implements OnInit {
   selectstripeproduct(event:any): void {
     let value = event.option.value;
     this.selectedstripeproduct = value.description;
-    this.offer.subscription_id = value.id;
+    this.offer.subscription_id = value.default_price;
+
+    this._product.fetchrecurringdetail(value.default_price).subscribe((resp:any)=>{
+      if(resp.data?.length!=0){
+          var mkobj = {price:resp.data.unit_amount, currency:resp.data.currency, interval:resp.data.recurring.interval, 
+            trial:resp.data.recurring.trial_period_days};
+          this.offer.recurring_data = JSON.stringify(mkobj);
+      }
+    });
+    
   }
 
   resetstripeproduct() {

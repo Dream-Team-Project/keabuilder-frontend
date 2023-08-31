@@ -20,6 +20,7 @@
     color: #666;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     background: #fff;
+    box-sizing: border-box;
 }
 .allfldreq{
     color: #9b9b9b;
