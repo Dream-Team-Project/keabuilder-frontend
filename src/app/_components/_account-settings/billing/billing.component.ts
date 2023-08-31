@@ -153,7 +153,7 @@ stripecard:any={
     this.subscriptiondata().then((resp:any)=>{
       this.fetching=false;
       this.subscriptionplans.map((element:any)=>{
-        console.log(this.subscription_productid)
+        // console.log(this.subscription_productid)
         if(element?.value == this.subscription_productid){
          this.products.map((option:any)=>{
             if(option?.name==element.name)
@@ -196,7 +196,7 @@ stripecard:any={
         resolve(true);
       }
       else{
-        this._general.openSnackBar(true,data.message,'Ok','center','top');
+        // this._general.openSnackBar(true,data.message,'Ok','center','top');
         this.fetching=false;
         this.usertype='free';
       }

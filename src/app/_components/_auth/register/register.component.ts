@@ -289,7 +289,7 @@ specialuser=false;
   duplicateusercheck(){
     return new Promise((resolve) => {
       let obj={username:this.form.username,email:this.form.email};
-    this.authService.duplicatecheck(obj).subscribe((data:any)=>{
+      this.authService.duplicatecheck(obj).subscribe((data:any)=>{
       if(data.success)  resolve(data.success);
       else this._snackBar.open(data?.message,'OK',{duration:2000});
      

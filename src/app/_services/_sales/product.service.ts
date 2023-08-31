@@ -61,6 +61,12 @@ export class ProductService {
     .pipe(catchError(this.errorHandler));
   }
 
+  fetchproductsbyid(obj:any){
+    obj.user_id = this.user_id;
+    return this.http.post('/api/fetchproductsbyid',obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

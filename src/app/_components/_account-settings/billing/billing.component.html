@@ -279,7 +279,7 @@
   <div class="row">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="col-md-3"></div>
-    <div class="col-md-6" *ngIf="usertype!='free'">
+    <div class="card col-md-6" *ngIf="usertype !='free'; else nodata">
       <div
         matTooltip="Billing Details :"
         matTooltipPosition="left"
@@ -400,6 +400,18 @@
         </div>
       </div>
     </div>
+    <ng-template #nodata>
+      <div class="row justify-content-center">
+        <div class="col-md-6 pt-5">
+          <h5 class="text-align-center text-center">Your are our Special User</h5>
+          <img
+            src="/assets/images/website/website-empty.png"
+            class="img-fluid img-fit"
+            alt="Plan Not Subscribed"
+          />
+        </div>
+      </div>
+    </ng-template>
     <div class="col-md-3"></div>
   </div>
 </div>

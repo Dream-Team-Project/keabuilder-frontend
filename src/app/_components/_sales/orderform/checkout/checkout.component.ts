@@ -2,11 +2,13 @@ import {Component, OnInit, Renderer2, Inject, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
-import { DOCUMENT } from '@angular/common';
 import { StripeService,StripeCardComponent,StripeCardNumberComponent } from 'ngx-stripe';
 import {StripeCardElementOptions,StripeElementsOptions,PaymentIntent,} from '@stripe/stripe-js';
-
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { OrderformService } from 'src/app/_services/_sales/orderform.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { OfferService } from 'src/app/_services/_sales/offer.service';
+import { ProductService } from 'src/app/_services/_sales/product.service';
 
 @Component({
     selector: 'orderformcheckout-form',
@@ -29,6 +31,8 @@ export class OrderFormCheckoutComponent implements OnInit {
   founderror:any = false;
 
   switchstep = false;
+  uniqueid:any; 
+  redirection = '';
 
   cardOptions: StripeCardElementOptions = {
     iconStyle: 'solid',
@@ -53,18 +57,32 @@ export class OrderFormCheckoutComponent implements OnInit {
   elementsOptions: StripeElementsOptions = {
     locale: 'auto',
   };
+
+  selectedProducts:Array<any> = [];
+  filteredProducts:Array<any> = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  offers:Array<any> = [];
+
+  totalprice:any = 0;
+  myproductarr:any = [];
+  symbolcode = '';
   
   constructor(
     private fb: FormBuilder, 
     private dialog: MatDialog,
-    private checkoutService: CheckoutService,
+    private orderformService: OrderformService,
     public _general: GeneralService,
+    private route: ActivatedRoute,
     private stripeService: StripeService,
-    ) {}
+    private _offerservice: OfferService,
+    private productService: ProductService,
+    ) {
+      this.route.paramMap.subscribe((params: ParamMap) => { 
+        this.uniqueid = params.get('id');
+      })
+    }
 
   ngOnInit(): void {
-    this.fetching = false;
-
     this.stripeForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required]],
@@ -78,15 +96,153 @@ export class OrderFormCheckoutComponent implements OnInit {
 
     const stripeKeys = 'pk_test_51Gqk7rBFKaDgAHCwnEl2FfdGGmguQWptXwwk5fHbjPu1jlWKeG0JGmy8rOhxr5dyP5PWMkObSFuZjllhQtT4Zhwt00QWjR7c8V';
     this.stripeService.setKey(stripeKeys);
-
+    
+    this.fetchOffers();
+    this.fetchOrder();
 
   }
 
-  nextstep(){
-    // (<HTMLStyleElement>document.getElementsByClassName('o2step_step1')[0]).style.display = "none";
-    // (<HTMLStyleElement>document.getElementsByClassName('o2step_step2')[0]).style.display = "block";
-    // this.adjustclass = false;
+  fetchOrder() {
+
+      this.fetching = true;
+      this.orderformService.singleorderform(this.uniqueid).subscribe((resp:any)=>{
+        if(resp.success) {
+            this.orderform = resp.data[0];
+            var mkofferarr = (this.orderform.offers!= null && this.orderform.offers!= '') ? this.orderform.offers.split(',') : [];
+            var mknewof:any = [];
+            this.offers.forEach(ofr => { if(mkofferarr.includes(ofr.uniqueid)) mknewof.push(ofr); });
+            this.selectedProducts = mknewof;
+            this.selnewproductarr();
+            this.redirection = this.orderform.redirection;
+          }
+        else {
+            this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+          }
+        this.fetching = false;
+      });
+   
   }
+
+  selnewproductarr(){
+    // console.log(this.selectedProducts);
+    this.myproductarr = [];
+    this.selectedProducts.forEach((selpr: any, i: number) => {
+      var obj:any = {productids:selpr.product_id};
+      this.productService.fetchproductsbyid(obj).subscribe((resp:any)=>{
+        var impname:any='';
+        resp.data?.forEach((nm: any, i: number) => {
+          impname += nm.name;
+          if (i < resp.data.length - 1) impname += ' + ';
+        });
+        var finalprice = 0, sym = '';
+        if(selpr.payment_type=='onetime'){
+          var getprice = selpr.price;
+          var cur = JSON.parse(selpr.currency);
+          sym = cur.symbol;
+          finalprice = getprice;
+          if(i==0) this.symbolcode = cur.code;
+          if(i==0)this.totalprice = selpr.price;
+        }else if(selpr.payment_type=='free'){
+          var cur = JSON.parse(selpr.currency);
+          if(i==0) this.symbolcode = cur.code;
+          finalprice = 0;
+        }
+        this.myproductarr.push({offerid:selpr.uniqueid,name:impname,price:finalprice,symbol:sym});
+      });
+    });
+  }
+
+  fetchOffers() {
+    this._offerservice.fetchoffers().subscribe((resp:any) => {
+        this.offers = resp.data;
+    });
+  }
+
+  addSelectedProduct(event:any, searchListInp:any): void {
+    let value = JSON.parse(JSON.stringify(event.option.value))
+    this.selectedProducts.push(value);
+    searchListInp.value = '';
+    this.filterProductData('');
+    this.selnewproductarr();
+  }
+
+  filterProductData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredProducts = this.offers?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  removeSelectedProduct(index:number): void {
+    this.selectedProducts.splice(index, 1);
+    this.selnewproductarr();
+    this.onremovetotalitem();
+  }
+
+  isOptionDisabled(values:any, uniqueid:any) {
+    let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
+    return vArr.length != 0;
+  }
+
+  saveorder(){
+    // console.log(this.selectedProducts);
+    var grabofferid:any = [];
+    if(this.selectedProducts.length!=0) this.selectedProducts.forEach(pr => { grabofferid.push(pr.uniqueid); });
+    if(grabofferid.length!=0){
+      if(this.redirection==null || this.redirection =='') this.redirection = '';
+      var orderobj = {offers:grabofferid,uniqueid: this.uniqueid, redirection:this.redirection};
+      this.orderformService.updateorderform(orderobj).subscribe((resp:any) => {
+        if(resp.success) {
+          this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
+        }
+        else this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+      })
+    }
+  }
+
+  maketotalprice(value:any){
+    
+    if(value.currentTarget.checked==true){
+      this.totalprice += parseFloat(value.currentTarget.value);
+    }else{
+      if(1<=this.totalprice) this.totalprice -= parseFloat(value.currentTarget.value);
+    }
+    
+   this.maketotalandsel();
+
+  }
+
+  maketotalandsel(){  
+    var main = document.querySelectorAll('input[type="checkbox"]');
+    var chkfalse:any = [];
+
+      main.forEach((element: any) => {
+        if (element.checked) {
+          chkfalse.push(true);
+        } else {
+          chkfalse.push(false);
+        }
+      });
+
+      if (!chkfalse.includes(true)) {
+        const kbchk0: HTMLInputElement = document.getElementById('kbchk0') as HTMLInputElement;
+        kbchk0.checked = true;
+        this.totalprice = parseFloat(kbchk0.value);
+      }
+  }
+
+  onremovetotalitem(){
+    if(this.selectedProducts.length!=0){
+      var kbchk0: HTMLInputElement = document.getElementById('kbchk0') as HTMLInputElement;
+      kbchk0.checked = true;
+      this.totalprice = parseFloat(kbchk0.value);
+    }else{
+      this.totalprice = 0;
+    }
+  }
+
+  
+
+
+  
 
 
  
