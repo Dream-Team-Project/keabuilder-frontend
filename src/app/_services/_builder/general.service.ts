@@ -616,6 +616,7 @@ export class GeneralService {
     type: ''
   };
   webpage:any = {uniqueid: ''};
+  template:any = {uniqueid: ''};
   page_general_tab:any = 'info';
   main:any = {id: 'kb-main', name: 'New Page', title: 'New Page', path: 'new-page', description: 'This page is built using Keabuilder.', keywords: [], page_code: '', author: '', meta_img: '', type: 'main', publish_status: true, style: {desktop:'', tablet_h:'', tablet_v:'', mobile:'', hover: ''}};
   page_name = '';
@@ -1020,7 +1021,15 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +        
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      if(!preview) {
+      // if(!preview) {
+      //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
+      //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
+      //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      // }
+      if(template) {
+        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/style.css">';
+      }
+      else if(!preview) {
         this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
         '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
         this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
@@ -1034,7 +1043,6 @@ export class GeneralService {
       }
       if(template) {
         this.pageObj.folder = this.webpage.uniqueid;
-        this.pageObj.dir = 'previews';
         this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
           resolve(true);
         },
