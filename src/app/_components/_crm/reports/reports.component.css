@@ -29,3 +29,18 @@
   .kb-user-detail-box{
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
   }
+  .kb-colr{
+    color: var(--primary-color);
+}
+.ftoverflow{
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ftoverflow:hover{
+  cursor: pointer;
+}
+.kb-fntsize{
+  font-size: 12px;
+}

@@ -12,6 +12,8 @@ import {
   ApexFill,
   ApexTooltip
 } from "ng-apexcharts";
+import { CampaignService } from 'src/app/_services/_crm/campaign.service';
+import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { ReportingService } from 'src/app/_services/reporting.service';
 
 export type ChartOptions = {
@@ -42,12 +44,18 @@ export class CrmReportsComponent implements OnInit {
   contactsduration:any=[];
   fetch=false;
   crmdata:any;
-  constructor(private _reportingService : ReportingService,) { 
+  campaigns:any;
+  allcontacts:Array<any> = [];
+  constructor(private _reportingService : ReportingService,
+    private _campaignservice: CampaignService,
+    private _contactService: ContactService,) { 
     this.fetchcrmdata();
     this.fetchcontactsdata(this.filtercontacts).then((resp)=>{
       this.chartsReload();
       this.fetch=true;
   })
+  this.fetchcampaigns();
+  this.fetchContacts();
   }
 
   ngOnInit(): void {
@@ -179,6 +187,20 @@ getdata(event:any){
   // console.log(event)
   this.filtercontacts=event;
   this.fetchcontactsdata(this.filtercontacts).then((resp)=> this.chartsReload());
+}
+fetchcampaigns(){
+  this._campaignservice.fetchcampaigns().subscribe({
+    next: resp => {
+      // console.log(resp.data);
+     this.campaigns=resp?.data;
+    }
+  });
+}
+fetchContacts() {
+  this._contactService.fetchcontacts().subscribe((resp) => {
+    this.allcontacts=resp?.data;
+    // console.log(this.allcontacts)
+});
 }
 
 }

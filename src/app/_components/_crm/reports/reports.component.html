@@ -25,8 +25,8 @@
                 ></apx-chart>
             </div>
         </div>
-            <div class="col-md-6">
-                <div class="card kb-user-detail-box px-4 py-4 h-100">
+            <div class="col-md-6 card kb-user-detail-box px-4 py-4">
+               <div class="row h-100">
                     <!-- <mat-form-field class="kb-full-width" appearance="fill">
                         <mat-label>Please Select</mat-label>
                         <mat-select value="month">
@@ -34,14 +34,37 @@
                           <mat-option value="30" selected>Monthly</mat-option>
                           <mat-option value="365" selected>Yearly</mat-option>
                         </mat-select>
-                    </mat-form-field> -->
+                    </mat-form-field>
                 <apx-chart
                     [series]="chartOptions2.series"
                     [chart]="chartOptions2.chart"
                     [plotOptions]="chartOptions2.plotOptions"
                     [xaxis]="chartOptions2.xaxis"
                     [fill]="chartOptions2.fill"
-                ></apx-chart>
+                ></apx-chart> -->
+                <div class="col-md-6 ">
+                    <div class="card kb-user-detail-box px-4 py-2 h-100">
+                        <h5>Recent Contacts</h5>
+                        <div *ngFor="let contact of allcontacts; index as i;">
+                            <div class="ftoverflow py-1" *ngIf="i < 8" [routerLink]="'/crm/contact/'+contact.uniqueid">
+                                <div class="kb-colr">{{contact.email}}</div>
+                                <div class="kb-fntsize">{{contact.created_at | date :'mediumDate'}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6">
+                    <div class="card kb-user-detail-box px-4 py-2 h-100">
+                        <h5>Recent Campaigns</h5>
+                        <div *ngFor="let campaign of campaigns; index as i;">
+                            <div class="ftoverflow py-1" *ngIf="i < 8" [routerLink]="'/crm/campaign/'+campaign.uniqueid">
+                                <div class="kb-colr">{{campaign.name}} <span>({{campaign.sentto}})</span></div>
+                                <div class="kb-fntsize">{{campaign.deliverdate | date :'mediumDate'}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
         </div>
