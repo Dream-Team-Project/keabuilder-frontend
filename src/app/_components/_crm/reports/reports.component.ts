@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReportingService } from 'src/app/_services/reporting.service';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -12,9 +13,6 @@ import {
   ApexFill,
   ApexTooltip
 } from "ng-apexcharts";
-import { CampaignService } from 'src/app/_services/_crm/campaign.service';
-import { ContactService } from 'src/app/_services/_crm/contact.service';
-import { ReportingService } from 'src/app/_services/reporting.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -37,37 +35,55 @@ export type ChartOptions = {
 export class CrmReportsComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent | any;
-  public chartOptions: Partial<ChartOptions> | any;
+  public chartContactOptions: Partial<ChartOptions> | any;
   public chartOptions2: Partial<ChartOptions> | any;
+
+  fetched=false;
+  recentContacts:any = [];
+  monthlyContacts:any = [];
+  contactLimit = 8;
+  contactData = {
+    x: [],
+    y: [],
+  }
+
+  crmdata:any;
   filtercontacts:any='WEEK';
   contacts:any=[];
   contactsduration:any=[];
-  fetch=false;
-  crmdata:any;
   campaigns:any;
-  allcontacts:Array<any> = [];
-  constructor(private _reportingService : ReportingService,
-    private _campaignservice: CampaignService,
-    private _contactService: ContactService,) { 
-    this.fetchcrmdata();
-    this.fetchcontactsdata(this.filtercontacts).then((resp)=>{
-      this.chartsReload();
-      this.fetch=true;
-  })
-  this.fetchcampaigns();
-  this.fetchContacts();
-  }
+
+  constructor(private _reportingService : ReportingService) { }
 
   ngOnInit(): void {
-   
+    this.fetchRecentContacts();
+    this.fetchMonthlyContacts();
   }
-  chartsReload(){
-    
-    this.chartOptions = {
+
+  fetchRecentContacts() {
+    this._reportingService.recentContacts(this.contactLimit).subscribe((resp:any)=>{
+      if(resp.success) this.recentContacts = resp.data;
+    })
+  }
+
+  fetchMonthlyContacts() {
+    this._reportingService.monthlyContacts().subscribe((resp:any)=>{
+      if(resp.success) {
+        this.monthlyContacts = resp.data;
+        this.contactData.x = this.monthlyContacts.map((m:any) => m.date);
+        this.contactData.y = this.monthlyContacts.map((m:any) => m.count);
+        console.log(this.contactData);
+        this.contactChartOption();
+      }
+    })
+  }
+
+  contactChartOption() {
+    this.chartContactOptions = {
       series: [
         {
           name: "Contacts",
-          data: this.contacts,
+          data: this.contactData.y,
         },
       ],
       chart: {
@@ -89,8 +105,7 @@ export class CrmReportsComponent implements OnInit {
         colors: ['#dea641']
       },
       xaxis: {
-        categories: this.contactsduration
-         
+        categories: this.contactData.x
       },
       yaxis: {
         title: {
@@ -109,7 +124,11 @@ export class CrmReportsComponent implements OnInit {
         },
       }
     };
+    console.log(this.chartContactOptions);
+    this.fetched = true;
+  }
 
+  chartsReload(){
     this.chartOptions2 = {
       series: [
         {
@@ -153,55 +172,11 @@ export class CrmReportsComponent implements OnInit {
       },
     };
   }
-fetchcrmdata(){
-  this._reportingService.getcrmData().subscribe((data:any)=>{
-    if(data.success){
-      this.crmdata=data.data;
-      // console.log(this.crmdata)
-    }
-  })
-}
-  fetchcontactsdata(value:any){
-    this.contacts=[];
-  this.contactsduration=[];
-    let obj={duration:this.filtercontacts};
-    return new Promise((resolve) => {
-    this._reportingService.getcontactsData(obj).subscribe((data:any)=>{
-      // console.log(data)
-      if(data.success){
-        let i=0;
-        data.data.map((element:any) =>{
-          if(i < 20){
-          this.contacts.push(element.contacts);
-          this.contactsduration.push(element.week);
-          }
-          i++;
-        });
-        // console.log(this.contacts)
-        //   console.log(this.contactsduration)
-          }
-          resolve(true);
-        });
-    })
-}
-getdata(event:any){
-  // console.log(event)
-  this.filtercontacts=event;
-  this.fetchcontactsdata(this.filtercontacts).then((resp)=> this.chartsReload());
-}
-fetchcampaigns(){
-  this._campaignservice.fetchcampaigns().subscribe({
-    next: resp => {
-      // console.log(resp.data);
-     this.campaigns=resp?.data;
-    }
-  });
-}
-fetchContacts() {
-  this._contactService.fetchcontacts().subscribe((resp) => {
-    this.allcontacts=resp?.data;
-    // console.log(this.allcontacts)
-});
-}
 
+  contactIcon(contact:any){
+    var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
+    var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
+    if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
+    return str.toUpperCase();
+  }
 }

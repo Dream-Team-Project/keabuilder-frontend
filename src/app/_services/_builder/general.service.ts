@@ -1021,11 +1021,6 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +        
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      // if(!preview) {
-      //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
-      //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
-      //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-      // }
       if(template) {
         this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/style.css">';
       }
