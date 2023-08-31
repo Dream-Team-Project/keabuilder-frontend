@@ -58,9 +58,10 @@
                     <div class="card kb-user-detail-box px-4 py-2 h-100">
                         <h5>Recent Campaigns</h5>
                         <div *ngFor="let campaign of campaigns; index as i;">
-                            <div class="ftoverflow py-1" *ngIf="i < 8" [routerLink]="'/crm/campaign/'+campaign.uniqueid">
-                                <div class="kb-colr">{{campaign.name}} <span>({{campaign.sentto}})</span></div>
-                                <div class="kb-fntsize">{{campaign.deliverdate | date :'mediumDate'}}</div>
+                            <div class="ftoverflow py-1 d-flex" *ngIf="i < 8" [routerLink]="'/crm/campaign/'+campaign.uniqueid">
+                                <span class="kb-colr col-md-6">{{campaign.name}}</span> 
+                                <span class="col-md-2">({{campaign.sentto}})</span>
+                                <div class="kb-fntsize col-md-4">{{campaign.deliverdate | date :'mediumDate'}}</div>
                             </div>
                         </div>
                     </div>

@@ -167,6 +167,7 @@ fetchcrmdata(){
     let obj={duration:this.filtercontacts};
     return new Promise((resolve) => {
     this._reportingService.getcontactsData(obj).subscribe((data:any)=>{
+      console.log(data)
       if(data.success){
         let i=0;
         data.data.map((element:any) =>{
