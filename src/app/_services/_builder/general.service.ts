@@ -1020,7 +1020,10 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +        
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      if(!preview) {
+      if(template) {
+        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/style.css">';
+      }
+      else if(!preview) {
         this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
         '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
         this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
@@ -1034,7 +1037,6 @@ export class GeneralService {
       }
       if(template) {
         this.pageObj.folder = this.webpage.uniqueid;
-        this.pageObj.dir = 'previews';
         this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
           resolve(true);
         },
