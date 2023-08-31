@@ -75,7 +75,7 @@ import {environment} from '../environments/environment';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe, 
+    SvgPipe,
   ],
   imports: [
     AppRoutingModule,

@@ -1,0 +1,30 @@
+.kb-template-container {
+    width: 1200px;
+}
+
+::ng-deep .kb-template-container .mat-tab-body {
+    max-height: 400px;
+}
+
+.kb-template-card {
+    box-shadow: 0px 0px 2px 1px rgb(34 38 42 / 10%);
+    border-radius: 4px;
+}
+
+.kb-template-card-outer {
+    width: 400px;
+}
+
+.kb-template-thumbnail {
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.kb-template-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #666666;
+}

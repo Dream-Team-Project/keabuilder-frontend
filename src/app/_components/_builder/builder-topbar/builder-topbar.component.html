@@ -32,7 +32,7 @@
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="updateTemplate()">Save</button>
+        <button mat-button mat-dialog-close cdkFocusInitial [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="updatesectiontemplate()">Save</button>
     </div>
 </ng-template>
 <ng-template #deltempdialog>
@@ -42,7 +42,7 @@
     </div>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close cdkFocusInitial color="primary">No</button>
-        <button mat-button mat-dialog-close (click)="deleteTemplate()" class="kb-danger">Yes</button>
+        <button mat-button mat-dialog-close (click)="deletesectiontemplate()" class="kb-danger">Yes</button>
     </div>
 </ng-template>
 <div id="kb-topbar" [class.pagedisabled]="_general.saveDisabled">
@@ -123,6 +123,9 @@
         </button>
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
+        </button>
+        <button mat-button (click)="!_general.saveDisabled ? saveastemp.emit() : ''" [disabled]="_general.saveDisabled">
+            <i class="fa-regular fa-copy"></i> Save As Template
         </button>
         <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
             <i class="fa-regular fa-clock"></i> Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}

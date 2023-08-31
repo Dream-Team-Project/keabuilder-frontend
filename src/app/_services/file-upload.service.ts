@@ -49,11 +49,18 @@ export class FileUploadService {
   copyImgApi = "./api/copyimage"
   deleteimageApi = "./api/deleteimage";
   // images
+  // page templates
+  savetemplatehtmlApi = "./api/savetemplatehtml"
+  allpagetemplatesApi = "./api/allpagetemplates";
+  savepagetemplateApi = "./api/savepagetemplate";
+  updatepagetemplateApi = "./api/updatepagetemplate";
+  deletepagetemplateApi = "./api/deletepagetemplate";
+  // page templates
   // section templates
-  alltemplatesApi = "./api/alltemplates";
-  savetemplateApi = "./api/savetemplate";
-  updatetemplateApi = "./api/updatetemplate";
-  deletetemplateApi = "./api/deletetemplate";
+  allsectemplatesApi = "./api/allsectiontemplates";
+  savesectemplateApi = "./api/savesectiontemplate";
+  updatesectemplateApi = "./api/updatesectiontemplate";
+  deletesectemplateApi = "./api/deletesectiontemplate";
   // section templates
   // headers
   searchheadersApi = './api/searchheaders';
@@ -311,25 +318,55 @@ export class FileUploadService {
   
     // footers
 
+  // page templates 
+
+  savetemplatehtml(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.savetemplatehtmlApi, obj)
+    .pipe(catchError(this.errorHandler));   
+  }
+
+  fetchpagetemplates():Observable<any> {
+    return this.http.get(this.allpagetemplatesApi+'/'+this.uuid);
+  }
+
+  savepagetemplate(obj:any):Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post(this.savepagetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  updatepagetemplate(obj:any):Observable<any> {
+    return this.http.post(this.updatepagetemplateApi, obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deletepagetemplate(id:any):Observable<any> {
+    return this.http.delete(this.deletepagetemplateApi + '/' + id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  // page templates 
+
   // section templates 
 
-  fetchtemplates():Observable<any> {
-    return this.http.get(this.alltemplatesApi+'/'+this.uuid);
+  fetchsectiontemplates():Observable<any> {
+    return this.http.get(this.allsectemplatesApi+'/'+this.uuid);
   }
 
-  savetemplate(obj:any):Observable<any> {
+  savesectiontemplate(obj:any):Observable<any> {
     obj.user_id = this.uuid;
-    return this.http.post(this.savetemplateApi, obj)
+    return this.http.post(this.savesectemplateApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  updatetemplate(obj:any):Observable<any> {
-    return this.http.post(this.updatetemplateApi, obj)
+  updatesectiontemplate(obj:any):Observable<any> {
+    return this.http.post(this.updatesectemplateApi, obj)
     .pipe(catchError(this.errorHandler));
   }
 
-  deletetemplate(id:any):Observable<any> {
-    return this.http.delete(this.deletetemplateApi + '/' + id)
+  deletesectiontemplate(id:any):Observable<any> {
+    return this.http.delete(this.deletesectemplateApi + '/' + id)
     .pipe(catchError(this.errorHandler));
   }
 

@@ -17,12 +17,12 @@
     <h1 mat-dialog-title>Do you want to save changes?</h1>
     <mat-checkbox [ngModel]="dntaskforsave"><small>Don't ask me again!</small></mat-checkbox>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
         <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="savePage(main, false)">Save</button>
     </div>
 </ng-template>
 <ng-template #templatedialog>
-    <h1 mat-dialog-title>Save As Template</h1>
+    <h1 mat-dialog-title>Save {{saveTempAs | titlecase}} As Template</h1>
     <div mat-dialog-content>
         <mat-error *ngIf="isNotValid(validate.tempname)">
             Template name should not be empty
@@ -36,16 +36,16 @@
         </mat-form-field>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close (click)="saveTemplateSection = ''" class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="saveAsTemplate()">Save</button>
+        <button mat-button mat-dialog-close (click)="saveTemplateSection = {name: ''}" class="kb-danger">Cancel</button>
+        <button mat-button [color]="!validate.tempname.invalid ? 'primary' : ''" [disabled]="validate.tempname.invalid" (click)="saveTemplate(main)">Save</button>
     </div>
 </ng-template>
 <app-image [DialogImageToggle]="DialogImageToggle"></app-image>
 <app-builder-setting (openImageDialog)="openImageDialog($event)" [DialogToggle]="DialogParentToggle"></app-builder-setting>
-<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferData)="transferData = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled || _general.savingPage" *ngIf="_section.sections.length != 0"></app-builder-topbar>
+<app-builder-topbar id="kb-builder-topbar" (openImageDialog)="openImageDialog($event)" (saveastemp)="saveAsTemplateDialog(templatedialog, _section.sections, 'page')" (zoomPage)="zoom = $event" [ishf]="ishf" [wftgl]="wireframe.opened" (wireframeToggle)="wireframeToggle()" (transferData)="transferData = $event;" (parentTrigger)="getTrigger($event)" [class.loaderShadow]="_general.saveDisabled || _general.savingPage" *ngIf="_section.sections.length != 0"></app-builder-topbar>
 <mat-drawer-container [class.kb-d-none]="wfhide" [hasBackdrop]="true" autosize>
     <mat-drawer #wireframe mode="over" [position]="wfpos" (closedStart)="closewf()">
-        <app-bulder-wireframe (dialogToggle)="openDialog()" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event)"></app-bulder-wireframe>
+        <app-bulder-wireframe (dialogToggle)="openDialog()" (wfpos)="wfpos=$event" (saveastemp)="saveAsTemplateDialog(templatedialog, $event, 'section')"></app-bulder-wireframe>
     </mat-drawer>
 </mat-drawer-container>
 <mat-progress-bar *ngIf="_general.saveDisabled || _general.savingPage" mode='indeterminate'></mat-progress-bar>
@@ -84,7 +84,7 @@
                         <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
                             <span cdkDragHandle *ngIf="_section.sections.length > 1"
                                 class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
-                            <span (click)="saveAsTemplateDialog(templatedialog, section)" matTooltip="Save As Template"
+                            <span (click)="saveAsTemplateDialog(templatedialog, section, 'section')" matTooltip="Save As Template"
                                 matTooltipPosition="above"><i class="far fa-save"></i></span>    
                             <span (click)="openSetting(section)"
                                 matTooltip="Section Setting" matTooltipPosition="above"><i

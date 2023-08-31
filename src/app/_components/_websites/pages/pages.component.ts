@@ -163,6 +163,12 @@ website_id:any;
   togglestatus:any;
 
 
+  templateDialog(templateRef: TemplateRef<any>) {
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+    });
+  }
+
+
   getServerData(event?:PageEvent){
     var length = event?.length;
     var pageindex = event?.pageIndex;

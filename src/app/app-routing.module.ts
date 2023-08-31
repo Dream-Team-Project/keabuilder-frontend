@@ -20,6 +20,7 @@ import { ProfileComponent } from './_components/_auth/profile/profile.component'
 import { RegisterComponent } from './_components/_auth/register/register.component';
 // auth
 // builder
+import { TemplateComponent } from './_components/_builder/template/template.component';
 import { BuilderComponent } from './_components/_builder/builder/builder.component';
 import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
 import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
@@ -392,6 +393,7 @@ export const RoutingComponents =
     CreateFunnelSalesComponent,
     CreateFunnelSettingsComponent,
     ProfileComponent,
+    TemplateComponent, 
     BuilderComponent,
     BuilderSettingComponent,
     BulderWireframeComponent, 

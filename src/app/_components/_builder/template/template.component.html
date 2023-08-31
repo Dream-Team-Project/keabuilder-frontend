@@ -1,0 +1,39 @@
+<div class="container-fluid p-0">
+    <div class="row align-items-center border-bottom pb-3 m-0">
+        <div class="col-md-7">
+            <span class="kb-template-heading">Choose a Template to Start</span>
+        </div>
+        <div class="col-md-5 text-right">
+            <button mat-raised-button color="accent" (click)="closeDialog.emit()" class="mr-3">
+                <i class="fa fa-arrow-left mr-2"></i>Back</button>
+            <button mat-raised-button color="primary">
+                <i class="fa-solid fa-file-circle-plus mr-2"></i>Create from scratch</button>
+        </div>
+    </div>
+    <mat-tab-group class="kb-template-container">
+        <mat-tab label="System Templates">
+            <div class="row m-0">
+                <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
+                    <div class="kb-template-card">
+                        <div class="kb-template-thumbnail"
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                        </div>
+                        <div class="text-center p-2">{{temp.name | titlecase}}</div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Saved Templates">
+            <div class="row mx-0">
+                <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
+                    <div class="kb-template-card">
+                        <div class="kb-template-thumbnail"
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                        </div>
+                        <div class="text-center p-2">{{temp.name | titlecase}}</div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

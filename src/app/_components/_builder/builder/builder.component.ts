@@ -31,7 +31,6 @@ export class BuilderComponent implements OnInit {
   DialogImageToggle:boolean = false;
 
   @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
-  @ViewChild('templatedialog') templatedialog!: TemplateRef<any>;
   @ViewChild('askforsave') askforsave!: ElementRef;
   @ViewChild('wireframe') wireframe: any;
   @ViewChild('main') main!: ElementRef;
@@ -56,6 +55,7 @@ export class BuilderComponent implements OnInit {
   zoom:any = false;
   initial:boolean = true;
   matMenuEle:any;
+  saveTempAs:string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -191,17 +191,36 @@ export class BuilderComponent implements OnInit {
     })
   }
 
-  saveAsTemplate() {
+  saveTemplate(main:any) {
     if(!this.validate.tempname.invalid) {
-      this._general.saveDisabled = true;
-      var section = this.saveTemplateSection;
-      var obj = {uniqueid: this._general.makeid(20), name: section.name, template: this._general.encodeJSON(section)};
-      this._general._file.savetemplate(obj).subscribe((resp:any)=>{
-        this.takePageSS('section-'+obj.uniqueid, 'template');
-        this._general.fetchSectionTemplates();
-      })
+      var temp = this.saveTemplateSection;
+      var obj = {uniqueid: this._general.makeid(20), name: temp.name, template: this._general.encodeJSON(temp)};
+      if(this.saveTempAs == 'section') this.saveSectionTemplate(obj);
+      else this.savePageTemplate(main, obj);
     }
-    else this.saveAsTemplateDialog(this.templatedialog, this.saveTemplateSection);
+    return false;
+  }
+
+  savePageTemplate(main:any, obj:any) {
+    obj.category = 'saved';
+    this._general._file.savepagetemplate(obj).subscribe((res1:any)=>{
+      console.log(res1); // template unique id use as folder name
+      this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
+        console.log(res2);
+        let msg = 'Page has been saved as template';
+        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        this.dialog.closeAll();
+      });
+    })
+  }
+
+  saveSectionTemplate(obj:any) {
+    this._general.saveDisabled = true;
+    this._general._file.savesectiontemplate(obj).subscribe((resp:any)=>{
+      this.takePageSS('section-'+obj.uniqueid, 'section template');
+      this._general.fetchSectionTemplates();
+      this.dialog.closeAll();
+    })
   }
 
   saveHeaderFooter(main:any) {
@@ -223,7 +242,7 @@ export class BuilderComponent implements OnInit {
   saveHTML(main:any, tglDraft:boolean) {
     if(!this.autoSaving) this._general.savingPage = true;
     this._general.pathError = false;
-    this._general.saveHTML(main, this._section.sections, false, tglDraft).then(res =>{
+    this._general.saveHTML(main, this._section.sections, false, false, tglDraft).then(res =>{
       if(!this.autoSaving) {
         if(this._general.pathError) this.openPageSetting(null);
         else if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -243,7 +262,7 @@ export class BuilderComponent implements OnInit {
 
   savePreview() {
     var main = this.main.nativeElement;
-    this._general.saveHTML(main, this._section.sections, true, false).then(e=>{
+    this._general.saveHTML(main, this._section.sections, true, false, false).then(e=>{
       if(this.initial) {
         this._general.pageSaved = true;
         this.initial = false;
@@ -275,7 +294,8 @@ export class BuilderComponent implements OnInit {
     this.DialogImageToggle = !this.DialogImageToggle;
   }
 
-  saveAsTemplateDialog(templateRef:any, section:any) {
+  saveAsTemplateDialog(templateRef:any, section:any, asa:string) {
+    this.saveTempAs = asa;
     this.saveTemplateSection = JSON.parse(JSON.stringify(section));
     var dialogData = this.dialog.open(templateRef);
     dialogData.afterClosed().subscribe((data:any)=>{

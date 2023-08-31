@@ -117,78 +117,78 @@ export class SidebarComponent implements OnInit {
         // }
       ]
     },
-    // {
-    //   0:true,
-    //   routerlink: '/membership',
-    //   img: 'shield.gif',
-    //   icon: 'fas fa-shield-alt',
-    //   title: 'Membership',
-    //   submenu:[{
-    //     0:true,
-    //     routerlink: '/nolink',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-file-alt',
-    //     title: 'Landing Page'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/nolink',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-file-alt',
-    //     title: 'Library Page'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/offers',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-percentage',
-    //     title: 'Offers'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/coupons',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-percent',
-    //     title: 'Coupons'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/payments',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-dollar-sign',
-    //     title: 'Payments'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/members',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-users',
-    //     title: 'Members'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/tags',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-tags',
-    //     title: 'Tags'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/marketplace',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-shopping-cart',
-    //     title: 'Marketplace'
-    //   }
-    //   ]
-    // },
-    // {
-    //   0:true,
-    //   routerlink: '/payment',
-    //   img: 'payment.gif',
-    //   icon: 'fa fa-dollar-sign',
-    //   title: 'Payment',
-    //   submenu:null
-    // },
+    {
+      0:true,
+      routerlink: '/membership',
+      img: 'shield.gif',
+      icon: 'fas fa-shield-alt',
+      title: 'Membership',
+      submenu:[{
+        0:true,
+        routerlink: '/nolink',
+        img: 'shield.gif',
+        icon: 'fa fa-file-alt',
+        title: 'Landing Page'
+      },
+      {
+        0:true,
+        routerlink: '/nolink',
+        img: 'shield.gif',
+        icon: 'fa fa-file-alt',
+        title: 'Library Page'
+      },
+      {
+        0:true,
+        routerlink: '/membership/offers',
+        img: 'shield.gif',
+        icon: 'fa fa-percentage',
+        title: 'Offers'
+      },
+      {
+        0:true,
+        routerlink: '/membership/coupons',
+        img: 'shield.gif',
+        icon: 'fa fa-percent',
+        title: 'Coupons'
+      },
+      {
+        0:true,
+        routerlink: '/membership/payments',
+        img: 'shield.gif',
+        icon: 'fa fa-dollar-sign',
+        title: 'Payments'
+      },
+      {
+        0:true,
+        routerlink: '/membership/members',
+        img: 'shield.gif',
+        icon: 'fa fa-users',
+        title: 'Members'
+      },
+      {
+        0:true,
+        routerlink: '/membership/tags',
+        img: 'shield.gif',
+        icon: 'fa fa-tags',
+        title: 'Tags'
+      },
+      {
+        0:true,
+        routerlink: '/membership/marketplace',
+        img: 'shield.gif',
+        icon: 'fa fa-shopping-cart',
+        title: 'Marketplace'
+      }
+      ]
+    },
+    {
+      0:true,
+      routerlink: '/payment',
+      img: 'payment.gif',
+      icon: 'fa fa-dollar-sign',
+      title: 'Payment',
+      submenu:null
+    },
    {
       0:true,
       routerlink: '/crm',
@@ -238,13 +238,13 @@ export class SidebarComponent implements OnInit {
           icon: 'fa fa-tags',
           title: 'Tags'
         },
-        // {
-        //   0:true,
-        //   routerlink: '/crm/automations',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-random',
-        //   title: 'Automations'
-        // },
+        {
+          0:true,
+          routerlink: '/crm/automations',
+          img: 'hacker.gif',
+          icon: 'fa fa-random',
+          title: 'Automations'
+        },
         {
           0:true,
           routerlink: '/crm/campaigns',
@@ -293,30 +293,30 @@ export class SidebarComponent implements OnInit {
         icon: 'fa fa-dollar-sign',
         title: 'Payments'
       },
-      // {
-      //   0:true,
-      //   routerlink: '/sales/coupons',
-      //   img: 'payment.gif',
-      //   icon: 'fa fa-file-alt',
-      //   title: 'Coupons'
-      // },
-      // {
-      //   0:true,
-      //   routerlink: '/sales/affiliates',
-      //   img: 'payment.gif',
-      //   icon: 'fas fa-search-dollar',
-      //   title: 'Affiliates'
-      // },
+      {
+        0:true,
+        routerlink: '/sales/coupons',
+        img: 'payment.gif',
+        icon: 'fa fa-file-alt',
+        title: 'Coupons'
+      },
+      {
+        0:true,
+        routerlink: '/sales/affiliates',
+        img: 'payment.gif',
+        icon: 'fas fa-search-dollar',
+        title: 'Affiliates'
+      },
     ],
   }
-  // ,{
-  //     0:true,
-  //     routerlink: '/payment',
-  //     img: 'payment.gif',
-  //     icon: 'fa fa-dollar-sign',
-  //     title: 'Payment',
-  //     submenu:null
-  //   }
+  ,{
+      0:true,
+      routerlink: '/payment',
+      img: 'payment.gif',
+      icon: 'fa fa-dollar-sign',
+      title: 'Payment',
+      submenu:null
+    }
   ,{
     0:true,
     routerlink: '/domain',
@@ -325,96 +325,96 @@ export class SidebarComponent implements OnInit {
     title: 'Domains',
     submenu:null
   },
-    // {
-    //   0:true,
-    //   routerlink: '/nolink',
-    //   img: 'complete.gif',
-    //   icon: 'fas fa-address-card',
-    //   title: 'Forms',
-    //   submenu:null
-    // },
-    // {
-    //   0:true,
-    //   routerlink: '/strategies',
-    //   img: 'chess.gif',
-    //   icon: 'fas fa-chess-knight',
-    //   title: 'Strategies',
-    //   submenu:null
-    // },{
-    //   0:true,
-    //   routerlink: '/heatmap',
-    //   img: 'way.gif',
-    //   icon: 'fas fa-fire',
-    //   title: 'HeatMap',
-    //   submenu:null
-    // },{
-    //   0:true,
-    //   routerlink: '/analytics',  
-    //   img: 'growth.gif',
-    //   icon: 'fas fa-chart-pie',
-    //   title: 'Analytics',
-    //   submenu:null
-    // },
-    // {
-    //   0:true,
-    //   routerlink: '/affiliates',
-    //   img: 'money-bag.gif',
-    //   icon: 'fas fa-search-dollar',
-    //   title: 'Affiliates',
-    //   submenu:[
-    //     {
-    //       0:true,
-    //       routerlink: '/affiliates-users',
-    //       img: 'money-bag.gif',
-    //       icon: 'fa fa-users',
-    //       title: 'Users'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-commission',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-hand-holding-usd',
-    //       title: 'Commission Setup'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-transactions',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-credit-card',
-    //       title: 'Transactions'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-share',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-share',
-    //       title: 'Share Links'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-announcements',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-bullhorn',
-    //       title: 'Announcements'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-exports',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-file-download',
-    //       title: 'Exports'
-    //     },{
-    //       0:true,
-    //       routerlink: '/affiliates-settings',
-    //       img: 'money-bag.gif',
-    //       icon: 'fas fa-cogs',
-    //       title: 'Settings'
-    //     }
-    //   ]
-    // },
-    // {
-    //   0:true,
-    //   routerlink: '/integrations',
-    //   img: 'cloud-network.gif',
-    //   icon: 'fas fa-cogs',
-    //   title: 'Integrations',
-    //   submenu:null
-    // },
+    {
+      0:true,
+      routerlink: '/nolink',
+      img: 'complete.gif',
+      icon: 'fas fa-address-card',
+      title: 'Forms',
+      submenu:null
+    },
+    {
+      0:true,
+      routerlink: '/strategies',
+      img: 'chess.gif',
+      icon: 'fas fa-chess-knight',
+      title: 'Strategies',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/heatmap',
+      img: 'way.gif',
+      icon: 'fas fa-fire',
+      title: 'HeatMap',
+      submenu:null
+    },{
+      0:true,
+      routerlink: '/analytics',  
+      img: 'growth.gif',
+      icon: 'fas fa-chart-pie',
+      title: 'Analytics',
+      submenu:null
+    },
+    {
+      0:true,
+      routerlink: '/affiliates',
+      img: 'money-bag.gif',
+      icon: 'fas fa-search-dollar',
+      title: 'Affiliates',
+      submenu:[
+        {
+          0:true,
+          routerlink: '/affiliates-users',
+          img: 'money-bag.gif',
+          icon: 'fa fa-users',
+          title: 'Users'
+        },{
+          0:true,
+          routerlink: '/affiliates-commission',
+          img: 'money-bag.gif',
+          icon: 'fas fa-hand-holding-usd',
+          title: 'Commission Setup'
+        },{
+          0:true,
+          routerlink: '/affiliates-transactions',
+          img: 'money-bag.gif',
+          icon: 'fas fa-credit-card',
+          title: 'Transactions'
+        },{
+          0:true,
+          routerlink: '/affiliates-share',
+          img: 'money-bag.gif',
+          icon: 'fas fa-share',
+          title: 'Share Links'
+        },{
+          0:true,
+          routerlink: '/affiliates-announcements',
+          img: 'money-bag.gif',
+          icon: 'fas fa-bullhorn',
+          title: 'Announcements'
+        },{
+          0:true,
+          routerlink: '/affiliates-exports',
+          img: 'money-bag.gif',
+          icon: 'fas fa-file-download',
+          title: 'Exports'
+        },{
+          0:true,
+          routerlink: '/affiliates-settings',
+          img: 'money-bag.gif',
+          icon: 'fas fa-cogs',
+          title: 'Settings'
+        }
+      ]
+    },
+    {
+      0:true,
+      routerlink: '/integrations',
+      img: 'cloud-network.gif',
+      icon: 'fas fa-cogs',
+      title: 'Integrations',
+      submenu:null
+    },
     {
       0:true,
       routerlink: '/account',

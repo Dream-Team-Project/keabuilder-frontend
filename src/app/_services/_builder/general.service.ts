@@ -731,7 +731,7 @@ export class GeneralService {
 
   fetchSectionTemplates() {
     return new Promise<any>((resolve, reject) => {
-      this._file.fetchtemplates().subscribe((data:any)=>{
+      this._file.fetchsectiontemplates().subscribe((data:any)=>{
         this.sectionTemplates = data.data;
         this.templatesUpdated.next(!this.templatesUpdated.value);
         resolve(true);
@@ -956,7 +956,7 @@ export class GeneralService {
     });
   }
 
-  saveHTML(main:any, sections:any, preview:boolean, tglDraft:boolean) {
+  saveHTML(main:any, sections:any, preview:boolean, template:boolean, tglDraft:boolean) {
     return new Promise<any>((resolve, reject) => {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
@@ -1032,7 +1032,18 @@ export class GeneralService {
         website_id: websiteid,
         page_id: this.webpage.uniqueid
       }
-      if(preview) {
+      if(template) {
+        this.pageObj.folder = this.webpage.uniqueid;
+        this.pageObj.dir = 'previews';
+        this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
+          resolve(true);
+        },
+        error=>{
+          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+          resolve(false);
+        });
+      }
+      else if(preview) {
         this.pageObj.prevFolder = this.webpage.uniqueid;
         this.pageObj.folder = this.webpage.uniqueid;
         this.pageObj.dir = 'previews';
