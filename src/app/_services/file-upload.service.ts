@@ -55,6 +55,7 @@ export class FileUploadService {
   savepagetemplateApi = "./api/savepagetemplate";
   updatepagetemplateApi = "./api/updatepagetemplate";
   deletepagetemplateApi = "./api/deletepagetemplate";
+  copytemplatepageApi =  "./api/copyTemplateToPage"; 
   // page templates
   // section templates
   allsectemplatesApi = "./api/allsectiontemplates";
@@ -198,6 +199,10 @@ export class FileUploadService {
   savePage(page:any):Observable<any> {
     page.uuid = this.uuid;
     return this.http.post(this.savePageApi, page);
+  }
+  copyTemplateToPage(page:any):Observable<any> {
+    page.uuid = this.uuid;
+    return this.http.post(this.copytemplatepageApi, page);
   }
 
   getPage(page:any):Observable<any> {

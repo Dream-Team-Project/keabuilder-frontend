@@ -1022,7 +1022,7 @@ export class GeneralService {
       '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
       if(template) {
-        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/style.css">';
+        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="../'+this.template.uniqueid+'/style.css">';
       }
       else if(!preview) {
         this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
@@ -1037,7 +1037,8 @@ export class GeneralService {
         page_id: this.webpage.uniqueid
       }
       if(template) {
-        this.pageObj.folder = this.webpage.uniqueid;
+        this.pageObj.template_id=this.template.uniqueid;
+        this.pageObj.folder = this.template.uniqueid;
         this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
           resolve(true);
         },

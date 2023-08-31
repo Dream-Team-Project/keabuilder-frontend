@@ -306,12 +306,24 @@ website_id:any;
               folder: pagepath,
               prevFolder: pagepath,
               website_id:this.website_id, 
-              template_id:this.template?.length > 0 ? this.template?.uniqueid : '',
+              template_id:this.template?.uniqueid ? this.template?.uniqueid : '',
             }
-            this._general._file.savePage(page).subscribe((event:any) => {
-              console.log(event);
-            },
-            error=>{console.log(error)});
+            // console.log(page)
+            if(this.template?.uniqueid){
+              this._general._file.copyTemplateToPage(page).subscribe((event:any) => {
+                console.log(event);
+              
+              },
+              error=>{console.log(error)});
+            }
+            else{
+              this._general._file.savePage(page).subscribe((event:any) => {
+                console.log(event);
+              
+              },
+              error=>{console.log(error)});
+            }
+            
             // create page/folder
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
