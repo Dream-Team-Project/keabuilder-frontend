@@ -1008,11 +1008,12 @@ export class GeneralService {
       // append Footer
       this.webpage.page_json = this.encodeJSON(jsonObj);
       this.removeExtra(preview);
+      let faviconIcon = (template || preview) ? '/favicon.ico' : '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
       this.pagehtml.querySelector('head').innerHTML = 
       '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
       '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
       '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
-      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
+      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+faviconIcon+'">' +
       '<meta charset="UTF-8">' +
       '<meta name="description" content="'+this.main.description+'">' +
       '<meta name="keywords" content="'+this.main.keywords+'">' +
