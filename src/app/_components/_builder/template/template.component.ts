@@ -88,16 +88,18 @@ export class TemplateComponent implements OnInit {
     var obj = {
       search: search.value,
       filter: filter.value,
-      archive:'1',
-      // funnelid:this.uniqueid,
+      // unique_id:this.unique_id,
     }
-    // this.funnelService.searchquerysavedtemplates(obj).subscribe((data:any) => {
-    //   this.searching = false;
-    //     if(data.success){ 
-    //       this.archivesteps = data?.data;
-    //     }
+    this._file.searchquerysavedtemplates(obj).subscribe((data:any) => {
+      this.searching = false;
+        if(data.success){ 
+          this.templates = data?.data;
+        }
+        else{
+          this.templates=[];
+        }
         
-    // });
+    });
     
   }
   
