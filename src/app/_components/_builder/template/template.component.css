@@ -36,6 +36,14 @@
     text-align: center;
     
 }
+.kb-img-fluid1{
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    align-items: center;
+    text-align: center;
+    
+}
 ::ng-deep .kb-table-action-icon {
     cursor: pointer;
     line-height: inherit;
@@ -64,3 +72,26 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .colr{
+    color: #dea641;
+}
+.active{
+    color: #dea641;
+}
+.kb-btn.active button{
+background-color:#dea641;
+color: #fff;
+}
+.fnt{
+    font-weight: 500;
+    font-size: 18px;
+}
+.verti{
+    color: #000;
+}
+.kb-fnt{
+    font-size:12px ;
+    color: var(--primary-color);
+    position: relative;
+    top: -15px;
+}

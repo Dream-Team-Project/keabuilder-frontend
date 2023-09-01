@@ -23,13 +23,16 @@ export class TemplateComponent implements OnInit {
   deltemplate:any;
   templatename:any;
   website_id:any='';
+  defaultcatg:any='sales';
+  isActive:boolean=false;
+  category:any='sales';
   templatenameFormControl = new FormControl('', [Validators.required,Validators.minLength(3),]);
   
   constructor(private _file: FileUploadService,private websiteService: WebsiteService, public _image: ImageService, private dialog: MatDialog, public _general: GeneralService,) { }
 
   ngOnInit(): void {
     this.fetchTemplates();
-    this.fetchsystemTemplates();
+    this.fetchsystemTemplates(this.category);
     
   }
 
@@ -41,8 +44,9 @@ export class TemplateComponent implements OnInit {
       }
     })
   }
-  fetchsystemTemplates() {
-    this._file.fetchdefaulttemplates().subscribe((resp:any)=>{
+  fetchsystemTemplates(value:string) {
+    this.category={category:value};
+    this._file.fetchdefaulttemplates(this.category).subscribe((resp:any)=>{
       if(resp.data?.length > 0) this.systemplates = resp.data;
       else{
         this.systemplates = resp.data;
