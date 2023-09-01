@@ -22,10 +22,19 @@ export class TemplateComponent implements OnInit {
   systemplates:any = [];
   deltemplate:any;
   templatename:any;
-  website_id:any='';
-  defaultcatg:any='sales';
+  website_id:string='';
+  defaultcatg:string='sales';
   isActive:boolean=false;
-  category:any='sales';
+  category:string='sales';
+  allmenu:any = [
+  { title: 'Sales', name : 'sales'},
+  {title: 'Order',name : 'order'},
+  {title: 'Upsell',name : 'upsell'},
+  {title: 'Downsell',name : 'downsell'},
+  { title: 'Webinar', name : 'webinar'},
+  {title: 'Optin',name : 'optin'},
+  {title: 'Other',name : 'other',},
+  ]
   templatenameFormControl = new FormControl('', [Validators.required,Validators.minLength(3),]);
   
   constructor(private _file: FileUploadService,private websiteService: WebsiteService, public _image: ImageService, private dialog: MatDialog, public _general: GeneralService,) { }
@@ -45,9 +54,11 @@ export class TemplateComponent implements OnInit {
     })
   }
   fetchsystemTemplates(value:string) {
-    this.category={category:value};
-    this._file.fetchdefaulttemplates(this.category).subscribe((resp:any)=>{
-      if(resp.data?.length > 0) this.systemplates = resp.data;
+    let obj={category  : value};
+    this._file.fetchdefaulttemplates(obj).subscribe((resp:any)=>{
+      this.category=value;
+      console.log(value);
+      if(resp.data?.length > 0)  this.systemplates = resp.data; 
       else{
         this.systemplates = resp.data;
       }
@@ -106,5 +117,5 @@ export class TemplateComponent implements OnInit {
     });
     
   }
-  
+
 }
