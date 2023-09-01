@@ -107,7 +107,7 @@
             
         </mat-tab>
         <mat-tab label="Saved Templates">
-          <div class="row my-3">
+          <div class="row m-0 mt-3">
 
             <mat-form-field  appearance="fill" class="col-md-6">
               <mat-label>Search Templates</mat-label>
@@ -125,7 +125,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-            <div class="row mx-0" *ngIf="templates?.length > 0">
+            <div class="row m-0" *ngIf="templates?.length > 0">
                 <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
