@@ -219,8 +219,8 @@ export class BuilderComponent implements OnInit {
   }
 
   saveSectionTemplate(obj:any) {
-    this._general.saveDisabled = true;
     this._general._file.savesectiontemplate(obj).subscribe((resp:any)=>{
+      this._general.saveDisabled = true;
       this.takePageSS('section-'+obj.uniqueid, 'section template');
       this._general.fetchSectionTemplates();
       this.dialog.closeAll();
@@ -228,12 +228,14 @@ export class BuilderComponent implements OnInit {
   }
 
   saveHeaderFooter(main:any) {
-    if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
     this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
       if(!this.autoSaving) {
         if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        else if(res) this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        else if(res) {
+          if(!this.autoSaving) this._general.saveDisabled = true;
+          this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        }
         else this._general.saveDisabled = false;
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
