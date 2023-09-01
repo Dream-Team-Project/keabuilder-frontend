@@ -294,6 +294,12 @@ export class SidebarComponent implements OnInit {
         img: 'payment.gif',
         icon: 'fa fa-product-hunt',
         title: 'Products'
+      }, {
+        0:true,
+        routerlink: '/sales/orderform',
+        img: 'payment.gif',
+        icon: 'fa fa-dolly-flatbed',
+        title: 'Order Form'
       },{
         0:true,
         routerlink: '/sales/payment',
@@ -301,20 +307,20 @@ export class SidebarComponent implements OnInit {
         icon: 'fa fa-dollar-sign',
         title: 'Payments'
       },
-      {
-        0:true,
-        routerlink: '/sales/coupons',
-        img: 'payment.gif',
-        icon: 'fa fa-file-alt',
-        title: 'Coupons'
-      },
-      {
-        0:true,
-        routerlink: '/sales/affiliates',
-        img: 'payment.gif',
-        icon: 'fas fa-search-dollar',
-        title: 'Affiliates'
-      },
+      // {
+      //   0:true,
+      //   routerlink: '/sales/coupons',
+      //   img: 'payment.gif',
+      //   icon: 'fa fa-file-alt',
+      //   title: 'Coupons'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/sales/affiliates',
+      //   img: 'payment.gif',
+      //   icon: 'fas fa-search-dollar',
+      //   title: 'Affiliates'
+      // },
     ],
   }
   // ,{
