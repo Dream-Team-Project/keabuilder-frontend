@@ -150,7 +150,7 @@
     </div>
   </div>
   <div class="row" >
-    <div class="col-lg-8 col-sm-6"  *ngIf="data1.length!=0">
+    <div class="col-lg-8 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -179,7 +179,7 @@
           </div>
           <h6 class="big-title">Total earnings in last Week</h6>
           <div class="kbcustmwidthforbox4">
-            <apx-chart
+            <apx-chart *ngIf="data1.length!=0"
               [series]="chartOptions11.series"
               [chart]="chartOptions11.chart"
               [yaxis]="chartOptions11.yaxis"
@@ -265,7 +265,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-6 col-sm-6" *ngIf="data2.length!=0">
+    <div class="col-lg-6 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -397,7 +397,7 @@
   </div>
   
   <div class="row" *ngIf="hidefornow">
-    <div class="col-lg-4 col-sm-6"  *ngIf="data1.length!=0">
+    <div class="col-lg-4 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -420,7 +420,7 @@
           </div>
           <h6 class="big-title">Total earnings in last Week</h6>
           <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart
+            <apx-chart *ngIf="campaign.fetched"
               [series]="chartOptions.series"
               [chart]="chartOptions.chart"
               [yaxis]="chartOptions.yaxis"

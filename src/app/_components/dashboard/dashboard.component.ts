@@ -902,7 +902,7 @@ export class DashboardComponent implements OnInit {
       if(resp.success) {
         this.campaign.recents = resp.data;
         this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
-        this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto.toString());
+        this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
         console.log(this.campaign);
         this.campaignReportOptions();
       }
@@ -964,7 +964,6 @@ export class DashboardComponent implements OnInit {
     this.chartOptions12 = {
       series: this.campaign.chartData.y,
       chart: {
-        // width: 380,
         height: 350,
         type: 'donut',
         dropShadow: {
@@ -993,10 +992,10 @@ export class DashboardComponent implements OnInit {
         },
         expandOnClick: true,
       },
-      labels: this.campaign.chartData.x,
+      labels: this.campaign.chartData.x.map((label:string) => label.charAt(0).toUpperCase() + label.slice(1)),
       dataLabels: {
         dropShadow: {
-          blur: 3,
+          blur: 2,
           opacity: 0.8,
         },
         formatter(value: any, opts: any): any {
@@ -1043,7 +1042,7 @@ export class DashboardComponent implements OnInit {
           },
         },
       ],
-    };
+    };    
     this.campaign.fetched = true;
   }
 
