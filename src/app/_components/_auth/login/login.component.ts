@@ -10,6 +10,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  img:any=1;
   product:any='plan-xTn8SqarYE0eVIEaSdkM';
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  bgImg = 'url(src/assets/images/login/login-bk1.jpg)';
+  bgImg = 'url(src/assets/images/login/1.png)';
   min = 1;
   max = 3;
 
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
     }
     this.createNewImg();
+    this.startInterval();
   }
 
   onSubmit(): void {
@@ -78,8 +80,16 @@ export class LoginComponent implements OnInit {
   }
 
   createNewImg(){
-    var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-      this.bgImg = 'url(./assets/images/login/login-bk'+genNum+'.jpg)';
+    // var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
+      this.bgImg = 'url(./assets/images/login/'+this.img+'.png)';
+  }
+  startInterval() {
+  setInterval(() => {
+      this.createNewImg();
+      // if(this.img <10){
+      //   this.img++;
+      // }
+    }, 5000);
   }
 
 
