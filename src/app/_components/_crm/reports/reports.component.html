@@ -1,24 +1,26 @@
 <div class="container-fluid">
-    <div class="row mt-5">
-        <div class="col-md-6">
+    <div class="row mb-4">
+        <div class="col-md-7 pr-3">
             <div class="kb-report-card p-3">
-                <div class="row">
-                    <div class="col-6">
-                        <h5 class="m-0">Contacts</h5>
+                <div class="row border-bottom">
+                    <div class="col-md-6">
+                        <h5 class="mt-3 ml-3 mb-0">Contacts</h5>
                     </div>
-                    <div class="col-6">
-                        <mat-form-field class="kb-full-width" appearance="fill">
-                            <mat-label>Time Period</mat-label>
-                            <mat-select [(ngModel)]="filtercontacts">
-                                <mat-option value="WEEK">Weekly</mat-option>
-                                <mat-option value="Month" selected>Monthly</mat-option>
-                                <mat-option value="YEAR">Yearly</mat-option>
-                            </mat-select>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="kb-full-width pb-2" (click)="contactpicker.open()">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="contactpicker" [max]="maxDate">
+                                <input matStartDate [(ngModel)]="contact.date.from" (ngModelChange)="fetchDateReportContacts()" placeholder="From date">
+                                <input matEndDate [(ngModel)]="contact.date.to" (ngModelChange)="fetchDateReportContacts()" placeholder="To date">
+                            </mat-date-range-input>
+                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="contactpicker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #contactpicker></mat-date-range-picker>
                         </mat-form-field>
                     </div>
                 </div>
                 <apx-chart
-                    *ngIf="fetched"
+                    *ngIf="contact.fetched"
                     [series]="chartContactOptions.series"
                     [chart]="chartContactOptions.chart"
                     [dataLabels]="chartContactOptions.dataLabels"
@@ -32,7 +34,7 @@
                 ></apx-chart>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5 pl-2">
             <div class="kb-report-card">
                 <h5 class="p-3 m-0">Recent Contacts</h5>
                 <table class="table kb-table" dataSource="contacts">
@@ -40,51 +42,81 @@
                       <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Phone</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let contact of recentContacts; index as i" [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
+                      <tr *ngFor="let contact of contact.recents; index as i" [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
                         <td class="kb-text-overflow">
                             <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
                             {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}
                         </td>
                         <td class="kb-text-overflow"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
-                        <td class="kb-text-overflow">{{ contact.phone ? contact.phone : '--' }}</td>
                       </tr>
                     </tbody>
                   </table>
             </div>
         </div>
     </div>
-    <!-- <div class="row mt-5">
-        <div class="col-md-6 mb-5">
-            <div class="card kb-user-detail-box px-4 py-4 h-100">
-            <apx-chart
-                [series]="chartOptions.series"
-                [chart]="chartOptions.chart"
-                [dataLabels]="chartOptions.dataLabels"
-                [plotOptions]="chartOptions.plotOptions"
-                [yaxis]="chartOptions.yaxis"
-                [legend]="chartOptions.legend"
-                [fill]="chartOptions.fill"
-                [stroke]="chartOptions.stroke"
-                [tooltip]="chartOptions.tooltip"
-                [xaxis]="chartOptions.xaxis"
-            ></apx-chart>
+    <div class="row">
+        <div class="col-md-7 pr-3">
+            <div class="kb-report-card p-3">
+                <div class="row border-bottom">
+                    <div class="col-md-6">
+                        <h5 class="mt-3 ml-3 mb-0">Campaigns</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="kb-full-width pb-2" (click)="campaignpicker.open()">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="campaignpicker" [max]="maxDate">
+                                <input matStartDate [(ngModel)]="campaign.date.from" (ngModelChange)="fetchDateReportCampaigns()" placeholder="From date">
+                                <input matEndDate [(ngModel)]="campaign.date.to" (ngModelChange)="fetchDateReportCampaigns()" placeholder="To date">
+                            </mat-date-range-input>
+                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="campaignpicker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #campaignpicker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <apx-chart
+                    *ngIf="campaign.fetched"
+                    [series]="chartCampaignOptions.series"
+                    [chart]="chartCampaignOptions.chart"
+                    [dataLabels]="chartCampaignOptions.dataLabels"
+                    [plotOptions]="chartCampaignOptions.plotOptions"
+                    [yaxis]="chartCampaignOptions.yaxis"
+                    [legend]="chartCampaignOptions.legend"
+                    [fill]="chartCampaignOptions.fill"
+                    [stroke]="chartCampaignOptions.stroke"
+                    [tooltip]="chartCampaignOptions.tooltip"
+                    [xaxis]="chartCampaignOptions.xaxis"
+                ></apx-chart>
+            </div>
+        </div>
+        <div class="col-md-5 pl-2">
+            <div class="kb-report-card">
+                <h5 class="p-3 m-0">Recent Campaigns</h5>
+                <table class="table kb-table" dataSource="campaigns">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Sent To</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let campaign of campaign.recents; index as i">
+                        <td class="kb-text-overflow">
+                            {{campaign.name | titlecase}}
+                        </td>
+                        <td class="kb-text-overflow"><span class="text-lowercase">{{ campaign.sentto }}</span></td>
+                        <td class="kb-text-overflow">{{ campaign.deliverdate ? (campaign.deliverdate | date:'mediumDate') : '--'}}</td>
+                        <td class="kb-text-overflow">{{ campaign.deliverdate ? (campaign.deliverdate | date:'shortTime') : '--'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
         </div>
     </div>
-        <div class="col-md-6 mb-5">
-            <div class="card kb-user-detail-box py-2 h-100">
-            <apx-chart
-                [series]="chartOptions2.series"
-                [chart]="chartOptions2.chart"
-                [plotOptions]="chartOptions2.plotOptions"
-                [xaxis]="chartOptions2.xaxis"
-                [fill]="chartOptions2.fill"
-            ></apx-chart>
-        </div>
-        </div>
-    </div> -->
 </div>
     

@@ -10,6 +10,30 @@ main {
     position: relative;
 }
 
+::ng-deep .mat-calendar-body-selected {
+    background-color: var(--primary-color);
+}
+
+::ng-deep .mat-calendar-body-in-range::before, ::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: rgb(216 200 152 / 40%);
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: var(--opacity-primary);
+}
+
+::ng-deep .mat-datepicker-toggle-active {
+    color: var(--primary-color);
+}
+
+::ng-deep .apexcharts-canvas .apexcharts-selected svg {
+    fill: var(--primary-color)!important;
+}
+
+::ng-deep .apexcharts-canvas .apexcharts-selected.apexcharts-pan-icon svg {
+    stroke: var(--primary-color)!important;
+}
+
 ::ng-deep .mat-dialog-title {
     margin-bottom: 16px!important;
     color: var(--primary-color);

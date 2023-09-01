@@ -36,43 +36,67 @@ export class CrmReportsComponent implements OnInit {
 
   @ViewChild("chart") chart: ChartComponent | any;
   public chartContactOptions: Partial<ChartOptions> | any;
-  public chartOptions2: Partial<ChartOptions> | any;
+  public chartCampaignOptions: Partial<ChartOptions> | any;
 
-  fetched=false;
-  recentContacts:any = [];
-  monthlyContacts:any = [];
-  contactLimit = 8;
-  contactData = {
-    x: [],
-    y: [],
+  currentDate:any = '';
+  contact:any = {
+    recents: [],
+    monthly: [],
+    limit: 8,
+    chartData: {
+      x: [],
+      y: [],
+    },
+    date: {
+      from: '',
+      to: new Date()
+    },
+    fetched: false
   }
+  campaign:any = {
+    recents: [],
+    monthly: [],
+    limit: 8,
+    chartData: {
+      x: [],
+      y: [],
+    },
+    date: {
+      from: '',
+      to: new Date
+    },
+    fetched: false
+  }
+  maxDate:Date = new Date();
 
-  crmdata:any;
-  filtercontacts:any='WEEK';
-  contacts:any=[];
-  contactsduration:any=[];
-  campaigns:any;
-
-  constructor(private _reportingService : ReportingService) { }
+  constructor(private _reportingService : ReportingService) {
+   }
 
   ngOnInit(): void {
+    this.currentDate = new Date();
+    this.contact.date.from = new Date(this.currentDate.setDate(this.currentDate.getDate() - 30));
+    this.campaign.date.from = new Date(this.currentDate.setDate(this.currentDate.getDate() - 30));
     this.fetchRecentContacts();
-    this.fetchMonthlyContacts();
+    this.fetchDateReportContacts();
+    this.fetchRecentCampaigns();
+    this.fetchDateReportCampaigns();
   }
 
+  // start contacts
+
   fetchRecentContacts() {
-    this._reportingService.recentContacts(this.contactLimit).subscribe((resp:any)=>{
-      if(resp.success) this.recentContacts = resp.data;
+    this._reportingService.recentContacts(this.contact.limit).subscribe((resp:any)=>{
+      if(resp.success) this.contact.recents = resp.data;
     })
   }
 
-  fetchMonthlyContacts() {
-    this._reportingService.monthlyContacts().subscribe((resp:any)=>{
+  fetchDateReportContacts() {
+    this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
+    console.log(resp);
       if(resp.success) {
-        this.monthlyContacts = resp.data;
-        this.contactData.x = this.monthlyContacts.map((m:any) => m.date);
-        this.contactData.y = this.monthlyContacts.map((m:any) => m.count);
-        console.log(this.contactData);
+        this.contact.monthly = resp.data;
+        this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
+        this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
         this.contactChartOption();
       }
     })
@@ -83,7 +107,7 @@ export class CrmReportsComponent implements OnInit {
       series: [
         {
           name: "Contacts",
-          data: this.contactData.y,
+          data: this.contact.chartData.y,
         },
       ],
       chart: {
@@ -105,12 +129,13 @@ export class CrmReportsComponent implements OnInit {
         colors: ['#dea641']
       },
       xaxis: {
-        categories: this.contactData.x
+        categories: this.contact.chartData.x
       },
       yaxis: {
         title: {
-          text: "Contacts Per Month",
-        }
+          text: "",
+        },
+        decimal: 0
       },
       fill: {
         opacity: 1,
@@ -118,60 +143,88 @@ export class CrmReportsComponent implements OnInit {
       },
       tooltip: {
         y: {
-          formatter: function(val: string) {
-            return val;
+          formatter: function(value: string) {
+            return value;
           },
         },
       }
     };
-    console.log(this.chartContactOptions);
-    this.fetched = true;
+    this.contact.fetched = true;
   }
 
-  chartsReload(){
-    this.chartOptions2 = {
+  // end contacts
+
+  // start campaigns
+
+  fetchRecentCampaigns() {
+    this._reportingService.recentCampaigns(this.campaign.limit).subscribe((resp:any)=>{
+      if(resp.success) this.campaign.recents = resp.data;
+    })
+  }
+
+  fetchDateReportCampaigns() {
+    this._reportingService.datefilterCampaigns(this.campaign.date.from, this.campaign.date.to).subscribe((resp:any)=>{
+      if(resp.success) {
+        this.campaign.monthly = resp.data;
+        this.campaign.chartData.x = this.campaign.monthly.map((m:any) => m.date);
+        this.campaign.chartData.y = this.campaign.monthly.map((m:any) => m.count.toString());
+        this.campaignChartOption();
+      }
+    })
+  }
+
+  campaignChartOption() {
+    this.chartCampaignOptions = {
       series: [
         {
-          name: 'No',
-          data: [this.crmdata.automations,this.crmdata.campaigns,this.crmdata.contacts,this.crmdata.lists,this.crmdata.tags,this.crmdata.address]
-        }
+          name: "Campaigns",
+          data: this.campaign.chartData.y,
+        },
       ],
       chart: {
-        height: 400,
-        type: "bar"
+        type: "bar", // Change the chart type to "bar" for a bar graph
+        height: 350,
       },
       plotOptions: {
-        bar: {
-          horizontal: true,
-          columnWidth: '55%',
+        bar: { // Specify bar plot options
+          horizontal: false, // Set to true for horizontal bars
           endingShape: 'rounded',
-        }
+        },
       },
-      fill: {
-        opacity: 1,
-        colors:'#dea641',
-      },
+      colors: ['#dea641'],
       dataLabels: {
         enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ['transparent'],
+        colors: ['#dea641'],
       },
       xaxis: {
-        // type: "datetime"
-        categories: ['Automations','Campaigns','Contacts','Lists','Tags','Address']
+        categories: this.campaign.chartData.x,
+      },
+      yaxis: {
+        title: {
+          text: "",
+        },
+        decimalsInFloat: 0, // Adjust the decimal places
+      },
+      fill: {
+        opacity: 0.5,
+        colors: ['#dea641'],
       },
       tooltip: {
-        x: {
-          formatter: function (val: any) {
-            return val;
+        y: {
+          formatter: function (value: string) {
+            return value;
           },
         },
       },
-    };
+    };    
+    this.campaign.fetched = true;
   }
+
+  // end campaigns
 
   contactIcon(contact:any){
     var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');

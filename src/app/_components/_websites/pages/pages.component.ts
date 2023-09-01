@@ -307,6 +307,7 @@ website_id:any;
               prevFolder: pagepath,
               website_id:this.website_id, 
               template_id:this.template?.uniqueid ? this.template?.uniqueid : '',
+              type: this.template?.user_id == 'default' ? 'default' : 'user' ,
             }
             // console.log(page)
             if(this.template?.uniqueid){
