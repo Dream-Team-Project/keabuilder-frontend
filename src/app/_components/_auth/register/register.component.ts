@@ -225,19 +225,46 @@ specialuser=false;
 
             var emailhtml = `Dear `+firstname+`,<br>
             <br>
-            Thank you for choosing KEA Solutions. We are very excited to have you with us!<br>   
+            We're thrilled to welcome you to the Kea Builder community! Your successful registration marks the beginning of your web development journey with us, and we're excited to be part of it.<br>   
             <br>
-            Your new KEA builder includes 2 FREE hours of BONUS Launch Assist redeemable through our KEA building Team! You can use it for free website/funnel transfers, consulting about advanced business strategy, custom solutions for any other 3rd party platform, and digital marketing services.<br> 
-            <br>
-            Please email <strong>support@keasolution.com</strong> in case you need any clarity or suggestions.<br>
-            <br>
+            Here are your User details-<br>
             Login: `+domainpath+`/login<br>
             Username: `+username+`<br>
             Password: `+password+`<br>
             <br>
-            Thanks<br>
-            KEA Solutions Team`;
-            var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome To Kea', html: emailhtml};
+            Here's what you can do now that your registration is complete:<br> 
+            <br>
+            1. Access Your Dashboard<br>
+            <br>
+            You can now log in to your dashboard at any time by visiting [Dashboard URL] and using the credentials provided.<br>
+            <br>
+            2. Start Building Your Dream Website/Funnel<br>
+            <br>
+            With Kea Builder, you have the tools and resources at your fingertips to create stunning websites and funnels and build your online business. Begin your project by selecting a template or starting from scratch.<br>
+            <br>
+            3. Explore Our Features<br>
+            <br>
+            Discover the powerful features and functionalities available to you:<br>
+            <br>
+            Customer Relationship Management<br>
+            Forms<br>
+            Funnel Builder<br>
+            <br>
+            4. Get Assistance When Needed<br>
+            <br>
+            If you have any questions, encounter challenges, or need assistance with your journey, our support team is here. Feel free to reach out to them at <strong>support@keasolution.com</strong>.
+            <br>
+            5. Learn and Grow<br>
+            <br>
+            Explore our tutorials, documentation, and community forums to enhance your web development skills. Stay connected with other developers, share insights, and learn from each other's experiences.<br>
+            <br>
+            Thank you for choosing Kea Builder. We're dedicated to providing you with the tools and support you need to create unique websites. We can't wait to see what you build!.<br>
+            <br>
+            Welcome aboard, and happy exploring!<br>
+            <br>
+            Best regards,<br>
+            Kea Builder Team`;
+            var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome to Kea Builder - Registration Successful!', html: emailhtml};
             this.emailService.sendmail(maildata).subscribe({
               next: data => {
                 console.log(data);

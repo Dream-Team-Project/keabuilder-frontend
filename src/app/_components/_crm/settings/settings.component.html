@@ -28,7 +28,7 @@
             Email is <strong>required</strong>
         </mat-error>
     </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
+    <mat-form-field class="kb-full-width" appearance="fill" hidden>
         <mat-label>API KEY ID</mat-label>
         <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
         <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
@@ -36,16 +36,18 @@
         </mat-error>
     </mat-form-field>
     <mat-form-field class="kb-full-width" appearance="fill">
-        <mat-label>API KEY </mat-label>
+        <mat-label>API KEY</mat-label>
         <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
         <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
             API Key is <strong>required</strong>
         </mat-error>
+        <mat-hint><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation</a></mat-hint>
     </mat-form-field>
+    
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button  cdkFocusInitial  color="primary" (click)="addsmtpdetails()">Add</button>
+        <button mat-button  cdkFocusInitial  color="primary" (click)="addsmtpdetails()" [disabled]="smtp.invalid || apikey.invalid || email.invalid">Add</button>
     </div>
   </ng-template>
  <!-- add new address setting-->

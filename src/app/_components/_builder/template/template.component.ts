@@ -75,6 +75,7 @@ export class TemplateComponent implements OnInit {
     this._file.deletepagetemplate(this.deltemplate.id).subscribe((resp:any)=>{
       if(resp?.success) {
         this._file.deleteFile(this.deltemplate.uniqueid,'templates').subscribe((resp1:any)=>{
+          // console.log(resp1)
           this._general.openSnackBar(false,resp?.message,'Ok','center','top');
           // this.dialog.closeAll();
           this.fetchTemplates();

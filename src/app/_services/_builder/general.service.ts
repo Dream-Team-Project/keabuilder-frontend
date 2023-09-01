@@ -1551,5 +1551,5 @@ export class GeneralService {
     var text2 = dt.toLocaleTimeString();
     return text1+' '+text2;
   }
-
+ 
 }

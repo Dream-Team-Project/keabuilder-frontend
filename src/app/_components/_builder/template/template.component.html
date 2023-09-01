@@ -49,32 +49,24 @@
         </div>
     </div>
     <mat-tab-group class="kb-template-container">
-        <mat-tab label="System Templates">
+        <mat-tab label="Marketplace">
             <div class="row m-0">
               <div class="col-md-2 bw-sidebar kb-template-card">
               <div *ngFor="let menu of allmenu; index as i;">
-                <button [class.kb-active] ='menu.name == category'  (click)="fetchsystemTemplates(menu.name)" class="bw-sidebar__item hasIcon" ><span class="bw-sidebar__item__text">{{menu.title}}</span></button>
+                <button [class.kb-active] ='menu.name == category' (click)="fetchsystemTemplates(menu.name)" class="bw-sidebar__item hasIcon" ><span class="bw-sidebar__item__text">{{menu.title}}</span></button>
               </div>
               </div>
               <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}">
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-2">
                           <span class="ftoverflow">{{temp.name | titlecase}}</span>
                           <span class="d-flex justify-content-end">
-                              <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"></i>
+                              <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/marketplace/template/preview/'+temp.uniqueid)"></i>
                               <i mat-ripple matTooltip="Use this template" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
-                              <!-- <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, temp)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del" aria-hidden="true"></i> -->
-                              <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
-                              <mat-menu #menu="matMenu">
-                                  <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
-                                  <button mat-menu-item (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
-                                  <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
-                                  <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
-                                  </mat-menu>  
                           </span>
                       </div>
                     </div>
@@ -82,7 +74,7 @@
               </div>
               <div class="col-md-10 d-flex align-items-center justify-content-center" *ngIf="systemplates?.length == 0">
                 <div class="kb-img-fluid1">
-                  <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
+                  <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Marketplace found">
                 </div>
                 
               </div>
@@ -113,7 +105,7 @@
                 <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}">
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-2">
                             <span class="ftoverflow">{{temp.name | titlecase}}</span>
@@ -124,7 +116,7 @@
                                 <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
-                                    <button mat-menu-item (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
+                                    <!-- <button mat-menu-item (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button> -->
                                     <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
                                     <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
                                     </mat-menu>  
