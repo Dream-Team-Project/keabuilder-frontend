@@ -70,9 +70,10 @@ export class DomainComponent implements OnInit {
       if(this.domainconn==1){
         this._general.openSnackBar(false,'Domain is now processing... Don not close the browser until process is complete.', 'OK','center','top');
 
+        console.log(this.domainname.value);
         this.domainService.oncreatedomain(this.domainname.value).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
           
             if(data.success==true){
               this.nameservers = data.nameservers.split(',');

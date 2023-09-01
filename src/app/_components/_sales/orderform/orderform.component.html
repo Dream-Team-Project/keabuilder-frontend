@@ -16,12 +16,12 @@
   <!-- add new product -->
   <!-- update product -->
   <ng-template #updatedialog>
-    <h1 mat-dialog-title>Update Product</h1>
+    <h1 mat-dialog-title>Update Order Form</h1>
     <div mat-dialog-content>
       <mat-error *ngIf="hasError">{{hasError}}</mat-error>
       <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
         <mat-label>Name</mat-label>
-        <input matInput type="text" placeholder="Product name" [(ngModel)]="productObj.name" required [minlength]="3">
+        <input matInput type="text" placeholder="Order Form name" [(ngModel)]="productObj.name" required [minlength]="3">
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
@@ -32,25 +32,25 @@
   <!-- update product -->
   <!-- duplicate product -->
   <ng-template #dupdialog>
-    <h1 mat-dialog-title >Duplicate Product</h1>
+    <h1 mat-dialog-title >Duplicate Order Form</h1>
     <div mat-dialog-content>
-      Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> product?
+      Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> Order Form?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger">No</button>
-      <button mat-button mat-dialog-close (click)="duplicateproduct(productObj)" [color]="'primary'">Yes</button>
+      <button mat-button mat-dialog-close (click)="duplicateorderform(productObj)" [color]="'primary'">Yes</button>
     </div>
   </ng-template>
   <!-- duplicate product -->
   <!-- delete product -->
   <ng-template #deldialog>
-    <h1 mat-dialog-title class="kb-danger">Delete Product</h1>
+    <h1 mat-dialog-title class="kb-danger">Delete Order Form</h1>
     <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{productObj.name}}</span> product?
+      Would you like to delete <span class="text-danger">{{productObj.name}}</span> order form?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close (click)="deleteproduct()" class="text-danger">Yes</button>
+      <button mat-button mat-dialog-close (click)="deleteorderform()" class="text-danger">Yes</button>
     </div>
   </ng-template>
   <!-- delete product -->
