@@ -1064,14 +1064,14 @@ export class GeneralService {
         this.pageObj.folder = this.templateobj.uniqueid;
         this.templateobj.template=this.encodeJSON(jsonObj);
         this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
-        this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
-          resolve(true);
-        },
-        error=>{
-          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-          resolve(false);
-        });
-      })
+          this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
+            resolve(true);
+          },
+          error=>{
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
+          });
+        })
       }
       else if(preview) {
         this.pageObj.prevFolder = this.webpage.uniqueid;
