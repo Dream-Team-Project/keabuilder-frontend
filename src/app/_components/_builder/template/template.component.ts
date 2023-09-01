@@ -78,11 +78,9 @@ export class TemplateComponent implements OnInit {
       if(resp?.success) {
         this._file.deleteFile(this.deltemplate.uniqueid,'templates').subscribe((resp1:any)=>{
           // console.log(resp1)
-          if(resp1?.success) {
-            this._general.openSnackBar(false,resp?.message,'Ok','center','top');
-            // this.dialog.closeAll();
-            this.fetchTemplates();
-          }
+          this._general.openSnackBar(false,resp?.message,'Ok','center','top');
+          // this.dialog.closeAll();
+          this.fetchTemplates();
         })
     }
 

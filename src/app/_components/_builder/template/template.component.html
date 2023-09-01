@@ -91,14 +91,6 @@
                           <span class="d-flex justify-content-end">
                               <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"></i>
                               <i mat-ripple matTooltip="Use this template" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
-                              <!-- <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, temp)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del" aria-hidden="true"></i> -->
-                              <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
-                              <mat-menu #menu="matMenu">
-                                  <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
-                                  <button mat-menu-item (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
-                                  <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
-                                  <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
-                                  </mat-menu>  
                           </span>
                       </div>
                     </div>
@@ -148,7 +140,7 @@
                                 <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
-                                    <button mat-menu-item (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
+                                    <!-- <button mat-menu-item (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button> -->
                                     <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
                                     <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
                                     </mat-menu>  
