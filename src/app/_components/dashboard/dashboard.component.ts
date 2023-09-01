@@ -873,7 +873,7 @@ export class DashboardComponent implements OnInit {
               return { ...item, email, time_ago };
           });
           this.recentsales = newArray1;
-          console.log(this.recentsales);
+          // console.log(this.recentsales);
         }
 
       },
@@ -903,7 +903,7 @@ export class DashboardComponent implements OnInit {
         this.campaign.recents = resp.data;
         this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
         this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
-        console.log(this.campaign);
+        // console.log(this.campaign);
         this.campaignReportOptions();
       }
     })

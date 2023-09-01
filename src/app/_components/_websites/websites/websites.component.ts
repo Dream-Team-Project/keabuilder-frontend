@@ -119,7 +119,7 @@ export class WebsitesComponent implements OnInit {
         this.fetweb(data);
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
@@ -156,11 +156,11 @@ export class WebsitesComponent implements OnInit {
             if(data?.success){
             var dataobj = {website_id:data.uniqueid};
             this._file.createwebsitefolder(dataobj).subscribe(e=>{
-              console.log(e);
+              // console.log(e);
             });
 
             this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
-              console.log(e);
+              // console.log(e);
             });
 
             this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
@@ -255,7 +255,7 @@ export class WebsitesComponent implements OnInit {
             this._snackBar.open("Password did't match!", 'OK');
           }else{
             this._file.deletewebsitefolder(web.uniqueid).subscribe(e=>{
-              console.log(e);
+              // console.log(e);
             });
 
               this.websiteService.ondeletesubdomain(web.subdomain).subscribe({
@@ -316,13 +316,13 @@ export class WebsitesComponent implements OnInit {
              }else{
               if(data?.success){
                 this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
-                  console.log(e);
+                  // console.log(e);
                 });
 
                 if(data.uniqueid!=''){
                   var dataobj = {old_website_id:this.duplicatewebid, new_website_id:data.uniqueid};
                   this._file.copywebsitefolder(dataobj).subscribe(e=>{
-                    console.log(e);
+                    // console.log(e);
                   });
                 }
 
@@ -379,7 +379,7 @@ export class WebsitesComponent implements OnInit {
     return datagen;
   }
   copyurl(website:any){
-    console.log(website)
+    // console.log(website)
   this.pageurl = 'https://'+website?.domain;
   this.dialog.open(this.copyurldialog)
   }

@@ -54,7 +54,7 @@ export class WebsiteDetailsComponent implements OnInit {
               private route: ActivatedRoute,
               public userService: UserService) { 
                 this.route.paramMap.subscribe((params: ParamMap) => {
-                  // console.log(params);
+                  // //console.log(params);
                   this.websiteid = params.get('website_id');
                 });
               }
@@ -64,11 +64,11 @@ export class WebsiteDetailsComponent implements OnInit {
     // Get Pages & landing page
     this.webpagesService.getWebpagesById(this.websiteid).subscribe({
       next: data => {
-        // console.log(data.data);
+        // //console.log(data.data);
         this.kbpages = data.data;
       },
       error: err => {
-        console.log(err);
+        //console.log(err);
       }
     });
 
@@ -76,7 +76,7 @@ export class WebsiteDetailsComponent implements OnInit {
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
         if(data?.length != 0) {
-          // console.log(data);
+          // //console.log(data);
           data.data.forEach((element:any) => {
 
               this.websitetitle = '('+element.title+')';
@@ -94,7 +94,7 @@ export class WebsiteDetailsComponent implements OnInit {
               });
             }
 
-            // console.log(element.domain);
+            // //console.log(element.domain);
 
             if(element.domain!='' && element.domain!=null){
               this.domainselected = element.domain;
@@ -105,7 +105,7 @@ export class WebsiteDetailsComponent implements OnInit {
               // this.defaultdomain = element.subdomain+'.'+data.globalsubdomain;
             }
 
-            console.log(this.domainselected);
+            //console.log(this.domainselected);
 
             if(element.tracking_header!=null && element.tracking_header!=''){
               this.pagescriptheader = this._general.decodeData(element.tracking_header);
@@ -154,13 +154,13 @@ export class WebsiteDetailsComponent implements OnInit {
         }
       },
       error: err => {
-        console.log(err);
+        //console.log(err);
       }
     });
 
     // this.userService.getUsersDetails().subscribe({
     //   next: data => {
-    //     // console.log(data);
+    //     // //console.log(data);
 
     //     if(data.realdomain!=''){
     //       this.defaultdomain = data.realdomain;
@@ -180,7 +180,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
   updatepage(){
     this.searching = true;
-    // console.log(this.pathselected);
+    // //console.log(this.pathselected);
     var obj = {
       homepage: this.pathselected,
       scriptheader: this._general.encodeData(this.pagescriptheader),
@@ -194,12 +194,12 @@ export class WebsiteDetailsComponent implements OnInit {
       // checkimginput2: this.imagefaviconrequest
     }
 
-    console.log(obj);
+    //console.log(obj);
 
     this.websiteService.updatesitedetails(obj).subscribe({
       next: data => {     
-        console.log('-->');
-        // console.log(data);
+        //console.log('-->');
+        // //console.log(data);
 
         var splnmlogo = 'logo-'+this.websiteid+'.png';  
         var splnmfavi = 'favicon-'+this.websiteid+'.png';  
@@ -268,7 +268,7 @@ export class WebsiteDetailsComponent implements OnInit {
     var getname = (event.target.files[0].name);
     this.logoimgname = this.generatename(getname);
 
-    // console.log(this.logoimgname);
+    // //console.log(this.logoimgname);
 
     if (this.file!=null && (chktype=='image/jpeg' || chktype=='image/jpg' || chktype=='image/png')) {
       this.typeerror = '';

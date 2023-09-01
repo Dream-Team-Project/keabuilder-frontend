@@ -401,7 +401,7 @@ export class NewFunnelStepsComponent implements OnInit {
           this._general.openSnackBar(false,'Step Added Successfully!', 'Close','center','top');
         },
         error: err => {
-          console.log(err);
+          // console.log(err);
         }
       });
     }
@@ -519,7 +519,7 @@ export class NewFunnelStepsComponent implements OnInit {
         this.generatefunneldt(data);
       },
       error: (err) => {
-        console.log(err);
+        // console.log(err);
       },
     });
   }
@@ -610,7 +610,7 @@ export class NewFunnelStepsComponent implements OnInit {
   }
   kb_substeps2(value: any) {
     // this.tabOpen2 = value;
-    console.log(value);
+    // console.log(value);
 
     this.funnelService.setfunnelselect(value).subscribe({
       next: data => {
@@ -663,7 +663,7 @@ export class NewFunnelStepsComponent implements OnInit {
         
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });   
 
@@ -688,7 +688,7 @@ export class NewFunnelStepsComponent implements OnInit {
 
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }

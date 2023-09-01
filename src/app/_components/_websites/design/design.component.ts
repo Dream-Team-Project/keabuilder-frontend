@@ -81,7 +81,7 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
+        // //console.log(data);
         if(data?.data) {
           if(data.data[0].publish_status==1){
             this.webstatus = 'Publish';
@@ -113,7 +113,7 @@ export class WebsiteDesignComponent implements OnInit {
         }
       },
       error: err => {
-        console.log(err);
+        //console.log(err);
       }
     });
 
@@ -123,7 +123,7 @@ export class WebsiteDesignComponent implements OnInit {
 
     this.websiteService.setpublishstatus(value).subscribe({
       next: data => {
-          // console.log(data);
+          // //console.log(data);
           if(data.status==1){
             this._snackBar.open('Status Updated Successfully!', 'OK');
           }
@@ -172,7 +172,7 @@ export class WebsiteDesignComponent implements OnInit {
 
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
-          // console.log(data);
+          // //console.log(data);
 
           if(data.found==1){
             this.pathcheck = true;
@@ -188,9 +188,10 @@ export class WebsiteDesignComponent implements OnInit {
               prevFolder: pagepath
             }
             this._general._file.savePage(page).subscribe((event:any) => {
-              // console.log(event);
+              // //console.log(event);
             },
-            error=>{console.log(error)});
+            error=>{//console.log(error)
+            });
             // create page/folder
 
             
@@ -221,7 +222,7 @@ export class WebsiteDesignComponent implements OnInit {
   }
 
   changemyname(event:any){
-    // console.log(event.target.value);
+    // //console.log(event.target.value);
     this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
   }
 

@@ -112,7 +112,7 @@ changepagename(dataobj:any, title:any){
   }
   togglepageview(){
     this.toggleview = !this.toggleview; 
-    console.log(this.toggleview);
+    // console.log(this.toggleview);
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
   deletecampaign(campaign:any){

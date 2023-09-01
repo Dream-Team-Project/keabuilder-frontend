@@ -252,7 +252,7 @@ specialuser=false;
             <br>
             4. Get Assistance When Needed<br>
             <br>
-            If you have any questions, encounter challenges, or need assistance with your journey, our support team is here. Feel free to reach out to them at <strong>support@keasolution.com</strong>.
+            If you have any questions, encounter challenges, or need assistance with your journey, our support team is here. Feel free to reach out to them at <strong>support@keasolution.com</strong>.<br>
             <br>
             5. Learn and Grow<br>
             <br>
@@ -267,7 +267,7 @@ specialuser=false;
             var maildata = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome to Kea Builder - Registration Successful!', html: emailhtml};
             this.emailService.sendmail(maildata).subscribe({
               next: data => {
-                console.log(data);
+                // console.log(data);
               }
             });
 

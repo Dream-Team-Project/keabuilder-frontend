@@ -400,7 +400,7 @@ export class NewFunnelBuildComponent implements OnInit {
           
         },
         error: err => {
-          console.log(err);
+          // console.log(err);
         }
       });   
 
@@ -444,7 +444,9 @@ export class NewFunnelBuildComponent implements OnInit {
           this._general._file.savePage(page).subscribe((event:any) => {
             // console.log(event);
           },
-          error=>{console.log(error)});
+          error=>{
+            // console.log(error)
+          });
 
           this._snackBar.open('Step Added Successfully!', 'Close');
 
@@ -456,7 +458,7 @@ export class NewFunnelBuildComponent implements OnInit {
           // }
         },
         error: err => {
-          console.log(err);
+          // console.log(err);
         }
       });
     }
@@ -484,7 +486,7 @@ export class NewFunnelBuildComponent implements OnInit {
 
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
@@ -499,7 +501,7 @@ export class NewFunnelBuildComponent implements OnInit {
         }
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
 
@@ -514,7 +516,7 @@ export class NewFunnelBuildComponent implements OnInit {
         }
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });    
 
@@ -681,7 +683,7 @@ export class NewFunnelBuildComponent implements OnInit {
 
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
@@ -795,7 +797,7 @@ export class NewFunnelBuildComponent implements OnInit {
 
     this.funnelService.makefunnelsettings(obj).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         if(data.status==1){
           this.accordion.closeAll();
@@ -831,13 +833,13 @@ export class NewFunnelBuildComponent implements OnInit {
   kbfootersteps(value:any){
     // console.log(this.uniqueidstep);
 
-    console.log(this.funnelstepurl);
+    // console.log(this.funnelstepurl);
     if(value=='clonefunnelstep'){
       if(this.funnelstepurl!=''){
         var newobj = {uniqueid:this.uniqueidstep, type:'duplicatestep'};
         this.funnelService.makefunnelstepduplicate(newobj).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success==1){
 
               var pathobj  = {oldpath:this.funnelstepurl,newpath:data.newpath, website_id:data.websiteid, dir:'pages'};
@@ -1002,7 +1004,7 @@ export class NewFunnelBuildComponent implements OnInit {
         if(data.status==1){
 
           var newpathobj:any = {website_id:this.uniqueid, path:data.path};
-          console.log(newpathobj);
+          // console.log(newpathobj);
           this.fileuploadService.deletepage(newpathobj).subscribe({
             next: data => {
               // console.log(data);
@@ -1279,12 +1281,10 @@ export class NewFunnelBuildComponent implements OnInit {
 
   dupanotherdes(page:any){
     
-    console.log(page);
-    console.log(this.newfunnelid);
 
     if(this.newfunnelid!=''){
 
-      console.log(page);
+      // console.log(page);
       var getvl = 'pages';
       // var newpath = page.page_path+'-'+this.makeid(20);
 

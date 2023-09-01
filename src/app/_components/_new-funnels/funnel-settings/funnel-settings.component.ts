@@ -131,7 +131,7 @@ fetchfunnel(){
     
     },
     error: err => {
-    console.log(err);
+    // console.log(err);
     }
     });
 }

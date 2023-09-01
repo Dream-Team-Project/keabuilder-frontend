@@ -139,7 +139,7 @@ export class CrmEmailsComponent implements OnInit {
   }
 
   duplicateemail(email:any){
-    console.log(email)
+    // console.log(email)
     var datadup = JSON.parse(JSON.stringify(email));
     datadup.olduid = email.uniqueid;
     datadup.uniqueid = this._general.makeid(20);

@@ -54,7 +54,7 @@ export class NewFunnelArchiveComponent implements OnInit {
 
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
 
@@ -69,7 +69,7 @@ export class NewFunnelArchiveComponent implements OnInit {
         this.users = data.data;
       },
       error: err => {
-        console.log(err);
+        // console.log(err);
       }
     });
 
@@ -100,7 +100,7 @@ export class NewFunnelArchiveComponent implements OnInit {
 
         },
         error: err => {
-          console.log(err);
+          // console.log(err);
         }
       });
 

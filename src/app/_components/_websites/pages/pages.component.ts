@@ -312,17 +312,21 @@ website_id:any;
             // console.log(page)
             if(this.template?.uniqueid){
               this._general._file.copyTemplateToPage(page).subscribe((event:any) => {
-                console.log(event);
+                // console.log(event);
               
               },
-              error=>{console.log(error)});
+              error=>{
+                // console.log(error)
+              });
             }
             else{
               this._general._file.savePage(page).subscribe((event:any) => {
-                console.log(event);
+                // console.log(event);
               
               },
-              error=>{console.log(error)});
+              error=>{
+                // console.log(error)
+              });
             }
             
             // create page/folder
@@ -777,18 +781,18 @@ website_id:any;
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
-        console.log(this.arpageobj);
-        console.log(type);
+        // console.log(this.arpageobj);
+        // console.log(type);
 
 
         if(data.success==1){
 
           if(type!='delete'){
             if(type=='restore'){
-              console.log('second');
+              // console.log('second');
               this.draftpublish('1', page.page_path);
             }else if(this.arpageobj.publish_status==1 && type=='archived'){
-              console.log('first');
+              // console.log('first');
               this.draftpublish('0', this.arpageobj.page_path);
             }
           }
