@@ -1,9 +1,16 @@
-import { Renderer2, Inject, Component, OnInit } from '@angular/core';
+import {Component, OnInit, Renderer2, Inject, ViewChild} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DOCUMENT } from '@angular/common';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FunnelService } from 'src/app/_services/funnels.service';
+import { StripeService,StripeCardComponent,StripeCardNumberComponent } from 'ngx-stripe';
+import {StripeCardElementOptions,StripeElementsOptions,PaymentIntent,} from '@stripe/stripe-js';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { OrderformService } from 'src/app/_services/_sales/orderform.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { OfferService } from 'src/app/_services/_sales/offer.service';
+import { ProductService } from 'src/app/_services/_sales/product.service';
 import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
+import { RegistrationpaymentService } from 'src/app/_services/registrationpayment.service';
 
 @Component({
   selector: 'appnew-funnel-checkout',
@@ -11,39 +18,125 @@ import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
   styleUrls: ['./new-funnel-checkout.component.css']
 })
 export class NewFunnelCheckoutComponent implements OnInit {
-  
-  stripeData: any;
-  submitted: any;
+
+  @ViewChild(StripeCardComponent) card!: StripeCardComponent;
+
+
+  fetching:boolean = true;
+  orderform:any = {
+    name: '',
+  }
+  hasError:boolean = false;
   stripeForm: FormGroup | any;
-  someerror:any;
-  uniqueidstep:any = '';
-
+  submitted: any;
+  checkoutstyle:any = {step1btntext:'Special Offer Click Here', step1footertext:'* 100% Secure & Safe Payments *',step2btntext:'Buy Now', step2footertext:'* 100% Secure & Safe Payments *'};
   founderror:any = false;
-  productdata:any = [];
-  totalprice = 0;
-  invalidconn = false;
-  redirecturi:any = '';
-  adjustclass = true;
-  selectedproduct:any = [];
 
-  checkoutstyle:any = {step1headline:'SHIPPING',step1subheadline:'Where Should We Ship It?',step1btntext:'Special Offer Click Here', step1btnsubtext:'', step1footertext:'* 100% Secure & Safe Payments *',step2headline:'YOUR INFO',step2subheadline:'Upgrade Now & Save!',step2btntext:'Buy Now', step2btnsubtext:'', step2footertext:'* 100% Secure & Safe Payments *'};
+  switchstep = false;
+  uniqueid:any; 
+  redirection = '';
+
+  cardOptions: StripeCardElementOptions = {
+    iconStyle: 'solid',
+    style: {
+      base: {
+        iconColor: '#dea641',
+        color: '#000',
+        fontWeight: 400,
+        fontFamily: 'Poppins,Roboto, Open Sans, Segoe UI, sans-serif',
+        fontSize: '16px',
+        fontSmoothing: 'antialiased',
+        ':-webkit-autofill': {color: '#fce883'},
+        '::placeholder': {color: '#000000'},
+      },
+      invalid: {
+        iconColor: 'dc3545',
+        color: 'dc3545'
+      }
+    },
+    hidePostalCode: true,
+  };  
+  elementsOptions: StripeElementsOptions = {
+    locale: 'auto',
+  };
+  stripe:any={
+    payeename:'',
+    // payeeamount:'',
+    phone:'',
+    payeeaddress:'',
+    payeecity:'',
+    payeestate:'',
+    payeecountry:'',
+    payeezip:'',
+  }
+
+  selectedProducts:Array<any> = [];
+  filteredProducts:Array<any> = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  offers:Array<any> = [];
+
+  totalprice:any = 0;
+  myproductarr:any = [];
+  symbolcode = '';
+
+  isPaymentConnected = false;
+  filteredcountry:any=[];
+
+  firststepsubmit = false;
+  spinner = false;
+  paymenterror = false;
+  paymentMessage = '';
+  productids = [];
   user_id:any = '';
-  mydomain = '';
+  uniqueproid:any = [];
+  cntryhelp = false;
+  redirecturi = '';
 
   constructor(
-    private fb: FormBuilder,  
-    private _renderer2: Renderer2, 
-    private checkoutService: CheckoutService,
-    private router: Router,
+    private fb: FormBuilder, 
+    private dialog: MatDialog,
+    private orderformService: OrderformService,
+    public _general: GeneralService,
     private route: ActivatedRoute,
-    private funnelService: FunnelService,
-    @Inject(DOCUMENT) private _document: Document) { }
+    private stripeService: StripeService,
+    private _offerservice: OfferService,
+    private productService: ProductService,
+    private checkoutService: CheckoutService,
+    private regpayService:RegistrationpaymentService,
+    ) {
+      this.route.paramMap.subscribe((params: ParamMap) => { 
+        this.uniqueid = params.get('id');
+      })
+
+        var dt = {id: this.uniqueid};
+        this.checkoutService.orderformgetuserid(dt).subscribe({
+          next: data => {
+            if(data?.data?.length!=0){
+              this.user_id = data.data[0].user_id;
+              this.redirecturi = data.data[0].redirection;
+              this.fetchOffers(); 
+              this.fetchOrder();
+            }
+
+            if(data.data2.length!=0){
+              if(data.data2[0]?.secret_key){
+                this.isPaymentConnected=true;
+                let stripeKeys = data.data2[0].publish_key;
+                var setstripekey = this.stripeService.setKey(stripeKeys);
+              }
+              else this.isPaymentConnected=false;
+            }
+            else{
+              this.isPaymentConnected=false;
+            }
+
+          }
+        });
+
+        
+    }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.uniqueidstep = params.get('id');
-    });
-
     this.stripeForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required]],
@@ -54,252 +147,240 @@ export class NewFunnelCheckoutComponent implements OnInit {
       state: ['', [Validators.required]],
       zip: ['', [Validators.required]],
     });
-
-    var dataobj = {stepid: this.uniqueidstep,name: '', price: '', priceoverride: '',type:'get'};
-    this.funnelService.funneladdeditproduct(dataobj).subscribe({
-      next: data => {
-        // console.log(data);
-        if(data?.data?.length!=0){
-
-          data.data.forEach((element:any) => {
-            var convertdata = {name: element.productname, price: element.productprice, priceoverride: element.priceoverride};
-            this.productdata.push(convertdata);
-          });
-          this.totalprice = parseFloat(data.data[0].productprice);
-          // this.selectedproduct.push(data.data[0].productname);
-
-          this.createForm(data.data[0].user_id);
-          this.user_id = data.data[0].user_id;
-          // console.log(this.user_id);
-
-          // console.log(this.productdata);
-        }else{
-          // this.founderror = true;
-        }
-      }
-    });
-
-    var dataobj2 = {id: this.uniqueidstep};
-    this.checkoutService.getallcheckoutdata(dataobj2).subscribe({
-      next: data => {
-
-        if(data?.data?.length!=0){
-          this.checkoutstyle = {step1headline:data.data[0].step1headline,step1subheadline:data.data[0].step1subheadline,step1btntext:data.data[0].step1btntext, step1btnsubtext:data.data[0].step1btnsubtext, step1footertext:data.data[0].step1footertext,step2headline:data.data[0].step2headline,step2subheadline:data.data[0].step2subheadline,step2btntext:data.data[0].step2btntext, step2btnsubtext:data.data[0].step2btnsubtext, step2footertext:data.data[0].step2footertext};
-        }
-
-      }
-    });
-
-    var dataobj3 = {id: this.uniqueidstep};
-    this.checkoutService.getnextstepurl(dataobj3).subscribe({
-      next: data => { 
-        console.log(data);
-        if(data?.path!=''){
-          this.redirecturi = data.path;
-        }
-
-        if(data?.domain!='' && data?.domain!=null){
-          this.mydomain = 'https://'+data.domain;
-        }else{
-          this.mydomain = 'https://'+data.subdomain+'.keapages.com';
-        }
-
-      }
-    });
-
-
   }
 
-  createForm(uniqueid:any){
-
-    // console.log(uniqueid);
-    if(!this.founderror){
-      this.checkoutService.stripePaymentkey(uniqueid).subscribe({
-        next: data => {
-          // console.log(data);
-
-          if(data?.data?.length!=0){
-              
-            let script = this._renderer2.createElement('script');
-            script.type = `text/javascript`;
-            script.text = `
-              var stripe = Stripe('`+data.data[0].publish_key+`');
-              
-              var elements = stripe.elements();
-              var styleCard =  {
-                  'base': {
-                    
-                    'color': '#31325F',
-                    'lineHeight': '40px',
-                    'fontWeight': 300,
-                    'fontFamily': '"Helvetica Neue", Helvetica, sans-serif',
-                    'fontSize': '18px',
-        
-                  },
-                  'Invalid': {  'color': 'red', },
-              };
-              var card = elements.create('card', { hidePostalCode: true,style: styleCard });
-              card.mount('#card-element');
-        
-              card.addEventListener('change', function(event) {
-                var displayError = document.getElementById('card-errors');
-                if (event.error) {
-                  displayError.textContent = event.error.message;
-                } else {
-                  displayError.textContent = '';
-                }
-              });
-        
-              function createToken() {
-                stripe.createToken(card).then(function(result) {
-                  if (result.error) {
-                    // Inform the user if there was an error
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                  } else {
-                    // console.log(result.token);
-                    document.getElementById('keatoken').value = result.token.id;
-                    // document.getElementById("payment-form").submit();
-                  }
-                });
-              };
-              
-              // Create a token when the form is submitted.
-              var form = document.getElementById('payment-form');
-              form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                createToken();
-              });
-            `;
-        
-            this._renderer2.appendChild(this._document.body, script);
-
-          }else{
-            this.invalidconn = true;
-          }
-
-
-        },
-        error: err => {
-          console.log(err);
-        }
-
-      });
-
-    }
-
-  }
-
-  maketotalprice(value:any){
-    // console.log(value.currentTarget.checked);
-    
-    if(value.currentTarget.checked==true){
-      this.totalprice += parseFloat(value.currentTarget.value);
+  validatestep(){
+    this.firststepsubmit = true;
+    var getcn = this.stripeForm.value.shippingcountry;
+    if(2>=getcn.length){
+      this.cntryhelp = false;
+      if(this.stripeForm.status=='VALID'){
+        this.switchstep = !this.switchstep;
+        setTimeout(() => {
+          const kbchk0: HTMLInputElement = document.getElementById('kbchk0') as HTMLInputElement;
+          if(kbchk0!=null) this.totalprice = parseFloat(kbchk0.value);
+        }, 50);
+      }
     }else{
-      if(1<=this.totalprice){
-        this.totalprice -= parseFloat(value.currentTarget.value);
-      }
+      this.cntryhelp = true;
     }
-
-    var main = document.querySelectorAll('input[type="checkbox"]');
-    var chkfalse:any = [];
-    main.forEach((element:any) => {
-        if(element.checked==true){
-          chkfalse.push(true);
-        }else{
-          chkfalse.push(false);
-        }
-    });
-    
-    if(!chkfalse.includes(true)){
-      (<HTMLInputElement>document.getElementById('kbchk0')).checked = true;
-      this.totalprice = parseFloat((<HTMLInputElement>document.getElementById('kbchk0')).value);
-    }
-
-  }
-  
-  nextstep(){
-    (<HTMLStyleElement>document.getElementsByClassName('o2step_step1')[0]).style.display = "none";
-    (<HTMLStyleElement>document.getElementsByClassName('o2step_step2')[0]).style.display = "block";
-    this.adjustclass = false;
-  }
-
-  backstep(){
-    (<HTMLStyleElement>document.getElementsByClassName('o2step_step1')[0]).style.display = "block";
-    (<HTMLStyleElement>document.getElementsByClassName('o2step_step2')[0]).style.display = "none";
-    this.adjustclass = true;
   }
 
   buy(){
-
-    this.submitted = true;
-
-    this.selectedproduct = [];
-    var main = document.querySelectorAll('input[type="checkbox"]');
-    main.forEach((element:any) => {
-        // console.log(element.checked==true);
-        if(element.checked==true){
-          this.selectedproduct.push(element.name);
-        }
-
-    });
-    // console.log(this.selectedproduct.toString());
-    var storename = this.checkoutstyle.step2btntext;
-    this.checkoutstyle.step2btntext = 'Submitting...';
-    setTimeout(() => {
-      if(this.stripeForm.status=='VALID' && this.totalprice!=0){
-        this.checkoutstyle.step2btntext = 'Processing...';
-        var validatetoken = (<HTMLInputElement>document.getElementById('keatoken')).value;
-
-        this.stripeData = this.stripeForm.value;
-        this.stripeData['token'] = validatetoken;
-        this.stripeData['amount'] = this.totalprice;
-        this.stripeData['stepid'] = this.uniqueidstep;
-        this.stripeData['user_id'] = this.user_id;
+    if(this.stripeForm.status=='VALID' && this.totalprice!=0){
+      this.spinner=true;
+      this.checkboxvalues();
+      this.createtoken().then((resp:any)=>{   
         
+        var stripeData:any = this.stripeForm.value;
+        stripeData['token'] = resp;
+        stripeData['amount'] = this.totalprice;
+        stripeData['offerid'] = this.uniqueproid;
+        stripeData['user_id'] = this.user_id;
 
-        this.stripeData['productdescr'] = this.selectedproduct.toString();
+        console.log(stripeData);
 
-        // console.log('workinside');
-        // console.log(this.stripeData);
-
-        this.checkoutService.stripePayment(this.stripeData).subscribe({
+        this.checkoutService.stripePayment(stripeData).subscribe({
           next: data => {
-
             console.log(data);
-            if(data.success==true){
+            if(data.success){
 
               if(data.customer){
                 // localStorage.setItem("uniquecustomer", data.customer.id);
 
                 if(window.top!=null){
-                  // window.top.location.href = "https://app.keabuilder.com/assets/upsell/#customerid="+data.customer.id; 
                   if(this.redirecturi!=''){
-                     window.top.location.href = this.mydomain +'/'+this.redirecturi+"/#customerid="+data.customer.id+'?userid='+this.user_id; 
+                     window.top.location.href = this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id; 
+                    //  console.log(this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id)
                   }
                 }
 
               }
 
+            }else{
+              this.paymenterror=true;
+              this.spinner=false;
             }
-
-          },
-          error: err => {
-            console.log(err);
           }
         });
 
-      }else{
-        this.checkoutstyle.step2btntext =storename;
-        this.someerror = 'something went wrong please try again!'
+      })
+
+    }else{
+      this.paymenterror=true;
+      this.paymentMessage='Something went wrong please try again!';
+    }
+  }
+
+  checkboxvalues(){
+    var main = document.querySelectorAll('input[type="checkbox"]');
+
+    this.uniqueproid = [];
+    main.forEach((elm: any) => {
+      if (elm.checked) {
+        this.uniqueproid.push(elm.getAttribute('data-prid'));
       }
 
-    }, 1500);
+    });
 
   }
 
+  createtoken(){
+    return new Promise((resolve) => {
+      let payeename:any=this.stripeForm.value.name;
+      // console.log(payeename);
+      this.stripeService.createToken(this.card.element,payeename).subscribe((result:any) => {
+          if (result.error) {
+            // Show error to your customer (e.g., insufficient funds)
+            this.paymenterror=true;
+            this.paymentMessage=result.error.message;
+            this.spinner=false;
+          } else if (result.token) {
+              // Show a success message to your customer
+              this.paymenterror=false;
+              this.paymentMessage='';
+              // console.log(result.token.id);
+              resolve(result.token.id);
+            }
+        })
+        })
+  }
 
+  fetchOrder() {
 
+      this.fetching = true;
+      this.orderformService.singleorderformusingid(this.user_id,this.uniqueid).subscribe((resp:any)=>{
+        if(resp.success) {
+            this.orderform = resp.data[0];
+            var mkofferarr = (this.orderform.offers!= null && this.orderform.offers!= '') ? this.orderform.offers.split(',') : [];
+            var mknewof:any = [];
+            this.offers.forEach(ofr => { if(mkofferarr.includes(ofr.uniqueid)) mknewof.push(ofr); });
+            this.selectedProducts = mknewof;
+            this.selnewproductarr();
+            this.redirection = this.orderform.redirection;
+          }
+        else {
+            this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+          }
+        this.fetching = false;
+      });
+   
+  }
 
+  selnewproductarr(){
+    this.myproductarr = [];
+    this.selectedProducts.forEach((selpr: any, i: number) => {
+      var obj:any = {user_id:this.user_id,productids:selpr.product_id};
+      this.productService.fetchproductsusinguserid(obj).subscribe((resp:any)=>{
+        var impname:any='';
+        resp.data?.forEach((nm: any, i: number) => {
+          impname += nm.name;
+          if (i < resp.data.length - 1) impname += ' + ';
+        });
+        var finalprice = 0, sym = '', recurring='';
+        var type = selpr.payment_type;
+        if(type=='onetime'){
+          var getprice = selpr.price;
+          var cur = JSON.parse(selpr.currency);
+          sym = cur.symbol;
+          finalprice = getprice;
+          if(i==0) this.symbolcode = cur.code;
+          if(i==0) this.totalprice = selpr.price;
+        }else if(type=='free'){
+          var cur = JSON.parse(selpr.currency);
+          if(i==0) this.symbolcode = cur.code;
+          finalprice = 0;
+        }else if(type=='recurring'){
+          var dtrec = selpr.recurring_data!=''?JSON.parse(selpr.recurring_data):'';
+          var adjpr = (parseInt(dtrec.price)/100);
+          recurring = dtrec.currency+''+adjpr+'/'+dtrec.interval;
+          finalprice = adjpr;
+          if(i==0) this.symbolcode = dtrec.currency;
+          if(i==0) this.totalprice = adjpr;
+        }
+        this.myproductarr.push({offerid:selpr.uniqueid,name:impname,price:finalprice,symbol:sym, type:type, recurring:recurring});
+      });
+    });
+  }
+
+  fetchOffers() {
+    this._offerservice.fetchoffersusingid(this.user_id).subscribe((resp:any) => {
+      // console.log(resp);
+        this.offers = resp.data;
+    });
+  }
+
+  addSelectedProduct(event:any, searchListInp:any): void {
+    let value = JSON.parse(JSON.stringify(event.option.value))
+    this.selectedProducts.push(value);
+    searchListInp.value = '';
+    this.filterProductData('');
+    this.selnewproductarr();
+  }
+
+  filterProductData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredProducts = this.offers?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  removeSelectedProduct(index:number): void {
+    this.selectedProducts.splice(index, 1);
+    this.selnewproductarr();
+    this.onremovetotalitem();
+  }
+
+  isOptionDisabled(values:any, uniqueid:any) {
+    let vArr = values.filter((v:any) => v.uniqueid.includes(uniqueid));
+    return vArr.length != 0;
+  }
+
+  maketotalprice(value:any){
+    if(value.currentTarget.checked==true){
+      this.totalprice += parseFloat(value.currentTarget.value);
+    }else{
+      if(1<=this.totalprice) this.totalprice -= parseFloat(value.currentTarget.value);
+    }
+    
+   this.maketotalandsel();
+
+  }
+
+  maketotalandsel(){  
+    var main = document.querySelectorAll('input[type="checkbox"]');
+    var chkfalse:any = [];
+
+      main.forEach((element: any) => {
+        if (element.checked) {
+          chkfalse.push(true);
+        } else {
+          chkfalse.push(false);
+        }
+      });
+
+      if (!chkfalse.includes(true)) {
+        const kbchk0: HTMLInputElement = document.getElementById('kbchk0') as HTMLInputElement;
+        kbchk0.checked = true;
+        this.totalprice = parseFloat(kbchk0.value);
+      }
+  }
+
+  onremovetotalitem(){
+    if(this.selectedProducts.length!=0){
+      var kbchk0: HTMLInputElement = document.getElementById('kbchk0') as HTMLInputElement;
+      kbchk0.checked = true;
+      this.totalprice = parseFloat(kbchk0.value);
+    }else{
+      this.totalprice = 0;
+    }
+  }
+
+  filtercountryData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredcountry= this.regpayService.Countrycode?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  getcountrynm(option:any){
+    if(option) this.stripe.payeecountry = option.value;
+  }
 
 }

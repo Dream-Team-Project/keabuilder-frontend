@@ -9,6 +9,8 @@ import { OrderformService } from 'src/app/_services/_sales/orderform.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { OfferService } from 'src/app/_services/_sales/offer.service';
 import { ProductService } from 'src/app/_services/_sales/product.service';
+import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
+import { RegistrationpaymentService } from 'src/app/_services/registrationpayment.service';
 
 @Component({
     selector: 'orderformcheckout-form',
@@ -57,7 +59,16 @@ export class OrderFormCheckoutComponent implements OnInit {
   elementsOptions: StripeElementsOptions = {
     locale: 'auto',
   };
-
+  stripe:any={
+    payeename:'',
+    // payeeamount:'',
+    phone:'',
+    payeeaddress:'',
+    payeecity:'',
+    payeestate:'',
+    payeecountry:'',
+    payeezip:'',
+  }
   selectedProducts:Array<any> = [];
   filteredProducts:Array<any> = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -66,6 +77,9 @@ export class OrderFormCheckoutComponent implements OnInit {
   totalprice:any = 0;
   myproductarr:any = [];
   symbolcode = '';
+
+  isPaymentConnected = false;
+  filteredcountry:any=[];
   
   constructor(
     private fb: FormBuilder, 
@@ -76,6 +90,8 @@ export class OrderFormCheckoutComponent implements OnInit {
     private stripeService: StripeService,
     private _offerservice: OfferService,
     private productService: ProductService,
+    private checkoutService: CheckoutService,
+    private regpayService:RegistrationpaymentService,
     ) {
       this.route.paramMap.subscribe((params: ParamMap) => { 
         this.uniqueid = params.get('id');
@@ -94,12 +110,31 @@ export class OrderFormCheckoutComponent implements OnInit {
       zip: ['', [Validators.required]],
     });
 
-    const stripeKeys = 'pk_test_51Gqk7rBFKaDgAHCwnEl2FfdGGmguQWptXwwk5fHbjPu1jlWKeG0JGmy8rOhxr5dyP5PWMkObSFuZjllhQtT4Zhwt00QWjR7c8V';
-    this.stripeService.setKey(stripeKeys);
+    this.fetchpaymentdetails();
+
+    
     
     this.fetchOffers();
     this.fetchOrder();
 
+  }
+
+  fetchpaymentdetails(){
+    this.checkoutService.getpaymentinteg().subscribe({
+      next: data => {
+      if(data.data.length!=0){
+        if(data.data[0]?.secret_key){
+          this.isPaymentConnected=true;
+          let stripeKeys = data.data[0].publish_key;
+          var setstripekey = this.stripeService.setKey(stripeKeys);
+        }
+        else this.isPaymentConnected=false;
+      }
+      else{
+        this.isPaymentConnected=false;
+      }
+    }
+    })
   }
 
   fetchOrder() {
@@ -239,13 +274,13 @@ export class OrderFormCheckoutComponent implements OnInit {
     }
   }
 
-  
-
-
-  
-
-
- 
+  filtercountryData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredcountry= this.regpayService.Countrycode?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+  getcountrynm(option:any){
+    if(option) this.stripe.payeecountry = option.value;
+  }
 
 
 }

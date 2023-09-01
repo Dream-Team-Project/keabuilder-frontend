@@ -108,6 +108,7 @@ website_id:any;
   insidepagesecond = false;
   selecttemplate = false;
   showmytemplates = false;
+  template:any=[];
   pagetemplates:any[] = [{
     id:1,
     title:'The Real Work',
@@ -272,27 +273,13 @@ website_id:any;
     this.selecttemplate = false;
   }
   
-  addnewpage(){
-    // this.showmytemplates = false;
-    // this.addnewpagepopup = true;
-    // this.insidepagefirst = true;
-    // this.insidepagesecond = false;
-    // this.quickeditpopup = false;
-    // this.selecttemplate = false;
-    // this.showpageurl = false;
-    // this.confirmarchivepage = false;
+  addnewpage(event:any){
+    // console.log(event);
+    if(event) this.template=event;
+    this.dialog.closeAll();
     this.createfromscratch();
-    // this.openSidebar();
     this.dialog.open(this.adddialog);
   }
-
-  // openSidebar(){
-  //   this.sidebar.open = true;
-  //   this.sidebar.anim.open = true;
-  //   setTimeout((e:any)=>{
-  //     this.sidebar.anim.open = false;
-  //   },this.sidebar.animtime)
-  // }
 
   onSubmit(): void {
     const { pagename, pagepath } = this.form;
@@ -300,7 +287,7 @@ website_id:any;
 
     if(this.userFormControl.status=='VALID' && this.website_id){
 
-      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.website_id};
+      var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.website_id,page_json:this.template?.template ? this.template?.template : ''};
       this.webpagesService.validatepages(gendata).subscribe({
         next: data => {
           // console.log(data);
@@ -319,11 +306,24 @@ website_id:any;
               folder: pagepath,
               prevFolder: pagepath,
               website_id:this.website_id, 
+              template_id:this.template?.uniqueid ? this.template?.uniqueid : '',
             }
-            this._general._file.savePage(page).subscribe((event:any) => {
-              console.log(event);
-            },
-            error=>{console.log(error)});
+            // console.log(page)
+            if(this.template?.uniqueid){
+              this._general._file.copyTemplateToPage(page).subscribe((event:any) => {
+                console.log(event);
+              
+              },
+              error=>{console.log(error)});
+            }
+            else{
+              this._general._file.savePage(page).subscribe((event:any) => {
+                console.log(event);
+              
+              },
+              error=>{console.log(error)});
+            }
+            
             // create page/folder
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
