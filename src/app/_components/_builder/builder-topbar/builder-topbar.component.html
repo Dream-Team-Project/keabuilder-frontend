@@ -124,7 +124,7 @@
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
         </button>
-        <button mat-button (click)="!_general.saveDisabled ? saveastemp.emit() : ''" [disabled]="_general.saveDisabled">
+        <button mat-button *ngIf="!ishf" (click)="!_general.saveDisabled ? saveastemp.emit() : ''" [disabled]="_general.saveDisabled">
             <i class="fa-regular fa-copy"></i> Save As Template
         </button>
         <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
@@ -252,7 +252,7 @@
         <div *ngSwitchCase="'elements'">
             <button mat-button (click)="selectElement(element.key)" class="kb-icon-btn" [class.kb-btn-active]="selectedElement == element.key" *ngFor="let element of _element.elementList | keyvalue | filter:searchText:'key'">
                 <i [class]="element.value.iconCls"></i>
-                <span>{{element.key | titlecase}}</span>
+                <span>{{element.key.replace('_', ' ') | titlecase}}</span>
             </button>
         </div>
         <div *ngSwitchCase="'responsive'">
@@ -387,7 +387,7 @@
             </span>
         </div>
         <div *ngSwitchCase="'form'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.forms" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <button mat-button (click)="_general.redirectLink('/forms')" class="kb-icon-btn">
+            <button mat-button (click)="_general.redirectLink('/crm/forms')" class="kb-icon-btn">
                 <i [innerHTML]="'add' | svg | safeHtml"></i>
                 <span>Create</span>
             </button>
@@ -400,13 +400,15 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
-        <div *ngSwitchCase="'checkout'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.checkouts" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
-            <span cdkDrag *ngFor="let check of _element.default.checkouts, index as i" (cdkDragMoved)="dragDataEmit(check)" [cdkDragData]="check">
-                <span class="kb-d-btn">
-                    <i [class]="check.iconCls"></i>
-                </span>
-                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
-                    <i [class]="check.iconCls"></i>
+        <div *ngSwitchCase="'order_form'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.order_forms" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <button mat-button (click)="_general.redirectLink('/sales/orderform')" class="kb-icon-btn">
+                <i [innerHTML]="'add' | svg | safeHtml"></i>
+                <span>Create</span>
+            </button>
+            <span cdkDrag *ngFor="let orderform of _general.order_forms, index as i" (cdkDragMoved)="dragDataEmit(orderform)" [cdkDragData]="orderform">
+                <span>{{orderform.name | titlecase}}</span>
+                <span *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--primary-color)'">
+                    {{orderform.name | titlecase}}
                 </span>
                 <span *cdkDragPlaceholder class="custom-placeholder"
                 [style.backgroundColor]="'var(--primary-color)'"></span>

@@ -42,7 +42,7 @@
                         <li *ngFor="let element of _element.elementList | keyvalue | filter:searchText:'key'" class="kb-element-box"><span
                                 [matTooltip]="!isElementExist(element.key) ? 'Please create first '+ element.key : ''" matTooltipPosition="above"
                                 (click)="isElementExist(element.key) ? _element.addElement(element.value.content) : ''"><i [class]="element.value.iconCls"></i>
-                                <div>{{element.key | titlecase}}</div>
+                                <div>{{element.key.replace('_', ' ') | titlecase}}</div>
                                 <i *ngIf="!isElementExist(element.key)" class="fa-solid fa-circle-exclamation kb-element-not-found-alert"></i>
                             </span></li>
                     </ul>
@@ -560,67 +560,65 @@
                                                         class="fas fa-external-link-alt"></i>Regular</mat-button-toggle>
                                             </mat-button-toggle-group>
                                         </div>
-                                        <div *ngIf="_general.target.type == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell') else regularAction"
+                                        <div *ngIf="_general.target.type == 'funnel' && (_general.selectedBlock.content.btntype == 'upsell' || _general.selectedBlock.content.btntype == 'downsell')"
                                             class="kb-inner-tab-component">
-                                            <div class="kb-tab-head">Products</div>
+                                            <div class="kb-tab-head">Offers</div>
                                             <div class="kb-tab-content kb-inp-left">
-                                                <mat-select [(ngModel)]="_style.button_product">
-                                                    <mat-option *ngFor="let product of _general.step_products"
-                                                        [value]="product.uniqueid">
-                                                        {{product.productname | titlecase}}
+                                                <mat-select [(ngModel)]="_style.button_offer">
+                                                    <mat-option *ngFor="let offer of _general.offers"
+                                                        [value]="offer.uniqueid">
+                                                        {{offer.name | titlecase}}
                                                     </mat-option>
                                                 </mat-select>
                                             </div>
                                         </div>
-                                        <ng-template #regularAction>
-                                            <div class="kb-inner-tab-component">
-                                                <div class="kb-tab-head">Link</div>
-                                                <div class="kb-tab-content kb-inp-left">
-                                                    <input type="text" [(ngModel)]="_style.button_link"
-                                                        [style.textTransform]="'lowercase'">
-                                                </div>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Redirection Link</div>
+                                            <div class="kb-tab-content kb-inp-left">
+                                                <input type="text" [(ngModel)]="_style.button_link"
+                                                    [style.textTransform]="'lowercase'">
                                             </div>
-                                            <div class="kb-inner-tab-component">
-                                                <div class="kb-tab-head">Website Pages</div>
-                                                <div class="kb-tab-content kb-inp-left">
-                                                    <mat-select [(ngModel)]="_style.button_link">
-                                                        <mat-option *ngFor="let page of _general.existwebpages"
-                                                            [value]="_general.subdomain+page.page_path"
-                                                            [disabled]="page.publish_status == 0">
-                                                            {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
-                                                                *ngIf="page.publish_status == 0"></small>
+                                        </div>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Website Pages</div>
+                                            <div class="kb-tab-content kb-inp-left">
+                                                <mat-select [(ngModel)]="_style.button_link">
+                                                    <mat-option *ngFor="let page of _general.existwebpages"
+                                                        [value]="_general.subdomain+page.page_path"
+                                                        [disabled]="page.publish_status == 0">
+                                                        {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
+                                                            *ngIf="page.publish_status == 0"></small>
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                        </div>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Funnel Steps</div>
+                                            <div class="kb-tab-content kb-inp-left">
+                                                <mat-select [(ngModel)]="_style.button_link">
+                                                    <mat-optgroup *ngFor="let funnel of _general.funnels"
+                                                        [label]="funnel.name | titlecase">
+                                                        <mat-option *ngFor="let step of funnel.steps"
+                                                            [value]="_general.subdomain+step.page_path"
+                                                            [disabled]="step.archived == 1">
+                                                            {{step.page_name | titlecase}}<small [attr.data]="step.funneltype"
+                                                                class="infoTxt"></small>
                                                         </mat-option>
-                                                    </mat-select>
-                                                </div>
+                                                    </mat-optgroup>
+                                                </mat-select>
                                             </div>
-                                            <div class="kb-inner-tab-component">
-                                                <div class="kb-tab-head">Funnel Steps</div>
-                                                <div class="kb-tab-content kb-inp-left">
-                                                    <mat-select [(ngModel)]="_style.button_link">
-                                                        <mat-optgroup *ngFor="let funnel of _general.funnels"
-                                                            [label]="funnel.name | titlecase">
-                                                            <mat-option *ngFor="let step of funnel.steps"
-                                                                [value]="_general.subdomain+step.page_path"
-                                                                [disabled]="step.archived == 1">
-                                                                {{step.page_name | titlecase}}<small [attr.data]="step.funneltype"
-                                                                    class="infoTxt"></small>
-                                                            </mat-option>
-                                                        </mat-optgroup>
-                                                    </mat-select>
-                                                </div>
+                                        </div>
+                                        <div class="kb-inner-tab-component">
+                                            <div class="kb-tab-head">Target</div>
+                                            <div class="kb-tab-content">
+                                                <mat-select [(ngModel)]="_style.button_target"
+                                                    [compareWith]="_general.compareOptValue">
+                                                    <mat-option *ngFor="let btt of _style.button_target_types"
+                                                        [value]="btt">{{btt.name |
+                                                        titlecase}}</mat-option>
+                                                </mat-select>
                                             </div>
-                                            <div class="kb-inner-tab-component">
-                                                <div class="kb-tab-head">Target</div>
-                                                <div class="kb-tab-content">
-                                                    <mat-select [(ngModel)]="_style.button_target"
-                                                        [compareWith]="_general.compareOptValue">
-                                                        <mat-option *ngFor="let btt of _style.button_target_types"
-                                                            [value]="btt">{{btt.name |
-                                                            titlecase}}</mat-option>
-                                                    </mat-select>
-                                                </div>
-                                            </div>
-                                        </ng-template>
+                                        </div>
                                         <mat-action-row>
                                             <button mat-button color="secondary"
                                                 (click)="_general.prevExpPanelStep()">Previous</button>

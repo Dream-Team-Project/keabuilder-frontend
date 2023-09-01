@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileUploadService } from '../file-upload.service';
 import {A, B, COMMA, ENTER} from '@angular/cdk/keycodes';
-import { TokenStorageService } from '../token-storage.service';
 import { AuthService } from '../auth.service';
+import { TokenStorageService } from '../token-storage.service';
+import { FileUploadService } from '../file-upload.service';
 import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
+import { OfferService } from '../_sales/offer.service';
+import { OrderformService } from '../_sales/orderform.service';
 import { UserService } from '../user.service';
-import { NgxCaptureService } from 'ngx-capture';
 import { BehaviorSubject } from 'rxjs';
 import { Location } from '@angular/common';
 
@@ -695,6 +696,8 @@ export class GeneralService {
   saveDisabled:boolean = false;
   pathError:boolean = false;
   sectionTemplates:any = [];
+  order_forms:any = [];
+  offers:any = [];
   forms:any = [];
   menus:any = [];
   headers:any = [];
@@ -716,7 +719,10 @@ export class GeneralService {
   searchFilter:any = this.filterOrder[3];
   pageSaved:boolean = true;
 
-  constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
+  constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, 
+    public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, 
+    public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, 
+    private _offer: OfferService, private _orderForm: OrderformService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -783,6 +789,22 @@ export class GeneralService {
   fetchForms() {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchforms().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
+  fetchOffers() {
+    return new Promise<any>((resolve, reject) => {
+      this._offer.fetchoffers().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
+  fetchOrderForms() {
+    return new Promise<any>((resolve, reject) => {
+      this._orderForm.fetchorderforms().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
@@ -1008,11 +1030,12 @@ export class GeneralService {
       // append Footer
       this.webpage.page_json = this.encodeJSON(jsonObj);
       this.removeExtra(preview);
+      let faviconIcon = (template || preview) ? '/favicon.ico' : '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
       this.pagehtml.querySelector('head').innerHTML = 
       '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
       '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
       '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
-      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+'/assets/uploads/images/keaimage-favicon-'+websiteid+'.png'+'">' +
+      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+faviconIcon+'">' +
       '<meta charset="UTF-8">' +
       '<meta name="description" content="'+this.main.description+'">' +
       '<meta name="keywords" content="'+this.main.keywords+'">' +
@@ -1041,14 +1064,14 @@ export class GeneralService {
         this.pageObj.folder = this.templateobj.uniqueid;
         this.templateobj.template=this.encodeJSON(jsonObj);
         this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
-        this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
-          resolve(true);
-        },
-        error=>{
-          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-          resolve(false);
-        });
-      })
+          this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
+            resolve(true);
+          },
+          error=>{
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
+          });
+        })
       }
       else if(preview) {
         this.pageObj.prevFolder = this.webpage.uniqueid;
@@ -1339,13 +1362,6 @@ export class GeneralService {
           if(fp.uniqueid == s.funnelid) fp.steps.push(s);
         })
       })
-    })
-  }
-
-  getAllProducts() {
-    var dataobj = {stepid: this.webpage.uniqueid,name: '', price: '', priceoverride: '',type:'get'};
-    this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
-      this.step_products = data.data;
     })
   }
 

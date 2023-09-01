@@ -181,8 +181,8 @@
                                                 [class.kb-block-none]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
                                                 [class.kb-block-disabled]="_general.showInlineEditor">
                                                 <div *cdkDragPreview class="custom-preview"
-                                                    [style.backgroundColor]="'var(--primary-color)'">{{element.name ?
-                                                    element.name : element.content.name}}</div>
+                                                    [style.backgroundColor]="'var(--primary-color)'">{{(element.content.type == 'order_form' || element.content.type == 'form') ? 
+                                                    element.content.type.replace('_',' ') : (element.name ? element.name : element.content.name)}}</div>
                                                 <div *cdkDragPlaceholder class="custom-placeholder"
                                                     [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting"
@@ -276,11 +276,11 @@
                                                     <ng-template #showBtn>
                                                         <a *ngIf="element.content.btntype != 'regular' else regular"
                                                             [ngStyle]="_style.getBlockStyle(element.content.style)"
-                                                            class="kb-default-btn kb-product-btn"
+                                                            class="kb-default-btn kb-offer-btn"
                                                             [attr.kb-btn-type]="element.content.btntype"
                                                             [attr.kb-redirect-link]="element.content.link"
-                                                            [attr.kb-product-id]="element.content.productid"
-                                                            href="#no-link" [target]="element.content.target">
+                                                            [attr.kb-offer-id]="element.content.offerid"
+                                                            href="javascript.void(0)" [target]="element.content.target">
                                                             <div>{{element.content.text}}</div>
                                                             <div class="subtext"
                                                                 [style.fontSize]="element.content.subfont_size">
