@@ -18,7 +18,10 @@
     transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
 }
 .card-stats .card-body {
-    padding: 15px 15px 0;
+    padding: 15px 15px;
+}
+.card-footer {
+    display: none;
 }
 .card-stats .icon-big {
     font-size: 3em;

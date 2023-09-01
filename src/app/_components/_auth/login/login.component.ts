@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -9,13 +9,15 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
-  img:any=1;
+
+  @ViewChild('bgLoginImg') bgLoginImg: any;
+
   product:any='plan-xTn8SqarYE0eVIEaSdkM';
   userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   hide = true;
-
   form: any = {
     username: null,
     password: null
@@ -24,16 +26,18 @@ export class LoginComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   roles: string[] = [];
-
-  bgImg = 'url(src/assets/images/login/1.png)';
-  min = 1;
-  max = 3;
+  bgImg:string = '';
+  fadeImg:boolean = false;
+  bgIntervalTime:number = 10000; 
 
   constructor(
     private authService: AuthService, 
     private tokenStorage: TokenStorageService, 
     private router: Router,
     private route: ActivatedRoute) { 
+      let num:any = window.localStorage.getItem('login_img');
+      this.bgImg = this.generateImgLink(num ? parseInt(num) : 1);
+      this.fetchLoginImg();
     }
 
   ngOnInit(): void {
@@ -41,8 +45,6 @@ export class LoginComponent implements OnInit {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
     }
-    this.createNewImg();
-    this.startInterval();
   }
 
   onSubmit(): void {
@@ -79,18 +81,24 @@ export class LoginComponent implements OnInit {
     window.location.href = '/';
   }
 
-  createNewImg(){
-    // var genNum = Math.floor(Math.random()*(this.max-this.min+1)+this.min);
-      this.bgImg = 'url(./assets/images/login/'+this.img+'.png)';
-  }
-  startInterval() {
-  setInterval(() => {
-      this.createNewImg();
-      // if(this.img <10){
-      //   this.img++;
-      // }
-    }, 5000);
+  generateImgLink(num:number) {
+    return 'url(./assets/images/login/'+num+'.png)';
   }
 
+  fetchLoginImg(){
+    setInterval(() => {
+      const randomNumber = Math.floor(Math.random() * 9) + 1;
+      this.bgImg = this.generateImgLink(randomNumber);
+      this.fadeOutImg();
+      window.localStorage.setItem('login_img', randomNumber.toString());
+    }, this.bgIntervalTime);
+  }
+
+  fadeOutImg() {
+    this.fadeImg = true;
+    setTimeout(()=>{
+        this.fadeImg = false;
+    }, this.bgIntervalTime - 2000);
+  }
 
 }

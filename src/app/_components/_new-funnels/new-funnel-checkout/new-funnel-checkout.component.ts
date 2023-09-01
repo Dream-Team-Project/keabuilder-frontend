@@ -108,6 +108,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
     ) {
       this.route.paramMap.subscribe((params: ParamMap) => { 
         this.uniqueid = params.get('id');
+        console.log()
       })
 
         var dt = {id: this.uniqueid};
@@ -197,7 +198,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
                 if(window.top!=null){
                   if(this.redirecturi!=''){
-                     window.top.location.href = this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id; 
+                     window.top.location.href = this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id+'&email='+data.email; 
                     //  console.log(this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id)
                   }
                 }
