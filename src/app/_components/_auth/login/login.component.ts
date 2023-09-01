@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
     this.fadeImg = true;
     setTimeout(()=>{
         this.fadeImg = false;
-    }, this.bgIntervalTime - 1000);
+    }, this.bgIntervalTime - 2000);
   }
 
 }
