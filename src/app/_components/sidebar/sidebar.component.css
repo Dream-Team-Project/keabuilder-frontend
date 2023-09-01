@@ -738,7 +738,7 @@ div#topbar_notifications_logs {
 .bw-sidebar-content a .bw-sidebar__item__text{
   display: none;
 }
-@media only screen and (max-width:500px){
+@media only screen and (max-width:768px){
   #bw-sidebar {
     width: 0px;
   }

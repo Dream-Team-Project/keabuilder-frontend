@@ -8,7 +8,7 @@
           <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
             <div class="bu-forlogin">
               
-              <mat-form-field class="example-full-width" appearance="fill">
+              <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Username</mat-label>
                 <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" >
                 <mat-error *ngIf="userFormControl.hasError('required')">
@@ -22,11 +22,11 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="example-full-width" appearance="fill">
+              <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Password</mat-label>
-                <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
-                <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
-                  <i class="far" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+                <input type="password" matInput placeholder="*********" [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon class="kb-mat-hide-icon">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="passwordFormControl.hasError('required')">
                   Password is <strong>required</strong>
@@ -62,7 +62,7 @@
     </div>
 
     <div class="col-md-6">
-      <div class="bw-container__bg" [style.backgroundImage]="bgImg"></div>
+      <div #bgLoginImg class="bw-container__bg" [class]="fadeImg ? 'fade-in' : 'fade-out'" [style.backgroundImage]="bgImg"></div>
     </div>
   </div>
 </div>
