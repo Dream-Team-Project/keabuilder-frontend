@@ -1,6 +1,6 @@
 <div class="container-fluid kb-main-container pb-5" id="kea-dashboard">
   
-  <div class="row">
+  <div class="row" *ngIf="hidefornow">
     <div class="col-md-12 mb-4 text-center">
       <p class="greetingnav">Good {{greeting}}, {{userService.user.name | uppercase}}! 🌆 Welcome to Kea! We're delighted to have you here. </p>
       <!-- <div class="card ">
@@ -44,35 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-3">
-              <div class="icon-big text-center icon-warning">
-                  <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
-               </div>
-            </div>
-            <div class="col-7 col-md-9">
-              <div class="numbers">
-                <p class="card-category">Revenue</p>
-                <p class="card-title colr">${{totalrevenue}} </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats "><span class="text-success">
-            <i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span>
-            <span class="float-right"> <mat-select value="month">
-            <mat-option value="month" selected>Last Month</mat-option>
-            <mat-option value="week">Last Week</mat-option>
-          </mat-select></span></div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-3">
+    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="hidefornow">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -95,16 +67,68 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3">
+
+    <div class="col-lg-6 col-md-6 col-sm-6">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-3">
+            <div class="col-10 col-md-10">
+              <div class="numbers text-left">
+                <p class="card-title">Good {{greeting}}, {{userService.user.name | uppercase}}</p>
+                <p class="card-category">{{randomwelcome}}</p>
+              </div>
+            </div>
+            <div class="col-2 col-md-2">
+              <div class="icon-big text-center icon-warning">
+                  <img src="/assets/images/dashboard/keababy.png" width="75" class="img-fluid" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats"><i class="fa fa-clock-o"></i> See How! </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <div class="icon-big text-center icon-warning">
+                  <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
+               </div>
+            </div>
+            <div class="col-7 col-md-8">
+              <div class="numbers">
+                <p class="card-category">Revenue</p>
+                <p class="card-title colr">${{totalrevenue}} </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats "><span class="text-success">
+            <i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span>
+            <span class="float-right"> <mat-select value="month">
+            <mat-option value="month" selected>Last Month</mat-option>
+            <mat-option value="week">Last Week</mat-option>
+          </mat-select></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
               <div class="icon-big text-center icon-warning">
                 <img src="/assets/images/dashboard/members.png" class="img-fluid" alt="">
               </div>
             </div>
-            <div class="col-7 col-md-9">
+            <div class="col-7 col-md-8">
               <div class="numbers">
                 <p class="card-category">Contacts</p>
                 <p class="card-title colr">{{totalmembers}} </p>
@@ -121,19 +145,19 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3">
+    <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
-            <div class="col-5 col-md-3">
+            <div class="col-5 col-md-4">
               <div class="icon-big text-center icon-warning">
                 <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
               </div>
             </div>
-            <div class="col-7 col-md-9">
+            <div class="col-7 col-md-8">
               <div class="numbers">
                 <p class="card-category">Daily Sales</p>
-                <p class="card-title colr">7932 </p>
+                <p class="card-title colr">${{dailysales}} </p>
               </div>
             </div>
           </div>
@@ -155,18 +179,20 @@
         <div class="card-header">
           <div class="row">
             <div class="col-sm-10">
-              <div class="numbers pull-left"><span>Total Earnings</span><span class="colr"> ${{totalrevenue7day}} </span></div>
+              <div class="numbers pull-left"><span>Total Earnings</span>
+                <!-- <span class="colr"> ${{totalrevenue7day}} </span> -->
+              </div>
             </div>
             <div class="col-sm-2">
-              <mat-select value="month">
+              <!-- <mat-select value="month">
                 <mat-option value="month" selected>Last Month</mat-option>
                 <mat-option value="week">Last Week</mat-option>
-              </mat-select>
+              </mat-select> -->
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
-          </div>
+          </div> -->
         </div>
         <div class="card-body">
           <div class="chartjs-size-monitor">
@@ -179,7 +205,7 @@
           </div>
           <h6 class="big-title">Total earnings in last Week</h6>
           <div class="kbcustmwidthforbox4">
-            <apx-chart *ngIf="data1.length!=0"
+            <apx-chart *ngIf="data11"
               [series]="chartOptions11.series"
               [chart]="chartOptions11.chart"
               [yaxis]="chartOptions11.yaxis"
@@ -233,7 +259,10 @@
               <div class=""></div>
             </div>
           </div>
-          <div class="kbcustmwidthforbox4-recent">
+          <div class="kbcustmwidthforbox4-recent text-center" [class.text-center]="recentsales.length==0">
+            <img *ngIf="recentsales.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" alt="">
+            <button color="primary" *ngIf="recentsales.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
+
             <div class="row mb-3" *ngFor="let recent of recentsales">
               <div class="col-sm-9 ">
                 <div class="row">
@@ -290,7 +319,12 @@
             </div>
           </div>
           <!-- <h6 class="big-title">total Contact in last 7 days</h6> -->
-          <div class="chart1 kbcustmwidthforbox3">
+          <div class="chart1 kbcustmwidthforbox3 text-center">
+
+            <img *ngIf="!contact.fetched" src="/assets/images/dashboard/recentcontact.png" class="img-fluid" width="500" alt="">
+       
+            <button color="primary" *ngIf="!contact.fetched" mat-raised-button class="mt-2" [routerLink]="['/crm/contacts']"><i class="fa fa-users" aria-hidden="true"></i> Create Contacts</button>
+
             <apx-chart
             *ngIf="contact.fetched"
             [series]="chartOptions10.series"
@@ -354,7 +388,11 @@
             </div>
           </div>
           
-          <div class="chart1 kbcustmwidthforbox3">
+          <div class="chart1 kbcustmwidthforbox3 text-center">
+            <img *ngIf="!campaign.fetched" src="/assets/images/dashboard/campaign.png" class="img-fluid" width="400" alt="">
+       
+            <button color="primary" *ngIf="!campaign.fetched" mat-raised-button class="mt-2" [routerLink]="['/crm/campaigns']"><i class="fa fa-envelope" aria-hidden="true"></i> Create Campaign</button>
+
             <apx-chart *ngIf="campaign.fetched"
               [series]="chartOptions12.series"
               [chart]="chartOptions12.chart"

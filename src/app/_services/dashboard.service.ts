@@ -37,5 +37,15 @@ export class DashboardService {
     return this.http.get('./api/getrecentsales/'+this.uuid);
   }
 
+  dailysales(): Observable<any> {
+    return this.http.get('./api/dailysales/'+this.uuid);
+  }
+
+  totalearning(): Observable<any> {
+    return this.http.get('./api/totalearning/'+this.uuid);
+  }
+
+  
+
 
 }

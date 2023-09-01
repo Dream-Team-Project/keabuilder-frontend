@@ -64,6 +64,8 @@ export class DashboardComponent implements OnInit {
   data2date: any = [];
   totalcontact7day = 0;
   recentsales:any = [];
+  dailysales:any = 0;
+  randomwelcome = "";
   // contact reporting
   contact:any = {
     recents: [],
@@ -79,6 +81,7 @@ export class DashboardComponent implements OnInit {
     },
     fetched: false
   }
+  data11:any = false;
   // contact reporting
   // campaign reporting
   campaign:any = {
@@ -655,67 +658,6 @@ export class DashboardComponent implements OnInit {
         },
       },
     };
-    this.chartOptions11 = {
-      series: [
-        {
-          name: 'Earnings',
-          data: [44, 55, 57, 56, 61, 58, 63, 25, 98, 42, 45, 11],
-        },
-        {
-          name: 'Earnings',
-          data: [48, 25, 98, 51, 81, 18, 93, 15, 89, 45, 85, 6],
-        },
-      ],
-      chart: {
-        type: 'area',
-        height: 350,
-      },
-
-      plotOptions: {
-        stroke: {
-          curve: 'smooth',
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent'],
-      },
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'July',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-      },
-      yaxis: {
-        title: {
-          text: '',
-        },
-      },
-      fill: {
-        opacity: 1,
-      },
-      tooltip: {
-        y: {
-          formatter: function (val: any) {
-            return val;
-          },
-        },
-      },
-    };
   }
 
   ngOnInit(): void {
@@ -873,7 +815,47 @@ export class DashboardComponent implements OnInit {
               return { ...item, email, time_ago };
           });
           this.recentsales = newArray1;
-          console.log(this.recentsales);
+          // console.log(this.recentsales);
+        }
+
+      },
+    });
+
+    // daliy sales activity
+    this.dashboardService.dailysales().subscribe({
+      next: (data) => {
+        // console.log(data);
+
+        if (data.data.length != 0) {
+
+          if(data.data[0].total_sales_amount!=null){
+            this.dailysales = data.data[0].total_sales_amount;
+          }
+        }
+
+      },
+    });
+
+    // total earning activity
+    this.dashboardService.totalearning().subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.data.length != 0) {
+
+          const inputData = data.data;
+          const resultData = new Array(12).fill(0); 
+          inputData.forEach((item:any) => {
+            const monthIndex = parseInt(item.month.split('-')[1]) - 1; 
+            const totalSum = parseInt(item.total_sum);
+            resultData[monthIndex] = totalSum;
+          });
+          
+          // console.log(resultData);
+          this.totalearningsreport(resultData);
+
+        }else{
+        var data:any = [0,0,0,0,0,0,0,0,0,0,0,0];
+          this.totalearningsreport(data);
         }
 
       },
@@ -881,6 +863,36 @@ export class DashboardComponent implements OnInit {
 
     this.fetchDateReportContacts();
     this.fetchRecentCampaigns();
+
+
+    var welcomeMessages = [
+      "Welcome back! We're glad to see you.",
+      "Hello there! Ready to get started?",
+      "Good day! Let's make it productive.",
+      "Greetings! Your dashboard awaits you.",
+      "Hey, it's you again! Let's dive in.",
+      "Welcome! Get ready to explore a world of possibilities.",
+      "Greetings! Your journey begins here.",
+      "Hello! We're thrilled to have you with us.",
+      "Hey there! Let's make today awesome.",
+      "Welcome back! We missed you.",
+      "Hello! Your presence makes us smile.",
+      "Good day! Your adventure starts now.",
+      "Greetings! Get ready for a fantastic experience.",
+      "Hey, we hope you're ready for some exciting moments!",
+      "Welcome aboard! Let's navigate this together.",
+      "Hello! Your journey into our world begins now.",
+      "Good to see you! Let's make today productive.",
+      "Welcome back! Your presence brightens our day.",
+      "Hello! We're delighted to have you here.",
+      "Hey there! Let's dive into a world of possibilities.",
+      "Welcome! Your adventure awaits.",
+      "Greetings! Let's get started on something amazing.",
+      "Hello! Your presence is the best part of our day.",
+      "Good day! We're excited to have you here.",
+    ];
+    const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
+    this.randomwelcome = welcomeMessages[randomIndex];
 
   }
 
@@ -904,11 +916,75 @@ export class DashboardComponent implements OnInit {
         this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
         this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
         console.log(this.campaign);
-        this.campaignReportOptions();
+
+        if(this.campaign.recents.length!=0){
+          this.campaignReportOptions();
+        }
       }
     })
   }
 
+  totalearningsreport(resultData:any){
+    this.chartOptions11 = {
+      series: [
+        {
+          name: 'Earnings',
+          data: resultData,
+        },
+      ],
+      chart: {
+        type: 'area',
+        height: 350,
+      },
+
+      plotOptions: {
+        stroke: {
+          curve: 'smooth',
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent'],
+      },
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'July',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
+      yaxis: {
+        title: {
+          text: '',
+        },
+      },
+      fill: {
+        opacity: 1,
+      },
+      tooltip: {
+        y: {
+          formatter: function (val: any) {
+            return val;
+          },
+        },
+      },
+    };
+    this.data11 = true;
+  }
+  
   contactReportOptions() {
     this.chartOptions10 = {
       series: [
