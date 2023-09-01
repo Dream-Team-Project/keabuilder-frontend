@@ -223,7 +223,7 @@ export class OrderFormCheckoutComponent implements OnInit {
     if(this.selectedProducts.length!=0) this.selectedProducts.forEach(pr => { grabofferid.push(pr.uniqueid); });
     if(grabofferid.length!=0){
       if(this.redirection==null || this.redirection =='') this.redirection = '';
-      var orderobj = {offers:grabofferid,uniqueid: this.uniqueid, redirection:this.redirection};
+      var orderobj = {name: this.orderform.name,offers:grabofferid,uniqueid: this.uniqueid, redirection:this.redirection};
       this.orderformService.updateorderform(orderobj).subscribe((resp:any) => {
         if(resp.success) {
           this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');

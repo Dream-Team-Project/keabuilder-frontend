@@ -258,7 +258,7 @@ canActivate: [AuthGuard] },
   { path: 'course/:name/:id', component: CourseUserModulesComponent},
   { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
-  { path: 'checkout/:id', component: NewFunnelCheckoutComponent},
+  { path: 'fetch-orderform/:user_id/:id', component: NewFunnelCheckoutComponent},
 
   // crm
 
