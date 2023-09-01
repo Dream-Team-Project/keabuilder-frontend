@@ -33,5 +33,9 @@ export class DashboardService {
     }, httpOptions);
   }
 
+  getrecentsales(): Observable<any> {
+    return this.http.get('./api/getrecentsales/'+this.uuid);
+  }
+
 
 }

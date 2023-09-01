@@ -87,8 +87,8 @@
                 <span>{{offer.product_id ? offer.product_id.split(',').length : 0}}</span>
               </td>
               <td>{{ offer.payment_type == 'onetime' ? (convertToJSON(offer.currency)?.symbol + offer.price) : (offer.payment_type == 'recurring' ? 'Subscribed' : 'free') }}</td>
-              <td>0</td>
-              <td>{{convertToJSON(offer.currency)?.symbol}}0 {{convertToJSON(offer.currency)?.code}}</td>
+              <td>{{offer.offerid_count}}</td>
+              <td>{{convertToJSON(offer.currency)?.symbol}}{{offer.total_salesamount}} {{convertToJSON(offer.currency)?.code}}</td>
               <td>
                 <span class="d-flex">
                   <i #editlink mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon"></i>

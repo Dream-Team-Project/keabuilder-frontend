@@ -92,6 +92,8 @@ export class NewFunnelCheckoutComponent implements OnInit {
   cntryhelp = false;
   redirecturi = '';
 
+  checkoutvisible = false;
+  chkerror = '';
   constructor(
     private fb: FormBuilder, 
     private dialog: MatDialog,
@@ -112,10 +114,15 @@ export class NewFunnelCheckoutComponent implements OnInit {
         this.checkoutService.orderformgetuserid(dt).subscribe({
           next: data => {
             if(data?.data?.length!=0){
+              this.checkoutvisible = true;
+              this.chkerror = '';
               this.user_id = data.data[0].user_id;
               this.redirecturi = data.data[0].redirection;
               this.fetchOffers(); 
               this.fetchOrder();
+            }else{
+              this.checkoutvisible = false;
+              this.chkerror = 'Error Loading in checkout!';
             }
 
             if(data.data2.length!=0){

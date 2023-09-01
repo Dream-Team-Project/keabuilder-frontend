@@ -1,8 +1,9 @@
 <div class="container-fluid kb-main-container pb-5" id="kea-dashboard">
   
   <div class="row">
-    <div class="col-md-12">
-      <div class="card ">
+    <div class="col-md-12 mb-4 text-center">
+      <p class="greetingnav">Good {{greeting}}, {{userService.user.name | uppercase}}! 🌆 Welcome to Kea! We're delighted to have you here. </p>
+      <!-- <div class="card ">
         <div class="card-header ">
           
           <div class="row">
@@ -16,10 +17,7 @@
           </div>
 
         </div>
-        <!-- <div class="card-body ">
-         
-        </div> -->
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="row">
@@ -65,7 +63,9 @@
         </div>
         <div class="card-footer ">
           <hr>
-          <div class="stats "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span><span class="float-right"> <mat-select value="month">
+          <div class="stats "><span class="text-success">
+            <i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span>
+            <span class="float-right"> <mat-select value="month">
             <mat-option value="month" selected>Last Month</mat-option>
             <mat-option value="week">Last Week</mat-option>
           </mat-select></span></div>
@@ -106,7 +106,7 @@
             </div>
             <div class="col-7 col-md-9">
               <div class="numbers">
-                <p class="card-category">Members</p>
+                <p class="card-category">Contacts</p>
                 <p class="card-title colr">{{totalmembers}} </p>
               </div>
             </div>
@@ -234,109 +234,33 @@
             </div>
           </div>
           <div class="kbcustmwidthforbox4-recent">
-            <div class="row mb-3">
+            <div class="row mb-3" *ngFor="let recent of recentsales">
               <div class="col-sm-9 ">
                 <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
+                <span  class="col-sm-12 kbcustmwidthforbox4-mail">{{recent.email}}</span>
                 </div>
                 <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
+                <span class="col-sm-12 kbcustmwidthforbox4-time">{{recent.time_ago}}</span>
               </div>
               </div>
               <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-9 ">
-                <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">hhorner420@gmail.com</span>
-                </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">about 15 hours ago</span>
-              </div>
-              </div>
-              <div class="col-sm-3">
-                <span class="colr">+$2.00</span>
+                <span class="colr">+${{recent.salesamount}}</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-footer" >
+        <!-- <div class="card-footer" >
           <hr>
           <div class="row">
             <div class="col-sm-12">
               <div class="pull-right">
-                <button mat-raised-button  class="btn-round btn-icon badge mr-1 colr" matTooltip="Recent Sales" matTooltipPosition="above" >Show More</button>
+                <button mat-raised-button  class="btn-round btn-icon badge mr-1 colr" 
+                matTooltip="Recent Sales" matTooltipPosition="above" >Show More</button>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+
       </div>
     </div>
   </div>

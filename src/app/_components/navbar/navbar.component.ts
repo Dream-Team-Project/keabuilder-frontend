@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
   logs = false;
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
-
+  greeting:any = '';
   ngOnInit(): void {
     var th:any = this;
     window.addEventListener('scroll', function(){
@@ -47,6 +47,7 @@ export class NavbarComponent implements OnInit {
         }
       }
     });
+
 
   }
 
@@ -108,7 +109,6 @@ export class NavbarComponent implements OnInit {
   }
 
   // drag drop box
-
 
 
 }

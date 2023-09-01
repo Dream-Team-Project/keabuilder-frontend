@@ -177,7 +177,7 @@ hr {
     /* max-width:660px; */
 }
 .kbcustmwidthforbox4-recent{
-    max-height: 310px;
+    height: 428px;
     overflow-y: scroll;
     overflow-x: hidden;
 }

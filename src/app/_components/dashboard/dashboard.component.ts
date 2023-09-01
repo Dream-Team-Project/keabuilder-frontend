@@ -62,6 +62,8 @@ export class DashboardComponent implements OnInit {
   data2: any = [];
   data2date: any = [];
   totalcontact7day = 0;
+  recentsales:any = [];
+
   // duration:any='week';
   constructor(
     private dashboardService: DashboardService,
@@ -812,11 +814,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUsersDetails().subscribe({
-      next: (data) => {
-        this.username = data.data[0].firstname;
-      },
-    });
+    // this.userService.getUsersDetails().subscribe({
+    //   next: (data) => {
+    //     this.username = data.data[0].firstname;
+    //   },
+    // });
 
     // if (this.tokenStorage.getToken()) {
     //   this.username = this.tokenStorage.getUser().username;
@@ -826,9 +828,12 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getAllrevenue().subscribe({
       next: (data) => {
+        // console.log(data);
         if (data.data.length != 0) {
           data.data.forEach((element: any) => {
-            this.totalrevenue += parseFloat(element.amount);
+            if(element.total_sales_amount!=null){
+              this.totalrevenue += parseFloat(element.total_sales_amount);
+            }
           });
         }
       },
@@ -949,6 +954,26 @@ export class DashboardComponent implements OnInit {
         }
       },
     });
+
+    // recent sales activity
+    this.dashboardService.getrecentsales().subscribe({
+      next: (data) => {
+        // console.log(data);
+
+        if (data.data.length != 0) {
+          let emailMap = new Map(data.data2.map((item:any) => [item.uniqueid, item.email]));
+          let newArray1 = data.data.map((item:any) => {
+              let email = emailMap.get(item.contactid);
+              let time_ago = this.timeAgo(item.created_at);
+              return { ...item, email, time_ago };
+          });
+          this.recentsales = newArray1;
+          console.log(this.recentsales);
+        }
+
+      },
+    });
+
   }
 
   public generateData(count: any, yrange: any) {
@@ -976,4 +1001,25 @@ export class DashboardComponent implements OnInit {
 
     this.greeting = greet;
   }
+
+  timeAgo(timestamp:any) {
+      let now:any = new Date();
+      let time:any = new Date(timestamp);
+      let elapsedMilliseconds = now - time;
+      let seconds = Math.floor(elapsedMilliseconds / 1000);
+      
+      if (seconds < 60) {
+          return `${seconds} second${seconds === 1 ? '' : 's'} ago`;
+      } else if (seconds < 3600) {
+          let minutes = Math.floor(seconds / 60);
+          return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+      } else if (seconds < 86400) {
+          let hours = Math.floor(seconds / 3600);
+          return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+      } else {
+          let days = Math.floor(seconds / 86400);
+          return `${days} day${days === 1 ? '' : 's'} ago`;
+      }
+  }
+
 }
