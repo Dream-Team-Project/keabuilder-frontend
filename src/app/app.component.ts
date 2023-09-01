@@ -32,7 +32,10 @@ export class AppComponent {
                 var e:any = event;
                 var geturl = e.url.split('/')[1];
                 var isAutomation = e.url.split('/')[2] == 'automation';
-                if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') && !isAutomation) {
+                if(geturl=='fetch-orderform'){
+                  _user.hideNav();
+                }
+                else if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') && !isAutomation) {
                   _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }
