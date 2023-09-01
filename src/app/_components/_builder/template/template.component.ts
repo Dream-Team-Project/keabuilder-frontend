@@ -57,7 +57,6 @@ export class TemplateComponent implements OnInit {
     let obj={category  : value};
     this._file.fetchdefaulttemplates(obj).subscribe((resp:any)=>{
       this.category=value;
-      console.log(value);
       if(resp.data?.length > 0)  this.systemplates = resp.data; 
       else{
         this.systemplates = resp.data;
@@ -74,7 +73,6 @@ export class TemplateComponent implements OnInit {
   }
   deleteTemplate(){
     this._file.deletepagetemplate(this.deltemplate.id).subscribe((resp:any)=>{
-      // console.log(resp)
       if(resp?.success) {
         this._file.deleteFile(this.deltemplate.uniqueid,'templates').subscribe((resp1:any)=>{
           // console.log(resp1)
@@ -90,8 +88,8 @@ export class TemplateComponent implements OnInit {
     this.deltemplate.name=this.templatename;
     this._file.updatepagetemplate(this.deltemplate).subscribe((resp:any)=>{
       if(resp.success) {
-      this.fetchTemplates();
-      this._general.openSnackBar(false,resp.message,'Ok','center','top');
+        this.fetchTemplates();
+        this._general.openSnackBar(false,resp.message,'Ok','center','top');
       }
     })
   }

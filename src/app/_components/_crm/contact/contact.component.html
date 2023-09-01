@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class="kb-contact-details-card rounded pt-3 px-3 mb-4">
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-3">
                 <h6>Subscribe to Lists</h6>
                 <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
                   <mat-label>Subscribe to Lists</mat-label>
@@ -105,7 +105,7 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-              <div class="kb-contact-details-card rounded pt-3 px-3 mb-4">
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-3">
                 <h6>Add Tags</h6>
                 <mat-form-field class="kb-full-width" appearance="fill" (click)="filterTagData($event)">
                   <mat-label>Add Tags</mat-label>
@@ -145,6 +145,26 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-3">
+                <h6>Billing Address</h6>
+                <div class="pb-3">
+                  <div *ngIf="!addressEdit else edit">
+                    <p>{{contact.address ? contact.address : 'Add an address by clicking on the edit button below.'}}</p>
+                    <div class="text-right">
+                      <button mat-raised-button color="primary" (click)="addressEdit = true">Edit</button>
+                    </div>
+                  </div>
+                  <ng-template #edit>
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                      <mat-label>Write an adress</mat-label>
+                      <textarea matInput [(ngModel)]="contact.address" (keydown.enter)="update_static()"></textarea>
+                    </mat-form-field>
+                    <div class="text-right">
+                      <button mat-raised-button color="primary" (click)="update_static()">Add</button>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
               <div class="kb-contact-details-card rounded pt-3 px-3">
                 <h6>Note</h6>
                 <div class="pb-3">
@@ -157,10 +177,10 @@
                   <ng-template #edit>
                     <mat-form-field class="kb-full-width" appearance="fill">
                       <mat-label>Write a note</mat-label>
-                      <textarea matInput [(ngModel)]="contact.note" (keydown.enter)="update_list_tag_note()"></textarea>
+                      <textarea matInput [(ngModel)]="contact.note" (keydown.enter)="update_static()"></textarea>
                     </mat-form-field>
                     <div class="text-right">
-                      <button mat-raised-button color="primary" (click)="update_list_tag_note()">Add</button>
+                      <button mat-raised-button color="primary" (click)="update_static()">Add</button>
                     </div>
                   </ng-template>
                 </div>

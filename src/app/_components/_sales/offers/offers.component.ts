@@ -56,11 +56,42 @@ export class OffersComponent implements OnInit {
    }
  
    fetchoffers() {
+    this._offerservice.offersalescount().subscribe((respsl:any) => {
      this._offerservice.fetchoffers().subscribe((resp:any) => {
-       this.adjustdata(resp?.data);
+        
+      const order = resp.data.map((item:any) => item.uniqueid);
+      const mergedData:any = {};
+
+      respsl.data.forEach((item:any) => {
+          const { offerid, ...rest } = item;
+          mergedData[offerid] = rest;
+      });
+
+      resp.data.forEach((item:any) => {
+          const { uniqueid, ...rest } = item; 
+          if (!mergedData[uniqueid]) {
+              mergedData[uniqueid] = {
+                  "offerid_count": 0,
+                  "total_salesamount": "0",
+                  ...rest
+              };
+          } else {
+              Object.assign(mergedData[item.uniqueid], rest);
+          }
+      });
+
+      const mergedArray = order.map((uniqueid:any) => ({
+          "uniqueid": uniqueid,
+          ...mergedData[uniqueid]
+      }));
+
+      // console.log(mergedArray);
+       this.adjustdata(mergedArray);
+      //  this.adjustdata(resp?.data);
        this.search.value = '';
        this.search.sortby = 'updated_at DESC';
      });
+    });
    }
 
    resetSearch() {

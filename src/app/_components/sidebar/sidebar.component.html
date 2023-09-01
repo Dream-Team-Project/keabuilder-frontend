@@ -1,9 +1,9 @@
 <div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" (mouseover)="hoveropen = true"
-  (mouseleave)="hoveropen = false" [class]="{ 'hoveropen' : hoveropen }">
-  <div class="bw-sidebar-logo" [style]="hoveropen ? 'padding-left: 20px;': ''">
-    <img src="/assets/images/logo/kblogo.png" alt="">
-    <i class="fas fa-bars kbburger"></i>
-    <div class="bw-logo__item__text" *ngIf="hoveropen">Keabuilder<div class="fadingEffect"></div>
+  (mouseleave)="hoveropen = false" [class.hoveropen]="hoveropen || toggleSidebar">
+  <div class="bw-sidebar-logo" [style]="hoveropen || toggleSidebar ? 'padding-left: 20px;': ''">
+    <span mat-ripple [class.kb-show-close-icon]="toggleSidebar" (click)="triggerSidebar()" class="kb-close-sidebar-icon"><i class="fa-solid fa-xmark"></i></span>
+    <img src="/assets/images/logo/kblogo.png" alt="Kea logo" [routerLink]="'/'">
+    <div class="bw-logo__item__text pl-2" *ngIf="hoveropen || toggleSidebar">Keabuilder<div class="fadingEffect"></div>
     </div>
   </div>
   <div class="bw-sidebar">
