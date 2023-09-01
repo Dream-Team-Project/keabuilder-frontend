@@ -45,6 +45,7 @@
   transition: .3s ease all;
   background: inherit;
   margin-left: 0;
+  background-color: var(--kb-white);
 }
 
 .navbar-sticky .navbar-container {

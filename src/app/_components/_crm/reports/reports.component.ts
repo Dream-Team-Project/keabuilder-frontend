@@ -92,7 +92,6 @@ export class CrmReportsComponent implements OnInit {
 
   fetchDateReportContacts() {
     this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
-    console.log(resp);
       if(resp.success) {
         this.contact.monthly = resp.data;
         this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
