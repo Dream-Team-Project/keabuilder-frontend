@@ -65,7 +65,7 @@
                 <div class="kb-drag-container" cdkDropList id="sectiongroup-0" [cdkDropListEnterPredicate]="dropAllow()" [cdkDropListConnectedTo]="_section.sectionConnect"
                     [cdkDropListData]="_section.sections" (cdkDropListDropped)="drop($event)">
                     <!-- sections start -->
-                    <div cdkDrag *ngFor="let section of _section.sections, index as si"
+                    <div #kbmain cdkDrag *ngFor="let section of _section.sections, index as si"
                         [attr.data-name]="section.name ? section.name : ''"
                         [attr.data-link]="section.redirection ? section.redirection.link : ''"
                         [attr.data-target]="section.redirection ? section.redirection.target : ''"

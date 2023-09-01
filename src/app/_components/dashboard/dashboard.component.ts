@@ -3,6 +3,7 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 import { Router } from '@angular/router';
 import { DashboardService } from '../../_services/dashboard.service';
 import { UserService } from '../../_services/user.service';
+import { ReportingService } from 'src/app/_services/reporting.service';
 
 import {
   ChartComponent,
@@ -63,9 +64,41 @@ export class DashboardComponent implements OnInit {
   data2date: any = [];
   totalcontact7day = 0;
   recentsales:any = [];
-
+  // contact reporting
+  contact:any = {
+    recents: [],
+    monthly: [],
+    limit: 8,
+    chartData: {
+      x: [],
+      y: [],
+    },
+    date: {
+      from: '',
+      to: new Date()
+    },
+    fetched: false
+  }
+  // contact reporting
+  // campaign reporting
+  campaign:any = {
+    recents: [],
+    monthly: [],
+    limit: 8,
+    chartData: {
+      x: [],
+      y: [],
+    },
+    date: {
+      from: '',
+      to: new Date
+    },
+    fetched: false
+  }
+  // campaign reporting
   // duration:any='week';
   constructor(
+    private _reportingService : ReportingService,
     private dashboardService: DashboardService,
     private tokenStorage: TokenStorageService,
     private router: Router,
@@ -622,51 +655,6 @@ export class DashboardComponent implements OnInit {
         },
       },
     };
-    this.chartOptions10 = {
-      series: [
-        {
-          name: 'Total Contacts',
-          data: [44, 55, 57, 56, 61, 58, 63],
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 350,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '55%',
-          endingShape: 'rounded',
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent'],
-      },
-      xaxis: {
-        categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      },
-      yaxis: {
-        title: {
-          text: '',
-        },
-      },
-      fill: {
-        opacity: 1,
-      },
-      tooltip: {
-        y: {
-          formatter: function (val: any) {
-            return val;
-          },
-        },
-      },
-    };
     this.chartOptions11 = {
       series: [
         {
@@ -727,89 +715,6 @@ export class DashboardComponent implements OnInit {
           },
         },
       },
-    };
-    this.chartOptions12 = {
-      series: [44, 55, 41, 17],
-      chart: {
-        // width: 380,
-        height: 350,
-        type: 'donut',
-        dropShadow: {
-          enabled: true,
-          color: '#111',
-          top: -1,
-          left: 3,
-          blur: 3,
-          opacity: 0.2,
-        },
-      },
-      stroke: {
-        width: 0,
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            labels: {
-              show: true,
-              total: {
-                showAlways: true,
-                show: true,
-              },
-            },
-          },
-        },
-        expandOnClick: true,
-      },
-      labels: ['Funnel', 'Campaign', 'Courses', 'Membership'],
-      dataLabels: {
-        dropShadow: {
-          blur: 3,
-          opacity: 0.8,
-        },
-        formatter(value: any, opts: any): any {
-          return opts.w.config.series[opts.seriesIndex];
-        },
-      },
-      fill: {
-        type: 'pattern',
-        opacity: 1,
-        pattern: {
-          enabled: true,
-          style: [
-            'verticalLines',
-            'squares',
-            'horizontalLines',
-            'circles',
-            'slantedLines',
-          ],
-        },
-      },
-      states: {
-        hover: {
-          filter: {
-            type: 'none',
-          },
-        },
-      },
-      theme: {
-        palette: 'palette2',
-      },
-      title: {
-        text: '',
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: 'bottom',
-            },
-          },
-        },
-      ],
     };
   }
 
@@ -974,6 +879,171 @@ export class DashboardComponent implements OnInit {
       },
     });
 
+    this.fetchDateReportContacts();
+    this.fetchRecentCampaigns();
+
+  }
+
+  fetchDateReportContacts() {
+    let d = new Date();
+    this.contact.date.from = new Date(d.setDate(d.getDate() - 30));
+    this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
+      if(resp.success) {
+        this.contact.monthly = resp.data;
+        this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
+        this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
+        this.contactReportOptions();
+      }
+    })
+  }
+
+  fetchRecentCampaigns() {
+    this._reportingService.recentCampaigns(this.campaign.limit).subscribe((resp:any)=>{
+      if(resp.success) {
+        this.campaign.recents = resp.data;
+        this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
+        this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
+        console.log(this.campaign);
+        this.campaignReportOptions();
+      }
+    })
+  }
+
+  contactReportOptions() {
+    this.chartOptions10 = {
+      series: [
+        {
+          name: "Current Month Contact",
+          data: this.contact.chartData.y,
+        },
+      ],
+      chart: {
+        type: "bar", // Change the chart type to "bar" for a bar graph
+        height: 350,
+      },
+      plotOptions: {
+        bar: { // Specify bar plot options
+          horizontal: false, // Set to true for horizontal bars
+          endingShape: 'rounded',
+        },
+      },
+      colors: ['#dea641'],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['#dea641'],
+      },
+      xaxis: {
+        categories: this.contact.chartData.x,
+      },
+      yaxis: {
+        title: {
+          text: "",
+        },
+        decimalsInFloat: 0, // Adjust the decimal places
+      },
+      fill: {
+        opacity: 0.5,
+        colors: ['#dea641'],
+      },
+      tooltip: {
+        y: {
+          formatter: function (value: string) {
+            return value;
+          },
+        },
+      },
+    }
+    this.contact.fetched = true;
+  }
+
+  campaignReportOptions() {
+    this.chartOptions12 = {
+      series: this.campaign.chartData.y,
+      chart: {
+        height: 350,
+        type: 'donut',
+        dropShadow: {
+          enabled: true,
+          color: '#111',
+          top: -1,
+          left: 3,
+          blur: 3,
+          opacity: 0.2,
+        },
+      },
+      stroke: {
+        width: 0,
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              total: {
+                showAlways: true,
+                show: true,
+              },
+            },
+          },
+        },
+        expandOnClick: true,
+      },
+      labels: this.campaign.chartData.x.map((label:string) => label.charAt(0).toUpperCase() + label.slice(1)),
+      dataLabels: {
+        dropShadow: {
+          blur: 2,
+          opacity: 0.8,
+        },
+        formatter(value: any, opts: any): any {
+          return opts.w.config.series[opts.seriesIndex];
+        },
+      },
+      fill: {
+        type: 'pattern',
+        opacity: 1,
+        pattern: {
+          enabled: true,
+          style: [
+            'verticalLines',
+            'squares',
+            'horizontalLines',
+            'circles',
+            'slantedLines',
+          ],
+        },
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none',
+          },
+        },
+      },
+      theme: {
+        palette: 'palette2',
+      },
+      title: {
+        text: '',
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      ],
+    };    
+    this.campaign.fetched = true;
   }
 
   public generateData(count: any, yrange: any) {

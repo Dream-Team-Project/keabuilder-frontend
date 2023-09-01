@@ -17,7 +17,7 @@
       "logLevel": "debug",
       "changeOrigin": true
     },
-    "/system/template/preview/*": {
+    "/marketplace/template/preview/*": {
       "target": "http://localhost:3000",
       "secure": true,
       "logLevel": "debug",

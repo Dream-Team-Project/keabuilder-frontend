@@ -16,7 +16,7 @@ export class CrmSettingsComponent implements OnInit {
   
   email = new FormControl('', [Validators.required,Validators.email]);
   smtp = new FormControl('', [Validators.required]);
-  apiid = new FormControl('', [Validators.required]);
+  apiid = new FormControl('default', [Validators.required]);
   apikey = new FormControl('', [Validators.required]);
 
   addressnameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
@@ -30,7 +30,7 @@ export class CrmSettingsComponent implements OnInit {
   emailfrom:any;
   smtp_type:any;
   api_key:any;
-  api_id:any;
+  api_id:any='default';
   showmytime:any = '';
   timezone:any='';
   genaddress = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
@@ -153,8 +153,12 @@ export class CrmSettingsComponent implements OnInit {
       this.genaddress.city='';
       this.genaddress.state='';
       this.genaddress.zip='';
+      this.email.reset();
+      this.smtp.reset();
+      this.apiid.reset();
+      this.apikey.reset();
       this.fetchaddress();
-    })
+    });
   }
 
   removespecialchar(data:any){
