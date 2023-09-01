@@ -8,6 +8,11 @@ main {
     margin-left: auto;
     top: 60px;
     position: relative;
+    transition: all .25s ease;
+}
+
+.kb-main-container.kb-fixed-template {
+    width: calc(100% - 260px)!important;
 }
 
 ::ng-deep .mat-calendar-body-selected {
@@ -199,7 +204,7 @@ main {
     color: var(--primary-color);
 }
 
-@media only screen and (max-width:500px){
+@media only screen and (max-width:625px){
     .kb-main-container{
         padding: 20px 0px;
         width: 100%;

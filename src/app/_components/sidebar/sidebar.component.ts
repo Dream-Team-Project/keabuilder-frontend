@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,8 +8,16 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(public router: Router) { }
+  @Input()
+  set openSidebar(val: any) {
+    if(this.connectWtParent) this.toggleSidebar = !this.toggleSidebar;
+    else this.connectWtParent = true;
+  }   
+  @Output('closeSidebar') closeSidebar: EventEmitter<any> = new EventEmitter();
 
+  constructor(public router: Router) { }
+  connectWtParent:boolean = false;
+  toggleSidebar:boolean = false;
   fullsidebar = true;
   hoveropen = false;
   isOpen = false;
@@ -577,6 +585,11 @@ export class SidebarComponent implements OnInit {
     });
     this.extramenus = true;
     this.backme = false;
+  }
+
+  triggerSidebar() {
+    this.closeSidebar.emit(this.toggleSidebar);
+    this.hoveropen = false;
   }
 
 }
