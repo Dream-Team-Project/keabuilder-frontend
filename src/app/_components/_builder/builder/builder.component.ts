@@ -203,16 +203,17 @@ export class BuilderComponent implements OnInit {
 
   savePageTemplate(main:any, obj:any) {
     obj.category = 'saved';
-    this._general._file.savepagetemplate(obj).subscribe((res1:any)=>{
-      console.log(res1); // template unique id use as folder name
-      this._general.template.uniqueid=res1.uniqueid;
+    this._general.templateobj=JSON.parse(JSON.stringify(obj));
+    
+      // console.log(res1); // template unique id use as folder name
+      // this._general.template.uniqueid=res1.uniqueid;
       this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
         console.log(res2);
         let msg = 'Page has been saved as template';
         this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
         this.dialog.closeAll();
       });
-    })
+  
   }
 
   saveSectionTemplate(obj:any) {
