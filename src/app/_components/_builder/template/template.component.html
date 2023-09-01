@@ -75,14 +75,10 @@
     <mat-tab-group class="kb-template-container">
         <mat-tab label="System Templates">
             <div class="row m-0">
-              <div class="col-md-2">
-                <div class="kb-btn mt-3" [class.active]="category.category == 'sales'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('sales')">Sales</button></div>
-                <div class="kb-btn mt-2" [class.active]="category.category  == 'order'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('order')">Order</button></div>
-                <div class="kb-btn mt-2" [class.active]="category.category  == 'upsell'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('upsell')">Upsell</button></div>
-                <div class="kb-btn mt-2" [class.active]="category.category  == 'downsell'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('downsell')">Downsell</button></div>
-                <div class="kb-btn mt-2" [class.active]="category.category  == 'webinar'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('webinar')">Webinar</button></div>
-                <div class="kb-btn mt-2" [class.active]="category.category  == 'optin'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('optin')">Optin</button></div>
-                <div class="kb-btn mt-2 mb-4" [class.active]="category.category  == 'other'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('other')">Other</button></div>
+              <div class="col-md-2 bw-sidebar kb-template-card">
+              <div *ngFor="let menu of allmenu; index as i;">
+                <button [class.kb-active] ='menu.name == category'  (click)="fetchsystemTemplates(menu.name)" class="bw-sidebar__item hasIcon" ><span class="bw-sidebar__item__text">{{menu.title}}</span></button>
+              </div>
               </div>
               <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
@@ -108,7 +104,7 @@
                     </div>
                 </div>
               </div>
-              <div class="col-md-10 d-flex justify-content-center" *ngIf="systemplates?.length == 0">
+              <div class="col-md-10 d-flex align-items-center justify-content-center" *ngIf="systemplates?.length == 0">
                 <div class="kb-img-fluid1">
                   <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
                 </div>
@@ -161,7 +157,7 @@
                     </div>
                 </div>
                 </div>
-                <div class="d-flex justify-content-center mt-5" *ngIf="templates?.length == 0">
+                <div class="d-flex align-items-center justify-content-center mt-5" *ngIf="templates?.length == 0">
                     <div class="kb-img-fluid1">
                       <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
                     </div>
