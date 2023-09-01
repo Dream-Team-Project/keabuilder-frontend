@@ -11,10 +11,6 @@ main {
     transition: all .25s ease;
 }
 
-.kb-main-container.kb-fixed-template {
-    width: calc(100% - 260px)!important;
-}
-
 ::ng-deep .mat-calendar-body-selected {
     background-color: var(--primary-color);
 }
@@ -204,7 +200,13 @@ main {
     color: var(--primary-color);
 }
 
-@media only screen and (max-width:625px){
+@media only screen and (min-width:768px) {
+    .kb-main-container.kb-fixed-template {
+        width: calc(100% - 260px)!important;
+    }
+}
+
+@media only screen and (max-width:768px) {
     .kb-main-container{
         padding: 20px 0px;
         width: 100%;
