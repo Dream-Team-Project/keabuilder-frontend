@@ -87,19 +87,25 @@ export class BuilderComponent implements OnInit {
               else {
                 data.json = _general.webpage.page_json;
                 if(_general.target.type == 'funnel') {
-                  this._general.getAllProducts();
                   if(_general.webpage.funneltype == 'order') {
-                    _element.elementList['checkout'] = { content: { name: 'iframe', type: 'checkout', src: window.location.origin+'/checkout/'+_general.webpage.uniqueid}, iconCls: 'fab fa-wpforms' };
+                      _general.fetchOrderForms().then(data=>{
+                        _general.order_forms = data;
+                      });
                   }
-                  else if(_general.webpage.funneltype == 'upsell') {
-                    _element.elementList['button'].content.btntype = 'upsell';
-                    _element.elementList['button'].content.productid = '';
-                    _element.elementList['button'].content.text = 'Upsell Button';
-                  }
-                  else if(_general.webpage.funneltype == 'downsell') {
-                    _element.elementList['button'].content.btntype = 'downsell';
-                    _element.elementList['button'].content.productid = '';
-                    _element.elementList['button'].content.text = 'Downsell Button';
+                  else {
+                    _general.fetchOffers().then(data=>{
+                      _general.offers = data;
+                    });
+                    if(_general.webpage.funneltype == 'upsell') {
+                      _element.elementList['button'].content.btntype = 'upsell';
+                      _element.elementList['button'].content.productid = '';
+                      _element.elementList['button'].content.text = 'Upsell Button';
+                    }
+                    else if(_general.webpage.funneltype == 'downsell') {
+                      _element.elementList['button'].content.btntype = 'downsell';
+                      _element.elementList['button'].content.productid = '';
+                      _element.elementList['button'].content.text = 'Downsell Button';
+                    }
                   }
                 }
               }
@@ -362,6 +368,7 @@ export class BuilderComponent implements OnInit {
     if(this.transferData) {
       var appendIndex =  event.currentIndex-1;
       var appendData = this.transferData;
+      console.log(appendData.type);
       if(appendData.type == 'image') {
         var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
@@ -376,9 +383,15 @@ export class BuilderComponent implements OnInit {
       }
       if(appendData.type == 'form') {
         var form = JSON.parse(JSON.stringify(this._element.elementList['form']));
-        form.content = this._element.setIframe(form.content, appendData);
+        form.content = this._element.setFormIframe(form.content, appendData);
         form.content.itemset = true;
         appendData = form;
+      }
+      if(appendData.type == 'order_form') {
+        var order_form = JSON.parse(JSON.stringify(this._element.elementList['order_form']));
+        order_form.content = this._element.setOrderFormIframe(order_form.content, appendData);
+        order_form.content.itemset = true;
+        appendData = order_form;
       }
       if(appendData.content) appendData.type = 'element';
       switch(appendData.type) {

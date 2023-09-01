@@ -84,9 +84,9 @@ export class ElementService {
     // icon
     icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
     // icon
-    // checkout form
-    // append
-    // checkout form
+    // order form
+    order_form: { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' },
+    // order form
   };
   preMenuItems: any = ['Home', 'About', 'Blog', 'Contact'];
   defaultIcons: any = [
@@ -526,7 +526,6 @@ export class ElementService {
     buttons: [],
     dividers: [],
     videos: [],
-    checkouts: [],
     codes: [],
   }
 
@@ -574,7 +573,7 @@ export class ElementService {
           obj.content.type = types[i];
           obj.content.btntype = types[i].name;
           obj.content.text = types[i].name[0].toUpperCase() + types[i].name.slice(1) + ' Button';
-          if(types[i].name == 'upsell' || types[i].name == 'downsell') obj.content.productid = '';
+          if(types[i].name == 'upsell' || types[i].name == 'downsell') obj.content.offerid = '';
           if(types[i].subtext) obj.content.subtext = 'Extra Text';
           this.default.buttons.push(obj);
         }        
@@ -587,9 +586,6 @@ export class ElementService {
       }
       if(e.content.name == 'divider') {
         this.default.dividers.push(e);
-      }
-      if(e.content.name == 'iframe' && e.content.type == 'checkout') {
-        this.default.checkouts.push(e);
       }
     })
   }
@@ -608,7 +604,13 @@ export class ElementService {
     return element;
   }
 
-  setIframe(element: any, adata: any) {
+  setOrderFormIframe(element: any, adata: any) {
+    element.data_id = adata.uniqueid;
+    element.src = window.origin + '/fetch-orderform/' + adata.user_id + '/' + adata.uniqueid;
+    return element;
+  }
+
+  setFormIframe(element: any, adata: any) {
     element.data_id = adata.uniqueid;
     element.src = window.origin + '/fetch-form/' + adata.user_id + '/' + adata.uniqueid;
     return element;
@@ -617,15 +619,21 @@ export class ElementService {
   addElement(element: any) {
     if (element.btntype == 'upsell' || element.btntype == 'downsell') {
       var proId = this._general.step_products[0];
-      element.productid = proId ? proId.uniqueid : '';
+      element.offerid = proId ? proId.uniqueid : '';
     }
     else if (element.name == 'menu') {
       if (element?.itemset) delete element?.itemset;
       else element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
     }
-    else if (element.name == 'iframe' && element.type == 'form') {
-      if (element?.itemset) delete element?.itemset;
-      else element = this.setIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
+    else if (element.name == 'iframe') {
+      if(element.type == 'form') {
+        if (element?.itemset) delete element?.itemset;
+        else element = this.setFormIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
+      }
+      if(element.type == 'order_form') {
+        if (element?.itemset) delete element?.itemset;
+        else element = this.setOrderFormIframe(element, JSON.parse(JSON.stringify(this._general.order_forms[0])));
+      }
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));

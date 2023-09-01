@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileUploadService } from '../file-upload.service';
 import {A, B, COMMA, ENTER} from '@angular/cdk/keycodes';
-import { TokenStorageService } from '../token-storage.service';
 import { AuthService } from '../auth.service';
+import { TokenStorageService } from '../token-storage.service';
+import { FileUploadService } from '../file-upload.service';
 import { WebpagesService } from '../webpages.service';
 import { WebsiteService } from '../website.service';
 import { FunnelService } from '../funnels.service';
+import { OfferService } from '../_sales/offer.service';
+import { OrderformService } from '../_sales/orderform.service';
 import { UserService } from '../user.service';
-import { NgxCaptureService } from 'ngx-capture';
 import { BehaviorSubject } from 'rxjs';
 import { Location } from '@angular/common';
 
@@ -695,6 +696,8 @@ export class GeneralService {
   saveDisabled:boolean = false;
   pathError:boolean = false;
   sectionTemplates:any = [];
+  order_forms:any = [];
+  offers:any = [];
   forms:any = [];
   menus:any = [];
   headers:any = [];
@@ -716,7 +719,10 @@ export class GeneralService {
   searchFilter:any = this.filterOrder[3];
   pageSaved:boolean = true;
 
-  constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, private captureService: NgxCaptureService) {
+  constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, 
+    public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, 
+    public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, 
+    private _offer: OfferService, private _orderForm: OrderformService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -783,6 +789,22 @@ export class GeneralService {
   fetchForms() {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchforms().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
+  fetchOffers() {
+    return new Promise<any>((resolve, reject) => {
+      this._offer.fetchoffers().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
+  fetchOrderForms() {
+    return new Promise<any>((resolve, reject) => {
+      this._orderForm.fetchorderforms().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
@@ -1337,13 +1359,6 @@ export class GeneralService {
           if(fp.uniqueid == s.funnelid) fp.steps.push(s);
         })
       })
-    })
-  }
-
-  getAllProducts() {
-    var dataobj = {stepid: this.webpage.uniqueid,name: '', price: '', priceoverride: '',type:'get'};
-    this.funnelService.funneladdeditproduct(dataobj).subscribe(data=>{
-      this.step_products = data.data;
     })
   }
 
