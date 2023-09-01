@@ -904,7 +904,9 @@ export class DashboardComponent implements OnInit {
         this.contact.monthly = resp.data;
         this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
         this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
-        this.contactReportOptions();
+        if(this.contact.monthly.length!=0){
+          this.contactReportOptions();
+        }
       }
     })
   }
