@@ -52,7 +52,7 @@ addautomation(){
   this._automationservice
   .addautomation(data)
   .subscribe((data) => {
-    console.log(data.uniqueid)
+    // console.log(data.uniqueid)
     this.fetchAutomations()
     this.dialog.closeAll();
     this._snackBar.open('Automation Added Succesfully !', 'OK');

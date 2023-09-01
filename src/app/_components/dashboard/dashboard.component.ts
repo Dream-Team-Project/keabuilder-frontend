@@ -915,7 +915,7 @@ export class DashboardComponent implements OnInit {
         this.campaign.recents = resp.data;
         this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
         this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
-        console.log(this.campaign);
+        // console.log(this.campaign);
 
         if(this.campaign.recents.length!=0){
           this.campaignReportOptions();

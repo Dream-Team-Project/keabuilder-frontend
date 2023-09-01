@@ -341,7 +341,7 @@
             <div
               class="kb-fnt kb-fnt-hover"
             >
-             {{product.name}}
+             {{product?.name}}
              <span *ngIf="stripedata?.subscription?.plan?.id == product?.type[0]?.value">{{'('+product?.type[0]?.name+')'}}</span>
              <span *ngIf="stripedata?.subscription?.plan?.id == product?.type[1]?.value">{{'('+product?.type[1]?.name+')'}}</span>
             </div>

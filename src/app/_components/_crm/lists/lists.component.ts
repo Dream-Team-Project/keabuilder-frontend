@@ -48,7 +48,7 @@ export class CrmListsComponent implements OnInit {
       this._listservice.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
-          console.log(this.lists)
+          // console.log(this.lists)
           resolve(true);
         },
         (error) => {

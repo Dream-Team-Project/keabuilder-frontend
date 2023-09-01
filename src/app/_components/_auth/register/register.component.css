@@ -228,7 +228,7 @@ max-height: 300px;
   justify-content: flex-start;
   width: 100%;
   padding: 25px 5px;
-  min-height: 60px;
+  min-height: 50px;
   transition: 0.3s ease-in;
 }
 

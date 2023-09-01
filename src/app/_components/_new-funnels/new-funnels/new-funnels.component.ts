@@ -307,7 +307,7 @@ export class NewFunnelsComponent implements OnInit {
         this.generatefunneldt(data);
       },
       error: (err) => {
-        console.log(err);
+        // console.log(err);
       },
     });
   }
@@ -836,7 +836,7 @@ export class NewFunnelsComponent implements OnInit {
           resolve(true);
         },
         (error) => {
-          console.log(error);
+          // console.log(error);
           resolve(false);
         }
       );

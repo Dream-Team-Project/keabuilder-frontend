@@ -57,7 +57,7 @@ export class SignInSecurityComponent implements OnInit {
          var emailInp = data.data[0].email;
          var type = 'type2';
          this._auth.forgetPassword(emailInp, loctn,type).subscribe(resp=>{
-           console.log(resp);
+          //  console.log(resp);
            this._general.openSnackBar(false,resp[1], 'OK','center','top');
          });
 

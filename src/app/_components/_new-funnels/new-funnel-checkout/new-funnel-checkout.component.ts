@@ -186,11 +186,11 @@ export class NewFunnelCheckoutComponent implements OnInit {
         stripeData['offerid'] = this.uniqueproid;
         stripeData['user_id'] = this.user_id;
 
-        console.log(stripeData);
+        // console.log(stripeData);
 
         this.checkoutService.stripePayment(stripeData).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success){
 
               if(data.customer){

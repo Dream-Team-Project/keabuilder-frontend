@@ -246,13 +246,13 @@ export class SidebarComponent implements OnInit {
           icon: 'fa fa-tags',
           title: 'Tags'
         },
-        {
-          0:true,
-          routerlink: '/crm/automations',
-          img: 'hacker.gif',
-          icon: 'fa fa-random',
-          title: 'Automations'
-        },
+        // {
+        //   0:true,
+        //   routerlink: '/crm/automations',
+        //   img: 'hacker.gif',
+        //   icon: 'fa fa-random',
+        //   title: 'Automations'
+        // },
         {
           0:true,
           routerlink: '/crm/campaigns',
@@ -339,96 +339,96 @@ export class SidebarComponent implements OnInit {
     title: 'Domains',
     submenu:null
   },
-    {
-      0:true,
-      routerlink: '/nolink',
-      img: 'complete.gif',
-      icon: 'fas fa-address-card',
-      title: 'Forms',
-      submenu:null
-    },
-    {
-      0:true,
-      routerlink: '/strategies',
-      img: 'chess.gif',
-      icon: 'fas fa-chess-knight',
-      title: 'Strategies',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/heatmap',
-      img: 'way.gif',
-      icon: 'fas fa-fire',
-      title: 'HeatMap',
-      submenu:null
-    },{
-      0:true,
-      routerlink: '/analytics',  
-      img: 'growth.gif',
-      icon: 'fas fa-chart-pie',
-      title: 'Analytics',
-      submenu:null
-    },
-    {
-      0:true,
-      routerlink: '/affiliates',
-      img: 'money-bag.gif',
-      icon: 'fas fa-search-dollar',
-      title: 'Affiliates',
-      submenu:[
-        {
-          0:true,
-          routerlink: '/affiliates-users',
-          img: 'money-bag.gif',
-          icon: 'fa fa-users',
-          title: 'Users'
-        },{
-          0:true,
-          routerlink: '/affiliates-commission',
-          img: 'money-bag.gif',
-          icon: 'fas fa-hand-holding-usd',
-          title: 'Commission Setup'
-        },{
-          0:true,
-          routerlink: '/affiliates-transactions',
-          img: 'money-bag.gif',
-          icon: 'fas fa-credit-card',
-          title: 'Transactions'
-        },{
-          0:true,
-          routerlink: '/affiliates-share',
-          img: 'money-bag.gif',
-          icon: 'fas fa-share',
-          title: 'Share Links'
-        },{
-          0:true,
-          routerlink: '/affiliates-announcements',
-          img: 'money-bag.gif',
-          icon: 'fas fa-bullhorn',
-          title: 'Announcements'
-        },{
-          0:true,
-          routerlink: '/affiliates-exports',
-          img: 'money-bag.gif',
-          icon: 'fas fa-file-download',
-          title: 'Exports'
-        },{
-          0:true,
-          routerlink: '/affiliates-settings',
-          img: 'money-bag.gif',
-          icon: 'fas fa-cogs',
-          title: 'Settings'
-        }
-      ]
-    },
-    {
-      0:true,
-      routerlink: '/integrations',
-      img: 'cloud-network.gif',
-      icon: 'fas fa-cogs',
-      title: 'Integrations',
-      submenu:null
-    },
+    // {
+    //   0:true,
+    //   routerlink: '/nolink',
+    //   img: 'complete.gif',
+    //   icon: 'fas fa-address-card',
+    //   title: 'Forms',
+    //   submenu:null
+    // },
+    // {
+    //   0:true,
+    //   routerlink: '/strategies',
+    //   img: 'chess.gif',
+    //   icon: 'fas fa-chess-knight',
+    //   title: 'Strategies',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/heatmap',
+    //   img: 'way.gif',
+    //   icon: 'fas fa-fire',
+    //   title: 'HeatMap',
+    //   submenu:null
+    // },{
+    //   0:true,
+    //   routerlink: '/analytics',  
+    //   img: 'growth.gif',
+    //   icon: 'fas fa-chart-pie',
+    //   title: 'Analytics',
+    //   submenu:null
+    // },
+    // {
+    //   0:true,
+    //   routerlink: '/affiliates',
+    //   img: 'money-bag.gif',
+    //   icon: 'fas fa-search-dollar',
+    //   title: 'Affiliates',
+    //   submenu:[
+    //     {
+    //       0:true,
+    //       routerlink: '/affiliates-users',
+    //       img: 'money-bag.gif',
+    //       icon: 'fa fa-users',
+    //       title: 'Users'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-commission',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-hand-holding-usd',
+    //       title: 'Commission Setup'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-transactions',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-credit-card',
+    //       title: 'Transactions'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-share',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-share',
+    //       title: 'Share Links'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-announcements',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-bullhorn',
+    //       title: 'Announcements'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-exports',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-file-download',
+    //       title: 'Exports'
+    //     },{
+    //       0:true,
+    //       routerlink: '/affiliates-settings',
+    //       img: 'money-bag.gif',
+    //       icon: 'fas fa-cogs',
+    //       title: 'Settings'
+    //     }
+    //   ]
+    // },
+    // {
+    //   0:true,
+    //   routerlink: '/integrations',
+    //   img: 'cloud-network.gif',
+    //   icon: 'fas fa-cogs',
+    //   title: 'Integrations',
+    //   submenu:null
+    // },
     {
       0:true,
       routerlink: '/account',

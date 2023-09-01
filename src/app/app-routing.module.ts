@@ -227,8 +227,8 @@ canActivate: [AuthGuard] },
     { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
     { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
     { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-    { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
-    { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
     { path: 'orderform', component: OrderFormComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
@@ -243,7 +243,7 @@ canActivate: [AuthGuard] },
 
   // builder
 
-  { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
+  // { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
@@ -251,12 +251,12 @@ canActivate: [AuthGuard] },
   // builder
   
   // User Course
-  { path: 'course/dashboard', component: CourseUserDashboardComponent},
-  { path: 'course/login', component: CourseUserCourseLoginComponent},
-  { path: 'course/forgot', component: CourseUserCourseForgotpassComponent},
-  { path: 'course/:name', component: CourseUserCoursesComponent},
-  { path: 'course/:name/:id', component: CourseUserModulesComponent},
-  { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
+  // { path: 'course/dashboard', component: CourseUserDashboardComponent},
+  // { path: 'course/login', component: CourseUserCourseLoginComponent},
+  // { path: 'course/forgot', component: CourseUserCourseForgotpassComponent},
+  // { path: 'course/:name', component: CourseUserCoursesComponent},
+  // { path: 'course/:name/:id', component: CourseUserModulesComponent},
+  // { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
   
   { path: 'fetch-orderform/:user_id/:id', component: NewFunnelCheckoutComponent},
 
@@ -267,7 +267,7 @@ canActivate: [AuthGuard] },
   { path: 'crm', component: CrmComponent, 
   children:[
     { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
-    { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
+    // { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
     { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
     { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
     { path: 'fields', component: CrmFieldsComponent, canActivate: [AuthGuard] },
@@ -306,14 +306,14 @@ canActivate: [AuthGuard] },
 
       // Coming Soon links==>  ComingSoonComponent
   
-    { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
-    { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
-    { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'analytics', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'integrations', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'heatmap', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'heatmaps-recordings', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
+    // { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
   
-    { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
+    // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
   
     // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
     // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },

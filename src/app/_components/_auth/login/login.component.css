@@ -64,7 +64,7 @@
 }
 
 .bw-login img {
-  width: 100px;
+  width: 60px;
 }
 
 .login-form {
@@ -213,7 +213,7 @@
 }
 
 ::ng-deep .kb-mat-hide-icon {
-  color: rgb(69 69 69 / 80%);
+  color: rgb(69 69 69 / 69%);
 }
 
 @keyframes fadeIn {
@@ -235,10 +235,10 @@
 }
 
 .fade-in {
-  animation: fadeIn 1s ease-in;
+  animation: fadeIn 2s ease-in;
 }
 
 .fade-out {
-  animation: fadeOut 1s ease-out;
+  animation: fadeOut 2s ease-out;
 }
 
