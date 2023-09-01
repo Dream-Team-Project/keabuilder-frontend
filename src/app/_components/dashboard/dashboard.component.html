@@ -150,7 +150,7 @@
     </div>
   </div>
   <div class="row" >
-    <div class="col-lg-8 col-sm-6"  *ngIf="data1.length!=0">
+    <div class="col-lg-8 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -179,7 +179,7 @@
           </div>
           <h6 class="big-title">Total earnings in last Week</h6>
           <div class="kbcustmwidthforbox4">
-            <apx-chart
+            <apx-chart *ngIf="data1.length!=0"
               [series]="chartOptions11.series"
               [chart]="chartOptions11.chart"
               [yaxis]="chartOptions11.yaxis"
@@ -265,18 +265,18 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-6 col-sm-6" *ngIf="data2.length!=0">
+    <div class="col-lg-6 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-10">
-              <div class="numbers pull-left"><span>Total Contacts Last Week</span><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+              <div class="numbers pull-left"><span>Recent Contacts</span><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
             </div>
-            <div class="col-sm-5" *ngIf="hidefornow">
+            <div *ngIf="hidefornow" class="col-sm-5">
               <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
             </div>
           </div>
-          <div class="row">
+          <div *ngIf="hidefornow" class="row">
             <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
           </div>
         </div>
@@ -292,16 +292,17 @@
           <!-- <h6 class="big-title">total Contact in last 7 days</h6> -->
           <div class="chart1 kbcustmwidthforbox3">
             <apx-chart
-              [series]="chartOptions10.series"
-              [chart]="chartOptions10.chart"
-              [xaxis]="chartOptions10.xaxis"
-              [stroke]="chartOptions10.stroke"
-              [dataLabels]="chartOptions10.dataLabels"
-              [yaxis]="chartOptions10.yaxis"
-              [labels]="chartOptions10.labels"
-              [legend]="chartOptions10.legend"
-              [title]="chartOptions10.title"
-              [subtitle]="chartOptions10.subtitle"
+            *ngIf="contact.fetched"
+            [series]="chartOptions10.series"
+            [chart]="chartOptions10.chart"
+            [dataLabels]="chartOptions10.dataLabels"
+            [plotOptions]="chartOptions10.plotOptions"
+            [yaxis]="chartOptions10.yaxis"
+            [legend]="chartOptions10.legend"
+            [fill]="chartOptions10.fill"
+            [stroke]="chartOptions10.stroke"
+            [tooltip]="chartOptions10.tooltip"
+            [xaxis]="chartOptions10.xaxis"
             ></apx-chart>
           </div>
 
@@ -335,10 +336,11 @@
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
-              <div class="numbers pull-left"><span>Sales By Category</span><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+              <div class="numbers pull-left"><span>Recent Campaigns</span>
+                <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
             </div>
         </div>
-        <div class="row">
+        <div *ngIf="hidefornow" class="row">
           <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
         </div>
         </div>
@@ -353,7 +355,7 @@
           </div>
           
           <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart
+            <apx-chart *ngIf="campaign.fetched"
               [series]="chartOptions12.series"
               [chart]="chartOptions12.chart"
               [xaxis]="chartOptions12.xaxis"
@@ -395,7 +397,7 @@
   </div>
   
   <div class="row" *ngIf="hidefornow">
-    <div class="col-lg-4 col-sm-6"  *ngIf="data1.length!=0">
+    <div class="col-lg-4 col-sm-6">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -418,7 +420,7 @@
           </div>
           <h6 class="big-title">Total earnings in last Week</h6>
           <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart
+            <apx-chart *ngIf="campaign.fetched"
               [series]="chartOptions.series"
               [chart]="chartOptions.chart"
               [yaxis]="chartOptions.yaxis"
