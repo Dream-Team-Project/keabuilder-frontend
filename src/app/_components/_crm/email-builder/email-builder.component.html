@@ -249,10 +249,10 @@
                         <ng-template #showBtn>
                             <a *ngIf="element.content.btntype != 'regular' else regular"
                                 [ngStyle]="_style.getBlockStyle(element.content.style)"
-                                class="kb-default-btn kb-product-btn"
+                                class="kb-default-btn kb-offer-btn"
                                 [attr.kb-btn-type]="element.content.btntype"
                                 [attr.kb-redirect-link]="element.content.link"
-                                [attr.kb-product-id]="element.content.productid"
+                                [attr.kb-offer-id]="element.content.offerid"
                                 href="#no-link" [target]="element.content.target">
                                 <div>{{element.content.text}}</div>
                                 <div class="subtext"

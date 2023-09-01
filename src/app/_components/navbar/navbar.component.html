@@ -4,8 +4,10 @@
   <div class="navbar-wrapper">
     <div class="navbar-container content">
       <div class="navbar-collapse" id="navbar-mobile">
-        <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center"></div>
-        <ul class="nav float-right overflow-hidden">         
+        <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+          <span mat-ripple (click)="triggerSidebar()" class="kb-open-sidebar-icon"><i class="fa-solid fa-bars"></i></span>
+        </div>
+        <ul class="nav float-right overflow-hidden">
           <!-- <li class="nav-item nav-search"><a class="nav-link nav-link-search" (click)="showsearch()"><i
                 class="fas fa-search"></i></a>
             <div class="search-input" [class.open]="issearch">

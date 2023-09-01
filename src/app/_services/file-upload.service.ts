@@ -335,8 +335,8 @@ export class FileUploadService {
   fetchpagetemplates():Observable<any> {
     return this.http.get(this.allpagetemplatesApi+'/'+this.uuid);
   }
-  fetchdefaulttemplates():Observable<any> {
-    return this.http.get(this.alldefaulttemplatesApi);
+  fetchdefaulttemplates(obj:any):Observable<any> {
+    return this.http.post(this.alldefaulttemplatesApi,obj);
   }
 
   savepagetemplate(obj:any):Observable<any> {

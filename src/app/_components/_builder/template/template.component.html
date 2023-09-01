@@ -7,59 +7,35 @@
       <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
       <button mat-button mat-dialog-close (click)="deleteTemplate()" class="text-danger">Yes</button>
     </div>
-  </ng-template>
-  <ng-template #editdialog>
-    <h1 mat-dialog-title >Update Template</h1>
-    <div mat-dialog-content>
-        <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Template Name</mat-label>
-            <input
-              type="text"
-              matInput
-              required
-              minlength="3"
-              [formControl]="templatenameFormControl"
-              [(ngModel)]="templatename"
-              name="template name"
-              placeholder="Ex. My First Optin"
-            />
-            <mat-error *ngIf="templatenameFormControl.hasError('required')">
-            Name is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="templatenameFormControl.hasError('minlength')">
-             Name must be at least <strong>3</strong> characters
-            </mat-error>
-          </mat-form-field>
-      </div>
-    <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
-      <button mat-button mat-dialog-close (click)="updateTemplate()" [color]="'primary'" [disabled]="templatenameFormControl.invalid">Update</button>
+</ng-template>
+<ng-template #editdialog>
+  <h1 mat-dialog-title >Update Template</h1>
+  <div mat-dialog-content>
+      <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Template Name</mat-label>
+          <input
+            type="text"
+            matInput
+            required
+            minlength="3"
+            [formControl]="templatenameFormControl"
+            [(ngModel)]="templatename"
+            name="template name"
+            placeholder="Ex. My First Optin"
+          />
+          <mat-error *ngIf="templatenameFormControl.hasError('required')">
+          Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="templatenameFormControl.hasError('minlength')">
+            Name must be at least <strong>3</strong> characters
+          </mat-error>
+        </mat-form-field>
     </div>
-  </ng-template>
-  <!-- <ng-template #adddialog>
-    <h1 mat-dialog-title >Select Website</h1>
-    <div mat-dialog-content>
-      <mat-form-field class="kb-full-width" appearance="fill" (click)="filterwebData()" [class.mat-form-field-invalid]="hasError">
-        <mat-label>Website</mat-label>
-        <input matInput type="text" [(ngModel)]="selectedweb" placeholder="Search by website name"
-      (input)="filterwebData()" [matAutocomplete]="websiteAuto" required class="w-100">
-    <button *ngIf="selectedweb" matSuffix mat-icon-button aria-label="Clear" (click)="resetweb()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <mat-autocomplete #websiteAuto="matAutocomplete" (optionSelected)="selectweb($event)">
-      <mat-option *ngFor="let option of filteredweb" [value]="option"
-        [disabled]="option.uniqueid == website_id">
-        {{ option.title | titlecase }}
-      </mat-option>
-    </mat-autocomplete>
-      </mat-form-field>
-  
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
-        <button mat-button class="kb-danger" mat-dialog-close >Cancel</button>
-        <button mat-button  color="primary" (click)="copytemplate()">Create</button>
-    </div>
-  </ng-template> -->
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">No</button>
+    <button mat-button mat-dialog-close (click)="updateTemplate()" [color]="'primary'" [disabled]="templatenameFormControl.invalid">Update</button>
+  </div>
+</ng-template>
 <div class="container-fluid p-0">
     <div class="row align-items-center border-bottom pb-3 m-0">
         <div class="col-md-7">
@@ -74,7 +50,13 @@
     </div>
     <mat-tab-group class="kb-template-container">
         <mat-tab label="System Templates">
-            <div class="row m-0" *ngIf="systemplates?.length > 0">
+            <div class="row m-0">
+              <div class="col-md-2 bw-sidebar kb-template-card">
+              <div *ngFor="let menu of allmenu; index as i;">
+                <button [class.kb-active] ='menu.name == category'  (click)="fetchsystemTemplates(menu.name)" class="bw-sidebar__item hasIcon" ><span class="bw-sidebar__item__text">{{menu.title}}</span></button>
+              </div>
+              </div>
+              <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
@@ -97,13 +79,15 @@
                       </div>
                     </div>
                 </div>
+              </div>
+              <div class="col-md-10 d-flex align-items-center justify-content-center" *ngIf="systemplates?.length == 0">
+                <div class="kb-img-fluid1">
+                  <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
+                </div>
+                
+              </div>
             </div>
-                <div class="mt-5" *ngIf="systemplates?.length == 0">
-                    <div class="kb-img-fluid">
-                      <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
-                    </div>
-                    
-                  </div>
+                
             
         </mat-tab>
         <mat-tab label="Saved Templates">
@@ -149,8 +133,8 @@
                     </div>
                 </div>
                 </div>
-                <div class="mt-5" *ngIf="templates?.length == 0">
-                    <div class="kb-img-fluid">
+                <div class="d-flex align-items-center justify-content-center mt-5" *ngIf="templates?.length == 0">
+                    <div class="kb-img-fluid1">
                       <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
                     </div>
             </div>

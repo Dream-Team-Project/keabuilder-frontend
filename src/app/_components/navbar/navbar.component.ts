@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -10,6 +10,8 @@ import { ImageService } from 'src/app/_services/image.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+
+  @Output('openSidebar') openSidebar: EventEmitter<any> = new EventEmitter();
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -28,7 +30,8 @@ export class NavbarComponent implements OnInit {
   logs = false;
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
-  greeting:any = '';
+  toggleSidebar:boolean = false;
+
   ngOnInit(): void {
     var th:any = this;
     window.addEventListener('scroll', function(){
@@ -110,5 +113,9 @@ export class NavbarComponent implements OnInit {
 
   // drag drop box
 
+  triggerSidebar() {
+    this.toggleSidebar = !this.toggleSidebar;
+    this.openSidebar.emit(this.toggleSidebar);
+  }
 
 }

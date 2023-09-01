@@ -1,5 +1,16 @@
 /* navbar css */
 
+.kb-open-sidebar-icon {
+  cursor: pointer;
+  font-size: 20px;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .navshadow {
   box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%);
 }

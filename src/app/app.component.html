@@ -1,8 +1,8 @@
 <div id="app">
-  <app-sidebar *ngIf="isLoggedIn && _user.navVisible"></app-sidebar>
-  <app-navbar *ngIf="isLoggedIn && _user.navVisible"></app-navbar>
+  <app-navbar (openSidebar)="triggerSidebar($event)" *ngIf="isLoggedIn && _user.navVisible"></app-navbar>
+  <app-sidebar (closeSidebar)="triggerSidebar($event)" [openSidebar]="toggleSidebar" *ngIf="isLoggedIn && _user.navVisible"></app-sidebar>
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-  <main id="angularApp" [class.kb-main-container]="isLoggedIn && _user.navVisible">
+  <main id="angularApp" [class.kb-main-container]="isLoggedIn && _user.navVisible" [class.kb-fixed-template]="toggleSidebar">
     <router-outlet (activate)="changeOfRoutes()"></router-outlet>
   </main>
 </div>

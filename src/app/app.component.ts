@@ -9,6 +9,7 @@ import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  toggleSidebar:boolean = false;
   title = 'Keabuilder';
   private roles: string[] = [];
   isLoggedIn:boolean = false;
@@ -87,6 +88,10 @@ export class AppComponent {
   logout(): void {
     this._token.signOut();
     window.location.reload();
+  }
+
+  triggerSidebar(e:boolean) {
+    this.toggleSidebar = !this.toggleSidebar;
   }
 }
 

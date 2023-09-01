@@ -55,6 +55,7 @@ export class CrmContactComponent implements OnInit {
     emailto:[],
   }
   noteEdit:boolean = false;
+  addressEdit:boolean = false;
  
   constructor(
     private _route: ActivatedRoute,
@@ -231,7 +232,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedList(event:any, searchListInp:any): void {
     this.selectedLists.push(event.option.value);
     this.filteredTempIds.lists.push(event.option.value.uniqueid);
-    this.update_list_tag_note();
+    this.update_static();
     searchListInp.value = '';
     this.filterListData('');
   }
@@ -239,7 +240,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedList(index:number): void {
     this.selectedLists.splice(index, 1);
     this.filteredTempIds?.lists?.splice(index, 1);
-    this.update_list_tag_note();
+    this.update_static();
   }
 
   // end list actions
@@ -254,7 +255,7 @@ export class CrmContactComponent implements OnInit {
   addSelectedTag(event:any, searchTagInp:any): void {
     this.selectedTags.push(event.option.value);
     this.filteredTempIds.tags.push(event.option.value.uniqueid);
-    this.update_list_tag_note();
+    this.update_static();
     searchTagInp.value = '';
     this.filterTagData('');
   }
@@ -262,7 +263,7 @@ export class CrmContactComponent implements OnInit {
   removeSelectedTag(index:number): void {
     this.selectedTags?.splice(index, 1);
     this.filteredTempIds?.tags?.splice(index, 1);
-    this.update_list_tag_note();
+    this.update_static();
   }
   
   addtag(event: MatChipInputEvent): void {
@@ -274,7 +275,7 @@ export class CrmContactComponent implements OnInit {
       };
       this.selectedTags.push(obj); 
       this.filteredTempIds.tags.push(obj.uniqueid);
-      this.tagupdate(obj).then((resp:any)=>{this.update_list_tag_note()})
+      this.tagupdate(obj).then((resp:any)=>{this.update_static()})
       this.newtags=[];
          
     }
@@ -282,7 +283,7 @@ export class CrmContactComponent implements OnInit {
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
   }
-  update_list_tag_note(){
+  update_static(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();
     var contact = JSON.parse(JSON.stringify(this.contact));
@@ -291,6 +292,7 @@ export class CrmContactComponent implements OnInit {
       let msg = resp.success ? 'Contact has been Updated' : 'Server Error';
       this._general.openSnackBar(!resp.success, msg, 'OK', 'center', 'top');
       this.noteEdit = false;
+      this.addressEdit = false;
     })
   }
   

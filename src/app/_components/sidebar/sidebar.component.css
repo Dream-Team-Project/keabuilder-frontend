@@ -294,10 +294,6 @@ div#topbar_notifications_logs {
   ;
 }
 
-#bw-sidebar.bw-sidebar-content.hoveropen {
-  border-radius: 0 12px 12px 0;
-}
-
 .bw-sidebar-content {
   overflow: hidden;
   position: fixed;
@@ -354,10 +350,32 @@ div#topbar_notifications_logs {
   padding: 25px 5px;
   min-height: 80px;
   transition: 0.3s ease-in;
+  position: relative;
+}
+
+.kb-close-sidebar-icon {
+  font-size: 20px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  opacity: 0;
+  transition: 0.2s ease;
+}
+
+.kb-close-sidebar-icon.kb-show-close-icon {
+  opacity: 1!important;
 }
 
 .bw-sidebar-logo img {
-  height: 48px;
+  height: 42px;
+  cursor: pointer;
 }
 
 .bw-sidebar-content .bw-sidebar {
@@ -720,13 +738,6 @@ div#topbar_notifications_logs {
 .bw-sidebar-content a .bw-sidebar__item__text{
   display: none;
 }
-.kbburger{
-  opacity: 0;
-  top: -9px;
-  font-size: 20px;
-  left: 18px;
-  position: relative;
-}
 @media only screen and (max-width:500px){
   #bw-sidebar {
     width: 0px;
@@ -735,8 +746,5 @@ div#topbar_notifications_logs {
     left: 9px;
     position: relative;
     top: -12px;
-  }
-  #bw-sidebar:not(.hoveropen) .kbburger{
-    opacity: 1;
   }
 }

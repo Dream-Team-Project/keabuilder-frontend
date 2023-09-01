@@ -68,7 +68,7 @@
   </button>
   <mat-autocomplete #websiteAuto="matAutocomplete" (optionSelected)="selectweb($event)">
     <mat-option *ngFor="let option of filteredweb" [value]="option"
-      [disabled]="option.uniqueid == form.website_id">
+      [disabled]="option.uniqueid == website_id">
       {{ option.title | titlecase }}
     </mat-option>
   </mat-autocomplete>
@@ -447,7 +447,7 @@
         <button mat-raised-button (click)="templateDialog(templatedialog)" color="primary" class="mr-3"><span class="keamobhd">Create Page </span> <i
           class="fas fa-plus"></i></button>
 
-        <button mat-raised-button (click)="archivepages()" > Archive Pages <i class="fas fa-archive"></i></button>
+        <button mat-raised-button (click)="archivepages()"> Archive Pages <i class="fas fa-archive"></i></button>
        
       </div>
     </div>

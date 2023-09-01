@@ -1,17 +1,17 @@
 window.onload = function(a){ 
-    // product code
-    document.querySelectorAll('.kb-product-btn').forEach(function(b){
+    // offer code
+    document.querySelectorAll('.kb-offer-btn').forEach(function(b){
         b.addEventListener("click", handleSubmition);
     });
     async function handleSubmition(e) {
-        var producttype = e.target.getAttribute('kb-btn-type')==null ? e.target.parentElement.getAttribute('kb-btn-type') :e.target.getAttribute('kb-btn-type');
-        if(producttype=='upsell' || producttype=='downsell'){
+        var offertype = e.target.getAttribute('kb-btn-type')==null ? e.target.parentElement.getAttribute('kb-btn-type') :e.target.getAttribute('kb-btn-type');
+        if(offertype=='upsell' || offertype=='downsell'){
             e.preventDefault();
-            var productid = e.target.getAttribute('kb-product-id')==null ? e.target.parentElement.getAttribute('kb-product-id') :e.target.getAttribute('kb-product-id');
+            var offerid = e.target.getAttribute('kb-offer-id')==null ? e.target.parentElement.getAttribute('kb-offer-id') :e.target.getAttribute('kb-offer-id');
             var custmid = window.location.hash.split('?')[0]?.split('=')[0]=='#customerid'?window.location.hash.split('?')[0]?.split('=')[1]:'';
             var userid = window.location.hash.split('?')[1]?.split('=')[0]=='userid'?window.location.hash.split('?')[1]?.split('=')[1]:'';
-            if(custmid && userid && productid) {
-                var itemscustm = { customerid: custmid, user_id:userid, productid:productid };
+            if(custmid && userid && offerid) {
+                var itemscustm = { customerid: custmid, user_id:userid, offerid:offerid };
                 const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -27,7 +27,7 @@ window.onload = function(a){
             }
         }
     }
-    // product code
+    // offer code
     // video muted
     document.querySelectorAll('.kb-video-muted').forEach(item=>{
         item.muted = true;

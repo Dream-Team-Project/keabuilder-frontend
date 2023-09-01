@@ -36,9 +36,7 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   @Output('openImageDialog') openImageDialog: EventEmitter<any> = new EventEmitter();
   @Input()
   set DialogToggle(val: any) {
-    if(this.connectWtParent) {
-      this.openDialog();
-    }
+    if(this.connectWtParent) this.openDialog();
     else this.connectWtParent = true;
   }   
 

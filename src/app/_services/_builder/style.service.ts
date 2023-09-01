@@ -82,7 +82,7 @@ export class StyleService {
   ]
   button_subfont_size = {value: '80'};
   button_subfont_sizeRange: any = { value: 80, max: 200, type: '%' };
-  button_product = '';
+  button_offer = '';
   // button
   // general
   block_link:string = '';
@@ -909,7 +909,7 @@ export class StyleService {
           this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
           this._general.selectedBlock.content.link = this.button_link;
           this._general.selectedBlock.content.target = this.button_target.value;
-          if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.productid = this.button_product;
+          if(this._general.selectedBlock.content.btntype != 'regular') this._general.selectedBlock.content.offerid = this.button_offer;
         }
         else if (this._general.selectedBlock.content.name == 'image') {
           this._general.selectedBlock.content.src = this.image_src;
@@ -1701,8 +1701,10 @@ export class StyleService {
     }
     if (element.name == 'button' && !element.form) {
       if(element.btntype != 'regular') {
-        this.button_product = element.productid;
-        this._general.getAllProducts();
+        this.button_offer = element.offerid;
+        this._general.fetchOffers().then(data=>{
+         this._general.offers = data;
+        });
       }
       this.button_text = element.text;
       this.button_subtext = element.subtext;

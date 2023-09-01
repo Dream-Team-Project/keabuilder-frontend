@@ -15,6 +15,7 @@ import { RowService } from 'src/app/_services/_builder/row.service';
 import { ColumnService } from 'src/app/_services/_builder/column.service';
 import { ElementService } from 'src/app/_services/_builder/element.service';
 
+
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
@@ -23,7 +24,7 @@ import { ElementService } from 'src/app/_services/_builder/element.service';
 })
 
 export class BuilderComponent implements OnInit {
-
+  
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
 
@@ -87,19 +88,25 @@ export class BuilderComponent implements OnInit {
               else {
                 data.json = _general.webpage.page_json;
                 if(_general.target.type == 'funnel') {
-                  this._general.getAllProducts();
                   if(_general.webpage.funneltype == 'order') {
-                    _element.elementList['checkout'] = { content: { name: 'iframe', type: 'checkout', src: window.location.origin+'/checkout/'+_general.webpage.uniqueid}, iconCls: 'fab fa-wpforms' };
+                      _general.fetchOrderForms().then(data=>{
+                        _general.order_forms = data;
+                      });
                   }
-                  else if(_general.webpage.funneltype == 'upsell') {
-                    _element.elementList['button'].content.btntype = 'upsell';
-                    _element.elementList['button'].content.productid = '';
-                    _element.elementList['button'].content.text = 'Upsell Button';
-                  }
-                  else if(_general.webpage.funneltype == 'downsell') {
-                    _element.elementList['button'].content.btntype = 'downsell';
-                    _element.elementList['button'].content.productid = '';
-                    _element.elementList['button'].content.text = 'Downsell Button';
+                  else {
+                    _general.fetchOffers().then(data=>{
+                      _general.offers = data;
+                    });
+                    if(_general.webpage.funneltype == 'upsell') {
+                      _element.elementList['button'].content.btntype = 'upsell';
+                      _element.elementList['button'].content.productid = '';
+                      _element.elementList['button'].content.text = 'Upsell Button';
+                    }
+                    else if(_general.webpage.funneltype == 'downsell') {
+                      _element.elementList['button'].content.btntype = 'downsell';
+                      _element.elementList['button'].content.productid = '';
+                      _element.elementList['button'].content.text = 'Downsell Button';
+                    }
                   }
                 }
               }
@@ -204,11 +211,7 @@ export class BuilderComponent implements OnInit {
   savePageTemplate(main:any, obj:any) {
     obj.category = 'saved';
     this._general.templateobj=JSON.parse(JSON.stringify(obj));
-    
-      // console.log(res1); // template unique id use as folder name
-      // this._general.template.uniqueid=res1.uniqueid;
       this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
-        console.log(res2);
         let msg = 'Page has been saved as template';
         this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
         this.dialog.closeAll();
@@ -217,8 +220,8 @@ export class BuilderComponent implements OnInit {
   }
 
   saveSectionTemplate(obj:any) {
-    this._general.saveDisabled = true;
     this._general._file.savesectiontemplate(obj).subscribe((resp:any)=>{
+      this._general.saveDisabled = true;
       this.takePageSS('section-'+obj.uniqueid, 'section template');
       this._general.fetchSectionTemplates();
       this.dialog.closeAll();
@@ -226,12 +229,14 @@ export class BuilderComponent implements OnInit {
   }
 
   saveHeaderFooter(main:any) {
-    if(!this.autoSaving) this._general.saveDisabled = true;
     this._general.pathError = false;
     this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
       if(!this.autoSaving) {
         if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
-        else if(res) this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        else if(res) {
+          if(!this.autoSaving) this._general.saveDisabled = true;
+          this.takePageSS(this._general.target.type+'-'+this._general.target.id, this._general.target.type);
+        }
         else this._general.saveDisabled = false;
         clearInterval(this.askForSaveInterval);
         this.askForSaveInterval;
@@ -364,6 +369,7 @@ export class BuilderComponent implements OnInit {
     if(this.transferData) {
       var appendIndex =  event.currentIndex-1;
       var appendData = this.transferData;
+      console.log(appendData.type);
       if(appendData.type == 'image') {
         var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
@@ -378,9 +384,15 @@ export class BuilderComponent implements OnInit {
       }
       if(appendData.type == 'form') {
         var form = JSON.parse(JSON.stringify(this._element.elementList['form']));
-        form.content = this._element.setIframe(form.content, appendData);
+        form.content = this._element.setFormIframe(form.content, appendData);
         form.content.itemset = true;
         appendData = form;
+      }
+      if(appendData.type == 'order_form') {
+        var order_form = JSON.parse(JSON.stringify(this._element.elementList['order_form']));
+        order_form.content = this._element.setOrderFormIframe(order_form.content, appendData);
+        order_form.content.itemset = true;
+        appendData = order_form;
       }
       if(appendData.content) appendData.type = 'element';
       switch(appendData.type) {
