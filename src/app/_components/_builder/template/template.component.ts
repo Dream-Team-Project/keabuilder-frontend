@@ -17,17 +17,22 @@ export class TemplateComponent implements OnInit {
   @Output('closeDialog') closeDialog: EventEmitter<any> = new EventEmitter();
   @Output('createDialog') createDialog: EventEmitter<any> = new EventEmitter();
 
+  searching = false;
   templates:any = [];
   systemplates:any = [];
   deltemplate:any;
   templatename:any;
   website_id:any='';
+  defaultcatg:any='sales';
+  isActive:boolean=false;
+  category:any='sales';
   templatenameFormControl = new FormControl('', [Validators.required,Validators.minLength(3),]);
   
-  constructor(private _file: FileUploadService,private websiteService: WebsiteService, public _image: ImageService, private dialog: MatDialog, private _general: GeneralService,) { }
+  constructor(private _file: FileUploadService,private websiteService: WebsiteService, public _image: ImageService, private dialog: MatDialog, public _general: GeneralService,) { }
 
   ngOnInit(): void {
     this.fetchTemplates();
+    this.fetchsystemTemplates(this.category);
     
   }
 
@@ -36,6 +41,15 @@ export class TemplateComponent implements OnInit {
       if(resp.data?.length > 0) this.templates = resp.data;
       else{
         this.templates = resp.data;
+      }
+    })
+  }
+  fetchsystemTemplates(value:string) {
+    this.category={category:value};
+    this._file.fetchdefaulttemplates(this.category).subscribe((resp:any)=>{
+      if(resp.data?.length > 0) this.systemplates = resp.data;
+      else{
+        this.systemplates = resp.data;
       }
     })
   }
@@ -73,12 +87,24 @@ export class TemplateComponent implements OnInit {
     })
   }
 
-  templatepreview(template:any){
-// this._file.getPreview()
+  searchsavedtemplates(search: any, filter: any) {
+    this.searching = true;
+    var obj = {
+      search: search.value,
+      filter: filter.value,
+      // unique_id:this.unique_id,
+    }
+    this._file.searchquerysavedtemplates(obj).subscribe((data:any) => {
+      this.searching = false;
+        if(data.success){ 
+          this.templates = data?.data;
+        }
+        else{
+          this.templates=[];
+        }
+        
+    });
+    
   }
-  // copytemplate(){
-  //   // let 
-  //   this._file.copyFile
-  // }
   
 }

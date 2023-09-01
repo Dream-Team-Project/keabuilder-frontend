@@ -74,26 +74,70 @@
     </div>
     <mat-tab-group class="kb-template-container">
         <mat-tab label="System Templates">
-            <div class="row m-0" *ngIf="systemplates?.length > 0">
+            <div class="row m-0">
+              <div class="col-md-2">
+                <div class="kb-btn mt-3" [class.active]="category.category == 'sales'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('sales')">Sales</button></div>
+                <div class="kb-btn mt-2" [class.active]="category.category  == 'order'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('order')">Order</button></div>
+                <div class="kb-btn mt-2" [class.active]="category.category  == 'upsell'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('upsell')">Upsell</button></div>
+                <div class="kb-btn mt-2" [class.active]="category.category  == 'downsell'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('downsell')">Downsell</button></div>
+                <div class="kb-btn mt-2" [class.active]="category.category  == 'webinar'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('webinar')">Webinar</button></div>
+                <div class="kb-btn mt-2" [class.active]="category.category  == 'optin'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('optin')">Optin</button></div>
+                <div class="kb-btn mt-2 mb-4" [class.active]="category.category  == 'other'"><button mat-raised-button class="kb-sys-btn w-100"  (click)="fetchsystemTemplates('other')">Other</button></div>
+              </div>
+              <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
                             [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
                         </div>
-                        <div class="text-center p-2">{{temp.name | titlecase}}</div>
+                        <div class="d-flex justify-content-between align-items-center p-2">
+                          <span class="ftoverflow">{{temp.name | titlecase}}</span>
+                          <span class="d-flex justify-content-end">
+                              <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"></i>
+                              <i mat-ripple matTooltip="Use this template" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
+                              <!-- <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, temp)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del" aria-hidden="true"></i> -->
+                              <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
+                              <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
+                                  <button mat-menu-item (click)="_general.redirectLink('/system/template/preview/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
+                                  <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
+                                  <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
+                                  </mat-menu>  
+                          </span>
+                      </div>
                     </div>
                 </div>
+              </div>
+              <div class="col-md-10 d-flex justify-content-center" *ngIf="systemplates?.length == 0">
+                <div class="kb-img-fluid1">
+                  <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
+                </div>
+                
+              </div>
             </div>
-                <div class="mt-5" *ngIf="systemplates?.length == 0">
-                    <div class="kb-img-fluid">
-                      <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
-                    </div>
-                    
-                  </div>
+                
             
         </mat-tab>
         <mat-tab label="Saved Templates">
-            <div class="row mx-0" *ngIf="templates?.length > 0">
+          <div class="row m-0 mt-3">
+
+            <mat-form-field  appearance="fill" class="col-md-6">
+              <mat-label>Search Templates</mat-label>
+              <input #searchInp matInput type="text"  (input)="searchsavedtemplates(searchInp,filterInp)" id="template-search" placeholder="Search by template name">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-md-3 ">
+              <mat-label>Showing Templates for</mat-label>
+              <mat-select  #filterInp name="showingtemplates" value='created_at DESC' (valueChange)="searchsavedtemplates(searchInp, filterInp)">
+                <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+            <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+            <div class="row m-0" *ngIf="templates?.length > 0">
                 <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
@@ -102,14 +146,14 @@
                         <div class="d-flex justify-content-between align-items-center p-2">
                             <span class="ftoverflow">{{temp.name | titlecase}}</span>
                             <span class="d-flex justify-content-end">
-                                <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true"(click)="templatepreview(temp)"></i>
-                                <i mat-ripple matTooltip="Copy" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
+                                <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"></i>
+                                <i mat-ripple matTooltip="Use this template" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
                                 <!-- <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, temp)" class="fa fa-trash-alt px-3 kb-table-action-icon kb-icon-del" aria-hidden="true"></i> -->
                                 <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"  class="fa-solid fa-gear px-3 kb-table-action-icon rounded-0" aria-hidden="true"></i>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item (click)="openDialog(editdialog, temp)"><i class="fas fa-pencil-alt mr-2" ></i> Edit</button>
-                                    <button mat-menu-item (click)="templatepreview(temp)"><i class="fas fa-eye mr-2" ></i> View</button>
-                                    <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button>
+                                    <button mat-menu-item (click)="_general.redirectLink('/template/preview/'+temp.user_id+'/'+temp.uniqueid)"><i class="fas fa-eye mr-2" ></i> Preview</button>
+                                    <!-- <button mat-menu-item (click)="createDialog.emit(temp)"><i class="fa-solid fa-file-circle-plus mr-2" ></i> Copy</button> -->
                                     <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, temp)"><i class="far fa-trash-alt mr-2"></i> Delete </button>
                                     </mat-menu>  
                             </span>
@@ -117,8 +161,8 @@
                     </div>
                 </div>
                 </div>
-                <div class="mt-5" *ngIf="templates?.length == 0">
-                    <div class="kb-img-fluid">
+                <div class="d-flex justify-content-center mt-5" *ngIf="templates?.length == 0">
+                    <div class="kb-img-fluid1">
                       <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
                     </div>
             </div>

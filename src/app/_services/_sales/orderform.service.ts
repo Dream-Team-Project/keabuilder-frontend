@@ -14,8 +14,8 @@ export class OrderformService {
   singleorder = './api/singleorderform';
   addorderforms = './api/addorderform';
   updateorderforms = './api/updateorderform';
-  duplicateproducts = './api/duplicateproduct';
-  deleteproducts = './api/deleteproduct';
+  duplicateorderforms = './api/duplicateorderform';
+  deleteorderforms = './api/deleteorderform';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;
@@ -50,13 +50,13 @@ export class OrderformService {
     .pipe(catchError(this.errorHandler));
   }
 
-  duplicateproduct(obj:any){
+  duplicateorderform(obj:any){
     obj.user_id = this.user_id;
-    return this.http.post(this.duplicateproducts,obj)
+    return this.http.post(this.duplicateorderforms,obj)
     .pipe(catchError(this.errorHandler));
   }
-  deleteproduct(id:any){
-    return this.http.delete(this.deleteproducts+'/'+id)
+  deleteorderform(id:any){
+    return this.http.delete(this.deleteorderforms+'/'+id)
     .pipe(catchError(this.errorHandler));
   }
 

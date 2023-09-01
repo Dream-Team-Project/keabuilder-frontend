@@ -29,8 +29,16 @@
     color: #666666;
 }
 .kb-img-fluid{
-    max-width: 200px;
-    max-height: 200px;
+    /* max-width: 00px; */
+    /* max-height: 800px; */
+    overflow: hidden;
+    align-items: center;
+    text-align: center;
+    
+}
+.kb-img-fluid1{
+    width: 300px;
+    height: 300px;
     overflow: hidden;
     align-items: center;
     text-align: center;
@@ -59,8 +67,31 @@
     background-color: rgb(220 53 69 / 10%);
 }
 .ftoverflow{
-    max-width: 70%;
+    max-height: 600px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .colr{
+    color: #dea641;
+}
+.active{
+    color: #dea641;
+}
+.kb-btn.active button{
+background-color:#dea641;
+color: #fff;
+}
+.fnt{
+    font-weight: 500;
+    font-size: 18px;
+}
+.verti{
+    color: #000;
+}
+.kb-fnt{
+    font-size:12px ;
+    color: var(--primary-color);
+    position: relative;
+    top: -15px;
+}

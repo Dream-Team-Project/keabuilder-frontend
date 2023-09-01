@@ -52,6 +52,7 @@ export class FileUploadService {
   // page templates
   savetemplatehtmlApi = "./api/savetemplatehtml"
   allpagetemplatesApi = "./api/allpagetemplates";
+  alldefaulttemplatesApi = "./api/alldefaulttemplates";
   savepagetemplateApi = "./api/savepagetemplate";
   updatepagetemplateApi = "./api/updatepagetemplate";
   deletepagetemplateApi = "./api/deletepagetemplate";
@@ -334,6 +335,9 @@ export class FileUploadService {
   fetchpagetemplates():Observable<any> {
     return this.http.get(this.allpagetemplatesApi+'/'+this.uuid);
   }
+  fetchdefaulttemplates(obj:any):Observable<any> {
+    return this.http.post(this.alldefaulttemplatesApi,obj);
+  }
 
   savepagetemplate(obj:any):Observable<any> {
     obj.user_id = this.uuid;
@@ -349,6 +353,10 @@ export class FileUploadService {
   deletepagetemplate(id:any):Observable<any> {
     return this.http.delete(this.deletepagetemplateApi + '/' + id)
     .pipe(catchError(this.errorHandler));
+  }
+  searchquerysavedtemplates(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("./api/searchquerysavedtemplates",data).pipe(catchError(this.errorHandler));
   }
 
   // page templates 
