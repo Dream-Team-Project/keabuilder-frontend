@@ -57,10 +57,13 @@
               </div>
               </div>
               <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
+                <div class="kb-spinner" *ngIf="spinner">
+                  <mat-spinner></mat-spinner>
+                </div>
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}">
+                            [ngStyle]="{'background-image': 'url('+ _image.uploadImgPath+'keaimage_' + temp.uniqueid+'_template.jpg' + ')'}">
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-2">
                           <span class="ftoverflow">{{temp.name | titlecase}}</span>

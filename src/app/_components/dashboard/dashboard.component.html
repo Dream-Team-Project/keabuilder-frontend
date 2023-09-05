@@ -260,7 +260,7 @@
             </div>
           </div>
           <div class="kbcustmwidthforbox4-recent text-center" [class.text-center]="recentsales.length==0">
-            <img *ngIf="recentsales.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" alt="">
+            <img *ngIf="recentsales.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" width="370" alt="">
             <button color="primary" *ngIf="recentsales.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
 
             <div class="row mb-3" *ngFor="let recent of recentsales">

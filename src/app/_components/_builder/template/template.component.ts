@@ -34,8 +34,10 @@ export class TemplateComponent implements OnInit {
   { title: 'Webinar', name : 'webinar'},
   {title: 'Optin',name : 'optin'},
   {title: 'Other',name : 'other',},
-  ]
+  ];
+  spinner=true;
   templatenameFormControl = new FormControl('', [Validators.required,Validators.minLength(3),]);
+  firsttime = true;
   
   constructor(private _file: FileUploadService,private websiteService: WebsiteService, public _image: ImageService, private dialog: MatDialog, public _general: GeneralService,) { }
 
@@ -54,14 +56,19 @@ export class TemplateComponent implements OnInit {
     })
   }
   fetchsystemTemplates(value:string) {
-    let obj={category  : value};
-    this._file.fetchdefaulttemplates(obj).subscribe((resp:any)=>{
-      this.category=value;
-      if(resp.data?.length > 0)  this.systemplates = resp.data; 
-      else{
-        this.systemplates = resp.data;
-      }
-    })
+    if(this.category!=value || this.firsttime){
+      this.spinner = true;
+      let obj={category  : value};
+      this._file.fetchdefaulttemplates(obj).subscribe((resp:any)=>{
+        this.category=value;
+        if(resp.data?.length > 0)  this.systemplates = resp.data; 
+        else{
+          this.systemplates = resp.data;
+        }
+        this.spinner = false;
+      })
+      this.firsttime = false;
+    }
   }
   openDialog(templateRef: TemplateRef<any>, template: any) {
     this.templatename=template.name;

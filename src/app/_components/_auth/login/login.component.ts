@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   roles: string[] = [];
   bgImg:string = '';
   fadeImg:boolean = false;
-  bgIntervalTime:number = 10000; 
+  bgIntervalTime:number = 5000; 
 
   constructor(
     private authService: AuthService, 
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
   }
 
   generateImgLink(num:number) {
-    return 'url(./assets/images/login/'+num+'.png)';
+    return 'url(./assets/images/login/'+num+'.jpg)';
   }
 
   fetchLoginImg(){
