@@ -4,6 +4,19 @@
 </ng-template>
 <!-- templates -->
 
+<!-- simple duplicate -->
+<ng-template #simpleduplicatedialog>
+  <h1 mat-dialog-title class="kb-danger">Duplicate Page</h1>
+  <div mat-dialog-content>
+      Would you like to duplicate <span class="text-danger">{{datakbpage.page_name}}</span> page?<br>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="shortsettings(datakbpage,'duplicate')">Yes</button>
+  </div>
+</ng-template>
+<!-- simple duplicate -->
+
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title >{{actionname}} Page</h1>
   <div mat-dialog-content>
@@ -503,13 +516,14 @@
                       <!-- <button mat-menu-item>
                         <i class="fas fa-chart-pie mr-2"></i> View Analytics
                       </button> -->
-                      <button mat-menu-item (click)="shortsettings(kbpage,'duplicate')">
+                      
+                      <button mat-menu-item (click)="openDialog(simpleduplicatedialog, kbpage, 'simpleduplicate');">
                         <i class="far fa-copy mr-2"></i> Duplicate
                       </button>
-                      <button mat-menu-item (click)="openDialog(duplicatedialog, kbpage, 'move');" *ngIf="websites.length != 1">
+                      <button mat-menu-item (click)="openDialog(duplicatedialog, kbpage, 'move');" *ngIf="websites.length > 1">
                         <i class="fa fa-paste mr-2"></i> Move
                       </button>
-                      <button mat-menu-item (click)="openDialog(duplicatedialog, kbpage, 'copymove')" *ngIf="websites.length != 1">
+                      <button mat-menu-item (click)="openDialog(duplicatedialog, kbpage, 'copymove')" *ngIf="websites.length > 1">
                         <i class="fa fa-paste mr-2"></i> Copy & Move
                       </button>
                       <button mat-menu-item (click)="shortsettings(kbpage,'copyurl')">
