@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter,TemplateRef, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
 import { ImageService } from 'src/app/_services/image.service';
+import {MatDialog,} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-navbar',
@@ -18,6 +19,7 @@ export class NavbarComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     public userService: UserService,
     public _image: ImageService,
+    public dialog: MatDialog
     ) {  }
 
   DialogParentToggle:boolean = false;
@@ -109,6 +111,10 @@ export class NavbarComponent implements OnInit {
 
     openDialog() {
       this.DialogParentToggle = !this.DialogParentToggle;
+  }
+
+  mainDialog(templateRef: TemplateRef<any>): void {
+    this.dialog.open(templateRef);
   }
 
   // drag drop box

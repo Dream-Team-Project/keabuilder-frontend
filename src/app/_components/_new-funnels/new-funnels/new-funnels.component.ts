@@ -727,6 +727,7 @@ export class NewFunnelsComponent implements OnInit {
       ];
       if (this.searchStringInArray(nwsubdomain, notusesub) == 1) {
         this.searching = true;
+        this.dialog.closeAll();
         this.funnelService.savefunneldb(this.form).subscribe({
           next: (data) => {
             // console.log(data);
@@ -753,7 +754,7 @@ export class NewFunnelsComponent implements OnInit {
                       next: (datanw) => {
                         // console.log("hello");
                         this.searching = false;
-                        this.dialog.closeAll();
+                        // this.dialog.closeAll();
                         this._general.openSnackBar(
                           false,
                           'Funnel Created Successfully!',
@@ -784,7 +785,7 @@ export class NewFunnelsComponent implements OnInit {
                   'top'
                 );
                 this.searching = false;
-                this.dialog.closeAll();
+                // this.dialog.closeAll();
               }
             }
           },

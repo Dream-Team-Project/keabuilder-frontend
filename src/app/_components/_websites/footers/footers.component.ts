@@ -139,8 +139,7 @@ export class WebsiteFootersComponent {
     footer.deleting = true;
     this.fetching = true;
     this._general._file.deletefooter(footer.id).subscribe((resp:any)=>{
-      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp=>{
-        console.log(resp);
+      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp1=>{
         if(resp.success) {
           this.action = 'deleted';
           this.fetch();
