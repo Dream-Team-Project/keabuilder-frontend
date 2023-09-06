@@ -149,6 +149,8 @@ export class WebsitesComponent implements OnInit {
     
            // console.log(data);
 
+           this.dialog.closeAll();
+
            if(data.exist ==1){
               this.searching = false;
               this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
@@ -170,14 +172,13 @@ export class WebsitesComponent implements OnInit {
               // console.log(data);
               this._snackBar.open('Website Created Successfully!', 'OK');
               this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
-              this.dialog.closeAll();
+              // this.dialog.closeAll();
 
               }
             });
           }else{
             this.searching = false;
             this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
-            this.dialog.closeAll();
           }
 
            }
@@ -208,12 +209,15 @@ export class WebsitesComponent implements OnInit {
         title: this.websitetitle,
         uniqueid: this.selecteduid,
       }
+      this.searching = true;
+      
+      this.dialog.closeAll();
       this.websiteService.updatesitedetails(obj).subscribe({
         next: data => {  
           // console.log(data);
           this._snackBar.open("Changes has been updated!", 'OK');
-          this.dialog.closeAll();
           this.fetwebfull();
+          this.searching = false;
         }
       });
 
@@ -310,6 +314,8 @@ export class WebsitesComponent implements OnInit {
 
           this.websiteService.duplicatewebsite(genobj).subscribe({
             next: data => {
+              this.dialog.closeAll();
+
               // console.log(data);
              if(data.exist ==1){
                 this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
@@ -330,7 +336,7 @@ export class WebsitesComponent implements OnInit {
                   next: data => {
                     // console.log(data);
                     this._snackBar.open("Website Successfylly Duplicate!", 'OK');
-                    this.dialog.closeAll();
+                    // this.dialog.closeAll();
                     this.fetwebfull();
                     this.searching = false;
                   }
@@ -338,7 +344,7 @@ export class WebsitesComponent implements OnInit {
               }else{
                 this.searching = false;
                 this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
-                this.dialog.closeAll();
+                // this.dialog.closeAll();
               }
 
 
@@ -388,6 +394,7 @@ export class WebsitesComponent implements OnInit {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
+    this.dialog.closeAll();
     this._snackBar.open('Successfully Copied!', 'OK');
   }
 }

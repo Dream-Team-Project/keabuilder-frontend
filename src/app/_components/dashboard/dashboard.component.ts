@@ -901,6 +901,7 @@ export class DashboardComponent implements OnInit {
     this.contact.date.from = new Date(d.setDate(d.getDate() - 30));
     this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
       if(resp.success) {
+        console.log(resp.data);
         this.contact.monthly = resp.data;
         this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
         this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
@@ -930,7 +931,7 @@ export class DashboardComponent implements OnInit {
     this.chartOptions11 = {
       series: [
         {
-          name: 'Earnings',
+          name: 'Earnings in $',
           data: resultData,
         },
       ],

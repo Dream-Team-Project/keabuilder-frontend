@@ -282,3 +282,7 @@ padding: 0px 15px;
     position: relative;
     top: -15px;
 }
+
+.mat-expansion-panel {
+    margin: 30px;
+}

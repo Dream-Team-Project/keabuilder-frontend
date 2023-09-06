@@ -162,7 +162,7 @@ spinner=false;
   pageEvent!: PageEvent;  
 
   togglestatus:any;
-
+  datakbpage:any;
 
   templateDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
@@ -289,8 +289,10 @@ spinner=false;
     this.spinner=true;
     const { pagename, pagepath } = this.form;
     this.hasError = false;
+    this.searching = true;
 
     if(this.userFormControl.status=='VALID' && this.website_id){
+      this.dialog.closeAll();
 
       var gendata = {name:pagename, path: pagepath, author: this.author, webid: this.website_id,page_json:this.template?.template ? this.template?.template : ''};
       this.webpagesService.validatepages(gendata).subscribe({
@@ -338,19 +340,20 @@ spinner=false;
             // create page/folder
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
-            this.dialog.closeAll();
-            this.spinner=false;
+            // this.dialog.closeAll();
+            this.searching = false;
           }
         }else{
             this.searching = false;
             this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+
             this.dialog.closeAll();
             this.spinner=false;
-        }
 
+            // this.dialog.closeAll();
         }
+      }
       });
-      
     }
     else{
       this._general.openSnackBar(true, 'Website is required', 'OK', 'center', 'top');
@@ -551,16 +554,19 @@ spinner=false;
   }
 
   savequickdetails(){
-    this.spinner=true;
-    var gentags = this.keywords?.toString();
-    if(this.pageurl != this.oldpagepath){
+    this.searching = true;
+    this.dialog.closeAll();
+    var gentags = this.keywords.toString();
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
 
         console.log(data);
         if(data.found==1){
-          this.pathcheck2 = true;
           
+          // this.pathcheck2 = true;
+          this.searching = false;
+          this._snackBar.open('Path Must Be Unique!', 'OK');
+
         }else if(data.found==0){
 
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
@@ -571,6 +577,10 @@ spinner=false;
             }
           });
           // this.popupsidebar = false;
+          
+          this.searching = false;
+          
+          this._snackBar.open('Page Details Updated Successfully!!', 'OK');
           this.showwebpages();
           this.dialog.closeAll();
           this.spinner=false;
@@ -579,7 +589,7 @@ spinner=false;
         this.spinner=false;
       }
     });
-  }
+  
 
   }
 
@@ -607,11 +617,12 @@ spinner=false;
     var dtobj = {pageid:page.id, type:type, webid: page.website_id};
     if(type=='duplicate'){
       // console.log(id);
+      this.searching = true;
       this.webpagesService.dupldelpage(dtobj).subscribe({
         next: data => {
           // console.log(data);
           if(data.success==1){
-            this._snackBar.open('Processing...', 'OK');
+            // this._snackBar.open('Processing...', 'OK');
 
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
             var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
@@ -629,10 +640,12 @@ spinner=false;
                 // console.log(data);
               }
             });
-
+            
+            this.searching = false;
             this.showwebpages();
 
           }else{
+            this.searching = false;
             this._general.openSnackBar(true,data?.message, 'OK','center','top');
           }
 
@@ -706,7 +719,8 @@ spinner=false;
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Successfully Copied!', 'OK');
+    this._snackBar.open('Url Successfully Copied!', 'OK');
+    this.dialog.closeAll();
   }
 
   togglepageview(){
@@ -796,6 +810,9 @@ spinner=false;
     
     // console.log(this.arpageobj);
     // console.log(gendata);
+    this.searching = true;
+    this.dialog.closeAll();
+
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
@@ -829,6 +846,7 @@ spinner=false;
 
               }
             });
+            this._snackBar.open('Page Archived Successfully!', 'OK');
           }
 
           if(data.deleteme==1){
@@ -844,10 +862,13 @@ spinner=false;
                 // console.log(data);
               }
             });
+            this._snackBar.open('Page Delete Successfully!', 'OK');
 
           }
           // this.hidepopupsidebar();
-          this.dialog.closeAll();
+          // this.dialog.closeAll();
+          this.searching = false;
+        
           this.showwebpages();
           // this.applykbfilter();
 
@@ -884,26 +905,32 @@ spinner=false;
   }
 
   openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
-    this.newwebsiteid = '';
-    this.getWebsites();
-    var acn;
-    switch(type){
-      case 'move':
-        acn = 'move';
-      break;
-      case 'copymove':
-        acn = 'copy & move';
-      break;
-      default:
-        acn = '';
+    if(type=='simpleduplicate'){
+      this.datakbpage = page;
+      this.dialog.open(templateRef);
+    }else{
+      this.newwebsiteid = '';
+      this.getWebsites();
+      var acn;
+      switch(type){
+        case 'move':
+          acn = 'move';
+        break;
+        case 'copymove':
+          acn = 'copy & move';
+        break;
+        default:
+          acn = '';
+      }
+      this.actionname = acn;
+      this.delpage = page;
+      this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+        this.form.pagename='';
+        this.form.pagepath='';
+        this.website_id='';
+      });
     }
-    this.actionname = acn;
-    this.delpage = page;
-    this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-      this.form.pagename='';
-      this.form.pagepath='';
-      this.website_id='';
-    });
+
   }
    // start all websites data actions
 

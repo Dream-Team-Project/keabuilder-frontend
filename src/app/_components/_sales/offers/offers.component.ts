@@ -94,6 +94,24 @@ export class OffersComponent implements OnInit {
     });
    }
 
+   updateoffer(){
+    if(this.offerObj.name) {
+      this.hasError.name = '';
+      console.log(this.offerObj);
+      this._offerservice.updateoffer(this.offerObj).subscribe((resp:any) => {
+        if(resp.success) {
+          this.fetchoffers();
+          this.dialog.closeAll();
+          this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
+        }
+        else this.hasError.name = resp?.message; 
+      })
+    }
+    else {
+      this.hasError.name = 'Please write the name of the offer';
+    }
+   }
+
    resetSearch() {
       this.search.value = '';
       this.searchoffers();

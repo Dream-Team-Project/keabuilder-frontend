@@ -245,7 +245,7 @@ canActivate: [AuthGuard] },
 
   // builder
 
-  // { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
+  { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
