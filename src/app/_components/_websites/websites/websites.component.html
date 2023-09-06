@@ -3,13 +3,14 @@
   <div mat-dialog-content>
       Would you like to delete <span class="text-danger">{{website.title}}</span> website?<br>
       All data with Pages will be deleted and can't be restored!
-  </div>
-  <div mat-dialog-actions class="justify-content-end">
+      <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Confirm Password</mat-label>
         <input type="text" name="confirmpass" matInput [(ngModel)]="confirmpass">
       </mat-form-field>
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close [color]="'primary'" (click)="resetobj()">No</button>
       <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="restoredeleteme(website)">Yes</button>
   </div>
 </ng-template>
@@ -17,6 +18,7 @@
 <ng-template #adddialog>
   <h1 mat-dialog-title >Build a website</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Website Title</mat-label>
         <input required matInput [(ngModel)]="websitetitle" name="websitetitle" [formControl]="webtitleFormControl"  placeholder="Ex. My Dream Website">
@@ -41,14 +43,15 @@
       </mat-form-field>
     </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-danger">No</button>
-      <button mat-button color="primary" cdkFocusInitial (click)="createnewweb()" [disabled]="webtitleFormControl.invalid || subdomainFormControl.invalid">Create</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+      <button mat-button mat-dialog-close color="primary" cdkFocusInitial (click)="createnewweb()" [disabled]="webtitleFormControl.invalid || subdomainFormControl.invalid">Create</button>
   </div>
 </ng-template>
 
 <ng-template #updatedialog>
   <h1 mat-dialog-title >Update a website</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Website Title</mat-label>
       <input required matInput [(ngModel)]="websitetitle" name="websitetitle" [formControl]="webtitleFormControl"  placeholder="Ex. My Dream Website">
@@ -59,14 +62,15 @@
 
     </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-danger">No</button>
-      <button mat-button color="primary" cdkFocusInitial [disabled]="webtitleFormControl.invalid" (click)="updatenewweb()"> Update</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+      <button mat-button mat-dialog-close color="primary" cdkFocusInitial [disabled]="webtitleFormControl.invalid" (click)="updatenewweb()"> Update</button>
   </div>
 </ng-template>
 
 <ng-template #duplicatedialog>
   <h1 mat-dialog-title >Duplicate '{{selectedwebsite}}' website</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Website Title</mat-label>
         <input required matInput [(ngModel)]="websitetitle" name="websitetitle" [formControl]="webtitleFormControl"  placeholder="Ex. My Dream Website">
@@ -91,8 +95,8 @@
       </mat-form-field>
     </div>
   <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-danger">No</button>
-      <button mat-button color="primary" cdkFocusInitial [disabled]="webtitleFormControl.invalid" (click)="duplicatewebsite()">Duplicate</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+      <button mat-button mat-dialog-close color="primary" cdkFocusInitial [disabled]="webtitleFormControl.invalid" (click)="duplicatewebsite()">Duplicate</button>
   </div>
 </ng-template>
 
@@ -114,7 +118,7 @@
     </button>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Close</button>
   </div>
 </ng-template>
 
@@ -123,6 +127,7 @@
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
 
         <div class="row">
+
               <mat-form-field  appearance="fill" class="col-md-6 pr-2">
                 <mat-label>Search Website</mat-label>
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Website">

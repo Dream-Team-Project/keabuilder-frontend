@@ -19,7 +19,7 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
     <button
       mat-button
       mat-dialog-close
@@ -35,8 +35,7 @@
 <ng-template #adddialog>
   <h1 mat-dialog-title>Add Funnel Step</h1>
   <div mat-dialog-content>
-    
-
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Step Name</mat-label>
       <input
@@ -69,14 +68,15 @@
     </mat-form-field> 
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
-    <button mat-button color="primary" (click)="addstep()" [disabled]="stepnameFormControl.invalid || !this.form.funneltype">Create</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="addstep()" [disabled]="stepnameFormControl.invalid || !this.form.funneltype">Create</button>
   </div>
 </ng-template>
 <!-- quick edit funnel step -->
 <ng-template #quickeditdialog>
   <h1 mat-dialog-title>Update Funnel Step</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Step Name</mat-label>
       <input
@@ -131,8 +131,8 @@
     </mat-form-field>  -->
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
-    <button mat-button color="primary" (click)="updatesteppath()" [disabled]="stepnameFormControl.invalid || steppathFormControl.invalid">Update</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="updatesteppath()" [disabled]="stepnameFormControl.invalid || steppathFormControl.invalid">Update</button>
   </div>
 </ng-template>
 <!-- Copy funnel url -->
@@ -154,7 +154,7 @@
     </button>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Close</button>
   </div>
 </ng-template>
 <!-- copy steps url -->
@@ -196,7 +196,7 @@
     </button>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Close</button>
   </div>
 </ng-template>
 <!-- Delete funnel & funnel steps -->
@@ -216,7 +216,7 @@
     <span class="kb-fnt">(It will help you remember why you archive it !)</span>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close color="primary">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="resetobj()">No</button>
     <button
       mat-button
       class="text-danger"
@@ -230,6 +230,7 @@
 <ng-template #colorbadgedialog>
   <h1 mat-dialog-title>Change Color Badge</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field appearance="fill" class="kb-full-width">
       <mat-label>Badge Color</mat-label>
       <mat-select name="badgecolor" [(ngModel)]="badgecolor">
@@ -244,8 +245,8 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
-    <button mat-button color="primary" (click)="savesteptheme()">Update</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="savesteptheme()" [disabled]="!badgecolor">Update</button>
   </div>
 </ng-template>
 <!-- Duplicate Funnels with stśeps-->

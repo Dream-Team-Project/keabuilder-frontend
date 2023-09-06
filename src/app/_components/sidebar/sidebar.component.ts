@@ -575,9 +575,9 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
       
-      this.allmenu[6][0] = true;
+      this.allmenu[7][0] = true;
 
-      this.allmenu[6].submenu.forEach((element: any) => {
+      this.allmenu[7].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }

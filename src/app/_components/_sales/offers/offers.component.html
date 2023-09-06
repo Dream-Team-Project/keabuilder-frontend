@@ -10,7 +10,7 @@
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="addoffer()" color="primary" [disabled]="!offerObj.name">Add</button>
+        <button mat-button mat-dialog-close (click)="addoffer()" color="primary" [disabled]="!offerObj.name">Add</button>
     </div>
   </ng-template>
   <!-- add new offer -->
@@ -26,7 +26,7 @@
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="updateoffer()" color="primary" [disabled]="!offerObj.name">Update</button>
+        <button mat-button mat-dialog-close (click)="updateoffer()" color="primary" [disabled]="!offerObj.name">Update</button>
     </div>
   </ng-template>
   <!-- update offer -->

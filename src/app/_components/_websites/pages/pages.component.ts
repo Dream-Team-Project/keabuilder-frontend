@@ -41,34 +41,14 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('deldialog') deldialog!: TemplateRef<any>;
   @ViewChild('quickeditdialog') quickeditdialog!: TemplateRef<any>;
   @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
+  @ViewChild('simpleduplicatedialog') simpleduplicatedialog!: TemplateRef<any>;
+  @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
 
-website_id:any;
-spinner=false;
-  constructor(private webpagesService: WebpagesService,
-              private _snackBar: MatSnackBar,
-              public dialog: MatDialog, 
-              private router: Router, 
-              private route: ActivatedRoute,
-              public _image: ImageService,
-              private tokenStorage: TokenStorageService,
-              public _general: GeneralService,
-              private websiteService: WebsiteService,
-              private userService: UserService,) {
-                this.toggleview = _general.getStorage('page_toggle');
-                this.dataSource = new MatTableDataSource(this.users);
-                this.route.paramMap.subscribe((params: ParamMap) => {
-                  this.website_id = params.get('website_id');
-                });
-               }
-
+readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  website_id:any;
+  spinner=false;
   delpage:any;
   hasError:boolean = false;
-  // displayedColumns: string[] = ['name', 'created_at','archive_reason', 'actions'];
-  // sidebar = {
-  //   open: false,
-  //   anim: {open: false, close: false, time: 500},
-  //   animtime: 300,
-  // }
   selection = new SelectionModel<WebpageData>(true, []);
   dataSource: MatTableDataSource<WebpageData>;
   users:any = [];
@@ -87,13 +67,10 @@ spinner=false;
   };
   userFormControl = new FormControl('',[Validators.required]);
   userFormControl2 = new FormControl('',[Validators.required]);
-
-  // websiteid:any = '';
   kbpages:any[] = [];
   popupsidebar = false;
   quickeditpopup = true;
   addnewpagepopup = false;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
   keywords:any[] = [];
   addOnBlur = true;
   pageurl = '';
@@ -163,6 +140,25 @@ spinner=false;
 
   togglestatus:any;
   datakbpage:any;
+  error=false;
+  errormessage:any='';
+
+  constructor(private webpagesService: WebpagesService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog, 
+    private router: Router, 
+    private route: ActivatedRoute,
+    public _image: ImageService,
+    private tokenStorage: TokenStorageService,
+    public _general: GeneralService,
+    private websiteService: WebsiteService,
+    private userService: UserService,) {
+      this.toggleview = _general.getStorage('page_toggle');
+      this.dataSource = new MatTableDataSource(this.users);
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        this.website_id = params.get('website_id');
+      });
+     }
 
   templateDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
@@ -179,16 +175,6 @@ spinner=false;
 
     this.pageSize = 20;
     var data = {pagesize:pageSize};
-    // this.webpagesService.shortbypaginator(data).subscribe({
-    //   next: data => {
-    //     // console.log(data);
-    //     // this.kbpages = [];
-    //     // this.shortdata(data);
-    //   },
-    //   error: err => {
-    //     console.log(err);
-    //   }
-    // });
   }
 
   ngOnInit(): void {
@@ -206,39 +192,9 @@ spinner=false;
       this.dataSource.sort = this.sort;
     }, 500);
 
-    // this.applykbfilter();
-
-    // this.websiteService.getWebsite().subscribe({
-    //   next: data => {
-    //     if(data?.data) {
-    //       if(data?.data[0]?.toggleview==1){
-    //         this.toggleview = true;
-    //       }else{
-    //         this.toggleview = false;
-    //       }
-    //     }
-    //   }
-    // });
-
-    // this.userService.getUsersDetails().subscribe({
-    //   next: data => {
-
-    //     // if(data.realdomain!=''){
-    //     //   this.mydomain = data.realdomain;
-    //     // }else{
-    //     //   this.mydomain = data.data[0].subdomain+'.'+data.domain;
-    //     // }
-    // this.author = data.data[0].firstname;
-        
-    //   }
-    // });
-
-    // console.log(this.toggleview);
-
   }
 
   getWebsites() {
-  
     if(this.website_id) this.websiteService.getWebsite().subscribe({
       next: webdata => {
         this.websites = [];
@@ -286,7 +242,7 @@ spinner=false;
   }
 
   onSubmit(): void {
-    this.spinner=true;
+    // this.spinner=true;
     const { pagename, pagepath } = this.form;
     this.hasError = false;
     this.searching = true;
@@ -301,7 +257,10 @@ spinner=false;
 
           if(data.found==1){
             this.pathcheck = true;
-            this.spinner=false;
+            // this.spinner=false;
+            this.error=true;
+            this.errormessage="Path already exist !"
+            this.dialog.open(this.adddialog);
           }
 
           if(data.found==0){
@@ -342,12 +301,14 @@ spinner=false;
             this._general.redirectToBuilder(data.uniqueid, 'website');
             // this.dialog.closeAll();
             this.searching = false;
+            this.resetobj();
           }
         }else{
             this.searching = false;
-            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
-
-            this.dialog.closeAll();
+            this.error=true;
+            this.errormessage="Usage limit exceeded, Please Upgrade your Plan !";
+            this.dialog.open(this.adddialog);
+            // this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
             this.spinner=false;
 
             // this.dialog.closeAll();
@@ -356,9 +317,11 @@ spinner=false;
       });
     }
     else{
-      this._general.openSnackBar(true, 'Website is required', 'OK', 'center', 'top');
+      // this._general.openSnackBar(true, 'Website is required', 'OK', 'center', 'top');
       this.hasError = true;
-      this.spinner=false;
+      this.error=true;
+      this.errormessage= 'Website is required';
+      this.dialog.open(this.adddialog);
     }
   }
 
@@ -477,7 +440,8 @@ spinner=false;
                 if(data.type=='name'){
 
                   this.showwebpages();
-                  this._snackBar.open('Name Changed Successfully!', 'OK');
+                  this._general.openSnackBar(false,'Name Changed Successfully!', 'OK','center','top');
+                  this.resetobj();
                 }else if(data.type=='status'){
 
                   this.draftpublish(title, dataobj.page_path);
@@ -501,7 +465,8 @@ spinner=false;
                     });
                   }
 
-                  this._snackBar.open('Status Changed Successfully!', 'OK');
+                  this._general.openSnackBar(false,'Status Changed Successfully!', 'OK','center','top');
+                  this.resetobj();
 
                 }
               }else if(type=='quickedit'){
@@ -539,7 +504,8 @@ spinner=false;
               }
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'OK');
+            this._general.openSnackBar(false,'Something Went Wrong!!', 'OK','center','top');
+            this.resetobj();
           }
 
         }
@@ -550,25 +516,27 @@ spinner=false;
     var getvl = status == '0' ? 'draft' : 'publish';
     var newobjdt = {status:getvl, path:page_path, website_id:this.website_id};
     this._general._file.toggleDraft(newobjdt).subscribe((data:any)=>{
+      this.resetobj();
     })
+  
   }
 
   savequickdetails(){
     this.searching = true;
-    this.dialog.closeAll();
     var gentags = this.keywords.toString();
+    if(this.pageurl && this.seotitle){
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
-
-        console.log(data);
+        // console.log(data);
         if(data.found==1){
           
           // this.pathcheck2 = true;
           this.searching = false;
-          this._snackBar.open('Path Must Be Unique!', 'OK');
-
+          // this._general.openSnackBar(false,'Path Must Be Unique!', 'OK','center','top');
+          this.error=true;
+          this.errormessage='Path Must Be Unique!';
+          this.dialog.open(this.quickeditdialog);
         }else if(data.found==0){
-
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.website_id, dir:getvl};
           this._general._file.renamepage(pathobj).subscribe({
@@ -580,17 +548,22 @@ spinner=false;
           
           this.searching = false;
           
-          this._snackBar.open('Page Details Updated Successfully!!', 'OK');
+          this._general.openSnackBar(false,'Page Details Updated Successfully!!', 'OK','center','top');
           this.showwebpages();
-          this.dialog.closeAll();
-          this.spinner=false;
+          this.resetobj();
 
         }
-        this.spinner=false;
+        else{
+          this.resetobj();
+        }
+        
       }
     });
-  
-
+  }else{
+    this.error=true;
+    this.errormessage="Please enter required information!";
+    this.dialog.open(this.quickeditdialog);
+  }
   }
 
   add(event: MatChipInputEvent): void {
@@ -622,7 +595,7 @@ spinner=false;
         next: data => {
           // console.log(data);
           if(data.success==1){
-            // this._snackBar.open('Processing...', 'OK');
+            // this._general.openSnackBar(false'Processing...', 'OK');
 
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
             var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
@@ -630,8 +603,9 @@ spinner=false;
          
             this._general._file.copypage(pathobj).subscribe({
               next: data => {
-                this._snackBar.open('Page Duplicate Successfully!', 'OK');
+                this._general.openSnackBar(false,'Page Duplicate Successfully!', 'OK','center','top');
                 this.showwebpages();
+                this.resetobj();
               }
             });
             var imgobj  = {oldname:'keaimage-page-'+page.uniqueid+'-screenshot.png', newname:'keaimage-page-'+data.uniqueid+'-screenshot.png'};
@@ -643,12 +617,14 @@ spinner=false;
             
             this.searching = false;
             this.showwebpages();
-
+            this.resetobj();
           }else{
             this.searching = false;
-            this._general.openSnackBar(true,data?.message, 'OK','center','top');
+            this.error=true;
+            this.errormessage=data?.message;
+            this.dialog.open(this.simpleduplicatedialog);
+            // this._general.openSnackBar(true,data?.message, 'OK','center','top');
           }
-
         }
       });
     }else if(type=='copyurl'){
@@ -674,7 +650,7 @@ spinner=false;
             this.pageurl = 'https://'+this.mydomain+'/'+data.data[0].page_path;
 
           }else{
-            this._snackBar.open('Something Went Wrong!!', 'OK');
+            this._general.openSnackBar(false,'Something Went Wrong!!', 'OK','center','top');
           }
 
         }
@@ -701,8 +677,9 @@ spinner=false;
             next: data => {
               // console.log(data);
 
-              this.actionname=='Move' ? this._snackBar.open('Page Move Successfully!', 'OK'): this._snackBar.open('Page Copy & Move Successfully!', 'OK');
+              this.actionname=='Move' ? this._general.openSnackBar(false,'Page Move Successfully!', 'OK','center','top'): this._general.openSnackBar(false,'Page Copy & Move Successfully!', 'OK','center','top');
               this.showwebpages();
+              this.resetobj();
             }
           });
 
@@ -710,7 +687,10 @@ spinner=false;
       });
 
     }else{
-      this._snackBar.open("Can't find the website!", 'OK');
+      // this._general.openSnackBar(false,"Can't find the website!", 'OK','center','top');
+      this.error=true;
+      this.errormessage="Can't find the website!";
+      this.dialog.open(this.duplicatedialog);
     }
 
   }
@@ -719,7 +699,7 @@ spinner=false;
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
-    this._snackBar.open('Url Successfully Copied!', 'OK');
+    this._general.openSnackBar(false,'Url Successfully Copied!', 'OK','center','top');
     this.dialog.closeAll();
   }
 
@@ -758,18 +738,6 @@ spinner=false;
     this.arpageobj = dataobj;
   }
 
-  // applykbfilter(){
-  //   var dt:any = {showing:this.showingcontacts, webid:this.website_id};
-  //   this.webpagesService.getarchivepages(dt).subscribe({
-  //     next: data => {
-  //       this.users = data.data;
-  //       this.dataSource = new MatTableDataSource(this.users);
-  //     },
-  //     error: err => {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
 
   searchpages(search: any, filter: any, visibility:any) {
     this.searching = true;
@@ -788,16 +756,6 @@ spinner=false;
   }
 
   
-  // changevisibility(value:any){
-  //   this.searching = true;
-  //   var dt = {order:value, id:this.website_id};
-  //   this.webpagesService.pagevisibility(dt).subscribe({
-  //     next: data => {
-  //       this.shortdata(data);
-  //     }
-  //   });
-  // }
-
   restoredeleteme(page:any,type:any){
  
     var gendata:any = {id:page.id,type:type,reason:''};
@@ -811,8 +769,6 @@ spinner=false;
     // console.log(this.arpageobj);
     // console.log(gendata);
     this.searching = true;
-    this.dialog.closeAll();
-
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
         // console.log(data);
@@ -842,11 +798,12 @@ spinner=false;
                   this._general._file.createdefaulthome(webobj).subscribe(e=>{
                     // console.log(e);
                   })
+                  this.resetobj();
                 }
 
               }
             });
-            this._snackBar.open('Page Archived Successfully!', 'OK');
+            this._general.openSnackBar(false,'Page Archived Successfully!', 'OK','center','top');
           }
 
           if(data.deleteme==1){
@@ -862,7 +819,7 @@ spinner=false;
                 // console.log(data);
               }
             });
-            this._snackBar.open('Page Delete Successfully!', 'OK');
+            this._general.openSnackBar(false,'Page Delete Successfully!', 'OK','center','top');
 
           }
           // this.hidepopupsidebar();
@@ -870,8 +827,14 @@ spinner=false;
           this.searching = false;
         
           this.showwebpages();
+          this.resetobj();
           // this.applykbfilter();
 
+        }
+        else{
+          this.error=true;
+          this.errormessage='Server Error';
+          this.dialog.open(this.deldialog);
         }
 
       },
@@ -925,12 +888,21 @@ spinner=false;
       this.actionname = acn;
       this.delpage = page;
       this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-        this.form.pagename='';
-        this.form.pagepath='';
-        this.website_id='';
+       
       });
     }
 
+  }
+  resetobj(){
+    this.form.pagename='';
+    this.form.pagepath='';
+    this.website_id='';
+    this.reason='';
+    this.searching=false;
+    this.spinner=false;
+    this.error=false;
+    this.errormessage='';
+    this.dialog.closeAll();
   }
    // start all websites data actions
 

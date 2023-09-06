@@ -14,11 +14,11 @@ export class DomainComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
+  // sidebar = {
+  //   open: false,
+  //   anim: {open: false, close: false, time: 500},
+  //   animtime: 300,
+  // }
 
   domainname = new FormControl('', [Validators.required]);
 
@@ -33,6 +33,8 @@ export class DomainComponent implements OnInit {
   createdatdomain:any = '';
   cldstatus = 'Pending';
   searching:boolean = false;
+  error=false;
+  errormessage:any='';
 
   constructor(private domainService: DomainService,
               private _snackBar: MatSnackBar,
@@ -82,6 +84,8 @@ export class DomainComponent implements OnInit {
                 next: data => {
                   // console.log(data);
                   this.searching = false;
+                  this.error=false;
+                  this.errormessage='';
                   this.domainconn = 0;
                   this._general.openSnackBar(false,'Domain has been Successfully added. Please check the given nameservers and update it!', 'OK','center','top');
                   if(data.success==true){
@@ -97,18 +101,28 @@ export class DomainComponent implements OnInit {
 
               }else{
                 this.searching = false;
+                this.error=true;
+                this.errormessage='Something went Wrong';
                 this.domainconn = 0;
-                this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
+                this.dialog.open(this.adddialog);
+                // this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
               }
-
           }
         });
       }
 
+    }else{
+      this.error=true;
+      this.errormessage='Please enter required details';
+      this.dialog.open(this.adddialog);
     }
 
   }
-
+resetobj(){
+  this.error=false;
+  this.errormessage='';
+  this.dialog.closeAll();
+}
   donestep1(){
     this.dialog.closeAll();
     setTimeout(() => {

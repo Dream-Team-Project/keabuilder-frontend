@@ -32,7 +32,7 @@ export class MembershipCoursesComponent implements OnInit {
   };
   offersToAdd:Array<string> = [];
   
-  course = {
+  course:any = {
     id: '',
     uniqueid: '',
     user_id: '',

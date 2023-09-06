@@ -19,7 +19,7 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
     <button
       mat-button
       mat-dialog-close
@@ -35,6 +35,7 @@
 <ng-template #adddialog>
   <h1 mat-dialog-title>Create Funnel Step</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Name</mat-label>
       <input
@@ -119,8 +120,8 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
-    <button mat-button color="primary" (click)="onSubmit()" [disabled]="userFormControl.invalid || stepnameFormControl.invalid || subdomainFormControl.invalid">Create</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="onSubmit()" [disabled]="userFormControl.invalid || stepnameFormControl.invalid || subdomainFormControl.invalid">Create</button>
   </div>
 </ng-template>
 <!-- Copy funnel url -->
@@ -142,7 +143,7 @@
     </button>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Close</button>
   </div>
 </ng-template>
 <!-- copy steps url -->
@@ -184,13 +185,14 @@
     </button>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Close</button>
   </div>
 </ng-template>
 <!-- Delete funnel & funnel steps -->
 <ng-template #deletedialog>
   <h1 mat-dialog-title class="text-danger">Archive</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Archive Reason (Optional)</mat-label>
       <textarea
@@ -204,8 +206,9 @@
     <span class="kb-fnt">(It will help you remember why you archive it !)</span>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close color="primary">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="resetobj()">No</button>
     <button
+    mat-dialog-close
       mat-button
       class="text-danger"
       (click)="shwobtnfirst ? makearchive() : makearchivestep()"
@@ -219,6 +222,7 @@
 <ng-template #colorbadgedialog>
   <h1 mat-dialog-title>Change Color Badge</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field appearance="fill" class="kb-full-width">
       <mat-label>Badge Color</mat-label>
       <mat-select name="badgecolor" [(ngModel)]="badgecolor">
@@ -233,14 +237,15 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
-    <button mat-button color="primary" (click)="savesteptheme()">Update</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+    <button mat-button mat-dialog-close color="primary" (click)="savesteptheme()" [disabled]="!badgecolor">Update</button>
   </div>
 </ng-template>
 <!-- Duplicate Funnels with steps-->
 <ng-template #funnelduplicatedialog>
   <h1 mat-dialog-title>Duplicate {{ dupfunnelname }} Funnel</h1>
   <div mat-dialog-content>
+    <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Name</mat-label>
       <input
@@ -285,7 +290,7 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
     <button
       mat-button
       mat-dialog-close

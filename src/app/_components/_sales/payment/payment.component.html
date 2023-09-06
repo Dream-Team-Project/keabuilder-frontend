@@ -56,7 +56,7 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button  cdkFocusInitial [color]="'primary'" (click)="stripecontentactive==true ? connectstripe() : connectpaypal()">Yes</button>
+        <button mat-button  mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="stripecontentactive==true ? connectstripe() : connectpaypal()">Yes</button>
     </div>
     </ng-template>
     <div class="container-fluid">

@@ -13,6 +13,9 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
   styleUrls: ['./settings.component.css']
 })
 export class CrmSettingsComponent implements OnInit {
+   
+  @ViewChild('dialog1') dialog1!: TemplateRef<any>;
+  @ViewChild('dialog2') dialog2!: TemplateRef<any>;
   
   email = new FormControl('', [Validators.required,Validators.email]);
   smtp = new FormControl('', [Validators.required]);
@@ -39,6 +42,9 @@ export class CrmSettingsComponent implements OnInit {
   filteredcountry:any=[];
   alladdress:any=[];
   defaultadd:any={name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
+  error=false;
+  errormessage:any='';
+
   constructor(private _settingService: SettingService,
               public dialog: MatDialog, 
               public _addressService: AddressService,
@@ -97,28 +103,30 @@ export class CrmSettingsComponent implements OnInit {
           next: data => {
             if(data.success==true){
               this.fetchsmtp();
-              this.dialog.closeAll();
-              this.emailfrom='';
-              this.smtp_type='';
-              this.api_key='';
-              this.api_id='';
+             this.resetobj();
               var msg =  'Settings has been saved';
               this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top');
             }
             else{
-              var msg =  'Server Error';
-              this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top');
+              this.error=true;
+              this.errormessage = 'Server Error';
+              this.dialog.open(this.dialog1);
+              // this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top');
             }
           }
         });
       }
       else{
-        var msg =  'Delete previous SMTP data from database!';
-        this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+        this.error=true;
+        this.errormessage =  'Delete previous SMTP data from database!';
+        this.dialog.open(this.dialog1);
+        // this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
       }else{
-        var msg =  'Please Fill All Details!';
-              this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+        this.error=true;
+        this.errormessage = 'Please Fill All Details!';
+        this.dialog.open(this.dialog1);
+              // this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
       }
 
     
@@ -130,6 +138,7 @@ export class CrmSettingsComponent implements OnInit {
       next: data => {
         if(data.success==true){
           this.fetchsmtp();
+          this.resetobj();
           var msg =  'Settings has been remove';
           this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
         }
@@ -144,21 +153,30 @@ export class CrmSettingsComponent implements OnInit {
   openDialog(templateRef: TemplateRef<any>,value:any,action:any): void {
    if(action=='edit' || action=='delete' || action=='default')  this.genaddress=value;
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
-      this.genaddress.id='';
-      this.genaddress.name='';
-      this.genaddress.company_name='';
-      this.genaddress.country='';
-      this.genaddress.address_1='';
-      this.genaddress.address_2='';
-      this.genaddress.city='';
-      this.genaddress.state='';
-      this.genaddress.zip='';
-      this.email.reset();
-      this.smtp.reset();
-      this.apiid.reset();
-      this.apikey.reset();
-      this.fetchaddress();
+     
     });
+  }
+  resetobj(){
+    this.error=false;
+    this.errormessage='';
+    this.emailfrom='';
+    this.smtp_type='';
+    this.api_key='';
+    this.api_id='';
+    this.genaddress.id='';
+    this.genaddress.name='';
+    this.genaddress.company_name='';
+    this.genaddress.country='';
+    this.genaddress.address_1='';
+    this.genaddress.address_2='';
+    this.genaddress.city='';
+    this.genaddress.state='';
+    this.genaddress.zip='';
+    this.email.reset();
+    this.smtp.reset();
+    this.apiid.reset();
+    this.apikey.reset();
+    this.fetchaddress();
   }
 
   removespecialchar(data:any){
@@ -235,24 +253,28 @@ export class CrmSettingsComponent implements OnInit {
               // console.log(data);
               if(data.success==1){
                 this.fetchdata();
-                this.dialog.closeAll();
+               this.resetobj();
                 var msg =  'Address save successfully!';
                this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
               }else{
-                var msg =  'Server Error!';
-               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+                this.error=true;
+                this.errormessage =  'Server Error!';
+                this.dialog.open(this.dialog2);
+              //  this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
               }
           }
         });
       }else{
-            var msg =  'Incorrect Address Details!';
-               this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+               this.error=true;
+                this.errormessage = 'Incorrect Address Details!';
+                this.dialog.open(this.dialog2);
              
       }
       
     }else{
-      var msg =  'All fields are required!';
-      this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+              this.error=true;
+                this.errormessage = 'All fields are required!';
+                this.dialog.open(this.dialog2);       
     }
 
   }
@@ -291,16 +313,18 @@ export class CrmSettingsComponent implements OnInit {
 
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
-   
+   this.resetobj();
   }
   deleteaddress(address:any){
     this._addressService.deleteaddress(address.uniqueid).subscribe((data:any)=>{
       if(data.success=true){
         this.fetchaddress();
+        this.resetobj();
         this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top'); 
       }
       else{
         this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
+        this.resetobj();
       }
 
     })
@@ -310,6 +334,7 @@ export class CrmSettingsComponent implements OnInit {
     if(data.success=true){
       this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top'); 
       this.fetchdata();
+      this.resetobj();
     }
     else{
       this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
