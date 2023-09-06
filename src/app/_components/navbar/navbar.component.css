@@ -343,6 +343,10 @@ div#topbar_notifications_logs {
   color: var(--primary-color) !important;
 }
 
+#defaultpri{
+  color: var(--primary-color);
+}
+
 /* user notification */
 
 
