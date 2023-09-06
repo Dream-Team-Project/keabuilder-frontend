@@ -1,0 +1,29 @@
+<div id="kb-crmreport">
+    <div class="container-fluid">
+          <div class="row ">
+              <div class="col-md-6 mt-4">
+                  <apx-chart
+                      [series]="chartOptions.series"
+                      [chart]="chartOptions.chart"
+                      [dataLabels]="chartOptions.dataLabels"
+                      [plotOptions]="chartOptions.plotOptions"
+                      [yaxis]="chartOptions.yaxis"
+                      [legend]="chartOptions.legend"
+                      [fill]="chartOptions.fill"
+                      [stroke]="chartOptions.stroke"
+                      [tooltip]="chartOptions.tooltip"
+                      [xaxis]="chartOptions.xaxis"
+                  ></apx-chart>
+              </div>
+              <div class="col-md-6 mt-4">
+                  <apx-chart
+                      [series]="chartOptions2.series"
+                      [chart]="chartOptions2.chart"
+                      [plotOptions]="chartOptions2.plotOptions"
+                      [xaxis]="chartOptions2.xaxis"
+                  ></apx-chart>
+              </div>
+          </div>
+      </div>
+      
+  </div>

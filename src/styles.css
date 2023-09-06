@@ -788,6 +788,17 @@ input[type=number] {
   border-radius: 50%;
   animation: shadow .5s linear infinite;
 }
+.kb-spinner{
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--kb-dim-black);
+  justify-content: center;
+  align-items: center;
+}
 
 @keyframes shadow {
   50% {

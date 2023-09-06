@@ -182,8 +182,10 @@ export class MembershipLessonComponent implements OnInit {
 
   // post methods
 
-    toggleStatus(lesson:any) {
-      lesson.publish_status = lesson.publish_status ? 1: 0;
+    toggleStatus(lesson:any,action:any) {
+      if(action == 'publish')lesson.publish_status =1; 
+      else if(action == 'draft')lesson.publish_status =0;
+      // lesson.publish_status = lesson.publish_status ? 1: 0;
       this._lesson.update(lesson).subscribe((res:any)=>{
         this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
       });

@@ -1,5 +1,130 @@
-<div id="kb-membershippayments">
+<ng-template #deldialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Member</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{addmemberobj.email}}</span> member?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="deletemember()">Yes</button>
+  </div>
+</ng-template>
+<ng-template #adddialog>
+  <h1 mat-dialog-title>Add Member</h1>
+  <div mat-dialog-content>
 
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" placeholder="first name" [(ngModel)]="addmemberobj.firstname" [formControl]="firstFormControl">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" placeholder="last name" [(ngModel)]="addmemberobj.lastname">
+    </mat-form-field>
+
+    <mat-error *ngIf="hasError">{{hasError}}</mat-error>
+    <mat-form-field appearance="fill" [class.mat-form-field-invalid]="hasError" >
+      <mat-label>Email</mat-label>
+      <input matInput type="text" placeholder="email" [(ngModel)]="addmemberobj.email" required>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Username</mat-label>
+      <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="addmemberobj.username" (input)="removespecialchar(addmemberobj)" >
+      <mat-error *ngIf="userFormControl.hasError('required')">
+        Username is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="userFormControl.hasError('minlength')">
+        Username must be at least <strong>3</strong> characters
+      </mat-error>
+      <mat-error *ngIf="userFormControl.hasError('maxlength')">
+        Username must be at most <strong>20</strong> characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="addmemberobj.password">
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+        <i class="far " [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+      </button>
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+        Password must be at least <strong>6</strong> characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-error *ngIf="error">{{'Please Assign a course'}}</mat-error>
+    <mat-form-field appearance="fill" (click)="filtercourseData($event)" [class.mat-form-field-invalid]="hasError">
+      <mat-label>Subscribe to Courses</mat-label>
+      <mat-chip-list #courseChipList aria-label="Course selection">
+          <mat-chip
+              *ngFor="let data of selectedcourses, index as i"
+              (removed)="removeSelectedcourse(i)">
+              {{data.title}}
+              <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+              </button>
+          </mat-chip>
+      </mat-chip-list>
+      <input matInput type="text"
+          #searchcourseInp
+          placeholder="Select multiples..."
+          (input)="filtercourseData($event)"
+          [matAutocomplete]="courseAuto"
+          [matChipInputFor]="courseChipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          class="kb-act-searchinp pt-1">
+      <mat-autocomplete autoActiveFirstOption #courseAuto="matAutocomplete" (optionSelected)="addSelectedcourse($event, searchcourseInp)">
+          <mat-option *ngFor="let option of filteredOptions.courses" [value]="option" [disabled]="filteredTempIds.courses.includes(option.uniqueid)">
+            {{option.title}}
+          </mat-option>
+      </mat-autocomplete>
+  </mat-form-field>
+   
+  <mat-form-field appearance="fill"  (click)="filterTagData($event)">
+    <mat-label>Add Tags</mat-label>
+    <mat-chip-list #tagChipList aria-label="Tag selection">
+        <mat-chip
+            *ngFor="let data of selectedTags, index as i"
+            (removed)="removeSelectedTag(i)">
+            {{data.name}}
+            <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip>
+    </mat-chip-list>
+    <input matInput type="text"
+        #searchTagInp
+        [formControl]="tagCtrl"
+        placeholder="Select multiples..."
+        (input)="filterTagData($event)"
+        [matAutocomplete]="tagAuto"
+        [matChipInputFor]="tagChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addtag($event)"
+        class="kb-act-searchinp pt-1">
+    <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" (optionSelected)="addSelectedTag($event, searchTagInp)">
+        <mat-option *ngFor="let option of filteredOptions.tags" [value]="option" [disabled]="filteredTempIds.tags.includes(option.uniqueid)">
+          {{option.name}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
+
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+      <button mat-button mat-dialog-close  cdkFocusInitial color="primary" (click)="createmember()" [disabled]="firstFormControl.invalid || userFormControl.invalid || passwordFormControl.invalid">Add</button>
+  </div>
+</ng-template>
+
+
+
+  <div class="container-fluid mb-4">
+  <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+<!-- 
   <div id="kb-offer-actions" *ngIf="popupsidebar && automationaddnewaction">
     <div class="offcanvas offcanvas-right p-4 offcanvas-on loadEffectFromLeftsidebar">
         
@@ -68,81 +193,82 @@
 
     </div>
   </div>
-  <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div>
+  <div class="offcanvas-overlay " *ngIf="popupsidebar" (click)="hidepopupsidebar()"></div> -->
 
-  <div class="container-fluid mb-4">
+  
     <div class="row">
-      <div class="col-md-6">
-        <h3 class="d-inline-block mr-2">All Members</h3>
-        <button (click)="addnewcontact()" mat-raised-button color="primary" matTooltip="Add New Contact" matTooltipPosition="above" class="mr-2">Add Contact <i class="fa fa-plus" aria-hidden="true"></i></button>
+      <mat-form-field appearance="fill" class="col-md-5 pl-2">
+        <mat-label>Search Members</mat-label>
+        <input matInput #searchInp (input)="searchmembers(searchInp, sortInp, tagInp)" type="text" placeholder="Search Members">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="col-md-2 pl-2">
+      <mat-label>Sort By</mat-label>
+      <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchmembers(searchInp, sortInp, tagInp)">
+          <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
+          <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
+          <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
+          <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+          <mat-option [value]="'email ASC'">ASC By Email</mat-option>
+          <mat-option [value]="'email DESC'">DESC By Email</mat-option>
+          <mat-option [value]="'firstname ASC'">ASC By Name</mat-option>
+          <mat-option [value]="'firstname DESC'">DESC By Name</mat-option>
+      </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="col-md-2 pl-2">
+    <mat-label>Filter By Tag</mat-label>
+    <mat-select #tagInp name="tagfilter" value='' (valueChange)="searchmembers(searchInp, sortInp, tagInp)">
+        <mat-option value="" selected>All</mat-option>
+        <mat-option *ngFor="let tag of tags" [value]="tag.uniqueid">
+            {{tag.name | titlecase}}
+          </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-          <button [routerLink]="['/membership/tags']" mat-raised-button matTooltip="Manage Tags" matTooltipPosition="above" class="mr-2">Manage Tags <i class="fa fa-tags" aria-hidden="true"></i></button>
+      <div class="col-md-3 text-right align-items-center pl-0">
+        <!-- <button  mat-raised-button matTooltip="Manage Tags" matTooltipPosition="above" class="mr-2" color="accent">Manage Tags <i class="fa fa-tags" aria-hidden="true"></i></button> -->
+        <button (click)="openDialog(adddialog, 'new')" mat-raised-button color="primary" matTooltip="Add New Contact" matTooltipPosition="above" class="mr-2" >Add Member <i class="fa fa-plus" aria-hidden="true"></i></button>
+
+         
       </div>
-      <div class="col-md-6 text-right">
-        <fieldset class="form-group position-relative has-icon-left kea-barfieldset mr-2">
-            <input type="text" class="form-control" id="offer-search" #input (keyup)="applyFilter($event)"  placeholder="Search members...">
-            <div class="form-control-position">
-                <i class="fab fa-searchengin"></i>                        
-            </div>
-        </fieldset>
-      </div>
-    </div>
+   
+  
   </div>
   
-  <div class="container-fluid mt-4">
+  
     <div class="row">
         <div class="col-md-12">
-          
-          <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource" matSort>
-          
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-              </ng-container>
-          
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="emailmarketing">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Marketing </th>
-                <td mat-cell *matCellDef="let row"> {{row.emailmarketing}} </td>
-              </ng-container>
-          
-              <ng-container matColumnDef="addeddate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Added Date </th>
-                <td mat-cell *matCellDef="let row"> {{row.addeddate}} </td>
-              </ng-container>
-          
-              <ng-container matColumnDef="lastactivity">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last activity </th>
-                <td mat-cell *matCellDef="let row"> {{row.lastactivity}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="options">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Option </th>
-                <td mat-cell *matCellDef="let row">
-                    <button mat-raised-button class="mr-2">View <i class="far fa-eye" aria-hidden="true"></i></button>
-                    <button mat-raised-button (click)="openDialog(row.id)" >Delete <i class="far fa-trash-alt" aria-hidden="true"></i></button>
-                </td>
-              </ng-container>
-          
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
-          
-              <!-- Row shown when there is no matching data. -->
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-              </tr>
+            <table class="table kb-table" >
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let member of users; index as i">
+                  <td (click)="editlink.click()" class="kb-td-link">
+                      <span class="kb-table-icon mr-1">{{contactIcon(member) | uppercase}}</span>
+                      {{(member.firstname ? member.firstname : '--') + ' ' + (member.lastname ? member.lastname : '') | titlecase}}
+                  </td>
+                  <td (click)="editlink.click()" class="kb-td-link"><span class="text-lowercase">{{ member.email | lowercase }}</span></td>
+                 
+                  <td>{{ member.created_at | date:'medium' }}</td>
+                  <td>
+                    <span class="d-flex">
+                      <i #editlink mat-ripple matTooltip="Edit" matTooltipPosition="above"  class="fa fa-pencil px-4 kb-table-action-icon"></i>
+                      <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, member)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
+                    </span>
+                  </td>                        
+                </tr>
+                
+              </tbody>
             </table>
-          
-            <mat-paginator [pageSizeOptions]="[10, 20, 45, 100]" aria-label="Select page of users"></mat-paginator>
-          </div>
-        </div>
     </div>
+  </div>
   </div>
 
 
-</div>
+

@@ -128,6 +128,9 @@
       <button mat-button class="kb-danger" mat-dialog-close >Cancel</button>
       <button mat-button  color="primary" (click)="savequickdetails()">Update</button>
   </div>
+  <div class="kb-spinner" *ngIf="spinner">
+    <mat-spinner></mat-spinner>
+  </div>
 </ng-template>
 
 <ng-template #deldialog>
@@ -181,214 +184,10 @@
 
 <div id="pagesinsidepage">
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
-  <!-- <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" [class.fulltemplate]="selecttemplate">
-
-      <i class="fas fa-times" (click)="hidepopupsidebar()"></i>
-
-      <div *ngIf="quickeditpopup">
-        <h6><strong>Quick Edit</strong></h6>
-        <hr>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Url</mat-label>
-          <input matInput [(ngModel)]="pageurl" name="pageurl" (blur)="pathuniqueremove()"
-            (input)="pageurl = _general.joinWthDash(pageurl)">
-          <small class="text-danger" *ngIf="pathcheck2">
-            Path must be <strong>unique</strong>
-          </small>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Title</mat-label>
-          <input matInput [(ngModel)]="seotitle" name="seotitle">
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Description</mat-label>
-          <textarea [(ngModel)]="seodescr" matInput name="seodescr">{{seodescr}}</textarea>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Add Keywords</mat-label>
-          <mat-chip-list #chipList>
-            <mat-chip *ngFor="let keyword of keywords" (removed)="remove(keyword)">
-              {{keyword}}
-              <button matChipRemove>
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input placeholder="New Keywords..." [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="add($event)">
-          </mat-chip-list>
-        </mat-form-field>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Author</mat-label>
-          <input matInput name="seoauthor" [(ngModel)]="seoauthor">
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="savequickdetails()">
-          <i class="fas fa-save"></i> Save Details
-        </button>
-      </div>
-
-      <div *ngIf="addnewpagepopup">
-
-        <h6><strong>Create A Page</strong></h6>
-        <hr>
-
-        <div *ngIf="insidepagefirst">
-
-          <button mat-raised-button color="accent" class="btn-block mb-2" (click)="createfromscratch()"><i
-              class="fas fa-plus"></i> Create From Scratch</button>
-        </div>
-
-        <div *ngIf="insidepagesecond">
-
-          <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-2">
-
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Name</mat-label>
-              <input type="text" matInput [(ngModel)]="form.pagename" (blur)="changemyname($event)" name="pagename"
-                [formControl]="userFormControl" placeholder="Ex. Home" required minlength="3">
-              <mat-error *ngIf="userFormControl.hasError('required')">
-                Page Name is <strong>required</strong>
-              </mat-error>
-              <mat-error *ngIf="userFormControl.hasError('minlength')">
-                Page Name must be at least <strong>3</strong> characters
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="kb-full-width" appearance="fill">
-              <mat-label>Page Path</mat-label>
-              <input type="text" matInput (input)="form.pagepath = _general.joinWthDash(form.pagepath)"
-                [(ngModel)]="form.pagepath" name="pagepath" [formControl]="userFormControl2" placeholder="Ex. home"
-                required minlength="3" (blur)="pathuniqueremove()">
-              <mat-error *ngIf="userFormControl2.hasError('required')">
-                Path Name is <strong>required</strong>
-              </mat-error>
-              <small class="text-danger" *ngIf="pathcheck">
-                Path must be <strong>unique</strong>
-              </small>
-              <mat-error *ngIf="userFormControl2.hasError('minlength')">
-                Page Name must be at least <strong>3</strong> characters
-              </mat-error>
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" type="submit" class="mt-2"> Create Page <i class="fas fa-plus"></i></button>
-
-          </form>
-
-        </div>
-
-        <img src="/assets/images/website/website1.png" class="img-fluid" alt="">
-
-      </div>
-
-      <div *ngIf="showmytemplates">
-
-        <div class="container-fluid">
-
-          <div class="row">
-            <div class="col-md-2">
-              <button mat-raised-button color="accent" (click)="createfromscratch()">
-                <i class="fas fa-plus"></i> Create From Scratch
-              </button>
-            </div>
-            <div class="col-md-6">
-              <fieldset class="form-group position-relative has-icon-left kea-barfieldset">
-                <input type="text" class="form-control" id="template-search" placeholder="Search Page Templates">
-                <div class="form-control-position">
-                  <i class="fab fa-searchengin"></i>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-
-          <div class="row mb-5">
-            <div class="col-md-4 cardpage mt-2 " *ngFor="let pagetemplate of pagetemplates; index as i;">
-              <div>
-                <img [src]="pagetemplate.thumbnail" alt="" class="img-fluid img-fit">
-
-                <div class="keabuilder-title line-ellipsis">
-                  <span>{{pagetemplate.title}}</span>
-                </div>
-
-                <button mat-raised-button color="accent" class="mr-2"> Preview <i class="far fa-eye"></i></button>
-                <button mat-raised-button color="primary" (click)="usetemplate(pagetemplate.id)">Use This Template <i
-                    class="fas fa-check"></i></button>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <mat-paginator [length]="100"
-                  [pageSize]="10"
-                  [pageSizeOptions]="[5, 10, 25, 100]"
-                  aria-label="Select page">
-                </mat-paginator>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div *ngIf="showpageurl">
-        <h6><strong>Copy Page Builder URL</strong></h6>
-        <hr>
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Step Url</mat-label>
-          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput>{{pagebuilderurl}}</textarea>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput)">
-          <i class="far fa-copy"></i> Copy Url
-        </button>
-
-        <hr>
-
-        <h6><strong>Copy Page URL</strong></h6>
-        <hr>
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Page Url</mat-label>
-          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2>{{pageurl}}</textarea>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)">
-          <i class="far fa-copy"></i> Copy Url
-        </button>
-      </div>
-
-      <div *ngIf="confirmarchivepage">
-        <h6><strong>Archive</strong></h6>
-        <hr>
-
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Archive Reason</mat-label>
-          <textarea matInput [(ngModel)]="reason" rows="8" name="reasons"></textarea>
-          <small>Optional</small>
-        </mat-form-field>
-
-        <p>It will help you remember why you archive it!</p>
-
-        <button mat-raised-button color="primary" type="submit" (click)="restoredeleteme('','archived')">
-          <i class="fas fa-archive"></i> Archive Webpage
-        </button>
-      </div>
-
-    </div>
-  </div> -->
-  <!-- <div class="offcanvas-overlay " *ngIf="sidebar.open" (click)="hidepopupsidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div> -->
- 
   <div class="container-fluid">
+    
     <div class="row align-items-center mobkeaadjust">
       <!-- <div class="col-md-8 adjustmatfrm"> -->
-
-       
           <mat-form-field  appearance="fill" class="col-md-3">
             <mat-label>{{searchpagetxt}}</mat-label>
             <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility)" placeholder="Search Pages">
@@ -468,7 +267,16 @@
             <div [class.row]="toggleview">
               <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
                 <div class="kb-fitimg"
-                  [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail1.jpg' + ')'}">
+                [ngStyle]="{
+                  'background-image':
+                    'url(' +
+                    _image.uploadImgPath +
+                    _general.getSSPath('page-' + kbpage.uniqueid) +
+                    '), url(' +
+                    _image.uploadImgPath +
+                    'webpage_thumbnail1.jpg' +
+                    ')'
+                }">
                   <!-- [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+kbpage.thumbnail + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}"> -->
                   <div class="kb-loader" *ngIf="shortwaiting">
                     <div class="kb-loader-shadow"></div>
@@ -546,7 +354,7 @@
             </div>
           </div>
         </div>
-        
+       
       </ng-template>
       <!-- pages to show -->
    
@@ -563,5 +371,10 @@
         </mat-paginator> -->
       </div>
     </div>
+
+    <div class="kb-spinner" *ngIf="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+
   </div>
 </div>

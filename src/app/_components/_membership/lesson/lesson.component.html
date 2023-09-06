@@ -148,21 +148,36 @@
     </div> 
 </ng-template>
 <div *ngIf="lesson.title" class="container-fluid px-md-5 py-3">
-    <div id="kbl-topbar" class="row align-items-center mb-4">
-        <div class="kbl-thumbnail col-md-2">
-            <img *ngIf="lesson.thumbnail else default" [src]="_image.getImgPath(lesson.thumbnail)" class="img-fluid rounded">
-            <ng-template #default><img [src]="_image.getImgPath('webpage_thumbnail.jpg')" class="img-fluid rounded"></ng-template>
+    <div id="kbl-topbar" class="row  mb-4">
+        <div class="kb-lesson-thumbnail col-md-3">
+            <img *ngIf="lesson.thumbnail else default" [src]="_image.uploadImgPath+lesson.thumbnail" class="img-fluid rounded">
+            <ng-template #default><img [src]="_image.getImgPath('webpage_thumbnail.jpg')" class="img-fluid rounded "></ng-template>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5 d-flex">
             <h3>
                 {{lesson.title}}
-                <i matTooltip="Lesson Setting" matTooltipPosition="above" (click)="openDialog(lesson, 'details')" class="kb-edit-pencil fa fa-pencil-alt ml-2 p-2"></i>
-                <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="toggleStatus(lesson)"></mat-slide-toggle>
             </h3>
+                <span class="kbc-qs-status px-3 py-1 toggle">
+                    <button mat-button [matMenuTriggerFor]="menu1"
+                        [class]="course.publish_status==1 ? 'active' : 'inactive'">
+                        <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i>
+                        {{course.publish_status==1 ? 'Published' : 'Draft'}}<i
+                            class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                    </button>
+                    <mat-menu #menu1="matMenu">
+                        <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
+                                class="fa fa-check pr-2"></i>Publish</button>
+                        <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
+                                class="fa fa-file pr-2"></i>Draft</button>
+                    </mat-menu>
+                </span>
+                <!-- <mat-slide-toggle color="success" [matTooltip]="lesson.publish_status ? 'Published' : 'Draft'" matTooltipPosition="above" [(ngModel)]="lesson.publish_status" (ngModelChange)="toggleStatus(lesson)"></mat-slide-toggle> -->
+            
         </div>
         <div class="col-md-4 text-right">
-            <button mat-raised-button color="accent" class="mr-3">Preview <i class="far fa-eye"></i></button>
-            <button mat-raised-button color="primary">Customize <i class="far fa-edit"></i></button>
+            <button mat-raised-button color="accent" (click)="_general.prevRoute()"  class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+            <button mat-raised-button color="primary" class="mr-3">Preview <i class="far fa-eye"></i></button>
+            <button mat-raised-button color="accent" (click)="openDialog(lesson, 'details')">Customize <i class="far fa-edit"></i></button>
         </div>
     </div>
     <mat-tab-group [selectedIndex]="selTab">

@@ -64,6 +64,8 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
+import { NewMembershipComponent } from './_components/_membership/new-membership/new-membership.component';
+
 
 @NgModule({
   declarations: [
@@ -76,6 +78,7 @@ import {environment} from '../environments/environment';
     FilterPipe,
     SortingPipe,
     SvgPipe,
+    NewMembershipComponent,
   ],
   imports: [
     AppRoutingModule,

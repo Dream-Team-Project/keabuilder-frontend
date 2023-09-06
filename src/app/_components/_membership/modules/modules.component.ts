@@ -13,6 +13,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { TagService } from 'src/app/_services/_crm/tag.service';
 
 @Component({
   selector: 'app-membrship-module',
@@ -36,6 +37,7 @@ export class MembershipModulesComponent implements OnInit {
   dragBoxAnime:any = {open: false, close: false};
 
   course:any = {id:0}
+  fetching:any;
   post:any;
   postLoading = true;
   modules:any = []
@@ -58,8 +60,10 @@ export class MembershipModulesComponent implements OnInit {
   offers = new FormControl();
   offersList: string[] = ['Small Options Big Profits', 'Weekly Option Income Academy'];
   offersToAdd:Array<string> = [];
-
+  delobj:any;
   showcourseoffers:any = [];
+  users:any=[];
+  tags:any=[];
 
   constructor(
     private router: Router,
@@ -73,6 +77,8 @@ export class MembershipModulesComponent implements OnInit {
     private _viewContainerRef: ViewContainerRef,
     public _image: ImageService,
     public _general: GeneralService,
+    private _tagService: TagService,
+    // private courseService:CourseService,
     public dialog: MatDialog) {
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
@@ -96,6 +102,7 @@ export class MembershipModulesComponent implements OnInit {
           
         }
     })
+    this.fetchcoursemembers();
   }
 
   ngAfterViewInit() {
@@ -113,17 +120,39 @@ export class MembershipModulesComponent implements OnInit {
     this._overlayRef.dispose();
   }
 
-  // ng events
+  fetchcoursemembers(){
 
-  // openDialog(templateRef: TemplateRef<any>, course:any ): void {
-  //   this.delcourse = course;
-  //   this.dialog.open(templateRef);
-  // }
-
+  this._course.getcoursemembers({course_id:this.course.uniqueid}).subscribe((data:any)=>{
+    // console.log(data)
+  this.users=data.data;
+})
+  }
+  searchmembers(search: any, sortInp:any, tagInp:any) {
+   
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      sortInp: sortInp.value,
+      tagInp: tagInp.value,
+      course_id:this.course.uniqueid,
+    }
+    this._course.searchmembers(obj).subscribe((data:any)=>{
+      this.users=data.data;
+      this.fetching=false;
+    })
+  }
   redirectToLesson(tab:number, module:any, lesson:any) {
     var lespath = './module/'+module.uniqueid+'/lesson/'+lesson.uniqueid;
     this.router.navigate([lespath+'/'+tab], {relativeTo: this.route});
   }
+  
+  fetchTags() {
+    this._tagService.fetchtags().subscribe(
+      (data) => {
+        this.tags = data.data;
+  });
+}
+
 
   //  data fetching
 
@@ -218,7 +247,7 @@ export class MembershipModulesComponent implements OnInit {
     else if(action == 'draft')course.publish_status =0;
     // course.publish_status = course.publish_status ? 1: 0;
     this._course.update(course).subscribe((res:any)=>{
-      this._snackbar.open('Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK');
+      this._general.openSnackBar(false,'Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
     });
   }
 
@@ -231,7 +260,7 @@ export class MembershipModulesComponent implements OnInit {
     course.offers = this.offersToAdd.join(',');
     this._course.update(course).subscribe((res:any)=>{
       if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
-      this._snackbar.open('Course has been updated', 'OK');
+      this._general.openSnackBar(false,'Course has been updated', 'OK', 'center', 'top');
       this.fetchCourse();
     })
   }
@@ -270,20 +299,20 @@ export class MembershipModulesComponent implements OnInit {
           else this.updateModuleAfterMethod();
         }
         else if(action == 'publish' || action == 'draft') {
-          this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
+          this._general.openSnackBar(false,'Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
         }
         else if(action == 'title') {
-          this._snackbar.open('Module title has been updated', 'OK');
+          this._general.openSnackBar(false,'Module title has been updated', 'OK', 'center', 'top');
         }
         else if(action == 'publish' || action == 'draft') {
-          this._snackbar.open('Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK');
+          this._general.openSnackBar(false,'Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
         }
       })
     }
 
     updateModuleAfterMethod() {
       this.overlayRefDetach();          
-      this._snackbar.open('Module details has been updated', 'OK');
+      this._general.openSnackBar(false,'Module details has been updated', 'OK', 'center', 'top');
     }
 
     addModule() {
@@ -325,7 +354,7 @@ export class MembershipModulesComponent implements OnInit {
         module.lessons = [];
         this.appendModule(module, this.index.module);
         this.overlayRefDetach();
-        this._snackbar.open('New module has been added','OK');
+        this._general.openSnackBar(false,'New module has been added', 'OK', 'center', 'top');
       }
       else {
         var request = 0;
@@ -340,7 +369,7 @@ export class MembershipModulesComponent implements OnInit {
             if(request == lessons.length - 1) {
               this.appendModule(module, this.index.module);
               this.overlayRefDetach();
-              this._snackbar.open('Module has been duplicated','OK');
+              this._general.openSnackBar(false,'Module has been duplicated', 'OK', 'center', 'top');
             }
             request++;
           });
@@ -349,7 +378,7 @@ export class MembershipModulesComponent implements OnInit {
         if(lessons.length == 0) {
           this.appendModule(module, this.index.module);
           this.overlayRefDetach();
-          this._snackbar.open('Module has been duplicated','OK');  
+          this._general.openSnackBar(false,'Module has been duplicated', 'OK', 'center', 'top');
         }
       }
     }
@@ -371,7 +400,7 @@ export class MembershipModulesComponent implements OnInit {
             this.modules.splice(mi, 1);
             this.sortModules();
             this.overlayRefDetach();
-            this._snackbar.open('Module has been deleted','OK');            
+            this._general.openSnackBar(false,'Module has been deleted', 'OK', 'center', 'top');         
           }
         }
       });
@@ -423,17 +452,17 @@ export class MembershipModulesComponent implements OnInit {
         else this.updateLessonAfterMethod();
       }
       else if(action == 'publish' || action == 'draft') {
-        this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
+        this._general.openSnackBar(false,'Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
       }
       else if(action == 'title') {
-        this._snackbar.open('Lesson title has been updated', 'OK');
+        this._general.openSnackBar(false,'Lesson title has been updated', 'OK', 'center', 'top');
       }
     })
   }
 
   updateLessonAfterMethod() {
     this.overlayRefDetach();          
-    this._snackbar.open('Lesson details has been updated', 'OK');
+    this._general.openSnackBar(false,'Lesson details has been updated', 'OK', 'center', 'top');
   }
 
   addLesson() {
@@ -474,7 +503,7 @@ export class MembershipModulesComponent implements OnInit {
   addLessonAfterMedhod(lesson:any, msg:string) {
     this.appendLesson(lesson, this.index.lesson);
     this.overlayRefDetach();
-    this._snackbar.open(msg,'OK');
+    this._general.openSnackBar(false,msg, 'OK', 'center', 'top');
   }
 
   duplicateLesson(lesson: any) {
@@ -490,14 +519,14 @@ export class MembershipModulesComponent implements OnInit {
           module.lessons.splice(li, 1);
           this.sortLessons();
           this.overlayRefDetach();
-          this._snackbar.open('Lesson has been deleted','OK');
+          this._general.openSnackBar(false,'Lesson has been deleted', 'OK', 'center', 'top');
         }
         else if(this.delReq == len-1) {
           this.modules.splice(mi, 1);
           this.sortModules();
           this.delReq = 0;
           this.overlayRefDetach();
-          this._snackbar.open('Module has been deleted','OK');
+          this._general.openSnackBar(false,'Module has been deleted', 'OK', 'center', 'top');
         }
         else this.delReq++;
       }
@@ -533,6 +562,7 @@ export class MembershipModulesComponent implements OnInit {
   }
 
   openDialog(post:any, type:string,templateRef: TemplateRef<any>,) {
+    if(type=='delet') this.delobj=post;
     this.post = JSON.parse(JSON.stringify(post));
     if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
     this.post.type = type;
@@ -628,5 +658,19 @@ export class MembershipModulesComponent implements OnInit {
     this.postLoading = false;
   }
 
+  contactIcon(contact:any){
+    var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
+    var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
+    if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
+    return str.toUpperCase();
+  }
+  deletemember(){
+    var data = {id:this.delobj.id,name:'',type:'delete'};
+        this._course.updatedelmember(data).subscribe({
+          next: data => {
+            this._general.openSnackBar(false,'Member Deleted Successfully!', 'Close','center','top');
+          }
+          })
+  }
  
 }

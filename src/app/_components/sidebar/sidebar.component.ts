@@ -125,70 +125,85 @@ export class SidebarComponent implements OnInit {
         // }
       ]
     },
-    // {
-    //   0:true,
-    //   routerlink: '/membership',
-    //   img: 'shield.gif',
-    //   icon: 'fas fa-shield-alt',
-    //   title: 'Membership',
-    //   submenu:[{
-    //     0:true,
-    //     routerlink: '/nolink',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-file-alt',
-    //     title: 'Landing Page'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/nolink',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-file-alt',
-    //     title: 'Library Page'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/offers',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-percentage',
-    //     title: 'Offers'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/coupons',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-percent',
-    //     title: 'Coupons'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/payments',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-dollar-sign',
-    //     title: 'Payments'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/members',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-users',
-    //     title: 'Members'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/tags',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-tags',
-    //     title: 'Tags'
-    //   },
-    //   {
-    //     0:true,
-    //     routerlink: '/membership/marketplace',
-    //     img: 'shield.gif',
-    //     icon: 'fa fa-shopping-cart',
-    //     title: 'Marketplace'
-    //   }
-    //   ]
-    // },
+    {
+      0:true,
+      routerlink: '/membership',
+      img: 'shield.gif',
+      icon: 'fas fa-shield-alt',
+      title: 'Membership',
+      submenu:[
+        {
+          0:true,
+          routerlink: '/membership/reports',
+          img: 'shield.gif',
+          icon: 'fa fa-chart-bar',
+          title: 'Reports'
+        },
+        {
+          0:true,
+          routerlink: '/membership/memberships',
+          img: 'shield.gif',
+          icon: 'fa-regular fa-folder',
+          title: 'Courses'
+        },
+      //   {
+      //   0:true,
+      //   routerlink: '/nolink',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-file-alt',
+      //   title: 'Landing Page'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/nolink',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-file-alt',
+      //   title: 'Library Page'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/membership/offers',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-percentage',
+      //   title: 'Offers'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/membership/coupons',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-percent',
+      //   title: 'Coupons'
+      // },
+      // {
+      //   0:true,
+      //   routerlink: '/membership/payments',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-dollar-sign',
+      //   title: 'Payments'
+      // },
+      {
+        0:true,
+        routerlink: '/membership/members',
+        img: 'shield.gif',
+        icon: 'fa fa-users',
+        title: 'Members'
+      },
+      // {
+      //   0:true,
+      //   routerlink: '/membership/tags',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-tags',
+      //   title: 'Tags'
+      // },
+      {
+        0:true,
+        routerlink: '/membership/marketplace',
+        img: 'shield.gif',
+        icon: 'fa fa-shopping-cart',
+        title: 'Marketplace'
+      }
+      ]
+    },
     // {
     //   0:true,
     //   routerlink: '/payment',
@@ -496,21 +511,7 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
     }
-    // else if(myhref=='/membership'){
-
-    //   this.extramenus = false;
-      
-    //   this.allmenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
-      
-    //   this.allmenu[3][0] = true;
-
-    //   this.allmenu[3].submenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
-    // }
-    else if(myhref=='/crm'){
+    else if(myhref=='/membership'){
 
       this.extramenus = false;
       
@@ -524,7 +525,7 @@ export class SidebarComponent implements OnInit {
         element[0] = false;
       });
     }
-    else if(myhref=='/sales'){
+    else if(myhref=='/crm'){
 
       this.extramenus = false;
       
@@ -535,6 +536,20 @@ export class SidebarComponent implements OnInit {
       this.allmenu[4][0] = true;
 
       this.allmenu[4].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
+    else if(myhref=='/sales'){
+
+      this.extramenus = false;
+      
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
+      
+      this.allmenu[5][0] = true;
+
+      this.allmenu[5].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }
@@ -574,7 +589,7 @@ export class SidebarComponent implements OnInit {
     } 
 
     // if(myhref=='/affiliates'){
-    if(myhref=='/membership' || myhref=='/affiliates'){
+    if( myhref=='/affiliates'){
       this.backme = false;
     }
 

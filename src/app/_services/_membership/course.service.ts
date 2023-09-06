@@ -20,7 +20,8 @@ export class CourseService {
   searchcoursequeryApi = './api/searchcoursequery';
   // API url
   uuid: any;
-
+//  course:any={courseid:'',title:''};
+ 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
@@ -81,19 +82,31 @@ export class CourseService {
 
   // member
   addnewmember(data:any):Observable<any> {
+    data.user_id=this.uuid;
     return this.http.post("./api/membership_addnewmember", {data});
   }
 
   getallmembers():Observable<any> {
-    return this.http.get("./api/membership_allmembers");
+    return this.http.get("./api/membership_allmembers/"+this.uuid);
   }
 
   updatedelmember(data:any):Observable<any> {
+    data.user_id=this.uuid;
     return this.http.post("./api/membership_updatedelmember", {data});
   }
 
   validatecourseemail(data:any):Observable<any> {
+    data.user_id=this.uuid;
     return this.http.post("./api/membership_validatecourseemail", {data});
+  }
+  searchmembers(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("./api/membership_searchmembers", data);
+  }
+  
+  getcoursemembers(obj:any):Observable<any> {
+    obj.user_id=this.uuid;
+    return this.http.post("./api/membership_allcoursemembers",obj);
   }
 
   // member

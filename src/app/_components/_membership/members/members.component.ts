@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource,MatTable} from '@angular/material/table';
@@ -7,21 +7,13 @@ import { FormControl,Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { CourseService } from 'src/app/_services/_membership/course.service';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { TagService } from 'src/app/_services/_crm/tag.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 
-export interface UserData {
-  name: string;
-  email: string;
-  emailmarketing:string;
-  addeddate: string;
-  lastactivity: string;
-  options: string;
-}
 
-export interface DialogData {
-  name: string;
-}
 
-const ELEMENT_DATA: UserData[] = [];
 
 @Component({
   selector: 'app-membership-members',
@@ -30,11 +22,12 @@ const ELEMENT_DATA: UserData[] = [];
 })
 export class MembershipMembersComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'email', 'emailmarketing', 'addeddate', 'lastactivity', 'options'];
-  // dataSource: MatTableDataSource<UserData>;
-  dataSource = new MatTableDataSource<UserData>(ELEMENT_DATA);
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
 
-  selection = new SelectionModel<UserData>(true, []);
+  fetching:boolean = true;
+  hide = true;
   currencytype = '';
   kbduration = '';
   popupsidebar = false;
@@ -42,162 +35,266 @@ export class MembershipMembersComponent implements OnInit {
   productoptionals = new FormControl();
   productoptionalList: string[] = [];
   tagoptionals = new FormControl();
-  tagoptionalList: string[] = [];
-  addmemberobj = {firstname:'',lastname:'',email:'',marketing:false,tags:''};
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
+  // tagoptionalList: string[] = [];
+  addmemberobj = {firstname:'',lastname:'',email:'',username:'',password:'', marketing:false,tags:'',courseid:''};
+  userFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
+  firstFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
+  passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   users:any = [];
-
-  
-  @ViewChild(MatPaginator) paginator!: MatPaginator; 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable,{static:true}) table!: MatTable<any>;
+  member:any={};
+  tagCtrl = new FormControl(['']);
+  tags:Array<any> = [];
+  filteredOptions:any = {
+    course:[],
+    tags: []
+  };
+  filteredTempIds:any = {
+    courses:[],
+    tags: []
+  };
+  hasError:string = '';
+  error=false;
+  contact:any = {};
+  selectedTags:any = [];
+  selectedcourses:any = [];
+  newtags: any = [];
+  courses:any=[];
 
 
   constructor( private _snackBar: MatSnackBar,
                 private courseService:CourseService,
-                public dialog: MatDialog) {
-
-    this.courseService.getalloffers().subscribe({
-      next: data => {
-
-        data.data.forEach((element: any) => {
-          this.productoptionalList.push(element.title);
-        });
-
-      }
-    });
-    
-    this.dataSource = new MatTableDataSource(this.users);
-
-    this.courseService.getalltags().subscribe({
-      next: data => {
-        // console.log(data);
-        data.data.forEach((element:any) => {
-          this.tagoptionalList.push(element.name);
-        }); 
-      }
-    });
+                public dialog: MatDialog,
+                private _tagService: TagService,
+                private _general: GeneralService,) {
 
     this.getallmymembers();
+    this.fetchTags();
+    this.fetchCourses();
 
   }
+  ngOnInit(): void {
+
+  }
+
+  fetchTags() {
+    this._tagService.fetchtags().subscribe(
+      (data) => {
+        this.tags = data.data;
+  });
+}
+
+fetchCourses() {
+  this.courseService.all().subscribe(
+    (data) => {
+      this.courses = data.data;
+      console.log(data)
+});
+}
 
   getallmymembers(){
     this.courseService.getallmembers().subscribe({
       next: data => {
         // console.log(data);
-        this.users = [];
-        this.dataSource.data = [];
-
-        data.data.forEach((element:any) => {
-          var mkname = element.firstname+' '+element.lastname;
-          var mrktng = element.marketing == 0 ? 'Unsubscribe': 'Subscribed';
-          var mycustomdate =  new Date(element.created_at);
-          var text1 = mycustomdate.toDateString();    
-          var text2 = mycustomdate.toLocaleTimeString();
-          element.created_at = text1;
-          var makenewobj = {id:element.id,name:mkname, email:element.email, emailmarketing:mrktng, addeddate:element.created_at, lastactivity:'---', options:''};
-          this.users.push(makenewobj);
-        }); 
-        this.dataSource.data = this.users;
-        this.table.renderRows();
-
+        this.users =  data.data;
+        this.fetching = false;
       }
+      
     });
   }
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }, 500);
+ 
+
+  contactIcon(contact:any){
+    var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
+    var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
+    if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
+    return str.toUpperCase();
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
-  addnewcontact(){
-    this.popupsidebar = true;
-    this.automationaddnewaction = true;
-  }
+  // addnewcontact(){
+  //   this.popupsidebar = true;
+  //   this.automationaddnewaction = true;
+  // }
   
-  hidepopupsidebar(){
-    this.popupsidebar = false;
-  }
-
-  createacontact(){
-    var settags = this.tagoptionals.value == null ? '' : this.tagoptionals.value;
-    if(settags!=''){
-      this.addmemberobj.tags = settags.toString();
+  createmember(){
+    // var settags = this.tagoptionals.value == null ? '' : this.tagoptionals.value;
+    if(this.selectedTags){
+      this.addmemberobj.tags = this.filteredTempIds.tags.toString();
     }
-
-    if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID'){
+    this.addmemberobj.courseid = this.filteredTempIds.courses.toString();
+    if(this.addmemberobj.email && this.isEmailValid(this.addmemberobj.email)) {
+      if(this.addmemberobj.courseid){
+      this.hasError = '';
+      this.error=false;
+      // delete this.addmemberobj.error;
 
       this.courseService.addnewmember(this.addmemberobj).subscribe({
         next: data => {
           // console.log(data);
 
           if(data.already==1){
-              this._snackBar.open('Email Already Exist!', 'Close');
+              this._general.openSnackBar(false,'Email Already Exist!', 'Close', 'center', 'top');
+              this.resetobj();
           }else{
               this.getallmymembers();
-              this._snackBar.open('Member Added Successfully!', 'Close');
+              this._general.openSnackBar(false,'Member Added Successfully!', 'Close', 'center', 'top');
+              this.resetobj();
           }
         
         }
       });
 
     }
-
+  else{
+    this.error=true;
+    this.dialog.open(this.adddialog);
   }
-
-  openDialog(id:any): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '250px',
-      data: {name: 'Member'},
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(id);
-
-      if(result.event == 'Delete'){
-        var data = {id:id,name:'',type:'delete'};
+}
+else{
+  let msg = this.addmemberobj.email ? 'Email is invalid' : 'Email should not be empty';
+  this.setError(msg);
+}
+  }
+  isEmailValid(value:any) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regex.test(value);
+  }
+  removespecialchar(data:any){
+    let un = data.username.replace(/[^a-zA-Z0-9]/g, "");
+    data.username = un.toLowerCase();
+  }
+  setError(msg:string) {
+    this.hasError = msg;
+    this.contact.error = true;
+    this.openDialog(this.adddialog, this.addmemberobj);
+  }
+  deletemember(){
+    var data = {id:this.member.id,name:'',type:'delete'};
         this.courseService.updatedelmember(data).subscribe({
           next: data => {
-            // console.log(data);
             this.getallmymembers();
-            this._snackBar.open('Member Deleted Successfully!', 'Close');
+            this._general.openSnackBar(false,'Member Deleted Successfully!', 'Close','center','top');
           }
-        });
+          })
+  }
+
+
+  // openDialog(id:any): void {
+  //   const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+  //     width: '250px',
+  //     data: {name: 'Member'},
+  //   });
+    
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log(id);
+
+  //     if(result.event == 'Delete'){
+  //       var data = {id:id,name:'',type:'delete'};
+  //       this.courseService.updatedelmember(data).subscribe({
+  //         next: data => {
+  //           // console.log(data);
+  //           this.getallmymembers();
+  //           this._general.openSnackBar(false,('Member Deleted Successfully!', 'Close');
+  //         }
+  //       });
+  //     }
+  //   });
+
+  // }
+  openDialog(templateRef: TemplateRef<any>, contact: any) {
+    if(!this.contact.error) {
+      delete contact.error;
+      this.hasError = '';
+      this.member = JSON.parse(JSON.stringify(contact));
+    }
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any) => {
+     
+    })
+  }
+  resetobj(){
+    this.addmemberobj = {firstname:'',lastname:'',email:'',username:'',password : '',marketing:false,tags:'',courseid:''};
+    this.member=[];
+    this.filteredOptions.tags=[];
+    this.filteredOptions.courses=[];
+    this.filteredTempIds.tags=[];
+    this.filteredTempIds.courses=[];
+    this.selectedTags=[];
+    this.selectedcourses=[];
+  }
+
+  searchmembers(search: any, sortInp:any, tagInp:any) {
+   
+    this.fetching = true;
+    var obj = {
+      search: search.value,
+      sortInp: sortInp.value,
+      tagInp: tagInp.value,
+    }
+    this.courseService.searchmembers(obj).subscribe((data:any)=>{
+      this.users=data.data;
+      this.fetching=false;
+    })
+  }
+
+   // start list actions
+
+   filtercourseData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.courses = this.courses.filter((option:any) => option?.title?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  addSelectedcourse(event:any, searchcourseInp:any): void {
+    this.selectedcourses.push(event.option.value);
+    this.filteredTempIds.courses.push(event.option.value.uniqueid);
+    searchcourseInp.value = '';
+    this.filtercourseData('');
+  }
+
+  removeSelectedcourse(index:number): void {
+    this.selectedcourses.splice(index, 1);
+    this.filteredTempIds.courses.splice(index, 1);
+  }
+
+  // end list actions
+    // start tag actions
+
+    filterTagData(event:any) {
+      var value = event ? event.target.value : '';
+      this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+    }
+  
+    addSelectedTag(event:any, searchTagInp:any): void {
+      this.selectedTags.push(event.option.value);
+      this.filteredTempIds.tags.push(event.option.value.uniqueid);
+      searchTagInp.value = '';
+      this.filterTagData('');
+    }
+  
+    removeSelectedTag(index:number): void {
+      this.selectedTags.splice(index, 1);
+      this.filteredTempIds.tags.splice(index, 1);
+    }
+    
+    addtag(event: MatChipInputEvent): void {
+      const value = (event.value || '').trim();
+      if (value) {
+        var obj: any = {
+          uniqueid: Math.random().toString(20).slice(2),
+          name: event.value,
+        };
+        this.selectedTags.push(obj);
+        this.filteredTempIds.tags.push(obj.uniqueid);
+        this.newtags.push(obj);
+        
       }
-    });
-
-  }
+      // Clear the input value
+      event.chipInput!.clear();
+      this.tagCtrl.setValue(null);
+    }
+  
+    // end tag actions
 
 
 }
 
-
-@Component({
-  selector: 'tags-dialog',
-  templateUrl: '../../../delete-dialog/delete-dialog.html',
-})
-export class DialogOverviewExampleDialog {
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-  ) {}
-
-  onNoClick(): void {
-    this.dialogRef.close({event:'nothanks'});
-  }
-  onClick(){
-    this.dialogRef.close({event:'Delete'});
-  }
-}

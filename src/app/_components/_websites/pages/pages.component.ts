@@ -43,6 +43,7 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
 website_id:any;
+spinner=false;
   constructor(private webpagesService: WebpagesService,
               private _snackBar: MatSnackBar,
               public dialog: MatDialog, 
@@ -237,6 +238,7 @@ website_id:any;
   }
 
   getWebsites() {
+  
     if(this.website_id) this.websiteService.getWebsite().subscribe({
       next: webdata => {
         this.websites = [];
@@ -244,7 +246,9 @@ website_id:any;
             var nwobj = {uniqueid:element.uniqueid,title:element.title};
             this.websites.push(nwobj);
           });
+          
         }
+        
     });
   }
   pathuniqueremove(){
@@ -282,6 +286,7 @@ website_id:any;
   }
 
   onSubmit(): void {
+    this.spinner=true;
     const { pagename, pagepath } = this.form;
     this.hasError = false;
 
@@ -294,6 +299,7 @@ website_id:any;
 
           if(data.found==1){
             this.pathcheck = true;
+            this.spinner=false;
           }
 
           if(data.found==0){
@@ -333,11 +339,13 @@ website_id:any;
             
             this._general.redirectToBuilder(data.uniqueid, 'website');
             this.dialog.closeAll();
+            this.spinner=false;
           }
         }else{
             this.searching = false;
             this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
             this.dialog.closeAll();
+            this.spinner=false;
         }
 
         }
@@ -347,6 +355,7 @@ website_id:any;
     else{
       this._general.openSnackBar(true, 'Website is required', 'OK', 'center', 'top');
       this.hasError = true;
+      this.spinner=false;
     }
   }
 
@@ -357,6 +366,7 @@ website_id:any;
 
   showwebpages(){
     this.searching = true;
+    this.spinner=true;
     if(this.website_id) {
       this.webpagesService.getWebpagesById(this.website_id).subscribe({
         next: data => {
@@ -388,6 +398,7 @@ website_id:any;
         // this.nodata = true;
         this.nodata = true;
         this.searching = false;
+        this.spinner=false;
       }else{
         this.nodata = false;
         var dt = {webid:this.website_id};
@@ -424,12 +435,14 @@ website_id:any;
                 }
               }
             }
+            this.spinner=false;
           }
         });    
       }
     }else{
       this.nodata = true;
       this.searching = false;
+      this.spinner=false;
     }
 
   
@@ -503,18 +516,18 @@ website_id:any;
                 this.showpageurl = false;
                 this.confirmarchivepage = false;
                 
-                this.pageurl = data.data[0].page_path;
-                this.seotitle = data.data[0].page_title;
-                this.seodescr = data.data[0].page_description == null ? '' : data.data[0].page_description;
-                this.seoauthor = data.data[0].page_author == null ? '' : data.data[0].page_author;
+                this.pageurl = data.data[0]?.page_path;
+                this.seotitle = data.data[0]?.page_title;
+                this.seodescr = data.data[0]?.page_description == null ? '' : data.data[0]?.page_description;
+                this.seoauthor = data.data[0]?.page_author == null ? '' : data.data[0]?.page_author;
 
-                var gettag = data.data[0].page_keywords;
+                var gettag = data.data[0]?.page_keywords;
                   if(gettag!='' && gettag!=null){
                     var crtag = gettag.split(',');
                     this.keywords = crtag; 
                   }
 
-                  this.quickeditid = data.data[0].id;
+                  this.quickeditid = data.data[0]?.id;
                 
                   // this.openSidebar();
 
@@ -538,14 +551,16 @@ website_id:any;
   }
 
   savequickdetails(){
-
-    var gentags = this.keywords.toString();
+    this.spinner=true;
+    var gentags = this.keywords?.toString();
+    if(this.pageurl != this.oldpagepath){
     this.webpagesService.savequickpagesdetails(this.pageurl, this.seotitle, this.seodescr, gentags, this.seoauthor, this.quickeditid).subscribe({
       next: data => {
 
-        // console.log(data);
+        console.log(data);
         if(data.found==1){
           this.pathcheck2 = true;
+          
         }else if(data.found==0){
 
           var getvl = this.togglestatus == '0' ? 'drafts' : 'pages';
@@ -557,11 +572,14 @@ website_id:any;
           });
           // this.popupsidebar = false;
           this.showwebpages();
+          this.dialog.closeAll();
+          this.spinner=false;
 
         }
-
+        this.spinner=false;
       }
     });
+  }
 
   }
 
