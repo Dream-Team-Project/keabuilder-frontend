@@ -380,7 +380,7 @@ div#topbar_notifications_logs {
   left: 0;
   top: 0;
   width: calc(100% - 50px);
-  max-width: 260px;
+  max-width: 240px;
   height: 100vh;
   color: rgb(44, 62, 80);
   -webkit-box-shadow: 0 0 25px 0 rgba(0, 0, 0, .08);
@@ -637,7 +637,7 @@ div#topbar_notifications_logs {
 .bw-sidebar__group {
   padding: 0;
   width: 100%;
-  min-width: 260px;
+  min-width: 240px;
   position: relative;
 }
 
@@ -778,7 +778,7 @@ div#topbar_notifications_logs {
 }
 
 .hoveropen {
-  width: 260px !important;
+  width: 240px !important;
 }
 
 /* Sidebar css */
