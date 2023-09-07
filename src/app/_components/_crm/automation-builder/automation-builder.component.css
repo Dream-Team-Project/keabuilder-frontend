@@ -380,4 +380,22 @@ span.kb-workflow-option-name {
 
 ::ng-deep i {
     display: inline-flex;
-}
+}  
+  .keabuilder-title-board input {
+    display: none;
+    background-color: #475F7B;
+    color: #FFFFFF;
+    border-radius: 0.267rem;
+    outline: none;
+    text-overflow: clip;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .keabuilder-title-board:hover span {
+    display: none;
+  }
+  
+  .keabuilder-title-board:hover input {
+    display: block;
+  }

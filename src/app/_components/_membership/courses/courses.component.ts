@@ -55,6 +55,8 @@ export class MembershipCoursesComponent implements OnInit {
   shortwaiting = true;
   btndis:boolean = false;
   delcourse:any;
+  error=false;
+  errormessage:any='';
 
   constructor(public _course: CourseService,
              public _image: ImageService, 
@@ -84,20 +86,26 @@ export class MembershipCoursesComponent implements OnInit {
   openDialog(templateRef: TemplateRef<any>, course:any ): void {
     this.delcourse = course;
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-      this.course.id= '';
-      this.course.uniqueid= '';
-      this.course.user_id= '';
-      this.course.title='';
-      this.course.path='';
-      this.course.description= '';
-      this.course.thumbnail= '';
-      this.course.offers= '';
-      this.course.publish_status= '';
-      this.thumbnail = {
-        path: '',
-        type: ''
-      }
+    
     });
+  }
+  resetobj(){
+    this.error=false;
+    this.errormessage='';
+    this.dialog.closeAll();
+    this.course.id= '';
+    this.course.uniqueid= '';
+    this.course.user_id= '';
+    this.course.title='';
+    this.course.path='';
+    this.course.description= '';
+    this.course.thumbnail= '';
+    this.course.offers= '';
+    this.course.publish_status= '';
+    this.thumbnail = {
+      path: '',
+      type: ''
+    }
   }
 
   allCourses() {
@@ -120,12 +128,18 @@ export class MembershipCoursesComponent implements OnInit {
       this._course.create(this.course).subscribe((res:any)=>{
         this._image.onImageFileUpload(this.thumbnail).then(resp=>{
           this.allCourses();
-          this.dialog.closeAll();
+          this.resetobj();
           this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
         })
       })
     }
-    else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
+    else if(!this.thumbnail.path) {
+      this.typeerror = 'Thumbnail is required';
+      this.error=true;
+      this.errormessage="Please enter required information"
+      this.dialog.open(this.adddialog);
+
+    }
   }
   duplicateCourse(course:any) {
     this.course.id=course.uniqueid;
@@ -140,9 +154,9 @@ export class MembershipCoursesComponent implements OnInit {
       this.btndis = true;
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
-      console.log(this.course)
+      // console.log(this.course)
       this._course.duplicate(this.course).subscribe((res:any)=>{
-        console.log(res)
+        // console.log(res)
         if(res.success==true){
         this._file.validateimg(oldimg).subscribe({
           next: datagen => {
@@ -152,11 +166,13 @@ export class MembershipCoursesComponent implements OnInit {
               this._file.copyimage(imgobj).subscribe({
                 next: data => {
                   this.allCourses();
+                  this.resetobj();
                   this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
                 }
               });
             }else{
               this.allCourses();
+              this.resetobj();
         this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
             }
 
@@ -180,11 +196,16 @@ export class MembershipCoursesComponent implements OnInit {
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
         this._image.timeStamp = (new Date()).getTime();
         this.allCourses();
-        this.dialog.closeAll();
+        this.resetobj();
         this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
       })
     }
-    else if(!this.thumbnail.path) this.typeerror = 'Thumbnail is required';
+    else if(!this.thumbnail.path) {
+      this.typeerror = 'Thumbnail is required';
+      this.error=true;
+      this.errormessage="Please enter required information"
+      this.dialog.open(this.adddialog);
+    }
   }
 
   findselectedproduct(){
@@ -206,10 +227,12 @@ export class MembershipCoursesComponent implements OnInit {
       if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
         this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
         this.allCourses();
+        this.resetobj();
       });
       else {
         this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
         this.allCourses();
+        this.resetobj();
       }
     }); 
   }

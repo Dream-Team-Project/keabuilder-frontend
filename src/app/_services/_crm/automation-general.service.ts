@@ -6,7 +6,7 @@ import { TokenStorageService } from '../token-storage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AutomationService {
+export class AutomationGeneralService {
 
   uuid:any = '';
 
@@ -19,6 +19,10 @@ export class AutomationService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/Allautomations', obj).pipe(catchError(this.errorHandler));
   }
+  fetchallcrmdata(): Observable<any> {
+    var obj = {uuid: this.uuid};
+    return this.http.post('/api/Allcrmdata', obj).pipe(catchError(this.errorHandler));
+  }
   singleautomation(uniqueid:any): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/singleautomation/'+uniqueid,obj).pipe(catchError(this.errorHandler));
@@ -30,6 +34,10 @@ export class AutomationService {
   updateautomation(obj:any): Observable<any>{
     obj.user_id = this.uuid;
     return this.http.put('/api/updateautomation',obj).pipe(catchError(this.errorHandler));
+  }
+  changeautomationname(obj:any): Observable<any>{
+    obj.user_id = this.uuid;
+    return this.http.put('/api/changename',obj).pipe(catchError(this.errorHandler));
   }
   deleteautomation(id:any): Observable<any>{
     // var obj = {uuid: this.uuid};
