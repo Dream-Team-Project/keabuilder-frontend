@@ -18,7 +18,7 @@
   right: 0;
   width: 0%;
   background: transparent;
-  background-image: linear-gradient(to right, transparent 0%, #fff 50%);
+  background-image: linear-gradient(to right, transparent 0%, #0f172a 50%);
   -moz-animation: showHide 0.3s ease-in;
   /* Firefox */
   -webkit-animation: showHide 0.3s ease-in;
@@ -302,7 +302,7 @@ div#topbar_notifications_logs {
   width: calc(100% - 50px);
   max-width: 260px;
   height: 100vh;
-  color: rgb(44, 62, 80);
+  color: rgb(255, 255, 255);
   -webkit-box-shadow: 0 0 25px 0 rgba(0, 0, 0, .08);
   box-shadow: 0 0 25px 0 rgba(0, 0, 0, .08);
   display: -webkit-box;
@@ -319,7 +319,7 @@ div#topbar_notifications_logs {
   -ms-flex-direction: column;
   flex-direction: column;
   z-index: 21000;
-  background: rgba(255, 255, 255, 1);
+  background: #0f172a;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
   -webkit-transform: translate(-110%);
@@ -404,9 +404,9 @@ div#topbar_notifications_logs {
   padding: 15px 16px 14px;
   text-align: left;
   background: transparent;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
-  opacity: .7;
+  opacity: 1;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
   display: -webkit-box;
@@ -419,7 +419,7 @@ div#topbar_notifications_logs {
   -ms-flex-pack: start;
   justify-content: flex-start;
   position: relative;
-  color: rgba(44, 62, 80, 1);
+  color: rgb(255, 255, 255);
   border: 0;
 }
 
@@ -459,9 +459,9 @@ div#topbar_notifications_logs {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 16px;
   z-index: 50;
-  background: rgba(255, 255, 255, 1);
+  /* background: rgba(255, 255, 255, 1); */
 }
 
 .bw-sidebar__item:after {
@@ -724,12 +724,12 @@ div#topbar_notifications_logs {
   color: var(--primary-color);
 }
 
-.bw-sidebar a:hover img, .bw-sidebar__group__header:hover .bw-sidebar__item__icon img{
+/* .bw-sidebar a:hover img, .bw-sidebar__group__header:hover .bw-sidebar__item__icon img{
   display: block!important;
-}
-.bw-sidebar a:hover i, .bw-sidebar__group__header:hover .bw-sidebar__item__icon i{
+} */
+/* .bw-sidebar a:hover i, .bw-sidebar__group__header:hover .bw-sidebar__item__icon i{
   display: none!important;
-}
+} */
 
 .bw-sidebar-content.hoveropen a .bw-sidebar__item__text{
   display: block;

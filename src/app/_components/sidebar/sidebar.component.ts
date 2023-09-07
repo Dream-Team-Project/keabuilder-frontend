@@ -568,16 +568,16 @@ export class SidebarComponent implements OnInit {
     //   });
     // }
     else if(myhref=='/account'){
-
       this.extramenus = false;
       
       this.allmenu.forEach((element: any) => {
         element[0] = false;
       });
       
-      this.allmenu[6][0] = true;
+      this.allmenu[7][0] = true;
 
-      this.allmenu[6].submenu.forEach((element: any) => {
+      console.log(this.allmenu);
+      this.allmenu[7].submenu.forEach((element: any) => {
         element[0] = false;
       });
     }

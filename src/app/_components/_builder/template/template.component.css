@@ -125,8 +125,6 @@
 .kb-template-card {
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
 }
-<<<<<<< HEAD
-=======
 .kb-spinner{
   position: absolute;
   display: flex;
@@ -139,4 +137,3 @@
   align-items: center;
   z-index: 99;
 }
->>>>>>> 347c714ec3c26b724d8a95d51b6ff065d19bfee2
