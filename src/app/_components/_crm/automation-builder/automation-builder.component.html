@@ -586,7 +586,7 @@
                     <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave"><i
                             class="fa-solid fa-toggle-off"></i>OFF</button>
                 </mat-menu>
-                <button mat-button (click)="saveautomation(true,'saved')">
+                <button mat-button (click)="saveautomation('saved')">
                     <i [innerHTML]="'save' | svg | safeHtml"></i>Save
                 </button>
                 <button mat-button [disabled]="_automation._general.saveDisabled" [matMenuTriggerFor]="status"
@@ -597,10 +597,10 @@
                     {{automation.publish_status ? 'Publish' : 'Draft'}}
                 </button>
                 <mat-menu #status="matMenu" xPosition="after" yPosition="below">
-                    <button mat-menu-item [class.kb-btn-active]="automation.publish_status" (click)="saveautomation(true,'published')">
+                    <button mat-menu-item [class.kb-btn-active]="automation.publish_status" (click)="saveautomation('published')">
                         <i [innerHTML]="'publish' | svg | safeHtml"></i>Publish
                     </button>
-                    <button mat-menu-item [class.kb-btn-active]="!automation.publish_status" (click)="saveautomation(true,'draft')">
+                    <button mat-menu-item [class.kb-btn-active]="!automation.publish_status" (click)="saveautomation('draft')">
                         <i [innerHTML]="'draft' | svg | safeHtml"></i>Draft
                     </button>
                 </mat-menu>

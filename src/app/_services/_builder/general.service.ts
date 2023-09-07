@@ -1274,69 +1274,94 @@ export class GeneralService {
 
   elementStyling(ele:any) {
     var pseudoEle:string = this.getSelector(ele);
+    var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
+    var style = JSON.parse(JSON.stringify(ele.content.style));
+
     var elestl = {
       selector: '#'+ele.id+'{',
       jc: 'justify-content:',
-    }
-    var deskjc = ele.item_alignment.desktop ? elestl.jc + ele.item_alignment.desktop : '';
-    this.pagestyling.desktop += elestl.selector + deskjc + ';}';
-
-    var tabhjc = ele.item_alignment.tablet_h ? elestl.jc + ele.item_alignment.tablet_h : '';
-    this.pagestyling.tablet_h += elestl.selector + tabhjc + ';}';
-
-    var tabvjc = ele.item_alignment.tablet_v ? elestl.jc + ele.item_alignment.tablet_v : '';
-    this.pagestyling.tablet_v += elestl.selector + tabvjc + ';}';
-
-    var mobjc = ele.item_alignment.mobile ? elestl.jc + ele.item_alignment.mobile : '';
-    this.pagestyling.mobile += elestl.selector + mobjc + ';}';
-
-    if(ele.content.name == 'menu') {
-      var ddSel = '#' + ele.id + ' .kb-element-content .kb-menu-resp {';
-      this.pagestyling.tablet_v += ddSel + tabvjc + ';}';
-      this.pagestyling.mobile += ddSel + mobjc + ';}';
+      mar: 'margin:'
     }
 
-    var style = JSON.parse(JSON.stringify(ele.content.style));
+    var itemAlign = {
+      desk: ele.item_alignment.desktop,
+      tabh: ele.item_alignment.tablet_h,
+      tabv: ele.item_alignment.tablet_v,
+      mob: ele.item_alignment.mobile
+    }
 
-    var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
+    var margin = {
+      desk: style.desktop.margin,
+      tabh: style.tablet_h.margin,
+      tabv: style.tablet_v.margin,
+      mob: style.mobile.margin,
+      hov: style.hover?.margin,
+      drop: style.hover?.margin,
+    }
 
-    style.desktop.margin = style.desktop.margin?.replace(/auto/g,'0px');
+    margin.desk = margin.desk?.replace(/auto/g,'0px');
+    if(margin.tabh) margin.tabh = margin.tabh?.replace(/auto/g,'0px');
+    if(margin.tabv) margin.tabv = margin.tabv?.replace(/auto/g,'0px');
+    if(margin.mob) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
+    if(margin.hov) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
+    if(margin.tabv) style.dropdown.margin = style.hover.margin?.replace(/auto/g,'0px');
+
+    var deskmar = margin.desk ? elestl.mar + margin.desk : '';
+    var deskjc = itemAlign.desk ? elestl.jc + itemAlign.desk : '';
+    this.pagestyling.desktop += elestl.selector + deskmar + ((deskmar && deskjc) ? ';' : '') + deskjc +';}';
+
+    var tabhmar = margin.tabh ? elestl.mar + margin.tabh : '';
+    var tabhjc = itemAlign.tabh ? elestl.jc + itemAlign.tabh : '';
+    this.pagestyling.tablet_h += elestl.selector + tabhmar + ((tabhmar && tabhjc) ? ';' : '') + tabhjc + ';}';
+
+    var tabvmar = margin.tabv ? elestl.mar + margin.tabv : '';
+    var tabvjc = itemAlign.tabv ? elestl.jc + itemAlign.tabv : '';
+    this.pagestyling.tablet_v += elestl.selector + tabvmar + ((tabvmar && tabvjc) ? ';' : '') + tabvjc + ';}';
+
+    var mobmar = margin.mob ? elestl.mar + margin.mob : '';
+    var mobjc = itemAlign.mob ? elestl.jc + itemAlign.mob : '';
+    this.pagestyling.mobile += elestl.selector + mobmar + ((mobmar && mobjc) ? ';' : '') + mobjc + ';}';
+    
+    var hovmar = margin.hov ? elestl.mar + margin.hov : '';
+    this.pagestyling.hover += elestl.selector + hovmar + ';}';
+
     this.pagestyling.desktop += selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    if(ele.content.name == 'menu') {
-      var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
-      this.pagestyling.desktop += hamsel + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
-    }
-    if(!this.isObjEmpty(ele.content.style.tablet_h)) {
-      if(style.tablet_h.margin) style.tablet_h.margin = style.tablet_h.margin?.replace(/auto/g,'0px');
+
+    if(!this.isObjEmpty(style.tablet_h)) {
       this.pagestyling.tablet_h += selector + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       if(ele.content.name == 'menu') {
         var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
         this.pagestyling.tablet_h += hamsel + '{' + Object.entries({...style.tablet_h}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       }
     }
-    if(!this.isObjEmpty(ele.content.style.tablet_v)) {
-      if(style.tablet_v.margin) style.tablet_v.margin = style.tablet_v.margin?.replace(/auto/g,'0px');
+    if(!this.isObjEmpty(style.tablet_v)) {
       this.pagestyling.tablet_v += selector + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       if(ele.content.name == 'menu') {
         var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
         this.pagestyling.tablet_v += hamsel + '{' + Object.entries({...style.tablet_v}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       }
     }
-    if(!this.isObjEmpty(ele.content.style.mobile)) {
-      if(style.mobile.margin) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
+    if(!this.isObjEmpty(style.mobile)) {
       this.pagestyling.mobile += selector + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       if(ele.content.name == 'menu') {
         var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
         this.pagestyling.mobile += hamsel + '{' + Object.entries({...style.mobile}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
       }
     }
-    if(!this.isObjEmpty(ele.content.style.hover)) {
-      if(style.hover.margin) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
+    if(!this.isObjEmpty(style.hover)) {
       this.pagestyling.hover += selector + ':hover{' + Object.entries({...style.hover}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
     }
-    if(!this.isObjEmpty(ele.content.style.dropdown)) {
+    if(!this.isObjEmpty(style.dropdown)) {
         var tempsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-content>ul.kb-menu';
         this.pagestyling.desktop += tempsel + '{' + Object.entries({...style.dropdown}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+    }
+
+    if(ele.content.name == 'menu') {
+      var hamsel = '#' + ele.id + ' .kb-element-content .kb-menu-resp .kb-menu-bar';
+      this.pagestyling.desktop += hamsel + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
+      var ddSel = '#' + ele.id + ' .kb-element-content .kb-menu-resp {';
+      this.pagestyling.tablet_v += ddSel + tabvjc + ';}';
+      this.pagestyling.mobile += ddSel + mobjc + ';}';
     }
   }
 

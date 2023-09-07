@@ -61,7 +61,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     name: '',
     uniqueid :'',
     user_id:'',
-    publish_status:'',
+    publish_status:0,
     thumbnail:'',
     triggers:'',
     actions:'',
@@ -216,25 +216,25 @@ export class CrmAutomationBuilderComponent implements OnInit {
     this.createTimePicker();
     this.fetchautomation();
   }
-fetchautomation(){
-  this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
-    if(data.success){
-      // console.log(data.data)
-      this.automation.id=data.data[0]?.id;
-      this.automation.user_id=data.data[0]?.user_id;
-      this.automation.uniqueid=data.data[0]?.uniqueid;
-      this.automation.name=data.data[0]?.name;
-      this.automation.publish_status=data.data[0]?.publish_status;
-      this.automation.thumbnail=data.data[0]?.thumbnail;
-      this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
-      this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
-      
-    }
-    else{
-      this.router.navigate(['/crm/automations'],{relativeTo: this.route});
-    }
-  })
-}
+
+  fetchautomation(){
+    this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
+      if(data.success){
+        this.automation.id=data.data[0]?.id;
+        this.automation.user_id=data.data[0]?.user_id;
+        this.automation.uniqueid=data.data[0]?.uniqueid;
+        this.automation.name=data.data[0]?.name;
+        this.automation.publish_status=data.data[0]?.publish_status;
+        this.automation.thumbnail=data.data[0]?.thumbnail;
+        this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
+        this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
+        
+      }
+      else{
+        // this.router.navigate(['/crm/automations'],{relativeTo: this.route});
+      }
+    })
+  }
   createTimePicker() {
     let h = 1, m = 0;
     while (h <= 12) {
@@ -806,13 +806,13 @@ fetchautomation(){
     })
   }
 
-  saveautomation(snackbar:boolean,status:any){
+  saveautomation(status:any){
     this.automation.triggers=this._general.encodeJSON(this._automation.activeTriggers);
     this.automation.actions=this._general.encodeJSON(this._automation.activeActions);
-    if(status == 'published') this.automation.publish_status='1';
-    else if(status == 'draft') this.automation.publish_status='0';
+    if(status == 'published') this.automation.publish_status=1;
+    else if(status == 'draft') this.automation.publish_status=0;
     this.automationgereralservice.updateautomation(this.automation).subscribe((data:any)=>{
-      if(snackbar){
+      if(status){
         if(data.success){
           var msg= 'Automation has been '+status;
           this._general.openSnackBar(false,msg,'OK','center','top');
@@ -829,7 +829,7 @@ fetchautomation(){
     clearInterval(this.autoSaveInterval);
     if(trigger) {
       this.autoSaveInterval = setInterval(()=>{
-        this.saveautomation(false,'');
+        this.saveautomation(false);
       }, 1000);
       this.autoSaveInterval;
     }
