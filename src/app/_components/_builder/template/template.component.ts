@@ -49,19 +49,19 @@ export class TemplateComponent implements OnInit {
   }
 
   fetchTemplates() {
-    this.spinner=true;
+    this.searching=true;
     this._file.fetchpagetemplates().subscribe((resp:any)=>{
-      this.spinner=false;
+      this.searching=false;
       if(resp.data?.length > 0) this.templates = resp.data;
       else{
         this.templates = resp.data;
       }
-      this.spinner=false;
+      this.searching=false;
     })
   }
   fetchsystemTemplates(value:string) {
     if(this.category!=value || this.firsttime){
-      this.spinner = true;
+      this.searching = true;
       let obj={category  : value};
       this._file.fetchdefaulttemplates(obj).subscribe((resp:any)=>{
         this.category=value;
@@ -69,7 +69,7 @@ export class TemplateComponent implements OnInit {
         else{
           this.systemplates = resp.data;
         }
-        this.spinner = false;
+        this.searching = false;
       })
       this.firsttime = false;
     }
@@ -83,7 +83,7 @@ export class TemplateComponent implements OnInit {
     })
   }
   deleteTemplate(){
-    this.spinner=true;
+    this.searching=true;
     this._file.deletepagetemplate(this.deltemplate.id).subscribe((resp:any)=>{
       if(resp?.success) {
         this._file.deleteFile(this.deltemplate.uniqueid,'templates').subscribe((resp1:any)=>{
@@ -92,33 +92,33 @@ export class TemplateComponent implements OnInit {
           // this.dialog.closeAll();
           this.fetchTemplates();
         })
-        this.spinner=false;
+        this.searching=false;
     }
 
     })
   };
   updateTemplate(){
-    this.spinner=true;
+    this.searching=true;
     this.deltemplate.name=this.templatename;
     this._file.updatepagetemplate(this.deltemplate).subscribe((resp:any)=>{
       if(resp.success) {
         this.fetchTemplates();
         this._general.openSnackBar(false,resp.message,'Ok','center','top');
       }
-      this.spinner=false;
+      this.searching=false;
     })
   }
 
   searchsavedtemplates(search: any, filter: any) {
    
-    this.spinner=true;
+    this.searching=true;
     var obj = {
       search: search.value,
       filter: filter.value,
       // unique_id:this.unique_id,
     }
     this._file.searchquerysavedtemplates(obj).subscribe((data:any) => {
-      this.spinner=false;
+      this.searching=false;
      
         if(data.success){ 
           this.templates = data?.data;

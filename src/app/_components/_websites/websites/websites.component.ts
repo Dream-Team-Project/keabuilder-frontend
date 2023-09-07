@@ -16,6 +16,9 @@ import { ImageService } from 'src/app/_services/image.service';
 export class WebsitesComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('deldialog') deldialog!: TemplateRef<any>;
+  @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+  @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
   @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
 
   allwebsites:any = []; 
@@ -36,6 +39,8 @@ export class WebsitesComponent implements OnInit {
   selectedwebsite = '';
   confirmpass = '';
   pageurl:any='';
+  error=false;
+  errormessage:any='';
 
   constructor(public websiteService: WebsiteService,
               private _snackBar: MatSnackBar,
@@ -124,12 +129,6 @@ export class WebsitesComponent implements OnInit {
     });
   }
 
-  // newwebsite(){
-  //   this.websitetitle = '';
-  //   this.createweb = true;
-  //   this.duplicateweb = false;
-  //   this.dialog.open(this.adddialog);
-  // }
 
  
 
@@ -153,7 +152,9 @@ export class WebsitesComponent implements OnInit {
 
            if(data.exist ==1){
               this.searching = false;
-              this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+              this.error=true;
+              this.errormessage="Subdomain is in use, please use another name!";
+              // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
            }else{
             if(data?.success){
             var dataobj = {website_id:data.uniqueid};
@@ -169,16 +170,15 @@ export class WebsitesComponent implements OnInit {
               next: datanw => {
                 
               this.searching = false;
-              // console.log(data);
-              this._snackBar.open('Website Created Successfully!', 'OK');
+              this.resetobj();
+              this._general.openSnackBar(false,'Website Created Successfully!', 'OK', 'center', 'top');
               this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
-              // this.dialog.closeAll();
-
               }
             });
           }else{
             this.searching = false;
             this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.resetobj();
           }
 
            }
@@ -187,20 +187,22 @@ export class WebsitesComponent implements OnInit {
         });
 
       }else{
-        this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+        // this._general.openSnackBar(false,"Subdomain is in use, please use another name!",'OK', 'center', 'top');
+        this.error=true;
+        this.errormessage="Subdomain is in use, please use another name!";
+        this.dialog.open(this.adddialog);
       }
 
+    }
+    else{
+      this.dialog.open(this.adddialog);
+      this.error=true;
+      this.errormessage="Please enter required information";
     }
 
   }
 
-  // updatewebsite(data:any,templateRef: TemplateRef<any>){
-
-  //   this.websitetitle = data.title;
-  //   this.selecteduid = data.uniqueid;
-  //   this.createweb = false;
-  //   this.dialog.open(templateRef);
-  // }
+ 
 
   updatenewweb(){
     if(this.websitetitle!='' && this.selecteduid!=''){
@@ -210,19 +212,21 @@ export class WebsitesComponent implements OnInit {
         uniqueid: this.selecteduid,
       }
       this.searching = true;
-      
-      this.dialog.closeAll();
       this.websiteService.updatesitedetails(obj).subscribe({
         next: data => {  
           // console.log(data);
-          this._snackBar.open("Changes has been updated!", 'OK');
+          this._general.openSnackBar(false,"Changes has been updated!", 'OK', 'center', 'top');
           this.fetwebfull();
+          this.resetobj();
           this.searching = false;
         }
       });
 
     }else{
-      this._snackBar.open("Website title can't be blank!", 'OK');
+      // this._general.openSnackBar(false,"Website title can't be blank!", 'OK', 'center', 'top');
+      this.error=true;
+      this.errormessage="Website title can't be blank!";
+      this.dialog.open(this.updatedialog);
     }
 
   }
@@ -238,11 +242,18 @@ export class WebsitesComponent implements OnInit {
     }
 
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-      this.subdomain= '';
-      this.websitetitle = '';
-      this.subdomainFormControl.reset();
-      this.webtitleFormControl.reset();
+     
     })
+  }
+  resetobj(){
+    this.subdomain= '';
+    this.websitetitle = '';
+    this.confirmpass='';
+    this.error=false;
+    this.errormessage='';
+    this.searching=false;
+    this.subdomainFormControl.reset();
+    this.webtitleFormControl.reset();
   }
 
   restoredeleteme(web:any){
@@ -252,11 +263,12 @@ export class WebsitesComponent implements OnInit {
       var genobj = {websiteid:web.uniqueid, password:this.confirmpass};
       this.websiteService.deletewebsite(genobj).subscribe({
         next: data => {
-          // console.log(data);
-
           if(data.incorrect == 1){
             this.searching = false;
-            this._snackBar.open("Password did't match!", 'OK');
+            this.error=true;
+            this.errormessage="Password did't match!";
+            // this._general.openSnackBar(false,"Password did't match!",'OK', 'center', 'top');
+            this.dialog.open(this.deldialog);
           }else{
             this._file.deletewebsitefolder(web.uniqueid).subscribe(e=>{
               // console.log(e);
@@ -264,13 +276,13 @@ export class WebsitesComponent implements OnInit {
 
               this.websiteService.ondeletesubdomain(web.subdomain).subscribe({
                 next: data => {
-                  
                   this.searching = false;
-                  this._snackBar.open("Website has been successfully deleted!", 'OK'); 
+                  this._general.openSnackBar(false,"Website has been successfully deleted!", 'OK', 'center', 'top');
                   this.fetwebfull();
-
+                  this.resetobj();
                 }
               });
+             
 
           }
 
@@ -278,31 +290,20 @@ export class WebsitesComponent implements OnInit {
 
       });
     }else{
-      this._snackBar.open("Password Can't be blank!", 'OK');
+      // this._general.openSnackBar(false,"Password Can't be blank!", 'OK', 'center', 'top');
+      this.error=true;
+      this.errormessage="Password Can't be blank!";
+      this.dialog.open(this.deldialog);
     }
 
   }  
 
-  // requestdupliwebsite(data:any,templateRef: TemplateRef<any>){
-  //   // console.log(data);
-  //   this.duplicatewebid = data.uniqueid;
-  //   this.selectedwebsite = data.title;
-  //   this.duplicateweb = true;
-  //   this.createweb = false;
-  //   this.websitetitle = '';
-  //   this.subdomain = '';
-  //   this.dialog.open(templateRef);
-  // }
+  
 
   duplicatewebsite(){
-    // console.log(this.websitetitle);
-    // console.log(this.subdomain);
-
     this.createweb = false;
     this.searching = true;
-
     if(this.subdomain!=''){
-
       if(this.webtitleFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
 
         var nwsubdomain:any = this.subdomain.toLowerCase();
@@ -314,11 +315,14 @@ export class WebsitesComponent implements OnInit {
 
           this.websiteService.duplicatewebsite(genobj).subscribe({
             next: data => {
-              this.dialog.closeAll();
+              // this.dialog.closeAll();
 
               // console.log(data);
              if(data.exist ==1){
-                this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+              this.error=true;
+              this.errormessage="Subdomain is in use, please use another name!";
+                // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
+                this.dialog.open(this.adddialog);
              }else{
               if(data?.success){
                 this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
@@ -335,16 +339,17 @@ export class WebsitesComponent implements OnInit {
                 this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
                   next: data => {
                     // console.log(data);
-                    this._snackBar.open("Website Successfylly Duplicate!", 'OK');
-                    // this.dialog.closeAll();
+                    this._general.openSnackBar(false,"Website Successfylly Duplicate!", 'OK', 'center', 'top');
                     this.fetwebfull();
+                    this.resetobj();
                     this.searching = false;
                   }
                 });
               }else{
                 this.searching = false;
                 this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
-                // this.dialog.closeAll();
+                this.dialog.closeAll();
+                this.resetobj();
               }
 
 
@@ -357,13 +362,24 @@ export class WebsitesComponent implements OnInit {
 
 
         }else{
-          this._snackBar.open("Subdomain is in use, please use another name!", 'OK');
+          // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
+          this.error=true;
+          this.errormessage="Subdomain is in use, please use another name!";
+          this.dialog.open(this.duplicatedialog);
         }
 
       }
-
+      else{
+      this.error=true;
+      this.errormessage="Please enter required information";
+      this.dialog.open(this.duplicatedialog);
     }
-
+  }
+else{
+  this.error=true;
+  this.errormessage="Please enter required information";
+  this.dialog.open(this.duplicatedialog);
+}
    
 
   }
@@ -387,7 +403,7 @@ export class WebsitesComponent implements OnInit {
   copyurl(website:any){
     // console.log(website)
   this.pageurl = 'https://'+website?.domain;
-  this.dialog.open(this.copyurldialog)
+  this.dialog.open(this.copyurldialog);
   }
   
   copyInputMessage(inputElement:any){
@@ -395,6 +411,6 @@ export class WebsitesComponent implements OnInit {
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
     this.dialog.closeAll();
-    this._snackBar.open('Successfully Copied!', 'OK');
+    this._general.openSnackBar(false,'Successfully Copied!', 'OK', 'center', 'top');
   }
 }

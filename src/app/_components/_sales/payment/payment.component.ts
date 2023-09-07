@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +11,8 @@ import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 })
 export class PaymentComponent implements OnInit {
 
+  @ViewChild('addstripe') addstripe!: TemplateRef<any>;
+
   stripekey = new FormControl('', [Validators.required]);
   stripesecret = new FormControl('', [Validators.required]);
   paypalemail = new FormControl('', [Validators.required]);
@@ -22,6 +24,8 @@ export class PaymentComponent implements OnInit {
   paypalcontentactive = false;
   sripestatus = 'Connect';
   paypalstatus = 'Connect';
+  error=false;
+  errormessage:any='';
 
   constructor(private checkoutService: CheckoutService,
               private _snackBar: MatSnackBar,
@@ -51,7 +55,17 @@ export class PaymentComponent implements OnInit {
     });    
 
   }
+resetobj(){
+  this.error=false;
+  this.errormessage='';
+  this.dialog.closeAll();
+  this.stripekey.reset();
+  this.stripesecret.reset();
+  this.paypalemail.reset();
+  this.paypalclientid.reset();
+  this.paypalsecret.reset();
 
+}
 
   connectstripe(){
     
@@ -62,16 +76,25 @@ export class PaymentComponent implements OnInit {
             next: data => {
               // console.log(data);
               if(data.success==1){
-                this.dialog.closeAll();
+               this.resetobj();
                 this.sripestatus = 'Connected';
                 this._snackBar.open('Stripe Keys Connected Successfully!', 'OK');
 
+              }
+              else{
+                this.error=true;
+                this.errormessage=data?.message;
+                this.dialog.open(this.addstripe);
               }
           }
         });
 
       }
-
+      else{
+        this.error=true;
+        this.errormessage="Please enter required fields";
+        this.dialog.open(this.addstripe);
+      }
     }else{
       if(this.stripekey.status=='VALID' && this.stripesecret.status=='VALID'){
           let data = {key:this.stripekey.value, secret: this.stripesecret.value, method: 'update'};
@@ -79,14 +102,24 @@ export class PaymentComponent implements OnInit {
             next: data => {
               // console.log(data);
               if(data.success==1){
-                this.dialog.closeAll();
+                this.resetobj();
                 this.sripestatus = 'Connected';
                 this._snackBar.open('Stripe Keys Updated Successfully!', 'OK');
 
               }
+              else{
+                this.error=true;
+                this.errormessage=data?.message;
+                this.dialog.open(this.addstripe);
+              }
           }
         });
 
+      }
+      else{
+        this.error=true;
+        this.errormessage="Please enter required fields";
+        this.dialog.open(this.addstripe);
       }
     }
   }
@@ -99,14 +132,24 @@ export class PaymentComponent implements OnInit {
             next: data => {
               // console.log(data);
               if(data.success==1){
-                this.dialog.closeAll();
+                this.resetobj();
                 this.paypalstatus = 'Connected';
                 this._snackBar.open('Paypal Keys Connected Successfully!', 'OK');
 
               }
+              else{
+                this.error=true;
+                this.errormessage=data?.message;
+                this.dialog.open(this.addstripe);
+              }
           }
         });
 
+      }
+      else{
+        this.error=true;
+        this.errormessage="Please enter required fields";
+        this.dialog.open(this.addstripe);
       }
 
     }else{
@@ -121,9 +164,19 @@ export class PaymentComponent implements OnInit {
                 this._snackBar.open('Paypal Keys Updated Successfully!', 'OK');
 
               }
+              else{
+                this.error=true;
+                this.errormessage=data?.message;
+                this.dialog.open(this.addstripe);
+              }
           }
         });
 
+      }
+      else{
+        this.error=true;
+        this.errormessage="Please enter required fields";
+        this.dialog.open(this.addstripe);
       }
     }
   }

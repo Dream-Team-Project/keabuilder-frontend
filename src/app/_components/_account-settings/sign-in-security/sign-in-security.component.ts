@@ -15,6 +15,9 @@ import {hashSync} from 'bcryptjs';
 
 export class SignInSecurityComponent implements OnInit {
 
+  @ViewChild('passworddialog') passworddialog!: TemplateRef<any>;
+  @ViewChild('usernamedialog') usernamedialog!: TemplateRef<any>;
+
   usernameFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20)]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   tokenFormControl = new FormControl('',[Validators.required]);
@@ -102,6 +105,7 @@ export class SignInSecurityComponent implements OnInit {
         }else{
           this.error=true;
           this.errormessage='Both fields are required !';
+          this.dialog.open(this.passworddialog);
           // this._general.openSnackBar(false,'Both fields are required !', 'OK','center','top');
         }
       }
@@ -109,6 +113,7 @@ export class SignInSecurityComponent implements OnInit {
     else{
       this.error=true;
       this.errormessage='Password not matched'
+      this.dialog.open(this.passworddialog);
       // this._general.openSnackBar(false,'Password not matched', 'OK','center','top');
     }
   }
@@ -120,13 +125,14 @@ export class SignInSecurityComponent implements OnInit {
     this.userService.updateuserdetails(obj).subscribe((data:any)=>{
       if(data.success){
         this.dialog.closeAll();
-        this._general.openSnackBar(false,data?.messsage,'Ok','center','top');
+        this._general.openSnackBar(false,'Username Updated Successfully','Ok','center','top');
         this.error=false;
         this.errormessage='';
       }
       else{
         this.error=true;
         this.errormessage=data?.message;
+        this.dialog.open(this.usernamedialog);
       }
     })
     

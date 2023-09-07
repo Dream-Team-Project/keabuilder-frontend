@@ -10,6 +10,9 @@ import { OrderformService } from 'src/app/_services/_sales/orderform.service';
   })
 export class OrderFormComponent implements OnInit {
 
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+
   fetching:boolean = true;
   hasError:string = '';
   products:Array<any> = [];
@@ -36,9 +39,14 @@ export class OrderFormComponent implements OnInit {
     this.hasError = '';
     this.productObj = JSON.parse(JSON.stringify(product));
     this.dialog.open(templateRef).afterClosed().subscribe((resp :any)=>{
-      this.productObj.id = '';
-      this.productObj.name = '';
+      
     })
+  }
+  resetobj(){
+    this.hasError = '';
+    this.productObj.id = '';
+    this.productObj.name = '';
+    this.dialog.closeAll();
   }
 
   adjustdata(data:any){
@@ -79,6 +87,8 @@ export class OrderFormComponent implements OnInit {
     else {
       let msg = this.productObj.name ? 'Minimum 3 characters required' : 'Please write the name of the Checkout';
       this.setError(msg);
+      if(action == 'add') this.dialog.open(this.adddialog);
+      else this.dialog.open(this.updatedialog);
     }
   }
 
@@ -86,10 +96,13 @@ export class OrderFormComponent implements OnInit {
     this._orderformservice.addorderform(this.productObj).subscribe((resp:any) => {
       if(resp.success) {
         this.fetchorderforms();
-        this.dialog.closeAll();
+        this.resetobj();
         this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
       }
-      else this.setError(resp?.message);
+      else {
+      this.setError(resp?.message);
+      this.dialog.open(this.adddialog);
+      }
     })
   }
 
@@ -97,10 +110,14 @@ export class OrderFormComponent implements OnInit {
     this._orderformservice.updateorderform(this.productObj).subscribe((resp:any) => {
       if(resp.success) {
         this.fetchorderforms();
-        this.dialog.closeAll();
+       this.resetobj();
         this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
       }
-      else this.setError(resp?.message);
+      else 
+      {this.setError(resp?.message);
+        this.dialog.open(this.updatedialog);
+      }
+
     })
   }
 
@@ -109,6 +126,7 @@ export class OrderFormComponent implements OnInit {
     temp.uniqueid = this._general.makeid(20);
     this._orderformservice.duplicateorderform(temp).subscribe((resp:any) => {
           if(resp.success) this.fetchorderforms();
+          this.resetobj();
           this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
@@ -116,6 +134,7 @@ export class OrderFormComponent implements OnInit {
   deleteorderform() {
     this._orderformservice.deleteorderform(this.productObj.id).subscribe((resp:any) => {
       if(resp.success) this.fetchorderforms();
+      this.resetobj();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }

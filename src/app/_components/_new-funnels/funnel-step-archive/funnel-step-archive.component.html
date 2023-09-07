@@ -5,8 +5,8 @@
         All data with funnel steps will be deleted and can't be restored!
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close color="primary">No</button>
-        <button mat-button  cdkFocusInitial class="text-danger" (click)="deletefunnelstep(delstep)" >Yes</button>
+        <button mat-button mat-dialog-close color="primary" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletefunnelstep(delstep)" >Yes</button>
     </div>
   </ng-template>
   

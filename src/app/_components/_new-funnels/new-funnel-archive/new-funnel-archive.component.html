@@ -1,16 +1,17 @@
-<ng-template #dialog>
+<ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Funnel</h1>
-    <div mat-dialog-content>
-        Would you like to delete <span class="text-danger">{{delpage.name}}</span> funnel?<br>
-        All data with funnel steps will be deleted and can't be restored!
-    </div>
-    <div mat-dialog-actions class="justify-content-end">
+    <div mat-dialog-content>Would you like to delete <span class="text-danger">{{delpage.name}}</span> funnel?<br>
+        <span>All data with funnel steps will be deleted and can't be restored!</span>
+
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Confirm Password</mat-label>
           <input type="text" name="confirmpass" matInput [(ngModel)]="confirmpass">
         </mat-form-field>
-        <button mat-button mat-dialog-close color="primary">No</button>
-        <button mat-button  cdkFocusInitial class="text-danger" (click)="restoredeleteme(delpage,'delete')" [disabled]="!confirmpass">Yes</button>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close color="primary" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close  cdkFocusInitial class="text-danger" (click)="restoredeleteme(delpage,'delete')" [disabled]="!confirmpass">Yes</button>
     </div>
   </ng-template>
   
@@ -57,7 +58,7 @@
                     <span class="d-flex">
                     <i mat-ripple matTooltip="Restore" matTooltipPosition="above" (click)="restoredeleteme(funnel,'restore')"
                         class="fa fa-trash-restore kb-table-action-icon" aria-hidden="true"></i>
-                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(dialog, funnel, '')" class="far fa-trash-alt  kb-table-action-icon kb-icon-del"
+                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, funnel, '')" class="far fa-trash-alt  kb-table-action-icon kb-icon-del"
                         aria-hidden="true"></i>
                     </span>
                 </td>

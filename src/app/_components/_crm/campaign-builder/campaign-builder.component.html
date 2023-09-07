@@ -12,7 +12,7 @@
         </div>
         <div mat-dialog-actions class="justify-content-end mt-1">
             <button mat-button mat-dialog-close class="text-danger">Close</button>
-            <button mat-button [color]="'primary'" (click)="sendatestemail()">Send</button>
+            <button mat-button mat-dialog-close [color]="'primary'" (click)="sendatestemail()">Send</button>
         </div>
     </ng-template>
 
@@ -20,7 +20,7 @@
     <ng-template #dialog2>
         <h1 mat-dialog-title >Add Address</h1>
         <div mat-dialog-content>
-
+            <mat-error *ngIf="error">{{errormessage}}</mat-error>
             <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Address Name</mat-label>
                 <input type="text" matInput name="addressname" [(ngModel)]="genaddress.name" [formControl]="addressnameControl" required minlength="3" >
@@ -100,8 +100,8 @@
             </div>
         </div>
         <div mat-dialog-actions class="justify-content-end">
-            <button mat-button mat-dialog-close class="text-danger">Close</button>
-            <button mat-button [color]="'primary'" (click)="sendaddress()">Add </button>
+            <button mat-button mat-dialog-close class="text-danger"  (click)="resetobj()">Close</button>
+            <button mat-button mat-dialog-close [color]="'primary'" (click)="sendaddress()">Add </button>
         </div>
     </ng-template>
 

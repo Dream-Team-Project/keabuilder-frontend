@@ -11,6 +11,9 @@ import { ImageService } from 'src/app/_services/image.service';
 })
 export class OffersComponent implements OnInit {
 
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+
   fetching:boolean = true;
   defaultCurrency = { name: "United States Dollar", code: "USD", symbol: "$" };
   offerObj = {
@@ -45,11 +48,16 @@ export class OffersComponent implements OnInit {
      this.hasError.type = '';
      this.offerObj = JSON.parse(JSON.stringify(offer));
      this.dialog.open(templateRef).afterClosed().subscribe((resp :any)=>{
-       this.offerObj.id = '';
-       this.offerObj.name = '';
+       
      })
    }
- 
+ resetobj(){
+  this.offerObj.id = '';
+  this.offerObj.name = '';
+  this.hasError.name = '';
+  this.hasError.type = '';
+  this.dialog.closeAll();
+ }
    adjustdata(data:any){
      if(data) this.offers = data;
      this.fetching = false;
@@ -97,18 +105,22 @@ export class OffersComponent implements OnInit {
    updateoffer(){
     if(this.offerObj.name) {
       this.hasError.name = '';
-      console.log(this.offerObj);
+      // console.log(this.offerObj);
       this._offerservice.updateoffer(this.offerObj).subscribe((resp:any) => {
         if(resp.success) {
           this.fetchoffers();
-          this.dialog.closeAll();
+          this.resetobj();
           this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
         }
-        else this.hasError.name = resp?.message; 
+        else {
+          this.hasError.name = resp?.message; 
+          this.dialog.open(this.updatedialog);
+        }
       })
     }
     else {
       this.hasError.name = 'Please write the name of the offer';
+      this.dialog.open(this.updatedialog);
     }
    }
 
@@ -134,14 +146,17 @@ export class OffersComponent implements OnInit {
       this._offerservice.addoffer(this.offerObj).subscribe((resp:any) => {
         if(resp.success) {
           this.fetchoffers();
-          this.dialog.closeAll();
+         this.resetobj();
           this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
         }
-        else this.hasError.name = resp?.message; 
+        else {this.hasError.name = resp?.message; 
+        this.dialog.open(this.adddialog);
+      }
       })
     }
     else {
       this.hasError.name = 'Please write the name of the offer';
+      this.dialog.open(this.adddialog);
     }
   }
  
@@ -151,6 +166,7 @@ export class OffersComponent implements OnInit {
      this._offerservice.duplicateoffer(temp).subscribe((resp:any) => {
            if(resp.success) this.fetchoffers();
            this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+           this.resetobj();
      });
    }
    
@@ -158,6 +174,7 @@ export class OffersComponent implements OnInit {
      this._offerservice.deleteoffer(this.offerObj.id).subscribe((resp:any) => {
        if(resp.success) this.fetchoffers();
        this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+       this.resetobj();
      });
    }
 

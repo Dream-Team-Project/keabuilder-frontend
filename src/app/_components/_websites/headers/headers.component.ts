@@ -23,6 +23,8 @@ export class WebsiteHeadersComponent {
   action:any;
   header:any = {uniqueid: '', name: ''};
   dataheader:any;
+  error=false;
+  errormessage:any='';
 
   constructor(
         public _image: ImageService,

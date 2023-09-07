@@ -20,6 +20,9 @@ export class NewFunnelStepsComponent implements OnInit {
 
    
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('quickeditdialog') quickeditdialog!: TemplateRef<any>;
+  @ViewChild('colorbadgedialog') colorbadgedialog!: TemplateRef<any>;
+  @ViewChild('deletedialog') deletedialog!: TemplateRef<any>;
  
   steps:any[] = [];
   funnel:any;
@@ -57,6 +60,8 @@ export class NewFunnelStepsComponent implements OnInit {
   funnelstepurl:any = '';
   getthumbnail = '';
   step:any;
+  error=false;
+  errormessage:any='';
 
   stepnameFormControl = new FormControl('', [
     Validators.required,
@@ -87,6 +92,27 @@ export class NewFunnelStepsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchsinglefunnel();
     
+  }
+
+  resetobj(){
+    this.fetching=false;
+    this.error=false;
+    this.errormessage='';
+    this.newfunnelid='';
+    this.funnelurl = '';
+  this.pageurl = '';
+  this.forarchiveid = '';
+  this.reason = '';
+  this.funnelarchid = '';
+  this.form={
+    funneltype: '',
+    stepname:'',
+    };
+    this.newfunnelid= '';
+    this.funnelstepname = '';
+    this.funnelstepurl= '';
+    this.getthumbnail = '';
+    this.dialog.closeAll();
   }
   fetchsinglefunnel(){
     this.funnelService.getSingleFunnel(this.uniqueid).subscribe({
@@ -324,6 +350,7 @@ export class NewFunnelStepsComponent implements OnInit {
           this.draftpublish('0', data.page_path, this.funnelarchid);
           this.reason = '';
           this.fetchsteps();
+          this.resetobj();
           this._general.openSnackBar(
             false,
             'Successfully Archived!',
@@ -333,6 +360,7 @@ export class NewFunnelStepsComponent implements OnInit {
           );
         } else if (data.status == 0) {
           if (data.notallow == 1) {
+            this.resetobj();
             this._general.openSnackBar(
               false,
               'Single Step Can not be Archived!',
@@ -343,7 +371,7 @@ export class NewFunnelStepsComponent implements OnInit {
           }
         }
         this.shwobtnfirst = true;
-        this.dialog.closeAll();
+        this.resetobj();
       },
     });
   }
@@ -364,7 +392,7 @@ export class NewFunnelStepsComponent implements OnInit {
         // console.log(data);
 
         if (data.status == 1) {
-          this.dialog.closeAll();
+          this.resetobj();
           this.fetchsteps();
           this._general.openSnackBar(
             false,
@@ -373,6 +401,11 @@ export class NewFunnelStepsComponent implements OnInit {
             'center',
             'top'
           );
+        }
+        else{
+          this.error=true;
+          this.errormessage='Server Error';
+          this.dialog.open(this.colorbadgedialog);
         }
       },
     });
@@ -395,15 +428,18 @@ export class NewFunnelStepsComponent implements OnInit {
             // console.log(event);
           },
           error=>{console.log(error)});
-          this.dialog.closeAll();
-          this.form.stepname='';
-          this.form.funneltype='';
+          this.resetobj();
           this._general.openSnackBar(false,'Step Added Successfully!', 'Close','center','top');
         },
         error: err => {
           // console.log(err);
         }
       });
+    }
+    else{
+          this.error=true;
+          this.errormessage='Please enter required fields';
+          this.dialog.open(this.adddialog);
     }
 
 
@@ -421,10 +457,17 @@ export class NewFunnelStepsComponent implements OnInit {
               
             }
           });
+          this.fetchsteps();
+          this.resetobj();
+          this._general.openSnackBar(false,'Successfully Updated!', 'Close','center','top');
         }
-        this.fetchsteps();
-        this.dialog.closeAll();
-        this._general.openSnackBar(false,'Successfully Updated!', 'Close','center','top');
+        else{
+          this.error=true;
+          this.errormessage='Please enter required fields';
+          this.dialog.open(this.quickeditdialog);
+        }
+        
+      
       }
     });
   }
@@ -479,7 +522,7 @@ export class NewFunnelStepsComponent implements OnInit {
                       'top'
                     );
                 this.fetchsteps();
-                this.dialog.closeAll();
+                this.resetobj();
               },
             });
           } else {

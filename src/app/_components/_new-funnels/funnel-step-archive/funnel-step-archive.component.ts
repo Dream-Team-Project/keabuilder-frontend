@@ -92,7 +92,7 @@ export class FunnelStepArchiveComponent implements OnInit {
           
           this.searching = false;
           this.archivedsteps('archivefunnelstep',this.uniqueid);
-          this.dialog.closeAll();
+          this.resetobj();
         this._general.openSnackBar(
             false,'Funnel Step Deleted Successfully!','OK','center','top');
 
@@ -100,7 +100,7 @@ export class FunnelStepArchiveComponent implements OnInit {
       }
     });
   }
-
+ 
   searchfunnels(search: any, filter: any) {
     this.searching = true;
     var obj = {
@@ -118,5 +118,8 @@ export class FunnelStepArchiveComponent implements OnInit {
     });
     
   }
-
+  resetobj(){
+    this.searching=false;
+    this.dialog.closeAll();
+  }
 }

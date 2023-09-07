@@ -22,6 +22,7 @@ export class NewFunnelArchiveComponent implements OnInit {
   
   @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('deldialog') deldialog!: TemplateRef<any>;
 
   funnelsteps: any = [];
   showingcontacts = '7 DAY';
@@ -30,7 +31,8 @@ export class NewFunnelArchiveComponent implements OnInit {
   delpage:any;
   confirmpass = '';
   searching:boolean = false;
-
+  error=false;
+  errormessage:any='';
 
   constructor(private funnelService: FunnelService,
             private fileuploadService: FileUploadService,
@@ -93,8 +95,8 @@ export class NewFunnelArchiveComponent implements OnInit {
             data.data.forEach((element:any) => {
               this.draftpublish('1', element.page_path, row.id);
             });
-            this.searching=false;
             this.applykbfilter();
+            this.resetobj();
 
           }
 
@@ -117,8 +119,9 @@ export class NewFunnelArchiveComponent implements OnInit {
   
             if(data.incorrect == 1){
               this.searching = false;
-              this._general.openSnackBar(
-            false,"Password did't match!", 'OK','center','top');
+              this.error=true;
+              this.errormessage="Password incorrect";
+              this.dialog.open(this.deldialog);
             }else{
               this.fileuploadService.deletewebsitefolder(row.uniqueid).subscribe(e=>{
                 // console.log(e);
@@ -127,30 +130,40 @@ export class NewFunnelArchiveComponent implements OnInit {
                 this.websiteService.ondeletesubdomain(row.subdomain).subscribe({
                   next: data => {
                     
-                    this.searching = false;
+                    
                     this._general.openSnackBar(false,"Website has been successfully deleted!", 'OK','center','top'); 
-  
+                   
                   }
+                  
                 });
-                this.dialog.closeAll();
-              
+                
+                this.applykbfilter();
+                this.resetobj();
             }
-            this.searching=false;
-            this.applykbfilter();
-
+            
+            
   
           }
   
         });
       }else{
-        this._general.openSnackBar(false,"Password Can't be blank!", 'OK','center','top');
+        this.error=true;
+        this.errormessage="Password Can't be blank!";
+        this.dialog.open(this.deldialog);
+        // this._general.openSnackBar(false,"Password Can't be blank!", 'OK','center','top');
       }
 
           
     }
 
   }
-
+resetobj(){
+  this.searching=false;
+  this.dialog.closeAll();
+  this.confirmpass='';
+  this.error=false;
+  this.errormessage='';
+}
   draftpublish(status:any, page_path:any, websiteid:any){
 
     var getvl = status == '0' ? 'draft' : 'publish';
@@ -176,7 +189,6 @@ export class NewFunnelArchiveComponent implements OnInit {
     });
     
   }
-
 
   openDialog(templateRef: TemplateRef<any>, page:any , type:any): void {
     
