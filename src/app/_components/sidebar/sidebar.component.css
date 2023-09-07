@@ -319,7 +319,7 @@ div#topbar_notifications_logs {
   -ms-flex-direction: column;
   flex-direction: column;
   z-index: 21000;
-  background: #0f172a;
+  background: var(--kb-dark);
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
   -webkit-transform: translate(-110%);
@@ -405,7 +405,7 @@ div#topbar_notifications_logs {
   text-align: left;
   background: transparent;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   opacity: 1;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;
