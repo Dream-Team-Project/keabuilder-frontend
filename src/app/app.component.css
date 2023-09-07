@@ -8,7 +8,7 @@ main {
     margin-left: auto;
     top: 60px;
     position: relative;
-    transition: all .25s ease;
+    transition: all .2s ease;
     background: rgb(244 244 244 / 48%);
 }
 
