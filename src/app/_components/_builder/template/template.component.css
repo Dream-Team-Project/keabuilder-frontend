@@ -19,8 +19,12 @@
     height: 200px;
     width: 100%;
     background-size: cover;
-    background-position: center;
+    background-position:top center;
     background-repeat: no-repeat;
+    transition: .5s ease-in-out;
+}
+.kb-template-thumbnail:hover{
+  background-position:bottom center;
 }
 
 .kb-template-heading {
@@ -120,4 +124,16 @@
 }
 .kb-template-card {
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+.kb-spinner{
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  /* background-color: var(--kb-dim-black); */
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
 }

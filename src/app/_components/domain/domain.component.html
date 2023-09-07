@@ -13,7 +13,7 @@
     <div mat-dialog-content *ngIf="!shownamehint">
         <h4>Add your own domain</h4>
         <p>Enter the domain name you already own below and we'll take care of the rest.</p>
-
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
         <mat-form-field class="kb-full-width" appearance="fill">
             <mat-label>Domain Name</mat-label>
             <input type="text" placeholder="mydomain.com" matInput required [formControl]="domainname" (keyup)="gendomainname = removespecialchar(gendomainname)" [(ngModel)]="gendomainname">
@@ -45,8 +45,8 @@
                 <button mat-raised-button color="primary" (click)="donestep1()" >I've done this step <i class="fas fa-check"></i></button> -->
             </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-danger">No</button>
-        <button mat-button cdkFocusInitial color="primary" (click)="!shownamehint ? connectdomain() : donestep1()" >Connect</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="!shownamehint ? connectdomain() : donestep1()" >Connect</button>
     </div>
   </ng-template>
 <div id="kb-domain">

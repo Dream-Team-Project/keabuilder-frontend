@@ -9,8 +9,8 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
-        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="validateorderform('add')" color="primary" [disabled]="!productObj.name">Add</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Cancel</button>
+        <button mat-button mat-dialog-close (click)="validateorderform('add')" color="primary" [disabled]="!productObj.name">Add</button>
     </div>
   </ng-template>
   <!-- add new product -->
@@ -25,7 +25,7 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
-        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Cancel</button>
         <button mat-button (click)="validateorderform('update')" color="primary" [disabled]="!productObj.name">Update</button>
     </div>
   </ng-template>
@@ -37,7 +37,7 @@
       Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> Order Form?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-danger">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
       <button mat-button mat-dialog-close (click)="duplicateorderform(productObj)" [color]="'primary'">Yes</button>
     </div>
   </ng-template>
@@ -49,7 +49,7 @@
       Would you like to delete <span class="text-danger">{{productObj.name}}</span> order form?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close [color]="'primary'" (click)="resetobj()">No</button>
       <button mat-button mat-dialog-close (click)="deleteorderform()" class="text-danger">Yes</button>
     </div>
   </ng-template>
@@ -93,14 +93,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let product of products; index as i">
-                <td (click)="editdialog.click()" class="kb-td-link">
+                <td [routerLink]="['/sales/orderform/'+product.uniqueid]" class="kb-td-link">
                   <span>{{product.name | titlecase}}</span>
                 </td>
                 <td>{{ product.updated_at | date:'medium' }}</td>
                 <td>
                   <span class="d-flex">
-                      <i mat-ripple matTooltip="Customize" matTooltipPosition="above" [routerLink]="['/sales/orderform/'+product.uniqueid]" class="fa fa-pencil px-4 kb-table-action-icon"></i>
-
+                    <i mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="['/sales/orderform/'+product.uniqueid]" class="fa fa-pencil px-4 kb-table-action-icon"></i>
                     <i #editdialog mat-ripple matTooltip="Quick Edit" matTooltipPosition="above" (click)="openDialog(updatedialog, product)" class="fa fa-edit px-4 kb-table-action-icon"></i>
                     <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"  (click)="openDialog(dupdialog, product)" class="fa fa-copy px-4 kb-table-action-icon"></i>
                     <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, product)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>

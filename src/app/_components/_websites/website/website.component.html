@@ -2,10 +2,8 @@
     <div class="row">
       <div class="col-md-12">
         <button mat-raised-button class="mr-2" [routerLink]="['/websites/all']" routerLinkActive="active" (click)="resetwebsitename()"><i class="fas fa-desktop" aria-hidden="true"></i> Websites</button>
-       
         <button *ngIf="websiteService.websitename" mat-raised-button class="mr-2" [routerLink]="['/websites/'+websiteService.website_id+'/pages']" routerLinkActive="active" (click)="resetwebsitename()"><i class="far fa-window-restore" aria-hidden="true"></i>  {{websiteService.websitename | titlecase}} | Pages</button>
         <button *ngIf="!websiteService.websitename" mat-raised-button class="mr-2" [routerLink]="['/websites/pages']" routerLinkActive="active" (click)="resetwebsitename()"><i class="far fa-window-restore" aria-hidden="true"></i>  Pages</button>
-        
         <button mat-raised-button class="mr-2" [routerLink]="['/websites/headers']" routerLinkActive="active" (click)="resetwebsitename()"><i class="far fa-window-maximize" aria-hidden="true"></i> Headers</button>
         <button mat-raised-button class="mr-2" [routerLink]="['/websites/footers']" routerLinkActive="active" (click)="resetwebsitename()"><i class="far fa-window-maximize kb-rev" aria-hidden="true"></i> Footers</button>
         <button mat-raised-button class="mr-2" [routerLink]="['/websites/navigation']" routerLinkActive="active" (click)="resetwebsitename()"><i class="fas fa-stream" aria-hidden="true"></i> Navigation</button>

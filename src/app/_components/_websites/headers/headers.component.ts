@@ -22,6 +22,9 @@ export class WebsiteHeadersComponent {
   delheader:any;
   action:any;
   header:any = {uniqueid: '', name: ''};
+  dataheader:any;
+  error=false;
+  errormessage:any='';
 
   constructor(
         public _image: ImageService,
@@ -83,6 +86,7 @@ export class WebsiteHeadersComponent {
 
   create() {
     if(!this.validate.name.invalid) {
+      this.fetching = true;
       this.header.uniqueid = this._general.makeid(20);
       var obj:any = {
         id: 'kb-header-'+this.header.uniqueid,
@@ -96,6 +100,7 @@ export class WebsiteHeadersComponent {
           }
           else this.openSB(true);
           resp.success ? this.edit(this.header) : this.openSB(true);
+          this.fetching = false;
         });
       });
     }
@@ -113,6 +118,7 @@ export class WebsiteHeadersComponent {
       oldpath: 'kb-header-'+header.uniqueid+'.php',
       path: 'kb-header-'+dobj.uniqueid+'.php',
     }
+    this.fetching = true;
     this._general._file.copyFile(obj, 'headers').subscribe(resp=>{
       if(resp.success) {
         this._general._file.saveheader(dobj).subscribe((resp:any)=>{
@@ -126,6 +132,7 @@ export class WebsiteHeadersComponent {
         this.action = 'duplicated';
       }
       else this.openSB(true);
+      this.fetching = false;
     });
   }
 

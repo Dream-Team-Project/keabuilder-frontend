@@ -229,8 +229,7 @@ specialuser=false;
             <br>
             Here are your User details-<br>
             Login: `+domainpath+`/login<br>
-            Username: `+username+`<br>
-            Password: `+password+`<br>
+            Username: `+username+`<br>  
             <br>
             Here's what you can do now that your registration is complete:<br> 
             <br>

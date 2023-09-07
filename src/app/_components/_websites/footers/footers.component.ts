@@ -23,6 +23,7 @@ export class WebsiteFootersComponent {
   delfooter:any;
   action:any;
   footer:any = {uniqueid: '', name: ''};
+  datafooter:any;
 
   constructor(
         public _image: ImageService,
@@ -84,6 +85,7 @@ export class WebsiteFootersComponent {
 
   create() {
     if(!this.validate.name.invalid) {
+      this.fetching = true;
       this.footer.uniqueid = this._general.makeid(20);
       var obj:any = {
         id: 'kb-footer-'+this.footer.uniqueid,
@@ -97,6 +99,7 @@ export class WebsiteFootersComponent {
           }
           else this.openSB(true);
           resp.success ? this.edit(this.footer) : this.openSB(true);
+          this.fetching = false;
         });
       });
     }
@@ -114,6 +117,7 @@ export class WebsiteFootersComponent {
       oldpath: 'kb-footer-'+footer.uniqueid+'.php',
       path: 'kb-footer-'+dobj.uniqueid+'.php',
     }
+    this.fetching = true;
     this._general._file.copyFile(obj, 'footers').subscribe(resp=>{
       if(resp.success) {
         this._general._file.savefooter(dobj).subscribe((resp:any)=>{
@@ -127,18 +131,21 @@ export class WebsiteFootersComponent {
         this.action = 'duplicated';
       }
       else this.openSB(true);
+      this.fetching = false;
     });
   }
 
   delete(footer:any) {
     footer.deleting = true;
+    this.fetching = true;
     this._general._file.deletefooter(footer.id).subscribe((resp:any)=>{
-      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp=>{
+      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp1=>{
         if(resp.success) {
           this.action = 'deleted';
           this.fetch();
         }
         else this.openSB(true);
+        this.fetching = false;
       });
     })
   }

@@ -24,6 +24,8 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   @ViewChild('campaignbody', { static: false }) screen: any;
+  @ViewChild('dialog2') dialog2!: TemplateRef<any>;
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   
   subjectControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
@@ -59,6 +61,9 @@ export class CrmCampaignBuilderComponent implements OnInit {
   emailid:any='';
   singleemail:any={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
   smtpstatus=false;
+  error=false;
+  errormessage:any='';
+  
 
   constructor(public _general:GeneralService,
         private _listService :ListService,
@@ -296,10 +301,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
   }
 
-  // sendchange(event:any){
-  //   this.sendoptn = event == 'specifictime' ? true:false;
-  // }
-
+  
   sendaddress(){
     // console.log(this.genaddress);
     var nwaddress = this.genaddress;
@@ -315,20 +317,30 @@ export class CrmCampaignBuilderComponent implements OnInit {
                  this._general.openSnackBar(false,'User Address added Successfully!', 'OK','center','top');
                 // this.alladdress = data.fulldata;
                 this.fetchAddress();
-                this.dialog.closeAll();
+                this.resetobj();
 
               }else{
-                 this._general.openSnackBar(true,'Something went wrong!', 'OK','center','top');
+                //  this._general.openSnackBar(true,'Something went wrong!', 'OK','center','top');
+                this.error=true;
+                this.errormessage='Server Error';
+                this.dialog.open(this.dialog2);
               }
           }
         });
 
       }else{
-         this._general.openSnackBar(true,'Incorrect Address Details!!', 'OK','center','top');
+        //  this._general.openSnackBar(true,'Incorrect Address Details!!', 'OK','center','top');
+        this.error=true;
+                this.errormessage='Incorrect Address Details';
+                this.dialog.open(this.dialog2);
       }
       
     }else{
-       this._general.openSnackBar(true,'All fields are required!!', 'OK','center','top');
+      //  this._general.openSnackBar(true,'All fields are required', 'OK','center','top');
+               this.error=true;
+                this.errormessage='All fields are required';
+                this.dialog.open(this.dialog2);
+       
     }
 
   }
@@ -417,5 +429,14 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.singleemail.subject=email.subject;
     this.singleemail.body=email.body;
     }
+  }
+  resetobj(){
+    this.error=false;
+    this.errormessage='';
+    this.genaddress= {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
+    // this.fullcampobj= {name:'',lists:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
+    // this.singleemail={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
+    this.testemail='';
+    this.dialog.closeAll();
   }
 }

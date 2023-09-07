@@ -2,7 +2,7 @@
   (mouseleave)="hoveropen = false" [class.hoveropen]="hoveropen || toggleSidebar">
   <div class="bw-sidebar-logo" [style]="hoveropen || toggleSidebar ? 'padding-left: 20px;': ''">
     <span mat-ripple [class.kb-show-close-icon]="toggleSidebar" (click)="triggerSidebar()" class="kb-close-sidebar-icon"><i class="fa-solid fa-xmark"></i></span>
-    <img src="/assets/images/logo/kblogo.png" alt="Kea logo" [routerLink]="'/'">
+    <img src="/assets/images/logo/kblogo-white.png" alt="Kea logo" [routerLink]="'/'">
     <div class="bw-logo__item__text pl-2" *ngIf="hoveropen || toggleSidebar">Keabuilder<div class="fadingEffect"></div>
     </div>
   </div>
@@ -23,7 +23,7 @@
         <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]">
           <div class="bw-sidebar__item__icon">
             <i [class]="allmenu[i].icon" aria-hidden="true"></i>
-            <img [src]="'/assets/images/sidebar/'+allmenu[i].img" width="35" class="d-none">
+            <img [src]="'/assets/images/sidebar/'+allmenu[i].img" width="35" class="d-none" *ngIf="false">
           </div>
           <div class="bw-sidebar__item__text">
             {{allmenu[i].title}}
@@ -37,7 +37,7 @@
           <button class="bw-sidebar__item hasIcon" *ngIf="!allmenu[i]['submenu'][j][0]">
             <div class="bw-sidebar__item__icon">
               <i [class]="allmenu[i]['submenu'][j].icon" aria-hidden="true"></i>
-              <img [src]="'/assets/images/sidebar/'+allmenu[i]['submenu'][j].img" width="35" class="d-none">
+              <img [src]="'/assets/images/sidebar/'+allmenu[i]['submenu'][j].img" width="35" class="d-none" *ngIf="false">
             </div>
             <div class="bw-sidebar__item__text">
               {{allmenu[i]['submenu'][j].title}}

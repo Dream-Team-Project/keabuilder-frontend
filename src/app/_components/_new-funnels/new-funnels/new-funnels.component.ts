@@ -15,8 +15,15 @@ import {MatDialog,} from '@angular/material/dialog';
   styleUrls: ['./new-funnels.component.css'],
 })
 export class NewFunnelsComponent implements OnInit {
+
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('colorbadgedialog') colorbadgedialog!: TemplateRef<any>;
+  @ViewChild('deletedialog') deletedialog!: TemplateRef<any>;
+  @ViewChild('funnelduplicatedialog') funnelduplicatedialog!: TemplateRef<any>;
  
   expi: number = -1;
+  error=false;
+  errormessage:any='';
   dataobj: any;
   errorMessage = '';
   funnels: any = [];
@@ -128,6 +135,7 @@ export class NewFunnelsComponent implements OnInit {
               uniqueid +
               '/steps/' +
               data.data[0].uniqueid;
+              
           }
         },
       });
@@ -171,14 +179,9 @@ export class NewFunnelsComponent implements OnInit {
             // console.log(data);
             
             if (data.exist == 1) {
-              this.searching = false;
-              this._general.openSnackBar(
-                false,
-                'Subdomain is in use, please use another name!',
-                'OK',
-                'center',
-                'top'
-              );
+              this.error=true;
+      this.errormessage="Title & subdomain Fields required !";
+      this.dialog.open(this.funnelduplicatedialog);
             } else {
 
               if (data.success == 1) {
@@ -209,41 +212,41 @@ export class NewFunnelsComponent implements OnInit {
                         'center',
                         'top'
                       );
-                      this.searching = false;
+                     this.resetobj();
                     },
                   });
-                  this.dialog.closeAll();
               }
               else{
-                this._general.openSnackBar(
-                  true,
-                  data?.message,
-                  'Ok',
-                  'center',
-                  'top'
-                );
-                this.searching = false;
+                this.error=true;
+      this.errormessage="Server Error!";
+      this.dialog.open(this.funnelduplicatedialog);
               }
             }
           },
         });
       } else {
-        this._general.openSnackBar(
-          false,
-          'Subdomain is in use, please use another name!',
-          'OK',
-          'center',
-          'top'
-        );
+        this.error=true;
+      this.errormessage="Subdomain is in use, please use another name!";
+      this.dialog.open(this.funnelduplicatedialog);
+        // this._general.openSnackBar(
+        //   false,
+        //   'Subdomain is in use, please use another name!',
+        //   'OK',
+        //   'center',
+        //   'top'
+        // );
       }
     } else {
-      this._general.openSnackBar(
-        false,
-        'Error in Title & subdomain Fields!',
-        'OK',
-        'center',
-        'top'
-      );
+      this.error=true;
+      this.errormessage="Title & subdomain Fields required !";
+      this.dialog.open(this.funnelduplicatedialog);
+      // this._general.openSnackBar(
+      //   false,
+      //   'Error in Title & subdomain Fields!',
+      //   'OK',
+      //   'center',
+      //   'top'
+      // );
     }
   }
 
@@ -271,10 +274,15 @@ export class NewFunnelsComponent implements OnInit {
             'center',
             'top'
           );
-          this.reason = '';
+          
           this.showfunnels();
-          this.dialog.closeAll();
+         this.resetobj();
           this.shwobtnfirst = true;
+        }
+        else{
+          this.error=true;
+          this.errormessage='Server Error';
+          this.dialog.open(this.deletedialog);
         }
       },
     });
@@ -466,6 +474,7 @@ export class NewFunnelsComponent implements OnInit {
             });
           }
           else{
+            this.resetobj();
             this._general.openSnackBar(
               true,
               data?.message,
@@ -520,7 +529,7 @@ export class NewFunnelsComponent implements OnInit {
 
         if (data.status == 1) {
           this.draftpublish('0', data.page_path, this.funnelarchid);
-          this.reason = '';
+         this.resetobj();
           this.showfunnels();
           this._general.openSnackBar(
             false,
@@ -531,6 +540,8 @@ export class NewFunnelsComponent implements OnInit {
           );
         } else if (data.status == 0) {
           if (data.notallow == 1) {
+            this.shwobtnfirst = true;
+            this.resetobj();
             this._general.openSnackBar(
               false,
               'Single Step Can not be Archived!',
@@ -539,34 +550,18 @@ export class NewFunnelsComponent implements OnInit {
               'top'
             );
           }
+          else{
+            this.error=true;
+          this.errormessage='Server Error';
+          this.dialog.open(this.deletedialog);
+          }
         }
-        this.shwobtnfirst = true;
-        this.dialog.closeAll();
+      
       },
     });
   }
 
-  // changestepnamesoutside(id: any, title: any) {
-  //   // console.log(id+''+title);
-  //   this.funnelService
-  //     .namepathchanges(id, title, 'changefunnelname')
-  //     .subscribe({
-  //       next: (data) => {
-  //         // console.log(data);
-  //         if (data.success == 1) {
-  //           this._general.openSnackBar(
-  //             false,
-  //             'Successfully Name Changed!',
-  //             'Ok',
-  //             'center',
-  //             'top'
-  //           );
-  //           this.showfunnels();
-  //         }
-  //       },
-  //     });
-  // }
-
+ 
   savesteptheme() {
     var obj = {
       value: this.badgecolor,
@@ -579,7 +574,7 @@ export class NewFunnelsComponent implements OnInit {
         // console.log(data);
 
         if (data.status == 1) {
-          this.dialog.closeAll();
+          this.resetobj();
           this.showfunnels();
           this._general.openSnackBar(
             false,
@@ -589,12 +584,20 @@ export class NewFunnelsComponent implements OnInit {
             'top'
           );
         }
+        else{
+          this.error=true;
+          this.errormessage='Server Error';
+          this.dialog.open(this.colorbadgedialog);
+
+        }
       },
     });
   }
+
   openDialog(templateRef: TemplateRef<any>): void {
     this.dialog.open(templateRef);
   }
+  
   dupanotherdes(page: any) {
     if (this.newfunnelid != '') {
       // console.log(page);
@@ -646,7 +649,7 @@ export class NewFunnelsComponent implements OnInit {
                       'top'
                     );
                 this.showfunnels();
-                this.dialog.closeAll();
+                this.resetobj();
               },
             });
           } else {
@@ -727,19 +730,23 @@ export class NewFunnelsComponent implements OnInit {
       ];
       if (this.searchStringInArray(nwsubdomain, notusesub) == 1) {
         this.searching = true;
+        this.dialog.closeAll();
         this.funnelService.savefunneldb(this.form).subscribe({
           next: (data) => {
             // console.log(data);
             this.dataobj = data.data;
             if (data.exist == 1) {
               this.searching = false;
-              this._general.openSnackBar(
-                false,
-                'Subdomain is in use, please use another name!',
-                'OK',
-                'center',
-                'top'
-              );
+              this.error=true;
+              this.errormessage='Subdomain is in use, please use another name!';
+              this.dialog.open(this.adddialog);
+              // this._general.openSnackBar(
+              //   false,
+              //   'Subdomain is in use, please use another name!',
+              //   'OK',
+              //   'center',
+              //   'top'
+              // );
             } else {
               if(data.data.success){
                 // console.log(data);
@@ -751,9 +758,6 @@ export class NewFunnelsComponent implements OnInit {
                     .oncreatesubdomain(this.form.subdomain, data.data.uniqueid)
                     .subscribe({
                       next: (datanw) => {
-                        // console.log("hello");
-                        this.searching = false;
-                        this.dialog.closeAll();
                         this._general.openSnackBar(
                           false,
                           'Funnel Created Successfully!',
@@ -770,21 +774,16 @@ export class NewFunnelsComponent implements OnInit {
                           ],
                           { relativeTo: this.route }
                         );
+                        this.resetobj();
                       },
                     });
                 });
               });
             }
               else{
-                this._general.openSnackBar(
-                  true,
-                  data?.data.message,
-                  'Ok',
-                  'center',
-                  'top'
-                );
-                this.searching = false;
-                this.dialog.closeAll();
+                this.error=true;
+                this.errormessage=data?.data.message;
+                this.dialog.open(this.adddialog);
               }
             }
           },
@@ -793,15 +792,39 @@ export class NewFunnelsComponent implements OnInit {
           },
         });
       } else {
-        this._general.openSnackBar(
-          false,
-          'Subdomain is in use, please use another name!',
-          'OK',
-          'center',
-          'top'
-        );
+        this.error=true;
+        this.errormessage='Subdomain is in use, please use another name!';
+        this.dialog.open(this.adddialog);
+        // this._general.openSnackBar(
+        //   false,
+        //   'Subdomain is in use, please use another name!',
+        //   'OK',
+        //   'center',
+        //   'top'
+        // );
       }
     }
+  }
+  resetobj(){
+    this.searching=false;
+    this.error=false;
+    this.errormessage='';
+    this.newfunnelid='';
+    this.form = {
+      funnelname: '',
+      funnelfirststep: '',
+      badgecolor: '',
+      funneltype: '',
+      subdomain: '',
+    };
+    this.pageurl='';
+    this.mydomain = '';
+    this.funnelurl = '';
+  this.reason = '';
+  this.selfunnelid = '';
+  this.dupfunnelname = '';
+  this.funnelarchid = '';
+    this.dialog.closeAll();
   }
   createwebsitefolder() {
     return new Promise((resolve) => {

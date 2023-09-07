@@ -61,10 +61,12 @@ export class WebpagesArchiveComponent implements OnInit {
   }
   deletepage(selectdata:any,type:any){
     this.searching = true;
+    
+    this.dialog.closeAll();
     this.webpagesService.restoredeletepage({id:selectdata.id, type:type}).subscribe({
       next: data => {
         this.searching = false;
-        if(data.success==1){
+        if(data.success==1){  
           
           // var newpathobj:any = {website_id:this.uniqueid, path:data.path};
           // this.fileuploadService.deletepage(newpathobj).subscribe({
@@ -88,9 +90,12 @@ export class WebpagesArchiveComponent implements OnInit {
           //   }
           // });
           this.archivedwebpage();
-          this.dialog.closeAll();
-        this._general.openSnackBar(
-            false,data?.message,'OK','center','top');
+
+          if(type=='delete'){
+            this._general.openSnackBar(false,'Delete Page Successfully!','OK','center','top');
+          }else if(type=='restore'){
+            this._general.openSnackBar(false,'Restore Page Successfully!','OK','center','top');
+          }
 
         }
       }

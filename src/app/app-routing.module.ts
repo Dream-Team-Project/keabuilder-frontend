@@ -96,6 +96,7 @@ import { MembershipPaymentComponent } from './_components/_membership/payment/pa
 import { MembershipMembersComponent } from './_components/_membership/members/members.component';
 import { MembershipTagsComponent } from './_components/_membership/tags/tags.component';
 import { MembershipMarketplaceComponent } from './_components/_membership/marketplace/marketplace.component';
+import { MembershipReportsComponent } from './_components/_membership/membership-reports/membership-reports.component';
 // theme
 import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
 import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
@@ -139,6 +140,7 @@ import { AccountComponent } from './_components/_account-settings/account/accoun
 import { ProfileSettingsComponent } from './_components/_account-settings/profile-settings/profile-settings.component';
 import { SignInSecurityComponent } from './_components/_account-settings/sign-in-security/sign-in-security.component';
 import { BillingComponent } from './_components/_account-settings/billing/billing.component';
+import { NewMembershipComponent } from './_components/_membership/new-membership/new-membership.component';
 
 //account-settings
 
@@ -287,20 +289,22 @@ canActivate: [AuthGuard] },
   // membership
 
   { path: 'membership', component: MembershipComponent,
-    children:[
-      { path: '', component: MembershipCoursesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-      { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-      { path: 'product', component: MembershipProductComponent, canActivate: [AuthGuard] }, // suspicious: not in used
-      { path: 'offers', component: MembershipOffersComponent, canActivate: [AuthGuard] },
-      { path: 'coupons', component: MembershipCouponsComponent, canActivate: [AuthGuard] },
-      { path: 'payments', component: MembershipPaymentComponent, canActivate: [AuthGuard] },
+    children : [
+      { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
+      { path: 'reports', component: MembershipReportsComponent, canActivate: [AuthGuard] }, 
+      { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
       { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-      { path: 'tags', component: MembershipTagsComponent, canActivate: [AuthGuard] },
       { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-  ],
-   canActivate: [AuthGuard] },
+    ],
+    canActivate: [AuthGuard] },
+      { path: 'new-membership', component: NewMembershipComponent,
+      children :[
+        { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+        { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+        { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+        ],canActivate: [AuthGuard] },
+  
+   
 
   // membership
 
@@ -410,6 +414,7 @@ export const RoutingComponents =
     MembershipMembersComponent,
     MembershipTagsComponent,
     MembershipMarketplaceComponent,
+    MembershipReportsComponent,
     CrmFormsComponent,
     CrmFormFetchComponent,
     CrmEmailsComponent,

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseService } from 'src/app/_services/_membership/course.service';
@@ -14,15 +14,14 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 export class MembershipCoursesComponent implements OnInit {
 
+  @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  
+  spinner=false;
   validate = {
     title: new FormControl('', [Validators.required]),
   }
   courses:any[] = [];
-  sidebar = {
-    open: false,
-    anim: {open: false, close: false, time: 500},
-    animtime: 300,
-  }
+ 
   file = null;
   typeerror = '';
   offers = new FormControl();
@@ -33,7 +32,7 @@ export class MembershipCoursesComponent implements OnInit {
   };
   offersToAdd:Array<string> = [];
   
-  course = {
+  course:any = {
     id: '',
     uniqueid: '',
     user_id: '',
@@ -57,7 +56,7 @@ export class MembershipCoursesComponent implements OnInit {
   btndis:boolean = false;
   delcourse:any;
 
-  constructor(private _course: CourseService,
+  constructor(public _course: CourseService,
              public _image: ImageService, 
              private _file: FileUploadService,
              public _general: GeneralService,
@@ -84,14 +83,30 @@ export class MembershipCoursesComponent implements OnInit {
 
   openDialog(templateRef: TemplateRef<any>, course:any ): void {
     this.delcourse = course;
-    this.dialog.open(templateRef);
+    this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+      this.course.id= '';
+      this.course.uniqueid= '';
+      this.course.user_id= '';
+      this.course.title='';
+      this.course.path='';
+      this.course.description= '';
+      this.course.thumbnail= '';
+      this.course.offers= '';
+      this.course.publish_status= '';
+      this.thumbnail = {
+        path: '',
+        type: ''
+      }
+    });
   }
 
   allCourses() {
     this.fetching = true;
+    // this.spinner=true;
     this._course.all().subscribe((res:any)=>{
       this.courses = res.data;
       this.fetching = false;
+      // this.spinner=false;
     }); 
   }
 
@@ -105,7 +120,7 @@ export class MembershipCoursesComponent implements OnInit {
       this._course.create(this.course).subscribe((res:any)=>{
         this._image.onImageFileUpload(this.thumbnail).then(resp=>{
           this.allCourses();
-          this.closeSidebar();
+          this.dialog.closeAll();
           this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
         })
       })
@@ -115,16 +130,16 @@ export class MembershipCoursesComponent implements OnInit {
   duplicateCourse(course:any) {
     this.course.id=course.uniqueid;
     this.course.uniqueid = this._general.makeid(20);
-    var oldimg ='keaimage-course-thumbnail-'+course.uniqueid+'.png';
+    var oldimg =course.thumbnail;
     this.course.description=course.description;
     this.thumbnail.path=course.path;
-    this.thumbnail.type='png';
+    this.thumbnail.type= this.thumbnail.type ? this.thumbnail.type : 'png';
     this.course.path=course.path;
     this.course.title=course.title;
     this.course.publish_status=course.publish_status;
       this.btndis = true;
-      // this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
-      // this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+      this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
       console.log(this.course)
       this._course.duplicate(this.course).subscribe((res:any)=>{
         console.log(res)
@@ -133,7 +148,7 @@ export class MembershipCoursesComponent implements OnInit {
           next: datagen => {
             console.log(datagen)
             if(datagen.data==1){
-              var imgobj  = {oldname:oldimg, newname:'keaimage-course-thumbnail-'+this.course.uniqueid+'.png'};
+              var imgobj  = {oldname:oldimg, newname: this.course.thumbnail};
               this._file.copyimage(imgobj).subscribe({
                 next: data => {
                   this.allCourses();
@@ -165,7 +180,7 @@ export class MembershipCoursesComponent implements OnInit {
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
         this._image.timeStamp = (new Date()).getTime();
         this.allCourses();
-        this.closeSidebar();
+        this.dialog.closeAll();
         this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
       })
     }
@@ -199,48 +214,15 @@ export class MembershipCoursesComponent implements OnInit {
     }); 
   }
 
-  closeSidebar(){
-    this.showmyselected  = [];
-    var arselmult:any = [];
-    this.offers.setValue(arselmult); 
-    this.sidebar.anim.close = true;
-    setTimeout((e:any)=>{
-      this.sidebar.anim.close = false;
-      this.sidebar.open = false;
-      this.btndis = false;
-      this.course ={ 
-        id: '',
-        uniqueid: '',
-        user_id: '',
-        title: '',
-        path: '',
-        description: '',
-        thumbnail: '',
-        offers: '',
-        publish_status: ''
-      }
-      this.thumbnail = {
-        path: '',
-        type: ''
-      }
-    },this.sidebar.animtime)
-  }
-
-  openSidebar(course:any, update:boolean){
-    this.update = update;
-    this.course = course;
-    this.sidebar.open = true;
-    this.sidebar.anim.open = true;
-    setTimeout((e:any)=>this.sidebar.anim.open = false,this.sidebar.animtime);
-  }
 
   quickEdit(course:any) {
-    var temp = JSON.parse(JSON.stringify(course));
-    // this.offersToAdd = this.course.offers.split(',');
-    // this.showmyselected = course.offers.split(',');
-    // this.findselectedproduct();
-    this.thumbnail.path = this._image.uploadImgPath + 'keaimage-course-thumbnail-'+temp.uniqueid+'.png';
-    this.openSidebar(temp, true);
+    this.course = JSON.parse(JSON.stringify(course));
+    this.thumbnail.path = this._image.uploadImgPath +this.course.thumbnail;
+    let chk=this.course.thumbnail.split('.');
+    if(chk[1]=='image/jpeg' || chk[1]=='image/jpg' || chk[1]=='image/png'){
+    this.thumbnail.type = chk[1];
+    }
+    this.dialog.open(this.adddialog,this.course);
   }
   
   changeImg (event:any) {
@@ -285,6 +267,7 @@ export class MembershipCoursesComponent implements OnInit {
   adjustdata(data:any){
     this.courses = data;
     this.fetching = false;
+    // this.spinner=false;
   }
 
   toggleView() {

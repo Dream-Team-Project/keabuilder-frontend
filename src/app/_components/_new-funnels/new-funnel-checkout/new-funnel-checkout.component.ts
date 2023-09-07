@@ -108,12 +108,13 @@ export class NewFunnelCheckoutComponent implements OnInit {
     ) {
       this.route.paramMap.subscribe((params: ParamMap) => { 
         this.uniqueid = params.get('id');
-        console.log()
+        // console.log(this.uniqueid);
       })
 
         var dt = {id: this.uniqueid};
         this.checkoutService.orderformgetuserid(dt).subscribe({
           next: data => {
+            // console.log(data);
             if(data?.data?.length!=0){
               this.checkoutvisible = true;
               this.chkerror = '';
@@ -186,11 +187,11 @@ export class NewFunnelCheckoutComponent implements OnInit {
         stripeData['offerid'] = this.uniqueproid;
         stripeData['user_id'] = this.user_id;
 
-        // console.log(stripeData);
+        console.log(stripeData);
 
         this.checkoutService.stripePayment(stripeData).subscribe({
           next: data => {
-            // console.log(data);
+            console.log(data);
             if(data.success){
 
               if(data.customer){

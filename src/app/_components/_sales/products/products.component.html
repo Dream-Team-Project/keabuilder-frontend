@@ -13,8 +13,8 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
-        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="validateproduct('add')" color="primary" [disabled]="!productObj.name">Add</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()" >Cancel</button>
+        <button mat-button mat-dialog-close (click)="validateproduct('add')" color="primary" [disabled]="!productObj.name">Add</button>
     </div>
   </ng-template>
   <!-- add new product -->
@@ -33,8 +33,8 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions class="float-right">
-        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="validateproduct('update')" color="primary" [disabled]="!productObj.name">Update</button>
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">Cancel</button>
+        <button mat-button mat-dialog-close (click)="validateproduct('update')" color="primary" [disabled]="!productObj.name">Update</button>
     </div>
   </ng-template>
   <!-- update product -->
@@ -45,7 +45,7 @@
       Would you like to duplicate <span class="kb-temp-text-primary">{{productObj.name}}</span> product?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close class="text-danger">No</button>
+      <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
       <button mat-button mat-dialog-close (click)="duplicateproduct(productObj)" [color]="'primary'">Yes</button>
     </div>
   </ng-template>
@@ -57,7 +57,7 @@
       Would you like to delete <span class="text-danger">{{productObj.name}}</span> product?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close [color]="'primary'" (click)="resetobj()">No</button>
       <button mat-button mat-dialog-close (click)="deleteproduct()" class="text-danger">Yes</button>
     </div>
   </ng-template>

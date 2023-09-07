@@ -1,4 +1,4 @@
-<ng-template #dialog>
+<ng-template #deldialog>
   <h1 mat-dialog-title class="kb-danger">Delete Course</h1>
   <div mat-dialog-content>
     Would you like to delete <span class="text-danger">{{delcourse.title}}</span> course?
@@ -9,7 +9,7 @@
   </div>
 </ng-template>
 <ng-template #duplicatedialog>
-  <h1 mat-dialog-title class="">Are you indeed want to duplicate this Course</h1>
+  <h1 mat-dialog-title class="">duplicate Course</h1>
   <div mat-dialog-content>
     Would you like to duplicate <span >{{delcourse.title}}</span> course?
   </div>
@@ -18,119 +18,57 @@
     <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="duplicateCourse(delcourse)">Yes</button>
   </div>
 </ng-template>
+<ng-template #adddialog>
+  <h1 mat-dialog-title>{{course?.id ? 'Update' : 'Add'}} Course</h1>
+    <div mat-dialog-content>
+      <mat-error *ngIf="isNotValid(validate.title)">
+        Course title should not be empty
+      </mat-error>
+      <mat-error *ngIf="validate.title.hasError('minlength')">
+        Course title must be at least <strong>3</strong> characters
+      </mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Title</mat-label>
+        <input name="title" [formControl]="validate.title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
+          minlength="3">
+      </mat-form-field>
+
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Path</mat-label>
+        <input name="url" [(ngModel)]="course.path" (input)="course.path = _general.joinWthDash(course.path)" type="text" matInput>
+      </mat-form-field>
+
+      <mat-form-field #description class="kb-full-width" appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
+      </mat-form-field>
+
+      <div class="imgFormField p-3 inpfill">
+        <label>Thumbnail</label>
+        <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
+          <img class="img-fluid" [src]="thumbnail.path"/>
+        </div>
+        <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
+          class="drop-zone__input">
+        <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+        <span *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></span>
+      </div>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close (click)="dialog.closeAll()" class="text-danger">No</button>
+      <button mat-button  cdkFocusInitial [color]="'primary'" (click)="course?.id ? updateCourse()  : createCourse()" [disabled]="validate.title.invalid || !course.path">{{course?.id ? 'Update' : 'Add'}}</button>
+    </div>
+</ng-template>
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-  <!-- sidebar -->
-  <div id="kb-offcanvas-actions" *ngIf="sidebar.open">
-    <div class="offcanvas offcanvas-right p-4 offcanvas-on" [class.loadEffectFromLeftsidebar]="sidebar.anim.open" [class.loadEffectFromLeftsidebarClose]="sidebar.anim.close" >
-      <form>
-        <i class="fas fa-times" (click)="closeSidebar()"></i>
-        <h6><strong>NEW COURSE STEPS</strong></h6>
-        <hr>
-        <mat-error *ngIf="isNotValid(validate.title)">
-          Course title should not be empty
-        </mat-error>
-        <mat-error *ngIf="validate.title.hasError('minlength')">
-          Course title must be at least <strong>3</strong> characters
-        </mat-error>
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Title</mat-label>
-          <input name="title" [formControl]="validate.title" [(ngModel)]="course.title" type="text" matInput placeholder="Ex. 10 Days to Productivity" required
-            minlength="3">
-        </mat-form-field>
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Path</mat-label>
-          <input name="url" [(ngModel)]="course.path" (input)="course.path = _general.joinWthDash(course.path)" type="text" matInput>
-        </mat-form-field>
-        <mat-form-field #description class="kb-full-width" appearance="fill">
-          <mat-label>Description</mat-label>
-          <textarea name="description" [(ngModel)]="course.description" matInput></textarea>
-        </mat-form-field>
-        <div class="imgFormField p-3 inpfill">
-          <label>Thumbnail</label>
-          <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
-            <img class="img-fluid" [src]="thumbnail.path"/>
-          </div>
-          <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
-            class="drop-zone__input">
-          <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
-          <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
-        </div>
-
-        <!-- <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Offers</mat-label>
-          <mat-select [(ngModel)]="offersToAdd" [formControl]="offers" multiple>
-            <mat-select-trigger>
-              {{offers.value ? offers.value[0] : ''}}
-              <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
-                (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
-              </span>
-            </mat-select-trigger>
-            <mat-option *ngFor="let offer of offersList" [value]="offer">{{offer}}</mat-option>
-          </mat-select>
-        </mat-form-field> -->
-
-        <!-- <mat-form-field class="kb-full-width" appearance="fill" >
-          <mat-label>Offers</mat-label>
-          <mat-select [formControl]="offers" multiple (selectionChange)="changeselectcourse($event.value)">
-            <mat-select-trigger>
-              <span *ngFor="let offer of offersList" >
-                <span *ngIf="offer['id'] == offers.value">
-                  {{offer['text']}}
-                </span>
-              </span>
-
-              <span *ngIf="offers.value?.length > 1" class="example-additional-selection">
-                (+{{offers.value.length - 1}} {{offers.value?.length === 2 ? 'other' : 'others'}})
-              </span>
-            </mat-select-trigger>
-            <mat-option *ngFor="let offer of offersList" [value]="offer['id']">{{offer['text']}}</mat-option>
-          </mat-select>
-        </mat-form-field> -->
-
-        <!-- <p *ngIf="selectedcourse && showmyselected.length!=0">
-          Selected Course: 
-            <span *ngFor="let showquickoff of showquickoffer;" class="showsomediff" >
-                {{showquickoff}}
-            </span>
-        </p> -->
-        <div class="col-12 p-0 text-center">
-          <button *ngIf="update else create" mat-raised-button color="primary" (click)="updateCourse()" [disabled]="btndis">
-            Update Course <i class="far fa-edit"></i>
-          </button>
-          <ng-template #create>
-            <button mat-raised-button color="primary" (click)="createCourse()" [disabled]="btndis">
-              Create Course <i class="fas fa-plus"></i>
-            </button>
-          </ng-template>
-        </div>
-      </form>
-      <!-- <div *ngIf="showpageurl">
-        <h6><strong>Duplicate Course URL</strong></h6>
-        <hr>
-        <mat-form-field class="kb-full-width" appearance="fill">
-          <mat-label>Course Url</mat-label>
-          <textarea matInput readonly rows="3" name="funnelurlonly" #userinput2 >{{pageurl}}</textarea>
-        </mat-form-field>
-        
-        <button mat-raised-button color="primary" (click)="copyInputMessage(userinput2)" >
-            <i class="far fa-copy"></i> Duplicate Url
-        </button>
-      </div> -->
-    </div>
-
-  </div>
-  <div class="offcanvas-overlay" *ngIf="sidebar.open" (click)="closeSidebar()" [class.slowVisible]="sidebar.anim.open" [class.slowHide]="sidebar.anim.close"></div>
-  <!-- sidebar -->
-  <div class="container-fluid">
     <div class="row align-items-center">
-      <div class="col-md-8">
-        <mat-form-field appearance="fill" class="col-8 pr-2">
+        <mat-form-field appearance="fill" class="col-md-6 pr-0">
           <mat-label>Search Courses</mat-label>
           <input matInput #searchInp type="text" (input)="searchCourses(searchInp, filterInp)" placeholder="Search Course Name">
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-4">
+
+        <mat-form-field appearance="fill" class="col-md-2">
           <mat-label>Sort By</mat-label>
           <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
             <mat-option [value]="'title ASC'">ASC By Name</mat-option>
@@ -139,31 +77,33 @@
             <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+     
       <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
         </button>
-        <button mat-raised-button color="primary" (click)="openSidebar(course, false)" class="mx-3">Create New <i
+        <button mat-raised-button color="primary" (click)="openDialog(adddialog,'')" class="mx-3">Create New <i
             class="fas fa-plus"></i></button>
       </div>
     </div>
     <div class="row">
-      <div *ngFor="let course of courses" [class]="toggleview ? 'col-md-6' : 'col-12'">
+      <div *ngFor="let course of courses" [class]="toggleview ? 'col-md-4' : 'col-md-12'">
         <div class="row kb-course-block">
           <div [class.kb-disabled]="course.deleting" class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
-          [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'keaimage-course-thumbnail-'+course.uniqueid+'.png' + '), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+          [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+course.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
             <div class="kb-loader" *ngIf="shortwaiting || course.deleting">
               <div class="kb-loader-shadow"></div>
               <div class="kb-loader-box"></div>
             </div>
           </div>
-          <div class="kb-course-content p-0" [class]="toggleview ? 'col-12' : 'col-md-9'">
+          <div class="kb-course-content p-0" [class]="toggleview ? 'col-md-12' : 'col-md-9'">
             <div class="kb-course-subblock p-2" [class.px-3]="!toggleview">
               <div class="kb-course-title">
                 {{course.title}}
+                
               </div>
+              
               <div>
                 <span [matTooltip]="course.total_modules+' Module'+(course.total_modules==1 ? '' : 's')" matTooltipPosition="above" class="mx-2">
                   <i class="fa-regular fa-folder pr-1"></i>
@@ -175,16 +115,20 @@
                 </span>
               </div>
             </div>
+            <div class="p-2">
+              <i class="fa-regular fa-calendar"></i>
+                {{_general.dateformat(course.updated_at)}}
+            </div>
             <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
-              <span class="kb-course-updatedat text-left float-left px-0 pb-2">
+              <!-- <span class="kb-course-updatedat text-left float-left px-0 pb-2">
                 <span matTooltip="Updated At" matTooltipPosition="above">
                   <i class="fa-regular fa-calendar"></i>
                   {{_general.dateformat(course.updated_at)}}
                 </span>
-              </span>
+              </span> -->
               <button [disabled]="course.deleting" mat-raised-button color="accent">View <i class="fa-solid fa-eye"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="primary"
-              [routerLink]="'course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
+              [routerLink]="'/new-membership/course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="accent"
               [matMenuTriggerFor]="menu">More <i class="fa-solid fa-gear"></i></button>
               <mat-menu #menu="matMenu">
@@ -194,7 +138,7 @@
                 <button mat-menu-item (click)="openDialog(duplicatedialog,course)">
                   <i class="far fa-copy pr-2"></i>Duplicate
                 </button>
-                <button (click)="openDialog(dialog, course)" mat-menu-item class="text-danger">
+                <button (click)="openDialog(deldialog, course)" mat-menu-item class="text-danger">
                   <i class="far fa-trash-alt pr-2"></i>Delete
                 </button>
               </mat-menu>
@@ -203,5 +147,7 @@
         </div>
       </div>
     </div>
+    <div class="kb-spinner" *ngIf="spinner">
+      <mat-spinner></mat-spinner>
+    </div>
   </div>
-</div>

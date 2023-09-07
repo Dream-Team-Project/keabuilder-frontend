@@ -3,7 +3,7 @@
 }
 
 div#kbc-topbar {
-    background-color: var(--kb-gray);
+    /* background-color: var(--kb-gray); */
     border-radius: 4px;
     overflow: hidden;
 }
@@ -20,7 +20,14 @@ div#kbc-topbar {
     color: var(--accent-color);
     font-size: 15px;
 }
-
+.kbc-title {
+    color: var(--secondary-color);
+    font-size: 16px;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .kbc-block-inner {
     line-height: 20px;
     padding: 4px 0;
@@ -133,9 +140,9 @@ span.kbc-qs-status button {
     border-radius: 5px;
     line-height: 20px;
     width: auto;
-    font-size: 90%;
+    font-size: 80%;
     color: var(--kb-light);
-    font-weight: 600;
+    /* font-weight: 600; */
 }
 
 span.kbc-qs-status button.active {
@@ -193,3 +200,10 @@ span.kb-ispan-add:hover {
     font-size: 15px;
     font-weight: 400;
 }
+.ftsize{
+
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }

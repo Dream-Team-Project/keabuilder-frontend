@@ -78,6 +78,7 @@
     </button>
     <button
       mat-button
+      mat-dialog-close 
       (click)="updatepassword()"
       [disabled]="tokenFormControl.invalid || passwordFormControl.invalid || confirmpasswordFormControl.invalid"
       [color]="'primary'"
@@ -114,6 +115,7 @@
     </button>
     <button
       mat-button
+      mat-dialog-close 
       (click)="updateusername()"
       [disabled]="usernameFormControl.invalid"
       [color]="'primary'"

@@ -49,6 +49,7 @@
         </div>
     </div>
     <mat-tab-group class="kb-template-container">
+      <mat-progress-bar mode='indeterminate'></mat-progress-bar>
         <mat-tab label="Marketplace">
             <div class="row m-0">
               <div class="col-md-2 bw-sidebar kb-template-card">
@@ -57,10 +58,11 @@
               </div>
               </div>
               <div class="col-md-10 d-flex flex-wrap" *ngIf="systemplates?.length > 0">
+                
                 <div *ngFor="let temp of systemplates" class="kb-template-card-outer col-md-4 p-3" >
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}">
+                            [ngStyle]="{'background-image': 'url('+ _image.uploadImgPath+'keaimage_' + temp.uniqueid+'_template.jpg' + ')'}">
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-2">
                           <span class="ftoverflow">{{temp.name | titlecase}}</span>
@@ -78,13 +80,12 @@
                 </div>
                 
               </div>
-            </div>
-                
-            
+            </div> 
         </mat-tab>
-        <mat-tab label="Saved Templates">
-          <div class="row m-0 mt-3">
 
+        <mat-tab label="Saved Templates">
+          <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+          <div class="row m-0 mt-3">
             <mat-form-field  appearance="fill" class="col-md-6">
               <mat-label>Search Templates</mat-label>
               <input #searchInp matInput type="text"  (input)="searchsavedtemplates(searchInp,filterInp)" id="template-search" placeholder="Search by template name">
@@ -105,7 +106,17 @@
                 <div *ngFor="let temp of templates" class="kb-template-card-outer col-md-4 p-3">
                     <div class="kb-template-card">
                         <div class="kb-template-thumbnail"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}">
+                        [ngStyle]="{
+                          'background-image':
+                            'url(' +
+                            _image.uploadImgPath +
+                            _general.getSSPath('page-' + temp.uniqueid) +
+                            '), url(' +
+                            _image.uploadImgPath +
+                            'webpage_thumbnail2.jpg' +
+                            ')'
+                        }">
+                            <!-- [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+'webpage_thumbnail2.jpg' + ')'}"> -->
                         </div>
                         <div class="d-flex justify-content-between align-items-center p-2">
                             <span class="ftoverflow">{{temp.name | titlecase}}</span>
@@ -130,6 +141,7 @@
                       <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No System templates found">
                     </div>
             </div>
+
         </mat-tab>
     </mat-tab-group>
 </div>

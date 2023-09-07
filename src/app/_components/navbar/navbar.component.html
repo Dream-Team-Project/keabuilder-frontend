@@ -1,4 +1,16 @@
 <app-feedback-form [DialogToggle]="DialogParentToggle" [user]="userService.user"></app-feedback-form>
+<ng-template #profiledialog>
+  <div mat-dialog-content class="m-0 symbol text-center w-100">
+    <div class="symbol-label m-auto" [style.backgroundImage]="'url('+_image.getImgPath(userimgpath)+')'" style="background-image:url('/assets/images/profile/avatar.png')"></div>
+    <p class="txttransform mt-2 mb-0">{{userService.user.name}}</p>
+    <p class="navi-text text-muted text-hover-primary brkeml">{{userService.user.email}}</p>
+    <button mat-button mat-dialog-close color="primary" id="defaultpri" [routerLink]="'/account/settings'"><i class="fas fa-user"></i> My Profile</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="logout()"><i class="fas fa-sign-out"></i> Sign Out</button>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">Close</button>
+  </div>
+</ng-template>
 <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top"
   [class.navshadow]="scrollPosition > 100">
   <div class="navbar-wrapper">
@@ -38,7 +50,8 @@
               </div>
               <span>
                 <div class="bw-avatar-content bw-change-color-badge">
-                  <div class="bw-avatar" (click)="showoffcanvasoverlay()">
+                  <!-- <div class="bw-avatar" (click)="showoffcanvasoverlay()"> -->
+                    <div class="bw-avatar"   (click)="mainDialog(profiledialog)">
                     <img [src]="_image.getImgPath(userimgpath)" alt="">
                   </div>
                 </div>

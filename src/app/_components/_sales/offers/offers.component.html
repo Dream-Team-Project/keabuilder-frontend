@@ -10,10 +10,26 @@
     </div>
     <div mat-dialog-actions class="float-right">
         <button mat-button mat-dialog-close class="text-danger">Cancel</button>
-        <button mat-button (click)="addoffer()" color="primary" [disabled]="!offerObj.name">Add</button>
+        <button mat-button mat-dialog-close (click)="addoffer()" color="primary" [disabled]="!offerObj.name">Add</button>
     </div>
   </ng-template>
   <!-- add new offer -->
+   <!-- update offer -->
+   <ng-template #updatedialog>
+    <h1 mat-dialog-title>Update Order Form</h1>
+    <div mat-dialog-content>
+      <mat-error *ngIf="hasError.name">{{hasError.name}}</mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="hasError">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Order Form name" [(ngModel)]="offerObj.name" required [minlength]="3">
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="float-right">
+        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+        <button mat-button mat-dialog-close (click)="updateoffer()" color="primary" [disabled]="!offerObj.name">Update</button>
+    </div>
+  </ng-template>
+  <!-- update offer -->
   <!-- duplicate offer -->
   <ng-template #dupdialog>
     <h1 mat-dialog-title >Duplicate Product</h1>
@@ -92,6 +108,9 @@
               <td>
                 <span class="d-flex">
                   <i #editlink mat-ripple matTooltip="Edit" matTooltipPosition="above" [routerLink]="offerLink+offer.uniqueid" class="fa fa-pencil px-4 kb-table-action-icon"></i>
+                  
+                  <i #editdialog mat-ripple matTooltip="Quick Edit" matTooltipPosition="above" (click)="openDialog(updatedialog, offer)" class="fa fa-edit px-4 kb-table-action-icon"></i>
+
                   <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above"  (click)="openDialog(dupdialog, offer)" class="fa fa-copy px-4 kb-table-action-icon"></i>
                   <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, offer)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
                 </span>
