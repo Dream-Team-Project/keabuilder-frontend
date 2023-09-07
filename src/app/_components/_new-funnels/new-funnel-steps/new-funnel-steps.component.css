@@ -10,6 +10,7 @@
   position: relative;
   transition: all 0.2s ease;
   overflow: hidden;
+  height: 60px;
 }
 
 .funnel-step-list:not(:last-child) {

@@ -80,6 +80,7 @@ export class NewFunnelsComponent implements OnInit {
   actionname: any = '';
   newfunnelid: any = '';
   dialogfunnelset = '';
+  hidefornow = false;
 
   constructor(
     private funnelService: FunnelService,
@@ -343,6 +344,7 @@ export class NewFunnelsComponent implements OnInit {
         newob.grouptags = element.grouptags;
         newob.created_at = element.created_at;
         newob.updated_at = element.updated_at;
+        newob.contentVisible = false;
 
         newob.domain = element.domain;
         newob.subdomain = element.subdomain;
