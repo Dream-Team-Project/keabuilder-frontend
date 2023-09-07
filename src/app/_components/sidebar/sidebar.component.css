@@ -347,14 +347,14 @@ div#topbar_notifications_logs {
   -ms-flex-pack: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 25px 5px;
-  min-height: 80px;
+  min-height: 65px;
   transition: 0.2s ease;
   position: relative;
 }
 
 .bw-sidebar-logo img {
-  height: 42px;
+  height: 34px;
+  margin: 0 10px;
   cursor: pointer;
 }
 
