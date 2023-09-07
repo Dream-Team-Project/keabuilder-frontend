@@ -479,119 +479,41 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {  }
   
-  changeFn(event:any){
+  changeFn(link: any) {
 
-    var myhref = event.currentTarget.attributes["href"].nodeValue;
-
-    if(myhref=='/websites'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[1][0] = true;
-
-      this.allmenu[1].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }else if(myhref=='/funnels'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[2][0] = true;
-
-      this.allmenu[2].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
-    else if(myhref=='/membership'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[3][0] = true;
-
-      this.allmenu[3].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
-    else if(myhref=='/crm'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[4][0] = true;
-
-      this.allmenu[4].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
-    else if(myhref=='/sales'){
-
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[5][0] = true;
-
-      this.allmenu[5].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
-    // else if(myhref=='/affiliates'){
-
-    //   this.extramenus = false;
-      
-    //   this.allmenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
-      
-    //   this.allmenu[10][0] = true;
-
-    //   this.allmenu[10].submenu.forEach((element: any) => {
-    //     element[0] = false;
-    //   });
-    // }
-    else if(myhref=='/account'){
-      this.extramenus = false;
-      
-      this.allmenu.forEach((element: any) => {
-        element[0] = false;
-      });
-      
-      this.allmenu[7][0] = true;
-
-      this.allmenu[7].submenu.forEach((element: any) => {
-        element[0] = false;
-      });
-    }
-
-    this.backme = true;
+    const menuMap:any = {
+      '/websites': 1,
+      '/funnels': 2,
+      '/membership': 3,
+      '/crm': 4,
+      '/sales': 5,
+      '/account': 7,
+      // '/affiliates': 10,
+    };
     
-    if(myhref!='/funnels' && myhref!='/sales' && myhref!='/websites' && myhref!='/membership' && myhref!='/crm' && myhref!='/affiliates' && myhref!='/account'){
-      this.backme = false;
-    } 
+    this.extramenus = false;
+    
+    const menuIndex = menuMap[link];
+    if (menuIndex !== undefined) {
 
-    // if(myhref=='/affiliates'){
-    if( myhref=='/affiliates'){
+      this.allmenu.forEach((element: any) => {
+        element[0] = false;
+      });
+
+      this.allmenu[menuIndex][0] = true;
+      this.allmenu[menuIndex].submenu.forEach((element: any) => {
+        element[0] = false;
+      });
+    }
+  
+    this.backme = true;
+  
+    if (link !== '/funnels' && link !== '/sales' && link !== '/websites' && link !== '/membership' && link !== '/crm' && link !== '/affiliates' && link !== '/account') {
       this.backme = false;
     }
 
   }
+  
 
   backFn(event:any){
     this.allmenu.forEach((element: any) => {

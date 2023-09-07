@@ -6,43 +6,37 @@
     </div>
   </div>
   <div class="bw-sidebar">
-    <a href="javascript:void(0)" (click)="backFn($event)" *ngIf="backme">
-      <button class="bw-sidebar__item hasIcon">
+      <button class="bw-sidebar__item hasIcon" (click)="backFn($event)" *ngIf="backme">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-arrow-alt-circle-left"></i>
-          <img src="/assets/images/sidebar/back.gif" width="35" class="d-none">
         </div>
         <div class="bw-sidebar__item__text">
           Back
         </div>
       </button>
-    </a>
-    <span *ngFor="let menu of allmenu; index as i;">
-      <a [routerLink]="allmenu[i].routerlink" [routerLinkActive]="['a-active']" (click)="changeFn($event)">
-        <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]">
-          <div class="bw-sidebar__item__icon">
-            <i [class]="allmenu[i].icon" aria-hidden="true"></i>
-            <img [src]="'/assets/images/sidebar/'+allmenu[i].img" width="35" class="d-none" *ngIf="false">
-          </div>
-          <div class="bw-sidebar__item__text">
-            {{allmenu[i].title}}
-          </div>
-        </button>
-      </a>
+    <span *ngFor="let menu of allmenu; index as i;" class="w-100 d-inline-block">
+      <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]" 
+        [routerLink]="allmenu[i].routerlink" [routerLinkActive]="['a-active']" (click)="changeFn(allmenu[i].routerlink)">
+        <div class="bw-sidebar__item__icon">
+          <i [class]="allmenu[i].icon" aria-hidden="true"></i>
+        </div>
+        <div class="bw-sidebar__item__text">
+          {{allmenu[i].title}}
+        </div>
+      </button>
 
       <span *ngIf="allmenu[i]['submenu']!=null">
-        <a *ngFor="let submenu of allmenu[i]['submenu']; index as j;" [routerLink]="allmenu[i]['submenu'][j].routerlink"
+        <span *ngFor="let submenu of allmenu[i]['submenu']; index as j;" [routerLink]="allmenu[i]['submenu'][j].routerlink"
           [routerLinkActive]="['a-active']">
           <button class="bw-sidebar__item hasIcon" *ngIf="!allmenu[i]['submenu'][j][0]">
             <div class="bw-sidebar__item__icon">
               <i [class]="allmenu[i]['submenu'][j].icon" aria-hidden="true"></i>
-              <img [src]="'/assets/images/sidebar/'+allmenu[i]['submenu'][j].img" width="35" class="d-none" *ngIf="false">
             </div>
             <div class="bw-sidebar__item__text">
               {{allmenu[i]['submenu'][j].title}}
             </div>
           </button>
-        </a>
+        </span>
       </span>
 
     </span>
