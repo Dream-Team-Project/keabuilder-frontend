@@ -614,8 +614,8 @@
                 </button>
             </div>
             <div class="col-4 p-0">
-                <div class="kb-top-inp-cont">
-                    <input [(ngModel)]="automation.name" type="text" class="kb-top-input" placeholder="Automation name">
+                <div class="kb-top-inp-cont keabuilder-title-board line-ellipsis">
+                    <input [(ngModel)]="automation.name" type="text" class="kb-top-input" placeholder="Automation name" (blur)="_automation.changename(automation,automation.name)">
                     <span class="kb-automation-name">{{automation.name ? automation.name : 'Automation Name'}}</span>
                 </div>
             </div>

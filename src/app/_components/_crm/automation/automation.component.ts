@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { AutomationService } from 'src/app/_services/_crm/automation.service';
+import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
 
 
 
@@ -19,7 +19,7 @@ delautomation:any;
 automations:any=[];
 automationname ='';
 automationnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-constructor(private _automationservice: AutomationService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
+constructor(private _automationgeneralservice: AutomationGeneralService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
   private router: Router,
   ) {
   this.togglebutton=true; 
@@ -31,7 +31,7 @@ ngOnInit(): void {
 
 fetchAutomations() {
   return new Promise((resolve) => {
-    this._automationservice.fetchautomations().subscribe(
+    this._automationgeneralservice.fetchautomations().subscribe(
       (data) => {
         this.automations = data.data;
         resolve(true);
@@ -49,7 +49,7 @@ addautomation(){
   if(this.automationnameControl.status=='VALID'){
     if(this.automationname!=''){
       var data = {name:this.automationname};
-  this._automationservice
+  this._automationgeneralservice
   .addautomation(data)
   .subscribe((data) => {
     // console.log(data.uniqueid)
@@ -65,7 +65,7 @@ copyAutomation(automation:any){
   let obj=automation;
   obj.name=obj.name+' '+'copy';
   // console.log(obj)
-  this._automationservice
+  this._automationgeneralservice
   .addautomation(obj)
   .subscribe((data) => {
     this.fetchAutomations()
@@ -78,7 +78,7 @@ openDialog(templateRef: TemplateRef<any>, automation:any) {
 
 }
 deleteAutomation(id:any){
-  this._automationservice.deleteautomation(id).subscribe((data)=>{
+  this._automationgeneralservice.deleteautomation(id).subscribe((data)=>{
     this.fetchAutomations()
     this._snackBar.open('CRM Automation deleted Succesfully !', 'OK');
 
@@ -92,7 +92,7 @@ searchAutomations(search: any, sort: any, filter: any) {
     filter: filter.value,
   }
   // console.log(obj);
-  this._automationservice.searchautomations(obj).subscribe((data:any)=>{
+  this._automationgeneralservice.searchautomations(obj).subscribe((data:any)=>{
     // console.log(data.data)
     this.automations = data.data;
   });

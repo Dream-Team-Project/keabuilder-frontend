@@ -261,13 +261,13 @@ export class SidebarComponent implements OnInit {
           icon: 'fa fa-tags',
           title: 'Tags'
         },
-        // {
-        //   0:true,
-        //   routerlink: '/crm/automations',
-        //   img: 'hacker.gif',
-        //   icon: 'fa fa-random',
-        //   title: 'Automations'
-        // },
+        {
+          0:true,
+          routerlink: '/crm/automations',
+          img: 'hacker.gif',
+          icon: 'fa fa-random',
+          title: 'Automations'
+        },
         {
           0:true,
           routerlink: '/crm/campaigns',

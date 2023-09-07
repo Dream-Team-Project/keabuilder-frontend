@@ -4,6 +4,8 @@ import { ImageService } from 'src/app/_services/image.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
 
 export interface TriggerGroup {
   list: Array<any>,
@@ -57,6 +59,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     id: '',
     name: '',
   }
+  uniqueid:any;
   autosave:boolean = false;
   trigger:TriggerGroup = {
     list: [],
@@ -181,14 +184,32 @@ export class CrmAutomationBuilderComponent implements OnInit {
     public _automation: AutomationService,
     public _image: ImageService,
     private dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet) {}
+    private route: ActivatedRoute,
+    private router: Router,
+    private automationgereralservice: AutomationGeneralService ,
+    private _bottomSheet: MatBottomSheet) {
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        this.uniqueid = params.get('id');
+      });
+    }
 
   ngOnInit(): void {
     this.resetTrigger();
     this.resetAction();
     this.createTimePicker();
+    this.fetchautomation();
   }
-
+fetchautomation(){
+  this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
+    if(data.success){
+      console.log(data.data)
+      this.automation=data.data[0];
+    }
+    else{
+      this.router.navigate(['/crm/automations'],{relativeTo: this.route});
+    }
+  })
+}
   createTimePicker() {
     let h = 1, m = 0;
     while (h <= 12) {

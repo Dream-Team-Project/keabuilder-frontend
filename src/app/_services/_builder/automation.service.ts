@@ -5,6 +5,7 @@ import { ListService } from '../_crm/list.service';
 import { TagService } from '../_crm/tag.service';
 import { FieldService } from '../_crm/field.service';
 import { EmailService } from '../_crm/email.service';
+import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
 
 @Injectable({
   providedIn: 'root'
@@ -83,47 +84,58 @@ export class AutomationService {
 
   constructor(public _general: GeneralService,
     private _file: FileUploadService,
+    private _automationgeneralservice: AutomationGeneralService,
     private _list: ListService,
     private _tag: TagService,
     private _field: FieldService,
     private _email: EmailService) {
-      this.fetchForms();
-      this.fetchLists();
-      this.fetchTags();
-      this.fetchFields();
-      this.fetchEmails();
+      // this.fetchForms();
+      // this.fetchLists();
+      // this.fetchTags();
+      // this.fetchFields();
+      // this.fetchEmails();
       this.saveWfSession();
+      this.fetchallData();
   }
+fetchallData(){
+  this._automationgeneralservice.fetchallcrmdata().subscribe((data:any)=>{
+    // console.log(data)
+    this.forms=data.forms;
+    this.fields=data.fields;
+    this.lists=data.lists;
+    this.tags=data.tags;
+    this.emails=data.emails;
+  })
+}
+  // fetchForms() {
+  //   this._file.fetchforms().subscribe((resp: any) => {
+  //     this.forms = resp?.data;
+  //   });
+  // }
 
-  fetchForms() {
-    this._file.fetchforms().subscribe((resp: any) => {
-      this.forms = resp?.data;
-    });
-  }
+  // fetchLists() {
+  //   this._list.fetchlists().subscribe((resp: any) => {
+  //     this.lists = resp?.data;
+  //   })
+  // }
 
-  fetchLists() {
-    this._list.fetchlists().subscribe((resp: any) => {
-      this.lists = resp?.data;
-    })
-  }
+  // fetchTags() {
+  //   this._tag.fetchtags().subscribe((resp: any) => {
+  //     this.tags = resp?.data;
+  //   })
+  // }
 
-  fetchTags() {
-    this._tag.fetchtags().subscribe((resp: any) => {
-      this.tags = resp?.data;
-    })
-  }
+  // fetchFields() {
+  //   this._field.fetchfields().subscribe((resp: any) => {
+  //     this.fields = resp?.data;
+  //   })
+  // }
 
-  fetchFields() {
-    this._field.fetchfields().subscribe((resp: any) => {
-      this.fields = resp?.data;
-    })
-  }
-
-  fetchEmails() {
-    this._email.fetchemails().subscribe((resp:any)=>{
-      this.emails = resp?.data;
-    })
-  }
+  // fetchEmails() {
+  //   this._email.fetchemails().subscribe((resp:any)=>{
+  //     this.emails = resp?.data;
+  //   })
+  // }
 
   fetchData(name:string) {
     if(name == 'list') return this.lists;
@@ -360,5 +372,14 @@ export class AutomationService {
   setPrevSession(sObj:any) {
     this.activeTriggers = sObj.actTrg;
     this.activeActions = sObj.actAct;
+  }
+  changename(automation:any,name:any){
+    let  obj=automation;
+    obj.newname=name;
+    this._automationgeneralservice.changeautomationname(obj).subscribe((data:any)=>{
+      if(data.success){
+        this._general.openSnackBar(false,data?.message,'Ok','center','top');
+      }
+    })
   }
 }

@@ -4,7 +4,7 @@
     Would you like to delete <span class="text-danger">{{delcourse.title}}</span> course?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close [color]="'primary'" (click)="resetobj()">No</button>
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteCourse(delcourse)">Yes</button>
   </div>
 </ng-template>
@@ -14,13 +14,14 @@
     Would you like to duplicate <span >{{delcourse.title}}</span> course?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close class="text-danger">No</button>
+    <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
     <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="duplicateCourse(delcourse)">Yes</button>
   </div>
 </ng-template>
 <ng-template #adddialog>
   <h1 mat-dialog-title>{{course?.id ? 'Update' : 'Add'}} Course</h1>
     <div mat-dialog-content>
+      <mat-error *ngIf="error">{{errormessage}}</mat-error>
       <mat-error *ngIf="isNotValid(validate.title)">
         Course title should not be empty
       </mat-error>
@@ -55,20 +56,20 @@
       </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
-      <button mat-button mat-dialog-close (click)="dialog.closeAll()" class="text-danger">No</button>
-      <button mat-button  cdkFocusInitial [color]="'primary'" (click)="course?.id ? updateCourse()  : createCourse()" [disabled]="validate.title.invalid || !course.path">{{course?.id ? 'Update' : 'Add'}}</button>
+      <button mat-button mat-dialog-close (click)="resetobj()" class="text-danger">No</button>
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="course?.id ? updateCourse()  : createCourse()" [disabled]="validate.title.invalid || !course.path">{{course?.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row align-items-center">
-        <mat-form-field appearance="fill" class="col-md-6 pr-0">
+        <mat-form-field appearance="outline" class="col-md-6 pr-0">
           <mat-label>Search Courses</mat-label>
           <input matInput #searchInp type="text" (input)="searchCourses(searchInp, filterInp)" placeholder="Search Course Name">
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="col-md-2">
+        <mat-form-field appearance="outline" class="col-md-2">
           <mat-label>Sort By</mat-label>
           <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
             <mat-option [value]="'title ASC'">ASC By Name</mat-option>
@@ -98,26 +99,27 @@
             </div>
           </div>
           <div class="kb-course-content p-0" [class]="toggleview ? 'col-md-12' : 'col-md-9'">
-            <div class="kb-course-subblock p-2" [class.px-3]="!toggleview">
+            <div class="p-2 align-items-center text-center" [class.px-3]="!toggleview">
               <div class="kb-course-title">
-                {{course.title}}
-                
+                {{course.title | titlecase}}
               </div>
-              
               <div>
-                <span [matTooltip]="course.total_modules+' Module'+(course.total_modules==1 ? '' : 's')" matTooltipPosition="above" class="mx-2">
+                <!-- <span [matTooltip]="course.total_modules+' Module'+(course.total_modules==1 ? '' : 's')" matTooltipPosition="above" class="mx-2">
                   <i class="fa-regular fa-folder pr-1"></i>
                   {{course.total_modules}}
                 </span>
                 <span [matTooltip]="course.total_members+' Member'+(course.total_members==1 ? '' : 's')" matTooltipPosition="above">
                   <i class="fa-regular fa-user pr-1"></i>
                   {{course.total_members}}
-                </span>
+                </span> -->
               </div>
             </div>
-            <div class="p-2">
+            <div class="p-2 kb-course-card align-items-center text-center">
               <i class="fa-regular fa-calendar"></i>
-                {{_general.dateformat(course.updated_at)}}
+                {{_general.dateformat(course.updated_at) | date:'mediumDate'}}
+            </div>
+            <div>
+
             </div>
             <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
               <!-- <span class="kb-course-updatedat text-left float-left px-0 pb-2">
