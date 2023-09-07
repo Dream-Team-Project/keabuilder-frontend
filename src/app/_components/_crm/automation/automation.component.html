@@ -18,7 +18,7 @@
   </ng-template>
   <!-- dialog for add automation button -->
   <ng-template #dialog>
-    <h1 mat-dialog-title class="txt">Create A Automation</h1>
+    <h1 mat-dialog-title class="txt">Create Automation</h1>
     <div mat-dialog-content>
         <mat-form-field class="kb-full-width mb-2" appearance="fill">
           <mat-label>Automation Name</mat-label>
@@ -133,7 +133,7 @@
                         </span>
                       </div>
                       <div class="text-left funlist1">
-                        <button mat-raised-button color="primary" [routerLink]="'/builder/automation/'+automation.uniqueid">
+                        <button mat-raised-button color="primary" (click)="_general.redirectToBuilder(automation.uniqueid, 'automation')">
                           Edit <i class="fas fa-pencil-alt"></i>
                         </button>
                         <button
