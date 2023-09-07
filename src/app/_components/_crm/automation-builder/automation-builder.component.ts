@@ -6,6 +6,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 export interface TriggerGroup {
   list: Array<any>,
@@ -58,9 +59,17 @@ export class CrmAutomationBuilderComponent implements OnInit {
   automation = {
     id: '',
     name: '',
+    uniqueid :'',
+    user_id:'',
+    publish_status:'',
+    thumbnail:'',
+    triggers:'',
+    actions:'',
   }
   uniqueid:any;
   autosave:boolean = false;
+  automationSaved:boolean = true;
+  autoSaveInterval:any = [];
   trigger:TriggerGroup = {
     list: [],
     search: '',
@@ -187,6 +196,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private automationgereralservice: AutomationGeneralService ,
+    public _general: GeneralService,
     private _bottomSheet: MatBottomSheet) {
       this.route.paramMap.subscribe((params: ParamMap) => {
         this.uniqueid = params.get('id');
@@ -194,6 +204,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    var vm = this;
+    window.addEventListener('beforeunload', function (e) {
+      if(!vm.automationSaved) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
     this.resetTrigger();
     this.resetAction();
     this.createTimePicker();
@@ -202,8 +219,16 @@ export class CrmAutomationBuilderComponent implements OnInit {
 fetchautomation(){
   this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
     if(data.success){
-      console.log(data.data)
-      this.automation=data.data[0];
+      // console.log(data.data)
+      this.automation.id=data.data[0]?.id;
+      this.automation.user_id=data.data[0]?.user_id;
+      this.automation.uniqueid=data.data[0]?.uniqueid;
+      this.automation.name=data.data[0]?.name;
+      this.automation.publish_status=data.data[0]?.publish_status;
+      this.automation.thumbnail=data.data[0]?.thumbnail;
+      this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
+      this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
+      
     }
     else{
       this.router.navigate(['/crm/automations'],{relativeTo: this.route});
@@ -274,6 +299,7 @@ fetchautomation(){
       if(resp) {
         this._automation.addTrigger(this.trigger.temp, this.trigger.index, this.trigger.update).then(resp=>{
           if(resp) {
+            this.automationSaved=false;
             this._automation.saveWfSession();
             this.dialog.closeAll();
           }
@@ -492,6 +518,7 @@ fetchautomation(){
       if(resp) {
         this._automation.addAction(this.action.temp, this.action.index, this.action.update).then(resp=>{
           if(resp) {
+            this.automationSaved=false;
             this._automation.saveWfSession();
             this.dialog.closeAll();
           }
@@ -757,11 +784,55 @@ fetchautomation(){
 
   // end group autocomplete
 
-  toggleAutoSave(value:boolean) {
-    this.autosave = value;
-  }
+  // toggleAutoSave(value:boolean) {
+  //   this.autosave = value;
+  // }
 
   closeBottomSheet(): void {
     this._bottomSheet.dismiss();
+  }
+  changename(automation:any,name:any){
+    let  obj=automation;
+    obj.newname=name;
+    this.automationgereralservice.changeautomationname(obj).subscribe((data:any)=>{
+      if(data.success){
+        this.fetchautomation();
+        this._general.openSnackBar(false,data?.message,'Ok','center','top');
+      }
+      else{
+
+        this._general.openSnackBar(true,data?.message,'Ok','center','top');
+      }
+    })
+  }
+
+  saveautomation(snackbar:boolean,status:any){
+    this.automation.triggers=this._general.encodeJSON(this._automation.activeTriggers);
+    this.automation.actions=this._general.encodeJSON(this._automation.activeActions);
+    if(status == 'published') this.automation.publish_status='1';
+    else if(status == 'draft') this.automation.publish_status='0';
+    this.automationgereralservice.updateautomation(this.automation).subscribe((data:any)=>{
+      if(snackbar){
+        if(data.success){
+          var msg= 'Automation has been '+status;
+          this._general.openSnackBar(false,msg,'OK','center','top');
+        }
+        else{
+          this._general.openSnackBar(true,data?.message,'OK','center','top');
+        }
+      } 
+    })
+    this.fetchautomation();
+  }
+
+  autoSaveTrigger(trigger:boolean) {
+    clearInterval(this.autoSaveInterval);
+    if(trigger) {
+      this.autoSaveInterval = setInterval(()=>{
+        this.saveautomation(false,'');
+      }, 1000);
+      this.autoSaveInterval;
+    }
+    this.autosave = trigger;
   }
 }

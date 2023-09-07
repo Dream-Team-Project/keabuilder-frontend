@@ -581,26 +581,26 @@
                     <i class="fa-regular fa-clock"></i>Auto Save > {{autosave ? 'ON' : 'OFF'}}
                 </button>
                 <mat-menu #asm>
-                    <button mat-menu-item (click)="autosave = true" [class.kb-btn-active]="autosave"><i
+                    <button mat-menu-item (click)="autoSaveTrigger(true)" [class.kb-btn-active]="autosave"><i
                             class="fa-solid fa-toggle-on"></i>ON</button>
-                    <button mat-menu-item (click)="autosave = false" [class.kb-btn-active]="!autosave"><i
+                    <button mat-menu-item (click)="autoSaveTrigger(false)" [class.kb-btn-active]="!autosave"><i
                             class="fa-solid fa-toggle-off"></i>OFF</button>
                 </mat-menu>
-                <button mat-button>
+                <button mat-button (click)="saveautomation(true,'saved')">
                     <i [innerHTML]="'save' | svg | safeHtml"></i>Save
                 </button>
                 <button mat-button [disabled]="_automation._general.saveDisabled" [matMenuTriggerFor]="status"
                     #statust="matMenuTrigger" [class.kb-btn-active]="statust.menuOpen">
                     <i
-                        [innerHTML]="(_automation._general.main.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i>Status
+                        [innerHTML]="(automation.publish_status ? 'publish' : 'draft') | svg | safeHtml"></i>Status
                     >
-                    {{_automation._general.main.publish_status ? 'Published' : 'Draft'}}
+                    {{automation.publish_status ? 'Publish' : 'Draft'}}
                 </button>
                 <mat-menu #status="matMenu" xPosition="after" yPosition="below">
-                    <button mat-menu-item [class.kb-btn-active]="_automation._general.main.publish_status">
+                    <button mat-menu-item [class.kb-btn-active]="automation.publish_status" (click)="saveautomation(true,'published')">
                         <i [innerHTML]="'publish' | svg | safeHtml"></i>Publish
                     </button>
-                    <button mat-menu-item [class.kb-btn-active]="!_automation._general.main.publish_status">
+                    <button mat-menu-item [class.kb-btn-active]="!automation.publish_status" (click)="saveautomation(true,'draft')">
                         <i [innerHTML]="'draft' | svg | safeHtml"></i>Draft
                     </button>
                 </mat-menu>
@@ -615,7 +615,7 @@
             </div>
             <div class="col-4 p-0">
                 <div class="kb-top-inp-cont keabuilder-title-board line-ellipsis">
-                    <input [(ngModel)]="automation.name" type="text" class="kb-top-input" placeholder="Automation name" (blur)="_automation.changename(automation,automation.name)">
+                    <input [(ngModel)]="automation.name" type="text" class="kb-top-input" placeholder="Automation name" (blur)="changename(automation,automation.name)">
                     <span class="kb-automation-name">{{automation.name ? automation.name : 'Automation Name'}}</span>
                 </div>
             </div>

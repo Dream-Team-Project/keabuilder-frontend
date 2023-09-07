@@ -373,13 +373,4 @@ fetchallData(){
     this.activeTriggers = sObj.actTrg;
     this.activeActions = sObj.actAct;
   }
-  changename(automation:any,name:any){
-    let  obj=automation;
-    obj.newname=name;
-    this._automationgeneralservice.changeautomationname(obj).subscribe((data:any)=>{
-      if(data.success){
-        this._general.openSnackBar(false,data?.message,'Ok','center','top');
-      }
-    })
-  }
 }

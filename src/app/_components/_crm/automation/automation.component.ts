@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
+import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 
 
@@ -19,7 +20,7 @@ delautomation:any;
 automations:any=[];
 automationname ='';
 automationnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
-constructor(private _automationgeneralservice: AutomationGeneralService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
+constructor( public _general: GeneralService,private _automationgeneralservice: AutomationGeneralService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
   private router: Router,
   ) {
   this.togglebutton=true; 
@@ -55,7 +56,7 @@ addautomation(){
     // console.log(data.uniqueid)
     this.fetchAutomations()
     this.dialog.closeAll();
-    this._snackBar.open('Automation Added Succesfully !', 'OK');
+     this._general.openSnackBar(false,'Automation Added Succesfully', 'OK','center','top');
     this.router.navigate(['/builder/automation/'+data.uniqueid],{relativeTo: this.route});
   });
     }
@@ -69,7 +70,8 @@ copyAutomation(automation:any){
   .addautomation(obj)
   .subscribe((data) => {
     this.fetchAutomations()
-    this._snackBar.open('CRM Automation Copied Succesfully !', 'OK');
+     this._general.openSnackBar(false,'CRM Automation Copied Succesfully', 'OK','center','top');
+
   });
 }
 openDialog(templateRef: TemplateRef<any>, automation:any) {
@@ -80,7 +82,7 @@ openDialog(templateRef: TemplateRef<any>, automation:any) {
 deleteAutomation(id:any){
   this._automationgeneralservice.deleteautomation(id).subscribe((data)=>{
     this.fetchAutomations()
-    this._snackBar.open('CRM Automation deleted Succesfully !', 'OK');
+    this._general.openSnackBar(false,'CRM Automation deleted Succesfully', 'OK','center','top');
 
   })
 }
