@@ -89,9 +89,10 @@ export class BuilderComponent implements OnInit {
                 data.json = _general.webpage.page_json;
                 if(_general.target.type == 'funnel') {
                   if(_general.webpage.funneltype == 'order') {
-                      _general.fetchOrderForms().then(data=>{
-                        _general.order_forms = data;
-                      });
+                    _general.fetchOrderForms().then(data=>{
+                      _general.order_forms = data;
+                      this._element.elementList['order_form'] = { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' };
+                    });
                   }
                   else {
                     _general.fetchOffers().then(data=>{
@@ -495,14 +496,7 @@ export class BuilderComponent implements OnInit {
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
   elementDblClk(element:any) {
-    if(element.content.name != 'iframe') {
-      this.openSetting(element);
-    }
-    // else if(element.content.name == 'text' || element.content.name == 'heading') {
-    //   this._general.showInlineEditor = true;
-    //   element.content.editor = true;
-    //   this._general.selectedBlock = element;
-    // }
+    if(element.content.name != 'iframe') this.openSetting(element);
   }
 
   isBlockActive(block:any) {

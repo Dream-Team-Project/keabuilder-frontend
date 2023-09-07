@@ -65,7 +65,7 @@
                         <div class="d-flex justify-content-between align-items-center p-2">
                           <span class="ftoverflow">{{temp.name | titlecase}}</span>
                           <span class="d-flex justify-content-end">
-                              <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon rounded-0" aria-hidden="true" (click)="_general.redirectLink('/marketplace/template/preview/'+temp.uniqueid)"></i>
+                              <i mat-ripple matTooltip="Preview" matTooltipPosition="above" class="fas fa-eye px-3 kb-table-action-icon" aria-hidden="true" (click)="_general.redirectLink('/marketplace/template/preview/'+temp.uniqueid)"></i>
                               <i mat-ripple matTooltip="Use this template" matTooltipPosition="above" class="fa-solid fa-file-circle-plus px-3 kb-table-action-icon" aria-hidden="true" (click)="createDialog.emit(temp)"></i>
                           </span>
                       </div>

@@ -451,7 +451,6 @@ fetchsingleemail(){
       this.selectedTags.push(obj);
       this.filteredTempIds.tags.push(obj.uniqueid);
       this.newtags.push(obj);
-      
     }
     // Clear the input value
     event.chipInput!.clear();

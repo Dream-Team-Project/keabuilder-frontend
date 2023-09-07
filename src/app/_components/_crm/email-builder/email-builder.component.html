@@ -187,7 +187,7 @@
     <div #emailbody id="kb-email-container" style="display: flex;">
         <div [id]="emailElements.section.id" [ngStyle]="isBlockActive(emailElements.section) ? _style.currentStyling() : _style.getBlockStyle(emailElements.section.style)" 
         (mouseenter)="emailElements.section.setting = true;" (mouseleave)="emailElements.section.setting = false" class="kb-section kb-block-container">
-            <div class="kb-module-setting" *ngIf="emailElements.section.setting && !_general.showInlineEditor">
+            <div class="kb-module-setting" *ngIf="emailElements.section.setting">
                 <span (click)="openSetting(emailElements.section)"
                     matTooltip="Section Setting" matTooltipPosition="above"><i
                         class="far fa-edit"></i></span>
@@ -198,7 +198,7 @@
                 [style.justifyContent]="isBlockActive(element) ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue( element.item_alignment)"
                 (dblclick)="openSetting(element)" (mouseenter)="element.setting = true" (mouseleave)="element.setting = false" [ngSwitch]="element.content.name">
                     <div class="kb-module-setting"
-                    *ngIf="element.setting && !_general.showInlineEditor">
+                    *ngIf="element.setting">
                         <span class="kb-handle-block kb-handle-element"><i
                                 class="fa fa-arrows-alt"></i></span>
                         <span (click)="openSetting(element)"

@@ -58,18 +58,18 @@ export class CrmEmailBuilderComponent implements OnInit {
     image: { content: { name: 'image', src: '' }, iconCls: 'far fa-image' },
     // image
     // video
-    video: {
-      content: {
-        name: 'video',
-        type: 'video',
-        iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
-        src: 'http://localhost:4200/assets/videos/movie.mp4',
-        autoplay: false,
-        muted: false,
-        loop: false,
-        controls: true
-      }, iconCls: 'fas fa-video'
-    },
+    // video: {
+    //   content: {
+    //     name: 'video',
+    //     type: 'video',
+    //     iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+    //     src: 'http://localhost:4200/assets/videos/movie.mp4',
+    //     autoplay: false,
+    //     muted: false,
+    //     loop: false,
+    //     controls: true
+    //   }, iconCls: 'fas fa-video'
+    // },
     // video
     // button
     button: {
