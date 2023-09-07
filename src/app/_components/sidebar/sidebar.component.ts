@@ -13,7 +13,6 @@ export class SidebarComponent implements OnInit {
     if(this.connectWtParent) this.toggleSidebar = !this.toggleSidebar;
     else this.connectWtParent = true;
   }   
-  @Output('closeSidebar') closeSidebar: EventEmitter<any> = new EventEmitter();
 
   constructor(public router: Router) { }
   connectWtParent:boolean = false;
@@ -605,11 +604,6 @@ export class SidebarComponent implements OnInit {
     });
     this.extramenus = true;
     this.backme = false;
-  }
-
-  triggerSidebar() {
-    this.closeSidebar.emit(this.toggleSidebar);
-    this.hoveropen = false;
   }
 
 }

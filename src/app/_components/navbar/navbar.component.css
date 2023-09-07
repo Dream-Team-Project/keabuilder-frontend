@@ -2,13 +2,18 @@
 
 .kb-open-sidebar-icon {
   cursor: pointer;
-  font-size: 20px;
-  height: 36px;
-  width: 36px;
+  font-size: 24px;
+  height: 38px;
+  width: 38px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.2s ease;
+}
+
+.kb-open-sidebar-icon:hover {
+  background-color: rgba(244, 247, 248, 1);
 }
 
 .navshadow {
@@ -18,15 +23,17 @@
 .header-navbar {
   padding: 0;
   min-height: 60px;
-  -webkit-transition: .1s ease all, background 0s;
-  transition: .1s ease all, background 0s;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
   z-index: 1000;
   background-color: #FFF;
   /* box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%); */
 }
 
 .header-navbar.fixed-top {
-  left: 50px;
+  width: calc(100% - 50px);
+  left: auto;
+  right: 0;
   position: fixed;
   background-color: #F2F4F4;
   padding: 0px;
@@ -41,9 +48,9 @@
 }
 
 .header-navbar .navbar-container {
-  padding-left: 1rem;
-  -webkit-transition: .3s ease all;
-  transition: .3s ease all;
+  padding-left: 12px;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
   background: inherit;
   margin-left: 0;
   background-color: var(--kb-white);

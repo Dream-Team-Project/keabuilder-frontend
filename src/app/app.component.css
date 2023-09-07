@@ -202,7 +202,7 @@ main {
 }
 
 @media only screen and (min-width:768px) {
-    .kb-main-container.kb-fixed-template {
+    .kb-main-container.kb-fixed-template, ::ng-deep .kb-main-container.kb-fixed-template .header-navbar.fixed-top {
         width: calc(100% - 260px)!important;
     }
 }

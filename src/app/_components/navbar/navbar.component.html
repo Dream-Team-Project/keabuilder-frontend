@@ -17,7 +17,10 @@
     <div class="navbar-container content">
       <div class="navbar-collapse" id="navbar-mobile">
         <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-          <span mat-ripple (click)="triggerSidebar()" class="kb-open-sidebar-icon"><i class="fa-solid fa-bars"></i></span>
+          <!-- <span mat-ripple (click)="triggerSidebar()"><i class="fa-solid fa-bars"></i></span> -->
+          <button mat-icon-button (click)="triggerSidebar()" class="kb-open-sidebar-icon">
+            <mat-icon>menu</mat-icon>
+          </button>
         </div>
         <ul class="nav float-right overflow-hidden">
           <!-- <li class="nav-item nav-search"><a class="nav-link nav-link-search" (click)="showsearch()"><i
