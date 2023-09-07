@@ -101,14 +101,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
       name: 'Unsubscribed to list',
       group: 'list'
     }, {
-      id: 'subs-list-on-date',
-      name: 'Subscribed on date',
-      group: 'list'
-    }, {
-      id: 'subs-list-at-time',
-      name: 'Subscribed at time',
-      group: 'list'
-    }, {
       id: 'subs-list-with-form',
       name: 'Subscribed with form',
       group: 'list'
@@ -183,6 +175,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   currentDate:Date = new Date();
   timeUnits:Array<string> = ['Minute','Hour','Day','Week','Month','Year'];
   wfExpPanel:number = 0;
+  isDisabled:boolean = false;
 
   constructor(
     public _automation: AutomationService,
@@ -237,22 +230,25 @@ export class CrmAutomationBuilderComponent implements OnInit {
   validateTrigger() {
     return new Promise<any>((resolve, reject) => {
       var tempTrgt = this.trigger.temp.target;
-      if(tempTrgt.name == 'list') tempTrgt = JSON.parse(JSON.stringify(this.trigger.listField));
-      else if(tempTrgt.name == 'tag') tempTrgt = JSON.parse(JSON.stringify(this.trigger.tagField));
-      else if(tempTrgt.name == 'form') tempTrgt = JSON.parse(JSON.stringify(this.trigger.formField));
-      else if(tempTrgt.name == 'field') tempTrgt = JSON.parse(JSON.stringify(this.trigger.fieldField));
-      else if(tempTrgt.name == 'email') tempTrgt = JSON.parse(JSON.stringify(this.trigger.emailField));
-      if(tempTrgt.id) {
-        this.trigger.temp.target.id = tempTrgt.id;
-        this.trigger.temp.target.run_once = tempTrgt.run_once;
-        if(tempTrgt.change) this.trigger.temp.target.change = JSON.parse(JSON.stringify(tempTrgt.change));
+      var tempTrgtObj:any = {};
+      if(tempTrgt.name == 'list') tempTrgtObj = JSON.parse(JSON.stringify(this.trigger.listField));
+      else if(tempTrgt.name == 'tag') tempTrgtObj = JSON.parse(JSON.stringify(this.trigger.tagField));
+      else if(tempTrgt.name == 'form') tempTrgtObj = JSON.parse(JSON.stringify(this.trigger.formField));
+      else if(tempTrgt.name == 'field') tempTrgtObj = JSON.parse(JSON.stringify(this.trigger.fieldField));
+      else if(tempTrgt.name == 'email') tempTrgtObj = JSON.parse(JSON.stringify(this.trigger.emailField));
+      if(tempTrgtObj.id || tempTrgtObj.value) {
+        this.trigger.temp.target.id = tempTrgtObj.id;
+        this.trigger.temp.target.run_once = tempTrgtObj.run_once;
+        if(tempTrgtObj.value) this.trigger.temp.target.value = tempTrgtObj.value;
+        if(tempTrgtObj.change) this.trigger.temp.target.change = JSON.parse(JSON.stringify(tempTrgtObj.change));
         resolve(true);
       }
       else resolve(false);
     });
   }
 
-  addTrigger() {
+  addTrigger(e:any) {
+    this.isDisabled = true;
     this.validateTrigger().then(resp=>{
       if(resp) {
         this._automation.addTrigger(this.trigger.temp, this.trigger.index, this.trigger.update).then(resp=>{
@@ -261,9 +257,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
             this.dialog.closeAll();
           }
           else this.showTriggerFieldError('Trigger allready added');
+          this.isDisabled = false;
         })
       }
-      else this.showTriggerFieldError('Please select a '+this.trigger.temp.target.name);
+      else {
+        this.showTriggerFieldError('Please select a '+this.trigger.temp.target.name);
+        this.isDisabled = false;
+      }
     })
   }
 
@@ -272,28 +272,28 @@ export class CrmAutomationBuilderComponent implements OnInit {
     if(update) {
       if(wf.target.name == 'list') {
         this.trigger.listField.id = wf.target.id;
-        this.trigger.listField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.listField.value = this._automation.fetchTargetName(wf, true);
         this.trigger.listField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'tag') {
         this.trigger.tagField.id = wf.target.id;
-        this.trigger.tagField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.tagField.value = this._automation.fetchTargetName(wf, true);
         this.trigger.tagField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'form') {
         this.trigger.formField.id = wf.target.id;
-        this.trigger.formField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.formField.value = this._automation.fetchTargetName(wf, true);
         this.trigger.formField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'field') {
         this.trigger.fieldField.id = wf.target.id;
-        this.trigger.fieldField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.fieldField.value = this._automation.fetchTargetName(wf, true);
         this.trigger.fieldField.change = JSON.parse(JSON.stringify(wf.target.change));
         this.trigger.fieldField.run_once = wf.target.run_once;
       }
       else if(wf.target.name == 'email') {
         this.trigger.emailField.id = wf.target.id;
-        this.trigger.emailField.value = this._automation.fetchTargetName(wf.target, true);
+        this.trigger.emailField.value = this._automation.fetchTargetName(wf, true);
         this.trigger.emailField.run_once = wf.target.run_once;
       }
       this.trigger.index = index;
@@ -370,10 +370,13 @@ export class CrmAutomationBuilderComponent implements OnInit {
     if(actNm == 'list')  this.action.listField.error = error;
     else if(actNm == 'tag') this.action.tagField.error = error;
     else if(actNm == 'field') this.action.fieldField.error = error;
-    else if(actNm == 'email') this.action.emailField.error = error;
+    else if(actNm == 'email') {
+      this.action.emailField.error = this.action.emailField.type == 'custom' ? 
+      'Email subject and content are required' : error;
+    }
     else if(actNm == 'note') this.action.noteField.error = 'Please write a note';
     else if(actNm == 'wait') this.action.waitField.error = 'Please write or select a valid input';
-    else if(actNm == 'ifelse') this.action.ifelseField.error = 'Please fill all the required fields';
+    else if(actNm == 'ifelse') this.action.ifelseField.error = 'Please select or fill all the required fields';
   }
 
   validateAction() {
@@ -388,9 +391,14 @@ export class CrmAutomationBuilderComponent implements OnInit {
         }
       }
       else if(tempTrgt.name == 'tag') {
-        let ids = this.action.tagField.values.map((tf:any) => tf.id);
-        if(ids?.length != 0) {
+        let ids:any = [], values:any = [];
+        this.action.tagField.values.forEach((tf:any) => {
+          if(tf.id) ids.push(tf.id);
+          else values.push(tf.name);
+        })
+        if(ids?.length != 0 || values.length != 0) {
           this.action.temp.target.ids = ids;
+          this.action.temp.target.values = values;
           resp = true;
         }
       }
@@ -404,11 +412,18 @@ export class CrmAutomationBuilderComponent implements OnInit {
         }
       }
       else if(tempTrgt.name == 'email') {
-        let ids = this.action.emailField.values.map((ef:any) => ef.id);
-        if(ids?.length != 0) {
-          this.action.temp.target.ids = ids;
+        let ef = this.action.emailField;
+        let ids = ef.values.map((ef:any) => ef.id);
+        if(ids?.length != 0) this.action.temp.target.ids = ids;
+        this.action.temp.target.custom.subject = ef.custom.subject;
+        this.action.temp.target.custom.content = ef.custom.content;
+        if(ef.type == 'template' && this.action.temp.target.ids) resp = true;
+        else if(ef.custom.subject && ef.custom.content) {
+          this.action.temp.target.custom.subject = ef.custom.subject;
+          this.action.temp.target.custom.content = ef.custom.content;
           resp = true;
         }
+        this.action.temp.target.type = ef.type;
       }
       else if(tempTrgt.name == 'note') {
         let value = this.action.noteField.value;
@@ -442,6 +457,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
             }
           });
           this.action.temp.target.logic = this.action.ifelseField.logic;
+          console.log(this.action.temp.target);
           resp = true;
         }
       }
@@ -450,6 +466,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   addAction() {
+    this.isDisabled = true;
     this.validateAction().then(resp=>{
       if(resp) {
         this._automation.addAction(this.action.temp, this.action.index, this.action.update).then(resp=>{
@@ -457,13 +474,17 @@ export class CrmAutomationBuilderComponent implements OnInit {
             this._automation.saveWfSession();
             this.dialog.closeAll();
           }
+          this.isDisabled = false;
         })
       }
-      else this.showActionFieldError('Please select '+this.action.temp.target.name);
+      else {
+        this.showActionFieldError('Please select '+this.action.temp.target.name);
+        this.isDisabled = false;
+      }
     })
   }
 
-  selectActionGet(e:any) {
+  getSelectAction(e:any) {
     this.selectAction(e.action, e.index, true);
   }
 
@@ -481,6 +502,9 @@ export class CrmAutomationBuilderComponent implements OnInit {
       }
       else if(wf.target.name == 'email') {
         this.action.emailField.values = this._automation.fetchMultipleTargets(wf);
+        this.action.emailField.custom.subject = wf.target.custom.subject;
+        this.action.emailField.custom.content = wf.target.custom.content;
+        this.action.emailField.type = wf.target.type;
       }
       else if(wf.target.name == 'note') {
         this.action.noteField.value = wf.target.value;
@@ -532,7 +556,9 @@ export class CrmAutomationBuilderComponent implements OnInit {
     this.action.emailField = {
       values: [],
       error: '',
-      filter: []
+      filter: [],
+      type: 'template',
+      custom: {subject: '', content: ''}
     };
     this.action.noteField = {
       value: '',
@@ -592,7 +618,18 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   // start multiple target selection
 
-  selectMultipleTarget(e:any, data:any, field:any, inp:any, key:string) {
+  addTag(e:any, field:any, inp:any, key:string) {
+    if(inp.value && field.values[0]?.id != '*') {
+      let obj:any = {id: ''};
+      obj[key] = e.value;
+      field.values.push(obj);
+      inp.value = '';
+      field.error = '';
+    }
+    else this._automation._general.openSnackBar(false, 'All Tags are selected', 'OK', 'center', 'top');
+  } 
+
+  selectMultipleTarget(e:any, field:any, inp:any, key:string) {
     let opt = e.option.value;
     let obj:any = {id: opt.id};
     obj[key] = opt[key];
@@ -600,7 +637,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
     if(obj.id == '*') field.values = [];
     field.values.push(obj);
     inp.value = '';
-    this.filterMultipleTarget(data, field, inp, key);
     field.error = '';
   }
 

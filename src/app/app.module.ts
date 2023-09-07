@@ -64,7 +64,6 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
-import { NewMembershipComponent } from './_components/_membership/new-membership/new-membership.component';
 
 
 @NgModule({
@@ -77,8 +76,7 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe,
-    NewMembershipComponent,
+    SvgPipe
   ],
   imports: [
     AppRoutingModule,

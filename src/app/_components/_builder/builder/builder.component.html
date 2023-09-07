@@ -49,8 +49,7 @@
     </mat-drawer>
 </mat-drawer-container>
 <mat-progress-bar *ngIf="_general.saveDisabled || _general.savingPage" mode='indeterminate'></mat-progress-bar>
-<div cdkDropListGroup id="kb-page-container" [style.transform]="zoom.active ? 'scale('+zoom.value+'%)' : ''" (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled"
-    (click)="_general.showInlineEditor && !_general.insideEditor ? _general.resetInlineEditor() : ''">
+<div cdkDropListGroup id="kb-page-container" [style.transform]="zoom.active ? 'scale('+zoom.value+'%)' : ''" (contextmenu)="onContextMenu($event)" [class.pagedisabled]="_general.saveDisabled">
     <div id="kb-block-container" [class.loading]="!_general.loading.success">
         <div #main id="kb-main-container"
             [class.kb-resp-border]="_general.respToggleDevice.name != 'desktop' && _general.respToggleDevice.name != 'hover'"
@@ -74,14 +73,13 @@
                         (mouseleave)="section.setting = false" [ngClass]="_style.getHideCls(section.hide)"
                         [class.kb-block-none]="isBlockActive(section) ? _style.getDisplay(_style.hide) : _style.getDisplay(section.hide)"
                         [ngStyle]="isBlockActive(section) ? _style.currentStyling() : _style.getBlockStyle(section.style)"
-                        [id]="section.id" class="kb-section kb-block-container"
-                        [class.kb-block-disabled]="_general.showInlineEditor">
+                        [id]="section.id" class="kb-section kb-block-container">
                         <!-- sections setting navigation start -->
                         <div *cdkDragPreview class="custom-preview" [style.backgroundColor]="'var(--section-color)'">
                             {{section.name ? section.name : 'Section'}}</div>
                         <div *cdkDragPlaceholder class="custom-placeholder"
                             [style.backgroundColor]="'var(--section-color)'"></div>
-                        <div class="kb-module-setting" *ngIf="section.setting && !_general.showInlineEditor">
+                        <div class="kb-module-setting" *ngIf="section.setting">
                             <span cdkDragHandle *ngIf="_section.sections.length > 1"
                                 class="kb-handle-block kb-handle-section"><i class="fa fa-arrows-alt"></i></span>
                             <span (click)="saveAsTemplateDialog(templatedialog, section, 'section')" matTooltip="Save As Template"
@@ -102,7 +100,7 @@
                             matTooltipPosition="right"><i class="fa fa-plus"></i></span>
                         <!-- add row option end -->
                         <!-- add section option start -->
-                        <span (click)="_section.addSection(si)" *ngIf="section.setting && !_general.showInlineEditor"
+                        <span (click)="_section.addSection(si)" *ngIf="section.setting"
                             class="kb-ispan-add add-section bottom-add-btn" matTooltip="Add New Section"
                             matTooltipPosition="below"><i class="fa fa-plus"></i></span>
                         <!-- add section option end -->
@@ -119,14 +117,13 @@
                                 (mouseleave)="row.setting = false" [ngClass]="_style.getHideCls(row.hide)"
                                 [class.kb-block-none]="isBlockActive(row) ? _style.getDisplay(_style.hide) : _style.getDisplay(row.hide)"
                                 [ngStyle]="isBlockActive(row) ? _style.currentStyling() : _style.getBlockStyle(row.style)"
-                                [id]="row.id" [class.kb-block-disabled]="_general.showInlineEditor"
-                                class="kb-row kb-block-container">
+                                [id]="row.id" class="kb-row kb-block-container">
                                 <!-- rows setting navigation start -->
                                 <div *cdkDragPreview class="custom-preview"
                                     [style.backgroundColor]="'var(--row-color)'">{{row.name ? row.name : 'Row'}}</div>
                                 <div *cdkDragPlaceholder class="custom-placeholder"
                                     [style.backgroundColor]="'var(--row-color)'"></div>
-                                <div class="kb-module-setting" *ngIf="row.setting && !_general.showInlineEditor">
+                                <div class="kb-module-setting" *ngIf="row.setting">
                                     <span cdkDragHandle
                                         *ngIf="_section.sections.length > 1 || section.rowArr.length > 1"
                                         class="kb-handle-block kb-handle-row"><i class="fa fa-arrows-alt"></i></span>
@@ -178,15 +175,14 @@
                                                 [ngClass]="_style.getHideCls(element.hide)"
                                                 [style.margin]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getMargin() : _style.getBlockStyle(element.content.style)['margin']"
                                                 [style.justifyContent]="isBlockActive(element) && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)"
-                                                [class.kb-block-none]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)"
-                                                [class.kb-block-disabled]="_general.showInlineEditor">
+                                                [class.kb-block-none]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)">
                                                 <div *cdkDragPreview class="custom-preview"
                                                     [style.backgroundColor]="'var(--primary-color)'">{{(element.content.type == 'order_form' || element.content.type == 'form') ? 
                                                     element.content.type.replace('_',' ') : (element.name ? element.name : element.content.name)}}</div>
                                                 <div *cdkDragPlaceholder class="custom-placeholder"
                                                     [style.backgroundColor]="'var(--primary-color)'"></div>
                                                 <div class="kb-module-setting"
-                                                    *ngIf="element.setting && !_general.showInlineEditor">
+                                                    *ngIf="element.setting">
                                                     <span class="kb-handle-block kb-handle-element"><i
                                                             class="fa fa-arrows-alt"></i></span>
                                                     <span *ngIf="element.content.name != 'iframe' && element.content.name != 'menu'"
@@ -356,17 +352,8 @@
                                                         <div [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-text-block"
                                                             [innerHTML]="element.content.html | safeHtml"></div>
                                                     </ng-template>
-                                                    <!-- <div *ngIf="!element.content.editor else editor"></div>
-                                                    <ng-template #editor>
-                                                        <tinymce
-                                                            [inline]="true"
-                                                            (mouseenter)="_general.insideEditor = true"
-                                                            (mouseleave)="_general.insideEditor = false;"
-                                                            [(ngModel)]="element.content.html"
-                                                            [config]="_general.config"></tinymce>
-                                                    </ng-template> -->
                                                 </div>
-                                                <span *ngIf="element.setting && !element?.moresetting && !_general.showInlineEditor"
+                                                <span *ngIf="element.setting && !element?.moresetting"
                                                     (click)="_column.selectedColumn = column; _element.element_index = ei; _general.blockSelection = 'element'; openDialog()"
                                                     matTooltip="Add New Element" matTooltipPosition="above"
                                                     class="kb-ispan-add add-element bottom-add-btn"><i
@@ -390,7 +377,7 @@
                                     <!-- columns end -->
                                 </div>
                                 <!-- add row option start -->
-                                <span *ngIf="row.setting && !_general.showInlineEditor"
+                                <span *ngIf="row.setting"
                                     (click)="_row.selectedRow = ''; _row.row_index = ri; _general.blockSelection = 'row'; openDialog()"
                                     matTooltip="Add New Row" matTooltipPosition="below"
                                     class="kb-ispan-add add-row bottom-add-btn"><i class="fa fa-plus"></i></span>

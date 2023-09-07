@@ -651,29 +651,27 @@ export class GeneralService {
   screenWidth:any;
   screenHeight:any;
   showEditor:boolean = false;
-  showInlineEditor:boolean = false;
-  insideEditor:boolean = false;
   selectedTab:any;
   expPanelStep = 0;
   config: any = {
     height: 250,
+    placeholder: 'Enter your text here...',
     plugins:
-      'image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars',
+      'autoresize image print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen link template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars',
     toolbar:
-      'undo redo | formatselect fontselect fontsizeselect | bold italic underline strikethrough link blockquote | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | code',
+      'undo redo | bold italic underline strikethrough link blockquote | formatselect fontselect fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | numlist bullist table outdent indent charmap | code',
     content_css: [
-      // '../../_components/material.component.css',
       // '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
       // '//www.tinymce.com/css/codepen.min.css',
     ],
-    images_upload_base_path: '/some/basepath',
-    images_upload_credentials: true,
-    images_upload_url: './api/uploadfile',
-    images_upload_handler: function (blobInfo:any, success:any, failure:any) {
-    setTimeout(function () {
-      success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-    }, 2000);
-  },
+    // images_upload_base_path: '/some/basepath',
+    // images_upload_credentials: true,
+    // images_upload_url: './api/uploadfile',
+    // images_upload_handler: function (blobInfo:any, success:any, failure:any) {
+    //   setTimeout(function () {
+    //     success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+    //   }, 2000);
+    // },
     importcss_append: true,
     menubar: false,
     statusbar: false,
@@ -1451,12 +1449,6 @@ export class GeneralService {
     this.expPanelStep--;
   }
 
-  resetInlineEditor() {
-      this.selectedBlock.content.editor = false;
-      this.selectedBlock = false;
-      this.showInlineEditor = false;
-  }
-
   openSnackBar(alert: boolean, message: string, action: string, hpos: any, vpos: any) {
     if(alert) this._snackBar.open(message, action, {
       horizontalPosition: hpos,
@@ -1467,11 +1459,6 @@ export class GeneralService {
       horizontalPosition: hpos,
       verticalPosition: vpos
     });
-  }
-
-  selectedTabChange(e:any) {
-    if(this.selectedBlock.type == 'element') this.showEditor = false;
-    this.selectedTab = e.tab ? e.tab['textLabel'].toLowerCase() : '';
   }
 
   encodeJSON(data:any) {

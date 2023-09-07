@@ -17,15 +17,15 @@ export class AutomationService {
       workflows: [
         { id: 'trg-sub-to-list', name: 'Subscribed to a List', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
         { id: 'trg-unsub-to-list', name: 'Unsubscribed to a List', target: {id: '', name: 'list', run_once: true}, icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
-        { id: 'trg-tag-add', name: 'Tag Added', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'trg-tag-rm', name: 'Tag Removed', target: {id: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
+        { id: 'trg-tag-add', name: 'Tag Added', target: {id: '', value: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'trg-tag-rm', name: 'Tag Removed', target: {id: '', value: '', name: 'tag', run_once: true}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
       ]
     },
     {
       id: 'trg-group-sub', name: 'Submissions', hide: false, icon: '<i class="fa-solid fa-paper-plane"></i>',
       workflows: [
         { id: 'trg-form-sub', name: 'Form Submitted', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-solid fa-file-circle-check"></i>', color: 'primary'},
-        // { id: 'trg-chckot-sub', name: 'Checkout Submitted', target: {id: '', name: 'form', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
+        // { id: 'trg-order-form-sub', name: 'Order Form Submitted', target: {id: '', name: 'Orderform', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
       ]
     },
     {
@@ -48,8 +48,8 @@ export class AutomationService {
       workflows: [
         { id: 'act-sub-to-list', name: 'Subscribe to Lists', target: {ids: [], name: 'list'}, icon: '<i class="fa-solid fa-user-plus"></i>', color: 'primary'},
         { id: 'act-unsub-to-list', name: 'Unsubscribe to Lists', target: {ids: [], name: 'list'}, icon: '<i class="fa-solid fa-user-minus"></i>', color: 'primary'},
-        { id: 'act-add-tag', name: 'Add Tags', target: {ids: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
-        { id: 'act-rm-tag', name: 'Remove Tags', target: {ids: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
+        { id: 'act-add-tag', name: 'Add Tags', target: {ids: [], values: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-tag"></i>', color: 'primary'},
+        { id: 'act-rm-tag', name: 'Remove Tags', target: {ids: [], values: [], name: 'tag'}, icon: '<i class="fa-solid fa-user-xmark"></i>', color: 'primary'},
         { id: 'act-up-cont', name: 'Update a Contact', target: {values: [], name: 'field'}, icon: '<i class="fa-solid fa-user-pen"></i>', color: 'primary'},
         { id: 'act-add-note', name: 'Add a Note', target: {value: '', name: 'note'}, icon: '<i class="fa-solid fa-file-pen"></i>', color: 'primary'},
       ]
@@ -57,7 +57,7 @@ export class AutomationService {
     {
       id: 'act-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
       workflows: [
-        { id: 'act-send-email', name: 'Send Emails', target: {id: '', name: 'email'}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+        { id: 'act-send-email', name: 'Send Emails', target: {id: '', custom: {subject: '', content: ''}, type: 'template', name: 'email'}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
       ]
     },
     {
@@ -144,8 +144,11 @@ export class AutomationService {
         name = resp[0]?.name;
       }
       else if(wf.target.name == 'tag') {
-        resp = this.tags.filter((t:any) => t.id == wf.target.id);
-        name = resp[0]?.name;
+        if(wf.target.value) name = wf.target.value;
+        else {
+          resp = this.tags.filter((t:any) => t.id == wf.target.id);
+          name = resp[0]?.name;
+        }
       }
       else if(wf.target.name == 'form') {
         resp = this.forms.filter((f:any) => f.id == wf.target.id);
@@ -176,9 +179,10 @@ export class AutomationService {
         name = resp[0]?.name + (lLen == 1 ? '' : '+' + (lLen - 1));
       }
       else if(wf.target.name == 'tag') {
-        let tLen =  wf.target.ids.length;
-        resp = this.tags.filter((t:any) => t.id == wf.target.ids[0]);
-        name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
+        let tLen =  wf.target.ids.length + wf.target.values.length;
+        let nmbyid = this.tags.filter((t:any) => t.id == wf.target.ids[0])[0]?.name;
+        let nmbyval = wf.target.values[0];
+        name = (nmbyid ? nmbyid : nmbyval) + (tLen == 1 ? '' : '+' + (tLen - 1));
       }
       else if(wf.target.name == 'field') {
         let fLen =  wf.target.values.length;
@@ -186,9 +190,12 @@ export class AutomationService {
         name = resp[0]?.label + (fLen == 1 ? '' : '+' + (fLen - 1));
       }
       else if(wf.target.name == 'email') {
-        let tLen =  wf.target.ids.length;
-        resp = this.emails.filter((e:any) => e.id == wf.target.ids[0]);
-        name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
+        if(wf.target.type == 'template') {
+          let tLen =  wf.target.ids.length;
+          resp = this.emails.filter((e:any) => e.id == wf.target.ids[0]);
+          name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
+        }
+        else name = wf.target.custom.subject;
       }
       else if(wf.target.name == 'note') {
         name = wf.target.value;
@@ -220,9 +227,13 @@ export class AutomationService {
       }
       else if(wf.target.name == 'tag') {
         resp = this.tags.filter((t:any) => wf.target.ids.includes(t.id));
-        return resp.map((t:any)=> {
+        let ids = resp.map((t:any)=> {
           return {id: t.id, name: t.name};
         });
+        let values = wf.target.values.map((val:any)=> {
+          return {id: '', name: val};
+        });
+        return [...ids, ...values];
       }
       else if(wf.target.name == 'field') {
         resp = this.fields.filter((f:any) => {
@@ -239,10 +250,10 @@ export class AutomationService {
         });
       }
       else if(wf.target.name == 'email') {
-        resp = this.emails.filter((e:any) => wf.target.ids.includes(e.id));
-        return resp.map((e:any)=> {
-          return {id: e.id, name: e.name};
-        });
+          resp = this.emails.filter((e:any) => wf.target.ids?.includes(e.id));
+          return resp.map((e:any)=> {
+            return {id: e.id, name: e.name};
+          });
       }
       else return '';
     }

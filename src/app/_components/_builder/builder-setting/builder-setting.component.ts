@@ -137,7 +137,6 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this._overlayRef.dispose();
     this._general.imgSelection = false;
-    this._general.showEditor = false;
     this._general.selectedTab = '';
   }
 
@@ -145,9 +144,11 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     this._general.pageSaved = false;
     this.backToRow ? this.backToRow = false : this.dragBoxAnime.open = true;
     this._overlayRef.attach(this._portal);
-    setTimeout(()=>{
+    setTimeout(() => {
+      if(this._general.selectedBlock?.content?.name == 'heading' ||
+      this._general.selectedBlock?.content?.name == 'text') this._general.showEditor = true;
       this.dragBoxAnime.open = false;
-    },200)
+    }, 200);
   }
 
   openImgDialog() {
@@ -213,5 +214,11 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     }
     return true;
   }
+
+  selectedTabChange(e:any) {
+    if(this._general.selectedBlock.type == 'element') this._general.showEditor = false;
+    this._general.selectedTab = e.tab ? e.tab['textLabel'].toLowerCase() : '';
+  }
+
 }
 

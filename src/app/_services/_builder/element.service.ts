@@ -85,7 +85,7 @@ export class ElementService {
     icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
     // icon
     // order form
-    order_form: { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' },
+    // order_form: { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' },
     // order form
   };
   preMenuItems: any = ['Home', 'About', 'Blog', 'Contact'];

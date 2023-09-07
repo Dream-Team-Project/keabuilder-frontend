@@ -3,7 +3,7 @@ main {
 }
 
 .kb-main-container{
-    padding: 20px 0px;
+    padding: 20px 10px;
     width: calc(100% - 50px);
     margin-left: auto;
     top: 60px;

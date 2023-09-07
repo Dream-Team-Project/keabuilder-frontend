@@ -259,7 +259,7 @@ changecarddetails(){
        this.cngcard=false;
        this.stripedata.card=data?.card;
        this.stripedata.customer=data?.customer;
-       this._general.openSnackBar(false,data?.message,'Ok','center','top');
+       this._general.openSnackBar(false,data?.message,'OK','center','top');
        this.dialog.closeAll();
      }
      else{

@@ -97,13 +97,11 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <div class="d-flex align-items-center">
-                <mat-button-toggle-group [(ngModel)]="trigger.listField.run_once" aria-label="Logic type" class="mr-2">
-                    <mat-button-toggle [value]="true">Once</mat-button-toggle>
-                    <mat-button-toggle [value]="false">Each</mat-button-toggle>
-                </mat-button-toggle-group>
-                <p class="mb-0">Runs {{trigger.listField.run_once ? 'only one time' : 'each time'}}.</p>
-            </div>
+            <mat-button-toggle-group [(ngModel)]="trigger.listField.run_once" aria-label="Logic type" class="mb-1">
+                <mat-button-toggle [value]="true">Once</mat-button-toggle>
+                <mat-button-toggle [value]="false">Each</mat-button-toggle>
+            </mat-button-toggle-group>
+            <p class="mb-0">Runs {{trigger.listField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
         <div *ngSwitchCase="'tag'">
             <mat-error *ngIf="trigger.tagField.error">{{trigger.tagField.error}}</mat-error>
@@ -125,13 +123,11 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <div class="d-flex align-items-center">
-                <mat-button-toggle-group [(ngModel)]="trigger.tagField.run_once" aria-label="Logic type" class="mr-2">
-                    <mat-button-toggle [value]="true">Once</mat-button-toggle>
-                    <mat-button-toggle [value]="false">Each</mat-button-toggle>
-                </mat-button-toggle-group>
-                <p class="mb-0">Runs {{trigger.tagField.run_once ? 'only one time' : 'each time'}}.</p>
-            </div>
+            <mat-button-toggle-group [(ngModel)]="trigger.tagField.run_once" aria-label="Logic type" class="mb-1">
+                <mat-button-toggle [value]="true">Once</mat-button-toggle>
+                <mat-button-toggle [value]="false">Each</mat-button-toggle>
+            </mat-button-toggle-group>
+            <p class="mb-0">Runs {{trigger.tagField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
         <div *ngSwitchCase="'form'">
             <mat-error *ngIf="trigger.formField.error">{{trigger.formField.error}}</mat-error>
@@ -153,13 +149,11 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <div class="d-flex align-items-center">
-                <mat-button-toggle-group [(ngModel)]="trigger.formField.run_once" aria-label="Logic type" class="mr-2">
-                    <mat-button-toggle [value]="true">Once</mat-button-toggle>
-                    <mat-button-toggle [value]="false">Each</mat-button-toggle>
-                </mat-button-toggle-group>
-                <p class="mb-0">Runs {{trigger.formField.run_once ? 'only one time' : 'each time'}}.</p>
-            </div>
+            <mat-button-toggle-group [(ngModel)]="trigger.formField.run_once" aria-label="Logic type" class="mb-1">
+                <mat-button-toggle [value]="true">Once</mat-button-toggle>
+                <mat-button-toggle [value]="false">Each</mat-button-toggle>
+            </mat-button-toggle-group>
+            <p class="mb-0">Runs {{trigger.formField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
         <div *ngSwitchCase="'field'">
             <mat-error *ngIf="trigger.fieldField.error">{{trigger.fieldField.error}}</mat-error>
@@ -211,13 +205,11 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="d-flex align-items-center">
-                <mat-button-toggle-group [(ngModel)]="trigger.fieldField.run_once" aria-label="Logic type" class="mr-2">
-                    <mat-button-toggle [value]="true">Once</mat-button-toggle>
-                    <mat-button-toggle [value]="false">Each</mat-button-toggle>
-                </mat-button-toggle-group>
-                <p class="mb-0">Runs {{trigger.fieldField.run_once ? 'only one time' : 'each time'}}.</p>
-            </div>
+            <mat-button-toggle-group [(ngModel)]="trigger.fieldField.run_once" aria-label="Logic type" class="mb-1">
+                <mat-button-toggle [value]="true">Once</mat-button-toggle>
+                <mat-button-toggle [value]="false">Each</mat-button-toggle>
+            </mat-button-toggle-group>
+            <p class="mb-0">Runs {{trigger.fieldField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
         <div *ngSwitchCase="'email'">
             <mat-error *ngIf="trigger.emailField.error">{{trigger.emailField.error}}</mat-error>
@@ -239,13 +231,11 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <div class="d-flex align-items-center">
-                <mat-button-toggle-group [(ngModel)]="trigger.emailField.run_once" aria-label="Logic type" class="mr-2">
-                    <mat-button-toggle [value]="true">Once</mat-button-toggle>
-                    <mat-button-toggle [value]="false">Each</mat-button-toggle>
-                </mat-button-toggle-group>
-                <p class="mb-0">Runs {{trigger.emailField.run_once ? 'only one time' : 'each time'}}.</p>
-            </div>
+            <mat-button-toggle-group [(ngModel)]="trigger.emailField.run_once" aria-label="Logic type" class="mb-1">
+                <mat-button-toggle [value]="true">Once</mat-button-toggle>
+                <mat-button-toggle [value]="false">Each</mat-button-toggle>
+            </mat-button-toggle-group>
+            <p class="mb-0">Runs {{trigger.emailField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
     </div>
     <div mat-dialog-actions class="justify-content-between">
@@ -255,7 +245,7 @@
         </div>
         <div>
             <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-            <button mat-button cdkFocusInitial (click)="addTrigger()" color="primary">{{trigger.update
+            <button mat-button cdkFocusInitial [disabled]="isDisabled" (click)="addTrigger($event)" color="primary">{{trigger.update
                 ? 'Update' : 'Add'}}</button>
         </div>
     </div>
@@ -285,7 +275,7 @@
                     [matAutocomplete]="matAuto" [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100 pt-1">
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
-                    (optionSelected)="selectMultipleTarget($event, _automation.lists, action.listField, chipInp, 'name')">
+                    (optionSelected)="selectMultipleTarget($event, action.listField, chipInp, 'name')">
                     <mat-option *ngFor="let option of action.listField.filter" [value]="option"
                         [disabled]="isTargetDisabled(action.listField.values, option.id)">
                         {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
@@ -310,10 +300,10 @@
                 </mat-chip-list>
                 <input #chipInp matInput type="text" name="tag" placeholder="Search tags"
                     (input)="filterMultipleTarget(_automation.tags, action.tagField, chipInp, 'name')"
-                    [matAutocomplete]="matAuto" [matChipInputFor]="chipTag"
+                    [matAutocomplete]="matAuto" [matChipInputFor]="chipTag" (matChipInputTokenEnd)="addTag($event, action.tagField, chipInp, 'name')"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100 pt-1">
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
-                    (optionSelected)="selectMultipleTarget($event, _automation.tags, action.tagField, chipInp, 'name')">
+                    (optionSelected)="selectMultipleTarget($event, action.tagField, chipInp, 'name')">
                     <mat-option *ngFor="let option of action.tagField.filter" [value]="option"
                         [disabled]="isTargetDisabled(action.tagField.values, option.id)">
                         {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
@@ -341,7 +331,7 @@
                     [matAutocomplete]="matAuto" [matChipInputFor]="chipField"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100 pt-1">
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
-                    (optionSelected)="selectMultipleTarget($event, _automation.fields, action.fieldField, chipInp, 'label')">
+                    (optionSelected)="selectMultipleTarget($event, action.fieldField, chipInp, 'label')">
                     <mat-option *ngFor="let option of action.fieldField.filter" [value]="option"
                         [disabled]="isTargetDisabled(action.fieldField.values, option.id)">
                         {{option?.label}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
@@ -360,33 +350,49 @@
                 </mat-form-field>
             </div>
         </div>
-        <div *ngSwitchCase="'email'">
-            <mat-error *ngIf="action.emailField.error">{{action.emailField.error}}</mat-error>
-            <mat-form-field appearance="fill"
+        <div *ngSwitchCase="'email'" [class.kb-text-editor]="action.emailField.type == 'custom'">
+            <mat-button-toggle-group [(ngModel)]="action.emailField.type" aria-label="Email type" class="mb-3">
+                <mat-button-toggle value="custom">Custom Email</mat-button-toggle>
+                <mat-button-toggle value="template">Email Template</mat-button-toggle>
+            </mat-button-toggle-group>
+            <ng-container *ngIf="action.emailField.type == 'custom' else emailtemplate">
+                <mat-error *ngIf="action.emailField.error && !action.emailField.custom.subject">Email subject is required</mat-error>
+                <mat-form-field class="kb-full-width" appearance="fill" [class.mat-form-field-invalid]="action.emailField.error && !action.emailField.custom.subject">
+                  <mat-label>Email Subject</mat-label>
+                  <input matInput type="text" placeholder="Email subject" [(ngModel)]="action.emailField.custom.subject" required>
+                </mat-form-field>
+                <mat-error *ngIf="action.emailField.error && !action.emailField.custom.content">Email content is required</mat-error>
+                <editor [(ngModel)]="action.emailField.custom.content" [init]="_automation._general.config" 
+                [class.kb-field-error]="action.emailField.error && !action.emailField.custom.content" class="kb-editor"></editor>
+            </ng-container>
+            <ng-template #emailtemplate>
+                <mat-error *ngIf="action.emailField.error">{{action.emailField.error}}</mat-error>
+                <mat-form-field appearance="fill"
                 (click)="filterMultipleTarget(_automation.emails, action.emailField, chipInp, 'name')"
                 [class.mat-form-field-invalid]="action.emailField.error">
-                <mat-label>Select Emails</mat-label>
-                <mat-chip-list #chipEmail aria-label="Email selection">
-                    <mat-chip *ngFor="let chip of action.emailField.values, index as i"
-                        (removed)="removeSelectedTarget(action.emailField, i)">
-                        {{chip.name}}
-                        <button matChipRemove>
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip>
-                </mat-chip-list>
-                <input #chipInp matInput type="text" name="email" placeholder="Search emails"
-                    (input)="filterMultipleTarget(_automation.emails, action.emailField, chipInp, 'name')"
-                    [matAutocomplete]="matAuto" [matChipInputFor]="chipEmail"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100 pt-1">
-                <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
-                    (optionSelected)="selectMultipleTarget($event, _automation.emails, action.emailField, chipInp, 'name')">
-                    <mat-option *ngFor="let option of action.emailField.filter" [value]="option"
-                        [disabled]="isTargetDisabled(action.emailField.values, option.id)">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
+                    <mat-label>Select Emails</mat-label>
+                    <mat-chip-list #chipEmail aria-label="Email selection">
+                        <mat-chip *ngFor="let chip of action.emailField.values, index as i"
+                            (removed)="removeSelectedTarget(action.emailField, i)">
+                            {{chip.name}}
+                            <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                    </mat-chip-list>
+                    <input #chipInp matInput type="text" name="email" placeholder="Search emails"
+                        (input)="filterMultipleTarget(_automation.emails, action.emailField, chipInp, 'name')"
+                        [matAutocomplete]="matAuto" [matChipInputFor]="chipEmail"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" class="w-100 pt-1">
+                    <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
+                        (optionSelected)="selectMultipleTarget($event, action.emailField, chipInp, 'name')">
+                        <mat-option *ngFor="let option of action.emailField.filter" [value]="option"
+                            [disabled]="isTargetDisabled(action.emailField.values, option.id)">
+                            {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </ng-template>
         </div>
         <div *ngSwitchCase="'note'">
             <mat-error *ngIf="action.noteField.error && !action.noteField.value">{{action.noteField.error}}</mat-error>
@@ -496,40 +502,42 @@
                         </mat-autocomplete>
                     </mat-form-field>
                 </div>
-                <div *ngIf="ietype.type?.data?.length > 0" [class.pl-2]="ietype.type?.group" class="flex-grow-1">
-                    <mat-form-field appearance="fill" (click)="setGroupTargetAction($event, ietype.type, 'filter')"
-                        [class.mat-form-field-invalid]="action.ifelseField.error && !ietype.type.value">
-                        <mat-label>Select a {{ietype.type.group | titlecase}}</mat-label>
-                        <input type="text" name="list" placeholder="Search list" [(ngModel)]="ietype.type.value"
-                            (input)="setGroupTargetAction($event, ietype.type, 'filter')" [matAutocomplete]="matAuto"
-                            matInput>
-                        <button *ngIf="ietype.type.value" matSuffix mat-icon-button aria-label="Clear"
-                            (click)="setGroupTargetAction($event, ietype.type, 'reset')">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                        <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
-                            (optionSelected)="setGroupTargetAction($event, ietype.type, 'select')">
-                            <mat-option *ngFor="let option of ietype.type.filter" [value]="option"
-                                [disabled]="ietype.type.id == option.id">
-                                {{ietype.type.group == 'field' ? option?.label : option?.name}} <span
-                                    *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div *ngIf="ietype.type?.group == 'field'" class="flex-grow-1 pl-2">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Value</mat-label>
-                        <input matInput type="text" placeholder="Value" [(ngModel)]="ietype.type.match">
-                        <button *ngIf="ietype.type.match" matSuffix mat-icon-button aria-label="Clear"
-                            (click)="ietype.type.match = ''">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-                <button mat-icon-button *ngIf="action.ifelseField.types.length > 1"
-                    (click)="removeCondition(action.ifelseField.types, ietypeI)"
-                    class="kb-danger mt-1"><mat-icon>close</mat-icon></button>
+                <ng-container *ngIf="ietype.type?.data?.length > 0 else nodata">
+                    <div [class.pl-2]="ietype.type?.group" class="flex-grow-1">
+                        <mat-form-field appearance="fill" (click)="setGroupTargetAction($event, ietype.type, 'filter')"
+                            [class.mat-form-field-invalid]="action.ifelseField.error && !ietype.type.id">
+                            <mat-label>Select a {{ietype.type.group | titlecase}}</mat-label>
+                            <input type="text" [name]="ietype.type.group+ietypeI" [placeholder]="'Search '+ietype.type.group" [(ngModel)]="ietype.type.value"
+                                (input)="setGroupTargetAction($event, ietype.type, 'filter')" [matAutocomplete]="matAuto" matInput>
+                            <button *ngIf="ietype.type.value" matSuffix mat-icon-button aria-label="Clear"
+                                (click)="setGroupTargetAction($event, ietype.type, 'reset')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
+                                (optionSelected)="setGroupTargetAction($event, ietype.type, 'select')">
+                                <mat-option *ngFor="let option of ietype.type.filter" [value]="option"
+                                    [disabled]="ietype.type.id == option.id">
+                                    {{ietype.type.group == 'field' ? option?.label : option?.name}} <span
+                                        *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="ietype.type?.group == 'field'" class="flex-grow-1 pl-2">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Value</mat-label>
+                            <input matInput type="text" placeholder="Value" [(ngModel)]="ietype.type.match">
+                            <button *ngIf="ietype.type.match" matSuffix mat-icon-button aria-label="Clear"
+                                (click)="ietype.type.match = ''">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <button mat-icon-button *ngIf="action.ifelseField.types.length > 1"
+                        (click)="removeCondition(action.ifelseField.types, ietypeI)"
+                        class="kb-danger mt-1"><mat-icon>close</mat-icon></button>
+                </ng-container>
+                <ng-template #nodata><div *ngIf="ietype.type?.group" class="kb-danger small col-12">You don't have any {{ietype.type?.group}}s</div></ng-template>
             </div>
             <div class="text-right">
                 <button mat-raised-button (click)="addCondition(action.ifelseField)" color="secondary">Add More
@@ -552,7 +560,7 @@
         </div>
         <div>
             <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-            <button mat-button cdkFocusInitial (click)="addAction()" color="primary">{{action.update ?
+            <button mat-button cdkFocusInitial [disabled]="isDisabled" (click)="addAction()" color="primary">{{action.update ?
                 'Update' : 'Add'}}</button>
         </div>
     </div>
@@ -640,7 +648,7 @@
         <app-crm-automation-workflow
             [activeActions]="_automation.activeActions"
             (openActionSheet)="openActionSheet(actionSheet, $event)"
-            (selectAction)="selectActionGet($event)"></app-crm-automation-workflow>
+            (selectAction)="getSelectAction($event)"></app-crm-automation-workflow>
         <!-- end action sections -->
         <!-- start finish -->
         <div *ngIf="_automation.activeActions[_automation.activeActions.length-1]?.target.name != 'ifelse'" class="kb-workflow-section">

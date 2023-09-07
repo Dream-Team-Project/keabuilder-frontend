@@ -280,6 +280,41 @@ span.kb-workflow-option-name {
     width: 100px;
 }
 
+.kb-field-error {
+    border: 2px solid var(--kb-danger);
+}
+
+.kb-editor {
+    border-radius: 4px;
+}
+
+::ng-deep .mat-dialog-container .kb-text-editor {
+    width: 800px;
+    min-height: 250px;
+}
+
+::ng-deep .mat-dialog-container .kb-action-dialog-content {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 800px;
+}
+
+::ng-deep .mat-dialog-container .kb-action-dialog-content {
+    padding-top: 0.5rem;
+}
+
+:ng-deep button.tox-button {
+    background-color: var(--primary-color);
+    border: 0px;
+    border-radius: 4px;
+    min-width: 100px;
+    font-weight: 600;
+}
+
+:ng-deep button.tox-button.tox-button--secondary {
+    background-color: var(--secondary-color);
+}
+
 /* data & time picker */
 
 ::ng-deep .kb-matgroup-isexpanded>span {
