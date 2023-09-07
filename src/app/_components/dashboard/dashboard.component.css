@@ -32,7 +32,7 @@
     font-size: 2em;
 }
 .card-stats .card-body .numbers .card-category {
-    color: #9a9a9a;
+    color: #000000;
     font-size: 16px;
     line-height: 1.4em;
 }
@@ -120,7 +120,8 @@ hr {
 .card-category, .category {
     text-transform: capitalize;
     font-weight: 400;
-    color: #9a9a9a;
+    color: #000000;
+    margin: 0;
     font-size: 14px;
 }
 .card-tasks .table tbody td {
@@ -198,4 +199,20 @@ hr {
 }
 .colr{
     color: #dea641;
+}
+.adjustcard{
+    font-size: 64px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+}
+.fntwght{
+font-weight: 600;
+}
+.adjustflex{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
 }

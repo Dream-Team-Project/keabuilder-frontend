@@ -54,11 +54,19 @@
               <span>
                 <div class="bw-avatar-content bw-change-color-badge">
                   <!-- <div class="bw-avatar" (click)="showoffcanvasoverlay()"> -->
-                    <div class="bw-avatar"   (click)="mainDialog(profiledialog)">
+                    <!-- <div class="bw-avatar"   (click)="mainDialog(profiledialog)"> -->
+                    <div class="bw-avatar"  [matMenuTriggerFor]="menu">
                     <img [src]="_image.getImgPath(userimgpath)" alt="">
                   </div>
                 </div>
               </span>
+              <mat-menu #menu="matMenu">
+                <p class="brkeml pl-4 pr-4 pt-2">Signed in as <br><small>{{userService.user.email}}</small></p>
+                <button mat-menu-item color="primary" id="defaultpri" [routerLink]="'/account/settings'"><i class="fas fa-user"></i> My Profile</button>
+                <hr class="mt-1 mb-1">
+                <button mat-menu-item class="text-danger" (click)="logout()"><i class="fas fa-sign-out"></i> Sign Out</button>
+              </mat-menu>
+
             </a>
 
           </li>

@@ -1,4 +1,43 @@
 <div class="container-fluid kb-main-container pb-5" id="kea-dashboard">
+
+  <div class="row">
+    <div class="col-md-4 adjustflex">
+      <h2 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h2>
+      <p class="card-category">{{randomwelcome}}</p>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <p class="card-category">Daily Visit</p>
+          <p class="card-title colr adjustcard">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <p class="card-category">Revenue</p>
+          <p class="card-title colr adjustcard">${{totalrevenue}} </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <p class="card-category">Contacts</p>
+          <p class="card-title colr adjustcard">{{totalmembers}} </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <p class="card-category">Daily Sales</p>
+          <p class="card-title colr adjustcard">${{dailysales}} </p>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="row" *ngIf="hidefornow">
     <div class="col-md-12 mb-4 text-center">
@@ -20,7 +59,7 @@
       </div> -->
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hidefornow">
     <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="hidefornow">
       <div class="card card-stats">
         <div class="card-body ">
@@ -68,7 +107,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="col-lg-6 col-md-6 col-sm-6" >
       <div class="card card-stats">
         <div class="card-body ">
           <div class="row">
@@ -91,6 +130,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
