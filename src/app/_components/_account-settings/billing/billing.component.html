@@ -1,6 +1,6 @@
 <!--Address dialog start-->
 <ng-template #address>
-  <h1 mat-dialog-title>Update Stripe Details</h1>
+  <h1 mat-dialog-title>Update Details</h1>
   <mat-error *ngIf="error">{{ errormessage }}</mat-error>
   <div mat-dialog-content>
     <mat-form-field class="kb-full-width" appearance="fill">
@@ -275,19 +275,110 @@
   </div>
 </ng-template>
 <!--update subscription-->
+
 <div class="container-fluid">
-  <div class="row">
+  <div class="row" *ngIf="usertype !='free'; else nodata">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-    <div class="col-md-3"></div>
-    <div class="card col-md-6" *ngIf="usertype !='free'; else nodata">
-      <div
-        matTooltip="Billing Details :"
-        matTooltipPosition="left"
-        class="row kb-strip-details"
-      >
-        <div
-          class="col-md-12 d-flex justify-content-between text-align-center p-3"
-        >
+
+    <div class="col-md-12">
+      <h4>Change your plan</h4>
+      <small>Upgrade or downgrade your current plan.</small>
+
+      <h6 class="mt-2">Next billing date:  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
+
+      <div class="row">
+
+        <div class="col-md-2">
+          <div class="card kb-user-detail-box p-3 mt-4">
+            <div class="justify-content-between">
+              <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Beta'"></i>
+                <b>BETA</b>
+                <p class="m-0">Beta Plan</p>
+                <p class="m-0">$29 / month</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card kb-user-detail-box p-3 mt-4">
+            <div class="justify-content-between">
+                <b>STARTUP</b>
+                <p class="m-0">Startup Plan</p>
+                <p class="m-0">$78 / month</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card kb-user-detail-box p-3 mt-4">
+            <div class="justify-content-between">
+                <b>ENTREPRENEUR</b>
+                <p class="m-0">Entrepreneur Plan</p>
+                <p class="m-0">$149 / month</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="card kb-user-detail-box p-3 mt-4">
+            <div class="justify-content-between">
+                <b>AGENCY</b>
+                <p class="m-0">Agency Plan</p>
+                <p class="m-0">Ask for Quote</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6 mt-4">
+      <hr class="mt-0">
+      <h4>Payment Details</h4>
+      <small>Update your billing information. Make sure to set your location correctly as it could affect your tax rates.</small>
+      
+      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(changecard)">
+        <div class="d-flex justify-content-between kb-user-detail align-items-center">
+          {{ stripedata?.card?.brand }} ending in XXXX XXXX {{ stripedata?.card?.last4 }}
+          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+        </div>
+      </div>
+
+      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(address)">
+        <div class="d-flex justify-content-between kb-user-detail align-items-center">
+
+            <div class="kb-fnt-details-o">
+              <b>Name:</b> {{ stripedata?.customer?.name | titlecase }}
+              <br>
+              <b>Address:</b> {{ stripedata?.customer?.address?.line1 }}
+              <br>
+              <b>City:</b> {{ stripedata?.customer?.address?.city }}
+              <br>
+              <b>State:</b> {{ stripedata?.customer?.address?.state }}
+              <br>
+              <b>Country:</b> {{ stripedata?.customer?.address?.country }}
+              <br>
+              <b>Zip:</b> {{ stripedata?.customer?.address?.postal_code }}
+              <br>
+              <b>Email:</b> {{ stripedata?.customer?.email }}
+              <br>
+              <b>Phone:</b> {{ stripedata?.customer?.phone }}
+            </div>
+
+          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="col-md-6 mkflx">
+      <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
+    </div>
+
+
+    <!-- OLD LAYOUT -->
+    <div class="card col-md-6" *ngIf="false">
+      <div matTooltip="Billing Details :" matTooltipPosition="left" class="row kb-strip-details">
+        <div class="col-md-12 d-flex justify-content-between text-align-center p-3">
           <div class="d-flex justify-content-between kb-fnt-details p-3">
             <div class="kb-fnt-details-img">
               <i class="fa-regular fa-address-card mr-3"></i>
@@ -308,42 +399,29 @@
                 {{ stripedata?.customer?.address?.postal_code }}
               </div>
               <div class="kb-fnt-details-o">
-                <i class="fa-regular fa-envelope mr-1"></i
-                >{{ stripedata?.customer?.email }}
+                <i class="fa-regular fa-envelope mr-1"></i>{{ stripedata?.customer?.email }}
               </div>
               <div class="kb-fnt-details-o">
-                <i class="fa-solid fa-phone mr-1"></i
-                >{{ stripedata?.customer?.phone }}
+                <i class="fa-solid fa-phone mr-1"></i>{{ stripedata?.customer?.phone }}
               </div>
             </div>
           </div>
           <div>
-            <button
-              mat-raised-button
-              class="kb-fnt-details-btn mt-3"
-              color="primary"
-              (click)="openDialog(address)"
-            >
+            <button mat-raised-button class="kb-fnt-details-btn mt-3" color="primary" (click)="openDialog(address)">
               Update
             </button>
           </div>
         </div>
       </div>
-      <div
-        matTooltip="Subscription Details :"
-        matTooltipPosition="left"
-        class="row kb-strip-details"
-      >
-        <div
-          class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom"
-        >
+      <div matTooltip="Subscription Details :" matTooltipPosition="left" class="row kb-strip-details">
+        <div class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom">
           <div>
-            <div
-              class="kb-fnt kb-fnt-hover"
-            >
-             {{product?.name}}
-             <span *ngIf="stripedata?.subscription?.plan?.id == product?.type[0]?.value">{{'('+product?.type[0]?.name+')'}}</span>
-             <span *ngIf="stripedata?.subscription?.plan?.id == product?.type[1]?.value">{{'('+product?.type[1]?.name+')'}}</span>
+            <div class="kb-fnt kb-fnt-hover">
+              {{product?.name}}
+              <span
+                *ngIf="stripedata?.subscription?.plan?.id == product?.type[0]?.value">{{'('+product?.type[0]?.name+')'}}</span>
+              <span
+                *ngIf="stripedata?.subscription?.plan?.id == product?.type[1]?.value">{{'('+product?.type[1]?.name+')'}}</span>
             </div>
             <div class="kb-fnt-plan-price kb-fnt-hover">
               <i class="fa-solid fa-circle-dollar-to-slot"></i>
@@ -355,9 +433,7 @@
           </div>
         </div>
 
-        <div
-          class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom"
-        >
+        <div class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom">
           <div>
             <div class="kb-fnt kb-fnt-hover">Next billing date</div>
             <div class="kb-fnt-plan-price kb-fnt-hover">
@@ -372,9 +448,7 @@
           </div>
         </div>
 
-        <div
-          class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom"
-        >
+        <div class="col-md-12 d-flex justify-content-between text-align-center p-3 border-bottom">
           <div>
             <div class="kb-fnt kb-fnt-hover">Payment Method</div>
             <div class="kb-fnt-plan-price kb-fnt-hover">
@@ -386,9 +460,7 @@
             Edit <i class="fa-solid fa-angles-right"></i>
           </div>
         </div>
-        <div
-          class="col-md-12 d-flex justify-content-center text-align-center p-3 border-bottom"
-        >
+        <div class="col-md-12 d-flex justify-content-center text-align-center p-3 border-bottom">
           <!-- <button mat-raised-button class="text-danger" (click)="openDialog(canceldialog)"><i class="fa-regular fa-trash-can"></i> Cancel Subscription</button> -->
           <!-- <button
             mat-raised-button
@@ -400,6 +472,9 @@
         </div>
       </div>
     </div>
+
+  </div>
+
     <ng-template #nodata>
       <div class="row justify-content-center">
         <div class="col-md-6 pt-5">
@@ -412,6 +487,4 @@
         </div>
       </div>
     </ng-template>
-    <div class="col-md-3"></div>
-  </div>
 </div>
