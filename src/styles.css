@@ -806,7 +806,8 @@ input[type=number] {
   }
 }
 
-.mat-form-field-appearance-fill .mat-form-field-flex, .cardpage > div, table {
+.cardpage > div, 
+table, .mat-tab-group, .kb-report-card, .insideshdw, .kb-offer-card {
   background: #fff;
 }
 

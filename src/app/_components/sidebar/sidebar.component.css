@@ -18,16 +18,16 @@
   right: 0;
   width: 0%;
   background: transparent;
-  background-image: linear-gradient(to right, transparent 0%, #0f172a 50%);
-  -moz-animation: showHide 0.3s ease-in;
+  background-image: linear-gradient(to right, transparent 0%, var(--kb-dark) 50%);
+  -moz-animation: showHide 0.2s ease;
   /* Firefox */
-  -webkit-animation: showHide 0.3s ease-in;
+  -webkit-animation: showHide 0.2s ease;
   /* Safari and Chrome */
-  -ms-animation: showHide 0.3s ease-in;
+  -ms-animation: showHide 0.2s ease;
   /* IE10 */
-  -o-animation: showHide 0.3s ease-in;
+  -o-animation: showHide 0.2s ease;
   /* Opera */
-  animation: showHide 0.3s ease-in;
+  animation: showHide 0.2s ease;
 }
 
 @-webkit-keyframes showHide {
@@ -319,9 +319,9 @@ div#topbar_notifications_logs {
   -ms-flex-direction: column;
   flex-direction: column;
   z-index: 21000;
-  background: #0f172a;
-  -webkit-transition: all .25s ease;
-  transition: all .25s ease;
+  background: var(--kb-dark);
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
   -webkit-transform: translate(-110%);
   transform: translate(-110%);
 }
@@ -349,28 +349,8 @@ div#topbar_notifications_logs {
   width: 100%;
   padding: 25px 5px;
   min-height: 80px;
-  transition: 0.3s ease-in;
-  position: relative;
-}
-
-.kb-close-sidebar-icon {
-  font-size: 20px;
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  cursor: pointer;
-  height: 30px;
-  width: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  opacity: 0;
   transition: 0.2s ease;
-}
-
-.kb-close-sidebar-icon.kb-show-close-icon {
-  opacity: 1!important;
+  position: relative;
 }
 
 .bw-sidebar-logo img {
@@ -405,7 +385,7 @@ div#topbar_notifications_logs {
   text-align: left;
   background: transparent;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   opacity: 1;
   -webkit-transition: all .25s ease;
   transition: all .25s ease;

@@ -8,8 +8,8 @@ main {
     margin-left: auto;
     top: 60px;
     position: relative;
-    transition: all .25s ease;
-    background: rgb(59 130 246 / 6%);
+    transition: all .2s ease;
+    background: rgb(244 244 244 / 48%);
 }
 
 ::ng-deep .mat-calendar-body-selected {
@@ -202,7 +202,7 @@ main {
 }
 
 @media only screen and (min-width:768px) {
-    .kb-main-container.kb-fixed-template {
+    .kb-main-container.kb-fixed-template, ::ng-deep .kb-main-container.kb-fixed-template .header-navbar.fixed-top {
         width: calc(100% - 260px)!important;
     }
 }

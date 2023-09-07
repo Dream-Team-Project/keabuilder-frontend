@@ -1,14 +1,24 @@
 /* navbar css */
 
-.kb-open-sidebar-icon {
-  cursor: pointer;
-  font-size: 20px;
-  height: 36px;
-  width: 36px;
+.kb-navbar-icon {
+  position: relative;
+  font-size: 18px;
+  height: 38px;
+  width: 38px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.2s ease;
+  overflow: hidden;
+}
+
+.kb-navbar-icon i {
+  font-size: inherit;
+}
+
+.kb-navbar-icon:hover {
+  background-color: rgba(244, 247, 248, 1);
 }
 
 .navshadow {
@@ -18,15 +28,17 @@
 .header-navbar {
   padding: 0;
   min-height: 60px;
-  -webkit-transition: .1s ease all, background 0s;
-  transition: .1s ease all, background 0s;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
   z-index: 1000;
   background-color: #FFF;
   /* box-shadow: -8px 12px 18px 0 rgb(25 42 70 / 13%); */
 }
 
 .header-navbar.fixed-top {
-  left: 50px;
+  width: calc(100% - 50px);
+  left: auto;
+  right: 0;
   position: fixed;
   background-color: #F2F4F4;
   padding: 0px;
@@ -41,9 +53,9 @@
 }
 
 .header-navbar .navbar-container {
-  padding-left: 1rem;
-  -webkit-transition: .3s ease all;
-  transition: .3s ease all;
+  padding-left: 12px;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
   background: inherit;
   margin-left: 0;
   background-color: var(--kb-white);
@@ -1376,10 +1388,12 @@ a:hover {
 /* pulsering */
 .pulse-ring {
     display: block;
-    border-radius: 40px;
-    height: 40px;
-    width: 40px;
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
     position: absolute;
+    top: 0;
+    left: 0;
     -webkit-animation: animation-pulse 3.5s ease-out;
     animation: animation-pulse 3.5s ease-out;
     -webkit-animation-iteration-count: infinite;
@@ -1393,12 +1407,12 @@ a:hover {
     -webkit-transform: scale(0.1, 0.1);
     opacity: 0;
 }
-60% {
+50% {
     -webkit-transform: scale(0.1, 0.1);
     opacity: 0;
 }
-65% {
-    opacity: 1;
+60% {
+  opacity: 1;
 }
 100% {
     -webkit-transform: scale(1.2, 1.2);
