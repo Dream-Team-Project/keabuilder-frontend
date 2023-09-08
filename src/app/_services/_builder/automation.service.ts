@@ -152,26 +152,26 @@ fetchallData(){
       var resp = [];
       if(wf.target.id == '*') name = 'Any';
       else if(wf.target.name == 'list') {
-        resp = this.lists.filter((l:any) => l.id == wf.target.id);
+        resp = this.lists.filter((l:any) => l.uniqueid == wf.target.id);
         name = resp[0]?.name;
       }
       else if(wf.target.name == 'tag') {
         if(wf.target.value) name = wf.target.value;
         else {
-          resp = this.tags.filter((t:any) => t.id == wf.target.id);
+          resp = this.tags.filter((t:any) => t.uniqueid == wf.target.id);
           name = resp[0]?.name;
         }
       }
       else if(wf.target.name == 'form') {
-        resp = this.forms.filter((f:any) => f.id == wf.target.id);
+        resp = this.forms.filter((f:any) => f.uniqueid == wf.target.id);
         name = resp[0]?.name;
       }
       else if(wf.target.name == 'field') {
-        resp = this.fields.filter((f:any) => f.id == wf.target.id);
+        resp = this.fields.filter((f:any) => f.uniqueid == wf.target.id);
         name = resp[0]?.label;
       }
       else if(wf.target.name == 'email') {
-        resp = this.emails.filter((t:any) => t.id == wf.target.id);
+        resp = this.emails.filter((t:any) => t.uniqueid == wf.target.id);
         name = resp[0]?.name;
       }
       return name ? (field ? name : '('+name+')') : '';
@@ -187,24 +187,24 @@ fetchallData(){
       if(allid == '*' && wf.target.ids?.length == 1) name = 'Select All';
       else if(wf.target.name == 'list') {
         let lLen =  wf.target.ids.length;
-        resp = this.lists.filter((l:any) => l.id == wf.target.ids[0]);
+        resp = this.lists.filter((l:any) => l.uniqueid == wf.target.ids[0]);
         name = resp[0]?.name + (lLen == 1 ? '' : '+' + (lLen - 1));
       }
       else if(wf.target.name == 'tag') {
         let tLen =  wf.target.ids.length + wf.target.values.length;
-        let nmbyid = this.tags.filter((t:any) => t.id == wf.target.ids[0])[0]?.name;
+        let nmbyid = this.tags.filter((t:any) => t.uniqueid == wf.target.ids[0])[0]?.name;
         let nmbyval = wf.target.values[0];
         name = (nmbyid ? nmbyid : nmbyval) + (tLen == 1 ? '' : '+' + (tLen - 1));
       }
       else if(wf.target.name == 'field') {
         let fLen =  wf.target.values.length;
-        resp = this.fields.filter((f:any) => f.id == wf.target.values[0].id);
+        resp = this.fields.filter((f:any) => f.uniqueid == wf.target.values[0].id);
         name = resp[0]?.label + (fLen == 1 ? '' : '+' + (fLen - 1));
       }
       else if(wf.target.name == 'email') {
         if(wf.target.type == 'template') {
           let tLen =  wf.target.ids.length;
-          resp = this.emails.filter((e:any) => e.id == wf.target.ids[0]);
+          resp = this.emails.filter((e:any) => e.uniqueid == wf.target.ids[0]);
           name = resp[0]?.name + (tLen == 1 ? '' : '+' + (tLen - 1));
         }
         else name = wf.target.custom.subject;
@@ -232,15 +232,15 @@ fetchallData(){
       var allid = wf.target.ids ?  wf.target.ids[0] : '';
       if(allid == '*' && wf.target.ids?.length == 1) return [{id: '*', name: 'Select All'}];
       else if(wf.target.name == 'list') {
-        resp = this.lists.filter((l:any) => wf.target.ids.includes(l.id));
+        resp = this.lists.filter((l:any) => wf.target.ids.includes(l.uniqueid));
         return resp.map((l:any)=> {
-          return {id: l.id, name: l.name};
+          return {id: l.uniqueid, name: l.name};
         });
       }
       else if(wf.target.name == 'tag') {
-        resp = this.tags.filter((t:any) => wf.target.ids.includes(t.id));
+        resp = this.tags.filter((t:any) => wf.target.ids.includes(t.uniqueid));
         let ids = resp.map((t:any)=> {
-          return {id: t.id, name: t.name};
+          return {id: t.uniqueid, name: t.name};
         });
         let values = wf.target.values.map((val:any)=> {
           return {id: '', name: val};
@@ -250,7 +250,7 @@ fetchallData(){
       else if(wf.target.name == 'field') {
         resp = this.fields.filter((f:any) => {
           return wf.target.values.some((tv:any) => {
-            if(f.id == tv.id) {
+            if(f.uniqueid == tv.id) {
               f.updatedvalue = tv.updatedvalue;
               return true;
             }
@@ -258,13 +258,13 @@ fetchallData(){
           });
         });
         return resp.map((f:any)=> {
-          return {id: f.id, label: f.label, updatedvalue: f.updatedvalue};
+          return {id: f.uniqueid, label: f.label, updatedvalue: f.updatedvalue};
         });
       }
       else if(wf.target.name == 'email') {
-          resp = this.emails.filter((e:any) => wf.target.ids?.includes(e.id));
+          resp = this.emails.filter((e:any) => wf.target.ids?.includes(e.uniqueid));
           return resp.map((e:any)=> {
-            return {id: e.id, name: e.name};
+            return {id: e.uniqueid, name: e.name};
           });
       }
       else return '';

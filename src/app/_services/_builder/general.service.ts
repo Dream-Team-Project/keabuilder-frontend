@@ -1304,7 +1304,7 @@ export class GeneralService {
     if(margin.tabv) margin.tabv = margin.tabv?.replace(/auto/g,'0px');
     if(margin.mob) style.mobile.margin = style.mobile.margin?.replace(/auto/g,'0px');
     if(margin.hov) style.hover.margin = style.hover.margin?.replace(/auto/g,'0px');
-    if(margin.tabv) style.dropdown.margin = style.hover.margin?.replace(/auto/g,'0px');
+    if(margin.drop) style.dropdown.margin = style.dropdown.margin?.replace(/auto/g,'0px');
 
     var deskmar = margin.desk ? elestl.mar + margin.desk : '';
     var deskjc = itemAlign.desk ? elestl.jc + itemAlign.desk : '';
@@ -1324,6 +1324,13 @@ export class GeneralService {
     
     var hovmar = margin.hov ? elestl.mar + margin.hov : '';
     this.pagestyling.hover += elestl.selector + hovmar + ';}';
+
+    delete style.desktop.margin;
+    delete style.tablet_h.margin;
+    delete style.tablet_v.margin;
+    delete style.mobile.margin;
+    delete style.hover?.margin;
+    delete style.hover?.margin;
 
     this.pagestyling.desktop += selector + '{' + Object.entries({...style.desktop}).map(([a, b]) => `${a}:${b}`).join(';')+';}';
 
