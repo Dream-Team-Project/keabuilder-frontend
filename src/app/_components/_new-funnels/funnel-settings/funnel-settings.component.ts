@@ -68,7 +68,7 @@ this.fetchfunnel();
 fetchfunnel(){
   this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
     next: data => {
-    // console.log(data);
+    console.log(data);
     this.funnelname = data.data2[0].name;
     this.uniqueidstep = data.data[0].uniqueid;  
     
@@ -87,6 +87,12 @@ fetchfunnel(){
       this.defaultsubdomain = elmsubd;
     
       this.kbdomains.push({name:elmsubd});
+
+      if(data.alldomains?.length>0){
+        data.alldomains.forEach((element:any) => {
+          this.kbdomains.push(element);
+        });
+      }
     
       if(element.domain!='' && element.domain!=null){
         this.domainselected = element.domain;

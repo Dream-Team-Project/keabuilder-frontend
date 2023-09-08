@@ -193,3 +193,6 @@ td.Checkout_Summary_Table_Row_Cell label{
     width: 100%;
     align-items: center;
 }
+table{
+    background: transparent;
+}

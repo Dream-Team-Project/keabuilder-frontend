@@ -64,65 +64,65 @@ export class DomainComponent implements OnInit {
 
 
   connectdomain(){
-    // console.log(this.gendomainname);
-    if(this.domainname.status=='VALID'){
-      this.searching = true;
-      this.domainconn++;
-      // console.log(this.domainname.value);
-      if(this.domainconn==1){
-        this._general.openSnackBar(false,'Domain is now processing... Don not close the browser until process is complete.', 'OK','center','top');
+    console.log(this.gendomainname);
+    // if(this.domainname.status=='VALID'){
+    //   this.searching = true;
+    //   this.domainconn++;
+    //   // console.log(this.domainname.value);
+    //   if(this.domainconn==1){
+    //     this._general.openSnackBar(false,'Domain is now processing... Don not close the browser until process is complete.', 'OK','center','top');
 
-        // console.log(this.domainname.value);
-        this.domainService.oncreatedomain(this.domainname.value).subscribe({
-          next: data => {
-            // console.log(data);
+    //     // console.log(this.domainname.value);
+    //     this.domainService.oncreatedomain(this.domainname.value).subscribe({
+    //       next: data => {
+    //         // console.log(data);
           
-            if(data.success==true){
-              this.nameservers = data.nameservers.split(',');
-              var objdata = {name:data.dmname,zoneid:data.zoneid, nameservers:data.nameservers, status:data.status};
-              this.domainService.oninsertdomain(objdata).subscribe({
-                next: data => {
-                  // console.log(data);
-                  this.searching = false;
-                  this.error=false;
-                  this.errormessage='';
-                  this.domainconn = 0;
-                  this._general.openSnackBar(false,'Domain has been Successfully added. Please check the given nameservers and update it!', 'OK','center','top');
-                  if(data.success==true){
-                    this.alldomainsdata = [];
-                    data.data.forEach((element:any) => {
-                      this.alldomainsdata.push(element);
-                    });
-                      this.shownamehint = true;
-                      this.dialog.closeAll();
-                    }
-                  }
-                });
+    //         if(data.success==true){
+    //           this.nameservers = data.nameservers.split(',');
+    //           var objdata = {name:data.dmname,zoneid:data.zoneid, nameservers:data.nameservers, status:data.status};
+    //           this.domainService.oninsertdomain(objdata).subscribe({
+    //             next: data => {
+    //               // console.log(data);
+    //               this.searching = false;
+    //               this.error=false;
+    //               this.errormessage='';
+    //               this.domainconn = 0;
+    //               this._general.openSnackBar(false,'Domain has been Successfully added. Please check the given nameservers and update it!', 'OK','center','top');
+    //               if(data.success==true){
+    //                 this.alldomainsdata = [];
+    //                 data.data.forEach((element:any) => {
+    //                   this.alldomainsdata.push(element);
+    //                 });
+    //                   this.shownamehint = true;
+    //                   this.dialog.closeAll();
+    //                 }
+    //               }
+    //             });
 
-              }else{
-                this.searching = false;
-                this.error=true;
-                this.errormessage='Something went Wrong';
-                this.domainconn = 0;
-                this.dialog.open(this.adddialog);
-                // this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
-              }
-          }
-        });
-      }
+    //           }else{
+    //             this.searching = false;
+    //             this.error=true;
+    //             this.errormessage='Something went Wrong';
+    //             this.domainconn = 0;
+    //             this.dialog.open(this.adddialog);
+    //             // this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
+    //           }
+    //       }
+    //     });
+    //   }
 
-    }else{
-      this.error=true;
-      this.errormessage='Please enter required details';
-      this.dialog.open(this.adddialog);
-    }
+    // }else{
+    //   this.error=true;
+    //   this.errormessage='Please enter required details';
+    //   this.dialog.open(this.adddialog);
+    // }
 
   }
-resetobj(){
-  this.error=false;
-  this.errormessage='';
-  this.dialog.closeAll();
-}
+  resetobj(){
+    this.error=false;
+    this.errormessage='';
+    this.dialog.closeAll();
+  }
   donestep1(){
     this.dialog.closeAll();
     setTimeout(() => {
@@ -238,7 +238,6 @@ resetobj(){
   }
 
   removespecialchar(data:any){
-
     var qr = data.indexOf("www.");
     var qr2 = data.indexOf("http://");
     var qr3 = data.indexOf("https://");

@@ -76,7 +76,7 @@ export class WebsiteDetailsComponent implements OnInit {
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
         if(data?.length != 0) {
-          // //console.log(data);
+          console.log(data);
           data.data.forEach((element:any) => {
 
               this.websitetitle = '('+element.title+')';
