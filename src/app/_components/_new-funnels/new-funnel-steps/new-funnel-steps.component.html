@@ -361,40 +361,31 @@
               <div class="col-md-5 d-flex justify-content-around p-0">
                 <i
                     mat-ripple 
-                      matTooltip="View Step"
+                      matTooltip="View"
                       matTooltipPosition="above"
                       (click)="viewpagestep(funnel.domain,funnel.subdomain,step.page_path)"
                     class="fas fa-eye px-4 kb-table-action-icon rounded-0" aria-hidden="true">
                 </i>
                 <i
                 mat-ripple 
-                  matTooltip="Quck Edit Step"
+                  matTooltip="Quck Edit"
                   matTooltipPosition="above"
                   (click)="funnelstepedit(step.page_path, step, 'quickedit',quickeditdialog)"
                 class="fas fa-pencil-alt px-4 kb-table-action-icon rounded-0" aria-hidden="true">
             </i>
             <i
             mat-ripple 
-              matTooltip="Step Duplicate"
+              matTooltip="Duplicate"
               matTooltipPosition="above"
               (click)="funnelstepedit(step.page_path, step.uniqueid, 'duplicate',copystepurldialog)"
             class="fa fa-copy px-4 kb-table-action-icon rounded-0" aria-hidden="true">
         </i>
-            <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="Settings" matTooltipPosition="above"
+            <i mat-ripple [matMenuTriggerFor]="menu" matTooltip="More" matTooltipPosition="above"
             class="fa-solid fa-gear px-4 kb-table-action-icon rounded-0">
           </i>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="funnelstepedit(step.page_path, step, 'quickedit',quickeditdialog)">
-                    <i class="fas fa-pencil-alt mr-2" ></i> Quick Edit
-                </button>
-                  <button mat-menu-item (click)="viewpagestep(funnel.domain,funnel.subdomain,step.page_path)">
-                    <i class="fas fa-eye mr-2" ></i> View Step
-                  </button>
                   <button mat-menu-item (click)="funnelstepedit(step.page_path, step.uniqueid, 'copy',copystepurldialog)">
                     <i class="fas fa-link mr-2" ></i> Copy Link
-                  </button>
-                  <button mat-menu-item (click)="funnelstepedit(step.page_path, step.uniqueid, 'duplicate',copystepurldialog)">
-                      <i class="far fa-clone mr-2" ></i> Duplicate
                   </button>
                   <button mat-menu-item (click)=" funnelstepedit(
                     funnel.uniqueid,

@@ -1,30 +1,37 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 px-4">
+
           <div class="mt-4 px-2">
             <h6 >Username</h6>
-            <div>You can change/update your username.</div>
+            <small>You can change/update your username.</small>
+            <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(usernamedialog)">
+              <div class="d-flex justify-content-between kb-user-detail align-items-center">
+                <div class="py-1 kb-inp" style="font-weight: 500;">Username : <span
+                    style="font-weight: 500;">{{username}}</span></div>
+                <i mat-ripple matTooltip="Edit Username" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn"
+                  aria-hidden="true" ></i>
+              </div>
+            </div>
           </div>
+
           <div class="mt-5 px-2">
           <h6>Password</h6>
-          <div>Keep your account secure by changing your password at least every 120 days.</div>
-        </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card kb-user-detail-box px-4 py-3">
-          <div class="d-flex justify-content-between kb-user-detail align-items-center"> 
-            <div class="py-1 kb-inp" style="font-weight: 500;" (click)="openDialog(usernamedialog)">Username : <span style="font-weight: 500;">{{username}}</span></div>
-              <i  mat-ripple  matTooltip="Edit Username" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn" aria-hidden="true" (click)="openDialog(usernamedialog)"></i>
+          <small>Keep your account secure by changing your password at least every 120 days.</small>
+          <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(passworddialog)">
+            <div class="d-flex justify-content-between align-items-center kb-user-detail">
+              <div class="py-1 kb-inp d-flex" style="font-weight: 500;" >Password :
+                <span class="d-flex mt-1 ml-1"> ******</span></div>
+              <i mat-ripple matTooltip="Update Password" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn"
+                aria-hidden="true"></i>
             </div>
-            </div>
-            <div class="card kb-user-detail-box px-4 py-3 my-5">
-              <div class="d-flex justify-content-between align-items-center kb-user-detail">
-                <div class="py-1 kb-inp d-flex" style="font-weight: 500;" (click)="openDialog(passworddialog)">Password : <span class="d-flex mt-1 ml-1"> ******</span></div>
-                  <i  mat-ripple  matTooltip="Update Password" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn" aria-hidden="true" (click)="openDialog(passworddialog)"></i>
-                </div>
-                </div>
+          </div>
+          </div>
+
         </div>
-        
+        <div class="col-md-6 text-center">
+          <img src="/assets/images/userprofile/signsecurity.png" width="500" class="img-fluid" alt="">
+        </div>       
       </div>
 </div>
 <!--change password-->
