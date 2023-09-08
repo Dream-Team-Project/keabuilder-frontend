@@ -344,7 +344,166 @@
         </button>
       </div>
     </div>
-    <div class="steps-group row keabuilder-container mt-3">
+
+    <div class="row">
+      <div class="cardpage col-md-4" *ngFor="let funnel of funnels; index as i">
+        <div>
+            <div class="col-md-12">
+                  <h5 class="line-ellipsis">{{funnel.name | titlecase}}</h5>
+                  <p class="mt-2 mb-2 w-25 d-inline-block">Steps: <span class="colr">{{funnel.steps.length }}</span></p>
+                  <p class="w-75 d-inline-block">Last Updated: <span class="colr">{{funnel.updated_at | date:'mediumDate'}} </span></p>
+
+                  <div class="showsteps" *ngIf="funnel.contentVisible">
+
+                    <div *ngFor="let funnelstep of funnel.steps; index as j"
+                      [class]="'kbstep-' + funnelstep.uniqueid">
+                      <div class="keatopstep" [attr.data-border]="funnelstep.color">
+                        <div class="keabuilder-item is-moving row">
+                          <div class="col-sm-12">
+                            <h6 class="mb-0 pb-0">{{ funnelstep.page_name }}</h6>
+                            <div class="keabuilder-due-date mt-0 pt-0">
+                              <span class="font-size-small d-inline-block w-50">Created:
+                                <span class="colr">{{funnelstep.created_at | date : "mediumDate"}}</span>
+                              </span>
+                              <span class="font-size-small funnelstypekb d-inline-block w-50">
+                                <span class="mr-2">Type:</span><span class="colr">{{funnelstep.funneltype}}</span>
+                              </span>
+
+                            </div>
+                          <hr class="mt-3 mb-0">
+                          </div>
+                          <div class="col-sm-12 d-flex justify-content-between smlfnt">
+                            <span mat-menu-item (click)="
+                            viewpagestep(funnel.domain,
+                              funnel.subdomain,
+                              funnelstep.page_path)">
+                              <i class="fas fa-eye" aria-hidden="true">
+                            </i> View
+                          </span>
+                          <span mat-menu-item (click)="funnelstepedit(
+                            funnel.uniqueid,
+                            funnelstep.uniqueid,
+                            'edit',
+                            copystepurldialog)">
+                            <i class="fas fa-pencil-alt" aria-hidden="true">
+                            </i> Edit
+                            </span>
+                          <span mat-menu-item (click)="funnelstepedit(
+                            funnelstep.page_path,
+                            funnelstep.uniqueid,
+                            'duplicate',
+                            copystepurldialog)">
+                            <i class="fa fa-copy" aria-hidden="true">
+                            </i> Duplicate
+                          </span>
+                          <span mat-menu-item  [matMenuTriggerFor]="menu">
+                            <i class="fa-solid fa-gear">
+                            </i> More
+                          </span>
+
+                            <mat-menu #menu="matMenu">
+                              <button mat-menu-item (click)="
+                                funnelstepedit(
+                                  funnel,
+                                  funnelstep,
+                                  'copy',
+                                  copystepurldialog
+                                )
+                              ">
+                                <i class="fas fa-link mr-2"></i> Copy Step Link
+                              </button>
+                              <button mat-menu-item (click)="
+                                funnelstepedit(
+                                  funnel.uniqueid,
+                                  funnelstep,
+                                  'move',
+                                  movedialog
+                                );
+                                dialogfunnelset = funnel.uniqueid
+                              ">
+                                <i class="fa fa-paste mr-2"></i> Move
+                              </button>
+                              <button mat-menu-item (click)="
+                                funnelstepedit(
+                                  funnel.uniqueid,
+                                  funnelstep,
+                                  'copymove',
+                                  movedialog
+                                );
+                                dialogfunnelset = funnel.uniqueid
+                              ">
+                                <i class="fa fa-paste mr-2"></i> Copy & Move
+                              </button>
+                              <button mat-menu-item (click)="
+                                funnelstepedit(
+                                  funnelstep.color,
+                                  funnelstep.uniqueid,
+                                  'colortheme',
+                                  colorbadgedialog
+                                )
+                              ">
+                                <i class="far fa-check-circle mr-2"></i> Change Color
+                                Badge
+                              </button>
+                              <button mat-menu-item class="text-danger" (click)="
+                                funnelstepedit(
+                                  funnel.uniqueid,
+                                  funnelstep.uniqueid,
+                                  'archive',
+                                  deletedialog
+                                )
+                              ">
+                                <i class="fa fa-trash-alt mr-2"></i> Archive
+                              </button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="col-md-12 text-right p-0">
+
+                    <button mat-raised-button color="accent" class="mr-2" (click)="funnel.contentVisible = !funnel.contentVisible"> 
+                      {{funnel.contentVisible ? 'Funnel': 'Steps'}} <i class="fa fa-dot-circle-o"></i></button>
+
+                    <button mat-raised-button color="primary" (click)="funneledit(
+                        funnel.uniqueid,
+                        funnel.id,
+                        'edit',
+                        adddialog
+                      )" class="mr-2"> Edit <i class="fas fa-pencil-alt"></i></button>
+
+                    <button mat-raised-button color="accent" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
+                    <mat-menu #menu2="matMenu">
+                      <button (click)="funneledit(
+                        funnel.uniqueid,
+                        funnel.id,
+                        'copy',
+                        copyurldialog)" mat-menu-item><i class="fas fa-link mr-2"></i> Copy URL</button>
+    
+                        <button  (click)="funneledit(
+                          funnel.name,
+                          funnel.uniqueid,
+                          'duplicate',
+                          funnelduplicatedialog)" mat-menu-item><i class="far fa-copy mr-2"></i> Duplicate</button>
+    
+                        <button  (click)="funneledit(
+                          funnel.uniqueid,
+                          funnel.id,
+                          'archive',
+                          deletedialog)" mat-menu-item class="text-danger"><i class="far fa-trash-alt mr-2"></i> Archive</button>
+                    </mat-menu>
+
+                  </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-group row keabuilder-container mt-3" *ngIf="hidefornow">
       <div class="col-md-12 mb-4">
         <mat-accordion>
           <div class="keabuilder-board">
@@ -684,6 +843,7 @@
         </mat-accordion>
       </div>
     </div>
+
     <div class="row" *ngIf="funnelnotfound">
       <div class="col-md-4"></div>
       <div class="col-md-4 text-center">

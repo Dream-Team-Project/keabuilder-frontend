@@ -103,28 +103,38 @@
     position: relative;
     font-size:14px;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=success]:before {
+.keatopstep[data-border=success]:before {
     background-color: #39DA8A;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=warning]:before {
+.keatopstep[data-border=warning]:before {
 background-color: #FDAC41;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=info]:before {
+.keatopstep[data-border=info]:before {
 background-color: #00CFDD;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=primary]:before {
+.keatopstep[data-border=primary]:before {
 background-color: #5A8DEE;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=secondary]:before {
+.keatopstep[data-border=secondary]:before {
 background-color: #475F7B;
 }
-.keabuilder-container .keabuilder-board .keatopstep[data-border=danger]:before {
+.keatopstep[data-border=danger]:before {
 background-color: #FF5B5C;
 }
 /* .keabuilder-item:hover {
     opacity: 0.7;
 }    */
-.keabuilder-container .keabuilder-board .keatopstep:before {
+.showsteps >div {
+    position: relative;
+}
+.smlfnt span{
+    font-size: 12px;
+    height: 30px;
+    line-height: 23px;
+    margin-top: 5px;
+    padding: 5px 17px;
+}
+.keatopstep:before {
     content: "";
     width: 3px;
     height: 100%;
@@ -285,4 +295,12 @@ padding: 0px 15px;
 
 .mat-expansion-panel {
     margin: 30px;
+}
+
+.cardpage> div{
+    box-shadow: 0px 0px 2px 1px rgb(34 38 42 / 10%);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
 }

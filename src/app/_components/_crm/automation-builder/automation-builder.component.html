@@ -92,8 +92,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectTarget($event, trigger.listField, 'name')">
                     <mat-option *ngFor="let option of trigger.listField.filter" [value]="option"
-                        [disabled]="trigger.listField.id == option.id">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="trigger.listField.id == option.uniqueid">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -118,8 +118,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectTarget($event, trigger.tagField, 'name')">
                     <mat-option *ngFor="let option of trigger.tagField.filter" [value]="option"
-                        [disabled]="trigger.tagField.id == option.id">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="trigger.tagField.id == option.uniqueid">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -144,8 +144,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectTarget($event, trigger.formField, 'name')">
                     <mat-option *ngFor="let option of trigger.formField.filter" [value]="option"
-                        [disabled]="trigger.formField.id == option.id">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="trigger.formField.id == option.uniqueid">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -170,8 +170,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectTarget($event, trigger.fieldField, 'label')">
                     <mat-option *ngFor="let option of trigger.fieldField.filter" [value]="option"
-                        [disabled]="trigger.fieldField.id == option.id">
-                        {{option?.label}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="trigger.fieldField.id == option.uniqueid">
+                        {{option?.label}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -226,8 +226,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectTarget($event, trigger.emailField, 'name')">
                     <mat-option *ngFor="let option of trigger.emailField.filter" [value]="option"
-                        [disabled]="trigger.emailField.id == option.id">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="trigger.emailField.id == option.uniqueid">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -277,8 +277,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectMultipleTarget($event, action.listField, chipInp, 'name')">
                     <mat-option *ngFor="let option of action.listField.filter" [value]="option"
-                        [disabled]="isTargetDisabled(action.listField.values, option.id)">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="isTargetDisabled(action.listField.values, option.uniqueid)">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -305,8 +305,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectMultipleTarget($event, action.tagField, chipInp, 'name')">
                     <mat-option *ngFor="let option of action.tagField.filter" [value]="option"
-                        [disabled]="isTargetDisabled(action.tagField.values, option.id)">
-                        {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="isTargetDisabled(action.tagField.values, option.uniqueid)">
+                        {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -333,8 +333,8 @@
                 <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                     (optionSelected)="selectMultipleTarget($event, action.fieldField, chipInp, 'label')">
                     <mat-option *ngFor="let option of action.fieldField.filter" [value]="option"
-                        [disabled]="isTargetDisabled(action.fieldField.values, option.id)">
-                        {{option?.label}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                        [disabled]="isTargetDisabled(action.fieldField.values, option.uniqueid)">
+                        {{option?.label}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
@@ -387,8 +387,8 @@
                     <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                         (optionSelected)="selectMultipleTarget($event, action.emailField, chipInp, 'name')">
                         <mat-option *ngFor="let option of action.emailField.filter" [value]="option"
-                            [disabled]="isTargetDisabled(action.emailField.values, option.id)">
-                            {{option?.name}} <span *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                            [disabled]="isTargetDisabled(action.emailField.values, option.uniqueid)">
+                            {{option?.name}} <span *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
@@ -516,9 +516,9 @@
                             <mat-autocomplete autoActiveFirstOption #matAuto="matAutocomplete"
                                 (optionSelected)="setGroupTargetAction($event, ietype.type, 'select')">
                                 <mat-option *ngFor="let option of ietype.type.filter" [value]="option"
-                                    [disabled]="ietype.type.id == option.id">
+                                    [disabled]="ietype.type.id == option.uniqueid">
                                     {{ietype.type.group == 'field' ? option?.label : option?.name}} <span
-                                        *ngIf="option.id == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
+                                        *ngIf="option.uniqueid == '*'" class="kb-tag kb-info-tag ml-2">Default</span>
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
