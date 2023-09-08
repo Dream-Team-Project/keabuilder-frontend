@@ -220,6 +220,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   fetchautomation(){
     this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
       if(data.success){
+      
         this.automation.id=data.data[0]?.id;
         this.automation.user_id=data.data[0]?.user_id;
         this.automation.uniqueid=data.data[0]?.uniqueid;
@@ -228,7 +229,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
         this.automation.thumbnail=data.data[0]?.thumbnail;
         this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
         this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
-        
       }
       else{
         // this.router.navigate(['/crm/automations'],{relativeTo: this.route});
@@ -504,7 +504,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
             }
           });
           this.action.temp.target.logic = this.action.ifelseField.logic;
-          console.log(this.action.temp.target);
           resp = true;
         }
       }
@@ -644,12 +643,12 @@ export class CrmAutomationBuilderComponent implements OnInit {
   selectTarget(e:any, field:any, key:string) {
     let opt = e.option.value;
     field.value = opt[key];
-    field.id = opt.id;
+    field.id = opt.uniqueid;
     field.error = '';
   }
 
   filterTarget(data:any, field:any, key:string) {
-    let anyObj:any = {id: '*'};
+    let anyObj:any = {uniqueid: '*'};
     anyObj[key] = 'Any';
     var data = JSON.parse(JSON.stringify(data));
     data.unshift(anyObj);
@@ -679,7 +678,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
 
   selectMultipleTarget(e:any, field:any, inp:any, key:string) {
     let opt = e.option.value;
-    let obj:any = {id: opt.id};
+    let obj:any = {id: opt.uniqueid};
     obj[key] = opt[key];
     if(key == 'label') obj['updatedvalue'] = '';
     if(obj.id == '*') field.values = [];
@@ -689,7 +688,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
   }
 
   filterMultipleTarget(data:any, field:any, inp:any, key:string) {
-    let anyObj:any = {id: '*'};
+    let anyObj:any = {uniqueid: '*'};
     anyObj[key] = 'Select All';
     var data = JSON.parse(JSON.stringify(data));
     if(key != 'label') data.unshift(anyObj);
@@ -816,13 +815,14 @@ export class CrmAutomationBuilderComponent implements OnInit {
         if(data.success){
           var msg= 'Automation has been '+status;
           this._general.openSnackBar(false,msg,'OK','center','top');
+          this.fetchautomation();
         }
         else{
           this._general.openSnackBar(true,data?.message,'OK','center','top');
         }
       } 
     })
-    this.fetchautomation();
+    
   }
 
   autoSaveTrigger(trigger:boolean) {
