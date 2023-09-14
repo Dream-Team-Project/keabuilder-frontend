@@ -188,7 +188,7 @@
 
                   <div class="py-3">
                       <span class="txt-light">Have an account?</span>
-                      <button mat-button [routerLink]="['/login']">Log In</button>
+                      <button mat-button (click)="navigateToLoginWithRefresh()">Log In</button>
                   </div>
               </div>
           <div class="alert alert-success" *ngIf="isSuccessful">

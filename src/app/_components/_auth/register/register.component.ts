@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap,Router } from '@angular/router';
 import { AuthService } from 'src/app/_services//auth.service';
 import { WistiaService } from 'src/app/_services//wistia.service';
 import { FileUploadService } from 'src/app/_services//file-upload.service';
@@ -153,6 +153,7 @@ specialuser=false;
               private ProgressSpinner :MatProgressSpinnerModule,
               private tokenStorage: TokenStorageService,
               private _route: ActivatedRoute,
+              private router: Router
              ) { 
               this._route.paramMap.subscribe((params: ParamMap) => {
                 if(params.get('id') == this.secret_route ){
@@ -462,5 +463,16 @@ specialuser=false;
     subscriptiontype(event:any){
       this.productid=event.value;
     }
+
+    navigateToLoginWithRefresh() {
+      this.router.navigate(['/login'])
+        .then(() => {
+          window.location.reload();
+        });
+    }
+
+
+
+
 }
 

@@ -83,7 +83,9 @@ export class ForgotPasswordComponent implements OnInit {
 
         setTimeout(() => {
           if(resp[0]!='error'){
-              this.router.navigate(['/login'],{relativeTo: this.route});
+              // this.router.navigate(['/login'],{relativeTo: this.route});
+              this.navigateToLoginWithRefresh();
+
           }
           this.submitShow = false;
         }, 3000);
@@ -91,6 +93,13 @@ export class ForgotPasswordComponent implements OnInit {
         // console.log(resp);
       });
     }
+  }
+
+  navigateToLoginWithRefresh() {
+    this.router.navigate(['/login'])
+      .then(() => {
+        window.location.reload();
+      });
   }
 
 }

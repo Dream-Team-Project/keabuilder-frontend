@@ -151,8 +151,8 @@ const routes: Routes = [
   // auth
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
-  { path: 'loginnew', component: LoginNewComponent, canActivate: [SignedInGuard]},
+  // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
+  { path: 'login', component: LoginNewComponent, canActivate: [SignedInGuard]},
   { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

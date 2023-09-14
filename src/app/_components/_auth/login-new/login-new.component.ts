@@ -178,7 +178,6 @@ export class LoginNewComponent implements OnInit {
     }(document, 'script', 'google-jssdk'));
    
   }
- 
 
 }
 
