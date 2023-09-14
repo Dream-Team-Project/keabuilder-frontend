@@ -143,77 +143,77 @@ fetchfunnel(){
 }
 updatesetting(){
 
-this.searching = true;
+    this.searching = true;
 
-var obj = {
-funnelname: this.funnelname,
-homepage: this.pathselected,
-scriptheader: this._general.encodeData(this.headertracking),
-scriptfooter: this._general.encodeData(this.footertracking),
-uniqueid: this.uniqueid,
-domain: this.domainselected,
-grouptags: '',
-};
+    var obj = {
+    funnelname: this.funnelname,
+    homepage: this.pathselected,
+    scriptheader: this._general.encodeData(this.headertracking),
+    scriptfooter: this._general.encodeData(this.footertracking),
+    uniqueid: this.uniqueid,
+    domain: this.domainselected,
+    grouptags: '',
+    };
 
-// console.log(obj);
-this.funnelService.updatebasicdetails(obj).subscribe({
-next: data => {
-// console.log(data);
-
-this.funnelname = data.newfunnelname;
-this.funnelService.funnelname = data.newfunnelname;
-
-var splnmfavi = 'favicon-'+this.uniqueid+'.png';  
-
-var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi};
-
-if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-  this.imageService.onImageFileUpload(genobjfavicon);
-}
-
-if(data.data.length!=0){
-  var obj = {
-    tracking: {
-      header: this.headertracking,
-      footer: this.footertracking,
-    },
-    path: data.data[0].page_path,
-    website_id: this.uniqueid,
-    dir: 'pages'
-  };
-  this._general._file.updateHome(obj).subscribe({
+    // console.log(obj);
+    this.funnelService.updatebasicdetails(obj).subscribe({
     next: data => {
-       this._general.openSnackBar(
-            false,'Details Updated Successfully!', 'OK','center',
-            'top');
+    // console.log(data);
+
+    this.funnelname = data.newfunnelname;
+    this.funnelService.funnelname = data.newfunnelname;
+
+    var splnmfavi = 'favicon-'+this.uniqueid+'.png';  
+
+    var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi};
+
+    if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
+      this.imageService.onImageFileUpload(genobjfavicon);
     }
-  });
 
-}else{
-  this.searching = false;
-   this._general.openSnackBar(
-            false,'Details Updated Successfully!', 'OK','center',
-            'top');
-}
+    if(data.data.length!=0){
+      var obj = {
+        tracking: {
+          header: this.headertracking,
+          footer: this.footertracking,
+        },
+        path: data.data[0].page_path,
+        website_id: this.uniqueid,
+        dir: 'pages'
+      };
+      this._general._file.updateHome(obj).subscribe({
+        next: data => {
+          this._general.openSnackBar(
+                false,'Details Updated Successfully!', 'OK','center',
+                'top');
+        }
+      });
 
-if(data.found==1){
-  this.domainconnerror = true;
-  this.searching = false;
-}else{
+    }else{
+      this.searching = false;
+      this._general.openSnackBar(
+                false,'Details Updated Successfully!', 'OK','center',
+                'top');
+    }
 
-  if(this.defaultsubdomain!=this.domainselected && data.seldomain?.length==0){
-    this.websiteService.onchangedirdomain(this.domainselected,this.uniqueid).subscribe({
-      next: data => {    
+    if(data.found==1){
+      this.domainconnerror = true;
+      this.searching = false;
+    }else{
+
+      if(this.defaultsubdomain!=this.domainselected && data.seldomain?.length==0){
+        this.websiteService.onchangedirdomain(this.domainselected,this.uniqueid).subscribe({
+          next: data => {    
+            this.searching = false;
+          }
+        });
+      }else{
         this.searching = false;
       }
-    });
-  }else{
-    this.searching = false;
-  }
-  this.domainconnerror = false;
-}
+      this.domainconnerror = false;
+    }
 
-}
+    }
 });
 
 }

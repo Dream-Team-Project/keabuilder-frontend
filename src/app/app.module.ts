@@ -135,8 +135,8 @@ import {environment} from '../environments/environment';
     MatAutocompleteModule,
     NgxStripeModule.forRoot(environment.stripekey),
   ],
-  providers: [authInterceptorProviders, { 
-    provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+  providers: [authInterceptorProviders,
+     {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
     MatTableModule
   ],
