@@ -620,7 +620,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
         unit: this.timeUnits[0]
       }, { 
         id: 'wait-sd&t',
-        name: 'Specific data & time', 
+        name: 'Specific date & time', 
         date:  new Date(),
         time: {
           hh: '12',
