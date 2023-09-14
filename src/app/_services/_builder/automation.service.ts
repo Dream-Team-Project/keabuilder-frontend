@@ -213,7 +213,8 @@ fetchallData(){
           name = type.value + ' ' + type.unit + (type.value > 1 ? 's' : '');
         }
         else if(type.id == 'wait-sd&t') {
-          name = type.date.toDateString() + ' | ' + type.time.hh + ':' + type.time.mm + ':' + type.time.ap;
+         let dt=new Date(type.date);
+          name = dt.toDateString() + ' | ' + type.time.hh + ':' + type.time.mm + ':' + type.time.ap;
         }
       }
       return name ? '('+name+')' : '';
