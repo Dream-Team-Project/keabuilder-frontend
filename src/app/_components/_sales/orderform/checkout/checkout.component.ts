@@ -35,6 +35,7 @@ export class OrderFormCheckoutComponent implements OnInit {
   switchstep = false;
   uniqueid:any; 
   redirection = '';
+  checkoutstep = 'two';
 
   cardOptions: StripeCardElementOptions = {
     iconStyle: 'solid',
@@ -142,6 +143,7 @@ export class OrderFormCheckoutComponent implements OnInit {
       this.fetching = true;
       this.orderformService.singleorderform(this.uniqueid).subscribe((resp:any)=>{
         if(resp.success) {
+          console.log(resp);
             this.orderform = resp.data[0];
             var mkofferarr = (this.orderform.offers!= null && this.orderform.offers!= '') ? this.orderform.offers.split(',') : [];
             var mknewof:any = [];
@@ -149,6 +151,8 @@ export class OrderFormCheckoutComponent implements OnInit {
             this.selectedProducts = mknewof;
             this.selnewproductarr();
             this.redirection = this.orderform.redirection;
+
+            this.checkoutstep = resp.data[0]?.step != null ? resp.data[0]?.step : 'two';
           }
         else {
             this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -223,7 +227,8 @@ export class OrderFormCheckoutComponent implements OnInit {
     if(this.selectedProducts.length!=0) this.selectedProducts.forEach(pr => { grabofferid.push(pr.uniqueid); });
     if(grabofferid.length!=0){
       if(this.redirection==null || this.redirection =='') this.redirection = '';
-      var orderobj = {name: this.orderform.name,offers:grabofferid,uniqueid: this.uniqueid, redirection:this.redirection};
+      var orderobj = {name: this.orderform.name,offers:grabofferid,uniqueid: this.uniqueid, 
+        redirection:this.redirection, step:this.checkoutstep};
       this.orderformService.updateorderform(orderobj).subscribe((resp:any) => {
         if(resp.success) {
           this._general.openSnackBar(false, resp?.message, 'OK', 'center', 'top');
@@ -282,5 +287,11 @@ export class OrderFormCheckoutComponent implements OnInit {
     if(option) this.stripe.payeecountry = option.value;
   }
 
+  showprev(){
+    window.open(window.origin+'/fetch-orderform/id/'+this.uniqueid, '_blank');
+  }
+  changestep(value:any){
+    this.checkoutstep = value;
+  }
 
 }
