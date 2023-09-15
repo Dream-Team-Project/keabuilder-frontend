@@ -29,13 +29,13 @@ export class AutomationService {
         // { id: 'trg-order-form-sub', name: 'Order Form Submitted', target: {id: '', name: 'Orderform', run_once: true}, icon: '<i class="fa-regular fa-credit-card"></i>', color: 'primary'},
       ]
     },
-    {
-      id: 'trg-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
-      workflows: [
-        { id: 'trg-opre-email', name: 'Opens/reads an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
-        { id: 'trg-reply-email', name: 'Replies to an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
-      ]
-    },
+    // {
+    //   id: 'trg-group-send', name: 'Email', hide: false, icon: '<i class="fa-solid fa-envelope"></i>',
+    //   workflows: [
+    //     { id: 'trg-opre-email', name: 'Opens/reads an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-envelope-open-text"></i>', color: 'primary'},
+    //     { id: 'trg-reply-email', name: 'Replies to an email', target: {id: '', name: 'email', run_once: true}, icon: '<i class="fa-solid fa-reply"></i>', color: 'primary'},
+    //   ]
+    // },
     {
       id: 'trg-group-condition-workflow', name: 'Conditions', hide: false, icon: '<i class="fa-solid fa-pen-to-square"></i>',
       workflows: [
@@ -89,11 +89,6 @@ export class AutomationService {
     private _tag: TagService,
     private _field: FieldService,
     private _email: EmailService) {
-      // this.fetchForms();
-      // this.fetchLists();
-      // this.fetchTags();
-      // this.fetchFields();
-      // this.fetchEmails();
       this.saveWfSession();
       this.fetchallData();
   }
@@ -218,7 +213,8 @@ fetchallData(){
           name = type.value + ' ' + type.unit + (type.value > 1 ? 's' : '');
         }
         else if(type.id == 'wait-sd&t') {
-          name = type.date.toDateString() + ' | ' + type.time.hh + ':' + type.time.mm + ':' + type.time.ap;
+         let dt=new Date(type.date);
+          name = dt.toDateString() + ' | ' + type.time.hh + ':' + type.time.mm + ':' + type.time.ap;
         }
       }
       return name ? '('+name+')' : '';

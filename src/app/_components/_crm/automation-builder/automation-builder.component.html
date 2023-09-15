@@ -211,7 +211,7 @@
             </mat-button-toggle-group>
             <p class="mb-0">Runs {{trigger.fieldField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
         </div>
-        <div *ngSwitchCase="'email'">
+        <!-- <div *ngSwitchCase="'email'">
             <mat-error *ngIf="trigger.emailField.error">{{trigger.emailField.error}}</mat-error>
             <mat-form-field appearance="fill" (click)="filterTarget(_automation.emails, trigger.emailField, 'name')"
                 [class.mat-form-field-invalid]="trigger.emailField.error">
@@ -236,7 +236,7 @@
                 <mat-button-toggle [value]="false">Each</mat-button-toggle>
             </mat-button-toggle-group>
             <p class="mb-0">Runs {{trigger.emailField.run_once ? 'only one time' : 'each time'}} for every contact.</p>
-        </div>
+        </div> -->
     </div>
     <div mat-dialog-actions class="justify-content-between">
         <div>
