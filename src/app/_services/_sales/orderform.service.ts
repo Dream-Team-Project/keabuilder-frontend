@@ -9,13 +9,13 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class OrderformService {
   user_id:any = '';
-  allorderforms = './api/allorderforms';
-  allstripeproducts = './api/allstripeproducts';
-  singleorder = './api/singleorderform';
-  addorderforms = './api/addorderform';
-  updateorderforms = './api/updateorderform';
-  duplicateorderforms = './api/duplicateorderform';
-  deleteorderforms = './api/deleteorderform';
+  allorderforms = '/api/allorderforms';
+  allstripeproducts = '/api/allstripeproducts';
+  singleorder = '/api/singleorderform';
+  addorderforms = '/api/addorderform';
+  updateorderforms = '/api/updateorderform';
+  duplicateorderforms = '/api/duplicateorderform';
+  deleteorderforms = '/api/deleteorderform';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;

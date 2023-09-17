@@ -20,29 +20,29 @@ export class DashboardService {
   }
 
   getAllrevenue(): Observable<any> {
-    return this.http.get('./api/getallrevenue/'+this.uuid);
+    return this.http.get('/api/getallrevenue/'+this.uuid);
   }
 
   getAllcontact(): Observable<any> {
-    return this.http.get('./api/getallcontact/'+this.uuid);
+    return this.http.get('/api/getallcontact/'+this.uuid);
   }
 
   getconditionaldata(data:any):Observable<any> {
-    return this.http.post("./api/getconditionaldata/"+this.uuid, {
+    return this.http.post("/api/getconditionaldata/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   getrecentsales(): Observable<any> {
-    return this.http.get('./api/getrecentsales/'+this.uuid);
+    return this.http.get('/api/getrecentsales/'+this.uuid);
   }
 
   dailysales(): Observable<any> {
-    return this.http.get('./api/dailysales/'+this.uuid);
+    return this.http.get('/api/dailysales/'+this.uuid);
   }
 
   totalearning(): Observable<any> {
-    return this.http.get('./api/totalearning/'+this.uuid);
+    return this.http.get('/api/totalearning/'+this.uuid);
   }
 
   

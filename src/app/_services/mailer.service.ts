@@ -10,10 +10,10 @@ import { TokenStorageService } from './token-storage.service';
 export class MailerService {
 
   uuid:any = '';
-  sendmailApi = './api/sendmail';
-  sendmailcampaignApi = './api/sendmailcampaign';
-  sendmailformApi = './api/sendmailform';
-  userfeedbackApi = './api/addfeedback';
+  sendmailApi = '/api/sendmail';
+  sendmailcampaignApi = '/api/sendmailcampaign';
+  sendmailformApi = '/api/sendmailform';
+  userfeedbackApi = '/api/addfeedback';
   
 
   constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {  this.uuid = this.tokenStorage.getUser().uniqueid;}

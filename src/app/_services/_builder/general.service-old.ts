@@ -976,11 +976,19 @@ export class GeneralService {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
       var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
-      var jsonObj = {head: '', header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
+      var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
+      this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+      // append Header
       if(this.includeLayout.header && this.selectedHeader.id) jsonObj.header = this.selectedHeader;
+      // append Header
+      // append Footer
       if(this.includeLayout.footer && this.selectedFooter.id) jsonObj.footer = this.selectedFooter;
+      // append Footer
+      this.webpage.page_json = this.encodeJSON(jsonObj);
+      this.removeExtra(preview);
       let faviconIcon = (template || preview) ? '/favicon.ico' : '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
-      jsonObj.head = '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
+      this.pagehtml.querySelector('head').innerHTML = 
+      '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
       '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
       '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
       '<link rel="icon" type="image/x-icon" href="'+window.location.origin+faviconIcon+'">' +
@@ -989,59 +997,66 @@ export class GeneralService {
       '<meta name="keywords" content="'+this.main.keywords+'">' +
       '<meta name="author" content="'+this.main.author+'">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      '<title>'+this.main.title+'</title>' +
+      '<title>'+this.main.title+'</title>' +        
+      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
       '<style>'+jsonObj.page_code+'</style>';
-      this.webpage.page_json = this.encodeJSON(jsonObj);
-      // if(template) {
-      //   this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
-      // }
-      // else if(!preview) {
-      //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
-      //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
-      //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-      // }
       if(template) {
-        console.log('Save as template');
-        // this.pageObj.template_id=this.templateobj.uniqueid;
-        // this.pageObj.folder = this.templateobj.uniqueid;
-        // this.templateobj.template=this.encodeJSON(jsonObj);
-        // this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
-        //   this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
-        //     resolve(true);
-        //   },
-        //   error=>{
-        //     this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-        //     resolve(false);
-        //   });
-        // })
+        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
+      }
+      else if(!preview) {
+        this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
+        '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
+        this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      }
+      this.pageObj = {
+        head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
+        body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+        style: this.getAllStyle(),
+        website_id: websiteid,
+        page_id: this.webpage.uniqueid
+      }
+      if(template) {
+        this.pageObj.template_id=this.templateobj.uniqueid;
+        this.pageObj.folder = this.templateobj.uniqueid;
+        this.templateobj.template=this.encodeJSON(jsonObj);
+        this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
+          this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
+            resolve(true);
+          },
+          error=>{
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
+          });
+        })
       }
       else if(preview) {
-        console.log('Save as preview');
-        // this.pageObj.prevFolder = this.webpage.uniqueid;
-        // this.pageObj.folder = this.webpage.uniqueid;
-        // this.pageObj.dir = 'previews';
-        // this._file.savePage(this.pageObj).subscribe((event:any)=>{
-        //   resolve(true);
-        // },
-        // error=>{
-        //   this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-        //   resolve(false);
-        // });
+        this.pageObj.prevFolder = this.webpage.uniqueid;
+        this.pageObj.folder = this.webpage.uniqueid;
+        this.pageObj.dir = 'previews';
+        this._file.savePage(this.pageObj).subscribe((event:any)=>{
+          resolve(true);
+        },
+        error=>{
+          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+          resolve(false);
+        });
       }
       else {
-        // var status = this.main.publish_status;
-        // this.pageObj.prevFolder = this.webpage.page_path;
-        // this.pageObj.folder = this.main.path;
-        // this.pageObj.dir = status ? 'pages' : 'drafts';
+        var status = this.main.publish_status;
+        this.pageObj.prevFolder = this.webpage.page_path;
+        this.pageObj.folder = this.main.path;
+        this.pageObj.dir = status ? 'pages' : 'drafts';
         if(tglDraft) {
-            let status = this.main.publish_status ? 'publish' : 'draft';
-            var dbobj:any = {
-              id: this.webpage.id,
-              preview_json: this.webpage.page_json,
-            }
-            // this.savePreview().then(resp=>resolve(resp));
+          var td = {
+            status:(status ? 'publish' : 'draft'), 
+            path: this.main.path,
+            website_id: websiteid
+          }
+          this._file.toggleDraft(td).subscribe((data:any)=>{
+            this.savePage().then(resp=>resolve(resp));
+          })
         }
-        else this.updatePageDB().then(resp=>resolve(resp));
+        else this.savePage().then(resp=>resolve(resp));
       }
     });
   }
@@ -1109,7 +1124,7 @@ export class GeneralService {
         this.webPageService.updateWebpage(dbobj).subscribe(
           (e:any)=>{
             resolve(e);
-        })
+          })
       }
       else if(this.target.type == 'funnel'){
         dbobj.funneltype = this.webpage.funneltype;

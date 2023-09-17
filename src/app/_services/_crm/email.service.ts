@@ -10,12 +10,12 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class EmailService {
 
   user_id:any = '';
-  allemails = './api/allemails';
-  singleemail = './api/singleemail';
-  addemails = './api/addemail';
-  updateemails = './api/updateemail';
-  duplicateemails = './api/duplicateemail';
-  deleteemails = './api/deleteemail';
+  allemails = '/api/allemails';
+  singleemail = '/api/singleemail';
+  addemails = '/api/addemail';
+  updateemails = '/api/updateemail';
+  duplicateemails = '/api/duplicateemail';
+  deleteemails = '/api/deleteemail';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;

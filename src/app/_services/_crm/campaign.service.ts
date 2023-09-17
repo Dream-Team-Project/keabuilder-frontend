@@ -67,7 +67,7 @@ export class CampaignService {
 
 // getAllcrmdata(): Observable<any> {
 //   var obj = {uuid: this.uuid};
-//   return this.http.post('./api/getAllcrmdata', obj,httpOptions);
+//   return this.http.post('/api/getAllcrmdata', obj,httpOptions);
 // }
 // getSinglecrmdata(uniqueid:any): Observable<any> {
 //   var obj = {uuid: this.uuid};

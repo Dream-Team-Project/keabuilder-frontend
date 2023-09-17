@@ -9,14 +9,14 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class ProductService {
   user_id:any = '';
-  allproducts = './api/allproducts';
-  allstripeproducts = './api/allstripeproducts';
-  fetchrecurringdetails = './api/fetchrecurringdetail';
-  product = './api/singleproduct';
-  addproducts = './api/addproduct';
-  updateproducts = './api/updateproduct';
-  duplicateproducts = './api/duplicateproduct';
-  deleteproducts = './api/deleteproduct';
+  allproducts = '/api/allproducts';
+  allstripeproducts = '/api/allstripeproducts';
+  fetchrecurringdetails = '/api/fetchrecurringdetail';
+  product = '/api/singleproduct';
+  addproducts = '/api/addproduct';
+  updateproducts = '/api/updateproduct';
+  duplicateproducts = '/api/duplicateproduct';
+  deleteproducts = '/api/deleteproduct';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;

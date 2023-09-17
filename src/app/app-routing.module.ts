@@ -25,6 +25,8 @@ import { BuilderComponent } from './_components/_builder/builder/builder.compone
 import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
 import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
 import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
+import { PageViewComponent } from './_components/page-view/page-view.component';
+import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
 // websites
 import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
@@ -249,6 +251,7 @@ canActivate: [AuthGuard] },
   { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  { path: 'preview/:view_target/:view_id', component: PageViewComponent },
   
   // builder
   
@@ -398,9 +401,11 @@ export const RoutingComponents =
     CreateFunnelSettingsComponent,
     ProfileComponent,
     TemplateComponent, 
+    PageViewComponent,
     BuilderComponent,
     BuilderSettingComponent,
     BulderWireframeComponent, 
+    FetchMenuComponent,
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
     MembershipCoursesComponent,

@@ -20,7 +20,7 @@ import { ElementService } from 'src/app/_services/_builder/element.service';
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.css','../../material.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 
 export class BuilderComponent implements OnInit {
@@ -91,7 +91,7 @@ export class BuilderComponent implements OnInit {
                   if(_general.webpage.funneltype == 'order') {
                     _general.fetchOrderForms().then(data=>{
                       _general.order_forms = data;
-                      this._element.elementList['order_form'] = { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' };
+                      this._element.elementList['order_form'] = { content: { name: 'order-form-component', type: 'order_form' }, iconCls: 'fab fa-wpforms' };
                     });
                   }
                   else {
@@ -211,12 +211,12 @@ export class BuilderComponent implements OnInit {
 
   savePageTemplate(main:any, obj:any) {
     obj.category = 'saved';
-    this._general.templateobj=JSON.parse(JSON.stringify(obj));
-      this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
-        let msg = 'Page has been saved as template';
-        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-        this.dialog.closeAll();
-      });
+    this._general.templateobj = JSON.parse(JSON.stringify(obj));
+    this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
+      let msg = 'Page has been saved as template';
+      this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+      this.dialog.closeAll();
+    });
   
   }
 
@@ -370,7 +370,6 @@ export class BuilderComponent implements OnInit {
     if(this.transferData) {
       var appendIndex =  event.currentIndex-1;
       var appendData = this.transferData;
-      console.log(appendData.type);
       if(appendData.type == 'image') {
         var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
@@ -385,13 +384,13 @@ export class BuilderComponent implements OnInit {
       }
       if(appendData.type == 'form') {
         var form = JSON.parse(JSON.stringify(this._element.elementList['form']));
-        form.content = this._element.setFormIframe(form.content, appendData);
+        form.content = this._element.setFormId(form.content, appendData);
         form.content.itemset = true;
         appendData = form;
       }
       if(appendData.type == 'order_form') {
         var order_form = JSON.parse(JSON.stringify(this._element.elementList['order_form']));
-        order_form.content = this._element.setOrderFormIframe(order_form.content, appendData);
+        order_form.content = this._element.setOrderFormId(order_form.content, appendData);
         order_form.content.itemset = true;
         appendData = order_form;
       }
@@ -487,16 +486,11 @@ export class BuilderComponent implements OnInit {
    }
   }
 
-  iframeLoad(iframe:any) {
-    setTimeout(()=>{
-      iframe.height = iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px';
-    }, 100)
-  }
-
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
   elementDblClk(element:any) {
-    if(element.content.name != 'iframe') this.openSetting(element);
+    if(element.content.name != 'form-component' && 
+    element.content.name != 'order-form-component') this.openSetting(element);
   }
 
   isBlockActive(block:any) {
