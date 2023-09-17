@@ -23,6 +23,12 @@ export class AuthService {
     }, httpOptions);
   }
 
+  googlelogin(email: string): Observable<any> {
+    return this.http.post(this.AUTH_API + 'googlesignin', {
+      email
+    }, httpOptions);
+  }
+
   register(obj:any): Observable<any> {
     return this.http.post(this.AUTH_API + 'signup',obj, httpOptions);
   }

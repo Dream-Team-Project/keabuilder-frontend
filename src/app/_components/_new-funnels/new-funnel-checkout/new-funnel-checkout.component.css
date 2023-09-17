@@ -9,18 +9,23 @@
 .o2step_step1 input, .o2step_step1 select {
   -webkit-font-smoothing: antialiased;
   font-family: Lato,sans-serif;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
   line-height: 32px;
-  padding: 0 15px;
+  padding: 0 15px 0px 35px;
   margin: 0;
   font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .5px;
+  font-weight: 500;
   color: #666;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
   background: #fff;
   box-sizing: border-box;
+}
+.o2step_step1 i.fa {
+  margin-top: -25px;
+  display: block;
+  margin-left: 11px;
+  width: 22px;
 }
 .allfldreq{
   color: #9b9b9b;
@@ -40,11 +45,11 @@
   width: 100%;
   position: relative;
   display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
   padding: 10px;
   margin: 0;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  background: #fff;
 }
 .st-paycard{
   float: right;
@@ -58,9 +63,9 @@
 }
 /* order summary */
 .Checkout_Summary {
-  background-color: #fff;
+  background-color: transparent;
   color: #333;
-  padding: 20px 2px;
+  padding: 10px;
 }
 .Checkout_Summary_Table {
   padding: 0;
@@ -74,34 +79,37 @@
   letter-spacing: .5px;
   vertical-align: top;
 }
-.Checkout_Summary_Table_Row_Cell:last-child {
+/* .Checkout_Summary_Table_Row_Cell:last-child {
   text-align: right;
-}
+} */
 .Checkout_Summary_Monetary {
   text-transform: uppercase;
   font-size: 13px;
   letter-spacing: .5px;
 }
 .Checkout_Summary_OrderTotal {
-  background-color: #cecece;
-  padding: 0 20px;
+  background-color: transparent;
+  padding: 0 10px;
+  border-bottom: 2px solid #1A9275;
+  border-top: 1px solid #1A9275;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell {
-  font-weight: 700;
-  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 16px;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary_Currency {
   display: inline-block;
-  margin: 0 4px 0 0;
+  margin: 0;
+  font-size: 16px;
 }
 .Checkout_Summary_Table-ordertotal .Checkout_Summary_Table_Row_Cell .Checkout_Summary_Monetary_Units {
-  font-size: 20px;
+  font-size: 16px;
 }
 .Checkout_Summary_Table_Row_Cell label {
   margin: 0;
@@ -116,31 +124,28 @@
   background-color: #fff;
 }
 .btnkeacheckout {
-  background-color: #dea641;
+  background-color: #1EBFC0;
   background-image: none;
-  border-radius: 5px;
   border: none;
-  box-shadow: 0 27px 15px -17px rgba(0,0,0,.3), 0 2px 4px rgba(0,0,0,.3);
   color: #fff;
   cursor: pointer;
   display: block;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 500;
   height: 50px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   line-height: 50px;
   outline: none;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color .2s ease,box-shadow .2s ease;
   width: 100%;
 }
-.btnkeacheckout:hover {
+/* .btnkeacheckout:hover {
   background-color: #af8333;
   background-image: none;
   box-shadow: 0 20px 15px -17px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.3);
   text-decoration: none;
-}
+} */
 .order2ButtonSubText {
   line-height: 1.5;
   padding: 20px 0 0;
@@ -155,28 +160,32 @@
   display: block;
   color: #444;
   text-decoration: underline;
+  margin-top: -23px;
 }
 td.Checkout_Summary_Table_Row_Cell label span {
   margin-left: 4px;
   text-transform: capitalize;
-  line-height: 15px;
+  /* line-height: 15px; */
 }
 td.Checkout_Summary_Table_Row_Cell label{
   cursor: pointer;
   width: 100%;
 }
-.Checkout_Summary_Table_Row-lineitem {
+/* .Checkout_Summary_Table_Row-lineitem {
   margin-top: 10px;
   display: inline-block;
   width: 100%;
-}
-.kbprname{
+} */
+/* .kbprname{
   width:80%;
   display: inline-block;
-}
-.kbprprice{
+} */
+/* .kbprprice{
   width:20%;
   display: inline-block;
+} */
+table{
+  background-color: transparent;
 }
 .kbprname2{
   width:70%;
@@ -206,4 +215,71 @@ td.Checkout_Summary_Table_Row_Cell label{
   background-color: var(--kb-dim-black);
   justify-content: center;
   align-items: center;
+  z-index: 9;
+}
+.cntbk{
+  background: #EFF3FA;
+  padding: 30px 15px;
+  position:relative;
+}
+.countryerr{
+  position: relative;
+  top: 5px;
+}
+.countryerr i{
+  display: inline;
+}
+.step1div.active, .step2div.active{
+  background: #242341;
+}
+.step1div{
+  background: #1DBCBD;
+  color: #fff;
+  border-radius: 25px 0px 0px 0px;
+  padding: 20px 35px 10px;
+}
+.step2div{
+  background: #1DBCBD;
+  color: #fff;
+  border-radius: 0px 25px 0px 0px;
+  padding: 20px 35px 10px;
+}
+
+table.Checkout_Summary_Table thead th {
+  font-weight: 500;
+  border-bottom: 1px solid #1A9275;
+  margin-bottom: 16px;
+  color: #7A7A7A;
+  font-size: 15px;
+}
+.Checkout_Summary tbody:before {
+  line-height: 1em;
+  content: "\200C";
+  display: block;
+}
+table.Checkout_Summary_Table tbody tr select {
+  font-size: 12px;
+  border: none;
+}
+
+table.Checkout_Summary_Table tbody tr {
+  line-height: 35px;
+}
+.thwidthadju{
+  width: 50%;
+}
+.kbcheckin label{
+  font-size: 12px;
+  padding-left: 5px;
+  line-height: 17px;
+}
+.kbcheckin label a {
+  display: inline-block;
+}
+.onlyonestepdiv{
+  text-align: center;
+  border-radius: 25px 25px 0px 0px;
+}
+#mkspinner{
+  position: absolute!important;
 }

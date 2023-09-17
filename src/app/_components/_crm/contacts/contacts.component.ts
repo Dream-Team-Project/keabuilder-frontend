@@ -46,6 +46,9 @@ export class CrmContactsComponent implements OnInit {
     phone: '',
     lists:'',
     tags:'',
+    note:'',
+    cron_date:'',
+    pending_actions:'',
   }
   hasError:string = '';
   selectedLists:any = [];
@@ -155,6 +158,9 @@ export class CrmContactsComponent implements OnInit {
   addContactFunction(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();
+    this.contact.note='';
+    this.contact.cron_date='';
+    this.contact.pending_actions='';
     this._contactService.addcontact(this.contact).subscribe((resp) => {
       if(resp.success) {
         this.fetchContacts();

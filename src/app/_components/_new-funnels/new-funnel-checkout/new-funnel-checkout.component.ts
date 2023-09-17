@@ -29,12 +29,14 @@ export class NewFunnelCheckoutComponent implements OnInit {
   hasError:boolean = false;
   stripeForm: FormGroup | any;
   submitted: any;
-  checkoutstyle:any = {step1btntext:'Special Offer Click Here', step1footertext:'* 100% Secure & Safe Payments *',step2btntext:'Buy Now', step2footertext:'* 100% Secure & Safe Payments *'};
+  checkoutstyle:any = {step1btntext:'Go to the next step', step1footertext:'* 100% Secure & Safe Payments *',step2btntext:'Complete My Payment', step2footertext:'* 100% Secure & Safe Payments *'};
   founderror:any = false;
 
   switchstep = false;
   uniqueid:any; 
   redirection = '';
+  checkpolicy = false;
+  maketwostep = true;
 
   cardOptions: StripeCardElementOptions = {
     iconStyle: 'solid',
@@ -122,6 +124,10 @@ export class NewFunnelCheckoutComponent implements OnInit {
               this.redirecturi = data.data[0].redirection;
               this.fetchOffers(); 
               this.fetchOrder();
+
+
+              var getstep = data.data[0].step!=null ? data.data[0].step : 'two';
+              this.maketwostep = getstep == 'two' ? true : false;
             }else{
               this.checkoutvisible = false;
               this.chkerror = 'Error Loading in checkout!';
@@ -147,8 +153,10 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.stripeForm = this.fb.group({
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      frname: ['', [Validators.required]],
+      ltname: ['', [Validators.required]],
+      name: ['', []],
+      email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       fulladdress: ['', [Validators.required]],
       cityname: ['', [Validators.required]],
@@ -181,6 +189,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
       this.checkboxvalues();
       this.createtoken().then((resp:any)=>{   
         
+        this.stripeForm.value.name = this.stripeForm.value.frname+' '+this.stripeForm.value.ltname; 
         var stripeData:any = this.stripeForm.value;
         stripeData['token'] = resp;
         stripeData['amount'] = this.totalprice;
@@ -191,7 +200,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
         this.checkoutService.stripePayment(stripeData).subscribe({
           next: data => {
-            console.log(data);
+            // console.log(data);
             if(data.success){
 
               if(data.customer){
@@ -293,11 +302,11 @@ export class NewFunnelCheckoutComponent implements OnInit {
           var cur = JSON.parse(selpr.currency);
           sym = cur.symbol;
           finalprice = getprice;
-          if(i==0) this.symbolcode = cur.code;
+          if(i==0) this.symbolcode = cur.symbol;
           if(i==0) this.totalprice = selpr.price;
         }else if(type=='free'){
           var cur = JSON.parse(selpr.currency);
-          if(i==0) this.symbolcode = cur.code;
+          if(i==0) this.symbolcode = cur.symbol;
           finalprice = 0;
         }else if(type=='recurring'){
           var dtrec = selpr.recurring_data!=''?JSON.parse(selpr.recurring_data):'';

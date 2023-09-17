@@ -16,6 +16,7 @@ import { StrategiesComponent } from './_components/strategies/strategies.compone
 import { DashboardComponent } from './_components/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './_components/_auth/forgot-password/forgot-password.component';
 import { LoginComponent } from './_components/_auth/login/login.component';
+import { LoginNewComponent } from './_components/_auth/login-new/login-new.component';
 import { ProfileComponent } from './_components/_auth/profile/profile.component';
 import { RegisterComponent } from './_components/_auth/register/register.component';
 // auth
@@ -124,6 +125,7 @@ import { AffiliateSettingsComponent } from './_components/_affiliate/settings/se
 // heatmap
 import { HeatmapsComponent } from './_components/_heatmap/heatmaps/heatmaps.component';
 import { HeatmapsRecordingsComponent } from './_components/_heatmap/recordings/recordings.component';
+import { HeatmapViewComponent } from './_components/_heatmap/heatmap-view/heatmap-view';
 // heatmap
 // sales
 import { SalesComponent } from './_components/_sales/sales/sales.component';
@@ -151,7 +153,8 @@ const routes: Routes = [
   // auth
 
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
+  // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
+  { path: 'login', component: LoginNewComponent, canActivate: [SignedInGuard]},
   { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
@@ -335,7 +338,8 @@ canActivate: [AuthGuard] },
     // Coming Soon Features ==>
 
   // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-  // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+  { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+  { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
   // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
 
 
@@ -382,6 +386,7 @@ export const RoutingComponents =
   [
     FeedbackFormComponent,
     LoginComponent, 
+    LoginNewComponent,
     RegisterComponent, 
     ForgotPasswordComponent,
     DashboardComponent, 
@@ -392,6 +397,7 @@ export const RoutingComponents =
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
+    HeatmapViewComponent,
     FunnelsComponent,
     BuildFunnelComponent,
     CreateFunnelComponent,

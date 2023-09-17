@@ -85,6 +85,8 @@ export class CrmContactComponent implements OnInit {
       this._contactService.singlecontact(this.contact.uniqueid).subscribe((resp) => {
         // console.log(resp?.data)
           this.contact = resp?.data;
+          this.contact.oldlists=resp?.data.lists;
+          this.contact.oldtags=resp?.data.tags;
           this.contact.icon = this.contactIcon(this.contact);
           if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);
           this.fetchFields();
@@ -92,6 +94,8 @@ export class CrmContactComponent implements OnInit {
           this.filteredTempIds.lists=resp?.data.listid;
           this.selectedTags=resp?.data.temp_tags;
           this.filteredTempIds.tags=resp?.data.tagid;
+          this.contact.olddata=JSON.stringify(resp?.data);
+         
         }
       );
   }

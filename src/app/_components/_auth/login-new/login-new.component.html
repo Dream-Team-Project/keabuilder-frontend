@@ -1,0 +1,93 @@
+<div>
+  <div class="bw-login container-fluid pt-5 pb-5" [style.backgroundImage]="bkImg">
+
+    <div class="container pb-4 pt-4">
+      <div class="row">
+        <div class="col-lg-1 col-md-0"></div>
+        <div class="col-lg-6 col-md-8">
+          <div class="bw-container__bg" [style.backgroundImage]="bgImg"></div>
+        </div>
+        <div class="col-md-4 text-center csmtmmr">
+
+          <img src="./assets/images/logo/kblogo.png">
+          <h3 class="font-weight-bold mt-2">Sign In</h3>
+          <p>New to KEA? <a class="d-inline-block anchclr" [routerLink]="['/register/'+product]">Create an Account</a></p>
+            <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-4 pr-4">
+              <div class="bu-forlogin" id="loginform">
+                
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" >
+                  <mat-error *ngIf="userFormControl.hasError('required')">
+                    Username is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="userFormControl.hasError('minlength')">
+                    Username must be at least <strong>3</strong> characters
+                  </mat-error>
+                  <mat-error *ngIf="userFormControl.hasError('maxlength')">
+                    Username must be at most <strong>20</strong> characters
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="kb-full-width" appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input type="password" matInput placeholder="*********" [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
+                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon class="kb-mat-hide-icon">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="passwordFormControl.hasError('required')">
+                    Password is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                    Password must be at least <strong>6</strong> characters
+                  </mat-error>
+                </mat-form-field>
+
+                <button type="submit" mat-raised-button class="loginbtn" >SIGN IN</button>
+                <div class="form-group">
+                  <div class="alert alert-danger" role="alert" *ngIf="f.submitted || isLoginFailed">
+                    <i class="fas fa-exclamation-triangle"></i> Login failed: {{ errorMessage }}
+                  </div>
+                </div>
+
+                <div id="g_id_onload"
+                    [attr.data-client_id]="clientid"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="true"
+                    data-nonce=""
+                    data-itp_support="true">
+                </div>
+
+                <div class="g_id_signin d-flex justify-content-center w-100"
+                    data-type="standard"
+                    data-shape="rectangular"
+                    data-theme="filled_blue"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="center">
+                </div>
+
+                <button mat-button [routerLink]="['/forget']">Forgot password?</button>
+
+              </div>
+            </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container-fluid clrchange pt-5 pb-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mkanch">
+          <img src="./assets/images/logo/kblogo-white.png" width="75">
+          <p class="mt-4 mb-0">Keabuilder.com®, 6th Floor, North West House, 119 Marylebone Rd, NW1 5PU. Copyright © 2016-2023 Engineer.ai Corp. All rights reserved. <a class="d-inline-block">Terms</a> | <a class="d-inline-block">Privacy</a> | <a class="d-inline-block">CCPA</a> | <a class="d-inline-block">Cookie Policy</a> | <a class="d-inline-block">Cookie Settings</a> | <a class="d-inline-block">Legal and Compliance</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

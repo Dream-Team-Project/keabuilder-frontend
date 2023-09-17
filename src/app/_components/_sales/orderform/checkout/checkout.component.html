@@ -12,6 +12,8 @@
         <button mat-raised-button color="primary" (click)="saveorder()" class="mx-3">Save
           <i class="far fa-save ml-1"></i>
         </button>
+        <button mat-raised-button class="mr-3" color="accent" (click)="showprev()"><i
+          class="fa fa-eye mr-2"></i>Preview</button>
         <button mat-raised-button color="danger">Delete
           <i class="far fa-trash-alt ml-1"></i>
         </button>
@@ -19,7 +21,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="false">
           <div class="kb-offer-card rounded px-3 pt-3 mb-4 pb-2 kb-prev">
                 <h6>Preview</h6>
                 <hr>
@@ -158,11 +160,34 @@
 
             </div>
         </div>
+        <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="kb-offer-card rounded px-3 pt-3 mb-4 pb-2">
                 <h6>Customize</h6>
                 <hr>
                 <br>
+
+                <div class="row mb-4">
+
+                  <div class="col-md-2"></div>
+                  <div class="col-md-4" (click)="changestep('single')">
+                    <div class="card kb-user-detail-box p-3 mt-4 text-center">
+                      <div class="justify-content-between">
+                        <i class="fa fa-check-circle selectplan" *ngIf="checkoutstep=='single'"></i>
+                          <b>SINGLE STEP</b>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4" (click)="changestep('two')">
+                    <div class="card kb-user-detail-box p-3 mt-4 text-center">
+                      <div class="justify-content-between">
+                        <i class="fa fa-check-circle selectplan" *ngIf="checkoutstep=='two'"></i>
+                          <b>TWO STEP</b>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2"></div>
+                </div>
 
               <div class="kb-offer-card rounded px-3 pt-3 mb-4">
                 <h6>Offers</h6>

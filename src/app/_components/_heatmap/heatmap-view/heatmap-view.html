@@ -1,0 +1,709 @@
+<div class="ui-backdrop layout-row layout-align-center-center size-dialog-large" style="position: fixed;"
+  id="kb-screenshotcont">
+  <div class="ui-dialog">
+
+    <div class="text-center padding" id="kb-insidescrn-first">
+      <h2> Taking a screenshot<br><span class="color-grey">(This may take a few seconds)</span></h2>
+      <div alt="Loading" class="ui-spinner style-1 refreshrotate"></div>
+    </div>
+
+
+    <div class="layout-row" id="kb-insidescrn-second" style="display:none;">
+      <div class="overflow-none screenshot-container"><a href="" target="_blank" id="kb-link1"
+          class="display-block"><img id="kb-scr-src" src="" alt="Screenshot preview" class="display-block"></a>
+      </div>
+      <div class="flex padding">
+        <h2>Your screenshot is ready</h2>
+        <p>Copy or download your screenshot image to place it in emails and presentations, or to save it for later
+          use.
+        </p>
+        <p class="color-grey"></p> <a target="_blank" href="" id="kb-link2"
+          class="flex ui-button ui-button-fill ui-button-primary kb-scrbtn">
+          <span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+              data-icon="external-link-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="svg-inline--fa fa-external-link-alt fa-w-16 fa-7x">
+              <path fill="currentColor"
+                d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"
+                class=""></path>
+            </svg>
+            Open in new window</span></a> <a class="ui-button flex ui-button-primary ui-button-fill kb-scrbtn"
+          id="capturescreenshot-kb" download><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+              data-prefix="fas" data-icon="download" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="svg-inline--fa fa-download fa-w-16 fa-9x">
+              <path fill="currentColor"
+                d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"
+                class=""></path>
+            </svg>
+            Download</span></a>
+      </div>
+    </div>
+
+    <button class="ui-button icon padding-none ui-dialog-close ui-button-default ui-button-text"
+      id="bw-close-scrnsht"><span class="ui-button-flex">
+        <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="times" role="img"
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" class="svg-inline--fa fa-times fa-w-10 fa-9x">
+          <path fill="currentColor"
+            d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"
+            class=""></path>
+        </svg>
+      </span></button>
+
+
+  </div>
+</div>
+
+<div class="lo-app layout-column size-fill overflow-none">
+  <main class="layout-column flex">
+    <div id="lo-app-bar" role="toolbar" class="ui-status-bar layout-row layout-align-space-between-center">
+      <div id="global-tools" class="flex layout-row layout-align-start-center"><button
+          class="ui-button icon app-button ui-button-default ui-button-text" id="segments-button"
+          (click)="showmydrop(0)" aria-label="filter_listSegments  ">
+          <span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+              data-icon="sort-amount-up-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="svg-inline--fa fa-sort-amount-up-alt fa-w-16 fa-9x">
+              <path fill="currentColor"
+                d="M240 96h64a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16h-64a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm0 128h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zm256 192H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h256a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm-256-64h192a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16H240a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16zM16 160h48v304a16 16 0 0 0 16 16h32a16 16 0 0 0 16-16V160h48c14.21 0 21.39-17.24 11.31-27.31l-80-96a16 16 0 0 0-22.62 0l-80 96C-5.35 142.74 1.78 160 16 160z"
+                class=""></path>
+            </svg><span class="icon-label">Segments</span>
+          </span>
+        </button> <button class="ui-button icon app-button ui-button-default ui-button-text" (click)="showmydrop(1)" id="device-button"
+          aria-label="desktop_windowsDevice  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+              data-prefix="fas" data-icon="desktop" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+              class="svg-inline--fa fa-desktop fa-w-18 fa-9x">
+              <path fill="currentColor"
+                d="M528 0H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h192l-16 48h-72c-13.3 0-24 10.7-24 24s10.7 24 24 24h272c13.3 0 24-10.7 24-24s-10.7-24-24-24h-72l-16-48h192c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 352H64V64h448v288z"
+                class=""></path>
+            </svg><span class="icon-label">Device</span>
+          </span></button>
+      </div>
+      <div id="primary-apps" class="layout-row layout-align-start-center">
+
+        <button class="ui-button icon app-button ui-button-default ui-button-text" (click)="showmydrop(2)" id="heatmap-button"
+          aria-label="blur_circularHeatmap  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+              data-prefix="fas" data-icon="braille" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+              class="svg-inline--fa fa-braille fa-w-20 fa-7x">
+              <path fill="currentColor"
+                d="M128 256c0 35.346-28.654 64-64 64S0 291.346 0 256s28.654-64 64-64 64 28.654 64 64zM64 384c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352C28.654 32 0 60.654 0 96s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm160 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352c-35.346 0-64 28.654-64 64s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm224 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352c-35.346 0-64 28.654-64 64s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm160 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-320c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z"
+                class=""></path>
+            </svg><span class="icon-label">Heatmap</span></span>
+        </button>
+
+        <button class="ui-button icon app-button ui-button-default ui-button-text" *ngIf="false" id="heatmap-recording"
+          aria-label="blur_circularHeatmap  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+              data-prefix="fas" data-icon="video" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+              class="svg-inline--fa fa-video fa-w-18 fa-9x">
+              <path fill="currentColor"
+                d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"
+                class=""></path>
+            </svg><span class="icon-label">Recordings</span></span>
+        </button>
+      </div>
+      <div class="flex layout-row layout-align-end-center" style="flex-direction: row-reverse;">
+        <button style="margin-left: -25px;" class="ui-button icon padding-none ui-button-default ui-button-text"
+          id="feedback-button" aria-label="help Get help"><span class="ui-button-flex"><svg aria-hidden="true"
+              focusable="false" data-prefix="fas" data-icon="question-circle" role="img"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="svg-inline--fa fa-question-circle fa-w-16 fa-9x">
+              <path fill="currentColor"
+                d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"
+                class=""></path>
+            </svg> &nbsp;
+            <span class="icon-label">Get help</span>
+          </span></button>
+
+        <button class="ui-button ui-button-positive ui-button-fill" id="screenshot-button"><span
+            class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera-retro"
+              role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+              class="svg-inline--fa fa-camera-retro fa-w-16 fa-9x">
+              <path fill="currentColor"
+                d="M48 32C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H48zm0 32h106c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H38c-3.3 0-6-2.7-6-6V80c0-8.8 7.2-16 16-16zm426 96H38c-3.3 0-6-2.7-6-6v-36c0-3.3 2.7-6 6-6h138l30.2-45.3c1.1-1.7 3-2.7 5-2.7H464c8.8 0 16 7.2 16 16v74c0 3.3-2.7 6-6 6zM256 424c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm-48 104c-8.8 0-16-7.2-16-16 0-35.3 28.7-64 64-64 8.8 0 16 7.2 16 16s-7.2 16-16 16c-17.6 0-32 14.4-32 32 0 8.8-7.2 16-16 16z"
+                class=""></path>
+            </svg> &nbsp;
+            <span class="icon-label">Screenshot</span>
+          </span></button>
+      </div>
+    </div>
+    <div id="lo-website" class="flex layout-column layout-align-center-center">
+      <div id="lo-website-iframe-container" class="shadow-z4 layout-column flex desktop"
+        style="width: 100%; height: 100%; position: relative;">
+        <div id="heatouterdiv">
+          <iframe id="lo-website-iframe" sandbox="allow-scripts allow-same-origin allow-forms"
+            class="lo-website-iframe flex" [src]="kb_landing_page"></iframe>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <div id="lo-status-bar" role="toolbar" class="ui-status-bar layout-row layout-align-space-between-center">
+      <div class="flex layout-row layout-align-start-center">
+        <span>
+          <strong class="filtered">{{totalclicks}} clicks</strong>
+        </span>
+        <span class="layout-row">
+          <strong class="spacer">·</strong>
+          <span class="color-positive">All clicks have been loaded</span>
+        </span>
+        <span class="layout-row">
+          <button class="ui-button icon padding-none ui-button-default ui-button-text" id="heatmap-reload">
+            <span class="ui-button-flex">
+              <svg style="width:15px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="redo"
+                role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                class="svg-inline--fa fa-redo fa-w-16 fa-9x">
+                <path fill="currentColor"
+                  d="M500.33 0h-47.41a12 12 0 0 0-12 12.57l4 82.76A247.42 247.42 0 0 0 256 8C119.34 8 7.9 119.53 8 256.19 8.1 393.07 119.1 504 256 504a247.1 247.1 0 0 0 166.18-63.91 12 12 0 0 0 .48-17.43l-34-34a12 12 0 0 0-16.38-.55A176 176 0 1 1 402.1 157.8l-101.53-4.87a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12h200.33a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12z"
+                  class=""></path>
+              </svg>
+            </span>
+          </button>
+        </span>
+      </div>
+      <a [href]="windoworigin+'/heatmap'" target="_blank" id="brand-link"
+        class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img id="brand-wordmark"
+          src="/assets/images/logo/kblogo.png" alt="Keabuilder" /></a>
+    </div>
+    <div class="ui-panel-manager size-fill">
+      <div class="ui-panel-manager-bounds size-fill">
+        <div tabindex="0" class="ui-floating-panel left loadEffect" *ngIf="segmentpanel[0]" id="segmentation-panel">
+          <div class="layout-column size-fill">
+            <header class="ui-floating-panel-header">
+              <div class="layout-row layout-align-start-center">
+                <h3 class="flex margin-none">Segmentation</h3>
+                <div class="layout-row layout-align-end-center">
+                  <button (click)="closedropall()"
+                    class="ui-button padding-none size-small icon ui-button-default ui-button-text closeall-floating"
+                    aria-label="close"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+                        data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 352 512" class="svg-inline--fa fa-times fa-w-11 fa-9x">
+                        <path fill="currentColor"
+                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                          class=""></path>
+                      </svg></span>
+                  </button>
+                </div>
+              </div>
+            </header>
+            <main class="layout-column ui-floating-panel-content flex">
+              <div id="segmentation-panel-scroll-container" class="ps ps--active-y" style="position: relative;">
+                <div class="padding-half">
+                  <div id="date-range" class="lo-segment loadEffect" [class.active]="insidesegmentpanel[0]" (click)="toggleinside(0)">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <h5 class="flex margin-none">
+                        Date range
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="lo-input-group padding-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="padding-bottom-half">
+                        <input name="date-start" type="date" id="ui-datepicker1" class="ui-datepicker ui-input"
+                          placeholder="Start date" autocomplete="off" aria-label="Use the arrow keys to pick a date" />
+                      </div>
+                      <input name="date-end" type="date" id="ui-datepicker2" class="ui-datepicker ui-input"
+                        placeholder="End date" autocomplete="off" />
+                    </div>
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" style="display:none;">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <h5 class="flex margin-none text-truncate">
+                        Source
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps"
+                        style="display: block;overflow-y: auto;height: 250px;position: relative;">
+                        <div role="group" class="" style="display: block; padding-top: 12px; padding-bottom: 0px;">
+                          <div class="padding-bottom-half"><label
+                              class="layout-row layout-align-start-center margin-none">
+                              <div class="padding-right-half"><input type="checkbox" value="" /></div>
+                              <div aria-label="" role="listitem" class="ui-list-item padding-none flex">
+                                <div class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                  Direct
+                                </div> <strong>116</strong>
+                              </div>
+                            </label></div>
+                          <div class="padding-bottom-half"><label
+                              class="layout-row layout-align-start-center margin-none">
+                              <div class="padding-right-half"><input type="checkbox" value="Google PPC" /></div>
+                              <div aria-label="" role="listitem" class="ui-list-item padding-none flex">
+                                <div class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                  Google PPC
+                                </div> <strong>51</strong>
+                              </div>
+                            </label></div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[1]" (click)="toggleinside(1)">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                      <h5 class="flex margin-none text-truncate">
+                        Browser
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps--active-y"
+                        style="display: block;overflow-y: scroll;height: 250px;position: relative;">
+                        <div role="group" id="kb_bs_segment" class=""
+                          style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[2]" (click)="toggleinside(2)">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                      <h5 class="flex margin-none text-truncate">
+                        Operating system
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps--active-y"
+                        style="display: block;overflow-y: scroll;height: 250px;position: relative;">
+                        <div role="group" id="kb_os_segment" class=""
+                          style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[3]" (click)="toggleinside(3)">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                      <h5 class="flex margin-none text-truncate">
+                        Country
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps--active-y"
+                        style="display: block;overflow-y: scroll;height: 250px;position: relative;">
+                        <div role="group" id="kb_country_segment" class=""
+                          style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" style="display:none;">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                      <h5 class="flex margin-none text-truncate">
+                        Region name
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps--active-y"
+                        style="display: block;overflow-y: scroll;height: 250px;position: relative;">
+                        <div role="group" class="" style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[4]" (click)="toggleinside(4)">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                      <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                      <h5 class="flex margin-none text-truncate">
+                        Number of visits
+                        <div class="indicator" style="display: none;">
+                          <div aria-hidden="true" class="ui-tooltip" style="display: none;">
+                            Contains active segmentation</div>
+                        </div>
+                      </h5>
+                      <div class="layout-row layout-align-start-center">
+                        <div class="display-inline-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                            class="svg-inline--fa fa-chevron-down fa-w-14 fa-9x">
+                            <path fill="currentColor"
+                              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                              class=""></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </header>
+                    <div class="border-top margin-bottom-half showmydropdown loadEffect" style="display: none;">
+                      <div class="segmentation-container padding-top-half ps--active-y"
+                        style="display: block;overflow-y: scroll;height: 250px;position: relative;">
+                        <div role="group" id="kb_nuofvisit_segment" class=""
+                          style="display: block; padding-top: 12px; padding-bottom: 0px;">
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel compact left loadEffect" *ngIf="segmentpanel[1]" id="sizing-options">
+          <div class="layout-column">
+            <header class="ui-floating-panel-header">
+              <div class="layout-row layout-align-start-center">
+                <h3 class="flex margin-none">Device</h3>
+                <div class="layout-row layout-align-end-center">
+                  <button (click)="closedropall()"
+                    class="ui-button padding-none size-small icon ui-button-default ui-button-text closeall-floating"
+                    aria-label="close"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+                        data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 352 512" class="svg-inline--fa fa-times fa-w-11 fa-9x">
+                        <path fill="currentColor"
+                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                          class=""></path>
+                      </svg></span></button></div>
+              </div>
+            </header>
+            <main class="layout-column ui-floating-panel-content">
+              <div class="padding-half">
+                <div id="screen-size-selector" class="ui-input-group margin-bottom-half"><label for="heatmap-viewport"
+                    class="ui-form-label flex">Device type</label>
+                  <div role="radiogroup" class="ui-button-group size-full-width" name="heatmap-viewport">
+                    <button
+                      class="ui-button padding-none size-small ui-button-default ui-button-text ui-button-primary kb-devicebtn active"
+                      value="desktop" aria-label="desktop_windowsDesktop" role="radio"><span class="ui-button-flex"><svg
+                          aria-hidden="true" focusable="false" data-prefix="fas" data-icon="desktop" role="img"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
+                          class="svg-inline--fa fa-desktop fa-w-18 fa-9x">
+                          <path fill="currentColor"
+                            d="M528 0H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h192l-16 48h-72c-13.3 0-24 10.7-24 24s10.7 24 24 24h272c13.3 0 24-10.7 24-24s-10.7-24-24-24h-72l-16-48h192c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 352H64V64h448v288z"
+                            class=""></path>
+                        </svg> Desktop</span></button>
+
+                    <button class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
+                      value="tablet" aria-label="tablet_macTablet" role="radio"><span class="ui-button-flex"><svg
+                          aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tablet-alt" role="img"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                          class="svg-inline--fa fa-tablet-alt fa-w-14 fa-9x">
+                          <path fill="currentColor"
+                            d="M400 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM224 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm176-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h328c6.6 0 12 5.4 12 12v312z"
+                            class=""></path>
+                        </svg> Tablet</span></button>
+
+                    <button class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
+                      value="phone" aria-label="smartphonePhone" role="radio"><span class="ui-button-flex"><svg
+                          aria-hidden="true" focusable="false" data-prefix="fas" data-icon="mobile-alt" role="img"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
+                          class="svg-inline--fa fa-mobile-alt fa-w-10 fa-9x">
+                          <path fill="currentColor"
+                            d="M272 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM160 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm112-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12v312z"
+                            class=""></path>
+                        </svg> Phone</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="ui-list-group lo-segment lo-default-segment margin-bottom-half">
+                  <header tabindex="0" class="layout-row layout-align-start-center padding-y-half cursor-pointer">
+                    <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
+                    <h5 class="flex margin-none text-truncate">
+                      Device segmentation
+                      <div class="indicator">
+                        <div aria-hidden="true" class="ui-tooltip" style="display: none;">Contains
+                          active segmentation</div>
+                      </div>
+                    </h5>
+                  </header>
+                </div>
+                <div class="layout-row layout-gutters-half layout-align-start-center margin-bottom">
+                  <div class="ui-input-group margin-none"><label for="device-width">Custom width</label> <input
+                      type="number" name="device-width" min="0" field="device-width" placeholder="E.g. 800"
+                      class="ui-input" />
+                  </div> <strong class="margin-top">×</strong>
+                  <div class="ui-input-group"><label for="device-height">Custom
+                      height</label> <input type="number" name="device-height" min="0" field="device-height"
+                      placeholder="E.g. 600" class="ui-input" />
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel compact right loadEffect" *ngIf="segmentpanel[2]" id="heatmap-options">
+          <div class="layout-column">
+            <header class="ui-floating-panel-header">
+              <div class="layout-row layout-align-start-center">
+                <h3 class="flex margin-none">Heatmap</h3>
+                <div class="layout-row layout-align-end-center">
+                  <button (click)="closedropall()"
+                    class="ui-button padding-none size-small icon ui-button-default ui-button-text closeall-floating"
+                    aria-label="close"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+                        data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 352 512" class="svg-inline--fa fa-times fa-w-11 fa-9x">
+                        <path fill="currentColor"
+                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                          class=""></path>
+                      </svg></span>
+                  </button>
+                </div>
+              </div>
+            </header>
+            <main class="layout-column ui-floating-panel-content">
+              <div class="padding-half">
+                <div id="event-type-selector" class="ui-input-group"><label for="heatmap-type"
+                    class="ui-form-label flex">Event type</label>
+                  <div role="radiogroup" class="ui-button-group size-full-width" name="heatmap-type">
+
+                    <button
+                      class="ui-button padding-none size-small ui-button-default ui-button-text ui-button-primary active"
+                      value="clicks" id="kb-clicks" role="radio"><span class="ui-button-flex">
+                        <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="hand-pointer" role="img"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                          class="svg-inline--fa fa-hand-pointer fa-w-14 fa-9x">
+                          <path fill="currentColor"
+                            d="M358.182 179.361c-19.493-24.768-52.679-31.945-79.872-19.098-15.127-15.687-36.182-22.487-56.595-19.629V67c0-36.944-29.736-67-66.286-67S89.143 30.056 89.143 67v161.129c-19.909-7.41-43.272-5.094-62.083 8.872-29.355 21.795-35.793 63.333-14.55 93.152l109.699 154.001C134.632 501.59 154.741 512 176 512h178.286c30.802 0 57.574-21.5 64.557-51.797l27.429-118.999A67.873 67.873 0 0 0 448 326v-84c0-46.844-46.625-79.273-89.818-62.639zM80.985 279.697l27.126 38.079c8.995 12.626 29.031 6.287 29.031-9.283V67c0-25.12 36.571-25.16 36.571 0v175c0 8.836 7.163 16 16 16h6.857c8.837 0 16-7.164 16-16v-35c0-25.12 36.571-25.16 36.571 0v35c0 8.836 7.163 16 16 16H272c8.837 0 16-7.164 16-16v-21c0-25.12 36.571-25.16 36.571 0v21c0 8.836 7.163 16 16 16h6.857c8.837 0 16-7.164 16-16 0-25.121 36.571-25.16 36.571 0v84c0 1.488-.169 2.977-.502 4.423l-27.43 119.001c-1.978 8.582-9.29 14.576-17.782 14.576H176c-5.769 0-11.263-2.878-14.697-7.697l-109.712-154c-14.406-20.223 14.994-42.818 29.394-22.606zM176.143 400v-96c0-8.837 6.268-16 14-16h6c7.732 0 14 7.163 14 16v96c0 8.837-6.268 16-14 16h-6c-7.733 0-14-7.163-14-16zm75.428 0v-96c0-8.837 6.268-16 14-16h6c7.732 0 14 7.163 14 16v96c0 8.837-6.268 16-14 16h-6c-7.732 0-14-7.163-14-16zM327 400v-96c0-8.837 6.268-16 14-16h6c7.732 0 14 7.163 14 16v96c0 8.837-6.268 16-14 16h-6c-7.732 0-14-7.163-14-16z"
+                            class=""></path>
+                        </svg> Clicks</span>
+                    </button>
+
+                    <button class="ui-button padding-none size-small ui-button-default ui-button-text" value="moves"
+                      role="radio" id="kb-moves"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
+                          data-prefix="fas" data-icon="signature" role="img" xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 640 512" class="svg-inline--fa fa-signature fa-w-20 fa-7x">
+                          <path fill="currentColor"
+                            d="M623.2 192c-51.8 3.5-125.7 54.7-163.1 71.5-29.1 13.1-54.2 24.4-76.1 24.4-22.6 0-26-16.2-21.3-51.9 1.1-8 11.7-79.2-42.7-76.1-25.1 1.5-64.3 24.8-169.5 126L192 182.2c30.4-75.9-53.2-151.5-129.7-102.8L7.4 116.3C0 121-2.2 130.9 2.5 138.4l17.2 27c4.7 7.5 14.6 9.7 22.1 4.9l58-38.9c18.4-11.7 40.7 7.2 32.7 27.1L34.3 404.1C27.5 421 37 448 64 448c8.3 0 16.5-3.2 22.6-9.4 42.2-42.2 154.7-150.7 211.2-195.8-2.2 28.5-2.1 58.9 20.6 83.8 15.3 16.8 37.3 25.3 65.5 25.3 35.6 0 68-14.6 102.3-30 33-14.8 99-62.6 138.4-65.8 8.5-.7 15.2-7.3 15.2-15.8v-32.1c.2-9.1-7.5-16.8-16.6-16.2z"
+                            class=""></path>
+                        </svg> Moves</span>
+                    </button>
+
+                  </div>
+                </div>
+                <div class="ui-input-group">
+                  <div class="layout-row layout-align-start-center"><label for="heatmap-opacity"
+                      class="ui-form-label flex margin-none">Opacity</label> <span class="size-small"><strong
+                        class="heatmapopacity">100%</strong></span></div>
+                  <input name="heatmap-opacity" type="range" min="0" max="1" value="1" step="0.1">
+                </div>
+                <div class="ui-input-group margin-none"><label id="show-background" class="ui-form-label margin-none">
+                    <div class="layout-row layout-align-start-center"><span class="flex">Show heatmap</span> <input
+                        type="checkbox" name="show-heatmap"></div>
+                  </label> <label id="show-background" class="ui-form-label margin-none">
+                    <div class="layout-row layout-align-start-center"><span class="flex">Show background</span>
+                      <input type="checkbox" name="show-background" checked></div>
+                  </label> </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel compact left loadEffect" *ngIf="segmentpanel[3]" id="advanced-options">
+        <div class="layout-column">
+          <header class="ui-floating-panel-header">
+            <div class="layout-row layout-align-start-center">
+              <h3 class="flex margin-none">Advanced</h3>
+              <div class="layout-row layout-align-end-center"><button
+                  class="ui-button padding-none size-small icon ui-button-default ui-button-text"
+                  aria-label="close"><span class="ui-button-flex"><i class="material-icons">close</i></span></button>
+              </div>
+            </div>
+          </header>
+          <main class="layout-column ui-floating-panel-content">
+            <div class="padding-half">
+              <div class="ui-popover">
+                <div tabindex="0" aria-haspopup="true" class="ui-popover-target"><label id="show-element-analytics"
+                    for="show-element-overlay" class="ui-form-label margin-none">
+                    <div class="layout-row layout-align-start-center"><span class="flex">Emulate
+                        mobile device</span> <input type="checkbox" name="show-element-overlay" />
+                    </div>
+                  </label> </div>
+                <div class="ui-popover-content" style="display: none;">
+                  <div class="padding-half size-panel-tiny">
+                    <h5>Help</h5>
+                    <p>Useful for websites that rely on a user-agent string to display a mobile
+                      optimized version.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ui-popover">
+                <div tabindex="0" aria-haspopup="true" class="ui-popover-target"><label id="show-element-analytics"
+                    for="show-element-overlay" class="ui-form-label margin-none">
+                    <div class="layout-row layout-align-start-center"><span class="flex">Update on
+                        URL change</span> <input type="checkbox" name="show-element-overlay" />
+                    </div>
+                  </label> </div>
+                <div class="ui-popover-content" style="display: none;">
+                  <div class="padding-half size-panel-tiny">
+                    <h5>Help</h5>
+                    <p>By default, data will be reloaded automatically when a URL change is
+                      detected.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel right loadEffect" *ngIf="segmentpanel[4]" id="element-analytics">
+          <div class="layout-column size-fill">
+            <header class="ui-floating-panel-header">
+              <div class="layout-row layout-align-start-center">
+                <h3 class="flex margin-none">Element analytics</h3>
+                <div class="layout-row layout-align-end-center"><button
+                    class="ui-button padding-none size-small icon ui-button-default ui-button-text"
+                    aria-label="close"><span class="ui-button-flex"><i class="material-icons">close</i></span></button>
+                </div>
+              </div>
+              <p class="color-darker margin-none">By number of clicks received</p>
+            </header>
+            <main class="layout-column ui-floating-panel-content flex">
+              <div class="layout-column flex">
+                <div class="layout-row padding-half"><input id="elements-list-filter" type="text" name="name" value=""
+                    autocomplete="off" placeholder="Filter elements" class="flex mousetrap" />
+                  <div class="padding-left-half layout-row"><button
+                      class="ui-button icon padding-none ui-button-default ui-button-text"
+                      id="toggle-top-elements-button" aria-label="Toggle top elements"><span class="ui-button-flex">
+                        <div class="">Top <span>10</span></div>
+                        <div aria-hidden="true" class="ui-tooltip" position="bottom" style="display: none;">Toggle
+                          top elements</div>
+                      </span></button> <button class="ui-button icon padding-none ui-button-default ui-button-text"
+                      id="export-csv-button" aria-label="Export to CSV"><span class="ui-button-flex"><i
+                          class="material-icons">file_download</i>
+                        <div aria-hidden="true" class="ui-tooltip" position="bottom" style="display: none;">Export
+                          to CSV</div>
+                      </span></button> <button class="ui-button icon padding-none ui-button-default ui-button-text"
+                      id="show-hidden-button" aria-label="Show Hidden Elements"><span class="ui-button-flex"><i
+                          class="material-icons">visibility</i>
+                        <div aria-hidden="true" class="ui-tooltip" position="bottom" style="display: none;">Only
+                          show visible elements</div>
+                      </span></button></div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel right loadEffect" *ngIf="segmentpanel[5]" id="form-analytics">
+          <div class="layout-column size-fill">
+            <main class="layout-column ui-floating-panel-content flex">
+              <header class="ui-floating-panel-header">
+                <div class="layout-row layout-align-start-center">
+                  <h3 class="flex margin-none text-truncate">Form analytics</h3>
+                  <div class="layout-row layout-align-end-center"><button
+                      class="ui-button padding-none size-small icon ui-button-default ui-button-text"
+                      aria-label="close"><span class="ui-button-flex"><i
+                          class="material-icons">close</i></span></button></div>
+                </div>
+                <p class="color-darker margin-none"><span class="cursor-pointer">By number of
+                    conversions</span></p>
+              </header>
+            </main>
+          </div>
+        </div>
+        <div tabindex="0" class="ui-floating-panel panel-fill right loadEffect" *ngIf="segmentpanel[6]" id="recordings">
+          <div class="layout-column size-fill">
+            <main class="layout-column ui-floating-panel-content flex">
+              <header class="ui-floating-panel-header">
+                <div class="layout-row layout-align-start-center">
+                  <h3 class="flex margin-none">Play recordings</h3>
+                  <div class="layout-row layout-align-end-center">
+                    <button
+                      class="ui-button padding-none size-small icon ui-button-default ui-button-text closeall-floating"
+                      aria-label="close"><span class="ui-button-flex"><svg style="width:12px;" aria-hidden="true"
+                          focusable="false" data-prefix="fas" data-icon="times" role="img"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"
+                          class="svg-inline--fa fa-times fa-w-11 fa-9x">
+                          <path fill="currentColor"
+                            d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                            class=""></path>
+                        </svg></span></button>
+                  </div>
+                </div>
+                <p class="color-darker margin-none"><span>Visitors who <span class="important">navigated to
+                      this page</span></span></p>
+              </header>
+              <div class="layout-column flex"
+                style="height: 350px; overflow-y: scroll; width: 100%; padding-top: 10px;">
+                <div class="ui-empty-state layout-column layout-align-center-center flex">
+                  <div class="content" style="width: 100%;">
+                    <div class="showmyheatmaps">
+                      <ol id="myheatrecordol">
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
