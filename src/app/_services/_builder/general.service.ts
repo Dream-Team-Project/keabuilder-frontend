@@ -979,7 +979,7 @@ export class GeneralService {
       var jsonObj = {head: '', header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
       if(this.includeLayout.header && this.selectedHeader.id) jsonObj.header = this.selectedHeader;
       if(this.includeLayout.footer && this.selectedFooter.id) jsonObj.footer = this.selectedFooter;
-      let faviconIcon = (template || preview) ? '/favicon.ico' : '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
+      let faviconIcon = '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
       jsonObj.head = '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
       '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
       '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
@@ -990,17 +990,17 @@ export class GeneralService {
       '<meta name="author" content="'+this.main.author+'">' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       '<title>'+this.main.title+'</title>' +
-      '<style>'+jsonObj.page_code+'</style>';
+      '<style>'+jsonObj.page_code+'</style>' +
+      '<style>'+this.getAllStyle()+'</style>';
       this.webpage.page_json = this.encodeJSON(jsonObj);
       if(template) {
         console.log('Save as template');
-        // this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
         this.templateobj.template=this.encodeJSON(jsonObj);
         this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
           if(res1.success) resolve(true);
           else {
             this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-            resolve(true);
+            resolve(false);
           }
         })
       }
@@ -1012,24 +1012,15 @@ export class GeneralService {
         }
         this.webpage.savePreview(prevObj).then((resp:any)=>{
           if(resp.success) resolve(true);
-          else {
-            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-            resolve(true);
-          }
+          else resolve(false);
         }); 
       }
       else {
-        // var status = this.main.publish_status;
-        // this.pageObj.prevFolder = this.webpage.page_path;
-        // this.pageObj.folder = this.main.path;
-        // this.pageObj.dir = status ? 'pages' : 'drafts';
+        console.log('Save as page');
         //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
         //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
         //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-        if(tglDraft) {
-            let status = this.main.publish_status ? 'publish' : 'draft';
-        }
-        else this.updatePageDB().then(resp=>resolve(resp));
+        this.updatePageDB().then(resp=>resolve(resp));
       }
     });
   }
