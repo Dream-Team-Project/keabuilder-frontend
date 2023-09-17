@@ -19,6 +19,7 @@ export class WebpagesService {
   updatewebpagesApi = '/api/updatewebpage/';
   savePreviewApi = '/api/savepreview/';
   getsinglewebpageApi = '/api/singlewebpagedata/';
+  getpreviewwebpageApi = '/api/previewwebpagedata';
   namepathchangesApi = '/api/namepathchangeswebsite/';
   validatepagesApi = '/api/validatepage/';
   savequickpagesdetailsApi = '/api/savequickpagesdetails/';
@@ -53,6 +54,10 @@ export class WebpagesService {
 
   getSingleWebpage(uniqueid:string): Observable<any> {
     return this.http.get(this.getsinglewebpageApi+this.uuid+'/'+uniqueid);
+  }
+
+  getpreviewWebpage(obj:any): Observable<any> {
+    return this.http.post(this.getpreviewwebpageApi,obj);
   }
 
   createWebpage(pagedata: any): Observable<any> {

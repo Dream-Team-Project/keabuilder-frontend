@@ -51,8 +51,9 @@ export class PageViewComponent implements OnInit {
         this.req.wid = id[1];
         this.req.pid = id[2];
         if(param_target == 'website') {
-          this.webpage.getSingleWebpage(this.req.pid).subscribe((resp:any)=>{
-            this.page_json = this._general.decodeJSON(resp.data[0].page_json);
+          this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
+            this.page_json = this._general.decodeJSON(resp.data);
+            console.log(this.page_json)
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
