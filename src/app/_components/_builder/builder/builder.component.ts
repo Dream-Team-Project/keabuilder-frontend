@@ -82,6 +82,7 @@ export class BuilderComponent implements OnInit {
       this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
       if(_general.target.type == 'website' || _general.target.type == 'funnel' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
+            console.log(data);
             if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
             else if(!_general.isObjEmpty(data)) {
               if(this.ishf) _general.target.name = data.name;

@@ -919,15 +919,7 @@ export class GeneralService {
       var status = this.webpage.publish_status == 1;
       this.main.publish_status = status;
       this.main.dir = status ? 'pages' : 'drafts';
-      this._file.getPage(this.main).subscribe({
-        next: (file:any)=>{
-          resolve(file);
-        },
-        error: (err:any) => {
-          this.loading.error = true;
-          resolve(false);
-        }
-      });
+      resolve(e);
     })
   }
 
@@ -1006,65 +998,58 @@ export class GeneralService {
       }
       else if(preview) {
         console.log('Save as preview');
-        let prevObj = {
-          id: this.webpage.id,
-          preview_json: this.webpage.page_json,
-        }
-        this.webPageService.savePreview(prevObj).subscribe((resp:any)=>{
-          if(resp.success) resolve(true);
-          else resolve(false);
-        }); 
+        this.savePreview();
       }
       else {
         console.log('Save as page');
         //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
         //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
         //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-        this.updatePageDB().then(resp=>resolve(resp));
+        this.savePage().then(resp=>resolve(resp));
       }
     });
+  }
+
+  savePreview() {
+    return new Promise<any>((resolve, reject) => {
+      let prevObj = {
+        id: this.webpage.id,
+        preview_json: this.webpage.page_json,
+      }
+      if(this.target.type == 'website'){
+        this.webPageService.savePreview(prevObj).subscribe((resp:any)=>{
+          if(resp.success) resolve(true);
+          else resolve(false);
+        }); 
+      }
+      else if(this.target.type == 'funnel'){
+        // this.funnelService.savePreview(prevObj).subscribe((resp:any)=>{
+        //   if(resp.success) resolve(true);
+        //   else resolve(false);
+        // }); 
+      }
+      else resolve(false);
+    })
   }
 
   savePage() {
     return new Promise<any>((resolve, reject) => {
       this.updatePageDB().then(e=>{
-        if(e.found == 0) {
-          this._file.savePage(this.pageObj).subscribe(
-            (event:any) => {
-              if(e.ishome) {
-                var obj = {
-                  dir: this.main.publish_status ? 'pages' : 'drafts',
-                  path: event.data.folder,
-                  website_id: this.webpage.website_id
-                }
-                if(obj.dir == 'drafts') {
-                  this._file.createdefaulthome(obj).subscribe((d:any)=>{
-                      this.pageSaved = true;
-                      resolve(true);
-                  });
-                }
-                else {
-                  this._file.updateHome(obj).subscribe((d:any)=>{
-                    this.pageSaved = true;
-                    resolve(true);
-                });
-                }
-              }
-              else {
-                this.pageSaved = true;
-                resolve(true);
-              }
-            },
-          error=>{
-            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-            resolve(false);
-          })
-        }
-        else if(e.found == 1) {
+        console.log(e);
+        if(e.found == 1) {
           this.pathError = true;
           resolve(false);
         }
-        else resolve(false);
+        else {
+          if(e.success == 1) {
+            this.pageSaved = true;
+            resolve(true);
+          }
+          else {
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
+          }
+        }
       })
     })
   }
