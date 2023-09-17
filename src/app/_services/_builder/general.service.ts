@@ -1017,16 +1017,6 @@ export class GeneralService {
             resolve(true);
           }
         }); 
-        // this.pageObj.prevFolder = this.webpage.uniqueid;
-        // this.pageObj.folder = this.webpage.uniqueid;
-        // this.pageObj.dir = 'previews';
-        // this._file.savePage(this.pageObj).subscribe((event:any)=>{
-        //   resolve(true);
-        // },
-        // error=>{
-        //   this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-        //   resolve(false);
-        // });
       }
       else {
         // var status = this.main.publish_status;
