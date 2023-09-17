@@ -1010,7 +1010,7 @@ export class GeneralService {
           id: this.webpage.id,
           preview_json: this.webpage.page_json,
         }
-        this.webpage.savePreview(prevObj).then((resp:any)=>{
+        this.webPageService.savePreview(prevObj).subscribe((resp:any)=>{
           if(resp.success) resolve(true);
           else resolve(false);
         }); 
