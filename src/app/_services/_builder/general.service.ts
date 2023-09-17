@@ -992,31 +992,31 @@ export class GeneralService {
       '<title>'+this.main.title+'</title>' +
       '<style>'+jsonObj.page_code+'</style>';
       this.webpage.page_json = this.encodeJSON(jsonObj);
-      // if(template) {
-      //   this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
-      // }
-      // else if(!preview) {
-      //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
-      //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
-      //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
-      // }
       if(template) {
         console.log('Save as template');
-        // this.pageObj.template_id=this.templateobj.uniqueid;
-        // this.pageObj.folder = this.templateobj.uniqueid;
-        // this.templateobj.template=this.encodeJSON(jsonObj);
-        // this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
-        //   this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
-        //     resolve(true);
-        //   },
-        //   error=>{
-        //     this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-        //     resolve(false);
-        //   });
-        // })
+        // this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
+        this.templateobj.template=this.encodeJSON(jsonObj);
+        this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
+          if(res1.success) resolve(true);
+          else {
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(true);
+          }
+        })
       }
       else if(preview) {
         console.log('Save as preview');
+        let prevObj = {
+          id: this.webpage.id,
+          preview_json: this.webpage.page_json,
+        }
+        this.webpage.savePreview(prevObj).then((resp:any)=>{
+          if(resp.success) resolve(true);
+          else {
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(true);
+          }
+        }); 
         // this.pageObj.prevFolder = this.webpage.uniqueid;
         // this.pageObj.folder = this.webpage.uniqueid;
         // this.pageObj.dir = 'previews';
@@ -1033,13 +1033,11 @@ export class GeneralService {
         // this.pageObj.prevFolder = this.webpage.page_path;
         // this.pageObj.folder = this.main.path;
         // this.pageObj.dir = status ? 'pages' : 'drafts';
+        //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
+        //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
+        //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
         if(tglDraft) {
             let status = this.main.publish_status ? 'publish' : 'draft';
-            var dbobj:any = {
-              id: this.webpage.id,
-              preview_json: this.webpage.page_json,
-            }
-            // this.savePreview().then(resp=>resolve(resp));
         }
         else this.updatePageDB().then(resp=>resolve(resp));
       }

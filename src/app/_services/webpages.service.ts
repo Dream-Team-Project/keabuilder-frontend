@@ -17,7 +17,7 @@ export class WebpagesService {
   getwebpagebypathApi = '/api/getwebpagebypath/';
   createwebpagesApi = '/api/createwebpage/';
   updatewebpagesApi = '/api/updatewebpage/';
-  updatePreviewApi = '/api/updatepreview/';
+  savePreviewApi = '/api/savepreview/';
   getsinglewebpageApi = '/api/singlewebpagedata/';
   namepathchangesApi = '/api/namepathchangeswebsite/';
   validatepagesApi = '/api/validatepage/';
@@ -63,8 +63,8 @@ export class WebpagesService {
     return this.http.post(this.updatewebpagesApi+this.uuid, pagedata);
   }
 
-  updatePreview(pagedata: any): Observable<any> {
-    return this.http.post(this.updatePreviewApi, pagedata);
+  savePreview(pagedata: any): Observable<any> {
+    return this.http.post(this.savePreviewApi, pagedata);
   }
 
   namepathchanges(id:string, name:string, which:string):Observable<any> {
