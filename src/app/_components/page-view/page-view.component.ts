@@ -53,15 +53,19 @@ export class PageViewComponent implements OnInit {
         if(param_target == 'website') {
           this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
             this.page_json = this._general.decodeJSON(resp.data);
-            // console.log(this.page_json)
+            console.log(this.page_json)
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
           })
         }
         else if(param_target == 'funnel') {
-          this.funnel.getSingleFunnelpage(this.req.pid).subscribe((resp:any)=>{
-            console.log(resp);
+          this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
+            this.page_json = this._general.decodeJSON(resp.data);
+            console.log(this.page_json)
+            this._general.fetchMenus().then(resp => {
+              this.setMenu(this.page_json.sections, resp);
+            })
           })
         }
       }

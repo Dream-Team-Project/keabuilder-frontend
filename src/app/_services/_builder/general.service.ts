@@ -1023,10 +1023,10 @@ export class GeneralService {
         }); 
       }
       else if(this.target.type == 'funnel'){
-        // this.funnelService.savePreview(prevObj).subscribe((resp:any)=>{
-        //   if(resp.success) resolve(true);
-        //   else resolve(false);
-        // }); 
+        this.funnelService.saveFunnelPreview(prevObj).subscribe((resp:any)=>{
+          if(resp.success) resolve(true);
+          else resolve(false);
+        }); 
       }
       else resolve(false);
     })

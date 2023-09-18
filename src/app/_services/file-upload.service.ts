@@ -49,6 +49,7 @@ export class FileUploadService {
   copyImgApi = "/api/copyimage"
   deleteimageApi = "/api/deleteimage";
   // images
+
   // page templates
   savetemplatehtmlApi = "/api/savetemplatehtml"
   allpagetemplatesApi = "/api/allpagetemplates";
@@ -57,7 +58,9 @@ export class FileUploadService {
   updatepagetemplateApi = "/api/updatepagetemplate";
   deletepagetemplateApi = "/api/deletepagetemplate";
   copytemplatepageApi =  "/api/copyTemplateToPage"; 
+  previewtemplateApi='/previewtemplate';
   // page templates
+
   // section templates
   allsectemplatesApi = "/api/allsectiontemplates";
   savesectemplateApi = "/api/savesectiontemplate";
@@ -354,6 +357,12 @@ export class FileUploadService {
     return this.http.delete(this.deletepagetemplateApi + '/' + id)
     .pipe(catchError(this.errorHandler));
   }
+
+  previewpagetemplate(obj:any):Observable<any> {
+    return this.http.post(this.previewtemplateApi,obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   searchquerysavedtemplates(data:any):Observable<any> {
     data.user_id=this.uuid;
     return this.http.post("/api/searchquerysavedtemplates",data).pipe(catchError(this.errorHandler));

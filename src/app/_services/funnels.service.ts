@@ -13,6 +13,8 @@ providedIn: 'root'
 
 export class FunnelService {
 
+  savePreviewApi = '/api/savefunnelpreview';
+  getpreviewfunnelApi='/getpreviewfunnelstep';
   uniquestepId:any;
   uuid:any = '';
   funnelname:any = '';
@@ -26,6 +28,13 @@ export class FunnelService {
 
   getSingleFunnel(uniqueid:string): Observable<any> {
     return this.http.get('/api/getsinglefunnnel/'+this.uuid+'/'+uniqueid);
+  }
+  saveFunnelPreview(pagedata: any): Observable<any> {
+    return this.http.post(this.savePreviewApi, pagedata);
+  }
+
+  getpreviewfunnelstep(obj:any): Observable<any> {
+    return this.http.post(this.getpreviewfunnelApi,obj);
   }
 
   savefunneldb(data:any):Observable<any> {
