@@ -1,6 +1,6 @@
 <ng-container *ngIf="target == 'main' && page_json?.header.id">
     <header [id]="'kb-header-'+page_json?.header.id">
-        <app-page-view [target]="'header'" [target_id]="page_json?.header.id"></app-page-view>
+        <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target]="'header'"></app-page-view>
     </header>
 </ng-container>
 <div [id]="'kb-'+target" [ngStyle]="target == 'main' ? _style.getBlockStyle(page_json?.mainstyle) : ''">
@@ -13,7 +13,6 @@
             [class.kb-block-redirection]="section.redirection?.link"
             [ngClass]="_style.getHideCls(section.hide)"
             [class.kb-block-none]="_style.getDisplay(section.hide)"
-            [ngStyle]="_style.getBlockStyle(section.style)"
             [id]="section.id" class="kb-section kb-block-container">
             <div class="kb-drag-container">
                 <!-- rows start -->
@@ -24,7 +23,6 @@
                     [class.kb-block-redirection]="row.redirection?.link"
                     [ngClass]="_style.getHideCls(row.hide)"
                     [class.kb-block-none]="_style.getDisplay(row.hide)"
-                    [ngStyle]="_style.getBlockStyle(row.style)"
                     [id]="row.id" class="kb-row kb-block-container">
                     <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                     [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
@@ -36,7 +34,6 @@
                             [attr.data-link]="column.redirection ? column.redirection.link : ''"
                             [attr.data-target]="column.redirection ? column.redirection.target : ''"
                             [class.kb-block-redirection]="column.redirection?.link"
-                            [ngStyle]="_style.getBlockStyle(column.style)"
                             [ngClass]="_style.getHideCls(column.hide)"
                             [class.kb-block-none]="_style.getDisplay(column.hide)"
                             [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
@@ -54,7 +51,7 @@
                                     [style.justifyContent]="_style.getBlockParamValue(element.item_alignment)"
                                     [class.kb-block-none]="_style.getDisplay(element.hide)">
                                     <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <img [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                        <img
                                             [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
                                             alt="image" width="auto"
                                             [class.dummyImg]="!element.content.src">
@@ -62,7 +59,7 @@
                                     <div *ngSwitchCase="'video'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <div [ngSwitch]="_style.video_type">
                                             <div *ngSwitchCase="'link'">
-                                                <video [ngStyle]="_style.getBlockStyle(element.content.style)"
+                                                <video
                                                 [autoplay]="element.content.autoplay"
                                                 [muted]="element.content.muted"
                                                 [loop]="element.content.loop"
@@ -72,13 +69,12 @@
                                                 </video>
                                             </div>
                                             <div *ngSwitchCase="'iframe'">
-                                                <div [innerHTML]="element.content.iframe | safeHtml" [ngStyle]="_style.getBlockStyle(element.content.style)"></div>
+                                                <div [innerHTML]="element.content.iframe | safeHtml"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'button'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <a *ngIf="element.content.btntype != 'regular' else regular"
-                                            [ngStyle]="_style.getBlockStyle(element.content.style)"
                                             class="kb-default-btn kb-offer-btn"
                                             [attr.kb-btn-type]="element.content.btntype"
                                             [attr.kb-redirect-link]="element.content.link"
@@ -90,7 +86,7 @@
                                                 {{element.content.subtext}}</div>
                                         </a>
                                         <ng-template #regular>
-                                            <a [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-default-btn" [href]="element.content.link"
+                                            <a class="kb-default-btn" [href]="element.content.link"
                                                 [target]="element.content.target">
                                                 <div>{{element.content.text}}</div>
                                                 <div class="subtext"
@@ -141,11 +137,11 @@
                                         <hr [ngStyle]="_style.getBlockStyle(element.content.style)">
                                     </div>
                                     <div *ngSwitchCase="'icon'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <div [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-icon-block"
+                                        <div class="kb-icon-block"
                                             [innerHTML]="element.content.icon_html | safeHtml"></div>
                                     </div>
                                     <div *ngSwitchDefault [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <div [ngStyle]="_style.getBlockStyle(element.content.style)" class="kb-text-block"
+                                        <div class="kb-text-block"
                                             [innerHTML]="element.content.html | safeHtml"></div>
                                     </div>
                                 </div>
@@ -163,6 +159,6 @@
 </div>
 <ng-container *ngIf="target == 'main' && page_json?.footer.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
-        <app-page-view [target]="'footer'" [target_id]="page_json?.footer.id"></app-page-view>
+        <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>
     </footer>
 </ng-container>
