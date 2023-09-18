@@ -99,14 +99,8 @@ export class NewFunnelsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showfunnels();
-    // this.viewDomain();
   }
-  // viewDomain(){
-  //   let obj={path:'',domain:'test57'};
-  //   this._pageviewService.checkdomain_subdomain(obj).subscribe((data:any)=>{
-  //    console.log(data) 
-  //   })
-  // }
+ 
   getServerData(event?: PageEvent) {
     var length = event?.length;
     var pageindex = event?.pageIndex;

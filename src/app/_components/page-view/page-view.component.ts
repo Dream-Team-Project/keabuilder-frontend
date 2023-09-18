@@ -87,7 +87,7 @@ export class PageViewComponent implements OnInit {
           this.req.pid = pid;
           if(param_target == 'website') {
             this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
-              if(resp?.data && resp?.data.length > 1) {
+              if(resp?.data && resp?.data.length > 0) {
                 this.page_json = this._general.decodeJSON(resp.data);
             console.log(this.page_json);
                 this.loadScript(this.page_json.tracking.header, document.head);
@@ -103,7 +103,7 @@ export class PageViewComponent implements OnInit {
           }
           else if(param_target == 'funnel') {
             this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
-              if(resp?.data && resp?.data.length > 1) {
+              if(resp?.data && resp?.data.length > 0) {
                 this.page_json = this._general.decodeJSON(resp.data);
                 this.loadScript(this.page_json.tracking.header, document.head);
                 this.addHead(this.page_json.head);
@@ -119,7 +119,7 @@ export class PageViewComponent implements OnInit {
           else this._general.redirectToPageNotFound();
         }
       }
-      else {
+      else if(domain){
         console.log(this.appHost);
         console.log(routeData);
         console.log(domain);
@@ -131,8 +131,8 @@ export class PageViewComponent implements OnInit {
         };
 
         this._pageviewService.checkdomain_subdomain(obj).subscribe((resp:any)=>{
-          
-            if(resp?.success && resp?.data && resp?.data.length > 1) {
+          console.log(resp.success)
+            if(resp?.success && resp?.data && resp?.data.length > 0) {
               this.page_json = this._general.decodeJSON(resp.data);
                console.log(this.page_json);
               this.loadScript(this.page_json.tracking.header, document.head);
@@ -143,9 +143,9 @@ export class PageViewComponent implements OnInit {
                 this.setMenu(this.page_json.sections, resp);
               }) 
           }
-          else{
-            this._general.redirectToPageNotFound();
-          }
+          // else{
+          //   this._general.redirectToPageNotFound();
+          // }
         })
       }
     })

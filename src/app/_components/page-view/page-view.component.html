@@ -1,4 +1,4 @@
-<ng-container *ngIf="target == 'main' && page_json?.header.id">
+<ng-container *ngIf="target == 'main' && page_json?.header?.id">
     <header [id]="'kb-header-'+page_json?.header.id">
         <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target]="'header'"></app-page-view>
     </header>
@@ -157,7 +157,7 @@
         <!-- sections end -->
     </div>
 </div>
-<ng-container *ngIf="target == 'main' && page_json?.footer.id">
+<ng-container *ngIf="target == 'main' && page_json?.footer?.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
         <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>
     </footer>

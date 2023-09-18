@@ -150,6 +150,7 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
 //account-settings
 
 var routes: Routes = [];
+// const currentDomain:any = 'newone.keapages.com';
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
 const appHost:any = environment.appHost;
