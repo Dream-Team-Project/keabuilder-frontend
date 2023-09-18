@@ -6,7 +6,7 @@
 <mat-menu #contextMenu="matMenu" class="kb-builder-options">
     <ng-template matMenuContent let-item="item">
         <button mat-menu-item (click)="_general.preview()" *ngIf="!ishf"><i [innerHTML]="'preview' | svg | safeHtml"></i> Preview</button>
-        <button mat-menu-item (click)="savePage(main, false)"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
+        <button mat-menu-item (click)="savePage()"><i [innerHTML]="'save' | svg | safeHtml"></i> Save</button>
         <button mat-menu-item (click)="openPageSetting(null)"><i [innerHTML]="'setting' | svg | safeHtml"></i> Setting</button>
         <button mat-menu-item (click)="wireframeToggle()"><i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe</button>
         <button mat-menu-item (click)="_section.undo()" *ngIf="_section.pageSessionArr[_section.pageSession.undo-1]"><i [innerHTML]="'undo' | svg | safeHtml"></i> Undo</button>
@@ -18,7 +18,7 @@
     <mat-checkbox [ngModel]="dntaskforsave"><small>Don't ask me again!</small></mat-checkbox>
     <div mat-dialog-actions>
         <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="savePage(main, false)">Save</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="savePage()">Save</button>
     </div>
 </ng-template>
 <ng-template #templatedialog>

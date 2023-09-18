@@ -82,7 +82,6 @@ export class BuilderComponent implements OnInit {
       this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
       if(_general.target.type == 'website' || _general.target.type == 'funnel' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
-            console.log(data);
             if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
             else if(!_general.isObjEmpty(data)) {
               if(this.ishf) _general.target.name = data.name;
@@ -117,7 +116,11 @@ export class BuilderComponent implements OnInit {
                 var jsonObj = _general.decodeJSON(data.json);
                 if(!this.ishf) {
                   _general.main.style = jsonObj.mainstyle;
-                  _general.main.page_code = jsonObj.page_code;
+                  _general.main.page_code = jsonObj.head.page_code;
+                  var style = document.createElement('STYLE');
+                  style.id = 'kb-append-style';
+                  style.innerHTML = _general.main.page_code;
+                  document.head.appendChild(style);
                 } 
                 jsonObj.header ? _general.selectedHeader = jsonObj.header : _general.includeLayout.header = false;
                 jsonObj.footer ? _general.selectedFooter = jsonObj.footer : _general.includeLayout.footer = false;
@@ -143,10 +146,6 @@ export class BuilderComponent implements OnInit {
               }
               else this._section.addSection(0);
               this._general.loading.success = true;
-              var style = document.createElement('STYLE');
-              style.id = 'kb-append-style';
-              style.innerHTML = _general.main.page_code;
-              document.head.appendChild(style);
             }
             else _general.redirectToPageNotFound();
         })
@@ -171,7 +170,7 @@ export class BuilderComponent implements OnInit {
   onKeydownHandler(event:KeyboardEvent) {
     var main = this.main.nativeElement;
     event.preventDefault();
-    this.savePage(main,  false);
+    this.savePage();
   }
 
   ngOnInit(): void {
@@ -213,7 +212,7 @@ export class BuilderComponent implements OnInit {
   savePageTemplate(main:any, obj:any) {
     obj.category = 'saved';
     this._general.templateobj = JSON.parse(JSON.stringify(obj));
-    this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
+    this._general.saveHTML(this._section.sections, false, true).then(res2 =>{
       let msg = 'Page has been saved as template';
       this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
       this.dialog.closeAll();
@@ -230,9 +229,9 @@ export class BuilderComponent implements OnInit {
     })
   }
 
-  saveHeaderFooter(main:any) {
+  saveHeaderFooter() {
     this._general.pathError = false;
-    this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
+    this._general.saveHeaderFooter(this._section.sections).then(res =>{
       if(!this.autoSaving) {
         if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         else if(res) {
@@ -248,10 +247,10 @@ export class BuilderComponent implements OnInit {
     });
   }
 
-  saveHTML(main:any, tglDraft:boolean) {
+  saveHTML() {
     if(!this.autoSaving) this._general.savingPage = true;
     this._general.pathError = false;
-    this._general.saveHTML(main, this._section.sections, false, false, tglDraft).then(res =>{
+    this._general.saveHTML(this._section.sections, false, false).then(res =>{
       if(!this.autoSaving) {
         if(this._general.pathError) this.openPageSetting(null);
         else if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -265,13 +264,12 @@ export class BuilderComponent implements OnInit {
     });
   }
 
-  savePage(main:any, tglDraft:boolean) {
-    !this.ishf ? this.saveHTML(main, tglDraft) : this.saveHeaderFooter(main);
+  savePage() {
+    !this.ishf ? this.saveHTML() : this.saveHeaderFooter();
   }
 
   savePreview() {
-    var main = this.main.nativeElement;
-    this._general.saveHTML(main, this._section.sections, true, false, false).then(e=>{
+    this._general.saveHTML(this._section.sections, true, false).then(e=>{
       if(this.initial) {
         this._general.pageSaved = true;
         this.initial = false;
@@ -330,7 +328,7 @@ export class BuilderComponent implements OnInit {
       this.autoSaveInterval = setInterval(()=>{
         if(!vm._general.pageSaved && vm._general.autosave) {
           vm.autoSaving = true;
-          vm.savePage(vm.main.nativeElement, false);
+          vm.savePage();
         }
       }, tm);
       this.autoSaveInterval;
@@ -352,12 +350,12 @@ export class BuilderComponent implements OnInit {
     if(e == 'preview') this.savePreview();
     else if(e == 'save') {
       this.trigger = 'saved'; 
-      this.savePage(main, false);
+      this.savePage();
     }
     else if(e == 'publish' || e == 'draft') {
       this._general.main.publish_status = e == 'publish';
       this.trigger = this._general.main.publish_status ? 'published' : 'draft';
-      this.savePage(main, true);
+      this.savePage();
     }
     else if(e == 'autosave') this.autoSaveTrigger();
     else if(e == 'setting') this.openPageSetting(null);
@@ -505,4 +503,5 @@ export class BuilderComponent implements OnInit {
     this.openDialog();
   }
 }
+
 

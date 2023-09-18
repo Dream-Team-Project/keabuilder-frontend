@@ -77,7 +77,7 @@ export class PageViewComponent implements OnInit {
           })
         }
         else if(param_target == 'funnel') {
-          this.funnel.getpreviewfunnelstep(this.req.pid).subscribe((resp:any)=>{
+          this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
             if(resp?.data && resp?.data.length > 1) {
               this.page_json = this._general.decodeJSON(resp.data);
               this.loadScript(this.page_json.tracking.header, document.head);

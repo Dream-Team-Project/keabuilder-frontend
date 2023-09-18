@@ -254,7 +254,8 @@ canActivate: [AuthGuard] },
   { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  { path: 'preview/:view_target/:view_id', component: PageViewComponent },
+  { path: ':view_type/:view_target/:user_id/:website_id/:page_id', component: PageViewComponent },
+  { path: 'preview/:view_type/:template_id', component: PageViewComponent },
   
   // builder
   

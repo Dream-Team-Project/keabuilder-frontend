@@ -58,7 +58,7 @@ export class FileUploadService {
   updatepagetemplateApi = "/api/updatepagetemplate";
   deletepagetemplateApi = "/api/deletepagetemplate";
   copytemplatepageApi =  "/api/copyTemplateToPage"; 
-  previewtemplateApi='/previewtemplate';
+  previewtemplateApi='/api/previewtemplate';
   // page templates
 
   // section templates

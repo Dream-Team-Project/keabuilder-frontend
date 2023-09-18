@@ -14,7 +14,7 @@ providedIn: 'root'
 export class FunnelService {
 
   savePreviewApi = '/api/savefunnelpreview';
-  getpreviewfunnelApi='/getpreviewfunnelstep';
+  getpreviewfunnelApi='/api/getpreviewfunnelstep';
   uniquestepId:any;
   uuid:any = '';
   funnelname:any = '';

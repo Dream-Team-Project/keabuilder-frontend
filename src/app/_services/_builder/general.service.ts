@@ -893,15 +893,9 @@ export class GeneralService {
 
   setFooter(footid:any) {
     return new Promise<any>((resolve, reject) => {
-      this._file.fetchFile('kb-footer-'+footid, 'footers').subscribe((data1)=>{
-        this.setMenu(data1.html).then(data2=>{
-          data1.id = footid;
-          data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
-          this.selectedFooter = data1;
-          this.includeLayout.footer = true;
-          resolve(true);
-        });
-      })
+      this.selectedFooter = {id: footid};
+      this.includeLayout.footer = true;
+      resolve(true);
     })
   }
   
@@ -925,68 +919,50 @@ export class GeneralService {
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target.type+'/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 
-  saveHeaderFooter(main:any, sections:any) {
+  saveHeaderFooter(sections:any) {
     this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
     return new Promise<any>((resolve, reject) => {
-      this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
-      this.removeExtra(false);
       this.setPageStyle(sections);
-      var obj:any = new Object();
-      obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
-      obj.html = '<style>'+this.getAllStyle()+'</style>'+this.removeCommments(this.pagehtml.querySelector('body').innerHTML);
       var dbobj:any = new Object();
       dbobj.name = this.target.name;
       dbobj.uniqueid = this.target.id;
-      var jsonObj = {sections: sections};
+      var jsonObj = {sections: sections, style: this.getAllStyle()};
       dbobj.json = this.encodeJSON(jsonObj);
       if(this.target.type == 'header') {
-        this._file.saveFile(obj, 'headers').subscribe(e=>{
-          this._file.updateheader(dbobj).subscribe((resp:any)=>{
-            this.pageSaved = true;
-            resolve(true);
-          })
-        },
-        error=>{resolve(false);});
+        this._file.updateheader(dbobj).subscribe((resp:any)=>{
+          this.pageSaved = true;
+          resolve(resp.success);
+        })
       }
       else if(this.target.type == 'footer') {
-        this._file.saveFile(obj, 'footers').subscribe(e=>{
-          this._file.updatefooter(dbobj).subscribe((resp:any)=>{
-            this.pageSaved = true;
-            resolve(true);
-          })
-        },
-        error=>{resolve(false);});
+        this._file.updatefooter(dbobj).subscribe((resp:any)=>{
+          this.pageSaved = true;
+          resolve(resp.success);
+        })
       }
     });
   }
 
-  saveHTML(main:any, sections:any, preview:boolean, template:boolean, tglDraft:boolean) {
+  saveHTML(sections:any, preview:boolean, template:boolean) {
     return new Promise<any>((resolve, reject) => {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
-      var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
-      var jsonObj = {head: '', header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
+      var jsonObj = {head: {}, header: false, footer: false, mainstyle: this.main.style, sections: sections};
       if(this.includeLayout.header && this.selectedHeader.id) jsonObj.header = this.selectedHeader;
       if(this.includeLayout.footer && this.selectedFooter.id) jsonObj.footer = this.selectedFooter;
-      let faviconIcon = '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
-      jsonObj.head = '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
-      '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
-      '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
-      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+faviconIcon+'">' +
-      '<meta charset="UTF-8">' +
-      '<meta name="description" content="'+this.main.description+'">' +
-      '<meta name="keywords" content="'+this.main.keywords+'">' +
-      '<meta name="author" content="'+this.main.author+'">' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-      '<title>'+this.main.title+'</title>' +
-      '<style>'+jsonObj.page_code+'</style>' +
-      '<style>'+this.getAllStyle()+'</style>';
+      jsonObj.head = {
+        title: this.main.title,
+        author: this.main.author,
+        keywords: this.main.keywords,
+        description: this.main.description,
+        page_code: this.main.page_code,
+        style: this.getAllStyle(),
+      }
       this.webpage.page_json = this.encodeJSON(jsonObj);
       if(template) {
-        console.log('Save as template');
         this.templateobj.template=this.encodeJSON(jsonObj);
         this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
           if(res1.success) resolve(true);
@@ -997,14 +973,9 @@ export class GeneralService {
         })
       }
       else if(preview) {
-        console.log('Save as preview');
         this.savePreview();
       }
       else {
-        console.log('Save as page');
-        //   this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
-        //   '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
-        //   this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
         this.savePage().then(resp=>resolve(resp));
       }
     });
@@ -1035,7 +1006,6 @@ export class GeneralService {
   savePage() {
     return new Promise<any>((resolve, reject) => {
       this.updatePageDB().then(e=>{
-        console.log(e);
         if(e.found == 1) {
           this.pathError = true;
           resolve(false);
@@ -1084,39 +1054,6 @@ export class GeneralService {
       }
       else resolve(false);
     })
-  }
-
-  removeCommments(html:any) {
-    html = html.replaceAll('<!--?php','<?php').replaceAll('?-->','?>');
-    return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
-  }
-
-  removeExtra(preview:boolean) {
-    var body = this.pagehtml.querySelector('BODY');
-    // encode text
-    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.encodeData(text.innerHTML);})
-    // encoded text
-    // remvoe extras
-    var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
-    /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
-    /ng-reflect-enter-predicate="(.*?)"/g, /ng-star-inserted/g, /cdk-drag/g, /cdk-drag-handle/g, /cdk-drop-list/g, 
-    /id="sectiongroup-(.*?)"/g, /id="rowgroup-(.*?)"/g, /id="elementgroup-(.*?)"/g];
-    body.querySelectorAll('.kb-ispan-add').forEach((item:any)=>item.remove());
-    body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
-    regExpArr.forEach((re:any)=>{body.innerHTML = body.innerHTML.replace(re, '');})
-    // remvoed extras
-    // decode text
-    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.decodeData(text.innerHTML);})
-    // decoded text
-    if(!preview) body.querySelectorAll('.kb-menu').forEach((item:any)=>{
-      item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
-    });
-    body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
-      var cb = item.getAttribute('html-data');
-      item.removeAttribute('html-data');
-      item.innerHTML = cb;
-    });
-    this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;
   }
 
   getAllStyle() {
