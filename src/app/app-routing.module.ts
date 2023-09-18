@@ -152,9 +152,8 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
 var routes: Routes = [];
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
-// console.log(currentDomain);
-// console.log(environment.appHost);
-if (currentDomain === environment.appHost) {
+const appHost:any = environment.appHost;
+if (currentDomain === appHost) {
   routes = [
 
     // auth
@@ -393,7 +392,7 @@ if (currentDomain === environment.appHost) {
 }
 else {
   routes = [
-    { path: '', component: PageViewComponent, data: {
+    { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
     },},

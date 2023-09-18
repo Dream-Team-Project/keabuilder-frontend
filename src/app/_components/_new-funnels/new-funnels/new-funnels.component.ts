@@ -8,6 +8,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { WebsiteService } from 'src/app/_services/website.service';
 import {MatDialog,} from '@angular/material/dialog';
+import { PageViewService } from 'src/app/_services/page-view.service';
 
 @Component({
   selector: 'app-new-funnels',
@@ -90,14 +91,22 @@ export class NewFunnelsComponent implements OnInit {
     private userService: UserService,
     private _file: FileUploadService,
     private websiteService: WebsiteService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public _pageviewService:PageViewService,
   ) {
     
   }
 
   ngOnInit(): void {
     this.showfunnels();
+    // this.viewDomain();
   }
+  // viewDomain(){
+  //   let obj={path:'',domain:'test57'};
+  //   this._pageviewService.checkdomain_subdomain(obj).subscribe((data:any)=>{
+  //    console.log(data) 
+  //   })
+  // }
   getServerData(event?: PageEvent) {
     var length = event?.length;
     var pageindex = event?.pageIndex;

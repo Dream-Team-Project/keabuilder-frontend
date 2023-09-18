@@ -8,6 +8,9 @@ import { StyleService } from 'src/app/_services/_builder/style.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import { PageViewService } from 'src/app/_services/page-view.service';
+
 
 
 @Component({
@@ -23,6 +26,7 @@ export class PageViewComponent implements OnInit {
   @Input ('target_sections') target_sections:any;
   @Input ('target_style') target_style:any;
 
+  appHost:any = environment.appHost;
   req = {
     uid: '',
     wid: '',
@@ -45,29 +49,30 @@ export class PageViewComponent implements OnInit {
     private _element: ElementService,
     private _file: FileUploadService,
     public _style: StyleService,
-    public _image: ImageService) {
+    public _image: ImageService,
+    private _pageviewService:PageViewService,) {
    }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      let view_type = params.get('view_type');
-      let param_target = params.get('view_target');
-      let uid = params.get('user_id');
-      let wid = params.get('website_id');
-      let pid = params.get('page_id');
-      let tempid = params.get('template_id');
-      if(view_type == 'preview' && param_target && uid && wid && pid && this.target == 'main') {
-        this.req.uid = uid
-        this.req.wid = wid;
-        this.req.pid = pid;
-        if(param_target == 'website') {
-          this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
-            console.log(resp)
+      const routeData:any = this.route.snapshot.data;
+      const domain = routeData.domain;
+      const path = routeData.path;
+      if(this.appHost === domain) {
+        let param_target = params.get('view_target');
+        let uid = params.get('user_id');
+        let wid = params.get('website_id');
+        let pid = params.get('page_id');
+        let tempid = params.get('template_id');
+        if(param_target == 'template' && tempid) {
+          let obj = {
+            tempid: tempid,
+            uid: this.req.uid,
+          }
+          this._file.previewpagetemplate(obj).subscribe((resp:any)=>{
             if(resp?.data && resp?.data.length > 1) {
               this.page_json = this._general.decodeJSON(resp.data);
-              this.loadScript(this.page_json.tracking.header, document.head);
               this.addHead(this.page_json.head);
-              this.loadScript(this.page_json.tracking.footer, document.body);
               document.head.innerHTML += this.page_json.head;
               this._general.fetchMenus().then(resp => {
                 this.setMenu(this.page_json.sections, resp);
@@ -76,38 +81,71 @@ export class PageViewComponent implements OnInit {
             else this._general.redirectToPageNotFound();
           })
         }
-        else if(param_target == 'funnel') {
-          this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
-            if(resp?.data && resp?.data.length > 1) {
-              this.page_json = this._general.decodeJSON(resp.data);
-              this.loadScript(this.page_json.tracking.header, document.head);
-              this.addHead(this.page_json.head);
-              this.loadScript(this.page_json.tracking.footer, document.body);
-              document.head.innerHTML += this.page_json.head;
-              this._general.fetchMenus().then(resp => {
-                this.setMenu(this.page_json.sections, resp);
-              })
-            }
-            else this._general.redirectToPageNotFound();
-          })
-        }
-        else this._general.redirectToPageNotFound();
-      }
-      else if(view_type == 'template' && tempid) {
-        let obj = {
-          tempid: tempid,
-          uid: this.req.uid,
-        }
-        this._file.previewpagetemplate(obj).subscribe((resp:any)=>{
-          if(resp?.data && resp?.data.length > 1) {
-            this.page_json = this._general.decodeJSON(resp.data);
-            this.addHead(this.page_json.head);
-            document.head.innerHTML += this.page_json.head;
-            this._general.fetchMenus().then(resp => {
-              this.setMenu(this.page_json.sections, resp);
+        else if(param_target && uid && wid && pid && this.target == 'main') {
+          this.req.uid = uid
+          this.req.wid = wid;
+          this.req.pid = pid;
+          if(param_target == 'website') {
+            this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
+              if(resp?.data && resp?.data.length > 1) {
+                this.page_json = this._general.decodeJSON(resp.data);
+            console.log(this.page_json);
+                this.loadScript(this.page_json.tracking.header, document.head);
+                this.addHead(this.page_json.head);
+                this.loadScript(this.page_json.tracking.footer, document.body);
+                document.head.innerHTML += this.page_json.head;
+                this._general.fetchMenus().then(resp => {
+                  this.setMenu(this.page_json.sections, resp);
+                })
+              }
+              else this._general.redirectToPageNotFound();
+            })
+          }
+          else if(param_target == 'funnel') {
+            this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
+              if(resp?.data && resp?.data.length > 1) {
+                this.page_json = this._general.decodeJSON(resp.data);
+                this.loadScript(this.page_json.tracking.header, document.head);
+                this.addHead(this.page_json.head);
+                this.loadScript(this.page_json.tracking.footer, document.body);
+                document.head.innerHTML += this.page_json.head;
+                this._general.fetchMenus().then(resp => {
+                  this.setMenu(this.page_json.sections, resp);
+                })
+              }
+              else this._general.redirectToPageNotFound();
             })
           }
           else this._general.redirectToPageNotFound();
+        }
+      }
+      else {
+        console.log(this.appHost);
+        console.log(routeData);
+        console.log(domain);
+        console.log(path.split('/')[1]);
+
+        let obj={
+          domain:domain,
+          path:path.split('/')[1]
+        };
+
+        this._pageviewService.checkdomain_subdomain(obj).subscribe((resp:any)=>{
+          
+            if(resp?.success && resp?.data && resp?.data.length > 1) {
+              this.page_json = this._general.decodeJSON(resp.data);
+               console.log(this.page_json);
+              this.loadScript(this.page_json.tracking.header, document.head);
+              this.addHead(this.page_json.head);
+              this.loadScript(this.page_json.tracking.footer, document.body);
+              document.head.innerHTML += this.page_json.head;
+              this._general.fetchMenus().then(resp => {
+                this.setMenu(this.page_json.sections, resp);
+              }) 
+          }
+          else{
+            this._general.redirectToPageNotFound();
+          }
         })
       }
     })
