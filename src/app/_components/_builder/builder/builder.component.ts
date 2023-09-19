@@ -20,7 +20,7 @@ import { ElementService } from 'src/app/_services/_builder/element.service';
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrls: ['./builder.component.css','../../material.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 
 export class BuilderComponent implements OnInit {
@@ -91,7 +91,7 @@ export class BuilderComponent implements OnInit {
                   if(_general.webpage.funneltype == 'order') {
                     _general.fetchOrderForms().then(data=>{
                       _general.order_forms = data;
-                      this._element.elementList['order_form'] = { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' };
+                      this._element.elementList['order_form'] = { content: { name: 'order-form-component', type: 'order_form' }, iconCls: 'fab fa-wpforms' };
                     });
                   }
                   else {
@@ -116,7 +116,11 @@ export class BuilderComponent implements OnInit {
                 var jsonObj = _general.decodeJSON(data.json);
                 if(!this.ishf) {
                   _general.main.style = jsonObj.mainstyle;
-                  _general.main.page_code = jsonObj.page_code;
+                  _general.main.page_code = jsonObj.head.page_code;
+                  var style = document.createElement('STYLE');
+                  style.id = 'kb-append-style';
+                  style.innerHTML = _general.main.page_code;
+                  document.head.appendChild(style);
                 } 
                 jsonObj.header ? _general.selectedHeader = jsonObj.header : _general.includeLayout.header = false;
                 jsonObj.footer ? _general.selectedFooter = jsonObj.footer : _general.includeLayout.footer = false;
@@ -142,10 +146,6 @@ export class BuilderComponent implements OnInit {
               }
               else this._section.addSection(0);
               this._general.loading.success = true;
-              var style = document.createElement('STYLE');
-              style.id = 'kb-append-style';
-              style.innerHTML = _general.main.page_code;
-              document.head.appendChild(style);
             }
             else _general.redirectToPageNotFound();
         })
@@ -170,7 +170,7 @@ export class BuilderComponent implements OnInit {
   onKeydownHandler(event:KeyboardEvent) {
     var main = this.main.nativeElement;
     event.preventDefault();
-    this.savePage(main,  false);
+    this.savePage();
   }
 
   ngOnInit(): void {
@@ -211,12 +211,12 @@ export class BuilderComponent implements OnInit {
 
   savePageTemplate(main:any, obj:any) {
     obj.category = 'saved';
-    this._general.templateobj=JSON.parse(JSON.stringify(obj));
-      this._general.saveHTML(main, this._section.sections, false, true, false).then(res2 =>{
-        let msg = 'Page has been saved as template';
-        this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
-        this.dialog.closeAll();
-      });
+    this._general.templateobj = JSON.parse(JSON.stringify(obj));
+    this._general.saveHTML(this._section.sections, false, true).then(res2 =>{
+      let msg = 'Page has been saved as template';
+      this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+      this.dialog.closeAll();
+    });
   
   }
 
@@ -229,9 +229,9 @@ export class BuilderComponent implements OnInit {
     })
   }
 
-  saveHeaderFooter(main:any) {
+  saveHeaderFooter() {
     this._general.pathError = false;
-    this._general.saveHeaderFooter(main, this._section.sections).then(res =>{
+    this._general.saveHeaderFooter(this._section.sections).then(res =>{
       if(!this.autoSaving) {
         if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
         else if(res) {
@@ -247,10 +247,10 @@ export class BuilderComponent implements OnInit {
     });
   }
 
-  saveHTML(main:any, tglDraft:boolean) {
+  saveHTML() {
     if(!this.autoSaving) this._general.savingPage = true;
     this._general.pathError = false;
-    this._general.saveHTML(main, this._section.sections, false, false, tglDraft).then(res =>{
+    this._general.saveHTML(this._section.sections, false, false).then(res =>{
       if(!this.autoSaving) {
         if(this._general.pathError) this.openPageSetting(null);
         else if(!res) this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
@@ -264,13 +264,12 @@ export class BuilderComponent implements OnInit {
     });
   }
 
-  savePage(main:any, tglDraft:boolean) {
-    !this.ishf ? this.saveHTML(main, tglDraft) : this.saveHeaderFooter(main);
+  savePage() {
+    !this.ishf ? this.saveHTML() : this.saveHeaderFooter();
   }
 
   savePreview() {
-    var main = this.main.nativeElement;
-    this._general.saveHTML(main, this._section.sections, true, false, false).then(e=>{
+    this._general.saveHTML(this._section.sections, true, false).then(e=>{
       if(this.initial) {
         this._general.pageSaved = true;
         this.initial = false;
@@ -329,7 +328,7 @@ export class BuilderComponent implements OnInit {
       this.autoSaveInterval = setInterval(()=>{
         if(!vm._general.pageSaved && vm._general.autosave) {
           vm.autoSaving = true;
-          vm.savePage(vm.main.nativeElement, false);
+          vm.savePage();
         }
       }, tm);
       this.autoSaveInterval;
@@ -351,12 +350,12 @@ export class BuilderComponent implements OnInit {
     if(e == 'preview') this.savePreview();
     else if(e == 'save') {
       this.trigger = 'saved'; 
-      this.savePage(main, false);
+      this.savePage();
     }
     else if(e == 'publish' || e == 'draft') {
       this._general.main.publish_status = e == 'publish';
       this.trigger = this._general.main.publish_status ? 'published' : 'draft';
-      this.savePage(main, true);
+      this.savePage();
     }
     else if(e == 'autosave') this.autoSaveTrigger();
     else if(e == 'setting') this.openPageSetting(null);
@@ -370,7 +369,6 @@ export class BuilderComponent implements OnInit {
     if(this.transferData) {
       var appendIndex =  event.currentIndex-1;
       var appendData = this.transferData;
-      console.log(appendData.type);
       if(appendData.type == 'image') {
         var image = JSON.parse(JSON.stringify(this._element.elementList['image']));
         image.content.src = appendData.ext_link ? appendData.path : this._image.uploadImgPath+appendData.path;
@@ -385,13 +383,13 @@ export class BuilderComponent implements OnInit {
       }
       if(appendData.type == 'form') {
         var form = JSON.parse(JSON.stringify(this._element.elementList['form']));
-        form.content = this._element.setFormIframe(form.content, appendData);
+        form.content = this._element.setFormId(form.content, appendData);
         form.content.itemset = true;
         appendData = form;
       }
       if(appendData.type == 'order_form') {
         var order_form = JSON.parse(JSON.stringify(this._element.elementList['order_form']));
-        order_form.content = this._element.setOrderFormIframe(order_form.content, appendData);
+        order_form.content = this._element.setOrderFormId(order_form.content, appendData);
         order_form.content.itemset = true;
         appendData = order_form;
       }
@@ -487,16 +485,11 @@ export class BuilderComponent implements OnInit {
    }
   }
 
-  iframeLoad(iframe:any) {
-    setTimeout(()=>{
-      iframe.height = iframe.contentWindow?.document?.documentElement?.scrollHeight + 'px';
-    }, 100)
-  }
-
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
   elementDblClk(element:any) {
-    if(element.content.name != 'iframe') this.openSetting(element);
+    if(element.content.name != 'form-component' && 
+    element.content.name != 'order-form-component') this.openSetting(element);
   }
 
   isBlockActive(block:any) {
@@ -510,4 +503,5 @@ export class BuilderComponent implements OnInit {
     this.openDialog();
   }
 }
+
 

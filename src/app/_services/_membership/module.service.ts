@@ -10,13 +10,13 @@ import { TokenStorageService } from '../token-storage.service';
 export class ModuleService {
 
   // API url
-  bycourseidApi = './api/modulebycourseid';
-  allApi = './api/allmodules';
-  singleApi = './api/singlemodule';
-  createApi = './api/createmodule';
-  updateApi = './api/updatemodule';
-  deleteApi = './api/deletemodule';
-  searchmodulequeryApi = './api/searchmodulequery';
+  bycourseidApi = '/api/modulebycourseid';
+  allApi = '/api/allmodules';
+  singleApi = '/api/singlemodule';
+  createApi = '/api/createmodule';
+  updateApi = '/api/updatemodule';
+  deleteApi = '/api/deletemodule';
+  searchmodulequeryApi = '/api/searchmodulequery';
   uuid:any = '';
   constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;

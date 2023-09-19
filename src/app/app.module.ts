@@ -65,6 +65,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
+import { ApiInterceptor } from './_interceptors/api.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -76,7 +78,7 @@ import {environment} from '../environments/environment';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe
+    SvgPipe,
   ],
   imports: [
     AppRoutingModule,
@@ -135,9 +137,10 @@ import {environment} from '../environments/environment';
     MatAutocompleteModule,
     NgxStripeModule.forRoot(environment.stripekey),
   ],
-  providers: [authInterceptorProviders,
-     {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}},
+  providers: [authInterceptorProviders, 
+    { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000} },
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
     MatTableModule
   ],
   bootstrap: [AppComponent],

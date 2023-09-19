@@ -190,7 +190,7 @@ export class FormService {
       this.setFormStyle(this.formEleTypes).then(style=>{
         this.form.style = this._general.encodeJSON(this.formEleTypes);
         this.form.appendstyle = this._general.encodeJSON(style);
-        this.form.thankyoumessage = this.getThankyouMsg();
+        this.form.thankyoumessage = this.getThankyouMsg(this.form);
         this._file.updateform(this.form).subscribe((resp:any)=>{
           resolve(resp);
           this.getForm(this.form.uniqueid);
@@ -199,8 +199,8 @@ export class FormService {
     })
   }
 
-  getThankyouMsg() {
-    return this.form.thankyoumessage ? this.form.thankyoumessage : this.thankyoumessage;
+  getThankyouMsg(form:any) {
+    return form.thankyoumessage ? form.thankyoumessage : this.thankyoumessage;
   }
 
   setFormStyle(ele:any) {

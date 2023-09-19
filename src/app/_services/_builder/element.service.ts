@@ -76,7 +76,7 @@ export class ElementService {
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
     // divider
     // form
-    form: { content: { name: 'iframe', type: 'form', src: '', height: '' }, iconCls: 'fab fa-wpforms' },
+    form: { content: { name: 'form-component', type: 'form' }, iconCls: 'fab fa-wpforms' },
     // form
     // code block
     code: { content: { name: 'code', html: `` }, iconCls: 'fas fa-code' },
@@ -85,7 +85,7 @@ export class ElementService {
     icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
     // icon
     // order form
-    // order_form: { content: { name: 'iframe', type: 'order_form', src: '', height: '' }, iconCls: 'fab fa-wpforms' },
+    // order_form: { content: { name: 'order-form-component', type: 'order_form' }, iconCls: 'fab fa-wpforms' },
     // order form
   };
   preMenuItems: any = ['Home', 'About', 'Blog', 'Contact'];
@@ -604,15 +604,13 @@ export class ElementService {
     return element;
   }
 
-  setOrderFormIframe(element: any, adata: any) {
+  setOrderFormId(element: any, adata: any) {
     element.data_id = adata.uniqueid;
-    element.src = window.origin + '/fetch-orderform/' + adata.user_id + '/' + adata.uniqueid;
     return element;
   }
 
-  setFormIframe(element: any, adata: any) {
+  setFormId(element: any, adata: any) {
     element.data_id = adata.uniqueid;
-    element.src = window.origin + '/fetch-form/' + adata.user_id + '/' + adata.uniqueid;
     return element;
   }
 
@@ -625,19 +623,17 @@ export class ElementService {
       if (element?.itemset) delete element?.itemset;
       else element = this.setMenu(element, JSON.parse(JSON.stringify(this._general.menus[0])));
     }
-    else if (element.name == 'iframe') {
-      if(element.type == 'form') {
-        if (element?.itemset) delete element?.itemset;
-        else element = this.setFormIframe(element, JSON.parse(JSON.stringify(this._general.forms[0])));
-      }
-      if(element.type == 'order_form') {
-        if (element?.itemset) delete element?.itemset;
-        else element = this.setOrderFormIframe(element, JSON.parse(JSON.stringify(this._general.order_forms[0])));
-      }
+    else if(element.name == 'form-component') {
+      if (element?.itemset) delete element?.itemset;
+      else element = this.setOrderFormId(element, JSON.parse(JSON.stringify(this._general.forms[0])));
+    }
+    else if(element.name == 'order-form-component') {
+      if (element?.itemset) delete element?.itemset;
+      else element = this.setFormId(element, JSON.parse(JSON.stringify(this._general.order_forms[0])));
     }
     var tempObj = JSON.parse(JSON.stringify(this.elementObj));
     tempObj.content = JSON.parse(JSON.stringify(element));
-    if (element.name != 'iframe' && element.name != 'code') {
+    if (element.name != 'form-component' && element.name != 'order-form-component' && element.name != 'code') {
       var fntSz = '14px';
       switch (tempObj.content.name) {
         case 'heading':

@@ -1,10 +1,9 @@
-<div *ngIf="_form.form else notfound">
-   
-    <form *ngIf="!thankyou else thankumsg" (ngSubmit)="!submitting ? formSubmit() : ''" class="kb-form"
-        [style.width]="_form.currentScrWdth < 800 ? '100%' : ''" [id]="'kb-form-'+_form.form.uniqueid"
-        [name]="'kb-form-'+_form.form.uniqueid">
-        <mat-error *ngIf="error">{{errormessage}}</mat-error>
-        <div *ngFor="let fe of _form.formField, index as fei" [id]="fe.id"
+<div *ngIf="formObj.form else notfound">
+    <form *ngIf="!formObj.thankyou else thankumsg" (ngSubmit)="!formObj.submitting ? formSubmit() : ''" class="kb-form"
+        [style.width]="formObj.form.currentScrWdth < 800 ? '100%' : ''" [id]="'kb-form-'+formObj.form.uniqueid"
+        [name]="'kb-form-'+formObj.form.uniqueid">
+        <mat-error *ngIf="formObj.error">{{formObj.errormessage}}</mat-error>
+        <div *ngFor="let fe of formObj.formField, index as fei" [id]="fe.id"
             [style.justifyContent]="!fe.input ? _form.justifyContent(fe.name) : ''" [id]="'kb-'+fe.type+'-'+fe.id"
             class="kb-form-element" [ngSwitch]="fe.name">
             <div *ngSwitchCase="'heading'" class="kb-form-heading" [innerHTML]="fe.html | safeHtml"></div>
@@ -58,13 +57,13 @@
                 </ng-template>
             </div>
         </div>
-        <div *ngIf="_form.formField.length != 0" class="kb-form-btn">
-            <button class="kb-form-button" [id]="'kb-form-btn-'+_form.form.uniqueid" [disabled]="submitting"
-                [ngStyle]="getBlockStyle('button')" type="submit">{{_form.form.btntxt}}</button>
+        <div *ngIf="formObj.formField.length != 0" class="kb-form-btn">
+            <button class="kb-form-button" [id]="'kb-form-btn-'+formObj.form.uniqueid" [disabled]="formObj.submitting"
+                [ngStyle]="getBlockStyle('button')" type="submit">{{formObj.form.btntxt}}</button>
         </div>
     </form>
     <ng-template #thankumsg>
-       <div id="thanku" [innerHTML]="_form.getThankyouMsg() | safeHtml" [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
+       <div id="thanku" [innerHTML]="_form.getThankyouMsg(formObj.form) | safeHtml" [style.margin]="getBlockStyle('form')['margin']" [style.padding]="getBlockStyle('form')['padding']">
             <!-- <div><img src="./assets/default/images/kbtick.png" width="100px" height="auto"></div> -->
             <!-- <h4>Thankyou</h4>
             <div>

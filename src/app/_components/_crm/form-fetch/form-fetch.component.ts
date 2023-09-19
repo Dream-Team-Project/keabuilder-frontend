@@ -15,15 +15,20 @@ import { EmailService } from 'src/app/_services/_crm/email.service';
 })
 export class CrmFormFetchComponent implements OnInit { 
   
-  submitting:boolean = false;
-  thankyou:boolean = false;
-  showErrors:boolean = false;
-  formans:Array<any> = [];
-  contact:any = {};
-  error=false;
-  errormessage:any;
-  
+  @Input ('append_form_id') append_form_id:any = '';
 
+  formObj:any = {
+    form: this._form.form,
+    formField: [],
+    submitting: false,
+    thankyou: false,
+    formans: [],
+    error: false,
+    errormessage: '',
+    currentScrWdth: ''
+  }
+  contact:any = {};
+  
   constructor(
     private route: ActivatedRoute,
     public _form: FormService,
@@ -36,15 +41,8 @@ export class CrmFormFetchComponent implements OnInit {
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var form_id = params.get('form_id');
-      _form.getForm(form_id).then((data:any)=>{
-        this.contact=data;
-        var style = document.createElement('STYLE');
-        style.innerHTML = data.appendstyle;
-        document.head.appendChild(style);
-        this.fetchsingleemail();
-      })
+      if(form_id) this.fetchForm(form_id);
     })
-    
   }
 
   @HostListener('window:resize', ['$event'])
@@ -53,20 +51,32 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    if(this.append_form_id) this.fetchForm(this.append_form_id);
   };
 
+  fetchForm(form_id:string) {
+    this._form.getForm(form_id).then((data:any)=>{
+      this.formObj.form = data;
+      this.formObj.formField = this._form.formField;
+      var style = document.createElement('STYLE');
+      style.innerHTML = data.appendstyle;
+      document.head.appendChild(style);
+      this.fetchsingleemail();
+    })
+  }
+
   fetchsingleemail(){
-    this.email.getsingleemail({uniqueid:this.contact.emailid}).subscribe((data:any)=>{
+    this.email.getsingleemail({uniqueid:this.formObj.emailid}).subscribe((data:any)=>{
       if(data.success==true){
-      this._form.singleemail.id=data.data[0].id;
-      this._form.singleemail.uniqueid=data.data[0].uniqueid;
-      this._form.singleemail.name=data.data[0].name;
-      this._form.singleemail.subject=data.data[0].subject;
-      this._form.singleemail.body=data.data[0].body;
+        this._form.singleemail.id=data.data[0].id;
+        this._form.singleemail.uniqueid=data.data[0].uniqueid;
+        this._form.singleemail.name=data.data[0].name;
+        this._form.singleemail.subject=data.data[0].subject;
+        this._form.singleemail.body=data.data[0].body;
       }
     })
   }
+
   valChng(ff:any, i:number) {
     var value:boolean = !ff.options[i].selected;
     if(ff.type == 'radio') {
@@ -86,12 +96,12 @@ export class CrmFormFetchComponent implements OnInit {
   validateFields() {
     return new Promise((resolve, reject)=>{
       var res = true;
-      this.formans = this._form.formField.filter((fe:any)=> fe.field_tag);
-      this.formans.forEach((ff:any, index:number)=>{
+      this.formObj.formans = this.formObj.formField.filter((fe:any)=> fe.field_tag);
+      this.formObj.formans.forEach((ff:any, index:number)=>{
         ff.error = !ff.value && ff.required;
         if(ff.type == 'email') ff.invalid = !this.isEmailValid(ff.value);
         if(ff.error || ff.invalid) res = false;
-        if(this.formans.length-1 == index) resolve(res);
+        if(this.formObj.formans.length-1 == index) resolve(res);
       })
     })
   }
@@ -102,30 +112,33 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   formSubmit() {
-    this.submitting = true;
+    this.formObj.submitting = true;
     this.validateFields().then(res=>{
       if(res) {
-        var formAnsJSON = this.formans.map((obj:any)=>{
+        var formAnsJSON = this.formObj.formans.map((obj:any)=>{
           if(obj.default_field) this.contact[obj.name.replaceAll('-', '')] = obj.value;
           return {id: obj.id, value: obj.value}
         });
         this.contact.fieldans = JSON.stringify(formAnsJSON);
+        this.contact.form_id=this.formObj.form.uniqueid;
+        this.contact.lists=this.formObj.form.lists;
+        this.contact.tags=this.formObj.form.tags;
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
-            this.error=false;
-            this.errormessage='';
+            this.formObj.error=false;
+            this.formObj.errormessage='';
             this.emailSent().then(resp=>{
               this.notifyemailSent().then(resp=>{
                 var redirection = this._form.form.redirection;
                 if(this._form.form.redirectionenabled && redirection) window.location.replace(redirection);
-                else this.thankyou = true;
+                else this.formObj.thankyou = true;
               })
             })
           }
           else {
-            this.submitting = false;
-            this.error=true;
-            this.errormessage=resp?.message;
+            this.formObj.submitting = false;
+            this.formObj.error=true;
+            this.formObj.errormessage=resp?.message;
             
           }
         });
@@ -133,7 +146,7 @@ export class CrmFormFetchComponent implements OnInit {
       else {
         var element:any = document.getElementById('kb-form-'+this._form.submission.form_id);
         element?.scrollIntoView();
-        this.submitting = false;
+        this.formObj.submitting = false;
       }
     });
   }

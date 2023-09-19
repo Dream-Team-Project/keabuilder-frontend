@@ -263,7 +263,7 @@ fetchsingleemail(){
 
   openSettingDialog(templateRef: TemplateRef<any>) {
     this.formdialog = 'Setting';
-    this._form.form.thankyoumessage = this._form.getThankyouMsg();
+    this._form.form.thankyoumessage = this._form.getThankyouMsg(this._form.form);
     this.dialogData = this.dialog.open(templateRef);
     this.dialogData.afterClosed().subscribe((data:any)=>{
       if(this.validate.name.invalid || this.validate.relink.invalid) this.openSettingDialog(this.settingdialog);

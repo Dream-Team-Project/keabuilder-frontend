@@ -33,23 +33,23 @@ export class DomainService {
   }
 
   oninsertdomain(data:any):Observable<any> {
-    return this.http.post("./api/insertdomaindata/"+this.uuid, {
+    return this.http.post("/api/insertdomaindata/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   getDomains(): Observable<any> {
-    return this.http.get('./api/getdomaindata/'+this.uuid);
+    return this.http.get('/api/getdomaindata/'+this.uuid);
   }
 
   updatedomaindata(data:any):Observable<any> {
-    return this.http.post("./api/updatedomaindata/"+this.uuid, {
+    return this.http.post("/api/updatedomaindata/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   ondeletedomain(id:any):Observable<any> {
-    return this.http.post("./api/deletedomaindata/"+this.uuid, {
+    return this.http.post("/api/deletedomaindata/"+this.uuid, {
       id,
     }, httpOptions);
   }

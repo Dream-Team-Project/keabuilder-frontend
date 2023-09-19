@@ -41,10 +41,10 @@ export class FieldService {
   ];
   
   user_id:any = '';
-  allfields = './api/allfields';
-  addfields = './api/addfield';
-  updatefields = './api/updatefield';
-  deletefields = './api/deletefield';
+  allfields = '/api/allfields';
+  addfields = '/api/addfield';
+  updatefields = '/api/updatefield';
+  deletefields = '/api/deletefield';
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;

@@ -8,15 +8,15 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class LessonService {
 
   // lesson API url
-  bycourse_moduleidApi = './api/bycourse-moduleid';
-  bycourseidApi = './api/lessonbycourseid';
-  onlybycourseidApi = './api/onlymodulebyid';
-  allApi = './api/alllessons';
-  singleApi = './api/singlelesson';
-  createApi = './api/createlesson';
-  updateApi = './api/updatelesson';
-  deleteApi = './api/deletelesson';
-  findnextApi = './api/findlesson';
+  bycourse_moduleidApi = '/api/bycourse-moduleid';
+  bycourseidApi = '/api/lessonbycourseid';
+  onlybycourseidApi = '/api/onlymodulebyid';
+  allApi = '/api/alllessons';
+  singleApi = '/api/singlelesson';
+  createApi = '/api/createlesson';
+  updateApi = '/api/updatelesson';
+  deleteApi = '/api/deletelesson';
+  findnextApi = '/api/findlesson';
 
   constructor(private http:HttpClient) {   }
 

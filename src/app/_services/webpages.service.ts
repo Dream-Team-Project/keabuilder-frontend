@@ -17,7 +17,9 @@ export class WebpagesService {
   getwebpagebypathApi = '/api/getwebpagebypath/';
   createwebpagesApi = '/api/createwebpage/';
   updatewebpagesApi = '/api/updatewebpage/';
+  savePreviewApi = '/api/savepreview/';
   getsinglewebpageApi = '/api/singlewebpagedata/';
+  getpreviewwebpageApi = '/api/previewwebpagedata';
   namepathchangesApi = '/api/namepathchangeswebsite/';
   validatepagesApi = '/api/validatepage/';
   savequickpagesdetailsApi = '/api/savequickpagesdetails/';
@@ -54,12 +56,20 @@ export class WebpagesService {
     return this.http.get(this.getsinglewebpageApi+this.uuid+'/'+uniqueid);
   }
 
+  getpreviewWebpage(obj:any): Observable<any> {
+    return this.http.post(this.getpreviewwebpageApi,obj);
+  }
+
   createWebpage(pagedata: any): Observable<any> {
     return this.http.post(this.createwebpagesApi+this.uuid, pagedata);
   }
 
   updateWebpage(pagedata: any): Observable<any> {
     return this.http.post(this.updatewebpagesApi+this.uuid, pagedata);
+  }
+
+  savePreview(pagedata: any): Observable<any> {
+    return this.http.post(this.savePreviewApi, pagedata);
   }
 
   namepathchanges(id:string, name:string, which:string):Observable<any> {
@@ -138,7 +148,7 @@ export class WebpagesService {
   }
   searchquerywebpages(data:any):Observable<any> {
     data.user_id=this.uuid;
-    return this.http.post("./api/searchquerywebpages",data, httpOptions);
+    return this.http.post("/api/searchquerywebpages",data, httpOptions);
   }
 
 }

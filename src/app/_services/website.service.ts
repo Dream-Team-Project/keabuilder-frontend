@@ -29,35 +29,35 @@ export class WebsiteService {
   }
 
   getuniqwebsites(data: any):Observable<any> {
-    return this.http.post("./api/getuniqwebsites/"+this.uuid, {
+    return this.http.post("/api/getuniqwebsites/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   createwebsite(data: any):Observable<any> {
-    return this.http.post("./api/createnewwebsite/"+this.uuid, {
+    return this.http.post("/api/createnewwebsite/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   duplicatewebsite(data: any):Observable<any> {
-    return this.http.post("./api/duplicatewebsite/"+this.uuid, {
+    return this.http.post("/api/duplicatewebsite/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   deletewebsite(data: any):Observable<any> {
-    return this.http.post("./api/deletewebsite/"+this.uuid, {
+    return this.http.post("/api/deletewebsite/"+this.uuid, {
       data,
     }, httpOptions);
   }
 
   updatesitedetails(obj:any):Observable<any> {
-    return this.http.post("./api/updatesitedetails/"+this.uuid, obj, httpOptions);
+    return this.http.post("/api/updatesitedetails/"+this.uuid, obj, httpOptions);
   }
 
   setpublishstatus(status: any):Observable<any> {
-    return this.http.post("./api/setPublishstatus/"+this.uuid, {
+    return this.http.post("/api/setPublishstatus/"+this.uuid, {
       status,
     }, httpOptions);
   }
@@ -75,13 +75,13 @@ export class WebsiteService {
   }
   
   querystringmanagewebsite(data:any):Observable<any> {
-    return this.http.post("./api/querystringmanagewebsite/"+this.uuid, {
+    return this.http.post("/api/querystringmanagewebsite/"+this.uuid, {
       data
     }, httpOptions);
   }
 
   shortbypaginatorwebsite(data:any):Observable<any> {
-    return this.http.post("./api/shortbypaginatorwebsite/"+this.uuid, {
+    return this.http.post("/api/shortbypaginatorwebsite/"+this.uuid, {
       data
     }, httpOptions);
   }

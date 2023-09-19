@@ -15,92 +15,95 @@ providedIn: 'root'
 export class FileUploadService {
   // API url
   // user
-  createuserfolderApi = "./api/create-user";
-  createlogofaviApi = "./api/create-user-logofavi";
+  createuserfolderApi = "/api/create-user";
+  createlogofaviApi = "/api/create-user-logofavi";
   // user
   // forms
-  searchformqueryApi = './api/searchformquery';
-  getformApi = "./api/getform";
-  allformsApi = "./api/allforms";
-  saveformApi = "./api/saveform";
-  updateformApi = "./api/updateform";
-  duplicateformApi = './api/duplicateform';
-  deleteformApi = "./api/deleteform";
+  searchformqueryApi = '/api/searchformquery';
+  getformApi = "/api/getform";
+  allformsApi = "/api/allforms";
+  saveformApi = "/api/saveform";
+  updateformApi = "/api/updateform";
+  duplicateformApi = '/api/duplicateform';
+  deleteformApi = "/api/deleteform";
   // forms
   // document
-  getAllDocumentsApi = "./api/getalldocuments";
-  uploadDocumentApi = "./api/uploaddocument";
-  deleteDocumentApi = "./api/deletedocument";
-  renameDocumentApi = "./api/renamedocument";
+  getAllDocumentsApi = "/api/getalldocuments";
+  uploadDocumentApi = "/api/uploaddocument";
+  deleteDocumentApi = "/api/deletedocument";
+  renameDocumentApi = "/api/renamedocument";
   uploadDocumentPath = '/assets/uploads/documents/';
   checkDocumentApi = '/api/checkdocuments';
   downloaduploadfileApi = '/api/downloaduploadfileformat';
   // document
   // media
-  uploadMediaApi = "./api/uploadmedia";
+  uploadMediaApi = "/api/uploadmedia";
   uploadMediaPath = '/assets/uploads/medias/';
   // media
   // images
-  uploadImageApi = "./api/uploadimage";
-  getAllImgsApi = "./api/getallimgs";
-  saveOnDBApi = "./api/saveondb";
-  updateOnDBApi = "./api/updateondb";
-  deleteFromDB = "./api/deletefromdb";
-  copyImgApi = "./api/copyimage"
-  deleteimageApi = "./api/deleteimage";
+  uploadImageApi = "/api/uploadimage";
+  getAllImgsApi = "/api/getallimgs";
+  saveOnDBApi = "/api/saveondb";
+  updateOnDBApi = "/api/updateondb";
+  deleteFromDB = "/api/deletefromdb";
+  copyImgApi = "/api/copyimage"
+  deleteimageApi = "/api/deleteimage";
   // images
+
   // page templates
-  savetemplatehtmlApi = "./api/savetemplatehtml"
-  allpagetemplatesApi = "./api/allpagetemplates";
-  alldefaulttemplatesApi = "./api/alldefaulttemplates";
-  savepagetemplateApi = "./api/savepagetemplate";
-  updatepagetemplateApi = "./api/updatepagetemplate";
-  deletepagetemplateApi = "./api/deletepagetemplate";
-  copytemplatepageApi =  "./api/copyTemplateToPage"; 
+  savetemplatehtmlApi = "/api/savetemplatehtml"
+  allpagetemplatesApi = "/api/allpagetemplates";
+  alldefaulttemplatesApi = "/api/alldefaulttemplates";
+  savepagetemplateApi = "/api/savepagetemplate";
+  updatepagetemplateApi = "/api/updatepagetemplate";
+  deletepagetemplateApi = "/api/deletepagetemplate";
+  copytemplatepageApi =  "/api/copyTemplateToPage"; 
+  previewtemplateApi='/api/previewtemplate';
   // page templates
+
   // section templates
-  allsectemplatesApi = "./api/allsectiontemplates";
-  savesectemplateApi = "./api/savesectiontemplate";
-  updatesectemplateApi = "./api/updatesectiontemplate";
-  deletesectemplateApi = "./api/deletesectiontemplate";
+  allsectemplatesApi = "/api/allsectiontemplates";
+  savesectemplateApi = "/api/savesectiontemplate";
+  updatesectemplateApi = "/api/updatesectiontemplate";
+  deletesectemplateApi = "/api/deletesectiontemplate";
   // section templates
   // headers
-  searchheadersApi = './api/searchheaders';
-  allheadersApi = "./api/allheaders";
-  getheaderApi = "./api/getheader";
-  saveheaderApi = "./api/saveheader";
-  updateheaderApi = "./api/updateheader";
-  deleteheaderApi = "./api/deleteheader";
+  searchheadersApi = '/api/searchheaders';
+  allheadersApi = "/api/allheaders";
+  getheaderApi = "/api/getheader";
+  saveheaderApi = "/api/saveheader";
+  updateheaderApi = "/api/updateheader";
+  deleteheaderApi = "/api/deleteheader";
   // headers
   // footers
-  searchfootersApi = './api/searchfooters';
-  allfootersApi = "./api/allfooters";
-  getfooterApi = "./api/getfooter";
-  savefooterApi = "./api/savefooter";
-  updatefooterApi = "./api/updatefooter";
-  deletefooterApi = "./api/deletefooter";
+  searchfootersApi = '/api/searchfooters';
+  allfootersApi = "/api/allfooters";
+  getfooterApi = "/api/getfooter";
+  savefooterApi = "/api/savefooter";
+  updatefooterApi = "/api/updatefooter";
+  deletefooterApi = "/api/deletefooter";
   // footers
   // website
-  createwebsitefolderApi = "./api/create-website";
-  renamewebsitefolderApi = "./api/rename-website";
-  copywebsitefolderApi = "./api/copy-website";
-  deletewebsitefolderApi = "./api/delete-website";
+  createwebsitefolderApi = "/api/create-website";
+  renamewebsitefolderApi = "/api/rename-website";
+  copywebsitefolderApi = "/api/copy-website";
+  deletewebsitefolderApi = "/api/delete-website";
   // website
   // web pages
-  savePageApi = "./api/savepage";
-  getPageApi = "./api/getpage";
-  renamePageApi = "./api/renamepage";
-  copyPageApi = "./api/copypage";
+  savePageApi = "/api/savepage";
+  getPageApi = "/api/getpage";
+  renamePageApi = "/api/renamepage";
+  copyPageApi = "/api/copypage";
   createDefaultHomeApi = '/api/default-home';
   updateHomeApi = '/api/updatehome';
   deletePageApi = '/api/deletepage';
   toggleDraftApi = '/api/toggledraft'
-  transferPageApi = "./api/transferpage";
+  transferPageApi = "/api/transferpage";
   // web pages
   // file
-  fileApi = "./api/file";
-  copyfileApi = "./api/copy-file";
-  fileExistApi = "./api/file-exist";
+  fileApi = "/api/file";
+  copyfileApi = "/api/copy-file";
+  fileExistApi = "/api/file-exist";
   // file
 
   uuid:any = '';
@@ -354,9 +357,15 @@ export class FileUploadService {
     return this.http.delete(this.deletepagetemplateApi + '/' + id)
     .pipe(catchError(this.errorHandler));
   }
+
+  previewpagetemplate(obj:any):Observable<any> {
+    return this.http.post(this.previewtemplateApi,obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   searchquerysavedtemplates(data:any):Observable<any> {
     data.user_id=this.uuid;
-    return this.http.post("./api/searchquerysavedtemplates",data).pipe(catchError(this.errorHandler));
+    return this.http.post("/api/searchquerysavedtemplates",data).pipe(catchError(this.errorHandler));
   }
 
   // page templates 

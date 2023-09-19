@@ -63,7 +63,7 @@ export class CheckoutService {
 
   
   orderformgetuserid(data:any):Observable<any> {
-    return this.http.post("./api/orderformgetuserid/", {
+    return this.http.post("/api/orderformgetuserid/", {
       data,
     }, httpOptions);
   }

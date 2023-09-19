@@ -893,9 +893,15 @@ export class GeneralService {
 
   setFooter(footid:any) {
     return new Promise<any>((resolve, reject) => {
-      this.selectedFooter = {id: footid};
-      this.includeLayout.footer = true;
-      resolve(true);
+      this._file.fetchFile('kb-footer-'+footid, 'footers').subscribe((data1)=>{
+        this.setMenu(data1.html).then(data2=>{
+          data1.id = footid;
+          data1.html = data1.html ? data2.querySelector('STYLE').outerHTML+data2.querySelector('BODY').innerHTML : null;
+          this.selectedFooter = data1;
+          this.includeLayout.footer = true;
+          resolve(true);
+        });
+      })
     })
   }
   
@@ -913,113 +919,188 @@ export class GeneralService {
       var status = this.webpage.publish_status == 1;
       this.main.publish_status = status;
       this.main.dir = status ? 'pages' : 'drafts';
-      resolve(e);
+      this._file.getPage(this.main).subscribe({
+        next: (file:any)=>{
+          resolve(file);
+        },
+        error: (err:any) => {
+          this.loading.error = true;
+          resolve(false);
+        }
+      });
     })
   }
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
-    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target.type+'/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
+    window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 
-  saveHeaderFooter(sections:any) {
+  saveHeaderFooter(main:any, sections:any) {
     this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
     return new Promise<any>((resolve, reject) => {
+      this.pagehtml = this.parser.parseFromString(main.children[0].innerHTML, 'text/html');
+      this.removeExtra(false);
       this.setPageStyle(sections);
+      var obj:any = new Object();
+      obj.id  = 'kb-'+this.target.type+'-'+this.target.id;
+      obj.html = '<style>'+this.getAllStyle()+'</style>'+this.removeCommments(this.pagehtml.querySelector('body').innerHTML);
       var dbobj:any = new Object();
       dbobj.name = this.target.name;
       dbobj.uniqueid = this.target.id;
-      var jsonObj = {sections: sections, style: this.getAllStyle()};
+      var jsonObj = {sections: sections};
       dbobj.json = this.encodeJSON(jsonObj);
       if(this.target.type == 'header') {
-        this._file.updateheader(dbobj).subscribe((resp:any)=>{
-          this.pageSaved = true;
-          resolve(resp.success);
-        })
+        this._file.saveFile(obj, 'headers').subscribe(e=>{
+          this._file.updateheader(dbobj).subscribe((resp:any)=>{
+            this.pageSaved = true;
+            resolve(true);
+          })
+        },
+        error=>{resolve(false);});
       }
       else if(this.target.type == 'footer') {
-        this._file.updatefooter(dbobj).subscribe((resp:any)=>{
-          this.pageSaved = true;
-          resolve(resp.success);
-        })
+        this._file.saveFile(obj, 'footers').subscribe(e=>{
+          this._file.updatefooter(dbobj).subscribe((resp:any)=>{
+            this.pageSaved = true;
+            resolve(true);
+          })
+        },
+        error=>{resolve(false);});
       }
     });
   }
 
-  saveHTML(sections:any, preview:boolean, template:boolean) {
+  saveHTML(main:any, sections:any, preview:boolean, template:boolean, tglDraft:boolean) {
     return new Promise<any>((resolve, reject) => {
       this.pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
       this.setPageStyle(sections);
-      var jsonObj = {head: {}, header: false, footer: false, mainstyle: this.main.style, sections: sections};
+      var websiteid = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
+      var jsonObj = {header: false, footer: false, mainstyle: this.main.style, sections: sections, page_code: this.main.page_code};
+      this.pagehtml = this.parser.parseFromString(main.innerHTML, 'text/html');
+      // append Header
       if(this.includeLayout.header && this.selectedHeader.id) jsonObj.header = this.selectedHeader;
+      // append Header
+      // append Footer
       if(this.includeLayout.footer && this.selectedFooter.id) jsonObj.footer = this.selectedFooter;
-      jsonObj.head = {
-        title: this.main.title,
-        author: this.main.author,
-        keywords: this.main.keywords,
-        description: this.main.description,
-        page_code: this.main.page_code,
-        style: this.getAllStyle(),
-      }
+      // append Footer
       this.webpage.page_json = this.encodeJSON(jsonObj);
+      this.removeExtra(preview);
+      let faviconIcon = (template || preview) ? '/favicon.ico' : '/assets/uploads/images/keaimage-favicon-'+websiteid+'.png';
+      this.pagehtml.querySelector('head').innerHTML = 
+      '<script src="'+window.location.origin+'/assets/script/tracking.js"></script>' +
+      '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">' +
+      '<script src="https://kit.fontawesome.com/a9660b7edf.js" crossorigin="anonymous"></script>' +
+      '<link rel="icon" type="image/x-icon" href="'+window.location.origin+faviconIcon+'">' +
+      '<meta charset="UTF-8">' +
+      '<meta name="description" content="'+this.main.description+'">' +
+      '<meta name="keywords" content="'+this.main.keywords+'">' +
+      '<meta name="author" content="'+this.main.author+'">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+      '<title>'+this.main.title+'</title>' +        
+      '<link rel="stylesheet" href="'+window.location.origin+'/assets/style/builder.css">' +
+      '<style>'+jsonObj.page_code+'</style>';
       if(template) {
+        this.pagehtml.querySelector('head').innerHTML += '<link rel="stylesheet" href="/'+this.templateobj.uniqueid+'/style.css">';
+      }
+      else if(!preview) {
+        this.pagehtml.querySelector('head').innerHTML += `<?php $path="../tracking/header-tracking.php"; `+this.includeCond+` ?>` + 
+        '<link rel="stylesheet" href="../'+this.main.path+'/style.css">';
+        this.pagehtml.querySelector('body').innerHTML += `<?php $path="../tracking/footer-tracking.php"; `+this.includeCond+` ?>`;
+      }
+      this.pageObj = {
+        head: this.removeCommments(this.pagehtml.querySelector('head').outerHTML),
+        body: this.removeCommments(this.pagehtml.querySelector('body').outerHTML),
+        style: this.getAllStyle(),
+        website_id: websiteid,
+        page_id: this.webpage.uniqueid
+      }
+      if(template) {
+        this.pageObj.template_id=this.templateobj.uniqueid;
+        this.pageObj.folder = this.templateobj.uniqueid;
         this.templateobj.template=this.encodeJSON(jsonObj);
         this._file.savepagetemplate(this.templateobj).subscribe((res1:any)=>{
-          if(res1.success) resolve(true);
-          else {
+          this._file.savetemplatehtml(this.pageObj).subscribe((event:any)=>{
+            resolve(true);
+          },
+          error=>{
             this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
             resolve(false);
-          }
+          });
         })
       }
       else if(preview) {
-        this.savePreview();
+        this.pageObj.prevFolder = this.webpage.uniqueid;
+        this.pageObj.folder = this.webpage.uniqueid;
+        this.pageObj.dir = 'previews';
+        this._file.savePage(this.pageObj).subscribe((event:any)=>{
+          resolve(true);
+        },
+        error=>{
+          this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+          resolve(false);
+        });
       }
       else {
-        this.savePage().then(resp=>resolve(resp));
+        var status = this.main.publish_status;
+        this.pageObj.prevFolder = this.webpage.page_path;
+        this.pageObj.folder = this.main.path;
+        this.pageObj.dir = status ? 'pages' : 'drafts';
+        if(tglDraft) {
+          var td = {
+            status:(status ? 'publish' : 'draft'), 
+            path: this.main.path,
+            website_id: websiteid
+          }
+          this._file.toggleDraft(td).subscribe((data:any)=>{
+            this.savePage().then(resp=>resolve(resp));
+          })
+        }
+        else this.savePage().then(resp=>resolve(resp));
       }
     });
-  }
-
-  savePreview() {
-    return new Promise<any>((resolve, reject) => {
-      let prevObj = {
-        id: this.webpage.id,
-        preview_json: this.webpage.page_json,
-      }
-      if(this.target.type == 'website'){
-        this.webPageService.savePreview(prevObj).subscribe((resp:any)=>{
-          if(resp.success) resolve(true);
-          else resolve(false);
-        }); 
-      }
-      else if(this.target.type == 'funnel'){
-        this.funnelService.saveFunnelPreview(prevObj).subscribe((resp:any)=>{
-          if(resp.success) resolve(true);
-          else resolve(false);
-        }); 
-      }
-      else resolve(false);
-    })
   }
 
   savePage() {
     return new Promise<any>((resolve, reject) => {
       this.updatePageDB().then(e=>{
-        if(e.found == 1) {
+        if(e.found == 0) {
+          this._file.savePage(this.pageObj).subscribe(
+            (event:any) => {
+              if(e.ishome) {
+                var obj = {
+                  dir: this.main.publish_status ? 'pages' : 'drafts',
+                  path: event.data.folder,
+                  website_id: this.webpage.website_id
+                }
+                if(obj.dir == 'drafts') {
+                  this._file.createdefaulthome(obj).subscribe((d:any)=>{
+                      this.pageSaved = true;
+                      resolve(true);
+                  });
+                }
+                else {
+                  this._file.updateHome(obj).subscribe((d:any)=>{
+                    this.pageSaved = true;
+                    resolve(true);
+                });
+                }
+              }
+              else {
+                this.pageSaved = true;
+                resolve(true);
+              }
+            },
+          error=>{
+            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
+            resolve(false);
+          })
+        }
+        else if(e.found == 1) {
           this.pathError = true;
           resolve(false);
         }
-        else {
-          if(e.success == 1) {
-            this.pageSaved = true;
-            resolve(true);
-          }
-          else {
-            this.openSnackBar(true, 'Server Error!', 'OK', 'center', 'top');
-            resolve(false);
-          }
-        }
+        else resolve(false);
       })
     })
   }
@@ -1043,7 +1124,7 @@ export class GeneralService {
         this.webPageService.updateWebpage(dbobj).subscribe(
           (e:any)=>{
             resolve(e);
-        })
+          })
       }
       else if(this.target.type == 'funnel'){
         dbobj.funneltype = this.webpage.funneltype;
@@ -1054,6 +1135,39 @@ export class GeneralService {
       }
       else resolve(false);
     })
+  }
+
+  removeCommments(html:any) {
+    html = html.replaceAll('<!--?php','<?php').replaceAll('?-->','?>');
+    return html.replace(/\r?\n|\r/g, "").replace(/<!--[\s\S]*?-->/g,"")
+  }
+
+  removeExtra(preview:boolean) {
+    var body = this.pagehtml.querySelector('BODY');
+    // encode text
+    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.encodeData(text.innerHTML);})
+    // encoded text
+    // remvoe extras
+    var regExpArr = [/style="(.*?)"/g, /cdkdrag="(.*?)"/g, /cdkdroplist="(.*?)"/g, /ng-reflect-id="(.*?)"/g, /ng-reflect-data="(.*?)"/g, 
+    /ng-reflect-ng-="(.*?)"/g, /ng-reflect-ng-style="(.*?)"/g, /ng-reflect-ng-class="(.*?)"/g, /ng-reflect-ng-switch="(.*?)"/g, /ng-reflect-connected-to="(.*?)"/g, 
+    /ng-reflect-enter-predicate="(.*?)"/g, /ng-star-inserted/g, /cdk-drag/g, /cdk-drag-handle/g, /cdk-drop-list/g, 
+    /id="sectiongroup-(.*?)"/g, /id="rowgroup-(.*?)"/g, /id="elementgroup-(.*?)"/g];
+    body.querySelectorAll('.kb-ispan-add').forEach((item:any)=>item.remove());
+    body.querySelectorAll('.kb-module-setting').forEach((item:any)=>item.remove());
+    regExpArr.forEach((re:any)=>{body.innerHTML = body.innerHTML.replace(re, '');})
+    // remvoed extras
+    // decode text
+    body.querySelectorAll('.kb-text-block').forEach((text:any)=>{text.innerHTML = this.decodeData(text.innerHTML);})
+    // decoded text
+    if(!preview) body.querySelectorAll('.kb-menu').forEach((item:any)=>{
+      item.outerHTML = `<?php $path="../../../menus/`+item.id+`.php"; `+this.includeCond+` ?>`;
+    });
+    body.querySelectorAll('.kb-code-block').forEach((item:any)=>{
+      var cb = item.getAttribute('html-data');
+      item.removeAttribute('html-data');
+      item.innerHTML = cb;
+    });
+    this.pagehtml.querySelector('BODY').innerHTML = body.innerHTML;
   }
 
   getAllStyle() {
