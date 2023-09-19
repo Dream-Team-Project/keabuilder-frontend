@@ -149,8 +149,12 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
 
 //account-settings
 
+//default page view
+import { DefaultPageViewComponent } from './_components/default-page-view/default-page-view.component';
+
+//default page view
+
 var routes: Routes = [];
-// const currentDomain:any = 'newone.keapages.com';
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
 const appHost:any = environment.appHost;
@@ -521,5 +525,6 @@ export const RoutingComponents =
     FunnelSettingsComponent,
     FunnelStepArchiveComponent,
     NewFunnelStepsComponent,
+    DefaultPageViewComponent,
   ];
 

@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 import { PageViewService } from 'src/app/_services/page-view.service';
 
 
-
 @Component({
   selector: 'app-page-view',
   templateUrl: './page-view.component.html',
@@ -20,7 +19,6 @@ import { PageViewService } from 'src/app/_services/page-view.service';
   encapsulation: ViewEncapsulation.None
 })
 export class PageViewComponent implements OnInit {
-
   @Input ('target') target:any = 'main';
   @Input ('target_id') target_id:any;
   @Input ('target_sections') target_sections:any;
@@ -38,6 +36,8 @@ export class PageViewComponent implements OnInit {
     sections: [],
     mainstyle: '',
   };
+  defaultPage:boolean = false;
+  pageNotFound:boolean = false;
 
   constructor(
     private route: ActivatedRoute, 
@@ -55,98 +55,77 @@ export class PageViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const routeData:any = this.route.snapshot.data;
-      const domain = routeData.domain;
-      const path = routeData.path;
-      if(this.appHost === domain) {
-        let param_target = params.get('view_target');
-        let uid = params.get('user_id');
-        let wid = params.get('website_id');
-        let pid = params.get('page_id');
-        let tempid = params.get('template_id');
-        if(param_target == 'template' && tempid) {
-          let obj = {
-            tempid: tempid,
-            uid: this.req.uid,
+      if(this.target == 'main') {
+        const routeData:any = this.route.snapshot.data;
+        // const domain = routeData.domain;
+        // const path = routeData.path;
+        const domain = 'newone.keapages.com';
+        const path = '/';
+        if(this.appHost === domain) {
+          let param_target = params.get('view_target');
+          let uid = params.get('user_id');
+          let wid = params.get('website_id');
+          let pid = params.get('page_id');
+          let tempid = params.get('template_id');
+          if(param_target == 'template' && tempid) {
+            let obj = {
+              tempid: tempid,
+              uid: this.req.uid,
+            }
+            this._file.previewpagetemplate(obj).subscribe((resp:any)=>{
+              if(resp?.data && resp?.data.length > 0) {
+                this.page_json = this._general.decodeJSON(resp.data);
+                if(this.page_json) {
+                  this.addHead(this.page_json.head);
+                  this._general.fetchMenus().then(resp => {
+                    this.setMenu(this.page_json.sections, resp);
+                  })
+                }
+              }
+              else this._general.redirectToPageNotFound();
+            })
           }
-          this._file.previewpagetemplate(obj).subscribe((resp:any)=>{
-            if(resp?.data && resp?.data.length > 1) {
-              this.page_json = this._general.decodeJSON(resp.data);
-              this.addHead(this.page_json.head);
-              document.head.innerHTML += this.page_json.head;
-              this._general.fetchMenus().then(resp => {
-                this.setMenu(this.page_json.sections, resp);
+          else if(param_target && uid && wid && pid) {
+            this.req.uid = uid
+            this.req.wid = wid;
+            this.req.pid = pid;
+            if(param_target == 'website') {
+              this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
+                if(resp?.data && resp?.data.length > 0) {
+                  this.setLoadScript(resp.data);
+                }
+                else this._general.redirectToPageNotFound();
+              })
+            }
+            else if(param_target == 'funnel') {
+              this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
+                if(resp?.data && resp?.data.length > 0) {
+                  this.setLoadScript(resp.data);
+                }
+                else this._general.redirectToPageNotFound();
               })
             }
             else this._general.redirectToPageNotFound();
-          })
-        }
-        else if(param_target && uid && wid && pid && this.target == 'main') {
-          this.req.uid = uid
-          this.req.wid = wid;
-          this.req.pid = pid;
-          if(param_target == 'website') {
-            this.webpage.getpreviewWebpage(this.req).subscribe((resp:any)=>{
-              if(resp?.data && resp?.data.length > 0) {
-                this.page_json = this._general.decodeJSON(resp.data);
-            console.log(this.page_json);
-                this.loadScript(this.page_json.tracking.header, document.head);
-                this.addHead(this.page_json.head);
-                this.loadScript(this.page_json.tracking.footer, document.body);
-                document.head.innerHTML += this.page_json.head;
-                this._general.fetchMenus().then(resp => {
-                  this.setMenu(this.page_json.sections, resp);
-                })
-              }
-              else this._general.redirectToPageNotFound();
-            })
-          }
-          else if(param_target == 'funnel') {
-            this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
-              if(resp?.data && resp?.data.length > 0) {
-                this.page_json = this._general.decodeJSON(resp.data);
-                this.loadScript(this.page_json.tracking.header, document.head);
-                this.addHead(this.page_json.head);
-                this.loadScript(this.page_json.tracking.footer, document.body);
-                document.head.innerHTML += this.page_json.head;
-                this._general.fetchMenus().then(resp => {
-                  this.setMenu(this.page_json.sections, resp);
-                })
-              }
-              else this._general.redirectToPageNotFound();
-            })
           }
           else this._general.redirectToPageNotFound();
         }
-      }
-      else if(domain){
-        console.log(this.appHost);
-        console.log(routeData);
-        console.log(domain);
-        console.log(path.split('/')[1]);
-
-        let obj={
-          domain:domain,
-          path:path.split('/')[1]
-        };
-
-        this._pageviewService.checkdomain_subdomain(obj).subscribe((resp:any)=>{
-          console.log(resp.success)
-            if(resp?.success && resp?.data && resp?.data.length > 0) {
-              this.page_json = this._general.decodeJSON(resp.data);
-               console.log(this.page_json);
-              this.loadScript(this.page_json.tracking.header, document.head);
-              this.addHead(this.page_json.head);
-              this.loadScript(this.page_json.tracking.footer, document.body);
-              document.head.innerHTML += this.page_json.head;
-              this._general.fetchMenus().then(resp => {
-                this.setMenu(this.page_json.sections, resp);
-              }) 
-          }
-          // else{
-          //   this._general.redirectToPageNotFound();
-          // }
-        })
+        else if(domain){
+          let obj={
+            domain:domain,
+            path:path.split('/')[1]
+          };
+          this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
+            if(resp.data == 'default') {
+              this.defaultPage = true;
+            }
+            else if(resp?.success && resp?.data && resp?.data.length > 0) {
+                this.req.wid = resp.wid;
+                this.req.pid = resp.pid;
+                this.setLoadScript(resp.data);
+            }
+            else this.pageNotFound = true;
+          })
+        }
       }
     })
   }
@@ -170,13 +149,15 @@ export class PageViewComponent implements OnInit {
       this._file.getheader(this.target_id).subscribe((resp:any)=>{
         if(resp.data[0].json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
-          const style = document.createElement('style');
-          style.innerHTML = this.page_json.style;
-          style.id = 'kb-header-style';
-          document.head.appendChild(style);
-          this._general.fetchMenus().then(resp => {
-            this.setMenu(this.page_json.sections, resp);
-          })
+          if(this.page_json) {
+            const style = document.createElement('style');
+            style.innerHTML = this.page_json.style;
+            style.id = 'kb-header-style';
+            document.head.appendChild(style);
+            this._general.fetchMenus().then(resp => {
+              this.setMenu(this.page_json.sections, resp);
+            })
+          }
         }
         else this.page_json.sections = [];
       })
@@ -185,37 +166,19 @@ export class PageViewComponent implements OnInit {
       this._file.getfooter(this.target_id).subscribe((resp:any)=>{
         if(resp.data[0].json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
-          const style = document.createElement('style');
-          style.innerHTML = this.page_json.style;
-          style.id = 'kb-footer-style';
-          document.head.appendChild(style);
-          this._general.fetchMenus().then(resp => {
-            this.setMenu(this.page_json.sections, resp);
-          })
+          if(this.page_json) {
+            const style = document.createElement('style');
+            style.innerHTML = this.page_json.style;
+            style.id = 'kb-footer-style';
+            document.head.appendChild(style);
+            this._general.fetchMenus().then(resp => {
+              this.setMenu(this.page_json.sections, resp);
+            })
+          }
         }
         else this.page_json.sections = [];
       })
     }
-  }
-
-  setMenu(sections:any, menus:any) {
-    sections.forEach((sec:any)=>{
-      sec.rowArr.forEach((row:any)=>{
-        row.columnArr.forEach((col:any)=>{
-          col.elementArr.forEach((ele:any)=>{
-            var cont = ele.content;
-            if(cont.name == 'menu') {
-              menus.forEach((menu:any)=>{
-                if(menu.id == cont.data_id) {
-                  var menuObj = JSON.parse(JSON.stringify(menu));
-                  ele.content = this._element.setMenu(cont, menuObj);
-                }
-              })
-            }
-        })
-      })
-      })
-    })
   }
 
   addHead(head:any) {
@@ -253,5 +216,35 @@ export class PageViewComponent implements OnInit {
       style.textContent = styleElement.textContent;
       targetElement.appendChild(style);
     });
+  }
+
+  setLoadScript(data:any) {
+    this.page_json = this._general.decodeJSON(data);
+    this.loadScript(this.page_json.tracking.header, document.head);
+    this.addHead(this.page_json.head);
+    this.loadScript(this.page_json.tracking.footer, document.body);
+    this._general.fetchMenus().then(resp => {
+      this.setMenu(this.page_json.sections, resp);
+    })
+  }
+
+  setMenu(sections:any, menus:any) {
+    sections.forEach((sec:any)=>{
+      sec.rowArr.forEach((row:any)=>{
+        row.columnArr.forEach((col:any)=>{
+          col.elementArr.forEach((ele:any)=>{
+            var cont = ele.content;
+            if(cont.name == 'menu') {
+              menus.forEach((menu:any)=>{
+                if(menu.id == cont.data_id) {
+                  var menuObj = JSON.parse(JSON.stringify(menu));
+                  ele.content = this._element.setMenu(cont, menuObj);
+                }
+              })
+            }
+        })
+      })
+      })
+    })
   }
 }

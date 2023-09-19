@@ -162,3 +162,5 @@
         <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>
     </footer>
 </ng-container>
+<app-default-page-view *ngIf="defaultPage"></app-default-page-view>
+<app-page-not-found *ngIf="pageNotFound"></app-page-not-found>

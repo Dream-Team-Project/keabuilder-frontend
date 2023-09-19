@@ -100,7 +100,7 @@ export class NewFunnelsComponent implements OnInit {
   ngOnInit(): void {
     this.showfunnels();
   }
- 
+
   getServerData(event?: PageEvent) {
     var length = event?.length;
     var pageindex = event?.pageIndex;

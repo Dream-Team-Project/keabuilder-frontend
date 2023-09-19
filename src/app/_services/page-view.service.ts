@@ -15,7 +15,7 @@ export class PageViewService {
     
   }
   
-  checkdomain_subdomain(obj:any): Observable<any> {
+  fetchPageByDomain(obj:any): Observable<any> {
     return this.http.post(this.getdomain_subdomain, obj);
   }
 

@@ -120,6 +120,9 @@ export class CrmFormFetchComponent implements OnInit {
           return {id: obj.id, value: obj.value}
         });
         this.contact.fieldans = JSON.stringify(formAnsJSON);
+        this.contact.form_id=this.formObj.form.uniqueid;
+        this.contact.lists=this.formObj.form.lists;
+        this.contact.tags=this.formObj.form.tags;
         this._contact.formsubmission(this.contact).subscribe((resp:any)=>{
           if(resp.success) {
             this.formObj.error=false;
