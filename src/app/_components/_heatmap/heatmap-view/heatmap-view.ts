@@ -264,7 +264,6 @@ export class HeatmapViewComponent implements OnInit {
         var htmp:any = document.getElementById("heat-map");
         var kbhtmp:any = document.getElementById("kb-heatmap");
 
-
         // switch (value) {
         //     case 'desktop':
 
