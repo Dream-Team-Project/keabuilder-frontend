@@ -51,7 +51,7 @@ export class AppComponent {
                 if(geturl=='fetch-orderform'){
                   _user.hideNav();
                 }
-                else if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form') && !isAutomation) {
+                else if((geturl == 'builder' || geturl == 'preview' || geturl == 'fetch-form' || this.appHost != this.currentDomain) && !isAutomation) {
                   _user.hideNav();
                   document.getElementById('kb-bootstrap-stylesheet')?.removeAttribute('href');
                 }

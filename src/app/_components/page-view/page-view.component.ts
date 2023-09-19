@@ -15,7 +15,7 @@ import { PageViewService } from 'src/app/_services/page-view.service';
 @Component({
   selector: 'app-page-view',
   templateUrl: './page-view.component.html',
-  styleUrls: ['./page-view.component.css','../default-page-view/default-page-view.component.css'],
+  styleUrls: ['./page-view.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class PageViewComponent implements OnInit {
@@ -57,10 +57,8 @@ export class PageViewComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        // const domain = routeData.domain;
-        // const path = routeData.path;
-        const domain = 'newone.keapages.com';
-        const path = '/';
+        const domain = routeData.domain;
+        const path = routeData.path;
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
