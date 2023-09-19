@@ -15,7 +15,7 @@ import { PageViewService } from 'src/app/_services/page-view.service';
 @Component({
   selector: 'app-page-view',
   templateUrl: './page-view.component.html',
-  styleUrls: ['./page-view.component.css'],
+  styleUrls: ['./page-view.component.css','../default-page-view/default-page-view.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class PageViewComponent implements OnInit {

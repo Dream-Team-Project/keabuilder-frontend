@@ -389,10 +389,10 @@ if (currentDomain === appHost) {
     ],
     canActivate: [AuthGuard] },
     //account-settings
-
-
+    
     // page not found
     { path: '**', component: PageNotFoundComponent },
+   
   ]
 }
 else {
