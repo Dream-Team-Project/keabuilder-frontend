@@ -70,6 +70,7 @@ export class ImageService {
                 (this.saveasnew ? Math.floor(Math.random() * 10000000000) : this.selectedImg.title.toLowerCase().replace(/ /g,"_"))+'.'+this.croppedImage.split('data:image/')[1].split(';base64')[0]
               )
         }
+        console.log(this.file);
         this._general._file.upload(this.file).subscribe(
             (event: any) => {
                 if (typeof (event) === 'object') {

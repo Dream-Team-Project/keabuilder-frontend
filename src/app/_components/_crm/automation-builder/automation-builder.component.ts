@@ -229,7 +229,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
         this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
         this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
       }
-      // else this._general.redirectToPageNotFound();
+      else this._general.redirectToPageNotFound();
     })
   }
   createTimePicker() {
