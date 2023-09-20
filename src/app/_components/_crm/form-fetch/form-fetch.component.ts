@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from 'src/app/_services/_crm/form.service';
 import { StyleService } from 'src/app/_services/_builder/style.service';
@@ -51,8 +51,11 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(this.append_form_id) this.fetchForm(this.append_form_id);
-  };
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['append_form_id']) this.fetchForm(this.append_form_id);
+  }
 
   fetchForm(form_id:string) {
     this._form.getForm(form_id).then((data:any)=>{

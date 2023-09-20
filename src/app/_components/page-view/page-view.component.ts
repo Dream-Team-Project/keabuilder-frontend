@@ -113,9 +113,7 @@ export class PageViewComponent implements OnInit {
             path:path.split('/')[1]
           };
           this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
-            if(resp.data == 'default') {
-              this.defaultPage = true;
-            }
+            if(resp.data == 'default') this.defaultPage = true;
             else if(resp?.success && resp?.data && resp?.data.length > 0) {
                 this.req.wid = resp.wid;
                 this.req.pid = resp.pid;
