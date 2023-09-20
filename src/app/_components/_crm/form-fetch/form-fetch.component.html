@@ -1,4 +1,4 @@
-<div *ngIf="formObj.form else notfound">
+<ng-container *ngIf="formObj.form else notfound">
     <form *ngIf="!formObj.thankyou else thankumsg" (ngSubmit)="!formObj.submitting ? formSubmit() : ''" class="kb-form"
         [style.width]="formObj.form.currentScrWdth < 800 ? '100%' : ''" [id]="'kb-form-'+formObj.form.uniqueid"
         [name]="'kb-form-'+formObj.form.uniqueid">
@@ -71,7 +71,7 @@
             </div> -->
         </div>
     </ng-template>
-</div>
+</ng-container>
 <ng-template #notfound>
     <div id="form-not-found" [style.margin]="getBlockStyle('form')['margin']"
         [style.padding]="getBlockStyle('form')['padding']">Form not found!</div>

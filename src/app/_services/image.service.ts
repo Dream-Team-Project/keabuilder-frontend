@@ -73,7 +73,6 @@ export class ImageService {
         this._general._file.upload(this.file).subscribe(
             (event: any) => {
                 if (typeof (event) === 'object') {
-                    // Short link via api response/
                     this.shortLink = event.link;
                     this.saveImageOnDb(event);
                 }

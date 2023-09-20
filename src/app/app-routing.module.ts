@@ -151,13 +151,14 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
 
 //default page view
 import { DefaultPageViewComponent } from './_components/default-page-view/default-page-view.component';
-
 //default page view
 
-var routes: Routes = [];
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
 const appHost:any = environment.appHost;
+
+var routes: Routes = [];
+
 if (currentDomain === appHost) {
   routes = [
 
@@ -284,7 +285,7 @@ if (currentDomain === appHost) {
     // { path: 'course/:name/:id', component: CourseUserModulesComponent},
     // { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
     
-    { path: 'fetch-orderform/:user_id/:id', component: NewFunnelCheckoutComponent},
+    { path: 'fetch-orderform/:id', component: NewFunnelCheckoutComponent},
 
     // crm
 

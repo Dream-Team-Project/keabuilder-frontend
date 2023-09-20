@@ -220,7 +220,6 @@ export class CrmAutomationBuilderComponent implements OnInit {
   fetchautomation(){
     this.automationgereralservice.singleautomation(this.uniqueid).subscribe((data:any)=>{
       if(data.success){
-      
         this.automation.id=data.data[0]?.id;
         this.automation.user_id=data.data[0]?.user_id;
         this.automation.uniqueid=data.data[0]?.uniqueid;
@@ -230,9 +229,7 @@ export class CrmAutomationBuilderComponent implements OnInit {
         this._automation.activeTriggers=data.data[0]?.triggers ? this._general.decodeJSON(data.data[0]?.triggers) : this._automation.activeTriggers;
         this._automation.activeActions= data.data[0]?.actions ? this._general.decodeJSON(data.data[0]?.actions) : this._automation.activeActions;
       }
-      else{
-        // this.router.navigate(['/crm/automations'],{relativeTo: this.route});
-      }
+      else this._general.redirectToPageNotFound();
     })
   }
   createTimePicker() {

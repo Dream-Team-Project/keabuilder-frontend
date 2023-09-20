@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, Inject, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, Renderer2, Inject, ViewChild, SimpleChanges} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -20,6 +20,8 @@ import { RegistrationpaymentService } from 'src/app/_services/registrationpaymen
 export class NewFunnelCheckoutComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
+
+  @Input ('append_checkout_id') append_checkout_id:any = '';
 
 
   fetching:boolean = true;
@@ -108,47 +110,12 @@ export class NewFunnelCheckoutComponent implements OnInit {
     private checkoutService: CheckoutService,
     private regpayService:RegistrationpaymentService,
     ) {
+      
       this.route.paramMap.subscribe((params: ParamMap) => { 
         this.uniqueid = params.get('id');
-        // console.log(this.uniqueid);
+        if(this.uniqueid) this.fetchForm(this.uniqueid);
       })
 
-        var dt = {id: this.uniqueid};
-        this.checkoutService.orderformgetuserid(dt).subscribe({
-          next: data => {
-            // console.log(data);
-            if(data?.data?.length!=0){
-              this.checkoutvisible = true;
-              this.chkerror = '';
-              this.user_id = data.data[0].user_id;
-              this.redirecturi = data.data[0].redirection;
-              this.fetchOffers(); 
-              this.fetchOrder();
-
-
-              var getstep = data.data[0].step!=null ? data.data[0].step : 'two';
-              this.maketwostep = getstep == 'two' ? true : false;
-            }else{
-              this.checkoutvisible = false;
-              this.chkerror = 'Error Loading in checkout!';
-            }
-
-            if(data.data2.length!=0){
-              if(data.data2[0]?.secret_key){
-                this.isPaymentConnected=true;
-                let stripeKeys = data.data2[0].publish_key;
-                var setstripekey = this.stripeService.setKey(stripeKeys);
-              }
-              else this.isPaymentConnected=false;
-            }
-            else{
-              this.isPaymentConnected=false;
-            }
-
-          }
-        });
-
-        
     }
 
   ngOnInit(): void {
@@ -164,6 +131,48 @@ export class NewFunnelCheckoutComponent implements OnInit {
       state: ['', [Validators.required]],
       zip: ['', [Validators.required]],
     });
+  }
+  
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['append_checkout_id']) this.fetchForm(this.append_checkout_id);
+  }
+
+  fetchForm(checkout_id:string) {
+    var id = {id: checkout_id};
+    this.checkoutService.orderformgetuserid(id).subscribe({
+      next: data => {
+        // console.log(data);
+        if(data?.data?.length!=0){
+          this.checkoutvisible = true;
+          this.chkerror = '';
+          this.user_id = data.data[0].user_id;
+          this.redirecturi = data.data[0].redirection;
+          this.fetchOffers(); 
+          this.fetchOrder();
+
+
+          var getstep = data.data[0].step!=null ? data.data[0].step : 'two';
+          this.maketwostep = getstep == 'two' ? true : false;
+        }else{
+          this.checkoutvisible = false;
+          this.chkerror = 'Error Loading in checkout!';
+        }
+
+        if(data.data2.length!=0){
+          if(data.data2[0]?.secret_key){
+            this.isPaymentConnected=true;
+            let stripeKeys = data.data2[0].publish_key;
+            var setstripekey = this.stripeService.setKey(stripeKeys);
+          }
+          else this.isPaymentConnected=false;
+        }
+        else{
+          this.isPaymentConnected=false;
+        }
+
+      }
+    });
+
   }
 
   validatestep(){
@@ -323,7 +332,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
   fetchOffers() {
     this._offerservice.fetchoffersusingid(this.user_id).subscribe((resp:any) => {
-      // console.log(resp);
+      console.log(resp);
         this.offers = resp.data;
     });
   }

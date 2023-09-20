@@ -288,7 +288,7 @@ export class OrderFormCheckoutComponent implements OnInit {
   }
 
   showprev(){
-    window.open(window.origin+'/fetch-orderform/id/'+this.uniqueid, '_blank');
+    window.open(window.origin+'/fetch-orderform/'+this.uniqueid, '_blank');
   }
   changestep(value:any){
     this.checkoutstep = value;

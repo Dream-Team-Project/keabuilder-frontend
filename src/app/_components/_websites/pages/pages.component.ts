@@ -548,7 +548,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           
           this.searching = false;
           
-          this._general.openSnackBar(false,'Page Details Updated Successfully!!', 'OK','center','top');
+          this._general.openSnackBar(false,'Page Details Updated Successfully', 'OK','center','top');
           this.showwebpages();
           this.resetobj();
 
