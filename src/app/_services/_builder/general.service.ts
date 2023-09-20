@@ -12,6 +12,7 @@ import { OrderformService } from '../_sales/orderform.service';
 import { UserService } from '../user.service';
 import { BehaviorSubject } from 'rxjs';
 import { Location } from '@angular/common';
+import { NavigationService } from '../navigation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -720,7 +721,7 @@ export class GeneralService {
   constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, 
     public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, 
     public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, 
-    private _offer: OfferService, private _orderForm: OrderformService) {
+    private _offer: OfferService, private _orderForm: OrderformService,private _navigationService : NavigationService) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -747,24 +748,28 @@ export class GeneralService {
   fetchMenus() {
     const menus:any = [];
     return new Promise<any>((resolve, reject) => {
-      this._file.fetchFiles('menus').subscribe((data:any)=>{
+      this._navigationService.fetchNavigations().subscribe((data:any)=>{
         if(!data.success) resolve(menus);
-        data.data.forEach((html:any, uindex:number)=>{
-          var doc = this.parser.parseFromString(html, 'text/html');
-          var ul = doc.querySelector('ul');
-          var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', html: html, items: []}
-          var list:any = ul?.querySelectorAll('li');
-          list.forEach((li:any, lindex:number) => {
-            var anc:any = li.querySelector('a');
-            var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
-            menu.items.push(item);
-            if(uindex == data.data.length-1 && lindex == list.length-1) {
-              resolve(menus);
-            }
-          })
-          menus.push(menu);
+        data?.data?.forEach((element:any)=>{
+          // var doc = this.parser.parseFromString(html, 'text/html');
+          // var ul = doc.querySelector('ul');
+          // var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', html: html, items: []}
+          // var list:any = ul?.querySelectorAll('li');
+          // list.forEach((li:any, lindex:number) => {
+          //   var anc:any = li.querySelector('a');
+          //   var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
+          //   menu.items.push(item);
+          //   if(uindex == data.data.length-1 && lindex == list.length-1) {
+          //     resolve(menus);
+          //   }
+          // })
+          element.items=this.decodeJSON(element.items);
+          menus.push(element);
         })
-      })
+        if( menus.length -1 == data.data.length-1){
+          resolve(menus);
+        }
+       })
     })
   }
 
@@ -1369,7 +1374,8 @@ export class GeneralService {
       return this.createBlockId(temp);
     }
     this.allBlocksIds.push(temp.id);
-    return 'kb-'+temp.type+'-'+temp.id;
+    return temp.id;
+    // return 'kb-'+temp.type+'-'+temp.id;
   }
 
   compareOptValue(item1: any, item2: any) {
