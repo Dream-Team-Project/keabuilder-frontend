@@ -70,10 +70,10 @@
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
             <div [class.kb-disabled]="footer.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('footer-'+footer.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-              <div class="kb-loader" *ngIf="shortwaiting || footer.deleting">
+              <!-- <div class="kb-loader" *ngIf="shortwaiting || footer.deleting">
                 <div class="kb-loader-shadow"></div>
                 <div class="kb-loader-box"></div>
-              </div>
+              </div> -->
             </div>
           </div>
           <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">

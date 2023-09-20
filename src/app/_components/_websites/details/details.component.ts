@@ -73,6 +73,8 @@ export class WebsiteDetailsComponent implements OnInit {
     });
 
     var dt = {webid:this.websiteid};
+
+    this.searching = true;
     this.websiteService.getuniqwebsites(dt).subscribe({
       next: data => {
         if(data?.length != 0) {
@@ -152,6 +154,7 @@ export class WebsiteDetailsComponent implements OnInit {
 
           });
         }
+         this.searching = false;
       },
       error: err => {
         //console.log(err);
