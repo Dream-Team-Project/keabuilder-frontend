@@ -883,8 +883,6 @@ export class StyleService {
       this._general.main.meta_img = this._general.meta_img;
       var ele:any = document.getElementById('kb-append-style');
       if(ele) ele.innerHTML = this._general.page_code;
-      console.log(this._general.page_code);
-      console.log(ele);
     }
     else if(this._general.selectedBlock.hide) this._general.selectedBlock.hide = JSON.parse(JSON.stringify(this.hide));
     if(this._general.selectedBlock.type == 'row') {
