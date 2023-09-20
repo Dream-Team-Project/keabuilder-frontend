@@ -533,10 +533,10 @@
                             </button>
                         </mat-form-field>
                     </div>
-                    <button mat-icon-button *ngIf="action.ifelseField.types.length > 1"
-                        (click)="removeCondition(action.ifelseField.types, ietypeI)"
-                        class="kb-danger mt-1"><mat-icon>close</mat-icon></button>
                 </ng-container>
+                <button mat-icon-button *ngIf="action.ifelseField.types.length > 1"
+                    (click)="removeCondition(action.ifelseField.types, ietypeI)"
+                    class="kb-danger mt-1"><mat-icon>close</mat-icon></button>
                 <ng-template #nodata><div *ngIf="ietype.type?.group" class="kb-danger small col-12">You don't have any {{ietype.type?.group}}s</div></ng-template>
             </div>
             <div class="text-right">
