@@ -49,8 +49,10 @@
         </div>
     </div>
     <mat-tab-group class="kb-template-container">
-      <mat-progress-bar mode='indeterminate'></mat-progress-bar>
         <mat-tab label="Marketplace">
+          <div class="kb-template-spinner" *ngIf="searching">
+            <mat-spinner></mat-spinner>
+          </div>
             <div class="row m-0">
               <div class="col-md-2 bw-sidebar kb-template-card">
               <div *ngFor="let menu of allmenu; index as i;">
@@ -83,8 +85,10 @@
             </div> 
         </mat-tab>
 
-        <mat-tab label="Saved Templates">
-          <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+        <mat-tab label="Saved Templates" (click)="this.fetchTemplates()">
+          <div class="kb-template-spinner" *ngIf="searching">
+            <mat-spinner></mat-spinner>
+          </div>
           <div class="row m-0 mt-3">
             <mat-form-field  appearance="fill" class="col-md-6">
               <mat-label>Search Templates</mat-label>
