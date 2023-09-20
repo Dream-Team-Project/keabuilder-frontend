@@ -1,4 +1,5 @@
-<div class="container-fluid kbmncont p-4">
+<ng-container *ngIf="checkoutvisible else notfound">
+<div class="container-fluid kbmncont">
 
   <div class="row">
     <div class="col-md-12 step1div onlyonestepdiv" *ngIf="!maketwostep">
@@ -15,7 +16,7 @@
     </div>
   </div>
 
-  <div class="row cntbk" *ngIf="checkoutvisible">
+  <div class="row cntbk">
 
     <div class="kb-spinner" *ngIf="spinner">
       <mat-progress-bar mode='indeterminate' id="mkspinner"></mat-progress-bar>
@@ -115,7 +116,7 @@
 
               <div class="o2step_step3" *ngIf="switchstep || !maketwostep">
                   <a class="kb-back" (click)="switchstep = !switchstep" href="javascript:void(0)" *ngIf="maketwostep">Back</a>
-                  <h6 class="mb-3">PAYMENT METHOD <i class="fa-lock fas float-right iconsty"></i></h6>
+                  <h6 class="mb-3 mt-2">PAYMENT METHOD <i class="fa-lock fas float-right iconsty"></i></h6>
 
                   <p class="kb-danger mt-2" *ngIf="!isPaymentConnected"><i class="fa fa-exclamation-circle mr-2" aria-hidden="true"></i>
                         Payment Gateway Error</p>
@@ -203,9 +204,8 @@
       </form>
   </div>
 
-  <div class="row" *ngIf="!checkoutvisible">
-    <div class="col-md-12 text-center">
-        <h3>{{chkerror}}</h3>
-    </div>
-  </div>
 </div>
+</ng-container>
+<ng-template #notfound>
+  <div class="pt-3 pb-3 text-center" >Checkout not found!</div>
+</ng-template>

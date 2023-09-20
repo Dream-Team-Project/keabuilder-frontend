@@ -285,7 +285,7 @@ if (currentDomain === appHost) {
     // { path: 'course/:name/:id', component: CourseUserModulesComponent},
     // { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
     
-    { path: 'fetch-orderform/:user_id/:id', component: NewFunnelCheckoutComponent},
+    { path: 'fetch-orderform/:id', component: NewFunnelCheckoutComponent},
 
     // crm
 
