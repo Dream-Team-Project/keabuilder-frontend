@@ -4,6 +4,7 @@ import { StyleService } from 'src/app/_services/_builder/style.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
+import { NavigationService } from 'src/app/_services/navigation.service';
 
 @Component({
   selector: 'app-website-navigation',
@@ -32,7 +33,7 @@ export class WebsiteNavigationComponent {
   delmenu:any;
   action:any;
 
-  constructor(public _general: GeneralService,  public _style: StyleService, public _image: ImageService, private dialog: MatDialog) { 
+  constructor(private _navigationService : NavigationService,public _general: GeneralService,  public _style: StyleService, public _image: ImageService, private dialog: MatDialog) { 
     this.fetchMenus(); 
     this.getAllWebPages();
     this.getAllFunnels();
@@ -109,8 +110,8 @@ export class WebsiteNavigationComponent {
   }
 
   createNew() {
-    this.menuobj = {id: '', name: '', type: 'menu', items: []};
-    this.menuobj.id = this._general.createBlockId(this.menuobj);
+    this.menuobj = {id: '',uniqueid:'', name: '', type: 'menu', items: []};
+    this.menuobj.uniqueid = this._general.makeid(20);
   }
 
   selectMenu(menu:any) {
@@ -121,31 +122,12 @@ export class WebsiteNavigationComponent {
     if(menuobj.name && menuobj.items.length != 0) {
       if(!this.action) this.action = 'saved';
       this.fetching.menu = true;
-      // put db api here
-      // var m = menuobj;
-      // var ul = document.createElement('UL');
-      // ul.id = m.id;
-      // ul.setAttribute('data-name',m.name);
-      // ul.className = 'kb-menu';
-      // m.items.forEach((i:any, index:number)=>{
-      //   var li:any = document.createElement('LI');
-      //   var a =  document.createElement('A');
-      //   a.id = i.id;
-      //   a.setAttribute('href', i.link);
-      //   a.setAttribute('target', i.target);
-      //   a.innerHTML = i.name;
-      //   li.innerHTML = a.outerHTML;
-      //   ul.innerHTML = ul.innerHTML + li.outerHTML;
-      //   if(index == m.items.length-1) {
-      //     var obj = {
-      //       id: m.id,
-      //       html: ul.outerHTML,
-      //     }
-      //     this._general._file.saveFile(obj, 'menus').subscribe((resp:any)=>{
-      //        resp.success ? this.fetchMenus() : this.openSB(true);
-      //     })
-      //   }
-      // })
+      menuobj.items=this._general.encodeJSON(menuobj.items);
+      this._navigationService.addNavigation(menuobj).subscribe((resp:any)=>{
+        resp.success ? this.fetchMenus() : this.openSB(true);
+     })
+          
+       
     }
     else {
       var msg = !menuobj.name ? 'Menu name should not be empty' : 'Atlease one menu item should be added';
@@ -156,10 +138,10 @@ export class WebsiteNavigationComponent {
   duplicateMenu(menuobj:any) {
     this.action = 'duplicated';
     var tempmenu = JSON.parse(JSON.stringify(menuobj));
-    tempmenu.id = this._general.createBlockId(tempmenu);
+    tempmenu.uniqueid = this._general.createBlockId(tempmenu);
     tempmenu.name = tempmenu.name + ' copy';
     tempmenu.items.forEach((item:any, index:number)=>{
-      item.id = this._general.createBlockId(item);
+      item.uniqueid = this._general.createBlockId(item);
       if(index == tempmenu.items.length-1) {
         this.saveMenu(tempmenu);
       }
@@ -169,7 +151,8 @@ export class WebsiteNavigationComponent {
   deleteMenu() {
     this.action = 'deleted';
     this.fetching.menu = true;
-    this._general._file.deleteFile(this.delmenu.id, 'menus').subscribe((resp:any)=>{
+
+    this._navigationService.deleteNavigation(this.delmenu.id).subscribe((resp:any)=>{
       resp.success ? this.fetchMenus() : this.openSB(true);
     })
   }
