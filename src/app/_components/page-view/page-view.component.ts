@@ -57,8 +57,8 @@ export class PageViewComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        const domain = routeData.domain;
-        const path = routeData.path;
+        const domain = 'newone.keapages.com';
+        const path = '/';
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -113,7 +113,10 @@ export class PageViewComponent implements OnInit {
             path:path.split('/')[1]
           };
           this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
-            if(resp.data == 'default') this.defaultPage = true;
+            if(resp.data == 'default') {
+              this.addFavicon(resp.wid);
+              this.defaultPage = true;
+            }
             else if(resp?.success && resp?.data && resp?.data.length > 0) {
                 this.req.wid = resp.wid;
                 this.req.pid = resp.pid;
@@ -177,12 +180,16 @@ export class PageViewComponent implements OnInit {
     }
   }
 
-  addHead(head:any) {
+  addFavicon(wid:string) {
     const link:any = document.querySelector("link[rel*='icon']") || document.createElement('link');
     link.type = 'image/x-icon';
     link.rel = 'icon';
-    link.href = '/assets/uploads/images/keaimage-favicon-'+this.req.wid+'.png';
+    link.href = '/assets/uploads/images/keaimage-favicon-'+wid+'.png';
     document.getElementsByTagName('head')[0].appendChild(link);
+  }
+
+  addHead(head:any) {
+    this.addFavicon(this.req.wid);
     this.title.setTitle(head.title);
     this.meta.addTag({ name: 'author', content: head.author });
     this.meta.addTag({ name: 'keywords', content: head.keywords });

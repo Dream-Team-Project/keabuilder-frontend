@@ -121,30 +121,31 @@ export class WebsiteNavigationComponent {
     if(menuobj.name && menuobj.items.length != 0) {
       if(!this.action) this.action = 'saved';
       this.fetching.menu = true;
-      var m = menuobj;
-      var ul = document.createElement('UL');
-      ul.id = m.id;
-      ul.setAttribute('data-name',m.name);
-      ul.className = 'kb-menu';
-      m.items.forEach((i:any, index:number)=>{
-        var li:any = document.createElement('LI');
-        var a =  document.createElement('A');
-        a.id = i.id;
-        a.setAttribute('href', i.link);
-        a.setAttribute('target', i.target);
-        a.innerHTML = i.name;
-        li.innerHTML = a.outerHTML;
-        ul.innerHTML = ul.innerHTML + li.outerHTML;
-        if(index == m.items.length-1) {
-          var obj = {
-            id: m.id,
-            html: ul.outerHTML,
-          }
-          this._general._file.saveFile(obj, 'menus').subscribe((resp:any)=>{
-             resp.success ? this.fetchMenus() : this.openSB(true);
-          })
-        }
-      })
+      // put db api here
+      // var m = menuobj;
+      // var ul = document.createElement('UL');
+      // ul.id = m.id;
+      // ul.setAttribute('data-name',m.name);
+      // ul.className = 'kb-menu';
+      // m.items.forEach((i:any, index:number)=>{
+      //   var li:any = document.createElement('LI');
+      //   var a =  document.createElement('A');
+      //   a.id = i.id;
+      //   a.setAttribute('href', i.link);
+      //   a.setAttribute('target', i.target);
+      //   a.innerHTML = i.name;
+      //   li.innerHTML = a.outerHTML;
+      //   ul.innerHTML = ul.innerHTML + li.outerHTML;
+      //   if(index == m.items.length-1) {
+      //     var obj = {
+      //       id: m.id,
+      //       html: ul.outerHTML,
+      //     }
+      //     this._general._file.saveFile(obj, 'menus').subscribe((resp:any)=>{
+      //        resp.success ? this.fetchMenus() : this.openSB(true);
+      //     })
+      //   }
+      // })
     }
     else {
       var msg = !menuobj.name ? 'Menu name should not be empty' : 'Atlease one menu item should be added';
