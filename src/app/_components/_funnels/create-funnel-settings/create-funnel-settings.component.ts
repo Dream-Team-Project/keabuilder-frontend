@@ -211,27 +211,7 @@ export class CreateFunnelSettingsComponent implements OnInit {
           if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
             this.imageService.onImageFileUpload(genobjfavicon);
           }
-  
-          if(data.data.length!=0){
-            var obj = {
-              tracking: {
-                header: this.headertracking,
-                footer: this.footertracking,
-              },
-              path: data.data[0].page_path,
-              website_id: this.uniqueid,
-              dir: 'pages'
-            };
-            this._general._file.updateHome(obj).subscribe({
-              next: data => {
-                this._snackBar.open('Details Updated Successfully!', 'OK');
-              }
-            });
-  
-          }else{
-            this.searching = false;
-            this._snackBar.open('Details Updated Successfully!', 'OK');
-          }
+          this._general.openSnackBar(false,'Details Updated Successfully', 'OK','center','top');
   
           if(data.found==1){
             this.domainconnerror = true;
