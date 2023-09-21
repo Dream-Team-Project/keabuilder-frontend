@@ -62,20 +62,19 @@ export class WebsitesComponent implements OnInit {
   }
 
   fetwebfull(){
-    this.searching = true;
+    this.searching=true;
     this.websiteService.getWebsite().subscribe({
       next: data => {
         this.fetweb(data);
       },
       error: err => {
         // console.log(err);
+        this.searching=false;
       }
     });
   }
 
   fetweb(data:any){
-
-    // console.log(data);
     if(data.data?.length != 0) {
       this.nodata = false;
       this.allwebsites = [];
@@ -129,10 +128,7 @@ export class WebsitesComponent implements OnInit {
       }
     });
   }
-
-
- 
-
+  
   createnewweb(){
     
     if(this.webtitleFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
