@@ -35,6 +35,22 @@ export class HeatmapsService {
     }, httpOptions);
   }
 
+  heatfetchmourequest(url: string): Observable<any> {
+    return this.http.post('/api/heatfetchmou-request',{
+      url
+    }, httpOptions);
+  }
+
+  heatallrequest(url: string): Observable<any> {
+    return this.http.post('/api/heatall-request',{
+      url
+    }, httpOptions);
+  }
+
+  heatshomerequest(data:any): Observable<any> {
+    return this.http.post('/api/heatshome-request',data, httpOptions);
+  }
+
  
 
   

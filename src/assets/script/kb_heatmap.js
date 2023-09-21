@@ -129,7 +129,7 @@ var kb_mousegetlocY = [];
 var kb_fulldata = {};
 
 // var windoworigin = window.origin;
-var windoworigin = 'http://localhost:4200';
+var windoworigin = 'http://localhost:3000';
 
 kb_fulldata['uniqueid'] = kb_unique_id;
 kb_fulldata['created_at'] = kb_created_at;
@@ -198,7 +198,7 @@ function forclick(e){
 
     console.log(kb_fulldata);
     $.ajax({
-        url: windoworigin+"/api/heat-request",
+        url: windoworigin+"/heat-request",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -233,7 +233,7 @@ function formouse(e){
     kb_fulldata['MlocY'] = kb_mousegetlocY;
 
     $.ajax({
-        url: windoworigin+"/api/heat-request",
+        url: windoworigin+"/heat-request",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -417,7 +417,7 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
 
 
                 $.ajax({
-                    url: windoworigin+"/api/saverecordheat",
+                    url: windoworigin+"/saverecordheat",
                     type: "POST",
                     dataType: 'json',
                     data:  {
@@ -1657,7 +1657,7 @@ if(window.location.hash=='#kb-heatmaps'){
     setTimeout(() => {
         
         $.ajax({
-            url: windoworigin+"/api/heatfetchloc-request",
+            url: windoworigin+"/heatfetchloc-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -1859,7 +1859,7 @@ if(window.location.hash=='#kb-heatmaps'){
 
         // fetch all data
         $.ajax({
-            url: windoworigin+"/api/heatall-request",
+            url: windoworigin+"/heatall-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -1904,12 +1904,14 @@ if(window.location.hash=='#kb-heatmaps'){
                         data3 = [];
                         if (this.checked) {
                             brsegmnt.push(this.value);
+                            console.log(brsegmnt);
                             getrequireddata(brsegmnt,'browser');
                         }else{
                             var index = brsegmnt.indexOf(this.value);
                             if (index > -1) {
                                 brsegmnt.splice(index, 1);
                             }
+                            console.log(brsegmnt);
                             getrequireddata(brsegmnt,'browser');
                         }
                     });
@@ -2060,7 +2062,7 @@ if(window.location.hash=='#kb-heatmaps'){
         // get required data
         function getrequireddata(value1,value2){
             $.ajax({
-                url: windoworigin+"/api/heatshome-request",
+                url: windoworigin+"/heatshome-request",
                 type: "POST",
                 dataType: 'json',
                 data:  {
@@ -2372,7 +2374,7 @@ if(window.location.hash=='#kb-heatmaps'){
     
     function createheatmpmouse(){
         $.ajax({
-            url: windoworigin+"/api/heatfetchmou-request",
+            url: windoworigin+"/heatfetchmou-request",
             type: "POST",
             dataType: 'json',
             data:  {
@@ -2808,7 +2810,7 @@ if(window.location.hash=='#kb-heatmaps'){
 
    
     $.ajax({
-        url: windoworigin+"/api/showrecordheat",
+        url: windoworigin+"/showrecordheat",
         type: "POST",
         dataType: 'json',
         data:  {
@@ -2821,7 +2823,7 @@ if(window.location.hash=='#kb-heatmaps'){
                 if(myArray[0]!=''){
 
                     $.ajax({
-                        url: windoworigin+"/api/getheatdir",
+                        url: windoworigin+"/getheatdir",
                         type: "POST",
                         dataType: 'json',
                         data:  {
