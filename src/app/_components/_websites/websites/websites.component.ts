@@ -7,6 +7,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ImageService } from 'src/app/_services/image.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-websites',
@@ -42,6 +43,8 @@ export class WebsitesComponent implements OnInit {
   error=false;
   errormessage:any='';
 
+  username:any = '';
+
   constructor(public websiteService: WebsiteService,
               private _snackBar: MatSnackBar,
               private router: Router,
@@ -50,6 +53,7 @@ export class WebsitesComponent implements OnInit {
               public dialog: MatDialog, 
               public _image: ImageService,
               public _general: GeneralService,
+              public userService: UserService,
               ) { }
 
   ngOnInit(): void {
@@ -58,6 +62,14 @@ export class WebsitesComponent implements OnInit {
     setTimeout(() => {
           this.shortwaiting = false;
       }, 1000);
+
+      this.userService.getUsersDetails().subscribe({
+        next: data => {
+          if(data.data.length>0){
+            this.username = data.data[0].username;
+          }
+        }
+      });
 
   }
 
@@ -131,70 +143,61 @@ export class WebsitesComponent implements OnInit {
   
   createnewweb(){
     
-    if(this.webtitleFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
+    this.createsubdomainname();
 
-      var nwsubdomain:any = this.subdomain.toLowerCase();
-      var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user']
-      if(this.searchStringInArray(nwsubdomain,notusesub)==1){
+    if(this.webtitleFormControl.status=='VALID' && this.subdomain!=''){
+      
+      this.searching = true;
 
-        this.searching = true;
+      var genobj = {title:this.websitetitle, subdomain: this.subdomain};
+      this.websiteService.createwebsite(genobj).subscribe({
+        next: data => {
+  
+        // console.log(data);
 
-        var genobj = {title:this.websitetitle, subdomain: this.subdomain};
-        this.websiteService.createwebsite(genobj).subscribe({
-          next: data => {
-    
-           // console.log(data);
+        this.dialog.closeAll();
 
-           this.dialog.closeAll();
-
-           if(data.exist ==1){
-              this.searching = false;
-              this.error=true;
-              this.errormessage="Subdomain is in use, please use another name!";
-              // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
-           }else{
-            if(data?.success){
-            var dataobj = {website_id:data.uniqueid};
-            this._file.createwebsitefolder(dataobj).subscribe(e=>{
-              // console.log(e);
-            });
-
-            this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
-              // console.log(e);
-            });
-
-            this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
-              next: datanw => {
-                
-              this.searching = false;
-              this.resetobj();
-              this._general.openSnackBar(false,'Website Created Successfully!', 'OK', 'center', 'top');
-              this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
-              }
-            });
-          }else{
+        if(data.exist ==1){
             this.searching = false;
-            this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+            this.error=true;
+            this.errormessage="Subdomain is in use, please use another name!";
+            // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
+        }else{
+          if(data?.success){
+          var dataobj = {website_id:data.uniqueid};
+          this._file.createwebsitefolder(dataobj).subscribe(e=>{
+            // console.log(e);
+          });
+
+          this._file.createuserlogofavi(data.uniqueid).subscribe(e=>{
+            // console.log(e);
+          });
+
+          this.websiteService.oncreatesubdomain(this.subdomain,data.uniqueid).subscribe({
+            next: datanw => {
+              
+            this.searching = false;
             this.resetobj();
-          }
+            this._general.openSnackBar(false,'Website Created Successfully!', 'OK', 'center', 'top');
+            this.router.navigate(['/websites/'+data.uniqueid+'/pages'],{relativeTo: this.route});
+            }
+          });
+        }else{
+          this.searching = false;
+          this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
+          this.resetobj();
+        }
 
-           }
-    
-          }
-        });
-
-      }else{
-        // this._general.openSnackBar(false,"Subdomain is in use, please use another name!",'OK', 'center', 'top');
-        this.error=true;
-        this.errormessage="Subdomain is in use, please use another name!";
-        this.dialog.open(this.adddialog);
-      }
+        }
+  
+        }
+      });
 
     }
     else{
       this.dialog.open(this.adddialog);
       this.error=true;
-      this.errormessage="Please enter required information";
+      this.errormessage="Something went Wrong!";
     }
 
   }
@@ -242,6 +245,7 @@ export class WebsitesComponent implements OnInit {
      
     })
   }
+
   resetobj(){
     this.subdomain= '';
     this.websitetitle = '';
@@ -295,21 +299,19 @@ export class WebsitesComponent implements OnInit {
 
   }  
 
-  
+  createsubdomainname(){
+    var uniqid = this._general.makeid(15);
+    this.subdomain = this.username+uniqid;
+  }
 
   duplicatewebsite(){
     this.createweb = false;
     this.searching = true;
-    if(this.subdomain!=''){
-      if(this.webtitleFormControl.status=='VALID' && this.subdomainFormControl.status=='VALID'){
+    this.createsubdomainname();
 
-        var nwsubdomain:any = this.subdomain.toLowerCase();
-        var notusesub = ['app','test','developer','admin','kea','keabuilder','keapages','user'];
+      if(this.webtitleFormControl.status=='VALID' && this.subdomain!=''){
 
-        if(this.searchStringInArray(nwsubdomain,notusesub)==1){
           var genobj = {title:this.websitetitle, subdomain: this.subdomain, website_id:this.duplicatewebid};
-          // console.log(genobj);
-
           this.websiteService.duplicatewebsite(genobj).subscribe({
             next: data => {
               // this.dialog.closeAll();
@@ -357,27 +359,11 @@ export class WebsitesComponent implements OnInit {
             }
           });
 
-
-        }else{
-          // this._general.openSnackBar(false,"Subdomain is in use, please use another name!", 'OK', 'center', 'top');
-          this.error=true;
-          this.errormessage="Subdomain is in use, please use another name!";
-          this.dialog.open(this.duplicatedialog);
-        }
-
-      }
-      else{
-      this.error=true;
-      this.errormessage="Please enter required information";
-      this.dialog.open(this.duplicatedialog);
-    }
-  }
-else{
-  this.error=true;
-  this.errormessage="Please enter required information";
-  this.dialog.open(this.duplicatedialog);
-}
-   
+      }else{
+        this.error=true;
+        this.errormessage="Something went Wrong!";
+        this.dialog.open(this.duplicatedialog);
+     }
 
   }
 
@@ -397,6 +383,7 @@ else{
     var datagen = this.removespecialchar(data).toLowerCase();
     return datagen;
   }
+
   copyurl(website:any){
     // console.log(website)
   this.pageurl = 'https://'+website?.domain;
@@ -410,4 +397,5 @@ else{
     this.dialog.closeAll();
     this._general.openSnackBar(false,'Successfully Copied!', 'OK', 'center', 'top');
   }
+
 }

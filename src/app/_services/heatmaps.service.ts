@@ -17,6 +17,16 @@ export class HeatmapsService {
     return this.http.get('/api/heatget-request');
   }
 
+  getheatunique(data:any): Observable<any> {
+    return this.http.post('/api/heatget-unique',{
+      data
+    });
+  }
+
+  getheatpagedata(id:any): Observable<any> {
+    return this.http.get('/api/heatget-pagedata/'+id);
+  }
+
   getheatdir(hash:string): Observable<any> {
     return this.http.post('/api/getheatdir',{
       hash
