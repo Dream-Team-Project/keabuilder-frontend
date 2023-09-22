@@ -20,8 +20,8 @@
                 <h3>Pages</h3>
                 <ol>
                     <li *ngFor="let visit of visited; index as i;">
-                        <a [href]="visit['landing_page']+'#kb-heatmaps'" target="_blank">
-                            {{visit['landing_page']}}
+                        <a (click)="sendurl(visit)" target="_blank">
+                            {{makeurl(visit)}}
                         </a>
                     </li>
                 </ol>
