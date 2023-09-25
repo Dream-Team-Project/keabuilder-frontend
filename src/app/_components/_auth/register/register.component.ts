@@ -277,7 +277,8 @@ specialuser=false;
             //  var userobject = {project_name: username};
             //   this._wistia.projectCreate(userobject).subscribe({
             //     next: data2 => {
-            //       this.authService.onupdateprojectid(data.id, data2.data.hashedId).subscribe({
+            //       console.log(data2)
+            //       this.authService.onupdateprojectid(data?.id, data2?.data?.id).subscribe({
             //         next: data3 => {
             //           console.log(data3);
             //         }

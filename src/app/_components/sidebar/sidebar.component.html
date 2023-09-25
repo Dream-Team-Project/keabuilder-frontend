@@ -40,22 +40,22 @@
       </span>
 
     </span>
-
+    
     <!-- Dropdown2 -->
-    <!-- <div class="bw-sidebar__group" [class]="{ 'open' : isOpen2 }" (click)="isOpen2 = !isOpen2" *ngIf="extramenus">
+   <div class="bw-sidebar__group"> 
       <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
+        <button class="bw-sidebar__item hasIcon">
           <div class="bw-sidebar__item__icon">
             <i class="fas fa-life-ring"></i>
-            <img src="/assets/images/sidebar/safe-box.gif" width="35" class="d-none">
+            <!-- <img src="/assets/images/sidebar/safe-box.gif" width="35" class="d-none"> -->
           </div>
-          <div class="bw-sidebar__item__text">
+          <div class="bw-sidebar__item__text" (click)="gotoHelpDocs()">
             Help
           </div>
-          <div class="bw-sidebar__item__arrow"><i class="fas fa-chevron-up"></i></div>
+          <!-- <div class="bw-sidebar__item__arrow"><i class="fas fa-chevron-up"></i></div> -->
         </button>
       </div>
-      <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen2 ? '100%' : '0px'}">
+      <!-- <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen2 ? '100%' : '0px'}">
         <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
           <div class="bw-sidebar__item__icon"><i class="fas fa-comments"></i></div>
           <div class="bw-sidebar__item__text">
@@ -74,8 +74,8 @@
             What's New
           </div>
         </button>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
 
     <!-- Dropdown3 -->
     <!-- <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3" *ngIf="extramenus">
