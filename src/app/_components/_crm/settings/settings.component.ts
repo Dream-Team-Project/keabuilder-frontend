@@ -30,6 +30,7 @@ export class CrmSettingsComponent implements OnInit {
   zipControl = new FormControl('', [Validators.required]);
 
   fetch:boolean=false;
+  searching:boolean=false;
   emailfrom:any;
   smtp_type:any;
   api_key:any;
@@ -66,9 +67,11 @@ export class CrmSettingsComponent implements OnInit {
     })
   }
   fetchsmtp(){
+    this.searching=true;
     this._settingService.singlesetting().subscribe({
       next: data => {
         // console.log(data.data[0]);
+        this.searching=false;
         if(data.data.length!=0){
          this.allsmtpdata=data.data[0]; 
          this.timezone=this.allsmtpdata?.global_timezone?this.allsmtpdata?.global_timezone:this.timezone;
@@ -81,9 +84,11 @@ export class CrmSettingsComponent implements OnInit {
     });
   }
   fetchaddress(){
+    this.searching=true;
     return new Promise((resolve, reject)=>{
     this._addressService.fetchaddress().subscribe({
       next: data => {
+        this.searching=false;
         if(data.data.length!=0){
          this.alladdress=data.data; 
          resolve(true);

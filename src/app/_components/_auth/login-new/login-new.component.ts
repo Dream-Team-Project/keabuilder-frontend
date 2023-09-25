@@ -54,11 +54,13 @@ export class LoginNewComponent implements OnInit {
   }
   
   onSubmit(): void {
-
+    this.isLoginFailed = false;
+    this.errorMessage='';
     const { username, password } = this.form;
     if(this.userFormControl.status=='VALID' && this.passwordFormControl.status=='VALID'){
       this.authService.login(btoa(username), btoa(password)).subscribe({
         next: data => {
+          if(data.success){
           this.tokenStorage.saveToken(data.accessToken);
           var userdata = {
             uniqueid: data.uniqueid,
@@ -73,6 +75,11 @@ export class LoginNewComponent implements OnInit {
           localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
 
           this.redirectToDashboard();
+        } else{
+          this.errorMessage = data?.error?.message;
+          this.isLoginFailed = true;
+        
+      }
         },
         error: err => {
           this.errorMessage = err.error.message;

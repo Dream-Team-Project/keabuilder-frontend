@@ -30,7 +30,7 @@ export class CrmEmailsComponent implements OnInit {
 
   delemail:any;
   nodata = true;
-  fetching:boolean = true;
+  fetching:boolean = false;
   error=false;
   errormessage:any;
   
@@ -49,14 +49,16 @@ export class CrmEmailsComponent implements OnInit {
   }
 
   fetchData(){
-    this.fetching = true;
+  
     this.fetchEmails();
-     this.fetching = false;
+    
   }
   
   fetchEmails(){
+    this.fetching = true;
     this._email.fetchemails().subscribe((resp:any)=>{
         this.adjustdata(resp.data);
+        this.fetching = false;
     })
   }
 
