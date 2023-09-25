@@ -97,6 +97,8 @@ export class NewFunnelCheckoutComponent implements OnInit {
   redirecturi = '';
 
   checkoutvisible = false;
+  paymentsuccess = false;
+
   chkerror = '';
   constructor(
     private fb: FormBuilder, 
@@ -110,7 +112,6 @@ export class NewFunnelCheckoutComponent implements OnInit {
     private checkoutService: CheckoutService,
     private regpayService:RegistrationpaymentService,
     ) {
-      
       this.route.paramMap.subscribe((params: ParamMap) => { 
         this.uniqueid = params.get('id');
         if(this.uniqueid) this.fetchForm(this.uniqueid);
@@ -119,6 +120,9 @@ export class NewFunnelCheckoutComponent implements OnInit {
     }
 
   ngOnInit(): void {
+
+    if(this.append_order_form_id!='') this.uniqueid = this.append_order_form_id;
+
     this.stripeForm = this.fb.group({
       frname: ['', [Validators.required]],
       ltname: ['', [Validators.required]],
@@ -131,6 +135,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
       state: ['', [Validators.required]],
       zip: ['', [Validators.required]],
     });
+
   }
   
   ngOnChanges(changes: SimpleChanges) {
@@ -148,7 +153,6 @@ export class NewFunnelCheckoutComponent implements OnInit {
           this.redirecturi = data.data[0].redirection;
           this.fetchOffers(); 
           this.fetchOrder();
-
 
           var getstep = data.data[0].step!=null ? data.data[0].step : 'two';
           this.maketwostep = getstep == 'two' ? true : false;
@@ -204,7 +208,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
         stripeData['offerid'] = this.uniqueproid;
         stripeData['user_id'] = this.user_id;
 
-        console.log(stripeData);
+        // console.log(stripeData);
 
         this.checkoutService.stripePayment(stripeData).subscribe({
           next: data => {
@@ -214,19 +218,26 @@ export class NewFunnelCheckoutComponent implements OnInit {
               if(data.customer){
                 // localStorage.setItem("uniquecustomer", data.customer.id);
 
-                if(window.top!=null){
+                // if(window.top!=null){
+                  
+                  this.checkoutvisible = false;
+                  this.paymentsuccess = true;
+                  this.spinner = false;
+                  
                   if(this.redirecturi!=''){
-                     window.top.location.href = this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id+'&email='+data.email; 
+                     window.location.href = this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id+'&email='+data.email; 
                     //  console.log(this.redirecturi+"#customerid="+data.customer+'?userid='+this.user_id)
                   }
-                }
+                // }
 
               }
 
             }else{
               this.paymenterror=true;
               this.spinner=false;
+              this.paymentMessage='Something went wrong please try again!';
             }
+
           }
         });
 
@@ -276,6 +287,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
       this.fetching = true;
       this.orderformService.singleorderformusingid(this.user_id,this.uniqueid).subscribe((resp:any)=>{
+        // console.log(resp);
         if(resp.success) {
             this.orderform = resp.data[0];
             var mkofferarr = (this.orderform.offers!= null && this.orderform.offers!= '') ? this.orderform.offers.split(',') : [];
@@ -286,7 +298,8 @@ export class NewFunnelCheckoutComponent implements OnInit {
             this.redirection = this.orderform.redirection;
           }
         else {
-            this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+          // no product found
+            // this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
           }
         this.fetching = false;
       });
@@ -331,7 +344,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
   fetchOffers() {
     this._offerservice.fetchoffersusingid(this.user_id).subscribe((resp:any) => {
-      console.log(resp);
+      // console.log(resp);
         this.offers = resp.data;
     });
   }

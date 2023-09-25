@@ -207,5 +207,11 @@
 </div>
 </ng-container>
 <ng-template #notfound>
-  <div class="pt-3 pb-3 text-center" >Checkout not found!</div>
+  <div class="pt-3 pb-3 text-center" *ngIf="!paymentsuccess" >{{chkerror}}</div>
+  
+  <div class="text-center" *ngIf="paymentsuccess">
+    <i class="fa fa-3x fa-check-circle-o" aria-hidden="true"></i>
+    <div class="pt-2">Thank you for your Purchase.</div>
+    <p>Your Payment has been received.</p>
+  </div>
 </ng-template>
