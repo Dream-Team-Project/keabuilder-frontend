@@ -284,7 +284,11 @@ table.Checkout_Summary_Table tbody tr {
   position: absolute!important;
 }
 
-
+.mtershow{
+  font-size: 13px;
+  margin-top: -17px;
+  display: block;
+}
 /* bootstrap elements  */
 .kbmainouter.container-fluid {
   width: 100%;

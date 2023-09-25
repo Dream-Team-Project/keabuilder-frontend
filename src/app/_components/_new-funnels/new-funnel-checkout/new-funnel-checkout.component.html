@@ -125,7 +125,7 @@
                         [elementsOptions]="elementsOptions"></ngx-stripe-card>
                     </div> 
         
-                    <mat-error *ngIf="paymenterror">{{paymentMessage}}</mat-error>
+                    <mat-error class="mtershow" *ngIf="paymenterror">{{paymentMessage}}</mat-error>
                 </div>
 
                 <div class="o2step_step4 mt-4" *ngIf="switchstep || !maketwostep">
