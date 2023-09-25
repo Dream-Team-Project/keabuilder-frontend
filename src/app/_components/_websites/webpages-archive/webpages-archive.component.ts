@@ -92,9 +92,9 @@ export class WebpagesArchiveComponent implements OnInit {
           this.archivedwebpage();
 
           if(type=='delete'){
-            this._general.openSnackBar(false,'Delete Page Successfully!','OK','center','top');
+            this._general.openSnackBar(false,'Page has been deleted','OK','center','top');
           }else if(type=='restore'){
-            this._general.openSnackBar(false,'Restore Page Successfully!','OK','center','top');
+            this._general.openSnackBar(false,'Page has been restored','OK','center','top');
           }
 
         }

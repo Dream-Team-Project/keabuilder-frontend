@@ -68,3 +68,25 @@
     /* max-width: 60%;
     align-items: center; */
 }
+.kb-colr {
+    color: var(--primary-color);
+}
+.statusbadge {
+    color: var(--primary-color) ;
+    border:1px solid var(--primary-color);
+    font-size: 12px;
+    padding: 2px 12px;
+    border-radius: 5px;
+    /* border-radius: 50px 0px 0px 50px; */
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+.statusbadge.active2 {
+    background-color: #ffffff;
+    color: var(--primary-color);
+}
+.statbadg{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}

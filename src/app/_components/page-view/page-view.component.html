@@ -126,6 +126,10 @@
                                     class="kb-element-content">
                                         <app-crm-form-fetch [append_form_id]="element.content.data_id" class="kb-form-append"></app-crm-form-fetch>
                                     </div>
+                                    <div *ngSwitchCase="'order-form-component'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
+                                    class="kb-element-content">
+                                        <app-order-form [append_order_form_id]="element.content.data_id" class="kb-form-append"></app-order-form>
+                                    </div>
                                     <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                         [style.justifyContent]="'center'">
                                         <div class="kb-code-block kb-content-item"
@@ -157,6 +161,7 @@
         <!-- sections end -->
     </div>
 </div>
+<span [attr.kea-user-id]="req.uid"></span>
 <ng-container *ngIf="target == 'main' && page_json?.footer?.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
         <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>

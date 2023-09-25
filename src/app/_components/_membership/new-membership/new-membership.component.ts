@@ -12,9 +12,6 @@ export class NewMembershipComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, 
     public _general: GeneralService,) {
-
-   
-   
    }
 
   ngOnInit(): void {
