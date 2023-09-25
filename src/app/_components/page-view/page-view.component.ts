@@ -92,7 +92,7 @@ export class PageViewComponent implements OnInit {
                 if(resp?.data && resp?.data.length > 0) {
                   this.setLoadScript(resp.data);
                 }
-                // else this._general.redirectToPageNotFound();
+                else this._general.redirectToPageNotFound();
               })
             }
             else if(param_target == 'funnel') {
@@ -117,6 +117,7 @@ export class PageViewComponent implements OnInit {
               this.defaultPage = true;
             }
             else if(resp?.success && resp?.data && resp?.data.length > 0) {
+                this.req.uid = resp.uid;
                 this.req.wid = resp.wid;
                 this.req.pid = resp.pid;
                 this.setLoadScript(resp.data);
