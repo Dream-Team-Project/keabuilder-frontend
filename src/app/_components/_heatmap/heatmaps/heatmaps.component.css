@@ -51,3 +51,14 @@
 .kb-mostvisitpage ol li a {
     color: #6f6954;
 }
+
+.mkbrdr{
+    border-left: 1px solid #fff;
+  }
+  .maindivhead span.active{
+    opacity: 1;
+  }
+  .maindivhead span{
+    cursor: pointer;
+    opacity: 0.5;
+  }

@@ -70,10 +70,10 @@
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
             <div [class.kb-disabled]="footer.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('footer-'+footer.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-              <!-- <div class="kb-loader" *ngIf="shortwaiting || footer.deleting">
+              <div class="kb-loader" *ngIf="footer.deleting">
                 <div class="kb-loader-shadow"></div>
                 <div class="kb-loader-box"></div>
-              </div> -->
+              </div>
             </div>
           </div>
           <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
@@ -88,7 +88,7 @@
                 </p>
               </div>
               <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'" class="text-right">
-                <button mat-raised-button [disabled]="footer.deleting" (click)="edit(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
+                <button mat-raised-button [disabled]="footer.deleting" (click)="redirectToBuilder(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button [disabled]="footer.deleting" (click)="datafooter = footer; openDialog(duplicatedialog)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
                 <button mat-raised-button [disabled]="footer.deleting" (click)="delfooter = footer; openDialog(deldialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
               </div>

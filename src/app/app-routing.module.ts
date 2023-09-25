@@ -28,7 +28,6 @@ import { BuilderSettingComponent } from './_components/_builder/builder-setting/
 import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
 import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
 import { PageViewComponent } from './_components/page-view/page-view.component';
-import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
 // websites
 import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
@@ -439,7 +438,6 @@ export const RoutingComponents =
     BuilderComponent,
     BuilderSettingComponent,
     BulderWireframeComponent, 
-    FetchMenuComponent,
     PageNotFoundComponent,
     HeatmapsRecordingsComponent,
     MembershipCoursesComponent,

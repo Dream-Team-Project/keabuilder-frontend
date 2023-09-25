@@ -133,8 +133,7 @@
                                     <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                         [style.justifyContent]="'center'">
                                         <div class="kb-code-block kb-content-item"
-                                            [attr.html-data]="element.content.html">
-                                            {{'<'+'custom code/>'}}
+                                            [innerHTML]="element.content.html | safeHtml">
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">
@@ -161,7 +160,7 @@
         <!-- sections end -->
     </div>
 </div>
-<span [attr.kea-user-id]="req.uid"></span>
+<span id="kb-user-id" [attr.kb-user-id]="req.uid"></span>
 <ng-container *ngIf="target == 'main' && page_json?.footer?.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
         <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>

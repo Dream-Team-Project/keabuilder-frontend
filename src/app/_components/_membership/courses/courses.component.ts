@@ -52,7 +52,6 @@ export class MembershipCoursesComponent implements OnInit {
   showquickoffer:any = [];
   fetching:boolean = true;
   toggleview:boolean = true;
-  shortwaiting = true;
   btndis:boolean = false;
   delcourse:any;
   error=false;
@@ -67,9 +66,6 @@ export class MembershipCoursesComponent implements OnInit {
               }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000);
     // this._course.getalloffers().subscribe({
     //   next: data => {
     //    data.data.forEach((element: any) => {

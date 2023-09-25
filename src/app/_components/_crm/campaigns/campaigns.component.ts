@@ -21,7 +21,6 @@ export class CrmCampaignsComponent implements OnInit {
   campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   toggleview = true;
   kbcampaigns:any = [];
-  shortwaiting = true;
   selectedForm:string = '';
   lists: any = [];
   delcampaign:any;
@@ -45,9 +44,6 @@ export class CrmCampaignsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchcampaigns();
     this.fetchLists();
-    setTimeout(() => {
-        this.shortwaiting = false;
-    }, 1000);
   }
 fetchcampaigns(){
   this.fetching=true;

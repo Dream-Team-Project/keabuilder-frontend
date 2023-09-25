@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { WebpagesService } from 'src/app/_services/webpages.service';
 import { WebsiteService } from 'src/app/_services/website.service';
+import { FunnelService } from 'src/app/_services/funnels.service';
 
 @Component({
   selector: 'app-heatmaps',
@@ -16,7 +17,8 @@ export class HeatmapsComponent implements OnInit {
     private router: Router,
     private _general :GeneralService,
     private webpagesService: WebpagesService,
-    private websiteService: WebsiteService) { }
+    private websiteService: WebsiteService,
+    private funnelService: FunnelService) { }
   
   visited = [];
 
@@ -30,15 +32,12 @@ export class HeatmapsComponent implements OnInit {
 
     this.websiteService.getWebsite().subscribe({
       next: data => {
-        // console.log(data);
 
         var fullobjsite = data.data;
-        
         this.webpagesService.getWebpages().subscribe({
           next: data2 => {
-            // console.log(data);
-            var fullobjpage = data2.data;
 
+            var fullobjpage = data2.data;
             if(fullobjsite.length>0){
 
               fullobjpage.forEach((elm:any) => {
@@ -56,41 +55,41 @@ export class HeatmapsComponent implements OnInit {
             }
 
             this.visited = fullobjpage;
-            console.log(fullobjpage);
-
-            
 
           }
         });
 
       }
     });
-    
-   
-    
-    // this.heatmapsService.get().subscribe({
-    //   next: data => {
-    //     // console.log(data.data);
-    //     this.visited = data.data;
-    //     // console.log(this.visited);
-    //   },
-    //   error: err => {
-    //     console.log(err);
-    //   }
-    // });
 
+    this.funnelService.getallfunnelandstep().subscribe({
+      next: data => {
+        console.log(data);
+
+        
+
+      }
+    });
+    
+
+
+    
     this.createNewImg();
 
   }
   
   makeurl(visit:any){
-      return 'https://'+visit['insideweb'][0]['subdomain']+'.keapages.com/'+visit['page_path'];
+      return this.createurl(visit);
   }
 
   sendurl(visit:any){
-    var mkurl = 'https://'+visit['insideweb'][0]['subdomain']+'.keapages.com/'+visit['page_path'];
+    var mkurl = this.createurl(visit);
     var dtobj = {url: mkurl};
     this.makeheatunique(dtobj);
+  }
+
+  createurl(visit:any){
+    return 'https://'+visit['insideweb'][0]['subdomain']+'.keapages.com/'+visit['page_path'];
   }
 
   settheurl(){
@@ -107,7 +106,7 @@ export class HeatmapsComponent implements OnInit {
   makeheatunique(dtobj:any){
     this.heatmapsService.getheatunique(dtobj).subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
         this.searching = false;
 
         if(data.data.length>0){
