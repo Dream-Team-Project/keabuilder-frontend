@@ -146,7 +146,7 @@ export class PageViewComponent implements OnInit {
   fetchTarget() {
     if(this.target == 'header') {
       this._file.getheader(this.target_id).subscribe((resp:any)=>{
-        if(resp.data[0].json) {
+        if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
             const style = document.createElement('style');
@@ -163,7 +163,7 @@ export class PageViewComponent implements OnInit {
     }
     else if(this.target == 'footer') {
       this._file.getfooter(this.target_id).subscribe((resp:any)=>{
-        if(resp.data[0].json) {
+        if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
             const style = document.createElement('style');
@@ -226,28 +226,32 @@ export class PageViewComponent implements OnInit {
     this.loadScript(this.page_json.tracking.header, document.head);
     this.addHead(this.page_json.head);
     this.loadScript(this.page_json.tracking.footer, document.body);
-    this._general.fetchMenus().then(resp => {
-      this.setMenu(this.page_json.sections, resp);
-    })
+    if(this.page_json.sections) {
+      this._general.fetchMenus().then(resp => {
+        this.setMenu(this.page_json.sections, resp);
+      })
+    }
   }
 
   setMenu(sections:any, menus:any) {
-    sections.forEach((sec:any)=>{
-      sec.rowArr.forEach((row:any)=>{
-        row.columnArr.forEach((col:any)=>{
-          col.elementArr.forEach((ele:any)=>{
-            var cont = ele.content;
-            if(cont.name == 'menu') {
-              menus.forEach((menu:any)=>{
-                if(menu.id == cont.data_id) {
-                  var menuObj = JSON.parse(JSON.stringify(menu));
-                  ele.content = this._element.setMenu(cont, menuObj);
-                }
-              })
-            }
+    if(sections) {
+      sections.forEach((sec:any)=>{
+        sec.rowArr.forEach((row:any)=>{
+          row.columnArr.forEach((col:any)=>{
+            col.elementArr.forEach((ele:any)=>{
+              var cont = ele.content;
+              if(cont.name == 'menu') {
+                menus.forEach((menu:any)=>{
+                  if(menu.id == cont.data_id) {
+                    var menuObj = JSON.parse(JSON.stringify(menu));
+                    ele.content = this._element.setMenu(cont, menuObj);
+                  }
+                })
+              }
+            })
           })
         })
       })
-    })
+    }
   }
 }

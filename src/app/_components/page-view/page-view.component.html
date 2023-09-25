@@ -133,8 +133,7 @@
                                     <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
                                         [style.justifyContent]="'center'">
                                         <div class="kb-code-block kb-content-item"
-                                            [attr.html-data]="element.content.html">
-                                            {{'<'+'custom code/>'}}
+                                            [innerHTML]="element.content.html | safeHtml">
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">

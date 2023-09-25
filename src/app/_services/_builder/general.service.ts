@@ -746,14 +746,13 @@ export class GeneralService {
   }
 
   fetchMenus() {
-    const menus:any = [];
     return new Promise<any>((resolve, reject) => {
       this._navigationService.fetchNavigations().subscribe((resp:any)=>{
         if(resp.data.length-1) {
           this.menus = resp.data;
-          resolve(menus);
+          resolve(this.menus);
         }
-        else resolve(menus);
+        else resolve(this.menus);
        })
     })
   }
