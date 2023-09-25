@@ -201,6 +201,8 @@ specialuser=false;
   }
 
   onSubmit(): void {
+    this.isSignUpFailed = false;
+    this.errorMessage='';
     this.form.uniqueid=this.makeid(20);
     this.form.password=hashSync(this.form.password,8);
     if(this.specialuser) {

@@ -28,7 +28,6 @@ export class NewFunnelStepsComponent implements OnInit {
   funnel:any;
   funnels:any;
   toggleview = true;
-  shortwaiting = true;
   uniqueid:any; 
   delstep:any;
   nodata = true;
@@ -120,9 +119,6 @@ export class NewFunnelStepsComponent implements OnInit {
         this.funnel=data?.data[0];
         this.fetchsteps();
         this.showfunnels();
-        setTimeout(() => {
-          this.shortwaiting = false;
-        }, 1000)
       }
     });
   }

@@ -16,7 +16,6 @@ export class WebsiteHeadersComponent {
     name: new FormControl('', [Validators.required]),
   }
   toggleview = true;
-  shortwaiting = true;
   fetching:boolean = true;
   headers:any[] = [];
   delheader:any;
@@ -36,9 +35,6 @@ export class WebsiteHeadersComponent {
         }
   
   ngOnInit(): void {
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000);
   }
 
   toggleView() {
@@ -88,65 +84,51 @@ export class WebsiteHeadersComponent {
     if(!this.validate.name.invalid) {
       this.fetching = true;
       this.header.uniqueid = this._general.makeid(20);
-      var obj:any = {
-        id: 'kb-header-'+this.header.uniqueid,
-        html: ''
-      };
-      this._general._file.saveFile(obj, 'headers').subscribe(e=>{
-        this._general._file.saveheader(this.header).subscribe(resp=>{
-          if(resp.success) {
-            this.edit(this.header);
-            this.header.name = '';
-          }
-          else this.openSB(true);
-          resp.success ? this.edit(this.header) : this.openSB(true);
-          this.fetching = false;
-        });
+      this._general._file.saveheader(this.header).subscribe(resp=>{
+        if(resp.success) {
+          this.redirectToBuilder(this.header);
+          this.header.name = '';
+        }
+        else this.openSB(true);
+        resp.success ? this.redirectToBuilder(this.header) : this.openSB(true);
+        this.fetching = false;
       });
     }
     else this.openDialog(this.createdialog);
   }
 
-  edit(header:any) {
+  redirectToBuilder(header:any) {
     this._general.redirectToBuilder(header.uniqueid, 'header');
   }
 
   duplicate(header:any) {
     var dobj = JSON.parse(JSON.stringify(header));
     dobj.uniqueid = this._general.makeid(20);
-    var obj = {
-      oldpath: 'kb-header-'+header.uniqueid+'.php',
-      path: 'kb-header-'+dobj.uniqueid+'.php',
-    }
     this.fetching = true;
-    this._general._file.copyFile(obj, 'headers').subscribe(resp=>{
+    this._general._file.saveheader(dobj).subscribe((resp:any)=>{
       if(resp.success) {
-        this._general._file.saveheader(dobj).subscribe((resp:any)=>{
-          this.fetch();
-        })
         var imgobj  = {
           oldname: this._general.getSSPath('header-'+header.uniqueid), 
           newname: this._general.getSSPath('header-'+dobj.uniqueid)
         };
         this._general._file.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
+        this.fetch();
       }
       else this.openSB(true);
       this.fetching = false;
-    });
+    })
   }
 
   delete(header:any) {
     header.deleting = true;
     this._general._file.deleteheader(header.id).subscribe((resp:any)=>{
-      this._general._file.deleteFile('kb-header-'+header.uniqueid, 'headers').subscribe(resp=>{
-        console.log(resp);
-        if(resp.success) {
-          this.action = 'deleted';
-          this.fetch();
-        }
-        else this.openSB(true);
-      });
+      if(resp.success) {
+        this.action = 'deleted';
+        this.fetch();
+      }
+      else this.openSB(true);
+      header.deleting = false;
     })
   }
 

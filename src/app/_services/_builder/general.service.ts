@@ -746,29 +746,13 @@ export class GeneralService {
   }
 
   fetchMenus() {
-    const menus:any = [];
     return new Promise<any>((resolve, reject) => {
-      this._navigationService.fetchNavigations().subscribe((data:any)=>{
-        if(!data.success) resolve(menus);
-        data?.data?.forEach((element:any)=>{
-          // var doc = this.parser.parseFromString(html, 'text/html');
-          // var ul = doc.querySelector('ul');
-          // var menu:any = {id: ul?.id, name: ul?.getAttribute('data-name'), type: 'menu', html: html, items: []}
-          // var list:any = ul?.querySelectorAll('li');
-          // list.forEach((li:any, lindex:number) => {
-          //   var anc:any = li.querySelector('a');
-          //   var item = {id: anc?.id, name: anc?.innerText, type: 'item', link: anc.getAttribute('href'), target: anc?.target };
-          //   menu.items.push(item);
-          //   if(uindex == data.data.length-1 && lindex == list.length-1) {
-          //     resolve(menus);
-          //   }
-          // })
-          element.items=this.decodeJSON(element.items);
-          menus.push(element);
-        })
-        if( menus.length -1 == data.data.length-1){
-          resolve(menus);
+      this._navigationService.fetchNavigations().subscribe((resp:any)=>{
+        if(resp.data.length-1) {
+          this.menus = resp.data;
+          resolve(this.menus);
         }
+        else resolve(this.menus);
        })
     })
   }

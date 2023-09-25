@@ -115,17 +115,20 @@ export class WebsiteNavigationComponent {
   }
 
   selectMenu(menu:any) {
-    this.menuobj = JSON.parse((JSON.stringify(menu)));
+    let temp = JSON.parse((JSON.stringify(menu)));
+    temp.items = this._general.decodeJSON(temp.items);
+    this.menuobj = temp;
   }
 
-  saveMenu(menuobj:any) {
+  saveMenu(menu:any) {
+    let menuobj = JSON.parse(JSON.stringify(menu));
     if(menuobj.name && menuobj.items.length != 0) {
       if(!this.action) this.action = 'saved';
       this.fetching.menu = true;
-      menuobj.items=this._general.encodeJSON(menuobj.items);
+      menuobj.items = this._general.encodeJSON(menuobj.items);
       this._navigationService.addNavigation(menuobj).subscribe((resp:any)=>{
         resp.success ? this.fetchMenus() : this.openSB(true);
-     })   
+      })   
     }
     else {
       var msg = !menuobj.name ? 'Menu name should not be empty' : 'Atlease one menu item should be added';

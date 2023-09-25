@@ -21,7 +21,6 @@ export class CrmEmailsComponent implements OnInit {
   }
   emails:any[] = [];
   toggleview = true;
-  shortwaiting = true;
   email: any = {
     name: '',
     subject:'',
@@ -31,7 +30,7 @@ export class CrmEmailsComponent implements OnInit {
 
   delemail:any;
   nodata = true;
-  fetching:boolean = true;
+  fetching:boolean = false;
   error=false;
   errormessage:any;
   
@@ -46,22 +45,20 @@ export class CrmEmailsComponent implements OnInit {
                }
 
   ngOnInit(): void {
-    this.fetchData();
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000)
-    
+    this.fetchData();    
   }
 
   fetchData(){
-    this.fetching = true;
+  
     this.fetchEmails();
-     this.fetching = false;
+    
   }
   
   fetchEmails(){
+    this.fetching = true;
     this._email.fetchemails().subscribe((resp:any)=>{
         this.adjustdata(resp.data);
+        this.fetching = false;
     })
   }
 

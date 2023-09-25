@@ -26,7 +26,6 @@ export class CrmFormsComponent implements OnInit {
   }
   forms:any[] = [];
   toggleview = true;
-  shortwaiting = true;
   form: any = {
     name: '',
     lists:'',
@@ -66,38 +65,38 @@ export class CrmFormsComponent implements OnInit {
                }
 
   ngOnInit(): void {
-    this.fetchData();
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000)
-    
+    this.fetchData();   
   }
 
   fetchData(){
-    this.fetching = true;
     this.fetchForms();
       this.fetchLists();
-        this.fetchTags();
-          this.fetching = false;
+        this.fetchTags();       
   }
   
   fetchForms(){
+    this.fetching = true;
     this._file.fetchforms().subscribe((resp:any)=>{
         this.adjustdata(resp.data);
+        this.fetching = false;
     })
   }
 
   fetchLists() {
+    this.fetching = true;
       this._listService.fetchlists().subscribe(
         (data) => {
           this.lists = data.data;
+          this.fetching = false;
     });
   }
 
   fetchTags() {
+    this.fetching = true;
       this._tagService.fetchtags().subscribe(
         (data) => {
           this.tags = data.data;
+          this.fetching = false;
     });
   }
 

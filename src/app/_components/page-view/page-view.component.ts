@@ -146,13 +146,14 @@ export class PageViewComponent implements OnInit {
   fetchTarget() {
     if(this.target == 'header') {
       this._file.getheader(this.target_id).subscribe((resp:any)=>{
-        if(resp.data[0].json) {
+        if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
             const style = document.createElement('style');
             style.innerHTML = this.page_json.style;
             style.id = 'kb-header-style';
             document.head.appendChild(style);
+            this.loadCustomCode();
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
@@ -163,13 +164,14 @@ export class PageViewComponent implements OnInit {
     }
     else if(this.target == 'footer') {
       this._file.getfooter(this.target_id).subscribe((resp:any)=>{
-        if(resp.data[0].json) {
+        if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
             const style = document.createElement('style');
             style.innerHTML = this.page_json.style;
             style.id = 'kb-footer-style';
             document.head.appendChild(style);
+            this.loadCustomCode();
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
@@ -221,33 +223,47 @@ export class PageViewComponent implements OnInit {
     });
   }
 
+  loadCustomCode() {
+    setTimeout(()=>{
+      document.querySelectorAll('app-page-view .kb-element-content .kb-code-block').forEach((item:any)=>{
+        let htmlData = item.getAttribute('html-data');
+        this.loadScript(htmlData, document.body);
+      })
+    }, 10)
+  }
+
   setLoadScript(data:any) {
     this.page_json = this._general.decodeJSON(data);
     this.loadScript(this.page_json.tracking.header, document.head);
     this.addHead(this.page_json.head);
     this.loadScript(this.page_json.tracking.footer, document.body);
-    this._general.fetchMenus().then(resp => {
-      this.setMenu(this.page_json.sections, resp);
-    })
+    if(this.page_json.sections) {
+      this._general.fetchMenus().then(resp => {
+        this.setMenu(this.page_json.sections, resp);
+        this.loadCustomCode();
+      })
+    }
   }
 
   setMenu(sections:any, menus:any) {
-    sections.forEach((sec:any)=>{
-      sec.rowArr.forEach((row:any)=>{
-        row.columnArr.forEach((col:any)=>{
-          col.elementArr.forEach((ele:any)=>{
-            var cont = ele.content;
-            if(cont.name == 'menu') {
-              menus.forEach((menu:any)=>{
-                if(menu.id == cont.data_id) {
-                  var menuObj = JSON.parse(JSON.stringify(menu));
-                  ele.content = this._element.setMenu(cont, menuObj);
-                }
-              })
-            }
+    if(sections) {
+      sections.forEach((sec:any)=>{
+        sec.rowArr.forEach((row:any)=>{
+          row.columnArr.forEach((col:any)=>{
+            col.elementArr.forEach((ele:any)=>{
+              var cont = ele.content;
+              if(cont.name == 'menu') {
+                menus.forEach((menu:any)=>{
+                  if(menu.id == cont.data_id) {
+                    var menuObj = JSON.parse(JSON.stringify(menu));
+                    ele.content = this._element.setMenu(cont, menuObj);
+                  }
+                })
+              }
+            })
           })
         })
       })
-    })
+    }
   }
 }

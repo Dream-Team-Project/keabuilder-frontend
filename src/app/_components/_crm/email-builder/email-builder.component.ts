@@ -209,7 +209,7 @@ export class CrmEmailBuilderComponent implements OnInit {
       if(data.success) {
         this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
           var file:any = this._image.base64ToFile(e, 'email-'+this.email.uniqueid+'-screenshot.png');
-          this._general._file.upload(file).subscribe(
+          this._general._file.uploadScreenshot(file).subscribe(
             (event: any) => {
               if (typeof (event) === 'object') {
                 var msg =  'Email has been saved';

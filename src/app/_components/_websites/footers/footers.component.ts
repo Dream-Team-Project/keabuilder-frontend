@@ -17,7 +17,6 @@ export class WebsiteFootersComponent {
     name: new FormControl('', [Validators.required]),
   }
   toggleview = true;
-  shortwaiting = true;
   footers:any[] = [];
   fetching:boolean = true;
   delfooter:any;
@@ -35,9 +34,6 @@ export class WebsiteFootersComponent {
         }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000);
   }
   
   toggleView() {
@@ -87,26 +83,20 @@ export class WebsiteFootersComponent {
     if(!this.validate.name.invalid) {
       this.fetching = true;
       this.footer.uniqueid = this._general.makeid(20);
-      var obj:any = {
-        id: 'kb-footer-'+this.footer.uniqueid,
-        html: ''
-      }
-      this._general._file.saveFile(obj, 'footers').subscribe(e=>{
-        this._general._file.savefooter(this.footer).subscribe(resp=>{
-          if(resp.success) {
-            this.edit(this.footer);
-            this.footer.name = '';
-          }
-          else this.openSB(true);
-          resp.success ? this.edit(this.footer) : this.openSB(true);
-          this.fetching = false;
-        });
+      this._general._file.savefooter(this.footer).subscribe(resp=>{
+        if(resp.success) {
+          this.redirectToBuilder(this.footer);
+          this.footer.name = '';
+        }
+        else this.openSB(true);
+        resp.success ? this.redirectToBuilder(this.footer) : this.openSB(true);
+        this.fetching = false;
       });
     }
     else this.openDialog(this.createdialog);
   }
 
-  edit(footer:any) {
+  redirectToBuilder(footer:any) {
     this._general.redirectToBuilder(footer.uniqueid, 'footer');
   }
 
@@ -118,35 +108,30 @@ export class WebsiteFootersComponent {
       path: 'kb-footer-'+dobj.uniqueid+'.php',
     }
     this.fetching = true;
-    this._general._file.copyFile(obj, 'footers').subscribe(resp=>{
+    this._general._file.savefooter(dobj).subscribe((resp:any)=>{
       if(resp.success) {
-        this._general._file.savefooter(dobj).subscribe((resp:any)=>{
-          this.fetch();
-        })
         var imgobj  = {
           oldname: this._general.getSSPath('footer-'+footer.uniqueid), 
           newname: this._general.getSSPath('footer-'+dobj.uniqueid)
         };
         this._general._file.copyimage(imgobj).subscribe(resp=>{});
         this.action = 'duplicated';
+        this.fetch();
       }
       else this.openSB(true);
       this.fetching = false;
-    });
+    })
   }
 
   delete(footer:any) {
     footer.deleting = true;
-    this.fetching = true;
     this._general._file.deletefooter(footer.id).subscribe((resp:any)=>{
-      this._general._file.deleteFile('kb-footer-'+footer.uniqueid, 'footers').subscribe(resp1=>{
-        if(resp.success) {
-          this.action = 'deleted';
-          this.fetch();
-        }
-        else this.openSB(true);
-        this.fetching = false;
-      });
+      if(resp.success) {
+        this.action = 'deleted';
+        this.fetch();
+      }
+      else this.openSB(true);
+      footer.deleting = false;
     })
   }
 
