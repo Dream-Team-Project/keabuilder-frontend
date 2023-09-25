@@ -93,10 +93,10 @@
         <div class="row kb-course-block">
           <div [class.kb-disabled]="course.deleting" class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
           [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+course.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
-            <div class="kb-loader" *ngIf="shortwaiting || course.deleting">
+            <!-- <div class="kb-loader" *ngIf="shortwaiting || course.deleting">
               <div class="kb-loader-shadow"></div>
               <div class="kb-loader-box"></div>
-            </div>
+            </div> -->
           </div>
           <div class="kb-course-content p-0" [class]="toggleview ? 'col-md-12' : 'col-md-9'">
             <div class="p-2 align-items-center text-center" [class.px-3]="!toggleview">

@@ -88,6 +88,17 @@
             </svg><span class="icon-label">Heatmap</span></span>
         </button>
 
+        <button class="ui-button ui-button-positive ui-button-fill" id="screenshot-button" *ngIf="false"><span
+          class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera-retro"
+            role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+            class="svg-inline--fa fa-camera-retro fa-w-16 fa-9x">
+            <path fill="currentColor"
+              d="M48 32C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H48zm0 32h106c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H38c-3.3 0-6-2.7-6-6V80c0-8.8 7.2-16 16-16zm426 96H38c-3.3 0-6-2.7-6-6v-36c0-3.3 2.7-6 6-6h138l30.2-45.3c1.1-1.7 3-2.7 5-2.7H464c8.8 0 16 7.2 16 16v74c0 3.3-2.7 6-6 6zM256 424c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm-48 104c-8.8 0-16-7.2-16-16 0-35.3 28.7-64 64-64 8.8 0 16 7.2 16 16s-7.2 16-16 16c-17.6 0-32 14.4-32 32 0 8.8-7.2 16-16 16z"
+              class=""></path>
+          </svg> &nbsp;
+          <span class="icon-label">Screenshot</span>
+        </span></button>
+
         <button class="ui-button icon app-button ui-button-default ui-button-text" *ngIf="false" id="heatmap-recording"
           aria-label="blur_circularHeatmap  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
               data-prefix="fas" data-icon="video" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
@@ -99,7 +110,7 @@
         </button>
       </div>
       <div class="flex layout-row layout-align-end-center" style="flex-direction: row-reverse;">
-        <button style="margin-left: -25px;" class="ui-button icon padding-none ui-button-default ui-button-text"
+        <button style="margin-left: -25px;" class="ui-button icon padding-none ui-button-default ui-button-text" *ngIf="false"
           id="feedback-button" aria-label="help Get help"><span class="ui-button-flex"><svg aria-hidden="true"
               focusable="false" data-prefix="fas" data-icon="question-circle" role="img"
               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -111,16 +122,30 @@
             <span class="icon-label">Get help</span>
           </span></button>
 
-        <button class="ui-button ui-button-positive ui-button-fill" id="screenshot-button"><span
-            class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera-retro"
-              role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-              class="svg-inline--fa fa-camera-retro fa-w-16 fa-9x">
-              <path fill="currentColor"
-                d="M48 32C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H48zm0 32h106c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H38c-3.3 0-6-2.7-6-6V80c0-8.8 7.2-16 16-16zm426 96H38c-3.3 0-6-2.7-6-6v-36c0-3.3 2.7-6 6-6h138l30.2-45.3c1.1-1.7 3-2.7 5-2.7H464c8.8 0 16 7.2 16 16v74c0 3.3-2.7 6-6 6zM256 424c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm-48 104c-8.8 0-16-7.2-16-16 0-35.3 28.7-64 64-64 8.8 0 16 7.2 16 16s-7.2 16-16 16c-17.6 0-32 14.4-32 32 0 8.8-7.2 16-16 16z"
-                class=""></path>
-            </svg> &nbsp;
-            <span class="icon-label">Screenshot</span>
-          </span></button>
+          <div class="layout-row layout-align-start-center">
+            <span>
+              <strong class="filtered">{{totalclicks}} clicks</strong>
+            </span>
+            <span class="layout-row" *ngIf="false">
+              <strong class="spacer">·</strong>
+              <span class="color-positive">All clicks have been loaded</span>
+            </span>
+            <span class="layout-row">
+              <button class="ui-button icon padding-none ui-button-default ui-button-text" id="heatmap-reload">
+                <span class="ui-button-flex">
+                  <svg style="width:15px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="redo"
+                    role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                    class="svg-inline--fa fa-redo fa-w-16 fa-9x">
+                    <path fill="currentColor"
+                      d="M500.33 0h-47.41a12 12 0 0 0-12 12.57l4 82.76A247.42 247.42 0 0 0 256 8C119.34 8 7.9 119.53 8 256.19 8.1 393.07 119.1 504 256 504a247.1 247.1 0 0 0 166.18-63.91 12 12 0 0 0 .48-17.43l-34-34a12 12 0 0 0-16.38-.55A176 176 0 1 1 402.1 157.8l-101.53-4.87a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12h200.33a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12z"
+                      class=""></path>
+                  </svg>
+                </span>
+              </button>
+            </span>
+          </div>
+
+      
       </div>
     </div>
     <div id="lo-website" class="flex layout-column layout-align-center-center">
@@ -133,8 +158,8 @@
       </div>
       <div></div>
     </div>
-    <div id="lo-status-bar" role="toolbar" class="ui-status-bar layout-row layout-align-space-between-center">
-      <div class="flex layout-row layout-align-start-center">
+    <div id="lo-status-bar" role="toolbar" class="m-2 ui-status-bar layout-row layout-align-space-between-center" >
+      <div class="flex layout-row layout-align-start-center" *ngIf="false">
         <span>
           <strong class="filtered">{{totalclicks}} clicks</strong>
         </span>
@@ -156,7 +181,7 @@
           </button>
         </span>
       </div>
-      <a [href]="windoworigin+'/heatmap'" target="_blank" id="brand-link"
+      <a *ngIf="false" [href]="windoworigin+'/heatmap'" target="_blank" id="brand-link"
         class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img id="brand-wordmark"
           src="/assets/images/logo/kblogo.png" alt="Keabuilder" /></a>
     </div>
@@ -184,8 +209,8 @@
             <main class="layout-column ui-floating-panel-content flex">
               <div id="segmentation-panel-scroll-container" class="ps ps--active-y" style="position: relative;">
                 <div class="padding-half">
-                  <div id="date-range" class="lo-segment loadEffect" [class.active]="insidesegmentpanel[0]" (click)="toggleinside(0)">
-                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                  <div id="date-range" class="lo-segment loadEffect" [class.active]="insidesegmentpanel[0]" >
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn" (click)="toggleinside(0)">
                       <h5 class="flex margin-none">
                         Date range
                         <div class="indicator" style="display: none;">
@@ -206,10 +231,10 @@
                     </header>
                     <div class="lo-input-group padding-bottom-half showmydropdown loadEffect" style="display: none;">
                       <div class="padding-bottom-half">
-                        <input name="date-start" type="date" id="ui-datepicker1" class="ui-datepicker ui-input"
+                        <input name="date-start" type="date" (change)="uidatepicker1($event)" id="ui-datepicker1" class="ui-datepicker ui-input"
                           placeholder="Start date" autocomplete="off" aria-label="Use the arrow keys to pick a date" />
                       </div>
-                      <input name="date-end" type="date" id="ui-datepicker2" class="ui-datepicker ui-input"
+                      <input name="date-end" type="date" (change)="uidatepicker2($event)" id="ui-datepicker2" class="ui-datepicker ui-input"
                         placeholder="End date" autocomplete="off" />
                     </div>
                   </div>
@@ -256,8 +281,8 @@
                     </div>
 
                   </div>
-                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[1]" (click)="toggleinside(1)">
-                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[1]">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn"  (click)="toggleinside(1)">
                       <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
                       <h5 class="flex margin-none text-truncate">
                         Browser
@@ -283,13 +308,27 @@
                         <div role="group" id="kb_bs_segment" class=""
                           style="display: block; padding-top: 12px; padding-bottom: 0px;">
 
+                              <div class="padding-bottom-half" *ngFor="let bs of kb_bs_segment[0] | keyvalue"><label
+                                class="layout-row layout-align-start-center margin-none">
+                                <div class="padding-right-half"><input type="checkbox" (click)="getrequireddata($event,'browser')"
+                                        [value]="bs.key" name="browser_segment" [checked]="brsegmnt.indexOf(bs.key)>-1" /></div>
+                                <div aria-label="" role="listitem"
+                                    class="ui-list-item padding-none flex">
+                                    <div
+                                        class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                       {{bs.key}}
+                                    </div> <strong>{{bs.value}}</strong>
+                                        </div>
+                                    </label>
+                                </div>
+
                         </div>
                       </div>
                     </div>
 
                   </div>
-                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[2]" (click)="toggleinside(2)">
-                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[2]" >
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn" (click)="toggleinside(2)">
                       <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
                       <h5 class="flex margin-none text-truncate">
                         Operating system
@@ -315,13 +354,27 @@
                         <div role="group" id="kb_os_segment" class=""
                           style="display: block; padding-top: 12px; padding-bottom: 0px;">
 
+                          <div class="padding-bottom-half" *ngFor="let bs of kb_os_segment[0] | keyvalue"><label
+                            class="layout-row layout-align-start-center margin-none">
+                            <div class="padding-right-half"><input type="checkbox" (click)="getrequireddata($event,'os')"
+                                    [value]="bs.key" name="os_segment" [checked]="ossegmnt.indexOf(bs.key)>-1" /></div>
+                            <div aria-label="" role="listitem"
+                                class="ui-list-item padding-none flex">
+                                <div
+                                    class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                   {{bs.key}}
+                                </div> <strong>{{bs.value}}</strong>
+                                    </div>
+                                </label>
+                            </div>
+                              
                         </div>
                       </div>
                     </div>
 
                   </div>
-                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[3]" (click)="toggleinside(3)">
-                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[3]">
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn" (click)="toggleinside(3)">
                       <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
                       <h5 class="flex margin-none text-truncate">
                         Country
@@ -346,6 +399,20 @@
                         style="display: block;overflow-y: scroll;height: 250px;position: relative;">
                         <div role="group" id="kb_country_segment" class=""
                           style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                            <div class="padding-bottom-half" *ngFor="let bs of kb_country_segment[0] | keyvalue"><label
+                              class="layout-row layout-align-start-center margin-none">
+                              <div class="padding-right-half"><input type="checkbox" (click)="getrequireddata($event,'location')"
+                                      [value]="bs.key" name="country_segment" [checked]="countrysegmnt.indexOf(bs.key)>-1" /></div>
+                              <div aria-label="" role="listitem"
+                                  class="ui-list-item padding-none flex">
+                                  <div
+                                    class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                   {{bs.key}}
+                                </div> <strong>{{bs.value}}</strong>
+                                    </div>
+                                </label>
+                            </div> 
 
                         </div>
                       </div>
@@ -382,8 +449,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[4]" (click)="toggleinside(4)">
-                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn">
+                  <div class="ui-list-group lo-segment lo-default-segment loadEffect" [class.active]="insidesegmentpanel[4]" >
+                    <header class="layout-row layout-align-start-center padding-y-half cursor-pointer kb-dropdwn" (click)="toggleinside(4)">
                       <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
                       <h5 class="flex margin-none text-truncate">
                         Number of visits
@@ -408,6 +475,21 @@
                         style="display: block;overflow-y: scroll;height: 250px;position: relative;">
                         <div role="group" id="kb_nuofvisit_segment" class=""
                           style="display: block; padding-top: 12px; padding-bottom: 0px;">
+
+                            <div class="padding-bottom-half" *ngFor="let bs of numberofvisit_segment[0] | keyvalue"><label
+                              class="layout-row layout-align-start-center margin-none">
+                              <div class="padding-right-half"><input type="radio" (click)="getrequireddata($event,'created_at')"
+                                      [value]="bs.key" name="numberofvisit_segment" [checked]="numberofvisitsegmnt.indexOf(bs.key)>-1" /></div>
+                              <div aria-label="" role="listitem"
+                                  class="ui-list-item padding-none flex">
+                                  <div
+                                    class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                                  {{bs.key}}
+                                </div> <strong>{{bs.value}}</strong>
+                                    </div>
+                                </label>
+                            </div> 
+
                         </div>
                       </div>
                     </div>
@@ -440,7 +522,7 @@
                 <div id="screen-size-selector" class="ui-input-group margin-bottom-half"><label for="heatmap-viewport"
                     class="ui-form-label flex">Device type</label>
                   <div role="radiogroup" class="ui-button-group size-full-width" name="heatmap-viewport">
-                    <button
+                    <button [class.active]="selectdevice=='desktop'" (click)=" devicecheck('desktop')"
                       class="ui-button padding-none size-small ui-button-default ui-button-text ui-button-primary kb-devicebtn active"
                       value="desktop" aria-label="desktop_windowsDesktop" role="radio"><span class="ui-button-flex"><svg
                           aria-hidden="true" focusable="false" data-prefix="fas" data-icon="desktop" role="img"
@@ -451,7 +533,7 @@
                             class=""></path>
                         </svg> Desktop</span></button>
 
-                    <button class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
+                    <button [class.active]="selectdevice=='tablet'" (click)=" devicecheck('tablet')" class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
                       value="tablet" aria-label="tablet_macTablet" role="radio"><span class="ui-button-flex"><svg
                           aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tablet-alt" role="img"
                           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
@@ -461,7 +543,7 @@
                             class=""></path>
                         </svg> Tablet</span></button>
 
-                    <button class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
+                    <button [class.active]="selectdevice=='phone'" (click)=" devicecheck('phone')" class="ui-button padding-none size-small ui-button-default ui-button-text kb-devicebtn"
                       value="phone" aria-label="smartphonePhone" role="radio"><span class="ui-button-flex"><svg
                           aria-hidden="true" focusable="false" data-prefix="fas" data-icon="mobile-alt" role="img"
                           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
@@ -473,7 +555,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="ui-list-group lo-segment lo-default-segment margin-bottom-half">
+                <div class="ui-list-group lo-segment lo-default-segment margin-bottom-half" *ngIf="false">
                   <header tabindex="0" class="layout-row layout-align-start-center padding-y-half cursor-pointer">
                     <input type="checkbox" checked="checked" class="margin-right-half" style="display: none;" />
                     <h5 class="flex margin-none text-truncate">
@@ -485,7 +567,7 @@
                     </h5>
                   </header>
                 </div>
-                <div class="layout-row layout-gutters-half layout-align-start-center margin-bottom">
+                <div class="layout-row layout-gutters-half layout-align-start-center margin-bottom" *ngIf="false">
                   <div class="ui-input-group margin-none"><label for="device-width">Custom width</label> <input
                       type="number" name="device-width" min="0" field="device-width" placeholder="E.g. 800"
                       class="ui-input" />
@@ -524,8 +606,7 @@
                     class="ui-form-label flex">Event type</label>
                   <div role="radiogroup" class="ui-button-group size-full-width" name="heatmap-type">
 
-                    <button
-                      class="ui-button padding-none size-small ui-button-default ui-button-text ui-button-primary active"
+                    <button [class.active]="selectheatmap=='clicks'" (click)="kbclicks()" class="ui-button padding-none size-small ui-button-default ui-button-text ui-button-primary active"
                       value="clicks" id="kb-clicks" role="radio"><span class="ui-button-flex">
                         <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="hand-pointer" role="img"
                           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
@@ -536,7 +617,7 @@
                         </svg> Clicks</span>
                     </button>
 
-                    <button class="ui-button padding-none size-small ui-button-default ui-button-text" value="moves"
+                    <button [class.active]="selectheatmap=='moves'" (click)="kbmoves()" class="ui-button padding-none size-small ui-button-default ui-button-text" value="moves"
                       role="radio" id="kb-moves"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false"
                           data-prefix="fas" data-icon="signature" role="img" xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 640 512" class="svg-inline--fa fa-signature fa-w-20 fa-7x">
@@ -552,14 +633,14 @@
                   <div class="layout-row layout-align-start-center"><label for="heatmap-opacity"
                       class="ui-form-label flex margin-none">Opacity</label> <span class="size-small"><strong
                         class="heatmapopacity">100%</strong></span></div>
-                  <input name="heatmap-opacity" type="range" min="0" max="1" value="1" step="0.1">
+                  <input name="heatmap-opacity" (change)="heatopacity($event)" type="range" min="0" max="1" value="1" step="0.1">
                 </div>
                 <div class="ui-input-group margin-none"><label id="show-background" class="ui-form-label margin-none">
-                    <div class="layout-row layout-align-start-center"><span class="flex">Show heatmap</span> <input
+                    <div class="layout-row layout-align-start-center"><span class="flex">Show heatmap</span> <input (click)="showheatmap()"
                         type="checkbox" name="show-heatmap"></div>
                   </label> <label id="show-background" class="ui-form-label margin-none">
                     <div class="layout-row layout-align-start-center"><span class="flex">Show background</span>
-                      <input type="checkbox" name="show-background" checked></div>
+                      <input (click)="showbackground()" type="checkbox" name="show-background" checked></div>
                   </label> </div>
               </div>
             </main>

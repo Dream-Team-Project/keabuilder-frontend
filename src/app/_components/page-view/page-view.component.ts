@@ -57,8 +57,8 @@ export class PageViewComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        const domain = 'newone.keapages.com';
-        const path = '/';
+        const domain = routeData.domain;
+        const path = routeData.path;
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -84,7 +84,7 @@ export class PageViewComponent implements OnInit {
             })
           }
           else if(param_target && uid && wid && pid) {
-            this.req.uid = uid
+            this.req.uid = uid;
             this.req.wid = wid;
             this.req.pid = pid;
             if(param_target == 'website') {
@@ -103,7 +103,6 @@ export class PageViewComponent implements OnInit {
                 else this._general.redirectToPageNotFound();
               })
             }
-            else this._general.redirectToPageNotFound();
           }
           else this._general.redirectToPageNotFound();
         }
@@ -118,6 +117,7 @@ export class PageViewComponent implements OnInit {
               this.defaultPage = true;
             }
             else if(resp?.success && resp?.data && resp?.data.length > 0) {
+                this.req.uid = resp.uid;
                 this.req.wid = resp.wid;
                 this.req.pid = resp.pid;
                 this.setLoadScript(resp.data);
@@ -245,8 +245,8 @@ export class PageViewComponent implements OnInit {
                 }
               })
             }
+          })
         })
-      })
       })
     })
   }

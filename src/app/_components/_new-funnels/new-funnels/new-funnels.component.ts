@@ -83,6 +83,9 @@ export class NewFunnelsComponent implements OnInit {
   dialogfunnelset = '';
   hidefornow = false;
 
+  username:any = '';
+
+
   constructor(
     private funnelService: FunnelService,
     private router: Router,
@@ -99,6 +102,15 @@ export class NewFunnelsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showfunnels();
+
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        if(data.data.length>0){
+          this.username = data.data[0].username;
+        }
+      }
+    });
+
   }
 
   getServerData(event?: PageEvent) {
@@ -152,23 +164,10 @@ export class NewFunnelsComponent implements OnInit {
   }
 
   makeduplicatefunnel() {
-    if (
-      this.funneltitleFormControl.status == 'VALID' &&
-      this.subdomainFormControl.status == 'VALID'
-    ) {
-      var nwsubdomain: any = this.form.subdomain.toLowerCase();
-      var notusesub = [
-        'app',
-        'test',
-        'developer',
-        'admin',
-        'kea',
-        'keabuilder',
-        'keapages',
-        'user',
-      ];
+    this.createsubdomainname();
 
-      if (this.searchStringInArray(nwsubdomain, notusesub) == 1) {
+    if (this.funneltitleFormControl.status == 'VALID' && this.form.subdomain!='') {
+
         this.searching = true;
         var obj: any = {
           uniqueid: this.selfunnelid,
@@ -228,21 +227,10 @@ export class NewFunnelsComponent implements OnInit {
             }
           },
         });
-      } else {
-        this.error=true;
-      this.errormessage="Subdomain is in use, please use another name!";
-      this.dialog.open(this.funnelduplicatedialog);
-        // this._general.openSnackBar(
-        //   false,
-        //   'Subdomain is in use, please use another name!',
-        //   'OK',
-        //   'center',
-        //   'top'
-        // );
-      }
+      
     } else {
       this.error=true;
-      this.errormessage="Title & subdomain Fields required !";
+      this.errormessage="Something went Wrong!";
       this.dialog.open(this.funnelduplicatedialog);
       // this._general.openSnackBar(
       //   false,
@@ -565,7 +553,6 @@ export class NewFunnelsComponent implements OnInit {
       },
     });
   }
-
  
   savesteptheme() {
     var obj = {
@@ -715,25 +702,20 @@ export class NewFunnelsComponent implements OnInit {
     
   }
 
+  createsubdomainname(){
+    var uniqid = this._general.makeid(15);
+    this.form.subdomain = this.username+uniqid;
+  }
+
   onSubmit(): void {
+    this.createsubdomainname();
     // console.log(this.userFormControl.status+' '+this.subdomainFormControl.status+' '+this.stepnameFormControl.status);
     if (
       this.userFormControl.status == 'VALID' &&
-      this.subdomainFormControl.status == 'VALID' &&
       this.stepnameFormControl.status == 'VALID'
     ) {
-      var nwsubdomain: any = this.form.subdomain?.toLowerCase();
-      var notusesub = [
-        'app',
-        'test',
-        'developer',
-        'admin',
-        'kea',
-        'keabuilder',
-        'keapages',
-        'user',
-      ];
-      if (this.searchStringInArray(nwsubdomain, notusesub) == 1) {
+     
+      if (this.form.subdomain != '') {
         this.searching = true;
         this.dialog.closeAll();
         this.funnelService.savefunneldb(this.form).subscribe({
@@ -798,7 +780,7 @@ export class NewFunnelsComponent implements OnInit {
         });
       } else {
         this.error=true;
-        this.errormessage='Subdomain is in use, please use another name!';
+        this.errormessage='Something went Wrong!';
         this.dialog.open(this.adddialog);
         // this._general.openSnackBar(
         //   false,
@@ -809,7 +791,9 @@ export class NewFunnelsComponent implements OnInit {
         // );
       }
     }
+
   }
+
   resetobj(){
     this.searching=false;
     this.error=false;
