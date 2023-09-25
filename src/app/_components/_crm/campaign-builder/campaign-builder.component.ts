@@ -194,7 +194,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
                 this.campstatus = 'Draft';
                 this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
                   var file:any = this._image.base64ToFile(e, 'campaign-'+this.uniqueid+'-screenshot.png');
-                  this._general._file.upload(file).subscribe(
+                  this._general._file.uploadScreenshot(file).subscribe(
                     (event: any) => {
                       if (typeof (event) === 'object') {
                         var msg =  'Campaign Update Successfully!!';
@@ -240,7 +240,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
                     this.campstatus = 'Publish';
                 this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
                   var file:any = this._image.base64ToFile(e, 'campaign-'+this.uniqueid+'-screenshot.png');
-                  this._general._file.upload(file).subscribe(
+                  this._general._file.uploadScreenshot(file).subscribe(
                     (event: any) => {
                       if (typeof (event) === 'object') {
                         var msg =  'Campaign Publish Successfully!!';

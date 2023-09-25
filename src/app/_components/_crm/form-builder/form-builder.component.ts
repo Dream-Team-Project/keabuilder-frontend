@@ -210,7 +210,7 @@ fetchsingleemail(){
           if(this._form.formField.length != 0) {
             this.captureService.getImage(this.screen.nativeElement, true).subscribe(e=>{
               var file:any = this._image.base64ToFile(e, 'form-'+this._form.form.uniqueid+'-screenshot.png');
-              this._general._file.upload(file).subscribe(
+              this._general._file.uploadScreenshot(file).subscribe(
                 (event: any) => {
                   if (typeof (event) === 'object') {
                     var msg =  'Form has been saved';

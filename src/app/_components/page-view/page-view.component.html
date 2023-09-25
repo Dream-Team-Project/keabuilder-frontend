@@ -47,8 +47,6 @@
                                     [class.kb-block-redirection]="element.redirection?.link"
                                     [id]="element.id" class="kb-element kb-block-container"
                                     [ngClass]="_style.getHideCls(element.hide)"
-                                    [style.margin]="_style.getBlockStyle(element.content.style)['margin']"
-                                    [style.justifyContent]="_style.getBlockParamValue(element.item_alignment)"
                                     [class.kb-block-none]="_style.getDisplay(element.hide)">
                                     <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <img
@@ -97,25 +95,25 @@
                                     </div>
                                     <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                         class="kb-element-content">
-                                        <ul class="kb-menu" [id]="element.content.data_id"
+                                        <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                             [ngStyle]="_style.getBlockStyle(element.content.style)">
                                             <li *ngFor="let item of element.content.items, index as mi">
-                                                <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                     [ngStyle]="_style.getBlockStyle(element.content.item.style)">
                                                     {{item.name}}</a>
                                             </li>
                                         </ul>
-                                        <div class="kb-menu-resp" [style.justifyContent]="_style.getBlockParamValue(element.item_alignment)">
+                                        <div class="kb-menu-resp">
                                             <div class="kb-menu-bar" [ngStyle]="_style.getBlockStyle(element.content.style)">
                                                 <span class="kb-menu-bar1"></span>
                                                 <span class="kb-menu-bar2"></span>
                                                 <span class="kb-menu-bar3"></span>
                                             </div>
                                             <div class="kb-menu-content kb-d-none">
-                                                <ul class="kb-menu" [id]="element.content.data_id"
+                                                <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                                 [ngStyle]="element.content.style.dropdown">
                                                     <li *ngFor="let item of element.content.items, index as mi">
-                                                        <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                        <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                             [ngStyle]="element.content.item.style.dropdown">{{item.name}}</a>
                                                     </li>
                                                 </ul>
@@ -130,10 +128,9 @@
                                     class="kb-element-content">
                                         <app-order-form [append_order_form_id]="element.content.data_id" class="kb-form-append"></app-order-form>
                                     </div>
-                                    <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content"
-                                        [style.justifyContent]="'center'">
+                                    <div *ngSwitchCase="'code'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <div class="kb-code-block kb-content-item"
-                                            [innerHTML]="element.content.html | safeHtml">
+                                            [attr.html-data]="element.content.html" [innerHTML]="element.content.html | safeHtml">
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">

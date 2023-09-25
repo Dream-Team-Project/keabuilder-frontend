@@ -41,6 +41,7 @@ export class FileUploadService {
   uploadMediaPath = '/assets/uploads/medias/';
   // media
   // images
+  uploadScreenShotApi = "/api/uploadscreenshot";
   uploadImageApi = "/api/uploadimage";
   getAllImgsApi = "/api/getallimgs";
   saveOnDBApi = "/api/saveondb";
@@ -456,6 +457,16 @@ export class FileUploadService {
     // Make http post request over api
     // with formData as req
     return this.http.post(this.uploadImageApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  uploadScreenshot(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedScreenshot', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadScreenShotApi, formData)
     .pipe(catchError(this.errorHandler));
   }
 

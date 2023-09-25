@@ -65,7 +65,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
-import { ApiInterceptor } from './_interceptors/api.interceptor';
+import { ApiInterceptor } from './_helpers/api.interceptor';
 
 
 @NgModule({

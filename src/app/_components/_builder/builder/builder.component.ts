@@ -187,7 +187,7 @@ export class BuilderComponent implements OnInit {
     var scr = stxt == 'template' ? document.getElementById(this.saveTemplateSection.id) : this.screen.nativeElement;
     this.captureService.getImage(scr, true).subscribe(e=>{
       var file:any = this._image.base64ToFile(e, id+'-screenshot.png');
-      this._general._file.upload(file).subscribe(
+      this._general._file.uploadScreenshot(file).subscribe(
         (event: any) => {
             if (typeof (event) === 'object') {
               var msg =  stxt.charAt(0).toUpperCase() + stxt.slice(1) +' has been '+this.trigger;

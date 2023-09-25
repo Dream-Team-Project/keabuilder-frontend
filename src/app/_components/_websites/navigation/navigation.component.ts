@@ -115,7 +115,9 @@ export class WebsiteNavigationComponent {
   }
 
   selectMenu(menu:any) {
-    this.menuobj = JSON.parse((JSON.stringify(menu)));
+    let temp = JSON.parse((JSON.stringify(menu)));
+    temp.items = this._general.decodeJSON(temp.items);
+    this.menuobj = temp;
   }
 
   saveMenu(menu:any) {

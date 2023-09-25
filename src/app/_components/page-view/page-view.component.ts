@@ -153,6 +153,7 @@ export class PageViewComponent implements OnInit {
             style.innerHTML = this.page_json.style;
             style.id = 'kb-header-style';
             document.head.appendChild(style);
+            this.loadCustomCode();
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
@@ -170,6 +171,7 @@ export class PageViewComponent implements OnInit {
             style.innerHTML = this.page_json.style;
             style.id = 'kb-footer-style';
             document.head.appendChild(style);
+            this.loadCustomCode();
             this._general.fetchMenus().then(resp => {
               this.setMenu(this.page_json.sections, resp);
             })
@@ -221,6 +223,15 @@ export class PageViewComponent implements OnInit {
     });
   }
 
+  loadCustomCode() {
+    setTimeout(()=>{
+      document.querySelectorAll('app-page-view .kb-element-content .kb-code-block').forEach((item:any)=>{
+        let htmlData = item.getAttribute('html-data');
+        this.loadScript(htmlData, document.body);
+      })
+    }, 10)
+  }
+
   setLoadScript(data:any) {
     this.page_json = this._general.decodeJSON(data);
     this.loadScript(this.page_json.tracking.header, document.head);
@@ -229,6 +240,7 @@ export class PageViewComponent implements OnInit {
     if(this.page_json.sections) {
       this._general.fetchMenus().then(resp => {
         this.setMenu(this.page_json.sections, resp);
+        this.loadCustomCode();
       })
     }
   }
