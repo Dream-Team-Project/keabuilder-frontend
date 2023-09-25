@@ -26,7 +26,6 @@ export class CrmFormsComponent implements OnInit {
   }
   forms:any[] = [];
   toggleview = true;
-  shortwaiting = true;
   form: any = {
     name: '',
     lists:'',
@@ -66,11 +65,7 @@ export class CrmFormsComponent implements OnInit {
                }
 
   ngOnInit(): void {
-    this.fetchData();
-    setTimeout(() => {
-      this.shortwaiting = false;
-    }, 1000)
-    
+    this.fetchData();   
   }
 
   fetchData(){

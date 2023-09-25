@@ -113,7 +113,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     thumbnail:'https://themewagon.com/wp-content/uploads/2020/12/eflyer.jpg'
   }
   ];
-  shortwaiting = true;
   showpageurl = false;
   oldpagepath = '';
   selstatusshow = 'all';
@@ -182,16 +181,10 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     this.getWebsites();
     this.fetchallwebsites();
     this.author = this.userService?.user?.name;
-
-    setTimeout(() => {
-        this.shortwaiting = false;
-    }, 1000);
-
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }, 500);
-
   }
 
   getWebsites() {

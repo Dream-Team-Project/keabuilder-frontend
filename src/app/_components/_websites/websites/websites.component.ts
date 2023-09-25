@@ -33,7 +33,6 @@ export class WebsitesComponent implements OnInit {
   duplicateweb:any = false;
   selecteduid = '';
   nodata = false;
-  shortwaiting = true;
   searching:boolean = false;
   selstatusshow = 'all';
   duplicatewebid  = '';
@@ -57,20 +56,14 @@ export class WebsitesComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
-
     this.fetwebfull();
-    setTimeout(() => {
-          this.shortwaiting = false;
-      }, 1000);
-
-      this.userService.getUsersDetails().subscribe({
-        next: data => {
-          if(data.data.length>0){
-            this.username = data.data[0].username;
-          }
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        if(data.data.length>0){
+          this.username = data.data[0].username;
         }
-      });
-
+      }
+    });
   }
 
   fetwebfull(){
