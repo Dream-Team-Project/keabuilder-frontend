@@ -368,14 +368,16 @@ export class SidebarComponent implements OnInit {
     //   icon: 'fas fa-chess-knight',
     //   title: 'Strategies',
     //   submenu:null
-    // },{
-    //   0:true,
-    //   routerlink: '/heatmap',
-    //   img: 'way.gif',
-    //   icon: 'fas fa-fire',
-    //   title: 'HeatMap',
-    //   submenu:null
-    // },{
+    // },
+    {
+      0:true,
+      routerlink: '/heatmap',
+      img: 'way.gif',
+      icon: 'fas fa-fire',
+      title: 'HeatMap',
+      submenu:null
+    },
+    // {
     //   0:true,
     //   routerlink: '/analytics',  
     //   img: 'growth.gif',

@@ -96,7 +96,7 @@
         <mat-option value="danger">Danger</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
+    <!-- <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label> Subdomain</mat-label>
       <input
         type="text"
@@ -117,11 +117,11 @@
       <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
         Subdomain must be at most <strong>20</strong> characters
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-    <button mat-button mat-dialog-close color="primary" (click)="onSubmit()" [disabled]="userFormControl.invalid || stepnameFormControl.invalid || subdomainFormControl.invalid">Create</button>
+    <button mat-button mat-dialog-close color="primary" (click)="onSubmit()" [disabled]="userFormControl.invalid || stepnameFormControl.invalid">Create</button>
   </div>
 </ng-template>
 <!-- Copy funnel url -->
@@ -266,7 +266,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="kb-full-width" appearance="fill">
+    <!-- <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label> Subdomain</mat-label>
       <input
         type="text"
@@ -287,7 +287,7 @@
       <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
         Subdomain must be at most <strong>20</strong> characters
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
@@ -296,8 +296,7 @@
       mat-dialog-close
       color="primary"
       (click)="makeduplicatefunnel()"
-      [disabled]="funneltitleFormControl.invalid || subdomainFormControl.invalid"
-    >
+      [disabled]="funneltitleFormControl.invalid">
       Yes
     </button>
   </div>
@@ -346,7 +345,7 @@
     </div>
 
     <div class="row">
-      <div class="cardpage col-md-4" *ngFor="let funnel of funnels; index as i">
+      <div class="cardpage col-md-4 mb-4" *ngFor="let funnel of funnels; index as i">
         <div>
             <div class="col-md-12">
                   <h5 class="line-ellipsis">{{funnel.name | titlecase}}</h5>

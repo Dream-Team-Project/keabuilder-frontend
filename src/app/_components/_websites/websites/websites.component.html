@@ -27,7 +27,7 @@
         </mat-error>
       </mat-form-field>
       
-      <mat-form-field class="kb-full-width" appearance="fill">
+      <!-- <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label> Subdomain</mat-label>
         <input type="text" (keyup)="subdomain = removespecialcharwithsmall(subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="subdomain">
         <span matSuffix>.keapages.com</span>
@@ -40,11 +40,11 @@
         <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
           Subdomain must be at most <strong>20</strong> characters
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-      <button mat-button mat-dialog-close color="primary" cdkFocusInitial (click)="createnewweb()" [disabled]="webtitleFormControl.invalid || subdomainFormControl.invalid">Create</button>
+      <button mat-button mat-dialog-close color="primary" cdkFocusInitial (click)="createnewweb()" [disabled]="webtitleFormControl.invalid">Create</button>
   </div>
 </ng-template>
 
@@ -79,7 +79,7 @@
         </mat-error>
       </mat-form-field>
       
-      <mat-form-field class="kb-full-width" appearance="fill">
+      <!-- <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label> Subdomain</mat-label>
         <input type="text" (keyup)="subdomain = removespecialcharwithsmall(subdomain)" required matInput [formControl]="subdomainFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="subdomain">
         <span matSuffix>.keapages.com</span>
@@ -92,7 +92,7 @@
         <mat-error *ngIf="subdomainFormControl.hasError('maxlength')">
           Subdomain must be at most <strong>20</strong> characters
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
   <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
