@@ -294,6 +294,8 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
         
     window.addEventListener('click',forclick);
     // window.addEventListener('mousemove',formouse);
+
+    allgeolocationdata();
     window.addEventListener('load',function(){
         recordheatmap();
     });
@@ -1498,17 +1500,22 @@ if(window.location.hash=='#kb-heatmaps'){
                 var strng2 = [];
 
                 data.data.forEach(element => {
-                    var elm1 =  element['locY'].split(',')
-                    elm1.forEach(element2 => {
-                        strng1.push(element2);
-                    });
 
-                    var elm2 =  element['locx'].split(',')
-                    elm2.forEach(element3 => {
-                        var generateelm = 1519%kb_width*0.5;
-                        generateelm = Math.abs(element3-generateelm);
-                        strng2.push(generateelm);
-                    });
+                    if(element['locY']!=null){
+                        var elm1 =  element['locY'].split(',')
+                        elm1.forEach(element2 => {
+                            strng1.push(element2);
+                        });
+                    }
+
+                    if(element['locx']!=null){
+                        var elm2 =  element['locx'].split(',')
+                        elm2.forEach(element3 => {
+                            var generateelm = 1519%kb_width*0.5;
+                            generateelm = Math.abs(element3-generateelm);
+                            strng2.push(generateelm);
+                        });
+                    }
                 });
 
                 var div1 = document.createElement("div");
@@ -1702,10 +1709,10 @@ if(window.location.hash=='#kb-heatmaps'){
                 var country_segment = [];
                 var numberofvisit_segment = [];
                 data.data.forEach(element => {
-                        browser_segment.push(element['browser']);
-                        os_segment.push(element['os']);
-                        country_segment.push(element['location']);
-                        numberofvisit_segment.push(element['created_at'].substr(0, 10));
+                    if(element['browser']!='' && element['browser']!=null) browser_segment.push(element['browser']);
+                    if(element['os']!='' && element['os']!=null) os_segment.push(element['os']);
+                    if(element['location']!='' && element['location']!=null) country_segment.push(element['location']);
+                    if(element['created_at']!='' && element['created_at']!=null) numberofvisit_segment.push(element['created_at'].substr(0, 10));
                 });
 
                 // browser_segment
@@ -1907,17 +1914,21 @@ if(window.location.hash=='#kb-heatmaps'){
                 var strng2 = [];
 
                 data.data.forEach(element => {
-                    var elm1 =  element['locY'].split(',')
-                    elm1.forEach(element2 => {
-                        strng1.push(element2);
-                    });
 
-                    var elm2 =  element['locx'].split(',')
-                    elm2.forEach(element3 => {
-                        var generateelm = 1519%kb_width*0.5;
-                        generateelm = Math.abs(element3-generateelm);
-                        strng2.push(generateelm);
-                    });
+                    if(element['locY']!=null){
+                        var elm1 =  element['locY'].split(',')
+                        elm1.forEach(element2 => {
+                            strng1.push(element2);
+                        });
+                    }
+                    if(element['locx']!=null){
+                        var elm2 =  element['locx'].split(',')
+                        elm2.forEach(element3 => {
+                            var generateelm = 1519%kb_width*0.5;
+                            generateelm = Math.abs(element3-generateelm);
+                            strng2.push(generateelm);
+                        });
+                    }
                 });
 
                 // ===================================
@@ -2638,41 +2649,41 @@ if(window.location.hash=='#kb-heatmaps'){
     });
 
    
-    $.ajax({
-        url: windoworigin+"/showrecordheat",
-        type: "POST",
-        dataType: 'json',
-        data:  {
-            url: window.location.href.toString().split('#kb-heatmaps')[0]
-        },
-        success: function (data) {
-            console.log(data.data);
-            data.data.forEach(element => {
-                var myArray = element['created_at'].split("-");
-                if(myArray[0]!=''){
+    // $.ajax({
+    //     url: windoworigin+"/showrecordheat",
+    //     type: "POST",
+    //     dataType: 'json',
+    //     data:  {
+    //         url: window.location.href.toString().split('#kb-heatmaps')[0]
+    //     },
+    //     success: function (data) {
+    //         console.log(data.data);
+    //         data.data.forEach(element => {
+    //             var myArray = element['created_at'].split("-");
+    //             if(myArray[0]!=''){
 
-                    $.ajax({
-                        url: windoworigin+"/getheatdir",
-                        type: "POST",
-                        dataType: 'json',
-                        data:  {
-                            hash: element['uniqueid']
-                        },
-                        success: function (data) {
-                            if(data.data[0]!=undefined){
-                                var dt = myArray[0]+'-'+myArray[1]+'-'+myArray[2];
-                                var hashvl = element['uniqueid'];
-                                document.getElementById('myheatrecordol').innerHTML += "<li><span>"+dt+"</span><span><a target='_blank' href='http://localhost:4200/heatmaps-recordings#"+hashvl+"'>View Recording</a></span></li>";
-                            }
-                        }
-                    });
+    //                 $.ajax({
+    //                     url: windoworigin+"/getheatdir",
+    //                     type: "POST",
+    //                     dataType: 'json',
+    //                     data:  {
+    //                         hash: element['uniqueid']
+    //                     },
+    //                     success: function (data) {
+    //                         if(data.data[0]!=undefined){
+    //                             var dt = myArray[0]+'-'+myArray[1]+'-'+myArray[2];
+    //                             var hashvl = element['uniqueid'];
+    //                             document.getElementById('myheatrecordol').innerHTML += "<li><span>"+dt+"</span><span><a target='_blank' href='http://localhost:4200/heatmaps-recordings#"+hashvl+"'>View Recording</a></span></li>";
+    //                         }
+    //                     }
+    //                 });
 
 
                    
-                }
-            });
-        }
-    });
+    //             }
+    //         });
+    //     }
+    // });
 
 
     
