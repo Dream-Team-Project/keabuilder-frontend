@@ -17,7 +17,10 @@
         </div>
         <div class="row pt-5">
             <div class="col-md-12 kb-mostvisitpage">
-                <h3>Pages</h3>
+                <h3 class="maindivhead">
+                    <span class="d-inline-block text-center w-50 active">Websites</span>
+                    <span class="d-inline-block text-center w-50 mkbrdr">Funnels</span>
+                </h3>
                 <ol>
                     <li *ngFor="let visit of visited; index as i;">
                         <a (click)="sendurl(visit)" target="_blank">
