@@ -237,7 +237,7 @@ export class GeneralService {
     { value:"Indian/Maldives",name:"Indian/Maldives"},
     { value:"Asia/Calcutta",name:"Asia/Calcutta"},
     { value:"Asia/Colombo",name:"Asia/Colombo"},
-    { value:"Asia/Kolkata",name:"Asia/Kolkata"},
+    { value:"Asia/Kolkata",name:"Asia/India/Kolkata"},
     { value:"Asia/Kathmandu",name:"Asia/Kathmandu"},
     { value:"Asia/Katmandu",name:"Asia/Katmandu"},
     { value:"Antarctica/Vostok",name:"Antarctica/Vostok"},

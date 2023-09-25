@@ -63,13 +63,13 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row align-items-center">
-        <mat-form-field appearance="outline" class="col-md-6 pr-0">
+        <mat-form-field appearance="fill" class="col-md-6 pr-0">
           <mat-label>Search Courses</mat-label>
           <input matInput #searchInp type="text" (input)="searchCourses(searchInp, filterInp)" placeholder="Search Course Name">
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-md-2">
+        <mat-form-field appearance="fill" class="col-md-2">
           <mat-label>Sort By</mat-label>
           <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
             <mat-option [value]="'title ASC'">ASC By Name</mat-option>
@@ -114,12 +114,29 @@
                 </span> -->
               </div>
             </div>
-            <div class="p-2 kb-course-card align-items-center text-center">
-              <i class="fa-regular fa-calendar"></i>
+            <div class="row align-items-center py-1 px-5">
+              <div class="kb-course-card py-2"  [class]="toggleview ? 'col-md-12' : 'col-md-6'">
+                <span class="col-md-5"><i class="fa-regular fa-user pr-1 kb-colr"></i>
+                  {{course.total_members+' '+'Members'}}
+                </span>
+                <span class="col-md-2"> | </span> 
+                <span class="col-md-5"> <i class="fa-regular fa-folder pr-1 kb-colr"></i>
+                  {{course.total_modules +' '+'Modules'}}
+                </span>
+              </div>
+            </div>
+            <div class="row align-items-center py-1 px-5">
+              <div class="kb-course-card py-2"  [class]="toggleview ? 'col-md-12' : 'col-md-6'">
+              <span class="col-md-5"><i class="fa-regular fa-calendar pr-1 kb-colr"></i>
                 {{_general.dateformat(course.updated_at) | date:'mediumDate'}}
+              </span>
+                <span class="col-md-2"> | </span> 
+                <span class="col-md-5"><i class="fa-solid fa-comment-dollar pr-1 kb-colr"></i>
+                  {{'$ 123'}}
+                </span>
+              </div>
             </div>
             <div>
-
             </div>
             <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
               <!-- <span class="kb-course-updatedat text-left float-left px-0 pb-2">
@@ -146,6 +163,12 @@
               </mat-menu>
             </div>
           </div>
+          <div class="d-flex justify-content-end" >
+            <div class="statbadg">
+              <span class="statusbadge" [class]="course.publish_status == 1 ? 'active1' : 'active2'" >
+                <i class="fas" [class]="course.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                {{course.publish_status == 1 ? 'Publish' : 'Draft'}}
+              </span>
         </div>
       </div>
     </div>
