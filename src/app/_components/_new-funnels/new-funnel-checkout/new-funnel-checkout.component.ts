@@ -141,7 +141,6 @@ export class NewFunnelCheckoutComponent implements OnInit {
     var id = {id: checkout_id};
     this.checkoutService.orderformgetuserid(id).subscribe({
       next: data => {
-        // console.log(data);
         if(data?.data?.length!=0){
           this.checkoutvisible = true;
           this.chkerror = '';
