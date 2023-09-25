@@ -13,7 +13,7 @@ import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
 import { RegistrationpaymentService } from 'src/app/_services/registrationpayment.service';
 
 @Component({
-  selector: 'appnew-funnel-checkout',
+  selector: 'app-order-form',
   templateUrl: './new-funnel-checkout.component.html',
   styleUrls: ['./new-funnel-checkout.component.css']
 })
@@ -21,7 +21,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
 
-  @Input ('append_checkout_id') append_checkout_id:any = '';
+  @Input ('append_order_form_id') append_order_form_id:any = '';
 
 
   fetching:boolean = true;
@@ -134,7 +134,7 @@ export class NewFunnelCheckoutComponent implements OnInit {
   }
   
   ngOnChanges(changes: SimpleChanges) {
-    if(changes['append_checkout_id']) this.fetchForm(this.append_checkout_id);
+    if(changes['append_order_form_id']) this.fetchForm(this.append_order_form_id);
   }
 
   fetchForm(checkout_id:string) {
