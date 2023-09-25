@@ -15,6 +15,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 })
 export class CrmAutomationComponent implements OnInit {
 
+searching=false;
 togglebutton=true;
 delautomation:any;
 automations:any=[];
@@ -31,13 +32,16 @@ ngOnInit(): void {
 }
 
 fetchAutomations() {
+  this.searching=true;
   return new Promise((resolve) => {
     this._automationgeneralservice.fetchautomations().subscribe(
       (data) => {
         this.automations = data.data;
+        this.searching=false;
         resolve(true);
       },
       (error) => {
+        this.searching=false;
         resolve(false);
       }
     );
@@ -69,7 +73,7 @@ copyAutomation(automation:any){
   this._automationgeneralservice
   .addautomation(obj)
   .subscribe((data) => {
-    this.fetchAutomations()
+    this.fetchAutomations();
      this._general.openSnackBar(false,'CRM Automation Copied Succesfully', 'OK','center','top');
 
   });
@@ -80,14 +84,16 @@ openDialog(templateRef: TemplateRef<any>, automation:any) {
 
 }
 deleteAutomation(id:any){
+  this.searching=true;
   this._automationgeneralservice.deleteautomation(id).subscribe((data)=>{
-    this.fetchAutomations()
+    this.fetchAutomations();
     this._general.openSnackBar(false,'CRM Automation deleted Succesfully', 'OK','center','top');
 
   })
 }
 
 searchAutomations(search: any, sort: any, filter: any) {
+  this.searching=true;
   var obj = {
     search: search.value,
     sort: sort.value,
@@ -97,6 +103,7 @@ searchAutomations(search: any, sort: any, filter: any) {
   this._automationgeneralservice.searchautomations(obj).subscribe((data:any)=>{
     // console.log(data.data)
     this.automations = data.data;
+    this.searching=false;
   });
 }
 }
