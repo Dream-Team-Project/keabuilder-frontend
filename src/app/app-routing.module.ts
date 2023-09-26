@@ -41,20 +41,6 @@ import { WebsiteComponent } from './_components/_websites/website/website.compon
 import { WebsitesComponent } from './_components/_websites/websites/websites.component';
 import { WebpagesArchiveComponent } from './_components/_websites/webpages-archive/webpages-archive.component';
 // websites
-// funnels
-import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
-import { FunnelArchiveComponent } from './_components/_funnels/funnel-archive/funnel-archive.component';
-import { FunnelMarketplaceComponent } from './_components/_funnels/funnel-marketplace/funnel-marketplace.component';
-import { FunnelsComponent } from './_components/_funnels/funnels/funnels.component';
-import { BuildFunnelComponent } from './_components/_funnels/build-funnel/build-funnel.component';
-import { CreateFunnelComponent } from './_components/_funnels/create-funnel/create-funnel.component';
-import { CreateFunnelStatsComponent } from './_components/_funnels/create-funnel-stats/create-funnel-stats.component';
-import { CreateFunnelContactsComponent } from './_components/_funnels/create-funnel-contacts/create-funnel-contacts.component';
-import { CreateFunnelSalesComponent } from './_components/_funnels/create-funnel-sales/create-funnel-sales.component';
-import { CreateFunnelSettingsComponent } from './_components/_funnels/create-funnel-settings/create-funnel-settings.component';
-import { FunnelWizardNavComponent } from './_components/_funnels/funnel-wizard-nav/funnel-wizard-nav.component';
-import { NewFunnelCheckoutComponent } from './_components/_new-funnels/new-funnel-checkout/new-funnel-checkout.component';
-// funnels
 
 // new-funnels
 import { NewFunnelsComponent } from './_components/_new-funnels/new-funnels/new-funnels.component';
@@ -65,6 +51,7 @@ import { CreateNewFunnelsComponent } from './_components/_new-funnels/create-new
 import { FunnelSettingsComponent } from './_components/_new-funnels/funnel-settings/funnel-settings.component';
 import { FunnelStepArchiveComponent } from './_components/_new-funnels/funnel-step-archive/funnel-step-archive.component';
 import { NewFunnelStepsComponent } from './_components/_new-funnels/new-funnel-steps/new-funnel-steps.component';
+import { NewFunnelCheckoutComponent } from './_components/_new-funnels/new-funnel-checkout/new-funnel-checkout.component';
 // new-funnels
 
 // crm
@@ -357,7 +344,7 @@ if (currentDomain === appHost) {
 
     // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
     { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
-    { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
+    // { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
     // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
 
 
@@ -417,21 +404,10 @@ export const RoutingComponents =
     RegisterComponent, 
     ForgotPasswordComponent,
     DashboardComponent, 
-    FunnelComponent,
-    FunnelArchiveComponent,
-    FunnelMarketplaceComponent,
-    FunnelWizardNavComponent,
     StrategiesComponent,
     AnalyticsComponent,
     HeatmapsComponent,
     HeatmapViewComponent,
-    FunnelsComponent,
-    BuildFunnelComponent,
-    CreateFunnelComponent,
-    CreateFunnelStatsComponent,
-    CreateFunnelContactsComponent,
-    CreateFunnelSalesComponent,
-    CreateFunnelSettingsComponent,
     ProfileComponent,
     TemplateComponent, 
     PageViewComponent,
