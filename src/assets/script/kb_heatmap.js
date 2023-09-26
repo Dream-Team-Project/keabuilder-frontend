@@ -80,7 +80,7 @@ function allgeolocationdata() {
   
     // Define a callback function that will be called when the data loads
     window.callback = function (location) {
-      console.log(location);
+    //   console.log(location);
       kb_location = location.country_name;
       allinonegeoloc[0] = location.country_code;
       allinonegeoloc[1] = location.country_name;
@@ -90,6 +90,10 @@ function allgeolocationdata() {
       allinonegeoloc[5] = location.latitude;
       allinonegeoloc[6] = location.longitude;
       allinonegeoloc[7] = location.IPv4;
+
+      setTimeout(function(){
+          recordheatmap();
+        },100);               
   
       // Clean up by removing the script element and callback function
       document.body.removeChild(script);
@@ -140,7 +144,11 @@ var kb_mousegetlocY = [];
 
 var kb_fulldata = {};
 
-// var windoworigin = window.origin;
+var kb_user_id = '';
+
+if(document.getElementById('kb-user-id')!=null) kb_user_id = document.getElementById('kb-user-id').getAttribute('kb-user-id');
+
+// var windoworigin = 'https://api.keabuilder.com';
 var windoworigin = 'http://localhost:3000';
 
 kb_fulldata['uniqueid'] = kb_unique_id;
@@ -169,8 +177,9 @@ function forclick(e){
     kb_fulldata['locx'] = kb_usergetlocX;
     kb_fulldata['locY'] = kb_usergetlocY;
     kb_fulldata['location'] = kb_location;
+    kb_fulldata['user_id'] = kb_user_id;
 
-    console.log(kb_fulldata);
+    // console.log(kb_fulldata);
     let url = `${windoworigin}/heat-request`;
     let data = { name: kb_fulldata };
 
@@ -189,11 +198,11 @@ function forclick(e){
     })
     .then((data) => {
         // Handle the success response here
-        console.log(data);
+        // console.log(data);
     })
     .catch((error) => {
         // Handle errors here
-        console.error(error);
+        // console.error(error);
     });
 
 }
@@ -208,8 +217,8 @@ function formouse(e){
         kb_mousegetlocY.push(e.clientY);
     }
 
-    console.log(kb_mousegetlocX);
-    console.log(kb_mousegetlocY);
+    // console.log(kb_mousegetlocX);
+    // console.log(kb_mousegetlocY);
 
     kb_fulldata['Mlocx'] = kb_mousegetlocX;
     kb_fulldata['MlocY'] = kb_mousegetlocY;
@@ -234,11 +243,11 @@ function formouse(e){
     })
     .then(data => {
         // Handle the success response here
-        console.log(data);
+        // console.log(data);
     })
     .catch(error => {
         // Handle errors here
-        console.error(error);
+        // console.error(error);
     });
 
 }
@@ -247,24 +256,25 @@ function recordheatmap(){
 
     let url = `${windoworigin}/saverecordheat`;
     let data = {
-    created_at: kb_created_at,
-    landing_page:location.href,
-    location:kb_location,
-    browser:kb_browser,
-    os:kb_os,
-    device:kb_device,
-    doc_title:kb_doctitle,
-    uniqueid: kb_unique_id,
-    country_code: allinonegeoloc[0],
-    country_name: allinonegeoloc[1],
-    state: allinonegeoloc[2],
-    city: allinonegeoloc[3],
-    postal: allinonegeoloc[4],
-    latitude: allinonegeoloc[5],
-    longitude: allinonegeoloc[6],
-    ipv4: allinonegeoloc[7]
+        user_id: kb_user_id,
+        created_at: kb_created_at,
+        landing_page:location.href,
+        location:kb_location,
+        browser:kb_browser,
+        os:kb_os,
+        device:kb_device,
+        doc_title:kb_doctitle,
+        uniqueid: kb_unique_id,
+        country_code: allinonegeoloc[0],
+        country_name: allinonegeoloc[1],
+        state: allinonegeoloc[2],
+        city: allinonegeoloc[3],
+        postal: allinonegeoloc[4],
+        latitude: allinonegeoloc[5],
+        longitude: allinonegeoloc[6],
+        ipv4: allinonegeoloc[7]
     };
-    console.log(data);
+    // console.log(data);
 
     fetch(url, {
     method: 'POST',
@@ -281,11 +291,11 @@ function recordheatmap(){
     })
     .then(data => {
         // Handle the success response here
-        console.log(data);
+        // console.log(data);
     })
     .catch(error => {
         // Handle errors here
-        console.error(error);
+        // console.error(error);
     });
 
 }
@@ -296,9 +306,10 @@ if(window.location.hash!='#kb-heatmaps' && window.top.location.hash!='#kb-heatma
     // window.addEventListener('mousemove',formouse);
 
     allgeolocationdata();
-    window.addEventListener('load',function(){
-        recordheatmap();
-    });
+    
+    recordheatmap();
+    // window.addEventListener('load',function(){
+    // });
 }
 
 var kb_fullcontent = `
@@ -711,7 +722,7 @@ var kb_fullcontent = `
         margin-right: 4px;
     }
     #screen-size-selector .ui-button-flex{
-        padding: 13px;
+        padding: 10px;
     }
     .ui-floating-panel.compact {
         height: auto;
@@ -948,17 +959,8 @@ var kb_fullcontent = `
                 <button class="ui-button icon app-button ui-button-default ui-button-text" id="heatmap-button"
                     aria-label="blur_circularHeatmap  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="braille" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-inline--fa fa-braille fa-w-20 fa-7x"><path fill="currentColor" d="M128 256c0 35.346-28.654 64-64 64S0 291.346 0 256s28.654-64 64-64 64 28.654 64 64zM64 384c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352C28.654 32 0 60.654 0 96s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm160 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352c-35.346 0-64 28.654-64 64s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm224 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-352c-35.346 0-64 28.654-64 64s28.654 64 64 64 64-28.654 64-64-28.654-64-64-64zm160 192c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0 160c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm0-320c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z" class=""></path></svg><span class="icon-label">Heatmap</span></span>
                     </button>
-
-                    <button class="ui-button icon app-button ui-button-default ui-button-text" id="heatmap-recording"
-                    aria-label="blur_circularHeatmap  "><span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="video" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-video fa-w-18 fa-9x"><path fill="currentColor" d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z" class=""></path></svg><span class="icon-label">Recordings</span></span>
-                    </button>
             </div>
             <div class="flex layout-row layout-align-end-center" style="flex-direction: row-reverse;">
-                    <button style="margin-left: -25px;" class="ui-button icon padding-none ui-button-default ui-button-text"
-                    id="feedback-button" aria-label="help Get help"><span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-question-circle fa-w-16 fa-9x"><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z" class=""></path></svg>  &nbsp;
-                        <span class="icon-label">Get help</span>
-                    </span></button> 
-
                     <button class="ui-button ui-button-positive ui-button-fill" id="screenshot-button"
                     ><span class="ui-button-flex"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera-retro" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-camera-retro fa-w-16 fa-9x"><path fill="currentColor" d="M48 32C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H48zm0 32h106c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H38c-3.3 0-6-2.7-6-6V80c0-8.8 7.2-16 16-16zm426 96H38c-3.3 0-6-2.7-6-6v-36c0-3.3 2.7-6 6-6h138l30.2-45.3c1.1-1.7 3-2.7 5-2.7H464c8.8 0 16 7.2 16 16v74c0 3.3-2.7 6-6 6zM256 424c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88zm-48 104c-8.8 0-16-7.2-16-16 0-35.3 28.7-64 64-64 8.8 0 16 7.2 16 16s-7.2 16-16 16c-17.6 0-32 14.4-32 32 0 8.8-7.2 16-16 16z" class=""></path></svg> &nbsp;
                         <span class="icon-label">Screenshot</span>
@@ -967,7 +969,7 @@ var kb_fullcontent = `
             </div>
             <div id="lo-website" class="flex layout-column layout-align-center-center">
                 <div id="lo-website-iframe-container" class="shadow-z4 layout-column flex desktop"
-                    style="width: 100%; height: 100%; position: relative;">
+                    style="width: 101%; height: 100%; position: relative;">
                     <iframe id="lo-website-iframe"
                         sandbox="allow-scripts allow-same-origin allow-forms" class="lo-website-iframe flex" src="`+kb_landing_page+`"></iframe>
                 </div>
@@ -979,7 +981,7 @@ var kb_fullcontent = `
                         <strong class="filtered">0 clicks</strong>
                     </span>
                     <span class="layout-row">
-                        <strong class="spacer">·</strong> 
+                        <strong class="spacer">.</strong> 
                         <span class="color-positive">All clicks have been loaded</span>
                     </span> 
                     <span class="layout-row">
@@ -991,7 +993,7 @@ var kb_fullcontent = `
                         </button>
                     </span>
                 </div> 
-                <a href="`+windoworigin+`/heatmap" target="_blank" id="brand-link"
+                <a href="https://app.keabuilder.com/heatmap" target="_blank" id="brand-link"
                     class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img
                         id="brand-wordmark"
                         src="`+windoworigin+`/assets/images/logo/kblogo.png"
@@ -1329,7 +1331,7 @@ var kb_fullcontent = `
                                         <div class="ui-input-group margin-none"><label
                                                 for="device-width">Custom width</label> <input type="number" name="device-width"
                                                 min="0" field="device-width" placeholder="E.g. 800" class="ui-input" />
-                                        </div> <strong class="margin-top">×</strong>
+                                        </div> <strong class="margin-top">x</strong>
                                         <div class="ui-input-group"><label for="device-height">Custom
                                                 height</label> <input type="number" name="device-height" min="0"
                                                 field="device-height" placeholder="E.g. 600" class="ui-input" />
@@ -1485,430 +1487,457 @@ if(window.location.hash=='#kb-heatmaps'){
 
     document.getElementsByTagName('body')[0].innerHTML = (kb_fullcontent);
 
+    // window.addEventListener('load',function(){
     setTimeout(() => {
+            
+        var url = `${windoworigin}/heatfetchloc-request`;
+        var requestData = {
+        url: window.location.href.toString().split('#kb-heatmaps')[0]
+        };
         
-        $.ajax({
-            url: windoworigin+"/heatfetchloc-request",
-            type: "POST",
-            dataType: 'json',
-            data:  {
-                url: window.location.href.toString().split('#kb-heatmaps')[0]
-            },
-            success: function (data) {
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log(data);
+            var strng1 = [];
+            var strng2 = [];
 
-                var strng1 = [];
-                var strng2 = [];
+            data.data.forEach(element => {
 
-                data.data.forEach(element => {
+                if(element['locY']!=null){
+                    var elm1 =  element['locY'].split(',')
+                    elm1.forEach(element2 => {
+                        strng1.push(element2);
+                    });
+                }
 
-                    if(element['locY']!=null){
-                        var elm1 =  element['locY'].split(',')
-                        elm1.forEach(element2 => {
-                            strng1.push(element2);
-                        });
+                if(element['locx']!=null){
+                    var elm2 =  element['locx'].split(',')
+                    elm2.forEach(element3 => {
+                        var generateelm = 1519%kb_width*0.5;
+                        generateelm = Math.abs(element3-generateelm);
+                        strng2.push(generateelm);
+                    });
+                }
+            });
+
+            var div1 = document.createElement("div");
+            div1.id = 'kb-heatmap'                
+
+            var div = document.createElement("canvas");
+            div.id='heat-map';
+            div.setAttribute('width',kb_width-64);
+            div.setAttribute('height',kb_height);
+            div1.append(div);
+
+            var style = document.createElement('STYLE');
+            style.id='kb_style';
+            style.innerHTML = `#heat-map {
+                z-index: 999999;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                display: block;
+            }
+            #kb-heatmap {
+                bottom: 0;
+                left: 0;
+                position: absolute;
+                pointer-events: none;
+                right: 0;
+                top: 0;
+                z-index: 999999998;
+                transition-property: opacity, background-color;
+                transition: .2s ease;
+                background-color: rgba(0, 0, 0, 0.75);
+                height: ${kb_height}px;
+            }
+            body{
+                pointer-events: none;
+            }
+            `;
+
+            var x = document.getElementById("lo-website-iframe");
+            var y = x.contentDocument;
+            y.body.insertBefore(div1,y.body.childNodes[0]);   
+            y.body.insertBefore(style,y.body.childNodes[0]);   
+
+            "use strict";
+            class HeatMap {
+                constructor(canvas, data) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext("2d");
+                    this.width = canvas.width;
+                    this.height = canvas.height;
+                    this.data = data;
+                    this.circle = HeatMap.createCanvas();
+                    this.radius = 15 + 15;
+                    this.computeRadius(15, 15);
+                    this.unit8Gradient = HeatMap.computeGradient({
+                        0.4: "blue",
+                        0.6: "cyan",
+                        0.7: "lime",
+                        0.8: "yellow",
+                        1.0: "red"
+                    });
+                }
+                computeRadius(r, blur) {
+                    const { circle } = this;
+                    const ctx = circle.getContext("2d");
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
                     }
-
-                    if(element['locx']!=null){
-                        var elm2 =  element['locx'].split(',')
-                        elm2.forEach(element3 => {
-                            var generateelm = 1519%kb_width*0.5;
-                            generateelm = Math.abs(element3-generateelm);
-                            strng2.push(generateelm);
-                        });
+                    const r2 = this.radius;
+                    circle.height = r2 * 2;
+                    circle.width = r2 * 2;
+                    ctx.shadowOffsetY = r2 * 2;
+                    ctx.shadowOffsetX = r2 * 2;
+                    ctx.shadowBlur = blur;
+                    ctx.shadowColor = "black";
+                    ctx.beginPath();
+                    ctx.arc(-r2, -r2, r, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                resize() {
+                    this.width = this.canvas.width;
+                    this.height = this.canvas.height;
+                }
+                draw(minOpacity) {
+                    const { ctx } = this;
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
                     }
+                    ctx.clearRect(0, 0, this.width, this.height);
+                    for (let i = 0, len = this.data.length, p; i < len; i++) {
+                        p = this.data[i];
+                        ctx.globalAlpha = Math.min(minOpacity, 1);
+                        if (!this.circle || !this.radius) {
+                            throw new Error("The circle || radius is undefined");
+                        }
+                        ctx.drawImage(this.circle, p[0] - this.radius, p[1] - this.radius,30,30);
+                    }
+                    const colored = HeatMap.colorize(ctx.getImageData(0, 0, this.width, this.height), this.unit8Gradient);
+                    ctx.putImageData(colored, 0, 0);
+                }
+                static computeGradient(grad) {
+                    const canvas = HeatMap.createCanvas();
+                    const ctx = canvas.getContext("2d");
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
+                    }
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 256);
+                    canvas.width = 1;
+                    canvas.height = 256;
+                    Object.keys(grad).forEach((i) => {
+                        gradient.addColorStop(+i, grad[+i]);
+                    });
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, 1, 256);
+                    return ctx.getImageData(0, 0, 1, 256).data;
+                }
+                static colorize(imageData, gradient) {
+                    const pixels = imageData.data;
+                    for (let i = 0, len = pixels.length, j; i < len; i += 4) {
+                        j = pixels[i + 3] * 4;
+                        if (j) {
+                            pixels[i] = gradient[j];
+                            pixels[i + 1] = gradient[j + 1];
+                            pixels[i + 2] = gradient[j + 2];
+                        }
+                    }
+                    return imageData;
+                }
+                static createCanvas() {
+                    return document.createElement("canvas");
+                }
+            }
+
+            const canvas = x.contentWindow.document.getElementById("heat-map");
+
+            var chkmn = [];
+            
+            var kb_main = 0;
+            strng1.forEach(element => {
+                chkmn = [];
+                if(strng2[kb_main]!='' || strng2[kb_main]!=0){
+                    chkmn.push(strng2[kb_main]);
+                    chkmn.push(strng1[kb_main]);
+                    data1.push(chkmn);
+                }
+                    kb_main++;
                 });
 
-                var div1 = document.createElement("div");
-                div1.id = 'kb-heatmap'                
+            document.getElementsByClassName('filtered')[0].innerText = data1.length+' clicks';
 
-                var div = document.createElement("canvas");
-                div.id='heat-map';
-                div.setAttribute('width',kb_width-64);
-                div.setAttribute('height',kb_height);
-                div1.append(div);
+            const heat = new HeatMap(canvas, data1);
+            heat.draw(0.85);
 
-                var style = document.createElement('STYLE');
-                style.id='kb_style';
-                style.innerHTML = `#heat-map {
-                    z-index: 999999;
-                    position: absolute;
-                    left: 0px;
-                    top: 0px;
-                    display: block;
-                }
-                #kb-heatmap {
-                    bottom: 0;
-                    left: 0;
-                    position: absolute;
-                    pointer-events: none;
-                    right: 0;
-                    top: 0;
-                    z-index: 999999998;
-                    transition-property: opacity, background-color;
-                    transition: .2s ease;
-                    background-color: rgba(0, 0, 0, 0.75);
-                    height: ${kb_height}px;
-                }
-                body{
-                    pointer-events: none;
-                }
-                `;
-                // document.head.appendChild(style);
-
-                var x = document.getElementById("lo-website-iframe");
-                var y = x.contentDocument;
-                y.body.insertBefore(div1,y.body.childNodes[0]);   
-                y.body.insertBefore(style,y.body.childNodes[0]);   
-
-                
-                // document.getElementById('heat-map').setAttribute('width',kb_width);
-                // document.getElementById('heat-map').setAttribute('height',kb_height);
-
-                // ===================================
-                // ========== HEATMAP START ==========
-                // ===================================
-                "use strict";
-                class HeatMap {
-                    constructor(canvas, data) {
-                        this.canvas = canvas;
-                        this.ctx = canvas.getContext("2d");
-                        this.width = canvas.width;
-                        this.height = canvas.height;
-                        this.data = data;
-                        this.circle = HeatMap.createCanvas();
-                        this.radius = 15 + 15;
-                        this.computeRadius(15, 15);
-                        this.unit8Gradient = HeatMap.computeGradient({
-                            0.4: "blue",
-                            0.6: "cyan",
-                            0.7: "lime",
-                            0.8: "yellow",
-                            1.0: "red"
-                        });
-                    }
-                    computeRadius(r, blur) {
-                        const { circle } = this;
-                        const ctx = circle.getContext("2d");
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        const r2 = this.radius;
-                        circle.height = r2 * 2;
-                        circle.width = r2 * 2;
-                        ctx.shadowOffsetY = r2 * 2;
-                        ctx.shadowOffsetX = r2 * 2;
-                        ctx.shadowBlur = blur;
-                        ctx.shadowColor = "black";
-                        ctx.beginPath();
-                        ctx.arc(-r2, -r2, r, 0, Math.PI * 2, true);
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-                    resize() {
-                        this.width = this.canvas.width;
-                        this.height = this.canvas.height;
-                    }
-                    draw(minOpacity) {
-                        const { ctx } = this;
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        ctx.clearRect(0, 0, this.width, this.height);
-                        for (let i = 0, len = this.data.length, p; i < len; i++) {
-                            p = this.data[i];
-                            ctx.globalAlpha = Math.min(minOpacity, 1);
-                            if (!this.circle || !this.radius) {
-                                throw new Error("The circle || radius is undefined");
-                            }
-                            ctx.drawImage(this.circle, p[0] - this.radius, p[1] - this.radius,30,30);
-                        }
-                        const colored = HeatMap.colorize(ctx.getImageData(0, 0, this.width, this.height), this.unit8Gradient);
-                        ctx.putImageData(colored, 0, 0);
-                    }
-                    static computeGradient(grad) {
-                        const canvas = HeatMap.createCanvas();
-                        const ctx = canvas.getContext("2d");
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 256);
-                        canvas.width = 1;
-                        canvas.height = 256;
-                        Object.keys(grad).forEach((i) => {
-                            gradient.addColorStop(+i, grad[+i]);
-                        });
-                        ctx.fillStyle = gradient;
-                        ctx.fillRect(0, 0, 1, 256);
-                        return ctx.getImageData(0, 0, 1, 256).data;
-                    }
-                    static colorize(imageData, gradient) {
-                        const pixels = imageData.data;
-                        for (let i = 0, len = pixels.length, j; i < len; i += 4) {
-                            j = pixels[i + 3] * 4;
-                            if (j) {
-                                pixels[i] = gradient[j];
-                                pixels[i + 1] = gradient[j + 1];
-                                pixels[i + 2] = gradient[j + 2];
-                            }
-                        }
-                        return imageData;
-                    }
-                    static createCanvas() {
-                        return document.createElement("canvas");
-                    }
-                }
-
-                // const canvas = document.getElementById("heat-map");
-                const canvas = x.contentWindow.document.getElementById("heat-map");
-
-                var chkmn = [];
-                
-                var kb_main = 0;
-                strng1.forEach(element => {
-                    chkmn = [];
-                    if(strng2[kb_main]!='' || strng2[kb_main]!=0){
-                        chkmn.push(strng2[kb_main]);
-                        chkmn.push(strng1[kb_main]);
-                        data1.push(chkmn);
-                    }
-                        kb_main++;
-                    });
-
-                document.getElementsByClassName('filtered')[0].innerText = data1.length+' clicks';
-
-                const heat = new HeatMap(canvas, data1);
-                heat.draw(0.85);
-
-                // ===================================
-                // =========== HEATMAP END ===========
-                // ===================================
+            // ===================================
+            // =========== HEATMAP END ===========
+            // ===================================
 
 
 
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(xhr.responseText);
-
-            }
+        })
+        .catch(error => {
+            // Handle errors here
+            // console.error(error);
         });
 
         // fetch all data
-        $.ajax({
-            url: windoworigin+"/heatall-request",
-            type: "POST",
-            dataType: 'json',
-            data:  {
-                url: window.location.href.toString().split('#kb-heatmaps')[0]
-            },
-            success: function (data) {
-                // console.log(data);
 
-                var browser_segment = [];
-                var os_segment = [];
-                var country_segment = [];
-                var numberofvisit_segment = [];
-                data.data.forEach(element => {
-                    if(element['browser']!='' && element['browser']!=null) browser_segment.push(element['browser']);
-                    if(element['os']!='' && element['os']!=null) os_segment.push(element['os']);
-                    if(element['location']!='' && element['location']!=null) country_segment.push(element['location']);
-                    if(element['created_at']!='' && element['created_at']!=null) numberofvisit_segment.push(element['created_at'].substr(0, 10));
+        var url = `${windoworigin}/heatall-request`;
+        var requestData = {
+        url: window.location.href.toString().split('#kb-heatmaps')[0]
+        };
+
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log(data);
+
+            var browser_segment = [];
+            var os_segment = [];
+            var country_segment = [];
+            var numberofvisit_segment = [];
+            data.data.forEach(element => {
+                if(element['browser']!='' && element['browser']!=null) browser_segment.push(element['browser']);
+                if(element['os']!='' && element['os']!=null) os_segment.push(element['os']);
+                if(element['location']!='' && element['location']!=null) country_segment.push(element['location']);
+                if(element['created_at']!='' && element['created_at']!=null) numberofvisit_segment.push(element['created_at'].substr(0, 10));
+            });
+
+            // browser_segment
+            var counts = {};
+            browser_segment.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
+            for (bs in counts) {
+                document.getElementById('kb_bs_segment').innerHTML+=`<div class="padding-bottom-half"><label
+                    class="layout-row layout-align-start-center margin-none">
+                    <div class="padding-right-half"><input type="checkbox"
+                            value="`+bs+`" name="browser_segment" checked /></div>
+                    <div aria-label="" role="listitem"
+                        class="ui-list-item padding-none flex">
+                        <div
+                            class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                            `+bs+`
+                        </div> <strong>`+counts[bs]+`</strong>
+                            </div>
+                        </label>
+                    </div>`;
+            }
+            var brsegmnt = [];
+            document.getElementsByName('browser_segment').forEach((brseg) => {
+            brsegmnt.push(brseg.value);
+                brseg.addEventListener('click',function(){
+                    data3 = [];
+                    if (this.checked) {
+                        brsegmnt.push(this.value);
+                        // console.log(brsegmnt);
+                        getrequireddata(brsegmnt,'browser');
+                    }else{
+                        var index = brsegmnt.indexOf(this.value);
+                        if (index > -1) {
+                            brsegmnt.splice(index, 1);
+                        }
+                        // console.log(brsegmnt);
+                        getrequireddata(brsegmnt,'browser');
+                    }
                 });
+               
+            });
+            // browser_segment
 
-                // browser_segment
-                var counts = {};
-                browser_segment.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
-                for (bs in counts) {
-                    document.getElementById('kb_bs_segment').innerHTML+=`<div class="padding-bottom-half"><label
-                        class="layout-row layout-align-start-center margin-none">
-                        <div class="padding-right-half"><input type="checkbox"
-                                value="`+bs+`" name="browser_segment" checked /></div>
-                        <div aria-label="" role="listitem"
-                            class="ui-list-item padding-none flex">
-                            <div
-                                class="flex layout-row layout-align-start-center text-truncate padding-right-half">
-                                `+bs+`
-                            </div> <strong>`+counts[bs]+`</strong>
-                                </div>
-                            </label>
-                        </div>`;
-                }
-                var brsegmnt = [];
-                document.getElementsByName('browser_segment').forEach((brseg) => {
-                brsegmnt.push(brseg.value);
-                    brseg.addEventListener('click',function(){
+            // os_segment
+            var counts2 = {};
+            os_segment.forEach(function (x) { counts2[x] = (counts2[x] || 0) + 1; });
+            for (bs in counts2) {
+                document.getElementById('kb_os_segment').innerHTML+=`<div class="padding-bottom-half"><label
+                    class="layout-row layout-align-start-center margin-none">
+                    <div class="padding-right-half"><input type="checkbox"
+                            value="`+bs+`" name="os_segment" checked /></div>
+                    <div aria-label="" role="listitem"
+                        class="ui-list-item padding-none flex">
+                        <div
+                            class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                            `+bs+`
+                        </div> <strong>`+counts2[bs]+`</strong>
+                            </div>
+                        </label>
+                    </div>`;
+            }
+            var ossegmnt = [];
+            document.getElementsByName('os_segment').forEach((osseg) => {
+                ossegmnt.push(osseg.value);
+                    osseg.addEventListener('click',function(){
                         data3 = [];
                         if (this.checked) {
-                            brsegmnt.push(this.value);
-                            console.log(brsegmnt);
-                            getrequireddata(brsegmnt,'browser');
+                            ossegmnt.push(this.value);
+                            getrequireddata(ossegmnt,'os');
                         }else{
-                            var index = brsegmnt.indexOf(this.value);
+                            var index = ossegmnt.indexOf(this.value);
                             if (index > -1) {
-                                brsegmnt.splice(index, 1);
+                                ossegmnt.splice(index, 1);
                             }
-                            console.log(brsegmnt);
-                            getrequireddata(brsegmnt,'browser');
+                            getrequireddata(ossegmnt,'os');
                         }
                     });
                    
                 });
-                // browser_segment
+            // os_segment
 
-                // os_segment
-                var counts2 = {};
-                os_segment.forEach(function (x) { counts2[x] = (counts2[x] || 0) + 1; });
-                for (bs in counts2) {
-                    document.getElementById('kb_os_segment').innerHTML+=`<div class="padding-bottom-half"><label
-                        class="layout-row layout-align-start-center margin-none">
-                        <div class="padding-right-half"><input type="checkbox"
-                                value="`+bs+`" name="os_segment" checked /></div>
-                        <div aria-label="" role="listitem"
-                            class="ui-list-item padding-none flex">
-                            <div
-                                class="flex layout-row layout-align-start-center text-truncate padding-right-half">
-                                `+bs+`
-                            </div> <strong>`+counts2[bs]+`</strong>
-                                </div>
-                            </label>
-                        </div>`;
-                }
-                var ossegmnt = [];
-                document.getElementsByName('os_segment').forEach((osseg) => {
-                    ossegmnt.push(osseg.value);
-                        osseg.addEventListener('click',function(){
-                            data3 = [];
-                            if (this.checked) {
-                                ossegmnt.push(this.value);
-                                getrequireddata(ossegmnt,'os');
-                            }else{
-                                var index = ossegmnt.indexOf(this.value);
-                                if (index > -1) {
-                                    ossegmnt.splice(index, 1);
-                                }
-                                getrequireddata(ossegmnt,'os');
-                            }
-                        });
-                       
-                    });
-                // os_segment
-
-                // country_segment
-                var counts3 = {};
-                country_segment.forEach(function (x) { counts3[x] = (counts3[x] || 0) + 1; });
-                for (bs in counts3) {
-                    document.getElementById('kb_country_segment').innerHTML+=`<div class="padding-bottom-half"><label
-                        class="layout-row layout-align-start-center margin-none">
-                        <div class="padding-right-half"><input type="checkbox"
-                                value="`+bs+`" name="country_segment" checked /></div>
-                        <div aria-label="" role="listitem"
-                            class="ui-list-item padding-none flex">
-                            <div
-                                class="flex layout-row layout-align-start-center text-truncate padding-right-half">
-                                `+bs+`
-                            </div> <strong>`+counts3[bs]+`</strong>
-                                </div>
-                            </label>
-                        </div>`;
-                }
-                var countrysegmnt = [];
-                document.getElementsByName('country_segment').forEach((countryseg) => {
-                    countrysegmnt.push(countryseg.value);
-                    countryseg.addEventListener('click',function(){
-                            data3 = [];
-                            if (this.checked) {
-                                countrysegmnt.push(this.value);
-                                getrequireddata(countrysegmnt,'location');
-                            }else{
-                                var index = countrysegmnt.indexOf(this.value);
-                                if (index > -1) {
-                                    countrysegmnt.splice(index, 1);
-                                }
-                                getrequireddata(countrysegmnt,'location');
-                            }
-                        });
-                       
-                    });
-                // country_segment
-
-                 // numberofvisit_segment
-                 var counts4 = {};
-                 numberofvisit_segment.forEach(function (x) { counts4[x] = (counts4[x] || 0) + 1; });
-                 for (bs in counts4) {
-                     document.getElementById('kb_nuofvisit_segment').innerHTML+=`<div class="padding-bottom-half"><label
-                         class="layout-row layout-align-start-center margin-none">
-                         <div class="padding-right-half"><input type="radio"
-                                 value="`+bs+`" name="numberofvisit_segment" /></div>
-                         <div aria-label="" role="listitem"
-                             class="ui-list-item padding-none flex">
-                             <div
-                                 class="flex layout-row layout-align-start-center text-truncate padding-right-half">
-                                 `+bs+`
-                             </div> <strong>`+counts4[bs]+`</strong>
-                                 </div>
-                             </label>
-                         </div>`;
-                 }
-                 document.getElementsByName('numberofvisit_segment').forEach((numberofvisitseg) => {
-                     // numberofvisitsegmnt.push(numberofvisitseg.value);
-                     numberofvisitseg.addEventListener('click',function(){
-                         var numberofvisitsegmnt = [];
-                         data3 = [];
-                            if (this.checked) {
-                                numberofvisitsegmnt.push(this.value);
-                                getrequireddata(numberofvisitsegmnt,'created_at');
-                            }else{
-                                var index = numberofvisitsegmnt.indexOf(this.value);
-                                if (index > -1) {
-                                    numberofvisitsegmnt.splice(index, 1);
-                                }
-                                console.log(numberofvisitsegmnt);
-                                getrequireddata(numberofvisitsegmnt,'created_at');
-                            }
-                        });
-                       
-                    });
-                 // numberofvisit_segment
-
-
-                //  date_range_segment
-                var dtrange = ['',''];
-                document.getElementById('ui-datepicker1').addEventListener('change',function(){
-                    data3 = [];
-                    dtrange[0] = this.value;
-                    if(dtrange[0]!='' && dtrange[1]!=''){
-                        getrequireddata(dtrange,'daterange_segment');
-                    }
-                });
-
-                document.getElementById('ui-datepicker2').addEventListener('change',function(){
-                    data3 = [];
-                    dtrange[1] = this.value;
-                    if(dtrange[0]!='' && dtrange[1]!=''){
-                        getrequireddata(dtrange,'daterange_segment');
-                    }
-                });
-                //  date_range_segment
-                
-                
-
+            // country_segment
+            var counts3 = {};
+            country_segment.forEach(function (x) { counts3[x] = (counts3[x] || 0) + 1; });
+            for (bs in counts3) {
+                document.getElementById('kb_country_segment').innerHTML+=`<div class="padding-bottom-half"><label
+                    class="layout-row layout-align-start-center margin-none">
+                    <div class="padding-right-half"><input type="checkbox"
+                            value="`+bs+`" name="country_segment" checked /></div>
+                    <div aria-label="" role="listitem"
+                        class="ui-list-item padding-none flex">
+                        <div
+                            class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                            `+bs+`
+                        </div> <strong>`+counts3[bs]+`</strong>
+                            </div>
+                        </label>
+                    </div>`;
             }
+            var countrysegmnt = [];
+            document.getElementsByName('country_segment').forEach((countryseg) => {
+                countrysegmnt.push(countryseg.value);
+                countryseg.addEventListener('click',function(){
+                        data3 = [];
+                        if (this.checked) {
+                            countrysegmnt.push(this.value);
+                            getrequireddata(countrysegmnt,'location');
+                        }else{
+                            var index = countrysegmnt.indexOf(this.value);
+                            if (index > -1) {
+                                countrysegmnt.splice(index, 1);
+                            }
+                            getrequireddata(countrysegmnt,'location');
+                        }
+                    });
+                   
+                });
+            // country_segment
+
+             // numberofvisit_segment
+             var counts4 = {};
+             numberofvisit_segment.forEach(function (x) { counts4[x] = (counts4[x] || 0) + 1; });
+             for (bs in counts4) {
+                 document.getElementById('kb_nuofvisit_segment').innerHTML+=`<div class="padding-bottom-half"><label
+                     class="layout-row layout-align-start-center margin-none">
+                     <div class="padding-right-half"><input type="radio"
+                             value="`+bs+`" name="numberofvisit_segment" /></div>
+                     <div aria-label="" role="listitem"
+                         class="ui-list-item padding-none flex">
+                         <div
+                             class="flex layout-row layout-align-start-center text-truncate padding-right-half">
+                             `+bs+`
+                         </div> <strong>`+counts4[bs]+`</strong>
+                             </div>
+                         </label>
+                     </div>`;
+             }
+             document.getElementsByName('numberofvisit_segment').forEach((numberofvisitseg) => {
+                 // numberofvisitsegmnt.push(numberofvisitseg.value);
+                 numberofvisitseg.addEventListener('click',function(){
+                     var numberofvisitsegmnt = [];
+                     data3 = [];
+                        if (this.checked) {
+                            numberofvisitsegmnt.push(this.value);
+                            getrequireddata(numberofvisitsegmnt,'created_at');
+                        }else{
+                            var index = numberofvisitsegmnt.indexOf(this.value);
+                            if (index > -1) {
+                                numberofvisitsegmnt.splice(index, 1);
+                            }
+                            // console.log(numberofvisitsegmnt);
+                            getrequireddata(numberofvisitsegmnt,'created_at');
+                        }
+                    });
+                   
+                });
+             // numberofvisit_segment
+
+
+            //  date_range_segment
+            var dtrange = ['',''];
+            document.getElementById('ui-datepicker1').addEventListener('change',function(){
+                data3 = [];
+                dtrange[0] = this.value;
+                if(dtrange[0]!='' && dtrange[1]!=''){
+                    getrequireddata(dtrange,'daterange_segment');
+                }
+            });
+
+            document.getElementById('ui-datepicker2').addEventListener('change',function(){
+                data3 = [];
+                dtrange[1] = this.value;
+                if(dtrange[0]!='' && dtrange[1]!=''){
+                    getrequireddata(dtrange,'daterange_segment');
+                }
+            });
+            //  date_range_segment
+            
+        })
+        .catch(error => {
+            // Handle errors here
+            // console.error(error);
         });
-        // fetch all data
+
+
 
         // get required data
         function getrequireddata(value1,value2){
-            $.ajax({
-                url: windoworigin+"/heatshome-request",
-                type: "POST",
-                dataType: 'json',
-                data:  {
-                    url: window.location.href.toString().split('#kb-heatmaps')[0],
-                    browser_segment: value1,
-                    whichvalue: value2
-                },
-                success: function (data) {
-                    // console.log(data);
+
+            var url = `${windoworigin}/heatshome-request`;
+            var requestData = {
+            url: window.location.href.toString().split('#kb-heatmaps')[0],
+            browser_segment: value1,
+            whichvalue: value2
+            };
+
+            fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log(data);
 
                 var strng1 = [];
                 var strng2 = [];
@@ -2050,14 +2079,19 @@ if(window.location.hash=='#kb-heatmaps'){
                 // =========== HEATMAP END ===========
                 // ===================================
 
-
-                }
+            })
+            .catch(error => {
+                // Handle errors here
+                // console.error(error);
             });
+            
         }
         // get required data
             
 
-    }, 500);
+        }, 500);
+    // });
+
 
     // layout js
 
@@ -2214,171 +2248,171 @@ if(window.location.hash=='#kb-heatmaps'){
     }
     
     function createheatmpmouse(){
-        $.ajax({
-            url: windoworigin+"/heatfetchmou-request",
-            type: "POST",
-            dataType: 'json',
-            data:  {
-                url: window.location.href.toString().split('#kb-heatmaps')[0]
-            },
-            success: function (data) {
 
-                var strng1 = [];
-                var strng2 = [];
+        var url = `${windoworigin}/heatfetchmou-request`;
+        var requestData = {
+        url: window.location.href.toString().split('#kb-heatmaps')[0]
+        };
 
-                data.data.forEach(element => {
-                    var elm1 =  element['mouseY'].split(',')
-                    elm1.forEach(element2 => {
-                        strng1.push(element2);
-                    });
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
 
-                    var elm2 =  element['mouseX'].split(',')
-                    elm2.forEach(element3 => {
-                        var generateelm = 1519%kb_width*0.5;
-                        generateelm = Math.abs(element3-generateelm);
-                        strng2.push(generateelm);
-                    });
+            // console.log(data);
+            var strng1 = [];
+            var strng2 = [];
+
+            data.data.forEach(element => {
+                var elm1 =  element['mouseY'].split(',')
+                elm1.forEach(element2 => {
+                    strng1.push(element2);
                 });
 
-                // ===================================
-                // ========== HEATMAP START ==========
-                // ===================================
-                "use strict";
-                class HeatMap {
-                    constructor(canvas, data) {
-                        this.canvas = canvas;
-                        this.ctx = canvas.getContext("2d");
-                        this.width = canvas.width;
-                        this.height = canvas.height;
-                        this.data = data;
-                        this.circle = HeatMap.createCanvas();
-                        this.radius = 15 + 15;
-                        this.computeRadius(15, 15);
-                        this.unit8Gradient = HeatMap.computeGradient({
-                            0.4: "blue",
-                            0.6: "cyan",
-                            0.7: "lime",
-                            0.8: "yellow",
-                            1.0: "red"
-                        });
-                    }
-                    computeRadius(r, blur) {
-                        const { circle } = this;
-                        const ctx = circle.getContext("2d");
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        const r2 = this.radius;
-                        circle.height = r2 * 2;
-                        circle.width = r2 * 2;
-                        ctx.shadowOffsetY = r2 * 2;
-                        ctx.shadowOffsetX = r2 * 2;
-                        ctx.shadowBlur = blur;
-                        ctx.shadowColor = "black";
-                        ctx.beginPath();
-                        ctx.arc(-r2, -r2, r, 0, Math.PI * 2, true);
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-                    resize() {
-                        this.width = this.canvas.width;
-                        this.height = this.canvas.height;
-                    }
-                    draw(minOpacity) {
-                        const { ctx } = this;
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        ctx.clearRect(0, 0, this.width, this.height);
-                        for (let i = 0, len = this.data.length, p; i < len; i++) {
-                            p = this.data[i];
-                            ctx.globalAlpha = Math.min(minOpacity, 1);
-                            if (!this.circle || !this.radius) {
-                                throw new Error("The circle || radius is undefined");
-                            }
-                            ctx.drawImage(this.circle, p[0] - this.radius, p[1] - this.radius,30,30);
-                        }
-                        const colored = HeatMap.colorize(ctx.getImageData(0, 0, this.width, this.height), this.unit8Gradient);
-                        ctx.putImageData(colored, 0, 0);
-                    }
-                    static computeGradient(grad) {
-                        const canvas = HeatMap.createCanvas();
-                        const ctx = canvas.getContext("2d");
-                        if (!ctx) {
-                            throw new Error("The ctx is undefined");
-                        }
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 256);
-                        canvas.width = 1;
-                        canvas.height = 256;
-                        Object.keys(grad).forEach((i) => {
-                            gradient.addColorStop(+i, grad[+i]);
-                        });
-                        ctx.fillStyle = gradient;
-                        ctx.fillRect(0, 0, 1, 256);
-                        return ctx.getImageData(0, 0, 1, 256).data;
-                    }
-                    static colorize(imageData, gradient) {
-                        const pixels = imageData.data;
-                        for (let i = 0, len = pixels.length, j; i < len; i += 4) {
-                            j = pixels[i + 3] * 4;
-                            if (j) {
-                                pixels[i] = gradient[j];
-                                pixels[i + 1] = gradient[j + 1];
-                                pixels[i + 2] = gradient[j + 2];
-                            }
-                        }
-                        return imageData;
-                    }
-                    static createCanvas() {
-                        return document.createElement("canvas");
-                    }
-                }
+                var elm2 =  element['mouseX'].split(',')
+                elm2.forEach(element3 => {
+                    var generateelm = 1519%kb_width*0.5;
+                    generateelm = Math.abs(element3-generateelm);
+                    strng2.push(generateelm);
+                });
+            });
 
-                var chkmn = [];
-                
-                // var kb_main = 0;
-                // strng1.forEach(element => {
-                //     chkmn = [];
-                //     chkmn.push(strng2[kb_main]);
-                //     chkmn.push(strng1[kb_main]);
-                //     console.log(chkmn);
-                //         data2.push(chkmn);
-                //         kb_main++;
-                //     });
-
-
-                var kb_main = 0;
-                strng1.forEach(element => {
-                    chkmn = [];
-                    if(strng2[kb_main]!='' || strng2[kb_main]!=0){
-                        chkmn.push(strng2[kb_main]);
-                        chkmn.push(strng1[kb_main]);
-                        data2.push(chkmn);
-                    }
-                        kb_main++;
+            // ===================================
+            // ========== HEATMAP START ==========
+            // ===================================
+            "use strict";
+            class HeatMap {
+                constructor(canvas, data) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext("2d");
+                    this.width = canvas.width;
+                    this.height = canvas.height;
+                    this.data = data;
+                    this.circle = HeatMap.createCanvas();
+                    this.radius = 15 + 15;
+                    this.computeRadius(15, 15);
+                    this.unit8Gradient = HeatMap.computeGradient({
+                        0.4: "blue",
+                        0.6: "cyan",
+                        0.7: "lime",
+                        0.8: "yellow",
+                        1.0: "red"
                     });
-
-                var x = document.getElementById("lo-website-iframe");
-                const canvas2 = x.contentWindow.document.getElementById("heat-map");
-
-                document.getElementsByClassName('filtered')[0].innerText = data2.length+' Moves';
-
-                const heat = new HeatMap(canvas2, data2);
-                heat.draw(0.85);
-
-                // ===================================
-                // =========== HEATMAP END ===========
-                // ===================================
-
-
-
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(xhr.responseText);
-
+                }
+                computeRadius(r, blur) {
+                    const { circle } = this;
+                    const ctx = circle.getContext("2d");
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
+                    }
+                    const r2 = this.radius;
+                    circle.height = r2 * 2;
+                    circle.width = r2 * 2;
+                    ctx.shadowOffsetY = r2 * 2;
+                    ctx.shadowOffsetX = r2 * 2;
+                    ctx.shadowBlur = blur;
+                    ctx.shadowColor = "black";
+                    ctx.beginPath();
+                    ctx.arc(-r2, -r2, r, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                resize() {
+                    this.width = this.canvas.width;
+                    this.height = this.canvas.height;
+                }
+                draw(minOpacity) {
+                    const { ctx } = this;
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
+                    }
+                    ctx.clearRect(0, 0, this.width, this.height);
+                    for (let i = 0, len = this.data.length, p; i < len; i++) {
+                        p = this.data[i];
+                        ctx.globalAlpha = Math.min(minOpacity, 1);
+                        if (!this.circle || !this.radius) {
+                            throw new Error("The circle || radius is undefined");
+                        }
+                        ctx.drawImage(this.circle, p[0] - this.radius, p[1] - this.radius,30,30);
+                    }
+                    const colored = HeatMap.colorize(ctx.getImageData(0, 0, this.width, this.height), this.unit8Gradient);
+                    ctx.putImageData(colored, 0, 0);
+                }
+                static computeGradient(grad) {
+                    const canvas = HeatMap.createCanvas();
+                    const ctx = canvas.getContext("2d");
+                    if (!ctx) {
+                        throw new Error("The ctx is undefined");
+                    }
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 256);
+                    canvas.width = 1;
+                    canvas.height = 256;
+                    Object.keys(grad).forEach((i) => {
+                        gradient.addColorStop(+i, grad[+i]);
+                    });
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, 1, 256);
+                    return ctx.getImageData(0, 0, 1, 256).data;
+                }
+                static colorize(imageData, gradient) {
+                    const pixels = imageData.data;
+                    for (let i = 0, len = pixels.length, j; i < len; i += 4) {
+                        j = pixels[i + 3] * 4;
+                        if (j) {
+                            pixels[i] = gradient[j];
+                            pixels[i + 1] = gradient[j + 1];
+                            pixels[i + 2] = gradient[j + 2];
+                        }
+                    }
+                    return imageData;
+                }
+                static createCanvas() {
+                    return document.createElement("canvas");
+                }
             }
+
+            var chkmn = [];
+            
+            var kb_main = 0;
+            strng1.forEach(element => {
+                chkmn = [];
+                if(strng2[kb_main]!='' || strng2[kb_main]!=0){
+                    chkmn.push(strng2[kb_main]);
+                    chkmn.push(strng1[kb_main]);
+                    data2.push(chkmn);
+                }
+                    kb_main++;
+                });
+
+            var x = document.getElementById("lo-website-iframe");
+            const canvas2 = x.contentWindow.document.getElementById("heat-map");
+
+            document.getElementsByClassName('filtered')[0].innerText = data2.length+' Moves';
+
+            const heat = new HeatMap(canvas2, data2);
+            heat.draw(0.85);
+
+            // ===================================
+            // =========== HEATMAP END ===========
+            // ===================================
+
+        })
+        .catch(error => {
+            // Handle errors here
+            // console.error(error);
         });
+
+       
     }
 
     var scrheight = 0;
@@ -2398,7 +2432,7 @@ if(window.location.hash=='#kb-heatmaps'){
 
         switch (this.value) {
             case 'desktop':
-                document.getElementById('lo-website-iframe-container').style.width = '100%';
+                document.getElementById('lo-website-iframe-container').style.width = '101%';
                 removeactiveclass('kb-devicebtn',0);
                 document.getElementById("lo-website-iframe-container").classList.remove('tablet');
                 document.getElementById("lo-website-iframe-container").classList.remove('phone');
@@ -2541,7 +2575,7 @@ if(window.location.hash=='#kb-heatmaps'){
         heatmapready = true;
     });
     
-       document.getElementById('kb-clicks').addEventListener('click',function(){
+    document.getElementById('kb-clicks').addEventListener('click',function(){
         document.getElementById('kb-moves').classList.remove('active');
         this.classList.add('active');
         createheatmp();
@@ -2619,7 +2653,7 @@ if(window.location.hash=='#kb-heatmaps'){
                     canvas.toBlob(function(blob) {
                         //     saveAs(blob, "screenshot.png");
                     var url = URL.createObjectURL(blob);
-                        console.log(url);
+                        // console.log(url);
 
                         document.getElementById('kb-scr-src').src = url;
                         document.getElementById('kb-link1').href = url;
@@ -2642,50 +2676,5 @@ if(window.location.hash=='#kb-heatmaps'){
         document.getElementById('kb-insidescrn-second').style.display = "none";
     });
 
-    // layout js
-    
-    document.getElementById('heatmap-recording').addEventListener('click',function(){
-        document.getElementById('recordings').style.display = "block";
-    });
-
-   
-    // $.ajax({
-    //     url: windoworigin+"/showrecordheat",
-    //     type: "POST",
-    //     dataType: 'json',
-    //     data:  {
-    //         url: window.location.href.toString().split('#kb-heatmaps')[0]
-    //     },
-    //     success: function (data) {
-    //         console.log(data.data);
-    //         data.data.forEach(element => {
-    //             var myArray = element['created_at'].split("-");
-    //             if(myArray[0]!=''){
-
-    //                 $.ajax({
-    //                     url: windoworigin+"/getheatdir",
-    //                     type: "POST",
-    //                     dataType: 'json',
-    //                     data:  {
-    //                         hash: element['uniqueid']
-    //                     },
-    //                     success: function (data) {
-    //                         if(data.data[0]!=undefined){
-    //                             var dt = myArray[0]+'-'+myArray[1]+'-'+myArray[2];
-    //                             var hashvl = element['uniqueid'];
-    //                             document.getElementById('myheatrecordol').innerHTML += "<li><span>"+dt+"</span><span><a target='_blank' href='http://localhost:4200/heatmaps-recordings#"+hashvl+"'>View Recording</a></span></li>";
-    //                         }
-    //                     }
-    //                 });
-
-
-                   
-    //             }
-    //         });
-    //     }
-    // });
-
-
-    
 
 }
