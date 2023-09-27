@@ -1,6 +1,6 @@
 <ng-container *ngIf="target == 'main' && page_json?.header?.id">
     <header [id]="'kb-header-'+page_json?.header.id">
-        <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target]="'header'"></app-page-view>
+        <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target_menus]="page_json?.menus" [target]="'header'"></app-page-view>
     </header>
 </ng-container>
 <div [id]="'kb-'+target">
@@ -156,7 +156,7 @@
 <span id="kb-user-id" [attr.kb-user-id]="req.uid"></span>
 <ng-container *ngIf="target == 'main' && page_json?.footer?.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
-        <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>
+        <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target_menus]="page_json?.menus" [target]="'footer'"></app-page-view>
     </footer>
 </ng-container>
 <app-default-page-view *ngIf="defaultPage"></app-default-page-view>
