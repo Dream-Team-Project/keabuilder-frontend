@@ -29,6 +29,7 @@ export class FileUploadService {
   // forms
   // document
   getAllDocumentsApi = "/api/getalldocuments";
+  uploadmembershipDocumentApi = "/api/uploadmembershipdocument";
   uploadDocumentApi = "/api/uploaddocument";
   deleteDocumentApi = "/api/deletedocument";
   renameDocumentApi = "/api/renamedocument";
@@ -502,6 +503,10 @@ export class FileUploadService {
 
   // document
 
+  getAllDocuments1(folder1:string):Observable<any> {
+    return this.http.get(this.getAllDocumentsApi+'/'+this.uuid+'/'+folder1)
+    .pipe(catchError(this.errorHandler));
+  }
   getAllDocuments(folder:string):Observable<any> {
     return this.http.get(this.getAllDocumentsApi+'/'+folder)
     .pipe(catchError(this.errorHandler));
@@ -512,10 +517,10 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
   
-  uploadDocument(file: any, folder:string):Observable<any> {
+  uploadDocument(file: any, folder:string,folder1:string):Observable<any> {
     const formData = new FormData();
     formData.append('uploadedDocument', file, file.name);
-    return this.http.post(this.uploadDocumentApi + '/' + folder, formData)
+    return this.http.post(this.uploadmembershipDocumentApi + '/' + folder+ '/' + folder1, formData)
     .pipe(catchError(this.errorHandler));
   }
   uploadcontactsDocument(file: any, folder:string):Observable<any> {
