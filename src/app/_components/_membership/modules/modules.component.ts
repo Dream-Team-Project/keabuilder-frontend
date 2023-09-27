@@ -321,6 +321,7 @@ export class MembershipModulesComponent implements OnInit {
       module.uniqueid = this.getUID();
       module.sort = this.index.module;
       module.publish_status = 1;
+      module.user_id=this.course.user_id;
       var imgNObj:any = null;
       if(module.thumbnail) {
         imgNObj = new Object();
@@ -472,6 +473,8 @@ export class MembershipModulesComponent implements OnInit {
     lesson.module_id = this.modules[this.index.module].uniqueid;
     lesson.sort = this.index.lesson+1;
     lesson.publish_status = 1;
+    lesson.user_id=this.course.user_id;
+    lesson.content='';lesson.video='';lesson.audio='';lesson.download='';lesson.email_subject='';lesson.email_body='';lesson.automationid='';
     var imgNObj:any = null;
     if(lesson.thumbnail) {
       imgNObj = new Object();
