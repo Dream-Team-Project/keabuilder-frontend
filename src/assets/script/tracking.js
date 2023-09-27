@@ -36,18 +36,9 @@ window.onload = function(a){
         item.classList.remove('kb-video-muted');
     });
     // video muted
-    // responsive menu
-    document.querySelectorAll('.kb-menu-bar').forEach(item=>{
-        item.addEventListener('click',()=>{
-            item.classList.toggle("kb-menu-bar-open");
-            item.parentElement.querySelector('.kb-menu-content').classList.toggle('kb-d-none');
-        })
-    });
-  // responsive menu
     // block redirection
     document.querySelectorAll('.kb-block-redirection').forEach(block=>{
         block.addEventListener('click',()=>{
-            console.log(block);
             var link = block.getAttribute('data-link');
             var target = block.getAttribute('data-target');
             if(link) window.open(link, target);

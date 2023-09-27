@@ -247,7 +247,7 @@
                                                                 [loop]="element.content.loop"
                                                                 [controls]="element.content.controls"
                                                                 [class.kb-video-muted]="element.content.muted">
-                                                                    <source [src]="element.content.src" type="video/mp4">
+                                                                    <!-- <source [src]="element.content.src" type="video/mp4"> -->
                                                                 </video>
                                                             </ng-template>
                                                         </div>
@@ -298,10 +298,10 @@
                                                 </div>
                                                 <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                     class="kb-element-content">
-                                                    <ul class="kb-menu" [id]="element.content.data_id"
+                                                    <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                                         [ngStyle]="isBlockActive(element) && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
                                                         <li *ngFor="let item of element.content.items, index as mi">
-                                                            <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                            <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                                 [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
                                                                 {{item.name}}</a>
                                                         </li>
@@ -313,15 +313,16 @@
                                                             <span class="kb-menu-bar3"></span>
                                                         </div>
                                                         <div [class.kb-d-none]="!(isBlockActive(element) && (_style.setDropDownStyle.main || _style.setDropDownStyle.item))" class="kb-menu-content">
-                                                            <ul class="kb-menu" [id]="element.content.data_id"
+                                                            <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                                             [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.main ? _style.currentStyling() : element.content.style.dropdown">
                                                                 <li *ngFor="let item of element.content.items, index as mi">
-                                                                    <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                                    <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                                         [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.item ? _style.textStyling() : element.content.item.style.dropdown">{{item.name}}</a>
                                                                 </li>
                                                             </ul>
                                                         </div>
                                                     </div>
+                                                    <!-- <app-fetch-menu [menu_element]="element" [isBlockActive]="isBlockActive(element)" ></app-fetch-menu> -->
                                                 </div>
                                                 <div *ngSwitchCase="'form-component'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">

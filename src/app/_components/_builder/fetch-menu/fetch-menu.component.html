@@ -1,0 +1,26 @@
+<ng-container *ngIf="menu_success">
+    <ul class="kb-menu" [id]="'kb-menu-'+menu_element.content.data_id"
+    [ngStyle]="isBlockActive && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.currentStyling() : _style.getBlockStyle(menu_element.content.style)">
+    <li *ngFor="let item of menu_element.content.items, index as mi">
+        <a class="kb-content-item" [id]="'kb-menu-item'+item.id" [href]="item.link"
+            [ngStyle]="isBlockActive && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(menu_element.content.item.style)">
+            {{item.name}}</a>
+    </li>
+</ul>
+<div class="kb-menu-resp" [style.justifyContent]="isBlockActive ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(menu_element.item_alignment)">
+    <div class="kb-menu-bar" [ngStyle]="isBlockActive && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item  ? _style.currentStyling() : _style.getBlockStyle(menu_element.content.style)">
+        <span class="kb-menu-bar1"></span>
+        <span class="kb-menu-bar2"></span>
+        <span class="kb-menu-bar3"></span>
+    </div>
+    <div [class.kb-d-none]="!(isBlockActive && (_style.setDropDownStyle.main || _style.setDropDownStyle.item))" class="kb-menu-content">
+        <ul class="kb-menu" [id]="'kb-menu-'+menu_element.content.data_id"
+        [ngStyle]="isBlockActive && _style.setDropDownStyle.main ? _style.currentStyling() : menu_element.content.style.dropdown">
+            <li *ngFor="let item of menu_element.content.items, index as mi">
+                <a class="kb-content-item" [id]="'kb-menu-item'+item.id" [href]="item.link"
+                    [ngStyle]="isBlockActive && _style.setDropDownStyle.item ? _style.textStyling() : menu_element.content.item.style.dropdown">{{item.name}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</ng-container>

@@ -125,14 +125,14 @@ export class BuilderComponent implements OnInit {
                 jsonObj.header ? _general.selectedHeader = jsonObj.header : _general.includeLayout.header = false;
                 jsonObj.footer ? _general.selectedFooter = jsonObj.footer : _general.includeLayout.footer = false;
                 _section.sections = jsonObj.sections;
-                _section.sections.forEach((sec:any)=>{
-                  sec.rowArr.forEach((row:any)=>{
-                    row.columnArr.forEach((col:any)=>{
-                      col.elementArr.forEach((ele:any)=>{
+                _section.sections.flatMap((sec:any)=>{
+                  sec.rowArr.flatMap((row:any)=>{
+                    row.columnArr.flatMap((col:any)=>{
+                      col.elementArr.filter((ele:any)=>{
                         var cont = ele.content;
                         if(cont.name == 'menu') {
-                          this._general.menus.forEach((menu:any)=>{
-                            if(menu.id == cont.data_id) {
+                          this._general.menus.filter((menu:any)=>{
+                            if(menu.uniqueid == cont.data_id) {
                               var menuObj = JSON.parse(JSON.stringify(menu));
                               ele.content = this._element.setMenu(cont, menuObj);
                             }

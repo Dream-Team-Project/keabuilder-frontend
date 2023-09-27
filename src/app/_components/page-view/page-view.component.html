@@ -3,7 +3,7 @@
         <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target]="'header'"></app-page-view>
     </header>
 </ng-container>
-<div [id]="'kb-'+target" [ngStyle]="target == 'main' ? _style.getBlockStyle(page_json?.mainstyle) : ''">
+<div [id]="'kb-'+target">
     <div class="kb-drag-container">
         <!-- sections start -->
         <div #kbmain *ngFor="let section of page_json?.sections, index as si"
@@ -95,26 +95,22 @@
                                     </div>
                                     <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                         class="kb-element-content">
-                                        <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
-                                            [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                        <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id">
                                             <li *ngFor="let item of element.content.items, index as mi">
-                                                <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
-                                                    [ngStyle]="_style.getBlockStyle(element.content.item.style)">
+                                                <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link">
                                                     {{item.name}}</a>
                                             </li>
                                         </ul>
                                         <div class="kb-menu-resp">
-                                            <div class="kb-menu-bar" [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                            <div class="kb-menu-bar" [class.kb-menu-bar-open]="element.content.menuOpen" (click)="toggleRespMenu(element.content)">
                                                 <span class="kb-menu-bar1"></span>
                                                 <span class="kb-menu-bar2"></span>
                                                 <span class="kb-menu-bar3"></span>
                                             </div>
-                                            <div class="kb-menu-content kb-d-none">
-                                                <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
-                                                [ngStyle]="element.content.style.dropdown">
+                                            <div class="kb-menu-content" [class.kb-d-none]="!element.content.menuOpen" >
+                                                <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id">
                                                     <li *ngFor="let item of element.content.items, index as mi">
-                                                        <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
-                                                            [ngStyle]="element.content.item.style.dropdown">{{item.name}}</a>
+                                                        <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link">{{item.name}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -134,7 +130,7 @@
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <hr [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                        <hr>
                                     </div>
                                     <div *ngSwitchCase="'icon'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <div class="kb-icon-block"

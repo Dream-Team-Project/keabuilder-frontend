@@ -202,8 +202,14 @@ export class PageViewComponent implements OnInit {
     document.head.appendChild(style);
     const script = document.createElement('script');
     script.src = '/assets/script/tracking.js';
+    script.type = 'text/javascript'; 
     script.async = true;
     document.head.appendChild(script);
+    const hmscript = document.createElement('script');
+    hmscript.src = '/assets/script/heatmap.js';
+    hmscript.type = 'text/javascript'; 
+    hmscript.async = true;
+    document.head.appendChild(hmscript);
   }
 
   loadScript(code:any, targetElement:any) {
@@ -233,6 +239,7 @@ export class PageViewComponent implements OnInit {
   }
 
   setLoadScript(data:any) {
+    console.log(data);
     this.page_json = this._general.decodeJSON(data);
     this.loadScript(this.page_json.tracking.header, document.head);
     this.addHead(this.page_json.head);
@@ -247,23 +254,33 @@ export class PageViewComponent implements OnInit {
 
   setMenu(sections:any, menus:any) {
     if(sections) {
-      sections.forEach((sec:any)=>{
-        sec.rowArr.forEach((row:any)=>{
-          row.columnArr.forEach((col:any)=>{
-            col.elementArr.forEach((ele:any)=>{
+      sections.flatMap((sec:any)=>{
+        sec.rowArr.flatMap((row:any)=>{
+          row.columnArr.flatMap((col:any)=>{
+            col.elementArr.filter((ele:any)=>{
               var cont = ele.content;
               if(cont.name == 'menu') {
-                menus.forEach((menu:any)=>{
-                  if(menu.id == cont.data_id) {
+                menus.filter((menu:any)=>{
+                  if(menu.uniqueid == cont.data_id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));
                     ele.content = this._element.setMenu(cont, menuObj);
                   }
                 })
               }
-            })
           })
+        })
         })
       })
     }
   }
+
+  redirectionLink(redir:any) {
+    console.log(redir);
+    if(redir?.link) window.open(redir.link, redir.target);
+  }
+
+  toggleRespMenu(menu:any) {
+    menu.menuOpen = !menu.menuOpen
+  }
+
 }

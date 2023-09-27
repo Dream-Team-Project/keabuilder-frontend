@@ -1416,7 +1416,7 @@ app-page-view .kb-drag-container {
     background-color: var(--kb-dark);
     margin-top: 3px;
     margin-bottom: 3px;
-    transition: 0.2s ease;
+    transition: 0.1s ease;
 }
 
 .kb-menu-bar-open .kb-menu-bar1 {
