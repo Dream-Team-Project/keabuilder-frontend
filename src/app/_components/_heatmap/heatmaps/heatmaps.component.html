@@ -18,11 +18,18 @@
         <div class="row pt-5">
             <div class="col-md-12 kb-mostvisitpage">
                 <h3 class="maindivhead">
-                    <span class="d-inline-block text-center w-50 active">Websites</span>
-                    <span class="d-inline-block text-center w-50 mkbrdr">Funnels</span>
+                    <span class="d-inline-block text-center w-50" [class.active]="toggleweb" (click)="toggleweb = true">Websites</span>
+                    <span class="d-inline-block text-center w-50 mkbrdr" [class.active]="!toggleweb" (click)="toggleweb = false">Funnels</span>
                 </h3>
-                <ol>
+                <ol *ngIf="toggleweb">
                     <li *ngFor="let visit of visited; index as i;">
+                        <a (click)="sendurl(visit)" target="_blank">
+                            {{makeurl(visit)}}
+                        </a>
+                    </li>
+                </ol>
+                <ol *ngIf="!toggleweb">
+                    <li *ngFor="let visit of visitedfunnel; index as i;">
                         <a (click)="sendurl(visit)" target="_blank">
                             {{makeurl(visit)}}
                         </a>

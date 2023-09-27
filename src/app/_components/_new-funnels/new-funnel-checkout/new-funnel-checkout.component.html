@@ -1,211 +1,219 @@
 <ng-container *ngIf="checkoutvisible else notfound">
-<div class="container-fluid kbmncont">
+  <div class="container-fluid kbmncont kbmainouter">
 
-  <div class="row">
-    <div class="col-md-12 step1div onlyonestepdiv" *ngIf="!maketwostep">
-      <h5 class="mb-0">Your Details</h5>
+    <div class="row">
+      <div class="col-md-12 step1div onlyonestepdiv" *ngIf="!maketwostep">
+        <h5 class="mb-0">Your Details</h5>
+      </div>
+
+      <div class="col-md-6 col-6 step1div" [class.active]="!switchstep" *ngIf="maketwostep">
+        <h5 class="mb-0">STEP 1</h5>
+        <p class="mb-0">Your Contact Detail</p>
+      </div>
+      <div class="col-md-6 col-6 step2div" [class.active]="switchstep" *ngIf="maketwostep">
+        <h5 class="mb-0">STEP 2</h5>
+        <p class="mb-0">Your Order Detail</p>
+      </div>
     </div>
 
-    <div class="col-md-6 col-6 step1div" [class.active]="!switchstep" *ngIf="maketwostep">
-      <h5 class="mb-0">STEP 1</h5>
-      <p class="mb-0">Your Contact Detail</p>
+    <div class="row cntbk">
+
+      <div class="kb-spinner" *ngIf="spinner">
+        <mat-progress-bar mode='indeterminate' id="mkspinner"></mat-progress-bar>
+      </div>
+
+        <form novalidate method="post" action="javascript:void(0)" id="payment-form" class="w-100" [formGroup]="stripeForm">
+            <div class="col-md-12">
+                
+                <div class="o2step_step1 mt-2" *ngIf="!switchstep">
+                    <h6>CONTACT INFORMATION</h6>
+                    
+                    <div class="row">
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="text" placeholder="First Name *" class="form-control" formControlName="frname" 
+                          required [class.finderror]="stripeForm.get('frname').hasError('required') && firststepsubmit">
+                          <i class="fa fa-user"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="text" placeholder="Last Name *" class="form-control" formControlName="ltname" 
+                          required [class.finderror]="stripeForm.get('ltname').hasError('required') && firststepsubmit">
+                          <i class="fa fa-user"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="email" placeholder="Email *" class="form-control" formControlName="email"
+                          required [class.finderror]="(stripeForm.get('email').hasError('required') || 
+                          stripeForm.get('email').hasError('email')) && firststepsubmit">
+                          <i class="fa fa-envelope"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="number" placeholder="Phone Number *" class="form-control" formControlName="phone"
+                          required [class.finderror]="stripeForm.get('phone').hasError('required') && firststepsubmit">
+                          <i class="fa fa-phone"></i>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <h6 class="mt-2">BILLING ADDRESS</h6>
+                    
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <input type="text" placeholder="Street Address *" class="form-control" formControlName="fulladdress"
+                          required [class.finderror]="stripeForm.get('fulladdress').hasError('required') && firststepsubmit">
+                          <i class="fa fa-map-marker"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="text" placeholder="City *" class="form-control" formControlName="cityname" 
+                          required [class.finderror]="stripeForm.get('cityname').hasError('required') && firststepsubmit">
+                          <i class="fa fa-city"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="text" placeholder="State / Province *" class="form-control" formControlName="state" 
+                          required [class.finderror]="stripeForm.get('state').hasError('required') && firststepsubmit">
+                          <i class="fa fa-building"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input type="number" class="form-control" formControlName="zip" placeholder="Zip *"
+                          required [class.finderror]="stripeForm.get('zip').hasError('required') && firststepsubmit">
+                          <i class="fa fa-location"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-6">
+                        <div class="form-group">
+                          <input matInput type="text" [(ngModel)]="stripe.payeecountry" formControlName="shippingcountry" 
+                          placeholder="Country *" [matAutocomplete]="countryAuto" 
+                          [class.finderror]="stripeForm.get('shippingcountry').hasError('required') && firststepsubmit"
+                          class="kb-act-searchinp w-100" (input)="filtercountryData($event)" required >
+                          <i class="fa fa-globe"></i>
+                          <mat-autocomplete #countryAuto="matAutocomplete" >
+                            <mat-option (click)="getcountrynm(option)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
+                          </mat-autocomplete>
+                          <small class="text-danger countryerr" *ngIf="cntryhelp"><i class="fa fa-arrow-up mr-1"></i>Please select the country</small>
+                        </div>
+                      </div>
+                    </div>
+                  
+                </div>
+
+                <div class="o2step_step2 mt-2" *ngIf="!switchstep && maketwostep">
+                    <button type="button" class="btnkeacheckout" (click)="validatestep()">
+                        <span class="elButtonMainStep1">{{checkoutstyle.step1btntext}}</span>
+                      </button>
+                </div>
+
+                <div class="o2step_step3" *ngIf="switchstep || !maketwostep">
+                    <a class="kb-back" (click)="switchstep = !switchstep" href="javascript:void(0)" *ngIf="maketwostep">Back</a>
+                    <h6 class="mb-3 mt-2">PAYMENT METHOD <i class="fa-lock fas float-right iconsty"></i></h6>
+
+                    <p class="kb-danger mt-2" *ngIf="!isPaymentConnected"><i class="fa fa-exclamation-circle mr-2" aria-hidden="true"></i>
+                          Payment Gateway Error</p>
+                    <div class="form-group mt-2" *ngIf="isPaymentConnected">
+                        <ngx-stripe-card class="stripe-card" [options]="cardOptions" 
+                        [elementsOptions]="elementsOptions"></ngx-stripe-card>
+                    </div> 
+        
+                    <mat-error class="mtershow" *ngIf="paymenterror">{{paymentMessage}}</mat-error>
+                </div>
+
+                <div class="o2step_step4 mt-4" *ngIf="switchstep || !maketwostep">
+
+                    <h6>ORDER SUMMARY</h6>
+
+                    <div class="Checkout_Summary">
+                        <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table"> 
+                          <thead>
+                            <tr>
+                              <th>S.no</th>
+                              <th class="thwidthadju">Product</th>
+                              <th>Qty</th>
+                              <th>Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-lineitem"
+                            *ngFor="let product of myproductarr; index as i;">
+                                <td>{{i+1}}.</td>
+                                <td class="Checkout_Summary_Table_Row_Cell kbprname">
+                                    <label [for]="'kbchk'+i">
+                                      <input type="checkbox" [attr.data-prid]="product.offerid" [value]="product.price" [checked]="i==0" 
+                                      (change)="maketotalprice($event)" [name]="product.name" [id]="'kbchk'+i">
+                                      <span>{{product.name}}</span>
+                                    </label>
+                                </td>
+                                <td>
+                                  <select>
+                                    <option value="1">1</option>
+                                  </select>
+                                </td>
+                                <td class="Checkout_Summary_Table_Row_Cell kbprprice">
+                                    <span class="Checkout_Summary_Monetary">
+                                        <span class="Checkout_Summary_Monetary_Units"  *ngIf="product.type!='recurring'">
+                                          {{product.symbol}}{{product.price!=0?product.price:'FREE'}}</span>
+                                          <span class="Checkout_Summary_Monetary_Units" *ngIf="product.type=='recurring'">
+                                            {{product.symbol}}{{product.recurring}}</span>
+                                          
+                                    </span>
+                                </td>
+                            </tr>
+                          </tbody>
+
+                        </table>
+                    </div>
+                    <div class="Checkout_Summary_OrderTotal">
+                        <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table Checkout_Summary_Table-ordertotal">
+                            <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-ordertotal">
+                                <td class="Checkout_Summary_Table_Row_Cell kbprname2">Total</td>
+                                <td class="Checkout_Summary_Table_Row_Cell kbprprice2">
+                                    <span class="Checkout_Summary_Monetary">
+                                        <span class="Checkout_Summary_Monetary_Currency">{{symbolcode | uppercase}}</span>
+                                        <span class="Checkout_Summary_Monetary_Units">{{totalprice}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <p class="kbcheckin mt-4" *ngIf="checkpolicy">
+                      <label for="chkbx" class="mb-0"><input type="checkbox" name="" id="chkbx"> By checking this box I confirm I've read and agreed to the <a href="" target="_blank">Terms of Service</a>, <a href="" target="_blank">Privacy Policy</a> & <a href="" target="_blank">Refund Policy</a>. I understand that by agreeing I also give my consent to receive further communications from [Company Name] - I know I can opt-out from this at any given time.</label>
+                    </p>
+
+                </div>
+
+                <div class="o2step_step5 mt-4" *ngIf="switchstep || !maketwostep">
+                    <button type="button" class="btnkeacheckout" (click)="buy()">
+                        <span class="elButtonMainStep1">{{checkoutstyle.step2btntext}}</span>
+                      </button>
+                      <!-- <div class="order2ButtonSubText">{{checkoutstyle.step2footertext}}</div> -->
+                </div>
+                
+                
+            </div>
+        </form>
     </div>
-    <div class="col-md-6 col-6 step2div" [class.active]="switchstep" *ngIf="maketwostep">
-      <h5 class="mb-0">STEP 2</h5>
-      <p class="mb-0">Your Order Detail</p>
-    </div>
+
   </div>
-
-  <div class="row cntbk">
-
-    <div class="kb-spinner" *ngIf="spinner">
-      <mat-progress-bar mode='indeterminate' id="mkspinner"></mat-progress-bar>
-    </div>
-
-      <form novalidate method="post" action="javascript:void(0)" id="payment-form" class="w-100" [formGroup]="stripeForm">
-          <div class="col-md-12">
-              
-              <div class="o2step_step1 mt-2" *ngIf="!switchstep">
-                  <h6>CONTACT INFORMATION</h6>
-                  
-                  <div class="row">
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="text" placeholder="First Name *" class="form-control" formControlName="frname" 
-                        required [class.finderror]="stripeForm.get('frname').hasError('required') && firststepsubmit">
-                        <i class="fa fa-user"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="text" placeholder="Last Name *" class="form-control" formControlName="ltname" 
-                        required [class.finderror]="stripeForm.get('ltname').hasError('required') && firststepsubmit">
-                        <i class="fa fa-user"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="email" placeholder="Email *" class="form-control" formControlName="email"
-                        required [class.finderror]="(stripeForm.get('email').hasError('required') || 
-                        stripeForm.get('email').hasError('email')) && firststepsubmit">
-                        <i class="fa fa-envelope"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="number" placeholder="Phone Number *" class="form-control" formControlName="phone"
-                        required [class.finderror]="stripeForm.get('phone').hasError('required') && firststepsubmit">
-                        <i class="fa fa-phone"></i>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <h6 class="mt-2">BILLING ADDRESS</h6>
-                  
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input type="text" placeholder="Street Address *" class="form-control" formControlName="fulladdress"
-                        required [class.finderror]="stripeForm.get('fulladdress').hasError('required') && firststepsubmit">
-                        <i class="fa fa-map-marker"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="text" placeholder="City *" class="form-control" formControlName="cityname" 
-                        required [class.finderror]="stripeForm.get('cityname').hasError('required') && firststepsubmit">
-                        <i class="fa fa-city"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="text" placeholder="State / Province *" class="form-control" formControlName="state" 
-                        required [class.finderror]="stripeForm.get('state').hasError('required') && firststepsubmit">
-                        <i class="fa fa-building"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input type="number" class="form-control" formControlName="zip" placeholder="Zip *"
-                        required [class.finderror]="stripeForm.get('zip').hasError('required') && firststepsubmit">
-                        <i class="fa fa-location"></i>
-                      </div>
-                    </div>
-                    <div class="col-md-6 col-6">
-                      <div class="form-group">
-                        <input matInput type="text" [(ngModel)]="stripe.payeecountry" formControlName="shippingcountry" 
-                        placeholder="Country *" [matAutocomplete]="countryAuto" 
-                        [class.finderror]="stripeForm.get('shippingcountry').hasError('required') && firststepsubmit"
-                         class="kb-act-searchinp w-100" (input)="filtercountryData($event)" required >
-                        <i class="fa fa-globe"></i>
-                        <mat-autocomplete #countryAuto="matAutocomplete" >
-                          <mat-option (click)="getcountrynm(option)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
-                        </mat-autocomplete>
-                        <small class="text-danger countryerr" *ngIf="cntryhelp"><i class="fa fa-arrow-up mr-1"></i>Please select the country</small>
-                      </div>
-                    </div>
-                  </div>
-                 
-              </div>
-
-              <div class="o2step_step2 mt-2" *ngIf="!switchstep && maketwostep">
-                  <button type="button" class="btnkeacheckout" (click)="validatestep()">
-                      <span class="elButtonMainStep1">{{checkoutstyle.step1btntext}}</span>
-                    </button>
-              </div>
-
-              <div class="o2step_step3" *ngIf="switchstep || !maketwostep">
-                  <a class="kb-back" (click)="switchstep = !switchstep" href="javascript:void(0)" *ngIf="maketwostep">Back</a>
-                  <h6 class="mb-3 mt-2">PAYMENT METHOD <i class="fa-lock fas float-right iconsty"></i></h6>
-
-                  <p class="kb-danger mt-2" *ngIf="!isPaymentConnected"><i class="fa fa-exclamation-circle mr-2" aria-hidden="true"></i>
-                        Payment Gateway Error</p>
-                  <div class="form-group mt-2" *ngIf="isPaymentConnected">
-                      <ngx-stripe-card class="stripe-card" [options]="cardOptions" 
-                      [elementsOptions]="elementsOptions"></ngx-stripe-card>
-                  </div> 
-      
-                  <mat-error *ngIf="paymenterror">{{paymentMessage}}</mat-error>
-              </div>
-
-              <div class="o2step_step4 mt-4" *ngIf="switchstep || !maketwostep">
-
-                  <h6>ORDER SUMMARY</h6>
-
-                  <div class="Checkout_Summary">
-                      <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table"> 
-                        <thead>
-                          <tr>
-                            <th>S.no</th>
-                            <th class="thwidthadju">Product</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-lineitem"
-                          *ngFor="let product of myproductarr; index as i;">
-                              <td>{{i+1}}.</td>
-                              <td class="Checkout_Summary_Table_Row_Cell kbprname">
-                                  <label [for]="'kbchk'+i">
-                                    <input type="checkbox" [attr.data-prid]="product.offerid" [value]="product.price" [checked]="i==0" 
-                                    (change)="maketotalprice($event)" [name]="product.name" [id]="'kbchk'+i">
-                                    <span>{{product.name}}</span>
-                                  </label>
-                              </td>
-                              <td>
-                                <select>
-                                  <option value="1">1</option>
-                                </select>
-                              </td>
-                              <td class="Checkout_Summary_Table_Row_Cell kbprprice">
-                                  <span class="Checkout_Summary_Monetary">
-                                      <span class="Checkout_Summary_Monetary_Units"  *ngIf="product.type!='recurring'">
-                                        {{product.symbol}}{{product.price!=0?product.price:'FREE'}}</span>
-                                        <span class="Checkout_Summary_Monetary_Units" *ngIf="product.type=='recurring'">
-                                          {{product.symbol}}{{product.recurring}}</span>
-                                        
-                                  </span>
-                              </td>
-                          </tr>
-                        </tbody>
-
-                      </table>
-                  </div>
-                  <div class="Checkout_Summary_OrderTotal">
-                      <table cellpadding="0" cellspacing="0" class="Checkout_Summary_Table Checkout_Summary_Table-ordertotal">
-                          <tr class="Checkout_Summary_Table_Row Checkout_Summary_Table_Row-ordertotal">
-                              <td class="Checkout_Summary_Table_Row_Cell kbprname2">Total</td>
-                              <td class="Checkout_Summary_Table_Row_Cell kbprprice2">
-                                  <span class="Checkout_Summary_Monetary">
-                                      <span class="Checkout_Summary_Monetary_Currency">{{symbolcode | uppercase}}</span>
-                                      <span class="Checkout_Summary_Monetary_Units">{{totalprice}}</span>
-                                  </span>
-                              </td>
-                          </tr>
-                      </table>
-                  </div>
-
-                  <p class="kbcheckin mt-4" *ngIf="checkpolicy">
-                    <label for="chkbx" class="mb-0"><input type="checkbox" name="" id="chkbx"> By checking this box I confirm I've read and agreed to the <a href="" target="_blank">Terms of Service</a>, <a href="" target="_blank">Privacy Policy</a> & <a href="" target="_blank">Refund Policy</a>. I understand that by agreeing I also give my consent to receive further communications from [Company Name] - I know I can opt-out from this at any given time.</label>
-                  </p>
-
-              </div>
-
-              <div class="o2step_step5 mt-4" *ngIf="switchstep || !maketwostep">
-                  <button type="button" class="btnkeacheckout" (click)="buy()">
-                      <span class="elButtonMainStep1">{{checkoutstyle.step2btntext}}</span>
-                    </button>
-                    <!-- <div class="order2ButtonSubText">{{checkoutstyle.step2footertext}}</div> -->
-              </div>
-              
-              
-          </div>
-      </form>
-  </div>
-
-</div>
 </ng-container>
 <ng-template #notfound>
-  <div class="pt-3 pb-3 text-center" >Checkout not found!</div>
+  <div class="kbmainouter container-fluid">
+    <div class="pt-3 pb-3 text-center" *ngIf="!paymentsuccess" >{{chkerror}}</div>
+    
+    <div class="text-center" *ngIf="paymentsuccess">
+      <i class="fa fa-3x fa-check-circle-o" aria-hidden="true"></i>
+      <div class="pt-2">Thank you for your Purchase.</div>
+      <p>Your Payment has been received.</p>
+    </div>
+  </div>
 </ng-template>

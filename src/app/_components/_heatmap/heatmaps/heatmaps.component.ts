@@ -21,12 +21,13 @@ export class HeatmapsComponent implements OnInit {
     private funnelService: FunnelService) { }
   
   visited = [];
+  visitedfunnel = [];
 
   bgImg = './assets/images/heatmap/bk-heatmap1.jpg';
   min = 1;
   max = 2;
   searching = false;
-
+  toggleweb = true;
 
   ngOnInit(): void {
 
@@ -66,13 +67,29 @@ export class HeatmapsComponent implements OnInit {
       next: data => {
         console.log(data);
 
-        
+        var fullobjsite = data.data2;
+        var fullobjpage = data.data;
+
+        if(fullobjsite.length>0){
+
+          fullobjpage.forEach((elm:any) => {
+            elm.insideweb = [];
+            
+            fullobjsite.forEach((em:any) => {
+              if(em.uniqueid==elm.funnelid){
+                elm.insideweb.push(em);
+              }
+
+            });
+
+          });
+
+        }
+
+        this.visitedfunnel = fullobjpage;
 
       }
     });
-    
-
-
     
     this.createNewImg();
 
@@ -110,7 +127,10 @@ export class HeatmapsComponent implements OnInit {
         this.searching = false;
 
         if(data.data.length>0){
-          this.router.navigate(['/heatmap/'+data.data[0].uniqueid]);
+
+          var url = dtobj.url+'#kb-heatmaps';
+          window.open(url, '_blank');
+          // this.router.navigate(['/heatmap/'+data.data[0].uniqueid]);
         }else{
           this._general.openSnackBar(false,'No heatmap found!', 'OK','center','top');
         }

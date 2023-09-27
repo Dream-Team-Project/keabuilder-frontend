@@ -223,11 +223,11 @@ table{
   position:relative;
 }
 .countryerr{
-  position: relative;
-  top: 5px;
+  position: absolute;
+  top: 30px;
 }
 .countryerr i{
-  display: inline;
+  display: inline-block!important;
 }
 .step1div.active, .step2div.active{
   background: #242341;
@@ -283,3 +283,104 @@ table.Checkout_Summary_Table tbody tr {
 #mkspinner{
   position: absolute!important;
 }
+
+.mtershow{
+  font-size: 13px;
+  margin-top: -17px;
+  display: block;
+}
+/* bootstrap elements  */
+.kbmainouter.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.kbmainouter .row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.kbmainouter .col-md-6 {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.kbmainouter .col-6 {
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+.kbmainouter .mb-0,.kbmainouter .my-0 {
+  margin-bottom: 0!important;
+}
+.kbmainouter .h5,.kbmainouter h5 {
+  font-size: 1.25rem;
+}
+.kbmainouter p{
+  font-size: 14px;
+}
+.kbmainouter .form-control {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.kbmainouter .form-group {
+  margin-bottom: 1rem;
+}
+
+.kbmainouter .kbmainouter .col-6, .kbmainouter .col-md-6, .kbmainouter .col-md-12 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.kbmainouter .col-md-12 {
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.kbmainouter .mt-2,.kbmainouter .my-2 {
+  margin-top: 0.5rem!important;
+}
+.kbmainouter .w-100 {
+  width: 100%!important;
+}
+.kbmainouter h5,.kbmainouter h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.kbmainouter th {
+  text-align: -webkit-match-parent;
+}
+.kbmainouter .mt-4,.kbmainouter .my-4 {
+  margin-top: 1.5rem!important;
+}
+.kbmainouter .text-center {
+  text-align: center!important;
+}
+.kbmainouter .pb-3,.kbmainouter .py-3 {
+  padding-bottom: 1rem!important;
+}
+.kbmainouter .pt-3,.kbmainouter .py-3 {
+  padding-top: 1rem!important;
+}
+.kbmainouter small {
+  font-size: 80%;
+  font-weight: 400;
+}
+.kbmainouter .text-danger {
+  color: #dc3545!important;
+}
+
+/* bootstrap elements  */
+
+

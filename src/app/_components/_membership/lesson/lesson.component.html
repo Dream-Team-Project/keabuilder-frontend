@@ -62,20 +62,20 @@
             </div>
         </div>
         <div *ngSwitchCase="'uploadVideo'" class="row py-4">
-            <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
+            <!-- <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
                 <h5>Upload a new video</h5>
                 <div class="kb-bg-info-line small">
                     <span class="text-info pr-2">Supported format:</span><span>{{'MOV, MPG, AVI, FLV, F4V, MP4, M4V, ASF, WMV, VOB, MOD, 3GP, MKV, DIVX, XVID, WEBM' | lowercase}}</span>
                 </div>
-            </div>
+            </div> -->
             <div class="col-12 p-4 text-center">
-                <div> 
+                <!-- <div> 
                     <input #videoInp class="kb-d-none" name="video" type="file" (change)="mediaChangeEvent($event, 'file')">
                     <button mat-raised-button color="primary" (click)="videoInp.click()">
                         <span>Upload through system</span>
                     </button>
                 </div>
-                <div class="kb-or-divider">OR</div>
+                <div class="kb-or-divider">OR</div> -->
                 <div>
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Paste Video Link</mat-label>
@@ -148,7 +148,7 @@
     </div> 
 </ng-template>
 <div *ngIf="lesson.title" class="container-fluid">
-    <div  class="row  mb-4">  
+    <div  class="row mb-4">  
         <div class="col-md-7">
             <h3>
                 {{lesson.title | titlecase}}
@@ -305,7 +305,7 @@
             </div>
         </div>
         <div class="col-md-5">
-            <div class="h-auto 100">
+            <div class="h-100">
             <div class="kb-lesson-card rounded px-3 pt-3 mb-4">
                 <div class="kb-lesson-thumbnail">
                     <img *ngIf="lesson?.thumbnail else default" [src]="_image.uploadImgPath+lesson?.thumbnail" class="img-fluid rounded">
@@ -385,7 +385,7 @@
             </div>    
             </div>    
         </div>
-    </div>
+</div>
     <!-- <div class="kb-lesson-thumbnail col-md-3">
         <img *ngIf="lesson.thumbnail else default" [src]="_image.uploadImgPath+lesson.thumbnail" class="img-fluid rounded">
         <ng-template #default><img [src]="_image.getImgPath('webpage_thumbnail.jpg')" class="img-fluid rounded "></ng-template>

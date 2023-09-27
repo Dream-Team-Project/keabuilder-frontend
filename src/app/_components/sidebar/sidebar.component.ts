@@ -475,6 +475,7 @@ export class SidebarComponent implements OnInit {
             },
           ]
     }
+
   ];
   extramenus = true;
   backme = false;
@@ -489,7 +490,7 @@ export class SidebarComponent implements OnInit {
       '/membership': 3,
       '/crm': 4,
       '/sales': 5,
-      '/account': 7,
+      '/account': 8,
       // '/affiliates': 10,
     };
     
@@ -528,6 +529,10 @@ export class SidebarComponent implements OnInit {
     });
     this.extramenus = true;
     this.backme = false;
+  }
+
+  gotoHelpDocs() {
+    window.open('https://help.keabuilder.com','_blank');
   }
 
 }
