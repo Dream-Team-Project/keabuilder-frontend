@@ -157,20 +157,19 @@
         </div>
         <div class="col-md-5 text-right">
             <button mat-raised-button color="accent" (click)="_general.prevRoute()"  class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-            <button mat-raised-button color="primary" class="mr-2">Preview <i class="far fa-eye"></i></button>
-           
-                <button color="primary" class="mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
+                <button [color]="lesson.publish_status == 1 ? 'primary' : 'accent'" class="mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
                     [class]="lesson.publish_status == 1 ? 'active' : 'inactive'">
-                    <!-- <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
+                    <!-- <i class="pr-1 fas" [class]="lesson.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
                     {{lesson.publish_status == 1 ? 'Published' : 'Draft'}}<i
                         class="fas fa-chevron-down drpdwnfa pl-2"></i>
                 </button>
                 <mat-menu #menu1="matMenu">
-                    <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
+                    <button mat-menu-item class="active" (click)="toggleStatus(lesson,'publish')"><i
                             class="fa fa-check pr-2"></i>Publish</button>
-                    <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
+                    <button mat-menu-item class="inactive" (click)="toggleStatus(lesson,'draft')"><i
                             class="fa fa-file pr-2"></i>Draft</button>
                 </mat-menu>
+                <button mat-raised-button color="primary" class="mr-2">Preview <i class="far fa-eye"></i></button>
                 <button mat-raised-button color="accent" (click)="addContent()">Save <i class="far fa-save ml-1"></i></button>
             <!-- <button mat-raised-button color="accent" (click)="openDialog(lesson, 'details')">Customize <i class="far fa-edit"></i></button> -->
         </div>

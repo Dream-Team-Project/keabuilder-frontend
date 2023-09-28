@@ -198,11 +198,12 @@ export class MembershipLessonComponent implements OnInit {
   // post methods
 
     toggleStatus(lesson:any,action:any) {
-      if(action == 'publish')lesson.publish_status = 1; 
-      else if(action == 'draft')lesson.publish_status = 0;
+      if(action == 'publish') lesson.publish_status = 1; 
+      else if(action == 'draft') lesson.publish_status = 0;
       lesson.publish_status = lesson.publish_status ? 1 : 0;
       this._lesson.update(lesson).subscribe((res:any)=>{
-        this._snackbar.open('Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK');
+        this.fetchLesson();
+        this._general.openSnackBar(false,'Lesson has been '+(lesson.publish_status == 1 ? 'published' : 'draft'), 'OK','center','top');
       });
     }
 
@@ -252,14 +253,14 @@ export class MembershipLessonComponent implements OnInit {
     toggleAutomation(lesson:any) {
       lesson.automation = lesson.automation ? 1: 0;
       this._lesson.update(lesson).subscribe((res:any)=>{
-        this._snackbar.open('Automation has been '+(lesson.automation == 1 ? 'activated' : 'deactivated'), 'OK');
+        this._general.openSnackBar(false,'Automation has been '+(lesson.automation == 1 ? 'activated' : 'deactivated'), 'OK','center','top');
       });
     }
 
     addEmail() {
       this.lesson.email_body = this._lesson.encodeContent(this.email_body);
       this._lesson.update(this.lesson).subscribe((res:any)=>{
-        this._snackbar.open('Automation has been updated', 'OK');
+        this._general.openSnackBar(false,'Automation has been updated', 'OK','center','top');
         this.fetchLesson();
       })
     }
@@ -312,7 +313,7 @@ export class MembershipLessonComponent implements OnInit {
         if(media.url == this.lesson.video) this.addVideo('');
         else if(media.url == this.lesson.audio) this.addAudio('');
         this.overlayRefDetach();
-        this._snackbar.open(media.type+' has been deleted', 'OK');
+        this._general.openSnackBar(false,media.type+' has been deleted', 'OK','center','top');
         // this.fetchMedia();
       });
     }
@@ -320,7 +321,7 @@ export class MembershipLessonComponent implements OnInit {
     updateMedia(media:any) {
       if(this.prevMediaName != media.name) {
         this._wistia.updateMedia(media).subscribe(resp=>{
-          this._snackbar.open(media.type+' name has been updated', 'OK');
+          this._general.openSnackBar(false,media.type+' name has been updated', 'OK','center','top');
         });
       }
     }
