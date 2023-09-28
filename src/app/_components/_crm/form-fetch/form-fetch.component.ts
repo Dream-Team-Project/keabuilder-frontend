@@ -7,6 +7,7 @@ import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { MailerService } from 'src/app/_services/mailer.service';
 import { EmailService } from 'src/app/_services/_crm/email.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-crm-form-fetch',
@@ -28,7 +29,8 @@ export class CrmFormFetchComponent implements OnInit {
     currentScrWdth: ''
   }
   contact:any = {};
-  
+  user_id:any;
+
   constructor(
     private route: ActivatedRoute,
     public _form: FormService,
@@ -38,11 +40,13 @@ export class CrmFormFetchComponent implements OnInit {
     public _general: GeneralService,
     private mailerService: MailerService,
     private email:EmailService,
+    private tokenStorage: TokenStorageService
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var form_id = params.get('form_id');
       if(form_id) this.fetchForm(form_id);
-    })
+    });
+    this.user_id = this.tokenStorage.getUser().uniqueid;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -58,8 +62,8 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   fetchForm(form_id:string) {
-    this._form.fetchForm(form_id).then((data:any)=>{
-      console.log(data);
+    this._form.fetchForm({form_id:form_id}).then((data:any)=>{
+      this.user_id=data.user_id
       this.formObj.form = data;
       this.formObj.formField = this._form.formField;
       var style = document.createElement('STYLE');
@@ -70,7 +74,7 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   fetchsingleemail(){
-    this.email.getsingleemail({uniqueid:this.formObj.emailid}).subscribe((data:any)=>{
+    this.email.getsingleemail({uniqueid:this.formObj.emailid,user_id:this.user_id}).subscribe((data:any)=>{
       if(data.success==true){
         this._form.singleemail.id=data.data[0].id;
         this._form.singleemail.uniqueid=data.data[0].uniqueid;

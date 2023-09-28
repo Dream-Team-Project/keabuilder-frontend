@@ -136,6 +136,14 @@ export class FormService {
       })
     })
   }
+  fetchviewFields(userid:string) {
+    return new Promise((resolve, reject)=>{
+      this._field.fetchviewfields(userid).subscribe((resp:any)=>{
+        if(resp?.data) this.fields = resp.data;
+        resolve(resp);
+      })
+    })
+  }
 
   createFields() {
     this.formEleTypesObj.forEach(e=>{
@@ -146,10 +154,10 @@ export class FormService {
     })
   }
 
-  fetchForm(uniqueid:any) {
+  fetchForm(obj:any) {
     return new Promise((resolve, reject)=>{
-      this._file.fetchform(uniqueid).subscribe((resp:any)=>{
-        this.fetchFields().then(()=>{
+      this._file.fetchform(obj).subscribe((resp:any)=>{
+        this.fetchviewFields(resp.data.user_id).then(()=>{
           this.setForm(resp).then(data=>{
             this.createFields();
             resolve(data);

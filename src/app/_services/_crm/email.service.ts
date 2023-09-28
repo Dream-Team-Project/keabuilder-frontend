@@ -26,7 +26,7 @@ export class EmailService {
     .pipe(catchError(this.errorHandler));
   }
   getsingleemail(obj:any){
-    return this.http.get(this.singleemail+'/'+this.user_id+'/'+obj.uniqueid)
+    return this.http.get(this.singleemail+'/'+obj.user_id+'/'+obj.uniqueid)
     .pipe(catchError(this.errorHandler));
   }
 

@@ -138,8 +138,8 @@ export class FileUploadService {
     return this.http.get(this.allformsApi+'/'+this.uuid);
   }
 
-  fetchform(uniqueid:any):Observable<any> {
-    return this.http.get(this.getformApi+'/'+uniqueid);
+  fetchform(obj:any):Observable<any> {
+    return this.http.get(this.fetchformApi+'/'+obj.form_id);
   }
 
   getform(uniqueid:any):Observable<any> {

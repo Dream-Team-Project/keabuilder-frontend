@@ -54,6 +54,11 @@ export class FieldService {
     return this.http.get(this.allfields+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+  
+  fetchviewfields(user_id:string){
+    return this.http.get(this.allfields+'/'+user_id)
+    .pipe(catchError(this.errorHandler));
+  }
 
   addfield(obj:any) {
     obj.user_id=this.user_id;
