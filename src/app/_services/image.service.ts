@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GeneralService } from './_builder/general.service';
 import { FormControl, Validators } from '@angular/forms';
 import { base64ToFile, Dimensions, ImageCroppedEvent, ImageTransform, LoadedImage } from 'ngx-image-cropper';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 
@@ -46,7 +45,6 @@ export class ImageService {
     imagesUpdated = new BehaviorSubject(false);
 
     constructor(private _general: GeneralService) {
-      this.getAllImgs();
     }
 
     checkAspVal(val:any) {

@@ -38,6 +38,7 @@ export class ImageComponent implements OnInit {
     private _viewContainerRef: ViewContainerRef) { }
 
   ngOnInit(): void {
+    this._image.getAllImgs();
   }
 
   ngAfterViewInit() {
