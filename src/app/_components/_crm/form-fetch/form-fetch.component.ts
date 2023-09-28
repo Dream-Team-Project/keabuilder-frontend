@@ -7,7 +7,7 @@ import { ContactService } from 'src/app/_services/_crm/contact.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { MailerService } from 'src/app/_services/mailer.service';
 import { EmailService } from 'src/app/_services/_crm/email.service';
-import { TokenStorageService } from 'src/app/_services/token-storage.service';
+
 
 @Component({
   selector: 'app-crm-form-fetch',
@@ -40,13 +40,13 @@ export class CrmFormFetchComponent implements OnInit {
     public _general: GeneralService,
     private mailerService: MailerService,
     private email:EmailService,
-    private tokenStorage: TokenStorageService
+    
   ) { 
     route.paramMap.subscribe((params: ParamMap) => {
       var form_id = params.get('form_id');
       if(form_id) this.fetchForm(form_id);
     });
-    this.user_id = this.tokenStorage.getUser().uniqueid;
+   
   }
 
   @HostListener('window:resize', ['$event'])
@@ -69,12 +69,13 @@ export class CrmFormFetchComponent implements OnInit {
       var style = document.createElement('STYLE');
       style.innerHTML = data.appendstyle;
       document.head.appendChild(style);
-      this.fetchsingleemail();
+      if(this.formObj.form.emailid) this.fetchsingleemail();
     })
   }
 
   fetchsingleemail(){
-    this.email.getsingleemail({uniqueid:this.formObj.emailid,user_id:this.user_id}).subscribe((data:any)=>{
+    // console.log(this.formObj.form)
+    this.email.getsingleemail({uniqueid:this.formObj.form.emailid,user_id:this.formObj.form.user_id}).subscribe((data:any)=>{
       if(data.success==true){
         this._form.singleemail.id=data.data[0].id;
         this._form.singleemail.uniqueid=data.data[0].uniqueid;
@@ -174,7 +175,7 @@ export class CrmFormFetchComponent implements OnInit {
         Thanks & regards<br>
         Kea Team`;
         var maildata = {
-          tomailid: this.contact.notifyemail.split(','), 
+          tomailid: this.contact.notifyemail?.split(','), 
           frommailid: 'support@keasolution.com',  
           subject: 'New Contact Added ', 
           html: emailhtmlbody,

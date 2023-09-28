@@ -26,6 +26,7 @@ export class EmailService {
     .pipe(catchError(this.errorHandler));
   }
   getsingleemail(obj:any){
+    obj.user_id=obj.user_id ? obj.user_id : this.user_id;
     return this.http.get(this.singleemail+'/'+obj.user_id+'/'+obj.uniqueid)
     .pipe(catchError(this.errorHandler));
   }
