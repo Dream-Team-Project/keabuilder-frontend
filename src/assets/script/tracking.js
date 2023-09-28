@@ -30,19 +30,4 @@ window.onload = function(a){
         }
     }
     // offer code
-    // video muted
-    document.querySelectorAll('.kb-video-muted').forEach(item=>{
-        item.muted = true;
-        item.classList.remove('kb-video-muted');
-    });
-    // video muted
-    // block redirection
-    document.querySelectorAll('.kb-block-redirection').forEach(block=>{
-        block.addEventListener('click',()=>{
-            var link = block.getAttribute('data-link');
-            var target = block.getAttribute('data-target');
-            if(link) window.open(link, target);
-        })
-    })
-    // block redirection
 }

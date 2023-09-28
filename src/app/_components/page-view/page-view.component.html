@@ -8,21 +8,15 @@
         <!-- sections start -->
         <div #kbmain *ngFor="let section of page_json?.sections, index as si"
             [attr.data-name]="section.name ? section.name : ''"
-            [attr.data-link]="section.redirection ? section.redirection.link : ''"
-            [attr.data-target]="section.redirection ? section.redirection.target : ''"
-            [class.kb-block-redirection]="section.redirection?.link"
+            (click)="redirectLink(section.redirection)"
             [ngClass]="_style.getHideCls(section.hide)"
-            [class.kb-block-none]="_style.getDisplay(section.hide)"
             [id]="section.id" class="kb-section kb-block-container">
             <div class="kb-drag-container">
                 <!-- rows start -->
                 <div *ngFor="let row of section.rowArr, index as ri"
                     [attr.data-name]="row.name ? row.name : ''"
-                    [attr.data-link]="row.redirection ? row.redirection.link : ''"
-                    [attr.data-target]="row.redirection ? row.redirection.target : ''"
-                    [class.kb-block-redirection]="row.redirection?.link"
+                    (click)="redirectLink(row.redirection)"
                     [ngClass]="_style.getHideCls(row.hide)"
-                    [class.kb-block-none]="_style.getDisplay(row.hide)"
                     [id]="row.id" class="kb-row kb-block-container">
                     <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                     [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
@@ -31,23 +25,17 @@
                         <!-- columns start -->
                         <div *ngFor="let column of row.columnArr, index as ci"
                             [attr.data-name]="column.name ? column.name : ''"
-                            [attr.data-link]="column.redirection ? column.redirection.link : ''"
-                            [attr.data-target]="column.redirection ? column.redirection.target : ''"
-                            [class.kb-block-redirection]="column.redirection?.link"
+                            (click)="redirectLink(column.redirection)"
                             [ngClass]="_style.getHideCls(column.hide)"
-                            [class.kb-block-none]="_style.getDisplay(column.hide)"
                             [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
                             <div class="kb-drag-container">
                                 <!-- elements start -->
                                 <div *ngFor="let element of column.elementArr, index as ei"
                                     [ngSwitch]="element.content.name"
                                     [attr.data-name]="element.name ? element.name : ''"
-                                    [attr.data-link]="element.redirection ? element.redirection.link : ''"
-                                    [attr.data-target]="element.redirection ? element.redirection.target : ''"
-                                    [class.kb-block-redirection]="element.redirection?.link"
+                                    (click)="redirectLink(element.redirection)"
                                     [id]="element.id" class="kb-element kb-block-container"
-                                    [ngClass]="_style.getHideCls(element.hide)"
-                                    [class.kb-block-none]="_style.getDisplay(element.hide)">
+                                    [ngClass]="_style.getHideCls(element.hide)">
                                     <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <img
                                             [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
@@ -61,8 +49,7 @@
                                                 [autoplay]="element.content.autoplay"
                                                 [muted]="element.content.muted"
                                                 [loop]="element.content.loop"
-                                                [controls]="element.content.controls"
-                                                [class.kb-video-muted]="element.content.muted">
+                                                [controls]="element.content.controls">
                                                     <source [src]="element.content.src" type="video/mp4">
                                                 </video>
                                             </div>

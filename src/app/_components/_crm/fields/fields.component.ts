@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -12,7 +12,10 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 })
 export class CrmFieldsComponent implements OnInit {
 
+  @Input ('field_list') field_list:boolean = true;
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
+  @ViewChild('fieldlists') fieldlists!: TemplateRef<any>;
+
 
     fieldTypes:Array<any> = this._field.fieldTypes;
     fields:Array<any> = this._field.defaultFields;
@@ -150,9 +153,8 @@ export class CrmFieldsComponent implements OnInit {
     this.dialog.open(templateRef);
   }
   
-  openBottomSheet(templateRef: TemplateRef<any>): void {
-    this._bottomSheet.open(templateRef);
-   
+  openBottomSheet(): void {
+    this._bottomSheet.open(this.fieldlists);
   }
 
   closeBottomSheet(): void {

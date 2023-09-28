@@ -1,3 +1,4 @@
+<app-crm-fields [field_list]="false"></app-crm-fields>
 <div *ngIf="!_form.preview else fetchpreview" id="kb-form-builder">
     <div style="visibility: hidden; position: fixed"
     [style.left]="contextMenuPosition.x"
@@ -356,7 +357,10 @@
                 <div id="kb-field-group">
                     <h2 class="kb-field-list-head">
                         Form Fields
-                        <i mat-ripple [matMenuTriggerFor]="ffoptm" #ffoptt="matMenuTrigger" class="kb-field-opt-trg fa-solid fa-bars"></i>
+                        <span class="kb-field-actions">
+                            <i mat-ripple (click)="fieldsComponent.openBottomSheet()" class="kb-field-opt-trg fa-solid fa-plus"></i>
+                            <i mat-ripple [matMenuTriggerFor]="ffoptm" #ffoptt="matMenuTrigger" class="kb-field-opt-trg fa-solid fa-bars"></i>
+                        </span>
                         <mat-menu #ffoptm>
                             <button (click)="toggleFieldsFilter(showFilter)" [class.kb-btn-active]="showFilter" mat-menu-item>
                                 <i [innerHTML]="'filter' | svg | safeHtml"></i> Filter</button>

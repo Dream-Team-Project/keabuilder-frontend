@@ -220,10 +220,6 @@ div.kb-block-container {
     flex-wrap: wrap;
 }
 
-.kb-block-redirection {
-    cursor: pointer;
-}
-
 div.kb-element-content .kb-form-append, div.kb-element-content .kb-form-append form {
     width: 100%!important;
 }

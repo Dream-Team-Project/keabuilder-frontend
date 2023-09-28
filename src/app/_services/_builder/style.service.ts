@@ -1619,6 +1619,7 @@ export class StyleService {
         this.block_target = this.button_target_types.filter((item:any)=>{ if(block.redirection.target == item.value) return item; })[0];
       }
       else {
+        block.redirection = {link: '', target: '_self' };
         this.block_link = '';
         this.block_target = { name: 'same tab', value: '_self'};
       }

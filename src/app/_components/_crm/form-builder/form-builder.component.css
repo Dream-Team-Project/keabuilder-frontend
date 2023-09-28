@@ -51,6 +51,12 @@
     margin: 0 !important;
 }
 
+.kb-field-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 mat-drawer.mat-drawer {
     position: fixed;
     height: 100%;

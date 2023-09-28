@@ -60,6 +60,8 @@ export class PageViewComponent implements OnInit {
         const routeData:any = this.route.snapshot.data;
         const domain = routeData.domain;
         const path = routeData.path;
+        // const domain = 'newone.keapages.com';
+        // const path = '';
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -144,7 +146,6 @@ export class PageViewComponent implements OnInit {
   fetchTarget() {
     if(this.target == 'header') {
       this._file.getheader(this.target_id).subscribe((resp:any)=>{
-        console.log(resp);
         if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
@@ -270,7 +271,7 @@ export class PageViewComponent implements OnInit {
     }
   }
 
-  redirectionLink(redir:any) {
+  redirectLink(redir:any) {
     console.log(redir);
     if(redir?.link) window.open(redir.link, redir.target);
   }
