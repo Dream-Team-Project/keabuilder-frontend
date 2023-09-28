@@ -58,7 +58,8 @@ export class CrmFormFetchComponent implements OnInit {
   }
 
   fetchForm(form_id:string) {
-    this._form.getForm(form_id).then((data:any)=>{
+    this._form.fetchForm(form_id).then((data:any)=>{
+      console.log(data);
       this.formObj.form = data;
       this.formObj.formField = this._form.formField;
       var style = document.createElement('STYLE');

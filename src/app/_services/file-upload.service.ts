@@ -21,6 +21,7 @@ export class FileUploadService {
   // forms
   searchformqueryApi = '/api/searchformquery';
   getformApi = "/api/getform";
+  fetchformApi = "/api/fetchform";
   allformsApi = "/api/allforms";
   saveformApi = "/api/saveform";
   updateformApi = "/api/updateform";
@@ -135,6 +136,10 @@ export class FileUploadService {
 
   fetchforms():Observable<any> {
     return this.http.get(this.allformsApi+'/'+this.uuid);
+  }
+
+  fetchform(uniqueid:any):Observable<any> {
+    return this.http.get(this.getformApi+'/'+uniqueid);
   }
 
   getform(uniqueid:any):Observable<any> {

@@ -146,6 +146,19 @@ export class FormService {
     })
   }
 
+  fetchForm(uniqueid:any) {
+    return new Promise((resolve, reject)=>{
+      this._file.fetchform(uniqueid).subscribe((resp:any)=>{
+        this.fetchFields().then(()=>{
+          this.setForm(resp).then(data=>{
+            this.createFields();
+            resolve(data);
+          });
+        });
+      })
+    })
+  }
+
   getForm(uniqueid:any) {
     return new Promise((resolve, reject)=>{
       this._file.getform(uniqueid).subscribe((resp:any)=>{
