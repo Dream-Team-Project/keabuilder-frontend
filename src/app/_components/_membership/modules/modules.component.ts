@@ -728,7 +728,7 @@ export class MembershipModulesComponent implements OnInit {
                 }
               });
             }else{
-              this._general.prevRoute()
+              this._general.prevRoute();
         this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
             }
             
