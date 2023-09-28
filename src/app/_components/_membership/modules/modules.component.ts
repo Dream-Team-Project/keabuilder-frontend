@@ -96,7 +96,7 @@ export class MembershipModulesComponent implements OnInit {
         if(getofferid!=''){
           var newob = {id:getofferid};
           this._course.getoffersbyids(newob).subscribe(res=>{
-            console.log(res);
+            // console.log(res);
             this.showcourseoffers = res.data;
           });
           
@@ -698,5 +698,45 @@ export class MembershipModulesComponent implements OnInit {
       console.log(data)
   })
   }
- 
+  duplicateCourse(course:any) {
+    this.fetching = true;
+    this.course.id=course.uniqueid;
+    this.course.uniqueid = this._general.makeid(20);
+    var oldimg =course.thumbnail;
+    this.course.description=course.description;
+    this.thumbnail.path=course.path;
+    this.thumbnail.type= this.thumbnail.type ? this.thumbnail.type : 'png';
+    this.course.path=course.path;
+    this.course.title=course.title;
+    this.course.publish_status=course.publish_status;
+     
+      this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+      this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      // console.log(this.course)
+      this._course.duplicate(this.course).subscribe((res:any)=>{
+        // console.log(res)
+        if(res.success==true){
+        this._file.validateimg(oldimg).subscribe({
+          next: datagen => {
+            // console.log(datagen)
+            if(datagen.data==1){
+              var imgobj  = {oldname:oldimg, newname: this.course.thumbnail};
+              this._file.copyimage(imgobj).subscribe({
+                next: data => {
+                  this._general.prevRoute();
+                  this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+                }
+              });
+            }else{
+              this._general.prevRoute()
+        this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+            }
+            
+          }
+        });
+      }
+      this.fetching = false;
+      })
+  }
+
 }
