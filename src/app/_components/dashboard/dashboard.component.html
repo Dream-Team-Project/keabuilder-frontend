@@ -692,6 +692,43 @@
         </div>
       </div>
     </div>
+
+    <div class="col-md-6">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Browser Breakdown</h5>
+        </div>
+        <div class="card-body">
+          <div class="kbcustmwidthforbox2">
+            <apx-chart *ngIf="data_browserbreak.fetched"
+              [series]="chartOptions13.series"
+              [chart]="chartOptions13.chart"
+              [labels]="chartOptions13.labels"
+              [responsive]="chartOptions13.responsive"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">OS Breakdown</h5>
+        </div>
+        <div class="card-body">
+          <div class="kbcustmwidthforbox2">
+            <apx-chart *ngIf="data_osbreak.fetched"
+              [series]="chartOptions14.series"
+              [chart]="chartOptions14.chart"
+              [labels]="chartOptions14.labels"
+              [responsive]="chartOptions14.responsive"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="row">

@@ -50,6 +50,9 @@ export class DashboardComponent implements OnInit {
   public chartOptions11: Partial<ChartOptions> | any;
   public chartOptions12: Partial<ChartOptions> | any;
 
+  public chartOptions13: Partial<ChartOptions> | any;
+  public chartOptions14: Partial<ChartOptions> | any;
+
   error?: string;
   isLoggedIn = false;
   isLoginFailed = false;
@@ -114,6 +117,18 @@ export class DashboardComponent implements OnInit {
   }
 
   data_devicebreak:any = {
+    data: [],
+    data2:[],
+    fetched:false
+  }
+
+  data_browserbreak:any = {
+    data: [],
+    data2:[],
+    fetched:false
+  }
+
+  data_osbreak:any = {
     data: [],
     data2:[],
     fetched:false
@@ -409,8 +424,6 @@ export class DashboardComponent implements OnInit {
         },
       },
     };
-    
-    
     this.chartOptions6 = {
       series: [
         {
@@ -472,7 +485,6 @@ export class DashboardComponent implements OnInit {
         },
       },
     };
-    
     this.chartOptions8 = {
       series: [
         {
@@ -753,13 +765,86 @@ export class DashboardComponent implements OnInit {
     this.visitordata({ type: 'newvsreturn'});
 
     this.visitordevice({ type: 'device'});
-
+    
     this.visitortopcountries({ type: 'topcountries'});
-
+    
     this.visitortopreferrals({ type: 'topreferrals'});
-
+    
     this.visitorlanding_page({ type: 'toplanding_page'});
     
+    this.visitorbrowser({ type: 'browser'});
+
+    this.visitoros({ type: 'os'});
+
+  }
+
+  visitorbrowser(condition:any){
+
+    this.dashboardService.visitordata(condition.type).subscribe({
+      next: (data) => {
+        // console.log(data);
+
+        var dt = data.data;
+        if(dt?.length>0){
+
+          var totalCount = dt.reduce((total:any, browser:any) => total + browser.count, 0);
+          var percentages = dt.map((browser:any) => ({
+              browser: browser.browser,
+              percentage: (browser.count / totalCount) * 100
+          }));
+
+          percentages.sort((a:any, b:any) => b.percentage - a.percentage);
+          
+          percentages.forEach((elm:any) => {
+            this.data_browserbreak.data.push(elm.browser);
+            this.data_browserbreak.data2.push(elm.percentage);
+          });
+
+          
+        }else{
+          this.data_browserbreak.data.push('No Browser Found');
+          this.data_browserbreak.data2.push(0);
+        }
+
+        this.browserReportOptions();
+
+      }
+    });
+
+  }
+
+  visitoros(condition:any){
+
+    this.dashboardService.visitordata(condition.type).subscribe({
+      next: (data) => {
+        console.log(data);
+
+        var dt = data.data;
+        if(dt?.length>0){
+
+          var totalCount = dt.reduce((total:any, os:any) => total + os.count, 0);
+          var percentages = dt.map((os:any) => ({
+              os: os.os,
+              percentage: (os.count / totalCount) * 100
+          }));
+          
+          percentages.sort((a:any, b:any) => b.percentage - a.percentage);
+          
+          percentages.forEach((elm:any) => {
+            this.data_osbreak.data.push(elm.os);
+            this.data_osbreak.data2.push(elm.percentage);
+          });
+
+          
+        }else{
+          this.data_osbreak.data.push('No OS Found');
+          this.data_osbreak.data2.push(0);
+        }
+
+        this.osReportOptions();
+
+      }
+    });
 
   }
 
@@ -820,8 +905,6 @@ export class DashboardComponent implements OnInit {
               percentage: (device.count / totalCount) * 100
           }));
           
-          console.log(percentages);
-
           percentages.forEach((elm:any) => {
             this.data_devicebreak.data.push(elm.device);
             this.data_devicebreak.data2.push(elm.percentage);
@@ -1343,6 +1426,58 @@ export class DashboardComponent implements OnInit {
   makemyurl(url:any){
     let cleanedUrl = url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
     return cleanedUrl;
+  }
+
+  browserReportOptions() {
+
+    this.chartOptions13 = {
+      series: this.data_browserbreak.data2,
+      chart: {
+        type: "donut"
+      },
+      labels: this.data_browserbreak.data,
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
+    this.data_browserbreak.fetched = true;
+
+  }
+
+  osReportOptions() {
+
+    this.chartOptions14 = {
+      series: this.data_osbreak.data2,
+      chart: {
+        type: "donut"
+      },
+      labels: this.data_osbreak.data,
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
+    this.data_osbreak.fetched = true;
+
   }
 
 
