@@ -171,7 +171,7 @@ hr {
     max-width:301px;
 }
 .kbcustmwidthforbox2{
-    max-width:334px;
+    max-width:500px;
     float: left;
 }
 .kbcustmwidthforbox3{
@@ -215,4 +215,53 @@ font-weight: 600;
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+}
+
+.kb-table-list-item {
+    padding: 12px 20px;
+    min-height: 43px;
+    font-size: 15px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+.kb-table-list-item .kb-reports-list-count {
+    display: inline-block;
+    min-width: 30px;
+    color: #657086;
+    font-weight: 400;
+}
+.kb-table-list-item .kb-reports-list-text {
+    color: #393f4c;
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: middle;
+    display: inline-block;
+    width: 100%;
+    padding: 1px;
+    margin: -1px;
+}
+.kb-table-list-item .kb-reports-list-text {
+    color: #393f4c;
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: middle;
+    display: inline-block;
+    width: 100%;
+    padding: 1px;
+    margin: -1px;
+}
+.kb-table-list-item .kb-reports-list-number {
+    color: #393f4c;
+    font-size: 15px;
+    text-align: right;
+    display: block;
+    padding-left: 5px;
+}
+.kb-table-list-item .kb-reports-list-text img {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
 }

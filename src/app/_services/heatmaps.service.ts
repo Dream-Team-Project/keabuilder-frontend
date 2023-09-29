@@ -11,7 +11,8 @@ const httpOptions = {
 })
 export class HeatmapsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   get(): Observable<any> {
     return this.http.get('/api/heatget-request');

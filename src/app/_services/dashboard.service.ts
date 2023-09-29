@@ -45,6 +45,20 @@ export class DashboardService {
     return this.http.get('/api/totalearning/'+this.uuid);
   }
 
+  getdashboardheat(): Observable<any> {
+    return this.http.get('/api/getdashboardheat/'+this.uuid);
+  }
+
+  pageview(): Observable<any> {
+    return this.http.get('/api/pageview/'+this.uuid);
+  }
+
+  visitordata(type:any): Observable<any> {
+    return this.http.get('/api/visitordata/'+this.uuid+'/'+type);
+  }
+
+  
+
   
 
 
