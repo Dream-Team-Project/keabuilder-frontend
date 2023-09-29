@@ -82,10 +82,10 @@
     </div>
 </ng-template>
 <ng-template #deleteDialog>
-    <h5 mat-dialog-title>Are you indeed want to delete this {{post.type | titlecase}}: <span
-            class="text-danger">{{post.title | uppercase}}</span>?</h5>
+    <h5 mat-dialog-title class="text-danger">Delete {{post.type | titlecase}} ?</h5>
     <div mat-dialog-content>
-        <h6 *ngIf="post.type == 'module'" class="text-info">It will delete all the module lessons too.</h6>
+        <div>Would you like to delete <span class="text-danger">{{ post.type | titlecase}} : {{ post.title | uppercase}}</span></div>
+        <h6 *ngIf="post.type == 'module'" class="text-info">(It will delete all the module lessons too.)</h6>
         <div class="text-right">
             <mat-checkbox color="primary" class="example-margin" [(ngModel)]="delAgree">Agree!</mat-checkbox>
         </div>
@@ -101,17 +101,16 @@
     </div>
 </ng-template>
 <ng-template #duplicateDialog>
-    <h5 mat-dialog-title>Are you indeed want to duplicate this {{post.type | titlecase}}: <span
-            class="text-info">{{post.title | uppercase}}</span>?</h5>
+    <h5 mat-dialog-title>Duplicate {{ post.type | titlecase}}</h5>
     <div mat-dialog-content>
-        <h6>It will duplicate this.</h6>
+        Would you like to duplicate <span class="kb-colr">{{ post.type | titlecase}} : {{post.title | uppercase}} ?</span>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <div class="col-12 pt-3 px-4 text-right border-top">
-            <button mat-dialog-close (click)="overlayRefDetach()" mat-button class="text-danger" class="mr-3">Cancel</button>
+            <button mat-dialog-close (click)="overlayRefDetach()" mat-button class="text-danger mr-3">Cancel</button>
             <button mat-dialog-close cdkFocusInitial color="primary"
                 (click)="respWaiting = true; post.type == 'module' ? duplicateModule(post) : duplicateLesson(post)"
-                mat-button color="primary">Duplicate</button>
+                mat-button>Duplicate</button>
         </div>
     </div>
 </ng-template>
@@ -137,13 +136,9 @@
                     {{course.title | titlecase}}
                 </h4>
             </div>
-          
-            <!-- <div class="kbc-top-info mt-2 mb-4">
-                {{modules.length}} Modules | 0 Members
-            </div> -->
             <div class="col-md-12">
                 <button mat-raised-button color="accent" (click)="_general.prevRoute()"  class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-                        <button mat-raised-button color="primary" class="toggle mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
+                        <button mat-raised-button [color]="course.publish_status == 1 ? 'primary' : 'accent'" class="toggle mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
                             [class]="course.publish_status==1 ? 'active' : 'inactive'">
                             <!-- <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
                             {{course.publish_status==1 ? 'Published' : 'Draft'}}<i
@@ -162,7 +157,7 @@
                     <button mat-menu-item (click)="openDialog(course, 'course', detailDialog)">
                         <i class="fas fa-pencil-alt pr-2"></i>Customize
                     </button>
-                    <button mat-menu-item (click)="openDialog(course, 'course',duplicateDialog)">
+                    <button mat-menu-item (click)="duplicateCourse(course)">
                         <i class="far fa-copy pr-2"></i>Duplicate
                     </button>
                     <button mat-menu-item class="text-danger" (click)="openDialog(course, 'course',deleteDialog)">
@@ -268,7 +263,7 @@
                                     </span>
                                    
                                         <button class="kbc-add-module-btn px-2" mat-button (click)="openDialog(post,'lesson',detailDialog)">
-                                        <i matTooltip="Add New Module" matTooltipPosition="above"
+                                        <i matTooltip="Add Lesson" matTooltipPosition="above"
                                             class="fa fa-plus mr-1"></i>Add Lesson</button>
                                       
                                     <span class="kbc-qs-status px-2">
@@ -364,9 +359,9 @@
 
                                         <span class="kbc-qs col-6">
                                             <span class="kbc-qs-status px-2 ">
-                                                <i matTooltip="Add New Lesson" matTooltipPosition="above"
+                                                <!-- <i matTooltip="Add Lesson" matTooltipPosition="above"
                                                     (click)="openDialog(post,'lesson',detailDialog)"
-                                                    class="fa fa-plus mr-4"></i>
+                                                    class="fa fa-plus mr-4"></i> -->
                                                 <i matTooltip="Lesson Setting" matTooltipPosition="above"
                                                     (click)="openDialog(lesson, 'lesson',detailDialog)"
                                                     class="far fa-edit mr-3"></i>

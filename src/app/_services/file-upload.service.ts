@@ -108,6 +108,8 @@ export class FileUploadService {
   copyfileApi = "/api/copy-file";
   fileExistApi = "/api/file-exist";
   // file
+copyfolderdocumentsApi = "/api/copyfolderdocuments";
+deletefolderdocumentsApi = "/api/deletefolderdocuments";
 
   uuid:any = '';
 
@@ -548,6 +550,16 @@ export class FileUploadService {
   checkDocument(path:string, folder:string):Observable<any> {
     return this.http.get(this.checkDocumentApi + '/' + path + '/' + folder)
     .pipe(catchError(this.errorHandler));
+  }
+
+  copyfolderDocuments(obj:any){
+    return this.http.post(this.copyfolderdocumentsApi, obj)
+    .pipe(catchError(this.errorHandler)); 
+  }
+  deletedocumentfolder(obj:any) {
+    obj.user_id=this.uuid;
+    return this.http.post(this.deletefolderdocumentsApi, obj)
+    .pipe(catchError(this.errorHandler)); 
   }
 
   // document

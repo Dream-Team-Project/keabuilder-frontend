@@ -134,6 +134,8 @@ kb_location = '';
 
 kb_doctitle = document.getElementsByTagName('title')[0].innerText;
 
+kb_referrer = document.referrer;
+
 var kb_usergetlocX = [];
 var kb_usergetlocY = [];
 
@@ -270,7 +272,8 @@ function recordheatmap(){
         postal: allinonegeoloc[4],
         latitude: allinonegeoloc[5],
         longitude: allinonegeoloc[6],
-        ipv4: allinonegeoloc[7]
+        ipv4: allinonegeoloc[7],
+        referrer: kb_referrer
     };
     // console.log(data);
 

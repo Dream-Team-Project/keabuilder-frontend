@@ -219,18 +219,25 @@ export class FunnelService {
       data
     }, httpOptions);
   }
+
   searchqueryFunnel(data:any):Observable<any> {
     data.user_id=this.uuid;
     return this.http.post("/api/searchqueryFunnel",data, httpOptions);
   }
+
   searchqueryFunnelsteps(data:any):Observable<any> {
     data.user_id=this.uuid;
     return this.http.post("/api/searchqueryFunnelsteps",data, httpOptions);
   }
+
   shortbypaginatorfunnnel(data:any):Observable<any> {
     return this.http.post("/api/shortbypaginatorfunnel/"+this.uuid, {
       data
     }, httpOptions);
+  }
+
+  makepaymentupsell(data:any):Observable<any> {
+    return this.http.post("/api/paymentupsell", data, httpOptions);
   }
         
 }
