@@ -1,28 +1,22 @@
 <ng-container *ngIf="target == 'main' && page_json?.header?.id">
     <header [id]="'kb-header-'+page_json?.header.id">
-        <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target]="'header'"></app-page-view>
+        <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target_menus]="page_json?.menus" [target]="'header'"></app-page-view>
     </header>
 </ng-container>
-<div [id]="'kb-'+target" [ngStyle]="target == 'main' ? _style.getBlockStyle(page_json?.mainstyle) : ''">
+<div [id]="'kb-'+target">
     <div class="kb-drag-container">
         <!-- sections start -->
         <div #kbmain *ngFor="let section of page_json?.sections, index as si"
             [attr.data-name]="section.name ? section.name : ''"
-            [attr.data-link]="section.redirection ? section.redirection.link : ''"
-            [attr.data-target]="section.redirection ? section.redirection.target : ''"
-            [class.kb-block-redirection]="section.redirection?.link"
+            (click)="redirectLink(section.redirection)"
             [ngClass]="_style.getHideCls(section.hide)"
-            [class.kb-block-none]="_style.getDisplay(section.hide)"
             [id]="section.id" class="kb-section kb-block-container">
             <div class="kb-drag-container">
                 <!-- rows start -->
                 <div *ngFor="let row of section.rowArr, index as ri"
                     [attr.data-name]="row.name ? row.name : ''"
-                    [attr.data-link]="row.redirection ? row.redirection.link : ''"
-                    [attr.data-target]="row.redirection ? row.redirection.target : ''"
-                    [class.kb-block-redirection]="row.redirection?.link"
+                    (click)="redirectLink(row.redirection)"
                     [ngClass]="_style.getHideCls(row.hide)"
-                    [class.kb-block-none]="_style.getDisplay(row.hide)"
                     [id]="row.id" class="kb-row kb-block-container">
                     <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                     [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
@@ -31,23 +25,17 @@
                         <!-- columns start -->
                         <div *ngFor="let column of row.columnArr, index as ci"
                             [attr.data-name]="column.name ? column.name : ''"
-                            [attr.data-link]="column.redirection ? column.redirection.link : ''"
-                            [attr.data-target]="column.redirection ? column.redirection.target : ''"
-                            [class.kb-block-redirection]="column.redirection?.link"
+                            (click)="redirectLink(column.redirection)"
                             [ngClass]="_style.getHideCls(column.hide)"
-                            [class.kb-block-none]="_style.getDisplay(column.hide)"
                             [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
                             <div class="kb-drag-container">
                                 <!-- elements start -->
                                 <div *ngFor="let element of column.elementArr, index as ei"
                                     [ngSwitch]="element.content.name"
                                     [attr.data-name]="element.name ? element.name : ''"
-                                    [attr.data-link]="element.redirection ? element.redirection.link : ''"
-                                    [attr.data-target]="element.redirection ? element.redirection.target : ''"
-                                    [class.kb-block-redirection]="element.redirection?.link"
+                                    (click)="redirectLink(element.redirection)"
                                     [id]="element.id" class="kb-element kb-block-container"
-                                    [ngClass]="_style.getHideCls(element.hide)"
-                                    [class.kb-block-none]="_style.getDisplay(element.hide)">
+                                    [ngClass]="_style.getHideCls(element.hide)">
                                     <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <img
                                             [src]="element.content.src ? element.content.src : _image.imgPath+'builder/no-image.png'"
@@ -61,8 +49,7 @@
                                                 [autoplay]="element.content.autoplay"
                                                 [muted]="element.content.muted"
                                                 [loop]="element.content.loop"
-                                                [controls]="element.content.controls"
-                                                [class.kb-video-muted]="element.content.muted">
+                                                [controls]="element.content.controls">
                                                     <source [src]="element.content.src" type="video/mp4">
                                                 </video>
                                             </div>
@@ -95,26 +82,22 @@
                                     </div>
                                     <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                         class="kb-element-content">
-                                        <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
-                                            [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                        <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id">
                                             <li *ngFor="let item of element.content.items, index as mi">
-                                                <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
-                                                    [ngStyle]="_style.getBlockStyle(element.content.item.style)">
+                                                <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link">
                                                     {{item.name}}</a>
                                             </li>
                                         </ul>
                                         <div class="kb-menu-resp">
-                                            <div class="kb-menu-bar" [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                            <div class="kb-menu-bar" [class.kb-menu-bar-open]="element.content.menuOpen" (click)="toggleRespMenu(element.content)">
                                                 <span class="kb-menu-bar1"></span>
                                                 <span class="kb-menu-bar2"></span>
                                                 <span class="kb-menu-bar3"></span>
                                             </div>
-                                            <div class="kb-menu-content kb-d-none">
-                                                <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
-                                                [ngStyle]="element.content.style.dropdown">
+                                            <div class="kb-menu-content" [class.kb-d-none]="!element.content.menuOpen" >
+                                                <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id">
                                                     <li *ngFor="let item of element.content.items, index as mi">
-                                                        <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
-                                                            [ngStyle]="element.content.item.style.dropdown">{{item.name}}</a>
+                                                        <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link">{{item.name}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -134,7 +117,7 @@
                                         </div>
                                     </div>
                                     <div *ngSwitchCase="'divider'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <hr [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                        <hr>
                                     </div>
                                     <div *ngSwitchCase="'icon'" [attr.data-name]="element.content.name" class="kb-element-content">
                                         <div class="kb-icon-block"
@@ -160,7 +143,7 @@
 <span id="kb-user-id" [attr.kb-user-id]="req.uid"></span>
 <ng-container *ngIf="target == 'main' && page_json?.footer?.id">
     <footer [id]="'kb-footer-'+page_json?.footer.id">
-        <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target]="'footer'"></app-page-view>
+        <app-page-view [target_sections]="page_json?.footer.sections" [target_style]="page_json?.footer.style" [target_menus]="page_json?.menus" [target]="'footer'"></app-page-view>
     </footer>
 </ng-container>
 <app-default-page-view *ngIf="defaultPage"></app-default-page-view>

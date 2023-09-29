@@ -21,6 +21,7 @@ export class FileUploadService {
   // forms
   searchformqueryApi = '/api/searchformquery';
   getformApi = "/api/getform";
+  fetchformApi = "/api/fetchform";
   allformsApi = "/api/allforms";
   saveformApi = "/api/saveform";
   updateformApi = "/api/updateform";
@@ -29,6 +30,7 @@ export class FileUploadService {
   // forms
   // document
   getAllDocumentsApi = "/api/getalldocuments";
+  uploadmembershipDocumentApi = "/api/uploadmembershipdocument";
   uploadDocumentApi = "/api/uploaddocument";
   deleteDocumentApi = "/api/deletedocument";
   renameDocumentApi = "/api/renamedocument";
@@ -106,6 +108,8 @@ export class FileUploadService {
   copyfileApi = "/api/copy-file";
   fileExistApi = "/api/file-exist";
   // file
+copyfolderdocumentsApi = "/api/copyfolderdocuments";
+deletefolderdocumentsApi = "/api/deletefolderdocuments";
 
   uuid:any = '';
 
@@ -134,6 +138,10 @@ export class FileUploadService {
 
   fetchforms():Observable<any> {
     return this.http.get(this.allformsApi+'/'+this.uuid);
+  }
+
+  fetchform(obj:any):Observable<any> {
+    return this.http.get(this.fetchformApi+'/'+obj.form_id);
   }
 
   getform(uniqueid:any):Observable<any> {
@@ -502,6 +510,10 @@ export class FileUploadService {
 
   // document
 
+  getAllDocuments1(folder1:string):Observable<any> {
+    return this.http.get(this.getAllDocumentsApi+'/'+this.uuid+'/'+folder1)
+    .pipe(catchError(this.errorHandler));
+  }
   getAllDocuments(folder:string):Observable<any> {
     return this.http.get(this.getAllDocumentsApi+'/'+folder)
     .pipe(catchError(this.errorHandler));
@@ -512,10 +524,10 @@ export class FileUploadService {
     .pipe(catchError(this.errorHandler));
   }
   
-  uploadDocument(file: any, folder:string):Observable<any> {
+  uploadDocument(file: any, folder:string,folder1:string):Observable<any> {
     const formData = new FormData();
     formData.append('uploadedDocument', file, file.name);
-    return this.http.post(this.uploadDocumentApi + '/' + folder, formData)
+    return this.http.post(this.uploadmembershipDocumentApi + '/' + folder+ '/' + folder1, formData)
     .pipe(catchError(this.errorHandler));
   }
   uploadcontactsDocument(file: any, folder:string):Observable<any> {
@@ -538,6 +550,16 @@ export class FileUploadService {
   checkDocument(path:string, folder:string):Observable<any> {
     return this.http.get(this.checkDocumentApi + '/' + path + '/' + folder)
     .pipe(catchError(this.errorHandler));
+  }
+
+  copyfolderDocuments(obj:any){
+    return this.http.post(this.copyfolderdocumentsApi, obj)
+    .pipe(catchError(this.errorHandler)); 
+  }
+  deletedocumentfolder(obj:any) {
+    obj.user_id=this.uuid;
+    return this.http.post(this.deletefolderdocumentsApi, obj)
+    .pipe(catchError(this.errorHandler)); 
   }
 
   // document

@@ -67,7 +67,6 @@ import {environment} from '../environments/environment';
 
 import { ApiInterceptor } from './_helpers/api.interceptor';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +77,7 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
-    SvgPipe,
+    SvgPipe
   ],
   imports: [
     AppRoutingModule,

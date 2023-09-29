@@ -8,12 +8,12 @@
             <div class="col-12 py-3 px-4 inp-contain">
                 <mat-form-field class="kb-full-width" appearance="outline">
                     <mat-label>Title</mat-label>
-                    <input name="title" [(ngModel)]="post.title" type="text" matInput placeholder="Ex. Features of Kea" required
+                    <input name="title" [(ngModel)]="lesson.title" type="text" matInput placeholder="Ex. Features of Kea" required
                         minlength="3" maxlength="140">
                 </mat-form-field>
                 <mat-form-field class="kb-full-width" appearance="outline">
                     <mat-label>Description</mat-label>
-                    <textarea name="description" [(ngModel)]="post.description" matInput placeholder="Ex. Kea is one of the smartest bird in the planet"></textarea>
+                    <textarea name="description" [(ngModel)]="lesson.description" matInput placeholder="Ex. Kea is one of the smartest bird in the planet"></textarea>
                 </mat-form-field>
                 <div class="imgFormField p-3 border">
                     <label>Thumbnail</label>
@@ -62,12 +62,12 @@
             </div>
         </div>
         <div *ngSwitchCase="'uploadVideo'" class="row py-4">
-            <!-- <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
+            <div class="kb-details-head col-12 pb-2 px-4 border-bottom">
                 <h5>Upload a new video</h5>
                 <div class="kb-bg-info-line small">
                     <span class="text-info pr-2">Supported format:</span><span>{{'MOV, MPG, AVI, FLV, F4V, MP4, M4V, ASF, WMV, VOB, MOD, 3GP, MKV, DIVX, XVID, WEBM' | lowercase}}</span>
                 </div>
-            </div> -->
+            </div>
             <div class="col-12 p-4 text-center">
                 <!-- <div> 
                     <input #videoInp class="kb-d-none" name="video" type="file" (change)="mediaChangeEvent($event, 'file')">
@@ -91,7 +91,7 @@
                         </mat-error>
                     </div>
                     <div>
-                        <button mat-raised-button color="accent" [disabled]="videoLinkInp.invalid" (click)="uploadMedia(videoLink, 'url')" class="kb-btn kb-btn-primary">
+                        <button mat-raised-button color="accent" [disabled]="videoLinkInp.invalid" (click)="uploadMedia(videoLink, 'Videourl')" class="kb-btn kb-btn-primary">
                             <span>Upload through URL</span></button> 
                     </div>
                 </div> 
@@ -108,13 +108,13 @@
                 </div>
             </div>
             <div class="col-12 p-4 text-center">
-                <div> 
+                <!-- <div> 
                     <input #audioInp class="kb-d-none" name="audio" type="file" (change)="mediaChangeEvent($event, 'file')">
                     <button mat-raised-button color="primary" (click)="audioInp.click()">
                         <span>Upload through system</span>
                     </button>
                 </div>
-                <div class="kb-or-divider">OR</div>
+                <div class="kb-or-divider">OR</div> -->
                 <div>
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Paste Audio Link</mat-label>
@@ -130,7 +130,7 @@
                         </mat-error>
                     </div>
                     <div>
-                        <button mat-raised-button color="accent" [disabled]="audioLinkInp.invalid" (click)="uploadMedia(audioLink, 'url')" class="kb-btn kb-btn-primary">
+                        <button mat-raised-button color="accent" [disabled]="audioLinkInp.invalid" (click)="uploadMedia(audioLink, 'Audiourl')" class="kb-btn kb-btn-primary">
                             <span>Upload through URL</span></button> 
                     </div>
                 </div> 
@@ -157,21 +157,20 @@
         </div>
         <div class="col-md-5 text-right">
             <button mat-raised-button color="accent" (click)="_general.prevRoute()"  class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-            <button mat-raised-button color="primary" class="mr-2">Preview <i class="far fa-eye"></i></button>
-           
-                <button color="primary" class="mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
-                    [class]="course.publish_status==1 ? 'active' : 'inactive'">
-                    <!-- <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
-                    {{course.publish_status==1 ? 'Published' : 'Draft'}}<i
+                <button [color]="lesson.publish_status == 1 ? 'primary' : 'accent'" class="mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
+                    [class]="lesson.publish_status == 1 ? 'active' : 'inactive'">
+                    <!-- <i class="pr-1 fas" [class]="lesson.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
+                    {{lesson.publish_status == 1 ? 'Published' : 'Draft'}}<i
                         class="fas fa-chevron-down drpdwnfa pl-2"></i>
                 </button>
                 <mat-menu #menu1="matMenu">
-                    <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
+                    <button mat-menu-item class="active" (click)="toggleStatus(lesson,'publish')"><i
                             class="fa fa-check pr-2"></i>Publish</button>
-                    <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
+                    <button mat-menu-item class="inactive" (click)="toggleStatus(lesson,'draft')"><i
                             class="fa fa-file pr-2"></i>Draft</button>
                 </mat-menu>
-                <button mat-raised-button color="accent">Save <i class="far fa-save ml-1"></i></button>
+                <button mat-raised-button color="primary" class="mr-2">Preview <i class="far fa-eye"></i></button>
+                <button mat-raised-button color="accent" (click)="addContent()">Save <i class="far fa-save ml-1"></i></button>
             <!-- <button mat-raised-button color="accent" (click)="openDialog(lesson, 'details')">Customize <i class="far fa-edit"></i></button> -->
         </div>
     </div>
@@ -182,7 +181,7 @@
                 <h6>Title</h6>
             <mat-form-field class="kb-full-width" appearance="fill">
                 <mat-label>Title</mat-label>
-                <input name="title" [(ngModel)]="post.title" type="text" matInput placeholder="Ex. Features of Kea" required
+                <input name="title" [(ngModel)]="lesson.title" type="text" matInput placeholder="Ex. Features of Kea" required
                     minlength="3" maxlength="140">
             </mat-form-field>
             <h6 class="mt-2">Content</h6>
@@ -199,7 +198,7 @@
                             <div *ngIf="!videoadding else adding">
                                 <span *ngIf="lesson.video else selvideobox">
                                     <video class="rounded" height="160px" controls>
-                                        <source [src]="lesson.video" type="video/mp4">
+                                        <source [src]="videos[0]" type="video/mp4">
                                     </video>
                                 </span>
                                 <ng-template #selvideobox>
@@ -211,9 +210,9 @@
                             </ng-template> 
                         </div>
                         <div class="kbl-summary col-md-6 text-right">
-                            <button *ngIf="lesson.video" class="mr-2" mat-raised-button color="accent" (click)="addVideo('')">
+                            <!-- <button *ngIf="lesson.video" class="mr-2" mat-raised-button color="accent" (click)="addVideo('')">
                                 <span>Remove <i class="fa fa-times"></i></span>
-                            </button>
+                            </button> -->
                             <button mat-raised-button color="primary" (click)="openDialog(lesson, 'uploadVideo')">
                                 <span>Upload <i class="fa fa-upload"></i></span>
                             </button>
@@ -222,9 +221,9 @@
                     <div class="row p-2">
                         <div class="col-12 p-0 kbl-media-list" *ngIf="!mediafetching else fetching">
                             <div class="col-lg-3 col-md-6 py-2" *ngFor="let video of videos">
-                                <div *ngIf="video.url == lesson.video" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
+                                <div *ngIf="video.url == videos" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
                                 <video class="rounded-top" width="100%" controls>
-                                    <source [src]="video.url" type="video/mp4">
+                                    <source [src]="video" type="video/mp4">
                                 </video>
                                 <div class="kbl-media-box rounded-bottom">
                                     <div class="kbl-media-name" [matTooltip]="video.name" matTooltipPosition="above">
@@ -254,7 +253,7 @@
                     <div *ngIf="!audioadding else adding">
                         <span *ngIf="lesson.audio else selaudiobox">
                             <audio controls>
-                                <source [src]="lesson.audio" type="audio/mp3">
+                                <source [src]="audios[0]" type="audio/mp3">
                             </audio>
                         </span>
                         <ng-template #selaudiobox>
@@ -266,9 +265,9 @@
                     </ng-template> 
                 </div>
                 <div class="kbl-summary col-md-6 text-right">
-                    <button *ngIf="lesson.audio" class="mr-2" mat-raised-button color="accent" (click)="addAudio('')">
+                    <!-- <button *ngIf="lesson.audio" class="mr-2" mat-raised-button color="accent" (click)="addAudio('')">
                         <span>Remove <i class="fa fa-times"></i></span>
-                    </button>
+                    </button> -->
                     <button mat-raised-button color="primary" (click)="openDialog(lesson, 'uploadAudio')">
                         <span>Upload <i class="fa fa-upload"></i></span>
                     </button>
@@ -277,9 +276,9 @@
             <div class="row p-2">
                 <div class="col-12 p-0 kbl-media-list" *ngIf="!mediafetching else fetching">
                     <div class="col-lg-3 col-md-6 py-2" *ngFor="let audio of audios">
-                        <div *ngIf="audio.url == lesson.audio" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
+                        <div *ngIf="audio.url == lesson.audios" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
                         <audio class="kbl-media-name rounded-top w-100" controls>
-                            <source [src]="audio.url" type="audio/mp3">
+                            <source [src]="audio" type="audio/mp3">
                         </audio>
                         <div class="kbl-media-box rounded-bottom border-top">
                             <div class="kbl-media-name" [matTooltip]="audio.name" matTooltipPosition="above">
@@ -316,24 +315,26 @@
                     <h6>Automation</h6>
                 <mat-form-field class="kb-full-width" appearance="fill">
                     <mat-label>Automation</mat-label>
-                    <input name="title" [(ngModel)]="post.title" type="text" matInput placeholder="Ex. Features of Kea" required
-                        minlength="3" maxlength="140">
+                    <mat-select  [(ngModel)]="lesson.automationid">
+                        <mat-option  *ngFor="let auto of automations" [value]="auto.uniqueid">{{auto.name}}</mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div class="kb-lesson-card rounded px-3 pt-3 mb-4">
                 <h6> <span>{{documents.length}} Document{{documents.length != 1 ? 's' : ''}} <span class="px-2">|</span> {{usedDocuments.length}} Active Download{{usedDocuments.length != 1 ? 's' : ''}}</span></h6>
                 <div class="row p-3 border-bottom">
                     <div class="kbl-summary row col-md-6">
-                        <div class="col-6 p-2" *ngFor="let item of usedDocuments, index as i">
+                        <div class="col-12 p-2" *ngFor="let item of usedDocuments, index as i">
                             <div class="kbl-media-box rounded">
                                 <div class="kbl-media-actions kb-doc-handle">
                                     <i class="fa fa-arrows-alt"></i>
                                 </div>
                                 <div class="kbl-media-name" [matTooltip]="item.name+item.ext" matTooltipPosition="above">
                                     {{item.name+item.ext}}
+                                   
                                 </div>
-                                <div class="kbl-media-actions">
-                                    <i (click)="removeUsedDocument(i)" class="fa fa-times" matTooltip="Remove" matTooltipPosition="above"></i>
+                                <div  class="kbl-media-actions">
+                                <i (click)="removeUsedDocument(i)" class="fa fa-times" matTooltip="Remove" matTooltipPosition="above"></i>
                                 </div>
                             </div>
                         </div>
@@ -342,9 +343,9 @@
                         </div>
                     </div>    
                     <div class="kbl-summary col-md-6 text-right">
-                        <button *ngIf="lesson.download" class="mr-3" mat-raised-button color="accent" (click)="addDocument('')">
+                        <!-- <button *ngIf="lesson.download" class="mr-3" mat-raised-button color="accent" (click)="addDocument('')">
                             <span>Remove <i class="fa fa-times"></i></span>
-                        </button>
+                        </button> -->
                         <input #downloadInp class="kb-d-none" name="download" type="file" (change)="documentChangeEvent($event)">
                         <button mat-raised-button color="primary" (click)="downloadInp.click()">
                             <span>Upload <i class="fa fa-upload"></i></span>
@@ -355,7 +356,7 @@
                     <div
                     class="col-12 p-0 kbl-media-list"
                     *ngIf="!documentfetching else fetching">
-                        <div class="col-3 p-2" *ngFor="let item of documents, index as i">
+                        <div class="col-12 p-2" *ngFor="let item of documents, index as i">
                             <div *ngIf="checkItem(item)" matTooltip="Active" matTooltipPosition="above" class="kbl-active-media"></div>
                             <div class="kbl-media-box rounded">
                                 <div class="kbl-media-actions" [ngClass]="!checkItem(item) ? 'kb-doc-handle' : 'kb-doc-disbaled'">

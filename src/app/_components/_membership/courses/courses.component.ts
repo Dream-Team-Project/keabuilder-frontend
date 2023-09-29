@@ -106,11 +106,9 @@ export class MembershipCoursesComponent implements OnInit {
 
   allCourses() {
     this.fetching = true;
-    // this.spinner=true;
     this._course.all().subscribe((res:any)=>{
       this.courses = res.data;
       this.fetching = false;
-      // this.spinner=false;
     }); 
   }
 
@@ -137,7 +135,9 @@ export class MembershipCoursesComponent implements OnInit {
 
     }
   }
+
   duplicateCourse(course:any) {
+    this.fetching = true;
     this.course.id=course.uniqueid;
     this.course.uniqueid = this._general.makeid(20);
     var oldimg =course.thumbnail;
@@ -156,7 +156,7 @@ export class MembershipCoursesComponent implements OnInit {
         if(res.success==true){
         this._file.validateimg(oldimg).subscribe({
           next: datagen => {
-            console.log(datagen)
+            // console.log(datagen)
             if(datagen.data==1){
               var imgobj  = {oldname:oldimg, newname: this.course.thumbnail};
               this._file.copyimage(imgobj).subscribe({
@@ -171,13 +171,13 @@ export class MembershipCoursesComponent implements OnInit {
               this.resetobj();
         this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
             }
-
+            
           }
         });
       }
+      this.fetching = false;
       })
-    }
-   
+  }
 
   updateCourse() {
     if(this.course.title!='' && this.thumbnail.path) {
@@ -218,17 +218,20 @@ export class MembershipCoursesComponent implements OnInit {
   }
 
   deleteCourse(course:any) {
+    this.fetching = true;
     course.deleting = true;
-    this._course.delete(course.id).subscribe((res:any)=>{
+    this._course.delete(course.uniqueid).subscribe((res:any)=>{
       if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
         this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
         this.allCourses();
         this.resetobj();
+        this.fetching = false;
       });
       else {
         this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
         this.allCourses();
         this.resetobj();
+        this.fetching = false;
       }
     }); 
   }

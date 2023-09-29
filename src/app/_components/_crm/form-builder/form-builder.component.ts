@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ViewContainerRef, ElementRef, HostListener, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -14,6 +14,7 @@ import { NgxCaptureService } from 'ngx-capture';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { EmailService } from 'src/app/_services/_crm/email.service';
+import { CrmFieldsComponent } from '../fields/fields.component';
 
 @Component({
   selector: 'app-crm-form-builder',
@@ -30,10 +31,11 @@ export class CrmFormBuilderComponent implements OnInit {
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
   @ViewChild('fieldsdrawer') fieldsdrawer: any;
+  @ViewChild(CrmFieldsComponent, { static: false }) fieldsComponent:any;
 
   DialogParentToggle:boolean = false;
   DialogImageToggle:boolean = false;
-
+    
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
@@ -108,7 +110,7 @@ export class CrmFormBuilderComponent implements OnInit {
         _general.loading.success = false;
         _form.getForm(_general.target.id).then((e:any)=>{
           if(e.id) {
-            this._general.loading.success = true;
+            this.selectTab('fields');
             _form.formSessionArr = [];
             _form.saveFormSession();
             this.selectedLists=e.temp_lists;
@@ -118,6 +120,7 @@ export class CrmFormBuilderComponent implements OnInit {
             this.notifyemail=e.notifyemail?e.notifyemail?.split(','):this.notifyemail;
             this.emailid=e.emailid;
             this.fetchdata();
+            this._general.loading.success = true;
           }
           else _general.redirectToPageNotFound();
         });

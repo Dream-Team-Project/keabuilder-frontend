@@ -96,7 +96,7 @@ export class MembershipModulesComponent implements OnInit {
         if(getofferid!=''){
           var newob = {id:getofferid};
           this._course.getoffersbyids(newob).subscribe(res=>{
-            console.log(res);
+            // console.log(res);
             this.showcourseoffers = res.data;
           });
           
@@ -166,26 +166,26 @@ export class MembershipModulesComponent implements OnInit {
    fetchPosts() {
       this.postLoading = true;
       this._module.bycourseid(this.course.uniqueid).subscribe(res=>{
-        console.log(res.data);
+        // console.log(res.data);
         this.adjustdata(res.data);
-        // var request = 0;
-        // this.modules.forEach((m:any)=>{
-        //   var paramObj = {
-        //     course_id: m.course_id,
-        //     module_id: m.uniqueid,
-        //   }
-        //   this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
-        //     m.lessons = res.data;
-        //     if(request == this.modules.length - 1) {
-        //       this.postLoading = false;
-        //       setTimeout((e:any)=>{
-        //         this.setDragDrop();
-        //       })
-        //     }
-        //     request++;
-        //   })
-        // })
-        // if(this.modules.length == 0) this.postLoading = false;
+        var request = 0;
+        this.modules.forEach((m:any)=>{
+          var paramObj = {
+            course_id: m.course_id,
+            module_id: m.uniqueid,
+          }
+          this._lesson.bycourse_moduleid(paramObj).subscribe(res=>{
+            m.lessons = res.data;
+            if(request == this.modules.length - 1) {
+              this.postLoading = false;
+              setTimeout((e:any)=>{
+                this.setDragDrop();
+              })
+            }
+            request++;
+          })
+        })
+        if(this.modules.length == 0) this.postLoading = false;
       })
     }
 
@@ -321,6 +321,7 @@ export class MembershipModulesComponent implements OnInit {
       module.uniqueid = this.getUID();
       module.sort = this.index.module;
       module.publish_status = 1;
+      module.user_id=this.course.user_id;
       var imgNObj:any = null;
       if(module.thumbnail) {
         imgNObj = new Object();
@@ -361,11 +362,13 @@ export class MembershipModulesComponent implements OnInit {
         var sorting = 0;
         var lessons = module.lessons;
         lessons.forEach((lesson:any)=>{
+          var olduniqueid= lesson.uniqueid;
           lesson.uniqueid = this.getUID();
           lesson.module_id = module.uniqueid;
           lesson.sort = sorting;
           this._lesson.create(lesson).subscribe(res=>{
             lesson.id = res.data.insertId;
+            if(olduniqueid) this.duplicateDocuments(lesson.uniqueid,olduniqueid,lesson.user_id);
             if(request == lessons.length - 1) {
               this.appendModule(module, this.index.module);
               this.overlayRefDetach();
@@ -395,6 +398,7 @@ export class MembershipModulesComponent implements OnInit {
           var lessons = module.lessons;
           lessons.forEach((lesson:any)=>{
             this.deleteLesson(module, lesson, mi, -1, lessons.length);
+            this._file.deletedocumentfolder({uniqueid:lesson.uniqueid}).subscribe((resp)=>{});
           })
           if(lessons.length == 0) {
             this.modules.splice(mi, 1);
@@ -467,11 +471,24 @@ export class MembershipModulesComponent implements OnInit {
 
   addLesson() {
     var lesson = JSON.parse(JSON.stringify(this.post));
+    var olduniqueid= lesson.id ? lesson.uniqueid : '';
+    // console.log(olduniqueid)
+    // console.log(lesson)
     var msg = lesson.id ? 'Lesson has been duplicated' : 'New lesson has been added';
     lesson.uniqueid = this.getUID();
     lesson.module_id = this.modules[this.index.module].uniqueid;
     lesson.sort = this.index.lesson+1;
     lesson.publish_status = 1;
+    lesson.user_id=this.course.user_id;
+   if(!lesson.id){
+    lesson.content= '';
+    lesson.video= '';
+    lesson.audio='';
+    lesson.download= '';
+    lesson.email_subject= '';
+    lesson.email_body='';
+    lesson.automationid='';
+   }
     var imgNObj:any = null;
     if(lesson.thumbnail) {
       imgNObj = new Object();
@@ -486,6 +503,7 @@ export class MembershipModulesComponent implements OnInit {
     this._lesson.create(lesson).subscribe(res=>{
       lesson.id = res.data.insertId;
       if(res.success) {
+        if(olduniqueid) this.duplicateDocuments(lesson.uniqueid,olduniqueid,lesson.user_id);
         if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
           this.addLessonAfterMedhod(lesson, msg);
         })  
@@ -514,6 +532,7 @@ export class MembershipModulesComponent implements OnInit {
   deleteLesson(module:any, lesson:any, mi:number, li:number, len:number) {
     this._lesson.delete(lesson.id).subscribe(res=>{
       if(res.success) {
+        this._file.deletedocumentfolder({uniqueid:lesson.uniqueid}).subscribe((resp)=>{});
         if(lesson.thumbnail) this._file.deleteimage(lesson.thumbnail);
         if(li > -1) {
           module.lessons.splice(li, 1);
@@ -672,5 +691,52 @@ export class MembershipModulesComponent implements OnInit {
           }
           })
   }
- 
+
+  duplicateDocuments(newid:any,oldid:any,userid:any) {
+    let obj={uniqueid:newid,olduniqueid:oldid,user_id:userid}
+    this._file.copyfolderDocuments(obj).subscribe((data:any)=>{
+      console.log(data)
+  })
+  }
+  duplicateCourse(course:any) {
+    this.fetching = true;
+    this.course.id=course.uniqueid;
+    this.course.uniqueid = this._general.makeid(20);
+    var oldimg =course.thumbnail;
+    this.course.description=course.description;
+    this.thumbnail.path=course.path;
+    this.thumbnail.type= this.thumbnail.type ? this.thumbnail.type : 'png';
+    this.course.path=course.path;
+    this.course.title=course.title;
+    this.course.publish_status=course.publish_status;
+     
+      this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
+      this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      // console.log(this.course)
+      this._course.duplicate(this.course).subscribe((res:any)=>{
+        // console.log(res)
+        if(res.success==true){
+        this._file.validateimg(oldimg).subscribe({
+          next: datagen => {
+            // console.log(datagen)
+            if(datagen.data==1){
+              var imgobj  = {oldname:oldimg, newname: this.course.thumbnail};
+              this._file.copyimage(imgobj).subscribe({
+                next: data => {
+                  this._general.prevRoute();
+                  this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+                }
+              });
+            }else{
+              this._general.prevRoute();
+        this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+            }
+            
+          }
+        });
+      }
+      this.fetching = false;
+      })
+  }
+
 }

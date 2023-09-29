@@ -227,8 +227,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
   
   addnewpage(event:any){
-    // console.log(event);
-    if(event) this.template=event;
+    if(event) this.template = event;
     this.dialog.closeAll();
     this.createfromscratch();
     this.dialog.open(this.adddialog);
@@ -248,64 +247,34 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         next: data => {
           // console.log(data);
 
-          if(data.found==1){
+          if(data.found==0){
+            if(data?.success){            
+              this._general.redirectToBuilder(data.uniqueid, 'website');
+              // this.dialog.closeAll();
+              this.searching = false;
+              this.resetobj();
+            }
+            else {
+              this._general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
+            }
+          }
+          else if(data.found==1){
             this.pathcheck = true;
             // this.spinner=false;
             this.error=true;
-            this.errormessage="Path already exist !"
+            this.errormessage="Path already exist";
             this.dialog.open(this.adddialog);
           }
-
-          if(data.found==0){
-            if(data?.success){
-            var page = {
-              head: '',
-              body: '',
-              style: '',
-              dir: '/drafts',
-              folder: pagepath,
-              prevFolder: pagepath,
-              website_id:this.website_id, 
-              template_id:this.template?.uniqueid ? this.template?.uniqueid : '',
-              type: this.template?.user_id == 'default' ? 'default' : 'user' ,
-            }
-            // console.log(page)
-            if(this.template?.uniqueid){
-              this._general._file.copyTemplateToPage(page).subscribe((event:any) => {
-                // console.log(event);
-              
-              },
-              error=>{
-                // console.log(error)
-              });
-            }
-            else{
-              this._general._file.savePage(page).subscribe((event:any) => {
-                // console.log(event);
-              
-              },
-              error=>{
-                // console.log(error)
-              });
-            }
-            
-            // create page/folder
-            
-            this._general.redirectToBuilder(data.uniqueid, 'website');
-            // this.dialog.closeAll();
-            this.searching = false;
-            this.resetobj();
-          }
-        }else{
+          else{
             this.searching = false;
             this.error=true;
-            this.errormessage="Usage limit exceeded, Please Upgrade your Plan !";
+            this.errormessage="Usage limit exceeded, Please Upgrade your Plan";
             this.dialog.open(this.adddialog);
             // this._general.openSnackBar(true,"Usage limit exceeded, Please Upgrade your Plan !", 'OK','center','top');
             this.spinner=false;
 
             // this.dialog.closeAll();
-        }
+          }
       }
       });
     }

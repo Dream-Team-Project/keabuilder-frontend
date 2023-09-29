@@ -21,7 +21,6 @@ export class NavigationService {
   }
 
   singleNavigation(obj:any): Observable<any> {
-    obj.user_id = this.uuid;
     return this.http.post('/api/singlenavigationdata',obj)
     .pipe(catchError(this.errorHandler));
   }

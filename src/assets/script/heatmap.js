@@ -56,10 +56,9 @@ function dateComponentPad(value) {
 }
   
 function formatDate(date) {
-var datePart = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ].map(dateComponentPad);
-var timePart = [ date.getHours(), date.getMinutes(), date.getSeconds() ].map(dateComponentPad);
-
-return datePart.join('-') + ' ' + timePart.join(':');
+    var datePart = [ date.getFullYear(), date.getMonth() + 1, date.getDate() ].map(dateComponentPad);
+    var timePart = [ date.getHours(), date.getMinutes(), date.getSeconds() ].map(dateComponentPad);
+    return datePart.join('-') + ' ' + timePart.join(':');
 }
 
 function makeid(length) {
@@ -67,9 +66,8 @@ function makeid(length) {
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
-   }
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
    return result;
 }
 

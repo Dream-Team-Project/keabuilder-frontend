@@ -599,7 +599,7 @@ export class ElementService {
   }
 
   setMenu(element: any, menu: any) {
-    element.data_id = menu.id;
+    element.data_id = menu.uniqueid;
     element.items = this._general.decodeJSON(menu.items);
     return element;
   }

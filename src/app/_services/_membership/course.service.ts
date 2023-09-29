@@ -58,7 +58,7 @@ export class CourseService {
   }
 
   delete(param:any):Observable<any> {
-    return this.http.delete(this.deleteApi + '/' + param)
+    return this.http.delete(this.deleteApi + '/' + this.uuid+'/'+param)
     .pipe(catchError(this.errorHandler));
   }
 

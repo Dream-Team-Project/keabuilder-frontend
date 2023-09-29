@@ -23,6 +23,7 @@ export class PageViewComponent implements OnInit {
   @Input ('target_id') target_id:any;
   @Input ('target_sections') target_sections:any;
   @Input ('target_style') target_style:any;
+  @Input ('target_menus') target_menus:any;
 
   appHost:any = environment.appHost;
   req = {
@@ -75,9 +76,7 @@ export class PageViewComponent implements OnInit {
                 this.page_json = this._general.decodeJSON(resp.data);
                 if(this.page_json) {
                   this.addHead(this.page_json.head);
-                  this._general.fetchMenus().then(resp => {
-                    this.setMenu(this.page_json.sections, resp);
-                  })
+                  this.setMenu(this.page_json);
                 }
               }
               else this._general.redirectToPageNotFound();
@@ -136,9 +135,8 @@ export class PageViewComponent implements OnInit {
       style.id = 'kb-'+this.target+'-style';
       document.head.appendChild(style);
       this.page_json.sections = this.target_sections;
-      this._general.fetchMenus().then(resp => {
-        this.setMenu(this.page_json.sections, resp);
-      })
+      this.page_json.menus = this.target_menus;
+      this.setMenu(this.page_json);
     }
     else if(changes['target_id']) this.fetchTarget();
   }
@@ -149,14 +147,13 @@ export class PageViewComponent implements OnInit {
         if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
+            if(resp.menus) this.page_json.menus = resp.menus;
             const style = document.createElement('style');
             style.innerHTML = this.page_json.style;
             style.id = 'kb-header-style';
             document.head.appendChild(style);
             this.loadCustomCode();
-            this._general.fetchMenus().then(resp => {
-              this.setMenu(this.page_json.sections, resp);
-            })
+            this.setMenu(this.page_json);
           }
         }
         else this.page_json.sections = [];
@@ -167,14 +164,13 @@ export class PageViewComponent implements OnInit {
         if(resp.data[0]?.json) {
           this.page_json = this._general.decodeJSON(resp.data[0].json);
           if(this.page_json) {
+            if(resp.menus) this.page_json.menus = resp.menus;
             const style = document.createElement('style');
             style.innerHTML = this.page_json.style;
             style.id = 'kb-footer-style';
             document.head.appendChild(style);
             this.loadCustomCode();
-            this._general.fetchMenus().then(resp => {
-              this.setMenu(this.page_json.sections, resp);
-            })
+            this.setMenu(this.page_json);
           }
         }
         else this.page_json.sections = [];
@@ -191,19 +187,27 @@ export class PageViewComponent implements OnInit {
   }
 
   addHead(head:any) {
-    this.addFavicon(this.req.wid);
-    this.title.setTitle(head.title);
-    this.meta.addTag({ name: 'author', content: head.author });
-    this.meta.addTag({ name: 'keywords', content: head.keywords });
-    this.meta.addTag({ name: 'description', content: head.description });
-    const style = document.createElement('style');
-    style.innerHTML = head.style + head.page_code;
-    style.id = 'kb-style-'+this.req.pid;
-    document.head.appendChild(style);
-    const script = document.createElement('script');
-    script.src = '/assets/script/tracking.js';
-    script.async = true;
-    document.head.appendChild(script);
+    if(head) {
+      this.addFavicon(this.req.wid);
+      this.title.setTitle(head.title);
+      this.meta.addTag({ name: 'author', content: head.author });
+      this.meta.addTag({ name: 'keywords', content: head.keywords });
+      this.meta.addTag({ name: 'description', content: head.description });
+      const style = document.createElement('style');
+      style.innerHTML = head.style + head.page_code;
+      style.id = 'kb-style-'+this.req.pid;
+      document.head.appendChild(style);
+      const script = document.createElement('script');
+      script.src = '/assets/script/tracking.js';
+      script.type = 'text/javascript'; 
+      script.async = true;
+      document.head.appendChild(script);
+      const hmscript = document.createElement('script');
+      hmscript.src = '/assets/script/heatmap.js';
+      hmscript.type = 'text/javascript'; 
+      hmscript.async = true;
+      document.head.appendChild(hmscript);
+    }
   }
 
   loadScript(code:any, targetElement:any) {
@@ -238,32 +242,40 @@ export class PageViewComponent implements OnInit {
     this.addHead(this.page_json.head);
     this.loadScript(this.page_json.tracking.footer, document.body);
     if(this.page_json.sections) {
-      this._general.fetchMenus().then(resp => {
-        this.setMenu(this.page_json.sections, resp);
-        this.loadCustomCode();
-      })
+      this.setMenu(this.page_json);
+      this.loadCustomCode();
     }
   }
 
-  setMenu(sections:any, menus:any) {
-    if(sections) {
-      sections.forEach((sec:any)=>{
-        sec.rowArr.forEach((row:any)=>{
-          row.columnArr.forEach((col:any)=>{
-            col.elementArr.forEach((ele:any)=>{
+  setMenu(data:any) {
+    if(data.sections) {
+      data.sections.flatMap((sec:any)=>{
+        sec.rowArr.flatMap((row:any)=>{
+          row.columnArr.flatMap((col:any)=>{
+            col.elementArr.filter((ele:any)=>{
               var cont = ele.content;
               if(cont.name == 'menu') {
-                menus.forEach((menu:any)=>{
-                  if(menu.id == cont.data_id) {
+                data.menus?.filter((menu:any)=>{
+                  if(menu.uniqueid == cont.data_id) {
                     var menuObj = JSON.parse(JSON.stringify(menu));
                     ele.content = this._element.setMenu(cont, menuObj);
                   }
                 })
               }
-            })
           })
+        })
         })
       })
     }
   }
+
+  redirectLink(redir:any) {
+    console.log(redir);
+    if(redir?.link) window.open(redir.link, redir.target);
+  }
+
+  toggleRespMenu(menu:any) {
+    menu.menuOpen = !menu.menuOpen
+  }
+
 }

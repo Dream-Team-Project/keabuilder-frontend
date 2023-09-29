@@ -136,6 +136,14 @@ export class FormService {
       })
     })
   }
+  fetchviewFields(userid:string) {
+    return new Promise((resolve, reject)=>{
+      this._field.fetchviewfields(userid).subscribe((resp:any)=>{
+        if(resp?.data) this.fields = resp.data;
+        resolve(resp);
+      })
+    })
+  }
 
   createFields() {
     this.formEleTypesObj.forEach(e=>{
@@ -143,6 +151,19 @@ export class FormService {
         e.form = true;
         this.formEleTypes[e.name] = this._element.addElement(e);
       }
+    })
+  }
+
+  fetchForm(obj:any) {
+    return new Promise((resolve, reject)=>{
+      this._file.fetchform(obj).subscribe((resp:any)=>{
+        this.fetchviewFields(resp.data.user_id).then(()=>{
+          this.setForm(resp).then(data=>{
+            this.createFields();
+            resolve(data);
+          });
+        });
+      })
     })
   }
 

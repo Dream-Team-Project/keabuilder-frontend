@@ -68,11 +68,8 @@
                     <!-- sections start -->
                     <div #kbmain cdkDrag *ngFor="let section of _section.sections, index as si"
                         [attr.data-name]="section.name ? section.name : ''"
-                        [attr.data-link]="section.redirection ? section.redirection.link : ''"
-                        [attr.data-target]="section.redirection ? section.redirection.target : ''"
-                        [class.kb-block-redirection]="section.redirection?.link"
                         (mouseenter)="section.setting = true; _row.selectedSectionRows = section.rowArr"
-                        (mouseleave)="section.setting = false" [ngClass]="_style.getHideCls(section.hide)"
+                        (mouseleave)="section.setting = false"
                         [class.kb-block-none]="isBlockActive(section) ? _style.getDisplay(_style.hide) : _style.getDisplay(section.hide)"
                         [ngStyle]="isBlockActive(section) ? _style.currentStyling() : _style.getBlockStyle(section.style)"
                         [id]="section.id" class="kb-section kb-block-container">
@@ -112,11 +109,8 @@
                             <!-- rows start -->
                             <div cdkDrag *ngFor="let row of section.rowArr, index as ri"
                                 [attr.data-name]="row.name ? row.name : ''"
-                                [attr.data-link]="row.redirection ? row.redirection.link : ''"
-                                [attr.data-target]="row.redirection ? row.redirection.target : ''"
-                                [class.kb-block-redirection]="row.redirection?.link"
                                 (mouseenter)="row.setting = true; _row.selectedRow = row;"
-                                (mouseleave)="row.setting = false" [ngClass]="_style.getHideCls(row.hide)"
+                                (mouseleave)="row.setting = false"
                                 [class.kb-block-none]="isBlockActive(row) ? _style.getDisplay(_style.hide) : _style.getDisplay(row.hide)"
                                 [ngStyle]="isBlockActive(row) ? _style.currentStyling() : _style.getBlockStyle(row.style)"
                                 [id]="row.id" class="kb-row kb-block-container">
@@ -151,12 +145,8 @@
                                     <!-- columns start -->
                                     <div *ngFor="let column of row.columnArr, index as ci"
                                         [attr.data-name]="column.name ? column.name : ''"
-                                        [attr.data-link]="column.redirection ? column.redirection.link : ''"
-                                        [attr.data-target]="column.redirection ? column.redirection.target : ''"
-                                        [class.kb-block-redirection]="column.redirection?.link"
                                         (mouseenter)="_element.selectedElements = column.elementArr"
                                         [ngStyle]="isBlockActive(column) ? _style.currentStyling() : _style.getBlockStyle(column.style)"
-                                        [ngClass]="_style.getHideCls(column.hide)"
                                         [class.kb-block-none]="isBlockActive(column) ? _style.getDisplay(_style.hide) : _style.getDisplay(column.hide)"
                                         [class]="row.rowSize" [id]="column.id" class="kb-column kb-block-container">
                                         <div class="kb-drag-container" cdkDropList [id]="'elementgroup-'+ci"
@@ -167,14 +157,10 @@
                                             <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
                                                 [ngSwitch]="element.content.name"
                                                 [attr.data-name]="element.name ? element.name : ''"
-                                                [attr.data-link]="element.redirection ? element.redirection.link : ''"
-                                                [attr.data-target]="element.redirection ? element.redirection.target : ''"
-                                                [class.kb-block-redirection]="element.redirection?.link"
                                                 (dblclick)="elementDblClk(element)"
                                                 (mouseenter)="element.setting = true"
                                                 (mouseleave)="element.setting = element?.moresetting" 
                                                 [id]="element.id" class="kb-element kb-block-container"
-                                                [ngClass]="_style.getHideCls(element.hide)"
                                                 [style.margin]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getMargin() : _style.getBlockStyle(element.content.style)['margin']"
                                                 [style.justifyContent]="isBlockActive(element) && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)"
                                                 [class.kb-block-none]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)">
@@ -245,9 +231,11 @@
                                                                 [autoplay]="element.content.autoplay"
                                                                 [muted]="element.content.muted"
                                                                 [loop]="element.content.loop"
-                                                                [controls]="element.content.controls"
-                                                                [class.kb-video-muted]="element.content.muted">
+                                                                [controls]="element.content.controls">
                                                                     <source [src]="element.content.src" type="video/mp4">
+                                                                </video>
+                                                                <video>
+                                                                    <source [src]="'http://localhost:4200/assets/videos/movie.mp4'" type="video/mp4">
                                                                 </video>
                                                             </ng-template>
                                                         </div>
@@ -298,10 +286,10 @@
                                                 </div>
                                                 <div *ngSwitchCase="'menu'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                     class="kb-element-content">
-                                                    <ul class="kb-menu" [id]="element.content.data_id"
+                                                    <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                                         [ngStyle]="isBlockActive(element) && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
                                                         <li *ngFor="let item of element.content.items, index as mi">
-                                                            <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                            <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                                 [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
                                                                 {{item.name}}</a>
                                                         </li>
@@ -313,15 +301,16 @@
                                                             <span class="kb-menu-bar3"></span>
                                                         </div>
                                                         <div [class.kb-d-none]="!(isBlockActive(element) && (_style.setDropDownStyle.main || _style.setDropDownStyle.item))" class="kb-menu-content">
-                                                            <ul class="kb-menu" [id]="element.content.data_id"
+                                                            <ul class="kb-menu" [id]="'kb-menu-'+element.content.data_id"
                                                             [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.main ? _style.currentStyling() : element.content.style.dropdown">
                                                                 <li *ngFor="let item of element.content.items, index as mi">
-                                                                    <a class="kb-content-item" [id]="item.id" [href]="item.link"
+                                                                    <a class="kb-content-item" [id]="'kb-menu-item-'+item.id" [href]="item.link"
                                                                         [ngStyle]="isBlockActive(element) && _style.setDropDownStyle.item ? _style.textStyling() : element.content.item.style.dropdown">{{item.name}}</a>
                                                                 </li>
                                                             </ul>
                                                         </div>
                                                     </div>
+                                                    <!-- <app-fetch-menu [menu_element]="element" [isBlockActive]="isBlockActive(element)" ></app-fetch-menu> -->
                                                 </div>
                                                 <div *ngSwitchCase="'form-component'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
