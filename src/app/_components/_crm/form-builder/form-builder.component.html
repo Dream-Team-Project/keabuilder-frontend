@@ -1,4 +1,4 @@
-<app-crm-fields [field_list]="false"></app-crm-fields>
+<app-crm-fields [field_list]="false" (fetch_fields)="refreshFields($event)"></app-crm-fields>
 <div *ngIf="!_form.preview else fetchpreview" id="kb-form-builder">
     <div style="visibility: hidden; position: fixed"
     [style.left]="contextMenuPosition.x"
@@ -132,7 +132,7 @@
                         <mat-label>Website Pages</mat-label>
                         <mat-select [(ngModel)]="_form.form.redirection">
                             <mat-option *ngFor="let page of _general.existwebpages"
-                                [value]="_general.subdomain+page.page_path"
+                                [value]="_general.active_domain+page.page_path"
                                 [disabled]="page.publish_status == 0">
                                 {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
                                     *ngIf="page.publish_status == 0"></small>
@@ -145,7 +145,7 @@
                             <mat-optgroup *ngFor="let funnel of _general.funnels"
                                 [label]="funnel.name | titlecase">
                                 <mat-option *ngFor="let step of funnel.steps"
-                                    [value]="_general.subdomain+step.page_path"
+                                    [value]="'https://'+funnel.domain+'/'+step.page_path"
                                     [disabled]="step.archived == 1">
                                     {{step.title | titlecase}}<small [attr.data]="step.funneltype"
                                         class="infoTxt"></small>

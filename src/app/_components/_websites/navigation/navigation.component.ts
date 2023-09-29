@@ -90,7 +90,7 @@ export class WebsiteNavigationComponent {
       moveItemInArray(this.menuobj.items, event.previousIndex, event.currentIndex);
     } else {
       let data = event.item.data;
-      this.menuItemObj = {id: '', name: data.page_name, type: 'item', link: data.page_path == '#' ? '#' : this._general.subdomain+data.page_path, target: '_self', setting: false}
+      this.menuItemObj = {id: '', name: data.page_name, type: 'item', link: data.page_path == '#' ? '#' : this._general.active_domain+data.page_path, target: '_self', setting: false}
       this.appendMenuItem(this.menuItemObj, event.currentIndex);
     }
   }

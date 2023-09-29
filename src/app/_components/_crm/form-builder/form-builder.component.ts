@@ -143,25 +143,32 @@ export class CrmFormBuilderComponent implements OnInit {
       }
     });
   }
-fetchdata(){
-  this.fetchlists();
-  this.fetchTags();
-  this.fetchEmails();
-  this.fetchsingleemail();
-}
-fetchsingleemail(){
-  if(this.emailid){
-  this.email.getsingleemail({uniqueid:this.emailid}).subscribe((data:any)=>{
-    if(data.success==true){
-    this._form.singleemail.id=data.data[0].id;
-    this._form.singleemail.uniqueid=data.data[0].uniqueid;
-    this._form.singleemail.name=data.data[0].name;
-    this._form.singleemail.subject=data.data[0].subject;
-    this._form.singleemail.body=data.data[0].body;
-    }
-  })
-}
-}
+
+  refreshFields(data:any) {
+    this._form.fields = data;
+  }
+  
+  fetchdata(){
+    this.fetchlists();
+    this.fetchTags();
+    this.fetchEmails();
+    this.fetchsingleemail();
+  }
+
+  fetchsingleemail(){
+    if(this.emailid){
+    this.email.getsingleemail({uniqueid:this.emailid}).subscribe((data:any)=>{
+      if(data.success==true){
+      this._form.singleemail.id=data.data[0].id;
+      this._form.singleemail.uniqueid=data.data[0].uniqueid;
+      this._form.singleemail.name=data.data[0].name;
+      this._form.singleemail.subject=data.data[0].subject;
+      this._form.singleemail.body=data.data[0].body;
+      }
+    })
+  }
+  }
+
   fetchlists(){
       this._listService.fetchlists().subscribe((data:any)=>{
         this.lists=data.data;
@@ -174,6 +181,7 @@ fetchsingleemail(){
           this.tags = data.data;
     });
   }
+
   fetchEmails(){
     this.email.fetchemails().subscribe((data:any)=>{
       this.emails=data.data;

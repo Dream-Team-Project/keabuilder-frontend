@@ -52,7 +52,7 @@
                                     </div>
                                     <span matTooltip="Preview" matTooltipPosition="above" class="border-left">
                                         <i class="fa fa-external-link-alt px-3 py-2"
-                                            (click)="page.publish_status == 1 ? redirectLink(_general.subdomain+page.page_path) : ''"></i>
+                                            (click)="page.publish_status == 1 ? redirectLink(_general.active_domain+page.page_path) : ''"></i>
                                     </span>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                                             <span matTooltip="Preview" matTooltipPosition="above"
                                                 class="border-left">
                                                 <i class="fa fa-external-link-alt px-3 py-2"
-                                                    (click)="redirectLink(_general.subdomain+step.page_path)"></i>
+                                                    (click)="redirectLink('https://'+funnel.domain+'/'+step.page_path)"></i>
                                             </span>
                                         </div>
                                     </div>
