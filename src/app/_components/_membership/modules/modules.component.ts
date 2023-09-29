@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TagService } from 'src/app/_services/_crm/tag.service';
+import { ListService } from 'src/app/_services/_crm/list.service';
 
 @Component({
   selector: 'app-membrship-module',
@@ -64,6 +65,7 @@ export class MembershipModulesComponent implements OnInit {
   showcourseoffers:any = [];
   users:any=[];
   tags:any=[];
+  lists:Array<any> = [];
 
   constructor(
     private router: Router,
@@ -78,12 +80,15 @@ export class MembershipModulesComponent implements OnInit {
     public _image: ImageService,
     public _general: GeneralService,
     private _tagService: TagService,
+    private _listService: ListService,
     // private courseService:CourseService,
     public dialog: MatDialog) {
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
       this.fetchCourse();
       this.fetchPosts();
+      this.fetchLists();
+      this.fetchTags();
       this.resetPostData();
     })
    }
@@ -127,13 +132,14 @@ export class MembershipModulesComponent implements OnInit {
   this.users=data.data;
 })
   }
-  searchmembers(search: any, sortInp:any, tagInp:any) {
+  searchmembers(search: any, sortInp:any,listInp:any, tagInp:any) {
    
     this.fetching = true;
     var obj = {
       search: search.value,
       sortInp: sortInp.value,
       tagInp: tagInp.value,
+      listInp: listInp.value,
       course_id:this.course.uniqueid,
     }
     this._course.searchmembers(obj).subscribe((data:any)=>{
@@ -151,6 +157,12 @@ export class MembershipModulesComponent implements OnInit {
       (data) => {
         this.tags = data.data;
   });
+}
+fetchLists() {
+  this._listService.fetchlists().subscribe(
+    (data) => {
+      this.lists = data.data;
+});
 }
 
 
