@@ -184,6 +184,7 @@ export class NewFunnelStepsComponent implements OnInit {
         }
         
     });
+
   }
 
   adjustdata(data:any){
