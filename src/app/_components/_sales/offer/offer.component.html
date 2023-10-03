@@ -189,6 +189,36 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
+      <div class="kb-offer-card rounded px-3 pt-3 mb-4">
+        <h6>Courses</h6>
+      <mat-error *ngIf="error">{{'Please Select a Course'}}</mat-error>
+      <mat-form-field class="kb-full-width" appearance="fill" (click)="filtercourseData($event)" [class.mat-form-field-invalid]="hasError">
+        <mat-label>Select Courses</mat-label>
+        <mat-chip-list #courseChipList aria-label="course selection">
+            <mat-chip
+                *ngFor="let data of selectedcourses, index as i"
+                (removed)="removeSelectedcourse(i)">
+                {{data.title}}
+                <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+        </mat-chip-list>
+        <input matInput type="text"
+            #searchcourseInp
+            placeholder="Select multiples..."
+            (input)="filtercourseData($event)"
+            [matAutocomplete]="courseAuto"
+            [matChipInputFor]="courseChipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            class="kb-act-searchinp pt-1">
+        <mat-autocomplete autoActiveFirstOption #courseAuto="matAutocomplete" (optionSelected)="addSelectedcourse($event, searchcourseInp)">
+            <mat-option *ngFor="let option of filteredOptions.courses" [value]="option" [disabled]="filteredTempIds.courses.includes(option.uniqueid)">
+              {{option.title}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    </div>
       <!-- <div class="kb-offer-card rounded p-3">
         <h6>Checkout</h6>
         <div class="kb-checkout-img rounded my-3" [ngStyle]="{'background-image':'url('+

@@ -271,7 +271,7 @@ else{
     })
   }
 
-   // start list actions
+   // start offer actions
 
    filterofferData(event:any) {
     var value = event ? event.target.value : '';
@@ -290,7 +290,7 @@ else{
     this.filteredTempIds.offers.splice(index, 1);
   }
 
-  // end list actions
+  // end offer actions
     // start tag actions
 
     filterTagData(event:any) {

@@ -88,6 +88,7 @@ import { MembershipMembersComponent } from './_components/_membership/members/me
 import { MembershipTagsComponent } from './_components/_membership/tags/tags.component';
 import { MembershipMarketplaceComponent } from './_components/_membership/marketplace/marketplace.component';
 import { MembershipReportsComponent } from './_components/_membership/membership-reports/membership-reports.component';
+import { MembershipCustomizationComponent } from './_components/_membership/membership-customization/membership-customization.component';
 // theme
 import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
 import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
@@ -318,6 +319,7 @@ if (currentDomain === appHost) {
         { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
         { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
         { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+        { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
       ],
       canActivate: [AuthGuard] },
         { path: 'new-membership', component: NewMembershipComponent,
@@ -327,7 +329,7 @@ if (currentDomain === appHost) {
           { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
           ],canActivate: [AuthGuard] },
     
-    
+          { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
 
     // membership
 
@@ -443,6 +445,7 @@ export const RoutingComponents =
     MembershipTagsComponent,
     MembershipMarketplaceComponent,
     MembershipReportsComponent,
+    MembershipCustomizationComponent,
     NewMembershipComponent,
     CrmFormsComponent,
     CrmFormFetchComponent,

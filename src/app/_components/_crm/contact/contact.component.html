@@ -71,6 +71,35 @@
             </div>
             <div class="col-md-4">
               <div class="kb-contact-details-card rounded pt-3 px-3 mb-3">
+                <h6>Subscribe to Offers</h6>
+              <mat-form-field class="kb-full-width" appearance="fill" (click)="filterofferData($event)">
+                <mat-label>Subscribe to Offers</mat-label>
+                <mat-chip-list #offerChipList aria-label="Offer selection">
+                    <mat-chip
+                        *ngFor="let data of selectedoffers, index as i"
+                        (removed)="removeSelectedoffer(i)">
+                        {{data.name}}
+                        <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                </mat-chip-list>
+                <input matInput type="text"
+                    #searchofferInp
+                    placeholder="Select multiples..."
+                    (input)="filterofferData($event)"
+                    [matAutocomplete]="offerAuto"
+                    [matChipInputFor]="offerChipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    class="kb-act-searchinp pt-1">
+                <mat-autocomplete autoActiveFirstOption #offerAuto="matAutocomplete" (optionSelected)="addSelectedoffer($event, searchofferInp)">
+                    <mat-option *ngFor="let option of filteredOptions.offers" [value]="option" [disabled]="filteredTempIds.offers.includes(option.uniqueid)">
+                      {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            </div>
+              <div class="kb-contact-details-card rounded pt-3 px-3 mb-3">
                 <h6>Subscribe to Lists</h6>
                 <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
                   <mat-label>Subscribe to Lists</mat-label>
