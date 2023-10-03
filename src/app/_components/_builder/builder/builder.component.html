@@ -234,9 +234,6 @@
                                                                 [controls]="element.content.controls">
                                                                     <source [src]="element.content.src" type="video/mp4">
                                                                 </video>
-                                                                <video>
-                                                                    <source [src]="'http://localhost:4200/assets/videos/movie.mp4'" type="video/mp4">
-                                                                </video>
                                                             </ng-template>
                                                         </div>
                                                         <div *ngSwitchCase="'iframe'">
@@ -355,6 +352,8 @@
                                                 <span *ngIf="_style.getDisplay(element.hide)"
                                                     class="kb-block-hidden-icon"><i class="fa fa-eye-slash"
                                                         aria-hidden="true"></i></span>
+                                                <span *ngIf="element.setting && element.redirection.link" class="kb-block-link">
+                                                    {{element.redirection.link}}</span>
                                             </div>
                                             <!-- elements end -->
                                         </div>
@@ -367,6 +366,7 @@
                                         <!-- add element option end -->
                                         <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
                                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                        <span *ngIf="column.setting && column.redirection.link" class="kb-block-link">{{column.redirection.link}}</span>
                                     </div>
                                     <!-- columns end -->
                                 </div>
@@ -378,11 +378,13 @@
                                 <!-- add row option end -->
                                 <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
                                         class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                <span *ngIf="row.setting && row.redirection.link" class="kb-block-link">{{row.redirection.link}}</span>
                             </div>
                             <!-- rows end -->
                         </div>
                         <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                        <span *ngIf="section.setting && section.redirection.link" class="kb-block-link">{{section.redirection.link}}</span>
                     </div>
                     <!-- sections end -->
                 </div>

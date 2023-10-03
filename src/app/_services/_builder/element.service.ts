@@ -51,8 +51,8 @@ export class ElementService {
       content: {
         name: 'video',
         type: 'video',
-        iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
-        src: 'http://localhost:4200/assets/videos/movie.mp4',
+        iframe: '<iframe width="560" height="315" src="http://app.keabuilder.com/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+        src: 'http://app.keabuilder.com/assets/videos/movie.mp4',
         autoplay: false,
         muted: false,
         loop: false,

@@ -272,7 +272,6 @@ export class PageViewComponent implements OnInit {
   }
 
   redirectLink(redir:any) {
-    console.log(redir);
     if(redir?.link) window.open(redir.link, redir.target);
   }
 

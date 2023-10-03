@@ -1338,7 +1338,7 @@ ul.kb-menu a, ul.kb-menu li {
 
   /* loader */
 
-  span.kb-element-info, span.kb-btn-link {
+  span.kb-element-info, span.kb-btn-link, span.kb-block-link {
     background-color: rgb(69 69 69 / 60%);
     position: absolute;
     color: #fff;
@@ -1349,6 +1349,16 @@ ul.kb-menu a, ul.kb-menu li {
     border-radius: 3px;
     animation: show 0.2s ease;
     z-index: 99;
+}
+
+span.kb-block-link {
+    top: 0px;
+    bottom: auto;
+}
+
+.kb-section .kb-row.kb-block-container>span.kb-block-link {
+    left: auto;
+    right: 0px;
 }
 
   .kb-code-block {
