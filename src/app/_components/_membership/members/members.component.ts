@@ -15,6 +15,7 @@ import { ListService } from 'src/app/_services/_crm/list.service';
 import { MembersService } from 'src/app/_services/_membership/members.service';
 import {hashSync} from 'bcryptjs';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { OfferService } from 'src/app/_services/_sales/offer.service';
 
 
 
@@ -40,7 +41,7 @@ export class MembershipMembersComponent implements OnInit {
   productoptionalList: string[] = [];
   tagoptionals = new FormControl();
   // tagoptionalList: string[] = [];
-  addmemberobj = {user_id:'',firstname:'',lastname:'',email:'',password:'',phone:'', marketing:false,lists:'',tags:'',courseid:'',registration_type:'free'};
+  addmemberobj = {user_id:'',firstname:'',lastname:'',email:'',password:'',phone:'', marketing:false,lists:'',tags:'',offerid:'',registration_type:'free'};
   firstFormControl = new FormControl('',[Validators.required,Validators.minLength(3),Validators.maxLength(20) ]);
   passwordFormControl = new FormControl('',[Validators.required,Validators.minLength(6)]);
   users:any = [];
@@ -50,12 +51,12 @@ export class MembershipMembersComponent implements OnInit {
   tags:Array<any> = [];
   lists:Array<any> = [];
   filteredOptions:any = {
-    course:[],
+    offers:[],
     lsits:[],
     tags: []
   };
   filteredTempIds:any = {
-    courses:[],
+    offers:[],
     lists:[],
     tags: []
   };
@@ -64,9 +65,10 @@ export class MembershipMembersComponent implements OnInit {
   contact:any = {};
   selectedTags:any = [];
   selectedLists:any = [];
-  selectedcourses:any = [];
+  selectedoffers:any = [];
   newtags: any = [];
   courses:any=[];
+  offers:any=[];
   user_id:any;
 
   constructor( private _snackBar: MatSnackBar,
@@ -76,12 +78,13 @@ export class MembershipMembersComponent implements OnInit {
                 private _listService: ListService,
                 private _general: GeneralService,
                 private _memberService:MembersService,
-                private tokenStorage: TokenStorageService,) {
+                private tokenStorage: TokenStorageService,
+                private _offerservice: OfferService,) {
                   this.user_id = this.tokenStorage?.getUser().uniqueid;
     this.getallmymembers();
     this.fetchTags();
     this.fetchLists();
-    this.fetchCourses();
+    this.fetchOffers();
 
   }
   ngOnInit(): void {
@@ -101,11 +104,11 @@ fetchLists() {
 });
 }
 
-fetchCourses() {
-  this.courseService.all().subscribe(
-    (data) => {
-      this.courses = data.data;
-      console.log(data)
+fetchOffers() {
+  this._offerservice.fetchoffers().subscribe((resp:any) => {
+      this.offers = resp.data;
+      // console.log(this.offers)
+      
 });
 }
 
@@ -144,9 +147,9 @@ fetchCourses() {
     if(this.selectedLists){
       this.addmemberobj.lists = this.filteredTempIds.lists.toString();
     }
-    this.addmemberobj.courseid = this.filteredTempIds.courses.toString();
+    this.addmemberobj.offerid = this.filteredTempIds.offers.toString();
     if(this.addmemberobj.email && this.isEmailValid(this.addmemberobj.email)) {
-      if(this.addmemberobj.courseid){
+      if(this.addmemberobj.offerid){
       this.hasError = '';
       this.error=false;
       // delete this.addmemberobj.error;
@@ -192,11 +195,16 @@ else{
     this.openDialog(this.adddialog, this.addmemberobj);
   }
   deletemember(){
-    var data = {id:this.member.id,name:'',type:'delete'};
+    var data = {uniqueid:this.member.uniqueid,contactid:this.member.contactid,name:'',type:'delete'};
         this.courseService.updatedelmember(data).subscribe({
           next: data => {
+            if(data.success){
             this.getallmymembers();
             this._general.openSnackBar(false,'Member Deleted Successfully!', 'Close','center','top');
+            }
+            else{
+              this._general.openSnackBar(true,'Member Not Deleted', 'Close','center','top');
+            }
           }
           })
   }
@@ -235,7 +243,7 @@ else{
     })
   }
   resetobj(){
-    this.addmemberobj = {user_id:'',firstname:'',lastname:'',email:'',password : '',phone:'',marketing:false,lists:'',tags:'',courseid:'',registration_type:'free'};
+    this.addmemberobj = {user_id:'',firstname:'',lastname:'',email:'',password : '',phone:'',marketing:false,lists:'',tags:'',offerid:'',registration_type:'free'};
     this.member=[];
     this.filteredOptions.tags=[];
     this.filteredOptions.lists=[];
@@ -245,7 +253,7 @@ else{
     this.filteredTempIds.courses=[];
     this.selectedTags=[];
     this.selectedLists=[];
-    this.selectedcourses=[];
+    this.selectedoffers=[];
   }
 
   searchmembers(search: any, sortInp:any,listInp:any, tagInp:any) {
@@ -265,21 +273,21 @@ else{
 
    // start list actions
 
-   filtercourseData(event:any) {
+   filterofferData(event:any) {
     var value = event ? event.target.value : '';
-    this.filteredOptions.courses = this.courses.filter((option:any) => option?.title?.toLowerCase().includes(value?.toLowerCase()));
+    this.filteredOptions.offers = this.offers.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
 
-  addSelectedcourse(event:any, searchcourseInp:any): void {
-    this.selectedcourses.push(event.option.value);
-    this.filteredTempIds.courses.push(event.option.value.uniqueid);
+  addSelectedoffer(event:any, searchcourseInp:any): void {
+    this.selectedoffers.push(event.option.value);
+    this.filteredTempIds.offers.push(event.option.value.uniqueid);
     searchcourseInp.value = '';
-    this.filtercourseData('');
+    this.filterofferData('');
   }
 
-  removeSelectedcourse(index:number): void {
-    this.selectedcourses.splice(index, 1);
-    this.filteredTempIds.courses.splice(index, 1);
+  removeSelectedoffer(index:number): void {
+    this.selectedoffers.splice(index, 1);
+    this.filteredTempIds.offers.splice(index, 1);
   }
 
   // end list actions

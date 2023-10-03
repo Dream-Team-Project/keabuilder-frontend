@@ -1,0 +1,56 @@
+<div class="bw-login container-fluid">
+    <div class="row">
+      <div class="pt-3 bw-colside ml-4 mt-4">
+        <div class="login-form">
+            <img src="./assets/images/logo/kblogo.png">
+          
+          <p>Enter your details to login to your account:</p> 
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input type="email" matInput placeholder="Ex. email" [formControl]="emailFormControl" required [(ngModel)]="form.email" >
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Username is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('email')">
+                    Username must be valid <strong>Email</strong>
+                  </mat-error>
+                  
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
+                  <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+                    <i class="far" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+                  </button>
+                  <mat-error *ngIf="passwordFormControl.hasError('required')">
+                    Password is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                    Password must be at least <strong>6</strong> characters
+                  </mat-error>
+                </mat-form-field>
+  
+                <div class="d-flex justify-content-between">
+                <button type="submit" mat-raised-button class="mt-3 mr-2 loginbtn" [disabled]="emailFormControl.invalid || passwordFormControl.invalid" (click)="onSubmit()" >Login</button>
+                <button  mat-raised-button class="mt-3 " color="accent"  [routerLink]="['/member/forgot/password']"> Forgot password?</button>
+              </div>
+                <br>
+                <div class="form-group">
+                  <div class="alert alert-danger" role="alert" *ngIf="isLoginFailed">
+                    <i class="fas fa-exclamation-triangle"></i> Login failed: {{ errorMessage }}
+                  </div>
+                </div>
+                <!-- <div>
+                  <span class="txt-light">Don't have an account yet?</span>
+                  <button mat-button [routerLink]="['/register']">Sign Up</button>
+                </div> -->
+             
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="bw-container__bg" [style.backgroundImage]="bgImg"></div>
+      </div>
+    </div>
+  </div>

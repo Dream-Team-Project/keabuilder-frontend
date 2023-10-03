@@ -117,7 +117,7 @@
 <ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Member</h1>
     <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{delobj.email}}</span> member?
+      Would you like to delete <span class="text-danger">{{delobj?.email}}</span> member?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>

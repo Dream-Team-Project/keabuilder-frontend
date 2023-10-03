@@ -590,12 +590,14 @@
                                                 <div class="kb-tab-head">Website Pages</div>
                                                 <div class="kb-tab-content kb-inp-left">
                                                     <mat-select [(ngModel)]="_style.button_link">
-                                                        <mat-option *ngFor="let page of _general.existwebpages"
-                                                            [value]="_general.active_domain+page.page_path"
+                                                        <mat-optgroup *ngFor="let website of _general.existwebpages" [label]="website.title | titlecase">
+                                                        <mat-option *ngFor="let page of website.pages"
+                                                        [value]="'https://'+website.domain+'/'+page.page_path"
                                                             [disabled]="page.publish_status == 0">
                                                             {{page.page_name | titlecase}}<small [attr.data]="'Draft'" class="infoTxt"
                                                                 *ngIf="page.publish_status == 0"></small>
                                                         </mat-option>
+                                                        </mat-optgroup>
                                                     </mat-select>
                                                 </div>
                                             </div>

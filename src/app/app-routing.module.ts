@@ -140,6 +140,13 @@ import { NewMembershipComponent } from './_components/_membership/new-membership
 import { DefaultPageViewComponent } from './_components/default-page-view/default-page-view.component';
 //default page view
 
+// member-routes
+import { MemberLoginComponent } from './_components/course-user/member-login/member-login.component';
+import { MemberDashboardComponent } from './_components/course-user/member-dashboard/member-dashboard.component';
+import { MemberForgotPasswordComponent } from './_components/course-user/member-forgot-password/member-forgot-password.component';
+
+// member-routes
+
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
 const appHost:any = environment.appHost;
@@ -158,6 +165,10 @@ if (currentDomain === appHost) {
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+
+    { path: 'member/login', component : MemberLoginComponent,},
+    { path: 'member/dashboard', component : MemberDashboardComponent,},
+    { path: 'member/forgot/password', component :   MemberForgotPasswordComponent,},
 
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
@@ -385,6 +396,8 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
+    // { path: 'login', component : MemberLoginComponent, data: { domain: currentDomain,path: currentPath,},},
+    // { path: 'library', component : MemberDashboardComponent, data: { domain: currentDomain,path: currentPath,},},
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
@@ -503,5 +516,9 @@ export const RoutingComponents =
     FunnelStepArchiveComponent,
     NewFunnelStepsComponent,
     DefaultPageViewComponent,
+    //member-routes
+    MemberLoginComponent,
+    MemberDashboardComponent,
+    MemberForgotPasswordComponent,
   ];
 
