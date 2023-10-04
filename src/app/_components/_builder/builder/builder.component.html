@@ -173,11 +173,11 @@
                                                     *ngIf="element.setting">
                                                     <span class="kb-handle-block kb-handle-element"><i
                                                             class="fa fa-arrows-alt"></i></span>
-                                                    <span *ngIf="element.content.name != 'form-component' && element.content.name != 'order-form-component' && element.content.name != 'menu'"
+                                                    <span *ngIf="element.content.name != 'form-component' && element.content.name != 'order-form-component' && !element.content.items"
                                                         (click)="openSetting(element)"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
-                                                    <span *ngIf="element.content.name == 'menu'" [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
+                                                    <span *ngIf="element.content.items" [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
                                                         matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
                                                     <span (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
@@ -188,17 +188,19 @@
                                                             class="far fa-trash-alt"></i></span>
                                                     <mat-menu #moresetting="matMenu" xPosition="after" yPosition="below">
                                                         <button mat-menu-item (click)="openSetting(element)">
-                                                            <i class="fas fa-bars"></i> Menu
+                                                            <i class="fas fa-bars"></i> {{element.content.name | titlecase}}
                                                         </button>
                                                         <button mat-menu-item (click)="_style.setItemStyle = true; openSetting(element)">
-                                                            <i class="fas fa-list-ul"></i> Items
+                                                            <i class="fas fa-list-ul"></i> {{element.content.name | titlecase}} Items
                                                         </button>
-                                                        <button mat-menu-item (click)="_style.setDropDownStyle.main = true; openSetting(element)">
-                                                            <i class="fas fa-stream"></i> Dropdown Menu
-                                                        </button>
-                                                        <button mat-menu-item (click)="_style.setDropDownStyle.item = true; openSetting(element)">
-                                                            <i class="far fa-list-alt"></i> Dropdown Items
-                                                        </button>
+                                                        <ng-container *ngIf="element.content.name == 'menu'" >
+                                                            <button mat-menu-item (click)="_style.setDropDownStyle.main = true; openSetting(element)">
+                                                                <i class="fas fa-stream"></i> Dropdown Menu
+                                                            </button>
+                                                            <button mat-menu-item (click)="_style.setDropDownStyle.item = true; openSetting(element)">
+                                                                <i class="far fa-list-alt"></i> Dropdown Items
+                                                            </button>
+                                                        </ng-container>
                                                     </mat-menu>
                                                 </div>
                                                 <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
@@ -307,7 +309,48 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <!-- <app-fetch-menu [menu_element]="element" [isBlockActive]="isBlockActive(element)" ></app-fetch-menu> -->
+                                                </div>
+                                                <div *ngSwitchCase="'courses'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
+                                                class="kb-element-content">
+                                                    <ul class="kb-courses-list"
+                                                    [ngStyle]="isBlockActive(element) && !_style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
+                                                        <li class="kb-course-item kb-content-item"
+                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                            </div>
+                                                            <div>Course Title</div>
+                                                            <div>
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                            </div>
+                                                        </li>
+                                                        <li class="kb-course-item kb-content-item"
+                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                            </div>
+                                                            <div>Course Title</div>
+                                                            <div>
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                            </div>
+                                                        </li>
+                                                        <li class="kb-course-item kb-content-item"
+                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                            </div>
+                                                            <div>Course Title</div>
+                                                            <div>
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                            </div>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                                 <div *ngSwitchCase="'form-component'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
@@ -352,7 +395,7 @@
                                                 <span *ngIf="_style.getDisplay(element.hide)"
                                                     class="kb-block-hidden-icon"><i class="fa fa-eye-slash"
                                                         aria-hidden="true"></i></span>
-                                                <span *ngIf="element.setting && element.redirection.link" class="kb-block-link">
+                                                <span *ngIf="element.setting && element.redirection?.link" class="kb-block-link">
                                                     {{element.redirection.link}}</span>
                                             </div>
                                             <!-- elements end -->
@@ -366,7 +409,7 @@
                                         <!-- add element option end -->
                                         <span *ngIf="_style.getDisplay(column.hide)" class="kb-block-hidden-icon"><i
                                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                                        <span *ngIf="column.setting && column.redirection.link" class="kb-block-link">{{column.redirection.link}}</span>
+                                        <span *ngIf="column.setting && column.redirection?.link" class="kb-block-link">{{column.redirection.link}}</span>
                                     </div>
                                     <!-- columns end -->
                                 </div>
@@ -378,13 +421,13 @@
                                 <!-- add row option end -->
                                 <span *ngIf="_style.getDisplay(row.hide)" class="kb-block-hidden-icon"><i
                                         class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                                <span *ngIf="row.setting && row.redirection.link" class="kb-block-link">{{row.redirection.link}}</span>
+                                <span *ngIf="row.setting && row.redirection?.link" class="kb-block-link">{{row.redirection.link}}</span>
                             </div>
                             <!-- rows end -->
                         </div>
                         <span *ngIf="_style.getDisplay(section.hide)" class="kb-block-hidden-icon"><i
                                 class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                        <span *ngIf="section.setting && section.redirection.link" class="kb-block-link">{{section.redirection.link}}</span>
+                        <span *ngIf="section.setting && section.redirection?.link" class="kb-block-link">{{section.redirection.link}}</span>
                     </div>
                     <!-- sections end -->
                 </div>

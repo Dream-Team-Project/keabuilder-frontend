@@ -72,6 +72,9 @@ export class ElementService {
     // menu
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
+    // courses block
+    courses: { content: { name: 'courses', items: [] }, iconCls: 'fa fa-users' },
+    // courses block
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
     // divider
@@ -657,7 +660,7 @@ export class ElementService {
         tempObj.content.style.dropdown = this._style.defaultStyling(tempObj);
         delete tempObj.dropdownstyle;
       }
-      else if (element.name == 'form' || element.name == 'divider') {
+      else if (element.name == 'form' || element.name == 'divider' || element.name == 'courses') {
         respS = { 'width': '100%' };
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),

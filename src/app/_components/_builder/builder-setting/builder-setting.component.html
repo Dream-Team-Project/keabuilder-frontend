@@ -1064,11 +1064,6 @@
                     <mat-tab label="Column" *ngIf="searchingTab('Column') && _general.selectedBlock.type == 'row'">
                         <div *ngIf="searchingDeep('Column Structure')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Structure</div>
-                            <div class="kb-cs-prev kb-row">
-                                <div *ngFor="let column of _general.selectedBlock.columnArr, index as index"
-                                    [class]="_general.selectedBlock.rowSize">
-                                </div>
-                            </div>
                             <div class="kb-cs-contain">
                                 <ul class="kb-drag-container" cdkDropList
                                     [cdkDropListData]="_general.selectedBlock.columnArr"

@@ -681,9 +681,6 @@ export class GeneralService {
     },
     diskCache: true,
   };
-  includeCond:string = `if(file_exists('../'.$path)) include('../'.$path); else if(file_exists($path)) include($path);`;
-  pagehtml:any;
-  pageObj:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
   parser = new DOMParser();
   loading = {
@@ -848,25 +845,6 @@ export class GeneralService {
         }
         else resolve(false);
       });
-    })
-  }
-
-  setMenu(html:any) {
-    return new Promise<any>((resolve, reject) => {
-      var doc = this.parser.parseFromString(html, 'text/html');
-      var appendmenus = doc.querySelectorAll('[data-name="menu"]');
-      if(appendmenus.length == 0) resolve(doc);
-      appendmenus.forEach((data:any, index:number)=>{
-        if(data) {
-          var menu = this.menus.filter((m:any)=>m.id == data.getAttribute('data-id'))
-          if(menu.length != 0) {
-            data.innerHTML = menu[0].html;
-            if(appendmenus.length-1 == index) {
-              resolve(doc);
-            }
-          }
-        }
-      })
     })
   }
 
@@ -1253,11 +1231,11 @@ export class GeneralService {
   }
 
   isAllHide(hide:any): boolean {
-    return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile;
+    return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile && hide.hover;
   }
 
   someComplete(hide:any): boolean {
-    return (hide.desktop || hide.tablet_h || hide.tablet_v || hide.mobile) && !this.isAllHide(hide);
+    return (hide.desktop || hide.tablet_h || hide.tablet_v || hide.mobile || hide.hover) && !this.isAllHide(hide);
   }
 
   setAll( hide: any, completed: boolean) {
@@ -1265,6 +1243,7 @@ export class GeneralService {
     hide.tablet_h = completed;
     hide.tablet_v = completed;
     hide.mobile = completed;
+    hide.hover = completed;
   }
 
   expandDevList(id:string) {
