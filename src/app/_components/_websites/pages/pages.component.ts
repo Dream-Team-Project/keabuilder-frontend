@@ -333,7 +333,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         this.websiteService.getuniqwebsites(dt).subscribe({
           next: data => {
             if(data?.length != 0) {
-              // console.log(data);
+              console.log(data);
               data.data.forEach((element:any) => {
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
                 // console.log(this.searchpagetxt);
@@ -344,8 +344,10 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 }
                 // console.log(this.mydomain);
               });
-              // console.log(data);
-              var tempsearch = [];
+              console.log(dataA);
+             
+              if(this.website_id){
+                let tempsearch = [];
               for(var i = 0; i < dataA.data.length; i++) {
                 var element = dataA.data[i];
                 var mycustomdate =  new Date(element.updated_at);
@@ -363,7 +365,25 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 }
               }
             }
+            else{
+              // let temp=[];
+              dataA.data.forEach((element1:any)=>{
+                element1.pages.map((element:any)=>{
+                  var mycustomdate =  new Date(element.updated_at);
+                  var text1 = mycustomdate.toDateString();    
+                  var text2 = mycustomdate.toLocaleTimeString();
+                  element.updated_at = text1+' '+text2;
+                  element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
+                  element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+                  this.kbpages.push(element);
+                  // console.log(dataA.data.length-1 == i)
+
+                })
+                })
+            }
+            }
             this.spinner=false;
+            this.searching=false;
           }
         });    
       }

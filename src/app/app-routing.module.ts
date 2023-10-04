@@ -398,8 +398,8 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
-    // { path: 'login', component : MemberLoginComponent, data: { domain: currentDomain,path: currentPath,},},
-    // { path: 'library', component : MemberDashboardComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'login', component : MemberLoginComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'library', component : MemberDashboardComponent, data: { domain: currentDomain,path: currentPath,},},
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
