@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatDialog } from '@angular/material/dialog';
 import { CheckoutService } from 'src/app/_services/_sales/checkout.service';
+import { CourseService } from 'src/app/_services/_membership/course.service';
 
 @Component({
   selector: 'app-offer',
@@ -24,6 +25,7 @@ export class OfferComponent implements OnInit {
     payment_type: 'free'
   }
   hasError:boolean = false;
+  error:boolean = false;
   emails:Array<any> = [];
   selectedEmail = '';
   filteredEmails:Array<any> = [];
@@ -33,6 +35,14 @@ export class OfferComponent implements OnInit {
   filteredstripeproducts:Array<any> = [];
   selectedProducts:Array<any> = [];
   filteredProducts:Array<any> = [];
+  courses:Array<any> = [];
+  filteredOptions:any = {
+    courses:[],
+  };
+  filteredTempIds:any = {
+    courses:[],
+  };
+  selectedcourses:any = [];
   isPaymentConnected:boolean = true;
   issmtpConnected:boolean = true;
   currencies = [
@@ -69,6 +79,7 @@ export class OfferComponent implements OnInit {
     private _email: EmailService,
     public _general: GeneralService,
     public _image: ImageService,
+    private _course: CourseService,
     private checkoutService: CheckoutService,) {
     this._route.paramMap.subscribe((params: ParamMap) => {
         this.offer.uniqueid = params.get('uniqueid');
@@ -82,6 +93,7 @@ export class OfferComponent implements OnInit {
     this.fetchstripeProducts();
     this.fetchpaymentdetails();
     this.fetchsmtpdetails();
+    this.fetchCourses();
   }
 
   openDialog(templateRef: TemplateRef<any>) {
@@ -120,6 +132,8 @@ export class OfferComponent implements OnInit {
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
       if(resp.success) {
         this.offer = resp.data;
+        this.filteredTempIds =resp.data?.temp_courseid;
+        this.selectedcourses=resp.data?.temp_courses;
         if(this.offer.currency) {
           let cur = JSON.parse(this.offer.currency);
           this.offerCurrency = this.currencies.filter((c:any) => c.code == cur.code)[0];
@@ -133,6 +147,13 @@ export class OfferComponent implements OnInit {
       this.fetching = false;
     });
   }
+  fetchCourses() {
+    this._course.all().subscribe((res:any)=>{
+      this.courses = res.data;
+    //  console.log(res.data)
+    }); 
+  
+}
 
   isEmailValid() {
     return this.offer.email_type == 'none' || (this.offer.email_type =='template' && this.offer.email_id) || (this.offer.email_type =='custom' && this.offer.email_subject && this.offer.email_content);
@@ -148,6 +169,7 @@ export class OfferComponent implements OnInit {
       if(this.isPaymentValid()){
         if(this.isEmailValid()){
           if(this.selectedProducts.length != 0) this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.uniqueid).join(',');
+          this.offer.courseid=this.filteredTempIds?.courses?.length > 0 ? this.filteredTempIds.courses.toString() : '';
           this._offer.updateoffer(this.offer).subscribe((resp:any) => {
             if(resp.success) this.fetchOffer();
             this._general.openSnackBar(!resp.success, resp?.message, 'OK', 'center', 'top');
@@ -290,4 +312,24 @@ export class OfferComponent implements OnInit {
   gotobuilder(){
     this._general.redirectToBuilder(this.offer.uniqueid, 'checkout');
   }
+     // start course actions
+
+     filtercourseData(event:any) {
+      var value = event ? event.target.value : '';
+      this.filteredOptions.courses = this.courses.filter((option:any) => option?.title?.toLowerCase().includes(value?.toLowerCase()));
+    }
+  
+    addSelectedcourse(event:any, searchcourseInp:any): void {
+      this.selectedcourses.push(event.option.value);
+      this.filteredTempIds.courses.push(event.option.value.uniqueid);
+      searchcourseInp.value = '';
+      this.filtercourseData('');
+    }
+  
+    removeSelectedcourse(index:number): void {
+      this.selectedcourses.splice(index, 1);
+      this.filteredTempIds.courses.splice(index, 1);
+    }
+  
+    // end offer actions
 }

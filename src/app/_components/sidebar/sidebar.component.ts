@@ -200,7 +200,14 @@ export class SidebarComponent implements OnInit {
         img: 'shield.gif',
         icon: 'fa fa-shopping-cart',
         title: 'Marketplace'
-      }
+      },
+      {
+      0:true,
+      routerlink: '/membership/customization',
+      img: 'shield.gif',
+      icon: 'fa-solid fa-gear',
+      title: 'Customization',
+    },
       ]
     },
     // {

@@ -593,7 +593,7 @@ fetchLists() {
   }
 
   openDialog(post:any, type:string,templateRef: TemplateRef<any>,) {
-    if(type=='delet') this.delobj=post;
+    if(type=='delete') this.delobj=post;
     this.post = JSON.parse(JSON.stringify(post));
     if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
     this.post.type = type;
@@ -696,10 +696,16 @@ fetchLists() {
     return str.toUpperCase();
   }
   deletemember(){
-    var data = {id:this.delobj.id,name:'',type:'delete'};
+    var data = {uniqueid:this.delobj.uniqueid,contactid:this.delobj.contactid,name:'',type:'delete'};
         this._course.updatedelmember(data).subscribe({
           next: data => {
+            if(data.success){
+              this.fetchcoursemembers();
             this._general.openSnackBar(false,'Member Deleted Successfully!', 'Close','center','top');
+            }
+            else{
+              this._general.openSnackBar(true,'Member Not Deleted', 'Close','center','top');
+            }
           }
           })
   }

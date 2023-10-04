@@ -356,7 +356,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
                 tempsearch.push(element);
                 // console.log(dataA.data.length-1 == i)
-                if(dataA.data.length-1 == i) {
+                if(dataA.data.length - 1 == i) {
                   this.kbpages = tempsearch;
                   this.searching = false;
                   // console.log(this.kbpages)

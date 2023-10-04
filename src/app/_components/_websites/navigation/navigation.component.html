@@ -38,6 +38,40 @@
                 </mat-form-field>
                 <div *ngIf="selfrom.value == 'website' else funnel">
                     <div class="kb-inner-pages px-3 pb-3">
+                        <mat-accordion>
+                            <h6 *ngIf="webpages.length == 0" class="kb-fade-text">You don't have any funnels</h6>
+                            <mat-expansion-panel *ngFor="let website of webpages | filter:searchText.value:'title', index as fi"  [expanded]="_general.expPanelStep === fi"
+                                (opened)="_general.setExpPanelStep(0)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{website.title | titlecase}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div cdkDropList [cdkDropListData]="website.pages" cdkDropListSortingDisabled>
+                                    <div cdkDrag [cdkDragData]="page" *ngFor="let page of website.pages"
+                                        class="py-1">
+                                        <div *cdkDragPreview class="custom-preview">{{page.page_name | titlecase}}
+                                        </div>
+                                        <div *cdkDragPlaceholder class="custom-placeholder px-3 py-2">Drop here
+                                        </div>
+                                        <div class="kb-menu-pages kb-has-icon">
+                                            <div cdkDragHandle matTooltip="Drag to add" matTooltipPosition="above"
+                                                class="px-3 py-2 w-100 d-flex justify-content-between">
+                                                <span>{{page.page_name | titlecase}}</span>
+                                                <!-- <span class="kb-tag kb-info-tag">{{page.funneltype}}</span> -->
+                                            </div>
+                                            <span matTooltip="Preview" matTooltipPosition="above"
+                                                class="border-left">
+                                                <i class="fa fa-external-link-alt px-3 py-2"
+                                                    (click)="redirectLink('https://'+website.domain+'/'+page.page_path)"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <!-- <div class="kb-inner-pages px-3 pb-3">
                         <div cdkDropList [cdkDropListData]="webpages" cdkDropListSortingDisabled>
                             <h6 *ngIf="webpages.length == 0" class="kb-fade-text">You don't have any website pages</h6>
                             <div cdkDrag [cdkDragData]="page" *ngFor="let page of webpages | filter:searchText.value:'page_name'" class="py-1">
@@ -57,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <ng-template #funnel>
                     <div class="kb-inner-pages px-3 pb-3">

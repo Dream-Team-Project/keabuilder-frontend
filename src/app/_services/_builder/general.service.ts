@@ -1192,8 +1192,9 @@ export class GeneralService {
   }
 
   getAllWebPages() {
-    this.webPageService.getWebpages().subscribe(pages=>{
-      this.existwebpages = pages.data;
+    this.webPageService.getWebpages().subscribe(resp=>{
+      this.existwebpages = resp.data;
+      //  console.log(resp.data);
     });
   }
 
@@ -1370,8 +1371,8 @@ export class GeneralService {
   }
 
   redirectToPageNotFound() {
-    console.log('redirect');
-    // window.location.href = './page-not-found';
+    // console.log('redirect');
+    window.location.href = './page-not-found';
   }
 
   setStorage(key:string, value:any) {

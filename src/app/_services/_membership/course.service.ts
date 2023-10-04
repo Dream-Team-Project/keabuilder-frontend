@@ -89,6 +89,9 @@ export class CourseService {
   getallmembers():Observable<any> {
     return this.http.get("/api/membership_allmembers/"+this.uuid);
   }
+  getsinglemember(uniqueid:any):Observable<any> {
+    return this.http.get("/api/membership_singlemember/"+this.uuid+'/'+uniqueid);
+  }
 
   updatedelmember(data:any):Observable<any> {
     data.user_id=this.uuid;

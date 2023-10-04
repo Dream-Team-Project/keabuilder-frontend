@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { of, Observable, BehaviorSubject } from 'rxjs';
+import {  Observable} from 'rxjs';
 
 
 const httpOptions = {
@@ -17,9 +17,9 @@ export class MembersService {
 
   constructor(private http: HttpClient) { }
 
-  memberlogin(username: string, password: string): Observable<any> {
+  memberlogin(email: string, password: string): Observable<any> {
     return this.http.post(this.AUTH_API + 'signin', {
-      username,
+      email,
       password
     }, httpOptions);
   }
@@ -35,15 +35,15 @@ export class MembersService {
   }
 
   memberforgetPassword(email: string, location:string,type:string): Observable<any>{
-    return this.http.post('/api/member-reset-password-email', {
+    return this.http.post('/api/reset-member-password-email', {
       email,
       location,
       type
     }, httpOptions);
   }
 
-  onupdatePassword(password: string, token: string): Observable<any>{
-    return this.http.post('/api/update-password', {
+  onupdatememberPassword(password: string, token: string): Observable<any>{
+    return this.http.post('/api/update-member-password', {
       password,
       token
     }, httpOptions);
@@ -53,12 +53,6 @@ export class MembersService {
     return this.http.get('/api/getuser/'+id);
   }
 
-  onupdateprojectid(id: string, wistiaid: string): Observable<any>{
-    return this.http.post(this.AUTH_API + 'wistiaprojectidupdate', {
-      id,
-      wistiaid
-    }, httpOptions);
-  }
   duplicatecheck(obj:any): Observable<any>{
     return this.http.post('/api/duplicateemail_username',obj);
   }
