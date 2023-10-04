@@ -51,8 +51,8 @@ export class ElementService {
       content: {
         name: 'video',
         type: 'video',
-        iframe: '<iframe width="560" height="315" src="http://localhost:4200/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
-        src: 'http://localhost:4200/assets/videos/movie.mp4',
+        iframe: '<iframe width="560" height="315" src="http://app.keabuilder.com/assets/videos/movie.mp4" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
+        src: 'http://app.keabuilder.com/assets/videos/movie.mp4',
         autoplay: false,
         muted: false,
         loop: false,
@@ -72,6 +72,9 @@ export class ElementService {
     // menu
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
+    // courses block
+    courses: { content: { name: 'courses', items: [] }, iconCls: 'fa fa-users' },
+    // courses block
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
     // divider
@@ -657,7 +660,7 @@ export class ElementService {
         tempObj.content.style.dropdown = this._style.defaultStyling(tempObj);
         delete tempObj.dropdownstyle;
       }
-      else if (element.name == 'form' || element.name == 'divider') {
+      else if (element.name == 'form' || element.name == 'divider' || element.name == 'courses') {
         respS = { 'width': '100%' };
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),

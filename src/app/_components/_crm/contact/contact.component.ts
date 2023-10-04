@@ -9,6 +9,8 @@ import { FieldService } from 'src/app/_services/_crm/field.service';
 import { ListService } from '../../../_services/_crm/list.service';
 import { TagService } from '../../../_services/_crm/tag.service';
 import { MailerService } from 'src/app/_services/mailer.service';
+import { OfferService } from 'src/app/_services/_sales/offer.service';
+import { CourseService } from 'src/app/_services/_membership/course.service';
 
 @Component({
   selector: 'app-crm-contact',
@@ -24,6 +26,8 @@ export class CrmContactComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fetching:boolean = true;
   contact:any = {};
+  member:any = {};
+  offers:any = {};
   fields:Array<any> = [];
   contactFields:Array<any> = [];
   contactFieldJSON:Array<any> = [];
@@ -34,12 +38,15 @@ export class CrmContactComponent implements OnInit {
   tags:any= [];
   selectedLists:any = [];
   selectedTags:any = [];
+  selectedoffers:any = [];
   newtags: any = [];
   filteredTempIds:any = {
+    offers:[],
     lists: [],
     tags: []
   };
   filteredOptions:any = {
+    offers:[],
     lists: [],
     tags: []
   };
@@ -65,10 +72,21 @@ export class CrmContactComponent implements OnInit {
     private _listService: ListService,
     private _tagService: TagService,
     private MailerService: MailerService,
+    private _offerservice: OfferService,
+    private courseService:CourseService,
   ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.contact.uniqueid = params.get('uniqueid');
-    });   
+    }); 
+    this._route.paramMap.subscribe((params: ParamMap) => { 
+      this.member.uniqueid=params.get('memberid');
+      if(params.get('memberid')) {
+      this.fetchmember(params.get('memberid'));
+      }
+      else{
+        this.fetchmember(params.get('uniqueid'));
+      }
+    })  
   }
 
   ngOnInit(): void {
@@ -79,6 +97,7 @@ export class CrmContactComponent implements OnInit {
     this.fetchContact();
       this.fetchLists();
         this.fetchTags();
+        this.fetchOffers();
           this.fetching = false;
   }
   fetchContact() {
@@ -145,7 +164,23 @@ export class CrmContactComponent implements OnInit {
     })
    
   }
-
+  fetchmember(uniqueid:any){
+    this.courseService.getsinglemember(uniqueid).subscribe((data:any)=>{
+      if(data.success){
+      this.member=data?.data[0];
+      this.selectedoffers=this.member?.temp_offers;
+      this.filteredTempIds.offers=this?.member.offer_id;
+      }
+      // console.log(data)
+    })
+  }
+  fetchOffers() {
+    this._offerservice.fetchoffers().subscribe((resp:any) => {
+        this.offers = resp?.data;
+        // console.log(this.offers)
+        
+  });
+  }
   undoField(cf:any, i:number) {
     cf.value = this.contactFieldJSON[i].value;
     cf.edit = false;
@@ -287,6 +322,43 @@ export class CrmContactComponent implements OnInit {
     event.chipInput!.clear();
     this.tagCtrl.setValue(null);
   }
+
+   // start offer actions
+
+   filterofferData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.offers = this.offers.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  addSelectedoffer(event:any, searchcourseInp:any): void {
+    this.selectedoffers.push(event.option.value);
+    this.filteredTempIds.offers.push(event.option.value.uniqueid);
+    this.updatememberOffer(this.member);
+    searchcourseInp.value = '';
+    this.filterofferData('');
+  }
+
+  removeSelectedoffer(index:number): void {
+    this.selectedoffers.splice(index, 1);
+    this.filteredTempIds.offers.splice(index, 1);
+    this.updatememberOffer(this.member);
+  }
+
+  // end offer actions
+
+  updatememberOffer(member:any) {
+    member.type='update';
+    member.offerid= this.filteredTempIds.offers.toString();
+    member.contactid=this.contact.uniqueid;
+    member.registration_type = member?.registration_type  ? member?.registration_type : 'free';
+    console.log(member)
+    this.courseService.updatedelmember(member).subscribe((resp:any)=>{
+      if(resp.success)  this._general.openSnackBar(false, resp.message, 'OK', 'center', 'top');
+
+    })
+  
+  }
+
   update_static(){
     this.contact.lists=this.filteredTempIds.lists.toString();
     this.contact.tags=this.filteredTempIds.tags.toString();

@@ -45,6 +45,7 @@ export class FileUploadService {
   // images
   uploadScreenShotApi = "/api/uploadscreenshot";
   uploadImageApi = "/api/uploadimage";
+  uploadfaviconApi = "/api/uploadfavicon_logo";
   getAllImgsApi = "/api/getallimgs";
   saveOnDBApi = "/api/saveondb";
   updateOnDBApi = "/api/updateondb";
@@ -465,6 +466,15 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
     // Make http post request over api
     // with formData as req
     return this.http.post(this.uploadImageApi, formData)
+    .pipe(catchError(this.errorHandler));
+  }
+  uploadfavicon(file: any):Observable<any> {
+    // Create form data
+    const formData = new FormData();
+    formData.append('uploadedImage', file, file.name);
+    // Make http post request over api
+    // with formData as req
+    return this.http.post(this.uploadfaviconApi, formData)
     .pipe(catchError(this.errorHandler));
   }
 

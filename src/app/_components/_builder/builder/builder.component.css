@@ -184,26 +184,12 @@ div.kb-column.kb-block-container:not(:last-child)::after {
     border-width: 0px;
 }
 
-.kb-cs-contain,
-.kb-cs-prev {
+.kb-cs-contain {
     width: 90%;
 }
 
 .kb-cs-contain {
     margin: auto;
-}
-
-.kb-cs-prev {
-    display: flex;
-    margin: 10px auto;
-}
-
-.kb-cs-prev>div {
-    background: var(--primary-color);
-    height: 30px;
-    margin: 0px 3px;
-    border-radius: 4px;
-    animation: bounce 0.2s ease;
 }
 
 .kb-cs-contain .kb-cs {
@@ -1338,7 +1324,7 @@ ul.kb-menu a, ul.kb-menu li {
 
   /* loader */
 
-  span.kb-element-info, span.kb-btn-link {
+  span.kb-element-info, span.kb-btn-link, span.kb-block-link {
     background-color: rgb(69 69 69 / 60%);
     position: absolute;
     color: #fff;
@@ -1349,6 +1335,16 @@ ul.kb-menu a, ul.kb-menu li {
     border-radius: 3px;
     animation: show 0.2s ease;
     z-index: 99;
+}
+
+span.kb-block-link {
+    top: 0px;
+    bottom: auto;
+}
+
+.kb-section .kb-row.kb-block-container>span.kb-block-link {
+    left: auto;
+    right: 0px;
 }
 
   .kb-code-block {
@@ -1432,3 +1428,20 @@ app-page-view .kb-drag-container {
 }
 
 /* menu responsiveness */
+
+.kb-courses-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.kb-course-item {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    width: 33.3333333333%;
+}

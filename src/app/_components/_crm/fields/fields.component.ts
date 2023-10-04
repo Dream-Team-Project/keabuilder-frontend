@@ -13,6 +13,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 export class CrmFieldsComponent implements OnInit {
 
   @Input ('field_list') field_list:boolean = true;
+  @Output ('fetch_fields') fetch_fields: EventEmitter<any> = new EventEmitter();
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
   @ViewChild('fieldlists') fieldlists!: TemplateRef<any>;
 
@@ -30,10 +31,10 @@ export class CrmFieldsComponent implements OnInit {
     private _field: FieldService,
     private _general: GeneralService
     ) { 
-      this.fetchFields();
     }
 
   ngOnInit(): void {
+    if(this.field_list) this.fetchFields();
   }
 
   adjustdata(data:any){
@@ -43,6 +44,7 @@ export class CrmFieldsComponent implements OnInit {
 
   fetchFields() {
     this._field.fetchfields().subscribe((resp:any)=>{
+      this.fetch_fields.emit(resp?.data);
       this.adjustdata(resp?.data);
     })
   }

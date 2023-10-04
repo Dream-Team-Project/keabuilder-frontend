@@ -15,11 +15,11 @@
 <ng-template #delfield>
     <h1 mat-dialog-title class="kb-danger">Delete Field</h1>
     <div mat-dialog-content>
-      Would you like to delete <span class="text-danger">{{selField.label | titlecase}}</span> field?
+      Would you like to delete <span class="kb-danger">{{selField.label | titlecase}}</span> field?
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
-      <button mat-button mat-dialog-close (click)="deleteField(selField)" class="text-danger">Yes</button>
+      <button mat-button mat-dialog-close (click)="deleteField(selField)" class="kb-danger">Yes</button>
     </div>
 </ng-template>
 <ng-template #fieldsetting>
@@ -71,7 +71,7 @@
     </div>
     <div mat-dialog-actions>
         <mat-checkbox class="mr-auto" [(ngModel)]="selField.required">Required</mat-checkbox>
-        <button mat-button mat-dialog-close class="text-danger">Cancel</button>
+        <button mat-button mat-dialog-close class="kb-danger">Cancel</button>
         <button mat-button mat-dialog-close (click)="setField(selField)" cdkFocusInitial color="primary">{{selField.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>

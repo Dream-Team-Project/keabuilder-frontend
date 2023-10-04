@@ -114,7 +114,7 @@ export class StyleService {
   background_gradient: any = { type: 'linear', radial_direction: 'center', start: '#1867c0', end: '#dea641', direction: 45, startPosition: 0, endPosition: 100 };
   background_gradient_types: any = ['linear', 'radial']
   background_gradient_radial_directions: any = ['center', 'top left', 'top', 'top right', 'right', 'bottom left', 'bottom', 'bottom right', 'left']
-  background_image:any = { name: 'no-image.png', size: 'cover', position: 'center', repeat: { name: 'no repeat', value: 'no-repeat' }, attachment: 'scroll'};
+  background_image:any = { name: '', size: 'cover', position: 'center', repeat: { name: 'no repeat', value: 'no-repeat' }, attachment: 'scroll'};
   background_image_sizes = ['cover', 'contain', 'auto'];
   background_image_positions = ['top left', 'top center', 'top right', 'center', 'bottom left', 'bottom center', 'bottom right'];
   background_image_repeats = [{ name: 'no repeat', value: 'no-repeat' }, { name: 'repeat', value: 'repeat' }, { name: 'repeat x (horizontal)', value: 'repeat-x' }, { name: 'repeat y (vertical)', value: 'repeat-y' }, { name: 'space', value: 'sapce' }, { name: 'round', value: 'round' }];
@@ -1255,6 +1255,11 @@ export class StyleService {
       this.widthRange.value = '500';
       return this.imageStyling();
     }
+    else if(block.content.name == 'courses') {
+      this.width.value = '33%';
+      this.widthRange.value = '33';
+      return this.textStyling();
+    }
     else {
       return this.textStyling();
     }
@@ -1276,7 +1281,7 @@ export class StyleService {
 
   resetBackgroundImage() {
     this.background_type = 'color';
-    this.background_image.name = 'no-image.png';
+    this.background_image.name = '';
     this.background_image.size = 'cover';
     this.background_image.position = 'center';
     this.background_image.repeat = { name: 'no repeat', value: 'no-repeat' };
@@ -1629,9 +1634,7 @@ export class StyleService {
     var obj = this.setDropDownStyle.item ? element.style.dropdown : this.getBlockStyle(element.style);
     if(element.name == 'menu' && !this.setItemStyle && !this.setDropDownStyle.item) {
       this._general.menus.forEach((menu:any)=>{
-        if(menu.id == element.data_id) {
-          this._general.selectedMenu = menu;
-        }
+        if(menu.uniqueid == element.data_id) this._general.selectedMenu = menu;
       })
     }
     if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle || this.setDropDownStyle.item) {

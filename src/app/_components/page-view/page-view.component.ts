@@ -60,6 +60,8 @@ export class PageViewComponent implements OnInit {
         const routeData:any = this.route.snapshot.data;
         const domain = routeData.domain;
         const path = routeData.path;
+        // const domain = 'hello.keapages.com';
+        // const path = '/member/login'
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -270,7 +272,6 @@ export class PageViewComponent implements OnInit {
   }
 
   redirectLink(redir:any) {
-    console.log(redir);
     if(redir?.link) window.open(redir.link, redir.target);
   }
 

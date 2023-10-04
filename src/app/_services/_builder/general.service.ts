@@ -19,12 +19,11 @@ import { NavigationService } from '../navigation.service';
 })
 
 export class GeneralService {
-  userdomain:string = 'keapages.com';
+  active_domain:string = '';
   includeLayout:any = {header:true, footer:true};
   user:any;
   autosave:any = '';
   autosaveopt:any = [{value:10, unit:'sec'}, {value:30, unit:'sec'}, {value:1, unit:'min'}, {value:2, unit:'min'}, {value:5, unit:'min'}];
-  subdomain:string = '';
   timezone:any=[{ value:"Default",name:"Default"},
     { value:"Africa/Abidjan",name:"Africa/Abidjan"},
     { value:"Africa/Accra",name:"Africa/Accra"},
@@ -682,9 +681,6 @@ export class GeneralService {
     },
     diskCache: true,
   };
-  includeCond:string = `if(file_exists('../'.$path)) include('../'.$path); else if(file_exists($path)) include($path);`;
-  pagehtml:any;
-  pageObj:any;
   pagestyling = {desktop: '', tablet_h: '', tablet_v: '', mobile: '', hover: ''};
   parser = new DOMParser();
   loading = {
@@ -728,7 +724,6 @@ export class GeneralService {
         this.user = {...this.user, ...data.data[0]};
         this.user.name = this.user.username;
         this.main.author = this.user.name;
-        this.subdomain = 'https://'+this.joinWthDash(this.user.subdomain)+'.'+this.userdomain+'/';
         this.screenWidth = window.innerWidth;  
         this.screenHeight = window.innerHeight; 
       })
@@ -853,25 +848,6 @@ export class GeneralService {
     })
   }
 
-  setMenu(html:any) {
-    return new Promise<any>((resolve, reject) => {
-      var doc = this.parser.parseFromString(html, 'text/html');
-      var appendmenus = doc.querySelectorAll('[data-name="menu"]');
-      if(appendmenus.length == 0) resolve(doc);
-      appendmenus.forEach((data:any, index:number)=>{
-        if(data) {
-          var menu = this.menus.filter((m:any)=>m.id == data.getAttribute('data-id'))
-          if(menu.length != 0) {
-            data.innerHTML = menu[0].html;
-            if(appendmenus.length-1 == index) {
-              resolve(doc);
-            }
-          }
-        }
-      })
-    })
-  }
-
   setHeader(headid:any) {
     return new Promise<any>((resolve, reject) => {
       this.selectedHeader = {id: headid};
@@ -890,19 +866,25 @@ export class GeneralService {
   
   setBuilder(e:any) {
     return new Promise<any>((resolve, reject) => {
-      if(e.data.length == 0) this.redirectToPageNotFound();
-      this.webpage = e.data[0];
-      this.main.name = this.webpage.page_name;
-      this.main.title = this.webpage.page_title;
-      this.main.path = this.webpage.page_path;
-      this.main.website_id = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
-      if(this.webpage.page_description) this.main.description = this.webpage.page_description;
-      if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
-      this.main.author = this.webpage.page_author;
-      var status = this.webpage.publish_status == 1;
-      this.main.publish_status = status;
-      this.main.dir = status ? 'pages' : 'drafts';
-      resolve(e);
+      if(e.data.length == 0) {
+        this.redirectToPageNotFound();
+        reject(e);
+      }
+      else {
+        this.webpage = e.data[0];
+        this.main.name = this.webpage.page_name;
+        this.main.title = this.webpage.page_title;
+        this.main.path = this.webpage.page_path;
+        this.main.website_id = this.webpage.funnelid ? this.webpage.funnelid : this.webpage.website_id;
+        if(this.webpage.page_description) this.main.description = this.webpage.page_description;
+        if(this.webpage.page_keywords) this.main.keywords = this.webpage.page_keywords.split(',');
+        this.main.author = this.webpage.page_author;
+        var status = this.webpage.publish_status == 1;
+        this.main.publish_status = status;
+        this.main.dir = status ? 'pages' : 'drafts';
+        this.active_domain = 'https://'+e.domain+'/';
+        resolve(e);
+      }
     })
   }
 
@@ -1210,8 +1192,9 @@ export class GeneralService {
   }
 
   getAllWebPages() {
-    this.webPageService.getWebpages().subscribe(pages=>{
-      this.existwebpages = pages.data;
+    this.webPageService.getWebpages().subscribe(resp=>{
+      this.existwebpages = resp.data;
+      //  console.log(resp.data);
     });
   }
 
@@ -1219,10 +1202,10 @@ export class GeneralService {
     this.funnelService.getallfunnelandstep().subscribe(data=>{
       var steps = data.data;
       this.funnels = data.data2;
-      this.funnels.forEach((fp:any)=>{
-        fp.steps = [];
+      this.funnels.forEach((f:any)=>{
+        f.steps = [];
         steps.forEach((s:any)=>{
-          if(fp.uniqueid == s.funnelid) fp.steps.push(s);
+          if(f.uniqueid == s.funnelid) f.steps.push(s);
         })
       })
     })
@@ -1249,11 +1232,11 @@ export class GeneralService {
   }
 
   isAllHide(hide:any): boolean {
-    return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile;
+    return hide.desktop && hide.tablet_h && hide.tablet_v && hide.mobile && hide.hover;
   }
 
   someComplete(hide:any): boolean {
-    return (hide.desktop || hide.tablet_h || hide.tablet_v || hide.mobile) && !this.isAllHide(hide);
+    return (hide.desktop || hide.tablet_h || hide.tablet_v || hide.mobile || hide.hover) && !this.isAllHide(hide);
   }
 
   setAll( hide: any, completed: boolean) {
@@ -1261,6 +1244,7 @@ export class GeneralService {
     hide.tablet_h = completed;
     hide.tablet_v = completed;
     hide.mobile = completed;
+    hide.hover = completed;
   }
 
   expandDevList(id:string) {
@@ -1387,6 +1371,7 @@ export class GeneralService {
   }
 
   redirectToPageNotFound() {
+    // console.log('redirect');
     window.location.href = './page-not-found';
   }
 
