@@ -6,7 +6,7 @@ import { LessonService } from 'src/app/_services/_membership/lesson.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { asapScheduler } from 'rxjs';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -96,17 +96,17 @@ export class MembershipModulesComponent implements OnInit {
   // ng events
 
   ngOnInit(): void {
-    this._course.single(this.course.uniqueid).subscribe(res=>{
-        var getofferid = res.data[0].offers;
-        if(getofferid!=''){
-          var newob = {id:getofferid};
-          this._course.getoffersbyids(newob).subscribe(res=>{
-            // console.log(res);
-            this.showcourseoffers = res.data;
-          });
+    // this._course.single(this.course.uniqueid).subscribe(res=>{
+    //     var getofferid = res.data[0].offers;
+    //     if(getofferid!=''){
+    //       var newob = {id:getofferid};
+    //       this._course.getoffersbyids(newob).subscribe(res=>{
+    //         // console.log(res);
+    //         this.showcourseoffers = res.data;
+    //       });
           
-        }
-    })
+    //     }
+    // })
     this.fetchcoursemembers();
   }
 

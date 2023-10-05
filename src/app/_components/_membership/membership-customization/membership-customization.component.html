@@ -1,8 +1,8 @@
     <div class="container-fluid">
       <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
       <div class="row align-items-center mobkeaadjust">
-
-            <mat-form-field  appearance="fill" class="col-md-3 pr-2">
+        
+            <mat-form-field  appearance="fill" class="col-md-5 pr-2">
               <mat-label></mat-label>
               <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility)" placeholder="Search Pages">
               <i class="fa-solid fa-magnifying-glass"></i>
@@ -27,7 +27,7 @@
               </mat-select>
             </mat-form-field>
         
-        <div class="col-md-5 text-right align-items-center pl-0 m-0" >
+        <div class="col-md-3 text-right align-items-center pl-0 m-0" >
             <button mat-raised-button [color]="'accent'" (click)="togglepageview()" *ngIf="!nodata" class="ml-3">
               <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list pl-1"></i></span>
               <ng-template #gridview><span>Grid View <i class="fas fa-th pl-1"></i></span></ng-template>

@@ -1256,7 +1256,7 @@ export class GeneralService {
 
   expandAll(ele:any, action:boolean) {
     ele.querySelectorAll('UL').forEach((temp: any)=>{
-      !action ? temp.classList.add('kb-d-none') : temp.classList.remove('kb-d-none');;
+      !action ? temp.classList.add('kb-d-none') : temp.classList.remove('kb-d-none');
     })
   }
 

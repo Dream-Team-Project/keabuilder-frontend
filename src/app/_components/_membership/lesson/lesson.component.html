@@ -148,6 +148,7 @@
     </div> 
 </ng-template>
 <div *ngIf="lesson.title" class="container-fluid">
+    <!-- <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar> -->
     <div  class="row mb-4">  
         <div class="col-md-7">
             <h3>
@@ -306,10 +307,21 @@
         <div class="col-md-5">
             <div class="h-100">
             <div class="kb-lesson-card rounded px-3 pt-3 mb-4">
-                <div class="kb-lesson-thumbnail">
-                    <img *ngIf="lesson?.thumbnail else default" [src]="_image.uploadImgPath+lesson?.thumbnail" class="img-fluid rounded">
+                <!-- <div class="kb-lesson-thumbnail align-items-center text-center"> -->
+                    <div *ngIf="thumbnail.path || lesson.thumbnail else default" id="img-preview" class="mb-2">
+                        <img *ngIf="thumbnail.path" [src]="this.thumbnail.path" class="img-fluid rounded"/>
+                        <img *ngIf="!thumbnail.path" [src]=" this._image.uploadImgPath+this.lesson.thumbnail" class="img-fluid rounded"/>
+                    </div>
                     <ng-template #default><img [src]="_image.uploadImgPath+'webpage_thumbnail.jpg'" class="img-fluid rounded "></ng-template>
-                </div> 
+                    <!-- <img *ngIf="lesson?.thumbnail else default" [src]="_image.uploadImgPath+lesson?.thumbnail" class="img-fluid rounded"> -->
+                   
+                    <div class="pt-3 pb-3">
+                        <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
+                        class="drop-zone__input">
+                        <div id="imginp" (click)="fileElem.click()"><span class="drop-zone__prompt">Click to upload</span></div>
+                        <p *ngIf="typeerror" class="mt-2"><small class="text-danger">{{typeerror}}</small></p>
+                    </div>
+                <!-- </div>  -->
             </div>
             <div class="kb-lesson-card rounded px-3 pt-3 mb-4">
                     <h6>Automation</h6>
