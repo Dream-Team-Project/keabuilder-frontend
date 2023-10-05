@@ -145,9 +145,7 @@ export class WebsitesComponent implements OnInit {
       var genobj = {title:this.websitetitle, subdomain: this.subdomain};
       this.websiteService.createwebsite(genobj).subscribe({
         next: data => {
-  
         // console.log(data);
-
         this.dialog.closeAll();
 
         if(data.exist ==1){

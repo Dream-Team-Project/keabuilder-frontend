@@ -213,7 +213,7 @@
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             class="kb-act-searchinp pt-1">
         <mat-autocomplete autoActiveFirstOption #courseAuto="matAutocomplete" (optionSelected)="addSelectedcourse($event, searchcourseInp)">
-            <mat-option *ngFor="let option of filteredOptions.courses" [value]="option" [disabled]="filteredTempIds.courses.includes(option.uniqueid)">
+            <mat-option *ngFor="let option of filteredOptions?.courses"  [value]="option"  [disabled]="isOptionDisabled(selectedcourses, option.uniqueid)">
               {{option.title}}
             </mat-option>
         </mat-autocomplete>

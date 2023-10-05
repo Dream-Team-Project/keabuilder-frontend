@@ -271,7 +271,7 @@ fetchLists() {
     }
     course.offers = this.offersToAdd.join(',');
     this._course.update(course).subscribe((res:any)=>{
-      if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
+      if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail);
       this._general.openSnackBar(false,'Course has been updated', 'OK', 'center', 'top');
       this.fetchCourse();
     })
@@ -305,7 +305,7 @@ fetchLists() {
       else if(action == 'draft') module.publish_status =0;
       this._module.update(module).subscribe(res=>{
         if(action == 'details') {
-          if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
             this.updateModuleAfterMethod();
           });
           else this.updateModuleAfterMethod();
@@ -348,7 +348,7 @@ fetchLists() {
       this._module.create(module).subscribe(res=>{
         module.id = res.data.insertId;
         if(res.success) {
-          if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
             this.addModuleAfterMethod(module, newM);
           })
           else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{
@@ -462,7 +462,7 @@ fetchLists() {
     
     this._lesson.update(lesson).subscribe(res=>{
       if(action == 'details') {
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
           this.updateLessonAfterMethod();
         });
         else this.updateLessonAfterMethod();
@@ -516,7 +516,7 @@ fetchLists() {
       lesson.id = res.data.insertId;
       if(res.success) {
         if(olduniqueid) this.duplicateDocuments(lesson.uniqueid,olduniqueid,lesson.user_id);
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
           this.addLessonAfterMedhod(lesson, msg);
         })  
         else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{

@@ -223,7 +223,7 @@ export class MembershipLessonComponent implements OnInit {
       this.lesson.thumbnail = lesson.thumbnail ? lesson.thumbnail : this.lesson.thumbnail;
       
       this._lesson.update(this.lesson).subscribe((res:any)=>{
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail);
         this._general.openSnackBar(false,'Lesson has been updated', 'OK','center','top');
         this.fetchLesson();
       })

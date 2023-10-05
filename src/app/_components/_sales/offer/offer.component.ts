@@ -39,9 +39,7 @@ export class OfferComponent implements OnInit {
   filteredOptions:any = {
     courses:[],
   };
-  filteredTempIds:any = {
-    courses:[],
-  };
+ 
   selectedcourses:any = [];
   isPaymentConnected:boolean = true;
   issmtpConnected:boolean = true;
@@ -132,7 +130,6 @@ export class OfferComponent implements OnInit {
     this._offer.singleoffer(this.offer.uniqueid).subscribe((resp:any)=>{
       if(resp.success) {
         this.offer = resp.data;
-        this.filteredTempIds =resp.data?.temp_courseid;
         this.selectedcourses=resp.data?.temp_courses;
         if(this.offer.currency) {
           let cur = JSON.parse(this.offer.currency);
@@ -169,7 +166,7 @@ export class OfferComponent implements OnInit {
       if(this.isPaymentValid()){
         if(this.isEmailValid()){
           if(this.selectedProducts.length != 0) this.offer.product_id = this.selectedProducts.map((sp:any)=> sp.uniqueid).join(',');
-          this.offer.courseid=this.filteredTempIds?.courses?.length > 0 ? this.filteredTempIds.courses.toString() : '';
+          this.offer.courseid=this.selectedcourses.length !=0 ? this.selectedcourses.map((sp:any)=> sp.uniqueid).join(',') : '';
           this._offer.updateoffer(this.offer).subscribe((resp:any) => {
             if(resp.success) this.fetchOffer();
             this._general.openSnackBar(!resp.success, resp?.message, 'OK', 'center', 'top');
@@ -320,15 +317,15 @@ export class OfferComponent implements OnInit {
     }
   
     addSelectedcourse(event:any, searchcourseInp:any): void {
+      // console.log(event.option.value)
       this.selectedcourses.push(event.option.value);
-      this.filteredTempIds.courses.push(event.option.value.uniqueid);
+      // this.filteredTempIds.courses.push(event.option.value.uniqueid);
       searchcourseInp.value = '';
       this.filtercourseData('');
     }
   
     removeSelectedcourse(index:number): void {
       this.selectedcourses.splice(index, 1);
-      this.filteredTempIds.courses.splice(index, 1);
     }
   
     // end offer actions
