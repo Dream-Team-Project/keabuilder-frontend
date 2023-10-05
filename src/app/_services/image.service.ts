@@ -90,7 +90,18 @@ export class ImageService {
             );
         })
     }
-
+    onImageFilefaviconUpload(data:any) {
+        return new Promise<any>((resolve, reject) => {
+            this.file = this.base64ToFile(data.path, data.name)
+            this._general._file.uploadfavicon(this.file).subscribe(
+                (event: any) => {
+                    if (typeof (event) === 'object') {
+                        resolve(event);
+                    }
+                }
+            );
+        })
+    }
     saveImageOnDb(data: any) {
         this.selectedImg.title = this.croppedEvent ? this.selectedImg.title : data.originalname.split('.')[0];
         this.selectedImg.alt = this.selectedImg.alt ? this.selectedImg.alt : this.selectedImg.title;

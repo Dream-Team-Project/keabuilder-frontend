@@ -208,11 +208,11 @@ export class WebsiteDetailsComponent implements OnInit {
         var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi};
 
         if(this.logoimgname!=this.defaultimgpath && this.imagelogorequest == true ){
-          this.imageService.onImageFileUpload(genobjlogo);
+          this.imageService.onImageFilefaviconUpload(genobjlogo);
         }
     
         if(this.faviconimg!=this.defaultimgpath && this.imagefaviconrequest == true){
-          this.imageService.onImageFileUpload(genobjfavicon);
+          this.imageService.onImageFilefaviconUpload(genobjfavicon);
         }
         if(data.found==1){
           this.domainconnerror = true;

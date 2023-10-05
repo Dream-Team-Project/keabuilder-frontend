@@ -3,11 +3,6 @@ import { WebpagesService } from 'src/app/_services/webpages.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 
-
-
-
-
-
 @Component({
   selector: 'app-membership-customization',
   templateUrl: './membership-customization.component.html',

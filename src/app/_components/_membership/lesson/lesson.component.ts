@@ -63,7 +63,8 @@ export class MembershipLessonComponent implements OnInit {
   // audioLinkInp = new FormControl('', [Validators.required, Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?.(?:mp3|wav|aif|au|m4a)')]);
   selTab:any = 0;
   automations:any;
-  
+  searching=false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -90,12 +91,12 @@ export class MembershipLessonComponent implements OnInit {
       this.course.uniqueid = params.get('course_id');
       this.module.uniqueid = params.get('module_id');
       this.lesson.uniqueid = params.get('lesson_id');
+      this.resetPostData();
       this.fetchCourse();
       this.fetchModule();
-      this.fetchLesson();
       this.fetchautomation();
-      this.resetPostData();
       this.fetchDocument();
+      this.fetchLesson();
     })
    }
 
@@ -171,10 +172,13 @@ export class MembershipLessonComponent implements OnInit {
   fetchDocument() {
     this.documentfetching = true;
     this._file.getAllDocuments1(this.lesson.uniqueid).subscribe(resp=>{
+      console.log(resp)
+      if(resp.success){
       this.documents = [];
       resp.data.forEach((item:string)=>{
         this.documents.push(this.getDocObj(item));
       })
+    }
       this.documentfetching = false;
     })
   }
@@ -220,10 +224,10 @@ export class MembershipLessonComponent implements OnInit {
       this.lesson.type = this.post.type ? this.post.type : this.lesson.type;
       this.lesson.description = this.post.description ? this.post.description : this.lesson.description;
       this.lesson.publish_status = this.post.publish_status ? this.post.publish_status : this.lesson.publish_status;
-      this.lesson.thumbnail = lesson.thumbnail ? lesson.thumbnail : this.lesson.thumbnail;
+      this.lesson.thumbnail =this.lesson.thumbnail ? this.lesson.thumbnail : lesson.thumbnail;
       
       this._lesson.update(this.lesson).subscribe((res:any)=>{
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail);
         this._general.openSnackBar(false,'Lesson has been updated', 'OK','center','top');
         this.fetchLesson();
       })
@@ -489,6 +493,7 @@ export class MembershipLessonComponent implements OnInit {
       var fileReader = new FileReader();
       fileReader.readAsDataURL(this.file);
       fileReader.onload = e => this.thumbnail.path = fileReader.result; 
+      this.updateLesson();
     }else{
       this.typeerror = 'File Type Not Allow';
     }

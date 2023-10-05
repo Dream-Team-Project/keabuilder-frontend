@@ -215,11 +215,8 @@
                             </div>
                         </div>
                         <div class="kbc-ec-btn col-md-6 text-right">
-                            <button (click)="_general.expandAll(moduleUl, false)" mat-raised-button color="accent"
-                                class="mr-3">Colapse all</button>
-                            <button (click)="_general.expandAll(moduleUl, true)" mat-raised-button class=""
-                                color="primary">Expand all</button>
-                            
+                            <button (click)="_general.expandAll(moduleUl, false)" mat-raised-button color="accent" class="mr-3">Colapse all</button>
+                            <button (click)="_general.expandAll(moduleUl, true)" mat-raised-button class="" color="primary">Expand all</button>
                         </div>
                     </div>
                     <ul #moduleUl class="row kb-drag-container p-3" cdkDropList [cdkDropListData]="modules"
@@ -317,7 +314,7 @@
                                                     matTooltip="Delete Module" matTooltipPosition="above"
                                                     class="far fa-trash-alt text-danger mr-2"></i> Delete</button>
                                         </mat-menu>
-                                        <i class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                                        <i class="fas fa-chevron-down drpdwnfa pl-2" (click)="this._general.expandToggle(lessonUl)"></i>
                                     </span>
                                 </span>
                             </div>

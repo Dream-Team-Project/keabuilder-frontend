@@ -5,6 +5,7 @@ import { CourseService } from 'src/app/_services/_membership/course.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { WebsiteService } from 'src/app/_services/website.service';
 
 @Component({
   selector: 'app-membership-courses',
@@ -37,6 +38,7 @@ export class MembershipCoursesComponent implements OnInit {
     uniqueid: '',
     user_id: '',
     title: '',
+    subdomain: '',
     path: '',
     description: '',
     thumbnail: '',
@@ -56,12 +58,14 @@ export class MembershipCoursesComponent implements OnInit {
   delcourse:any;
   error=false;
   errormessage:any='';
+  subdomain:any;
 
   constructor(public _course: CourseService,
              public _image: ImageService, 
              private _file: FileUploadService,
              public _general: GeneralService,
-             public dialog: MatDialog) {
+             public dialog: MatDialog,
+             public websiteService: WebsiteService,) {
               this.toggleview = _general.getStorage('course_toggle');
               }
 
@@ -119,12 +123,16 @@ export class MembershipCoursesComponent implements OnInit {
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
       // this.course.offers = this.offers.value.join(',');
+      this.course.subdomain=this.createsubdomainname();
       this._course.create(this.course).subscribe((res:any)=>{
-        this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+      if(res.success) {
+      this.websiteService.oncreatesubdomain(res.subdomain,res.uniqueid).subscribe({next: datanw => {}})
+        this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
           this.allCourses();
           this.resetobj();
           this._general.openSnackBar(false, 'Course Created Successfully!', 'OK', 'center', 'top');
         })
+      }
       })
     }
     else if(!this.thumbnail.path) {
@@ -134,6 +142,11 @@ export class MembershipCoursesComponent implements OnInit {
       this.dialog.open(this.adddialog);
 
     }
+  }
+
+  createsubdomainname(){
+    var uniqid = this._general.makeid(15);
+    return this.course.title+uniqid;
   }
 
   duplicateCourse(course:any) {
@@ -151,9 +164,11 @@ export class MembershipCoursesComponent implements OnInit {
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
       // console.log(this.course)
+      this.course.subdomain=this.createsubdomainname();
       this._course.duplicate(this.course).subscribe((res:any)=>{
         // console.log(res)
-        if(res.success==true){
+        if(res.success == true){
+          this.websiteService.oncreatesubdomain(res.subdomain,res.uniqueid).subscribe({next: datanw => {}})
         this._file.validateimg(oldimg).subscribe({
           next: datagen => {
             // console.log(datagen)
@@ -189,12 +204,20 @@ export class MembershipCoursesComponent implements OnInit {
         this.course.offers = this.offers.value.join(',');
       }
       this._course.update(this.course).subscribe((res:any)=>{
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail)
-        this._image.timeStamp = (new Date()).getTime();
+        if(this.thumbnail.type) {
+        this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
+          this.allCourses();
+          this.resetobj();
+          this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
+        })
+      }
+      else{
         this.allCourses();
         this.resetobj();
         this._general.openSnackBar(false, 'Course Updated Successfully!', 'OK', 'center', 'top');
+      }
       })
+    
     }
     else if(!this.thumbnail.path) {
       this.typeerror = 'Thumbnail is required';
@@ -221,6 +244,7 @@ export class MembershipCoursesComponent implements OnInit {
     this.fetching = true;
     course.deleting = true;
     this._course.delete(course.uniqueid).subscribe((res:any)=>{
+      if(res.success)  this.websiteService.ondeletesubdomain(res.subdomain).subscribe({next: data => { } })
       if(course.thumbnail) this._file.deleteimage(course.thumbnail).subscribe((res:any)=>{
         this._general.openSnackBar(false, 'Course Deleted Successfully!', 'OK', 'center', 'top');
         this.allCourses();

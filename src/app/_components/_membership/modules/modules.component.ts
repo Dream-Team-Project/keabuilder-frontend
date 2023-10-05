@@ -6,7 +6,7 @@ import { LessonService } from 'src/app/_services/_membership/lesson.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { asapScheduler } from 'rxjs';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -96,17 +96,17 @@ export class MembershipModulesComponent implements OnInit {
   // ng events
 
   ngOnInit(): void {
-    this._course.single(this.course.uniqueid).subscribe(res=>{
-        var getofferid = res.data[0].offers;
-        if(getofferid!=''){
-          var newob = {id:getofferid};
-          this._course.getoffersbyids(newob).subscribe(res=>{
-            // console.log(res);
-            this.showcourseoffers = res.data;
-          });
+    // this._course.single(this.course.uniqueid).subscribe(res=>{
+    //     var getofferid = res.data[0].offers;
+    //     if(getofferid!=''){
+    //       var newob = {id:getofferid};
+    //       this._course.getoffersbyids(newob).subscribe(res=>{
+    //         // console.log(res);
+    //         this.showcourseoffers = res.data;
+    //       });
           
-        }
-    })
+    //     }
+    // })
     this.fetchcoursemembers();
   }
 
@@ -271,7 +271,7 @@ fetchLists() {
     }
     course.offers = this.offersToAdd.join(',');
     this._course.update(course).subscribe((res:any)=>{
-      if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail);
+      if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail);
       this._general.openSnackBar(false,'Course has been updated', 'OK', 'center', 'top');
       this.fetchCourse();
     })
@@ -305,7 +305,7 @@ fetchLists() {
       else if(action == 'draft') module.publish_status =0;
       this._module.update(module).subscribe(res=>{
         if(action == 'details') {
-          if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
             this.updateModuleAfterMethod();
           });
           else this.updateModuleAfterMethod();
@@ -348,7 +348,7 @@ fetchLists() {
       this._module.create(module).subscribe(res=>{
         module.id = res.data.insertId;
         if(res.success) {
-          if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+          if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
             this.addModuleAfterMethod(module, newM);
           })
           else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{
@@ -462,7 +462,7 @@ fetchLists() {
     
     this._lesson.update(lesson).subscribe(res=>{
       if(action == 'details') {
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
           this.updateLessonAfterMethod();
         });
         else this.updateLessonAfterMethod();
@@ -516,7 +516,7 @@ fetchLists() {
       lesson.id = res.data.insertId;
       if(res.success) {
         if(olduniqueid) this.duplicateDocuments(lesson.uniqueid,olduniqueid,lesson.user_id);
-        if(this.thumbnail.type) this._image.onImageFileUpload(this.thumbnail).then(resp=>{
+        if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
           this.addLessonAfterMedhod(lesson, msg);
         })  
         else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{
