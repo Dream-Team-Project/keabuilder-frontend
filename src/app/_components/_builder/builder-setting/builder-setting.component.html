@@ -69,7 +69,10 @@
                     </div>
                     <span class="kb-setting-head-text">
                         {{_general.selectedBlock.type != 'element' ? (_general.selectedBlock.type == 'main' ? 'Page' :
-                        _general.selectedBlock.type) : _general.selectedBlock.content.name}} {{_style.setItemStyle ? 'Item' : ''}} {{_style.setDropDownStyle.main ? 'Dropdown' : ''}} {{_style.setDropDownStyle.item ? 'Dropdown Item' : ''}}
+                        _general.selectedBlock.type) : _general.selectedBlock.content.name}} 
+                        {{_style.setItemStyle ? 'Item' : ''}} {{_style.setDropDownStyle.main ? 'Dropdown' : ''}} {{_style.setDropDownStyle.item ? 'Dropdown Item' : ''}}
+                        {{_style.setCourseItemStyle.card ? 'Card' : ''}} {{_style.setCourseItemStyle.thumbnail ? 'Thumbnail' : ''}} {{_style.setCourseItemStyle.title ? 'Title' : ''}} 
+                        {{_style.setCourseItemStyle.description ? 'Description' : ''}} {{_style.setCourseItemStyle.button ? 'Button' : ''}}
                         <span class="kb-tag kb-info-tag">{{_general.respToggleDevice.name.replace('-',' ')}}</span>
                     </span>
                     <span class="kb-selection-top-actions">
@@ -198,7 +201,50 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Content" *ngIf="searchingTab('Content') && _general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && !_style.setDropDownStyle.main">
+                    <mat-tab label="Content" *ngIf="searchingTab('Content') && showContentTab()">
+                        <!-- courses -->
+                        <div *ngIf="_general.selectedBlock.content.name == 'courses' && _style.setCourseItemStyle.courses">
+                            <div *ngIf="searchingDeep('Course View')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Course View</div>
+                                <div class="kb-tab-content">
+                                    <mat-select [(ngModel)]="_style.course_view">
+                                        <mat-option *ngFor="let cvt of _style.course_view_types" [value]="cvt">{{cvt.name |
+                                            titlecase}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div *ngIf="searchingDeep('Course Spacing')" class="kb-inner-tab-component">
+                                <div class="kb-tab-head">Course Spacing
+                                    <strong
+                                        style="margin-left: auto;">{{_style.getBlockParamValue(_style.course_gap)}}</strong>
+                                </div>
+                                <div class="kb-tab-content">
+                                    <div [ngSwitch]="_general.respToggleDevice.name" class="kb-rangeInp">
+                                        <mat-slider *ngSwitchCase="'tablet-h'" thumbLabel
+                                            [(ngModel)]="_style.course_gap.tablet_h" [displayWith]="_style.formatLabel"
+                                            tickInterval="0" step="0.1" min="0" max="6" class="slider"
+                                            aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchCase="'tablet-v'" thumbLabel
+                                            [(ngModel)]="_style.course_gap.tablet_v" [displayWith]="_style.formatLabel"
+                                            tickInterval="0" step="0.1" min="0" max="6" class="slider"
+                                            aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchCase="'mobile'" thumbLabel
+                                            [(ngModel)]="_style.course_gap.mobile" [displayWith]="_style.formatLabel"
+                                            tickInterval="0" step="0.1" min="0" max="6" class="slider"
+                                            aria-label="units">
+                                        </mat-slider>
+                                        <mat-slider *ngSwitchDefault thumbLabel
+                                            [(ngModel)]="_style.course_gap.desktop" [displayWith]="_style.formatLabel"
+                                            tickInterval="0" step="0.1" min="0" max="6" class="slider"
+                                            aria-label="units">
+                                        </mat-slider>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- courses -->
                         <!-- image -->
                         <div *ngIf="_general.selectedBlock.content.name == 'image'">
                             <div *ngIf="searchingDeep('Content Choose Image') && !_general.selectedBlock?.content?.form" class="kb-inner-tab-component">
@@ -515,11 +561,11 @@
                             <ng-template #styling>
                                 <div class="kb-tabChange">
                                     <mat-accordion>
-                                        <mat-expansion-panel *ngIf="searchingDeep('Content Text') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 0"
+                                        <mat-expansion-panel *ngIf="searchingDeep('Button Text') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 0"
                                         (opened)="_general.setExpPanelStep(0)" hideToggle>
                                             <mat-expansion-panel-header>
                                                 <mat-panel-title>
-                                                    Text
+                                                    Button Text
                                                 </mat-panel-title>
                                                 <mat-panel-description>
                                                     <i class="fas fa-font"></i>
@@ -543,7 +589,7 @@
                                                     (click)="_general.nextExpPanelStep()">Next</button>
                                             </mat-action-row>
                                         </mat-expansion-panel>
-                                        <mat-expansion-panel *ngIf="searchingDeep('Content Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 1"
+                                        <mat-expansion-panel *ngIf="searchingDeep('Button Action Link') && _general.selectedBlock.content.name == 'button' && !_general.selectedBlock?.content?.form" [expanded]="_general.expPanelStep === 1"
                                         (opened)="_general.setExpPanelStep(1)" hideToggle>
                                             <mat-expansion-panel-header>
                                                 <mat-panel-title>
@@ -631,6 +677,26 @@
                                             <mat-action-row>
                                                 <button mat-button color="secondary"
                                                     (click)="_general.prevExpPanelStep()">Previous</button>
+                                                <button mat-button color="primary"
+                                                    (click)="_general.nextExpPanelStep()">Next</button>
+                                            </mat-action-row>
+                                        </mat-expansion-panel>
+                                        <mat-expansion-panel *ngIf="searchingDeep('Button Text') && _style.setCourseItemStyle.button" [expanded]="_general.expPanelStep === 1"
+                                        (opened)="_general.setExpPanelStep(1)" hideToggle>
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    Button Text
+                                                </mat-panel-title>
+                                                <mat-panel-description>
+                                                    <i class="fas fa-font"></i>
+                                                </mat-panel-description>
+                                            </mat-expansion-panel-header>
+                                            <div class="kb-inner-tab-component">
+                                                <div class="kb-tab-content kb-inp-left">
+                                                    <input type="text" [(ngModel)]="_style.button_text" placeholder="Main text">
+                                                </div>
+                                            </div>
+                                            <mat-action-row>
                                                 <button mat-button color="primary"
                                                     (click)="_general.nextExpPanelStep()">Next</button>
                                             </mat-action-row>
@@ -1369,7 +1435,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Sizing" *ngIf="searchingTab('Sizing') && _general.selectedBlock.type != 'column'">
+                    <mat-tab label="Sizing" *ngIf="searchingTab('Sizing') && _general.selectedBlock.type != 'column' && !_style.setCourseItemStyle.card && !_style.setCourseItemStyle.thumbnail && !_style.setCourseItemStyle.title && !_style.setCourseItemStyle.description">
                         <div *ngIf="searchingDeep('Sizing Width')" class="kb-inner-tab-component">
                             <div class="kb-tab-head">Width
                                 <span class="kb-align-btn-group kb-wh-btn-group">
@@ -1437,7 +1503,7 @@
                             </div>
                         </div>
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item">
-                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' else blockAlign"
+                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' && !_style.setCourseItemStyle.button else blockAlign"
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment <i matTooltip="Not work on full width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i></div>
                                 <div class="kb-tab-content">

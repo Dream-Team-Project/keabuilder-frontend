@@ -161,47 +161,75 @@
                                                 (mouseenter)="element.setting = true"
                                                 (mouseleave)="element.setting = element?.moresetting" 
                                                 [id]="element.id" class="kb-element kb-block-container"
-                                                [style.margin]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getMargin() : _style.getBlockStyle(element.content.style)['margin']"
-                                                [style.justifyContent]="isBlockActive(element) && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)"
-                                                [class.kb-block-none]="isBlockActive(element) && !_style.setItemStyle  && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)">
+                                                [style.margin]="isBlockActive(element) && isChildDeactive() ? _style.getMargin() : _style.getBlockStyle(element.content.style)['margin']"
+                                                [style.justifyContent]="isBlockActive(element) && isChildDeactive() ? _style.getBlockParamValue(_style.item_alignment) : _style.getBlockParamValue(element.item_alignment)"
+                                                [class.kb-block-none]="isBlockActive(element) && isChildDeactive() ? _style.getDisplay(_style.hide) : _style.getDisplay(element.hide)">
                                                 <div *cdkDragPreview class="custom-preview"
                                                     [style.backgroundColor]="'var(--primary-color)'">{{(element.content.type == 'order_form' || element.content.type == 'form') ? 
                                                     element.content.type.replace('_',' ') : (element.name ? element.name : element.content.name)}}</div>
                                                 <div *cdkDragPlaceholder class="custom-placeholder"
                                                     [style.backgroundColor]="'var(--primary-color)'"></div>
-                                                <div class="kb-module-setting"
-                                                    *ngIf="element.setting">
+                                                <div class="kb-module-setting" *ngIf="element.setting">
                                                     <span class="kb-handle-block kb-handle-element"><i
                                                             class="fa fa-arrows-alt"></i></span>
-                                                    <span *ngIf="element.content.name != 'form-component' && element.content.name != 'order-form-component' && !element.content.items"
-                                                        (click)="openSetting(element)"
-                                                        matTooltip="Element Setting" matTooltipPosition="above"><i
+                                                    <ng-container *ngIf="showSettingMenu(element.content.name) else setting">
+                                                        <ng-container *ngIf="element.content.name == 'menu'">
+                                                            <span [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
+                                                            matTooltip="Element Setting" matTooltipPosition="above"><i
+                                                                class="far fa-edit"></i></span>
+                                                            <mat-menu #moresetting="matMenu" xPosition="after" yPosition="below">
+                                                                <button mat-menu-item (click)="openSetting(element)">
+                                                                    <i class="fas fa-bars"></i> Menu
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setItemStyle = true; openSetting(element)">
+                                                                    <i class="fas fa-list-ul"></i> Menu Items
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setDropDownStyle.main = true; openSetting(element)">
+                                                                    <i class="fas fa-stream"></i> Dropdown Menu
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setDropDownStyle.item = true; openSetting(element)">
+                                                                    <i class="far fa-list-alt"></i> Dropdown Menu Items
+                                                                </button>
+                                                            </mat-menu>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="element.content.name == 'courses'">
+                                                            <span [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
+                                                            matTooltip="Element Setting" matTooltipPosition="above"><i
+                                                                class="far fa-edit"></i></span>
+                                                            <mat-menu #moresetting="matMenu" xPosition="after" yPosition="below">
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.courses = true; openSetting(element)">
+                                                                    <i class="fas fa-th"></i> Courses
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.card = true; openSetting(element)">
+                                                                    <i class="fas fa-square"></i> Card
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.thumbnail = true; openSetting(element)">
+                                                                    <i class="far fa-image"></i> Thumbnail
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.title = true; openSetting(element)">
+                                                                    <i class="fas fa-heading"></i> Title
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.description = true; openSetting(element)">
+                                                                    <i class="fas fa-align-left"></i> Description
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setCourseItemStyle.button = true; openSetting(element)">
+                                                                    <i class="fas fa-toggle-off"></i> Button
+                                                                </button>
+                                                            </mat-menu>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-template #setting>
+                                                        <span *ngIf="element.content.name != 'form-component' && element.content.name != 'order-form-component'"
+                                                            (click)="openSetting(element)"
+                                                            matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
-                                                    <span *ngIf="element.content.items" [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
-                                                        matTooltip="Element Setting" matTooltipPosition="above"><i
-                                                            class="far fa-edit"></i></span>
+                                                    </ng-template>
                                                     <span (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
                                                         matTooltip="Duplicate Element" matTooltipPosition="above"><i
                                                             class="far fa-copy"></i></span>
                                                     <span (click)="_element.deleteElement(column.elementArr, ei)"
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
-                                                    <mat-menu #moresetting="matMenu" xPosition="after" yPosition="below">
-                                                        <button mat-menu-item (click)="openSetting(element)">
-                                                            <i class="fas fa-bars"></i> {{element.content.name | titlecase}}
-                                                        </button>
-                                                        <button mat-menu-item (click)="_style.setItemStyle = true; openSetting(element)">
-                                                            <i class="fas fa-list-ul"></i> {{element.content.name | titlecase}} Items
-                                                        </button>
-                                                        <ng-container *ngIf="element.content.name == 'menu'" >
-                                                            <button mat-menu-item (click)="_style.setDropDownStyle.main = true; openSetting(element)">
-                                                                <i class="fas fa-stream"></i> Dropdown Menu
-                                                            </button>
-                                                            <button mat-menu-item (click)="_style.setDropDownStyle.item = true; openSetting(element)">
-                                                                <i class="far fa-list-alt"></i> Dropdown Items
-                                                            </button>
-                                                        </ng-container>
-                                                    </mat-menu>
                                                 </div>
                                                 <div *ngSwitchCase="'image'" [attr.data-name]="element.content.name" class="kb-element-content">
                                                     <img *ngIf="isBlockActive(element) else showImg"
@@ -312,42 +340,157 @@
                                                 </div>
                                                 <div *ngSwitchCase="'courses'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
-                                                    <ul class="kb-courses-list"
-                                                    [ngStyle]="isBlockActive(element) && !_style.setItemStyle ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
-                                                        <li class="kb-course-item kb-content-item"
-                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                    <ul class="kb-course-list" [class]="isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.course_view.value : element.content.view"
+                                                    [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.currentStyling() : _style.getBlockStyle(element.content.style)"
+                                                    [style.gap]="(isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.getBlockParamValue(_style.course_gap) : _style.getBlockParamValue(element.content.gap)) + 'rem'">
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
                                                             <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
                                                             </div>
-                                                            <div>Course Title</div>
                                                             <div>
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
                                                             </div>
                                                         </li>
-                                                        <li class="kb-course-item kb-content-item"
-                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
                                                             <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
                                                             </div>
-                                                            <div>Course Title</div>
                                                             <div>
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
                                                             </div>
                                                         </li>
-                                                        <li class="kb-course-item kb-content-item"
-                                                            [ngStyle]="isBlockActive(element) && _style.setItemStyle ? _style.textStyling() : _style.getBlockStyle(element.content.item.style)">
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
                                                             <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png">
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
                                                             </div>
-                                                            <div>Course Title</div>
                                                             <div>
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
+                                                            </div>
+                                                        </li>
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
+                                                            </div>
+                                                            <div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
+                                                            </div>
+                                                        </li>
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
+                                                            </div>
+                                                            <div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
+                                                            </div>
+                                                        </li>
+                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
+                                                            <div>
+                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
+                                                            </div>
+                                                            <div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
+                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                    {{_style.button_text}}
+                                                                </a>
+                                                                <ng-template #showBtn>
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                        {{element.content.children.button.text}}
+                                                                    </a>
+                                                                </ng-template>
                                                             </div>
                                                         </li>
                                                     </ul>

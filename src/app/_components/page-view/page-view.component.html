@@ -20,7 +20,6 @@
                     [id]="row.id" class="kb-row kb-block-container">
                     <div class="kb-column-wrap" [class.flexColumnRev]="_style.getColumnReverse(row.columnRev)"
                     [ngClass]="{'kb-desk-flex-rev': row.columnRev.desktop, 'kb-tab-h-flex-rev': row.columnRev.tablet_h, 'kb-tab-v-flex-rev': row.columnRev.tablet_v, 'kb-mob-flex-rev': row.columnRev.mobile}"
-                    [style.gap]="_style.getBlockParamValue(row.columnGap) + 'rem'"
                     [style.flexDirection]="_style.getColumnReverse(row.columnRev)">
                         <!-- columns start -->
                         <div *ngFor="let column of row.columnArr, index as ci"

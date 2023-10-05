@@ -150,6 +150,23 @@ export class StyleService {
     main: false,
     item: false
   }
+  setCourseItemStyle = {
+    courses: false,
+    card: false,
+    thumbnail: false,
+    title: false,
+    description: false,
+    button: false
+  }
+  course_view_types = [
+    // { name: 'list view', value: 'kb-course-list-view' },
+    { name: '2 cloumn grid view', value: 'kb-course-grid-view-2' },
+    { name: '3 column grid view', value: 'kb-course-grid-view-3' },
+    { name: '4 column grid view', value: 'kb-course-grid-view-4' },
+  ]
+  course_view = { name: '3 column grid view', value: 'kb-course-grid-view-3' };
+  course_gap = { desktop: 1.5, tablet_h: 1.5, tablet_v: 1, mobile: 1 };
+
   constructor(private _general: GeneralService, private _image: ImageService) {
     _general.main.style.desktop = this.defaultStyling(_general.main);
   }
@@ -890,7 +907,7 @@ export class StyleService {
       this._general.selectedBlock.columnRev =  JSON.parse(JSON.stringify(this.columnRev));
     }
     if(this._general.selectedBlock.type == 'element') {
-      if(this.setItemStyle) this.setElementStyle(this.textStyling());
+      if(this.setItemStyle) this.setElementStyle(this._general.selectedBlock.content.item, this.textStyling());
       else {
         this._general.selectedBlock.item_alignment = JSON.parse(JSON.stringify(this.item_alignment));
         if(this._general.selectedBlock.content.html) this._general.selectedBlock.content.html = this.edit_html;
@@ -898,10 +915,10 @@ export class StyleService {
         if(this._general.selectedBlock.content?.name == 'menu' || this._general.selectedBlock.content?.name == 'form' || this._general.selectedBlock.content?.name == 'divider') {
           if(this.setDropDownStyle.main) this._general.selectedBlock.content.style.dropdown = this.currentStyling();
           else if(this.setDropDownStyle.item) this._general.selectedBlock.content.item.style.dropdown = this.textStyling();
-          else this.setElementStyle(this.currentStyling());
+          else this.setElementStyle(this._general.selectedBlock.content, this.currentStyling());
         }
         else if (this._general.selectedBlock.content.name == 'button') {
-          this.setElementStyle(this.buttonStyling());
+          this.setElementStyle(this._general.selectedBlock.content, this.buttonStyling());
           this._general.selectedBlock.content.text = this.button_text;
           this._general.selectedBlock.content.subtext = this.button_subtext;
           this._general.selectedBlock.content.subfont_size = this.button_subfont_size.value;
@@ -911,7 +928,7 @@ export class StyleService {
         }
         else if (this._general.selectedBlock.content.name == 'image') {
           this._general.selectedBlock.content.src = this.image_src;
-          this.setElementStyle(this.imageStyling());
+          this.setElementStyle(this._general.selectedBlock.content, this.imageStyling());
         }
         else if (this._general.selectedBlock.content.name == 'video') {
           this._general.selectedBlock.content.iframe = this.video_iframe;
@@ -920,12 +937,23 @@ export class StyleService {
           this._general.selectedBlock.content.muted = this.video_muted;
           this._general.selectedBlock.content.loop = this.video_loop;
           this._general.selectedBlock.content.controls = this.video_controls;
-          this.setElementStyle(this.currentStyling());
+          this.setElementStyle(this._general.selectedBlock.content, this.currentStyling());
         }
-        else if(this._general.selectedBlock.content?.name == 'code') {
-          this._general.selectedBlock.content.html = this.code_html;
+        else if(this._general.selectedBlock.content?.name == 'code') this._general.selectedBlock.content.html = this.code_html;
+        else if(this.setCourseItemStyle.courses) {
+          this._general.selectedBlock.content.view = this.course_view.value;
+          this._general.selectedBlock.content.gap = JSON.parse(JSON.stringify(this.course_gap));
+          this.setElementStyle(this._general.selectedBlock.content, this.currentStyling());
         }
-        else this.setElementStyle(this.textStyling());
+        else if(this.setCourseItemStyle.card) this.setElementStyle(this._general.selectedBlock.content.children.card, this.currentStyling());
+        else if(this.setCourseItemStyle.thumbnail) this.setElementStyle(this._general.selectedBlock.content.children.thumbnail, this.currentStyling());
+        else if(this.setCourseItemStyle.title) this.setElementStyle(this._general.selectedBlock.content.children.title, this.textStyling());
+        else if(this.setCourseItemStyle.description) this.setElementStyle(this._general.selectedBlock.content.children.description, this.textStyling());
+        else if(this.setCourseItemStyle.button) {
+          this._general.selectedBlock.content.children.button.text = this.button_text;
+          this.setElementStyle(this._general.selectedBlock.content.children.button, this.textStyling());
+        }
+        else this.setElementStyle(this._general.selectedBlock.content, this.textStyling());
       }    
     }
     else {
@@ -971,40 +999,35 @@ export class StyleService {
     return ns;
   }
 
-  setElementStyle(contentStyle: any) {
+  setElementStyle(content:any, contentStyle: any) {
     var device = this._general.respToggleDevice.name;
     if (device != 'desktop') {
-      var deskS = this.setItemStyle ? this._general.selectedBlock.content.item.style.desktop : this._general.selectedBlock.content.style.desktop;
+      var deskS = content.style.desktop;
       var newES = this.filterElementStyle(contentStyle, deskS);
       var newCS = this.filterStyle(this.currentStyling(), deskS);
       var newS = {...newES, ...newCS};
       if (this._general.respToggleDevice.name == 'tablet-h') {
-        if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_h = newS;
-        else this._general.selectedBlock.content.style.tablet_h = newS;
+        content.style.tablet_h = newS;
       }
       else if (this._general.respToggleDevice.name == 'tablet-v') {
-        if(this.setItemStyle) this._general.selectedBlock.content.item.style.tablet_v = newS;
-        else this._general.selectedBlock.content.style.tablet_v = newS;
+        content.style.tablet_v = newS;
       }
       else if (this._general.respToggleDevice.name == 'mobile') {
-        if(this.setItemStyle) this._general.selectedBlock.content.item.style.mobile = newS;
-        else this._general.selectedBlock.content.style.mobile = newS;
+        content.style.mobile = newS;
       }
       else if (this._general.respToggleDevice.name == 'hover') {
-        if(this.setItemStyle) this._general.selectedBlock.content.item.style.hover = newS;
-        else this._general.selectedBlock.content.style.hover = newS;
+        content.style.hover = newS;
       }
     }
     else {
       var mergS = {...contentStyle, ...this.currentStyling()};
-      if(this.setItemStyle) this._general.selectedBlock.content.item.style.desktop = mergS;
-      else this._general.selectedBlock.content.style.desktop = mergS;
+      content.style.desktop = mergS;
     }
   }
 
   defaultStyling(block:any) {
     var w, mt, mb, mlr, ptb, plr, bw, br, bclr, bgclr, isDivider = false;
-    if (block.content?.name == 'button') {
+    if (block.content?.name == 'button' || block.button_child) {
       w = 'auto';
       mt = '0px';
       mb = '10px';
@@ -1173,9 +1196,9 @@ export class StyleService {
     this.defaultStyling(block);
     // text
     var fsv, fsr, fwn, fwv, tc, ta;
-    fsv = block.content.size+'px';
-    fsr = block.content.size;
-    if (block.content.name == 'button') {
+    fsr = (block.size ? block.size : block.content.size);
+    fsv = fsr+'px';
+    if (block.content.name == 'button' || block.button_child) {
       fwn = 'semi bold (demi bold)';
       fwv = 600;
       tc = '#ffffff';
@@ -1189,6 +1212,10 @@ export class StyleService {
       else if (block.content.name == 'label') {
         fwn = 'medium';
         fwv = 500;
+      }
+      else if(block.weight) {
+        fwn = block.weight.num;
+        fwv = block.weight.val;
       }
       else {
         fwn = 'normal';
@@ -1251,14 +1278,9 @@ export class StyleService {
       return this.inputStyling();
     }
     else if(block.content.name == 'image') {
-      this.width.value = '500px';
-      this.widthRange.value = '500';
+      this.width.value = '200px';
+      this.widthRange.value = '200';
       return this.imageStyling();
-    }
-    else if(block.content.name == 'courses') {
-      this.width.value = '33%';
-      this.widthRange.value = '33';
-      return this.textStyling();
     }
     else {
       return this.textStyling();
@@ -1323,17 +1345,35 @@ export class StyleService {
       if(block.type == 'element') {
         if(this.setItemStyle) {
           obj = this.getBlockStyle(block.content.item.style);
-          this.elementSetting(block.content.item);
+          this.elementSetting(block.content.item, obj);
         }
         else if(this.setDropDownStyle.item) {
           obj = block.content.item.style.dropdown;
-          this.elementSetting(block.content.item);          
+          this.elementSetting(block.content.item, obj);          
+        }
+        else if(this.setCourseItemStyle.card) {
+          obj = this.getBlockStyle(block.content.children.card.style);
+        }
+        else if(this.setCourseItemStyle.thumbnail) {
+          obj = this.getBlockStyle(block.content.children.thumbnail.style);
+        }
+        else if(this.setCourseItemStyle.title) {
+          obj = this.getBlockStyle(block.content.children.title.style);
+          this.elementSetting(block.content.children.title, obj);   
+        }
+        else if(this.setCourseItemStyle.description) {
+          obj = this.getBlockStyle(block.content.children.description.style);
+          this.elementSetting(block.content.children.description, obj);   
+        }
+        else if(this.setCourseItemStyle.button) {
+          obj = this.getBlockStyle(block.content.children.button.style);
+          this.elementSetting(block.content.children.button, obj);   
         }
         else {
           if(this.setDropDownStyle.main) obj = block.content.style.dropdown;
           else {
             obj = this.getBlockStyle(block.content.style);
-            if(block.content?.name != 'form' && block.content?.name != 'divider' && block.content?.name != 'code') this.elementSetting(block.content);
+            if(block.content?.name != 'form' && block.content?.name != 'divider' && block.content?.name != 'code') this.elementSetting(block.content, obj);
           }
           this.item_alignment = JSON.parse(JSON.stringify(block.item_alignment));
         }
@@ -1630,14 +1670,16 @@ export class StyleService {
       }
   }
 
-  elementSetting(element: any) {
-    var obj = this.setDropDownStyle.item ? element.style.dropdown : this.getBlockStyle(element.style);
+  elementSetting(element: any, elementStyle:any) {
+    var obj = this.setDropDownStyle.item ? element.style.dropdown : elementStyle;
     if(element.name == 'menu' && !this.setItemStyle && !this.setDropDownStyle.item) {
       this._general.menus.forEach((menu:any)=>{
         if(menu.uniqueid == element.data_id) this._general.selectedMenu = menu;
       })
     }
-    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle || this.setDropDownStyle.item) {
+    if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' 
+    || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle 
+    || this.setDropDownStyle.item || this.setCourseItemStyle.title || this.setCourseItemStyle.description || this.setCourseItemStyle.button) {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'] ? obj['font-style'] : 'normal';
@@ -1713,6 +1755,13 @@ export class StyleService {
       this.button_subfont_size.value = element.subfont_size;
       this.button_link = element.link;
       this.button_target = this.button_target_types.filter((item:any)=>{ if(element.target == item.value) return item; })[0];
+    }
+    if(element.name == 'courses' && this.setCourseItemStyle.courses) {
+      this.course_view = this.course_view_types.filter((cvt:any) => cvt.value == element.view)[0];
+      this.course_gap = JSON.parse(JSON.stringify(element.gap));
+    }
+    else if(this.setCourseItemStyle.button) {
+      this.button_text = element.text;
     }
   }
 

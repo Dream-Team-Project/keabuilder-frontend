@@ -13,7 +13,6 @@ export class ColumnService {
 
   resizeColumn(row:any) {
     row.rowSize = 'kb-full-block';
-    console.log(row.rowSize);
   }
 
   addColumn(rowSize: any, index: any) {

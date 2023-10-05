@@ -73,7 +73,8 @@ export class ElementService {
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
     // courses block
-    courses: { content: { name: 'courses', items: [] }, iconCls: 'fa fa-users' },
+    courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1},
+    children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
     // courses block
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
@@ -87,6 +88,9 @@ export class ElementService {
     // icon
     icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
     // icon
+    // login
+    // login: { content: { name: 'login', label: {}, input: {}, button: {} }, iconCls: 'fas fa-bars' },
+    // login
     // order form
     // order_form: { content: { name: 'order-form-component', type: 'order_form' }, iconCls: 'fab fa-wpforms' },
     // order form
@@ -660,7 +664,61 @@ export class ElementService {
         tempObj.content.style.dropdown = this._style.defaultStyling(tempObj);
         delete tempObj.dropdownstyle;
       }
-      else if (element.name == 'form' || element.name == 'divider' || element.name == 'courses') {
+      else if(element.name == 'courses') {
+        respS = { 'width': '100%' };
+        tempObj.content.style = {
+          desktop: this._style.defaultStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.card.style = {
+          desktop: this._style.defaultStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.card.style.desktop['background-color'] = 'rgb(255, 255, 255)';
+        tempObj.content.children.card.style.desktop['border-radius'] = '10px';
+        tempObj.content.children.card.style.desktop['box-shadow'] = 'rgba(0, 0, 3, 0.1) 0px 2px 12px 4px';
+        tempObj.content.children.thumbnail.style = {
+          desktop: this._style.defaultStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.thumbnail.style.desktop['margin'] = '0px';
+        tempObj.size = '22';
+        tempObj.weight = {num: 'semi bold (demi bold)', val: 600};
+        tempObj.content.children.title.style = {
+          desktop: this._style.defaultElementStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.title.style.desktop['margin'] = '0px 10px';
+        tempObj.size = '14';
+        tempObj.weight = {num: 'normal', val: 400};
+        tempObj.content.children.description.style = {
+          desktop: this._style.defaultElementStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.description.style.desktop['margin'] = '0px 10px';
+        tempObj.button_child = true;
+        tempObj.content.children.button.style = {
+          desktop: this._style.defaultElementStyling(tempObj),
+          tablet_h: '',
+          tablet_v: respS,
+          mobile: respS
+        }
+        tempObj.content.children.button.style.desktop['margin'] = '10px 10px';
+        delete tempObj.button_child;
+        delete tempObj.size;
+        delete tempObj.weight;
+      }
+      else if (element.name == 'form' || element.name == 'divider') {
         respS = { 'width': '100%' };
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),

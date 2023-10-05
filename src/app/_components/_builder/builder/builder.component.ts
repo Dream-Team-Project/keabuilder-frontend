@@ -488,12 +488,26 @@ export class BuilderComponent implements OnInit {
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
 
   elementDblClk(element:any) {
-    if(element.content.name != 'form-component' && 
+    if(element.content.name == 'courses') {
+      this._style.setCourseItemStyle.courses = true;
+      this.openSetting(element);
+    }
+    else if(element.content.name != 'form-component' && 
     element.content.name != 'order-form-component') this.openSetting(element);
   }
 
   isBlockActive(block:any) {
     return this._general.selectedBlock.id == block.id && this._general.selectedBlock.type == block.type;
+  }
+
+  isChildDeactive() {
+    return !this._style.setItemStyle && !this._style.setDropDownStyle.main && !this._style.setDropDownStyle.item
+    && !this._style.setCourseItemStyle.card && !this._style.setCourseItemStyle.thumbnail && !this._style.setCourseItemStyle.title 
+    && !this._style.setCourseItemStyle.description && !this._style.setCourseItemStyle.button;
+  }
+
+  showSettingMenu(content:any) {
+    return content == 'menu' || content == 'courses';
   }
 
   openSetting(block:any) {

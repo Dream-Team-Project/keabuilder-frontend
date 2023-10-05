@@ -1088,6 +1088,7 @@ export class GeneralService {
   }
 
   elementStyling(ele:any) {
+    console.log(ele);
     var pseudoEle:string = this.getSelector(ele);
     var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
     var style = JSON.parse(JSON.stringify(ele.content.style));
@@ -1342,8 +1343,7 @@ export class GeneralService {
       return this.createBlockId(temp);
     }
     this.allBlocksIds.push(temp.id);
-    return temp.id;
-    // return 'kb-'+temp.type+'-'+temp.id;
+    return 'kb-'+temp.type+'-'+temp.id;
   }
 
   compareOptValue(item1: any, item2: any) {
