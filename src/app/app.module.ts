@@ -66,6 +66,7 @@ import { NgxStripeModule } from 'ngx-stripe';
 import {environment} from '../environments/environment';
 
 import { ApiInterceptor } from './_helpers/api.interceptor';
+import { LibrarySidebarComponent } from './_components/_membership/library-sidebar/library-sidebar.component';
 
 
 
@@ -82,6 +83,7 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
     FilterPipe,
     SortingPipe,
     SvgPipe,
+    LibrarySidebarComponent,
   ],
   imports: [
     AppRoutingModule,

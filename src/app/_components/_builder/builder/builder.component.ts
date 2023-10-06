@@ -84,8 +84,9 @@ export class BuilderComponent implements OnInit {
         _general.getBuilderData(_general.target.id).then(data=> {
           _general.fetchCourses().then((resp)=>{
             _general.courses=resp;
+            // this._element.elementList.courses.children=resp
             console.log(resp)
-          })
+          });
             if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
             else if(!_general.isObjEmpty(data)) {
               if(this.ishf) _general.target.name = data.name;

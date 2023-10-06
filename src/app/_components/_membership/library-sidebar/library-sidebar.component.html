@@ -1,0 +1,45 @@
+<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" (mouseover)="hoveropen = true"
+  (mouseleave)="hoveropen = false" [class.hoveropen]="hoveropen || toggleSidebar">
+  <div class="bw-sidebar-logo">
+    <img src="/assets/images/logo/kblogo-white.png" alt="Kea logo" [routerLink]="'/'">
+    <div class="bw-logo__item__text" *ngIf="hoveropen || toggleSidebar">Keabuilder<div class="fadingEffect"></div>
+    </div>
+  </div>
+  <div class="bw-sidebar">
+      <ng-container class="w-100 d-inline-block" *ngFor="let course of courses; index as c;">
+        <mat-optgroup  [label]="'Course :' + ' ' + (course.title | titlecase)">
+          <ng-container *ngFor="let module of course.modules;index as m;">
+            <mat-optgroup [label]="'Module : '+' '+module.title | titlecase">
+              <ng-container *ngFor="let lesson of module?.lessons;index as l;">
+                <mat-option class="bw-sidebar__group__header">
+                    <button class="bw-sidebar__item hasIcon">
+                        <div class="bw-sidebar__item__icon">
+                            <!-- <i class="fa-regular fa-folder-open"></i> -->
+                            <i class="fa-solid fa-book"></i>
+                          </div>
+                          <div class="bw-sidebar__item__text">
+                            {{ lesson.title | titlecase }} {{ '('}}{{l+1}}{{')'}}
+                          </div>
+                    </button></mat-option>
+              </ng-container>
+            </mat-optgroup>
+          </ng-container>
+        </mat-optgroup>
+      </ng-container>
+    <!-- Dropdown2 -->
+   <div class="bw-sidebar__group"> 
+      <div class="bw-sidebar__group__header">
+        <button class="bw-sidebar__item hasIcon"  (click)="gotoHelpDocs()">
+          <div class="bw-sidebar__item__icon">
+            <i class="fas fa-life-ring"></i>
+          </div>
+          <div class="bw-sidebar__item__text">
+            Help
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

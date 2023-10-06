@@ -168,7 +168,7 @@ if (currentDomain === appHost) {
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'member/login', component : MemberLoginComponent,},
-    { path: 'member/dashboard', component : MemberDashboardComponent,},
+    { path: 'member/library', component : MemberDashboardComponent,},
     { path: 'member/forgot/password', component :   MemberForgotPasswordComponent,},
 
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
