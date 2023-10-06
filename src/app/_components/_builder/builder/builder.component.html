@@ -343,17 +343,15 @@
                                                     <ul class="kb-course-list" [class]="isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.course_view.value : element.content.view"
                                                     [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.currentStyling() : _style.getBlockStyle(element.content.style)"
                                                     [style.gap]="(isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.getBlockParamValue(_style.course_gap) : _style.getBlockParamValue(element.content.gap)) + 'rem'">
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
+                                                        <li *ngFor="let course_item of _general.courses, index as mi" class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
                                                             <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
+                                                                <img [src]="course_item.thumbnail ? _image.uploadImgPath+course_item.thumbnail : _image.uploadImgPath+course_item.thumbnail+'webpage_thumbnail.jpg'"
                                                                 [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
                                                             </div>
                                                             <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
+                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">{{course_item.title}}</div>
                                                                 <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
+                                                                    {{course_item.description}}
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -362,132 +360,7 @@
                                                                     {{_style.button_text}}
                                                                 </a>
                                                                 <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
-                                                            </div>
-                                                        </li>
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
-                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
-                                                                </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
-                                                            </div>
-                                                        </li>
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
-                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
-                                                                </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
-                                                            </div>
-                                                        </li>
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
-                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
-                                                                </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
-                                                            </div>
-                                                        </li>
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
-                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
-                                                                </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
-                                                            </div>
-                                                        </li>
-                                                        <li class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
-                                                                <img src="http://localhost:4200/assets/uploads/images/keaimage-mypic.jpg.png"
-                                                                [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">Course Title</div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                    Course Description Loream Ipsum Course Description Loream Ipsum Course Description Loream Ipsum
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
-                                                                </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
+                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="course_item.domain" class="kb-default-btn">
                                                                         {{element.content.children.button.text}}
                                                                     </a>
                                                                 </ng-template>

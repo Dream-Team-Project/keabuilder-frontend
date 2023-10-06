@@ -10,6 +10,7 @@ export class CourseService {
 
   // API url
   allApi = '/api/allcourses';
+  allcourseApi = '/api/courses';
   singleApi = '/api/singlecourse';
   multipleApi = '/api/multiplecourse';
   singlebyurlApi = '/api/singlebyurlcourse';
@@ -28,6 +29,9 @@ export class CourseService {
 
   all():Observable<any> {
     return this.http.get(this.allApi+'/'+this.uuid);
+  }
+  allcourses():Observable<any> {
+    return this.http.get(this.allcourseApi+'/'+this.uuid);
   }
 
   single(param:any):Observable<any> {

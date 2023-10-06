@@ -13,6 +13,7 @@ import { UserService } from '../user.service';
 import { BehaviorSubject } from 'rxjs';
 import { Location } from '@angular/common';
 import { NavigationService } from '../navigation.service';
+import { CourseService } from '../_membership/course.service';
 
 @Injectable({
   providedIn: 'root'
@@ -693,6 +694,7 @@ export class GeneralService {
   sectionTemplates:any = [];
   order_forms:any = [];
   offers:any = [];
+  courses:any =[];
   forms:any = [];
   menus:any = [];
   headers:any = [];
@@ -717,7 +719,8 @@ export class GeneralService {
   constructor(private _location: Location, public userService: UserService, private _snackBar: MatSnackBar, 
     public _file: FileUploadService, public tokenStorageService: TokenStorageService, public authService: AuthService, 
     public webPageService: WebpagesService, public websiteService: WebsiteService, public funnelService: FunnelService, 
-    private _offer: OfferService, private _orderForm: OrderformService,private _navigationService : NavigationService) {
+    private _offer: OfferService, private _orderForm: OrderformService,private _navigationService : NavigationService,
+    private _course: CourseService,) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
         this.userService.getUsersDetails().subscribe(data=>{
@@ -779,6 +782,13 @@ export class GeneralService {
   fetchOffers() {
     return new Promise<any>((resolve, reject) => {
       this._offer.fetchoffers().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+  fetchCourses() {
+    return new Promise<any>((resolve, reject) => {
+      this._course.allcourses().subscribe((resp:any)=>{
         resolve(resp.data);
       })
     })
