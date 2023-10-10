@@ -35,13 +35,6 @@ export class LibrarySidebarComponent implements OnInit {
       })
     })
   }
-getCourseLabel(course: any): string {
-    return `<i class="fas fa-life-ring pr-1"></i> ${course.title}`;
-  }
-
-  getModuleLabel(module: any): string {
-    return `<i class="fas fa-life-ring pr-1"></i> ${module.title}`;
-  }
   
   gotoHelpDocs() {
     window.open('https://help.keabuilder.com','_blank');

@@ -93,28 +93,29 @@ export class CrmContactComponent implements OnInit {
     this.fetchData();
   }
   fetchData(){
-    this.fetching = true;
+   
     this.fetchContact();
       this.fetchLists();
         this.fetchTags();
         this.fetchOffers();
-          this.fetching = false;
+          
   }
   fetchContact() {
+    this.fetching = true;
       this._contactService.singlecontact(this.contact.uniqueid).subscribe((resp) => {
-        // console.log(resp?.data)
+        // console.log(resp)
           this.contact = resp?.data;
-          this.contact.oldlists=resp?.data.lists;
-          this.contact.oldtags=resp?.data.tags;
+          this.contact.oldlists=resp?.data?.lists;
+          this.contact.oldtags=resp?.data?.tags;
           this.contact.icon = this.contactIcon(this.contact);
           if(this.contact.fieldans) this.contactFieldJSON = JSON.parse(this.contact.fieldans);
           this.fetchFields();
-          this.selectedLists=resp?.data.temp_lists;
-          this.filteredTempIds.lists=resp?.data.listid;
-          this.selectedTags=resp?.data.temp_tags;
-          this.filteredTempIds.tags=resp?.data.tagid;
+          this.selectedLists=resp?.data?.temp_lists;
+          this.filteredTempIds.lists=resp?.data?.listid;
+          this.selectedTags=resp?.data?.temp_tags;
+          this.filteredTempIds.tags=resp?.data?.tagid;
           this.contact.olddata=JSON.stringify(resp?.data);
-         
+          this.fetching = false;
         }
       );
   }
@@ -228,8 +229,8 @@ export class CrmContactComponent implements OnInit {
   contactIcon(contact:any){
     var fullname = (contact.firstname ? contact.firstname : '') + (contact.lastname ? contact.lastname : '');
     var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
-    if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
-    return str.toUpperCase();
+    if(str.length != 2) str = fullname ? fullname?.slice(0, 2) : contact?.email?.slice(0, 2);
+    return str?.toUpperCase();
   }
 
   tagupdate(tag:any) {

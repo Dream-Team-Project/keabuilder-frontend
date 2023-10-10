@@ -167,9 +167,9 @@ if (currentDomain === appHost) {
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
-    { path: 'member/login', component : MemberLoginComponent,},
-    { path: 'member/library', component : MemberDashboardComponent,},
-    { path: 'member/forgot/password', component :   MemberForgotPasswordComponent,},
+    // { path: 'member/login', component : MemberLoginComponent,},
+    // { path: 'member/library', component : MemberDashboardComponent,},
+    // { path: 'member/forgot/password', component :   MemberForgotPasswordComponent,},
 
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
@@ -312,24 +312,24 @@ if (currentDomain === appHost) {
 
     // membership
 
-    { path: 'membership', component: MembershipComponent,
-      children : [
-        { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
-        { path: 'reports', component: MembershipReportsComponent, canActivate: [AuthGuard] }, 
-        { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
-        { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-        { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-        { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
-      ],
-      canActivate: [AuthGuard] },
-        { path: 'new-membership', component: NewMembershipComponent,
-        children :[
-          { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-          { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-          { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-          ],canActivate: [AuthGuard] },
+    // { path: 'membership', component: MembershipComponent,
+    //   children : [
+    //     { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
+    //     { path: 'reports', component: MembershipReportsComponent, canActivate: [AuthGuard] }, 
+    //     { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
+    //     { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
+    //     { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
+    //     { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
+    //   ],
+    //   canActivate: [AuthGuard] },
+    //     { path: 'new-membership', component: NewMembershipComponent,
+    //     children :[
+    //       { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+    //       { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+    //       { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+    //       ],canActivate: [AuthGuard] },
     
-          { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+    //       { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
 
     // membership
 

@@ -351,7 +351,7 @@ uploadcontacts(){
           this.getpagecontacts({pageIndex:0,pageSize:20});
         }
         else{
-          if(data.errordata?.length>0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
+          if(data.errordata?.length > 0) this._general.openSnackBar(false,data?.errordata,'Ok','center','top');
           this.error=true;
           this.errormessage=data?.error;
           this.spinner=false;

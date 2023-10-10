@@ -1,5 +1,6 @@
 <div class="container-fluid">
   <div class="row">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="col-md-12 kb-contact-content">
       <mat-tab-group (selectedIndexChange)="getactivetab($event)" [(selectedIndex)]="selIndex">
         <mat-tab>
@@ -11,7 +12,7 @@
           <div class="row kb-contact-card m-3">
             <div class="col-sm-1">
               <div class="kb-contact-icon">
-                {{contact.icon}}
+                {{contact?.icon}}
               </div>
             </div>
             <div class="col-sm-11">

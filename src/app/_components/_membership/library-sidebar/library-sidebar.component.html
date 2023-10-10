@@ -7,11 +7,11 @@
   </div>
   <div class="bw-sidebar">
       <ng-container class="w-100 d-inline-block" *ngFor="let course of courses; index as c;">
-        <mat-optgroup  [label]="'Course :' + ' ' + (course.title | titlecase)">
-          <ng-container *ngFor="let module of course.modules;index as m;">
-            <mat-optgroup [label]="'Module : '+' '+module.title | titlecase">
+        <mat-optgroup  [label]="'Course ' + (c+1) + ':'+' '+(course.title | titlecase)">
+          <ng-container  *ngFor="let module of course.modules;index as m;">
+            <mat-optgroup  [label]="'Module ' + (m+1) + ':'+' '+module.title | titlecase">
               <ng-container *ngFor="let lesson of module?.lessons;index as l;">
-                <mat-option class="bw-sidebar__group__header">
+                <mat-option class="">
                     <button class="bw-sidebar__item hasIcon">
                         <div class="bw-sidebar__item__icon">
                             <!-- <i class="fa-regular fa-folder-open"></i> -->
