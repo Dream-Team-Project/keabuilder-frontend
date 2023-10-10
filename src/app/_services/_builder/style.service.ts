@@ -381,7 +381,8 @@ export class StyleService {
     login: false,
     heading: false,
     input: false,
-    button: false
+    button: false,
+    thumbnail :false,
   }
   course_view_types = [
     // { name: 'list view', value: 'kb-course-list-view' },
@@ -565,6 +566,7 @@ export class StyleService {
   }
 
   getBlockParamValue(blockparam: any) {
+    
     if (this._general.respToggleDevice.name == 'tablet-h' && blockparam.tablet_h != 'auto') {
       return blockparam.tablet_h;
     }
@@ -1413,7 +1415,6 @@ export class StyleService {
     this.resetBoxShadow();
 
     if(block.dropdownstyle) this.box_shadow_position = '';
-    
     return this.currentStyling();
   }
 
@@ -1564,6 +1565,7 @@ export class StyleService {
   }
 
   blockSetting(block: any) {
+
       this._general.getAllWebPages();
       this._general.getAllFunnels();
       var obj:any = new Object();
@@ -1591,6 +1593,21 @@ export class StyleService {
           this.elementSetting(block.content.children.description, obj);   
         }
         else if(this.setCourseItemStyle.button) {
+          obj = this.getBlockStyle(block.content.children.button.style);
+          this.elementSetting(block.content.children.button, obj);   
+        }
+        else if(this.setLoginItemStyle.heading) {
+          obj = this.getBlockStyle(block.content.children.heading.style);
+          this.elementSetting(block.content.children.heading, obj);   
+        }
+        else if(this.setLoginItemStyle.input) {
+          obj = this.getBlockStyle(block.content.children.input.style);
+          this.elementSetting(block.content.children.input, obj);   
+        }
+        else if(this.setLoginItemStyle.thumbnail) {
+          obj = this.getBlockStyle(block.content.children.thumbnail.style);
+        }
+        else if(this.setLoginItemStyle.button) {
           obj = this.getBlockStyle(block.content.children.button.style);
           this.elementSetting(block.content.children.button, obj);   
         }
@@ -1904,7 +1921,7 @@ export class StyleService {
     }
     if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' 
     || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle 
-    || this.setDropDownStyle.item || this.setCourseItemStyle.title || this.setCourseItemStyle.description || this.setCourseItemStyle.button) {
+    || this.setDropDownStyle.item || this.setCourseItemStyle.title || this.setCourseItemStyle.description || this.setCourseItemStyle.button || this.setLoginItemStyle.heading || this.setLoginItemStyle.input || this.setLoginItemStyle.button) {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'] ? obj['font-style'] : 'normal';
@@ -1986,6 +2003,9 @@ export class StyleService {
       this.course_gap = JSON.parse(JSON.stringify(element.gap));
     }
     else if(this.setCourseItemStyle.button) {
+      this.button_text = element.text;
+    }
+    else if(this.setLoginItemStyle.button) {
       this.button_text = element.text;
     }
   }

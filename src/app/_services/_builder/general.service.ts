@@ -695,6 +695,7 @@ export class GeneralService {
   order_forms:any = [];
   offers:any = [];
   courses:any =[];
+  login:any=[];
   forms:any = [];
   menus:any = [];
   headers:any = [];

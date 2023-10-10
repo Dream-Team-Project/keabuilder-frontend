@@ -41,6 +41,7 @@ export class BuilderComponent implements OnInit {
   validate = {
     tempname: new FormControl('', [Validators.required]),
   }
+  hide=true;
   showNavFrom:string = 'bottom';
   trigger:string = 'saved';
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -85,7 +86,7 @@ export class BuilderComponent implements OnInit {
           _general.fetchCourses().then((resp)=>{
             _general.courses=resp;
             // this._element.elementList.courses.children=resp
-            console.log(resp)
+            // console.log(resp)
           });
             if(!data) _general.openSnackBar(true, 'Server Error', 'OK', 'center', 'top');
             else if(!_general.isObjEmpty(data)) {

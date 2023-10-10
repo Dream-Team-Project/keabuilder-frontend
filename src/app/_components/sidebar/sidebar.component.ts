@@ -494,7 +494,7 @@ export class SidebarComponent implements OnInit {
     const menuMap:any = {
       '/websites': 1,
       '/funnels': 2,
-      // '/membership': 3,
+      '/membership': 3,
       '/crm': 4,
       '/sales': 5,
       '/account': 8,
