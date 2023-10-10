@@ -73,9 +73,12 @@ export class ElementService {
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
     // courses block
-    courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1},
+    courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1}, 
     children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
     // courses block
+    // login
+    login: { content: { name: 'login', children: {heading: {}, input: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-user' },
+    // login
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
     // divider
@@ -534,6 +537,8 @@ export class ElementService {
     dividers: [],
     videos: [],
     codes: [],
+    courses: [],
+    logins: []
   }
 
   constructor(private _general: GeneralService, 
@@ -587,6 +592,17 @@ export class ElementService {
       }
       if(e.content.name == 'code') {
         this.default.codes.push(e);
+      }
+      if(e.content.name == 'courses') {
+        this._style.course_view_types.forEach((item:any)=>{
+          let obj = JSON.parse(JSON.stringify(e));
+          obj.content.view = item.value;
+          obj['grid_name'] = item.name;
+          this.default.courses.push(obj);
+        })
+      }
+      if(e.content.name == 'login') {
+        this.default.logins.push(e);
       }
       if(e.content.name == 'video') {
         this.default.videos.push(e);
@@ -718,6 +734,9 @@ export class ElementService {
         delete tempObj.size;
         delete tempObj.weight;
       }
+      // login condition
+      // for self defaultstyling
+      // default element styling for others
       else if (element.name == 'form' || element.name == 'divider') {
         respS = { 'width': '100%' };
         tempObj.content.style = {

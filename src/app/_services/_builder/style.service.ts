@@ -158,6 +158,12 @@ export class StyleService {
     description: false,
     button: false
   }
+  setLoginItemStyle = {
+    login: false,
+    heading: false,
+    input: false,
+    button: false
+  }
   course_view_types = [
     // { name: 'list view', value: 'kb-course-list-view' },
     { name: '2 cloumn grid view', value: 'kb-course-grid-view-2' },
