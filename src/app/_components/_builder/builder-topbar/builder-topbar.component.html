@@ -372,6 +372,30 @@
                 [style.backgroundColor]="'var(--primary-color)'"></span>
             </span>
         </div>
+        <div *ngSwitchCase="'courses'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.courses" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let courses of _element.default.courses, index as i" (cdkDragMoved)="dragDataEmit(courses)" [cdkDragData]="courses">
+                <span class="kb-d-btn">
+                    {{courses.grid_name | titlecase}}
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    {{courses.grid_name | titlecase}}
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
+        <div *ngSwitchCase="'login'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_element.default.logins" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
+            <span cdkDrag *ngFor="let login of _element.default.logins, index as i" (cdkDragMoved)="dragDataEmit(login)" [cdkDragData]="login">
+                <span class="kb-d-btn">
+                    <i [class]="login.iconCls"></i>
+                </span>
+                <span *cdkDragPreview class="custom-preview kb-d-btn" [style.backgroundColor]="'var(--primary-color)'">
+                    <i [class]="login.iconCls"></i>
+                </span>
+                <span *cdkDragPlaceholder class="custom-placeholder"
+                [style.backgroundColor]="'var(--primary-color)'"></span>
+            </span>
+        </div>
         <div *ngSwitchCase="'menu'" id="elementgroup" class="kb-block-selection kb-element-list kb-btn-list" cdkDropList [cdkDropListData]="_general.menus" [cdkDropListConnectedTo]="_element.elementConnect" cdkDropListSortingDisabled>
             <button mat-button (click)="_general.redirectLink('/websites/navigation')" class="kb-icon-btn">
                 <i [innerHTML]="'add' | svg | safeHtml"></i>

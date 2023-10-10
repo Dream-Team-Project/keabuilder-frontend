@@ -843,6 +843,7 @@ export class GeneralService {
             }
           )
         }
+        // membeship
         else if(this.target.type == 'header') {
           this._file.getheader(id).subscribe((resp:any)=>{
             resolve(resp.data[0]);
@@ -1098,7 +1099,6 @@ export class GeneralService {
   }
 
   elementStyling(ele:any) {
-    console.log(ele);
     var pseudoEle:string = this.getSelector(ele);
     var selector = '#' + ele.id + ' .kb-element-content ' + pseudoEle;
     var style = JSON.parse(JSON.stringify(ele.content.style));

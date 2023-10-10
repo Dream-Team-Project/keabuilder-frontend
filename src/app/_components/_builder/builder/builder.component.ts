@@ -512,7 +512,7 @@ export class BuilderComponent implements OnInit {
   }
 
   showSettingMenu(content:any) {
-    return content == 'menu' || content == 'courses';
+    return content == 'menu' || content == 'courses' || content == 'login';
   }
 
   openSetting(block:any) {
