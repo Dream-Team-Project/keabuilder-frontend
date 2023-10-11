@@ -132,6 +132,12 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
       description: false,
       button: false
     };
+    this._style.setLoginItemStyle = {
+      login: false,
+      label: false,
+      input: false,
+      button: false
+    };
     this.searchInpClear();
     this.searchText = '';
     this.searchType = '';
@@ -198,12 +204,15 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
 
   isText(en:string) {
     return en == 'input' || en == 'label' || en == 'option' || en == 'icon' || en == 'text' || en == 'heading' || en == 'button' 
-    || this._style.setItemStyle || this._style.setDropDownStyle.item || this._style.setCourseItemStyle.title || this._style.setCourseItemStyle.description  || this._style.setCourseItemStyle.button;
+    || this._style.setItemStyle || this._style.setDropDownStyle.item || this._style.setCourseItemStyle.title 
+    || this._style.setCourseItemStyle.description  || this._style.setCourseItemStyle.button || this._style.setLoginItemStyle.label 
+    || this._style.setLoginItemStyle.input || this._style.setLoginItemStyle.button;
   }
 
   showContentTab() {
     return this._general.selectedBlock.type == 'element' && this._general.selectedBlock.content?.name != 'form' 
-    && !this._style.setDropDownStyle.main && !this._style.setCourseItemStyle.card && !this._style.setCourseItemStyle.thumbnail;
+    && !this._style.setDropDownStyle.main && !this._style.setCourseItemStyle.card && !this._style.setCourseItemStyle.thumbnail
+    && !this._style.setLoginItemStyle.login;
   }
 
   searchingDeep(val:string) {

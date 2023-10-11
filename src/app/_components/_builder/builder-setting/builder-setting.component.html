@@ -1503,7 +1503,8 @@
                             </div>
                         </div>
                         <div *ngIf="searchingDeep('Sizing Alignment') && !_style.setItemStyle && !_style.setDropDownStyle.main && !_style.setDropDownStyle.item">
-                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' && !_style.setCourseItemStyle.button else blockAlign"
+                            <div *ngIf="_general.selectedBlock.type == 'element' && _general.selectedBlock.content?.name != 'form' && _general.selectedBlock.content?.name != 'input' && !_style.setCourseItemStyle.button
+                            && !_style.setLoginItemStyle.button else blockAlign"
                                 class="kb-inner-tab-component">
                                 <div class="kb-tab-head">Alignment <i matTooltip="Not work on full width" [matTooltipPosition]="'above'" [style]="'marginLeft: 5px;'" class="fa fa-exclamation-circle kb-active-brd"></i></div>
                                 <div class="kb-tab-content">

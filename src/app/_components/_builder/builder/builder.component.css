@@ -616,7 +616,7 @@ div.kb-element.kb-border:before {
     border-color: var(--primary-color);
 }
 
-div.kb-element-content *:not(.kb-content-item, .kb-course-list *, .kb-menu-resp *, .kb-form-append *), .kb-menu-bar {
+div.kb-element-content *:not(.kb-content-item, .kb-login-form *, .kb-course-list *, .kb-menu-resp *, .kb-form-append *), .kb-menu-bar {
     margin: 0!important;
 }
 
@@ -1468,4 +1468,9 @@ app-page-view .kb-drag-container {
 .kb-course-list.kb-course-list-view .kb-course-item {
     display: flex;
     column-gap: 15px;
+}
+
+.kb-login-form label, .kb-login-form input {
+    display: block;
+    width: 100%;
 }
