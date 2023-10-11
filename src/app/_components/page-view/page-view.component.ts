@@ -10,6 +10,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { PageViewService } from 'src/app/_services/page-view.service';
+import { CourseService } from 'src/app/_services/_membership/course.service';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class PageViewComponent implements OnInit {
     private _file: FileUploadService,
     public _style: StyleService,
     public _image: ImageService,
+    private _course: CourseService,
     private _pageviewService:PageViewService,) {
    }
 
@@ -98,6 +100,14 @@ export class PageViewComponent implements OnInit {
             }
             else if(param_target == 'funnel') {
               this.funnel.getpreviewfunnelstep(this.req).subscribe((resp:any)=>{
+                if(resp?.data && resp?.data.length > 0) {
+                  this.setLoadScript(resp.data);
+                }
+                else this._general.redirectToPageNotFound();
+              })
+            }
+            else if(param_target == 'membership') {
+              this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
                 if(resp?.data && resp?.data.length > 0) {
                   this.setLoadScript(resp.data);
                 }

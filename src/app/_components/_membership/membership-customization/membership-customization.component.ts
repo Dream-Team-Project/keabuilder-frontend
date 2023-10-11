@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core
 import { WebpagesService } from 'src/app/_services/webpages.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { CourseService } from 'src/app/_services/_membership/course.service';
 
 @Component({
   selector: 'app-membership-customization',
@@ -18,10 +19,11 @@ export class MembershipCustomizationComponent implements OnInit {
   togglestatus:any;
   toggleview = true;
   nodata:any;
-  
-  constructor(private webpagesService: WebpagesService,
+  domain:any;
+  constructor(
     public _image: ImageService,
-    public _general: GeneralService,) {
+    public _general: GeneralService,
+    public _course: CourseService,) {
       this.toggleview = _general.getStorage('page_toggle');
     
      }
@@ -34,30 +36,35 @@ export class MembershipCustomizationComponent implements OnInit {
   showwebpages(){
     this.searching = true;
     this.spinner=true;
-      this.webpagesService.getWebpages().subscribe({
+      this._course.getallMembershippage().subscribe({
         next: data => {
-         if(data?.data?.length > 0) {
-          data.data.forEach((element :any) => {
-            element.pages.map((page:any) => {
-              this.kbpages.push(page);
-            })
-            
-          })
+         if(data.success) {
+              this.kbpages=data.data;
+              this.searching = false;
         }
         else{
           this.nodata=true;
+          this.searching = false;
         }
          
-          this.searching = false;
+          
         },
         error: err => {
           // console.log(err);
         }
       });
     }
+    
     togglepageview(){
       this.toggleview = !this.toggleview; 
       // this._general.setStorage('page_toggle',this.toggleview);
+    }
+
+    checkpagesettings(value:any,data:any){
+      if(value=='preview'){
+        var url = 'https://'+this.domain+'/'+data;
+        window.open(url, '_blank');
+      }
     }
 
     searchpages(a:any,b:any,c:any){

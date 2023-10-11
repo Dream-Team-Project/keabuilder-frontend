@@ -60,11 +60,11 @@
                 <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
                   <div class="row align-items-center p-0 h-100">
                     <div [class.p-0]="!toggleview" class="col-md-12">
-                      <div class="keabuilder-title-board line-ellipsis">
+                      <div class="" matTooltip="Page Name" matTooltipPosition="above">
                         <span>{{kbpage.page_name}}</span>
-                        <input type="text" [(ngModel)]="kbpage.page_name"
+                        <!-- <input type="text" [(ngModel)]="kbpage.page_name"
                            matTooltip="Edit Page Name"
-                          matTooltipPosition="above">
+                          matTooltipPosition="above"> -->
                       </div>
                       <!-- (blur)="changepagename(kbpage,kbpage.page_name,'namechange')" -->
                       <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
@@ -72,13 +72,13 @@
                       </p>
                     </div>
                     <div [class.p-0]="!toggleview" class="col-md-12 text-right">
-                      <button mat-raised-button color="accent"
+                      <button (click)="checkpagesettings('preview',kbpage.page_path)" mat-raised-button color="accent"
                         class="mr-2"> View <i class="far fa-eye"></i></button>
-                      <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button
+                      <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'membership')" mat-raised-button
                         color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
-                      <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
+                      <!-- <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu2"> More <i class="fas fa-cog"></i></button>
                       <mat-menu #menu2="matMenu">
-                        <!-- <button mat-menu-item (click)="changepagename(kbpage,kbpage.page_name,'quickedit')">
+                        <button mat-menu-item (click)="changepagename(kbpage,kbpage.page_name,'quickedit')">
                           <i class="fas fa-pen mr-2"></i> Quick Edit
                         </button>
                        
@@ -96,8 +96,8 @@
                         </button>
                         <button class="text-danger" mat-menu-item (click)="archive_popup(kbpage)">
                           <i class="far fa-trash-alt mr-2"></i> Archive
-                        </button> -->
-                      </mat-menu>
+                        </button>
+                      </mat-menu> -->
                     </div>
                   </div>
                 </div>

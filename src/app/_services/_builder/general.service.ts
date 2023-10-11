@@ -855,6 +855,19 @@ export class GeneralService {
             resolve(resp.data[0]);
           })
         }
+        else if(this.target.type == 'membership') {
+          this._course.getSingleMembershippage(id).subscribe(
+            (e:any)=>{
+              this.setBuilder(e).then(resp=>{
+                resolve(resp);
+              })
+            },
+            (err:any) => {
+              this.loading.error = true;
+              resolve(false);
+            }
+          )
+        }
         else resolve(false);
       });
     })
@@ -902,6 +915,7 @@ export class GeneralService {
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
+    if(this.target.type == 'membership') uniqueid = 'login_view';
     window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target.type+'/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 
@@ -982,6 +996,12 @@ export class GeneralService {
           else resolve(false);
         }); 
       }
+      else if(this.target.type == 'membership'){
+        this._course.savememberPreview(prevObj).subscribe((resp:any)=>{
+          if(resp.success) resolve(true);
+          else resolve(false);
+        }); 
+      }
       else resolve(false);
     })
   }
@@ -1034,6 +1054,13 @@ export class GeneralService {
           (e:any)=>{
             resolve(e);
           })
+      }
+      if(this.target.type == 'membership'){
+        this._course.updatemembershiploginpage(dbobj).subscribe(
+          (e:any)=>{
+            console.log(e)
+            resolve(e);
+        })
       }
       else resolve(false);
     })

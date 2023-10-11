@@ -19,6 +19,11 @@ export class CourseService {
   updateApi = '/api/updatecourse';
   deleteApi = '/api/deletecourse';
   searchcoursequeryApi = '/api/searchcoursequery';
+  updatememberloginApi='/api/updatememberloginpage/';
+  savememberPreviewApi='/api/savememberPreview'
+  getsinglemembershippageApi = '/api/singlemembershippage/';
+  getallmembershippageApi = '/api/allmembershippage/';
+  getpreviewmembershippageApi = '/api/previewmembershippage';
   // API url
   uuid: any;
 //  course:any={courseid:'',title:''};
@@ -176,5 +181,28 @@ searchcoursequery(obj:any):Observable<any> {
 }
 
 // search & filter
+
+// update default login && library page
+getallMembershippage(): Observable<any> {
+  return this.http.get(this.getallmembershippageApi+this.uuid);
+}
+
+getSingleMembershippage(uniqueid:string): Observable<any> {
+  return this.http.get(this.getsinglemembershippageApi+this.uuid+'/'+uniqueid);
+}
+
+updatemembershiploginpage(pagedata: any): Observable<any> {
+  return this.http.post(this.updatememberloginApi+this.uuid, pagedata);
+}
+
+savememberPreview(pagedata: any): Observable<any> {
+  return this.http.post(this.savememberPreviewApi, pagedata);
+}
+getpreviewmembershippage(obj:any): Observable<any> {
+  return this.http.post(this.getpreviewmembershippageApi,obj);
+}
+
+
+// update default login && library page
 
 }

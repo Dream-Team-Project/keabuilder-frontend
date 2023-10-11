@@ -23,9 +23,7 @@ export class MembersService {
       password
     }, httpOptions);
   }
-
- 
-
+  
   memberregister(obj:any): Observable<any> {
     return this.http.post(this.AUTH_API + 'signup',obj, httpOptions);
   }
