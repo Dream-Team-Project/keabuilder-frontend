@@ -747,7 +747,7 @@ export class GeneralService {
   fetchMenus() {
     return new Promise<any>((resolve, reject) => {
       this._navigationService.fetchNavigations().subscribe((resp:any)=>{
-        if(resp.data.length-1) {
+        if(resp.success) {
           this.menus = resp.data;
           resolve(this.menus);
         }

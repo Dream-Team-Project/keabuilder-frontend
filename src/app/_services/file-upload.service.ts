@@ -74,7 +74,7 @@ export class FileUploadService {
   // headers
   searchheadersApi = '/api/searchheaders';
   allheadersApi = "/api/allheaders";
-  getheaderApi = "/api/getheader";
+  getheaderApi = "/api/singleheader";
   saveheaderApi = "/api/saveheader";
   updateheaderApi = "/api/updateheader";
   deleteheaderApi = "/api/deleteheader";
@@ -277,11 +277,11 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
     }
 
     fetchheaders():Observable<any> {
-      return this.http.get(this.allheadersApi+'/'+this.uuid);
+      return this.http.get(this.allheadersApi+'/'+this.uuid).pipe(catchError(this.errorHandler));
     }
 
     getheader(uniqueid:any):Observable<any> {
-      return this.http.get(this.getheaderApi+'/'+this.uuid+'/'+uniqueid);
+      return this.http.get(this.getheaderApi+'/'+this.uuid+'/'+uniqueid).pipe(catchError(this.errorHandler));
     }
   
     saveheader(obj:any):Observable<any> {
