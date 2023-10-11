@@ -379,10 +379,9 @@ export class StyleService {
   }
   setLoginItemStyle = {
     login: false,
-    heading: false,
+    label: false,
     input: false,
     button: false,
-    thumbnail :false,
   }
   course_view_types = [
     // { name: 'list view', value: 'kb-course-list-view' },
@@ -776,7 +775,7 @@ export class StyleService {
   }
 
   setBlockAlign(pos: string) {
-      this.blockAlign = pos;
+    this.blockAlign = pos;
     if(pos == 'center') {
       this.margin.left = 'auto';
       this.margin.right = 'auto';
@@ -1180,6 +1179,13 @@ export class StyleService {
           this._general.selectedBlock.content.children.button.text = this.button_text;
           this.setElementStyle(this._general.selectedBlock.content.children.button, this.textStyling());
         }
+        else if(this.setLoginItemStyle.login) this.setElementStyle(this._general.selectedBlock.content, this.currentStyling());
+        else if(this.setLoginItemStyle.label) this.setElementStyle(this._general.selectedBlock.content.children.label, this.textStyling());
+        else if(this.setLoginItemStyle.input) this.setElementStyle(this._general.selectedBlock.content.children.input, this.textStyling());
+        else if(this.setLoginItemStyle.button) {
+          this._general.selectedBlock.content.children.button.text = this.button_text;
+          this.setElementStyle(this._general.selectedBlock.content.children.button, this.textStyling());
+        }
         else this.setElementStyle(this._general.selectedBlock.content, this.textStyling());
       }    
     }
@@ -1565,7 +1571,6 @@ export class StyleService {
   }
 
   blockSetting(block: any) {
-
       this._general.getAllWebPages();
       this._general.getAllFunnels();
       var obj:any = new Object();
@@ -1596,16 +1601,13 @@ export class StyleService {
           obj = this.getBlockStyle(block.content.children.button.style);
           this.elementSetting(block.content.children.button, obj);   
         }
-        else if(this.setLoginItemStyle.heading) {
-          obj = this.getBlockStyle(block.content.children.heading.style);
-          this.elementSetting(block.content.children.heading, obj);   
+        else if(this.setLoginItemStyle.label) {
+          obj = this.getBlockStyle(block.content.children.label.style);
+          this.elementSetting(block.content.children.label, obj);   
         }
         else if(this.setLoginItemStyle.input) {
           obj = this.getBlockStyle(block.content.children.input.style);
           this.elementSetting(block.content.children.input, obj);   
-        }
-        else if(this.setLoginItemStyle.thumbnail) {
-          obj = this.getBlockStyle(block.content.children.thumbnail.style);
         }
         else if(this.setLoginItemStyle.button) {
           obj = this.getBlockStyle(block.content.children.button.style);
@@ -1921,7 +1923,8 @@ export class StyleService {
     }
     if (element.name == 'input' || element.name == 'label' || element.name == 'option' || element.name == 'icon' 
     || element.name == 'text' || element.name == 'heading' || element.name == 'button' || this.setItemStyle 
-    || this.setDropDownStyle.item || this.setCourseItemStyle.title || this.setCourseItemStyle.description || this.setCourseItemStyle.button || this.setLoginItemStyle.heading || this.setLoginItemStyle.input || this.setLoginItemStyle.button) {
+    || this.setDropDownStyle.item || this.setCourseItemStyle.title || this.setCourseItemStyle.description || this.setCourseItemStyle.button 
+    || this.setLoginItemStyle.label || this.setLoginItemStyle.input || this.setLoginItemStyle.button) {
       this.font_size.value = obj['font-size'];
       this.font_weight = this.font_weight_types.filter((item:any)=>{ if(obj['font-weight'] == item.value) return item; })[0];
       this.font_style = obj['font-style'] ? obj['font-style'] : 'normal';
@@ -2002,10 +2005,7 @@ export class StyleService {
       this.course_view = this.course_view_types.filter((cvt:any) => cvt.value == element.view)[0];
       this.course_gap = JSON.parse(JSON.stringify(element.gap));
     }
-    else if(this.setCourseItemStyle.button) {
-      this.button_text = element.text;
-    }
-    else if(this.setLoginItemStyle.button) {
+    else if(this.setCourseItemStyle.button || this.setLoginItemStyle.button) {
       this.button_text = element.text;
     }
   }

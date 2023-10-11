@@ -217,20 +217,19 @@
                                                                 </button>
                                                             </mat-menu>
                                                         </ng-container>
-                                                        <!-- login mat menu -->
                                                         <ng-container *ngIf="element.content.name == 'login'">
                                                             <span [matMenuTriggerFor]="moresetting" (onMenuOpen)="element.moresetting = true" (onMenuClose)="element.moresetting = false; element.setting = false"
                                                             matTooltip="Element Setting" matTooltipPosition="above"><i
                                                                 class="far fa-edit"></i></span>
                                                             <mat-menu #moresetting="matMenu" xPosition="after" yPosition="below">
-                                                                <button mat-menu-item (click)="_style.setLoginItemStyle.heading = true; openSetting(element)">
-                                                                    <i class="fa fa-solid fa-heading"></i> Heading
+                                                                <button mat-menu-item (click)="_style.setLoginItemStyle.login = true; openSetting(element)">
+                                                                    <i class="fas fa-sign-in-alt"></i> Login
+                                                                </button>
+                                                                <button mat-menu-item (click)="_style.setLoginItemStyle.label = true; openSetting(element)">
+                                                                    <i class="fas fa-font"></i> Label
                                                                 </button>
                                                                 <button mat-menu-item (click)="_style.setLoginItemStyle.input = true; openSetting(element)">
                                                                     <i class="fas fa-th"></i> Input
-                                                                </button>
-                                                                <button mat-menu-item (click)="_style.setLoginItemStyle.thumbnail = true; openSetting(element)">
-                                                                    <i class="far fa-image"></i> Thumbnail
                                                                 </button>
                                                                 <button mat-menu-item (click)="_style.setLoginItemStyle.button = true; openSetting(element)">
                                                                     <i class="fas fa-toggle-off"></i> Button
@@ -390,37 +389,29 @@
                                                 </div>
                                                 <div *ngSwitchCase="'login'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
                                                 class="kb-element-content">
-                                                        <div  class="kb-login-item" [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.login ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
-                                                            <div>
-                                                                <img  [src]="_general.login.thumbnail ? _image.uploadImgPath+_general.login.thumbnail : _image.uploadImgPath+'webpage_thumbnail.jpg'"
-                                                                [ngStyle]="_style.setLoginItemStyle.thumbnail ?  _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
-                                                            </div>
-                                                            <div>
-                                                                <mat-form-field class="example-full-width" appearance="fill">
-                                                                    <mat-label>Email</mat-label>
-                                                                    <input type="email" matInput  placeholder="Ex. pat@example.com">
-                                                                  </mat-form-field>
-                                                            
-                                                                <mat-form-field class="example-full-width" appearance="fill">
-                                                                    <mat-label>Password</mat-label>
-                                                                    <input type="password" matInput  required minlength="6" [type]="hide ? 'password' : 'text'">
-                                                                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
-                                                                      <i class="far " [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
-                                                                    </button>
-                                                                    
-                                                                  </mat-form-field>
-                                                            </div>
-                                                                <div [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.heading ? _style.textStyling() : _style.getBlockStyle(element.content.children.heading.style)">{{'hello'}}</div>
-                                                            <div>
-                                                                <a *ngIf="isBlockActive(element) && _style.setLoginItemStyle.button else showBtn"
-                                                                [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
-                                                                    {{_style.button_text}}
+                                                    <div class="kb-login-form" [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.login ? _style.currentStyling() : _style.getBlockStyle(element.content.style)">
+                                                        <div>
+                                                            <label [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.label ? _style.textStyling() : _style.getBlockStyle(element.content.children.label.style)">
+                                                                Email</label>
+                                                            <input type="text" name="email" placeholder="email address"
+                                                            [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.input ? _style.textStyling() : _style.getBlockStyle(element.content.children.input.style)">
+                                                        </div>
+                                                        <div>
+                                                            <label [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.label ? _style.textStyling() : _style.getBlockStyle(element.content.children.label.style)">
+                                                                Password</label>
+                                                            <input type="password" name="password" placeholder="********"
+                                                            [ngStyle]="isBlockActive(element) && _style.setLoginItemStyle.input ? _style.textStyling() : _style.getBlockStyle(element.content.children.input.style)">
+                                                        </div>
+                                                        <div>
+                                                            <a *ngIf="isBlockActive(element) && _style.setLoginItemStyle.button else showBtn"
+                                                            [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
+                                                                {{_style.button_text}}
+                                                            </a>
+                                                            <ng-template #showBtn>
+                                                                <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" class="kb-default-btn">
+                                                                    {{element.content.children.button.text}}
                                                                 </a>
-                                                                <ng-template #showBtn>
-                                                                    <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'/'" class="kb-default-btn">
-                                                                        {{element.content.children.button.text}}
-                                                                    </a>
-                                                                </ng-template>
+                                                            </ng-template>
                                                         </div>
                                                     </div>
                                                 </div>

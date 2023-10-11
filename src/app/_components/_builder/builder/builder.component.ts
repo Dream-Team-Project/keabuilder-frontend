@@ -509,7 +509,8 @@ export class BuilderComponent implements OnInit {
   isChildDeactive() {
     return !this._style.setItemStyle && !this._style.setDropDownStyle.main && !this._style.setDropDownStyle.item
     && !this._style.setCourseItemStyle.card && !this._style.setCourseItemStyle.thumbnail && !this._style.setCourseItemStyle.title 
-    && !this._style.setCourseItemStyle.description && !this._style.setCourseItemStyle.button;
+    && !this._style.setCourseItemStyle.description && !this._style.setCourseItemStyle.button && !this._style.setLoginItemStyle.login
+    && !this._style.setLoginItemStyle.label && this._style.setLoginItemStyle.input && this._style.setLoginItemStyle.button;
   }
 
   showSettingMenu(content:any) {

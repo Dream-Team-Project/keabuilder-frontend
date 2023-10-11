@@ -77,7 +77,7 @@ export class ElementService {
     children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
     // courses block
     // login
-    login: { content: { name: 'login', children: {heading: {}, input: {email:'',password:''},thumbnail:{}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
+    login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
     // login,password
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
@@ -681,7 +681,6 @@ export class ElementService {
         delete tempObj.dropdownstyle;
       }
       else if(element.name == 'courses') {
-       
         respS = { 'width': '100%' };
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),
@@ -735,11 +734,7 @@ export class ElementService {
         delete tempObj.size;
         delete tempObj.weight;
       }
-      // login condition
-      // for self defaultstyling
-      // default element styling for others
       else if(element.name == 'login') {
-        
         respS = { 'width': '100%' };
         tempObj.content.style = {
           desktop: this._style.defaultStyling(tempObj),
@@ -747,34 +742,33 @@ export class ElementService {
           tablet_v: respS,
           mobile: respS
         }
+        tempObj.content.style.desktop['width'] = '50%';
+        tempObj.content.style.desktop['padding'] = '12px 20px';
         tempObj.content.style.desktop['background-color'] = 'rgb(255, 255, 255)';
         tempObj.content.style.desktop['border-radius'] = '10px';
         tempObj.content.style.desktop['box-shadow'] = 'rgba(0, 0, 3, 0.1) 0px 2px 12px 4px';
-        tempObj.content.children.thumbnail.style = {
-          desktop: this._style.defaultStyling(tempObj),
-          tablet_h: '',
-          tablet_v: respS,
-          mobile: respS
-        }
-        tempObj.content.children.thumbnail.style.desktop['margin'] = '0px';
-        tempObj.size = '22';
-        tempObj.weight = {num: 'semi bold (demi bold)', val: 600};
-        tempObj.content.children.heading.style = {
+        tempObj.item_alignment = {desktop:'center', tablet_h:'center', tablet_v:'center', mobile:'center'};
+        tempObj.size = '16';
+        tempObj.weight = {num: 'normal', val: 500};
+        tempObj.content.children.label.style = {
           desktop: this._style.defaultElementStyling(tempObj),
           tablet_h: '',
           tablet_v: respS,
           mobile: respS 
         }
-        tempObj.content.children.heading.style.desktop['margin'] = '0px 10px';
+        tempObj.content.children.label.style.desktop['width'] = '100%';
         tempObj.size = '14';
-        tempObj.weight = {num: 'normal', val: 400};
+        tempObj.weight = {num: 'normal', val: 500};
         tempObj.content.children.input.style = {
           desktop: this._style.defaultElementStyling(tempObj),
           tablet_h: '',
           tablet_v: respS,
           mobile: respS
         }
-        tempObj.content.children.input.style.desktop['margin'] = '0px 10px';
+        tempObj.content.children.input.style.desktop['border'] = '2px solid #e0e0e0';
+        tempObj.content.children.input.style.desktop['border-radius'] = '4px';
+        tempObj.content.children.input.style.desktop['width'] = '100%';
+        tempObj.content.children.input.style.desktop['padding'] = '4px 8px';
         tempObj.button_child = true;
         tempObj.content.children.button.style = {
           desktop: this._style.defaultElementStyling(tempObj),
@@ -782,10 +776,11 @@ export class ElementService {
           tablet_v: respS,
           mobile: respS
         }
-        tempObj.content.children.button.style.desktop['margin'] = '10px 10px';
+        tempObj.content.children.button.style.desktop['margin'] = '0px';
         delete tempObj.button_child;
         delete tempObj.size;
         delete tempObj.weight;
+        console.log(tempObj.content);
       }
       else if (element.name == 'form' || element.name == 'divider') {
         respS = { 'width': '100%' };

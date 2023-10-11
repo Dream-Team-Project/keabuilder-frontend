@@ -345,7 +345,7 @@ div.kb-element-content .kb-form-append, ::ng-deep div.kb-element-content .kb-for
     width: 100%!important;
 }
 
-div.kb-element-content *:not(.kb-content-item, .kb-course-list *, .kb-menu-resp *, .kb-form-append *), .kb-menu-bar {
+div.kb-element-content *:not(.kb-content-item, .kb-login-form *, .kb-course-list *, .kb-menu-resp *, .kb-form-append *), .kb-menu-bar {
     margin: 0!important;
 }
 
