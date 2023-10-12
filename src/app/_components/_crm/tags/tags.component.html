@@ -16,6 +16,7 @@
   <span mat-dialog-title *ngIf="!tag.uniqueid">Add Tag</span>
   <span mat-dialog-title *ngIf="tag.uniqueid">Update Tag</span>
   <div mat-dialog-content>
+    <mat-error *ngIf="hasError">{{hasError}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
       <mat-label>Tag Name</mat-label>
       <input type="text" matInput [(ngModel)]="tag.name" placeholder="Eg: Monthly Newsletter, Sales Leads, etc."

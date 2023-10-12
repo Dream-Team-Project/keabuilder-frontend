@@ -915,7 +915,7 @@ export class GeneralService {
 
   preview() {
     var uniqueid = this.target.type == 'funnel' ? this.webpage.funnelid : this.webpage.website_id;
-    if(this.target.type == 'membership') uniqueid = 'login_view';
+    if(this.target.type == 'membership') uniqueid = 'default_view';
     window.open(window.location.protocol+'//'+window.location.host+'/preview/'+this.target.type+'/'+this.user.uniqueid+'/'+uniqueid+'/'+this.webpage.uniqueid, 'framename');
   }
 

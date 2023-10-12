@@ -40,6 +40,7 @@ export class PageViewComponent implements OnInit {
   };
   defaultPage:boolean = false;
   pageNotFound:boolean = false;
+  courses :any=[];
 
   constructor(
     private route: ActivatedRoute, 
@@ -54,9 +55,13 @@ export class PageViewComponent implements OnInit {
     public _image: ImageService,
     private _course: CourseService,
     private _pageviewService:PageViewService,) {
+      this.fetchCourses().then((resp) =>{
+        this.courses=resp;
+      })
    }
 
   ngOnInit(): void {
+   
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
@@ -287,6 +292,14 @@ export class PageViewComponent implements OnInit {
 
   toggleRespMenu(menu:any) {
     menu.menuOpen = !menu.menuOpen
+  }
+
+  fetchCourses() {
+    return new Promise<any>((resolve, reject) => {
+      this._course.allcourses().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
   }
 
 }

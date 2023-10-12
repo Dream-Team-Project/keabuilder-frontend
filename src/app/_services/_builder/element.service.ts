@@ -73,11 +73,11 @@ export class ElementService {
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
     // courses block
-    courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1}, 
-    children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
+    // courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1}, 
+    // children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
     // courses block
     // login
-    login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
+    // login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
     // login,password
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },

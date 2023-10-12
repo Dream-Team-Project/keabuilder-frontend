@@ -102,6 +102,52 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div *ngSwitchCase="'courses'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
+                                                class="kb-element-content">
+                                                    <ul class="kb-course-list" [class]="element.content.view"
+                                                    [ngStyle]=" _style.getBlockStyle(element.content.style)"
+                                                    [style.gap]=" _style.getBlockParamValue(element.content.gap) + 'rem'">
+                                                        <li *ngFor="let course_item of courses, index as mi" class="kb-course-item" [ngStyle]="_style.getBlockStyle(element.content.children.card.style)">
+                                                            <div>
+                                                                <img [src]="course_item.thumbnail ? _image.uploadImgPath+course_item.thumbnail : _image.uploadImgPath+'webpage_thumbnail.jpg'"
+                                                                [ngStyle]="_style.getBlockStyle(element.content.children.thumbnail.style)">
+                                                            </div>
+                                                            <div>
+                                                                <div [ngStyle]="_style.getBlockStyle(element.content.children.title.style)">{{course_item.title}}</div>
+                                                                <div [ngStyle]="_style.getBlockStyle(element.content.children.description.style)">
+                                                                    {{course_item.description}}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="course_item.domain" class="kb-default-btn">
+                                                                    {{element.content.children.button.text}}
+                                                                </a>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                     </div>
+                                     <div *ngSwitchCase="'login'" [attr.data-name]="element.content.name" [attr.data-id]="element.content.data_id"
+                                                class="kb-element-content">
+                                                    <div class="kb-login-form" [ngStyle]="_style.getBlockStyle(element.content.style)">
+                                                        <div>
+                                                            <label [ngStyle]="_style.getBlockStyle(element.content.children.label.style)">
+                                                                Email</label>
+                                                            <input type="text" name="email" placeholder="email address"
+                                                            [ngStyle]="_style.getBlockStyle(element.content.children.input.style)">
+                                                        </div>
+                                                        <div>
+                                                            <label [ngStyle]="_style.getBlockStyle(element.content.children.label.style)">
+                                                                Password</label>
+                                                            <input type="password" name="password" placeholder="********"
+                                                            [ngStyle]="_style.getBlockStyle(element.content.children.input.style)">
+                                                        </div>
+                                                        <div>
+                                                            <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" class="kb-default-btn">
+                                                                {{element.content.children.button.text}}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                     </div>
                                     <div *ngSwitchCase="'form-component'" [attr.data-name]="element.content.type" [attr.data-id]="element.content.data_id"
                                     class="kb-element-content">
                                         <app-crm-form-fetch [append_form_id]="element.content.data_id" class="kb-form-append"></app-crm-form-fetch>
