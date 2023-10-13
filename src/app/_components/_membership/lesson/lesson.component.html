@@ -379,7 +379,7 @@
                                     <span>{{item.name+item.ext}}</span>
                                 </div>
                                 <div class="kbl-media-actions">
-                                    <a [href]="_file.uploadDocumentPath + '/' + wistia_project_id + '/' + item.name+item.ext" target="_blank" download><i class="fa fa-download text-black-50" matTooltip="Download" matTooltipPosition="above"></i></a>
+                                    <a [href]="_file.uploadmembershipDocumentPath + '/' + lesson.user_id  + '/' + lesson.uniqueid + '/' + item.name+item.ext" target="_blank" download><i class="fa fa-download text-black-50" matTooltip="Download" matTooltipPosition="above"></i></a>
                                     <i (click)="addDocument(item)" class="far fa-save" matTooltip="Use Document" matTooltipPosition="above"></i>
                                     <i (click)="delDocument = item; openDialog(lesson, 'deleteDocument');" class="far fa-trash-alt" matTooltip="Delete Document" matTooltipPosition="above"></i>
                                 </div>

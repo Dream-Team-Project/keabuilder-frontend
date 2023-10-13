@@ -35,6 +35,7 @@ export class FileUploadService {
   deleteDocumentApi = "/api/deletedocument";
   renameDocumentApi = "/api/renamedocument";
   uploadDocumentPath = '/assets/uploads/documents/';
+  uploadmembershipDocumentPath = '/assets/uploads/medias/';
   checkDocumentApi = '/api/checkdocuments';
   downloaduploadfileApi = '/api/downloaduploadfileformat';
   // document

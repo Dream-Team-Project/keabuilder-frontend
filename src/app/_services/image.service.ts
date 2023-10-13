@@ -83,6 +83,7 @@ export class ImageService {
             this.file = this.base64ToFile(data.path, data.name)
             this._general._file.upload(this.file).subscribe(
                 (event: any) => {
+                    console.log(event)
                     if (typeof (event) === 'object') {
                         resolve(event);
                     }

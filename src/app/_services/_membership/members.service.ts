@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {  Observable} from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 
 
 const httpOptions = {
@@ -53,5 +53,13 @@ export class MembersService {
 
   duplicatecheck(obj:any): Observable<any>{
     return this.http.post('/api/duplicateemail_username',obj);
+  }
+
+  getsinglelesson(obj:any): Observable<any>{
+    return this.http.post('/api/singlelesson', obj).pipe(catchError(this.errorHandler));
+  };
+
+  errorHandler(error: HttpErrorResponse) {
+    return throwError(()=>error.message || "Sever Error")
   }
 }
