@@ -131,10 +131,10 @@
                                         (click)="openSetting(row)"
                                         matTooltip="Row Setting" matTooltipPosition="above"><i
                                             class="far fa-edit"></i></span>
-                                    <span (click)="_row.duplicateRow(section.rowArr, row, ri)"
+                                    <span *ngIf="_general.target.type != 'membership'" (click)="_row.duplicateRow(section.rowArr, row, ri)"
                                         matTooltip="Duplicate Row" matTooltipPosition="above"><i
                                             class="far fa-copy"></i></span>
-                                    <span (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
+                                    <span *ngIf="_general.target.type != 'membership'" (click)="_row.deleteRow(section.rowArr, ri)" matTooltip="Delete Row"
                                         matTooltipPosition="above"><i class="far fa-trash-alt"></i></span>
                                 </div>
                                 <!-- rows setting navigation end -->
@@ -243,10 +243,10 @@
                                                             matTooltip="Element Setting" matTooltipPosition="above"><i
                                                             class="far fa-edit"></i></span>
                                                     </ng-template>
-                                                    <span (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
+                                                    <span *ngIf="_general.target.type != 'membership'" (click)="_column.selectedColumn = column; _element.duplicateElement(element, ei)"
                                                         matTooltip="Duplicate Element" matTooltipPosition="above"><i
                                                             class="far fa-copy"></i></span>
-                                                    <span (click)="_element.deleteElement(column.elementArr, ei)"
+                                                    <span *ngIf="element.content.name != 'courses' && element.content.name != 'login'" (click)="_element.deleteElement(column.elementArr, ei)"
                                                         matTooltip="Delete Element" matTooltipPosition="above"><i
                                                             class="far fa-trash-alt"></i></span>
                                                 </div>

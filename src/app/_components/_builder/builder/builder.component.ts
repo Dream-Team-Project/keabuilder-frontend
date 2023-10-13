@@ -81,7 +81,7 @@ export class BuilderComponent implements OnInit {
         type: params.get('target')
       }
       this.ishf = _general.target.type == 'header' || _general.target.type == 'footer';
-      if(_general.target.type == 'website' || _general.target.type == 'funnel' ||_general.target.type == 'membership' || this.ishf) {
+      if(_general.target.type == 'website' || _general.target.type == 'funnel' || _general.target.type == 'membership' || this.ishf) {
         _general.getBuilderData(_general.target.id).then(data=> {
           _general.fetchCourses().then((resp)=>{
             _general.courses=resp;

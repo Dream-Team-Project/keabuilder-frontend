@@ -66,7 +66,7 @@ export class CrmListsComponent implements OnInit {
       if(list.id) this.updateList(tempObj);
       else this.addList(tempObj);
     }
-    else this.setError('List name must be atleast 3 characters');
+    else this.setError('List name must be atleast 4 characters');
   }
 
   addList(list:any) {

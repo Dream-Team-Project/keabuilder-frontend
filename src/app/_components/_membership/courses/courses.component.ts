@@ -113,6 +113,7 @@ export class MembershipCoursesComponent implements OnInit {
     this._course.all().subscribe((res:any)=>{
       this.courses = res.data;
       this.fetching = false;
+      // console.log(this.courses)
     }); 
   }
 

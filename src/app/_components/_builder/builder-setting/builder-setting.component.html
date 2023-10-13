@@ -127,8 +127,8 @@
                                 <div *ngIf="searchingDeep('General Info Page Name')" class="kb-inner-tab-component">
                                     <div class="kb-tab-head">Page Name</div>
                                     <div class="kb-tab-content kb-inp-left">
-                                        <input type="text" name="page-name" placeholder="Page name"
-                                            [(ngModel)]="_general.page_name">
+                                        <input  type="text" name="page-name" placeholder="Page name"
+                                            [(ngModel)]="_general.page_name" [readonly]="_general.target.type === 'membership'">>
                                     </div>
                                 </div>
                                 <div *ngIf="searchingDeep('General Info Page Path')" class="kb-inner-tab-component">
@@ -139,7 +139,7 @@
                                         <span class="highlight">{{_general.active_domain}}</span><input type="text"
                                             name="page-path" placeholder="Page path" [class.errorInp]="_general.pathError"
                                             (input)="_general.page_path = _general.joinWthDash(_general.page_path)"
-                                            [(ngModel)]="_general.page_path">
+                                            [(ngModel)]="_general.page_path" [readonly]="_general.target.type === 'membership'">>
                                     </div>
                                 </div>
                             </div>

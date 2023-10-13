@@ -74,7 +74,7 @@ export class ProfileSettingsComponent implements OnInit {
         var genobjlogo:any = {path:this.logoimg, name:splnmlogo[1]};
 
         if(this.logoimgname!=this.userimgpath && this.imagelogorequest == true ){
-          this.imageService.onImageFileUpload(genobjlogo);
+          this.imageService.onImageFilefaviconUpload(genobjlogo);
           this.imageService.timeStamp = (new Date()).getTime();
         }
 
