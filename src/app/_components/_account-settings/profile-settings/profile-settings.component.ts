@@ -23,8 +23,8 @@ export class ProfileSettingsComponent implements OnInit {
 
   profileobj:any = {firstname:'',lastname:'',email:'',phone:'',company:''};
   imagelogorequest = false;
-  userimgpath = '/assets/images/profile/avatar.png';
-  logoimg:any = this.userimgpath;
+  userimgpath = '';
+  logoimg:any = '/assets/images/profile/avatar.png';
   selectfilenm = '';
   file = null;
   logoimgname = '';
@@ -49,7 +49,9 @@ export class ProfileSettingsComponent implements OnInit {
         this.profileobj.phone = data?.data[0]?.phone;
         this.profileobj.company = data?.data[0]?.company;
         if(data?.data[0]?.useravatar!='' && data?.data[0]?.useravatar!=null && data?.data[0]?.useravatar!=undefined){
-          this.userimgpath = '/assets/uploads/images/'+data?.data[0]?.useravatar;
+          let avatarImg = '/assets/uploads/images/'+data?.data[0]?.useravatar;
+          this.userimgpath = avatarImg;
+          this.logoimg = avatarImg;
         }
         this.userService.user = {
           name: data?.data[0]?.firstname,
