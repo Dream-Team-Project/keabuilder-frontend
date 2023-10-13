@@ -146,6 +146,8 @@ import { MemberLoginComponent } from './_components/course-user/member-login/mem
 import { MemberDashboardComponent } from './_components/course-user/member-dashboard/member-dashboard.component';
 import { MemberForgotPasswordComponent } from './_components/course-user/member-forgot-password/member-forgot-password.component';
 import { ViewLessonComponent } from './_components/_membership/view-lesson/view-lesson.component';
+import { ViewCourseComponent } from './_components/_membership/view-course/view-course.component';
+import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
 
 // member-routes
 
@@ -172,6 +174,8 @@ if (currentDomain === appHost) {
     { path: 'member/library', component : MemberDashboardComponent,},
     { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
     { path: 'membership/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
+    { path: 'membership/:user_id/:course_id', component : ViewCourseComponent,},
+    { path: 'membership/:user_id/:course_id', component : CourseSidebarComponent,},
 
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
@@ -526,5 +530,7 @@ export const RoutingComponents =
     MemberDashboardComponent,
     MemberForgotPasswordComponent,
     ViewLessonComponent,
+    ViewCourseComponent,
+    CourseSidebarComponent,
   ];
 

@@ -73,6 +73,7 @@ import { LibrarySidebarComponent } from './_components/_membership/library-sideb
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +86,6 @@ import { LibrarySidebarComponent } from './_components/_membership/library-sideb
     SortingPipe,
     SvgPipe,
     LibrarySidebarComponent,
-   
   ],
   imports: [
     AppRoutingModule,

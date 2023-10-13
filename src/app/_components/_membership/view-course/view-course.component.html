@@ -1,0 +1,72 @@
+<div class="container-fluid p-0 m-0">
+    <div class="row p-0 m-0">
+
+<!-- SIDEBAR  -->
+        <div class="col-3 p-4 pt-5 sidebarContainer shadow-sm">
+            <app-course-sidebar [course]="course"></app-course-sidebar>
+        </div>
+
+<!-- MAIN CONTENT -->
+        <div class="col-9 mainContentContainer">
+            <div class="row">
+
+                <!-- USER DESCRIPTION -->
+                <div class="col-12 profileContainer">
+                    <div class="row py-5">
+                        <div class="col-2">
+                            <div class="profileImage mx-5 my-3 ">
+                                <img src="../../assets/images/logo/kblogo.png" alt="profile" class="kb-img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="profileNameText ">
+                                Welcome back, {{user}}
+                            </div>
+                            <div class="progressContainer d-flex align-items-center">
+                                <mat-icon>computer</mat-icon>
+                                <span class="fw-bold ps-2">{{progress}}% COMPLETE</span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button mat-raised-button color="primary" class="">Resume Course</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COURESE CONTENT -->
+                <div class="col-12 p-0 bg-light  ">
+
+                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="dashboardNav p-0 m-0">
+                        <mat-tab label="Dashboard" class="p-0 m-0 dashboardContainer">
+                            <div class="row p-3 pt-3 m-0">
+                                {{course.description}}
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Modules" class="p-0 m-0 moduleContainer">
+                            <div class="row p-3 pt-3 m-0">
+                                <div class="col-12 p-0 mt-3 m-0 d-flex align-items-center bg-light-subtle "
+                                    *ngFor="let module of course.modules"
+                                >
+                                        
+                                        <!-- cardImage -->
+                                        <div class="cardImage bg-danger rounded-start-2  ">
+                                            <img [src]="module?.thumbnail ?  _image.uploadImgPath+module?.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'"
+                                                alt="module thumbnail" class="rounded-start-2">
+                                        </div>
+                        
+                                        <!-- card content -->
+                                        <div class="p-3 flex-grow-1 rounded-end-2 ">
+                                            <p class="fs-5">{{module.title | titlecase}}</p>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -58,6 +58,9 @@ export class MembersService {
   getsinglelesson(obj:any): Observable<any>{
     return this.http.post('/api/singlelesson', obj).pipe(catchError(this.errorHandler));
   };
+  getsinglecourse(obj:any): Observable<any>{
+    return this.http.post('/api/singlecourse', obj).pipe(catchError(this.errorHandler));
+  };
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")

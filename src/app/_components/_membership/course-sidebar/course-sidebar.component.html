@@ -1,0 +1,14 @@
+<h2 class="fs-4 courseHeading fw-bolder" >{{course.title}}</h2>
+<div class="pt-4 px-3">
+    <div *ngFor="let module of course.modules" class="pt-4 moduleText" >
+        <h3 class="fw-bolder m-0" [routerLink]="'/membership/'+module.user_id+'/'+module.course_id">{{module.title | titlecase}}</h3>
+        <div class="pt-2">
+            <a *ngFor="let lesson of module.lessons " [routerLink]="'/membership/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class="text-decoration-none text-dark ">
+                <div class="d-flex align-items-start py-2 pl-3 lessonText ">
+                    <mat-icon class="">chrome_reader_mode</mat-icon>
+                    <span class="ps-1"> {{lesson.title | titlecase}}</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

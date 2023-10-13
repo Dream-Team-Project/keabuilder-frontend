@@ -1,0 +1,21 @@
+
+.moduleText h3{
+    font-size: 20px;
+}
+.lessonText mat-icon{
+    font-size: 20px;
+}
+.lessonText span{
+    font-size: 16px;
+    color: var(--kb-black);
+    opacity: .75;
+}
+.lessonText span:hover{
+    opacity: 1;
+    color: var(--primary-color);
+}
+.moduleText h3:hover{
+    opacity: 1;
+    cursor: pointer;
+    color: var(--primary-color);
+}

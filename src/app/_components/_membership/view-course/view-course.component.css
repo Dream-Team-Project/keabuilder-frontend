@@ -1,0 +1,42 @@
+/* sidebar */
+.sidebarContainer{
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #ecf0f1;
+}
+
+
+
+
+/* mainContent */
+.mainContentContainer{
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.profileContainer{
+    background-color: rgb(226, 218, 197)   ;
+}
+.kb-img-fluid{
+    
+    width: 60px;
+    height: 60px;
+}
+.profileNameText{
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.progressContainer{
+    font-size: 12px;
+}
+.resumeCourseButton{
+    padding: 1.4rem 2.5rem !important;
+}
+
+.cardImage img{
+    width: 100%;
+    max-width: 250px;
+    max-height: 200px;
+}
+

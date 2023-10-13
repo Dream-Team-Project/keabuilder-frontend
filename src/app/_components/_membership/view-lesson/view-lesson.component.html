@@ -1,7 +1,13 @@
 <div class="container-fluid">
     <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
     <div class="row">
-      <mat-form-field appearance="fill" class="col-md-12 m-0 p-0">
+        <!-- SIDEBAR  -->
+        <div class="col-2 p-4 pt-5 sidebarContainer shadow-sm">
+            <app-course-sidebar [course]="course"></app-course-sidebar>
+        </div>
+        <div class="col-10 mainContentContainer">
+    <div class="row">
+      <mat-form-field appearance="fill" class="col-md-12">
         <mat-label>Search Lessons</mat-label>
         <input
           matInput
@@ -30,55 +36,60 @@
         </div>
     </div>
     <div class="row" *ngIf="lesson else nodata">
-        <div class="col-md-8">
+        <div class="col-md-3"> </div>
+        <div class="col-md-6">
         <div class="col-md-12 align-items-center py-2 ml-0 pl-0"><h1>{{lesson.title | titlecase}}</h1></div>
         <div class="col-md-12 align-items-center d-flex justify-content-center">
             <img class="kb-fitimg img-fluid"
               [src]="lesson?.thumbnail ?  _image.uploadImgPath+lesson.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'">
         </div>
+        <div class="col-md-12 align-items-center py-2" *ngIf="videos?.length > 0">
+            <h4>Lesson Video's</h4>
+            <!-- <div class="d-flex"> -->
+            <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let video of videos">
+                <video class="rounded-top" width="100%" controls>
+                    <source [src]="video" type="video/mp4">
+                </video>
+        <!-- </div> -->
+    </div>
+        </div>
+        <div class="col-md-12 align-items-center py-2" *ngIf="audios?.length > 0">
+            <h4>Lesson Audio's</h4>
+            <!-- <div class="d-flex"> -->
+            <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let audio of audios">
+                <video class="rounded-top" width="100%" controls>
+                    <source [src]="audio" type="audio/mp3">
+                </video>
+        <!-- </div> -->
+    </div>
+        </div>
+        
         <div class="col-md-12 align-items-center py-2">
             <h5>Lesson Content</h5>
             <span class="text-justify" [innerHTML]="lesson.content_html"></span>
         </div>
+        <div class=" col-md-12 align-items-center py-2 mb-2" *ngIf="documents?.length > 0">
+            <h4>Lesson Documents</h4>
+            <!-- <div class="d-flex" > -->
+            <div *ngFor="let item of documents">
+            <span class="d-flex">
+               <span class="align-items-center mr-2"> <i class="fa-regular fa-file"></i></span>
+               <span>{{item.name+item.ext}}</span>
+            <span (click)="downloadDocument(item)"><i class="fa fa-download text-black-50 ml-2 mr-3" matTooltip="Download" matTooltipPosition="above"></i></span>
+        </span>
+            <!-- </div> -->
+        </div>
+        </div>
+        <hr>
+        <div class=" col-md-12 align-items-center py-2 mb-2">
+            <textarea type="text"  class="w-100" style="height: 100px;" placeholder="Write something..."></textarea>
+            <button mat-raised-button class="mt-2" color="primary"> Post Comment</button>
+        </div>
     </div>
-    <div class="col-md-4"> 
-        <div class="col-md-12 align-items-center py-2" *ngIf="audios?.length > 0">
-        <h4>Lesson Audio's</h4>
-        <!-- <div class="d-flex"> -->
-        <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let audio of audios">
-            <video class="rounded-top" width="100%" controls>
-                <source [src]="audio" type="audio/mp3">
-            </video>
-    <!-- </div> -->
-</div>
-    </div>
-    <div class="col-md-12 align-items-center py-2" *ngIf="videos?.length > 0">
-        <h4>Lesson Video's</h4>
-        <!-- <div class="d-flex"> -->
-        <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let video of videos">
-            <video class="rounded-top" width="100%" controls>
-                <source [src]="video" type="video/mp4">
-            </video>
-    <!-- </div> -->
-</div>
-    </div>
-    <div class=" col-md-12 align-items-center py-2 mb-2" *ngIf="documents?.length > 0">
-        <h4>Lesson Documents</h4>
-        <!-- <div class="d-flex" > -->
-        <div *ngFor="let item of documents">
-        <span class="d-flex">
-           <span class="align-items-center mr-2"> <i class="fa-regular fa-file"></i></span>
-           <span>{{item.name+item.ext}}</span>
-        <span (click)="downloadDocument(item)"><i class="fa fa-download text-black-50 ml-2 mr-3" matTooltip="Download" matTooltipPosition="above"></i></span>
-    </span>
-        <!-- </div> -->
-    </div>
-    </div>
-    <hr>
-    <div class=" col-md-12 align-items-center py-2 mb-2">
-        <textarea type="text"  class="w-100" style="height: 100px;" placeholder="Write something..."></textarea>
-        <button mat-raised-button class="mt-2" color="primary"> Post Comment</button>
-    </div>
+    <div class="col-md-3"> 
+     
+    
+   
 </div>
         <!-- <div class="col-md-3"></div> -->
     </div>
@@ -94,4 +105,6 @@
       </div>
     </ng-template>
   </div>
+  </div>
+</div>
   

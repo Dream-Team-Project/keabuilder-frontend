@@ -38,7 +38,7 @@ export class ViewLessonComponent implements OnInit {
       this.module.uniqueid = params.get('module_id');
       this.lesson.uniqueid = params.get('lesson_id');
       this.fetchLesson();
-      // this.fetchDocument();  
+      this.fetchCourse();  
     })
   }
 
@@ -63,7 +63,18 @@ export class ViewLessonComponent implements OnInit {
       })
   
   }
-
+  fetchCourse() {
+    this.searching=true;
+    let obj={course_id : this.course.uniqueid}
+      this.memberService.getsinglecourse(obj).subscribe((resp:any)=>{
+        if(resp.success) {
+          console.log(resp.data[0])
+          this.course=resp.data[0]
+        this.searching=false;
+        }
+      })
+  
+  }
   // fetchDocument() {
   //  this.searching=true;
   //   this._file.getAllDocuments1(this.lesson.uniqueid).subscribe(resp=>{
