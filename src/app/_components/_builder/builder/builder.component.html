@@ -363,17 +363,17 @@
                                                     [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.currentStyling() : _style.getBlockStyle(element.content.style)"
                                                     [style.gap]="(isBlockActive(element) && _style.setCourseItemStyle.courses ? _style.getBlockParamValue(_style.course_gap) : _style.getBlockParamValue(element.content.gap)) + 'rem'">
                                                         <li *ngFor="let course_item of _general.courses, index as mi" class="kb-course-item" [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.card ? _style.currentStyling() : _style.getBlockStyle(element.content.children.card.style)">
-                                                            <div>
+                                                            <div class="kb-course-thumbnail">
                                                                 <img [src]="course_item.thumbnail ? _image.uploadImgPath+course_item.thumbnail : _image.uploadImgPath+'webpage_thumbnail.jpg'"
                                                                 [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.thumbnail ? _style.currentStyling() : _style.getBlockStyle(element.content.children.thumbnail.style)">
                                                             </div>
-                                                            <div>
+                                                            <div class="kb-course-title">
                                                                 <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.title ? _style.textStyling() : _style.getBlockStyle(element.content.children.title.style)">{{course_item.title}}</div>
                                                                 <div [ngStyle]="isBlockActive(element) && _style.setCourseItemStyle.description ? _style.textStyling() : _style.getBlockStyle(element.content.children.description.style)">
                                                                     {{course_item.description}}
                                                                 </div>
                                                             </div>
-                                                            <div>
+                                                            <div class="kb-course-button">
                                                                 <a *ngIf="isBlockActive(element) && _style.setCourseItemStyle.button else showBtn"
                                                                 [ngStyle]="_style.buttonStyling()" class="kb-default-btn">
                                                                     {{_style.button_text}}

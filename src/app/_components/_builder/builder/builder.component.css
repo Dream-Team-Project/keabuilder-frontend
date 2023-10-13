@@ -1443,6 +1443,11 @@ app-page-view .kb-drag-container {
     overflow: hidden;
 }
 
+.kb-course-item>div {
+    display: inline-flex;
+    width: 100%;
+}
+
 .kb-course-item img {
     height: 100%;
 }

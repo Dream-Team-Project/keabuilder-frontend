@@ -712,8 +712,9 @@ export class ElementService {
           tablet_v: respS,
           mobile: respS
         }
-        tempObj.content.children.title.style.desktop['margin'] = '0px 10px';
-        tempObj.size = '14';
+        tempObj.content.children.title.style.desktop['margin'] = '0px';
+        tempObj.content.children.title.style.desktop['padding'] = '0px 10px';
+        tempObj.size = '16';
         tempObj.weight = {num: 'normal', val: 400};
         tempObj.content.children.description.style = {
           desktop: this._style.defaultElementStyling(tempObj),
@@ -721,7 +722,8 @@ export class ElementService {
           tablet_v: respS,
           mobile: respS
         }
-        tempObj.content.children.description.style.desktop['margin'] = '0px 10px';
+        tempObj.content.children.description.style.desktop['margin'] = '0px';
+        tempObj.content.children.description.style.desktop['padding'] = '0px 10px';
         tempObj.button_child = true;
         tempObj.content.children.button.style = {
           desktop: this._style.defaultElementStyling(tempObj),
@@ -780,7 +782,6 @@ export class ElementService {
         delete tempObj.button_child;
         delete tempObj.size;
         delete tempObj.weight;
-        console.log(tempObj.content);
       }
       else if (element.name == 'form' || element.name == 'divider') {
         respS = { 'width': '100%' };
