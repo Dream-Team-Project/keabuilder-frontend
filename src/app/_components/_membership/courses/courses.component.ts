@@ -323,5 +323,11 @@ export class MembershipCoursesComponent implements OnInit {
   }
 
   isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
-
+  
+  checkpagesettings(value:any,data:any){
+    if(value=='preview'){
+      var url = 'https://'+data?.domain+'/membership/'+data.user_id+'/'+data.uniqueid;
+      window.open(url, '_blank');
+    }
+  }
 }

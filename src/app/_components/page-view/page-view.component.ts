@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { ParamMap, ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, Input, OnInit, Renderer2, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ParamMap, ActivatedRoute, Router } from '@angular/router';
 import { WebpagesService } from 'src/app/_services/webpages.service';
 import { FunnelService } from 'src/app/_services/funnels.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
@@ -11,6 +11,8 @@ import { Meta, Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { PageViewService } from 'src/app/_services/page-view.service';
 import { CourseService } from 'src/app/_services/_membership/course.service';
+import { MembersService } from 'src/app/_services/_membership/members.service';
+import { MemberTokenService } from 'src/app/_services/_membership/member-token.service';
 
 
 @Component({
@@ -41,9 +43,16 @@ export class PageViewComponent implements OnInit {
   defaultPage:boolean = false;
   pageNotFound:boolean = false;
   courses :any=[];
+  email:any;
+  password:any;
+  isLoggedIn = false;
+  isLoginFailed = false;
+  errorMessage = '';
+  user:any=[];
 
   constructor(
     private route: ActivatedRoute, 
+    private router: Router,
     private webpage: WebpagesService, 
     private funnel: FunnelService,
     private meta: Meta,
@@ -54,21 +63,20 @@ export class PageViewComponent implements OnInit {
     public _style: StyleService,
     public _image: ImageService,
     private _course: CourseService,
-    private _pageviewService:PageViewService,) {
-      this.fetchCourses().then((resp) =>{
-        this.courses=resp;
-      })
+    private _pageviewService:PageViewService,
+    private memberService: MembersService, 
+    private tokenmemberService: MemberTokenService,) {
+      
    }
 
-  ngOnInit(): void {
-   
+  ngOnInit(): void {  
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        const domain = routeData.domain;
-        const path = routeData.path;
-        // const domain = 'hello.keapages.com';
-        // const path = '/member/login'
+        // const domain = routeData.domain;
+        // const path = routeData.path;
+        const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+        const path = '/member/login'
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -112,6 +120,9 @@ export class PageViewComponent implements OnInit {
               })
             }
             else if(param_target == 'membership') {
+              this.fetchCourses().then((resp) =>{
+                this.courses=resp;
+              })
               this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
                 if(resp?.data && resp?.data.length > 0) {
                   this.setLoadScript(resp.data);
@@ -125,17 +136,20 @@ export class PageViewComponent implements OnInit {
         else if(domain){
           let obj={
             domain:domain,
-            path:path.split('/')[1]
+            path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
           };
+          console.log(domain)
+          console.log(path)
           this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
+            console.log(resp)
             if(resp.data == 'default') {
               this.addFavicon(resp.wid);
               this.defaultPage = true;
             }
             else if(resp?.success && resp?.data && resp?.data.length > 0) {
-                this.req.uid = resp.uid;
-                this.req.wid = resp.wid;
-                this.req.pid = resp.pid;
+                this.req.uid = resp?.uid;
+                this.req.wid = resp?.wid;
+                this.req.pid = resp?.pid;
                 this.setLoadScript(resp.data);
             }
             else this.pageNotFound = true;
@@ -144,7 +158,7 @@ export class PageViewComponent implements OnInit {
       }
     })
   }
-
+ 
   ngOnChanges(changes: SimpleChanges) {
     if(changes['target_sections']) {
       const style = document.createElement('style');
@@ -301,5 +315,79 @@ export class PageViewComponent implements OnInit {
       })
     })
   }
-
+  memberSignin() {
+    if(this.isEmailValid(this.email)){
+      if(this.password?.length > 6){
+        this.memberService.memberlogin(btoa(this.email), btoa(this.password)).subscribe({
+          next: data => {
+            console.log(data)
+            if(data.success){
+            this.tokenmemberService.savememberToken(data.uniqueid);
+            var userdata = {
+              uniqueid: data.uniqueid,
+              admin:data.admin,
+            }
+            this.tokenmemberService.saveMember(userdata);
+            this.isLoginFailed = false;
+            this.isLoggedIn = true;
+            this.redirectToDashboard();
+          }
+          else{
+            this.errorMessage = data.message;
+            this._general.openSnackBar(true,this.errorMessage,'OK','center','top');
+            this.isLoginFailed = true;
+          }
+          },
+          error: err => {
+            this.errorMessage = err.error.message;
+            this._general.openSnackBar(true,this.errorMessage,'OK','center','top');
+            this.isLoginFailed = true;
+          }
+        });
+      }
+      else{
+        this._general.openSnackBar(false,'Password atleast 6 characters long','OK','center','top');
+      }
+    }
+    else{
+      this._general.openSnackBar(false,'Email not valid','OK','center','top');
+    }
+ 
+  }
+  redirectToDashboard(): void {
+    let member=this.tokenmemberService.getMember();
+    if(!member.admin){
+      this.fetchmembercourses(member.admin,member.uniqueid);
+    }
+    const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+    const path = '/member/library'
+  let obj={
+    domain:domain,
+    path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
+  };
+  this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
+    console.log(resp)
+    if(resp.data == 'default') {
+      this.addFavicon(resp.wid);
+      this.defaultPage = true;
+    }
+    else if(resp?.success && resp?.data && resp?.data.length > 0) {
+        this.req.uid = resp?.uid;
+        this.req.wid = resp?.wid;
+        this.req.pid = resp?.pid;
+        this.setLoadScript(resp.data);
+    }
+    else this.pageNotFound = true;
+  })
+  }
+  isEmailValid(value:any) {
+  let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return regex.test(value);
+  }
+  fetchmembercourses(admin:any,user_id:any){
+    let obj={admin:admin,user_id:user_id};
+    this._pageviewService.fetchmembercourses(obj).subscribe((data:any)=>{
+      this.courses=data.data;
+    })
+  }
 }

@@ -14,21 +14,23 @@
           #searchInp
           type="text"
           (input)="searchlessons(searchInp)"
-          placeholder="Search Form Name"
+          placeholder="Search Lesson Name"
         />
         <i class="fa-solid fa-magnifying-glass"></i>
       </mat-form-field>
     </div>
     <div class="row">
         <div class="col-md-12 d-flex justify-content-between align-items-center">
-            <div class="">
-                <i class="fa-solid fa-chevron-left"></i>
+            <div class="d-flex align-items-center">
+                <!-- <i class="fa-solid fa-chevron-left mr-3"></i> -->
+                <h3>{{lesson.title | titlecase}}</h3>
             </div>
+            <!-- (click)="_general.prevRoute()" -->
             <div class="d-flex justify-content-between align-items-center">
-                <button mat-raised-button color="accent" (click)="_general.prevRoute()"  class="mr-3"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-                    <button mat-raised-button color="primary" class="mr-4">Lesson Complete</button>
+                <button mat-raised-button color="accent"  [routerLink]="'/membership/'+course.user_id+'/'+course?.uniqueid"  class="mr-3"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+                    <button mat-raised-button color="primary" class="">Lesson Complete</button>
                 
-                <div class=""><i class="fa-solid fa-chevron-right"></i></div>
+                <!-- <div class=""><i class="fa-solid fa-chevron-right"></i></div> -->
             </div>
         </div>
         <div class="col-md-12 m-0 p-0">
@@ -38,7 +40,6 @@
     <div class="row" *ngIf="lesson else nodata">
         <div class="col-md-3"> </div>
         <div class="col-md-6">
-        <div class="col-md-12 align-items-center py-2 ml-0 pl-0"><h1>{{lesson.title | titlecase}}</h1></div>
         <div class="col-md-12 align-items-center d-flex justify-content-center">
             <img class="kb-fitimg img-fluid"
               [src]="lesson?.thumbnail ?  _image.uploadImgPath+lesson.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'">

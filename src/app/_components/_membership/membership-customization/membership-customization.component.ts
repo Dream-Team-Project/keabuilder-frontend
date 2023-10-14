@@ -20,6 +20,7 @@ export class MembershipCustomizationComponent implements OnInit {
   toggleview = true;
   nodata:any;
   domain:any;
+  courses:any={};
   constructor(
     public _image: ImageService,
     public _general: GeneralService,
@@ -31,6 +32,7 @@ export class MembershipCustomizationComponent implements OnInit {
 
   ngOnInit(): void {
     this.showwebpages();
+    this.allCourses();
   }
 
   showwebpages(){
@@ -59,10 +61,20 @@ export class MembershipCustomizationComponent implements OnInit {
       this.toggleview = !this.toggleview; 
       // this._general.setStorage('page_toggle',this.toggleview);
     }
+    
+    allCourses() {
+      this.searching = true;
+      this._course.all().subscribe((res:any)=>{
+        this.courses = res?.data;
+        this.domain=this.courses[0]?.domain;
+        this.searching = false;
+        // console.log(this.courses)
+      }); 
+    }
 
     checkpagesettings(value:any,data:any){
       if(value=='preview'){
-        var url = 'https://'+this.domain+'/'+data;
+        var url = 'https://'+this.domain+'/member/'+data;
         window.open(url, '_blank');
       }
     }

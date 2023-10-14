@@ -119,7 +119,7 @@
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="course_item.domain" class="kb-default-btn">
+                                                                <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" [href]="'membership/'+course_item.user_id+'/'+course_item.uniqueid" class="kb-default-btn">
                                                                     {{element.content.children.button.text}}
                                                                 </a>
                                                             </div>
@@ -132,17 +132,17 @@
                                                         <div>
                                                             <label [ngStyle]="_style.getBlockStyle(element.content.children.label.style)">
                                                                 Email</label>
-                                                            <input type="text" name="email" placeholder="email address"
+                                                            <input type="text" name="email" placeholder="email address" [(ngModel)]="email" required
                                                             [ngStyle]="_style.getBlockStyle(element.content.children.input.style)">
                                                         </div>
                                                         <div>
                                                             <label [ngStyle]="_style.getBlockStyle(element.content.children.label.style)">
                                                                 Password</label>
-                                                            <input type="password" name="password" placeholder="********"
+                                                            <input type="password" name="password" placeholder="********" [(ngModel)]="password" required [min]="6" 
                                                             [ngStyle]="_style.getBlockStyle(element.content.children.input.style)">
                                                         </div>
                                                         <div>
-                                                            <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" class="kb-default-btn">
+                                                            <a [ngStyle]="_style.getBlockStyle(element.content.children.button.style)" class="kb-default-btn" (click)="memberSignin()">
                                                                 {{element.content.children.button.text}}
                                                             </a>
                                                         </div>

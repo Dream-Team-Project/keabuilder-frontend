@@ -142,7 +142,7 @@
                   {{_general.dateformat(course.updated_at)}}
                 </span>
               </span> -->
-              <button [disabled]="course.deleting" mat-raised-button color="accent">View <i class="fa-solid fa-eye"></i></button>
+              <button [disabled]="course.deleting" mat-raised-button color="accent" (click)="checkpagesettings('preview',course)">View <i class="fa-solid fa-eye"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="primary"
               [routerLink]="'/new-membership/course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="accent"

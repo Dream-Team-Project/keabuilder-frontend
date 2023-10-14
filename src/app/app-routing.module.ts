@@ -170,13 +170,10 @@ if (currentDomain === appHost) {
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
-    { path: 'member/login', component : MemberLoginComponent,},
-    { path: 'member/library', component : MemberDashboardComponent,},
-    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
     { path: 'membership/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
     { path: 'membership/:user_id/:course_id', component : ViewCourseComponent,},
     { path: 'membership/:user_id/:course_id', component : CourseSidebarComponent,},
-
+    
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
     // auth
@@ -404,8 +401,9 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
-    { path: 'login', component : MemberLoginComponent, data: { domain: currentDomain,path: currentPath,},},
-    { path: 'library', component : MemberDashboardComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
