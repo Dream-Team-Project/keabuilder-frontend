@@ -208,6 +208,13 @@ export class SidebarComponent implements OnInit {
       icon: 'fa-solid fa-gear',
       title: 'Customization',
     },
+    {
+      0:true,
+      routerlink: '/membership/settings',
+      img: 'shield.gif',
+      icon: 'fa-solid fa-gears',
+      title: 'Settings'
+    },
       ]
     },
     // {
@@ -494,7 +501,7 @@ export class SidebarComponent implements OnInit {
     const menuMap:any = {
       '/websites': 1,
       '/funnels': 2,
-      // '/membership': 3,
+      '/membership': 3,
       '/crm': 4,
       '/sales': 5,
       '/account': 8,

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
-import { WebpagesService } from 'src/app/_services/webpages.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { CourseService } from 'src/app/_services/_membership/course.service';

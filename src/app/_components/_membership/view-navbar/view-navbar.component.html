@@ -1,0 +1,36 @@
+<nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top">
+  <div class="navbar-wrapper">
+    <div class="navbar-container content">
+      <div class="navbar-collapse" id="navbar-mobile">
+        <ul class="nav float-right overflow-hidden">
+          <li class="dropdown dropdown-user nav-item">
+            <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown"
+              aria-expanded="false">
+              <div class="user-nav d-sm-flex d-none">
+                <span class="user-name">{{memberobj.firstname}}</span>
+              </div>
+              <span>
+                <div class="bw-avatar-content bw-change-color-badge">
+                    <div class="bw-avatar"  [matMenuTriggerFor]="menu">
+                    <img [src]="_image.getImgPath(userimgpath)" alt="">
+                  </div>
+                </div>
+              </span>
+              <mat-menu #menu="matMenu">
+                <p class="brkeml pl-4 pr-4 pt-2">Signed in as <br><small>{{memberobj.email}}</small></p>
+                <button mat-menu-item color="primary" id="defaultpri" ><i class="fas fa-user"></i> My Profile</button>
+                <hr class="mt-1 mb-1">
+                <button mat-menu-item class="text-danger" (click)="logout()"><i class="fas fa-sign-out"></i> Sign Out</button>
+              </mat-menu>
+
+            </a>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+    

@@ -108,5 +108,7 @@ export class ViewLessonComponent implements OnInit {
   decodeContent(blob:any) {
     return atob(blob);
   }
-
+  Gotohref(url :any){
+    window.open(url,'_self');
+  }
 }

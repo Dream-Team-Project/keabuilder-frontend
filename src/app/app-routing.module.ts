@@ -89,6 +89,7 @@ import { MembershipTagsComponent } from './_components/_membership/tags/tags.com
 import { MembershipMarketplaceComponent } from './_components/_membership/marketplace/marketplace.component';
 import { MembershipReportsComponent } from './_components/_membership/membership-reports/membership-reports.component';
 import { MembershipCustomizationComponent } from './_components/_membership/membership-customization/membership-customization.component';
+import { CourseSettingsComponent } from './_components/_membership/course-settings/course-settings.component';
 // theme
 import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
 import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
@@ -325,6 +326,8 @@ if (currentDomain === appHost) {
         { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
         { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
         { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
+        { path: 'settings', component: CourseSettingsComponent, canActivate: [AuthGuard] },
+
       ],
       canActivate: [AuthGuard] },
         { path: 'new-membership', component: NewMembershipComponent,
@@ -407,8 +410,8 @@ else {
     { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
     // auth guard
     { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
-    { path: 'member/:course_id', component : ViewCourseComponent,},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
+    { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},},
     // auth guard
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
@@ -456,6 +459,7 @@ export const RoutingComponents =
     MembershipMarketplaceComponent,
     MembershipReportsComponent,
     MembershipCustomizationComponent,
+    CourseSettingsComponent,
     NewMembershipComponent,
     CrmFormsComponent,
     CrmFormFetchComponent,

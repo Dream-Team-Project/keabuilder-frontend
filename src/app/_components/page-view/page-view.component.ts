@@ -50,7 +50,8 @@ export class PageViewComponent implements OnInit {
   errorMessage = '';
   user:any=[];
   domain:string = '';
-
+  path:string = '';
+  admin=false;
   constructor(
     private route: ActivatedRoute, 
     private router: Router,
@@ -75,10 +76,9 @@ export class PageViewComponent implements OnInit {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
         // const domain = routeData.domain;
-        const path = routeData.path;
+        // const path = routeData.path;
         const domain = 'domainpbsvsgsygnsxy38.keapages.com';
-        console.log(path)
-        // const path = '/member/login'
+        const path = '/member/library'; 
         this.domain = domain;
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
@@ -122,12 +122,10 @@ export class PageViewComponent implements OnInit {
                 else this._general.redirectToPageNotFound();
               })
             }
-            else if(param_target == 'member') {
-              // this.fetchCourses().then((resp) =>{
-              //   this.courses=resp;
-              // })
+            else if(param_target == 'membership') {
               this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
                 if(resp?.data && resp?.data.length > 0) {
+                  this.courses=resp?.courses ? resp?.courses : [];
                   this.setLoadScript(resp.data);
                 }
                 else this._general.redirectToPageNotFound();
@@ -137,12 +135,15 @@ export class PageViewComponent implements OnInit {
           else this._general.redirectToPageNotFound();
         }
         else if(domain){
+          let member=this.tokenmemberService?.getMember();
           let obj={
             domain:domain,
             path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
+            admin:member ? member?.admin : this.admin,
+            user_id:member ? member?.uniqueid : '',
           };
-          console.log(domain)
-          console.log(path)
+          console.log(domain);
+          console.log(path);
           this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
             console.log(resp)
             if(resp.data == 'default') {
@@ -153,6 +154,7 @@ export class PageViewComponent implements OnInit {
                 this.req.uid = resp?.uid;
                 this.req.wid = resp?.wid;
                 this.req.pid = resp?.pid;
+                this.courses=resp?.courses ? resp?.courses : [];
                 this.setLoadScript(resp.data);
             }
             else this.pageNotFound = true;
@@ -317,6 +319,11 @@ export class PageViewComponent implements OnInit {
         this.memberService.memberlogin(btoa(this.email), btoa(this.password)).subscribe({
           next: data => {
             if(data.success){
+              this.memberService.memberobj.firstname=data.firstname;
+              this.memberService.memberobj.firstname=data.uniqueid;
+              this.memberService.memberobj.email=this.email;
+              this.memberService.memberobj.admin=data.admin;
+              this.memberService.memberobj.domain=this.domain;
             this.tokenmemberService.savememberToken(data.uniqueid);
             var userdata = {
               uniqueid: data.uniqueid,
@@ -325,8 +332,8 @@ export class PageViewComponent implements OnInit {
             this.tokenmemberService.saveMember(userdata);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
-            let libraryPath = this.domain+'/member/library';
-            this.redirectLink(libraryPath);
+            let libraryPath ='https://'+this.domain+'/member/library';
+            window.open(libraryPath,'_self');
           }
           else{
             this.errorMessage = data.message;
@@ -351,51 +358,9 @@ export class PageViewComponent implements OnInit {
  
   }
 
-  // redirectToDashboard(): void {
-  //   let member=this.tokenmemberService.getMember();
-  //   if(!member.admin){
-  //     this.fetchmembercourses(member.admin,member.uniqueid);
-  //   }
-  //   const domain = 'domainpbsvsgsygnsxy38.keapages.com';
-  //   const path = '/member/library'
-  // let obj={
-  //   domain:domain,
-  //   path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
-  // };
-  // this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
-  //   console.log(resp)
-  //   if(resp.data == 'default') {
-  //     this.addFavicon(resp.wid);
-  //     this.defaultPage = true;
-  //   }
-  //   else if(resp?.success && resp?.data && resp?.data.length > 0) {
-  //       this.req.uid = resp?.uid;
-  //       this.req.wid = resp?.wid;
-  //       this.req.pid = resp?.pid;
-  //       this.setLoadScript(resp.data);
-  //   }
-  //   else this.pageNotFound = true;
-  // })
-  // }
-
   isEmailValid(value:any) {
   let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return regex.test(value);
-  }
-
-  fetchCourses() {
-    return new Promise<any>((resolve, reject) => {
-      this._course.allcourses().subscribe((resp:any)=>{
-        resolve(resp.data);
-      })
-    })
-  }
-
-  fetchmembercourses(admin:any,user_id:any){
-    let obj={admin:admin,user_id:user_id};
-    this._pageviewService.fetchmembercourses(obj).subscribe((data:any)=>{
-      this.courses=data.data;
-    })
   }
 
 }

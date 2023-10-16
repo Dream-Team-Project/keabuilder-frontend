@@ -18,7 +18,7 @@ import { ImageService } from 'src/app/_services/image.service';
 export class ViewCourseComponent implements OnInit {
 
  
-user: string  = 'Kunal Sharma';
+userimgpath = '/assets/images/profile/avatar.png';
 progress: number = 1;
 course_navigation:string  = 'description'
 searching=false;
@@ -28,7 +28,7 @@ lesson:any = {};
 
 constructor(private router: Router,
   private route: ActivatedRoute,
-  private memberService: MembersService, 
+  public memberService: MembersService, 
   public _file: FileUploadService,
   public _image: ImageService,
   public _general: GeneralService,
@@ -51,11 +51,13 @@ constructor(private router: Router,
     let obj={course_id : this.course.uniqueid}
       this.memberService.getsinglecourse(obj).subscribe((resp:any)=>{
         if(resp.success) {
-          console.log(resp.data[0])
+          // console.log(resp.data[0])
           this.course=resp.data[0]
         this.searching=false;
         }
       })
-  
+  }
+  Gotohref(url :any){
+    window.open(url,'_self');
   }
 }

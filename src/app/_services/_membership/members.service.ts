@@ -14,7 +14,7 @@ export class MembersService {
 
   private AUTH_API = '/api/member/';
   public loggedInStatus = false;
-
+  memberobj:any={firstname:'',uniqueid:'',email:'',admin:false,domain:''};
   constructor(private http: HttpClient) { }
 
   memberlogin(email: string, password: string): Observable<any> {
@@ -47,8 +47,8 @@ export class MembersService {
     }, httpOptions);
   }
 
-  getActiveUser(id:number): Observable<any>{
-    return this.http.get('/api/getuser/'+id);
+  getActiveUser(obj:any): Observable<any>{
+    return this.http.post('/api/getmemberuser',obj);
   }
 
   duplicatecheck(obj:any): Observable<any>{

@@ -8,6 +8,7 @@
 
 <!-- MAIN CONTENT -->
         <div class="col-9 mainContentContainer">
+            <app-view-navbar></app-view-navbar>
             <div class="row">
 
                 <!-- USER DESCRIPTION -->
@@ -15,12 +16,12 @@
                     <div class="row py-5">
                         <div class="col-2">
                             <div class="profileImage mx-5 my-3 ">
-                                <img src="../../assets/images/logo/kblogo.png" alt="profile" class="kb-img-fluid">
+                                <img  [src]="_image.getImgPath(userimgpath)" alt="profile" class="kb-img-fluid">
                             </div>
                         </div>
                         <div class="col-7">
                             <div class="profileNameText ">
-                                Welcome back, {{user}}
+                                Welcome back, {{this.memberService.memberobj.firstname}}
                             </div>
                             <div class="progressContainer d-flex align-items-center">
                                 <mat-icon>computer</mat-icon>
@@ -28,7 +29,7 @@
                             </div>
                         </div>
                         <div class="col-2">
-                            <button mat-raised-button color="primary" class="" [routerLink]="'/membership/'+course.uniqueid+'/'+course?.modules[0]?.uniqueid+'/'+course?.modules[0]?.lessons[0]?.uniqueid">Resume Course</button>
+                            <button mat-raised-button color="primary" class="" (click)="Gotohref('/member/'+course.uniqueid+'/'+course?.modules[0]?.uniqueid+'/'+course?.modules[0]?.lessons[0]?.uniqueid)">Resume Course</button>
                         </div>
                     </div>
                 </div>

@@ -20,5 +20,7 @@ export class CourseSidebarComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
+  Gotohref(url :any){
+    window.open(url,'_self');
+  }
 }
