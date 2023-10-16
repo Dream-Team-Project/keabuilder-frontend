@@ -169,10 +169,6 @@ if (currentDomain === appHost) {
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-
-    { path: 'membership/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
-    { path: 'membership/:user_id/:course_id', component : ViewCourseComponent,},
-    { path: 'membership/:user_id/:course_id', component : CourseSidebarComponent,},
     
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
@@ -272,10 +268,16 @@ if (currentDomain === appHost) {
       domain: currentDomain,
       path: currentPath,
     }},
+    { path: 'preview/:view_target/:user_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
+      domain: currentDomain,
+      path: currentPath,
+    }},
     { path: 'preview/:view_target/:user_id/:website_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
       domain: currentDomain,
       path: currentPath,
     }},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
+    { path: 'member/:course_id', component : ViewCourseComponent,},
     
     // builder
     
@@ -402,8 +404,12 @@ if (currentDomain === appHost) {
 else {
   routes = [
     { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
-    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
     { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
+    // auth guard
+    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/:course_id', component : ViewCourseComponent,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
+    // auth guard
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
