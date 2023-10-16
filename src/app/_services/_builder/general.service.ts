@@ -1055,10 +1055,9 @@ export class GeneralService {
             resolve(e);
           })
       }
-      if(this.target.type == 'membership'){
+      else if(this.target.type == 'membership'){
         this._course.updatemembershiploginpage(dbobj).subscribe(
           (e:any)=>{
-            console.log(e)
             resolve(e);
         })
       }
