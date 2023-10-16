@@ -51,7 +51,8 @@ export class PageViewComponent implements OnInit {
   user:any=[];
   domain:string = '';
   path:string = '';
-  admin=false;
+  admin=true;
+  member:any;
   constructor(
     private route: ActivatedRoute, 
     private router: Router,
@@ -75,10 +76,10 @@ export class PageViewComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        // const domain = routeData.domain;
-        // const path = routeData.path;
-        const domain = 'domainpbsvsgsygnsxy38.keapages.com';
-        const path = '/member/library'; 
+        const domain = routeData.domain;
+        const path = routeData.path;
+        // const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+        // const path = '/member/library'; 
         this.domain = domain;
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
@@ -124,6 +125,7 @@ export class PageViewComponent implements OnInit {
             }
             else if(param_target == 'membership') {
               this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
+                console.log(resp)
                 if(resp?.data && resp?.data.length > 0) {
                   this.courses=resp?.courses ? resp?.courses : [];
                   this.setLoadScript(resp.data);
@@ -135,12 +137,12 @@ export class PageViewComponent implements OnInit {
           else this._general.redirectToPageNotFound();
         }
         else if(domain){
-          let member=this.tokenmemberService?.getMember();
+          this.member=this.tokenmemberService?.getMember();
           let obj={
             domain:domain,
             path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
-            admin:member ? member?.admin : this.admin,
-            user_id:member ? member?.uniqueid : '',
+            admin:this.member ? this.member?.admin : this.admin,
+            user_id:this.member ? this.member?.uniqueid : '',
           };
           console.log(domain);
           console.log(path);

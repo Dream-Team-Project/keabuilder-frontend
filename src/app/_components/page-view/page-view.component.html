@@ -1,3 +1,4 @@
+<app-view-navbar  *ngIf="member?.uniqueid"></app-view-navbar>
 <ng-container *ngIf="target == 'main' && page_json?.header?.id">
     <header [id]="'kb-header-'+page_json?.header.id">
         <app-page-view [target_sections]="page_json?.header.sections" [target_style]="page_json?.header.style" [target_menus]="page_json?.menus" [target]="'header'"></app-page-view>

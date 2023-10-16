@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './_guard/auth.guard';
 import { SignedInGuard } from './_guard/signed-in.guard';
+import { MemberAuthGuard } from './_guard/member-auth.guard';
+import { MemberSignedGuard } from './_guard/member-signed.guard';
 import { environment } from 'src/environments/environment';
 
 import { AnalyticsComponent } from './_components/analytics/analytics.component';
@@ -277,8 +279,8 @@ if (currentDomain === appHost) {
       domain: currentDomain,
       path: currentPath,
     }},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
-    { path: 'member/:course_id', component : ViewCourseComponent,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
+    { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
     
     // builder
     
@@ -406,12 +408,12 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
-    { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
-    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,},
+    { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
+    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
     // auth guard
-    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},},
-    { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},},
+    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+    { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
     // auth guard
     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
