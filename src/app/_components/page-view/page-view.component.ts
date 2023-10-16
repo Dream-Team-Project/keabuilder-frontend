@@ -49,6 +49,7 @@ export class PageViewComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   user:any=[];
+  domain:string = '';
 
   constructor(
     private route: ActivatedRoute, 
@@ -78,6 +79,7 @@ export class PageViewComponent implements OnInit {
         const domain = 'domainpbsvsgsygnsxy38.keapages.com';
         console.log(path)
         // const path = '/member/login'
+        this.domain = domain;
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
           let uid = params.get('user_id');
@@ -120,10 +122,10 @@ export class PageViewComponent implements OnInit {
                 else this._general.redirectToPageNotFound();
               })
             }
-            else if(param_target == 'membership') {
-              this.fetchCourses().then((resp) =>{
-                this.courses=resp;
-              })
+            else if(param_target == 'member') {
+              // this.fetchCourses().then((resp) =>{
+              //   this.courses=resp;
+              // })
               this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
                 if(resp?.data && resp?.data.length > 0) {
                   this.setLoadScript(resp.data);
@@ -309,19 +311,11 @@ export class PageViewComponent implements OnInit {
     menu.menuOpen = !menu.menuOpen
   }
 
-  fetchCourses() {
-    return new Promise<any>((resolve, reject) => {
-      this._course.allcourses().subscribe((resp:any)=>{
-        resolve(resp.data);
-      })
-    })
-  }
   memberSignin() {
     if(this.isEmailValid(this.email)){
       if(this.password?.length > 6){
         this.memberService.memberlogin(btoa(this.email), btoa(this.password)).subscribe({
           next: data => {
-            console.log(data)
             if(data.success){
             this.tokenmemberService.savememberToken(data.uniqueid);
             var userdata = {
@@ -331,7 +325,8 @@ export class PageViewComponent implements OnInit {
             this.tokenmemberService.saveMember(userdata);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
-            this.redirectToDashboard();
+            let libraryPath = this.domain+'/member/library';
+            this.redirectLink(libraryPath);
           }
           else{
             this.errorMessage = data.message;
@@ -355,40 +350,52 @@ export class PageViewComponent implements OnInit {
     }
  
   }
-  redirectToDashboard(): void {
-    let member=this.tokenmemberService.getMember();
-    if(!member.admin){
-      this.fetchmembercourses(member.admin,member.uniqueid);
-    }
-    const domain = 'domainpbsvsgsygnsxy38.keapages.com';
-    const path = '/member/library'
-  let obj={
-    domain:domain,
-    path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
-  };
-  this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
-    console.log(resp)
-    if(resp.data == 'default') {
-      this.addFavicon(resp.wid);
-      this.defaultPage = true;
-    }
-    else if(resp?.success && resp?.data && resp?.data.length > 0) {
-        this.req.uid = resp?.uid;
-        this.req.wid = resp?.wid;
-        this.req.pid = resp?.pid;
-        this.setLoadScript(resp.data);
-    }
-    else this.pageNotFound = true;
-  })
-  }
+
+  // redirectToDashboard(): void {
+  //   let member=this.tokenmemberService.getMember();
+  //   if(!member.admin){
+  //     this.fetchmembercourses(member.admin,member.uniqueid);
+  //   }
+  //   const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+  //   const path = '/member/library'
+  // let obj={
+  //   domain:domain,
+  //   path:path.split('/')[1] == 'member' ? path : path.split('/')[1],
+  // };
+  // this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
+  //   console.log(resp)
+  //   if(resp.data == 'default') {
+  //     this.addFavicon(resp.wid);
+  //     this.defaultPage = true;
+  //   }
+  //   else if(resp?.success && resp?.data && resp?.data.length > 0) {
+  //       this.req.uid = resp?.uid;
+  //       this.req.wid = resp?.wid;
+  //       this.req.pid = resp?.pid;
+  //       this.setLoadScript(resp.data);
+  //   }
+  //   else this.pageNotFound = true;
+  // })
+  // }
+
   isEmailValid(value:any) {
   let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return regex.test(value);
   }
+
+  fetchCourses() {
+    return new Promise<any>((resolve, reject) => {
+      this._course.allcourses().subscribe((resp:any)=>{
+        resolve(resp.data);
+      })
+    })
+  }
+
   fetchmembercourses(admin:any,user_id:any){
     let obj={admin:admin,user_id:user_id};
     this._pageviewService.fetchmembercourses(obj).subscribe((data:any)=>{
       this.courses=data.data;
     })
   }
+
 }

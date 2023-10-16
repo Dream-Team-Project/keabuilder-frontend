@@ -77,7 +77,7 @@ export class ElementService {
     // children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
     // courses
     // login
-    // login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
+    login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
     // login,password
     // divider
     divider: { content: { name: 'divider' }, iconCls: 'fas fa-minus' },
