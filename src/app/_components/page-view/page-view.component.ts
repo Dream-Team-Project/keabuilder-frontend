@@ -73,9 +73,10 @@ export class PageViewComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(this.target == 'main') {
         const routeData:any = this.route.snapshot.data;
-        const domain = routeData.domain;
+        // const domain = routeData.domain;
         const path = routeData.path;
-        // const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+        const domain = 'domainpbsvsgsygnsxy38.keapages.com';
+        console.log(path)
         // const path = '/member/login'
         if(this.appHost === domain) {
           let param_target = params.get('view_target');
