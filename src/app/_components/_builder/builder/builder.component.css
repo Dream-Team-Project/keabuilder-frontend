@@ -1444,8 +1444,9 @@ app-page-view .kb-drag-container {
 }
 
 .kb-course-item>div {
-    display: inline-flex;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .kb-course-item img {

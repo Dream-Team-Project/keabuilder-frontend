@@ -365,6 +365,51 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.kb-course-list {
+    display: grid;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.kb-course-item {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.kb-course-item>div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.kb-course-item img {
+    height: 100%;
+}
+
+.kb-course-list.kb-course-grid-view-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.kb-course-list.kb-course-grid-view-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.kb-course-list.kb-course-grid-view-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.kb-course-list.kb-course-list-view .kb-course-item {
+    display: flex;
+    column-gap: 15px;
+}
+
+.kb-login-form label, .kb-login-form input {
+    display: block;
+    width: 100%;
+}
+
 
 @media screen and (max-width: 900px) {
     .kb-menu-resp {
@@ -396,6 +441,12 @@ input[type=number] {
     div.kb-row.kb-block-container {
         width: 100%;
         padding: 20px 0px;
+    }
+
+    .kb-course-list.kb-course-grid-view-2, 
+    .kb-course-list.kb-course-grid-view-3, 
+    .kb-course-list.kb-course-grid-view-4 {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
 

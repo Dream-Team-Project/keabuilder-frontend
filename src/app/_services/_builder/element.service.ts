@@ -72,10 +72,10 @@ export class ElementService {
     // menu
     menu: { content: { name: 'menu', size: 16, items: [] }, iconCls: 'fas fa-bars' },
     // menu
-    // courses block
+    // courses
     // courses: { content: { name: 'courses', view: 'kb-course-grid-view-3', gap: {desktop:1.5, tablet_h:1.5, tablet_v:1, mobile:1}, 
     // children: {card: {}, thumbnail: {}, title: {}, description: {}, button: {text: 'View Course'}} }, iconCls: 'fa fa-users' },
-    // courses block
+    // courses
     // login
     // login: { content: { name: 'login', children: {label: {}, input: {}, button: {text: 'Login'}} }, iconCls: 'fa fa-user' },
     // login,password
@@ -91,9 +91,6 @@ export class ElementService {
     // icon
     icon: { content: { name: 'icon', icon_html: `<i class="fa-solid fa-icons"></i>`, size: 18 }, iconCls: 'fa-solid fa-icons' },
     // icon
-    // login
-    // login: { content: { name: 'login', label: {}, input: {}, button: {} }, iconCls: 'fas fa-bars' },
-    // login
     // order form
     // order_form: { content: { name: 'order-form-component', type: 'order_form' }, iconCls: 'fab fa-wpforms' },
     // order form
@@ -767,7 +764,9 @@ export class ElementService {
           tablet_v: respS,
           mobile: respS
         }
-        tempObj.content.children.input.style.desktop['border'] = '2px solid #e0e0e0';
+        tempObj.content.children.input.style.desktop['border-width'] = '2px';
+        tempObj.content.children.input.style.desktop['border-style'] = 'solid';
+        tempObj.content.children.input.style.desktop['border-color'] = '#e0e0e0';
         tempObj.content.children.input.style.desktop['border-radius'] = '4px';
         tempObj.content.children.input.style.desktop['width'] = '100%';
         tempObj.content.children.input.style.desktop['padding'] = '4px 8px';

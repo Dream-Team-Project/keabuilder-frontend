@@ -222,6 +222,13 @@ export class BuilderSettingComponent implements AfterViewInit, OnDestroy {
     && !this._style.setLoginItemStyle.button
   }
 
+  noAlign() {
+    return this._general.selectedBlock.type == 'element' && !this._style.setCourseItemStyle.title 
+    && !this._style.setCourseItemStyle.thumbnail && !this._style.setCourseItemStyle.description 
+    && !this._style.setCourseItemStyle.button && !this._style.setLoginItemStyle.label 
+    && !this._style.setLoginItemStyle.input && !this._style.setLoginItemStyle.button
+  }
+
   searchingDeep(val:string) {
     return val?.toLowerCase().indexOf(this.searchInp.deep.toLowerCase()) >= 0;
   }
