@@ -1,6 +1,7 @@
+<app-view-navbar></app-view-navbar>
 <div class="container-fluid">
     <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
-    <div class="row">
+    <div class="row mt-4">
         <!-- SIDEBAR  -->
         <div class="col-2 p-4 pt-5 sidebarContainer shadow-sm">
             <app-course-sidebar [course]="course"></app-course-sidebar>
@@ -27,7 +28,7 @@
             </div>
             <!-- (click)="_general.prevRoute()" -->
             <div class="d-flex justify-content-between align-items-center">
-                <button mat-raised-button color="accent"  (click)="Gotohref('/member/'+course?.uniqueid)" class="mr-3"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+                <button mat-raised-button color="accent"  (click)="Gotohref('/member/'+course.user_id+'/'+course?.uniqueid)" class="mr-3"><i class="fa fa-arrow-left mr-2"></i>Back</button>
                     <button mat-raised-button color="primary" class="">Lesson Complete</button>
                 
                 <!-- <div class=""><i class="fa-solid fa-chevron-right"></i></div> -->

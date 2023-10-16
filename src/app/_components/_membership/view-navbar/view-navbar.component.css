@@ -36,13 +36,14 @@
   }
   
   .header-navbar.fixed-top {
-    width: calc(100% - 50px);
+    width: 100%;
     left: auto;
     right: 0;
     position: sticky;
     background-color: #F2F4F4;
     padding: 0px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+    margin: 0;
   }
   
   .header-navbar .navbar-wrapper {
@@ -379,7 +380,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    width: calc(100% - 50px);
+    width:100%;
     max-width: 240px;
     height: 100vh;
     color: rgb(44, 62, 80);
@@ -801,7 +802,7 @@
   }
   
   .card.card-custom.card-stretch.gutter-b {
-    height: calc(100% - 25px);
+    height: 100%;
   }
   
   .card.card-custom.card-stretch {
