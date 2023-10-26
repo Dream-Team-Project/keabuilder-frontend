@@ -300,13 +300,16 @@ export class NewFunnelsComponent implements OnInit {
   }
 
   showfunnels() {
+    this.searching=true;
     this.funnelService.getallfunnelandstep().subscribe({
       next: (data) => {
         // console.log(data);
 
         this.generatefunneldt(data);
+       
       },
       error: (err) => {
+        this.searching=false;
         // console.log(err);
       },
     });
@@ -382,10 +385,12 @@ export class NewFunnelsComponent implements OnInit {
         });
 
         this.funnels.push(newob);
+        this.searching=false;
         // console.log(this.funnels);
       });
     } else {
       this.funnelnotfound = true;
+      this.searching=false;
     }
   }
 

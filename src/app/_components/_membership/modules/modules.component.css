@@ -220,3 +220,6 @@ span.kb-ispan-add:hover {
   .kb-colr {
     color: var(--primary-color);
   }
+  .kb-d-none {
+    display: none;
+}

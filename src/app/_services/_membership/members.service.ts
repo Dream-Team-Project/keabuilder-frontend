@@ -50,6 +50,9 @@ export class MembersService {
   getActiveUser(obj:any): Observable<any>{
     return this.http.post('/api/getmemberuser',obj);
   }
+  updateActiveUser(obj:any): Observable<any>{
+    return this.http.post('/api/updatememberuser',obj);
+  }
 
   duplicatecheck(obj:any): Observable<any>{
     return this.http.post('/api/duplicateemail_username',obj);

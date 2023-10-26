@@ -534,4 +534,7 @@ export class MembershipLessonComponent implements OnInit {
     onChoose: function (/**Event*/) {      
     },
   }; 
+  GotoUrl(url:any){
+    window.open(url,'_blank');
+  }
 }

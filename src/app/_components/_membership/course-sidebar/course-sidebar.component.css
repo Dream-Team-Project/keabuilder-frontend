@@ -24,3 +24,17 @@
     cursor: pointer;
     color: var(--primary-color);
 }
+.ftsize{
+    font-weight: 600;
+    font-size: 25px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ftsize1{
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }

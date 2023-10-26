@@ -145,13 +145,13 @@ import { DefaultPageViewComponent } from './_components/default-page-view/defaul
 //default page view
 
 // member-routes
-import { MemberLoginComponent } from './_components/course-user/member-login/member-login.component';
-import { MemberDashboardComponent } from './_components/course-user/member-dashboard/member-dashboard.component';
 import { MemberForgotPasswordComponent } from './_components/course-user/member-forgot-password/member-forgot-password.component';
 import { ViewLessonComponent } from './_components/_membership/view-lesson/view-lesson.component';
 import { ViewCourseComponent } from './_components/_membership/view-course/view-course.component';
 import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
-
+import { MemberProfileSettingsComponent } from './_components/course-user/member-profile-settings/member-profile-settings.component';
+import { MemberSignInSecurityComponent } from './_components/course-user/member-sign-in-security/member-sign-in-security.component';
+import { MemberBillingComponent } from './_components/course-user/member-billing/member-billing.component';
 // member-routes
 
 const currentDomain:any = window.location.hostname;
@@ -170,7 +170,7 @@ if (currentDomain === appHost) {
     { path: 'login', component: LoginNewComponent, canActivate: [SignedInGuard]},
     { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
-    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+    // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
@@ -281,6 +281,15 @@ if (currentDomain === appHost) {
     }},
     { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
     { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
+
+
+     // member-account-settings
+     
+       { path: 'profile/settings', component: MemberProfileSettingsComponent, canActivate: [AuthGuard] },
+       { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent, canActivate: [AuthGuard] },
+       { path: 'profile/billing', component: MemberBillingComponent, canActivate: [AuthGuard]},
+    
+     //member-account-settings
     
     // builder
     
@@ -414,12 +423,21 @@ else {
     { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
     { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
     { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-    // auth guard
-    { path: '**', component: PageViewComponent, data: {
+   
+    
+    // member-account-settings
+    
+    { path: 'profile/settings', component: MemberProfileSettingsComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
+    { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
+    { path: 'profile/billing', component: MemberBillingComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard]},
+    //member-account-settings
+     // auth guard
+     { path: '**', component: PageViewComponent, data: {
       domain: currentDomain,
       path: currentPath,
     },},
   ]
+
 }
 
 @NgModule({
@@ -536,11 +554,12 @@ export const RoutingComponents =
     NewFunnelStepsComponent,
     DefaultPageViewComponent,
     //member-routes
-    MemberLoginComponent,
-    MemberDashboardComponent,
     MemberForgotPasswordComponent,
     ViewLessonComponent,
     ViewCourseComponent,
     CourseSidebarComponent,
+    MemberProfileSettingsComponent,
+    MemberSignInSecurityComponent,  
+    MemberBillingComponent,
   ];
 

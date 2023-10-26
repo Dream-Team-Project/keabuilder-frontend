@@ -1,0 +1,21 @@
+
+.active1{
+    background-color: var(--primary-color);
+    color: #ffff;
+}
+.kb-user-detail-box{
+    box-shadow:  1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1)!important;
+    }
+    .card{
+      cursor: pointer;
+    }
+   /* .kb-inp:hover{
+    color: var(--primary-color);
+      cursor: pointer;
+   } */
+    .kb-edit-btn:hover{
+      color: var(--primary-color);
+      cursor: pointer;
+    }
+   
+  

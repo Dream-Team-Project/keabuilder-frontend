@@ -194,13 +194,13 @@ export class SidebarComponent implements OnInit {
       //   icon: 'fa fa-tags',
       //   title: 'Tags'
       // },
-      {
-        0:true,
-        routerlink: '/membership/marketplace',
-        img: 'shield.gif',
-        icon: 'fa fa-shopping-cart',
-        title: 'Marketplace'
-      },
+      // {
+      //   0:true,
+      //   routerlink: '/membership/marketplace',
+      //   img: 'shield.gif',
+      //   icon: 'fa fa-shopping-cart',
+      //   title: 'Marketplace'
+      // },
       {
       0:true,
       routerlink: '/membership/customization',

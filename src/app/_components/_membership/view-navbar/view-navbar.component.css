@@ -1385,6 +1385,11 @@
   .nav-tabs-line-active-border-success .active {
       color: #000!important;
   }
+  .kb-nav-right{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
   
   /* pulsering */
   .pulse-ring {

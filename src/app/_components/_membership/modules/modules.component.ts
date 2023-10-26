@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { CourseService } from 'src/app/_services/_membership/course.service';
 import { ModuleService } from 'src/app/_services/_membership/module.service';
@@ -15,6 +15,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TagService } from 'src/app/_services/_crm/tag.service';
 import { ListService } from 'src/app/_services/_crm/list.service';
+import { WebsiteService } from 'src/app/_services/website.service';
 
 @Component({
   selector: 'app-membrship-module',
@@ -81,15 +82,11 @@ export class MembershipModulesComponent implements OnInit {
     public _general: GeneralService,
     private _tagService: TagService,
     private _listService: ListService,
-    // private courseService:CourseService,
+    public websiteService: WebsiteService,
     public dialog: MatDialog) {
     route.paramMap.subscribe((params: ParamMap) => {
       this.course.uniqueid = params.get('course_id');
-      this.fetchCourse();
-      this.fetchPosts();
-      this.fetchLists();
-      this.fetchTags();
-      this.resetPostData();
+     this.fetchalldata();
     })
    }
 
@@ -124,7 +121,13 @@ export class MembershipModulesComponent implements OnInit {
   ngOnDestroy() {
     this._overlayRef.dispose();
   }
-
+  fetchalldata(){
+    this.fetchCourse();
+    this.fetchPosts();
+    this.fetchLists();
+    this.fetchTags();
+    this.resetPostData();
+  }
   fetchcoursemembers(){
 
   this._course.getcoursemembers({course_id:this.course.uniqueid}).subscribe((data:any)=>{
@@ -257,7 +260,6 @@ fetchLists() {
   toggleStatus(course:any,action:string) {
     if(action == 'publish')course.publish_status =1; 
     else if(action == 'draft')course.publish_status =0;
-    // course.publish_status = course.publish_status ? 1: 0;
     this._course.update(course).subscribe((res:any)=>{
       this._general.openSnackBar(false,'Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
     });
@@ -319,6 +321,7 @@ fetchLists() {
         else if(action == 'publish' || action == 'draft') {
           this._general.openSnackBar(false,'Module has been '+(module.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
         }
+        this.fetchalldata();
       })
     }
 
@@ -331,7 +334,7 @@ fetchLists() {
       var module = JSON.parse(JSON.stringify(this.post));
       var newM = module.id ? false : true;
       module.uniqueid = this.getUID();
-      module.sort = this.index.module;
+      module.sort =this.modules?.length > 0 ? this.modules[this.modules.length-1].sort+1 : 0;
       module.publish_status = 1;
       module.user_id=this.course.user_id;
       var imgNObj:any = null;
@@ -349,12 +352,13 @@ fetchLists() {
         module.id = res.data.insertId;
         if(res.success) {
           if(this.thumbnail.type) this._image.onImageFilefaviconUpload(this.thumbnail).then(resp=>{
-            this.addModuleAfterMethod(module, newM);
+            // this.addModuleAfterMethod(module, newM);
           })
           else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{
-            this.addModuleAfterMethod(module, newM);
+            // this.addModuleAfterMethod(module, newM);
           })
-          else this.addModuleAfterMethod(module, newM);
+          // else this.addModuleAfterMethod(module, newM);
+          this.fetchalldata();
         }
         else {
           this.overlayRefDetach();
@@ -473,6 +477,7 @@ fetchLists() {
       else if(action == 'title') {
         this._general.openSnackBar(false,'Lesson title has been updated', 'OK', 'center', 'top');
       }
+      this.fetchalldata();
     })
   }
 
@@ -489,7 +494,10 @@ fetchLists() {
     var msg = lesson.id ? 'Lesson has been duplicated' : 'New lesson has been added';
     lesson.uniqueid = this.getUID();
     lesson.module_id = this.modules[this.index.module].uniqueid;
-    lesson.sort = this.index.lesson+1;
+    // lesson.sort = this.index.lesson+1;
+    // console.log(this.modules[this.index.module].lessons)
+    // console.log(this.modules[this.index.module].lessons[this.modules[this.index.module].lessons.length - 1].sort+1)
+    lesson.sort= this.modules[this.index.module].lessons?.length > 0 ? this.modules[this.index.module].lessons[this.modules[this.index.module].lessons.length - 1].sort+1 : 0;
     lesson.publish_status = 1;
     lesson.user_id=this.course.user_id;
    if(!lesson.id){
@@ -522,7 +530,8 @@ fetchLists() {
         else if(imgNObj) this._file.copyimage(imgNObj).subscribe(resp=>{
           this.addLessonAfterMedhod(lesson, msg);
         })
-        else this.addLessonAfterMedhod(lesson, msg);
+        // else this.addLessonAfterMedhod(lesson, msg);
+        this.fetchalldata();
       }
       else {
         this.overlayRefDetach();
@@ -592,12 +601,12 @@ fetchLists() {
     },200);
   }
 
-  openDialog(post:any, type:string,templateRef: TemplateRef<any>,) {
+  openDialog(post:any, type:string, templateRef: TemplateRef<any>,) {
     if(type=='delete') this.delobj=post;
     this.post = JSON.parse(JSON.stringify(post));
     if(this.post.thumbnail) this.thumbnail.path = this._image.uploadImgPath + this.post.thumbnail;
     this.post.type = type;
-    if(this.post.offers) this.offersToAdd = this.post.offers.split(',');
+    if(this.post.offers) this.offersToAdd = this.post.offers?.split(',');
     this.dialog.open(templateRef);
     // this.dragBoxAnime.open = true;
     // this._overlayRef.attach(this._portal);
@@ -730,10 +739,12 @@ fetchLists() {
      
       this.thumbnail.name = 'course-thumbnail-'+this.course.uniqueid+'.'+this.thumbnail.type;
       this.course.thumbnail = 'keaimage-'+this.thumbnail.name;
+      this.course.subdomain=this.createsubdomainname();
       // console.log(this.course)
       this._course.duplicate(this.course).subscribe((res:any)=>{
         // console.log(res)
         if(res.success==true){
+          this.websiteService.oncreatesubdomain(res.subdomain,res.uniqueid).subscribe({next: datanw => {}});
         this._file.validateimg(oldimg).subscribe({
           next: datagen => {
             // console.log(datagen)
@@ -743,6 +754,7 @@ fetchLists() {
                 next: data => {
                   this._general.prevRoute();
                   this._general.openSnackBar(false, 'Duplicate Course Created Successfully!', 'OK', 'center', 'top');
+                  
                 }
               });
             }else{
@@ -756,5 +768,12 @@ fetchLists() {
       this.fetching = false;
       })
   }
-
+  createsubdomainname(){
+    var uniqid = this._general.makeid(15);
+    return this.course.title+uniqid;
+  }
+  GotoUrl(url:any){
+    window.open(url,'_blank');
+  }
 }
+

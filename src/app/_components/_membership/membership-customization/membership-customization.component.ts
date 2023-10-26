@@ -63,7 +63,7 @@ export class MembershipCustomizationComponent implements OnInit {
     
     allCourses() {
       this.searching = true;
-      this._course.all().subscribe((res:any)=>{
+      this._course.getallcourses().subscribe((res:any)=>{
         this.courses = res?.data;
         this.domain=this.courses[0]?.domain;
         this.searching = false;

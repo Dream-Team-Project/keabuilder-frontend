@@ -145,7 +145,7 @@ export class OfferComponent implements OnInit {
     });
   }
   fetchCourses() {
-    this._course.all().subscribe((res:any)=>{
+    this._course.getallcourses().subscribe((res:any)=>{
       this.courses = res.data;
     //  console.log(res.data)
     }); 

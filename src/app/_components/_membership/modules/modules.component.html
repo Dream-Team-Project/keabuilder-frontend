@@ -62,7 +62,7 @@
             <label>Thumbnail</label>
             <div *ngIf="thumbnail.path" id="img-preview" class="mb-2">
                 <img class="img-fluid"
-                    [src]="_image.timeStamp && !thumbnail.type  ? thumbnail.path + '?' + _image.timeStamp : thumbnail.path" />
+                    [src]="_image.timeStamp && !thumbnail.type  ? thumbnail.path : thumbnail.path" />
             </div>
             <input #fileElem type="file" name="thumbnail" (change)="changeImg($event)" accept=".png, .jpg, .jpeg"
                 class="drop-zone__input">
@@ -150,7 +150,7 @@
                             <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
                                     class="fa fa-file pr-2"></i>Draft</button>
                         </mat-menu>
-                <button mat-raised-button color="primary" class="mr-2">Preview <i class="fa-solid fa-eye"></i></button>
+                <button mat-raised-button color="primary" class="mr-2" (click)="GotoUrl('member/'+course.uniqueid)">Preview <i class="fa-solid fa-eye"></i></button>
                 <button [disabled]="course.deleting" mat-raised-button color="accent" [matMenuTriggerFor]="menu">More <i
                         class="fa-solid fa-gear"></i></button>
                 <mat-menu #menu="matMenu">
@@ -196,7 +196,7 @@
                         <mat-form-field appearance="fill" class="col-md-2">
                             <mat-label>Visibility</mat-label>
                             <mat-select name="visibility" #visibilityInp (valueChange)="searchModules(searchInp, filterInp,visibilityInp)">
-                                <!-- <mat-option [value]="">Show All</mat-option> -->
+                                <mat-option [value]="">Show All</mat-option>
                                 <mat-option [value]="'draft'">Draft Only</mat-option>
                                 <mat-option [value]="'publish'">Publish Only</mat-option>
                             </mat-select>
@@ -215,8 +215,8 @@
                             </div>
                         </div>
                         <div class="kbc-ec-btn col-md-6 text-right">
-                            <button (click)="_general.expandAll(moduleUl, false)" mat-raised-button color="accent" class="mr-3">Colapse all</button>
-                            <button (click)="_general.expandAll(moduleUl, true)" mat-raised-button class="" color="primary">Expand all</button>
+                            <button (click)="this._general.expandAll(moduleUl, false)" mat-raised-button color="accent" class="mr-3">Colapse all</button>
+                            <button (click)="this._general.expandAll(moduleUl, true)" mat-raised-button class="" color="primary">Expand all</button>
                         </div>
                     </div>
                     <ul #moduleUl class="row kb-drag-container p-3" cdkDropList [cdkDropListData]="modules"

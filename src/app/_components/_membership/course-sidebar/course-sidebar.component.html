@@ -2,15 +2,15 @@
 <div class="mb-2">
 <span class="kb-lib-bck"  (click)="Gotohref('https://'+this.course?.domain+'/member/library')"> <i class="fa-solid fa-chevron-left"></i> Library</span>
 </div>
-<h2 class="fs-4 courseHeading fw-bolder" >{{course.title | titlecase}}</h2>
+<h2 class="fs-4 courseHeading fw-bolder ftsize" >{{course.title | titlecase}}</h2>
 <div class="pt-4">
     <div *ngFor="let module of course.modules" class="pt-4 moduleText" >
-        <h3 class="fw-bolder m-0" (click)="Gotohref('/member/'+module.course_id)">{{module.title | titlecase}}</h3>
+        <h3 class="fw-bolder m-0 ftsize1" (click)="Gotohref('/member/'+module.course_id)">{{module.title | titlecase}}</h3>
         <div class="pt-2">
             <a *ngFor="let lesson of module.lessons " [href]="'/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class="text-decoration-none text-dark ">
                 <div class="d-flex align-items-start py-2 pl-3 lessonText ">
                     <mat-icon class="">chrome_reader_mode</mat-icon>
-                    <span class="ps-1"> {{lesson.title | titlecase}}</span>
+                    <span class="ps-1 ftsize1"> {{lesson.title | titlecase}}</span>
                 </div>
             </a>
         </div>

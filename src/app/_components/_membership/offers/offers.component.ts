@@ -69,7 +69,7 @@ export class MembershipOffersComponent implements OnInit {
               private _snackBar: MatSnackBar,
               public dialog: MatDialog,) {
 
-    this.courseService.all().subscribe({
+    this.courseService.getallcourses().subscribe({
 
       next: data => {
         // console.log(data);

@@ -1,0 +1,400 @@
+<div class="container-fluid mb-4">
+  <div class="row">
+    <div class="col-md-12">
+      <button mat-raised-button color="accent" (click)="Gotohref('/member/library','')" class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+      <button mat-raised-button class="mr-2" [class]="active" (click)="Gotohref('/profile/settings','active')"><i class="fa-regular fa-user" aria-hidden="true"></i> Profile Details</button>
+      <button mat-raised-button class="mr-2" [class]="active1" (click)="Gotohref('/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Sign In & Security</button>
+      <button mat-raised-button class="mr-2" [class]="active2" (click)="Gotohref('/profile/billing','active2')"><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Billing</button>
+    </div>
+    </div>
+    <div class="row mt-4" *ngIf="registrationtype !='free'; else nodata">
+        <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    
+        <!-- <div class="col-md-12">
+          <h4>Change your plan</h4>
+          <small>Upgrade or downgrade your current plan.</small>
+    
+          <h6 class="mt-2">Next billing date:  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
+    
+          <div class="row">
+    
+            <div class="col-md-2">
+              <div class="card kb-user-detail-box p-3 mt-4">
+                <div class="justify-content-between">
+                  <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Beta'"></i>
+                    <b>BETA</b>
+                    <p class="m-0">Beta Plan</p>
+                    <p class="m-0">$29 / month</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card kb-user-detail-box p-3 mt-4">
+                <div class="justify-content-between">
+                    <b>STARTUP</b>
+                    <p class="m-0">Startup Plan</p>
+                    <p class="m-0">$78 / month</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card kb-user-detail-box p-3 mt-4">
+                <div class="justify-content-between">
+                    <b>ENTREPRENEUR</b>
+                    <p class="m-0">Entrepreneur Plan</p>
+                    <p class="m-0">$149 / month</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card kb-user-detail-box p-3 mt-4">
+                <div class="justify-content-between">
+                    <b>AGENCY</b>
+                    <p class="m-0">Agency Plan</p>
+                    <p class="m-0">Ask for Quote</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4"></div>
+          </div>
+    
+        </div>
+    
+        <div class="col-md-6 mt-4">
+          <hr class="mt-0">
+          <h4>Payment Details</h4>
+          <small>Update your billing information. Make sure to set your location correctly as it could affect your tax rates.</small>
+          
+          <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(changecard)">
+            <div class="d-flex justify-content-between kb-user-detail align-items-center">
+              {{ stripedata?.card?.brand }} ending in XXXX XXXX {{ stripedata?.card?.last4 }}
+              <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+            </div>
+          </div>
+    
+          <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(address)">
+            <div class="d-flex justify-content-between kb-user-detail align-items-center">
+    
+                <div class="kb-fnt-details-o">
+                  <b>Name:</b> {{ stripedata?.customer?.name | titlecase }}
+                  <br>
+                  <b>Address:</b> {{ stripedata?.customer?.address?.line1 }}
+                  <br>
+                  <b>City:</b> {{ stripedata?.customer?.address?.city }}
+                  <br>
+                  <b>State:</b> {{ stripedata?.customer?.address?.state }}
+                  <br>
+                  <b>Country:</b> {{ stripedata?.customer?.address?.country }}
+                  <br>
+                  <b>Zip:</b> {{ stripedata?.customer?.address?.postal_code }}
+                  <br>
+                  <b>Email:</b> {{ stripedata?.customer?.email }}
+                  <br>
+                  <b>Phone:</b> {{ stripedata?.customer?.phone }}
+                </div>
+    
+              <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+            </div>
+          </div>
+    
+    
+        </div>
+     -->
+        <div class="col-md-6 mkflx">
+          <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
+        </div>
+      </div>
+    
+        <ng-template #nodata>
+          <div class="row justify-content-center">
+            <div class="col-md-6 pt-5">
+              <h5 class="text-align-center text-center">Your are our Special User</h5>
+              <img
+                src="/assets/images/website/website-empty.png"
+                class="img-fluid img-fit"
+                alt="Plan Not Subscribed"
+              />
+            </div>
+          </div>
+        </ng-template>
+  </div>
+  <!--Address dialog start-->
+<!-- <ng-template #address>
+  <h1 mat-dialog-title>Update Details</h1>
+  <mat-error *ngIf="error">{{ errormessage }}</mat-error>
+  <div mat-dialog-content>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="nameFormControl"
+        [(ngModel)]="stripeaddress.name"
+      />
+      <mat-error *ngIf="nameFormControl.hasError('required')">
+        Name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field class="kb-full-width col-md-6" appearance="fill">
+        <mat-label>Email </mat-label>
+        <input
+          type="email"
+          matInput
+          [formControl]="emailFormControl"
+          [(ngModel)]="stripeaddress.email"
+        />
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('email')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width col-md-6" appearance="fill">
+        <mat-label>Phone </mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="phoneFormControl"
+          [(ngModel)]="stripeaddress.phone"
+        />
+        <mat-error *ngIf="phoneFormControl.hasError('required')">
+          Phone No is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Address </mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="addressline1FormControl"
+        [(ngModel)]="stripeaddress.line1"
+      />
+      <mat-error *ngIf="addressline1FormControl.hasError('required')">
+        Address is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Address 2</mat-label>
+      <input
+        type="text"
+        matInput
+        [formControl]="addressline2FormControl"
+        [(ngModel)]="stripeaddress.line2"
+      />
+    </mat-form-field>
+    <div class="row">
+      <mat-form-field class="kb-full-width col-md-6" appearance="fill">
+        <mat-label>City</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="cityFormControl"
+          [(ngModel)]="stripeaddress.city"
+        />
+        <mat-error *ngIf="cityFormControl.hasError('required')">
+          City is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width col-md-6" appearance="fill">
+        <mat-label>State</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="stateFormControl"
+          [(ngModel)]="stripeaddress.state"
+        />
+        <mat-error *ngIf="stateFormControl.hasError('required')">
+          State is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field
+        class="kb-full-width col-md-6"
+        appearance="fill"
+        (click)="filtercountryData($event)"
+      >
+        <mat-label>Country</mat-label>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="stripeaddress.country"
+          [formControl]="countryFormControl"
+          placeholder="Please enter country name"
+          [matAutocomplete]="countryAuto"
+          class="kb-act-searchinp w-100"
+          (input)="filtercountryData($event)"
+        />
+        <mat-autocomplete #countryAuto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of filteredcountry"
+            [value]="option.value"
+            >{{ option.name }}</mat-option
+          >
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width col-md-6" appearance="fill">
+        <mat-label>Postal Code</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="postal_codeFormControl"
+          [(ngModel)]="stripeaddress.postal_code"
+        />
+        <mat-error *ngIf="postal_codeFormControl.hasError('required')">
+          Postal Code is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button
+      mat-button
+      [color]="'primary'"
+      [disabled]="
+        nameFormControl.invalid ||
+        emailFormControl.invalid ||
+        phoneFormControl.invalid ||
+        addressline1FormControl.invalid ||
+        cityFormControl.invalid ||
+        stateFormControl.invalid ||
+        postal_codeFormControl.invalid ||
+        !this.stripeaddress.country
+      "
+      (click)="updateaddress()"
+    >
+      Update
+    </button>
+  </div>
+</ng-template> -->
+<!--Address dialog close-->
+<!--Edit card dtails-->
+<!-- <ng-template #changecard>
+  <h1 mat-dialog-title>Update Card Details</h1>
+  <mat-error *ngIf="error">{{ errormessage }}</mat-error>
+  <div mat-dialog-content>
+    <div class="d-flex justify-content-between">
+      <div class="text-success">{{ stripedata?.card?.brand }}</div>
+      <div>
+        <div>Ending in {{ stripedata?.card?.last4 }}</div>
+        <div>
+          Expires {{ stripedata?.card?.exp_month }}/{{
+            stripedata.card.exp_year
+          }}
+        </div>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="changecardstatus()">
+          Change
+        </button>
+      </div>
+    </div>
+    <div *ngIf="cngcard">
+      <div class="row">
+        <mat-form-field class="kb-full-width mt-2" appearance="fill">
+          <mat-label>Card Holder Name</mat-label>
+          <input
+            type="text"
+            matInput
+            [formControl]="nameoncardFormControl"
+            required
+            [(ngModel)]="nameoncard"
+          />
+          <mat-error *ngIf="nameoncardFormControl.hasError('required')">
+            card Holder Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="chgerror">{{ chgerrormessage }}</mat-error>
+        <mat-error *ngIf="token">{{ tokenmessage }}</mat-error>
+        <div class="w-100 kb-strip mt-2">
+          <mat-label>Enter Card Details</mat-label>
+          <div class="kb-strip-cardbox mt-3 p-2 border-bottom border-top">
+            <ngx-stripe-card
+              [options]="cardOptions"
+              [elementsOptions]="elementsOptions"
+            ></ngx-stripe-card>
+          </div>
+          <div class="kb-strip-mesg">
+            Why? We ask for a payment method so that your subscription and
+            business can continue without interruption after your trial ends
+          </div>
+          <img src="./assets/images/registration/cards.png" width="130" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close class="text-danger">Close</button>
+    <button
+      mat-button
+      [color]="'primary'"
+      [disabled]="nameoncardFormControl.invalid"
+      (click)="changecarddetails()"
+    >
+      Update
+    </button>
+  </div>
+</ng-template> -->
+<!--Edit card details-->
+<!--cancel subscription-->
+<!-- <ng-template #canceldialog>
+  <h1 mat-dialog-title class="kb-danger">Cancel Subscription</h1>
+  <div mat-dialog-content>Would you like to cancel your subscription?</div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">
+      No
+    </button>
+    <button
+      mat-button
+      mat-dialog-close
+      (click)="cancelsubscription()"
+      class="text-danger"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template> -->
+<!--cancel subscription-->
+
+<!--update subscription-->
+<!-- <ng-template #updatedialog>
+  <h1 mat-dialog-title>Update Subscription</h1>
+  <div mat-dialog-content>
+    <mat-error *ngIf="error">{{ errormessage }}</mat-error>
+    <mat-form-field class="kb-full-width " appearance="fill">
+      <mat-label>Current Subsciption Plan</mat-label>
+      <mat-select [(ngModel)]="product" (selectionChange)="productdetails($event)">
+     <mat-option *ngFor="let item of products" [value]="item">{{item.name}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="kb-full-width " appearance="fill">
+      <mat-label>Current Payment Plan</mat-label>
+      <mat-select [(ngModel)]="subscription_productid" (selectionChange)="subscriptiontype($event)" [formControl]="subscription_productidFormControl">
+        <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">
+      No
+    </button>
+    <button
+      mat-button
+      mat-dialog-close
+      (click)="updatesubscription()"
+      class="text-danger"
+      [disabled]="subscription_productidFormControl.invalid"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template> -->
+<!--update subscription-->
+
+
+

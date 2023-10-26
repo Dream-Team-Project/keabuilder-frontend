@@ -125,7 +125,7 @@ export class PageViewComponent implements OnInit {
             }
             else if(param_target == 'membership') {
               this._course.getpreviewmembershippage(this.req).subscribe((resp:any)=>{
-                console.log(resp)
+                // console.log(resp)
                 if(resp?.data && resp?.data.length > 0) {
                   this.courses=resp?.courses ? resp?.courses : [];
                   this.setLoadScript(resp.data);
@@ -147,7 +147,7 @@ export class PageViewComponent implements OnInit {
           console.log(domain);
           console.log(path);
           this._pageviewService.fetchPageByDomain(obj).subscribe((resp:any)=>{
-            console.log(resp)
+            // console.log(resp)
             if(resp.data == 'default') {
               this.addFavicon(resp.wid);
               this.defaultPage = true;

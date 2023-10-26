@@ -172,7 +172,7 @@
             <i [innerHTML]="'search' | svg | safeHtml"></i>
             <input placeholder="Search here..." [(ngModel)]="searchText" (keydown)="setShift(); setElementShift()">
         </span>
-        <button mat-button (click)="_general.redirectLink('/profile')">
+        <button mat-button (click)="_general.redirectLink('/account')">
             {{_general.user.name | titlecase}} 
             <img *ngIf="_general.user.useravatar" [src]="_image.getImgPath(_image.uploadImgPath+_general.user.useravatar)">
         </button>

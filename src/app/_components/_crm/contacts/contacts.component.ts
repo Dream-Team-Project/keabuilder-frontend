@@ -39,6 +39,7 @@ export class CrmContactsComponent implements OnInit {
   lists:Array<any> = [];
   tags:Array<any> = [];
   contact:any = {};
+  contactlength:any;
   contactObj = {
     firstname: '',
     lastname: '',
@@ -93,23 +94,23 @@ export class CrmContactsComponent implements OnInit {
   
 
   adjustdata(data:any){
-    if(data) this.pagecontacts = data;
+    if(data) this.pagecontacts =data;
     this.fetching = false;
   }
   
   fetchData(){
-    this.fetchContacts();
+    // this.fetchContacts();
     this.getpagecontacts({pageIndex:0,pageSize:20});
       this.fetchLists();
         this.fetchTags();
   }
 
-  fetchContacts() {
-    this._contactService.fetchcontacts().subscribe((resp) => {
-      this.contacts=resp?.data;
-      this.adjustdata(resp?.data);
-});
-  }
+//   fetchContacts() {
+//     this._contactService.fetchcontacts().subscribe((resp) => {
+//       // this.contacts=resp?.data;
+//       this.adjustdata(resp?.data);
+// });
+//   }
 
   fetchLists() {
       this._listService.fetchlists().subscribe(
@@ -163,7 +164,7 @@ export class CrmContactsComponent implements OnInit {
     this.contact.pending_actions='';
     this._contactService.addcontact(this.contact).subscribe((resp) => {
       if(resp.success) {
-        this.fetchContacts();
+        // this.fetchContacts();
         this.getpagecontacts({pageIndex:0,pageSize:20});
         this.resetobj();
         this._general.openSnackBar(false, 'Contact has been saved', 'OK', 'center', 'top');
@@ -182,7 +183,7 @@ export class CrmContactsComponent implements OnInit {
     this._contactService.deletecontact(this.contact.id).subscribe((resp) => {
       if(resp.success) 
       this.getpagecontacts({pageIndex:0,pageSize:20});
-       this.fetchContacts();
+      //  this.fetchContacts();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
@@ -347,7 +348,7 @@ uploadcontacts(){
           else{
             this._general.openSnackBar(false,data?.message,'Ok','center','top');
           }
-          this.fetchContacts();
+          // this.fetchContacts();
           this.getpagecontacts({pageIndex:0,pageSize:20});
         }
         else{
@@ -403,6 +404,10 @@ let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
 this._contactService.getpagecontacts(obj).subscribe((data:any)=>{ 
   if(data?.success){
   this.pagecontacts=data?.data;
+  this.contactlength=data?.contacts;
+  this.fetching = false;
+  }else{
+    this.fetching = false;
   }
 });
 }

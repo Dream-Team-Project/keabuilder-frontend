@@ -5,7 +5,7 @@
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close [color]="'primary'" (click)="resetobj()">No</button>
-    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteCourse(delcourse)">Yes</button>
+    <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deleteCourse(delcourse)" [disabled]="fetching">Yes</button>
   </div>
 </ng-template>
 <ng-template #duplicatedialog>
@@ -15,7 +15,7 @@
   </div>
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="duplicateCourse(delcourse)">Yes</button>
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="duplicateCourse(delcourse)" [disabled]="fetching">Yes</button>
   </div>
 </ng-template>
 <ng-template #adddialog>
@@ -57,7 +57,7 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
       <button mat-button mat-dialog-close (click)="resetobj()" class="text-danger">No</button>
-      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="course?.id ? updateCourse()  : createCourse()" [disabled]="validate.title.invalid || !course.path">{{course?.id ? 'Update' : 'Add'}}</button>
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" [disabled]="fetching" (click)="course?.id ? updateCourse()  : createCourse()" [disabled]="validate.title.invalid || !course.path">{{course?.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
 
@@ -162,10 +162,22 @@
           </div>
           <div class="d-flex justify-content-end" >
             <div class="statbadg">
-              <span class="statusbadge" [class]="course.publish_status == 1 ? 'active1' : 'active2'" >
-                <i class="fas" [class]="course.publish_status==1 ? 'fa-check':'fa-file'"></i>
-                {{course.publish_status == 1 ? 'Publish' : 'Draft'}}
-              </span>
+              <!-- <span class="statusbadge" [class]="course.publish_status == 1 ? 'active1' : 'active2'" > -->
+                <!-- <i class="fas" [class]="course.publish_status==1 ? 'fa-check':'fa-file'"></i>
+                {{course.publish_status == 1 ? 'Publish' : 'Draft'}} -->
+                <button class="statusbadge" mat-raised-button [color]="course.publish_status == 1 ? 'primary' : 'accent'" class="toggle mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
+                            [class]="course.publish_status==1 ? 'active' : 'inactive'">
+                             <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i>
+                            {{course.publish_status==1 ? 'Published' : 'Draft'}}<i
+                                class="fas fa-chevron-down drpdwnfa pl-2"></i>
+                        </button>
+                        <mat-menu #menu1="matMenu">
+                          <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
+                                  class="fa fa-check pr-2"></i>Publish</button>
+                          <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
+                                  class="fa fa-file pr-2"></i>Draft</button>
+                      </mat-menu>
+              <!-- </span> -->
         </div>
       </div>
     </div>
@@ -175,3 +187,4 @@
   </div>
   </div>
   </div>
+ 

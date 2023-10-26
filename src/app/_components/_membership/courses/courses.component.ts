@@ -17,6 +17,7 @@ export class MembershipCoursesComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   
+  btndisable=false;
   spinner=false;
   validate = {
     title: new FormControl('', [Validators.required]),
@@ -110,7 +111,7 @@ export class MembershipCoursesComponent implements OnInit {
 
   allCourses() {
     this.fetching = true;
-    this._course.all().subscribe((res:any)=>{
+    this._course.getallcourses().subscribe((res:any)=>{
       this.courses = res.data;
       this.fetching = false;
       // console.log(this.courses)
@@ -147,7 +148,8 @@ export class MembershipCoursesComponent implements OnInit {
 
   createsubdomainname(){
     var uniqid = this._general.makeid(15);
-    return this.course.title+uniqid;
+    let temp=this.course?.title?.replace(/\s/g,'');
+    return temp+uniqid;
   }
 
   duplicateCourse(course:any) {
@@ -169,7 +171,7 @@ export class MembershipCoursesComponent implements OnInit {
       this._course.duplicate(this.course).subscribe((res:any)=>{
         // console.log(res)
         if(res.success == true){
-          this.websiteService.oncreatesubdomain(res.subdomain,res.uniqueid).subscribe({next: datanw => {}})
+          this.websiteService.oncreatesubdomain(res.subdomain,res.uniqueid).subscribe({next: datanw => {}});
         this._file.validateimg(oldimg).subscribe({
           next: datagen => {
             // console.log(datagen)
@@ -326,8 +328,15 @@ export class MembershipCoursesComponent implements OnInit {
   
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = 'https://'+data?.domain+'/membership/'+data.user_id+'/'+data.uniqueid;
+      var url = 'https://'+data?.domain+'/member/'+data.uniqueid;
       window.open(url, '_blank');
     }
+  }
+  toggleStatus(course:any,action:string) {
+    if(action == 'publish')course.publish_status =1; 
+    else if(action == 'draft')course.publish_status =0;
+    this._course.update(course).subscribe((res:any)=>{
+      this._general.openSnackBar(false,'Course has been '+(course.publish_status == 1 ? 'published' : 'draft'), 'OK', 'center', 'top');
+    });
   }
 }

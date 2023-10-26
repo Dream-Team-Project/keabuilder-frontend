@@ -9,7 +9,7 @@ import { TokenStorageService } from '../token-storage.service';
 export class CourseService {
 
   // API url
-  allApi = '/api/allcourses';
+  allApi = '/api/getallcourses/';
   allcourseApi = '/api/courses';
   singleApi = '/api/singlecourse';
   multipleApi = '/api/multiplecourse';
@@ -32,8 +32,8 @@ export class CourseService {
     this.uuid = this.tokenStorage.getUser().uniqueid;
   }
 
-  all():Observable<any> {
-    return this.http.get(this.allApi+'/'+this.uuid);
+  getallcourses():Observable<any> {
+    return this.http.get(this.allApi+this.uuid);
   }
   allcourses():Observable<any> {
     return this.http.get(this.allcourseApi+'/'+this.uuid);

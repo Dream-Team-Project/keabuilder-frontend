@@ -69,8 +69,6 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
 import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
 
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,7 +80,7 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     FilterPipe,
     SortingPipe,
     SvgPipe,
-    ViewNavbarComponent,  
+    ViewNavbarComponent,
   ],
   imports: [
     AppRoutingModule,

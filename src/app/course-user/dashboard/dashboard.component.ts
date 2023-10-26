@@ -36,7 +36,7 @@ export class CourseUserDashboardComponent implements OnInit {
         });
       }); 
     }else if(this.userselectedcourse=='all'){
-      this._course.all().subscribe((res:any)=>{
+      this._course.getallcourses().subscribe((res:any)=>{
         // console.log(res);
         res.data.forEach((element:any) => {
           this.allcourses.push(element);

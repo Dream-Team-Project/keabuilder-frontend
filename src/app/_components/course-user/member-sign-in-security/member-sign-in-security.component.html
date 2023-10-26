@@ -1,0 +1,105 @@
+<div class="container-fluid mb-4">
+  <div class="row">
+    <div class="col-md-12">
+      <button mat-raised-button color="accent" (click)="Gotohref('/member/library','')" class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
+      <button mat-raised-button class="mr-2" [class]="active" (click)="Gotohref('/profile/settings','active')"><i class="fa-regular fa-user" aria-hidden="true"></i> Profile Details</button>
+      <button mat-raised-button class="mr-2" [class]="active1" (click)="Gotohref('/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Sign In & Security</button>
+      <button mat-raised-button class="mr-2" [class]="active2" (click)="Gotohref('/profile/billing','active2')"><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Billing</button>
+    </div>
+  </div>
+  <div class="row mt-5">
+      <div class="col-md-6 px-4">
+
+        <div class="mt-4 px-2">
+          <h6 >Username</h6>
+          <small>You can not change/update your username.</small>
+          <div class="card kb-user-detail-box p-3 mt-4">
+            <div class="d-flex justify-content-between kb-user-detail align-items-center">
+              <div class="py-1 kb-inp" style="font-weight: 500;">Username : <span
+                  style="font-weight: 500;">{{username}}</span></div>
+              <i mat-ripple matTooltip="Username" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn"
+                aria-hidden="true" ></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 px-2">
+        <h6>Password</h6>
+        <small>Keep your account secure by changing your password at least every 120 days.</small>
+        <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(passworddialog)">
+          <div class="d-flex justify-content-between align-items-center kb-user-detail">
+            <div class="py-1 kb-inp d-flex" style="font-weight: 500;" >Password :
+              <span class="d-flex mt-1 ml-1"> ******</span></div>
+            <i mat-ripple matTooltip="Update Password" matTooltipPosition="above" class="fa fa-pencil kb-edit-btn"
+              aria-hidden="true"></i>
+          </div>
+        </div>
+        </div>
+
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="/assets/images/userprofile/signsecurity.png" width="500" class="img-fluid" alt="">
+      </div>       
+    </div>
+<!--change password-->
+<ng-template #passworddialog>
+<h1 mat-dialog-title >Update Password</h1>
+<div mat-dialog-content>
+<button class="mb-4" type="button" mat-raised-button color="primary" (click)="generatetoken()">Send Verification Token </button>
+ <mat-error *ngIf="error">{{errormessage}}</mat-error> 
+
+<mat-form-field class="kb-full-width" appearance="fill">
+<mat-label>Token</mat-label>
+  <input matInput type="text" name="token" placeholder="Token" [(ngModel)]="chktoken" [formControl]="tokenFormControl">
+    <small class="text-danger" *ngIf="incrtkn" >Incorrect Token</small>
+    <mat-error *ngIf="tokenFormControl.hasError('required')">
+      Token is <strong>required</strong>
+    </mat-error>
+</mat-form-field>
+
+<mat-form-field class="kb-full-width" appearance="fill">
+<mat-label>New Password</mat-label>
+<input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="newpassword">
+<button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+  <i class="far" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+</button>
+<mat-error *ngIf="passwordFormControl.hasError('required')">
+  Password is <strong>required</strong>
+</mat-error>
+<mat-error *ngIf="passwordFormControl.hasError('minlength')">
+  Password must be at least <strong>6</strong> characters
+</mat-error>
+</mat-form-field>
+
+<mat-form-field class="kb-full-width" appearance="fill">
+<mat-label>Confirm Password</mat-label>
+<input type="password" matInput [formControl]="confirmpasswordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="confirmpassword">
+<button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+  <i class="far" [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+</button>
+<mat-error *ngIf="confirmpasswordFormControl.hasError('required')">
+  Confirm Password is <strong>required</strong>
+</mat-error>
+<mat-error *ngIf="confirmpasswordFormControl.hasError('minlength')">
+ Confirm Password must be at least <strong>6</strong> characters
+</mat-error>
+</mat-form-field>
+
+</div>
+<div mat-dialog-actions class="justify-content-end">
+  <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">
+    No
+  </button>
+  <button
+    mat-button
+    mat-dialog-close 
+    (click)="updatepassword()"
+    [disabled]="tokenFormControl.invalid || passwordFormControl.invalid || confirmpasswordFormControl.invalid"
+    [color]="'primary'"
+  >
+    Update
+  </button>
+</div>
+</ng-template>
+</div>
+
