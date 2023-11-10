@@ -27,7 +27,7 @@ course:any = {};
 module:any = {};
 lesson:any = {};
 user_id:any;
-  admin=false;
+admin=false;
 constructor(private router: Router,
   private route: ActivatedRoute,
   public memberService: MembersService,

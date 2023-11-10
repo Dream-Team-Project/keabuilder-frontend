@@ -126,7 +126,8 @@
                                     <button *ngIf="alldomains.verifyssl==0" mat-raised-button class="mr-2" (click)="verifyssl(alldomains.id,alldomains.name,$event)">
                                         Verify SSl <i class="fa fa-unlock" aria-hidden="true"></i>
                                     </button>
-                                    <button mat-raised-button class="mr-2" (click)="viewdomain(alldomains)" >View <i class="fa fa-eye" aria-hidden="true"></i></button>
+                                    <button mat-raised-button class="mr-2" (click)="viewdomain(alldomains)"> View <i class="fa fa-eye" aria-hidden="true"></i></button>
+                                    <button mat-raised-button class="mr-2" [routerLink]="['/domain/update/'+alldomains.uniqueid]"> Update <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></button>
                                     <button mat-raised-button (click)="openDialog(deldialog,alldomains)">
                                         Delete <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>

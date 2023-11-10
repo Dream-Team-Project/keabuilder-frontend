@@ -1,4 +1,4 @@
-<nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top">
+<!-- <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top">
   <div class="navbar-wrapper">
     <div class="navbar-container content">
       <div class="navbar-collapse" id="navbar-mobile">
@@ -30,7 +30,34 @@
       </div>
     </div>
   </div>
-</nav>
+</nav> -->
 
 
-    
+
+<div class="kb-navbar-wrapper">
+  <div class="kb-navbar">
+      <!-- <div>
+          <mat-icon>menu</mat-icon>
+      </div> -->
+      <div class="profileContainer " >
+        <p >{{memberobj.firstname}}</p>
+          <div class="position-relative d-flex gap-1 align-items-center py-1 profileImageContainer">
+            <img [src]="_image.getImgPath(userimgpath)" alt="" class="profileImage" [matMenuTriggerFor]="menu">
+              <i class="fa fa-caret-down" [matMenuTriggerFor]="menu"></i>
+              <mat-menu #menu="matMenu" class="profileDropdown" >
+                  <p class="dropdownItem">Signed in as</p>
+                  <p class="emailText dropdownItem">{{memberobj.email}}</p>
+                  <div class="dropItemContainer" (click)="Gotohref('/profile/settings')">
+                      <i class="fas fa-user profileText"></i> 
+                      <p class="profileText">My Profile</p>
+                  </div>
+                  <hr>
+                  <div class="dropItemContainer" (click)="logout()">
+                      <i class="fa fa-sign-out logoutText" aria-hidden="true"></i>
+                      <p class="logoutText ">Log Out</p>
+                  </div>
+          </mat-menu>
+          </div>
+      </div>
+  </div>
+</div>

@@ -13,19 +13,14 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 export class DomainComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
-  
-  // sidebar = {
-  //   open: false,
-  //   anim: {open: false, close: false, time: 500},
-  //   animtime: 300,
-  // }
-
+   
   domainname = new FormControl('', [Validators.required]);
 
   deldomain:any;
   gendomainname:any = '';
   domainconn = 0;
   deldomconn = 0;
+  
   ssldomconn = 0;
   nameservers = [];
   shownamehint = false;
@@ -227,7 +222,7 @@ export class DomainComponent implements OnInit {
   }
 
   viewdomain(data:any){
-    // console.log(data);
+    console.log(data);
     this.shownamehint = true;
     this.gendomainname = data.name;
     this.nameservers = data.nameserver.split(',');

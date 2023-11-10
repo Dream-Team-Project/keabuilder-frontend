@@ -276,6 +276,7 @@ export class PageViewComponent implements OnInit {
 
   setLoadScript(data:any) {
     this.page_json = this._general.decodeJSON(data);
+    console.log(this.page_json)
     this.loadScript(this.page_json.tracking.header, document.head);
     this.addHead(this.page_json.head);
     this.loadScript(this.page_json.tracking.footer, document.body);
@@ -287,6 +288,7 @@ export class PageViewComponent implements OnInit {
 
   setMenu(data:any) {
     if(data.sections) {
+      // console.log(data.sections)
       data.sections.flatMap((sec:any)=>{
         sec.rowArr.flatMap((row:any)=>{
           row.columnArr.flatMap((col:any)=>{

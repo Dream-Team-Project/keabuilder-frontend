@@ -1,19 +1,21 @@
-<div class="container-fluid m-0 p-0">
-<div class="mb-2">
-<span class="kb-lib-bck"  (click)="Gotohref('https://'+this.course?.domain+'/member/library')"> <i class="fa-solid fa-chevron-left"></i> Library</span>
-</div>
-<h2 class="fs-4 courseHeading fw-bolder ftsize" >{{course.title | titlecase}}</h2>
-<div class="pt-4">
-    <div *ngFor="let module of course.modules" class="pt-4 moduleText" >
-        <h3 class="fw-bolder m-0 ftsize1" (click)="Gotohref('/member/'+module.course_id)">{{module.title | titlecase}}</h3>
-        <div class="pt-2">
-            <a *ngFor="let lesson of module.lessons " [href]="'/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class="text-decoration-none text-dark ">
-                <div class="d-flex align-items-start py-2 pl-3 lessonText ">
-                    <mat-icon class="">chrome_reader_mode</mat-icon>
-                    <span class="ps-1 ftsize1"> {{lesson.title | titlecase}}</span>
-                </div>
-            </a>
+<div class="wrapper">
+    <div class="libraryBtnContainer">
+        <span class="kb-lib-bck" (click)="Gotohref(domain)"> <i
+                class="fa-solid fa-chevron-left"></i> Library</span>
+    </div>
+    <h4 class=" courseHeading  ftsize">{{course.title | titlecase}}</h4>
+    <div class="moduleContainer">
+        <div *ngFor="let module of course.modules" class="moduleText">
+            <h3 class="ftsize1" (click)="Gotohref('/member/'+module.course_id)">{{module.title | titlecase}}</h3>
+            <div class="lessonContainer ">
+                <a *ngFor="let lesson of module.lessons "
+                    [href]="'/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class=" lessonText">
+                    <div class="EachlessonText ">
+                        <mat-icon class="lessonIcon">chrome_reader_mode</mat-icon>
+                        <span class="ftsize1"> {{lesson.title | titlecase}}</span>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 </div>

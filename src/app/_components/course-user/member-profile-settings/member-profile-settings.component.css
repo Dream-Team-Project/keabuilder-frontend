@@ -1,39 +1,109 @@
 
 .active{
-    background-color: var(--primary-color);
-    color: #ffff;
+  background-color: var(--primary-color);
+  color: #ffff;
 }
 .symbol {
-    display: inline-block;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    position: relative;
-    border-radius: 50%;
-    
-  }
-  .symbol .symbol-label {
-    width: 120px;
-    height: 120px;
-  }
-    
-  .symbol .symbol-label {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    font-weight: 500;
-    color: #3F4254;
-    background-color: #F3F6F9;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    border-radius: 50%;
-  }
-  .kb-profile-card {
-    box-shadow: 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1)!important;
+  display: inline-block;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  position: relative;
+  border-radius: 50%;
+  
+}
+.symbol .symbol-label {
+  width: 120px;
+  height: 120px;
+}
+  
+.symbol .symbol-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #3F4254;
+  background-color: #F3F6F9;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+}
+.kb-profile-card {
+  box-shadow: 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1)!important;
+}
+.kb-ms-2{
+margin-left: 8px;
+}
+.kb-w-100{
+width: 100%;
+}
+.kb-p-2{
+padding: 8px;
+}
+.kb-d-flex{
+display: flex;
+}
+.kb-mt-5{
+margin-top: 1.25rem;
+}
+.kb-w-50{
+width: 50%;
+}
+.kb-gap-4{
+gap: 1rem;
+}
+.kb-pb-4{
+padding-bottom: 1rem;
+} 
+.kb-pr-0 {
+padding-right: 0;
+}
+.kb-pl-4{
+padding-left: 1rem;
+}
+.kb-ml-5{
+margin-left: 1.25rem;
+} 
+.kb-mt-3{
+margin-top: .75rem;
+}
+.kb-mt-2{
+margin-top: .50rem;
+}
+.kb-mr-3{
+margin-right: .75rem;
+}
+.kb-px-2{
+padding-left: .50rem;
+padding-right: .50rem;
+}
+.kb-py-1{
+padding-top: .25rem;
+padding-bottom: .25rem;
+}
+.kb-rounded{
+border-radius: .25rem;
+} 
+.kb-px-4{
+padding-left: 1rem;
+padding-right: 1rem;
+} 
+.kb-py-4{
+padding-top: 1rem;
+padding-bottom: 1rem;
+}
+.btnPrimary.mat-mdc-raised-button:not(:disabled){
+background-color: #dea641;
+}
+.kb-justify-content-center{
+justify-content: center;
+}
+.kb-text-center{
+text-align: center;
 }

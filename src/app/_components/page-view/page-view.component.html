@@ -43,18 +43,18 @@
                                             [class.dummyImg]="!element.content.src">
                                     </div>
                                     <div *ngSwitchCase="'video'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                        <div [ngSwitch]="_style.video_type">
+                                        <div [ngSwitch]="element.content.type">
                                             <div *ngSwitchCase="'link'">
                                                 <video
                                                 [autoplay]="element.content.autoplay"
                                                 [muted]="element.content.muted"
                                                 [loop]="element.content.loop"
-                                                [controls]="element.content.controls">
+                                                [controls]="element.content.controls" *ngIf="element.content.src">
                                                     <source [src]="element.content.src" type="video/mp4">
                                                 </video>
                                             </div>
                                             <div *ngSwitchCase="'iframe'">
-                                                <div [innerHTML]="element.content.iframe | safeHtml"></div>
+                                                <div [innerHTML]="element.content.iframe"></div>
                                             </div>
                                         </div>
                                     </div>

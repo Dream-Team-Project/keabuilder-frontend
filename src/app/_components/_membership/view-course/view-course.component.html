@@ -1,74 +1,113 @@
-<div class="container-fluid p-0 m-0">
-    <app-view-navbar></app-view-navbar>
-    <div class="row p-0 m-0">
+<div class="wrapper">
+    <div class="kb-h-2">
+        <app-view-navbar></app-view-navbar>
+    </div>
+    <mat-drawer-container class="kb-h-8" hasBackdrop="false">
+        <mat-drawer #drawer mode="push" class="inactive" >
+            <div class="sidebarContainerr " >
+                <app-course-sidebar [course]="course"></app-course-sidebar>
+            </div>
+        </mat-drawer>
 
-<!-- SIDEBAR  -->
-        <div class="col-3 p-4 pt-5 sidebarContainer shadow-sm">
-            <app-course-sidebar [course]="course"></app-course-sidebar>
-        </div>
+        <mat-drawer-content class="kb-py-sm-2 ">
 
-<!-- MAIN CONTENT -->
-        <div class="col-9 mainContentContainer">
-           
-            <div class="row">
+            <!-- <div class="lessonWrapper"> -->
+                <div class="lessonContainer">
 
-                <!-- USER DESCRIPTION -->
-                <div class="col-12 profileContainer">
-                    <div class="row py-5">
-                        <div class="col-2">
-                            <div class="profileImage mx-5 my-3 ">
-                                <img  [src]="_image.getImgPath(userimgpath)" alt="profile" class="kb-img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-7">
-                            <div class="profileNameText ">
-                                Welcome back, {{this.memberService.memberobj.firstname}}
-                            </div>
-                            <div class="progressContainer d-flex align-items-center">
-                                <mat-icon>computer</mat-icon>
-                                <span class="fw-bold ps-2">{{progress}}% COMPLETE</span>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <button mat-raised-button color="primary" class="" (click)="Gotohref('/member/'+course.uniqueid+'/'+course?.modules[0]?.uniqueid+'/'+course?.modules[0]?.lessons[0]?.uniqueid)">Resume Course</button>
-                        </div>
+
+                    <!-- SIDEBAR  -->
+                    <div class="sidebarContainer sm-inactive">
+                        <app-course-sidebar [course]="course"></app-course-sidebar>
                     </div>
-                </div>
 
-                <!-- COURESE CONTENT -->
-                <div class="col-12 p-0 bg-light  ">
+                    <!-- MAIN CONTAINER OR RIGHT CONTAINER -->
+                    <div class="mainContentContainer ">
+                        <div class="sidebarBtn">
+                            <button mat-raised-button (click)="drawer.toggle()" class="inactive kb-my-sm-2">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                        </div>
 
-                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="dashboardNav p-0 m-0">
-                        <mat-tab label="Dashboard" class="p-0 m-0 dashboardContainer">
-                            <div class="row p-3 pt-3 m-0">
-                                {{course.description}}
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Modules" class="p-0 m-0 moduleContainer">
-                            <div class="row p-3 pt-3 m-0">
-                                <div class="col-12 p-0 mt-3 m-0 d-flex align-items-center bg-light-subtle "
-                                    *ngFor="let module of course.modules"
-                                >
-                                        
-                                        <!-- cardImage -->
-                                        <div class="cardImage bg-danger rounded-start-2  ">
-                                            <img [src]="module?.thumbnail ?  _image.uploadImgPath+module?.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'"
-                                                alt="module thumbnail" class="rounded-start-2">
+                        <div class="kb-row kb-flex-column ">
+            
+                            <!-- USER DESCRIPTION -->
+                            <div class="profileContainer">
+                                <div class="kb-row kb-py-5  kb-s-flex-column kb-s-align-items-center">
+                                    <div class="profileImage kb-col-2 kb-sm-col-4 .kb-s-col-12  kb-d-flex kb-justify-content-center ">
+                                        <img  [src]="_image.getImgPath(userimgpath)" alt="profile" class="kb-img-fluid">
+                                    </div>
+                                    <div class="kb-col-10 kb-sm-col-8 .kb-s-col-12 kb-d-flex kb-justfy-content-end kb-sm-flex-column">
+
+                                    
+                                    <div class="kb-col-8 kb-sm-col-12 kb-s-text-center">
+                                        <div class="profileNameText kb-text-black">
+                                            Welcome back, {{this.memberService.memberobj.firstname}}
+            
                                         </div>
-                        
-                                        <!-- card content -->
-                                        <div class="p-3 flex-grow-1 rounded-end-2 ">
-                                            <p class="fs-5">{{module.title | titlecase}}</p>
+                                        <div class="progressContainer kb-d-flex kb-align-items-center  kb-s-justify-contetnt-center">
+                                            <mat-icon class="kb-text-black">computer</mat-icon>
+                                            <span class="fw-bold ps-2 kb-text-black">{{progress}}% COMPLETE</span>
                                         </div>
-
+                                    </div>
+                                    <div class="kb-col-4 kb-d-flex kb-align-items-center kb-sm-col-12 kb-s-justify-contetnt-center">
+                                        <button mat-raised-button color="primary" class="" (click)="Gotohref('/member/'+course.uniqueid+'/'+course?.modules[0]?.uniqueid+'/'+course?.modules[0]?.lessons[0]?.uniqueid)">Resume Course</button> 
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                        </mat-tab>
-                    </mat-tab-group>
+            
+                            <!-- COURESE CONTENT -->
+                            <div class="kb-col-12 kb-p-0 ">
+            
+                                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="   kb-p-0 kb-m-0">
+            
+                                    <!-- DASHBOARD TAB -->
+                                    <mat-tab label="Dashboard" class="p-0 m-0 dashboardContainer">
+                                        <div class="kb-p-3 kb-m-0 kb-text-black">
+                                            {{course.description}}
+                                        </div>
+                                    </mat-tab>
+            
+            
+                                    <!-- MODULES TAB -->
+                                    <mat-tab label="Modules" class="moduleContainer">
+                                        <div class="moduleCards kb-m-2">
+                                            <div class="kb-col-12 kb-p-0 kb-mt-3 kb-m-0 kb-d-flex kb-s-flex-column kb-align-items-center kb-card kb-rounded-start-2 kb-gap-2"
+                                                *ngFor="let module of course.modules">
+            
+                                                <!-- cardImage -->
+                                                <div class="cardImage kb-rounded-start-2  ">
+                                                    <img [src]="module?.thumbnail ?  _image.uploadImgPath+module?.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'"
+                                                            alt="module thumbnail" class="kb-rounded-start-2">
+                                                </div>
+            
+                                                <!-- card content -->
+                                                <div class="kb-flex-grow-1 kb-rounded-end-2 ">
+                                                    <p class="kb-fs-5">{{module.title | titlecase}}</p>
+                                                </div>
+            
+                                            </div>
+                                        </div>
+                                    </mat-tab>
+                                </mat-tab-group>
+            
+            
+                            </div>
+                        </div>
+                    </div>
 
-                    
+
+                    <ng-template #nodata>
+                        <div class="kb-row kb-justify-content-center kb-mt-5">
+                            <div>
+                                <img src="/assets/images/website/website-empty.png" class="img-fluid"
+                                    alt="No Course Found" />
+                            </div>
+                        </div>
+                    </ng-template>
+
+
                 </div>
-            </div>
-        </div>
-    </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
 </div>

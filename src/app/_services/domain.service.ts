@@ -27,6 +27,10 @@ export class DomainService {
   ongetdomainstatus(domain: any): Observable<any>{
     return this.http.get('https://keasolution.com/dmsts.php?domain='+domain);
   }
+  
+  oncloudAddUpdatedomain(zoneid: any, domain:any, type:any, name:any, content:any, action:any): Observable<any>{
+    return this.http.get('https://keasolution.com/editdm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid+'&type='+type+'&name='+name+'&content='+content+'&action='+action);
+  }
 
   onclouddeletedomain(zoneid: any, domain:any): Observable<any>{
     return this.http.get('https://keasolution.com/deldm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid);
@@ -40,6 +44,9 @@ export class DomainService {
 
   getDomains(): Observable<any> {
     return this.http.get('/api/getdomaindata/'+this.uuid);
+  }
+  getSingleDomain(id:any): Observable<any> {
+    return this.http.get('/api/getsingledomaindata/'+this.uuid+'/'+id);
   }
 
   updatedomaindata(data:any):Observable<any> {

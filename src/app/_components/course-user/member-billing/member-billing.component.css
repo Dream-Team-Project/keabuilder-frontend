@@ -78,3 +78,28 @@ cursor: pointer;
         justify-content: flex-end;
         align-items: center;
     }
+    .kb-p-2{
+        padding: .50rem;
+    } 
+    .kb-mb-4{
+        margin-bottom: 1rem;
+    }
+    .kb-w-100{
+        width: 100%;
+    } 
+    .kb-d-flex{
+        display: flex;
+    }
+    .kb-mx-auto{
+        margin: 0 auto;
+    }
+    .billingImage{
+        display: flex;
+        justify-content: center;
+    }
+    .kb-pt-5{
+        padding-top: 3rem;
+    }
+    .kb-ms-2{
+        margin-left: .50rem;
+    }

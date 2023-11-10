@@ -107,24 +107,24 @@ export class RegisterComponent implements OnInit {
   serviceterms=false;
   product:any;
   products:any=[
-//     {name:'Startup',
-//     type:[
-//     {name:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw'},
-//     {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv'},
-//     ],
-// },
-//     {name:'Entrepreneur',
-//     type:[
-//       {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc'},
-//     {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G'},
-//     ],
-//   },
-//   {name:'Agency',
-//     type:[
-//       {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM'},
-//       {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I'},
-//     ],
-//   },
+    {name:'Startup',
+    type:[
+    {name:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw'},
+    {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv'},
+    ],
+},
+    {name:'Entrepreneur',
+    type:[
+      {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc'},
+    {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G'},
+    ],
+  },
+  {name:'Agency',
+    type:[
+      {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM'},
+      {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I'},
+    ],
+  },
   {name:'Beta',
     type:[
       {name:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa'},

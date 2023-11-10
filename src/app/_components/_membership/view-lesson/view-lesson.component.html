@@ -1,112 +1,165 @@
-<app-view-navbar></app-view-navbar>
-<div class="container-fluid">
-    <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
-    <div class="row mt-4">
-        <!-- SIDEBAR  -->
-        <div class="col-3 p-4 pt-5 sidebarContainer shadow-sm">
-            <app-course-sidebar [course]="course"></app-course-sidebar>
-        </div>
-        <div class="col-9 mainContentContainer">
-    <div class="row">
-      <mat-form-field appearance="fill" class="col-md-12">
-        <mat-label>Search Lessons</mat-label>
-        <input
-          matInput
-          #searchInp
-          type="text"
-          (input)="searchlessons(searchInp)"
-          placeholder="Search Lesson Name"
-        />
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </mat-form-field>
+<div class="wrapper">
+    <div class="kb-h-2">
+        <app-view-navbar></app-view-navbar>
     </div>
-    <div class="row">
-        <div class="col-md-12 d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <!-- <i class="fa-solid fa-chevron-left mr-3"></i> -->
-                <h3>{{lesson.title | titlecase}}</h3>
+    <mat-drawer-container class="kb-h-8" hasBackdrop="false">
+        <mat-drawer #drawer mode="push" class="inactive ">
+            <div class="sidebarContainerr " >
+                <app-course-sidebar [course]="course"></app-course-sidebar>
             </div>
-            <!-- (click)="_general.prevRoute()" -->
-            <div class="d-flex justify-content-between align-items-center">
-                <button mat-raised-button color="accent"  (click)="Gotohref('/member/'+course?.uniqueid)" class="mr-3"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-                    <button mat-raised-button color="primary" class="">Lesson Complete</button>
-                
-                <!-- <div class=""><i class="fa-solid fa-chevron-right"></i></div> -->
+        </mat-drawer>
+        <mat-drawer-content class="kb-py-sm-2 ">
+            <div class="sidebarBtn">
+                <button mat-raised-button (click)="drawer.toggle()" class="inactive kb-my-sm-2">
+                    <mat-icon>menu</mat-icon>
+                </button>
             </div>
-        </div>
-        <div class="col-md-12 m-0 p-0">
-            <hr>
-        </div>
-    </div>
-    <div class="row" *ngIf="lesson else nodata">
-        <div class="col-md-3"> </div>
-        <div class="col-md-6">
-        <div class="col-md-12 align-items-center d-flex justify-content-center">
-            <img class="kb-fitimg img-fluid"
-              [src]="lesson?.thumbnail ?  _image.uploadImgPath+lesson.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'">
-        </div>
-        <div class="col-md-12 align-items-center py-2" *ngIf="videos?.length > 0">
-            <h4>Lesson Video's</h4>
-            <!-- <div class="d-flex"> -->
-            <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let video of videos">
-                <video class="rounded-top" width="100%" controls>
-                    <source [src]="video" type="video/mp4">
-                </video>
-        <!-- </div> -->
-    </div>
-        </div>
-        <div class="col-md-12 align-items-center py-2" *ngIf="audios?.length > 0">
-            <h4>Lesson Audio's</h4>
-            <!-- <div class="d-flex"> -->
-            <div class="col-lg-12 col-md-12 m-0 p-0 mr-2" *ngFor="let audio of audios">
-                <video class="rounded-top" width="100%" controls>
-                    <source [src]="audio" type="audio/mp3">
-                </video>
-        <!-- </div> -->
-    </div>
-        </div>
-        
-        <div class="col-md-12 align-items-center py-2">
-            <h5>Lesson Content</h5>
-            <span class="text-justify" [innerHTML]="lesson.content_html"></span>
-        </div>
-        <div class=" col-md-12 align-items-center py-2 mb-2" *ngIf="documents?.length > 0">
-            <h4>Lesson Documents</h4>
-            <!-- <div class="d-flex" > -->
-            <div *ngFor="let item of documents">
-            <span class="d-flex">
-               <span class="align-items-center mr-2"> <i class="fa-regular fa-file"></i></span>
-               <span>{{item.name+item.ext}}</span>
-            <span (click)="downloadDocument(item)"><i class="fa fa-download text-black-50 ml-2 mr-3" matTooltip="Download" matTooltipPosition="above"></i></span>
-        </span>
-            <!-- </div> -->
-        </div>
-        </div>
-        <hr>
-        <div class=" col-md-12 align-items-center py-2 mb-2">
-            <textarea type="text"  class="w-100" style="height: 100px;" placeholder="Write something..."></textarea>
-            <button mat-raised-button class="mt-2" color="primary"> Post Comment</button>
-        </div>
-    </div>
-    <div class="col-md-3"> 
-     
-    
-   
+            <div class="lessonWrapper">
+                <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
+
+
+                <div class="lessonContainer">
+
+
+                    <!-- SIDEBAR  -->
+                    <div class="sidebarContainer sm-inactive">
+                        <app-course-sidebar [course]="course"></app-course-sidebar>
+                    </div>
+
+                    <!-- MAIN CONTAINER OR RIGHT CONTAINER -->
+                    <div class="mainContentContainer">
+
+
+                        <!-- SEARCH BAR SECTION -->
+                        <div class="kb-row ">
+                            <mat-form-field appearance="fill" class="kb-w-100">
+                                <mat-label>Search Lessons</mat-label>
+                                <input matInput #searchInp type="text" (input)="searchlessons(searchInp)"
+                                    placeholder="Search Lesson Name" />
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </mat-form-field>
+                        </div>
+
+
+                        <!-- NEXT TO SEARCH SECTION  -->
+
+                        <div class="kb-lessonDetails">
+
+                            <!-- LESSON DETAILS BACK BUTTON ETC. -->
+                            <div class="kb-d-flex kb-justify-content-between kb-align-items-center kb-sm-flex-column-reverse kb-sm-align-items-start">
+                                <div class="kb-d-flex kb-align-items-center">
+                                    <!-- <i class="fa-solid fa-chevron-left mr-3"></i> -->
+                                    <h1 class="kb-m-0 lessonHeading lesson-sm-Heading">{{lesson.title | titlecase}}</h1>
+                                </div>
+                                <!-- (click)="_general.prevRoute()" -->
+                                <div class="kb-d-flex kb-justify-content-between kb-align-items-center">
+                                    <button mat-raised-button color="accent"
+                                        (click)="Gotohref('/member/'+course?.uniqueid)" class="kb-mr-2 backBtn"><i
+                                            class="fa fa-arrow-left kb-mr-2"></i>Back</button>
+                                    <button mat-raised-button class="mainBtn">Lesson Complete</button>
+
+                                    <!-- <div class=""><i class="fa-solid fa-chevron-right"></i></div> -->
+                                </div>
+                            </div>
+
+                            <!-- HORIZONTAL LINE -->
+                            <div>
+                                <hr>
+                            </div>
+
+                        </div>
+
+                        <!-- *ngIf="lesson else nodata" -->
+
+
+                        <div class="lessonContentWrapper kb-s-w-100">
+                            <div class="lessonContent">
+                                <div class="kb-align-items-center kb-d-flex kb-justify-content-center">
+                                    <img class="kb-fitimg img-fluid"
+                            [src]="lesson?.thumbnail ?  _image.uploadImgPath+lesson.thumbnail :  _image.uploadImgPath +'webpage_thumbnail.jpg'">
+                                </div>
+
+
+                                <!-- VIDEO CONTAINER -->
+                                <div class="videoContainer kb-s-w-100 kb-mt-5" *ngIf="videos?.length > 0">
+                                    <h4 class="kb-heading">Lesson Video's</h4>
+                                    <ul>
+                                        <li class="videos" *ngFor="let video of videos">
+                                            <video class="kb-rounded-top" width="100%" controls>
+                                        <source [src]="video" type="video/mp4">
+                                    </video>
+                                            
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+
+                                <!-- AUDIO CONTAINER -->
+                                <div class="audioContainer kb-s-w-100" *ngIf="audios?.length > 0">
+                                    <h4 class="kb-heading">Lesson Audio's</h4>
+                                    <ul>
+                                        <li class="audios" *ngFor="let audio of audios">
+                                            <video class="kb-rounded-top kb-rounded-bottom" width="100%" controls>
+                                        <source [src]="audio" type="audio/mp3">
+                                    </video>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                                <!-- LESSON CONTENT CONTAINER -->
+                                <div class="kb-w-70 kb-s-w-100 kb-mx-auto kb-mt-2r kb-text-justify">
+                                    <h5 class="kb-heading">Lesson Content</h5>
+                                    <span class="kb-text-justify contentText" [innerHTML]="lesson.content_html"></span>
+                                </div>
+
+
+                                <!-- LESSON DOCUMENT CONTAINER-->
+                                <div class="kb-w-70 kb-s-w-100 kb-mx-auto kb-mt-2r" *ngIf="documents?.length > 0">
+                                    <h4 class="kb-heading">Lesson Documents</h4>
+                                    <div>
+                                        <div *ngFor="let item of documents">
+                                            <span class="kb-d-flex kb-hover">
+                                                <span><i class="fa-regular fa-file"></i></span>
+                                                <span class="kb-ml-2r">{{item.name+item.ext}}</span>
+                                                <span (click)="downloadDocument('item')"><i
+                                                        class="fa fa-download kb-text-black-50 kb-ml-2 kb-mr-3"
+                                                        matTooltip="Download" matTooltipPosition="above"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <hr>
+
+                                <!-- COMMENT CONTAINER -->
+                                <div
+                                    class="kb-d-flex kb-flex-column kb-align-items-start kb-py-2 kb-mb-2 kb-gap-2 kb-w-80 kb-mx-auto">
+                                    <textarea type="text" rows="5"
+                                        class="kb-w-100 kb-p-2 kb-rounded-top kb-rounded-bottom"
+                                        placeholder="Write something..."></textarea>
+                                    <button mat-raised-button class="kb-mt-2 "> Post Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <ng-template #nodata>
+                        <div class="kb-row kb-justify-content-center kb-mt-5">
+                            <div>
+                                <img src="/assets/images/website/website-empty.png" class="img-fluid"
+                                    alt="No lesson Found" />
+                            </div>
+                        </div>
+                    </ng-template>
+
+
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
 </div>
-        <!-- <div class="col-md-3"></div> -->
-    </div>
-    <ng-template #nodata>
-      <div class="row justify-content-center mt-5">
-        <div class="col-md-4">
-          <img
-            src="/assets/images/website/website-empty.png"
-            class="img-fluid"
-            alt="No Form Found"
-          />
-        </div>
-      </div>
-    </ng-template>
-  </div>
-  </div>
-</div>
-  

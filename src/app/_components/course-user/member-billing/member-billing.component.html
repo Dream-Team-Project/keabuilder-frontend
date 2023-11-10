@@ -1,12 +1,15 @@
-<div class="container-fluid mb-4">
-  <div class="row">
-    <div class="col-md-12">
-      <button mat-raised-button color="accent" (click)="Gotohref('/member/library','')" class="mr-2"><i class="fa fa-arrow-left mr-2"></i>Back</button>
-      <button mat-raised-button class="mr-2" [class]="active" (click)="Gotohref('/profile/settings','active')"><i class="fa-regular fa-user" aria-hidden="true"></i> Profile Details</button>
-      <button mat-raised-button class="mr-2" [class]="active1" (click)="Gotohref('/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Sign In & Security</button>
-      <button mat-raised-button class="mr-2" [class]="active2" (click)="Gotohref('/profile/billing','active2')"><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Billing</button>
-    </div>
-    </div>
+<div class="kb-p-2 kb-mb-4">
+  <div class="kb-w-100 kb-d-flex">
+    <button mat-raised-button color="accent" (click)="Gotohref('/member/library','')" class="kb-ms-2"><i
+        class="fa fa-arrow-left kb-ms-2"></i>Back</button>
+    <button mat-raised-button class="kb-ms-2" [class]="active" (click)="Gotohref('/profile/settings','active')"><i
+        class="fa-regular fa-user" aria-hidden="true"></i> Profile Details</button>
+    <button mat-raised-button class="kb-ms-2" [class]="active1"
+      (click)="Gotohref('/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved"
+        aria-hidden="true"></i> Sign In & Security</button>
+    <button mat-raised-button class="kb-ms-2" [class]="active2" (click)="Gotohref('/profile/billing','active2')"><i
+        class="fa-regular fa-credit-card" aria-hidden="true"></i> Billing</button>
+  </div>
     <div class="row mt-4" *ngIf="registrationtype !='free'; else nodata">
         <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     
@@ -100,8 +103,9 @@
     
         </div>
      -->
-        <div class="col-md-6 mkflx">
+        <div class="billingImage kb-pt-5">
           <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
+          <!-- <img src="../../assets/images/signsecurity.png"  class="img-fluid" alt=""> -->
         </div>
       </div>
     

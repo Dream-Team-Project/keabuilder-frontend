@@ -93,7 +93,7 @@
                   <ng-template mat-tab-label>
                     <i class="fa-brands fa-cc-stripe mr-1"></i>Strip
                   </ng-template> -->
-                  <!-- <div class="row">
+                  <div class="row">
                     <mat-form-field class="example-full-width col-md-6" appearance="fill">
                       <mat-label>Current Subsciption Plan</mat-label>
                       <mat-select [(ngModel)]="product" (selectionChange)="productdetails($event)">
@@ -107,7 +107,7 @@
                         <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
                     </mat-select>
                     </mat-form-field>
-                  </div> -->
+                  </div>
 
 
               <div ngxStripeCardGroup [formGroup]="stripeForm" [elementsOptions]="elementsOptions">

@@ -1,4 +1,8 @@
-
+.wrapper{
+  padding: 1rem;
+  height: 100%;
+  overflow-y: auto;
+}
 .moduleText h3{
     font-size: 20px;
 }
@@ -33,8 +37,48 @@
     white-space: nowrap;
   }
   .ftsize1{
-    max-width: 250px;
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin: 0;
+    color: black;
   }
+
+  .libraryBtnContainer{
+    margin-bottom: 25px;
+  }
+  .courseDetailSidebar{
+    padding-top: 16px;
+  }
+  .moduleText{
+    padding-top: 16px;
+  }
+  .moduleText h3{
+    font-weight: bolder;
+    margin: 0;
+  }
+  .courseHeading{
+    font-weight: bolder ;
+    color: black;
+  }
+  .lessonText{
+    text-decoration: none;
+    color: black;
+  }
+  .EachlessonText{
+    display: flex;
+    align-items: start;
+    padding: 8px 0;
+    padding-left: 12px;
+  }
+.EachlessonText span{
+    padding-left: 4px;
+}
+  .lessonContainer{
+    padding-top: 8px;
+  }
+  .moduleContainer{
+    padding-left: 15px;
+  }
+  

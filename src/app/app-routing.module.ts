@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { AnalyticsComponent } from './_components/analytics/analytics.component';
 import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
 import { DomainComponent } from './_components/domain/domain.component';
+import { UpdateDnsComponent } from './_components/update-dns/update-dns.component';
 import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
 import { ImageComponent } from './_components/image/image.component';
 import { IntegrationsComponent } from './_components/integrations/integrations.component';
@@ -260,6 +261,7 @@ if (currentDomain === appHost) {
   
     // { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
     { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
+    { path: 'domain/update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
 
     // builder
 
@@ -540,6 +542,7 @@ export const RoutingComponents =
     OfferComponent,
     CheckoutComponent,
     DomainComponent,
+    UpdateDnsComponent,
     AccountComponent,
     BillingComponent, 
     ProfileSettingsComponent,
@@ -561,5 +564,6 @@ export const RoutingComponents =
     MemberProfileSettingsComponent,
     MemberSignInSecurityComponent,  
     MemberBillingComponent,
+    
   ];
 

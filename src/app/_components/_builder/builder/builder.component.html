@@ -264,7 +264,7 @@
                                                     </ng-template>
                                                 </div>
                                                 <div *ngSwitchCase="'video'" [attr.data-name]="element.content.name" class="kb-element-content">
-                                                    <div [ngSwitch]="_style.video_type">
+                                                    <div [ngSwitch]="isBlockActive(element) ? _style.video_type : element.content.type">
                                                         <div *ngSwitchCase="'link'">
                                                             <video *ngIf="isBlockActive(element) else showVideo" 
                                                             [autoplay]="_style.video_autoplay"
