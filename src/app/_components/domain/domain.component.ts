@@ -30,6 +30,7 @@ export class DomainComponent implements OnInit {
   searching:boolean = false;
   error=false;
   errormessage:any='';
+  nameserver:any={type:'',name:'',content:'',proxy_status:'',ttl:''}
 
   constructor(private domainService: DomainService,
               private _snackBar: MatSnackBar,
@@ -222,7 +223,7 @@ export class DomainComponent implements OnInit {
   }
 
   viewdomain(data:any){
-    console.log(data);
+    // console.log(data);
     this.shownamehint = true;
     this.gendomainname = data.name;
     this.nameservers = data.nameserver.split(',');

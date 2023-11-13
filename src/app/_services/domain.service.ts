@@ -54,6 +54,11 @@ export class DomainService {
       data,
     }, httpOptions);
   }
+  updatedomainnameserver(data:any):Observable<any> {
+    return this.http.post("/api/updatedomainnameserver/"+this.uuid, {
+      data,
+    }, httpOptions);
+  }
 
   ondeletedomain(id:any):Observable<any> {
     return this.http.post("/api/deletedomaindata/"+this.uuid, {

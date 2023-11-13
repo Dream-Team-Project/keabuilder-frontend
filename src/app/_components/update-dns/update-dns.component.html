@@ -5,7 +5,39 @@
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletedomain(domain)">Yes</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletedomain(domain,delaction)">Yes</button>
+    </div>
+  </ng-template>
+  <ng-template #adddialog>
+    <h1 mat-dialog-title >Add Domain Record</h1>
+    <div mat-dialog-content>
+        <span>Add new record</span>
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Type</mat-label>
+          <input type="text" placeholder="A,CNAME,AAA" matInput required [formControl]="type"  [(ngModel)]="nameserver.type">
+          <mat-error *ngIf="type.hasError('required')" class="errdmrgn">
+              Type is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" placeholder="nameserver" matInput required [formControl]="name"  [(ngModel)]="nameserver.name">
+            <mat-error *ngIf="name.hasError('required')" class="errdmrgn">
+                Name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Target</mat-label>
+          <input type="text" placeholder="target content" matInput required [formControl]="content"  [(ngModel)]="nameserver.name">
+          <mat-error *ngIf="content.hasError('required')" class="errdmrgn">
+              Target Content is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="updatedomain(nameserver,'add')" [disabled]="type.invalid || name.invalid || content.invalid">Connect</button>
     </div>
   </ng-template>
 <div class="container-fluid pb-5 px-5">
@@ -21,10 +53,10 @@
       <div class="col-md-6 text-right">
         <button mat-raised-button color="accent" (click)="_general.prevRoute()"><i
             class="fa fa-arrow-left mr-2"></i>Back</button>
-        <button mat-raised-button color="primary" (click)="updatedomain()" class="mx-3">Save
+        <!-- <button mat-raised-button color="primary" (click)="updatedomain(nameserver,'update')" class="mx-3">Save
           <i class="far fa-save ml-1"></i>
-        </button>
-        <button mat-raised-button (click)="openDialog(deldialog)" color="danger">Delete
+        </button> -->
+        <button mat-raised-button (click)="openDialog(deldialog,'main')" color="danger" class="mx-3">Delete
           <i class="far fa-trash-alt ml-1"></i>
         </button>
       </div>
@@ -34,25 +66,60 @@
         <div class="kb-dns-card rounded px-3 pt-3 mb-4">
             <div class="d-flex justify-content-between mb-3">
                 <h6>Details</h6>
-                <button mat-raised-button color="primary">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
+                <button mat-raised-button color="primary" (click)="openDialog(adddialog,'')">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
             </div>
-            <div>
-          <mat-form-field class="kb-full-width" appearance="fill"
-            [class.mat-form-field-invalid]="!domain.name">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" placeholder="domain name" [(ngModel)]="domain.name" required>
-          </mat-form-field>
-        </div>
-          <mat-form-field class="kb-full-width mb-3" appearance="fill">
-            <mat-label>Title<span class="kb-tag kb-info-tag ml-1">Optional</span></mat-label>
-            <input matInput type="text" placeholder="domain Title" [(ngModel)]="domain.title">
-            <mat-hint>Title will appear on checkout instead of name</mat-hint>
-          </mat-form-field>
-          <mat-form-field class="kb-full-width" appearance="fill">
-            <mat-label>Description</mat-label>
-            <textarea matInput placeholder="domain description" [(ngModel)]="domain.description"
-              [style.minHeight]="'60px'"></textarea>
-          </mat-form-field>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Name</th>
+                  <th>Content</th>
+                  <th>Proxy Status</th>
+                  <th>TTL</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let cf of domain.nameserver?.split(','); let i = index">
+                  <ng-container *ngIf="!cf.edit; else editMode">
+                    <td>{{ cf.type }}</td>
+                    <td>{{ cf.name }}</td>
+                    <td>{{ cf.content }}</td>
+                    <td>{{cf.proxy_status}}</td>
+                    <td>{{cf.ttl}}</td>
+                    <td class="col-1 text-center p-0">
+                      <span class="d-flex px-1">
+                        <i mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-table-action-icon"></i>
+                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog,'')" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
+                      </span>
+                    </td>
+                  </ng-container>
+                  <ng-template #editMode>
+                    <td>
+                      <input type="text" [(ngModel)]="cf.type" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="cf.name" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="cf.content" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="cf.proxy_status" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    </td>
+                    <td>
+                      <input type="text" [(ngModel)]="cf.ttl" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    </td>
+                    <td class="col-1 text-center p-0">
+                      <span class="kb-contact-field-action d-flex px-1">
+                        <i mat-ripple (click)="undoNameserver(cf, i)" matTooltip="Undo" matTooltipPosition="above" class="fa fa-solid fa-rotate-left"></i>
+                        <i mat-ripple (click)="updatedomain(cf,'update')" matTooltip="Save" matTooltipPosition="above" class="fa fa-check"></i>
+                      </span>
+                    </td>
+                  </ng-template>
+                </tr>
+              </tbody>
+            </table>
         </div>
       </div>
       <div class="col-md-4">
