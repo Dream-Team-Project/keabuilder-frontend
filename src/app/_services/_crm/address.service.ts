@@ -290,6 +290,29 @@ export class AddressService {
     return this.http.post('/api/searchaddress',obj).pipe(catchError(this.errorHandler));
   }
 
+
+  fetchsmtp(): Observable<any> {
+    var obj = {uuid: this.uuid};
+    return this.http.post('/api/Allsmtp', obj).pipe(catchError(this.errorHandler));
+  }
+  singlesmtp(uniqueid:any): Observable<any> {
+    var obj = {uuid: this.uuid};
+    return this.http.post('/api/singlesmtp/'+uniqueid,obj).pipe(catchError(this.errorHandler));
+  }
+  addsmtp(obj:any): Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post('/api/addsmtp',obj).pipe(catchError(this.errorHandler));
+  }
+  updatesmtp(obj:any): Observable<any>{
+    obj.user_id = this.uuid;
+    return this.http.put('/api/updatesmtp',obj).pipe(catchError(this.errorHandler));
+  }
+  deletesmtp(id:any): Observable<any>{
+    // var obj = {uuid: this.uuid};
+    return this.http.delete('/api/deletesmtp/'+id+'/'+this.uuid).pipe(catchError(this.errorHandler));
+    
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(()=>error.message || "Sever Error")
   }

@@ -19,7 +19,7 @@ export class CrmSettingsComponent implements OnInit {
   
   email = new FormControl('', [Validators.required,Validators.email]);
   smtp = new FormControl('', [Validators.required]);
-  apiid = new FormControl('default', [Validators.required]);
+  // apiid = new FormControl('default', [Validators.required]);
   apikey = new FormControl('', [Validators.required]);
 
   addressnameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
@@ -30,19 +30,23 @@ export class CrmSettingsComponent implements OnInit {
   zipControl = new FormControl('', [Validators.required]);
 
   fetch:boolean=false;
+  fetch1:boolean=false;
   searching:boolean=false;
-  emailfrom:any;
-  smtp_type:any;
-  api_key:any;
-  api_id:any='default';
+  // emailfrom:any;
+  // smtp_type:any;
+  // api_key:any;
+  // api_id:any='';
   showmytime:any = '';
   timezone:any='';
   genaddress = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
+  gensmtp = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_key:''};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
   filteredcountry:any=[];
   alladdress:any=[];
+  allsmtp:any=[];
   defaultadd:any={name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
+  defaultsmtpdata :any = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_id:'',api_key:''};
   error=false;
   errormessage:any='';
 
@@ -57,14 +61,29 @@ export class CrmSettingsComponent implements OnInit {
   }
   fetchdata(){
     this.fetchsmtp();
-    this.fetchaddress().then(resp=>{
+    this.fetchaddress().then(resp =>{
       this.alladdress.filter((element:any)=>{
         if(element.uniqueid==this.allsmtpdata?.addressid){
           this.defaultadd=element;
           this.fetch=true;
         }
        })
-    })
+    });
+    this.fetchallsmtp().then(resp=>{
+      // console.log(this.allsmtpdata)
+      this.allsmtp.filter((element:any)=>{
+        if(element.uniqueid == this.allsmtpdata?.api_id){
+          this.defaultsmtpdata.id=element.id;
+          this.defaultsmtpdata.uniqueid=element.uniqueid;
+          this.defaultsmtpdata.smtp_type=element.smtp_type;
+          this.defaultsmtpdata.emailfrom=element.emailfrom;
+          this.defaultsmtpdata.api_id=element.api_id;
+          this.defaultsmtpdata.api_key=element.api_key;
+          this.fetch1=true;
+        }
+       })
+    });
+
   }
   fetchsmtp(){
     this.searching=true;
@@ -100,17 +119,34 @@ export class CrmSettingsComponent implements OnInit {
     })
 })
   }
+  fetchallsmtp(){
+    this.searching=true;
+    return new Promise((resolve, reject)=>{
+    this._addressService.fetchsmtp().subscribe({
+      next: data => {
+        this.searching=false;
+        if(data.data?.length != 0){
+         this.allsmtp=data.data; 
+         resolve(true);
+        }
+        else{
+          this.allsmtp=[];
+        } 
+      }
+    })
+})
+  }
 
   addsmtpdetails(){
-    if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apiid.status=='VALID' && this.apikey.status=='VALID'){
-     if(!this.allsmtpdata?.smtp_type){
-        this._settingService.addsetting({emailfrom:this.emailfrom,smtp_type:this.smtp_type,api_id:this.api_id,api_key:this.api_key}).subscribe({
+    if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apikey.status=='VALID'){
+    //  if(!this.allsmtpdata?.smtp_type){
+        this._addressService.addsmtp(this.gensmtp).subscribe({
           next: data => {
             if(data.success==true){
-              this.fetchsmtp();
+              this.fetchdata();
              this.resetobj();
-              var msg =  'Settings has been saved';
-              this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top');
+              var msg =  'SMTP Setting has been saved';
+              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
             }
             else{
               this.error=true;
@@ -120,13 +156,13 @@ export class CrmSettingsComponent implements OnInit {
             }
           }
         });
-      }
-      else{
-        this.error=true;
-        this.errormessage =  'Delete previous SMTP data from database!';
-        this.dialog.open(this.dialog1);
-        // this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
-      }
+      // }
+      // else{
+      //   this.error=true;
+      //   this.errormessage =  'Delete previous SMTP data from database!';
+      //   this.dialog.open(this.dialog1);
+      //   // this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+      // }
       }else{
         this.error=true;
         this.errormessage = 'Please Fill All Details!';
@@ -137,13 +173,14 @@ export class CrmSettingsComponent implements OnInit {
     
 
   }
+  
   deletesmtp(smtp:any){
     let obj={id:smtp.id,uniqueid:smtp.uniqueid,smtp_type:'',emailfrom:'',api_id:'',api_key:''}
     this._settingService.updatesetting(obj).subscribe({
       next: data => {
         if(data.success==true){
-          this.fetchsmtp();
           this.resetobj();
+          this.fetchdata();
           var msg =  'Settings has been remove';
           this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
         }
@@ -155,8 +192,32 @@ export class CrmSettingsComponent implements OnInit {
       }
     });
   }
+  deletesmtpdata(smtp:any){
+    this._addressService.deletesmtp(smtp.uniqueid).subscribe({
+      next: data => {
+        if(data.success==true){
+          this.resetobj();
+          this.fetchdata();
+          var msg =  'Settings has been remove';
+          this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+        }
+        else{
+          // this.fetchdata();
+          var msg =  'Single SMTP Details can not removed / Server Error';
+          this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+        }
+      }
+    });
+  }
   openDialog(templateRef: TemplateRef<any>,value:any,action:any): void {
-   if(action=='edit' || action=='delete' || action=='default')  this.genaddress=value;
+   if(action=='edit' || action=='delete' || action=='default')  {
+    this.genaddress=value;
+    this.gensmtp.id=value.id;
+    this.gensmtp.smtp_type=value.smtp_type;
+    this.gensmtp.uniqueid=value.uniqueid;
+    this.gensmtp.emailfrom=value.emailfrom;
+    this.gensmtp.api_key=value.api_key;
+   }
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
      
     });
@@ -164,10 +225,6 @@ export class CrmSettingsComponent implements OnInit {
   resetobj(){
     this.error=false;
     this.errormessage='';
-    this.emailfrom='';
-    this.smtp_type='';
-    this.api_key='';
-    this.api_id='';
     this.genaddress.id='';
     this.genaddress.name='';
     this.genaddress.company_name='';
@@ -177,9 +234,13 @@ export class CrmSettingsComponent implements OnInit {
     this.genaddress.city='';
     this.genaddress.state='';
     this.genaddress.zip='';
+    this.gensmtp.id='';
+    this.gensmtp.smtp_type='';
+    this.gensmtp.uniqueid='';
+    this.gensmtp.emailfrom='';
+    this.gensmtp.api_key='';
     this.email.reset();
     this.smtp.reset();
-    this.apiid.reset();
     this.apikey.reset();
     this.fetchaddress();
   }
@@ -345,5 +406,33 @@ export class CrmSettingsComponent implements OnInit {
       this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
     }
   })
-}
+  }
+  // setdefaultsmtp(smtp:any){
+  // this._settingService.setdefaultaddress(smtp).subscribe((data:any)=>{
+  //   if(data.success=true){
+  //     this._general.openSnackBar(false, data.msg, 'OK', 'center', 'top'); 
+  //     this.fetchdata();
+  //     this.resetobj();
+  //   }
+  //   else{
+  //     this._general.openSnackBar(true, data.msg, 'OK', 'center', 'top'); 
+  //   }
+  // })
+  // }
+  setdefaultsmtp(smtp:any){
+        this._settingService.addsetting(smtp).subscribe({
+          next: data => {
+            if(data.success==true){
+              this.resetobj();
+              this.fetchdata();
+              var msg =  'Default SMTP Settings has been saved';
+              this._general.openSnackBar(false, msg, 'OK', 'center', 'top');
+            }
+            else{
+              this._general.openSnackBar(true,"Server Error", 'OK', 'center', 'top');
+            }
+          }
+        });
+  }
+  
 } 

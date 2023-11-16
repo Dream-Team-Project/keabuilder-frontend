@@ -75,7 +75,8 @@ export class DomainComponent implements OnInit {
           
             if(data.success==true){
               this.nameservers = data.nameservers.split(',');
-              var objdata = {name:data.dmname,zoneid:data.zoneid, nameservers:data.nameservers, status:data.status};
+              let dns_records=JSON.stringify(data.dns_records);
+              var objdata = {name:data.dmname,zoneid:data.zoneid, nameservers:data.nameservers,dns_records:dns_records, status:data.status};
               this.domainService.oninsertdomain(objdata).subscribe({
                 next: data => {
                   // console.log(data);

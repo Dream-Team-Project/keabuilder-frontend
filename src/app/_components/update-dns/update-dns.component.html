@@ -1,11 +1,11 @@
 <ng-template #deldialog>
-    <h1 mat-dialog-title class="kb-danger">Delete Domain</h1>
-    <div mat-dialog-content>
-        Would you like to delete <span class="text-danger">{{domain.name}}</span> domain?
+    <h1 mat-dialog-title class="kb-danger">Delete Domain Name Server</h1>
+    <div mat-dialog-content >
+        Would you like to delete <span class="text-danger">{{delobj.name}}</span> domain name server?
     </div>
     <div mat-dialog-actions class="justify-content-end">
-        <button mat-button mat-dialog-close class="text-info">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="deletedomain(domain,delaction)">Yes</button>
+        <button mat-button mat-dialog-close class="text-info" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="updatedomain(delobj,delaction)">Yes</button>
     </div>
   </ng-template>
   <ng-template #adddialog>
@@ -15,7 +15,10 @@
         <mat-error *ngIf="error">{{errormessage}}</mat-error>
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Type</mat-label>
-          <input type="text" placeholder="A,CNAME,AAA" matInput required [formControl]="type"  [(ngModel)]="nameserver.type">
+          <mat-select  [formControl]="type"  [(ngModel)]="nameserver.type">
+                          <mat-option *ngFor="let record of dnsRecordTypes" [value]="record.value">{{record.name}}</mat-option>
+                        </mat-select>
+          <!-- <input type="text" placeholder="A,CNAME,AAA" matInput required [formControl]="type"  [(ngModel)]="nameserver.type"> -->
           <mat-error *ngIf="type.hasError('required')" class="errdmrgn">
               Type is <strong>required</strong>
           </mat-error>
@@ -29,15 +32,50 @@
         </mat-form-field>
         <mat-form-field class="kb-full-width" appearance="fill">
           <mat-label>Target</mat-label>
-          <input type="text" placeholder="target content" matInput required [formControl]="content"  [(ngModel)]="nameserver.name">
+          <input type="text" placeholder="target content" matInput required [formControl]="content"  [(ngModel)]="nameserver.content">
           <mat-error *ngIf="content.hasError('required')" class="errdmrgn">
               Target Content is <strong>required</strong>
           </mat-error>
       </mat-form-field>
+      <mat-form-field class="kb-full-width" appearance="fill">
+        <mat-label>Proxy Status</mat-label>
+        <mat-select  [formControl]="proxy"  [(ngModel)]="nameserver.proxied" (ngModelChange)="showttl1($event)">
+                        <mat-option [value]="true">Proxied</mat-option>
+                        <mat-option [value]="false">DNS Only</mat-option>
+                      </mat-select>
+        <mat-error *ngIf="proxy.hasError('required')" class="errdmrgn">
+            Proxy Status is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>TTL</mat-label>
+      <mat-select  [(ngModel)]="nameserver.ttl">
+        <ng-container *ngIf="shwttl == true">
+        <mat-option  [value]="1">Auto</mat-option>
+        </ng-container>
+        <ng-container *ngIf="shwttl == false">
+        <mat-option  [value]="1">Auto</mat-option>
+        <mat-option  [value]="1">1 min</mat-option>
+        <mat-option  [value]="2">2 min</mat-option>
+        <mat-option  [value]="5">5 min</mat-option>
+        <mat-option  [value]="10">10 min</mat-option>
+        <mat-option  [value]="15">15 min</mat-option>
+        <mat-option  [value]="30">30 min</mat-option>
+        <mat-option  [value]="60">1 hr</mat-option>
+        <mat-option  [value]="120">2 hr</mat-option>
+        <mat-option  [value]="300">5 hr</mat-option>
+        <mat-option  [value]="720">12 hr</mat-option>
+        <mat-option  [value]="1440">1 day</mat-option>
+        </ng-container>
+      </mat-select>
+      <mat-error *ngIf="ttl.hasError('required')" class="errdmrgn">
+          TTL is <strong>required</strong>
+      </mat-error>
+  </mat-form-field>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="updatedomain(nameserver,'add')" [disabled]="type.invalid || name.invalid || content.invalid">Connect</button>
+        <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="updatedomain(nameserver,'add')" [disabled]="type.invalid || name.invalid || content.invalid">Add</button>
     </div>
   </ng-template>
 <div class="container-fluid pb-5 px-5">
@@ -53,21 +91,22 @@
       <div class="col-md-6 text-right">
         <button mat-raised-button color="accent" (click)="_general.prevRoute()"><i
             class="fa fa-arrow-left mr-2"></i>Back</button>
+            <button mat-raised-button color="primary" (click)="openDialog(adddialog,'','')" class="mx-3">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
         <!-- <button mat-raised-button color="primary" (click)="updatedomain(nameserver,'update')" class="mx-3">Save
           <i class="far fa-save ml-1"></i>
         </button> -->
-        <button mat-raised-button (click)="openDialog(deldialog,'main')" color="danger" class="mx-3">Delete
+        <!-- <button mat-raised-button (click)="openDialog(deldialog,'main','')" color="danger" class="mx-3">Delete
           <i class="far fa-trash-alt ml-1"></i>
-        </button>
+        </button> -->
       </div>
     </div>
     <div class="row">
       <div class="col-md-8">
         <div class="kb-dns-card rounded px-3 pt-3 mb-4">
-            <div class="d-flex justify-content-between mb-3">
+            <!-- <div class="d-flex justify-content-between mb-3">
                 <h6>Details</h6>
-                <button mat-raised-button color="primary" (click)="openDialog(adddialog,'')">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
-            </div>
+                <button mat-raised-button color="primary" (click)="openDialog(adddialog,'','')">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
+            </div> -->
             <table class="table">
               <thead>
                 <tr>
@@ -80,23 +119,27 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let cf of domain.nameserver?.split(','); let i = index">
+                <tr *ngFor="let cf of domain.dns_records; let i = index">
                   <ng-container *ngIf="!cf.edit; else editMode">
                     <td>{{ cf.type }}</td>
                     <td>{{ cf.name }}</td>
                     <td>{{ cf.content }}</td>
-                    <td>{{cf.proxy_status}}</td>
+                    <td>{{cf.proxied}}</td>
                     <td>{{cf.ttl}}</td>
                     <td class="col-1 text-center p-0">
                       <span class="d-flex px-1">
                         <i mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-table-action-icon"></i>
-                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog,'')" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
+                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog,'delete',cf)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
                       </span>
                     </td>
                   </ng-container>
                   <ng-template #editMode>
                     <td>
-                      <input type="text" [(ngModel)]="cf.type" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                        <select  [(ngModel)]="cf.type"  class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                          <option *ngFor="let record of dnsRecordTypes" [value]="record.value">{{record.name}}</option>
+                        </select>
+                    
+                      <!-- <input type="text" [(ngModel)]="cf.type" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr"> -->
                     </td>
                     <td>
                       <input type="text" [(ngModel)]="cf.name" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
@@ -105,11 +148,35 @@
                       <input type="text" [(ngModel)]="cf.content" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
                     </td>
                     <td>
-                      <input type="text" [(ngModel)]="cf.proxy_status" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                      <select  [(ngModel)]="cf.proxied" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr" (change)="showttl($event)">
+                        <option  [value]="true">Proxied</option>
+                        <option  [value]="false">DNS Only</option>
+                      </select>
                     </td>
-                    <td>
-                      <input type="text" [(ngModel)]="cf.ttl" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                    <td >
+                      <select  [(ngModel)]="cf.ttl" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr">
+                       <ng-container *ngIf="shwttl == true">
+                        <option  [value]="1">Auto</option>
+                       </ng-container>
+                       <ng-container *ngIf="shwttl == false">
+                        <option  [value]="1">Auto</option>
+                        <option  [value]="1">1 min</option>
+                        <option  [value]="2">2 min</option>
+                        <option  [value]="5">5 min</option>
+                        <option  [value]="10">10 min</option>
+                        <option  [value]="15">15 min</option>
+                        <option  [value]="30">30 min</option>
+                        <option  [value]="60">1 hr</option>
+                        <option  [value]="120">2 hr</option>
+                        <option  [value]="300">5 hr</option>
+                        <option  [value]="720">12 hr</option>
+                        <option  [value]="1440">1 day</option>
+                        </ng-container>
+                      </select>
                     </td>
+                      <!-- <td *ngIf="!shwttl">
+                      <input type="text" [(ngModel)]="cf.ttl" class="kb-contact-field-inp px-2 py-1" [class.border-danger]="cf.error || cf.uniqueErr" readonly>
+                    </td> -->
                     <td class="col-1 text-center p-0">
                       <span class="kb-contact-field-action d-flex px-1">
                         <i mat-ripple (click)="undoNameserver(cf, i)" matTooltip="Undo" matTooltipPosition="above" class="fa fa-solid fa-rotate-left"></i>

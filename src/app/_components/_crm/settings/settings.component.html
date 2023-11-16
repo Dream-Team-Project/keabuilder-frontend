@@ -11,44 +11,46 @@
   </ng-template>
    <!-- add new smtp setting-->
    <ng-template #dialog1>
-    <h1 mat-dialog-title >Add your SMTP Details</h1>
+    <h1 mat-dialog-title ><span>{{gensmtp.id ? 'Update' : 'Add'}}</span>Add your SMTP Details</h1>
     <div mat-dialog-content>
         <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Choose an option</mat-label>
-        <mat-select [(ngModel)]="smtp_type" [formControl]="smtp">
+        <mat-select [(ngModel)]="gensmtp.smtp_type" [formControl]="smtp">
           <mat-option value="sendgrid">SendGrid</mat-option>
-          <!-- <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
-          <mat-option value="mailchimp">Mailchimp</mat-option> -->
+          <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
+          <mat-option value="mailchimp">Mailchimp</mat-option>
         </mat-select>
       </mat-form-field>
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Email From</mat-label>
-        <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="emailfrom">
+        <input type="email" placeholder="support@xyz.com" matInput required [formControl]="email"  [(ngModel)]="gensmtp.emailfrom">
         <mat-error *ngIf="email.hasError('required')" class="errdmrgn">
             Email is <strong>required</strong>
         </mat-error>
     </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill" hidden>
+    <!-- <mat-form-field class="kb-full-width" appearance="fill" hidden>
         <mat-label>API KEY ID</mat-label>
         <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
         <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
             API Key Id is <strong>required</strong>
         </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>API KEY</mat-label>
-        <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="api_key">
+        <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="gensmtp.api_key">
         <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
             API Key is <strong>required</strong>
         </mat-error>
-        <mat-hint><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation</a></mat-hint>
+        <mat-hint *ngIf="gensmtp.smtp_type == 'sendgrid'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation</a></mat-hint>
+        <mat-hint *ngIf="gensmtp.smtp_type == 'sendinblue'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys' target="_blank"> See Documentation1</a></mat-hint>
+        <mat-hint *ngIf="gensmtp.smtp_type == 'mailchimp'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation2</a></mat-hint>
     </mat-form-field>
     
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-        <button mat-button mat-dialog-close  cdkFocusInitial  color="primary" (click)="addsmtpdetails()" [disabled]="smtp.invalid || apikey.invalid || email.invalid">Add</button>
+        <button mat-button mat-dialog-close  cdkFocusInitial  color="primary" (click)="addsmtpdetails()" [disabled]="smtp.invalid || apikey.invalid || email.invalid">{{gensmtp.id ? 'Update' : 'Add'}}</button>
     </div>
   </ng-template>
  <!-- add new address setting-->
@@ -189,6 +191,54 @@
       <button mat-button mat-dialog-close   [color]="'primary'" (click)="setdefaultaddress(genaddress)">Yes</button>
     </div>
 </ng-template>
+<!--view address-->
+<ng-template #smtplists>
+    <h4 class="kb-field-list-head border-bottom py-2">
+        <span>Select SMTP</span>
+        <span>
+        <button class="float-left mr-2" color="primary" mat-raised-button (click)="openDialog(dialog1,'new','add')">Add</button>
+        <button (click)="closeBottomSheet()" class="float-right" mat-icon-button>
+            <mat-icon>close</mat-icon>
+        </button>
+    </span>
+    </h4>
+    <mat-nav-list>
+        <div class="kb-field-list"  *ngFor="let smtp of allsmtp" role="listitem" mat-ripple>
+            <span  class="kb-field-list-name d-flex justify-content-between text-center">
+                <span class="d-inline-flex text-align-center">
+                     <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="smtp.uniqueid == allsmtpdata.api_id"></mat-checkbox>
+                    <span  (click)="openDialog(dialog1,smtp,'edit')" style="font-size:16px">{{smtp.smtp_type | titlecase}}</span></span>
+            <span class="d-flex">
+                <i mat-ripple matTooltip="Set Default SMTP" matTooltipPosition="above" (click)="openDialog(defaultsmtp,smtp,'default')" class="fa fa-solid fa-house-user kb-table-action-icon"></i>
+                <i mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(dialog1,smtp,'edit')" class="fa fa-pencil kb-table-action-icon"></i>
+                <i  mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delsmtp,smtp,'delete')" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
+        </span>
+        </span> 
+        </div>
+    </mat-nav-list>
+</ng-template>
+<!--delete address-->
+<ng-template #delsmtp>
+    <h1 mat-dialog-title class="kb-danger">Delete SMTP Record</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{this.gensmtp.smtp_type | titlecase}}</span> SMTP?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="resetobj()">No</button>
+      <button mat-button mat-dialog-close (click)="deletesmtpdata(gensmtp)" class="text-danger">Yes</button>
+    </div>
+</ng-template>
+<!--default address-->
+<ng-template #defaultsmtp>
+    <h1 mat-dialog-title > Default SMTP</h1>
+    <div mat-dialog-content>
+      Would you like to use <span class="kb-txt">{{this.gensmtp.smtp_type | titlecase}}</span> smtp to default smtp?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial class="text-danger" (click)="resetobj()">No</button>
+      <button mat-button mat-dialog-close   [color]="'primary'" (click)="setdefaultsmtp(gensmtp)">Yes</button>
+    </div>
+</ng-template>
 <div class="container-fluid">
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
     <div class="row">     
@@ -198,21 +248,26 @@
                     <div class="col-md-8 ">
                         <h5>Add your own SMTP Server Details </h5>
                         <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
-                        <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1,'smtp','add')" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        <!-- <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1,'smtp','add')" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button> -->
+                        <button mat-raised-button [color]="'primary'" class=" mt-3 mr-2 outer-card-add"  (click)="openBottomSheet(smtplists)" >View SMTP  <i class="far fa-eye" aria-hidden="true"></i></button>
                     </div>
                     <div class="col-md-4 ">
                         <img src="/assets/images/crm_smtp/smtp.png" class="img-fluid " alt="" srcset="">
                     </div>
                 </div>
-                <div class="col-12" *ngIf="allsmtpdata?.smtp_type">
+                <div class="col-12" *ngIf="fetch1">
                         <ul class="kb-smtpul align-items-center mt-4 ">
-                            <li><span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span></li>
-                            <li>{{allsmtpdata.smtp_type}}</li>
-                            <li>{{allsmtpdata.emailfrom}}</li>
+                            <li><span >Default<i class="fa-solid fa-house" aria-hidden="true"></i></span></li>
+                            <!-- <li><span >Connected <i class="fa fa-check-circle" aria-hidden="true"></i></span></li> -->
+                            <li>{{defaultsmtpdata?.smtp_type}}</li>
+                            <li>{{defaultsmtpdata?.emailfrom}}</li>
                             <li>
-                                <button mat-raised-button (click)="openDialog(dialog,allsmtpdata,'delete')" class="text-danger">
-                                    Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                <button mat-raised-button (click)="openBottomSheet(smtplists)" [color]="'primary'">
+                                    Change <i class="fa fa-pencil ml-1" aria-hidden="true"></i>
                                 </button>
+                                <!-- <button mat-raised-button (click)="openDialog(dialog,defaultsmtpdata,'delete')" class="text-danger">
+                                    Delete <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button> -->
                             </li>   
                         </ul>
                 </div>
