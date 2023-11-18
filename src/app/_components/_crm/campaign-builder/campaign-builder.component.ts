@@ -271,7 +271,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
  sendatestemail(){
 
   let getobj=this.fullcampobj;
-  // if(this.smtpstatus){
+  if(this.smtpstatus){
     if(this.testemailControl.status=='VALID'){
       
       if(this.singleemail.subject!='' && this.singleemail.body!='' && this.testemail!='' && getobj.addressid!=''){
@@ -293,10 +293,10 @@ export class CrmCampaignBuilderComponent implements OnInit {
     }else{
        this._general.openSnackBar(true,'Incorrect Email Address!!', 'OK','center','top');
     }
-  // }
-  //   else{
-  //     this._general.openSnackBar(true,'Please Connect with SMTP First from CRM settings!', 'OK','center','top');
-  //  }
+  }
+    else{
+      this._general.openSnackBar(true,'Please Connect with SMTP First from CRM settings!', 'OK','center','top');
+   }
 
 
   }

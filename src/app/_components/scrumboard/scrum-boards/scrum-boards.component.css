@@ -1,0 +1,50 @@
+.wrapper{
+    background-color: rgb(235, 241, 245);
+    height: 100vh;
+}
+.boardCard{
+    min-width: 220px;
+    min-height: 270px;
+    background-color: white;
+    cursor: pointer;
+}
+.boardCard:hover{
+    background-color: rgb(255, 255, 238);
+}
+.w-80{
+    width: 80%;     
+}
+.addBoardCard{
+    border: 2px dashed rgb(164, 164, 168);
+    background-color: transparent;
+}
+.addBoardCard mat-icon{
+    color: rgb(141, 141, 145);
+    font-size: 30px;
+}   
+.moreVertIcon{
+    cursor: pointer;
+  }
+
+.dailogWrapper{
+    min-width: 40vw;
+    background-color: rgb(243, 243, 243) !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled){
+    background-color: rgb(247, 247, 247) !important;
+}
+.dailogHeading{
+    color: #dea641;
+}
+.textPrimary{
+    color: #dea641 !important;
+}
+.kb-table-action-icon:hover {
+    color: var(--primary-color);
+    background-color: rgb(216 200 152 / 20%);
+}
+
+.kb-table-action-icon.kb-icon-del:hover {
+    color: var(--kb-danger);
+    background-color: rgb(220 53 69 / 10%);
+}

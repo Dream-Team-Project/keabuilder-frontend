@@ -43,7 +43,7 @@ export class UpdateDnsComponent implements OnInit {
     // { name: 'SSHFP', value: 'SSHFP' },
     // { name: 'SVCB', value: 'SVCB' },
     // { name: 'TLSA', value: 'TLSA' },
-    // { name: 'TXT', value: 'TXT' },
+    { name: 'TXT', value: 'TXT' },
     // { name: 'URI', value: 'URI' },
   ];
   error=false;

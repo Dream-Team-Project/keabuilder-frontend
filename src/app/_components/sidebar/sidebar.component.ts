@@ -461,6 +461,31 @@ export class SidebarComponent implements OnInit {
     // },
     {
       0:true,
+      routerlink: '/scrumboard',
+      img: 'worldwide.gif',
+      icon: 'fa-solid fa-chalkboard-user',
+      title: 'Scrumboard',
+      submenu:null,
+    },
+    //   submenu:[
+    //     {
+    //       0:true,
+    //       routerlink: '/scrumboard/scrumboardlist',
+    //       img: 'worldwide.gif',
+    //       icon: 'fa fa-list',
+    //       title: 'Scrumboard List'
+    //     },
+    //     {
+    //       0:true,
+    //       routerlink: '/scrumboard/createscrumboard',
+    //       img: 'worldwide.gif',
+    //       icon: 'fa-solid fa-person-chalkboard',
+    //       title: 'Create Scrumboard'
+    //     },
+    //   ]
+    // },
+    {
+      0:true,
       routerlink: '/account',
       img: 'shield.gif',
       icon: 'fa-solid fa-gear',
@@ -504,7 +529,8 @@ export class SidebarComponent implements OnInit {
       '/membership': 3,
       '/crm': 4,
       '/sales': 5,
-      '/account': 8,
+      // '/scrumboard': 8,
+      '/account': 9,
       // '/affiliates': 10,
     };
     
@@ -525,7 +551,7 @@ export class SidebarComponent implements OnInit {
   
     this.backme = true;
   
-    if (link !== '/funnels' && link !== '/sales' && link !== '/websites' && link !== '/membership' && link !== '/crm' && link !== '/affiliates' && link !== '/account') {
+    if (link !== '/funnels' && link !== '/sales' && link !== '/websites' && link !== '/membership' && link !== '/crm' && link !== '/affiliates'  && link !== '/account') {
       this.backme = false;
     }
 

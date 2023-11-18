@@ -1,0 +1,92 @@
+.parentContainer{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* padding-bottom: 6rem; */
+  }
+  .draggable-container {
+      min-width: 270px ;
+      max-width: 270px ;
+      padding: 8px;
+    }
+    
+    .draggable {  
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      cursor: move;
+    }
+    .itemText{
+      text-align: justify;
+    }
+    .wrapper{
+      background-color: rgb(235, 241, 245); 
+      height: 100%;
+      width: 100%;
+      overflow:auto;
+    }
+    .mainContainer{
+      height: max-content;
+      width: fit-content;
+    }
+    .listCard{
+      background-color: rgba(217, 223, 226, 0.685);
+      min-width: 250px;
+      max-width: 250px;
+      height: fit-content;
+    }
+    .addListItem{
+      background-color: rgb(205, 211, 211);
+      color: rgb(92, 94, 95);
+      cursor: pointer;
+    }
+    .addListItem:hover{
+      background-color: rgb(185, 188, 190);
+    }
+    .addNewListDiv{
+      margin-top: 2.8rem;
+    }
+    .listInput{
+      outline: none;
+      border: 1px solid rgb(184, 184, 184);
+    }
+    .listInput:focus{
+      border: 1.8px solid rgb(14, 121, 243);
+    }
+    .addListChip{
+      background-color: #dea641 !important;
+    }
+    .fabIcon{
+      background-color: #dea641 !important;
+      padding: .2rem .5rem;
+    }
+    .moreVertIcon{
+      cursor: pointer;
+    }
+    .listTitle{
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .boardBtn{
+      background-color: #dea641;
+      /* width: 90px;
+      height: 90px; */
+    }
+    textarea{
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .kb-table-action-icon:hover {
+      color: var(--primary-color);
+      background-color: rgb(216 200 152 / 20%);
+  }
+  
+  .kb-table-action-icon.kb-icon-del:hover {
+      color: var(--kb-danger);
+      background-color: rgb(220 53 69 / 10%);
+  }
+  
+  
+    
+    

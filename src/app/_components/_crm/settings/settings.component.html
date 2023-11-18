@@ -11,7 +11,7 @@
   </ng-template>
    <!-- add new smtp setting-->
    <ng-template #dialog1>
-    <h1 mat-dialog-title ><span>{{gensmtp.id ? 'Update' : 'Add'}}</span>Add your SMTP Details</h1>
+    <h1 mat-dialog-title ><span>{{gensmtp.id ? 'Update' : 'Add'}}</span> your SMTP Details</h1>
     <div mat-dialog-content>
         <mat-error *ngIf="error">{{errormessage}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
@@ -29,13 +29,6 @@
             Email is <strong>required</strong>
         </mat-error>
     </mat-form-field>
-    <!-- <mat-form-field class="kb-full-width" appearance="fill" hidden>
-        <mat-label>API KEY ID</mat-label>
-        <input type="text" placeholder="API Key" matInput required [formControl]="apiid"  [(ngModel)]="api_id">
-        <mat-error *ngIf="apiid.hasError('required')" class="errdmrgn">
-            API Key Id is <strong>required</strong>
-        </mat-error>
-    </mat-form-field> -->
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>API KEY</mat-label>
         <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="gensmtp.api_key">
@@ -46,7 +39,9 @@
         <mat-hint *ngIf="gensmtp.smtp_type == 'sendinblue'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys' target="_blank"> See Documentation1</a></mat-hint>
         <mat-hint *ngIf="gensmtp.smtp_type == 'mailchimp'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation2</a></mat-hint>
     </mat-form-field>
-    
+    <div class="">
+        <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="default" *ngIf="!gensmtp?.id"><span class="kb-txt">Set as Default SMTP</span></mat-checkbox>
+    </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
@@ -135,6 +130,9 @@
                     </mat-error>
                 </mat-form-field>
             </div>
+            <div class="ml-3">
+            <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="default" *ngIf="!genaddress?.id"><span class="kb-txt">Set as Default Address</span></mat-checkbox>
+        </div>
         </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
@@ -248,7 +246,7 @@
                     <div class="col-md-8 ">
                         <h5>Add your own SMTP Server Details </h5>
                         <p>Add/Configure a SMTP Server to send Emails & help customers remember your website!</p>
-                        <!-- <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1,'smtp','add')" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button> -->
+                        <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog1,'new','add')" >Add New SMTP <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                         <button mat-raised-button [color]="'primary'" class=" mt-3 mr-2 outer-card-add"  (click)="openBottomSheet(smtplists)" >View SMTP  <i class="far fa-eye" aria-hidden="true"></i></button>
                     </div>
                     <div class="col-md-4 ">
@@ -279,6 +277,7 @@
                     <div class="col-md-8">
                         <h5>Address Settings</h5> 
                         <p>Add your new/another address.</p>
+                        <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog2,'new','add')" >Add New Address <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                         <button mat-raised-button [color]="'primary'" class=" mt-3 mr-2 outer-card-add"  (click)="openBottomSheet(addresslists)" >View Address  <i class="far fa-eye" aria-hidden="true"></i></button>
                     </div>
                     <div class="col-md-4 ">

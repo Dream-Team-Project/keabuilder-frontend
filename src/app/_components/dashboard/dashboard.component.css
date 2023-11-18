@@ -205,6 +205,9 @@ hr {
     font-weight: 600;
     text-align: center;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .fntwght{
 font-weight: 600;

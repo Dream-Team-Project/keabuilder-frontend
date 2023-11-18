@@ -15,6 +15,8 @@ import { ImageComponent } from './_components/image/image.component';
 import { IntegrationsComponent } from './_components/integrations/integrations.component';
 import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
 import { StrategiesComponent } from './_components/strategies/strategies.component';
+import { ScrumBoardsComponent } from './_components/scrumboard/scrum-boards/scrum-boards.component';
+import { ScrumBoardListComponent } from './_components/scrumboard/scrum-board-list/scrum-board-list.component';
 
 // auth
 import { DashboardComponent } from './_components/dashboard/dashboard.component';
@@ -173,6 +175,13 @@ if (currentDomain === appHost) {
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
     // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+
+    // scrumboard
+    
+    { path: 'scrumboard', component:ScrumBoardsComponent, canActivate: [AuthGuard] },
+    { path: 'scrumboardlist/:id', component:ScrumBoardListComponent, canActivate: [AuthGuard] },
+   
+
     
     // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
     
@@ -462,6 +471,8 @@ export const RoutingComponents =
     ProfileComponent,
     TemplateComponent, 
     PageViewComponent,
+    ScrumBoardsComponent,
+    ScrumBoardListComponent,   
     FetchMenuComponent,
     BuilderComponent,
     BuilderSettingComponent,

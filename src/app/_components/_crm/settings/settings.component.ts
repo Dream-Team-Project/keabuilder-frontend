@@ -32,13 +32,9 @@ export class CrmSettingsComponent implements OnInit {
   fetch:boolean=false;
   fetch1:boolean=false;
   searching:boolean=false;
-  // emailfrom:any;
-  // smtp_type:any;
-  // api_key:any;
-  // api_id:any='';
   showmytime:any = '';
   timezone:any='';
-  genaddress = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
+  genaddress = {id:'',uniqueid:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
   gensmtp = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_key:''};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
@@ -49,6 +45,7 @@ export class CrmSettingsComponent implements OnInit {
   defaultsmtpdata :any = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_id:'',api_key:''};
   error=false;
   errormessage:any='';
+  default:boolean=false;
 
   constructor(private _settingService: SettingService,
               public dialog: MatDialog, 
@@ -140,6 +137,10 @@ export class CrmSettingsComponent implements OnInit {
   addsmtpdetails(){
     if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apikey.status=='VALID'){
     //  if(!this.allsmtpdata?.smtp_type){
+      if(this.default){
+        this.gensmtp.uniqueid=this._general.makeid(20);
+        this.setdefaultsmtp(this.gensmtp);
+      }
         this._addressService.addsmtp(this.gensmtp).subscribe({
           next: data => {
             if(data.success==true){
@@ -203,7 +204,7 @@ export class CrmSettingsComponent implements OnInit {
         }
         else{
           // this.fetchdata();
-          var msg =  'Single SMTP Details can not removed / Server Error';
+          var msg =  'Single SMTP Details/ Default SMTP can not removed / Server Error';
           this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
         }
       }
@@ -226,6 +227,7 @@ export class CrmSettingsComponent implements OnInit {
     this.error=false;
     this.errormessage='';
     this.genaddress.id='';
+    this.genaddress.uniqueid='';
     this.genaddress.name='';
     this.genaddress.company_name='';
     this.genaddress.country='';
@@ -241,6 +243,7 @@ export class CrmSettingsComponent implements OnInit {
     this.gensmtp.api_key='';
     this.email.reset();
     this.smtp.reset();
+    this.default=false;
     this.apikey.reset();
     this.fetchaddress();
   }
@@ -314,6 +317,10 @@ export class CrmSettingsComponent implements OnInit {
     var nwaddress = this.genaddress;
     if(this.addressnameControl.status=='VALID' && this.companynameControl.status=='VALID' && this.addressline1Control.status=='VALID' && this.cityControl.status=='VALID' && this.stateControl.status=='VALID' && this.zipControl.status=='VALID'){
       if(nwaddress.company_name!=''&& nwaddress.country!='' && nwaddress.address_1!='' && nwaddress.city!='' && nwaddress.state!='' && nwaddress.zip!=''){
+        if(this.default){
+          this.genaddress.uniqueid=this._general.makeid(20);
+          this.setdefaultaddress(this.genaddress);
+        }
         this._addressService.addaddress(nwaddress).subscribe({
           next: data => {
               // console.log(data);
