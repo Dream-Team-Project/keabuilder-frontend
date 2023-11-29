@@ -20,6 +20,7 @@
           <mat-option value="sendgrid">SendGrid</mat-option>
           <mat-option value="sendinblue">Sendinblue/Brevo</mat-option>
           <mat-option value="mailchimp">Mailchimp</mat-option>
+          <mat-option value="smtp_server">SMTP Server</mat-option>
         </mat-select>
       </mat-form-field>
     <mat-form-field class="kb-full-width" appearance="fill">
@@ -29,7 +30,7 @@
             Email is <strong>required</strong>
         </mat-error>
     </mat-form-field>
-    <mat-form-field class="kb-full-width" appearance="fill">
+    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="gensmtp.smtp_type != 'smtp_server'">
         <mat-label>API KEY</mat-label>
         <input type="text" placeholder="API Key" matInput required [formControl]="apikey"  [(ngModel)]="gensmtp.api_key">
         <mat-error *ngIf="apikey.hasError('required')" class="errdmrgn">
@@ -39,13 +40,45 @@
         <mat-hint *ngIf="gensmtp.smtp_type == 'sendinblue'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys' target="_blank"> See Documentation1</a></mat-hint>
         <mat-hint *ngIf="gensmtp.smtp_type == 'mailchimp'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation2</a></mat-hint>
     </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="gensmtp.smtp_type == 'smtp_server'">
+        <mat-label>Host</mat-label>
+        <input type="text" placeholder="enter host Details" matInput required [formControl]="host"  [(ngModel)]="gensmtp.host">
+        <mat-error *ngIf="host.hasError('required')" class="errdmrgn">
+            Server Host is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="gensmtp.smtp_type == 'smtp_server'">
+        <mat-label>Port</mat-label>
+        <input type="text" placeholder="enter port Details" matInput required [formControl]="port"  [(ngModel)]="gensmtp.port">
+        <mat-error *ngIf="port.hasError('required')" class="errdmrgn">
+            Server Port is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="gensmtp.smtp_type == 'smtp_server'">
+    <mat-label>User Name</mat-label>
+    <input type="text" placeholder="enter username" matInput required [formControl]="user"  [(ngModel)]="gensmtp.user">
+    <mat-error *ngIf="user.hasError('required')" class="errdmrgn">
+        User Name is <strong>required</strong>
+    </mat-error>
+</mat-form-field>
+    <mat-form-field class="kb-full-width" appearance="fill" *ngIf="gensmtp.smtp_type == 'smtp_server'">
+        <mat-label>Password</mat-label>
+        <input type="text"  placeholder="*********" matInput required [formControl]="pass"  [(ngModel)]="gensmtp.pass">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon class="kb-mat-hide-icon">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        <mat-error *ngIf="pass.hasError('required')" class="errdmrgn">
+            Password is <strong>required</strong>
+        </mat-error>
+        <mat-hint *ngIf="gensmtp.smtp_type == 'smtp_server'"><a class='kb-txt' href='https://docs.sendgrid.com/ui/account-and-settings/api-keys'  target="_blank"> See Documentation</a></mat-hint>
+    </mat-form-field>
     <div class="">
         <mat-checkbox class="mt-1 mr-1" color="primary" [(ngModel)]="default" *ngIf="!gensmtp?.id"><span class="kb-txt">Set as Default SMTP</span></mat-checkbox>
     </div>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger" (click)="resetobj()">No</button>
-        <button mat-button mat-dialog-close  cdkFocusInitial  color="primary" (click)="addsmtpdetails()" [disabled]="smtp.invalid || apikey.invalid || email.invalid">{{gensmtp.id ? 'Update' : 'Add'}}</button>
+        <button mat-button mat-dialog-close  cdkFocusInitial  color="primary" (click)="addsmtpdetails()" [disabled]="smtp.invalid || email.invalid">{{gensmtp.id ? 'Update' : 'Add'}}</button>
     </div>
   </ng-template>
  <!-- add new address setting-->

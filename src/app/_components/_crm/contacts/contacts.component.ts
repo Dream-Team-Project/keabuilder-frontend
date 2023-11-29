@@ -10,7 +10,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -22,6 +22,7 @@ import { saveAs } from 'file-saver';
 export class CrmContactsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('delselecteddialog') delselecteddialog!: TemplateRef<any>;
   @ViewChild('importdialog') importdialog!: TemplateRef<any>;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
@@ -69,9 +70,11 @@ export class CrmContactsComponent implements OnInit {
   document:any = '';
   uuid:any;
   listid:any;
+  tagid:any;
   spinner=false;
   exportname:any;
-
+  selectedContacts: any[] = [];
+  checked_selected=false;
   constructor(
     private _contactService: ContactService,
     private _listService: ListService,
@@ -180,12 +183,17 @@ export class CrmContactsComponent implements OnInit {
   }
 
   deleteContact() {
+    if(this.selectedContacts.length > 0){
+      this.deleteSelectedContacts(this.selectedContacts);
+    }
+    else{
     this._contactService.deletecontact(this.contact.id).subscribe((resp) => {
       if(resp.success) 
       this.getpagecontacts({pageIndex:0,pageSize:20});
       //  this.fetchContacts();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
+  }
   }
 
   contactIcon(contact:any){
@@ -209,6 +217,7 @@ export class CrmContactsComponent implements OnInit {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any) => {
      this.fileFormControl.reset();
      this.resetobj();
+     this.resetselecteddata();
     })
   }
 
@@ -337,7 +346,8 @@ uploadcontacts(){
   this.file.uploadcontactsDocument(this.document,this.uuid).subscribe((file:any)=>{
     if(file){
       this.listid= this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : '';
-      this._contactService.uploadcontacts({file:file,listid:this.listid}).subscribe((data:any)=>{
+      this.tagid= this.filteredTempIds.tags?.length > 0 ? this.filteredTempIds.tags?.toString() : '';
+      this._contactService.uploadcontacts({file:file,listid:this.listid,tagid:this.tagid}).subscribe((data:any)=>{
         if(data.success){
           this.spinner=false;
           this.dialog.closeAll();
@@ -410,5 +420,46 @@ this._contactService.getpagecontacts(obj).subscribe((data:any)=>{
     this.fetching = false;
   }
 });
+}
+
+selectContact(event: any, contact: any) {
+  if (event) {
+    this.selectedContacts.push(contact);
+  } else {
+    const index = this.selectedContacts.indexOf(contact);
+    if (index !== -1) {
+      this.selectedContacts.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllContacts(event: any) {
+  // console.log(event)
+  if(event){
+  this.pagecontacts=this.pagecontacts.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pagecontacts=this.pagecontacts.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedContacts = event ? [...this.pagecontacts] : [];
+  // if(event) this.dialog.open(this.delselecteddialog);
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedContacts(contacts:any) {
+  this._contactService.deleteselectedcontacts({contacts:contacts}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpagecontacts({pageIndex:0,pageSize:20});
+  this.resetselecteddata();
+    //  this.fetchContacts();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pagecontacts=this.pagecontacts.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedContacts=[];
 }
 }

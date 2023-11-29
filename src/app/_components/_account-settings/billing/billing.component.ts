@@ -47,7 +47,7 @@ export class BillingComponent implements OnInit {
   
   fetching=true;
   cngcard=false;
-
+  show=false;
   stripedata:any={
     customer:[],
     subscription:[],
@@ -64,7 +64,7 @@ export class BillingComponent implements OnInit {
   token=false;
   tokenmessage:any;
   subscription_productid:any;
-  usertype:any;
+  usertype:any='paid';
   product:any;
   products:any=[
     {name:'Startup',
@@ -151,16 +151,17 @@ stripecard:any={
 
   ngOnInit(): void {
     this.subscriptiondata().then((resp:any)=>{
-      this.fetching=false;
       this.subscriptionplans.map((element:any)=>{
         // console.log(this.subscription_productid)
+        this.fetching=false;
         if(element?.value == this.subscription_productid){
          this.products.map((option:any)=>{
-            if(option?.name==element.name)
+            if(option?.name == element.name)
             {
               this.product=option;
+              this.show=true;
             }
-           
+            
           });
         }
        })
@@ -169,7 +170,7 @@ stripecard:any={
   subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
-      if(data?.success){
+      if(data.success){
         // console.log(data)
         this.stripedata.subscription=data?.subscription;
         this.stripedata.customer=data?.customer;
@@ -196,9 +197,8 @@ stripecard:any={
         resolve(true);
       }
       else{
-        // this._general.openSnackBar(true,data.message,'Ok','center','top');
-        this.fetching=false;
         this.usertype='free';
+        this.fetching=false;
       }
       })
     });

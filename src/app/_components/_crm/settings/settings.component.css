@@ -146,3 +146,6 @@
   position: relative;
   top: 3px;
 }
+::ng-deep .kb-mat-hide-icon {
+  color: rgb(69 69 69 / 69%);
+}

@@ -64,6 +64,11 @@
     background-color: rgb(220 53 69 / 10%);
 }
 
+::ng-deep .kb-delbtn :hover{
+    color: var( --kb-danger);
+    cursor: pointer;
+    text-decoration:underline
+} 
 ::ng-deep .kb-td-link {
     cursor: pointer;
 }

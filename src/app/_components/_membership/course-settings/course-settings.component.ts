@@ -33,6 +33,7 @@ export class CourseSettingsComponent implements OnInit {
   spinner=false;
   nodata:any;
   page_path:any='';
+  page:any='';
 
 
   constructor(

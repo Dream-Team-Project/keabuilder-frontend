@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +14,9 @@ import { ScrumboardService } from 'src/app/_services/scrumboard.service';
 })
 export class ScrumBoardListComponent implements OnInit {
 
+  @ViewChild('listTitleInputt') listTitleInputt : ElementRef | undefined;
+  @ViewChild('listItemInputt') listItemInputt : ElementRef | undefined;
+
   containers: any =[];
 
   containerOrder: any;
@@ -22,8 +25,8 @@ export class ScrumBoardListComponent implements OnInit {
   listTitleInput = null;
   titleInputFormControl = new FormControl('');
   listId: any = null;
-  listNameFormControl = new FormControl('', Validators.required);
-  listItemFormControl = new FormControl('', Validators.required);
+  listNameFormControl = new FormControl('', [Validators.required]);
+  listItemFormControl = new FormControl('', [Validators.required]);
   listItemId: any = null;
   listItemContainer: any = null;
   listItemEditFormControl = new FormControl('');
@@ -32,14 +35,12 @@ export class ScrumBoardListComponent implements OnInit {
   dropContainer: any = null;
   boardName: any = '';
   listitems:any;
-
-
-   
-    
+ 
   constructor(private dialog: MatDialog, 
     private route: ActivatedRoute,
     public scrumboardService: ScrumboardService,
-     private _general: GeneralService,) { 
+     private _general: GeneralService,
+     private renderer: Renderer2) { 
       this.boardId = this.route.snapshot.paramMap.get('id');
      }
 
@@ -108,12 +109,18 @@ export class ScrumBoardListComponent implements OnInit {
       }
     }
 
-    const updateListDetails = {
-      firstList: this._general.encodeJSON(currentContainer),
-      secondList: this._general.encodeJSON(this.dragContainer)
+    const updatedData = {
+      firstList: {
+        uniqueid: currentContainer.uniqueid,
+        list_item: this._general.encodeJSON(currentContainer.list_item)
+      },
+      secondList: {
+        uniqueid: this.dragContainer.uniqueid,
+        list_item: this._general.encodeJSON(this.dragContainer.list_item)
+      }
     }
 
-    this.scrumboardService.updateListItemAfterTransfer(updateListDetails).subscribe(
+    this.scrumboardService.updateListItemAfterTransfer(updatedData).subscribe(
       result => {
         this._general.openSnackBar(false,"List Updated",'OK','center','top');
         this.fetching=false;
@@ -132,10 +139,14 @@ export class ScrumBoardListComponent implements OnInit {
   addListItem(container: any) {
     this.fetching=true;
     if (this.listItemFormControl.status == 'VALID') {
-    container.list_item.push(this.listItemFormControl.value);
-    let newListItem=this._general.encodeJSON(container.list_item);
-    container.list_item=newListItem;
-    this.scrumboardService.updateListItem(container).subscribe(
+      let new_list = container.list_item;
+      new_list.push(this.listItemFormControl.value);
+      
+      let updatedData={
+        uniqueid: container.uniqueid,
+        list_item: this._general.encodeJSON(new_list)
+      }
+    this.scrumboardService.updateListItem(updatedData).subscribe(
       (result: any) => {
         console.log(result)
         this._general.openSnackBar(false,"List Item Added",'OK','center','top');
@@ -183,7 +194,12 @@ export class ScrumBoardListComponent implements OnInit {
   // SHOW LIST TITLE INPUT BOX
   showListTitleInput(id: any, listTitle: any) {
     this.listTitleInput = id;
-    this.titleInputFormControl.setValue(listTitle);
+    this.titleInputFormControl.setValue(listTitle);setTimeout(() => {
+      if (this.listTitleInputt) {
+        this.renderer.selectRootElement(this.listTitleInputt.nativeElement).focus();
+      }
+    });
+
   }
 
 
@@ -192,6 +208,11 @@ export class ScrumBoardListComponent implements OnInit {
     this.listItemContainer = container;
     this.listItemId = listItemIndex;
     this.listItemEditFormControl.setValue(item);
+    setTimeout(() => {
+      if (this.listItemInputt) {
+        this.renderer.selectRootElement(this.listItemInputt.nativeElement).focus();
+      }
+    });
   }
 
 
@@ -236,6 +257,7 @@ export class ScrumBoardListComponent implements OnInit {
         this._general.openSnackBar(false,"List Created Successfully!",'OK','center','top');
         this.showAddListInput();
         this.fetchdata();
+        this.listNameFormControl.reset();
         this.fetching=false;
         this.titleInputFormControl.reset();
       },
@@ -291,8 +313,11 @@ export class ScrumBoardListComponent implements OnInit {
   deleteListItem(container: any, index: any) {
     this.fetching=true;
     container.list_item.splice(index, 1);
-    container.list_item=this._general.encodeJSON(container.list_item);
-    this.scrumboardService.updateListItem(container).subscribe(
+    const updatedData = {
+      uniqueid: container.uniqueid,
+      list_item: this._general.encodeJSON(container.list_item)
+    }
+    this.scrumboardService.updateListItem(updatedData).subscribe(
       (result: any) => {
         this._general.openSnackBar(false,"List Item Deleted!",'OK','center','top');
         this.fetchdata();

@@ -25,6 +25,11 @@ export class EmailService {
     return this.http.get(this.allemails+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+  getpageemails(obj :any): Observable<any> {
+    obj.uuid = this.user_id;
+    return this.http.post('/api/getpageemails', obj)
+    .pipe(catchError(this.errorHandler));
+  }
   getsingleemail(obj:any){
     obj.user_id=obj.user_id ? obj.user_id : this.user_id;
     return this.http.get(this.singleemail+'/'+obj.user_id+'/'+obj.uniqueid)
@@ -50,6 +55,12 @@ export class EmailService {
 
   deleteemail(id:any){
     return this.http.delete(this.deleteemails+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+  
+  deleteselectedemails(emails:any): Observable<any>{
+    emails.user_id=this.user_id;
+    return this.http.post('/api/deleteselectedemails',emails)
     .pipe(catchError(this.errorHandler));
   }
 

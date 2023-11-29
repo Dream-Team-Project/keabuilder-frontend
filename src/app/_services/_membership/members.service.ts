@@ -29,7 +29,7 @@ export class MembersService {
   }
 
   memberloggedIn() {
-    return !!localStorage.getItem('member-auth-token');
+    return !!localStorage.getItem('auth-member-token');
   }
 
   memberforgetPassword(email: string, location:string,type:string): Observable<any>{

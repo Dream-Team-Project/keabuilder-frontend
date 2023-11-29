@@ -21,6 +21,10 @@ export class CrmSettingsComponent implements OnInit {
   smtp = new FormControl('', [Validators.required]);
   // apiid = new FormControl('default', [Validators.required]);
   apikey = new FormControl('', [Validators.required]);
+  host = new FormControl('', [Validators.required]);
+  port = new FormControl('', [Validators.required]);
+  user = new FormControl('', [Validators.required]);
+  pass = new FormControl('', [Validators.required]);
 
   addressnameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
   companynameControl = new FormControl('', [Validators.required,Validators.minLength(3)]);
@@ -29,20 +33,21 @@ export class CrmSettingsComponent implements OnInit {
   stateControl = new FormControl('', [Validators.required]);
   zipControl = new FormControl('', [Validators.required]);
 
+  hide = true;
   fetch:boolean=false;
   fetch1:boolean=false;
   searching:boolean=false;
   showmytime:any = '';
   timezone:any='';
   genaddress = {id:'',uniqueid:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:'',};
-  gensmtp = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_key:''};
+  gensmtp = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_key:'',host:'',port:'',user:'',pass:''};
   allsmtpdata:any = [];
   filteredtimezone:any=[];
   filteredcountry:any=[];
   alladdress:any=[];
   allsmtp:any=[];
   defaultadd:any={name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-  defaultsmtpdata :any = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_id:'',api_key:''};
+  defaultsmtpdata :any = {id:'',uniqueid:'',smtp_type:'',emailfrom:'',api_id:'',api_key:'',host:'',port:'',user:'',pass:''};
   error=false;
   errormessage:any='';
   default:boolean=false;
@@ -76,6 +81,10 @@ export class CrmSettingsComponent implements OnInit {
           this.defaultsmtpdata.emailfrom=element.emailfrom;
           this.defaultsmtpdata.api_id=element.api_id;
           this.defaultsmtpdata.api_key=element.api_key;
+          this.defaultsmtpdata.host=element.host;
+          this.defaultsmtpdata.port=element.port;
+          this.defaultsmtpdata.user=element.user;
+          this.defaultsmtpdata.pass=element.pass;
           this.fetch1=true;
         }
        })
@@ -135,8 +144,7 @@ export class CrmSettingsComponent implements OnInit {
   }
 
   addsmtpdetails(){
-    if(this.email.status=='VALID' && this.smtp.status=='VALID' && this.apikey.status=='VALID'){
-    //  if(!this.allsmtpdata?.smtp_type){
+    if(this.email.status=='VALID' && this.smtp.status=='VALID' && ((this.apikey.status=='VALID') || (this.host.status == 'VALID' && this.port.status == 'VALID' && this.user.status == 'VALID' && this.pass.status == 'VALID'))){
       if(this.default){
         this.gensmtp.uniqueid=this._general.makeid(20);
         this.setdefaultsmtp(this.gensmtp);
@@ -218,6 +226,10 @@ export class CrmSettingsComponent implements OnInit {
     this.gensmtp.uniqueid=value.uniqueid;
     this.gensmtp.emailfrom=value.emailfrom;
     this.gensmtp.api_key=value.api_key;
+    this.gensmtp.host=value.host;
+    this.gensmtp.port=value.port;
+    this.gensmtp.user=value.user;
+    this.gensmtp.pass=value.pass;
    }
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
      
@@ -241,8 +253,16 @@ export class CrmSettingsComponent implements OnInit {
     this.gensmtp.uniqueid='';
     this.gensmtp.emailfrom='';
     this.gensmtp.api_key='';
+    this.gensmtp.host='';
+    this.gensmtp.port='';
+    this.gensmtp.user='';
+    this.gensmtp.pass='';
     this.email.reset();
     this.smtp.reset();
+    this.host.reset();
+    this.port.reset();
+    this.user.reset();
+    this.pass.reset();
     this.default=false;
     this.apikey.reset();
     this.fetchaddress();

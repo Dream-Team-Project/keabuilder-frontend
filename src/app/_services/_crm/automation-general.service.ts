@@ -19,6 +19,13 @@ export class AutomationGeneralService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/Allautomations', obj).pipe(catchError(this.errorHandler));
   }
+
+  getpageautomations(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpageautomations', obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   fetchallcrmdata(): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/Allcrmdata', obj).pipe(catchError(this.errorHandler));
@@ -43,6 +50,11 @@ export class AutomationGeneralService {
     // var obj = {uuid: this.uuid};
     return this.http.delete('/api/deleteautomation/'+id+'/'+this.uuid).pipe(catchError(this.errorHandler));
     
+  }
+  deleteselectedautomations(automations:any): Observable<any>{
+    automations.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedautomations',automations)
+    .pipe(catchError(this.errorHandler));
   }
   searchautomations(obj:any){
     obj.user_id = this.uuid;

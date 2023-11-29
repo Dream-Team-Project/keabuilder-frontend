@@ -101,13 +101,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-12">
         <div class="kb-dns-card rounded px-3 pt-3 mb-4">
-            <!-- <div class="d-flex justify-content-between mb-3">
-                <h6>Details</h6>
-                <button mat-raised-button color="primary" (click)="openDialog(adddialog,'','')">Add record <i class="fa-solid fa-circle-plus ml-1"></i></button> 
-            </div> -->
-            <table class="table">
+            <table class="table table-responsive">
               <thead>
                 <tr>
                   <th>Type</th>
@@ -126,7 +122,7 @@
                     <td>{{ cf.content }}</td>
                     <td>{{cf.proxied}}</td>
                     <td>{{cf.ttl}}</td>
-                    <td class="col-1 text-center p-0">
+                    <td class="text-center p-0">
                       <span class="d-flex px-1">
                         <i mat-ripple (click)="cf.edit = true" matTooltip="Edit" matTooltipPosition="above" class="fa fa-pencil px-4 kb-table-action-icon"></i>
                         <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog,'delete',cf)" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del"></i>
@@ -189,8 +185,8 @@
             </table>
         </div>
       </div>
-      <div class="col-md-4">
+      <!-- <div class="col-md-4">
         <img src="/assets/images/domain/domain-names.png" class="img-fluid" alt="" srcset="">
-      </div>
+      </div> -->
     </div>
   </div>

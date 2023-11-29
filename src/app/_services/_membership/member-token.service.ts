@@ -16,6 +16,9 @@ export class MemberTokenService {
 
   membersignOut(): void {
     window.localStorage.clear();
+    window.sessionStorage.clear();
+    window.localStorage.removeItem(this.Member_KEY);
+    window.localStorage.removeItem(this.TOKEN_KEY);
   }
 
   public savememberToken(token: string): void {

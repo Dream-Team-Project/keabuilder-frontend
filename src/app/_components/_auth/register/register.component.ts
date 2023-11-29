@@ -215,10 +215,10 @@ specialuser=false;
         this.authService.register(this.form).subscribe({
           next: data => {
             // console.log(data);
-            if(data?.success){
-              this.tokenStorage.saveToken(data?.accessToken);
+            if(data.success){
+              this.tokenStorage.saveToken(data.accessToken);
             var userdata = {
-              uniqueid: data?.uniqueid,
+              uniqueid: data.uniqueid,
             }
             this.tokenStorage.saveUser(userdata);
             this._file.createuserfolder(data.uniqueid).subscribe(e=>{
@@ -288,7 +288,7 @@ specialuser=false;
 
             this.isSuccessful = true;
             this.isSignUpFailed = false;
-            var datasubmittion = [username,firstname,lastname,email,company,phone,data?.uniqueid];
+            var datasubmittion = [username,firstname,lastname,email,company,phone,data.uniqueid];
             this.redirectToDashboard();
             this.email_creationuser(datasubmittion);
             

@@ -61,6 +61,7 @@ export class LoginNewComponent implements OnInit {
       this.authService.login(btoa(username), btoa(password)).subscribe({
         next: data => {
           if(data.success){
+            console.log(data.accessToken)
           this.tokenStorage.saveToken(data.accessToken);
           var userdata = {
             uniqueid: data.uniqueid,

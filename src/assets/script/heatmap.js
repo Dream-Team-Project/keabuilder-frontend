@@ -148,8 +148,8 @@ var kb_user_id = '';
 
 if(document.getElementById('kb-user-id')!=null) kb_user_id = document.getElementById('kb-user-id').getAttribute('kb-user-id');
 
-// var windoworigin = 'https://api.keabuilder.com';
-var windoworigin = 'http://localhost:3000';
+var windoworigin = 'https://api.keabuilder.com';
+// var windoworigin = 'http://localhost:3000';
 
 kb_fulldata['uniqueid'] = kb_unique_id;
 kb_fulldata['created_at'] = kb_created_at;

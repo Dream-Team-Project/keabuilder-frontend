@@ -16,6 +16,16 @@
       </button>
     </div>
   </ng-template>
+  <ng-template #delselecteddialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Selected Automations</h1>
+    <div mat-dialog-content>
+      Would you like to delete <span class="text-danger">{{selectedAutomations.length}}</span> campaigns?
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+      <button mat-button mat-dialog-close (click)="deleteSelectedAutomations(selectedAutomations)" class="text-danger">Yes</button>
+    </div>
+  </ng-template>
   <!-- dialog for add automation button -->
   <ng-template #dialog>
     <h1 mat-dialog-title class="txt">Create Automation</h1>

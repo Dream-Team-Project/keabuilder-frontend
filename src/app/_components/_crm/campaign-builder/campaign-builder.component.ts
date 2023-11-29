@@ -14,6 +14,7 @@ import { ImageService } from 'src/app/_services/image.service';
 import { FormService } from 'src/app/_services/_crm/form.service';
 import { EmailService } from 'src/app/_services/_crm/email.service';
 import { SettingService } from 'src/app/_services/_crm/setting.service';
+import { TagService } from 'src/app/_services/_crm/tag.service';
 
 @Component({
   selector: 'app-crm-campaign-builder',
@@ -23,6 +24,7 @@ import { SettingService } from 'src/app/_services/_crm/setting.service';
 export class CrmCampaignBuilderComponent implements OnInit {
 
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('campaignbody', { static: false }) screen: any;
   @ViewChild('dialog2') dialog2!: TemplateRef<any>;
 
@@ -41,20 +43,27 @@ export class CrmCampaignBuilderComponent implements OnInit {
   testemail = '';
   sendoptn = false;
   lists:any = [];
+  tags:any = [];
   alladdress:any = [];
   genaddress:any = {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-  fullcampobj:any = {name:'',lists:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
+  fullcampobj:any = {name:'',lists:'',tags:'',ex_tags:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
   uniqueid:any = '';
   campstatus = 'Draft';
   showmytime:any = '';
   filteredtimezone:any=[];
   filteredcountry:any=[];
   selectedLists:any = [];
+  selectedTags:any = [];
+  selectedex_Tags:any = [];
   filteredTempIds:any = {
     lists: [],
+    tags:[],
+    ex_tags:[],
   };
   filteredOptions:any = {
     lists: [],
+    tags: [],
+    ex_tags: [],
   };
   emails:any=[];
   filteredemails:any=[];
@@ -67,6 +76,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
   constructor(public _general:GeneralService,
         private _listService :ListService,
+        private _tagService: TagService,
         private _snackBar: MatSnackBar, 
         public dialog: MatDialog, 
         private MailerService: MailerService,
@@ -98,6 +108,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
   fetchdata(){
     this.fetchcampaign();
     this.fetchList();
+    this.fetchTags();
     this.fetchAddress();
     this.fetchEmails();
     this.fetchsmtp();
@@ -126,11 +137,16 @@ export class CrmCampaignBuilderComponent implements OnInit {
             this.fullcampobj.id=element.id;
             // this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
             this.fullcampobj.senddate = element.senddate;
-            this.fullcampobj.list = element.list;
+            // this.fullcampobj.list = element.lists;
+            // this.fullcampobj.tag = element.tags;
             this.fullcampobj.addressid = element.addressid;
             this.fullcampobj.timezone = element.timezone;
             this.selectedLists=element.temp_lists;
+            this.selectedTags=element.temp_tags;
+            this.selectedex_Tags=element.temp_ex_tags;
             this.filteredTempIds.lists=element.listid;
+            this.filteredTempIds.tags=element.tagid;
+            this.filteredTempIds.ex_tags=element.ex_tagid;
             this.fullcampobj.recurring=element.recurring;
             this.campstatus = element.publish_status == 1 ? 'Publish' : 'Draft';
             if(element.timezone=='Default' || !element.timezone) this.showmytime='Default';
@@ -154,6 +170,12 @@ export class CrmCampaignBuilderComponent implements OnInit {
     }
   });
  }
+ fetchTags() {
+  this._tagService.fetchtags().subscribe(
+    (data) => {
+      this.tags = data.data;
+});
+}
  fetchAddress(){
   this._addressService.fetchaddress().subscribe({
     next: data => {
@@ -182,11 +204,13 @@ export class CrmCampaignBuilderComponent implements OnInit {
  campaigndraft(){
   this.fullcampobj.emailid=this.singleemail?.uniqueid;
   this.fullcampobj.lists=this.filteredTempIds.lists.toString();
+  this.fullcampobj.tags=this.filteredTempIds.tags.toString();
+  this.fullcampobj.ex_tags=this.filteredTempIds.ex_tags.toString();
     this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish_status = 0;
     var getobj = this.fullcampobj;
     if(this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){
-      if(getobj.name!='' && getobj.preheader_text!='' && getobj.emailfrom!='' && getobj.list!='' && getobj.addressid!='' && getobj.sendoption!='' && getobj.emailid!=''){
+      if(getobj.name!='' && getobj.preheader_text!='' && getobj.emailfrom!='' && (getobj.lists!='' || getobj.tags!='') && getobj.addressid!='' && getobj.sendoption!='' && getobj.emailid!=''){
         if(this.singleemail.subject!='' && this.singleemail.body!=''){
         this._campaignService.updatecampaign(getobj).subscribe({
           next: data => {
@@ -225,12 +249,14 @@ export class CrmCampaignBuilderComponent implements OnInit {
  publishcampaign(){
   this.fullcampobj.emailid=this.singleemail.uniqueid;
     this.fullcampobj.lists=this.filteredTempIds.lists.toString();
+    this.fullcampobj.tags=this.filteredTempIds.tags.toString();
+    this.fullcampobj.ex_tags=this.filteredTempIds.ex_tags.toString();
     this.fullcampobj.uniqueid = this.uniqueid;
     this.fullcampobj.publish_status = 1;
     var getobj = this.fullcampobj;
     if(this.smtpstatus){
     if(this.preheadertextControl.status=='VALID' && this.emailfromControl.status=='VALID'){  
-      if(getobj.name!='' && getobj.preheader_text!='' && getobj.emailfrom!='' && getobj.list!='' && getobj.addressid!='' && getobj.sendoption!='' && getobj.emailid!=''){
+      if(getobj.name!='' && getobj.preheader_text!='' && getobj.emailfrom!='' && (getobj.lists!='' || getobj.tags!='') && getobj.addressid!='' && getobj.sendoption!='' && getobj.emailid!=''){
 
         if(this.singleemail.subject!='' && this.singleemail.body!=''){
 
@@ -416,6 +442,48 @@ export class CrmCampaignBuilderComponent implements OnInit {
   }
 
   // end list actions
+
+   // start tag actions
+
+   filterTagData(event:any) {
+    var value = event ? event.target.value : '';
+    this.filteredOptions.tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+  }
+
+  addSelectedTag(event:any, searchTagInp:any): void {
+    this.selectedTags.push(event.option.value);
+    this.filteredTempIds.tags.push(event.option.value.uniqueid);
+    searchTagInp.value = '';
+    this.filterTagData('');
+  }
+
+  removeSelectedTag(index:number): void {
+    this.selectedTags.splice(index, 1);
+    this.filteredTempIds.tags.splice(index, 1);
+  }
+
+  // end tag actions
+
+ // start ex_tag actions
+
+ filterex_TagData(event:any) {
+  var value = event ? event.target.value : '';
+  this.filteredOptions.ex_tags = this.tags.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
+}
+
+addSelectedex_Tag(event:any, searchex_TagInp:any): void {
+  this.selectedex_Tags.push(event.option.value);
+  this.filteredTempIds.ex_tags.push(event.option.value.uniqueid);
+  searchex_TagInp.value = '';
+  this.filterTagData('');
+}
+
+removeSelectedex_Tag(index:number): void {
+  this.selectedex_Tags.splice(index, 1);
+  this.filteredTempIds.ex_tags.splice(index, 1);
+}
+
+// end tag actions
   filteremailData(event:any) {
     var value = event ? event.target.value : '';
     this.filteredemails=this.emails?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
@@ -434,7 +502,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.error=false;
     this.errormessage='';
     this.genaddress= {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-    // this.fullcampobj= {name:'',lists:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
+    // this.fullcampobj= {name:'',lists:'',tags:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
     // this.singleemail={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
     this.testemail='';
     this.dialog.closeAll();

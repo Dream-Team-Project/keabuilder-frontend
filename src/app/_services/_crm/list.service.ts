@@ -23,6 +23,11 @@ export class ListService {
     return this.http.post('/api/alllists', obj)
     .pipe(catchError(this.errorHandler));
   }
+  getpagelists(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpagelists', obj)
+    .pipe(catchError(this.errorHandler));
+  }
 
   singlelist(id:any): Observable<any> {
     var obj = {uuid: this.uuid};
@@ -44,6 +49,12 @@ export class ListService {
 
   deletelist(id:any): Observable<any>{
     return this.http.delete('/api/deletelist/'+id+'/'+this.uuid)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteselectedlists(lists:any): Observable<any>{
+    lists.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedlists',lists)
     .pipe(catchError(this.errorHandler));
   }
 

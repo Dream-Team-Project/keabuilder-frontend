@@ -1,29 +1,45 @@
 
 <ng-template #createboard>
-    <h1 mat-dialog-title>{{boarddata?.id ? 'Update' : 'Add'}} Board Details</h1>
+    <h1 mat-dialog-title>Add Board Details</h1>
     <div mat-dialog-content>
+      <mat-error *ngIf="error">{{hasError}}</mat-error>
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Name</mat-label>
-        <input type="text" matInput [formControl]="boardNameFormControl" placeholder="Enter Board Name" [(ngModel)]="boarddata.boardName">
-        <mat-error *ngIf="boardNameFormControl.hasError('required')">
-          Board Name is <strong>required</strong>
-        </mat-error>
+        <input type="text" matInput name="bname" placeholder="Enter Board Name" [(ngModel)]="boardname">
     </mat-form-field>
 
     <mat-form-field class="kb-full-width" appearance="fill">
         <mat-label>Description</mat-label>
-        <input type="text" matInput [formControl]="boardDescriptionFormControl" placeholder="description" [(ngModel)]="boarddata.description">
-        <mat-error *ngIf="boardDescriptionFormControl.hasError('required')">
-          Board Description is <strong>required</strong>
-        </mat-error>
+        <input type="text" matInput name="bdescription" placeholder="description" [(ngModel)]="description">
     </mat-form-field>
 
 </div>
     <div mat-dialog-actions class="justify-content-end">
         <button  mat-button mat-dialog-close class="text-danger" >Cancel</button>
-        <button mat-button mat-dialog-close [color]="'primary'" [disabled]="boardDescriptionFormControl.invalid || boardNameFormControl.invalid" 
-        (click)="boarddata.id ? updateBoardDetails() : createBoard()">{{boarddata?.id ? 'Update' : 'Add'}}</button>
+        <button mat-button mat-dialog-close [color]="'primary'" [disabled]="!boardname || !description" 
+        (click)="createBoard()">Add</button>
     </div>
+</ng-template>
+<ng-template #updateboard>
+  <h1 mat-dialog-title>Update Board Details</h1>
+  <div mat-dialog-content>
+    <mat-error *ngIf="error">{{hasError}}</mat-error>
+  <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput name="bname" placeholder="Enter Board Name" [(ngModel)]="boarddata.boardName">
+  </mat-form-field>
+
+  <mat-form-field class="kb-full-width" appearance="fill">
+      <mat-label>Description</mat-label>
+      <input type="text" matInput name="bdescription" placeholder="description" [(ngModel)]="boarddata.description">
+  </mat-form-field>
+
+</div>
+  <div mat-dialog-actions class="justify-content-end">
+      <button  mat-button mat-dialog-close class="text-danger" >Cancel</button>
+      <button mat-button mat-dialog-close [color]="'primary'" [disabled]="!boarddata.boardName || !boarddata.description" 
+      (click)="updateBoardDetails()"> Update</button>
+  </div>
 </ng-template>
 <ng-template #deldialog>
     <h1 mat-dialog-title class="kb-danger">Delete Board</h1>
@@ -44,12 +60,12 @@
   <div *ngFor="let board of boards" class="boardCard px-3 py-4 rounded-3 d-flex flex-column justify-content-between mr-4" [routerLink]="'/scrumboardlist/'+board.uniqueid">
     <div class="d-flex justify-content-between">
       <div>
-        <h3 class="fw-bold">{{board.boardName | titlecase}}</h3>
-        <p class="mt-4 text-secondary ">{{board.description}}</p>
+        <h3 class="fw-bold">{{board?.boardName | titlecase}}</h3>
+        <p class="mt-4 text-secondary ">{{board?.description}}</p>
       </div>
       <mat-icon class="fs-6 text-end moreVertIcon mt-1" [matMenuTriggerFor]="menu" (click)="handleIconClick($event)">more_vert</mat-icon>
       <mat-menu #menu="matMenu" class="menuContainer">
-        <button mat-menu-item class="kb-table-action-icon" (click)="openDialog(createboard,board)">
+        <button mat-menu-item class="kb-table-action-icon" (click)="openDialog(updateboard,board)">
             <i class="fa fa-pencil px-2 kb-table-action-icon"></i> Edit
         </button>
         <button mat-menu-item class="kb-table-action-icon" (click)="openDialog(deldialog,board)">

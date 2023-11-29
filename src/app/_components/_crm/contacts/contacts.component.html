@@ -1,11 +1,21 @@
 <ng-template #deldialog>
-  <h1 mat-dialog-title class="kb-danger">Delete Contact</h1>
+  <h1 mat-dialog-title class="kb-danger">Delete {{selectedContacts.length ? ' Selected Contacts' : 'Contact'}}</h1>
   <div mat-dialog-content>
-    Would you like to delete <span class="text-danger">{{contact.email}}</span> contact?
+    Would you like to delete <span class="text-danger">{{selectedContacts.length ? selectedContacts.length : contact.email}}</span> {{selectedContacts.length ? 'contacts ?' : 'contact ?'}}
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="resetselecteddata()">No</button>
     <button mat-button mat-dialog-close (click)="deleteContact()" class="text-danger">Yes</button>
+  </div>
+</ng-template>
+<ng-template #delselecteddialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Selected Contacts</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{selectedContacts.length}}</span> contacts?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="resetselecteddata()">No</button>
+    <button mat-button mat-dialog-close (click)="deleteSelectedContacts(selectedContacts)" class="text-danger">Yes</button>
   </div>
 </ng-template>
 <ng-template #adddialog>
@@ -138,6 +148,40 @@
       </mat-autocomplete>
     </mat-form-field>      
    <span *ngIf="document" class="kb-fnt">(Leave empty if you don't want to subscribe to any list)</span>
+
+    <mat-form-field *ngIf="document" class="kb-full-width" appearance="fill" (click)="filterTagData($event)">
+      <mat-label>Select Tags</mat-label>
+      <mat-chip-list #tagChipList aria-label="Tag selection">
+        <mat-chip
+          *ngFor="let data of selectedTags; index as i"
+          (removed)="removeSelectedTag(i)">
+          {{ data?.name }}
+          <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+      <input matInput
+        type="text"
+        #searchTagInp
+        placeholder="Select multiples..."
+        (input)="filterTagData($event)"
+        [matAutocomplete]="tagAuto"
+        [matChipInputFor]="tagChipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        class="kb-act-searchinp w-100 pt-1">
+      <mat-autocomplete
+        #tagAuto="matAutocomplete"
+        (optionSelected)="addSelectedTag($event, searchTagInp)">
+        <mat-option
+          *ngFor="let option of filteredOptions.tags"
+          [value]="option"
+          [disabled]="filteredTempIds.tags?.includes(option.uniqueid)">
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>      
+   <span *ngIf="document" class="kb-fnt">(Leave empty if you don't want to subscribe to any tag)</span>
     <div class="kb-spinner" *ngIf="spinner">
       <mat-spinner></mat-spinner>
     </div>
@@ -263,10 +307,20 @@
         </div>
     </div>
     <div class="row">
+      <div class="col-md-12" *ngIf="selectedContacts.length > 0">
+        <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedContacts)">
+          <span class="">Delete Selected Contacts <i class="fa fa-trash-alt"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-12">
         <table class="table kb-table" dataSource="contacts">
           <thead>
             <tr>
+              <th>
+                <mat-checkbox [(ngModel)]="checked_selected" (ngModelChange)="selectAllContacts($event)" matTooltip="Select All Page Contacts" matTooltipPosition="above"></mat-checkbox>
+              </th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
@@ -276,6 +330,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let contact of pagecontacts; index as i">
+             <td><mat-checkbox class="align-items-center" [(ngModel)]="contact.selected" (ngModelChange)="selectContact($event, contact)"></mat-checkbox></td>
               <td (click)="editlink.click()" class="kb-td-link">
                   <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
                   {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}

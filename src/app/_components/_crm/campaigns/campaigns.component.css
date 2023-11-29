@@ -43,7 +43,15 @@
     font-size: 12px;
     padding: 2px 12px;
     border-radius: 5px;
-    /* border-radius: 50px 0px 0px 50px; */
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+.statusbadge3 {
+    color: var(--primary-color) ;
+    border:1px solid var(--primary-color);
+    font-size: 12px;
+    padding: 2px 12px;
+    border-radius: 5px;
     cursor: pointer;
     transition: .5s ease-in-out;
 }
@@ -173,6 +181,11 @@ mat-spinner {
     position: absolute;
     top: 0px;
     left: 0px;
+}
+.statbadg3 {
+    position: absolute;
+    top: 0px;
+    left: 200px;
 }
 .statusbadge2 {
     color: var(--accent-color);

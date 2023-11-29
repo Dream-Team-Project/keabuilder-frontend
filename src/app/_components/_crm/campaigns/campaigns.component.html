@@ -39,6 +39,16 @@
     </button>
   </div>
 </ng-template>
+<ng-template #delselecteddialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Selected Campaigns</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{selectedCampaigns.length}}</span> campaigns?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="resetselecteddata()">No</button>
+    <button mat-button mat-dialog-close (click)="deleteSelectedCampaigns(selectedCampaigns)" class="text-danger">Yes</button>
+  </div>
+</ng-template>
 <!-- close delete campaign dialog -->
     <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
@@ -77,6 +87,7 @@
             </mat-select>
       </mat-form-field>
     <div class="col-md-3 text-right p-0">
+      <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllCampaigns($event)" matTooltip="Select All Page Campaigns" matTooltipPosition="above"></mat-checkbox></span>
       <button mat-raised-button [color]="'accent'" (click)="togglepageview()" class="mr-3">
         <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
         <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
@@ -86,8 +97,15 @@
       </button>
     </div>
     </div>
-    <div [class.px-3]="toggleview" class="row" *ngIf="kbcampaigns?.length != 0; else nodata">
-      <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of kbcampaigns; index as i;">
+    <div class="row">
+      <div class="col-md-12" *ngIf="selectedCampaigns.length > 0">
+        <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedCampaigns)">
+          <span class="">Delete Selected Campaigns <i class="fa fa-trash-alt"></i></span>
+        </div>
+      </div>
+    </div>
+    <div [class.px-3]="toggleview" class="row" *ngIf="pagecampaigns?.length != 0; else nodata">
+      <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbcampaign of pagecampaigns; index as i;">
         <div [class.row]="toggleview">
           <div
           [style.height]="toggleview ? '150px' : '300px'"
@@ -137,9 +155,11 @@
 
                 <div class="sentoption">
                   <hr>
-                  <div class="d-flex justify-content-between">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="kbcampaign.selected" (ngModelChange)="selectCampaigns($event, kbcampaign)"></mat-checkbox>
                     <span class="fnt"><i class="fa fa-user mr-2 colr" aria-hidden="true"></i>Sent To: <span *ngIf="kbcampaign.sentto>0"> {{kbcampaign.sentto}}</span>
                     <span *ngIf="kbcampaign.sentto==0">--</span></span>
+                  </span>
                   <span class="fnt">Sent On: 
                     <span *ngIf="kbcampaign.deliverdate"><i class="fa fa-calendar-alt" aria-hidden="true"></i> {{dateformat(kbcampaign.deliverdate)}}</span>
                     <span *ngIf="!kbcampaign.deliverdate">--</span>
@@ -165,13 +185,15 @@
             </span>
 
           </div>
-
+          <!-- <div  class="statbadg3"><mat-checkbox class="align-items-center" [(ngModel)]="kbcampaign.selected" (ngModelChange)="selectCampaigns($event, kbcampaign)"></mat-checkbox></div> -->
           <div class="statbadg2">
             <span class="statusbadge2">{{kbcampaign.sendoption=='immediately'?'Immediately':'Specific Time'}}</span>
           </div>
         </div>
         </div>
       </div>
+    </div>
+    <mat-paginator  #paginator [length]="campaignslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagecampaigns($event)"></mat-paginator>
     </div>
     <ng-template #nodata>
       <div class="row justify-content-center mt-5">
@@ -184,5 +206,5 @@
         </div>
       </div>
     </ng-template>
-  </div>
+  
 

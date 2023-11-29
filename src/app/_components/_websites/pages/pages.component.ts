@@ -392,8 +392,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.searching = false;
       this.spinner=false;
     }
-
-  
   }
 
   checkpagesettings(value:any,data:any){

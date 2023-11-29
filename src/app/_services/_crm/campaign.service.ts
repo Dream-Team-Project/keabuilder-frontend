@@ -25,6 +25,11 @@ export class CampaignService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/Allcampaigns', obj).pipe(catchError(this.errorHandler));
   }
+  getpagecampaigns(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpagecampaigns', obj)
+    .pipe(catchError(this.errorHandler));
+  }
   singlecampaign(uniqueid:any): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/singlecampaign/'+uniqueid,obj).pipe(catchError(this.errorHandler));
@@ -41,6 +46,12 @@ export class CampaignService {
     return this.http.delete('/api/deletecampaign/'+id+'/'+this.uuid).pipe(catchError(this.errorHandler));
     
   }
+  deleteselectedcampaigns(campaigns:any): Observable<any>{
+    campaigns.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedcampaigns',campaigns)
+    .pipe(catchError(this.errorHandler));
+  }
+
   searchcampaigns(obj:any){
     obj.user_id = this.uuid;
     return this.http.post('/api/searchcampaigns',obj).pipe(catchError(this.errorHandler));

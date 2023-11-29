@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AutomationGeneralService } from 'src/app/_services/_crm/automation-general.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 
@@ -15,12 +16,19 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 })
 export class CrmAutomationComponent implements OnInit {
 
+  @ViewChild('paginator') paginator!: MatPaginator;
+
 searching=false;
 togglebutton=true;
 delautomation:any;
 automations:any=[];
 automationname ='';
 automationnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
+automationslength:any;
+pageautomations:any;
+selectedAutomations: any[] = [];
+checked_selected=false;
+
 constructor( public _general: GeneralService,private _automationgeneralservice: AutomationGeneralService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
   private router: Router,
   ) {
@@ -28,7 +36,8 @@ constructor( public _general: GeneralService,private _automationgeneralservice: 
  }
 
 ngOnInit(): void {
-  this.fetchAutomations();
+  this.getpageautomations({pageIndex:0,pageSize:20});
+  // this.fetchAutomations();
 }
 
 fetchAutomations() {
@@ -105,6 +114,55 @@ searchAutomations(search: any, sort: any, filter: any) {
     this.automations = data.data;
     this.searching=false;
   });
+}
+getpageautomations(event:any){
+  let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._automationgeneralservice.getpageautomations(obj).subscribe(
+      (data:any) => {
+        // this.kbcampaigns = data?.data;
+        this.pageautomations=data?.data;
+        this.automationslength=data?.campaigns;
+        this.searching = false;
+        // console.log(this.lists)
+  });
+}
+selectAutomations(event: any, obj: any) {
+if (event) {
+  this.selectedAutomations.push(obj);
+} else {
+  const index = this.selectedAutomations.indexOf(obj);
+  if (index !== -1) {
+    this.selectedAutomations.splice(index, 1);
+  }
+}
+// console.log(this.selectedContacts)
+}
+
+selectAllAutomations(event: any) {
+// console.log(event)
+if(event){
+this.pageautomations=this.pageautomations.map((ele:any)=>{ele.selected = true; return ele;});
+}
+else{
+  this.pageautomations=this.pageautomations.map((ele:any)=>{ele.selected = false; return ele;});
+}
+this.selectedAutomations = event ? [...this.pageautomations] : [];
+// console.log(this.selectedContacts)
+}
+
+deleteSelectedAutomations(obj:any) {
+this._automationgeneralservice.deleteselectedautomations({automations:obj}).subscribe((resp:any) => {
+  if(resp.success) 
+  this.getpageautomations({pageIndex:0,pageSize:20});
+  this.resetselecteddata();
+  this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+});
+}
+
+resetselecteddata(){
+this.pageautomations=this.pageautomations.map((ele:any)=>{ele.selected = false; return ele;});
+this.checked_selected=false;
+this.selectedAutomations=[];
 }
 }
 

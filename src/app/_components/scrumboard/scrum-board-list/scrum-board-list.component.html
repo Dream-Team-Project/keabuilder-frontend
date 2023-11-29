@@ -4,7 +4,6 @@
       <h2>{{boardName | titlecase}}</h2>
       <a mat-fab extended routerLink="/scrumboard" matTooltip="Go To Boards" matTooltipPosition="above" class="boardBtn text-light">
         <mat-icon>dns</mat-icon>
-        <!-- Boards -->
       </a>
     </div>
     <div class="wrapper p-5">
@@ -16,7 +15,7 @@
             <h2 class=" m-0 fs-6 listTitle" *ngIf="listTitleInput !== container.uniqueid">{{container.name}}</h2>
             <div *ngIf="listTitleInput === container.uniqueid">
               <input type="text" placeholder="Enter list title..." class="p-2 rounded-2 listInput w-100"
-                [formControl]="titleInputFormControl" (change)="updateListTitle()">
+                [formControl]="titleInputFormControl" (keyup.enter)="updateListTitle()" (focusout)="updateListTitle()" #listTitleInputt>
             </div>
             <div class="d-flex align-items-center justify-content-center ">
               <div class="fabIcon rounded-circle text-light">{{container.list_item.length}}</div>
@@ -46,9 +45,9 @@
               <div class="px-2 py-2" *ngIf="(listItemContainer?.uniqueid !== container.uniqueid) || (listItemId !== i)">
                 {{ item }}
               </div>
-              <div *ngIf="(listItemContainer?.unique_id === container.unique_id) && (listItemId === i)" class="h-100 p-1">
+              <div *ngIf="(listItemContainer?.uniqueid === container.uniqueid) && (listItemId === i)" class="h-100 p-1">
                 <textarea placeholder="Enter list title..." class="p-2 rounded-2 listInput w-100"
-                  [formControl]="listItemEditFormControl" (change)="updateListItemText()" (focusout)="updateListItemText()" ></textarea>
+                  [formControl]="listItemEditFormControl" (keyup.enter)="updateListItemText()" (focusout)="updateListItemText()" #listItemInputt></textarea>
               </div>
               <div class="">
                 <mat-icon class="fs-6 text-end moreVertIcon mt-2 text-center" [matMenuTriggerFor]="listItem">

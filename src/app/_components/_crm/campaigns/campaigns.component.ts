@@ -8,6 +8,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { CampaignService } from 'src/app/_services/_crm/campaign.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-crm-campaigns',
@@ -15,6 +16,8 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
   styleUrls: ['./campaigns.component.css']
 })
 export class CrmCampaignsComponent implements OnInit {
+
+  @ViewChild('paginator') paginator!: MatPaginator;
   
   fetching:boolean = true;
   campaignname ='';
@@ -26,6 +29,10 @@ export class CrmCampaignsComponent implements OnInit {
   delcampaign:any;
   error=false;
   errormessage:any;
+  campaignslength:any;
+  pagecampaigns:any;
+  selectedCampaigns: any[] = [];
+  checked_selected=false;
   
   constructor(
       private _campaignservice: CampaignService,
@@ -42,20 +49,21 @@ export class CrmCampaignsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchcampaigns();
+    this.getpagecampaigns({pageIndex:0,pageSize:20});
+    // this.fetchcampaigns();
     this.fetchLists();
   }
-fetchcampaigns(){
-  this.fetching=true;
-  this._campaignservice.fetchcampaigns().subscribe({
-    next: resp => {
-      // console.log(data);
-     this.adjustdata(resp?.data)
-    }
-  });
-}
+// fetchcampaigns(){
+//   this.fetching=true;
+//   this._campaignservice.fetchcampaigns().subscribe({
+//     next: resp => {
+//       // console.log(data);
+//      this.adjustdata(resp?.data)
+//     }
+//   });
+// }
 adjustdata(data:any){
-  if(data) this.kbcampaigns = data;
+  if(data) this.pagecampaigns = data;
   this.fetching = false;
 }
 fetchLists() {
@@ -119,13 +127,15 @@ changepagename(dataobj:any, title:any){
             if(datagen.data==1){
               this._file.deleteimage('keaimage-campaign-'+campaign.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
-                  this.fetchcampaigns();
+                  this.getpagecampaigns({pageIndex:0,pageSize:20})
+                  // this.fetchcampaigns();
                   this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
                 }
               });
             }
             else {
-              this.fetchcampaigns();
+              this.getpagecampaigns({pageIndex:0,pageSize:20})
+              // this.fetchcampaigns();
               this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
             }
           }
@@ -139,6 +149,8 @@ changepagename(dataobj:any, title:any){
       sortInp: sortInp.value,
       sentInp: sentInp.value,
       listInp: listInp.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._campaignservice.searchcampaigns(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
@@ -157,12 +169,14 @@ changepagename(dataobj:any, title:any){
                 var imgobj  = {oldname:oldimg, newname:'keaimage-campaign-'+campaign.uniqueid+'-screenshot.png'};
                 this._file.copyimage(imgobj).subscribe({
                   next: data => {
-                    this.fetchcampaigns();
+                    this.getpagecampaigns({pageIndex:0,pageSize:20})
+                    // this.fetchcampaigns();
                     this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
                   }
                 });
               }else{
-                this.fetchcampaigns();
+                this.getpagecampaigns({pageIndex:0,pageSize:20})
+                // this.fetchcampaigns();
                 this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
               }
 
@@ -174,4 +188,53 @@ changepagename(dataobj:any, title:any){
         }
     })   
   }
+  getpagecampaigns(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this._campaignservice.getpagecampaigns(obj).subscribe(
+        (data:any) => {
+          this.kbcampaigns = data?.data;
+          this.pagecampaigns=data?.data;
+          this.campaignslength=data?.campaigns;
+          this.fetching = false;
+          // console.log(this.lists)
+    });
+ }
+ selectCampaigns(event: any, list: any) {
+  if (event) {
+    this.selectedCampaigns.push(list);
+  } else {
+    const index = this.selectedCampaigns.indexOf(list);
+    if (index !== -1) {
+      this.selectedCampaigns.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllCampaigns(event: any) {
+  // console.log(event)
+  if(event){
+  this.pagecampaigns=this.pagecampaigns.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pagecampaigns=this.pagecampaigns.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedCampaigns = event ? [...this.pagecampaigns] : [];
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedCampaigns(campaigns:any) {
+  this._campaignservice.deleteselectedcampaigns({campaigns:campaigns}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpagecampaigns({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pagecampaigns=this.pagecampaigns.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedCampaigns=[];
+}
 } 

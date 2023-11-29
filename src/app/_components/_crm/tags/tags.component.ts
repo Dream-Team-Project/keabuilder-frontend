@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TagService } from 'src/app/_services/_crm/tag.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface UserData {
   position: number;
@@ -25,6 +26,7 @@ export class CrmTagsComponent implements OnInit {
     'actions',
   ];
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   tags:any=[];
@@ -40,13 +42,18 @@ export class CrmTagsComponent implements OnInit {
   temptags: any = [];
  populartags:any=[];
  recenttags:any=[];
+  tagslength:any;
+  pagetags:any;
+  selectedTags: any[] = [];
+  checked_selected=false;
   
 
  
   constructor(private _tagService: TagService,private dialog: MatDialog,private _general: GeneralService) {};
 
   ngOnInit(): void {
-    this.fetchtags().then((resp1) => {
+    this.getpagetags({pageIndex:0,pageSize:20}).then((resp1:any) => {
+    // this.fetchtags().then((resp1) => {
     this.sortTagcontacts().then((resp2:any) => {
           for(let i=0;i<5;i++){
             if(resp2[i])
@@ -57,24 +64,25 @@ export class CrmTagsComponent implements OnInit {
     })
   }
  
-  fetchtags() {
-    return new Promise((resolve) => {
-      this._tagService.fetchtags().subscribe(
-        (data) => {
-          this.tags = data.data;
-          let i=0;
-          for(i=0;i<5;i++){
-            if(this.tags[i])
-            this.recenttags[i]=this.tags[i].name;
-          }
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
+  // fetchtags() {
+  //   return new Promise((resolve) => {
+  //     this._tagService.fetchtags().subscribe(
+  //       (data) => {
+  //         this.tags = data.data;
+  //         let i=0;
+  //         for(i=0;i<5;i++){
+  //           if(this.tags[i])
+  //           this.recenttags[i]=this.tags[i].name;
+  //         }
+  //         resolve(true);
+  //       },
+  //       (error) => {
+  //         resolve(false);
+  //       }
+  //     );
+  //   });
+  // }
+
   sortTagcontacts() {
     return new Promise((resolve) => {
       var newtags=JSON.parse(JSON.stringify(this.tags));
@@ -91,7 +99,8 @@ export class CrmTagsComponent implements OnInit {
         .addtag(this.tag)
         .subscribe((resp) => {
           if(resp.success==true){
-            this.fetchtags();
+            // this.fetchtags();
+             this.getpagetags({pageIndex:0,pageSize:20})
             this._general.openSnackBar(false, 'Tag has been saved', 'OK', 'center', 'top');
             }
             else this.setError(resp.message);
@@ -107,7 +116,8 @@ export class CrmTagsComponent implements OnInit {
     if(this.tag.name && this.isTagNameValid(this.tag.name)) {
       this._tagService.updatetag(this.tag).subscribe((resp) => {
         if(resp.success==true){
-          this.fetchtags();
+          // this.fetchtags();
+           this.getpagetags({pageIndex:0,pageSize:20})
         this._general.openSnackBar(false, 'Tag has been Updated', 'OK', 'center', 'top');
         }
         else this.setError(resp.message);
@@ -130,7 +140,8 @@ export class CrmTagsComponent implements OnInit {
  
   deletetag(id:any){
     this._tagService.deletetag(id).subscribe((resp) => {
-      if(resp.success) this.fetchtags();
+      if(resp.success)   this.getpagetags({pageIndex:0,pageSize:20})
+      // this.fetchtags();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
 
@@ -148,10 +159,72 @@ export class CrmTagsComponent implements OnInit {
   searchTags(search: any,filter: any) {
     var obj = {
       search:search.value,
-      filter:filter.value
+      filter:filter.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._tagService.searchtags(obj).subscribe((data:any)=>{
-      this.tags = data.data;
+      this.pagetags = data.data;
     });
   }
+  getpagetags(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    return new Promise((resolve) => {
+      this._tagService.getpagetags(obj).subscribe(
+        (data:any) => {
+          this.tags = data.data;
+          this.pagetags=data?.data;
+          this.tagslength=data?.tags;
+          let i=0;
+          for(i=0;i<5;i++){
+            if(this.tags[i])
+            this.recenttags[i]=this.tags[i].name;
+          }
+          // console.log(this.lists)
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+ }
+ selectTag(event: any, tag: any) {
+  if (event) {
+    this.selectedTags.push(tag);
+  } else {
+    const index = this.selectedTags.indexOf(tag);
+    if (index !== -1) {
+      this.selectedTags.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllTags(event: any) {
+  // console.log(event)
+  if(event){
+  this.pagetags=this.pagetags.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pagetags=this.pagetags.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedTags = event ? [...this.pagetags] : [];
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedTags(tags:any) {
+  this._tagService.deleteselectedtags({tags:tags}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpagetags({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pagetags=this.pagetags.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedTags=[];
+}
 }

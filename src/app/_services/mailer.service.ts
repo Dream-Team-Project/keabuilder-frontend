@@ -19,10 +19,12 @@ export class MailerService {
   constructor(private http:HttpClient,private tokenStorage: TokenStorageService) {  this.uuid = this.tokenStorage.getUser().uniqueid;}
 
   sendmail(maildata:any) {
+    maildata.user_id=this.uuid;
     return this.http.post(this.sendmailApi, maildata)
     .pipe(catchError(this.errorHandler));
   }
   sendmailcampaign(maildata:any) {
+    maildata.user_id=this.uuid;
     return this.http.post(this.sendmailcampaignApi, maildata)
     .pipe(catchError(this.errorHandler));
   }

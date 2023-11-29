@@ -8,7 +8,7 @@ import { TokenStorageService } from './token-storage.service';
 })
 export class ScrumboardService {
 
-  user_id:any;
+  user_id:any='';
   createapiUrl = `/api/createBoard`;
   getallapiUrl = `/api/getAllBoards/`;
   deleteapiUrl = `/api/deleteBoard`;
@@ -74,7 +74,7 @@ export class ScrumboardService {
 
   deleteList(data: any){
     data.user_id=this.user_id;
-    return this.http.post(this.deleteapiUrl, data);
+    return this.http.post(this.deletelistapiUrl, data);
   }
 
   updateListTitle(data: any){

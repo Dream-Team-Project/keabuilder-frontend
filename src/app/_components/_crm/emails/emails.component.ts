@@ -5,6 +5,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { EmailService } from 'src/app/_services/_crm/email.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-crm-emails',
@@ -14,6 +15,7 @@ import { EmailService } from 'src/app/_services/_crm/email.service';
 export class CrmEmailsComponent implements OnInit {
 
   // @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
   
   validate = {
     name: new FormControl('',[Validators.required]),
@@ -33,6 +35,10 @@ export class CrmEmailsComponent implements OnInit {
   fetching:boolean = false;
   error=false;
   errormessage:any;
+  emailslength:any;
+  pageemails:any;
+  selectedEmails: any[] = [];
+  checked_selected=false;
   
  
   constructor(private _file: FileUploadService,
@@ -49,18 +55,18 @@ export class CrmEmailsComponent implements OnInit {
   }
 
   fetchData(){
-  
-    this.fetchEmails();
+    this.getpageemails({pageIndex:0,pageSize:20});
+    // this.fetchEmails();
     
   }
   
-  fetchEmails(){
-    this.fetching = true;
-    this._email.fetchemails().subscribe((resp:any)=>{
-        this.adjustdata(resp.data);
-        this.fetching = false;
-    })
-  }
+  // fetchEmails(){
+  //   this.fetching = true;
+  //   this._email.fetchemails().subscribe((resp:any)=>{
+  //       this.adjustdata(resp.data);
+  //       this.fetching = false;
+  //   })
+  // }
 
 
   createemailtemplate() {
@@ -91,7 +97,8 @@ export class CrmEmailsComponent implements OnInit {
             }
             else {
               msg = 'Email tempalte name updated successfully!';
-              this.fetchEmails();
+              this.getpageemails({pageIndex:0,pageSize:20});
+              // this.fetchEmails();
             }
             this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
         }); 
@@ -112,13 +119,15 @@ export class CrmEmailsComponent implements OnInit {
             this._file.deleteimage('keaimage-form-'+email.uniqueid+'-screenshot.png').subscribe({
               next: data => {
                 this._general.openSnackBar(false, 'Email Template Deleted Successfully!', 'OK', 'center', 'top');
-                this.fetchEmails();
+                this.getpageemails({pageIndex:0,pageSize:20});
+                // this.fetchEmails();
               }
             });
           }
           else {
             this._general.openSnackBar(false, 'Email template Deleted Successfully!', 'OK', 'center', 'top');
-            this.fetchEmails();
+            this.getpageemails({pageIndex:0,pageSize:20});
+            // this.fetchEmails();
           }
         }
       })
@@ -154,12 +163,14 @@ export class CrmEmailsComponent implements OnInit {
                       var imgobj  = {oldname:oldimg, newname:'keaimage-email-'+datadup.uniqueid+'-screenshot.png'};
                       this._file.copyimage(imgobj).subscribe({
                         next: data => {
-                          this.fetchEmails();
+                          this.getpageemails({pageIndex:0,pageSize:20});
+                          // this.fetchEmails();
                           this._general.openSnackBar(false, 'Email Template Duplicated Successfully!', 'OK', 'center', 'top');
                         }
                       });
                     }else{
-                      this.fetchEmails();
+                      this.getpageemails({pageIndex:0,pageSize:20});
+                      // this.fetchEmails();
                       this._general.openSnackBar(false, 'Email Template Duplicated Successfully!', 'OK', 'center', 'top');
                     }
       
@@ -175,6 +186,8 @@ export class CrmEmailsComponent implements OnInit {
     var obj = {
       search: search.value,
       filter: filter.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._email.searchemails(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
@@ -183,9 +196,9 @@ export class CrmEmailsComponent implements OnInit {
 
   adjustdata(data:any){
     this.fetching = false;
-    this.emails = [];
+    this.pageemails = [];
     this.nodata = data.length == 0;
-    this.emails = data;
+    this.pageemails = data;
   }
 
   toggleView() {
@@ -193,6 +206,56 @@ export class CrmEmailsComponent implements OnInit {
     this._general.setStorage('email_toggle',this.toggleview);
   }
 
-  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];};
+
+  getpageemails(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this._email.getpageemails(obj).subscribe(
+        (data:any) => {
+          this.emails = data?.data;
+          this.pageemails=data?.data;
+          this.emailslength=data?.emails;
+          this.fetching = false;
+          // console.log(this.lists)
+    });
+ }
+ selectEmails(event: any, email: any) {
+  if (event) {
+    this.selectedEmails.push(email);
+  } else {
+    const index = this.selectedEmails.indexOf(email);
+    if (index !== -1) {
+      this.selectedEmails.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllEmails(event: any) {
+  // console.log(event)
+  if(event){
+  this.pageemails=this.pageemails.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pageemails=this.pageemails.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedEmails = event ? [...this.pageemails] : [];
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedEmails(emails:any) {
+  this._email.deleteselectedemails({emails:emails}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpageemails({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pageemails=this.pageemails.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedEmails=[];
+}
   
 }

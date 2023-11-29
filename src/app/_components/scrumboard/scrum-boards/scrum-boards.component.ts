@@ -15,10 +15,14 @@ export class ScrumBoardsComponent implements OnInit {
 
   boards:any ;
   deldata:any;
+  hasError: string = '';
+  error=false;
   fetching=false;
-  boardNameFormControl = new FormControl('', Validators.required);
-  boardDescriptionFormControl = new FormControl('', Validators.required);
-  boarddata:any={id:'',uniqueid:'',boardName:'',description:'',created_at:'',updated_at:''};
+  bnFormControl = new FormControl('', [Validators.required]);
+  descriptionFormControl = new FormControl('', [Validators.required]);
+  boardname:any='';
+  description:any='';
+  boarddata :any ={id:'',uniqueid:'',boardName:'',description:'',created_at:'',updated_at:''};
 
   constructor(private dialog: MatDialog, 
     public scrumboardService: ScrumboardService,
@@ -48,8 +52,6 @@ export class ScrumBoardsComponent implements OnInit {
     this.boarddata.description='';
     this.boarddata.created_at='';
     this.boarddata.updated_at='';
-    // this.boardNameFormControl.reset();
-    // this.boardDescriptionFormControl.reset();
     this.deldata=[];
     this.fetchdata();
     this.dialog.closeAll();
@@ -80,17 +82,19 @@ export class ScrumBoardsComponent implements OnInit {
 
 
   handleIconClick(event: Event): void {
-    console.log('Icon clicked!');
+    // console.log('Icon clicked!');
     event.stopPropagation();
   }
     // CREATE BOARD 
     createBoard(){
+      if(this.boardname && this.description){
       this.fetching=true;
-      this.scrumboardService.createBoard(this.boarddata).subscribe(
+      this.scrumboardService.createBoard({boardName:this.boardname,description:this.description}).subscribe(
         result => {
           this._general.openSnackBar(false,"Board Created Succesfully!",'OK','center','top');
-          this.resetobj();
           this.fetchdata();
+          this.description='';
+          this.boardname='';
           this.fetching=false;
         },
         err => {
@@ -98,11 +102,16 @@ export class ScrumBoardsComponent implements OnInit {
           console.log(err);
         }
       )
+      }else{
+        this.error=true;
+        this.hasError='Please fill all details';
+        this.dialog.open(this.createboard);
+      }
     }
-  
   
     // UPDATE BOARD DETAILS
     updateBoardDetails(){
+      if(this.boarddata.boardName && this.boarddata.description){
       this.fetching=true;
       this.scrumboardService.updateBoardDetails(this.boarddata).subscribe(
         result => {
@@ -116,6 +125,10 @@ export class ScrumBoardsComponent implements OnInit {
           console.log(err);
         }
       )
-  
-    }  
+     }else{
+      this.error=true;
+      this.hasError='Please fill all details';
+      this.dialog.open(this.createboard);
+    } 
+  } 
 }

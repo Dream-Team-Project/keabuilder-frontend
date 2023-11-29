@@ -20,6 +20,12 @@ export class TagService {
     .pipe(catchError(this.errorHandler));
   }
 
+  getpagetags(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpagetags', obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   singletag(id:any): Observable<any> {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/singletag/'+id,obj)
@@ -42,7 +48,11 @@ export class TagService {
     return this.http.delete('/api/deletetag/'+id+'/'+this.uuid)
     .pipe(catchError(this.errorHandler));
   }
-
+  deleteselectedtags(tags:any): Observable<any>{
+    tags.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedtags',tags)
+    .pipe(catchError(this.errorHandler));
+  }
   searchtags(obj:any){
     obj.user_id = this.uuid;
     return this.http.post('/api/searchtags',obj)

@@ -2,6 +2,8 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
+
 
 
 export interface UserData {
@@ -20,12 +22,15 @@ export class CrmListsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   duplicateList:boolean = false;
 
   duplist:any='';
-;  lists:any=[];
+  listslength:any;
+  pagelists:any;
+  lists:any=[];
   list:any = {};
   listObj = {
     name: '',
@@ -33,9 +38,12 @@ export class CrmListsComponent implements OnInit {
     id: '',
   }
   hasError: string = '';
+  selectedLists: any[] = [];
+  checked_selected=false;
 
   constructor(private _listservice: ListService, private dialog: MatDialog, private _general: GeneralService) {
-      this.fetchLists().then((resp1) => {
+    this.getpagelists({pageIndex:0,pageSize:20}).then((resp1) => {
+      // this.fetchLists().then((resp1) => {
         this.fetching = false;
       });
    }
@@ -43,20 +51,20 @@ export class CrmListsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  fetchLists() {
-    return new Promise((resolve) => {
-      this._listservice.fetchlists().subscribe(
-        (data) => {
-          this.lists = data.data;
-          // console.log(this.lists)
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-  }
+  // fetchLists() {
+  //   return new Promise((resolve) => {
+  //     this._listservice.fetchlists().subscribe(
+  //       (data) => {
+  //         this.lists = data.data;
+  //         // console.log(this.lists)
+  //         resolve(true);
+  //       },
+  //       (error) => {
+  //         resolve(false);
+  //       }
+  //     );
+  //   });
+  // }
 
   setList(list:any) {
     if(this.list.name && this.isListNameValid(this.list.name)) {
@@ -72,7 +80,8 @@ export class CrmListsComponent implements OnInit {
   addList(list:any) {
     this._listservice.addlist(list).subscribe((resp) => {
         if (resp.success) {
-          this.fetchLists();
+          // this.fetchLists();
+          this.getpagelists({pageIndex:0,pageSize:20});
           this._general.openSnackBar(false, 'List has been saved', 'OK', 'center', 'top');
         }
         else this.setError(resp.message);
@@ -82,7 +91,8 @@ export class CrmListsComponent implements OnInit {
   updateList(list:any) {
       this._listservice.updatelist(list).subscribe((resp) => {
         if (resp.success) {
-          this.fetchLists();
+          // this.fetchLists();
+          this.getpagelists({pageIndex:0,pageSize:20});
           this._general.openSnackBar(false, 'List has been Updated', 'OK', 'center', 'top');
         }
         else this.setError(resp.message);
@@ -96,7 +106,8 @@ export class CrmListsComponent implements OnInit {
     .addlist(list)
     .subscribe((resp) => {
       if(resp.success) {
-        this.fetchLists();
+        // this.fetchLists();
+        this.getpagelists({pageIndex:0,pageSize:20});
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
       this.duplist='';
       }
@@ -113,19 +124,21 @@ export class CrmListsComponent implements OnInit {
 
   deleteList(id: any) {
     this._listservice.deletelist(id).subscribe((resp) => {
-      if (resp.success) this.fetchLists();
+      if (resp.success) this.getpagelists({pageIndex:0,pageSize:20});
+      // this.fetchLists();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
-
   }
   
   searchLists(search: any, filter: any) {
     var obj = {
       search: search.value,
-      filter: filter.value
+      filter: filter.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._listservice.searchlists(obj).subscribe((data: any) => {
-      this.lists = data.data;
+      this.pagelists = data.data;
     });
   }
 
@@ -152,4 +165,59 @@ export class CrmListsComponent implements OnInit {
     }
     this.dialog.open(templateRef);
   }
+  getpagelists(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    return new Promise((resolve) => {
+      this._listservice.getpagelists(obj).subscribe(
+        (data:any) => {
+          this.lists = data.data;
+          this.pagelists=data?.data;
+          this.listslength=data?.lists;
+          // console.log(this.lists)
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+ }
+ selectList(event: any, list: any) {
+  if (event) {
+    this.selectedLists.push(list);
+  } else {
+    const index = this.selectedLists.indexOf(list);
+    if (index !== -1) {
+      this.selectedLists.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllLists(event: any) {
+  // console.log(event)
+  if(event){
+  this.pagelists=this.pagelists.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pagelists=this.pagelists.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedLists = event ? [...this.pagelists] : [];
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedLists(lists:any) {
+  this._listservice.deleteselectedlists({lists:lists}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpagelists({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pagelists=this.pagelists.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedLists=[];
+}
 }

@@ -165,13 +165,6 @@
                         <span class="kp-colr">Campaign Settings <span class="kb-info-tag kb-tag ml-2">{{campstatus}}</span></span>
                         <hr>
                     </h5>
-                    <!-- <mat-form-field appearance="fill" class="kb-full-width" >
-                        <mat-label>List</mat-label>
-                        <input required matInput type="text" [(ngModel)]="listname" [ngModelOptions]="{standalone: true}" placeholder="Please enter list name" [matAutocomplete]="listAuto"  class="kb-act-searchinp w-100" (input)="filterlistData($event)" (click)="filterlistData($event)">
-                        <mat-autocomplete #listAuto="matAutocomplete" >
-                          <mat-option  *ngFor="let list of filteredlist; index as i;" [disabled]="list.activecontacts=='0'"  [value]="list.name" (onSelectionChange)="patchlistid(list)">{{list.name}} ({{list.activecontacts}})</mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field> -->
                     <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterListData($event)">
                         <mat-label>Subscribe to Lists</mat-label>
                         <mat-chip-list #listChipList aria-label="List selection">
@@ -205,6 +198,108 @@
                           </mat-option>
                         </mat-autocomplete>
                       </mat-form-field>
+
+                      <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterTagData($event)">
+                        <mat-label>Subscribe to Tags</mat-label>
+                        <mat-chip-list #tagChipList aria-label="Tag selection">
+                          <mat-chip
+                            *ngFor="let data of selectedTags; index as i"
+                            (removed)="removeSelectedTag(i)">
+                            {{ data?.name }}
+                            <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                            </button>
+                          </mat-chip>
+                        </mat-chip-list>
+                        <input matInput
+                          type="text"
+                          #searchTagInp
+                          placeholder="Select multiples..."
+                          (input)="filterTagData($event)"
+                          [matAutocomplete]="tagAuto"
+                          [matChipInputFor]="tagChipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          class="kb-act-searchinp w-100 pt-1">
+                        <mat-autocomplete
+                          autoActiveFirstOption
+                          #tagAuto="matAutocomplete"
+                          (optionSelected)="addSelectedTag($event, searchTagInp)">
+                          <mat-option
+                            *ngFor="let option of filteredOptions?.tags"
+                            [value]="option"
+                            [disabled]="filteredTempIds?.tags.includes(option.uniqueid)">
+                            {{ option?.name }} {{'('+option?.activecontacts+')'}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      
+                      <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterex_TagData($event)">
+                        <mat-label>Excluding Tags</mat-label>
+                        <mat-chip-list #ex_tagChipList aria-label="Tag selection">
+                          <mat-chip
+                            *ngFor="let data of selectedex_Tags; index as i"
+                            (removed)="removeSelectedex_Tag(i)">
+                            {{ data?.name }}
+                            <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                            </button>
+                          </mat-chip>
+                        </mat-chip-list>
+                        <input matInput
+                          type="text"
+                          #searchex_TagInp
+                          placeholder="Select multiples..."
+                          (input)="filterex_TagData($event)"
+                          [matAutocomplete]="ex_tagAuto"
+                          [matChipInputFor]="ex_tagChipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          class="kb-act-searchinp w-100 pt-1">
+                        <mat-autocomplete
+                          autoActiveFirstOption
+                          #ex_tagAuto="matAutocomplete"
+                          (optionSelected)="addSelectedex_Tag($event, searchex_TagInp)">
+                          <mat-option
+                            *ngFor="let option of filteredOptions?.ex_tags"
+                            [value]="option"
+                            [disabled]="filteredTempIds?.ex_tags?.includes(option.uniqueid)">
+                            {{ option?.name }} {{'('+option?.activecontacts+')'}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+                      <!-- <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterTagData($event)">
+                        <mat-label>Not Subscribe</mat-label>
+                        <mat-chip-list #tagChipList aria-label="Tag selection">
+                          <mat-chip
+                            *ngFor="let data of selectedTags; index as i"
+                            (removed)="removeSelectedTag(i)">
+                            {{ data?.name }}
+                            <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                            </button>
+                          </mat-chip>
+                        </mat-chip-list>
+                        <input matInput
+                          type="text"
+                          #searchTagInp
+                          placeholder="Select multiples..."
+                          (input)="filterTagData($event)"
+                          [matAutocomplete]="tagAuto"
+                          [matChipInputFor]="tagChipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          class="kb-act-searchinp w-100 pt-1">
+                        <mat-autocomplete
+                          autoActiveFirstOption
+                          #tagAuto="matAutocomplete"
+                          (optionSelected)="addSelectedTag($event, searchTagInp)">
+                          <mat-option
+                            *ngFor="let option of filteredOptions?.tags"
+                            [value]="option"
+                            [disabled]="filteredTempIds?.tags.includes(option.uniqueid)">
+                            {{ option?.name }} {{'('+option?.activecontacts+')'}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field> -->
 
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>Preheader text</mat-label>
@@ -271,9 +366,11 @@
 
                    
                        <div>
+                    <button mat-raised-button color="accent" (click)="_general.prevRoute()" class="mr-2"><i class="fa fa-arrow-left mr-1"></i>Back</button>
                     <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
                     <button mat-raised-button color="primary" (click)="openDialog(dialog3)" >Publish <i class="fas fa-paper-plane"></i></button>
                     <button mat-raised-button color="accent"  class="ml-2" (click)="campaigndraft()">Save Draft <i class="fa fa-file"></i></button>
+                    
                 </div> 
                 </form>
                     

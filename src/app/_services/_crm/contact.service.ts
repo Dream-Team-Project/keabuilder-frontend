@@ -52,7 +52,11 @@ export class ContactService {
     return this.http.delete('/api/deletecontact/'+id+'/'+this.uuid)
     .pipe(catchError(this.errorHandler));
   }
-
+  deleteselectedcontacts(contacts:any): Observable<any>{
+    contacts.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedcontacts',contacts)
+    .pipe(catchError(this.errorHandler));
+  }
   searchcontacts(obj:any){
     obj.user_id = this.uuid;
     return this.http.post('/api/searchcontact',obj)
