@@ -133,7 +133,11 @@
     top: 0px;
     right: 13px;
   }
-  
+  .statbadg1 {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+  }
   .kb-dropdown__status {
     top: 30px;
     min-width: 156px;

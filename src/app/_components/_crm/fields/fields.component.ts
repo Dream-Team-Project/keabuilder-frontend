@@ -4,6 +4,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FieldService } from 'src/app/_services/_crm/field.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-crm-fields',
@@ -16,6 +17,7 @@ export class CrmFieldsComponent implements OnInit {
   @Output ('fetch_fields') fetch_fields: EventEmitter<any> = new EventEmitter();
   @ViewChild('fieldsetting') fieldsetting!: TemplateRef<any>;
   @ViewChild('fieldlists') fieldlists!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
 
     fieldTypes:Array<any> = this._field.fieldTypes;
@@ -24,6 +26,10 @@ export class CrmFieldsComponent implements OnInit {
     selField:any = '';
     field_error:string = '';
     isCopied:boolean = false;
+    fieldslength:any;
+    pagefields:any;
+    selectedFields: any[] = [];
+    checked_selected=false;
 
   constructor(
     private dialog: MatDialog,
@@ -34,27 +40,44 @@ export class CrmFieldsComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    if(this.field_list) this.fetchFields();
+    if(this.field_list)  this.getpagefields({pageIndex:0,pageSize:20});
+    // this.fetchFields();
   }
 
   adjustdata(data:any){
-    if(data) this.fields = data;
+    if(data) this.pagefields = data;
     this.fetching = false;
   }
 
-  fetchFields() {
-    this._field.fetchfields().subscribe((resp:any)=>{
-      this.fetch_fields.emit(resp?.data);
-      this.adjustdata(resp?.data);
-    })
-  }
+  // fetchFields() {
+  //   this._field.fetchfields().subscribe((resp:any)=>{
+  //     this.fetch_fields.emit(resp?.data);
+  //     this.adjustdata(resp?.data);
+  //   })
+  // }
+
+  getpagefields(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this._field.getpagefields(obj).subscribe(
+        (data:any) => {
+          this.fields = data?.data;
+          this.fetch_fields.emit(data?.data);
+          this.adjustdata(data?.data);
+          // this.pagefields=data?.data;
+          this.fieldslength=data?.fields;
+          this.fetching = false;
+          // console.log(this.lists)
+    });
+ }
 
   searchFields(search: any, sort: any, filter: any) {
     this.fetching = true;
     var obj = {
       search: search.value,
       sort: sort.value,
-      filter: filter.value
+      filter: filter.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._field.searchFields(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
@@ -81,7 +104,8 @@ export class CrmFieldsComponent implements OnInit {
   addField(field:any) {
     this._field.addfield(field).subscribe((resp:any)=>{
       if(resp.success) {
-        this.fetchFields();
+        // this.fetchFields();
+        this.getpagefields({pageIndex:0,pageSize:20});
         this._general.openSnackBar(false, 'Field has been saved', 'OK', 'center', 'top');
       }
       else this.setError(resp.message);
@@ -91,7 +115,8 @@ export class CrmFieldsComponent implements OnInit {
   updateField(field:any) {
     this._field.updatefield(field).subscribe((resp:any)=>{
       if(resp.success) {
-        this.fetchFields();
+        this.getpagefields({pageIndex:0,pageSize:20});
+        // this.fetchFields();
         this._general.openSnackBar(false, 'Field has been updated', 'OK', 'center', 'top');
       }
       else this.setError(resp.message);
@@ -113,7 +138,8 @@ export class CrmFieldsComponent implements OnInit {
 
   deleteField(field:any) {
     this._field.deletefield(field.id).subscribe((resp:any)=>{
-      if(resp.success) this.fetchFields();
+      if(resp.success) this.getpagefields({pageIndex:0,pageSize:20});
+      //  this.fetchFields();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     })
   }
@@ -180,4 +206,65 @@ export class CrmFieldsComponent implements OnInit {
     this.isCopied = true;
     setTimeout(()=>this.isCopied = false, 1000)
   }
+
+//   getpagefields(event:any){
+//     let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+//       this._field.getpagefields(obj).subscribe(
+//         (data:any) => {
+//           this.fields = data?.data;
+//           this.pagefields=data?.data;
+//           this.fieldslength=data?.fields;
+//           this.fetching = false;
+//           // console.log(this.lists)
+//     });
+//  }
+ selectFields(event: any, obj: any) {
+  if (event) {
+    this.selectedFields.push(obj);
+  } else {
+    const index = this.selectedFields.indexOf(obj);
+    if (index !== -1) {
+      this.selectedFields.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedFields)
+}
+
+selectAllFields(event: any) {
+  // console.log(event)
+  if(event){
+  this.pagefields.map((ele:any) => {
+    if(!ele?.default_field) { 
+      ele.selected = true; 
+      this.selectedFields.push(ele)
+    }
+  });
+  }
+  else{
+    this.pagefields.map((ele:any)=>{
+      if(!ele?.default_field) { 
+        ele.selected = false;
+        this.selectedFields=[]
+        }
+    });
+  }
+  // this.selectedFields = event ? [...this.pagefields] : [];
+  // console.log(this.selectedFields)
+}
+
+deleteSelectedFields(obj:any) {
+  this._field.deleteselectedfields({fields:obj}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpagefields({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pagefields=this.pagefields.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedFields=[];
+}
+
 }

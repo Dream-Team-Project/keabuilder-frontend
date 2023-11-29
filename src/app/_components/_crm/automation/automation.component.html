@@ -84,6 +84,7 @@
         </mat-select>
         </mat-form-field>
         <div class="col-md-4 text-right mt-2">
+          <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllAutomations($event)" matTooltip="Select All Page Automations" matTooltipPosition="above"></mat-checkbox></span>
           <button mat-raised-button [color]="'accent'"
             (click)="toggleView()" class="mr-2">
             <span *ngIf="togglebutton==false">List View <i class="fas fa-th-list ml-1"></i></span>
@@ -94,28 +95,29 @@
           </button>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-12" *ngIf="selectedAutomations.length > 0">
+          <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedAutomations)">
+            <span class="">Delete Selected Automations <i class="fa fa-trash-alt"></i></span>
+          </div>
+        </div>
+      </div>
         <div class="row" *ngIf="togglebutton; else gridview">
-          <div class="table m-2">
-            <table class="col-md-12 border border-1 m-center">
+          
+            <table class="table border border-1">
               <thead>
                 <tr>
-                  <td class="border-bottom border-warning text-center">Name</td>
-                  <!-- <td class="border-bottom border-warning text-center">
-                    Automations
-                  </td> -->
-                  <td class="border-bottom border-warning text-center">Mail</td>
-                  <!-- <td class="border-bottom border-warning text-center">Type</td> -->
-                  <td class="border-bottom border-warning text-center">
-                    Created On
-                  </td>
-                  <td class="border-bottom border-warning text-center">
-                    Last Modified
-                  </td>
-                  <td class="border-bottom border-warning text-center">More</td>
+                  <th>Select</th>
+                  <th>Name</th>
+                  <th>Mail</th>
+                  <th>Created On</th>
+                  <th>Last Modified</th>
+                  <th>More</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let automation of automations; index as i">
+                <tr *ngFor="let automation of pageautomations; index as i">
+                  <td><span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></span></td>
                   <td class="d-flex">
                     <div
                       class="kb-fitimg namebox1"
@@ -220,13 +222,14 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+        </div>
+          <mat-paginator  #paginator [length]="automationslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageautomations($event)"></mat-paginator>
         </div>
     <ng-template #gridview >
       <div class="row w-100">
         <div
           class="col-md-4 cardpage mt-5 mb-5 loadEffect"
-          *ngFor="let automation of automations; index as i"
+          *ngFor="let automation of pageautomations; index as i"
         >
           <div>
             <div
@@ -235,7 +238,6 @@
                 'background-image': 'url(' + automation.thumbnail + ')'
               }"
             >
-              <!-- <img [src]="automations[i]['thumbnail']" alt="" class="img-fluid"> -->
             </div>
             <div class="d-flex justify-content-between">
               <div
@@ -257,6 +259,30 @@
                 mat-button
                 [matMenuTriggerFor]="menu"
                 class="statusbadge"
+                [class.active1]="automation.publish_status == 1"
+                [class.active2]="automation.publish_status != 1"
+              >
+                <i class="fas" [class.fa-check]="automation.publish_status == 1" [class.fa-file]="automation.publish_status != 1"></i>
+                {{ automation.publish_status == 1 ? "Active" : "Inactive" }}
+                <i class="fas fa-chevron-down drpdwnfa"></i>
+              </span>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="copyAutomation(automation)">
+                  <i class="far fa-copy pr-2"></i>Duplicate
+                </button>
+                <button mat-menu-item class="text-danger" (click)="openDialog(deldialog, automation)">
+                  <i class="far fa-trash-alt pr-2"></i>Delete
+                </button>
+              </mat-menu>
+            </div>
+            <div class="statbadg1" matTooltip="Status" matTooltipPosition="above">
+              <span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></span>
+            </div>
+            <!-- <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+              <span
+                mat-button
+                [matMenuTriggerFor]="menu"
+                class="statusbadge"
                 [class]="automation.publish_status == 1 ? 'active1' : 'active2'"
               >
                 <i
@@ -269,40 +295,40 @@
                 <i class="fas fa-chevron-down drpdwnfa"></i>
               </span>
               <mat-menu #menu="matMenu">
-                  <!-- <button mat-menu-item>
-                    <i class="fas fa-users pr-2"></i>View Contacts
-                  </button>
-                  <button mat-menu-item>
-                    <i class="fas fa-share pr-2"></i>Share
-                  </button> -->
-                  <button mat-menu-item (click)="copyAutomation(automation)">
-                    <i
-                      class="far fa-copy pr-2"
-                      
-                    ></i
-                    >Duplicate
-                  </button>
-                  <!-- <button mat-menu-item>
-                    <i class="fas fa-link pr-2"></i>Copy URL
-                  </button> -->
-                  <button mat-menu-item class="text-danger"
-                  (click)="openDialog(deldialog, automation.id)">
-                    <i
-                      class="far fa-trash-alt pr-2"
-                     
-                    ></i
-                    >Delete
-                  </button>
-                </mat-menu>
-              <!-- <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <i class="fas fa-users pr-2"></i>View Contacts
+                </button>
+                <button mat-menu-item>
+                  <i class="fas fa-share pr-2"></i>Share
+                </button>
+                <button mat-menu-item (click)="copyAutomation(automation)">
+                  <i
+                    class="far fa-copy pr-2"
+                    
+                  ></i
+                  >Duplicate
+                </button>
+                <button mat-menu-item>
+                  <i class="fas fa-link pr-2"></i>Copy URL
+                </button>
+                <button mat-menu-item class="text-danger"
+                (click)="openDialog(deldialog, automation.id)">
+                  <i
+                    class="far fa-trash-alt pr-2"
+                   
+                  ></i
+                  >Delete
+                </button>
+              </mat-menu>
+              <mat-menu #menu="matMenu">
                 <button mat-menu-item>
                   <i class="fa fa-check pr-2"></i> Active
                 </button>
                 <button mat-menu-item>
                   <i class="fa fa-file pr-2"></i> Inactive
                 </button>
-              </mat-menu> -->
-            </div>
+              </mat-menu>
+            </div> -->
             <div
               class="kb-pagedate d-flex justify-content-around border border-1"
             >
@@ -354,7 +380,6 @@
           </div>
         </div>
       </div>
-  
     </ng-template>
-  </div>
+  
   

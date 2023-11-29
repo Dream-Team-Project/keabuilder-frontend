@@ -54,6 +54,12 @@ export class FieldService {
     return this.http.get(this.allfields+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+
+  getpagefields(obj :any): Observable<any> {
+    obj.uuid = this.user_id;
+    return this.http.post('/api/getpagefields', obj)
+    .pipe(catchError(this.errorHandler));
+  }
   
   fetchviewfields(user_id:string){
     return this.http.get(this.allfields+'/'+user_id)
@@ -74,6 +80,12 @@ export class FieldService {
 
   deletefield(id:any){
     return this.http.delete(this.deletefields+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteselectedfields(fields:any): Observable<any>{
+    fields.user_id=this.user_id;
+    return this.http.post('/api/deleteselectedfields',fields)
     .pipe(catchError(this.errorHandler));
   }
 

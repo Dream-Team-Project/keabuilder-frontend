@@ -40,22 +40,22 @@ ngOnInit(): void {
   // this.fetchAutomations();
 }
 
-fetchAutomations() {
-  this.searching=true;
-  return new Promise((resolve) => {
-    this._automationgeneralservice.fetchautomations().subscribe(
-      (data) => {
-        this.automations = data.data;
-        this.searching=false;
-        resolve(true);
-      },
-      (error) => {
-        this.searching=false;
-        resolve(false);
-      }
-    );
-  });
-}
+// fetchAutomations() {
+//   this.searching=true;
+//   return new Promise((resolve) => {
+//     this._automationgeneralservice.fetchautomations().subscribe(
+//       (data) => {
+//         this.automations = data.data;
+//         this.searching=false;
+//         resolve(true);
+//       },
+//       (error) => {
+//         this.searching=false;
+//         resolve(false);
+//       }
+//     );
+//   });
+// }
 toggleView(){
   this.togglebutton=!this.togglebutton; 
 }
@@ -67,7 +67,8 @@ addautomation(){
   .addautomation(data)
   .subscribe((data) => {
     // console.log(data.uniqueid)
-    this.fetchAutomations()
+    this.getpageautomations({pageIndex:0,pageSize:20});
+    // this.fetchAutomations()
     this.dialog.closeAll();
      this._general.openSnackBar(false,'Automation Added Succesfully', 'OK','center','top');
     this.router.navigate(['/builder/automation/'+data.uniqueid],{relativeTo: this.route});
@@ -82,7 +83,8 @@ copyAutomation(automation:any){
   this._automationgeneralservice
   .addautomation(obj)
   .subscribe((data) => {
-    this.fetchAutomations();
+    this.getpageautomations({pageIndex:0,pageSize:20});
+    // this.fetchAutomations();
      this._general.openSnackBar(false,'CRM Automation Copied Succesfully', 'OK','center','top');
 
   });
@@ -95,7 +97,8 @@ openDialog(templateRef: TemplateRef<any>, automation:any) {
 deleteAutomation(id:any){
   this.searching=true;
   this._automationgeneralservice.deleteautomation(id).subscribe((data)=>{
-    this.fetchAutomations();
+    this.getpageautomations({pageIndex:0,pageSize:20});
+    // this.fetchAutomations();
     this._general.openSnackBar(false,'CRM Automation deleted Succesfully', 'OK','center','top');
 
   })
@@ -121,7 +124,7 @@ getpageautomations(event:any){
       (data:any) => {
         // this.kbcampaigns = data?.data;
         this.pageautomations=data?.data;
-        this.automationslength=data?.campaigns;
+        this.automationslength=data?.automations;
         this.searching = false;
         // console.log(this.lists)
   });

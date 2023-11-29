@@ -142,6 +142,12 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
     return this.http.get(this.allformsApi+'/'+this.uuid);
   }
 
+  getpageforms(obj :any): Observable<any> {
+    obj.uuid = this.uuid;
+    return this.http.post('/api/getpageforms', obj)
+    .pipe(catchError(this.errorHandler));
+  }
+
   fetchform(obj:any):Observable<any> {
     return this.http.get(this.fetchformApi+'/'+obj.form_id);
   }
@@ -176,6 +182,12 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
 
   deleteform(id:any):Observable<any> {
     return this.http.delete(this.deleteformApi+'/'+id)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  deleteselectedforms(forms:any): Observable<any>{
+    forms.user_id=this.uuid;
+    return this.http.post('/api/deleteselectedforms',forms)
     .pipe(catchError(this.errorHandler));
   }
   

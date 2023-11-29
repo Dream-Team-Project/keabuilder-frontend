@@ -45,7 +45,7 @@
     Would you like to delete <span class="text-danger">{{selectedCampaigns.length}}</span> campaigns?
   </div>
   <div mat-dialog-actions class="justify-content-end">
-    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'" (click)="resetselecteddata()">No</button>
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
     <button mat-button mat-dialog-close (click)="deleteSelectedCampaigns(selectedCampaigns)" class="text-danger">Yes</button>
   </div>
 </ng-template>

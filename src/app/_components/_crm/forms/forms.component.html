@@ -17,6 +17,17 @@
     </button>
   </div>
 </ng-template>
+<ng-template #delselecteddialog>
+  <h1 mat-dialog-title class="kb-danger">Delete Selected Forms</h1>
+  <div mat-dialog-content>
+    Would you like to delete <span class="text-danger">{{selectedForms.length}}</span> forms?
+  </div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
+    <button mat-button mat-dialog-close (click)="deleteSelectedForms(selectedForms)" class="text-danger">Yes</button>
+  </div>
+</ng-template>
+
 <ng-template #adddialog>
   <h1 mat-dialog-title class="txt">Create Form</h1>
   <div mat-dialog-content>
@@ -154,6 +165,7 @@
       </mat-select>
     </mat-form-field>
     <div class="col-md-4 mt-2 text-right">
+      <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllForms($event)" matTooltip="Select All Page Forms" matTooltipPosition="above"></mat-checkbox></span>
       <button
         mat-raised-button
         [color]="'accent'"
@@ -177,6 +189,13 @@
       </button>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="selectedForms.length > 0">
+      <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedForms)">
+        <span class="">Delete Selected Forms <i class="fa fa-trash-alt"></i></span>
+      </div>
+    </div>
+  </div>
   <div
     [class.px-3]="toggleview"
     class="row"
@@ -185,7 +204,7 @@
     <div
       [class]="toggleview ? 'col-md-12' : 'col-md-4'"
       class="cardpage mt-4"
-      *ngFor="let form of forms"
+      *ngFor="let form of pageforms"
     >
       <div [class.row]="toggleview">
         <div
@@ -287,9 +306,13 @@
             </div>
           </div>
         </div>
+        <div class="statbadg">
+          <span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="form.selected" (ngModelChange)="selectForms($event, form)"></mat-checkbox></span>
+        </div>
       </div>
     </div>
   </div>
+  <mat-paginator  #paginator [length]="formslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageforms($event)"></mat-paginator>
   <ng-template #nodata>
     <div class="row justify-content-center mt-5">
       <div class="col-md-4">

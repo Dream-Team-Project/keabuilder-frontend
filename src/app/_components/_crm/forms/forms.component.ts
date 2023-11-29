@@ -8,6 +8,7 @@ import { ImageService } from 'src/app/_services/image.service';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { TagService } from 'src/app/_services/_crm/tag.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-crm-forms',
@@ -19,6 +20,7 @@ export class CrmFormsComponent implements OnInit {
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('paginator') paginator!: MatPaginator;
   
   separatorKeysCodes: number[] = [ENTER, COMMA];
   validate = {
@@ -50,6 +52,10 @@ export class CrmFormsComponent implements OnInit {
     tags: []
   };
   tagCtrl = new FormControl(['']);
+  formslength:any;
+  pageforms:any;
+  selectedForms: any[] = [];
+  checked_selected=false;
   
 
   constructor(private _file: FileUploadService,
@@ -69,18 +75,19 @@ export class CrmFormsComponent implements OnInit {
   }
 
   fetchData(){
-    this.fetchForms();
+    this.getpageforms({pageIndex:0,pageSize:20});
+    // this.fetchForms();
       this.fetchLists();
         this.fetchTags();       
   }
   
-  fetchForms(){
-    this.fetching = true;
-    this._file.fetchforms().subscribe((resp:any)=>{
-        this.adjustdata(resp.data);
-        this.fetching = false;
-    })
-  }
+  // fetchForms(){
+  //   this.fetching = true;
+  //   this._file.fetchforms().subscribe((resp:any)=>{
+  //       this.adjustdata(resp.data);
+  //       this.fetching = false;
+  //   })
+  // }
 
   fetchLists() {
     this.fetching = true;
@@ -143,7 +150,8 @@ export class CrmFormsComponent implements OnInit {
             }
             else {
               msg = 'Form name updated successfully!';
-              this.fetchForms();
+              this.getpageforms({pageIndex:0,pageSize:20});
+              // this.fetchForms();
             }
             this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
           }
@@ -166,13 +174,15 @@ export class CrmFormsComponent implements OnInit {
               this._file.deleteimage('keaimage-form-'+form.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
                   this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
-                  this.fetchForms();
+                  this.getpageforms({pageIndex:0,pageSize:20});
+                  // this.fetchForms();
                 }
               });
             }
             else {
               this._general.openSnackBar(false, 'Form Deleted Successfully!', 'OK', 'center', 'top');
-              this.fetchForms();
+              this.getpageforms({pageIndex:0,pageSize:20});
+              // this.fetchForms();
             }
           }
         });
@@ -207,12 +217,14 @@ export class CrmFormsComponent implements OnInit {
                   var imgobj  = {oldname:oldimg, newname:'keaimage-form-'+datadup.uniqueid+'-screenshot.png'};
                   this._file.copyimage(imgobj).subscribe({
                     next: data => {
-                      this.fetchForms();
+                      this.getpageforms({pageIndex:0,pageSize:20});
+                      // this.fetchForms();
                       this._general.openSnackBar(false, 'Form Duplicated Successfully!', 'OK', 'center', 'top');
                     }
                   });
                 }else{
-                  this.fetchForms();
+                  this.getpageforms({pageIndex:0,pageSize:20});
+                  // this.fetchForms();
                   this._general.openSnackBar(false, 'Form Duplicated Successfully!', 'OK', 'center', 'top');
                 }
   
@@ -228,6 +240,8 @@ export class CrmFormsComponent implements OnInit {
     var obj = {
       search: search.value,
       filter: filter.value,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._file.searchformquery(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);
@@ -236,9 +250,11 @@ export class CrmFormsComponent implements OnInit {
 
   adjustdata(data:any){
     this.fetching = false;
-    this.forms = [];
+    // this.forms = [];
+    this.pageforms=[];
     this.nodata = data.length == 0;
-    this.forms = data;
+    this.pageforms=data
+    // this.forms = data;
   }
 
   toggleView() {
@@ -317,6 +333,56 @@ export class CrmFormsComponent implements OnInit {
 
   // end tag actions
   
-  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];}
+  isNotValid(val:any) {return val.touched && val.invalid && val.dirty && val.errors?.['required'];};
+
+  getpageforms(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this._file.getpageforms(obj).subscribe(
+        (data:any) => {
+          this.forms = data?.data;
+          this.pageforms=data?.data;
+          this.formslength=data?.forms;
+          this.fetching = false;
+          // console.log(this.lists)
+    });
+ }
+ selectForms(event: any, obj: any) {
+  if (event) {
+    this.selectedForms.push(obj);
+  } else {
+    const index = this.selectedForms.indexOf(obj);
+    if (index !== -1) {
+      this.selectedForms.splice(index, 1);
+    }
+  }
+  // console.log(this.selectedContacts)
+}
+
+selectAllForms(event: any) {
+  // console.log(event)
+  if(event){
+  this.pageforms=this.pageforms.map((ele:any)=>{ele.selected = true; return ele;});
+  }
+  else{
+    this.pageforms=this.pageforms.map((ele:any)=>{ele.selected = false; return ele;});
+  }
+  this.selectedForms = event ? [...this.pageforms] : [];
+  // console.log(this.selectedContacts)
+}
+
+deleteSelectedForms(obj:any) {
+  this._file.deleteselectedforms({forms:obj}).subscribe((resp:any) => {
+    if(resp.success) 
+    this.getpageforms({pageIndex:0,pageSize:20});
+    this.resetselecteddata();
+    this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
+  });
+}
+
+resetselecteddata(){
+  this.pageforms=this.pageforms.map((ele:any)=>{ele.selected = false; return ele;});
+  this.checked_selected=false;
+  this.selectedForms=[];
+}
   
 }
