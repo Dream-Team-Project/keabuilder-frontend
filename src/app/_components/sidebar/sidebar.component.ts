@@ -16,7 +16,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(public router: Router) { }
   connectWtParent:boolean = false;
-  toggleSidebar:boolean = false;
+  toggleSidebar:boolean = true;
   fullsidebar = true;
   hoveropen = false;
   isOpen = false;

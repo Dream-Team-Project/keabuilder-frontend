@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class AppComponent {
   currentDomain:any = window.location.hostname;
   appHost:any = environment.appHost;
-  toggleSidebar:boolean = false;
+  toggleSidebar:boolean = true;
   private roles: string[] = [];
   isLoggedIn:boolean = false;
   showAdminBoard = false;
