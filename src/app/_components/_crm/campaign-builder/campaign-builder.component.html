@@ -122,7 +122,7 @@
 
     <div class="container-fluid">
         <div #campaignbody class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="makecard h-100 p-3">
                     <h5>
                         <span class="kp-colr">Design Your Campaign</span>
@@ -157,7 +157,7 @@
                     </div>     -->
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
 
                 <div class="makecard h-100 p-3">
                     <form>
@@ -365,11 +365,11 @@
                     </mat-form-field>
 
                    
-                       <div>
-                    <button mat-raised-button color="accent" (click)="_general.prevRoute()" class="mr-2"><i class="fa fa-arrow-left mr-1"></i>Back</button>
-                    <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="mr-2">Test <i class="fa fa-telegram"></i></button>
-                    <button mat-raised-button color="primary" (click)="openDialog(dialog3)" >Publish <i class="fas fa-paper-plane"></i></button>
-                    <button mat-raised-button color="accent"  class="ml-2" (click)="campaigndraft()">Save Draft <i class="fa fa-file"></i></button>
+                       <div class="d-flex justify-content-between">
+                    <button mat-raised-button color="accent" (click)="_general.prevRoute()" class=""><i class="fa fa-arrow-left mr-1"></i>Back</button>
+                    <button mat-raised-button color="accent" (click)="openDialog(dialog)" class="">Test <i class="fa fa-telegram"></i></button>
+                    <button mat-raised-button color="primary" (click)="openDialog(dialog3)" class="">Publish <i class="fas fa-paper-plane"></i></button>
+                    <button mat-raised-button color="accent" (click)="campaigndraft()" class="">Save Draft <i class="fa fa-file"></i></button>
                     
                 </div> 
                 </form>
