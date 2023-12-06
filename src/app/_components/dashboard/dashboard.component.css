@@ -1,5 +1,6 @@
 .kb-main-container {
-    background: rgb(244 244 244 / 48%);
+    background: var(--kb-text-gray-50-color);
+    /* background: rgb(244 244 244 / 48%); */
     padding-top: 30px;
     margin-bottom: -20px;
     margin-top: -26px;
@@ -198,8 +199,37 @@ hr {
     }
 }
 .colr{
-    color: #dea641;
+    color: var(--primary-color);
 }
+.kb-colr-kea{
+    color: var(--primary-color);
+}
+.kb-colr-blue{
+    color: var(--kb-text-blue-500-color);
+}
+.kb-colr-green{
+color: var(--kb-text-green-400-color)
+}
+.kb-colr-accent{
+    color: var(--kb-text-accent-600-color)
+}
+.kb-elli-vertical{
+    cursor: pointer;
+    line-height: inherit;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    margin: 0 2px;
+    transition: 0.2s ease;
+}
+.kb-elli-vertical:hover {
+    color: var(--primary-color);
+    background-color: rgb(216 200 152 / 20%);
+}
+
 .adjustcard{
     font-size: 64px;
     font-weight: 600;

@@ -46,6 +46,8 @@ export class CrmTagsComponent implements OnInit {
   pagetags:any;
   selectedTags: any[] = [];
   checked_selected=false;
+  searchInp : any = ''; 
+  filterInp : any = 'name DESC';
   
 
  
@@ -156,12 +158,22 @@ export class CrmTagsComponent implements OnInit {
     let regex =/^[\w-_. ]{4,}$/
     return regex.test(value);
   }
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.filterInp.includes(column)) {
+      this.filterInp = this.filterInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.filterInp = `${column} ASC`;
+    }
+    this.searchTags(this.searchInp, this.filterInp);
+  }
+
   searchTags(search: any,filter: any) {
     var obj = {
-      search:search.value,
-      filter:filter.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      search:search,
+      filter:filter,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._tagService.searchtags(obj).subscribe((data:any)=>{
       this.pagetags = data.data;

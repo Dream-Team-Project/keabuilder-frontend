@@ -252,12 +252,12 @@
 <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field appearance="fill" class="col-md-3 pr-2">
+        <mat-form-field appearance="fill" class="col-md-5 pr-2">
             <mat-label>Search Contacts</mat-label>
-            <input matInput #searchInp (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
+            <input matInput  [(ngModel)]="searchInp" (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-md-2 px-2">
+        <!-- <mat-form-field appearance="fill" class="col-md-2 px-2">
             <mat-label>Sort By</mat-label>
             <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
                 <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -269,10 +269,10 @@
                 <mat-option [value]="'firstname ASC'">ASC By Name</mat-option>
                 <mat-option [value]="'firstname DESC'">DESC By Name</mat-option>
             </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field appearance="fill" class="col-md-2 px-2">
             <mat-label>Filter By List</mat-label>
-            <mat-select #listInp name="listfilter" value='' (valueChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
+            <mat-select  [(ngModel)]="listInp" name="listfilter"  (ngModelChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
                 <mat-option value="" selected>All</mat-option>
                 <mat-option value="NULL" selected>None</mat-option>
                 <mat-option *ngFor="let list of lists" [value]="list.uniqueid">
@@ -282,7 +282,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="col-md-2 px-2">
           <mat-label>Filter By Tag</mat-label>
-          <mat-select #tagInp name="tagfilter" value='' (valueChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
+          <mat-select  [(ngModel)]="tagInp" name="tagfilter"  (ngModelChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
               <mat-option value="" selected>All</mat-option>
               <mat-option *ngFor="let tag of tags" [value]="tag.uniqueid">
                   {{tag.name | titlecase}}
@@ -313,7 +313,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="pagecontacts?.length != 0; else nodata">
       <div class="col-12">
         <table class="table kb-table" dataSource="contacts">
           <thead>
@@ -321,10 +321,10 @@
               <th>
                 <mat-checkbox [(ngModel)]="checked_selected" (ngModelChange)="selectAllContacts($event)" matTooltip="Select All Page Contacts" matTooltipPosition="above"></mat-checkbox>
               </th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Created</th>
+              <th class="kb-table-sort" (click)="toggleSort('firstname')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'firstname ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'firstname DESC'"></i></th>
+              <th class="kb-table-sort" (click)="toggleSort('email')">Email <i class="fa-solid fa-up-long" *ngIf="sortInp == 'email ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'email DESC'"></i></th>
+              <th class="kb-table-sort" (click)="toggleSort('phone')">Phone <i class="fa-solid fa-up-long" *ngIf="sortInp == 'phone ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'phone DESC'"></i></th>
+              <th class="kb-table-sort" (click)="toggleSort('created_at')">Created On <i class="fa-solid fa-up-long" *ngIf="sortInp == 'created_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'created_at DESC'"></i></th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -353,4 +353,14 @@
       
     </div>
 </div>
-
+<ng-template #nodata>
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+      <img
+        src="/assets/images/website/website-empty.png"
+        class="img-fluid"
+        alt="No Contacts Found"
+      />
+    </div>
+  </div>
+</ng-template>

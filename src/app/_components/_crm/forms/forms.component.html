@@ -139,18 +139,18 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
-    <mat-form-field appearance="fill" class="col-6 pr-2">
+    <mat-form-field appearance="fill" class="col-8 pr-2">
       <mat-label>Search Forms</mat-label>
       <input
         matInput
-        #searchInp
+        [(ngModel)]="searchInp"
         type="text"
         (input)="searchForms(searchInp, filterInp)"
         placeholder="Search Form Name"
       />
       <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
-    <mat-form-field appearance="fill" class="col-2">
+    <!-- <mat-form-field appearance="fill" class="col-2">
       <mat-label>Sort By</mat-label>
       <mat-select
         #filterInp
@@ -163,9 +163,9 @@
         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
         <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
     <div class="col-md-4 mt-2 text-right">
-      <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllForms($event)" matTooltip="Select All Page Forms" matTooltipPosition="above"></mat-checkbox></span>
+      <!-- <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllForms($event)" matTooltip="Select All Page Forms" matTooltipPosition="above"></mat-checkbox></span>
       <button
         mat-raised-button
         [color]="'accent'"
@@ -178,7 +178,7 @@
         <ng-template #listview
           ><span>List View <i class="fas fa-th-list"></i></span
         ></ng-template>
-      </button>
+      </button> -->
       <button
         mat-raised-button
         color="primary"
@@ -196,7 +196,61 @@
       </div>
     </div>
   </div>
-  <div
+  <div class="row" *ngIf="pageforms?.length != 0; else nodata">
+    <div class="col-12">
+      <table class="table kb-table" dataSource="forms">
+        <thead>
+          <tr>
+            <th>
+              <mat-checkbox [(ngModel)]="checked_selected" (ngModelChange)="selectAllForms($event)" matTooltip="Select All Page Forms" matTooltipPosition="above"></mat-checkbox>
+            </th>
+            <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="filterInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'name DESC'"></i></th>
+            <th class="kb-table-sort" (click)="toggleSort('created_at')">Created On <i class="fa-solid fa-up-long" *ngIf="filterInp == 'created_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'created_at DESC'"></i></th>
+            <th class="kb-table-sort" (click)="toggleSort('updated_at')">Modified On <i class="fa-solid fa-up-long" *ngIf="filterInp == 'updated_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'updated_at DESC'"></i></th>
+           
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let form of pageforms; index as i">
+           <td><mat-checkbox class="align-items-center" [(ngModel)]="form.selected" (ngModelChange)="selectForms($event, form)"></mat-checkbox></td>
+            <td class="kb-td-link ftsize" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{ form.name ? form.name : ("form" | titlecase) }}</td>
+            <td class="kb-td-link" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{form.created_at | date:'medium'}}</td>
+            <td class="kb-td-link" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{form.updated_at | date:'medium'}}</td>
+            <td>
+              <span class="d-flex">
+                <!-- <i  mat-ripple matTooltip="Quik Edit" matTooltipPosition="above"  class="fa-regular fa-pen-to-square kb-table-action-icon"></i> -->
+                <i  mat-ripple matTooltip="View" matTooltipPosition="above"  class="far fa-eye px-4 kb-table-action-icon" (click)="_general.redirectLink('/fetch-form/' + form.user_id + '/' + form.uniqueid)"></i>
+                <i  mat-ripple matTooltip="Edit" matTooltipPosition="above"  class="fa fa-pencil px-4 kb-table-action-icon" (click)="_general.redirectToBuilder(form.uniqueid, 'form')"></i>
+                <i mat-ripple matTooltip="More" matTooltipPosition="above" class="fas fa-cog px-4 kb-table-action-icon"  [matMenuTriggerFor]="menu"></i>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="duplicateform(form)"
+                    [disabled]="form.deleting"
+                  >
+                    <i class="far fa-copy pr-2"></i>Duplicate
+                  </button>
+                  <button
+                    mat-menu-item
+                    class="text-danger"
+                    (click)="openDialog(deldialog, form)"
+                    [disabled]="form.deleting"
+                  >
+                    <i class="far fa-trash-alt pr-2"></i>Delete
+                  </button>
+                </mat-menu>
+              </span>
+            </td>                        
+          </tr>
+          
+        </tbody>
+      </table>
+      <mat-paginator  #paginator [length]="formslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageforms($event)"></mat-paginator>
+    </div>
+    
+  </div>
+  <!-- <div
     [class.px-3]="toggleview"
     class="row"
     *ngIf="forms.length != 0; else nodata"
@@ -283,10 +337,10 @@
                 More <i class="fas fa-cog"></i>
               </button>
               <mat-menu #menu="matMenu">
-                <!-- (click)="newform('update',form)" -->
-                <!-- <button mat-menu-item  (click)="newform('update',form)" [disabled]="form.deleting">
+               
+                <button mat-menu-item  (click)="newform('update',form)" [disabled]="form.deleting">
                     <i class="far fa-edit pr-2"></i>Quick Edit
-                  </button> -->
+                  </button>
                 <button
                   mat-menu-item
                   (click)="duplicateform(form)"
@@ -311,8 +365,7 @@
         </div>
       </div>
     </div>
-  </div>
-  <mat-paginator  #paginator [length]="formslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageforms($event)"></mat-paginator>
+  </div> -->
   <ng-template #nodata>
     <div class="row justify-content-center mt-5">
       <div class="col-md-4">

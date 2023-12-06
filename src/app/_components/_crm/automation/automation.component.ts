@@ -23,11 +23,16 @@ togglebutton=true;
 delautomation:any;
 automations:any=[];
 automationname ='';
+automationnote ='';
 automationnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
 automationslength:any;
 pageautomations:any;
 selectedAutomations: any[] = [];
 checked_selected=false;
+sortInp : string = '';
+searchInp : string = ''; 
+filterInp : string = 'name DESC';
+
 
 constructor( public _general: GeneralService,private _automationgeneralservice: AutomationGeneralService,private _snackBar: MatSnackBar, private dialog: MatDialog,private route: ActivatedRoute,
   private router: Router,
@@ -62,7 +67,7 @@ toggleView(){
 addautomation(){
   if(this.automationnameControl.status=='VALID'){
     if(this.automationname!=''){
-      var data = {name:this.automationname};
+      var data = {name:this.automationname,note:this.automationnote};
   this._automationgeneralservice
   .addautomation(data)
   .subscribe((data) => {
@@ -76,9 +81,20 @@ addautomation(){
     }
   }
 }
+updateautomation(){
+  if(this.automationnameControl.status=='VALID'){
+this._automationgeneralservice.updateautomation(this.delautomation).subscribe((data:any)=>{
+    if(data.success){
+      var msg= 'Automation has been updated';
+      this._general.openSnackBar(false,msg,'OK','center','top');
+      this.dialog.closeAll();
+    }
+  })
+}
+  }    
 copyAutomation(automation:any){
   let obj=automation;
-  obj.name=obj.name+' '+'copy';
+  obj.name=obj.name+' '+this._general.makeid(10);
   // console.log(obj)
   this._automationgeneralservice
   .addautomation(obj)
@@ -91,7 +107,11 @@ copyAutomation(automation:any){
 }
 openDialog(templateRef: TemplateRef<any>, automation:any) {
   this.delautomation = automation;
-  this.dialog.open(templateRef);
+  this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
+    this.automationname='';
+    this.automationnote='';
+    this.dialog.closeAll();
+  })
 
 }
 deleteAutomation(id:any){
@@ -104,17 +124,30 @@ deleteAutomation(id:any){
   })
 }
 
+toggleSort(column: string): void {
+  // console.log(column)
+  if (this.filterInp.includes(column)) {
+    this.filterInp = this.filterInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+  } else {
+    this.filterInp = `${column} ASC`;
+  }
+  this.searchAutomations(this.searchInp, this.sortInp, this.filterInp);
+}
+
+
 searchAutomations(search: any, sort: any, filter: any) {
   this.searching=true;
   var obj = {
-    search: search.value,
-    sort: sort.value,
-    filter: filter.value,
+    search: search,
+    sort: sort,
+    filter: filter,
+    pageIndex:this.paginator?.pageIndex ? this.paginator?.pageIndex : 0,
+    pageSize:this.paginator?.pageSize ? this.paginator?.pageSize : 20,
   }
-  // console.log(obj);
+  console.log(obj);
   this._automationgeneralservice.searchautomations(obj).subscribe((data:any)=>{
     // console.log(data.data)
-    this.automations = data.data;
+    this.pageautomations = data.data;
     this.searching=false;
   });
 }
@@ -138,7 +171,7 @@ if (event) {
     this.selectedAutomations.splice(index, 1);
   }
 }
-// console.log(this.selectedContacts)
+console.log(this.selectedAutomations)
 }
 
 selectAllAutomations(event: any) {
@@ -167,5 +200,6 @@ this.pageautomations=this.pageautomations.map((ele:any)=>{ele.selected = false; 
 this.checked_selected=false;
 this.selectedAutomations=[];
 }
+
 }
 

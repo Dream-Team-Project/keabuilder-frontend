@@ -8,32 +8,67 @@
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
-          <p class="card-category">Daily Visit</p>
-          <p class="card-title colr adjustcard">{{dailyvisit}}</p>
+          <!-- <p class="card-category">Daily Visit</p> -->
+          <p class="card-category d-flex justify-content-between align-items-center">
+            <span>Daily Visit </span>
+            <span class="kb-elli-vertical" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Yesterday</button>
+              <button mat-menu-item>2 days ago</button>
+              <button mat-menu-item>3 days ago</button>
+            </mat-menu>
+          </p>
+          <p class="card-title adjustcard kb-colr-blue">{{dailyvisit}}</p>
         </div>
       </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
-          <p class="card-category">Revenue</p>
-          <p class="card-title colr adjustcard">${{totalrevenue}} </p>
+          <p class="card-category d-flex justify-content-between align-items-center">
+            <span>Revenue </span>
+            <span class="kb-elli-vertical" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Yesterday</button>
+              <button mat-menu-item>2 days ago</button>
+              <button mat-menu-item>3 days ago</button>
+            </mat-menu>
+          </p>
+          <p class="card-title adjustcard colr">${{totalrevenue}} </p>
         </div>
       </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
-          <p class="card-category">Contacts</p>
-          <p class="card-title colr adjustcard">{{totalmembers}} </p>
+          <!-- <p class="card-category">Contacts</p> -->
+          <p class="card-category d-flex justify-content-between align-items-center">
+            <span>Contacts </span>
+            <span class="kb-elli-vertical" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Yesterday</button>
+              <button mat-menu-item>2 days ago</button>
+              <button mat-menu-item>3 days ago</button>
+            </mat-menu>
+          </p>
+          <p class="card-title adjustcard kb-colr-green">{{totalmembers}} </p>
         </div>
       </div>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2">
       <div class="card card-stats">
         <div class="card-body ">
-          <p class="card-category">Daily Sales</p>
-          <p class="card-title colr adjustcard">${{dailysales}} </p>
+          <!-- <p class="card-category">Daily Sales</p> -->
+          <p class="card-category d-flex justify-content-between align-items-center">
+            <span>Daily Sales </span>
+            <span class="kb-elli-vertical" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Yesterday</button>
+              <button mat-menu-item>2 days ago</button>
+              <button mat-menu-item>3 days ago</button>
+            </mat-menu>
+          </p>
+          <p class="card-title adjustcard kb-colr-accent">${{dailysales}} </p>
         </div>
       </div>
     </div>
@@ -200,7 +235,6 @@
           <div class="row">
             <div class="col-sm-10">
               <div class="numbers pull-left"><h5>Total Earnings</h5>
-                <!-- <span class="colr"> ${{totalrevenue7day}} </span> -->
               </div>
             </div>
             <div class="col-sm-2">

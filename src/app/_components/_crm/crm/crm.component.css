@@ -78,6 +78,15 @@
     width: 100%;
 }
 
+::ng-deep .kb-table-sort {
+    font-weight: 600;
+    border-bottom: 1px solid var(--primary-color)!important;
+}
+::ng-deep .kb-table-sort:hover{
+    font-weight: 600;
+    cursor: pointer;
+    color:  var(--kb-text-green-600-color)!important;
+}
 
 ::ng-deep .global{
     color: var(--primary-color);

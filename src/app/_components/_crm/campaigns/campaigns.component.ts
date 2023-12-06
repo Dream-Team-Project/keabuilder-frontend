@@ -9,6 +9,7 @@ import { ListService } from 'src/app/_services/_crm/list.service';
 import { CampaignService } from 'src/app/_services/_crm/campaign.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { TagService } from 'src/app/_services/_crm/tag.service';
 
 @Component({
   selector: 'app-crm-campaigns',
@@ -21,11 +22,14 @@ export class CrmCampaignsComponent implements OnInit {
   
   fetching:boolean = true;
   campaignname ='';
+  campaignnote='';
+  campaignobj:any={};
   campaignnameControl = new FormControl('',[Validators.required,Validators.minLength(3)]);
   toggleview = true;
   kbcampaigns:any = [];
   selectedForm:string = '';
   lists: any = [];
+  tags: any = [];
   delcampaign:any;
   error=false;
   errormessage:any;
@@ -33,6 +37,11 @@ export class CrmCampaignsComponent implements OnInit {
   pagecampaigns:any;
   selectedCampaigns: any[] = [];
   checked_selected=false;
+  sortInp : string = 'name DESC';
+  searchInp : string = ''; 
+  sentInp : string = '';
+  listInp : string = '';
+  tagInp : string = '';
   
   constructor(
       private _campaignservice: CampaignService,
@@ -44,6 +53,7 @@ export class CrmCampaignsComponent implements OnInit {
       public _image: ImageService,
       public _general: GeneralService,
       private _file: FileUploadService,
+      private _tagService: TagService,
     ) {
       this.toggleview = _general.getStorage('campaign_toggle');
   }
@@ -52,6 +62,7 @@ export class CrmCampaignsComponent implements OnInit {
     this.getpagecampaigns({pageIndex:0,pageSize:20});
     // this.fetchcampaigns();
     this.fetchLists();
+    this.fetchTags();
   }
 // fetchcampaigns(){
 //   this.fetching=true;
@@ -72,6 +83,12 @@ fetchLists() {
 
 })
 }
+fetchTags() {
+  this._tagService.fetchtags().subscribe(
+    (data) => {
+      this.tags = data.data;
+});
+}
 dateformat(value:any){
     if(value=='') return '';
     var mycustomdate =  new Date(value);
@@ -80,16 +97,17 @@ dateformat(value:any){
     return text1;
     // return text1+' '+text2;
   }
-createcamp(){
+
+  createcamp(){
 
     if(this.campaignnameControl.status=='VALID'){
       if(this.campaignname!=''){
-        var data = {name:this.campaignname};
+        var data = {name:this.campaignname,note:this.campaignnote};
         this._campaignservice.addcampaign(data).subscribe({
           next: data => {
             if(data?.success){
             this.dialog.closeAll();
-            this._snackBar.open('Campaign Created Successfully!', 'OK');
+            this._general.openSnackBar(false,'Campaign created Successfully!', 'OK','center','top');
             this.router.navigate(['/crm/campaign/'+data.uniqueid],{relativeTo: this.route});
             } else{
               this.error=true;
@@ -104,21 +122,39 @@ createcamp(){
     }
 
   }
-openDialog(templateRef: TemplateRef<any>,id:any): void {
-    if(id)  this.delcampaign = id;
+
+  updatecamp(){
+    if(this.campaignnameControl.status=='VALID'){
+    this._campaignservice.updatecampaign(this.campaignobj).subscribe({
+      next: data => {
+          if(data.success==true){
+            this.dialog.closeAll();
+            this._general.openSnackBar(false,'Campaign Updated Successfully!', 'OK','center','top');
+          }
+        }
+        })
+      }
+  }
+
+  openDialog(templateRef: TemplateRef<any>,id:any): void {
+    if(id)  {
+      this.delcampaign = id;
+      this.campaignobj=id;
+    }
     this.dialog.open(templateRef).afterClosed().subscribe((data)=>{
       this.campaignname='';
+      this.campaignobj={};
       this.error=false;
       this.errormessage='';
     })
   } 
-changepagename(dataobj:any, title:any){
-  }
+
   togglepageview(){
     this.toggleview = !this.toggleview; 
     // console.log(this.toggleview);
     this._general.setStorage('campaign_toggle',this.toggleview);
   }
+  
   deletecampaign(campaign:any){
     this._campaignservice.deletecampaign(campaign.id).subscribe((data:any)=>{
       var genscrn = 'keaimage-campaign-'+campaign.uniqueid+'-screenshot.png';
@@ -142,16 +178,28 @@ changepagename(dataobj:any, title:any){
         });
     })
   }
-  searchCampaigns(search: any, sortInp:any, sentInp:any, listInp:any) {
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.sortInp.includes(column)) {
+      this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.sortInp = `${column} ASC`;
+    }
+    this.searchCampaigns(this.searchInp, this.sortInp, this.sentInp, this.listInp, this.tagInp);
+  }
+
+  searchCampaigns(search: any, sortInp:any, sentInp:any, listInp:any, tagInp:any) {
     this.fetching=true;
     var obj = {
-      search: search.value,
-      sortInp: sortInp.value,
-      sentInp: sentInp.value,
-      listInp: listInp.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      search: search,
+      sortInp: sortInp,
+      sentInp: sentInp,
+      listInp: listInp,
+      tagInp: tagInp,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
+    console.log(obj)
     this._campaignservice.searchcampaigns(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);
     });
@@ -237,4 +285,9 @@ resetselecteddata(){
   this.checked_selected=false;
   this.selectedCampaigns=[];
 }
+
+GotoUrl(url:any) {
+  this.router.navigate([url], {relativeTo: this.route,});
+}
+
 } 

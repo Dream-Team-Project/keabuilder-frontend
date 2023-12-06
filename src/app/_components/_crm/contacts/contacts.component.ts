@@ -75,6 +75,11 @@ export class CrmContactsComponent implements OnInit {
   exportname:any;
   selectedContacts: any[] = [];
   checked_selected=false;
+  listInp : string = '';
+  tagInp : string = '';
+  searchInp : string = ''; 
+  sortInp : string = 'firstname DESC';
+
   constructor(
     private _contactService: ContactService,
     private _listService: ListService,
@@ -129,14 +134,24 @@ export class CrmContactsComponent implements OnInit {
     });
   }
 
+  toggleSort(column: string): void {
+    console.log(column)
+    if (this.sortInp.includes(column)) {
+      this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.sortInp = `${column} ASC`;
+    }
+    this.searchContacts(this.searchInp, this.sortInp, this.listInp, this.tagInp);
+  }
+
   searchContacts(search: any, sortInp:any, listInp:any, tagInp:any) {
    
     this.fetching = true;
     var obj = {
-      search: search.value,
-      sortInp: sortInp.value,
-      listInp: listInp.value,
-      tagInp: tagInp.value,
+      search: search,
+      sortInp: sortInp,
+      listInp: listInp,
+      tagInp: tagInp,
       pageIndex:this.paginator.pageIndex,
       pageSize:this.paginator.pageSize,
 

@@ -30,6 +30,10 @@ export class CrmFieldsComponent implements OnInit {
     pagefields:any;
     selectedFields: any[] = [];
     checked_selected=false;
+    filterInp : any = '';
+    searchInp : any = ''; 
+    sortInp : any = 'name DESC';
+
 
   constructor(
     private dialog: MatDialog,
@@ -69,15 +73,23 @@ export class CrmFieldsComponent implements OnInit {
           // console.log(this.lists)
     });
  }
-
+ toggleSort(column: string): void {
+  // console.log(column)
+  if (this.sortInp.includes(column)) {
+    this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+  } else {
+    this.sortInp = `${column} ASC`;
+  }
+  this.searchFields(this.searchInp, this.sortInp, this.filterInp);
+}
   searchFields(search: any, sort: any, filter: any) {
     this.fetching = true;
     var obj = {
-      search: search.value,
-      sort: sort.value,
-      filter: filter.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      search: search,
+      sort: sort,
+      filter: filter,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._field.searchFields(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);

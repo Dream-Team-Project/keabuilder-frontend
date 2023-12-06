@@ -40,6 +40,8 @@ export class CrmListsComponent implements OnInit {
   hasError: string = '';
   selectedLists: any[] = [];
   checked_selected=false;
+  searchInp : any = ''; 
+  filterInp : any = 'name DESC';
 
   constructor(private _listservice: ListService, private dialog: MatDialog, private _general: GeneralService) {
     this.getpagelists({pageIndex:0,pageSize:20}).then((resp1) => {
@@ -129,13 +131,22 @@ export class CrmListsComponent implements OnInit {
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     });
   }
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.filterInp.includes(column)) {
+      this.filterInp = this.filterInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.filterInp = `${column} ASC`;
+    }
+    this.searchLists(this.searchInp, this.filterInp);
+  }
   
   searchLists(search: any, filter: any) {
     var obj = {
-      search: search.value,
-      filter: filter.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      search: search,
+      filter: filter,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._listservice.searchlists(obj).subscribe((data: any) => {
       this.pagelists = data.data;

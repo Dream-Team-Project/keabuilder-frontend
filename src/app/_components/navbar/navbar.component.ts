@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
   logs = false;
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
-  toggleSidebar:boolean = false;
+  toggleSidebar:boolean = true;
 
   ngOnInit(): void {
     var th:any = this;
