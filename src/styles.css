@@ -226,6 +226,77 @@
         --kb-dark: #2e2e2e; 
         --kb-white: #fff;
         --kb-black: #000;
+       
+        --kb-text-accent-color : rgb(249, 115, 22) !important;
+--kb-text-accent-300-color : rgb(255, 202, 125) !important;
+--kb-text-accent-600-color : rgb(255, 160, 2) !important;
+--kb-text-accent-800-color : rgb(255, 129, 0) !important;
+--kb-text-accent-900-color: rgb(245, 101, 0) !important;
+--kb-text-amber-500-color: rgb(245, 158, 11) !important;
+--kb-text-amber-600-color: rgb(217, 119, 6) !important;
+--kb-text-amber-800-color: rgb(146, 64, 14) !important;
+--kb-text-black-color: rgb(0, 0, 0) !important;
+--kb-text-blue-50-color: rgb(239, 246, 255) !important;
+--kb-text-blue-500-color: rgb(59, 130, 246) !important;
+--kb-text-blue-600-color: rgb(37, 99, 235) !important;
+--kb-text-blue-800-color: rgb(30, 64, 175) !important;
+--kb-text-gray-100-color: rgb(241, 245, 249) !important;
+--kb-text-gray-200-color: rgb(226, 232, 240) !important;
+--kb-text-gray-400-color: rgb(148, 163, 184) !important;
+--kb-text-gray-50-color: rgb(248, 250, 252) !important;
+--kb-text-gray-500-color: rgb(100, 116, 139) !important;
+--kb-text-gray-600-color: rgb(71, 85, 105) !important;
+--kb-text-gray-700-color: rgb(51, 65, 85) !important;
+--kb-text-gray-800-color: rgb(30, 41, 59) !important;
+--kb-text-gray-900-color: rgb(15, 23, 42) !important;
+--kb-text-green-400-color: rgb(74, 222, 128) !important;
+--kb-text-green-50-color: rgb(240, 253, 244) !important;
+--kb-text-green-500-color: rgb(34, 197, 94) !important;
+--kb-text-green-600-color: rgb(22, 163, 74) !important;
+--kb-text-green-700-color: rgb(21, 128, 61) !important;
+--kb-text-green-800-color: rgb(22, 101, 52) !important;
+--kb-text-indigo-50-color: rgb(238, 242, 255) !important;
+--kb-text-indigo-500-color: rgb(99, 102, 241) !important;
+--kb-text-indigo-800-color: rgb(55, 48, 163) !important;
+--kb-text-on-accent-color: rgb(255, 255, 255) !important;
+--kb-text-on-accent-300-color: rgb(255, 255, 255) !important;
+--kb-text-on-primary-color: rgb(255, 255, 255) !important;
+--kb-text-on-primary-100-color: rgb(255, 255, 255) !important;
+--kb-text-on-primary-200-color: rgb(255, 255, 255) !important;
+--kb-text-on-primary-600-color: rgb(255, 255, 255) !important;
+--kb-text-on-warn-color: rgb(255, 255, 255) !important;
+--kb-text-on-warn-400-color: rgb(255, 255, 255) !important;
+--kb-text-on-warn-500-color: rgb(255, 255, 255) !important;
+--kb-text-on-warn-800-color: rgb(255, 255, 255) !important;
+--kb-text-orange-500-color: rgb(249, 115, 22) !important;
+--kb-text-orange-800-color: rgb(154, 52, 18) !important;
+--kb-text-pink-500-color: rgb(236, 72, 153) !important;
+--kb-text-pink-800-color: rgb(157, 23, 77) !important;
+--kb-text-primary-color: rgb(33, 150, 243) !important;
+--kb-text-primary-300-color: rgb(100, 181, 246) !important;
+--kb-text-primary-400-color: rgb(66, 153, 225) !important;
+--kb-text-primary-500-color: rgb(33, 150, 243) !important;
+--kb-text-primary-600-color: rgb(30, 136, 229) !important;
+--kb-text-primary-700-color: rgb(25, 118, 210) !important;
+--kb-text-primary-800-color: rgb(21, 101, 192) !important;
+--kb-text-purple-500-color: rgb(168, 85, 247) !important;
+--kb-text-purple-800-color: rgb(107, 33, 168) !important;
+--kb-text-red-400-color: rgb(248, 113, 113) !important;
+--kb-text-red-50-color: rgb(254, 242, 242) !important;
+--kb-text-red-500-color: rgb(239, 68, 68) !important;
+--kb-text-red-600-color: rgb(220, 38, 38) !important;
+--kb-text-red-800-color: rgb(153, 27, 27) !important;
+--kb-text-teal-500-color: rgb(20, 184, 166) !important;
+--kb-text-teal-800-color: rgb(17, 94, 89) !important;
+--kb-text-warn-color: rgb(255, 87, 34) !important;
+--kb-text-warn-600-color: rgb(255, 87, 34) !important;
+--kb-text-warn-800-color: rgb(255, 87, 34) !important;
+--kb-text-white-color: rgb(255, 255, 255) !important;
+--kb-text-yellow-500-color: rgb(234, 179, 8) !important;
+
+
+
+
     
     /* builder root */
       }

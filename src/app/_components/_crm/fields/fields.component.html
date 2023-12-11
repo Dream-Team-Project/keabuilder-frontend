@@ -58,6 +58,10 @@
                 <input matInput type="text" placeholder="default value" [(ngModel)]="selField.value">
             </ng-template>
         </mat-form-field>
+        <mat-form-field class="kb-full-width mb-2" appearance="fill">
+            <mat-label>Add Note</mat-label>
+            <textarea type="text" matInput name="fieldnote" [(ngModel)]="selField.note"></textarea>
+        </mat-form-field>
         <div cdkDropList
         [cdkDropListData]="selField.options" (cdkDropListDropped)="itemDropped($event)">
             <span *ngFor="let option of selField.options, index as i">
@@ -90,12 +94,12 @@
     <div class="container-fluid">
         <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
         <div class="row">
-            <mat-form-field appearance="fill" class="col-md-5">
+            <mat-form-field appearance="fill" class="col-md-7">
                 <mat-label>Search Fields</mat-label>
-                <input matInput #searchInp (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Field Name">
+                <input matInput  [(ngModel)]="searchInp" (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Field Name">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </mat-form-field>
-            <mat-form-field appearance="fill" class="col-md-2">
+            <!-- <mat-form-field appearance="fill" class="col-md-2">
                 <mat-label>Sort By</mat-label>
                 <mat-select #sortInp name="kbfilter" value='created_at ASC' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
                     <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -105,10 +109,10 @@
                     <mat-option [value]="'label ASC'">ASC By Label</mat-option>
                     <mat-option [value]="'label DESC'">DESC By Label</mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
             <mat-form-field appearance="fill" class="col-md-2">
                 <mat-label>Filter By Name</mat-label>
-                <mat-select #filterInp name="kbfilter" value='' (valueChange)="searchFields(searchInp, sortInp, filterInp)">
+                <mat-select [(ngModel)]="filterInp" name="kbfilter"  (ngModelChange)="searchFields(searchInp, sortInp, filterInp)">
                     <mat-option value="" selected><i class="fas fa-bars mr-1"></i> All</mat-option>
                     <mat-option *ngFor="let ft of fieldTypes" [value]="ft.type">
                         <span class="mr-1" [innerHTML]="ft.icon | safeHtml"></span>
@@ -134,9 +138,10 @@
                     <thead>
                         <tr>
                             <th><span class="align-items-center"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllFields($event)" matTooltip="Select All Page Fields" matTooltipPosition="above"></mat-checkbox></span></th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Field Tag</th>
+                            <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'name DESC'"></i></th>
+                            <th class="kb-table-sort" (click)="toggleSort('type')">Type <i class="fa-solid fa-up-long" *ngIf="sortInp == 'type ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'type DESC'"></i></th>
+                            <th class="kb-table-sort" (click)="toggleSort('field_tag')">Field Tag <i class="fa-solid fa-up-long" *ngIf="sortInp == 'field_tag ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'field_tag DESC'"></i></th>
+                            <th class="kb-table-sort" (click)="toggleSort('note')">Note <i class="fa-solid fa-up-long" *ngIf="sortInp == 'note ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'note DESC'"></i></th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -146,6 +151,7 @@
                             <td (click)="editdialog.click()" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
                             <td class="kb-text-overflow">{{ff?.name.replaceAll('-', ' ')}}</td>
                             <td class="kb-text-overflow">{{ff?.field_tag | uppercase}}</td>
+                            <td class="kb-text-overflow ftsize">{{ ff.note ? ff.note : "--" }}</td>
                             <td>
                                 <span class="d-flex"> 
                                     <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>

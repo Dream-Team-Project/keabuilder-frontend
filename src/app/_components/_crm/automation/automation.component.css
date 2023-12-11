@@ -307,6 +307,10 @@
   color: var(--primary-color);
   margin: 8px;
   }
+  
   .ftsize{
-    font-size: 20px;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }

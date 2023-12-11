@@ -186,8 +186,8 @@ export class CrmEmailsComponent implements OnInit {
     var obj = {
       search: search.value,
       filter: filter.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._email.searchemails(obj).subscribe((resp:any)=>{
       this.adjustdata(resp.data);

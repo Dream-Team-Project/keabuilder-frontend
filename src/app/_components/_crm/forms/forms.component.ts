@@ -56,6 +56,8 @@ export class CrmFormsComponent implements OnInit {
   pageforms:any;
   selectedForms: any[] = [];
   checked_selected=false;
+  searchInp : any = ''; 
+  filterInp : any = 'name DESC';
   
 
   constructor(private _file: FileUploadService,
@@ -140,8 +142,9 @@ export class CrmFormsComponent implements OnInit {
   rename(data:any, inp:any){
     var newname = inp.value;
     if(data.name !== newname) {
-      if(newname.length>3){
-        data.name = newname;
+      if(newname.length > 3){
+        if(inp.value == 'remarks') data.remarks =newname 
+        else data.name = newname;
         this._file.updateform(data).subscribe({
           next: data => {
             var msg, err = data.success==0;
@@ -235,26 +238,38 @@ export class CrmFormsComponent implements OnInit {
     });
   }
 
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.filterInp.includes(column)) {
+      this.filterInp = this.filterInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.filterInp = `${column} ASC`;
+    }
+    this.searchForms(this.searchInp, this.filterInp);
+  }
+
   searchForms(search: any, filter: any) {
     this.fetching = true;
     var obj = {
-      search: search.value,
-      filter: filter.value,
-      pageIndex:this.paginator.pageIndex,
-      pageSize:this.paginator.pageSize,
+      search: search,
+      filter: filter,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
+    console.log(obj)
     this._file.searchformquery(obj).subscribe((resp:any)=>{
-      this.adjustdata(resp.data);
+      if(resp.success) this.adjustdata(resp?.data);
+      else  this.getpageforms({pageIndex:0,pageSize:20});
+      this.fetching = false;
     });
+   
   }
 
   adjustdata(data:any){
     this.fetching = false;
-    // this.forms = [];
     this.pageforms=[];
     this.nodata = data.length == 0;
     this.pageforms=data
-    // this.forms = data;
   }
 
   toggleView() {

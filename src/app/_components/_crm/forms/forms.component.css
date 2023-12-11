@@ -208,8 +208,8 @@
     background-position: center bottom;
 }
 .ftsize{
-  font-weight: 500;
-  font-size: 20px;
+  /* font-weight: 500;
+  font-size: 20px; */
   max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;

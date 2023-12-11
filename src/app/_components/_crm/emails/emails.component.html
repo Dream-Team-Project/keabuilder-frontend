@@ -166,6 +166,7 @@
           <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
             <div class="row align-items-center p-0 h-100">
               <div [class.p-0]="!toggleview" class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center">
                 <div class="kb-title-board line-ellipsis ftsize ">
                   <span >{{ email.name ? email.name : ("email" | titlecase) }}</span>
                   <input
@@ -177,6 +178,7 @@
                     matTooltipPosition="above"
                   />
                 </div>
+                <span class="align-items-center fnt mt-2" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="email.selected" (ngModelChange)="selectEmails($event, email)"></mat-checkbox></span></div>
                 <p
                   class="kb-pagedate mt-2 mb-3"
                   matTooltip="Last Updated"
@@ -187,7 +189,7 @@
                 </p>
               </div>
               <div [class.p-0]="!toggleview" class="col-md-12 text-right">
-                <span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="email.selected" (ngModelChange)="selectEmails($event, email)"></mat-checkbox></span>
+                
                 <!-- <button
                   (click)="
                     _general.redirectLink(

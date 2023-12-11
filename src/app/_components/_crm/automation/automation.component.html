@@ -40,6 +40,10 @@
               Name must be at least <strong>3</strong> characters
           </mat-error>
       </mat-form-field>
+      <mat-form-field class="kb-full-width mb-2" appearance="fill">
+        <mat-label>Add Note</mat-label>
+        <textarea type="text" matInput name="campaignnote" [(ngModel)]="automationnote"></textarea>
+    </mat-form-field>
     </div>
     <div mat-dialog-actions class="justify-content-end">
         <button mat-button mat-dialog-close class="text-danger">Close</button>
@@ -48,23 +52,48 @@
         [disabled]="automationnameControl.invalid">Create</button>
     </div>
   </ng-template>
+  <ng-template #updatedialog>
+    <h1 mat-dialog-title class="txt">Update Automation</h1>
+    <div mat-dialog-content>
+        <mat-form-field class="kb-full-width mb-2" appearance="fill">
+          <mat-label>Automation Name</mat-label>
+          <input type="text" matInput name="automationname" [(ngModel)]="delautomation.name" [formControl]="automationnameControl" required minlength="3" >
+          <mat-error *ngIf="automationnameControl.hasError('required')">
+              Automation Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="automationnameControl.hasError('minlength')">
+              Name must be at least <strong>3</strong> characters
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field class="kb-full-width mb-2" appearance="fill">
+        <mat-label>Add Note</mat-label>
+        <textarea type="text" matInput name="automationnote" [(ngModel)]="delautomation.note"></textarea>
+    </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close class="text-danger">Close</button>
+        <button mat-button mat-dialog-close (click)="updateautomation()" 
+        [color]="!automationnameControl.invalid ? 'primary' : ''"  
+        [disabled]="automationnameControl.invalid">Update</button>
+    </div>
+  </ng-template>
     <div class="container-fluid ">
       <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field class= "col-md-4" appearance="fill">
+        <mat-form-field class= "col-md-7" appearance="fill">
           <mat-label>Search Automations...</mat-label>
           <input
           matInput 
             type="text"
             class=""
             id="offer-search"
-            #searchInp 
+            [(ngModel)]="searchInp"
             (input)="searchAutomations(searchInp, sortInp, filterInp)"
             placeholder="Search Automations..."
           />
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field class="col-md-2 " appearance="fill">
+        <!-- <mat-form-field class="col-md-2 " appearance="fill">
           <mat-label>Status :</mat-label>
           <mat-select #sortInp name="kbfilter" value='' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
             <mat-option value="" selected>All</mat-option>
@@ -82,14 +111,14 @@
             <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
             <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
         </mat-select>
-        </mat-form-field>
-        <div class="col-md-4 text-right mt-2">
-          <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllAutomations($event)" matTooltip="Select All Page Automations" matTooltipPosition="above"></mat-checkbox></span>
+        </mat-form-field> -->
+        <div class="col-md-5 text-right mt-2">
+          <!-- <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllAutomations($event)" matTooltip="Select All Page Automations" matTooltipPosition="above"></mat-checkbox></span>
           <button mat-raised-button [color]="'accent'"
             (click)="toggleView()" class="mr-2">
             <span *ngIf="togglebutton==false">List View <i class="fas fa-th-list ml-1"></i></span>
              <span *ngIf="togglebutton==true">Grid View <i class="fas fa-th ml-1"></i></span>
-          </button>
+          </button> -->
           <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
             <i class="fa fa-random" aria-hidden="true"></i> Create Automation
           </button>
@@ -102,7 +131,59 @@
           </div>
         </div>
       </div>
-        <div class="row" *ngIf="togglebutton; else gridview">
+      <div class="row" *ngIf="pageautomations?.length != 0; else nodata">
+        <div class="col-12">
+          <table class="table kb-table" dataSource="automations">
+            <thead>
+              <tr>
+                <th>
+                  <mat-checkbox [(ngModel)]="checked_selected" (ngModelChange)="selectAllAutomations($event)" matTooltip="Select All Page Automations" matTooltipPosition="above"></mat-checkbox>
+                </th>
+                <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="filterInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'name DESC'"></i></th>
+                <th class="kb-table-sort" (click)="toggleSort('publish_status')">Status <i class="fa-solid fa-up-long" *ngIf="filterInp == 'publish_status ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'publish_status DESC'"></i></th>
+                <th class="kb-table-sort" (click)="toggleSort('created_at')">Created On <i class="fa-solid fa-up-long" *ngIf="filterInp == 'created_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'created_at DESC'"></i></th>
+                <th class="kb-table-sort" (click)="toggleSort('updated_at')">Modified On <i class="fa-solid fa-up-long" *ngIf="filterInp == 'updated_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'updated_at DESC'"></i></th>
+                <th class="kb-table-sort" (click)="toggleSort('note')">Note <i class="fa-solid fa-up-long" *ngIf="filterInp == 'note ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'note DESC'"></i></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let automation of pageautomations; index as i">
+               <td><mat-checkbox class="align-items-center" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></td>
+                <td (click)="_general.redirectToBuilder(automation.uniqueid, 'automation')" class="kb-td-link ftsize">{{automation.name}}</td>
+                <td [class]="automation.publish_status == '1' ? 'text-success' : 'text-danger' ">{{automation.publish_status == '1' ? 'Active' : 'Inactive'}}</td>
+                <td>{{automation.created_at | date:'medium'}}</td>
+                <td>{{automation.updated_at | date:'medium'}}</td>
+                <td class="ftsize">{{automation?.note || '--' | titlecase}}</td>
+                <td>
+                  <span class="d-flex">
+                    <i  mat-ripple matTooltip="Quik Edit" matTooltipPosition="above"  class="fa-regular fa-pen-to-square kb-table-action-icon" (click)="openDialog(updatedialog,automation)"></i>
+                    <i  mat-ripple matTooltip="Edit" matTooltipPosition="above"  class="fa fa-pencil px-4 kb-table-action-icon" (click)="_general.redirectToBuilder(automation.uniqueid, 'automation')"></i>
+                    <i mat-ripple matTooltip="Duplicate" matTooltipPosition="above" class="far fa-copy px-4 kb-table-action-icon" (click)="copyAutomation(automation)"></i>
+                    <i mat-ripple matTooltip="Delete" matTooltipPosition="above" class="fa fa-trash-alt px-4 kb-table-action-icon kb-icon-del" (click)="openDialog(deldialog, automation)"></i>
+                  </span>
+                </td>                        
+              </tr>
+              
+            </tbody>
+          </table>
+          <mat-paginator  #paginator [length]="automationslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageautomations($event)"></mat-paginator>
+        </div>
+        
+      </div>
+    </div>
+    <ng-template #nodata>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-4">
+          <img
+            src="/assets/images/website/website-empty.png"
+            class="img-fluid"
+            alt="No Automation Found"
+          />
+        </div>
+      </div>
+    </ng-template>
+        <!-- <div class="row" *ngIf="togglebutton; else gridview">
           
             <table class="table border border-1">
               <thead>
@@ -161,17 +242,17 @@
                       </div>
                     </div>
                   </td>
-                  <!-- <td class="text-center">
+                  <td class="text-center">
                     <span class="automationitem">{{
                       automation.automation_campaigns
                     }}</span>
-                  </td> -->
+                  </td>
                   <td class="text-center">
                     <span class="tdtype">{{ automation.mail }}</span>
                   </td>
-                  <!-- <td class="text-center">
+                  <td class="text-center">
                     <span class="tdtype">{{ automation.quick_status }}</span>
-                  </td> -->
+                  </td>
                   <td class="text-center">
                     <span>{{ automation.created_at | date : "mediumDate" }}</span
                     ><br />
@@ -201,14 +282,14 @@
                         <mat-icon> <i class="far fa-copy pr-2"></i></mat-icon>
                         <span>Duplicate</span>
                       </button>
-                      <!-- <button mat-menu-item>
+                      <button mat-menu-item>
                             <mat-icon><i class="fas fa-save pr-2"></i></mat-icon>
                             <span>Save as a template</span>
                           </button>
                           <button mat-menu-item>
                             <mat-icon> <i class="fas fa-link pr-2"></i></mat-icon>
                             <span>Copy URL</span>
-                          </button> -->
+                          </button>
                       <button
                         mat-menu-item
                         class="text-danger"
@@ -222,10 +303,8 @@
                 </tr>
               </tbody>
             </table>
-        </div>
-          <mat-paginator  #paginator [length]="automationslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageautomations($event)"></mat-paginator>
-        </div>
-    <ng-template #gridview >
+        </div> -->
+    <!-- <ng-template #gridview >
       <div class="row w-100">
         <div
           class="col-md-4 cardpage mt-5 mb-5 loadEffect"
@@ -278,7 +357,7 @@
             <div class="statbadg1" matTooltip="Status" matTooltipPosition="above">
               <span class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></span>
             </div>
-            <!-- <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
+            <div class="statbadg" matTooltip="Status" matTooltipPosition="above">
               <span
                 mat-button
                 [matMenuTriggerFor]="menu"
@@ -328,7 +407,7 @@
                   <i class="fa fa-file pr-2"></i> Inactive
                 </button>
               </mat-menu>
-            </div> -->
+            </div>
             <div
               class="kb-pagedate d-flex justify-content-around border border-1"
             >
@@ -380,6 +459,6 @@
           </div>
         </div>
       </div>
-    </ng-template>
+    </ng-template> -->
   
   

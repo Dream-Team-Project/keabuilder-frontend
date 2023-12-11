@@ -39,6 +39,11 @@ export class CrmReportsComponent implements OnInit {
   public chartCampaignOptions: Partial<ChartOptions> | any;
 
   currentDate:any = '';
+  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  report_type:any='last_week';
+  report_campaign:any='last_week';
+  report_month:any;
+  campaign_month:any;
   contact:any = {
     recents: [],
     monthly: [],
@@ -91,6 +96,16 @@ export class CrmReportsComponent implements OnInit {
   }
 
   fetchDateReportContacts() {
+    if(this.report_type == 'last_week') {
+      this.contact.date.to = new Date();
+      this.contact.date.from = new Date();
+      this.contact.date.from.setDate(this.currentDate.getDate() - 7);
+    }
+    if(this.report_type == 'monthly') {
+      this.contact.date.from = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month), 1);
+      const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month) + 1, 0).getDate();
+      this.contact.date.to = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month), lastDayOfMonth);
+    }
     this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
       if(resp.success) {
         this.contact.monthly = resp.data;
@@ -110,14 +125,14 @@ export class CrmReportsComponent implements OnInit {
         },
       ],
       chart: {
-        type: "area",
+        type: "bar",
         height: 350
       },
       plotOptions: {
         stroke: {
           curve: 'smooth',
         },
-        colors:'#dea641',
+        colors:'rgb(100, 116, 139)',
       },
       dataLabels: {
         enabled: false
@@ -125,7 +140,8 @@ export class CrmReportsComponent implements OnInit {
       stroke: {
         show: true,
         width: 2,
-        colors: ['#dea641']
+        colors: ['rgb(100, 116, 139)']
+        // colors: ['#dea641']
       },
       xaxis: {
         categories: this.contact.chartData.x
@@ -138,7 +154,7 @@ export class CrmReportsComponent implements OnInit {
       },
       fill: {
         opacity: 1,
-        colors:'#dea641',
+        colors:'rgb(226, 232, 240)',
       },
       tooltip: {
         y: {
@@ -162,6 +178,16 @@ export class CrmReportsComponent implements OnInit {
   }
 
   fetchDateReportCampaigns() {
+    if(this.report_campaign == 'last_week') {
+      this.campaign.date.to = new Date();
+      this.campaign.date.from = new Date();
+      this.campaign.date.from.setDate(this.currentDate.getDate() - 7);
+    }
+    if(this.report_campaign == 'monthly') {
+      this.campaign.date.from = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.campaign_month), 1);
+      const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.campaign_month) + 1, 0).getDate();
+      this.campaign.date.to = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.campaign_month), lastDayOfMonth);
+    }
     this._reportingService.datefilterCampaigns(this.campaign.date.from, this.campaign.date.to).subscribe((resp:any)=>{
       if(resp.success) {
         this.campaign.monthly = resp.data;
@@ -230,5 +256,17 @@ export class CrmReportsComponent implements OnInit {
     var str = contact.firstname?.charAt(0) + contact.lastname?.charAt(0);
     if(str.length != 2) str = fullname ? fullname.slice(0, 2) : contact.email.slice(0, 2);
     return str.toUpperCase();
+  }
+
+  reporttypechange(event:any){
+    // console.log(event);
+    this.report_type=event;
+    if(event == 'last_week') this.fetchDateReportContacts();
+  }
+  
+  reporttypechange1(event:any){
+    // console.log(event);
+    this.report_campaign=event;
+    if(event == 'last_week') this.fetchDateReportCampaigns();
   }
 }

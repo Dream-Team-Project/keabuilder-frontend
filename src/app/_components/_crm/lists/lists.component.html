@@ -73,13 +73,13 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
-    <mat-form-field class="col-md-6" appearance="fill">
+    <mat-form-field class="col-md-8" appearance="fill">
       <mat-label>Search Lists</mat-label>
-      <input matInput type="text" #searchInp (input)="searchLists(searchInp, filterInp)" class="form-control-search"
+      <input matInput type="text"  [(ngModel)]="searchInp" (input)="searchLists(searchInp, filterInp)" class="form-control-search"
         id="offer-search" placeholder="Search Lists" />
       <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
-    <mat-form-field class="col-md-2" appearance="fill">
+    <!-- <mat-form-field class="col-md-2" appearance="fill">
       <mat-label>Filter by:</mat-label>
       <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchLists(searchInp, filterInp)">
         <mat-option [value]="'name ASC'">ASC By Name</mat-option>
@@ -89,7 +89,7 @@
         <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
         <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
     <div class="col-md-4 text-right mt-2">
       <button mat-raised-button (click)="openDialog(adddialog, listObj)" color="primary" class="mr-2">Add List <i
           class="fas fa-plus"></i>
@@ -103,7 +103,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="pagelists?.length != 0; else nodata">
     <div class="col-12">
       <table class="table kb-table">
         <thead>
@@ -111,9 +111,9 @@
             <th>
               <mat-checkbox [(ngModel)]="checked_selected" (ngModelChange)="selectAllLists($event)" matTooltip="Select All Page Lists" matTooltipPosition="above"></mat-checkbox>
             </th>
-            <th>Name</th>
+            <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="filterInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'name DESC'"></i></th>
             <th>Contacts</th>
-            <th>Created</th>
+            <th class="kb-table-sort" (click)="toggleSort('created_at')">Created On <i class="fa-solid fa-up-long" *ngIf="filterInp == 'created_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="filterInp == 'created_at DESC'"></i></th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -143,3 +143,14 @@
     </div>
   </div>
 </div>
+<ng-template #nodata>
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+      <img
+        src="/assets/images/website/website-empty.png"
+        class="img-fluid"
+        alt="No Lists Found"
+      />
+    </div>
+  </div>
+</ng-template>
