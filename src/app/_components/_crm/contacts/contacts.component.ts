@@ -358,11 +358,16 @@ uploadcontacts(){
   const reader = new FileReader();
   reader.onload = e => {reader.result}
   reader.readAsDataURL(this.document);
-  this.file.uploadcontactsDocument(this.document,this.uuid).subscribe((file:any)=>{
+  this.file.uploadcontactsDocument(this.document, this.uuid).subscribe((file:any)=>{
     if(file){
       this.listid= this.filteredTempIds.lists?.length > 0 ? this.filteredTempIds.lists?.toString() : '';
       this.tagid= this.filteredTempIds.tags?.length > 0 ? this.filteredTempIds.tags?.toString() : '';
-      this._contactService.uploadcontacts({file:file,listid:this.listid,tagid:this.tagid}).subscribe((data:any)=>{
+      let data = {
+        file: file,
+        listid: this.listid,
+        tagid: this.tagid
+      }
+      this._contactService.uploadcontacts(data).subscribe((data:any)=>{
         if(data.success){
           this.spinner=false;
           this.dialog.closeAll();
