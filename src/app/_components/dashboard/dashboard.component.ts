@@ -59,8 +59,10 @@ export class DashboardComponent implements OnInit {
   username = '';
   hidefornow = false;
   totalrevenue: any = 0;
+  revenuelimit:any='1';
   totalrevenue7day: any = 0;
   totalmembers: any = 0;
+  contactlimit:any='1';
   data1: any = [];
   data1date: any = [];
   data2: any = [];
@@ -68,8 +70,10 @@ export class DashboardComponent implements OnInit {
   totalcontact7day = 0;
   recentsales:any = [];
   dailysales:any = 0;
+  saleslimit:any='1';
   randomwelcome = "";
   dailyvisit:any = 0;
+  visitlimit:any='1';
   // contact reporting
   contact:any = {
     recents: [],
@@ -609,7 +613,7 @@ export class DashboardComponent implements OnInit {
 
     this.allrevenue();
     this.allcontact();
-
+    this.dailySales();
     // last week revenue
     var datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
@@ -736,20 +740,7 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    // daliy sales activity
-    this.dashboardService.dailysales().subscribe({
-      next: (data) => {
-        // console.log(data);
-
-        if (data.data.length != 0) {
-
-          if(data.data[0].total_sales_amount!=null){
-            this.dailysales = data.data[0].total_sales_amount;
-          }
-        }
-
-      },
-    });
+   
 
     // total earning activity
     this.totalearn();
@@ -817,7 +808,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
-        console.log(data);
+        // console.log(data);
 
         var dt = data.data;
         if(dt?.length>0){
@@ -971,16 +962,21 @@ export class DashboardComponent implements OnInit {
   }
 
   allrevenue(){
-
-    this.dashboardService.getAllrevenue().subscribe({
+    this.dashboardService.getAllrevenue(this.revenuelimit).subscribe({
       next: (data) => {
         // console.log(data);
         if (data.data.length != 0) {
-          data.data.forEach((element: any) => {
+          data.data.forEach((element : any) => {
             if(element.total_sales_amount!=null){
-              this.totalrevenue += parseFloat(element.total_sales_amount);
+              this.totalrevenue = parseFloat(element.total_sales_amount);
+            }
+            else{
+              this.totalrevenue=0;
             }
           });
+        }
+        else{
+          this.totalrevenue=0;
         }
       },
     });
@@ -989,11 +985,14 @@ export class DashboardComponent implements OnInit {
 
   allcontact(){
 
-    this.dashboardService.getAllcontact().subscribe({
+    this.dashboardService.getAllcontact(this.contactlimit).subscribe({
       next: (data) => {
         // console.log(data);
-        if (data.data.length != 0) {
+        if (data.data.length != 0 && data.data.length != null) {
           this.totalmembers = data.data[0]['count(*)'];
+        }
+        else{
+          this.totalmembers =0;
         }
       },
     });
@@ -1026,17 +1025,62 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  triggerFunction(event:any,type:any) {
+  if(type== 'visit') {
+    this.visitlimit=event.target.value;
+    this.dashboardheat();
+  }
+  else if( type== 'revenue') {
+    this.revenuelimit=event.target.value;
+    this.allrevenue();
+  }
+  else if( type== 'contacts') {
+    this.contactlimit=event.target.value;
+    this.allcontact();
+  }
+  else if( type== 'sales') {
+    this.saleslimit=event.target.value;
+    this.dailySales();
+  }
+  }
+
   dashboardheat(){
-    this.dashboardService.getdashboardheat().subscribe({
+    this.dashboardService.getdashboardheat(this.visitlimit).subscribe({
       next: (data) => {
         // console.log(data);
 
         if(data.data?.length>0){
           this.dailyvisit = data.data[0].daily_visits;
         }
+        else{
+          this.dailyvisit=0;
+        }
 
       },
     });
+  }
+
+  dailySales(){
+ // daliy sales activity
+ this.dashboardService.dailysales(this.saleslimit).subscribe({
+  next: (data) => {
+    // console.log(data);
+
+    if (data.data.length != 0) {
+
+      if(data.data[0].total_sales_amount!=null){
+        this.dailysales = data.data[0].total_sales_amount;
+      }
+      else{
+        this.dailysales=0;
+      }
+    }
+    else{
+      this.dailysales=0;
+    }
+
+  },
+});
   }
 
   randomwelm(){

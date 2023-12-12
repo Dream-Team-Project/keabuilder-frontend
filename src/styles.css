@@ -757,6 +757,22 @@ main.kb-main-container .box {
 .cdk-overlay-container .cdk-drag-handle {
   cursor: all-scroll;
 }
+.kb-custom-icon {
+  cursor: pointer;
+  line-height: inherit;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  margin: 0 2px;
+  transition: 0.2s ease;
+}
+.kb-custom-icon:hover {
+  color: var(--primary-color);
+  background-color: rgb(216 200 152 / 20%);
+}
 
 .custom-preview {
   font-size: 14px;
@@ -912,6 +928,7 @@ main.kb-main-container .box {
   text-transform: capitalize;
   line-height: normal;
 }
+
 
 .kb-small {
   font-size: 12px;

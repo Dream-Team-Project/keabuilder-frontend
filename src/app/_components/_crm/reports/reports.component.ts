@@ -47,6 +47,11 @@ export class CrmReportsComponent implements OnInit {
   contact:any = {
     recents: [],
     monthly: [],
+    contacts:'0',
+    new_contacts:'0',
+    lists:'0',
+    tags:'0',
+    forms:'0',
     limit: 8,
     chartData: {
       x: [],
@@ -61,6 +66,11 @@ export class CrmReportsComponent implements OnInit {
   campaign:any = {
     recents: [],
     monthly: [],
+    campaigns:'0',
+    drafts:'0',
+    sent:'0',
+    active:'0',
+    recurring:'0',
     limit: 8,
     chartData: {
       x: [],
@@ -107,63 +117,131 @@ export class CrmReportsComponent implements OnInit {
       this.contact.date.to = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month), lastDayOfMonth);
     }
     this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
+      
       if(resp.success) {
-        this.contact.monthly = resp.data;
-        this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
-        this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
+        this.contact.monthly = resp?.data || [];
+        this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date) || [];
+        this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString()) || [];
+        this.contact.contacts = resp?.data[0]?.contacts || '0';
+        this.contact.tags = resp?.data[0]?.tags || '0';
+        this.contact.lists = resp?.data[0]?.lists || '0';
+        this.contact.forms = resp?.data[0]?.forms || '0';
+        this.contact.new_contacts = resp?.data[0]?.new_contacts || '0';
         this.contactChartOption();
       }
     })
   }
 
   contactChartOption() {
+    // this.chartContactOptions = {
+    //   series: [
+    //     {
+    //       name: "Contacts",
+    //       data: this.contact.chartData.y,
+    //     },
+    //   ],
+    //   chart: {
+    //     type: "bar",
+    //     height: 350
+    //   },
+    //   plotOptions: {
+    //     stroke: {
+    //       curve: 'smooth',
+    //     },
+    //     colors:'rgb(100, 116, 139)',
+    //   },
+    //   dataLabels: {
+    //     enabled: false
+    //   },
+    //   stroke: {
+    //     show: true,
+    //     width: 2,
+    //     colors: ['rgb(100, 116, 139)']
+    //     // colors: ['#dea641']
+    //   },
+    //   xaxis: {
+    //     categories: this.contact.chartData.x
+    //   },
+    //   yaxis: {
+    //     title: {
+    //       text: "",
+    //     },
+    //     decimal: 0
+    //   },
+    //   fill: {
+    //     opacity: 1,
+    //     colors:'rgb(226, 232, 240)',
+    //   },
+    //   tooltip: {
+    //     y: {
+    //       formatter: function(value: string) {
+    //         return value;
+    //       },
+    //     },
+    //   }
+    // };
     this.chartContactOptions = {
-      series: [
-        {
-          name: "Contacts",
-          data: this.contact.chartData.y,
-        },
-      ],
-      chart: {
-        type: "bar",
-        height: 350
-      },
-      plotOptions: {
-        stroke: {
-          curve: 'smooth',
-        },
-        colors:'rgb(100, 116, 139)',
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['rgb(100, 116, 139)']
-        // colors: ['#dea641']
-      },
-      xaxis: {
-        categories: this.contact.chartData.x
-      },
-      yaxis: {
-        title: {
-          text: "",
-        },
-        decimal: 0
-      },
-      fill: {
-        opacity: 1,
-        colors:'rgb(226, 232, 240)',
-      },
-      tooltip: {
-        y: {
-          formatter: function(value: string) {
-            return value;
-          },
-        },
+    series: [
+      {
+        name: "Contacts",
+        data: this.contact.chartData.y,
       }
-    };
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+      dropShadow: {
+        enabled: true,
+        color: "#000",
+        top: 18,
+        left: 7,
+        blur: 10,
+        opacity: 0.2
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    colors: ["#77B6EA", "#545454"],
+    dataLabels: {
+      enabled: true
+    },
+    stroke: {
+      curve: "smooth"
+    },
+    title: {
+      text: "Contacts",
+      align: "left"
+    },
+    grid: {
+      borderColor: "#e7e7e7",
+      // row: {
+      //   colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+      //   opacity: 0.5
+      // }
+    },
+    markers: {
+      size: 1
+    },
+    xaxis: {
+      categories: this.contact.chartData.x,
+      title: {
+        text: ""
+      }
+    },
+    yaxis: {
+      title: {
+        text: ""
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      floating: true,
+      offsetY: -25,
+      offsetX: -5
+    }
+  }
     this.contact.fetched = true;
   }
 
@@ -189,10 +267,16 @@ export class CrmReportsComponent implements OnInit {
       this.campaign.date.to = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.campaign_month), lastDayOfMonth);
     }
     this._reportingService.datefilterCampaigns(this.campaign.date.from, this.campaign.date.to).subscribe((resp:any)=>{
+      // console.log(resp)
       if(resp.success) {
         this.campaign.monthly = resp.data;
         this.campaign.chartData.x = this.campaign.monthly.map((m:any) => m.date);
         this.campaign.chartData.y = this.campaign.monthly.map((m:any) => m.count.toString());
+        this.campaign.active=resp?.data[0]?.active || '0';
+        this.campaign.drafts=resp?.data[0]?.drafts || '0';
+        this.campaign.recurring=resp?.data[0]?.recurring || '0';
+        this.campaign.campaigns=resp?.data[0]?.campaigns || '0';
+        this.campaign.sent=resp?.data[0]?.sent || '0';
         this.campaignChartOption();
       }
     })
@@ -207,7 +291,7 @@ export class CrmReportsComponent implements OnInit {
         },
       ],
       chart: {
-        type: "bar", // Change the chart type to "bar" for a bar graph
+        type: "area", // Change the chart type to "bar" for a bar graph
         height: 350,
       },
       plotOptions: {

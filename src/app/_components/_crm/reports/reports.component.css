@@ -10,3 +10,94 @@
 .kb-fntsize{
   font-size: 12px;
 }
+.card {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+  background-color: var(--primary-color);
+  color: #252422;
+  margin-bottom: 20px;
+  position: relative;
+  border: 0;
+  transition: box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+}
+.card-blue {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+  background-color: var(--kb-text-blue-50-color);
+  color: #252422;
+  margin-bottom: 20px;
+  position: relative;
+  border: 0;
+  transition: box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+}
+.card-green {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+  background-color: var(--kb-text-green-50-color);
+  color: #252422;
+  margin-bottom: 20px;
+  position: relative;
+  border: 0;
+  transition: box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+}
+.card-gray {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+  background-color: var(--kb-text-gray-50-color);
+  color: #252422;
+  margin-bottom: 20px;
+  position: relative;
+  border: 0;
+  transition: box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
+  transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
+}
+.card-stats .card-body {
+  padding: 15px 15px;
+}
+.card-stats .card-body .numbers .card-title {
+  font-size: 28px;
+}
+.adjustcard{
+  font-size: 64px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.adjustsubcard{
+  font-size: 50px;
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kb-colr-blue{
+  color: var(--kb-text-blue-800-color);
+}
+.kb-colr-green{
+  color: var(--kb-text-green-800-color);
+}
+.kb-colr-gray{
+  color: var(--kb-text-gray-700-color);
+}
+.kb-card-subtitle{
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

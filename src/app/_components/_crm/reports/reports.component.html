@@ -46,6 +46,8 @@
                     [dataLabels]="chartContactOptions.dataLabels"
                     [plotOptions]="chartContactOptions.plotOptions"
                     [yaxis]="chartContactOptions.yaxis"
+                    [markers]="chartContactOptions.markers"
+                    [grid]="chartContactOptions.grid"
                     [legend]="chartContactOptions.legend"
                     [fill]="chartContactOptions.fill"
                     [stroke]="chartContactOptions.stroke"
@@ -55,29 +57,58 @@
             </div>
         </div>
         <div class="col-md-5 pl-2">
-            <div class="kb-report-card">
-                <h5 class="p-3 m-0">Recent Contacts</h5>
-                <table class="table kb-table" dataSource="contacts">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let contact of contact.recents; index as i" [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
-                        <td class="kb-text-overflow">
-                            <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
-                            {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}
-                        </td>
-                        <td class="kb-text-overflow"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <div class="kb-report-card p-3">
+                <div class="row border-bottom">
+                    <h5 class="p-2">Contacts Overview</h5>
+            </div>
+            <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 py-3">
+                <div class="card-blue card-stats">
+                  <div class="card-body">
+                    <p class="card-title adjustcard kb-colr-blue">{{contact.new_contacts}}</p>
+                    <p class="kb-card-subtitle kb-colr-blue text-center">New Contacts</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 py-3">
+                <div class="card-green card-stats">
+                  <div class="card-body">
+                    <p class="card-title adjustcard kb-colr-green">{{contact.contacts}}</p>
+                    <p class="kb-card-subtitle kb-colr-green text-center">Total Contacts</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{contact.lists}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Lists</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{contact.tags}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Tags</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{contact.forms}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Forms</p>
+                      </div>
+                    </div>
+                  </div>
             </div>
         </div>
+        </div>
     </div>
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-7 pr-3">
             <div class="kb-report-card p-3">
                 <div class="row border-bottom">
@@ -132,6 +163,59 @@
             </div>
         </div>
         <div class="col-md-5 pl-2">
+            <div class="kb-report-card p-3">
+                <div class="row border-bottom">
+                    <h5 class="p-2">Campaigns Overview</h5>
+            </div>
+            <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 py-3">
+                <div class="card-blue card-stats">
+                  <div class="card-body">
+                    <p class="card-title adjustcard kb-colr-blue">{{campaign.active}}</p>
+                    <p class="kb-card-subtitle kb-colr-blue text-center">Active</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 py-3">
+                <div class="card-green card-stats">
+                  <div class="card-body">
+                    <p class="card-title adjustcard kb-colr-green">{{campaign.campaigns}}</p>
+                    <p class="kb-card-subtitle kb-colr-green text-center">Total Campaigns</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{campaign.recurring}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Recurring</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{campaign.sent}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Sent</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card-gray card-stats">
+                      <div class="card-body">
+                        <p class="card-title adjustsubcard kb-colr-gray">{{campaign.drafts}}</p>
+                        <p class="kb-card-subtitle kb-colr-gray text-center">Drafts</p>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 pr-3">
             <div class="kb-report-card">
                 <h5 class="p-3 m-0">Recent Campaigns</h5>
                 <table class="table kb-table" dataSource="campaigns">
@@ -151,6 +235,28 @@
                         <td class="kb-text-overflow"><span class="text-lowercase">{{ campaign.sentto }}</span></td>
                         <td class="kb-text-overflow">{{ campaign.deliverdate ? (campaign.deliverdate | date:'mediumDate') : '--'}}</td>
                         <td class="kb-text-overflow">{{ campaign.deliverdate ? (campaign.deliverdate | date:'shortTime') : '--'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <div class="col-md-5 pl-2">
+            <div class="kb-report-card">
+                <h5 class="p-3 m-0">Recent Contacts</h5>
+                <table class="table kb-table" dataSource="contacts">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let contact of contact.recents; index as i" [routerLink]="['/crm/contact/'+contact.uniqueid]" class="kb-td-link">
+                        <td class="kb-text-overflow">
+                            <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
+                            {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}
+                        </td>
+                        <td class="kb-text-overflow"><span class="text-lowercase">{{ contact.email | lowercase }}</span></td>
                       </tr>
                     </tbody>
                   </table>

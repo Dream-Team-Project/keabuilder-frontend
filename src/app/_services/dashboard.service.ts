@@ -19,12 +19,12 @@ export class DashboardService {
     // console.log(this.tokenStorage.getUser());
   }
 
-  getAllrevenue(): Observable<any> {
-    return this.http.get('/api/getallrevenue/'+this.uuid);
+  getAllrevenue(obj:any): Observable<any> {
+    return this.http.get('/api/getallrevenue/'+this.uuid+'/'+obj);
   }
 
-  getAllcontact(): Observable<any> {
-    return this.http.get('/api/getallcontact/'+this.uuid);
+  getAllcontact(obj:any): Observable<any> {
+    return this.http.get('/api/getallcontact/'+this.uuid+'/'+obj);
   }
 
   getconditionaldata(data:any):Observable<any> {
@@ -37,16 +37,16 @@ export class DashboardService {
     return this.http.get('/api/getrecentsales/'+this.uuid);
   }
 
-  dailysales(): Observable<any> {
-    return this.http.get('/api/dailysales/'+this.uuid);
+  dailysales(obj:any): Observable<any> {
+    return this.http.get('/api/dailysales/'+this.uuid+'/'+obj);
   }
 
   totalearning(): Observable<any> {
     return this.http.get('/api/totalearning/'+this.uuid);
   }
 
-  getdashboardheat(): Observable<any> {
-    return this.http.get('/api/getdashboardheat/'+this.uuid);
+  getdashboardheat(obj:any): Observable<any> {
+    return this.http.get('/api/getdashboardheat/'+this.uuid+'/'+obj);
   }
 
   pageview(): Observable<any> {
