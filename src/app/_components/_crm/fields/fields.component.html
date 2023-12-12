@@ -147,7 +147,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let ff of pagefields, index as i">
-                            <td><span *ngIf="!ff.default_field" class="align-items-center fnt" matTooltip="click to select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="ff.selected" (ngModelChange)="selectFields($event, ff)"></mat-checkbox></span></td>
+                            <td><span *ngIf="!ff.default_field" class="align-items-center fnt" matTooltip="Click to Select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="ff.selected" (ngModelChange)="selectFields($event, ff)"></mat-checkbox></span></td>
                             <td (click)="editdialog.click()" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
                             <td class="kb-text-overflow">{{ff?.name.replaceAll('-', ' ')}}</td>
                             <td class="kb-text-overflow">{{ff?.field_tag | uppercase}}</td>

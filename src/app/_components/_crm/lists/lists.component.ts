@@ -230,5 +230,9 @@ resetselecteddata(){
   this.pagelists=this.pagelists.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedLists=[];
+  this. searchInp  = ''; 
+  this.filterInp = 'name DESC';
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
 }

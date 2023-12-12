@@ -149,7 +149,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let automation of pageautomations; index as i">
-               <td><mat-checkbox class="align-items-center" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></td>
+               <td><mat-checkbox class="align-items-center" matTooltip="Click to Select" matTooltipPosition="above" [(ngModel)]="automation.selected" (ngModelChange)="selectAutomations($event, automation)"></mat-checkbox></td>
                 <td (click)="_general.redirectToBuilder(automation.uniqueid, 'automation')" class="kb-td-link ftsize">{{automation.name}}</td>
                 <td [class]="automation.publish_status == '1' ? 'text-success' : 'text-danger' ">{{automation.publish_status == '1' ? 'Active' : 'Inactive'}}</td>
                 <td>{{automation.created_at | date:'medium'}}</td>

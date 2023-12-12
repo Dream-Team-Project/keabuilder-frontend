@@ -119,7 +119,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let list of pagelists; index as i">
-            <td><mat-checkbox class="align-items-center" [(ngModel)]="list.selected" (ngModelChange)="selectList($event, list)"></mat-checkbox></td>
+            <td><mat-checkbox class="align-items-center" matTooltip="Click to Select" matTooltipPosition="above" [(ngModel)]="list.selected" (ngModelChange)="selectList($event, list)"></mat-checkbox></td>
             <td>
               <span class="kb-table mr-1">{{ list.name | titlecase }}
               </span>
