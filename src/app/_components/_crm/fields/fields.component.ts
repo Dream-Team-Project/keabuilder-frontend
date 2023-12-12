@@ -50,6 +50,7 @@ export class CrmFieldsComponent implements OnInit {
 
   adjustdata(data:any){
     if(data) this.pagefields = data;
+    else this.searchInp='';
     this.fetching = false;
   }
 
@@ -277,6 +278,12 @@ resetselecteddata(){
   this.pagefields=this.pagefields.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedFields=[];
+  this.filterInp = '';
+  this.searchInp = ''; 
+  this.sortInp = 'name DESC';
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
+
 }
 
 }

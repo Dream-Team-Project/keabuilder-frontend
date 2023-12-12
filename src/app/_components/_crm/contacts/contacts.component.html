@@ -330,7 +330,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let contact of pagecontacts; index as i">
-             <td><mat-checkbox class="align-items-center" [(ngModel)]="contact.selected" (ngModelChange)="selectContact($event, contact)"></mat-checkbox></td>
+             <td><mat-checkbox class="align-items-center" [(ngModel)]="contact.selected" matTooltipPosition="above" matTooltip="Click to Select" (ngModelChange)="selectContact($event, contact)"></mat-checkbox></td>
               <td (click)="editlink.click()" class="kb-td-link">
                   <span class="kb-table-icon mr-1">{{contactIcon(contact) | uppercase}}</span>
                   {{(contact.firstname ? contact.firstname : '--') + ' ' + (contact.lastname ? contact.lastname : '') | titlecase}}

@@ -40,8 +40,8 @@ export class CrmTagsComponent implements OnInit {
   hasError:string = '';
   filteredtags: any = [];
   temptags: any = [];
- populartags:any=[];
- recenttags:any=[];
+  populartags:any=[];
+  recenttags:any=[];
   tagslength:any;
   pagetags:any;
   selectedTags: any[] = [];
@@ -238,5 +238,9 @@ resetselecteddata(){
   this.pagetags=this.pagetags.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedTags=[];
+  this.searchInp = ''; 
+  this.filterInp = 'name DESC';
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
 }

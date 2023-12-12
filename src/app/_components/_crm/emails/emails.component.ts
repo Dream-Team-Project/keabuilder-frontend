@@ -256,6 +256,8 @@ resetselecteddata(){
   this.pageemails=this.pageemails.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedEmails=[];
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
   
 }

@@ -166,7 +166,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let campaign of pagecampaigns; index as i">
-             <td><mat-checkbox class="align-items-center" [(ngModel)]="campaign.selected" (ngModelChange)="selectCampaigns($event, campaign)"></mat-checkbox></td>
+             <td><mat-checkbox class="align-items-center" [(ngModel)]="campaign.selected" matTooltip="Click to Select" matTooltipPosition="above" (ngModelChange)="selectCampaigns($event, campaign)"></mat-checkbox></td>
               <td (click)="campaign.sendoption =='recurring' || campaign.campaign_sent =='0' ? GotoUrl('/crm/campaign/'+campaign.uniqueid) : GotoUrl('')" class="kb-td-link ftsize">{{campaign.name}}</td>
               <!-- <td>{{campaign.sendoption}}</td> -->
               <td [class]="campaign.publish_status == '1' ? 'text-success' : 'text-danger'">{{campaign.publish_status == '1' ? 'Publish' : 'Drafts'}}{{campaign.campaign_sent == '1' ? '( Sent )' : ' ( Pending )'}}</td>

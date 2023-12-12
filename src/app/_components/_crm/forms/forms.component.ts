@@ -398,6 +398,10 @@ resetselecteddata(){
   this.pageforms=this.pageforms.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedForms=[];
+  this.searchInp = ''; 
+  this.filterInp = 'name DESC';
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
   
 }

@@ -144,7 +144,7 @@ searchAutomations(search: any, sort: any, filter: any) {
     pageIndex:this.paginator?.pageIndex ? this.paginator?.pageIndex : 0,
     pageSize:this.paginator?.pageSize ? this.paginator?.pageSize : 20,
   }
-  console.log(obj);
+  // console.log(obj);
   this._automationgeneralservice.searchautomations(obj).subscribe((data:any)=>{
     // console.log(data.data)
     this.pageautomations = data.data;
@@ -199,6 +199,11 @@ resetselecteddata(){
 this.pageautomations=this.pageautomations.map((ele:any)=>{ele.selected = false; return ele;});
 this.checked_selected=false;
 this.selectedAutomations=[];
+this.sortInp = '';
+this.searchInp = ''; 
+this.filterInp = 'name DESC';
+this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
 
 }

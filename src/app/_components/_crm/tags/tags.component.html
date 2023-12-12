@@ -91,7 +91,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let tag of pagetags; index as i">
-            <td><mat-checkbox class="align-items-center" [(ngModel)]="tag.selected" (ngModelChange)="selectTag($event, tag)"></mat-checkbox></td>
+            <td><mat-checkbox class="align-items-center" matTooltip="Click to Select" matTooltipPosition="above" [(ngModel)]="tag.selected" (ngModelChange)="selectTag($event, tag)"></mat-checkbox></td>
             <td>
               <span class="kb-table mr-1">{{ tag.name | titlecase }} </span>
             </td>

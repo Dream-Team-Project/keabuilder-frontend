@@ -481,5 +481,8 @@ resetselecteddata(){
   this.pagecontacts=this.pagecontacts.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedContacts=[];
+  this.listInp = '';
+  this.tagInp = '';
+  this.searchInp = ''; 
 }
 }

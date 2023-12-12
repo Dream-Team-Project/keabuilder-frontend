@@ -213,7 +213,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let form of pageforms; index as i">
-           <td><mat-checkbox class="align-items-center" [(ngModel)]="form.selected" (ngModelChange)="selectForms($event, form)"></mat-checkbox></td>
+           <td><mat-checkbox class="align-items-center" matTooltip="Click to Select" matTooltipPosition="above" [(ngModel)]="form.selected" (ngModelChange)="selectForms($event, form)"></mat-checkbox></td>
             <td class="kb-td-link ftsize" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{ form.name ? form.name : ("form" | titlecase) }}</td>
             <td class="kb-td-link" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{form.created_at | date:'medium'}}</td>
             <td class="kb-td-link" (click)="_general.redirectToBuilder(form.uniqueid, 'form')">{{form.updated_at | date:'medium'}}</td>

@@ -284,6 +284,13 @@ resetselecteddata(){
   this.pagecampaigns=this.pagecampaigns.map((ele:any)=>{ele.selected = false; return ele;});
   this.checked_selected=false;
   this.selectedCampaigns=[];
+  this.sortInp = 'name DESC';
+  this.searchInp = ''; 
+  this.sentInp  = '';
+  this.listInp = '';
+  this.tagInp = '';
+  this.paginator.pageIndex = 0;
+  this.paginator.pageSize =20;
 }
 
 GotoUrl(url:any) {
