@@ -74,8 +74,10 @@ export class DashboardComponent implements OnInit {
   randomwelcome = "";
   dailyvisit:any = 0;
   visitlimit:any='1';
+  userplan:any;
   // contact reporting
   contact:any = {
+    totalcontacts:0,
     recents: [],
     monthly: [],
     limit: 8,
@@ -610,7 +612,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.fetchUserplan();
     this.allrevenue();
     this.allcontact();
     this.dailySales();
@@ -1044,6 +1046,18 @@ export class DashboardComponent implements OnInit {
   }
   }
 
+  fetchUserplan(){
+    this.dashboardService.plandata().subscribe((data:any)=>{
+      // console.log(data.data[0])
+      if(data.success){
+        this.userplan=data.data[0];
+      }
+      else{
+        this.userplan=[];
+      }
+    })
+  }
+
   dashboardheat(){
     this.dashboardService.getdashboardheat(this.visitlimit).subscribe({
       next: (data) => {
@@ -1121,6 +1135,7 @@ export class DashboardComponent implements OnInit {
       if(resp.success) {
         // console.log(resp.data);
         this.contact.monthly = resp.data;
+        this.contact.totalcontacts=resp.data[0].contacts;
         this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
         this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
         if(this.contact.monthly.length!=0){
@@ -1230,7 +1245,7 @@ export class DashboardComponent implements OnInit {
       },
       stroke: {
         show: true,
-        width: 2,
+        // width: 2,
         colors: ['#dea641'],
       },
       xaxis: {
@@ -1244,7 +1259,7 @@ export class DashboardComponent implements OnInit {
       },
       fill: {
         opacity: 0.5,
-        colors: ['#dea641'],
+        colors: ['#044'],
       },
       tooltip: {
         y: {
@@ -1262,7 +1277,7 @@ export class DashboardComponent implements OnInit {
       series: this.campaign.chartData.y,
       chart: {
         height: 350,
-        type: 'donut',
+        type: 'pie',
         dropShadow: {
           enabled: true,
           color: '#111',
@@ -1387,30 +1402,88 @@ export class DashboardComponent implements OnInit {
       chart: {
         height: 350,
         type: "line",
-        zoom: {
-          enabled: false
+        dropShadow: {
+          enabled: true,
+          color: "#000",
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2
+        },
+        toolbar: {
+          show: false
         }
       },
+      colors: ["#77B6EA", "#545454"],
       dataLabels: {
-        enabled: false
+        enabled: true
       },
       stroke: {
-        curve: "straight"
+        curve: "smooth"
       },
       title: {
-        text: "",
+        // text: "Contacts",
         align: "left"
       },
       grid: {
-        row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-          opacity: 0.5
-        }
+        borderColor: "#e7e7e7",
+      },
+      markers: {
+        size: 1
       },
       xaxis: {
-        categories: this.data_pageview.data2
+        categories: this.data_pageview.data2,
+        title: {
+          text: ""
+        }
+      },
+      yaxis: {
+        title: {
+          text: ""
+        },
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
       }
-    };
+    }
+    // this.chartOptions7 = {
+    //   series: [
+    //     {
+    //       name: "Unique Views",
+    //       data: this.data_pageview.data
+    //     }
+    //   ],
+    //   chart: {
+    //     height: 350,
+    //     type: "line",
+    //     zoom: {
+    //       enabled: false
+    //     }
+    //   },
+    //   dataLabels: {
+    //     enabled: false
+    //   },
+    //   stroke: {
+    //     curve: "straight"
+    //   },
+    //   title: {
+    //     text: "",
+    //     align: "left"
+    //   },
+    //   grid: {
+    //     row: {
+    //       colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+    //       opacity: 0.5
+    //     }
+    //   },
+    //   xaxis: {
+    //     categories: this.data_pageview.data2
+    //   }
+    // };
     this.data_pageview.fetched = true;
   }
 
@@ -1419,7 +1492,8 @@ export class DashboardComponent implements OnInit {
     this.chartOptions4 = {
       series: this.data_newvsret.data,
       chart: {
-        type: "donut",
+        type: "pie",
+        width:380,
       },
       labels: ["New", "Returning"],
       responsive: [
@@ -1446,7 +1520,8 @@ export class DashboardComponent implements OnInit {
     this.chartOptions5 = {
       series: this.data_devicebreak.data2,
       chart: {
-        type: "donut"
+        type: "pie",
+        width:370,
       },
       labels: this.data_devicebreak.data,
       responsive: [
