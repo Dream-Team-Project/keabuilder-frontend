@@ -444,3 +444,33 @@ input.iserror {
 
 
 
+@media only screen and (max-width:500px){
+  .shortshowbox b, .shortshowbox2 b {
+      font-size: 14px;
+      margin-top: 6px;
+  }
+  .packst {
+    margin-top: 37px;
+  }
+  .showdetailfeat li {
+    width: 100%;
+    padding-right: 0;
+  }
+  span.slp {
+      width: 100%;
+      margin-top: 0px;
+      text-align: center;
+  }
+  .sdf {
+    width: 100%;
+    text-align: center;
+  }
+  .paybtncomp {
+      font-size: 19px;
+  }
+  .packst b {
+      text-align: center;
+  }
+
+}
+
