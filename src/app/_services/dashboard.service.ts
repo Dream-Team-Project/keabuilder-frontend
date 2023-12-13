@@ -57,6 +57,10 @@ export class DashboardService {
     return this.http.get('/api/visitordata/'+this.uuid+'/'+type);
   }
 
+  plandata(): Observable<any> {
+    return this.http.get('/api/getplandata/'+this.uuid);
+  }
+
   
 
   

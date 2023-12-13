@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 <div class="row" *ngIf="allsmtp?.length > 0">
-                    <div class="col-12">
+                    <!-- <div class="col-md-12 col-sm-12"> -->
                         <table class="table kb-table">
                           <thead>
                             <tr>
@@ -310,7 +310,7 @@
                                 </tr>
                                 </tbody>
                         </table>
-                        </div>
+                        <!-- </div> -->
                         <!-- <ul class="kb-smtpul align-items-center mt-4 ">
                             <li><span >Default<i class="fa-solid fa-house" aria-hidden="true"></i></span></li>
                            
@@ -337,12 +337,12 @@
                         <button mat-raised-button color="primary" class="mr-2 outer-card-add" (click)="openDialog(dialog2,'new','add')" >Add New Address <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                         <!-- <button mat-raised-button [color]="'primary'" class=" mt-3 mr-2 outer-card-add"  (click)="openBottomSheet(addresslists)" >View Address  <i class="far fa-eye" aria-hidden="true"></i></button> -->
                     </div>
-                    <div class="col-md-4 ">
+                    <div class="col-md-4">
                         <img src="/assets/images/crm_smtp/address.png" class="img-fluid adr-img " alt="" srcset="">
                     </div>
                 </div> 
                 <div class="row" *ngIf="alladdress?.length > 0">
-                    <div class="col-12">
+                    <!-- <div class="col-md-12 col-sm-12"> -->
                         <table class="table kb-table">
                           <thead>
                             <tr>
@@ -369,7 +369,7 @@
                                 </tr>
                                 </tbody>
                         </table>
-                        </div>
+                        <!-- </div> -->
                         <!-- <ul class="kb-smtpul align-items-center mt-4 ">
                             <li><span >Default<i class="fa-solid fa-house" aria-hidden="true"></i></span></li>
                             <li>{{defaultadd.name | titlecase}}</li>

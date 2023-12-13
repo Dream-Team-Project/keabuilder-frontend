@@ -43,7 +43,7 @@
         <div class="card-body ">
           <!-- <p class="card-category">Contacts</p> -->
           <p class="card-category d-flex justify-content-between align-items-center">
-            <span>Contacts </span>
+            <span>Daily Contacts </span>
             <span class="kb-elli-vertical" [(ngModel)]="contactlimit"  [matMenuTriggerFor]="menu2"><i class="fa-solid fa-ellipsis-vertical"></i></span>
             <mat-menu #menu2="matMenu">
               <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'contacts')">Yesterday</button>
@@ -257,7 +257,7 @@
               <div class=""></div>
             </div>
           </div>
-          <h6 class="big-title">Total earnings in last Week</h6>
+          <h6 class="big-title">Total earnings monthly</h6>
           <div class="kbcustmwidthforbox4">
             <apx-chart *ngIf="data11"
               [series]="chartOptions11.series"
@@ -352,8 +352,13 @@
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-sm-10">
-              <div class="numbers pull-left"><h5>Recent Contacts</h5><span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+            <div class="col-sm-12">
+              <div class="numbers pull-left d-flex justify-content-between">
+                <h5>Recent Contacts</h5>
+                <h5><span class="text-success">Overall : {{contact.totalcontacts}}</span></h5>
+                <h5><span class="text-danger">Limit : {{userplan.contacts == 'unlimited' ? '10,00,000' : userplan.contacts}}</span></h5>
+                <!-- <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span> -->
+              </div>
             </div>
             <div *ngIf="hidefornow" class="col-sm-5">
               <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
