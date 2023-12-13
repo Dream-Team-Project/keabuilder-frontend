@@ -1,0 +1,717 @@
+<div class="bw-login container">
+
+  <div class="row myregisterform mt-4 pt-4 pb-4 mb-4">
+    <div class="col-md-6">
+        <img width="50" src="/assets/images/logo/kblogo.png" alt="">
+        <p></p>
+        <h5 *ngIf="!specialuser">1. Choose your payment schedule</h5>
+        <div *ngIf="!specialuser" class="shortshowbox">
+          <label for="schd">
+            <input type="radio" [checked]="isthischecked" (click)="changemyplan('Annual')" name="schedule" id="schd"> Yearly
+          </label>
+          <p *ngIf="productname =='Beta'">${{29*12-51}}/yearly</p>
+          <p *ngIf="productname =='Startup'">${{97*12-51}}/yearly</p>
+          <p *ngIf="productname =='Entrepreneur'">${{197*12-51}}/yearly</p>
+          <p *ngIf="productname =='Agency'">${{1997*12-51}}/yearly</p>
+
+          <small *ngIf="productname =='Beta'">${{(29*12-51)/12}}/monthly, billed yearly</small>
+          <small *ngIf="productname =='Startup'">${{(97*12-51)/12}}/monthly, billed yearly</small>
+          <small *ngIf="productname =='Entrepreneur'">${{(197*12-51)/12}}/monthly, billed yearly</small>
+          <small *ngIf="productname =='Agency'">${{(1997*12-51)/12}}/monthly, billed yearly</small>
+          <br>
+          <b>Saved $51/yearly</b>
+        </div>
+        <div *ngIf="!specialuser" class="shortshowbox2">
+          <label for="schd2">
+            <input type="radio" [checked]="!isthischecked" (click)="changemyplan('Monthly')" name="schedule" id="schd2"> Monthly
+          </label>
+          <p *ngIf="productname =='Beta'">$29/mo</p>
+          <p *ngIf="productname =='Startup'">$97/mo</p>
+          <p *ngIf="productname =='Entrepreneur'">$197/mo</p>
+          <p *ngIf="productname =='Agency'">$1997/mo</p>
+          <small>Billed monthly</small>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div ngxStripeCardGroup [formGroup]="stripeForm" [elementsOptions]="elementsOptions">
+
+          <h5 *ngIf="!specialuser">2. Billing Details</h5>
+          <h5 *ngIf="specialuser">1. Billing Details</h5>
+
+          <div class="billdetail">
+
+            <label for="">Company / Organization Name</label>
+            <input type="text" [formControl]="companynameFormControl" [(ngModel)]="form.company" [class.iserror]="spinner && companynameFormControl.hasError('required')">
+
+            <div class="halfinside mrfw">
+              <label for="">First Name</label>
+              <input type="text" [formControl]="firstnameFormControl" required [(ngModel)]="form.firstname" [class.iserror]="spinner && firstnameFormControl.hasError('required')">
+            </div>
+            <div class="halfinside mlfw">
+              <label for="">Last Name</label>
+              <input type="text" [formControl]="lastnameFormControl" [(ngModel)]="form.lastname">
+            </div>
+
+            <label for="">Phone Name</label>
+            <input type="tel" [formControl]="phoneFormControl" [(ngModel)]="form.phone">
+
+            <span *ngIf="!specialuser">
+              
+                <label for="">Address</label>
+                <input type="text" formControlName="address" [(ngModel)]="stripe.payeeaddress">
+
+                <div class="halfinside mrfw">
+                  <label for="">City</label>
+                  <input type="text" formControlName="cityname" [(ngModel)]="stripe.payeecity">
+                </div>
+                <div class="halfinside mlfw">
+                  <label for="">State</label>
+                  <input type="text" formControlName="state" [(ngModel)]="stripe.payeestate">
+                </div>
+                <div class="halfinside mrfw">
+                  <label for="">Country</label>
+                  <input matInput type="text" [(ngModel)]="stripe.payeecountry" formControlName="shippingcountry" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" >
+                  <mat-autocomplete #countryAuto="matAutocomplete" >
+                    <mat-option (click)="getcountrynm(option)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
+                  </mat-autocomplete>
+                </div>
+                <div class="halfinside mlfw">
+                  <label for="">Zip Code</label>
+                  <input type="text" formControlName="zip" [(ngModel)]="stripe.payeezip">
+                </div>
+
+            </span>
+
+          </div>
+          
+          <div class="clearfix"></div>
+          <h5 *ngIf="!specialuser" class="mt-4">3. Choose your payment method</h5>
+          <div *ngIf="!specialuser">
+              
+              <div>
+                <mat-label>Enter Card Details</mat-label>
+                <div class="kb-strip-cardbox mt-2">
+                  <ngx-stripe-card  [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+                </div>
+                <mat-error *ngIf="paymenterror">{{paymentMessage}}</mat-error>
+                <span *ngIf="paymentstatus" class="colr">{{successMessage}}</span>
+              </div>
+
+          </div>
+
+        </div>
+
+        <div class="text-center mt-4" *ngIf="!specialuser">
+          <img class="img-fluid" width="170" src="/assets/images/registration/cards.png" alt="">
+        </div>
+
+        <div class="clearfix"></div>
+       
+
+    </div>
+    <div class="col-md-6">
+
+      <div class="packst" *ngIf="!specialuser">
+          <p>
+
+            <b *ngIf="productname =='Beta'">
+              <span *ngIf="productid=='price_1NgOpkBFKaDgAHCwesDitAQa'">$29.00<small>/mo</small></span><span *ngIf="productid=='price_1OMnJqBFKaDgAHCwXYEHUk41'">${{29*12-51}}.00<small>/yr</small></span>
+            </b>
+
+            <b *ngIf="productname =='Startup'">
+              <span *ngIf="productid=='price_1NTevbBFKaDgAHCwEwUIyyJw'">$97.00<small>/mo</small></span><span *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv'">${{97*12-51}}.00<small>/yr</small></span>
+            </b>
+            <b *ngIf="productname =='Entrepreneur'">
+              <span *ngIf="productid=='price_1Ndr32BFKaDgAHCw5xKyngcc'">$197.00<small>/mo</small></span><span *ngIf="productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G'">${{197*12-51}}.00<small>/yr</small></span>
+            </b>
+            <b *ngIf="productname =='Agency'">
+              <span *ngIf="productid=='price_1Ndr7RBFKaDgAHCwdcMETILM'">$1997.00<small>/mo</small></span><span *ngIf="productid=='price_1Ndr8LBFKaDgAHCw7jph534I'">${{1997*12-51}}.00<small>/yr</small></span>
+            </b>
+
+
+            <span class="slp" *ngIf="productname =='Beta'">Starter Launch Plan</span>
+            <span class="slp" *ngIf="productname =='Startup'">Startup Spark Plan</span>
+            <span class="slp" *ngIf="productname =='Entrepreneur'">SMB Power Plan</span>
+            <span class="slp" *ngIf="productname =='Agency'">Agency advantage plan</span>
+
+            <span class="sdf">
+              
+              <svg *ngIf="!showdetails" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.29289 15.7071C7.68342 16.0976 8.31658 16.0976 8.70711 15.7071L15.0711 9.34315C15.4616 8.95262 15.4616 8.31946 15.0711 7.92893C14.6805 7.53841 14.0474 7.53841 13.6569 7.92893L8 13.5858L2.34315 7.92893C1.95262 7.53841 1.31946 7.53841 0.928932 7.92893C0.538408 8.31946 0.538408 8.95262 0.928932 9.34315L7.29289 15.7071ZM7 0L7 15H9V0L7 0Z" fill="#07E1FF"/></svg>
+  
+              <svg *ngIf="showdetails" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.70711 0.292892C8.31658 -0.0976315 7.68342 -0.0976315 7.29289 0.292892L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292892ZM9 16V0.999999H7L7 16H9Z" fill="#07E1FF"/></svg> 
+              <span (click)="showdetails = !showdetails"> See Detailed Features</span></span>
+          </p>
+          <div *ngIf="showdetails">
+            <ul class="showdetailfeat" *ngIf="productname =='Beta'">
+              <li><span>Website</span> - <span>1</span></li>
+              <li><span>Users</span> - <span>1</span></li>
+              <li><span>Funnels</span> - <span>1</span></li>
+              <li><span>Heat Map</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Contacts</span> - <span>5,000</span></li>
+              <li><span>Advance Analytics</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Courses</span> - <span> <img src="/assets/images/registration/no.png"> </span></li>
+              <li><span>Zapier</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Products</span> - <span>10</span></li>
+              <li><span>Campaign</span> - <span>50</span></li>
+              <li><span>Pages</span> - <span>10</span></li>
+              <li><span>Support</span> - <span class="lightgr">Ticket Support</span></li>
+              <li><span>Domains</span> - <span>1</span></li>
+              <li><span>Funnel Strategist</span> - <span class="lightgr">One Free Call - [30 min]</span></li>
+              <li><span>Automation</span> - <span>5</span></li>
+              <li><span>Business Strategy </span> - <span class="lightgr">Free Call - [30 min]</span></li>
+              <li><span>Survey quiz (with logic) </span> - <span><img src="/assets/images/registration/no.png"></span></li>
+            </ul>
+
+            <ul class="showdetailfeat" *ngIf="productname =='Startup'">
+              <li><span>Website</span> - <span>3</span></li>
+              <li><span>Users</span> - <span>5</span></li>
+              <li><span>Funnels</span> - <span>50</span></li>
+              <li><span>Heat Map</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Contacts</span> - <span>50,000</span></li>
+              <li><span>Advance Analytics</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Courses</span> - <span> 10 </span></li>
+              <li><span>Zapier</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Products</span> - <span><img src="/assets/images/registration/infinity.png"> </span></li>
+              <li><span>Campaign</span> - <span>499</span></li>
+              <li><span>Pages</span> - <span>499</span></li>
+              <li><span>Support</span> - <span class="lightgr">Ticket Support</span></li>
+              <li><span>Domains</span> - <span>10</span></li>
+              <li><span>Funnel Strategist</span> - <span class="lightgr">2 hours/month</span></li>
+              <li><span>Automation</span> - <span>50</span></li>
+              <li><span>Business Strategy </span> - <span class="lightgr">2 hours/month</span></li>
+              <li><span>Survey quiz (with logic) </span> - <span><img src="/assets/images/registration/yes.png"></span></li>
+            </ul>
+
+            <ul class="showdetailfeat" *ngIf="productname =='Entrepreneur'">
+              <li><span>Website</span> - <span>10</span></li>
+              <li><span>Users</span> - <span>10</span></li>
+              <li><span>Funnels</span> - <span>200</span></li>
+              <li><span>Heat Map</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Contacts</span> - <span>100,000</span></li>
+              <li><span>Advance Analytics</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Courses</span> - <span>25 </span></li>
+              <li><span>Zapier</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Products</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Campaign</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Pages</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Support</span> - <span class="lightgr">Ticket + 24*7 chat support</span></li>
+              <li><span>Domains</span> - <span>20</span></li>
+              <li><span>Funnel Strategist</span> - <span class="lightgr">5 hours/month</span></li>
+              <li><span>Automation</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Business Strategy </span> - <span class="lightgr">5 hours/month</span></li>
+              <li><span>Survey quiz (with logic) </span> - <span><img src="/assets/images/registration/yes.png"></span></li>
+            </ul>
+
+            <ul class="showdetailfeat" *ngIf="productname =='Agency'">
+              <li><span>Website</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Users</span> - <span>25</span></li>
+              <li><span>Funnels</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Heat Map</span> - <span><img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Contacts</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Advance Analytics</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Courses</span> - <span> <img src="/assets/images/registration/infinity.png"> </span></li>
+              <li><span>Zapier</span> - <span> <img src="/assets/images/registration/yes.png"> </span></li>
+              <li><span>Products</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Campaign</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Pages</span> - <span><img src="/assets/images/registration/infinity.png"></span></li>
+              <li><span>Support</span> - <span class="lightgr">Ticket support + 24*7 (Chat Support + Assitance (Zoom call))</span></li>
+              <li><span>Domains</span> - <span>100</span></li>
+              <li><span>Funnel Strategist</span> - <span class="lightgr">10 hours/month</span></li>
+              <li><span>Automation</span> - <span><span><img src="/assets/images/registration/infinity.png"></span></span></li>
+              <li><span>Business Strategy </span> - <span class="lightgr">10 hours/month</span></li>
+              <li><span>Survey quiz (with logic) </span> - <span><img src="/assets/images/registration/yes.png"></span></li>
+            </ul>
+
+
+          </div>
+      </div>
+      
+      <h5 *ngIf="!specialuser">4. Login Details</h5>
+      <h5 *ngIf="specialuser">2. Login Details</h5>
+      
+      <div class="billdetail">
+
+        <input type="email" placeholder="Email" [formControl]="emailFormControl" required [(ngModel)]="form.email"
+        [class.iserror]="(spinner && emailFormControl.hasError('required')) || (spinner && emailFormControl.hasError('pattern'))">
+        <p></p>
+        <div class="halfinside mrfw">
+          <input type="text" placeholder="Username" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" (input)="removespecialchar(form)"  [class.iserror]="(spinner && userFormControl.hasError('required')) || (spinner && userFormControl.hasError('minlength') || (spinner && userFormControl.hasError('maxlength')))">
+        </div>
+        <div class="halfinside mlfw">
+          <input type="password" placeholder="Password" [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password" [class.iserror]="(spinner && passwordFormControl.hasError('required')) || (spinner && passwordFormControl.hasError('minlength'))">
+          <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+            <i class="far " [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+          </button>
+        </div>
+        
+      </div>
+      
+      
+      <div class="packsum">
+
+        <p>Summary</p>
+        <p *ngIf="specialuser">
+          FREE
+        </p>
+        <p *ngIf="!specialuser">
+          <span *ngIf="productid=='price_1OMnJqBFKaDgAHCwXYEHUk41'">Starter Launch Plan - Yearly</span>
+          <span *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv'">Startup Spark Plan - Yearly</span>
+          <span *ngIf="productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G'">SMB Power Plan - Yearly</span>
+          <span *ngIf="productid=='price_1Ndr8LBFKaDgAHCw7jph534I'">Agency advantage plan - Yearly</span>
+
+          <span *ngIf="productid=='price_1NgOpkBFKaDgAHCwesDitAQa'">Starter Launch Plan - Monthly</span>
+          <span *ngIf="productid=='price_1NTevbBFKaDgAHCwEwUIyyJw'">Startup Spark Plan - Monthly</span>
+          <span  *ngIf="productid=='price_1Ndr32BFKaDgAHCw5xKyngcc'">SMB Power Plan - Monthly</span>
+          <span *ngIf="productid=='price_1Ndr7RBFKaDgAHCwdcMETILM'">Agency advantage plan - Monthly</span>
+
+          <span *ngIf="productname =='Beta'">
+            <span *ngIf="productid=='price_1NgOpkBFKaDgAHCwesDitAQa'">$29.00</span><span *ngIf="productid=='price_1OMnJqBFKaDgAHCwXYEHUk41'">${{29*12}}.00</span>
+          </span>
+
+          <span *ngIf="productname =='Startup'">
+            <span *ngIf="productid=='price_1NTevbBFKaDgAHCwEwUIyyJw'">$97.00</span><span *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv'">${{97*12}}.00</span>
+          </span>
+          <span *ngIf="productname =='Entrepreneur'">
+            <span *ngIf="productid=='price_1Ndr32BFKaDgAHCw5xKyngcc'">$197.00</span><span *ngIf="productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G'">${{197*12}}.00</span>
+          </span>
+          <span *ngIf="productname =='Agency'">
+            <span *ngIf="productid=='price_1Ndr7RBFKaDgAHCwdcMETILM'">$1997.00</span><span *ngIf="productid=='price_1Ndr8LBFKaDgAHCw7jph534I'">${{1997*12}}.00</span>
+          </span>
+
+
+        </p>
+
+        <p *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv' || productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G' || productid=='price_1Ndr8LBFKaDgAHCw7jph534I' || productid=='price_1OMnJqBFKaDgAHCwXYEHUk41'"> <span>Discount (End of Year)</span> <span>- $51.00</span> </p>
+
+        <p *ngIf="!specialuser">
+          <span><b>Total</b></span>
+          <span><b>
+
+            <span *ngIf="productname =='Beta'">
+              <span *ngIf="productid=='price_1NgOpkBFKaDgAHCwesDitAQa'">$29.00</span><span *ngIf="productid=='price_1OMnJqBFKaDgAHCwXYEHUk41'">${{29*12-51}}.00</span>
+            </span>
+
+            <span *ngIf="productname =='Startup'">
+              <span *ngIf="productid=='price_1NTevbBFKaDgAHCwEwUIyyJw'">$97.00</span><span *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv'">${{97*12-51}}.00</span>
+            </span>
+            <span *ngIf="productname =='Entrepreneur'">
+              <span *ngIf="productid=='price_1Ndr32BFKaDgAHCw5xKyngcc'">$197.00</span><span *ngIf="productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G'">${{197*12-51}}.00</span>
+            </span>
+            <span *ngIf="productname =='Agency'">
+              <span *ngIf="productid=='price_1Ndr7RBFKaDgAHCwdcMETILM'">$1997.00</span><span *ngIf="productid=='price_1Ndr8LBFKaDgAHCw7jph534I'">${{1997*12-51}}.00</span>
+            </span>
+
+          </b></span>
+        </p>
+
+        <hr>
+
+        
+        <label for="iveread" class="termsserv">
+          <input type="checkbox" name="termserv" [class.iserror]="spinner && !ischeck" #inputEl (change)="changeStatus(inputEl.checked)" id="iveread"> I’ve read and agree to the <a href="#">Terms of Service</a>
+        </label>
+        <div class="clearfix"></div>
+
+        <p class="text-center">
+          <button class="paybtncomp" (click)="specialuser ? onSubmit() : payment()">COMPLETE PAYMENT</button>
+        </p>
+        <div class="kb-spinner" *ngIf="spinnerpayment">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <p class="text-center autorenw" *ngIf="!specialuser">
+          <b class="d-block">Auto-Renewal Notice</b>
+          <small>You’ll be charged every year until you cancel your subscription.</small>
+        </p>
+        
+      </div>
+
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Your registration is successful!
+      </div>
+      
+
+      <div class="dayguarn text-center" *ngIf="!specialuser">
+        <img src="/assets/images/registration/30-day.png" alt="">
+        <p>
+          <small>
+            At Kea Builder, we are committed to ensuring our customers' satisfaction, and that's why we offer a 30-day recurring return policy for our subscription services. This means that, regardless of when a user requests a return within the 30-day period, even on the 29th day in the evening of their monthly subscription, we will honor the request and provide a full refund. It's important to note that this policy automatically renews every month when the subscription renews for the user, allowing them the flexibility to assess our services regularly. Please be aware that the refund process typically takes 5 to 7 working days to complete, ensuring a smooth and efficient return experience for our valued customers. We appreciate your trust in our services, and our commitment to customer satisfaction remains at the forefront of our business practices.
+          </small>
+        </p>
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+  <div class="pt-4 pb-4"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" *ngIf="false">
+      <div class="bw-sidebar-logo py-4 px-5">
+        <img src="/assets/images/logo/kblogo.png" alt="">
+        <div class="bw-logo__item__text ml-2">Keabuilder</div>
+      </div>
+    </div>
+
+    <div class="row py-2 px-5" *ngIf="false" >
+        <div class="col-md-5 login-form p-4">
+              <div class="bu-forregister">
+                <div *ngIf="changestep==0">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> First Name</mat-label>
+                        <input type="text" matInput [formControl]="firstnameFormControl" placeholder="Ex. Rock" required [(ngModel)]="form.firstname">
+                        <mat-error *ngIf="firstnameFormControl.hasError('required')">
+                          First Name is <strong>required</strong>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label> Last Name</mat-label>
+                        <input type="text" matInput [formControl]="lastnameFormControl" placeholder="Ex. Rock" [(ngModel)]="form.lastname">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" required [(ngModel)]="form.email">
+                    <!-- <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                      Please enter a valid email address
+                    </mat-error> -->
+                    <mat-error *ngIf="emailFormControl.hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="emailFormControl.hasError('pattern')">
+                      Please enter <strong>Valid Email</strong>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label> Company Name</mat-label>
+                    <input type="text" matInput [formControl]="companynameFormControl" placeholder="Ex. Keabuilder" [(ngModel)]="form.company">
+                    <mat-error *ngIf="companynameFormControl.hasError('required')">
+                      Company Name is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label> Phone Number</mat-label>
+                    <input type="tel" matInput [formControl]="phoneFormControl" placeholder="Ex. +19999999999" [(ngModel)]="form.phone"> 
+                  </mat-form-field>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Username</mat-label>
+                    <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" (input)="removespecialchar(form)" >
+                    <mat-error *ngIf="userFormControl.hasError('required')">
+                      Username is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="userFormControl.hasError('minlength')">
+                      Username must be at least <strong>3</strong> characters
+                    </mat-error>
+                    <mat-error *ngIf="userFormControl.hasError('maxlength')">
+                      Username must be at most <strong>20</strong> characters
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
+                      <i class="far " [class]="hide ? 'fa-eye-slash' : 'fa-eye'" aria-hidden="true"></i>
+                    </button>
+                    <mat-error *ngIf="passwordFormControl.hasError('required')">
+                      Password is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                      Password must be at least <strong>6</strong> characters
+                    </mat-error>
+                  </mat-form-field>
+
+                  <div class="d-flex justify-content-end">
+                      <button mat-raised-button type="button" class="registerbtn" (click)="specialuser ? onSubmit() : fillnext()" [disabled]="firstnameFormControl.invalid || emailFormControl.invalid || companynameFormControl.invalid || phoneFormControl.invalid  || userFormControl.invalid ||  passwordFormControl.invalid"><span *ngIf="specialuser">Submit</span><span *ngIf="!specialuser">Next</span></button>
+                  </div>
+                </div>
+
+              <div *ngIf="changestep==1 && !specialuser">          
+                <!-- <mat-tab-group class="w-100" (selectedIndexChange)="getactivetab($event)">
+                  <mat-tab>
+                  <ng-template mat-tab-label>
+                    <i class="fa-brands fa-cc-stripe mr-1"></i>Strip
+                  </ng-template> -->
+                  <div class="row">
+                    <mat-form-field class="example-full-width col-md-6" appearance="fill">
+                      <mat-label>Current Subsciption Plan</mat-label>
+                      <mat-select [(ngModel)]="product" (selectionChange)="productdetails($event)">
+                        <mat-option *ngFor="let item of products" [value]="item">{{item.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+        
+                    <mat-form-field class="example-full-width col-md-6" appearance="fill">
+                      <mat-label>Current Payment Plan</mat-label>
+                      <mat-select [(ngModel)]="productid" (selectionChange)="subscriptiontype($event)">
+                          <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+
+              <div ngxStripeCardGroup [formGroup]="stripeForm" [elementsOptions]="elementsOptions">
+
+             <!-- <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Card Holder Name</mat-label>
+                <input type="text" matInput formControlName="name" [(ngModel)]="stripe.payeename">
+              </mat-form-field> -->
+
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Address</mat-label>
+                <input type="text" matInput formControlName="address" [(ngModel)]="stripe.payeeaddress">
+              </mat-form-field>
+             
+              <div class="row">
+                <mat-form-field class="example-full-width col-md-6" appearance="fill">
+                  <mat-label>City</mat-label>
+                  <input type="text" matInput formControlName="cityname" [(ngModel)]="stripe.payeecity">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width col-md-6" appearance="fill">
+                  <mat-label>State</mat-label>
+                  <input type="text" matInput formControlName="state" [(ngModel)]="stripe.payeestate">
+                </mat-form-field>
+              </div>
+
+            <div class="row">
+              <mat-form-field class="kb-full-width col-md-6" appearance="fill" (click)="filtercountryData($event)">
+                <mat-label>Country</mat-label>
+                <input matInput type="text" [(ngModel)]="stripe.payeecountry" formControlName="shippingcountry" placeholder="Please enter country name" [matAutocomplete]="countryAuto"  class="kb-act-searchinp w-100" (input)="filtercountryData($event)" >
+                <mat-autocomplete #countryAuto="matAutocomplete" >
+                  <mat-option (click)="getcountrynm(option)" *ngFor="let option of filteredcountry" [value]="option.name">{{ option.name }}</mat-option>
+                </mat-autocomplete>
+              </mat-form-field> 
+
+              <mat-form-field class="example-full-width col-md-6" appearance="fill">
+                <mat-label>ZIP</mat-label>
+                <input type="text" matInput formControlName="zip" [(ngModel)]="stripe.payeezip">
+              </mat-form-field>
+            </div>
+           
+            <mat-error *ngIf="paymenterror">{{paymentMessage}}</mat-error>
+            <span *ngIf="paymentstatus" class="colr">{{successMessage}}</span>
+            <div class="w-100 kb-strip py-2">
+              <mat-label>Enter Card Details</mat-label>
+              <div class="kb-strip-cardbox">
+              <ngx-stripe-card  [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+            </div>
+             
+              <!-- <div class="kb-strip-mesg">Why? We ask for a payment method so that your subscription and business can continue without interruption after your trial ends</div>
+              <img src="./assets/images/registration/cards.png" width="130">
+            </div> -->
+          </div>
+          
+        </div>
+         
+        <!-- </mat-tab>
+        <mat-tab>
+                    <ng-template mat-tab-label>
+                      <i class="fa-brands fa-cc-paypal mr-1"></i>Paypal
+                    </ng-template>
+                    </mat-tab>
+      </mat-tab-group> -->
+      <div class="py-3">
+      <!-- <div class="kb-check"><mat-checkbox [(ngModel)]="emailsubscription"><span>Sign up to receive the latests product updates</span></mat-checkbox></div> -->
+     <!-- <div class="kb-check"><mat-checkbox  [(ngModel)]="serviceterms"><span>You agree to Keabuilder’s <span class="kb-check-wrap-text" routerLink="'/serviceterms'">Terms of Service & Privacy Policy.</span></span></mat-checkbox></div>  -->
+    </div>   
+     <div class="d-flex justify-content-end py-3">
+            <button mat-raised-button type="button" class="mr-3" (click)="fillback()">Back</button>
+            <button mat-raised-button class="registerbtn" [disabled]="stripeForm.invalid" (click)="payment()" *ngIf="!spinner" >Start Free Trial</button>
+            </div>
+           
+                <div class="alert alert-warning" *ngIf="isSignUpFailed">
+                  <i class="fas fa-exclamation-triangle"></i> Signup failed!<br />{{ errorMessage }}
+                </div>
+
+            </div>
+
+                  <div class="py-3">
+                      <span class="txt-light">Have an account?</span>
+                      <button mat-button (click)="navigateToLoginWithRefresh()">Log In</button>
+                  </div>
+              </div>
+          <div class="alert alert-success" *ngIf="isSuccessful">
+            Your registration is successful!
+          </div>
+          <div class="kb-spinner" *ngIf="spinner">
+            <mat-spinner></mat-spinner>
+          </div>
+    </div>
+      <div class="col-md-7 px-5">
+        <div *ngIf="!specialuser">
+       <div class="py-2">
+        <span *ngIf="productname =='Startup'">
+       <h1>Startup <span class="colr" *ngIf="productid=='price_1NTevbBFKaDgAHCwEwUIyyJw'">$79/monthly</span><span class="colr" *ngIf="productid=='price_1NTeyPBFKaDgAHCwLv5twvpv'">${{79*12}}/Annual</span></h1>
+       <span>Get your business up and running</span>
+       <div class="row py-3">
+        <div class="col-md-6">
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>0% transaction fee</p>
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>3 website</p>
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>50 funnels</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>50,000 contacts</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 courses</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Products</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>499 pages</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 domains</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>50 automation</p> 
+        </div>
+        <div class="col-md-6">
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>499 campaign</p>
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>5 users</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Survey quiz (with logic)</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Heat Map (Snapshot)</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Advance Analytics</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Zapier</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Ticket support</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>2 hours/month business Strategy</p> 
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>2 hours/month business Strategist</p> 
+       
+        </div>
+       </div>
+       <p>*+ applicable taxes</p>
+      </span>
+      <span *ngIf="productname =='Entrepreneur'">     
+        <h1>Entrepreneur <span class="colr" *ngIf="productid=='price_1Ndr32BFKaDgAHCw5xKyngcc'">$149/monthly</span><span class="colr" *ngIf="productid=='price_1Ndr4lBFKaDgAHCw8WCP0i1G'">${{149*12}}/Annual</span></h1>
+        <span>Expand your offering and grow your audience</span>
+        <div class="row py-3">
+         <div class="col-md-6">
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>0% transaction fee</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 website</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>200 funnels</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>100,000 contacts</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>25 courses</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Products</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited pages</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>20 domains</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited automation</p> 
+         </div>
+         <div class="col-md-6">
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited campaign</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 users</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Survey quiz (with logic)</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Heat Map (Snapshot)</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Advance Analytics</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Zapier</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Ticket + 24*7 chat support</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>5 hours/month business Strategy</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>5 hours/month business Strategist</p> 
+        
+         </div>
+        </div>
+        <p>*+ applicable taxes</p>
+       </span>
+       <span *ngIf="productname =='Agency'" >
+        <h1>Agency <span class="colr" *ngIf="productid=='price_1Ndr7RBFKaDgAHCwdcMETILM'">$1997/monthly</span><span class="colr" *ngIf="productid=='price_1Ndr8LBFKaDgAHCw7jph534I'">${{1997*12}}/Annual</span></h1>
+        <span>Scale your business and your team with advanced features</span>
+        <div class="row py-3">
+         <div class="col-md-6">
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>0% transaction fee</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited website</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited funnels</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited contacts</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited courses</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Products</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited pages</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>100 domains</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited automation</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited campaign</p>
+         </div>
+         <div class="col-md-6">
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>25 users</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Survey quiz (with logic)</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Heat Map (Snapshot + Recording)</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Advance Analytics</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Zapier</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Ticket support + 24*7 (Chat Support + Assitance (Zoom call))</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 hours/month business Strategy</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 hours/month business Strategist</p> 
+         </div>
+        </div>
+        <p>*+ applicable taxes</p>
+       </span>
+       <span *ngIf="productname =='Beta'">
+        <h1 class="mb-3">Beta <span class="colr">$29/monthly</span></h1>
+        <span >Get your business up and running</span>
+        <div class="row py-3">
+         <div class="col-md-6">
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>0% transaction fee</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>1 Website</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>1 Funnel</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10 Pages</p> 
+           <!-- <p><i class="fa-regular fa-circle-check mr-2 colr"></i>1 courses</p>  -->
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Products</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Offers (Product Bundle)</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>1 Domain</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Ticket Support</p>  
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>One Free Call (30 min) Funnel Strategist</p>
+           <!-- <p><i class="fa-regular fa-circle-check mr-2 colr"></i>0 automation</p>  -->
+          
+           
+         </div>
+         <div class="col-md-6">
+          <p><i class="fa-regular fa-circle-check mr-2 colr"></i>10,000 Contacts</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>100 Campaign</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Email Templates</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Unlimited Forms</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Marketplace</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Free SSL</p>
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Reporting</p> 
+           <!-- <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Survey quiz (with logic)</p>  -->
+           <!-- <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Heat Map (Snapshot)</p>  -->
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Analytics</p> 
+           <p><i class="fa-regular fa-circle-check mr-2 colr"></i>One Free Call (30 min) Business Strategy</p>
+           <!-- <p><i class="fa-regular fa-circle-check mr-2 colr"></i>Zapier</p>  -->
+           
+        
+         </div>
+        </div>
+        <p>*+ applicable taxes</p>
+       </span>
+      </div>
+    </div>
+    <div *ngIf="specialuser">
+      <div  class="bw-container__bg" [style.backgroundImage]="bgImg"></div>
+    </div>
+      </div>
+     
+    </div> 
+
+</div>
