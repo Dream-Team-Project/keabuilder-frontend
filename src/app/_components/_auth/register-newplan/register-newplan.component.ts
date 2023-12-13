@@ -112,7 +112,7 @@ export class RegisterNewplanComponent implements OnInit {
   products:any=[
     {name:'Startup',
     type:[
-    {name:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw'},
+    {name:'Monthly',value:'price_1OMpu7BFKaDgAHCwv86w1n9J'},
     {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv'},
     ],
 },
@@ -136,7 +136,7 @@ export class RegisterNewplanComponent implements OnInit {
   },
 ];
 subscriptionplans:any=[
-  {id:'plan-8yKU3Mz9BnHVth6SYOjC',name:'Startup',type:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw',},
+  {id:'plan-8yKU3Mz9BnHVth6SYOjC',name:'Startup',type:'Monthly',value:'price_1OMpu7BFKaDgAHCwv86w1n9J',},
   {id:'plan-eeROpMVoVkNCasGIIXay',name:'Startup',type:'Annual',value:'price_1NTeyPBFKaDgAHCwLv5twvpv',},
   {id:'plan-74KaBnAOAiMDJx6HK5rl',name:'Entrepreneur',type:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc',},
   {id:'plan-O149fUrEJB3jc0akzgs9',name:'Entrepreneur',type:'Annual',value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G',},
