@@ -1,4 +1,5 @@
 <div class="bw-login container-fluid">
+
   <div class="row">
       <div class="bw-sidebar-logo py-4 px-5">
         <img src="/assets/images/logo/kblogo.png" alt="">
@@ -97,15 +98,15 @@
                     <mat-form-field class="example-full-width col-md-6" appearance="fill">
                       <mat-label>Current Subsciption Plan</mat-label>
                       <mat-select [(ngModel)]="product" (selectionChange)="productdetails($event)">
-                     <mat-option *ngFor="let item of products" [value]="item">{{item.name}}</mat-option>
-                    </mat-select>
+                        <mat-option *ngFor="let item of products" [value]="item">{{item.name}}</mat-option>
+                      </mat-select>
                     </mat-form-field>
         
                     <mat-form-field class="example-full-width col-md-6" appearance="fill">
                       <mat-label>Current Payment Plan</mat-label>
                       <mat-select [(ngModel)]="productid" (selectionChange)="subscriptiontype($event)">
-                        <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
-                    </mat-select>
+                          <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </div>
 
@@ -336,4 +337,4 @@
       </div>
      
     </div> 
-    </div>
+</div>

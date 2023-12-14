@@ -25,6 +25,8 @@ import { LoginComponent } from './_components/_auth/login/login.component';
 import { LoginNewComponent } from './_components/_auth/login-new/login-new.component';
 import { ProfileComponent } from './_components/_auth/profile/profile.component';
 import { RegisterComponent } from './_components/_auth/register/register.component';
+
+import { RegisterNewplanComponent } from './_components/_auth/register-newplan/register-newplan.component';
 // auth
 // builder
 import { TemplateComponent } from './_components/_builder/template/template.component';
@@ -171,7 +173,9 @@ if (currentDomain === appHost) {
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
     { path: 'login', component: LoginNewComponent, canActivate: [SignedInGuard]},
-    { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
+    // { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
+    { path: 'register/:id', component: RegisterNewplanComponent, canActivate: [SignedInGuard]},
+
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
     // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -462,6 +466,7 @@ export const RoutingComponents =
     LoginComponent, 
     LoginNewComponent,
     RegisterComponent, 
+    RegisterNewplanComponent,
     ForgotPasswordComponent,
     DashboardComponent, 
     StrategiesComponent,
