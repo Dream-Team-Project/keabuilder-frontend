@@ -15,8 +15,6 @@ export class TokenStorageService {
   constructor() { }
 
   signOut(): void {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
     window.localStorage.removeItem(this.USER_KEY);
     window.localStorage.removeItem(this.TOKEN_KEY);
   }
@@ -27,7 +25,14 @@ export class TokenStorageService {
   }
 
   public getToken(): string | null {
-    return window.localStorage.getItem(this.TOKEN_KEY);
+    const token = window.localStorage.getItem(this.TOKEN_KEY);
+    if (token) {
+      return token;
+    }
+    else {
+      this.signOut();
+      return '';
+    }
   }
 
   public saveUser(user: any): void {
@@ -40,7 +45,10 @@ export class TokenStorageService {
     if (user) {
       return JSON.parse(atob(user));
     }
-    return {};
+    else {
+      this.signOut();
+      return {};
+    }
   }
 
   public getUserLoggedInStatus(): Observable<any> {

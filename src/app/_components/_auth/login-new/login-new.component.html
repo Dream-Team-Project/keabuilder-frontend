@@ -15,7 +15,7 @@
             <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate class="pl-4 pr-4">
               <div class="bu-forlogin" id="loginform">
                 
-                <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-form-field class="kb-full-width" appearance="outline">
                   <mat-label>Username</mat-label>
                   <input type="text" matInput placeholder="Ex. User" [formControl]="userFormControl" required minlength="3" maxlength="20" [(ngModel)]="form.username" >
                   <mat-error *ngIf="userFormControl.hasError('required')">
@@ -29,7 +29,7 @@
                   </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="kb-full-width" appearance="fill">
+                <mat-form-field class="kb-full-width" appearance="outline">
                   <mat-label>Password</mat-label>
                   <input type="password" matInput placeholder="*********" [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="form.password">
                   <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">

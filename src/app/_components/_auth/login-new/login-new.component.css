@@ -240,7 +240,6 @@
   text-decoration: underline;
 }
 
-#loginform .mat-form-field-appearance-fill::ng-deep .mat-form-field-flex{
-  border: 2px solid #838383;
-  background: #fff;
+::ng-deep #loginform .mat-form-field-appearance-outline:not(.mat-form-field-invalid) .mat-form-field-outline {
+  color: #838383;
 }
