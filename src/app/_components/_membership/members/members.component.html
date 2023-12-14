@@ -258,7 +258,7 @@
   </div>
   
   
-    <div class="row">
+    <div class="row" *ngIf="users?.length != 0; else nodata">
         <div class="col-md-12">
             <table class="table kb-table" >
               <thead>
@@ -293,6 +293,17 @@
     </div>
   </div>
   </div>
+  <ng-template #nodata>
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-4">
+        <img
+          src="/assets/images/website/website-empty.png"
+          class="img-fluid"
+          alt="No Member Found"
+        />
+      </div>
+    </div>
+  </ng-template>
 
 
 
