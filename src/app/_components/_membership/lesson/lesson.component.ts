@@ -133,8 +133,8 @@ export class MembershipLessonComponent implements OnInit {
   fetchLesson() {
     this._lesson.single(this.lesson.uniqueid).subscribe(res=>{
       this.lesson = res.data[0];
-      if(this.lesson.content) this.content_html = this._lesson.decodeContent(this.lesson.content);
-      if(this.lesson.email_body) this.email_body = this._lesson.decodeContent(this.lesson.email_body);
+      if(this.lesson.content) this.content_html = this._lesson?.decodeContent(this.lesson.content);
+      if(this.lesson.email_body) this.email_body = this._lesson?.decodeContent(this.lesson.email_body);
       if(this.lesson.video) this.videos =  JSON.parse(this.lesson.video);
       if(this.lesson.audio) this.audios =  JSON.parse(this.lesson.audio);
       if(this.lesson.download && this.lesson.download != 'null') {
@@ -172,7 +172,7 @@ export class MembershipLessonComponent implements OnInit {
   fetchDocument() {
     this.documentfetching = true;
     this._file.getAllDocuments1(this.lesson.uniqueid).subscribe(resp=>{
-      console.log(resp)
+      // console.log(resp)
       if(resp.success){
       this.documents = [];
       resp.data.forEach((item:string)=>{

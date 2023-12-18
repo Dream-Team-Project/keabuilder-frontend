@@ -39,6 +39,7 @@ export class CrmReportsComponent implements OnInit {
   public chartCampaignOptions: Partial<ChartOptions> | any;
 
   currentDate:any = '';
+  fetching=false;
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   report_type:any='last_week';
   report_campaign:any='last_week';
@@ -88,6 +89,7 @@ export class CrmReportsComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.fetching=true;
     this.currentDate = new Date();
     this.contact.date.from = new Date(this.currentDate.setDate(this.currentDate.getDate() - 30));
     this.campaign.date.from = new Date(this.currentDate.setDate(this.currentDate.getDate() - 30));
@@ -95,17 +97,21 @@ export class CrmReportsComponent implements OnInit {
     this.fetchDateReportContacts();
     this.fetchRecentCampaigns();
     this.fetchDateReportCampaigns();
+    this.fetching=false;
   }
 
   // start contacts
 
   fetchRecentContacts() {
+    this.fetching=true;
     this._reportingService.recentContacts(this.contact.limit).subscribe((resp:any)=>{
       if(resp.success) this.contact.recents = resp.data;
+      this.fetching=false;
     })
   }
 
   fetchDateReportContacts() {
+    this.fetching=true;
     if(this.report_type == 'last_week') {
       this.contact.date.to = new Date();
       this.contact.date.from = new Date();
@@ -128,6 +134,7 @@ export class CrmReportsComponent implements OnInit {
         this.contact.forms = resp?.data[0]?.forms || '0';
         this.contact.new_contacts = resp?.data[0]?.new_contacts || '0';
         this.contactChartOption();
+        this.fetching=false;
       }
     })
   }
@@ -250,12 +257,15 @@ export class CrmReportsComponent implements OnInit {
   // start campaigns
 
   fetchRecentCampaigns() {
+    this.fetching=true;
     this._reportingService.recentCampaigns(this.campaign.limit).subscribe((resp:any)=>{
       if(resp.success) this.campaign.recents = resp.data;
+      this.fetching=false;
     })
   }
 
   fetchDateReportCampaigns() {
+    this.fetching=true;
     if(this.report_campaign == 'last_week') {
       this.campaign.date.to = new Date();
       this.campaign.date.from = new Date();
@@ -278,6 +288,7 @@ export class CrmReportsComponent implements OnInit {
         this.campaign.campaigns=resp?.data[0]?.campaigns || '0';
         this.campaign.sent=resp?.data[0]?.sent || '0';
         this.campaignChartOption();
+        this.fetching=false;
       }
     })
   }

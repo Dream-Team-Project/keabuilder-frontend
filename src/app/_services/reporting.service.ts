@@ -16,6 +16,10 @@ export class ReportingService {
   recentCampaignsApi = '/api/recentcampaigns';
   datefilterCampaignsApi = '/api/datefiltercampaigns';
 
+  recentCoursesApi = '/api/recentcourses';
+  recentMembersApi = '/api/recentmembers';
+  datefilterCoursesApi = '/api/datefiltercourses';
+
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.user_id = this.tokenStorage.getUser().uniqueid;
   }
@@ -37,6 +41,19 @@ export class ReportingService {
 
   datefilterCampaigns(from:Date, to:Date): Observable<any> {
     return this.http.get(this.datefilterCampaignsApi+'/'+this.user_id+'/'+from+'/'+to)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  recentCourses(limit:number): Observable<any> {
+    return this.http.get(this.recentCoursesApi+'/'+this.user_id+'/'+limit)
+    .pipe(catchError(this.errorHandler));
+  }
+  datefilterCourses(from:Date, to:Date): Observable<any> {
+    return this.http.get(this.datefilterCoursesApi+'/'+this.user_id+'/'+from+'/'+to)
+    .pipe(catchError(this.errorHandler));
+  }
+  recentMembers(limit:number): Observable<any> {
+    return this.http.get(this.recentMembersApi+'/'+this.user_id+'/'+limit)
     .pipe(catchError(this.errorHandler));
   }
   

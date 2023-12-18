@@ -1,5 +1,5 @@
 <div class="container-fluid kb-main-container pb-5" id="kea-dashboard">
-
+  <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row">
     <div class="col-md-4 adjustflex">
       <h2 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h2>

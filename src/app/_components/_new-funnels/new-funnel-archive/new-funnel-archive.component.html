@@ -38,7 +38,7 @@
                 </mat-form-field>
              
             </div>
-              <div class="row">
+              <div class="row" *ngIf="users.length !=0 ; else nodata">
                 <div class="col-12">
         <table class="table kb-table">
           <thead>
@@ -67,8 +67,20 @@
         </table>
                
                   </div>
-  
-              </div>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+              </div> 
       </div>
   </div>
+  <ng-template #nodata>
+  <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 text-center">
+        <img
+          width=""
+          src="/assets/images/funnel/funnel2.png"
+          class="img-fluid"
+          alt=""
+        />
+      </div>
+    </div>
+  </ng-template>

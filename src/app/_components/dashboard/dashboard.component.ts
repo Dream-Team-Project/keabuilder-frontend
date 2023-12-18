@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit {
   public chartOptions14: Partial<ChartOptions> | any;
 
   error?: string;
+  fetching=false;
   isLoggedIn = false;
   isLoginFailed = false;
   username = '';
@@ -153,6 +154,7 @@ export class DashboardComponent implements OnInit {
     public userService: UserService,
     private heatmapsService: HeatmapsService,
   ) {
+    this.fetching=true;
     this.chartOptions = {
       series: [
         {
@@ -612,6 +614,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+   
     this.fetchUserplan();
     this.allrevenue();
     this.allcontact();
@@ -768,11 +771,12 @@ export class DashboardComponent implements OnInit {
     this.visitorbrowser({ type: 'browser'});
 
     this.visitoros({ type: 'os'});
+    this.fetching=false;
 
   }
 
   visitorbrowser(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
         // console.log(data);
@@ -800,14 +804,14 @@ export class DashboardComponent implements OnInit {
         }
 
         this.browserReportOptions();
-
+        this.fetching=false;
       }
     });
 
   }
 
   visitoros(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
         // console.log(data);
@@ -835,14 +839,14 @@ export class DashboardComponent implements OnInit {
         }
 
         this.osReportOptions();
-
+        this.fetching=false;
       }
     });
 
   }
 
   visitorlanding_page(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
           // console.log(data);
@@ -850,13 +854,14 @@ export class DashboardComponent implements OnInit {
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_toplandingpage = data.data;
           }
+          this.fetching=false;
       }
     });
 
   }
 
   visitortopreferrals(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
           // console.log(data);
@@ -864,13 +869,14 @@ export class DashboardComponent implements OnInit {
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topreferrals = data.data;
           }
+          this.fetching=false;
       }
     });
 
   }
 
   visitortopcountries(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
           // console.log(data);
@@ -878,13 +884,14 @@ export class DashboardComponent implements OnInit {
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topcountry = data.data;
           }
+          this.fetching=false;
       }
     });
 
   }
 
   visitordevice(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
         // console.log(data);
@@ -910,14 +917,14 @@ export class DashboardComponent implements OnInit {
         }
 
         this.deviceReportOptions();
-
+        this.fetching=false;
       }
     });
 
   }
 
   visitordata(condition:any){
-
+    this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
         // console.log(data);
@@ -930,14 +937,14 @@ export class DashboardComponent implements OnInit {
           this.data_newvsret.data = [0,0]
         }
         this.pagenewvsretReportOptions();
-
+        this.fetching=false;
       },
     });
 
   }
 
   pageviews(){
-
+    this.fetching=true;
     this.dashboardService.pageview().subscribe({
       next: (data) => {
         // console.log(data);
@@ -956,7 +963,7 @@ export class DashboardComponent implements OnInit {
         }
 
         this.pageviewReportOptions();
-
+        this.fetching=false;
 
       },
     });
@@ -964,6 +971,7 @@ export class DashboardComponent implements OnInit {
   }
 
   allrevenue(){
+    this.fetching=true;
     this.dashboardService.getAllrevenue(this.revenuelimit).subscribe({
       next: (data) => {
         // console.log(data);
@@ -980,13 +988,14 @@ export class DashboardComponent implements OnInit {
         else{
           this.totalrevenue=0;
         }
+        this.fetching=false;
       },
     });
 
   }
 
   allcontact(){
-
+    this.fetching=true;
     this.dashboardService.getAllcontact(this.contactlimit).subscribe({
       next: (data) => {
         // console.log(data);
@@ -996,12 +1005,14 @@ export class DashboardComponent implements OnInit {
         else{
           this.totalmembers =0;
         }
+        this.fetching=false;
       },
     });
 
   }
 
   totalearn(){
+    this.fetching=true;
     this.dashboardService.totalearning().subscribe({
       next: (data) => {
         // console.log(data);
@@ -1022,7 +1033,7 @@ export class DashboardComponent implements OnInit {
         var data:any = [0,0,0,0,0,0,0,0,0,0,0,0];
           this.totalearningsreport(data);
         }
-
+        this.fetching=false;
       },
     });
   }
@@ -1047,6 +1058,7 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchUserplan(){
+    this.fetching=true;
     this.dashboardService.plandata().subscribe((data:any)=>{
       // console.log(data.data[0])
       if(data.success){
@@ -1055,6 +1067,7 @@ export class DashboardComponent implements OnInit {
       else{
         this.userplan=[];
       }
+      this.fetching=false;
     })
   }
 

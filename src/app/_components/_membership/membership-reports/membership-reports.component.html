@@ -1,7 +1,13 @@
 <div id="kb-crmreport">
     <div class="container-fluid">
-          <div class="row ">
-              <div class="col-md-6 mt-4">
+          <div class="row mb-4">
+            <div class="col-md-12">
+            <div class="kb-report-card p-3">
+                <div class="row border-bottom">
+                    <div class="col-md-3">
+                        <h5 class="mt-3 ml-3 mb-2">Courses</h5>
+                    </div>
+                    </div>
                   <apx-chart
                       [series]="chartOptions.series"
                       [chart]="chartOptions.chart"
@@ -15,14 +21,23 @@
                       [xaxis]="chartOptions.xaxis"
                   ></apx-chart>
               </div>
-              <div class="col-md-6 mt-4">
-                  <apx-chart
-                      [series]="chartOptions2.series"
-                      [chart]="chartOptions2.chart"
-                      [plotOptions]="chartOptions2.plotOptions"
-                      [xaxis]="chartOptions2.xaxis"
-                  ></apx-chart>
-              </div>
+              </div>         
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                <div class="kb-report-card p-3">
+                    <div class="row border-bottom">
+                        <div class="col-md-3">
+                            <h5 class="mt-3 ml-3 mb-2">Courses vs Members</h5>
+                        </div>
+                        </div>
+                <apx-chart
+                    [series]="chartOptions2.series"
+                    [chart]="chartOptions2.chart"
+                    [plotOptions]="chartOptions2.plotOptions"
+                    [xaxis]="chartOptions2.xaxis"
+                ></apx-chart>
+            </div>
           </div>
       </div>
       
