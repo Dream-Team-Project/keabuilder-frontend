@@ -35,7 +35,6 @@ export interface WebpageData {
 })
 export class WebsitePagesComponent implements OnInit {
   
-  @ViewChild(MatPaginator) paginator!: MatPaginator; 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('deldialog') deldialog!: TemplateRef<any>;
@@ -43,6 +42,7 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
   @ViewChild('simpleduplicatedialog') simpleduplicatedialog!: TemplateRef<any>;
   @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
 readonly separatorKeysCodes = [ENTER, COMMA] as const;
   website_id:any;
@@ -141,6 +141,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   datakbpage:any;
   error=false;
   errormessage:any='';
+  pageslength:any;
+  pagePages:any;
 
   constructor(private webpagesService: WebpagesService,
     private _snackBar: MatSnackBar,
@@ -295,6 +297,10 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   showwebpages(){
     this.searching = true;
     this.spinner=true;
+    let obj ={pageIndex:this.paginator?.pageIndex || 0, 
+      pageSize:this.paginator?.pageSize || 20,
+      websiteid:this.website_id,
+    };
     if(this.website_id) {
       this.webpagesService.getWebpagesById(this.website_id).subscribe({
         next: data => {
@@ -927,7 +933,19 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
   // end all webistes actions
-
+  getpagePages(event:any){
+    this.searching= true;
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this.websiteService.getpagewebsites(obj).subscribe(
+        (data:any) => {
+          this.shortdata(data);
+          // this.allwebsites = data?.data;
+          // this.pagewebsites=data?.data;
+          this.pageslength=data?.pages;
+          this.searching= false;
+          console.log(data)
+    });
+ }
   
 }
 

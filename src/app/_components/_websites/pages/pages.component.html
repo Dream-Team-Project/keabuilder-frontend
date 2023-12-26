@@ -212,10 +212,10 @@
           <mat-form-field appearance="fill" class="col-md-2 p-2">
             <mat-label>Sort By</mat-label>
             <mat-select name="kbfilter" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibility)">
-              <mat-option [value]="'page_name ASC'">ASC By Name</mat-option>
-              <mat-option [value]="'page_name DESC'">DESC By Name</mat-option>
-              <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-              <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+              <mat-option [value]="'page_name ASC'">Ascending By Name</mat-option>
+              <mat-option [value]="'page_name DESC'">Descending By Name</mat-option>
+              <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
+              <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -345,7 +345,9 @@
             </div>
           </div>
         </div>
-       
+        <div class="py-3">
+          <mat-paginator  #paginator [length]="pageslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagePages($event)"></mat-paginator>
+        </div>
       </ng-template>
       <!-- pages to show -->
    
