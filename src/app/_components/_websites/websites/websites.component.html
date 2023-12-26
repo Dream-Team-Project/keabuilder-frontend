@@ -137,10 +137,10 @@
               <mat-form-field appearance="fill" class="col-md-3">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
-                  <mat-option value="nameasc" >ASC By Name</mat-option>
-                  <mat-option value="namedesc">DESC By Name</mat-option>
-                  <mat-option value="dateasc" >ASC By Date</mat-option>
-                  <mat-option value="datedesc">DESC By Date</mat-option>
+                  <mat-option value="nameasc" >Ascending By Name</mat-option>
+                  <mat-option value="namedesc">Descending By Name</mat-option>
+                  <mat-option value="dateasc" >Ascending By Date</mat-option>
+                  <mat-option value="datedesc">Descending By Date</mat-option>
                 </mat-select>
               </mat-form-field>
             
@@ -159,7 +159,7 @@
       <ng-template #showpages>
         <div class="row">
 
-            <div class="col-md-6 cardpage mt-4" *ngFor="let websites of allwebsites;">
+            <div class="col-md-6 cardpage mt-4" *ngFor="let websites of pagewebsites;">
                 <div>
                     <div class="row">
                         <div class="row tphdrcard">
@@ -206,9 +206,12 @@
                             </mat-menu>
                         </div>
                     </div>
+                    
                 </div>
             </div>
-
+        </div>
+        <div class="py-3">
+          <mat-paginator  #paginator [length]="websiteslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageWebsites($event)"></mat-paginator>
         </div>
       </ng-template>
 

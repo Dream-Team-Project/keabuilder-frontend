@@ -63,15 +63,15 @@ export class WebsiteService {
   }
 
   oncreatesubdomain(domain: any, uniqueid: any): Observable<any>{
-    return this.http.get('https://keasolution.com/crd.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
+    return this.http.get('https://api.keasolution.com/crd.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
   }
 
   ondeletesubdomain(domain: any): Observable<any>{
-    return this.http.get('https://keasolution.com/delsubdm.php?domain='+domain+'&uniqueid='+this.uuid);
+    return this.http.get('https://api.keasolution.com/delsubdm.php?domain='+domain+'&uniqueid='+this.uuid);
   }
 
   onchangedirdomain(domain: any, uniqueid: any): Observable<any>{
-    return this.http.get('https://keasolution.com/cngdmrt.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
+    return this.http.get('https://api.keasolution.com/cngdmrt.php?domain='+domain+'&uniqueid='+uniqueid+'&userid='+this.uuid);
   }
   
   querystringmanagewebsite(data:any):Observable<any> {
@@ -84,6 +84,15 @@ export class WebsiteService {
     return this.http.post("/api/shortbypaginatorwebsite/"+this.uuid, {
       data
     }, httpOptions);
+  }
+
+  getpagewebsites(obj :any): Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post('/api/getpagewebsites', obj);
+  }
+  getpagePages(obj :any): Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post('/api/getpagePages', obj);
   }
 
 }

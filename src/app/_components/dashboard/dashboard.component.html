@@ -351,12 +351,12 @@
     <div class="col-lg-6 col-sm-6">
       <div class="card">
         <div class="card-header">
-          <div class="row">
+          <div class="row"   *ngIf="contact.fetched">
             <div class="col-sm-12">
               <div class="numbers pull-left d-flex justify-content-between">
                 <h5>Recent Contacts</h5>
-                <h5><span class="text-success">Overall : {{contact.totalcontacts}}</span></h5>
-                <h5><span class="text-danger">Limit : {{userplan.contacts == 'unlimited' ? '10,00,000' : userplan.contacts}}</span></h5>
+                <h5><span class="text-success">Overall : {{contact?.totalcontacts}}</span></h5>
+                <h5><span class="text-danger">Limit : {{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</span></h5>
                 <!-- <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span> -->
               </div>
             </div>

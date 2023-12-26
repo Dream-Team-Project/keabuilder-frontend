@@ -93,32 +93,7 @@
           />
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <!-- <mat-form-field class="col-md-2 " appearance="fill">
-          <mat-label>Status :</mat-label>
-          <mat-select #sortInp name="kbfilter" value='' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
-            <mat-option value="" selected>All</mat-option>
-              <mat-option [value]="'Active'">Active</mat-option>
-              <mat-option [value]="'Inactive'">Inactive</mat-option>
-          </mat-select>
-        </mat-form-field> 
-        <mat-form-field class="col-md-2 " appearance="fill">
-          <mat-label>Filter by:</mat-label>
-          <mat-select #filterInp name="kbfilter" value='created_at DESC' (valueChange)="searchAutomations(searchInp, sortInp, filterInp)">
-            <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-            <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-            <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-            <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-            <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-            <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-        </mat-select>
-        </mat-form-field> -->
         <div class="col-md-5 text-right mt-2">
-          <!-- <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllAutomations($event)" matTooltip="Select All Page Automations" matTooltipPosition="above"></mat-checkbox></span>
-          <button mat-raised-button [color]="'accent'"
-            (click)="toggleView()" class="mr-2">
-            <span *ngIf="togglebutton==false">List View <i class="fas fa-th-list ml-1"></i></span>
-             <span *ngIf="togglebutton==true">Grid View <i class="fas fa-th ml-1"></i></span>
-          </button> -->
           <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
             <i class="fa fa-random" aria-hidden="true"></i> Create Automation
           </button>

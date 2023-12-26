@@ -60,7 +60,7 @@ export class UpdateDnsComponent implements OnInit {
     ) {
     this._route.paramMap.subscribe((params: ParamMap) => {
       this.domain.uniqueid = params.get('uniqueid');
-      console.log(this.domain.uniqueid)
+      // console.log(this.domain.uniqueid)
   });  
    }
 
@@ -77,13 +77,13 @@ export class UpdateDnsComponent implements OnInit {
   }
   getdomainDetails(){
     this.domainService.getSingleDomain(this.domain.uniqueid).subscribe({
-      next: data => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
         this.fetching=false;
         if(data.data.length!=0){
           this.domain=data.data[0];
           this.domain.dns_records=JSON.parse(data.data[0]?.dns_records);
-          // console.log(this.domain)
+          // // console.log(this.domain)
         }
       }
     });
@@ -104,8 +104,8 @@ export class UpdateDnsComponent implements OnInit {
     data.zoneid=this.domain?.zoneid;
     data.domain=this.domain?.name;
     let recordid=data?.id ? data?.id : '';
-    // console.log(recordid)
-    console.log(data)
+    // // console.log(recordid)
+    // console.log(data)
     if(data.type && data.name && data.content && data.ttl){
       this.domainService.oncloudAddUpdatedomain(data.zoneid,data.domain,data.type,data.name,recordid,data.content,data.action,data.proxied,data.ttl).subscribe((resp:any)=>{
         if(resp.success == true){
@@ -113,7 +113,7 @@ export class UpdateDnsComponent implements OnInit {
         var objdata = {uniqueid:this.domain?.uniqueid,name:resp.dmname,zoneid:resp.zoneid, nameservers:resp.nameservers,dns_records:dns_records, status:resp.status};
         this.domainService.updatedomainnameserver(objdata).subscribe({
           next: data => {
-            // console.log(data);
+            // // console.log(data);
             if(data.success==true){
               this.resetobj();
               this.getdomainDetails();
@@ -139,12 +139,12 @@ export class UpdateDnsComponent implements OnInit {
 //     if(action=='main'){
 //     this.domainService.onclouddeletedomain(domain.zoneid,domain.name).subscribe({
 //       next: data => {
-//         // console.log(data);
+//         // // console.log(data);
 //         if(data.success==true){
 
 //           this.domainService.ondeletedomain(domain.id).subscribe({
 //             next: data => {
-//               // console.log(data);
+//               // // console.log(data);
 //               this.fetching = false;
              
 //               if(data.success==true){
@@ -179,12 +179,12 @@ export class UpdateDnsComponent implements OnInit {
   }
 
   showttl(event:any){
-    // console.log(event.target.value)
+    // // console.log(event.target.value)
     let evt=event.target.value
     this.shwttl= JSON.parse(evt);
   }
   showttl1(event:any){
-    // console.log(event)
+    // // console.log(event)
     let evt=event
     this.shwttl= JSON.parse(evt);
   }

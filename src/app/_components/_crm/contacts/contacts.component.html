@@ -189,7 +189,6 @@
   <div mat-dialog-actions class="justify-content-end">
     <button mat-button mat-dialog-close cdkFocusInitial class="text-danger">Cancel</button>
     <button mat-button [color]="'primary'" [disabled]="fileFormControl.invalid || document?.length == 0" (click)="uploadcontacts()">Import</button>
-    <!-- <button mat-raised-button mat-dialog-close [color]="'primary'" [disabled]="filteredTempIds.lists?.length > 0" (click)="uploadcontacts('all')">Import All</button> -->
   </div>
 </ng-template>
 <ng-template #exportdialog>
@@ -257,19 +256,6 @@
             <input matInput  [(ngModel)]="searchInp" (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill" class="col-md-2 px-2">
-            <mat-label>Sort By</mat-label>
-            <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
-                <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-                <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-                <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-                <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-                <mat-option [value]="'email ASC'">ASC By Email</mat-option>
-                <mat-option [value]="'email DESC'">DESC By Email</mat-option>
-                <mat-option [value]="'firstname ASC'">ASC By Name</mat-option>
-                <mat-option [value]="'firstname DESC'">DESC By Name</mat-option>
-            </mat-select>
-        </mat-form-field> -->
         <mat-form-field appearance="fill" class="col-md-2 px-2">
             <mat-label>Filter By List</mat-label>
             <mat-select  [(ngModel)]="listInp" name="listfilter"  (ngModelChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">

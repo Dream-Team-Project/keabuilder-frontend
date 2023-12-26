@@ -142,19 +142,6 @@
                     <div class="kb-fitimg"
               [ngStyle]="{'background-image':'url(' + _image.uploadImgPath + _general.getSSPath('email-' + singleemail?.uniqueid) +'), url(' + _image.uploadImgPath +'webpage_thumbnail.jpg' +')'}" *ngIf="singleemail?.uniqueid">
             </div>
-                    <!-- <mat-form-field class="kb-full-width" appearance="fill">
-                        <mat-label>Subject</mat-label>
-                        <input type="text" matInput name="subject" [(ngModel)]="fullcampobj.subject"  [formControl]="subjectControl" placeholder="Enter the subject(We suggest no more than 65 characters)" required minlength="3" >
-                        <mat-error *ngIf="subjectControl.hasError('required')">
-                        Name is <strong>required</strong>
-                        </mat-error>
-                        <mat-error *ngIf="subjectControl.hasError('minlength')">
-                        Name must be at least <strong>3</strong> characters
-                        </mat-error>
-                    </mat-form-field>
-                    <div class="kb-editor-container">
-                        <editor [(ngModel)]="fullcampobj.emailbody" [init]="_general.config" class="h-100"></editor>
-                    </div>     -->
                 </div>
             </div>
             <div class="col-md-5">
@@ -267,44 +254,10 @@
                         </mat-autocomplete>
                       </mat-form-field>
 
-                      <!-- <mat-form-field class="kb-full-width" appearance="fill"  (click)="filterTagData($event)">
-                        <mat-label>Not Subscribe</mat-label>
-                        <mat-chip-list #tagChipList aria-label="Tag selection">
-                          <mat-chip
-                            *ngFor="let data of selectedTags; index as i"
-                            (removed)="removeSelectedTag(i)">
-                            {{ data?.name }}
-                            <button matChipRemove>
-                            <mat-icon>cancel</mat-icon>
-                            </button>
-                          </mat-chip>
-                        </mat-chip-list>
-                        <input matInput
-                          type="text"
-                          #searchTagInp
-                          placeholder="Select multiples..."
-                          (input)="filterTagData($event)"
-                          [matAutocomplete]="tagAuto"
-                          [matChipInputFor]="tagChipList"
-                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                          class="kb-act-searchinp w-100 pt-1">
-                        <mat-autocomplete
-                          autoActiveFirstOption
-                          #tagAuto="matAutocomplete"
-                          (optionSelected)="addSelectedTag($event, searchTagInp)">
-                          <mat-option
-                            *ngFor="let option of filteredOptions?.tags"
-                            [value]="option"
-                            [disabled]="filteredTempIds?.tags.includes(option.uniqueid)">
-                            {{ option?.name }} {{'('+option?.activecontacts+')'}}
-                          </mat-option>
-                        </mat-autocomplete>
-                      </mat-form-field> -->
-
+                  
                     <mat-form-field class="kb-full-width " appearance="fill">
                         <mat-label>Preheader text</mat-label>
                         <input type="text" matInput name="preheadertext" [(ngModel)]="fullcampobj.preheader_text" [formControl]="preheadertextControl" placeholder="Text that appears after your subject line." minlength="3" >
-                        <!-- <small>Text that appears after your subject line. If this field is left blank the first line of your email will display</small> -->
                         <mat-error *ngIf="preheadertextControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
                         </mat-error>
@@ -330,7 +283,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <!-- <a mat-raised-button href="javascript:void(0)" class="mb-4 text-decoration-none txtanchor" (click)="openDialog(dialog2)" >Add New Address <i class="fas fa-plus"></i></a> -->
+                    
 
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>Send</mat-label>
@@ -341,7 +294,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <!-- <small *ngIf="sendoptn">Current Time from timezone: <b style="color:var(--primary-color);">{{showmytime}}</b></small><br> -->
+                  
                     <mat-form-field class="kb-full-width" appearance="fill" *ngIf="fullcampobj.sendoption =='recurring'">
                         <mat-label>Recurring Type</mat-label>
                         <mat-select name="recurring"  required [(ngModel)]="fullcampobj.recurring">

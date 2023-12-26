@@ -51,17 +51,7 @@
         (input)="searchTags(searchInp, filterInp)" placeholder="Search Tags..." />
       <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
-    <!-- <mat-form-field class="col-md-2" appearance="fill">
-      <mat-label>Filter by:</mat-label>
-      <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchTags(searchInp, filterInp)">
-        <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-        <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-        <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-        <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-        <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-        <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-      </mat-select>
-    </mat-form-field> -->
+  
     <div class="col-md-4 text-right mt-2">
       <button mat-raised-button (click)="openDialog(adddialog, tagObj)" color="primary" class="mr-2">
         Add Tag <i class="fas fa-plus"></i>

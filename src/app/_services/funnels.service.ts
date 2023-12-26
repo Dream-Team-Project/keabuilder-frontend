@@ -68,6 +68,10 @@ export class FunnelService {
       data
     }, httpOptions);
   }
+  updatefunnelStepsettings(data:any):Observable<any> {
+    data.user_id=this.uuid;
+    return this.http.post("/api/updatefunnelStepsettings",data);
+  }
 
   setfunnelvariation(id:string):Observable<any> {
     return this.http.post("/api/selectedvariation/"+this.uuid, {

@@ -724,7 +724,7 @@ export class GeneralService {
     private _course: CourseService,) {
     if(this.tokenStorageService.getToken()) {
         this.user = this.tokenStorageService.getUser();
-        this.userService.getUsersDetails().subscribe(data=>{
+        this.userService.getUsersDetails().subscribe((data:any) => {
         this.user = {...this.user, ...data.data[0]};
         this.user.name = this.user.username;
         this.main.author = this.user.name;

@@ -40,6 +40,7 @@ export class MembershipReportsComponent implements OnInit {
 
   currentDate:any = '';
   fetching=false;
+  fetch=false;
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   report_type:any='last_week';
   
@@ -202,56 +203,35 @@ export class MembershipReportsComponent implements OnInit {
       // }
     };
   }
-  memberChart(){
+  memberChart() {
+  
     this.chartOptions2 = {
       series: [
         {
           data: [
-            {
-              x: "Courses",
-              y: [
-                new Date("2019-03-02").getTime(),
-                new Date("2019-03-04").getTime()
-              ]
-            },
-            {
-              x: "Members",
-              y: [
-                new Date("2019-03-04").getTime(),
-                new Date("2019-03-08").getTime()
-              ]
-            },
-            // {
-            //   x: "Contacts",
-            //   y: [
-            //     new Date("2019-03-08").getTime(),
-            //     new Date("2019-03-12").getTime()
-            //   ]
-            // },
-            // {
-            //   x: "Forms",
-            //   y: [
-            //     new Date("2019-03-12").getTime(),
-            //     new Date("2019-03-18").getTime()
-            //   ]
-            // }
-          ]
-        }
+            { x: "Courses", y: [this.courses?.recents?.length] },
+            { x: "Members", y: [this.courses?.members?.length] },
+          ],
+        },
       ],
       chart: {
         height: 350,
-        type: "rangeBar"
+        type: "bar",
       },
       plotOptions: {
         bar: {
-          horizontal: true
-        }
+          horizontal: true,
+        },
       },
       xaxis: {
-        type: "datetime"
-      }
+        type: "",
+      },
+      fill: {
+        opacity: 1,
+      },
     };
   }
+  
 
   fetchRecentCourses() {
     this.fetching=true;
@@ -280,7 +260,7 @@ export class MembershipReportsComponent implements OnInit {
     //   const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month) + 1, 0).getDate();
     //   this.contact.date.to = new Date(this.currentDate.getFullYear(), this.months.indexOf(this.report_month), lastDayOfMonth);
     // }
-    this._reportingService.datefilterCourses(this.courses.date.from, this.courses.date.to).subscribe((resp:any)=>{
+    this._reportingService.datefilterCourses(this.courses.date?.from, this.courses.date?.to).subscribe((resp:any)=>{
       
       if(resp.success) {
         this.courses.monthly = resp?.data || [];
@@ -292,6 +272,7 @@ export class MembershipReportsComponent implements OnInit {
         this.courseChart();
         this.fetching=false;
       }
+      this.fetch=true;
     })
   }
 

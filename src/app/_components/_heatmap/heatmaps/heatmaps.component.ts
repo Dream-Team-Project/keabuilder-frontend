@@ -65,7 +65,7 @@ export class HeatmapsComponent implements OnInit {
 
     this.funnelService.getallfunnelandstep().subscribe({
       next: data => {
-        console.log(data);
+        // console.log(data);
 
         var fullobjsite = data.data2;
         var fullobjpage = data.data;

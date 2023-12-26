@@ -8,6 +8,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { UserService } from 'src/app/_services/user.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-websites',
@@ -21,6 +22,7 @@ export class WebsitesComponent implements OnInit {
   @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
   @ViewChild('duplicatedialog') duplicatedialog!: TemplateRef<any>;
   @ViewChild('copyurldialog') copyurldialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   allwebsites:any = []; 
   delwebsite:any;
@@ -43,6 +45,8 @@ export class WebsitesComponent implements OnInit {
   errormessage:any='';
 
   username:any = '';
+  websiteslength:any;
+  pagewebsites:any;
 
   constructor(public websiteService: WebsiteService,
               private _snackBar: MatSnackBar,
@@ -56,7 +60,7 @@ export class WebsitesComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
-    this.fetwebfull();
+    // this.fetwebfull();
     this.userService.getUsersDetails().subscribe({
       next: data => {
         if(data.data.length>0){
@@ -64,25 +68,30 @@ export class WebsitesComponent implements OnInit {
         }
       }
     });
+    this.fetchData();
+  }
+  fetchData(){
+    this.getpageWebsites({pageIndex:0,pageSize:20}); 
   }
 
-  fetwebfull(){
-    this.searching=true;
-    this.websiteService.getWebsite().subscribe({
-      next: data => {
-        this.fetweb(data);
-      },
-      error: err => {
-        // console.log(err);
-        this.searching=false;
-      }
-    });
-  }
+  // fetwebfull(){
+  //   this.searching=true;
+  //   this.websiteService.getWebsite().subscribe({
+  //     next: data => {
+  //       this.fetweb(data);
+  //     },
+  //     error: err => {
+  //       // console.log(err);
+  //       this.searching=false;
+  //     }
+  //   });
+  // }
 
   fetweb(data:any){
     if(data.data?.length != 0) {
       this.nodata = false;
-      this.allwebsites = [];
+      this.pagewebsites = [];
+      // this.allwebsites = [];
       data.data.forEach((element:any, index:number) => {
         var genobj = {uniqueid:'',title:'',created:'',publishpages:'',totalpage:'',thumbnail:'',subdomain:'',domain:''};
 
@@ -100,7 +109,8 @@ export class WebsitesComponent implements OnInit {
         genobj.thumbnail = 'keaimage-page-'+element.homepage+'-screenshot.png';
         genobj.subdomain = element.subdomain;
 
-        this.allwebsites.push(genobj);
+        this.pagewebsites.push(genobj);
+        // this.allwebsites.push(genobj);
 
       });
     }else{
@@ -113,7 +123,10 @@ export class WebsitesComponent implements OnInit {
 
   searchpage(event: Event) {
     this.searching = true;
-    var SearchValue = {search:(event.target as HTMLInputElement).value};
+    var SearchValue = {
+      search:(event.target as HTMLInputElement).value,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,};
     this.selstatusshow = 'all';
     this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
       next: data => {
@@ -123,7 +136,9 @@ export class WebsitesComponent implements OnInit {
   }
 
   applykbfilter(){
-    var dt:any = {order:this.selstatusshow};
+    var dt:any = {order:this.selstatusshow,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,};
     this.websiteService.shortbypaginatorwebsite(dt).subscribe({
       next: data => {
         this.fetweb(data);
@@ -207,7 +222,7 @@ export class WebsitesComponent implements OnInit {
         next: data => {  
           // console.log(data);
           this._general.openSnackBar(false,"Changes has been updated!", 'OK', 'center', 'top');
-          this.fetwebfull();
+          this.fetchData();
           this.resetobj();
           this.searching = false;
         }
@@ -270,7 +285,7 @@ export class WebsitesComponent implements OnInit {
                 next: data => {
                   this.searching = false;
                   this._general.openSnackBar(false,"Website has been successfully deleted!", 'OK', 'center', 'top');
-                  this.fetwebfull();
+                  this.fetchData();
                   this.resetobj();
                 }
               });
@@ -330,7 +345,7 @@ export class WebsitesComponent implements OnInit {
                   next: data => {
                     // console.log(data);
                     this._general.openSnackBar(false,"Website Successfylly Duplicate!", 'OK', 'center', 'top');
-                    this.fetwebfull();
+                    this.fetchData();
                     this.resetobj();
                     this.searching = false;
                   }
@@ -388,5 +403,19 @@ export class WebsitesComponent implements OnInit {
     this.dialog.closeAll();
     this._general.openSnackBar(false,'Successfully Copied!', 'OK', 'center', 'top');
   }
+
+  getpageWebsites(event:any){
+    this.searching= true;
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+      this.websiteService.getpagewebsites(obj).subscribe(
+        (data:any) => {
+          this.fetweb(data);
+          // this.allwebsites = data?.data;
+          // this.pagewebsites=data?.data;
+          this.websiteslength=data?.websites;
+          this.searching= false;
+          console.log(data)
+    });
+ }
 
 }

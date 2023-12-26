@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
-import { CourseService } from 'src/app/_services/_membership/course.service';
+import { FunnelService } from 'src/app/_services/funnels.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'app-course-settings',
-  templateUrl: './course-settings.component.html',
-  styleUrls: ['./course-settings.component.css']
+  selector: 'app-funnel-step-settings',
+  templateUrl: './funnel-step-settings.component.html',
+  styleUrls: ['./funnel-step-settings.component.css']
 })
-export class CourseSettingsComponent implements OnInit {
+export class FunnelStepSettingsComponent implements OnInit {
 
-  
   allpages:any[] = [];
   kbpages:any;
   pagescriptheader = '';
@@ -34,47 +34,48 @@ export class CourseSettingsComponent implements OnInit {
   nodata:any;
   page_path:any='';
   page:any='';
+  step_id:any;
 
 
   constructor(
     public _image: ImageService,
     public _general: GeneralService,
-    public _course: CourseService,) {
-      this.showwebpages();
-    
+    private route: ActivatedRoute,
+    private funnelService: FunnelService,) {
+      this.route.paramMap.subscribe((params: ParamMap) => { 
+        this.step_id = params.get('step_id'); 
+      })
      }
   
      ngOnInit(): void {
+      this.fetchstep();
     }
 
 
-  showwebpages(){
-    this.searching = true;
-    this.spinner=true;
-      this._course.getallMembershippage().subscribe({
+
+    fetchstep(){
+      this.searching = true;
+      this.funnelService.getSingleFunnelpage(this.step_id).subscribe({
         next: data => {
-         if(data.success) {
-              this.allpages=data.data;
-              this.searching = false;
-        }
-        else{
-          this.nodata=true;
-          this.searching = false;
-        }
-         
+          console.log(data.data)
+          if(data.success) {
+               this.allpages=data.data;
+               this.searching = false;
+         }
+         else{
+           this.nodata=true;
+           this.searching = false;
+         }
           
-        },
-        error: err => {
-          // console.log(err);
-        }
-      });
+           
+         },
+         error: err => {
+           // console.log(err);
+         }
+       });
     }
-    
-  // viewsite(){
-  //   var url = 'https://'+this.domainselected;
-  //   window.open(url, '_blank');
-  // }
-
+  
+ 
   updatepage(){
     this.searching = true;
     if(this.kbpages?.length > 0){
@@ -85,10 +86,9 @@ export class CourseSettingsComponent implements OnInit {
       
       var genobjlogo:any = {path:this.logoimg, name:splnmlogo};
       var genobjfavicon:any = {path:this.faviconimg, name:splnmfavi};
-      this.kbpages[0].logo=splnmlogo;
-      this.kbpages[0].favicon=splnmfavi;
-    // console.log(this.kbpages[0])
-    this._course.updatemembershiploginpage(this.kbpages[0]).subscribe({
+      this.kbpages[0].logo=this.imagelogorequest ? 'keaimage-'+splnmlogo : this.kbpages[0]?.logo;
+      this.kbpages[0].favicon=this.imagefaviconrequest ? 'keaimage-'+splnmfavi : this.kbpages[0].favicon;
+    this.funnelService.updatefunnelStepsettings(this.kbpages[0]).subscribe({
       next: data => { 
         if(data.success){    
           this.searching = false;
@@ -139,11 +139,6 @@ export class CourseSettingsComponent implements OnInit {
 
   generatename(value:any){
     var extn = value.split(/[. ]+/).pop();
-    // var newvl = value.split('.'+extn)
-    // var setname = (newvl[0].toLowerCase()).replaceAll(" ","-");
-    // var unqueid = Math.random().toString(20).slice(2);
-    // return setname+'-'+unqueid+'.'+extn;
-
     return '.'+extn;
 
   }
@@ -191,6 +186,8 @@ export class CourseSettingsComponent implements OnInit {
     this.faviconimg= temp.favicon ? this._image.uploadImgPath+temp.favicon : this.defaultimgpath;
     this.logoimg= temp.logo ? this._image.uploadImgPath+temp.logo : this.defaultimgpath;
     // console.log(this.faviconimg)
+    // console.log(this.logoimg)
   }
 
 }
+

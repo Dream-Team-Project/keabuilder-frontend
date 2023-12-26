@@ -622,8 +622,8 @@ export class DashboardComponent implements OnInit {
     // last week revenue
     var datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
         var newarr: any = [];
 
@@ -644,18 +644,18 @@ export class DashboardComponent implements OnInit {
         var d = new Date();
         var dt = d.getDate();
 
-        if (data.data.length == 0) {
+        if (data?.data?.length == 0) {
           this.data1date.push(months[d.getMonth()] + ' ' + dt);
           this.data1.push(0);
         } else {
-          data.data.forEach((element: any) => {
+          data?.data?.forEach((element: any) => {
             var arr: any = { name: '', value: 0 };
             arr.name = months[d.getMonth()] + ' ' + dt;
             arr.value = parseFloat(element.amount);
             newarr.push(arr);
             this.totalrevenue7day += parseFloat(element.amount);
           });
-          // console.log(newarr);
+          // // console.log(newarr);
           var output: any = [];
 
           newarr.forEach(function (item: any) {
@@ -673,12 +673,12 @@ export class DashboardComponent implements OnInit {
           });
 
           output.forEach((element3: any) => {
-            // console.log(element3);
+            // // console.log(element3);
             this.data1date.push(element3.name);
             this.data1.push(element3.value);
           });
 
-          // console.log(this.data1date);
+          // // console.log(this.data1date);
         }
       },
     });
@@ -686,8 +686,8 @@ export class DashboardComponent implements OnInit {
     // last week contact
     var datacondition = { type: 'lastweekcontact', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition).subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
         var newarr: any = [];
 
@@ -718,7 +718,7 @@ export class DashboardComponent implements OnInit {
           });
 
           output.forEach((element3: any) => {
-            // console.log(element3);
+            // // console.log(element3);
             this.data2date.push(element3.name);
             this.data2.push(element3.value);
           });
@@ -728,18 +728,18 @@ export class DashboardComponent implements OnInit {
 
     // recent sales activity
     this.dashboardService.getrecentsales().subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
-        if (data.data.length != 0) {
-          let emailMap = new Map(data.data2.map((item:any) => [item.uniqueid, item.email]));
-          let newArray1 = data.data.map((item:any) => {
+        if (data?.data?.length != 0) {
+          let emailMap = new Map(data?.data2?.map((item:any) => [item.uniqueid, item.email]));
+          let newArray1 = data?.data.map((item:any) => {
               let email = emailMap.get(item.contactid);
               let time_ago = this.timeAgo(item.created_at);
               return { ...item, email, time_ago };
           });
           this.recentsales = newArray1;
-          // console.log(this.recentsales);
+          // // console.log(this.recentsales);
         }
 
       },
@@ -778,8 +778,8 @@ export class DashboardComponent implements OnInit {
   visitorbrowser(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
         var dt = data.data;
         if(dt?.length>0){
@@ -813,8 +813,8 @@ export class DashboardComponent implements OnInit {
   visitoros(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
         var dt = data.data;
         if(dt?.length>0){
@@ -848,8 +848,8 @@ export class DashboardComponent implements OnInit {
   visitorlanding_page(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-          // console.log(data);
+      next: (data:any) => {
+          // // console.log(data);
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_toplandingpage = data.data;
@@ -863,8 +863,8 @@ export class DashboardComponent implements OnInit {
   visitortopreferrals(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-          // console.log(data);
+      next: (data:any) => {
+          // // console.log(data);
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topreferrals = data.data;
@@ -878,8 +878,8 @@ export class DashboardComponent implements OnInit {
   visitortopcountries(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-          // console.log(data);
+      next: (data:any) => {
+          // // console.log(data);
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topcountry = data.data;
@@ -893,8 +893,8 @@ export class DashboardComponent implements OnInit {
   visitordevice(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
-      next: (data) => {
-        // console.log(data);
+      next: (data:any) => {
+        // // console.log(data);
 
         var dt = data.data;
         if(dt?.length>0){
@@ -927,7 +927,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
 
         var dt = data.data;
         if(dt?.length>0){
@@ -947,7 +947,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=true;
     this.dashboardService.pageview().subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
 
         if(data.data.length>0){
 
@@ -974,7 +974,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=true;
     this.dashboardService.getAllrevenue(this.revenuelimit).subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
         if (data.data.length != 0) {
           data.data.forEach((element : any) => {
             if(element.total_sales_amount!=null){
@@ -998,7 +998,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=true;
     this.dashboardService.getAllcontact(this.contactlimit).subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
         if (data.data.length != 0 && data.data.length != null) {
           this.totalmembers = data.data[0]['count(*)'];
         }
@@ -1015,7 +1015,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=true;
     this.dashboardService.totalearning().subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
         if (data.data.length != 0) {
 
           const inputData = data.data;
@@ -1026,7 +1026,7 @@ export class DashboardComponent implements OnInit {
             resultData[monthIndex] = totalSum;
           });
           
-          // console.log(resultData);
+          // // console.log(resultData);
           this.totalearningsreport(resultData);
 
         }else{
@@ -1060,7 +1060,7 @@ export class DashboardComponent implements OnInit {
   fetchUserplan(){
     this.fetching=true;
     this.dashboardService.plandata().subscribe((data:any)=>{
-      // console.log(data.data[0])
+      // // console.log(data.data[0])
       if(data.success){
         this.userplan=data.data[0];
       }
@@ -1074,7 +1074,7 @@ export class DashboardComponent implements OnInit {
   dashboardheat(){
     this.dashboardService.getdashboardheat(this.visitlimit).subscribe({
       next: (data) => {
-        // console.log(data);
+        // // console.log(data);
 
         if(data.data?.length>0){
           this.dailyvisit = data.data[0].daily_visits;
@@ -1091,7 +1091,7 @@ export class DashboardComponent implements OnInit {
  // daliy sales activity
  this.dashboardService.dailysales(this.saleslimit).subscribe({
   next: (data) => {
-    // console.log(data);
+    // // console.log(data);
 
     if (data.data.length != 0) {
 
@@ -1146,9 +1146,9 @@ export class DashboardComponent implements OnInit {
     this.contact.date.from = new Date(d.setDate(d.getDate() - 30));
     this._reportingService.datefilterContacts(this.contact.date.from, this.contact.date.to).subscribe((resp:any)=>{
       if(resp.success) {
-        console.log(resp.data);
+        // console.log(resp.data);
         this.contact.monthly = resp.data;
-        this.contact.totalcontacts=resp.data[0].contacts;
+        this.contact.totalcontacts=resp.data[0]?.contacts;
         this.contact.chartData.x = this.contact.monthly.map((m:any) => m.date);
         this.contact.chartData.y = this.contact.monthly.map((m:any) => m.count.toString());
         if(this.contact.monthly.length!=0){
@@ -1164,7 +1164,7 @@ export class DashboardComponent implements OnInit {
         this.campaign.recents = resp.data;
         this.campaign.chartData.x = this.campaign.recents.map((m:any) => m.name);
         this.campaign.chartData.y = this.campaign.recents.map((m:any) => m.sentto);
-        // console.log(this.campaign);
+        // // console.log(this.campaign);
 
         if(this.campaign.recents.length!=0){
           this.campaignReportOptions();

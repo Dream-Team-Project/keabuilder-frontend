@@ -333,7 +333,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         this.websiteService.getuniqwebsites(dt).subscribe({
           next: data => {
             if(data?.length != 0) {
-              console.log(data);
+              // console.log(data);
               data.data.forEach((element:any) => {
                 this.searchpagetxt = 'Search Pages from website: '+element.title;
                 // console.log(this.searchpagetxt);
@@ -344,7 +344,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 }
                 // console.log(this.mydomain);
               });
-              console.log(dataA);
+              // console.log(dataA);
+              // console.log(this.mydomain);
              
               if(this.website_id){
                 let tempsearch = [];
@@ -356,6 +357,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 element.updated_at = text1+' '+text2;
                 element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
                 element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+                element.domain=this.mydomain;
                 tempsearch.push(element);
                 // console.log(dataA.data.length-1 == i)
                 if(dataA.data.length - 1 == i) {
@@ -375,6 +377,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                   element.updated_at = text1+' '+text2;
                   element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
                   element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+                  element.domain=element1.domain;
                   this.kbpages.push(element);
                   // console.log(dataA.data.length-1 == i)
 
@@ -395,8 +398,9 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
   checkpagesettings(value:any,data:any){
+    // console.log(data)
     if(value=='preview'){
-      var url = 'https://'+this.mydomain+'/'+data;
+      var url = 'https://'+data.domain+'/'+data.page_path;
       window.open(url, '_blank');
     }
   }

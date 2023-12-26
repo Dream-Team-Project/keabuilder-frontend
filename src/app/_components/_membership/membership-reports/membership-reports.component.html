@@ -8,7 +8,7 @@
                         <h5 class="mt-3 ml-3 mb-2">Courses</h5>
                     </div>
                     </div>
-                  <apx-chart
+                  <apx-chart *ngIf="fetch"
                       [series]="chartOptions.series"
                       [chart]="chartOptions.chart"
                       [dataLabels]="chartOptions.dataLabels"
@@ -31,9 +31,12 @@
                             <h5 class="mt-3 ml-3 mb-2">Courses vs Members</h5>
                         </div>
                         </div>
-                <apx-chart
+                <apx-chart *ngIf="fetch"
                     [series]="chartOptions2.series"
                     [chart]="chartOptions2.chart"
+                    [yaxis]="chartOptions2.yaxis"
+                    [legend]="chartOptions2.legend"
+                    [fill]="chartOptions2.fill"
                     [plotOptions]="chartOptions2.plotOptions"
                     [xaxis]="chartOptions2.xaxis"
                 ></apx-chart>

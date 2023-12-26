@@ -131,7 +131,7 @@
     <div
       [class.px-3]="toggleview"
       class="row"
-      *ngIf="pageemails.length != 0; else nodata"
+      *ngIf="pageemails?.length != 0; else nodata"
     >
       <div
         [class]="toggleview ? 'col-md-12' : 'col-md-4'"
@@ -188,22 +188,7 @@
                   {{ _general.dateformat(email.updated_at) }}
                 </p>
               </div>
-              <div [class.p-0]="!toggleview" class="col-md-12 text-right">
-                
-                <!-- <button
-                  (click)="
-                    _general.redirectLink(
-                      '/fetch-email/' + email.user_id + '/' + email.uniqueid
-                    )
-                  "
-                  mat-raised-button
-                  color="accent"
-                  [disabled]="email.deleting"
-                  class="mr-2"
-                >
-                  View <i class="far fa-eye"></i>
-                </button> -->
-                
+              <div [class.p-0]="!toggleview" class="col-md-12 text-right"> 
                 <button
                   (click)="_general.redirectToBuilder(email.uniqueid, 'email')"
                   mat-raised-button

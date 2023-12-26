@@ -415,6 +415,9 @@
                 ">
                       <i class="far fa-check-circle mr-2"></i> Change Color Badge
                   </button>
+                  <button mat-menu-item [routerLink]="'/funnels/step/settings/'+step.uniqueid">
+                      <i class="fa-solid fa-gears mr-2"></i> Settings
+                  </button>
                   <button mat-menu-item class="text-danger"  (click)="
                   funnelstepedit(
                     funnel.uniqueid,

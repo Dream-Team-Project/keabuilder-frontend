@@ -21,19 +21,19 @@ export class DomainService {
   }
 
   oncreatedomain(domain: any): Observable<any>{
-    return this.http.get('https://keasolution.com/dm.php?domain='+domain+'&uniqueid='+this.uuid);
+    return this.http.get('https://api.keasolution.com/dm.php?domain='+domain+'&uniqueid='+this.uuid);
   }
 
   ongetdomainstatus(domain: any): Observable<any>{
-    return this.http.get('https://keasolution.com/dmsts.php?domain='+domain);
+    return this.http.get('https://api.keasolution.com/dmsts.php?domain='+domain);
   }
   
   oncloudAddUpdatedomain(zoneid: any, domain:any, type:any, name:any,recordid:any, content:any, action:any,proxied:any,ttl:any): Observable<any>{
-    return this.http.get('https://keasolution.com/editdm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid+'&type='+type+'&name='+name+'&content='+content+'&action='+action+'&proxied='+proxied+'&ttl='+ttl+'&recordid='+recordid);
+    return this.http.get('https://api.keasolution.com/editdm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid+'&type='+type+'&name='+name+'&content='+content+'&action='+action+'&proxied='+proxied+'&ttl='+ttl+'&recordid='+recordid);
   }
 
   onclouddeletedomain(zoneid: any, domain:any): Observable<any>{
-    return this.http.get('https://keasolution.com/deldm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid);
+    return this.http.get('https://api.keasolution.com/deldm.php?domain='+domain+'&zoneid='+zoneid+'&uniqueid='+this.uuid);
   }
 
   oninsertdomain(data:any):Observable<any> {

@@ -60,6 +60,7 @@ import { FunnelSettingsComponent } from './_components/_new-funnels/funnel-setti
 import { FunnelStepArchiveComponent } from './_components/_new-funnels/funnel-step-archive/funnel-step-archive.component';
 import { NewFunnelStepsComponent } from './_components/_new-funnels/new-funnel-steps/new-funnel-steps.component';
 import { NewFunnelCheckoutComponent } from './_components/_new-funnels/new-funnel-checkout/new-funnel-checkout.component';
+import { FunnelStepSettingsComponent } from './_components/_new-funnels/funnel-step-settings/funnel-step-settings.component';
 // new-funnels
 
 // crm
@@ -252,6 +253,7 @@ if (currentDomain === appHost) {
     { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
   ],
   canActivate: [AuthGuard] },
+  { path: 'funnels/step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
     // new-funnels
     
     // sales 
@@ -565,6 +567,7 @@ export const RoutingComponents =
     SignInSecurityComponent,
     NewFunnelsComponent,
     NewFunnelComponent,
+    FunnelStepSettingsComponent,
     NewFunnelBuildComponent,
     NewFunnelArchiveComponent,
     CreateNewFunnelsComponent,

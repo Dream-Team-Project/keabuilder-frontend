@@ -554,8 +554,8 @@ export class HeatmapViewComponent implements OnInit {
     }
 
     getrequireddata(e:any,value2:any){
-        console.log( this.ossegmntdummy);
-        console.log( this.brsegmntdummy);
+        // console.log( this.ossegmntdummy);
+        // console.log( this.brsegmntdummy);
 
         var brows:any = [];
         if(value2=='browser'){
