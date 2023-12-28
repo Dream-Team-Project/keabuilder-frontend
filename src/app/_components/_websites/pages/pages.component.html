@@ -201,8 +201,6 @@
   <div class="container-fluid">
     
     <div class="row align-items-center mobkeaadjust">
-      <!-- <div class="col-md-8 adjustmatfrm"> -->
-
           <mat-form-field  appearance="fill" class="col-md-3 pr-2">
             <mat-label>{{searchpagetxt}}</mat-label>
             <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility)" placeholder="Search Pages">
@@ -211,7 +209,7 @@
 
           <mat-form-field appearance="fill" class="col-md-2 p-2">
             <mat-label>Sort By</mat-label>
-            <mat-select name="kbfilter" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibility)">
+            <mat-select name="kbfilter" value="created_at DESC" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibility)">
               <mat-option [value]="'page_name ASC'">Ascending By Name</mat-option>
               <mat-option [value]="'page_name DESC'">Descending By Name</mat-option>
               <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
@@ -350,19 +348,6 @@
         </div>
       </ng-template>
       <!-- pages to show -->
-   
     <!-- pages -->
-    <!-- pagination -->
-    <div class="row" *ngIf="!nodata">
-      <div class="col-md-12 mt-4">
-        <!-- <mat-paginator 
-                    [length]="length"
-                    [pageSize]="pageSize"
-                    [pageSizeOptions]="pageSizeOptions"
-                    (page)="getServerData($event)"
-                    >
-        </mat-paginator> -->
-      </div>
-    </div>
   </div>
 </div>

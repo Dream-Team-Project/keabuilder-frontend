@@ -1,20 +1,15 @@
 import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { WebpagesService } from 'src/app/_services/webpages.service';
 import { ImageService } from 'src/app/_services/image.service';
 import { FormControl, Validators } from '@angular/forms';
-import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { UserService } from 'src/app/_services/user.service';
 import { WebsiteService } from 'src/app/_services/website.service';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface DialogData {
@@ -49,9 +44,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   spinner=false;
   delpage:any;
   hasError:boolean = false;
-  selection = new SelectionModel<WebpageData>(true, []);
-  dataSource: MatTableDataSource<WebpageData>;
-  users:any = [];
   showingcontacts = '7 DAY';
   actionname:any = '';
   newwebsiteid:any = '';
@@ -124,19 +116,9 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   showarchivemode = false;
   nodata = true;
   mydomain = '';
-  
-  // MatPaginator Inputs
-  length = 100;
-  pageSize = 6;
-  pageSizeOptions: number[] = [6, 12, 24, 100];
-
   searching:boolean = false;
   author:any = '';
   searchval:any = '';
-
-  // MatPaginator Output
-  pageEvent!: PageEvent;  
-
   togglestatus:any;
   datakbpage:any;
   error=false;
@@ -145,17 +127,14 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   pagePages:any;
 
   constructor(private webpagesService: WebpagesService,
-    private _snackBar: MatSnackBar,
     public dialog: MatDialog, 
     private router: Router, 
     private route: ActivatedRoute,
     public _image: ImageService,
-    private tokenStorage: TokenStorageService,
     public _general: GeneralService,
     private websiteService: WebsiteService,
     private userService: UserService,) {
       this.toggleview = _general.getStorage('page_toggle');
-      this.dataSource = new MatTableDataSource(this.users);
       this.route.paramMap.subscribe((params: ParamMap) => {
         this.website_id = params.get('website_id');
       });
@@ -166,42 +145,18 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     });
   }
 
-
-  getServerData(event?:PageEvent){
-    var length = event?.length;
-    var pageindex = event?.pageIndex;
-    var pageSize = event?.pageSize;
-    var previousPageIndex = event?.previousPageIndex;
-    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
-
-    this.pageSize = 20;
-    var data = {pagesize:pageSize};
-  }
-
   ngOnInit(): void {
-    this.showwebpages();
-    this.getWebsites();
-    this.fetchallwebsites();
+    this.fetchData();
     this.author = this.userService?.user?.name;
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }, 500);
   }
 
-  getWebsites() {
-    if(this.website_id) this.websiteService.getWebsite().subscribe({
-      next: webdata => {
-        this.websites = [];
-        webdata.data.forEach((element:any) => {
-            var nwobj = {uniqueid:element.uniqueid,title:element.title};
-            this.websites.push(nwobj);
-          });
-          
-        }
-        
-    });
+  fetchData(){
+  this.getpagePages({pageIndex:0,pageSize:20});
+  // this.showwebpages();
+  // this.getWebsites();
+  this.fetchallwebsites();
   }
+
   pathuniqueremove(){
     this.pathcheck = false;
     this.pathcheck2 = false;
@@ -290,112 +245,28 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
   changemyname(event:any){
-    // console.log(event.target.value);
     this.form.pagepath = (event.target.value).replaceAll(" ", "-").toLowerCase();
-  }
-
-  showwebpages(){
-    this.searching = true;
-    this.spinner=true;
-    let obj ={pageIndex:this.paginator?.pageIndex || 0, 
-      pageSize:this.paginator?.pageSize || 20,
-      websiteid:this.website_id,
-    };
-    if(this.website_id) {
-      this.webpagesService.getWebpagesById(this.website_id).subscribe({
-        next: data => {
-          this.shortdata(data);
-          // console.log(data);
-        },
-        error: err => {
-          // console.log(err);
-        }
-      });
-    }
-    else {
-      this.webpagesService.getWebpages().subscribe({
-        next: data => {
-          // console.log(data);
-          this.shortdata(data);
-          // console.log(data);
-        },
-        error: err => {
-          // console.log(err);
-        }
-      });
-    }
   }
 
   shortdata(dataA:any){
     if(dataA.success !=0 && dataA?.data?.length!=0){
-      if(dataA.success == 2){
-        // this.nodata = true;
-        this.nodata = true;
-        this.searching = false;
-        this.spinner=false;
-      }else{
-        this.nodata = false;
-        var dt = {webid:this.website_id};
-        this.websiteService.getuniqwebsites(dt).subscribe({
-          next: data => {
-            if(data?.length != 0) {
-              // console.log(data);
-              data.data.forEach((element:any) => {
-                this.searchpagetxt = 'Search Pages from website: '+element.title;
-                // console.log(this.searchpagetxt);
-                if(element.domain!='' && element.domain!=null){
-                  this.mydomain = element.domain;
-                }else{
-                  this.mydomain = element.subdomain+'.'+data.globalsubdomain;
-                }
-                // console.log(this.mydomain);
-              });
-              // console.log(dataA);
-              // console.log(this.mydomain);
-             
-              if(this.website_id){
-                let tempsearch = [];
-              for(var i = 0; i < dataA.data.length; i++) {
-                var element = dataA.data[i];
-                var mycustomdate =  new Date(element.updated_at);
-                var text1 = mycustomdate.toDateString();    
-                var text2 = mycustomdate.toLocaleTimeString();
-                element.updated_at = text1+' '+text2;
-                element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
-                element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
-                element.domain=this.mydomain;
-                tempsearch.push(element);
-                // console.log(dataA.data.length-1 == i)
-                if(dataA.data.length - 1 == i) {
-                  this.kbpages = tempsearch;
-                  this.searching = false;
-                  // console.log(this.kbpages)
-                }
-              }
-            }
-            else{
-              // let temp=[];
-              dataA.data.forEach((element1:any)=>{
+      this.kbpages=[];
+             this.nodata = false;
+              dataA.data?.forEach((element1:any)=>{
                 element1.pages.map((element:any)=>{
                   var mycustomdate =  new Date(element.updated_at);
                   var text1 = mycustomdate.toDateString();    
                   var text2 = mycustomdate.toLocaleTimeString();
                   element.updated_at = text1+' '+text2;
-                  element.defaulthome = data?.data[0]?.homepage==element.uniqueid ? 1 : 0;
+                  element.defaulthome = dataA?.data[0]?.homepage==element.uniqueid ? 1 : 0;
                   element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
                   element.domain=element1.domain;
                   this.kbpages.push(element);
-                  // console.log(dataA.data.length-1 == i)
-
                 })
                 })
-            }
-            }
-            this.spinner=false;
-            this.searching=false;
-          }
-        });    
-      }
+            
+        this.spinner=false;
+        this.searching=false;  
     }else{
       this.nodata = true;
       this.searching = false;
@@ -413,7 +284,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   changepagename(dataobj:any, title:any, type:any){
 
-    // console.log(dataobj);
       this.pageurl = '';
       this.seotitle = '';
       this.seodescr = '';
@@ -422,24 +292,16 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     // console.log(title);
       this.webpagesService.namepathchanges(dataobj.id,title,type).subscribe({
         next: data => {
-          // console.log(data);
-          // console.log(this.kbpages);
-
           if(data.success==1){
               if(type!='quickedit'){
                 if(data.type=='name'){
-
-                  this.showwebpages();
+                  this.getpagePages({pageIndex:0,pageSize:20});
                   this._general.openSnackBar(false,'Name Changed Successfully!', 'OK','center','top');
                   this.resetobj();
                 }else if(data.type=='status'){
 
                   this.draftpublish(title, dataobj.page_path);
-
-                  // this.selstatusshow = 'all';
                   if(data.name=='0'){
-                    // this.showwebpages();
-                    // console.log(data.id);
                     this.webpagesService.checkandmakestatus(data.id).subscribe({
                       next: data => {
                         // console.log(data);
@@ -461,9 +323,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 }
               }else if(type=='quickedit'){
 
-                this.togglestatus = data.data[0].publish_status;
-
-                // this.openSidebar();
+                this.togglestatus = data.data[0].publish_status
                 this.dialog.open(this.quickeditdialog)
                 this.showmytemplates = false;
                 this.addnewpagepopup = false;
@@ -519,8 +379,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       next: data => {
         // console.log(data);
         if(data.found==1){
-          
-          // this.pathcheck2 = true;
           this.searching = false;
           // this._general.openSnackBar(false,'Path Must Be Unique!', 'OK','center','top');
           this.error=true;
@@ -531,15 +389,12 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           var pathobj  = {oldpath:this.oldpagepath,newpath:this.pageurl, website_id:this.website_id, dir:getvl};
           this._general._file.renamepage(pathobj).subscribe({
             next: data => {
-              // console.log(data);
             }
-          });
-          // this.popupsidebar = false;
-          
+          });          
           this.searching = false;
           
           this._general.openSnackBar(false,'Page Details Updated Successfully', 'OK','center','top');
-          this.showwebpages();
+          this.getpagePages({pageIndex:0,pageSize:20});
           this.resetobj();
 
         }
@@ -585,19 +440,15 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         next: data => {
           // console.log(data);
           if(data.success==1){
-            // this._general.openSnackBar(false'Processing...', 'OK');
-
             var getvl = page.publish_status == '0' ? 'drafts' : 'pages';
-            var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
-            // console.log(pathobj);
-         
-            this._general._file.copypage(pathobj).subscribe({
-              next: data => {
-                this._general.openSnackBar(false,'Page Duplicate Successfully!', 'OK','center','top');
-                this.showwebpages();
-                this.resetobj();
-              }
-            });
+            // var pathobj  = {oldpath:page.page_path,newpath:data.newpath, website_id:page.website_id, dir:getvl};
+            // this._general._file.copypage(pathobj).subscribe({
+            //   next: data => {
+            //     this._general.openSnackBar(false,'Page Duplicate Successfully!', 'OK','center','top');
+            //     this.getpagePages({pageIndex:0,pageSize:20});
+            //     this.resetobj();
+            //   }
+            // });
             var imgobj  = {oldname:'keaimage-page-'+page.uniqueid+'-screenshot.png', newname:'keaimage-page-'+data.uniqueid+'-screenshot.png'};
             this._general._file.copyimage(imgobj).subscribe({
               next: data => {
@@ -606,7 +457,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
             });
             
             this.searching = false;
-            this.showwebpages();
+            this.getpagePages({pageIndex:0,pageSize:20});
             this.resetobj();
           }else{
             this.searching = false;
@@ -668,7 +519,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
               // console.log(data);
 
               this.actionname=='Move' ? this._general.openSnackBar(false,'Page Move Successfully!', 'OK','center','top'): this._general.openSnackBar(false,'Page Copy & Move Successfully!', 'OK','center','top');
-              this.showwebpages();
+              this.getpagePages({pageIndex:0,pageSize:20});
+              // this.showwebpages();
               this.resetobj();
             }
           });
@@ -735,12 +587,33 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       search: search.value,
       filter: filter.value,
       visibility: visibility.value,
-      id:this.website_id
+      id:this.website_id,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
-    // console.log(obj);
     this.webpagesService.pagevisibility(obj).subscribe({
       next: data => {
-        this.shortdata(data);
+        // console.log(data)
+        if(data.success){
+          this.kbpages=[];
+          this.searching=false;
+          data.data.map((element:any)=>{
+            var mycustomdate =  new Date(element.updated_at);
+            var text1 = mycustomdate.toDateString();    
+            var text2 = mycustomdate.toLocaleTimeString();
+            element.updated_at = text1+' '+text2;
+            element.defaulthome = data[0]?.homepage==element.uniqueid ? 1 : 0;
+            element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+            element.domain=element.domain;
+            this.kbpages.push(element);
+          })
+          
+        }
+        else{
+          this.searching=false;
+          this.kbpages=[];
+        }
+       
       }
     });
   }
@@ -756,16 +629,9 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       gendata = {id:page.id,type:type,reason:this.toggleview};
     }
     
-    // console.log(this.arpageobj);
-    // console.log(gendata);
     this.searching = true;
     this.webpagesService.restoredeletepage(gendata).subscribe({
       next: data => {
-        // console.log(data);
-        // console.log(this.arpageobj);
-        // console.log(type);
-
-
         if(data.success==1){
 
           if(type!='delete'){
@@ -815,8 +681,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           // this.hidepopupsidebar();
           // this.dialog.closeAll();
           this.searching = false;
-        
-          this.showwebpages();
+          this.getpagePages({pageIndex:0,pageSize:20});
+          // this.showwebpages();
           this.resetobj();
           // this.applykbfilter();
 
@@ -835,19 +701,15 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.searchval = filterValue;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.searchval = filterValue;
+   
+  // }
 
   searchpage(event: Event) {
     this.searching = true;
     var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.website_id};
-    // console.log(SearchValue);
     this.selstatusshow = 'all';
 
     this.webpagesService.querystringmanage(SearchValue).subscribe({
@@ -863,7 +725,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.dialog.open(templateRef);
     }else{
       this.newwebsiteid = '';
-      this.getWebsites();
+      this.getpagePages({pageIndex:0,pageSize:20});
       var acn;
       switch(type){
         case 'move':
@@ -914,7 +776,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     });
   }
 
-
   filterwebData() {
     var value = this.selectedweb;
     this.filteredweb = this.allwebsites?.filter((option:any) => option?.title?.toLowerCase().includes(value?.toLowerCase()));
@@ -935,15 +796,13 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   // end all webistes actions
   getpagePages(event:any){
     this.searching= true;
-    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
-      this.websiteService.getpagewebsites(obj).subscribe(
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize,website_id:this.website_id};
+      this.webpagesService.getpagePages(obj).subscribe(
         (data:any) => {
           this.shortdata(data);
-          // this.allwebsites = data?.data;
-          // this.pagewebsites=data?.data;
           this.pageslength=data?.pages;
           this.searching= false;
-          console.log(data)
+          // console.log(data)
     });
  }
   

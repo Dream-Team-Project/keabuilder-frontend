@@ -414,7 +414,7 @@ export class WebsitesComponent implements OnInit {
           // this.pagewebsites=data?.data;
           this.websiteslength=data?.websites;
           this.searching= false;
-          console.log(data)
+          // console.log(data)
     });
  }
 

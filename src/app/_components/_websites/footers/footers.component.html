@@ -49,7 +49,7 @@
 
         <mat-form-field appearance="fill" class="col-2">
           <mat-label>Sort By</mat-label>
-          <mat-select #filterInp name="kbfilter" (valueChange)="searchfooters(searchInp, filterInp)">
+          <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchfooters(searchInp, filterInp)">
             <mat-option [value]="'name ASC'">Ascending By Name</mat-option>
             <mat-option [value]="'name DESC'">Descending By Name</mat-option>
             <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
@@ -65,7 +65,8 @@
         <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Footer </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>
-  <div [class.px-3]="!toggleview" class="row" *ngIf="footers.length != 0 else nodata">
+  <div *ngIf="footers.length != 0 else nodata">
+  <div [class.px-3]="!toggleview" class="row">
     <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4" *ngFor="let footer of footers | filter:searchInp.value:'name' | sorting:_general.searchFilter.value:_general.searchFilter.type">
         <div [class.row]="!toggleview">
           <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
@@ -80,14 +81,14 @@
             <div class="row align-items-center p-0 h-100">
               <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'">
                 <div class="kb-title-board line-ellipsis">
-                  <span>{{footer.name ? footer.name : 'Footer Name' | titlecase}}</span>
+                  <span class="line-ellipsis">{{footer.name ? footer.name : 'Footer Name' | titlecase}}</span>
                   <input type="text" #footname [value]="footer.name" (blur)="rename(footer, footname)" matTooltip="Edit footer Name" matTooltipPosition="above">
                 </div>
                 <p class="kb-pagedate mt-2 mb-0" matTooltip="Last Updated" matTooltipPosition="above">
                   <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(footer.updated_at)}}
                 </p>
               </div>
-              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'" class="text-right">
+              <div [class]="toggleview ? 'col-md-6 p-0 d-flex justify-content-between' : 'col-md-12 p-0 m-0'">
                 <button mat-raised-button [disabled]="footer.deleting" (click)="redirectToBuilder(footer)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button [disabled]="footer.deleting" (click)="datafooter = footer; openDialog(duplicatedialog)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
                 <button mat-raised-button [disabled]="footer.deleting" (click)="delfooter = footer; openDialog(deldialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>
@@ -96,6 +97,10 @@
           </div>
         </div>
     </div>
+  </div>
+  <div class="py-3">
+    <mat-paginator #paginator [length]="footerslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagefooters($event)"></mat-paginator>
+  </div>
   </div>
   <ng-template #nodata>
     <div class="row justify-content-center mt-5" >

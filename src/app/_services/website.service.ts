@@ -90,9 +90,5 @@ export class WebsiteService {
     obj.user_id = this.uuid;
     return this.http.post('/api/getpagewebsites', obj);
   }
-  getpagePages(obj :any): Observable<any> {
-    obj.user_id = this.uuid;
-    return this.http.post('/api/getpagePages', obj);
-  }
-
+  
 }

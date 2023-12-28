@@ -763,7 +763,20 @@ export class GeneralService {
       })
     })
   }
-
+  pageHeaders(obj:any) {
+    return new Promise<any>((resolve, reject) => {
+      this._file.getpageheaders(obj).subscribe((resp:any)=>{
+        resolve(resp);
+      })
+    })
+  }
+  pageFooters(obj:any) {
+    return new Promise<any>((resolve, reject) => {
+      this._file.getpagefooters(obj).subscribe((resp:any)=>{
+        resolve(resp);
+      })
+    })
+  }
   fetchFooters() {
     return new Promise<any>((resolve, reject) => {
       this._file.fetchfooters().subscribe((resp:any)=>{

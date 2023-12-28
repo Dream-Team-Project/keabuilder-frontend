@@ -292,6 +292,10 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
     fetchheaders():Observable<any> {
       return this.http.get(this.allheadersApi+'/'+this.uuid).pipe(catchError(this.errorHandler));
     }
+    getpageheaders(obj :any): Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post('/api/getpageheaders', obj);
+    }
 
     getheader(uniqueid:any):Observable<any> {
       return this.http.get(this.getheaderApi+'/'+this.uuid+'/'+uniqueid).pipe(catchError(this.errorHandler));
@@ -327,7 +331,10 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
     fetchfooters():Observable<any> {
       return this.http.get(this.allfootersApi+'/'+this.uuid);
     }
-
+    getpagefooters(obj :any): Observable<any> {
+      obj.user_id = this.uuid;
+      return this.http.post('/api/getpagefooters', obj);
+    }
     getfooter(uniqueid:any):Observable<any> {
       return this.http.get(this.getfooterApi+'/'+this.uuid+'/'+uniqueid);
     }

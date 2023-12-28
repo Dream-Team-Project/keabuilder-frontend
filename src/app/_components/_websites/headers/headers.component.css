@@ -61,3 +61,9 @@
     font-size: 13px;
     color: #988e71;
 }
+.line-ellipsis {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }

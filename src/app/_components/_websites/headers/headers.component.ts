@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-website-headers',
   templateUrl: './headers.component.html',
@@ -11,6 +12,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 export class WebsiteHeadersComponent {
 
   @ViewChild('createdialog') createdialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   validate = {
     name: new FormControl('', [Validators.required]),
@@ -24,6 +26,8 @@ export class WebsiteHeadersComponent {
   dataheader:any;
   error=false;
   errormessage:any='';
+  headerslength:any;
+  pageheaders:any;
 
   constructor(
         public _image: ImageService,
@@ -51,12 +55,17 @@ export class WebsiteHeadersComponent {
 
   fetch() {
     this.fetching = true;
-    this._general.fetchHeaders().then(data=>{
-      this.setHeaders(data);
+    this.getpageheaders({pageIndex:0,pageSize:20});
+  }
+  getpageheaders(event:any){
+    this.fetching = true;
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._general.pageHeaders(obj).then(data=>{
+      this.setHeaders(data.data);
+      this.headerslength=data.headers;
       if(this.action) this.openSB(false);
     });
-  }
-
+ }
   rename(header:any, inp:any) {
     var headname = inp.value;
     if(header.name !== headname) {
@@ -136,7 +145,9 @@ export class WebsiteHeadersComponent {
     this.fetching = true;
     var obj = {
       search: search.value,
-      filter: filter.value,
+      filter: filter?.value,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._general._file.searchheaders(obj).subscribe((resp:any)=>{
       this.setHeaders(resp.data);

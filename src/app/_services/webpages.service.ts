@@ -42,6 +42,10 @@ export class WebpagesService {
   getWebpages(): Observable<any> {
     return this.http.get(this.allwebpagesApi+this.uuid);
   }
+  getpagePages(obj :any): Observable<any> {
+    obj.user_id = this.uuid;
+    return this.http.post('/api/getpagePages', obj);
+  }
 
   getWebpagesById(uniqueid:any): Observable<any> {
     return this.http.get(this.allwebpagesbyidApi+this.uuid+'/'+uniqueid);

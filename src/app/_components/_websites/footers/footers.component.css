@@ -26,6 +26,12 @@
 .kb-title-board:hover input {
  display: block;
 }
+.line-ellipsis{
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
 .kb-page-settting {
     float: right;

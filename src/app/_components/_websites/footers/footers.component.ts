@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { ImageService } from 'src/app/_services/image.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-website-footers',
@@ -12,6 +13,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 export class WebsiteFootersComponent {
   
   @ViewChild('createdialog') createdialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   validate = {
     name: new FormControl('', [Validators.required]),
@@ -23,6 +25,9 @@ export class WebsiteFootersComponent {
   action:any;
   footer:any = {uniqueid: '', name: ''};
   datafooter:any;
+  footerslength:any;
+  pagefooters:any;
+
 
   constructor(
         public _image: ImageService,
@@ -50,11 +55,21 @@ export class WebsiteFootersComponent {
 
   fetch() {
     this.fetching = true;
-    this._general.fetchFooters().then(data=>{
-      this.setFooters(data);
+    this.getpagefooters({pageIndex:0,pageSize:20});
+    // this._general.fetchFooters().then(data=>{
+    //   this.setFooters(data);
+    //   if(this.action) this.openSB(false);
+    // });
+  }
+  getpagefooters(event:any){
+    this.fetching = true;
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._general.pageFooters(obj).then(data=>{
+      this.setFooters(data.data);
+      this.footerslength=data.footers;
       if(this.action) this.openSB(false);
     });
-  }
+ }
 
   rename(footer:any, inp:any) {
     var footname = inp.value;
@@ -139,7 +154,9 @@ export class WebsiteFootersComponent {
     this.fetching = true;
     var obj = {
       search: search.value,
-      filter: filter.value,
+      filter: filter?.value,
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this._general._file.searchfooters(obj).subscribe((resp:any)=>{
       this.setFooters(resp.data);
