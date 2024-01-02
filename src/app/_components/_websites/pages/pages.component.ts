@@ -115,7 +115,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   arpageobj:any;
   showarchivemode = false;
   nodata = true;
-  mydomain = '';
   searching:boolean = false;
   author:any = '';
   searchval:any = '';
@@ -124,7 +123,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   error=false;
   errormessage:any='';
   pageslength:any;
-  pagePages:any;
+  
 
   constructor(private webpagesService: WebpagesService,
     public dialog: MatDialog, 
@@ -250,20 +249,36 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   shortdata(dataA:any){
     if(dataA.success !=0 && dataA?.data?.length!=0){
-      this.kbpages=[];
+            this.kbpages=[];
              this.nodata = false;
-              dataA.data?.forEach((element1:any)=>{
-                element1.pages.map((element:any)=>{
+             let pages=this.website_id ? dataA.data[0].pages :  dataA.data;
+            //  if(this.website_id){
+              console.log(pages)
+                  pages.map((element:any)=>{
                   var mycustomdate =  new Date(element.updated_at);
                   var text1 = mycustomdate.toDateString();    
                   var text2 = mycustomdate.toLocaleTimeString();
                   element.updated_at = text1+' '+text2;
-                  element.defaulthome = dataA?.data[0]?.homepage==element.uniqueid ? 1 : 0;
+                  element.defaulthome = this.website_id ? (pages[0].homepage == element.uniqueid ? 1 : 0) : (element.homepage == element.uniqueid ? 1 : 0);
                   element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
-                  element.domain=element1.domain;
+                  element.domain=this.website_id ? pages[0].domain : element.domain;
                   this.kbpages.push(element);
                 })
-                })
+                // })
+              // }
+              // else{
+              //     dataA.data.map((element:any)=>{
+              //       var mycustomdate =  new Date(element.updated_at);
+              //       var text1 = mycustomdate.toDateString();    
+              //       var text2 = mycustomdate.toLocaleTimeString();
+              //       element.updated_at = text1+' '+text2;
+              //       element.defaulthome = element.homepage == element.uniqueid ? 1 : 0;
+              //       element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+              //       // element.domain=element.domain;
+              //       this.kbpages.push(element);
+              //     })
+              //     // })
+              // }
             
         this.spinner=false;
         this.searching=false;  
@@ -469,12 +484,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         }
       });
     }else if(type=='copyurl'){
-      this.webpagesService.dupldelpage(dtobj).subscribe({
-        next: data => {
-          // console.log(data);
-
-          if(data.success==1){
-
+      
             // this.openSidebar();
             this.dialog.open(this.copyurldialog);
             this.showmytemplates = false;
@@ -486,18 +496,12 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
             this.showpageurl = true;
             this.confirmarchivepage = false;
 
-            this.pagebuilderurl = window.origin+'/builder/website/'+data.data[0].uniqueid;
+            this.pagebuilderurl = window.origin+'/builder/website/'+page.uniqueid;
 
-            this.pageurl = 'https://'+this.mydomain+'/'+data.data[0].page_path;
+            this.pageurl = 'https://'+page.domain+'/'+page.page_path;
 
-          }else{
-            this._general.openSnackBar(false,'Something Went Wrong!!', 'OK','center','top');
-          }
-
+         
         }
-      });
-    }
-
   }
 
   dupanotherdes(page:any){
@@ -701,12 +705,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   }
 
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.searchval = filterValue;
-   
-  // }
-
   searchpage(event: Event) {
     this.searching = true;
     var SearchValue = {search:(event.target as HTMLInputElement).value, id:this.website_id};
@@ -758,7 +756,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
    // start all websites data actions
 
-   fetchallwebsites(){
+  fetchallwebsites(){
     this.websiteService.getWebsite().subscribe({
       next: data => {
         this.allwebsites=data.data;

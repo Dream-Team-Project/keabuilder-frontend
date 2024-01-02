@@ -25,6 +25,11 @@ export class OrderformService {
     return this.http.get(this.allorderforms+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+  getpageorderforms(obj:any){
+    obj.user_id=this.user_id;
+    return this.http.post('/api/getpageorderforms',obj)
+    .pipe(catchError(this.errorHandler));
+  }
   fetchstripeproducts(){
     return this.http.get(this.allstripeproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
