@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FunnelService } from 'src/app/_services/funnels.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -21,6 +21,7 @@ export class NewFunnelsComponent implements OnInit {
   @ViewChild('colorbadgedialog') colorbadgedialog!: TemplateRef<any>;
   @ViewChild('deletedialog') deletedialog!: TemplateRef<any>;
   @ViewChild('funnelduplicatedialog') funnelduplicatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
  
   expi: number = -1;
   error=false;
@@ -44,14 +45,6 @@ export class NewFunnelsComponent implements OnInit {
   selfunnelid = '';
   dupfunnelname = '';
   funnelarchid = '';
-
-  // MatPaginator Inputs
-  length = 100;
-  pageSize = 8;
-  pageSizeOptions: number[] = [8, 16, 24, 100];
-
-  // MatPaginator Output
-  pageEvent!: PageEvent;  
   userFormControl = new FormControl('', [
     Validators.required,
     Validators.minLength(3),
@@ -82,8 +75,8 @@ export class NewFunnelsComponent implements OnInit {
   newfunnelid: any = '';
   dialogfunnelset = '';
   hidefornow = false;
-
   username:any = '';
+  funnellength:any;
 
 
   constructor(
@@ -111,14 +104,6 @@ export class NewFunnelsComponent implements OnInit {
       }
     });
 
-  }
-
-  getServerData(event?: PageEvent) {
-    var length = event?.length;
-    var pageindex = event?.pageIndex;
-    var pageSize = event?.pageSize;
-    var previousPageIndex = event?.previousPageIndex;
-    // console.log(length+' - '+pageindex+' - '+pageSize+' - '+' - '+previousPageIndex);
   }
 
   funneledit(uniqueid: any, id: any, type: any, templateRef: TemplateRef<any>) {
@@ -301,10 +286,14 @@ export class NewFunnelsComponent implements OnInit {
 
   showfunnels() {
     this.searching=true;
-    this.funnelService.getallfunnelandstep().subscribe({
+    this.getpagefunnels({pageIndex:0,pageSize:20});
+  }
+  getpagefunnels(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this.funnelService.getpagefunnels(obj).subscribe({
       next: (data) => {
         // console.log(data);
-
+        this.funnellength=data.funnels;
         this.generatefunneldt(data);
        
       },
@@ -313,7 +302,8 @@ export class NewFunnelsComponent implements OnInit {
         // console.log(err);
       },
     });
-  }
+   
+    }
 
   generatefunneldt(data: any) {
     this.funnels = [];
@@ -696,6 +686,9 @@ export class NewFunnelsComponent implements OnInit {
       search: search.value,
       filter: filter.value,
       archive:'0',
+      pageIndex:this.paginator.pageIndex,
+       pageSize:this.paginator.pageSize,
+
     }
     this.funnelService.searchqueryFunnel(obj).subscribe((data:any) => {
       this.searching = false;
