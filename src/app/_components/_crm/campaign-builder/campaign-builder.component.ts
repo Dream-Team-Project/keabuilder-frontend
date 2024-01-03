@@ -502,8 +502,6 @@ removeSelectedex_Tag(index:number): void {
     this.error=false;
     this.errormessage='';
     this.genaddress= {id:'',name:'',company_name:'',country:'',address_1:'',address_2:'',city:'',state:'',zip:''};
-    // this.fullcampobj= {name:'',lists:'',tags:'',preheader_text:'',emailfrom:'',sendoption:'',senddate:'',emailid:'', addressid:'', timezone:'', recurring:''};
-    // this.singleemail={id:'',user_id:'',uniqueid:'',name:'',subject:'',body:''};
     this.testemail='';
     this.dialog.closeAll();
   }

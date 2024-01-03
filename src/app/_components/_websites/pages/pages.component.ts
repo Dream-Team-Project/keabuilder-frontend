@@ -123,6 +123,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   error=false;
   errormessage:any='';
   pageslength:any;
+  sortInp:any='';
   
 
   constructor(private webpagesService: WebpagesService,
@@ -264,22 +265,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                   element.domain=this.website_id ? pages[0].domain : element.domain;
                   this.kbpages.push(element);
                 })
-                // })
-              // }
-              // else{
-              //     dataA.data.map((element:any)=>{
-              //       var mycustomdate =  new Date(element.updated_at);
-              //       var text1 = mycustomdate.toDateString();    
-              //       var text2 = mycustomdate.toLocaleTimeString();
-              //       element.updated_at = text1+' '+text2;
-              //       element.defaulthome = element.homepage == element.uniqueid ? 1 : 0;
-              //       element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
-              //       // element.domain=element.domain;
-              //       this.kbpages.push(element);
-              //     })
-              //     // })
-              // }
-            
         this.spinner=false;
         this.searching=false;  
     }else{
@@ -585,13 +570,14 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
 
-  searchpages(search: any, filter: any, visibility:any) {
+  searchpages(search: any, filter: any, visibility:any,sortInp:any) {
     this.searching = true;
     var obj = {
       search: search.value,
       filter: filter.value,
       visibility: visibility.value,
       id:this.website_id,
+      sortInp:sortInp.value || this.sortInp,
       pageIndex:this.paginator?.pageIndex || 0,
       pageSize:this.paginator?.pageSize || 20,
     }

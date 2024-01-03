@@ -53,21 +53,6 @@ export class CrmListsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // fetchLists() {
-  //   return new Promise((resolve) => {
-  //     this._listservice.fetchlists().subscribe(
-  //       (data) => {
-  //         this.lists = data.data;
-  //         // console.log(this.lists)
-  //         resolve(true);
-  //       },
-  //       (error) => {
-  //         resolve(false);
-  //       }
-  //     );
-  //   });
-  // }
-
   setList(list:any) {
     if(this.list.name && this.isListNameValid(this.list.name)) {
       this.hasError = '';

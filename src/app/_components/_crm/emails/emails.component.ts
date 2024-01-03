@@ -55,20 +55,9 @@ export class CrmEmailsComponent implements OnInit {
   }
 
   fetchData(){
-    this.getpageemails({pageIndex:0,pageSize:20});
-    // this.fetchEmails();
-    
+    this.getpageemails({pageIndex:0,pageSize:20});    
   }
   
-  // fetchEmails(){
-  //   this.fetching = true;
-  //   this._email.fetchemails().subscribe((resp:any)=>{
-  //       this.adjustdata(resp.data);
-  //       this.fetching = false;
-  //   })
-  // }
-
-
   createemailtemplate() {
     this._email.addemail(this.email).subscribe((data:any) => {
         var msg, err = data.success==0;
@@ -81,7 +70,6 @@ export class CrmEmailsComponent implements OnInit {
           msg = 'Email Template has been successfully created!';
           this._general.redirectToBuilder(data.uniqueid, 'email');
         }
-        // this._general.openSnackBar(err, msg, 'OK', 'center', 'top');
       }); 
   }
 
@@ -120,14 +108,14 @@ export class CrmEmailsComponent implements OnInit {
               next: data => {
                 this._general.openSnackBar(false, 'Email Template Deleted Successfully!', 'OK', 'center', 'top');
                 this.getpageemails({pageIndex:0,pageSize:20});
-                // this.fetchEmails();
+               
               }
             });
           }
           else {
             this._general.openSnackBar(false, 'Email template Deleted Successfully!', 'OK', 'center', 'top');
             this.getpageemails({pageIndex:0,pageSize:20});
-            // this.fetchEmails();
+            
           }
         }
       })
@@ -164,13 +152,13 @@ export class CrmEmailsComponent implements OnInit {
                       this._file.copyimage(imgobj).subscribe({
                         next: data => {
                           this.getpageemails({pageIndex:0,pageSize:20});
-                          // this.fetchEmails();
+                          
                           this._general.openSnackBar(false, 'Email Template Duplicated Successfully!', 'OK', 'center', 'top');
                         }
                       });
                     }else{
                       this.getpageemails({pageIndex:0,pageSize:20});
-                      // this.fetchEmails();
+                  
                       this._general.openSnackBar(false, 'Email Template Duplicated Successfully!', 'OK', 'center', 'top');
                     }
       

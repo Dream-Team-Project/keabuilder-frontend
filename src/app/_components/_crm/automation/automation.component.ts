@@ -42,25 +42,9 @@ constructor( public _general: GeneralService,private _automationgeneralservice: 
 
 ngOnInit(): void {
   this.getpageautomations({pageIndex:0,pageSize:20});
-  // this.fetchAutomations();
+ 
 }
 
-// fetchAutomations() {
-//   this.searching=true;
-//   return new Promise((resolve) => {
-//     this._automationgeneralservice.fetchautomations().subscribe(
-//       (data) => {
-//         this.automations = data.data;
-//         this.searching=false;
-//         resolve(true);
-//       },
-//       (error) => {
-//         this.searching=false;
-//         resolve(false);
-//       }
-//     );
-//   });
-// }
 toggleView(){
   this.togglebutton=!this.togglebutton; 
 }
@@ -118,7 +102,6 @@ deleteAutomation(id:any){
   this.searching=true;
   this._automationgeneralservice.deleteautomation(id).subscribe((data)=>{
     this.getpageautomations({pageIndex:0,pageSize:20});
-    // this.fetchAutomations();
     this._general.openSnackBar(false,'CRM Automation deleted Succesfully', 'OK','center','top');
 
   })
@@ -155,7 +138,7 @@ getpageautomations(event:any){
   let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
     this._automationgeneralservice.getpageautomations(obj).subscribe(
       (data:any) => {
-        // this.kbcampaigns = data?.data;
+      
         this.pageautomations=data?.data;
         this.automationslength=data?.automations;
         this.searching = false;

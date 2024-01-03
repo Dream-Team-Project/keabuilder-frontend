@@ -60,19 +60,9 @@ export class CrmCampaignsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getpagecampaigns({pageIndex:0,pageSize:20});
-    // this.fetchcampaigns();
     this.fetchLists();
     this.fetchTags();
   }
-// fetchcampaigns(){
-//   this.fetching=true;
-//   this._campaignservice.fetchcampaigns().subscribe({
-//     next: resp => {
-//       // console.log(data);
-//      this.adjustdata(resp?.data)
-//     }
-//   });
-// }
 adjustdata(data:any){
   if(data) this.pagecampaigns = data;
   this.fetching = false;
@@ -164,14 +154,12 @@ dateformat(value:any){
               this._file.deleteimage('keaimage-campaign-'+campaign.uniqueid+'-screenshot.png').subscribe({
                 next: data => {
                   this.getpagecampaigns({pageIndex:0,pageSize:20})
-                  // this.fetchcampaigns();
                   this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
                 }
               });
             }
             else {
               this.getpagecampaigns({pageIndex:0,pageSize:20})
-              // this.fetchcampaigns();
               this._general.openSnackBar(false, 'Campaign Deleted Successfully!', 'OK', 'center', 'top');
             }
           }
@@ -218,13 +206,11 @@ dateformat(value:any){
                 this._file.copyimage(imgobj).subscribe({
                   next: data => {
                     this.getpagecampaigns({pageIndex:0,pageSize:20})
-                    // this.fetchcampaigns();
                     this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
                   }
                 });
               }else{
                 this.getpagecampaigns({pageIndex:0,pageSize:20})
-                // this.fetchcampaigns();
                 this._general.openSnackBar(false, 'Campaign Duplicated Successfully!', 'OK', 'center', 'top');
               }
 
