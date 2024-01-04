@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of, Observable, BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 const httpOptions = {
@@ -12,8 +13,9 @@ const httpOptions = {
 })
 export class AuthService {
   private AUTH_API = '/api/auth/';
+  private TOKEN_KEY = environment.tokenKey;
   public loggedInStatus = false;
-
+  
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
@@ -34,7 +36,7 @@ export class AuthService {
   }
 
   loggedIn() {
-    return !!localStorage.getItem('auth-token');
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
   forgetPassword(email: string, location:string,type:string): Observable<any>{

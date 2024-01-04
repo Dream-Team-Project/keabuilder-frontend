@@ -1,5 +1,6 @@
 import { Injectable, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,21 @@ export class TokenStorageService {
 
   @Output() loggedInUser: EventEmitter<any> = new EventEmitter<any>();
 
-  private TOKEN_KEY = 'auth-token';
-  private USER_KEY = 'auth-user';
+  private TOKEN_KEY = environment.tokenKey;
+  private USER_KEY = environment.userKey;
 
   constructor() { }
 
-  signOut(): void {
-    window.localStorage.removeItem(this.USER_KEY);
-    window.localStorage.removeItem(this.TOKEN_KEY);
+  public signOut(): Promise<void> {
+    return new Promise((resolve) => {
+      try {
+        window.localStorage.removeItem(this.USER_KEY);
+        window.localStorage.removeItem(this.TOKEN_KEY);
+        resolve();
+      } catch (error) {
+        console.error('Error during sign out:', error);
+      }
+    });
   }
 
   public saveToken(token: string): void {
@@ -36,14 +44,16 @@ export class TokenStorageService {
   }
 
   public saveUser(user: any): void {
+    let encoded = btoa(JSON.stringify(user));
     window.localStorage.removeItem(this.USER_KEY);
-    window.localStorage.setItem(this.USER_KEY, btoa(JSON.stringify(user)));
+    window.localStorage.setItem(this.USER_KEY, encoded);
   }
 
   public getUser(): any {
     const user = window.localStorage.getItem(this.USER_KEY);
     if (user) {
-      return JSON.parse(atob(user));
+      let decoded = JSON.parse(atob(user));
+      return decoded;
     }
     else {
       this.signOut();

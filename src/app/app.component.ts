@@ -105,8 +105,10 @@ export class AppComponent {
   }
 
   logout(): void {
-    this._token.signOut();
-    window.location.reload();
+    this._token.signOut()
+    .then(()=>{
+      window.location.reload();
+    });
   }
 
   triggerSidebar(e:boolean) {

@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
           this.roles = this.tokenStorage.getUser().roles;
           var loginobj:any = {isloggedIn:true, course_assign:'all', username:'admin'};
           localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
-
           this.redirectToDashboard();
         } else{
           this.errorMessage = data?.error?.message;
