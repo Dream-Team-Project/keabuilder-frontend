@@ -24,6 +24,10 @@ export class OfferService {
     var obj = {uuid: this.uuid};
     return this.http.post('/api/alloffers', obj).pipe(catchError(this.errorHandler));
   }
+  getpageoffers(obj:any): Observable<any> {
+     obj.uuid = this.uuid;
+    return this.http.post('/api/getpageoffers', obj).pipe(catchError(this.errorHandler));
+  }
 
   offersalescount(): Observable<any> {
     var obj = {uuid: this.uuid};

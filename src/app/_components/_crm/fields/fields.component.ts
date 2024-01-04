@@ -54,13 +54,6 @@ export class CrmFieldsComponent implements OnInit {
     this.fetching = false;
   }
 
-  // fetchFields() {
-  //   this._field.fetchfields().subscribe((resp:any)=>{
-  //     this.fetch_fields.emit(resp?.data);
-  //     this.adjustdata(resp?.data);
-  //   })
-  // }
-
   getpagefields(event:any){
     let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
       this._field.getpagefields(obj).subscribe(
@@ -68,7 +61,6 @@ export class CrmFieldsComponent implements OnInit {
           this.fields = data?.data;
           this.fetch_fields.emit(data?.data);
           this.adjustdata(data?.data);
-          // this.pagefields=data?.data;
           this.fieldslength=data?.fields;
           this.fetching = false;
           // console.log(this.lists)
@@ -117,7 +109,6 @@ export class CrmFieldsComponent implements OnInit {
   addField(field:any) {
     this._field.addfield(field).subscribe((resp:any)=>{
       if(resp.success) {
-        // this.fetchFields();
         this.getpagefields({pageIndex:0,pageSize:20});
         this._general.openSnackBar(false, 'Field has been saved', 'OK', 'center', 'top');
       }
@@ -129,7 +120,6 @@ export class CrmFieldsComponent implements OnInit {
     this._field.updatefield(field).subscribe((resp:any)=>{
       if(resp.success) {
         this.getpagefields({pageIndex:0,pageSize:20});
-        // this.fetchFields();
         this._general.openSnackBar(false, 'Field has been updated', 'OK', 'center', 'top');
       }
       else this.setError(resp.message);
@@ -152,7 +142,6 @@ export class CrmFieldsComponent implements OnInit {
   deleteField(field:any) {
     this._field.deletefield(field.id).subscribe((resp:any)=>{
       if(resp.success) this.getpagefields({pageIndex:0,pageSize:20});
-      //  this.fetchFields();
       this._general.openSnackBar(!resp.success, resp.message, 'OK', 'center', 'top');
     })
   }
@@ -220,17 +209,7 @@ export class CrmFieldsComponent implements OnInit {
     setTimeout(()=>this.isCopied = false, 1000)
   }
 
-//   getpagefields(event:any){
-//     let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
-//       this._field.getpagefields(obj).subscribe(
-//         (data:any) => {
-//           this.fields = data?.data;
-//           this.pagefields=data?.data;
-//           this.fieldslength=data?.fields;
-//           this.fetching = false;
-//           // console.log(this.lists)
-//     });
-//  }
+
  selectFields(event: any, obj: any) {
   if (event) {
     this.selectedFields.push(obj);

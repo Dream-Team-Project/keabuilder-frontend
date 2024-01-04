@@ -1,5 +1,6 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { ProductService } from 'src/app/_services/_sales/product.service';
 
@@ -12,6 +13,7 @@ export class ProductsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   hasError:string = '';
@@ -21,10 +23,9 @@ export class ProductsComponent implements OnInit {
     name: '',
     description: '',
   }
-  search = {
-    value: '',
-    sortby: 'updated_at DESC',
-  }
+  searchInp : string = ''; 
+  sortInp : string = 'updated_at DESC';
+  productlength:any;
   
   constructor(
     private _productservice: ProductService,
@@ -58,23 +59,36 @@ export class ProductsComponent implements OnInit {
   }
 
   fetchproducts() {
-    this._productservice.fetchproducts().subscribe((resp:any) => {
-      this.adjustdata(resp?.data);
-      this.search.value = '';
-      this.search.sortby = 'updated_at DESC';
-    });
+    this.getpageproducts({pageIndex:0,pageSize:20});
   }
-
+  getpageproducts(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._productservice.getpageproducts(obj).subscribe((resp:any) => {
+       this.productlength=resp.products; 
+       this.adjustdata(resp?.data);
+      this.searchInp = '';
+      })
+    }
   resetSearch() {
-    this.search.value = '';
-    this.searchproducts();
+    this.searchInp = '';
+    this.searchproducts(this.searchInp, this.sortInp);
   }
-
-  searchproducts() {
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.sortInp.includes(column)) {
+      this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.sortInp = `${column} ASC`;
+    }
+    this.searchproducts(this.searchInp, this.sortInp);
+  }
+  searchproducts(search: any, sort:any) {
     this.fetching = true;
     var obj = {
-      value: this.search.value,
-      sortby: this.search.sortby,
+      value: search,
+      sortby: sort,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._productservice.searchproducts(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);

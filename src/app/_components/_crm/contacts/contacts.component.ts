@@ -113,13 +113,6 @@ export class CrmContactsComponent implements OnInit {
         this.fetchTags();
   }
 
-//   fetchContacts() {
-//     this._contactService.fetchcontacts().subscribe((resp) => {
-//       // this.contacts=resp?.data;
-//       this.adjustdata(resp?.data);
-// });
-//   }
-
   fetchLists() {
       this._listService.fetchlists().subscribe(
         (data) => {
@@ -135,7 +128,7 @@ export class CrmContactsComponent implements OnInit {
   }
 
   toggleSort(column: string): void {
-    console.log(column)
+    // console.log(column)
     if (this.sortInp.includes(column)) {
       this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
     } else {

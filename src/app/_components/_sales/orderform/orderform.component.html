@@ -57,15 +57,15 @@
   <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
       <div class="row">
-          <mat-form-field appearance="fill" class="col-md-4">
+          <mat-form-field appearance="fill" class="col-md-7">
               <mat-label>Search order form by name</mat-label>
-              <input matInput [(ngModel)]="search.value" (input)="searchorderforms()" name="searchvalue" type="text" placeholder="Search order forms">
-              <button *ngIf="search.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
+              <input matInput [(ngModel)]="searchInp" (input)="searchorderforms(searchInp, sortInp)" name="searchvalue" type="text" placeholder="Search order forms">
+              <button *ngIf="searchInp" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
                 <mat-icon>close</mat-icon>
               </button>
               <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
-          <mat-form-field appearance="fill" class="col-md-3">
+          <!-- <mat-form-field appearance="fill" class="col-md-3">
               <mat-label>Sort By</mat-label>
               <mat-select [(ngModel)]="search.sortby" name="sortby" (valueChange)="searchorderforms()">
                   <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
@@ -75,7 +75,7 @@
                   <mat-option [value]="'name ASC'">ASC By Name</mat-option>
                 <mat-option [value]="'name DESC'">DESC By Name</mat-option>
               </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
           <div class="col-md-5 text-right">
               <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-3">Add Order Form <i
                   class="fas fa-plus"></i></button>
@@ -86,8 +86,8 @@
           <table class="table kb-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Last Modified</th>
+                <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'name DESC'"></i></th>
+                <th class="kb-table-sort" (click)="toggleSort('updated_at')">Last Modified <i class="fa-solid fa-up-long" *ngIf="sortInp == 'updated_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'updated_at DESC'"></i></th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -108,6 +108,9 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="col-12">
+          <mat-paginator  #paginator [length]="orderformlength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageorderforms($event)"></mat-paginator>
         </div>
       </div>
   </div>

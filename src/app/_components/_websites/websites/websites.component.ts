@@ -71,22 +71,10 @@ export class WebsitesComponent implements OnInit {
     this.fetchData();
   }
   fetchData(){
-    this.getpageWebsites({pageIndex:0,pageSize:20}); 
+    this.getpageWebsites({pageIndex:0,pageSize:6}); 
   }
 
-  // fetwebfull(){
-  //   this.searching=true;
-  //   this.websiteService.getWebsite().subscribe({
-  //     next: data => {
-  //       this.fetweb(data);
-  //     },
-  //     error: err => {
-  //       // console.log(err);
-  //       this.searching=false;
-  //     }
-  //   });
-  // }
-
+ 
   fetweb(data:any){
     if(data.data?.length != 0) {
       this.nodata = false;
@@ -126,7 +114,7 @@ export class WebsitesComponent implements OnInit {
     var SearchValue = {
       search:(event.target as HTMLInputElement).value,
       pageIndex:this.paginator?.pageIndex || 0,
-      pageSize:this.paginator?.pageSize || 20,};
+      pageSize:this.paginator?.pageSize || 6,};
     this.selstatusshow = 'all';
     this.websiteService.querystringmanagewebsite(SearchValue).subscribe({
       next: data => {
@@ -138,7 +126,7 @@ export class WebsitesComponent implements OnInit {
   applykbfilter(){
     var dt:any = {order:this.selstatusshow,
       pageIndex:this.paginator?.pageIndex || 0,
-      pageSize:this.paginator?.pageSize || 20,};
+      pageSize:this.paginator?.pageSize || 6,};
     this.websiteService.shortbypaginatorwebsite(dt).subscribe({
       next: data => {
         this.fetweb(data);

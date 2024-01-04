@@ -65,25 +65,15 @@
   <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
       <div class="row">
-          <mat-form-field appearance="fill" class="col-md-4">
+          <mat-form-field appearance="fill" class="col-md-7">
               <mat-label>Search products by name</mat-label>
-              <input matInput [(ngModel)]="search.value" (input)="searchproducts()" name="searchvalue" type="text" placeholder="Search products">
-              <button *ngIf="search.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
+              <input matInput [(ngModel)]="searchInp" (input)="searchproducts(searchInp, sortInp)" name="searchvalue" type="text" placeholder="Search products">
+              <button *ngIf="searchInp" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
                 <mat-icon>close</mat-icon>
               </button>
               <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
-          <mat-form-field appearance="fill" class="col-md-3">
-              <mat-label>Sort By</mat-label>
-              <mat-select [(ngModel)]="search.sortby" name="sortby" (valueChange)="searchproducts()">
-                  <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-                  <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-                  <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-                  <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-                  <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-                <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-              </mat-select>
-          </mat-form-field>
+         
           <div class="col-md-5 text-right">
               <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-3">Add Product <i
                   class="fas fa-plus"></i></button>
@@ -94,9 +84,9 @@
           <table class="table kb-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'name DESC'"></i></th>
                 <th>Description</th>
-                <th>Last Modified</th>
+                <th class="kb-table-sort" (click)="toggleSort('updated_at')">Last Modified <i class="fa-solid fa-up-long" *ngIf="sortInp == 'updated_at ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'updated_at DESC'"></i></th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -119,6 +109,9 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="col-12">
+          <mat-paginator  #paginator [length]="productlength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageproducts($event)"></mat-paginator>
         </div>
       </div>
   </div>

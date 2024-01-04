@@ -26,10 +26,17 @@ export class ProductService {
     return this.http.get(this.allproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+
+  getpageproducts(obj:any): Observable<any> {
+    obj.user_id = this.user_id;
+   return this.http.post('/api/getpageproducts', obj).pipe(catchError(this.errorHandler));
+ }
+
   fetchstripeproducts(){
     return this.http.get(this.allstripeproducts+'/'+this.user_id)
     .pipe(catchError(this.errorHandler));
   }
+  
   fetchrecurringdetail(key:any){
     return this.http.get(this.fetchrecurringdetails+'/'+this.user_id+'/'+key)
     .pipe(catchError(this.errorHandler));

@@ -66,25 +66,6 @@ export class CrmTagsComponent implements OnInit {
     })
   }
  
-  // fetchtags() {
-  //   return new Promise((resolve) => {
-  //     this._tagService.fetchtags().subscribe(
-  //       (data) => {
-  //         this.tags = data.data;
-  //         let i=0;
-  //         for(i=0;i<5;i++){
-  //           if(this.tags[i])
-  //           this.recenttags[i]=this.tags[i].name;
-  //         }
-  //         resolve(true);
-  //       },
-  //       (error) => {
-  //         resolve(false);
-  //       }
-  //     );
-  //   });
-  // }
-
   sortTagcontacts() {
     return new Promise((resolve) => {
       var newtags=JSON.parse(JSON.stringify(this.tags));
@@ -101,7 +82,6 @@ export class CrmTagsComponent implements OnInit {
         .addtag(this.tag)
         .subscribe((resp) => {
           if(resp.success==true){
-            // this.fetchtags();
              this.getpagetags({pageIndex:0,pageSize:20})
             this._general.openSnackBar(false, 'Tag has been saved', 'OK', 'center', 'top');
             }

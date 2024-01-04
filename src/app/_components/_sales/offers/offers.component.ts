@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { OfferService } from 'src/app/_services/_sales/offer.service';
 import { ImageService } from 'src/app/_services/image.service';
@@ -9,10 +10,11 @@ import { ImageService } from 'src/app/_services/image.service';
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
-export class OffersComponent implements OnInit {
+export class OffersComponent implements OnInit {  
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   defaultCurrency = { name: "United States Dollar", code: "USD", symbol: "$" };
@@ -26,11 +28,10 @@ export class OffersComponent implements OnInit {
     name: '',
   };
   offers:Array<any> = [];
-  search = {
-    value: '',
-    sortby: 'updated_at DESC',
-  }
   offerLink = '/sales/offer/';
+  offerlength:any;
+  searchInp : string = ''; 
+  sortInp : string = 'created_at DESC';
 
   constructor(
       private _offerservice: OfferService,
@@ -64,43 +65,48 @@ export class OffersComponent implements OnInit {
    }
  
    fetchoffers() {
-    this._offerservice.offersalescount().subscribe((respsl:any) => {
-     this._offerservice.fetchoffers().subscribe((resp:any) => {
-        
-      const order = resp.data.map((item:any) => item.uniqueid);
-      const mergedData:any = {};
-
-      respsl.data.forEach((item:any) => {
-          const { offerid, ...rest } = item;
-          mergedData[offerid] = rest;
-      });
-
-      resp.data.forEach((item:any) => {
-          const { uniqueid, ...rest } = item; 
-          if (!mergedData[uniqueid]) {
-              mergedData[uniqueid] = {
-                  "offerid_count": 0,
-                  "total_salesamount": "0",
-                  ...rest
-              };
-          } else {
-              Object.assign(mergedData[item.uniqueid], rest);
-          }
-      });
-
-      const mergedArray = order.map((uniqueid:any) => ({
-          "uniqueid": uniqueid,
-          ...mergedData[uniqueid]
-      }));
-
-      // console.log(mergedArray);
-       this.adjustdata(mergedArray);
-      //  this.adjustdata(resp?.data);
-       this.search.value = '';
-       this.search.sortby = 'updated_at DESC';
-     });
-    });
+    this.getpageoffers({pageIndex:0,pageSize:20});
    }
+
+   getpageoffers(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._offerservice.offersalescount().subscribe((respsl:any) => {
+      this._offerservice.getpageoffers(obj).subscribe((resp:any) => {
+       this.offerlength=resp.offers; 
+       const order = resp.data.map((item:any) => item.uniqueid);
+       const mergedData:any = {};
+ 
+       respsl.data.forEach((item:any) => {
+           const { offerid, ...rest } = item;
+           mergedData[offerid] = rest;
+       });
+ 
+       resp.data.forEach((item:any) => {
+           const { uniqueid, ...rest } = item; 
+           if (!mergedData[uniqueid]) {
+               mergedData[uniqueid] = {
+                   "offerid_count": 0,
+                   "total_salesamount": "0",
+                   ...rest
+               };
+           } else {
+               Object.assign(mergedData[item.uniqueid], rest);
+           }
+       });
+ 
+       const mergedArray = order.map((uniqueid:any) => ({
+           "uniqueid": uniqueid,
+           ...mergedData[uniqueid]
+       }));
+ 
+       // console.log(mergedArray);
+        this.adjustdata(mergedArray);
+       //  this.adjustdata(resp?.data);
+        this.searchInp = '';
+        this.sortInp = 'created_at DESC';
+      });
+     });
+    }
 
    updateoffer(){
     if(this.offerObj.name) {
@@ -125,15 +131,25 @@ export class OffersComponent implements OnInit {
    }
 
    resetSearch() {
-      this.search.value = '';
-      this.searchoffers();
+      this.searchInp = '';
+      this.searchoffers(this.searchInp, this.sortInp);
    }
- 
-   searchoffers() {
+   toggleSort(column: string): void {
+    // console.log(column)
+    if (this.sortInp.includes(column)) {
+      this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.sortInp = `${column} ASC`;
+    }
+    this.searchoffers(this.searchInp, this.sortInp);
+  }
+   searchoffers(search: any, sortInp:any) {
      this.fetching = true;
      var obj = {
-       value: this.search.value,
-       sortby: this.search.sortby,
+       value: search,
+       sortby: sortInp,
+       pageIndex:this.paginator.pageIndex,
+       pageSize:this.paginator.pageSize,
      }
      this._offerservice.searchoffers(obj).subscribe((resp:any)=>{
        this.adjustdata(resp?.data);

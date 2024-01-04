@@ -1,5 +1,6 @@
 import {Component, OnInit, ElementRef, ViewChild, TemplateRef} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { OrderformService } from 'src/app/_services/_sales/orderform.service';
 
@@ -12,6 +13,7 @@ export class OrderFormComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('updatedialog') updatedialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   hasError:string = '';
@@ -20,10 +22,9 @@ export class OrderFormComponent implements OnInit {
     id: '',
     name: '',
   }
-  search = {
-    value: '',
-    sortby: 'updated_at DESC',
-  }
+  searchInp : string = ''; 
+  sortInp : string = 'updated_at DESC';
+  orderformlength:any;
   
   constructor(
     private _orderformservice: OrderformService,
@@ -55,23 +56,37 @@ export class OrderFormComponent implements OnInit {
   }
 
   fetchorderforms() {
-    this._orderformservice.fetchorderforms().subscribe((resp:any) => {
+    this.getpageorderforms({pageIndex:0,pageSize:20});
+  }
+  getpageorderforms(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    this._orderformservice.getpageorderforms(obj).subscribe((resp:any) => {
       this.adjustdata(resp?.data);
-      this.search.value = '';
-      this.search.sortby = 'updated_at DESC';
+      this.orderformlength=resp.orderforms;
+      this.searchInp = '';
+      this.sortInp = 'updated_at DESC';
     });
-  }
-
+    }
   resetSearch() {
-    this.search.value = '';
-    this.searchorderforms();
+    this.searchInp = '';
+    this.searchorderforms(this.searchInp, this.sortInp);
   }
-
-  searchorderforms() {
+  toggleSort(column: string): void {
+    // console.log(column)
+    if (this.sortInp.includes(column)) {
+      this.sortInp = this.sortInp.endsWith('ASC') ? `${column} DESC` : `${column} ASC`;
+    } else {
+      this.sortInp = `${column} ASC`;
+    }
+    this.searchorderforms(this.searchInp, this.sortInp);
+  }
+  searchorderforms(search: any, sort:any) {
     this.fetching = true;
     var obj = {
-      value: this.search.value,
-      sortby: this.search.sortby,
+      value: search,
+      sortby: sort,
+      pageIndex:this.paginator.pageIndex,
+      pageSize:this.paginator.pageSize,
     }
     this._orderformservice.searchorderforms(obj).subscribe((resp:any)=>{
       this.adjustdata(resp?.data);

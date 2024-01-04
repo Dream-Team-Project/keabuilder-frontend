@@ -78,18 +78,10 @@ export class CrmFormsComponent implements OnInit {
 
   fetchData(){
     this.getpageforms({pageIndex:0,pageSize:20});
-    // this.fetchForms();
       this.fetchLists();
         this.fetchTags();       
   }
   
-  // fetchForms(){
-  //   this.fetching = true;
-  //   this._file.fetchforms().subscribe((resp:any)=>{
-  //       this.adjustdata(resp.data);
-  //       this.fetching = false;
-  //   })
-  // }
 
   fetchLists() {
     this.fetching = true;

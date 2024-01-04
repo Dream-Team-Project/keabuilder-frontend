@@ -177,6 +177,10 @@ export class FunnelService {
     return this.http.post("/api/getallfunnelandstep/"+this.uuid, {
     }, httpOptions);
   }
+  getpagefunnels(obj:any): Observable<any> {
+    obj.user_id = this.uuid;
+   return this.http.post('/api/getpagefunnels', obj);
+ }
 
   makefunnelsettings(data:any):Observable<any> {
     return this.http.post("/api/makefunnelsettings/"+this.uuid, {

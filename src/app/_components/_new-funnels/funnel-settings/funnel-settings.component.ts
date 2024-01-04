@@ -68,7 +68,7 @@ this.fetchfunnel();
 fetchfunnel(){
   this.funnelService.getuniquefunnelstep(this.uniqueid,'funnelstep').subscribe({
     next: data => {
-    console.log(data);
+    // console.log(data);
     this.funnelname = data.data2[0].name;
     this.uniqueidstep = data.data[0].uniqueid;  
     
