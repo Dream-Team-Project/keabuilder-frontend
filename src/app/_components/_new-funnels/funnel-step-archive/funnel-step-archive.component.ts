@@ -1,5 +1,6 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
@@ -14,10 +15,13 @@ import { ImageService } from 'src/app/_services/image.service';
 })
 export class FunnelStepArchiveComponent implements OnInit {
 
+  @ViewChild('paginator') paginator!: MatPaginator;
+
   archivesteps:any[] = [];
   searching = false;
   delstep:any;
   uniqueid:any;
+  funnellength:any;
 
   constructor(private funnelService: FunnelService,
     public _general: GeneralService,
@@ -39,7 +43,6 @@ export class FunnelStepArchiveComponent implements OnInit {
     // console.log(this.panelOpenState);
     if(value=='archivefunnelstep'){
         this.searching = true;
-        
         this.funnelService.getuniquefunnelstep(this.uniqueid, value).subscribe({
           next: data => {
             this.searching = false;
@@ -58,6 +61,18 @@ export class FunnelStepArchiveComponent implements OnInit {
     }
 
   }
+  getpagearchive(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize};
+    // this.funnelService.getpagearchivefunnel(obj).subscribe({
+    //   next: data => {
+    //     this.funnellength=data?.archive;
+    //   },
+    //   error: err => {
+    //     // console.log(err);
+    //   }
+    // });
+   
+    }
   openDialog(templateRef: TemplateRef<any>, page:any): void {
     this.delstep = page;
     this.dialog.open(templateRef);

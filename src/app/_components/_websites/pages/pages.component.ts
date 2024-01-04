@@ -254,7 +254,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
              this.nodata = false;
              let pages=this.website_id ? dataA.data[0].pages :  dataA.data;
             //  if(this.website_id){
-              console.log(pages)
+              // console.log(pages)
                   pages.map((element:any)=>{
                   var mycustomdate =  new Date(element.updated_at);
                   var text1 = mycustomdate.toDateString();    

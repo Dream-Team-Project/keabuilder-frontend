@@ -20,7 +20,7 @@ export class NewFunnelArchiveComponent implements OnInit {
  
   // dataSource: MatTableDataSource<UserData>;
   
-  @ViewChild(MatPaginator) paginator!: MatPaginator; 
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('deldialog') deldialog!: TemplateRef<any>;
 
@@ -33,6 +33,7 @@ export class NewFunnelArchiveComponent implements OnInit {
   searching:boolean = false;
   error=false;
   errormessage:any='';
+  funnellength:any;
 
   constructor(private funnelService: FunnelService,
             private fileuploadService: FileUploadService,
@@ -46,35 +47,25 @@ export class NewFunnelArchiveComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
-
-    this.funnelService.getarchivefunnel('7 DAY').subscribe({
-      next: data => {
-        // console.log(data.data); 
-        this.users = data.data;
-        
-
-      },
-      error: err => {
-        // console.log(err);
-      }
-    });
-
+    this.applykbfilter();
   }
 
- 
-  applykbfilter(){
-
-    this.funnelService.getarchivefunnel(this.showingcontacts).subscribe({
+  getpagearchive(event:any){
+    let obj={pageIndex:event.pageIndex,pageSize:event.pageSize,showingcontacts:this.showingcontacts};
+    this.funnelService.getpagearchivefunnel(obj).subscribe({
       next: data => {
         // console.log(data.data); 
-        this.users = data.data;
+        this.users = data?.data;
+        this.funnellength=data?.archive;
       },
       error: err => {
         // console.log(err);
       }
     });
-
+   
+    }
+  applykbfilter(){
+    this.getpagearchive({pageIndex:0,pageSize:20});
   }
 
   datecusfilter(value:any){
@@ -179,6 +170,8 @@ resetobj(){
       search: search.value,
       filter: filter.value,
       archive:'1',
+      pageIndex:this.paginator?.pageIndex || 0,
+      pageSize:this.paginator?.pageSize || 20,
     }
     this.funnelService.searchqueryFunnel(obj).subscribe((data:any) => {
       this.searching = false;

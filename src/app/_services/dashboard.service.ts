@@ -16,7 +16,6 @@ export class DashboardService {
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService) {
     this.uuid = this.tokenStorage.getUser().uniqueid;
-    // console.log(this.tokenStorage.getUser());
   }
 
   getAllrevenue(obj:any): Observable<any> {
@@ -60,10 +59,4 @@ export class DashboardService {
   plandata(): Observable<any> {
     return this.http.get('/api/getplandata/'+this.uuid);
   }
-
-  
-
-  
-
-
 }

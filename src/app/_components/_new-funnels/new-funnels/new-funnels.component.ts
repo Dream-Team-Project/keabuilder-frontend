@@ -686,8 +686,8 @@ export class NewFunnelsComponent implements OnInit {
       search: search.value,
       filter: filter.value,
       archive:'0',
-      pageIndex:this.paginator.pageIndex,
-       pageSize:this.paginator.pageSize,
+      pageIndex:this.paginator?.pageIndex || 0,
+       pageSize:this.paginator?.pageSize || 20,
 
     }
     this.funnelService.searchqueryFunnel(obj).subscribe((data:any) => {

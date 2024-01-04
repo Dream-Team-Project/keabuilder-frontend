@@ -45,7 +45,7 @@ export class UserService {
   }
 
   getUsersDetails(): Observable<any> {
-    return this.http.post(this.getUsersDetailsApi+this.uuid,{});
+    return this.http.get(this.getUsersDetailsApi+this.uuid);
   }
 
   updateuserdetails(data: any): Observable<any> {

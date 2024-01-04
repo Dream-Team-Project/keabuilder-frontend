@@ -24,10 +24,10 @@
                 <mat-form-field appearance="fill" class="col-md-3 ">
                   <mat-label>Showing Archive for</mat-label>
                   <mat-select  #filterInp name="showingcontacts" value='created_at DESC' (valueChange)="searchfunnels(searchInp, filterInp)">
-                    <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-                <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-                <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-                <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
+                    <mat-option [value]="'created_at ASC'">Ascending By Create</mat-option>
+                <mat-option [value]="'created_at DESC'">Descending By Create</mat-option>
+                <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
+                <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
                   </mat-select>
                 </mat-form-field>
              
@@ -61,7 +61,9 @@
         </table>
                
                   </div>
-                  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                  <div class="col-md-12">
+                    <mat-paginator  #paginator [length]="funnellength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagearchive($event)"></mat-paginator>
+                </div>
               </div>  
       </div>
   </div>
