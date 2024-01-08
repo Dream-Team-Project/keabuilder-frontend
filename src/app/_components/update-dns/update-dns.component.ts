@@ -108,7 +108,7 @@ export class UpdateDnsComponent implements OnInit {
     // console.log(data)
     if(data.type && data.name && data.content && data.ttl){
       this.domainService.oncloudAddUpdatedomain(data.zoneid,data.domain,data.type,data.name,recordid,data.content,data.action,data.proxied,data.ttl).subscribe((resp:any)=>{
-        if(resp.success == true){
+        if(resp.success == true) {
         let dns_records=JSON.stringify(resp.dns_records);
         var objdata = {uniqueid:this.domain?.uniqueid,name:resp.dmname,zoneid:resp.zoneid, nameservers:resp.nameservers,dns_records:dns_records, status:resp.status};
         this.domainService.updatedomainnameserver(objdata).subscribe({
@@ -122,7 +122,7 @@ export class UpdateDnsComponent implements OnInit {
             }
           }
         });
-      }else{
+      }else {
         this.fetching = false;
         this._general.openSnackBar(true,'Something went Wrong!!', 'OK','center','top');
       }

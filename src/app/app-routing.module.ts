@@ -21,12 +21,9 @@ import { ScrumBoardListComponent } from './_components/scrumboard/scrum-board-li
 // auth
 import { DashboardComponent } from './_components/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './_components/_auth/forgot-password/forgot-password.component';
-import { LoginComponent } from './_components/_auth/login/login.component';
-import { LoginNewComponent } from './_components/_auth/login-new/login-new.component';
+import { LoginNewComponent } from './_components/_auth/login/login-new.component';
 import { ProfileComponent } from './_components/_auth/profile/profile.component';
-import { RegisterComponent } from './_components/_auth/register/register.component';
-
-import { RegisterNewplanComponent } from './_components/_auth/register-newplan/register-newplan.component';
+import { RegisterNewplanComponent } from './_components/_auth/register/register-newplan.component';
 // auth
 // builder
 import { TemplateComponent } from './_components/_builder/template/template.component';
@@ -51,16 +48,16 @@ import { WebpagesArchiveComponent } from './_components/_websites/webpages-archi
 // websites
 
 // new-funnels
-import { NewFunnelsComponent } from './_components/_new-funnels/new-funnels/new-funnels.component';
-import { NewFunnelComponent } from './_components/_new-funnels/new-funnel/new-funnel.component';
-import { NewFunnelBuildComponent } from './_components/_new-funnels/new-funnel-build/new-funnel-build.component';
-import { NewFunnelArchiveComponent } from './_components/_new-funnels/new-funnel-archive/new-funnel-archive.component';
-import { CreateNewFunnelsComponent } from './_components/_new-funnels/create-new-funnels/create-new-funnels.component';
-import { FunnelSettingsComponent } from './_components/_new-funnels/funnel-settings/funnel-settings.component';
-import { FunnelStepArchiveComponent } from './_components/_new-funnels/funnel-step-archive/funnel-step-archive.component';
-import { NewFunnelStepsComponent } from './_components/_new-funnels/new-funnel-steps/new-funnel-steps.component';
-import { NewFunnelCheckoutComponent } from './_components/_new-funnels/new-funnel-checkout/new-funnel-checkout.component';
-import { FunnelStepSettingsComponent } from './_components/_new-funnels/funnel-step-settings/funnel-step-settings.component';
+import { NewFunnelsComponent } from './_components/_funnels/funnels/new-funnels.component';
+import { NewFunnelComponent } from './_components/_funnels/funnel/new-funnel.component';
+import { NewFunnelBuildComponent } from './_components/_funnels/funnel-build/new-funnel-build.component';
+import { NewFunnelArchiveComponent } from './_components/_funnels/funnel-archive/new-funnel-archive.component';
+import { CreateNewFunnelsComponent } from './_components/_funnels/create-funnels/create-new-funnels.component';
+import { FunnelSettingsComponent } from './_components/_funnels/funnel-settings/funnel-settings.component';
+import { FunnelStepArchiveComponent } from './_components/_funnels/funnel-step-archive/funnel-step-archive.component';
+import { NewFunnelStepsComponent } from './_components/_funnels/funnel-steps/new-funnel-steps.component';
+import { NewFunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/new-funnel-checkout.component';
+import { FunnelStepSettingsComponent } from './_components/_funnels/funnel-step-settings/funnel-step-settings.component';
 // new-funnels
 
 // crm
@@ -98,18 +95,6 @@ import { MembershipMarketplaceComponent } from './_components/_membership/market
 import { MembershipReportsComponent } from './_components/_membership/membership-reports/membership-reports.component';
 import { MembershipCustomizationComponent } from './_components/_membership/membership-customization/membership-customization.component';
 import { CourseSettingsComponent } from './_components/_membership/course-settings/course-settings.component';
-// theme
-import { CourseUserDashboardComponent } from './course-user/dashboard/dashboard.component';
-import { CourseUserCoursesComponent } from './course-user/courses/courses.component';
-import { CourseUserModulesComponent } from './course-user/modules/modules.component';
-import { CourseUserModulesSidebarComponent } from './course-user/modules-sidebar/modules-sidebar.component';
-import { CourseUserModulesBoardComponent } from './course-user/modules-board/modules-board.component';
-import { CourseUserModulesPostComponent } from './course-user/modules-post/modules-post.component';
-import { CourseUserCourseLoginComponent } from './course-user/course-login/course-login.component';
-import { CourseUserCourseHeaderComponent } from './course-user/course-header/course-header.component';
-import { CourseUserCourseForgotpassComponent } from './course-user/course-forgotpass/course-forgotpass.component';
-// theme
-// membership
 // affiliate
 import { AffiliatesComponent } from './_components/_affiliate/affiliates/affiliates.component';
 import { AffiliateUsersComponent } from './_components/_affiliate/users/users.component';
@@ -213,29 +198,8 @@ if (currentDomain === appHost) {
 
     // website 
 
+   
     // funnels
-
-    // { path: 'funnels', component: FunnelComponent,
-    // children: [
-    //   { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
-    //   { path: 'build', component: BuildFunnelComponent, canActivate: [AuthGuard] },
-    //   { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
-    //   { path: 'marketplace', component: FunnelMarketplaceComponent, canActivate: [AuthGuard] },
-    //   { path: ':funnel_id', component: FunnelWizardNavComponent, 
-    //   children: [
-    //     { path: 'steps/:step_id', component: CreateFunnelComponent, canActivate: [AuthGuard] },
-    //     { path: 'stats', component: CreateFunnelStatsComponent, canActivate: [AuthGuard] },
-    //     { path: 'contacts', component: CreateFunnelContactsComponent, canActivate: [AuthGuard] },
-    //     { path: 'sales', component: CreateFunnelSalesComponent, canActivate: [AuthGuard] },
-    //     { path: 'settings', component: CreateFunnelSettingsComponent, canActivate: [AuthGuard] }
-    //   ],
-    //   canActivate: [AuthGuard]},
-    // ],
-    // canActivate: [AuthGuard] },
-
-    // funnels
-
-    // new-funnels
 
     { path: 'funnels', component: NewFunnelComponent,
     children: [
@@ -254,8 +218,9 @@ if (currentDomain === appHost) {
   ],
   canActivate: [AuthGuard] },
   { path: 'funnels/step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
-    // new-funnels
+    // funnels
     
+
     // sales 
     { path: 'sales', component: SalesComponent, 
     children: [
@@ -309,15 +274,6 @@ if (currentDomain === appHost) {
      //member-account-settings
     
     // builder
-    
-    // User Course
-    // { path: 'course/dashboard', component: CourseUserDashboardComponent},
-    // { path: 'course/login', component: CourseUserCourseLoginComponent},
-    // { path: 'course/forgot', component: CourseUserCourseForgotpassComponent},
-    // { path: 'course/:name', component: CourseUserCoursesComponent},
-    // { path: 'course/:name/:id', component: CourseUserModulesComponent},
-    // { path: 'course/:name/:id/posts/:postid', component: CourseUserModulesComponent},
-    
     { path: 'fetch-orderform/:id', component: NewFunnelCheckoutComponent},
 
     // crm
@@ -465,9 +421,7 @@ export class AppRoutingModule { }
 export const RoutingComponents = 
   [
     FeedbackFormComponent,
-    LoginComponent, 
     LoginNewComponent,
-    RegisterComponent, 
     RegisterNewplanComponent,
     ForgotPasswordComponent,
     DashboardComponent, 
@@ -538,15 +492,6 @@ export const RoutingComponents =
     CrmFormBuilderComponent,
     BuilderTopbarComponent,
     ImageComponent,
-    CourseUserDashboardComponent,
-    CourseUserCoursesComponent,
-    CourseUserModulesComponent,
-    CourseUserModulesSidebarComponent,
-    CourseUserModulesBoardComponent,
-    CourseUserModulesPostComponent,
-    CourseUserCourseLoginComponent,
-    CourseUserCourseHeaderComponent,
-    CourseUserCourseForgotpassComponent,
     ComingSoonComponent,
     NewFunnelCheckoutComponent,
     WebsitesComponent,

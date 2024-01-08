@@ -97,8 +97,8 @@
         </mat-select>
       </mat-form-field>
       <div class="col-md-4 mt-2 text-right">
-        <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllEmails($event)" matTooltip="Select All Page Emails" matTooltipPosition="above"></mat-checkbox></span>
-        <button
+        <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllEmails($event)" matTooltip="Select All Page Emails" matTooltipPosition="above">Select All</mat-checkbox></span>
+        <!-- <button
           mat-raised-button
           [color]="'accent'"
           (click)="toggleView()"
@@ -110,7 +110,7 @@
           <ng-template #listview
             ><span>List View <i class="fas fa-th-list"></i></span
           ></ng-template>
-        </button>
+        </button> -->
         <button
           mat-raised-button
           color="primary"
@@ -129,20 +129,17 @@
       </div>
     </div>
     <div
-      [class.px-3]="toggleview"
-      class="row"
+      class="row px-3"
       *ngIf="pageemails?.length != 0; else nodata"
     >
       <div
-        [class]="toggleview ? 'col-md-12' : 'col-md-4'"
-        class="cardpage mt-4"
+        class=" col-md-12 cardpage mt-4"
         *ngFor="let email of pageemails"
       >
-        <div [class.row]="toggleview">
+        <div class="row">
           <div
-            [style.height]="toggleview ? '150px' : '300px'"
-            [class]="toggleview ? 'col-md-6' : 'col-md-12'"
-            class="p-0"
+            [style.height]="'50px'"
+            class='col-md-2 p-0'
           >
             <div
               [class.kb-disabled]="email.deleting"
@@ -163,11 +160,11 @@
               </div>
             </div>
           </div>
-          <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+          <div class='col-md-10'>
             <div class="row align-items-center p-0 h-100">
-              <div [class.p-0]="!toggleview" class="col-md-12">
-                <div class="d-flex justify-content-between align-items-center">
-                <div class="kb-title-board line-ellipsis ftsize ">
+                <div  class="col-md-12 d-flex justify-content-left align-items-center">
+                  <span class="align-items-center fnt mt-2" matTooltip="Click to Select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="email.selected" (ngModelChange)="selectEmails($event, email)"></mat-checkbox></span>
+                <div class="kb-title-board ftsize ">
                   <span >{{ email.name ? email.name : ("email" | titlecase) }}</span>
                   <input
                     type="text"
@@ -178,17 +175,18 @@
                     matTooltipPosition="above"
                   />
                 </div>
-                <span class="align-items-center fnt mt-2" matTooltip="Click to Select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="email.selected" (ngModelChange)="selectEmails($event, email)"></mat-checkbox></span></div>
-                <p
-                  class="kb-pagedate mt-2 mb-3"
-                  matTooltip="Last Updated"
-                  matTooltipPosition="above"
-                >
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  {{ _general.dateformat(email.updated_at) }}
-                </p>
               </div>
-              <div [class.p-0]="!toggleview" class="col-md-12 text-right"> 
+              <div class="col-md-6">
+                <p
+                class="kb-pagedate mt-2 mb-3"
+                matTooltip="Last Updated"
+                matTooltipPosition="above"
+              >
+                <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                {{ _general.dateformat(email.updated_at) }}
+              </p>
+              </div>
+              <div  class="col-md-6 text-right"> 
                 <button
                   (click)="_general.redirectToBuilder(email.uniqueid, 'email')"
                   mat-raised-button
