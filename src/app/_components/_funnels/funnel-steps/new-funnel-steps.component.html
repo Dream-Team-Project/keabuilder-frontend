@@ -350,7 +350,7 @@
     </div>
   </div> 
     <div class="row pt-3" *ngIf="steps.length != 0; else nodata">
-      <div class="col-md-5">
+      <div class="col-md-6">
         <div class="card px-4 py-4 h-100">
             <div class="funnel-step-list d-flex align-items-center justify-content-between" (click)="kb_substeps2(step.id)" [class]="step.color" [class.selectedstep]="selectedstep==step.id" *ngFor="let step of steps; index as i;" >
               <div class="col-md-5 d-flex justify-content-between pr-0" 
@@ -434,7 +434,7 @@
       </div>
     </div>
       <!-- col -->
-      <div class="col-md-7">
+      <div class="col-md-6">
         <!-- <div class="kb-templates text-center mt-5">
         <button mat-raised-button (click)="usertemplateselected('start')" class="mt-4">
           <i class="fas fa-plus"></i> Build Funnel With Keabuilder
