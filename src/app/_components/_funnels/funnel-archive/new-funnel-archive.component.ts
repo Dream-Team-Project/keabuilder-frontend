@@ -15,7 +15,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
   templateUrl: './new-funnel-archive.component.html',
   styleUrls: ['./new-funnel-archive.component.css']
 })
-export class NewFunnelArchiveComponent implements OnInit {
+export class FunnelArchiveComponent implements OnInit {
 
  
   // dataSource: MatTableDataSource<UserData>;

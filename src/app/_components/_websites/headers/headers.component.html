@@ -39,15 +39,15 @@
 </ng-template>
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-  <div class="row align-items-center">
-      
-          <mat-form-field appearance="fill" class="col-6">
+  <div class="row">
+    <div class="col-md-8 pr-0">
+          <mat-form-field appearance="fill" class="col-md-6 p-0">
             <mat-label>Search Headers</mat-label>
             <input matInput #searchInp type="text" (input)="searchheaders(searchInp, filterInp)" placeholder="Search Header Name">
             <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
           
-          <mat-form-field appearance="fill" class="col-3">
+          <mat-form-field appearance="fill" class="col-md-3 px-2">
             <mat-label>Sort By</mat-label>
             <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchheaders(searchInp, filterInp)">
               <mat-option [value]="'name ASC'">Ascending By Name</mat-option>
@@ -56,12 +56,8 @@
               <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
             </mat-select>
           </mat-form-field>
-     
-      <div class="col-md-3 text-right">
-        <!-- <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="headers.length != 0">
-          <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-          <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
-        </button> -->
+     </div>
+      <div class="col-md-4 text-right">
         <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Header </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>

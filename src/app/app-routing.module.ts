@@ -21,9 +21,9 @@ import { ScrumBoardListComponent } from './_components/scrumboard/scrum-board-li
 // auth
 import { DashboardComponent } from './_components/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './_components/_auth/forgot-password/forgot-password.component';
-import { LoginNewComponent } from './_components/_auth/login/login-new.component';
+import { LoginComponent } from './_components/_auth/login/login.component';
 import { ProfileComponent } from './_components/_auth/profile/profile.component';
-import { RegisterNewplanComponent } from './_components/_auth/register/register-newplan.component';
+import { RegisterComponent } from './_components/_auth/register/register.component';
 // auth
 // builder
 import { TemplateComponent } from './_components/_builder/template/template.component';
@@ -49,9 +49,9 @@ import { WebpagesArchiveComponent } from './_components/_websites/webpages-archi
 
 // new-funnels
 import { NewFunnelsComponent } from './_components/_funnels/funnels/new-funnels.component';
-import { NewFunnelComponent } from './_components/_funnels/funnel/new-funnel.component';
+import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
 import { NewFunnelBuildComponent } from './_components/_funnels/funnel-build/new-funnel-build.component';
-import { NewFunnelArchiveComponent } from './_components/_funnels/funnel-archive/new-funnel-archive.component';
+import { FunnelArchiveComponent } from './_components/_funnels/funnel-archive/new-funnel-archive.component';
 import { CreateNewFunnelsComponent } from './_components/_funnels/create-funnels/create-new-funnels.component';
 import { FunnelSettingsComponent } from './_components/_funnels/funnel-settings/funnel-settings.component';
 import { FunnelStepArchiveComponent } from './_components/_funnels/funnel-step-archive/funnel-step-archive.component';
@@ -157,11 +157,8 @@ if (currentDomain === appHost) {
     // auth
 
     { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-    // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
-    { path: 'login', component: LoginNewComponent, canActivate: [SignedInGuard]},
-    // { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
-    { path: 'register/:id', component: RegisterNewplanComponent, canActivate: [SignedInGuard]},
-
+    { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
+    { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
     { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
     // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -201,12 +198,12 @@ if (currentDomain === appHost) {
    
     // funnels
 
-    { path: 'funnels', component: NewFunnelComponent,
+    { path: 'funnels', component: FunnelComponent,
     children: [
       { path: '', component: NewFunnelsComponent, canActivate: [AuthGuard] },
       { path: 'all', component: NewFunnelsComponent, canActivate: [AuthGuard] },
       { path: 'build', component: NewFunnelBuildComponent, canActivate: [AuthGuard] },
-      { path: 'archive', component: NewFunnelArchiveComponent, canActivate: [AuthGuard] },
+      { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard] },
   { path: 'funnels/:funnel_id', component: CreateNewFunnelsComponent,
@@ -421,8 +418,8 @@ export class AppRoutingModule { }
 export const RoutingComponents = 
   [
     FeedbackFormComponent,
-    LoginNewComponent,
-    RegisterNewplanComponent,
+    LoginComponent,
+    RegisterComponent,
     ForgotPasswordComponent,
     DashboardComponent, 
     StrategiesComponent,
@@ -511,10 +508,10 @@ export const RoutingComponents =
     ProfileSettingsComponent,
     SignInSecurityComponent,
     NewFunnelsComponent,
-    NewFunnelComponent,
+    FunnelComponent,
     FunnelStepSettingsComponent,
     NewFunnelBuildComponent,
-    NewFunnelArchiveComponent,
+    FunnelArchiveComponent,
     CreateNewFunnelsComponent,
     FunnelSettingsComponent,
     FunnelStepArchiveComponent,
