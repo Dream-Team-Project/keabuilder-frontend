@@ -172,6 +172,12 @@ export class FunnelService {
       showing,
     }, httpOptions);
   }
+  getpagearchivefunnel(showing:any):Observable<any> {
+    showing.user_id=this.uuid;
+    return this.http.post("/api/getpagearchivefunnel", {
+      showing,
+    }, httpOptions);
+  }
 
   getallfunnelandstep():Observable<any> {
     return this.http.post("/api/getallfunnelandstep/"+this.uuid, {

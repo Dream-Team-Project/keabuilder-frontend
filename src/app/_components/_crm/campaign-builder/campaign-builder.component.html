@@ -264,7 +264,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="kb-full-width " appearance="fill">
-                        <mat-label>From</mat-label>
+                        <mat-label>Get Reply</mat-label>
                         <input type="email" matInput name="from" [(ngModel)]="fullcampobj.emailfrom"  [formControl]="emailfromControl" placeholder="Ex: info@keabuilder.com" minlength="3" >
                         <mat-error *ngIf="emailfromControl.hasError('minlength')">
                         Name must be at least <strong>3</strong> characters
@@ -273,6 +273,13 @@
                             Please enter a valid email address
                           </mat-error>
                     </mat-form-field>
+
+                    <mat-form-field class="kb-full-width" appearance="fill">
+                        <mat-label>SMTP</mat-label>
+                        <mat-select [(ngModel)]="fullcampobj.smtp_id" required name="smtp" class="kb-act-searchinp w-100">
+                          <mat-option *ngFor="let option of allsmtp" [value]="option.uniqueid">{{option.emailfrom}}</mat-option>
+                        </mat-select>
+                    </mat-form-field> 
 
                     <mat-form-field appearance="fill" class="kb-full-width" >
                         <mat-label>Address</mat-label>

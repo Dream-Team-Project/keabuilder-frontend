@@ -247,7 +247,7 @@ mat-spinner {
     align-items: center;
   }
   .line-ellipsis{
-    max-width: 300px;
+    max-width: 60%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

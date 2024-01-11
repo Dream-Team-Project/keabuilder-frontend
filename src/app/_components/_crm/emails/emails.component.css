@@ -210,7 +210,7 @@
   .ftsize{
     font-weight: 500;
     font-size: 20px;
-    max-width: 300px;
+    max-width: 500px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

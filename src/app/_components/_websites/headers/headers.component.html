@@ -47,7 +47,7 @@
             <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
           
-          <mat-form-field appearance="fill" class="col-2">
+          <mat-form-field appearance="fill" class="col-3">
             <mat-label>Sort By</mat-label>
             <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchheaders(searchInp, filterInp)">
               <mat-option [value]="'name ASC'">Ascending By Name</mat-option>
@@ -57,19 +57,19 @@
             </mat-select>
           </mat-form-field>
      
-      <div class="col-md-4 text-right">
-        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="headers.length != 0">
+      <div class="col-md-3 text-right">
+        <!-- <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="headers.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
-        </button>
+        </button> -->
         <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Header </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>
   <div *ngIf="headers.length != 0 else nodata">
-  <div [class.px-3]="!toggleview" class="row" >
-    <div [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="cardpage mt-4" *ngFor="let header of headers">
-        <div [class.row]="!toggleview">
-          <div [class]="toggleview ? 'col-md-12' : 'col-md-6'" class="p-0">
+  <div class="row px-3" >
+    <div  class="col-md-12 cardpage mt-4" *ngFor="let header of headers">
+        <div class="row">
+          <div [style.height]="'50px'" class="col-md-2 p-0">
             <div [class.kb-disabled]="header.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('header-'+header.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
               <div class="kb-loader" *ngIf="header.deleting">
                 <div class="kb-loader-shadow"></div>
@@ -77,18 +77,20 @@
               </div>
             </div>
           </div>
-          <div [class]="toggleview ? 'col-md-12 pt-3' : 'col-md-6'">
+          <div class="col-md-10">
             <div class="row align-items-center p-0 h-100">
-              <div [class]="toggleview ? 'col-md-6 p-0' : 'col-md-12'">
+              <div class="col-md-12">
                 <div class="kb-title-board line-ellipsis">
                   <span class="line-ellipsis">{{header.name ? header.name : 'Header' | titlecase}}</span>
                   <input type="text" #headname [value]="header.name" (blur)="rename(header, headname)" matTooltip="Edit Header Name" matTooltipPosition="above">
                 </div>
+              </div>
+              <div class="col-md-6">
                 <p class="kb-pagedate mt-2 mb-0" matTooltip="Last Updated" matTooltipPosition="above">
                   <i class="far fa-calendar-alt" aria-hidden="true"></i> {{_general.dateformat(header.updated_at)}}
                 </p>
               </div>
-              <div [class]="toggleview ? 'col-md-6 p-0 d-flex justify-content-between' : 'col-md-12 p-0 m-0'">
+              <div class="col-md-6 p-0 text-right">
                 <button mat-raised-button [disabled]="header.deleting" (click)="redirectToBuilder(header)" color="primary">Edit <i class="fas fa-pencil-alt"></i></button>
                 <button mat-raised-button [disabled]="header.deleting" (click)="dataheader = header; openDialog(duplicatedialog)" color="accent" class="mx-2">Dupliacte <i class="far fa-copy"></i></button>
                 <button mat-raised-button [disabled]="header.deleting" (click)="delheader = header; openDialog(deldialog)" color="danger"> Delete <i class="far fa-trash-alt"></i></button>

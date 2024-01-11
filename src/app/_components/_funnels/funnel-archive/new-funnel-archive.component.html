@@ -1,0 +1,88 @@
+<ng-template #deldialog>
+    <h1 mat-dialog-title class="kb-danger">Delete Funnel</h1>
+    <div mat-dialog-content>Would you like to delete <span class="text-danger">{{delpage.name}}</span> funnel?<br>
+        <span>All data with funnel steps will be deleted and can't be restored!</span>
+
+        <mat-error *ngIf="error">{{errormessage}}</mat-error>
+        <mat-form-field class="kb-full-width" appearance="fill">
+          <mat-label>Confirm Password</mat-label>
+          <input type="text" name="confirmpass" matInput [(ngModel)]="confirmpass">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+        <button mat-button mat-dialog-close color="primary" (click)="resetobj()">No</button>
+        <button mat-button mat-dialog-close  cdkFocusInitial class="text-danger" (click)="restoredeleteme(delpage,'delete')" [disabled]="!confirmpass">Yes</button>
+    </div>
+  </ng-template>
+  
+  <div id="archivesteps">
+      <div class="container-fluid">
+        <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
+            <div class="row">
+              
+                <mat-form-field  appearance="fill" class="col-md-6">
+                  <mat-label>Search Archive Funnels</mat-label>
+                  <input #searchInp matInput type="text"  (input)="searchfunnels(searchInp,filterInp)" id="offer-search" placeholder="Search by Funnel name, created at...">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </mat-form-field>
+    
+                <mat-form-field appearance="fill" class="col-md-3 ">
+                  <mat-label>Showing Archive for</mat-label>
+                  <mat-select  #filterInp name="showingcontacts" value="7 DAY" (valueChange)="searchfunnels(searchInp, filterInp)">
+                    <mat-option value="7 DAY">Last 7 Days</mat-option>
+                    <mat-option value="30 DAY">Last 30 Days</mat-option>
+                    <mat-option value="2 MONTH">Last 2 Months</mat-option>
+                    <mat-option value="1 YEAR">This Year</mat-option>
+                    <mat-option value="all">All Time</mat-option>
+                  </mat-select>
+                </mat-form-field>
+             
+            </div>
+              <div class="row" *ngIf="users.length !=0 ; else nodata">
+                <div class="col-12">
+        <table class="table kb-table">
+          <thead>
+            <tr>
+                <th>Funnel Name</th>
+                <th>Archived Reason</th>
+                <th>Archived Date</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let funnel of users; index as i">
+                <td>{{ funnel.name | titlecase}}</td>
+                <td>{{ funnel.archive_reason}}</td>
+                <td>{{ funnel.created_at | date:'medium' }}</td>
+                <td> 
+                    <span class="d-flex">
+                    <i mat-ripple matTooltip="Restore" matTooltipPosition="above" (click)="restoredeleteme(funnel,'restore')"
+                        class="fa fa-trash-restore kb-table-action-icon" aria-hidden="true"></i>
+                        <i mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(deldialog, funnel, '')" class="far fa-trash-alt  kb-table-action-icon kb-icon-del"
+                        aria-hidden="true"></i>
+                    </span>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+               
+                  </div>
+                  <div class="col-md-12">
+                    <mat-paginator  #paginator [length]="funnellength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagearchive($event)"></mat-paginator>
+                </div>
+              </div> 
+      </div>
+  </div>
+  <ng-template #nodata>
+  <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 text-center">
+        <img
+          width=""
+          src="/assets/images/funnel/funnel2.png"
+          class="img-fluid"
+          alt=""
+        />
+      </div>
+    </div>
+  </ng-template>

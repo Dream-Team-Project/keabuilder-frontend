@@ -144,12 +144,15 @@ export class CrmSettingsComponent implements OnInit {
   }
 
   addsmtpdetails(){
+    let obj=this.gensmtp;
+    if(this.allsmtp.length < 5) {
     if(this.email.status=='VALID' && this.smtp.status=='VALID' && ((this.apikey.status=='VALID') || (this.host.status == 'VALID' && this.port.status == 'VALID' && this.user.status == 'VALID' && this.pass.status == 'VALID'))){
       if(this.default){
         this.gensmtp.uniqueid=this._general.makeid(20);
-        this.setdefaultsmtp(this.gensmtp);
+        this.setdefaultsmtp(obj);
       }
-        this._addressService.addsmtp(this.gensmtp).subscribe({
+      // console.log(obj)
+        this._addressService.addsmtp(obj).subscribe({
           next: data => {
             if(data.success==true){
               this.fetchdata();
@@ -176,7 +179,11 @@ export class CrmSettingsComponent implements OnInit {
         this.error=true;
         this.errormessage = 'Please Fill All Details!';
         this.dialog.open(this.dialog1);
-              // this._general.openSnackBar(true, msg, 'OK', 'center', 'top');
+      }
+    }else{
+        this.error=true;
+        this.errormessage = 'Adding New SMTP limit exceeded';
+        this.dialog.open(this.dialog1);
       }
 
     
@@ -335,6 +342,7 @@ export class CrmSettingsComponent implements OnInit {
   }
   sendaddress(){
     var nwaddress = this.genaddress;
+    if(this.alladdress.length < 5) {
     if(this.addressnameControl.status=='VALID' && this.companynameControl.status=='VALID' && this.addressline1Control.status=='VALID' && this.cityControl.status=='VALID' && this.stateControl.status=='VALID' && this.zipControl.status=='VALID'){
       if(nwaddress.company_name!=''&& nwaddress.country!='' && nwaddress.address_1!='' && nwaddress.city!='' && nwaddress.state!='' && nwaddress.zip!=''){
         if(this.default){
@@ -369,7 +377,11 @@ export class CrmSettingsComponent implements OnInit {
                 this.errormessage = 'All fields are required!';
                 this.dialog.open(this.dialog2);       
     }
-
+  }else{
+      this.error=true;
+      this.errormessage = 'Adding New Address limit exceeded';
+      this.dialog.open(this.dialog2);
+    }
   }
   settimezone(){
     // console.log(this.timezone)

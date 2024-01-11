@@ -615,16 +615,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.fetchUserplan();
-    this.allrevenue();
-    this.allcontact();
-    this.dailySales();
     // last week revenue
-    var datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
+    let datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
       next: (data:any) => {
         // // console.log(data);
-
+        if(data.success){
         var newarr: any = [];
 
         var months = [
@@ -680,11 +676,12 @@ export class DashboardComponent implements OnInit {
 
           // // console.log(this.data1date);
         }
+      }
       },
     });
 
     // last week contact
-    var datacondition = { type: 'lastweekcontact', option: '7 DAY' };
+    let datacondition = { type: 'lastweekcontact', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition).subscribe({
       next: (data:any) => {
         // // console.log(data);
@@ -745,7 +742,10 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-   
+    this.fetchUserplan();
+    this.allrevenue();
+    this.allcontact();
+    this.dailySales();
 
     // total earning activity
     this.totalearn();

@@ -11,7 +11,7 @@
           <!-- <p class="card-category">Daily Visit</p> -->
           <p class="card-category d-flex justify-content-between align-items-center">
             <span>Daily Visit </span>
-            <span class="kb-elli-vertical" [(ngModel)]="visitlimit" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="visitlimit" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
             <mat-menu #menu="matMenu">
               <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'visit')">Yesterday</button>
               <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'visit')">2 days ago</button>
@@ -27,7 +27,7 @@
         <div class="card-body ">
           <p class="card-category d-flex justify-content-between align-items-center">
             <span>Revenue </span>
-            <span class="kb-elli-vertical" [(ngModel)]="revenuelimit" [matMenuTriggerFor]="menu1"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="revenuelimit" [matMenuTriggerFor]="menu1"><i class="fa-solid fa-ellipsis-vertical"></i></span>
             <mat-menu #menu1="matMenu">
               <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'revenue')">Yesterday</button>
               <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'revenue')">2 days ago</button>
@@ -44,7 +44,7 @@
           <!-- <p class="card-category">Contacts</p> -->
           <p class="card-category d-flex justify-content-between align-items-center">
             <span>Daily Contacts </span>
-            <span class="kb-elli-vertical" [(ngModel)]="contactlimit"  [matMenuTriggerFor]="menu2"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="contactlimit"  [matMenuTriggerFor]="menu2"><i class="fa-solid fa-ellipsis-vertical"></i></span>
             <mat-menu #menu2="matMenu">
               <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'contacts')">Yesterday</button>
               <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'contacts')">2 days ago</button>
@@ -61,7 +61,7 @@
           <!-- <p class="card-category">Daily Sales</p> -->
           <p class="card-category d-flex justify-content-between align-items-center">
             <span>Daily Sales </span>
-            <span class="kb-elli-vertical" [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-ellipsis-vertical"></i></span>
             <mat-menu #menu3="matMenu">
               <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
               <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>

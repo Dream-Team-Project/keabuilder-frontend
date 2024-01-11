@@ -37,7 +37,7 @@ export class HeatmapsComponent implements OnInit {
         var fullobjsite = data.data;
         this.webpagesService.getWebpages().subscribe({
           next: data2 => {
-
+            // console.log(data2);
             var fullobjpage = data2.data;
             if(fullobjsite.length>0){
 
@@ -96,17 +96,22 @@ export class HeatmapsComponent implements OnInit {
   }
   
   makeurl(visit:any){
-      return this.createurl(visit);
+    return 'https://'+visit['subdomain']+'.keapages.com/'+visit['pages'][0]['page_path'];
+  }
+  makeurl2(visit:any){
+    return 'https://'+visit['insideweb'][0]['subdomain']+'.keapages.com/'+visit['page_path'];
   }
 
   sendurl(visit:any){
-    var mkurl = this.createurl(visit);
+    var mkurl = this.makeurl(visit);
     var dtobj = {url: mkurl};
     this.makeheatunique(dtobj);
   }
 
-  createurl(visit:any){
-    return 'https://'+visit['insideweb'][0]['subdomain']+'.keapages.com/'+visit['page_path'];
+  sendurl2(visit:any){
+    var mkurl = this.makeurl2(visit);
+    var dtobj = {url: mkurl};
+    this.makeheatunique(dtobj);
   }
 
   settheurl(){
