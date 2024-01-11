@@ -139,18 +139,20 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
-    <mat-form-field appearance="fill" class="col-8 pr-2">
-      <mat-label>Search Forms</mat-label>
-      <input
-        matInput
-        [(ngModel)]="searchInp"
-        type="text"
-        (input)="searchForms(searchInp, filterInp)"
-        placeholder="Search Form Name"
-      />
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </mat-form-field>
-    <div class="col-md-4 mt-2 text-right">
+    <div class="col-md-8 pr-0">
+      <mat-form-field appearance="fill" class="col-md-6 p-0">
+        <mat-label>Search Forms</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchInp"
+          type="text"
+          (input)="searchForms(searchInp, filterInp)"
+          placeholder="Search Form Name"
+        />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 text-right">
       <button
         mat-raised-button
         color="primary"
@@ -222,7 +224,6 @@
     </div>
     
   </div>
- 
   <ng-template #nodata>
     <div class="row justify-content-center mt-5">
       <div class="col-md-4">

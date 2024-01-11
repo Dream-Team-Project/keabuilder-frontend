@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WebsiteService } from 'src/app/_services/website.service';
 
 @Component({
   selector: 'app-website',
@@ -9,14 +8,8 @@ import { WebsiteService } from 'src/app/_services/website.service';
 })
 export class WebsiteComponent implements OnInit {
    
-  constructor(public websiteService: WebsiteService,public router: Router) { }
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
   }
-  resetwebsitename(){
-    this.websiteService.websitename='';
-  }
-  isButtonDisabled(route: string): boolean {
-    return this.router.isActive(route, true);
-}
 }

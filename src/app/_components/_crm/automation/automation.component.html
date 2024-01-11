@@ -80,20 +80,22 @@
     <div class="container-fluid ">
       <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field class= "col-md-7" appearance="fill">
-          <mat-label>Search Automations...</mat-label>
-          <input
-          matInput 
-            type="text"
-            class=""
-            id="offer-search"
-            [(ngModel)]="searchInp"
-            (input)="searchAutomations(searchInp, sortInp, filterInp)"
-            placeholder="Search Automations..."
-          />
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </mat-form-field>
-        <div class="col-md-5 text-right mt-2">
+        <div class="col-md-8 pr-0">
+          <mat-form-field class= "col-md-6 p-0" appearance="fill">
+            <mat-label>Search Automations...</mat-label>
+            <input
+            matInput 
+              type="text"
+              class=""
+              id="offer-search"
+              [(ngModel)]="searchInp"
+              (input)="searchAutomations(searchInp, sortInp, filterInp)"
+              placeholder="Search Automations..."
+            />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 text-right">
           <button mat-raised-button color="primary" class="mr-2 d-inline-block" (click)="openDialog(dialog,false)">
             <i class="fa fa-random" aria-hidden="true"></i> Create Automation
           </button>

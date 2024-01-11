@@ -251,12 +251,13 @@
 <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field appearance="fill" class="col-md-5 pr-2">
-            <mat-label>Search Contacts</mat-label>
-            <input matInput  [(ngModel)]="searchInp" (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
-            <i class="fa-solid fa-magnifying-glass"></i>
+      <div class="col-md-8 pr-0">
+        <mat-form-field appearance="fill" class="col-md-6 p-0">
+          <mat-label>Search Contacts</mat-label>
+          <input matInput  [(ngModel)]="searchInp" (input)="searchContacts(searchInp, sortInp, listInp, tagInp)" type="text" placeholder="Search Contacts">
+          <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-md-2 px-2">
+        <mat-form-field appearance="fill" class="col-md-3 px-2">
             <mat-label>Filter By List</mat-label>
             <mat-select  [(ngModel)]="listInp" name="listfilter"  (ngModelChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
                 <mat-option value="" selected>All</mat-option>
@@ -266,7 +267,7 @@
                   </mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="col-md-2 px-2">
+        <mat-form-field appearance="fill" class="col-md-3 p-0">
           <mat-label>Filter By Tag</mat-label>
           <mat-select  [(ngModel)]="tagInp" name="tagfilter"  (ngModelChange)="searchContacts(searchInp, sortInp, listInp, tagInp)">
               <mat-option value="" selected>All</mat-option>
@@ -275,22 +276,23 @@
                 </mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="col-md-3 pl-0 align-items-center text-right">
-          <button mat-raised-button color="accent" class="" [matMenuTriggerFor]="menu">
-            Import/Export <mat-icon>import_export</mat-icon>
+      </div>
+      <div class="col-md-4 text-right">
+        <button mat-raised-button color="accent" class="" [matMenuTriggerFor]="menu">
+          Import/Export <mat-icon>import_export</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="openDialog(importdialog, '')">
+            <span>Import</span>
+            <i class="fa-solid fa-upload ml-2"></i>
           </button>
-          <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item (click)="openDialog(importdialog, '')">
-              <span>Import</span>
-              <i class="fa-solid fa-upload ml-2"></i>
-            </button>
-            <button mat-menu-item (click)="openDialog(exportdialog, '')">
-              <span>Export</span>
-              <i class="fa-solid fa-download ml-2"></i>
-            </button>
-          </mat-menu>
-          <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="ml-2">Add Contact <i class="fas fa-plus"></i></button>
-        </div>
+          <button mat-menu-item (click)="openDialog(exportdialog, '')">
+            <span>Export</span>
+            <i class="fa-solid fa-download ml-2"></i>
+          </button>
+        </mat-menu>
+        <button mat-raised-button (click)="openDialog(adddialog, contactObj)" color="primary" class="ml-2">Add Contact <i class="fas fa-plus"></i></button>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-12" *ngIf="selectedContacts.length > 0">

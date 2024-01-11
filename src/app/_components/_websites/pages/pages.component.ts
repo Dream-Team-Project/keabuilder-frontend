@@ -140,21 +140,21 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       });
      }
 
+  ngOnInit(): void {
+    this.author = this.userService?.user?.name;
+    this.fetchData();
+  }
+
   templateDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
     });
   }
 
-  ngOnInit(): void {
-    this.fetchData();
-    this.author = this.userService?.user?.name;
-  }
-
   fetchData(){
-  this.getpagePages({pageIndex:0,pageSize:20});
+    this.getpagePages({pageIndex:0,pageSize:20});
+    this.fetchallwebsites();
   // this.showwebpages();
   // this.getWebsites();
-  this.fetchallwebsites();
   }
 
   pathuniqueremove(){
