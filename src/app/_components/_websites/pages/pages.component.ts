@@ -124,6 +124,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   errormessage:any='';
   pageslength:any;
   sortInp:any='';
+  visibility:any='';
+  filter:any='';
   
 
   constructor(private webpagesService: WebpagesService,
@@ -574,8 +576,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     this.searching = true;
     var obj = {
       search: search.value,
-      filter: filter.value,
-      visibility: visibility.value,
+      filter: filter.value || this.filter,
+      visibility: visibility.value || this.visibility,
       id:this.website_id,
       sortInp:sortInp.value || this.sortInp,
       pageIndex:this.paginator?.pageIndex || 0,

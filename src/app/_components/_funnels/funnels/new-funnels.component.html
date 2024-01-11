@@ -305,7 +305,8 @@
   <mat-progress-bar *ngIf="searching" mode="indeterminate"></mat-progress-bar>
   <div class="container-fluid">
     <div class="row">
-      <mat-form-field appearance="fill" class="col-md-6">
+      <div class="col-md-8 pr-0">
+      <mat-form-field appearance="fill" class="col-md-6 p-0">
         <mat-label>Search Funnel</mat-label>
         <input
           matInput
@@ -317,7 +318,7 @@
         />
         <i class="fa-solid fa-magnifying-glass"></i>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="col-md-2">
+      <mat-form-field appearance="fill" class="col-md-4 px-2">
         <mat-label>Sort By</mat-label>
         <mat-select
         #filterInp
@@ -333,7 +334,8 @@
         <mat-option [value]="'created_at ASC'">Ascending By Created</mat-option>
         </mat-select>
       </mat-form-field>
-      <div class="col-md-4 text-right mt-2">
+      </div>
+      <div class="col-md-4 text-right">
         <button
           [disabled]="searching"
           mat-raised-button

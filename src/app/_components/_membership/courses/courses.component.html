@@ -63,23 +63,24 @@
 
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-    <div class="row align-items-center">
-        <mat-form-field appearance="fill" class="col-md-6 pr-0">
+    <div class="row">
+      <div class="col-md-8 pr-0">
+        <mat-form-field appearance="fill" class="col-md-6 p-0">
           <mat-label>Search Courses</mat-label>
           <input matInput #searchInp type="text" (input)="searchCourses(searchInp, filterInp)" placeholder="Search Course Name">
           <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="col-md-2">
+        <mat-form-field appearance="fill" class="col-md-4">
           <mat-label>Sort By</mat-label>
-          <mat-select #filterInp name="kbfilter" (valueChange)="searchCourses(searchInp, filterInp)">
+          <mat-select #filterInp name="kbfilter" value="updated_at DESC" (valueChange)="searchCourses(searchInp, filterInp)">
             <mat-option [value]="'title ASC'">Ascending By Name</mat-option>
             <mat-option [value]="'title DESC'">Descending By Name</mat-option>
             <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
             <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
           </mat-select>
         </mat-form-field>
-     
+     </div>
       <div class="col-md-4 text-right">
         <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>

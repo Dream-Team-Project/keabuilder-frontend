@@ -49,16 +49,17 @@
           
           <mat-form-field appearance="fill" class="col-md-3 px-2">
             <mat-label>Sort By</mat-label>
-            <mat-select #filterInp name="kbfilter" value="created_at DESC" (valueChange)="searchheaders(searchInp, filterInp)">
+            <mat-select #filterInp name="kbfilter" [(ngModel)]="filter" (valueChange)="searchheaders(searchInp, filterInp)">
               <mat-option [value]="'name ASC'">Ascending By Name</mat-option>
               <mat-option [value]="'name DESC'">Descending By Name</mat-option>
               <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
               <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
+              <mat-option [value]="''">Descending By Created</mat-option>
             </mat-select>
           </mat-form-field>
      </div>
       <div class="col-md-4 text-right">
-        <button mat-raised-button class="mx-3" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Header </span> <i class="fas fa-plus"></i></button>
+        <button mat-raised-button class="mx-1" (click)="openDialog(createdialog)" color="primary"><span class="keamobhd">Create Header </span> <i class="fas fa-plus"></i></button>
       </div>  
   </div>
   <div *ngIf="headers.length != 0 else nodata">

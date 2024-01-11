@@ -19,14 +19,14 @@
       <div class="container-fluid">
         <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
             <div class="row">
-              
-                <mat-form-field  appearance="fill" class="col-md-6">
+              <div class="col-md-8 pr-0">
+                <mat-form-field  appearance="fill" class="col-md-6 p-0">
                   <mat-label>Search Archive Funnels</mat-label>
                   <input #searchInp matInput type="text"  (input)="searchfunnels(searchInp,filterInp)" id="offer-search" placeholder="Search by Funnel name, created at...">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </mat-form-field>
     
-                <mat-form-field appearance="fill" class="col-md-3 ">
+                <mat-form-field appearance="fill" class="col-md-3 px-2">
                   <mat-label>Showing Archive for</mat-label>
                   <mat-select  #filterInp name="showingcontacts" value="7 DAY" (valueChange)="searchfunnels(searchInp, filterInp)">
                     <mat-option value="7 DAY">Last 7 Days</mat-option>
