@@ -207,7 +207,6 @@
             <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility,sortInp)" placeholder="Search Pages">
             <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
-
           <mat-form-field appearance="fill" class="col-md-2 px-1">
             <mat-label>Sort By</mat-label>
             <mat-select name="kbfilter" value="created_at DESC" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
@@ -217,8 +216,6 @@
               <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
             </mat-select>
           </mat-form-field>
-
-          
           <mat-form-field appearance="fill" class="col-md-2 px-1">
             <mat-label>Visibility</mat-label>
             <mat-select name="visibility" #visibility (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
@@ -234,7 +231,6 @@
               <mat-option *ngFor="let web of allwebsites;" [value]="web.uniqueid">{{web.title}}</mat-option>
             </mat-select>
           </mat-form-field>
-      
        </div>
 
       <div class="col-md-3 text-right align-items-center pl-0 m-0" >
