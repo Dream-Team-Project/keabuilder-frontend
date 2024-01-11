@@ -227,9 +227,9 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill" class="col-md-2 p-0 m-0">
-            <mat-label>Filter by</mat-label>
-            <mat-select name="sortInp" #sortInp (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
-              <mat-option [value]="">All</mat-option>
+            <mat-label>Filter by Website</mat-label>
+            <mat-select name="sortInp" #sortInp [(ngModel)]="website_id" (ngModelChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
+              <mat-option [value]="''">All</mat-option>
               <mat-option *ngFor="let web of allwebsites;" [value]="web.uniqueid">{{web.title}}</mat-option>
             </mat-select>
           </mat-form-field>

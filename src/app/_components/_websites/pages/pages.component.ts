@@ -40,7 +40,7 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('paginator') paginator!: MatPaginator;
 
 readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  website_id:any;
+  website_id:string = '';
   spinner=false;
   delpage:any;
   hasError:boolean = false;
@@ -134,10 +134,10 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     public _general: GeneralService,
     private websiteService: WebsiteService,
     private userService: UserService,) {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation?.extras.state;
+      if(state) this.website_id = state['website_id'];
       this.toggleview = _general.getStorage('page_toggle');
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        this.website_id = params.get('website_id');
-      });
      }
 
   ngOnInit(): void {
