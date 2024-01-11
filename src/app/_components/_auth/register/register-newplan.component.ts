@@ -268,9 +268,9 @@ isthischecked = false;
               uniqueid: data.uniqueid,
             }
             this.tokenStorage.saveUser(userdata);
-            this._file.createuserfolder(data.uniqueid).subscribe(e=>{
-              // console.log(e);
-            });
+            // this._file.createuserfolder(data.uniqueid).subscribe(e=>{
+            //   // console.log(e);
+            // });
             var domainpath = window.location.hostname;
 
             var emailhtml = `Dear `+firstname+`,<br>
@@ -383,7 +383,7 @@ isthischecked = false;
 }
 
   email_creationuser(data:any){
-    var emailhtml = `New User Sign Creation Successfully.
+    var emailhtml = `New User Creation Successfully.
     <br>
     UserId: `+data[6]+`<br>
     Username: `+data[0]+`<br>
@@ -487,9 +487,7 @@ isthischecked = false;
                 this.form.productid=this.productid;
                 this.form.registration_type='paid';
                 this.successMessage=data?.status;
-                // this._snackBar.open(data.status,'OK',{duration:2000});
                 this.onSubmit();
-                // console.log(this.form);
               }
               else{
                 this.paymenterror=true;
