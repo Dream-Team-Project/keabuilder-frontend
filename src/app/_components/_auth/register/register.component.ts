@@ -16,11 +16,11 @@ import {hashSync} from 'bcryptjs';
 
 @Component({
   selector: 'register-newplan-register',
-  templateUrl: './register-newplan.component.html',
-  styleUrls: ['./register-newplan.component.css']
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 
-export class RegisterNewplanComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
 
