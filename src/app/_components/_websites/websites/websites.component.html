@@ -155,7 +155,7 @@
                             Total Pages: {{websites.totalpage}}
                         </div>
                         <div class="col-md-8 text-right">
-                            <button mat-raised-button color="primary" class="mr-2" [routerLink]="['/websites/'+websites.uniqueid+'/pages']" (click)="websiteService.websitename=websites.title;websiteService.website_id=websites.uniqueid"> Pages <i class="far fa-eye"></i></button>
+                            <button mat-raised-button color="primary" class="mr-2" [routerLink]="['/websites/pages']" [state]="{ website_id: websites.uniqueid }" (click)="websiteService.websitename=websites.title;websiteService.website_id=websites.uniqueid"> Pages <i class="far fa-eye"></i></button>
                             <button mat-raised-button color="accent" class="ml-2" [matMenuTriggerFor]="menu"> More <i class="fas fa-cog"></i></button>
                             <mat-menu #menu="matMenu">
                                 <button mat-menu-item (click)="openDialog(updatedialog,websites)">
