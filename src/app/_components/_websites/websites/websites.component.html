@@ -98,14 +98,14 @@
     <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
 
         <div class="row">
-
-              <mat-form-field  appearance="fill" class="col-md-6 pr-2">
+          <div class="col-md-8 pr-0">
+              <mat-form-field  appearance="fill" class="col-md-6 p-0">
                 <mat-label>Search Website</mat-label>
                 <input matInput type="text" name="searchweb" (keyup)="searchpage($event)" placeholder="Search Website">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </mat-form-field>
 
-              <mat-form-field appearance="fill" class="col-md-3">
+              <mat-form-field appearance="fill" class="col-md-3 px-2">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
                   <mat-option value="nameasc" >Ascending By Name</mat-option>
@@ -114,9 +114,9 @@
                   <mat-option value="datedesc">Descending By Date</mat-option>
                 </mat-select>
               </mat-form-field>
-            
-            <div class="col-md-3 text-right">
-                <button mat-raised-button color="primary" class="mr-3" (click)="openDialog(adddialog,'add')">Create Website <i
+            </div>
+            <div class="col-md-4 text-right">
+                <button mat-raised-button color="primary" class="mx-2" (click)="openDialog(adddialog,'add')">Create Website <i
                     class="fas fa-plus"></i></button>
             </div>
         </div>

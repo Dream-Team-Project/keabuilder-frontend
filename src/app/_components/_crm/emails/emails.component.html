@@ -71,8 +71,9 @@
   <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
     <div class="row">
-      <mat-form-field appearance="fill" class="col-6 pr-2">
-        <mat-label>Search emails</mat-label>
+      <div class="col-md-8 pr-0">
+      <mat-form-field appearance="fill" class="col-md-6 p-0">
+        <mat-label>Search Emails</mat-label>
         <input
           matInput
           #searchInp
@@ -82,7 +83,7 @@
         />
         <i class="fa-solid fa-magnifying-glass"></i>
       </mat-form-field>
-      <mat-form-field appearance="fill" class="col-2">
+      <mat-form-field appearance="fill" class="col-md-3 px-2">
         <mat-label>Sort By</mat-label>
         <mat-select
           #filterInp
@@ -96,6 +97,7 @@
           <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
         </mat-select>
       </mat-form-field>
+      </div>
       <div class="col-md-4 mt-2 text-right">
         <span class="align-items-center px-2 pt-2"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllEmails($event)" matTooltip="Select All Page Emails" matTooltipPosition="above">Select All</mat-checkbox></span>
         <!-- <button
