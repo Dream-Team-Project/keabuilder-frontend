@@ -83,13 +83,14 @@
     <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div  class="row">
-        <mat-form-field  class="col-md-5 px-3"  appearance="fill" >
-          <mat-label>Search Campaigns...</mat-label>
+      <div class="col-md-8 pr-0">
+        <mat-form-field  class="col-md-6 p-0"  appearance="fill" >
+          <mat-label>Search Campaigns</mat-label>
             <input matInput [(ngModel)]="searchInp" (input)="searchCampaigns(searchInp, sortInp,sentInp,listInp,tagInp)" type="text" placeholder="Search Campaigns">
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
       
-      <mat-form-field  class="col-md-2 px-1" appearance="fill">
+      <mat-form-field  class="col-md-3 px-2" appearance="fill">
         <mat-label>Filter By List</mat-label>
             <mat-select  name="listfilter" [(ngModel)]="listInp" (ngModelChange)="searchCampaigns(searchInp, sortInp, sentInp, listInp, tagInp)">
                 <mat-option value="" selected>All</mat-option>
@@ -98,7 +99,7 @@
                   </mat-option>
             </mat-select>
       </mat-form-field>
-      <mat-form-field  class="col-md-2 px-1" appearance="fill">
+      <mat-form-field  class="col-md-3 p-0" appearance="fill">
         <mat-label>Filter By Tag</mat-label>
             <mat-select  name="tagfilter" [(ngModel)]="tagInp" (ngModelChange)="searchCampaigns(searchInp, sortInp, sentInp, listInp, tagInp)">
                 <mat-option value="" selected>All</mat-option>
@@ -107,7 +108,8 @@
                   </mat-option>
             </mat-select>
       </mat-form-field>
-    <div class="col-md-3 text-right p-0">
+      </div>
+    <div class="col-md-4 text-right">
       <button mat-raised-button color="primary" class="mr-3 d-inline-block" (click)="openDialog(adddialog,false)">
         <i class="fa fa fa-envelope" aria-hidden="true"></i> Create Campaign
       </button>

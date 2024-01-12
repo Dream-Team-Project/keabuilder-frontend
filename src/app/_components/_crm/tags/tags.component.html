@@ -45,14 +45,15 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
-    <mat-form-field class="col-md-8" appearance="fill">
-      <mat-label>Search Tags...</mat-label>
-      <input matInput type="text" class="form-control-search" id="offer-search" [(ngModel)]="searchInp"
-        (input)="searchTags(searchInp, filterInp)" placeholder="Search Tags..." />
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </mat-form-field>
-  
-    <div class="col-md-4 text-right mt-2">
+    <div class="col-md-8 pr-0">
+      <mat-form-field class="col-md-6 p-0" appearance="fill">
+        <mat-label>Search Tags</mat-label>
+        <input matInput type="text" class="form-control-search" id="offer-search" [(ngModel)]="searchInp"
+          (input)="searchTags(searchInp, filterInp)" placeholder="Search Tags" />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 text-right">
       <button mat-raised-button (click)="openDialog(adddialog, tagObj)" color="primary" class="mr-2">
         Add Tag <i class="fas fa-plus"></i>
       </button>

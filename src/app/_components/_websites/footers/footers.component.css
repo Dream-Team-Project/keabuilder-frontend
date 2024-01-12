@@ -27,7 +27,7 @@
  display: block;
 }
 .line-ellipsis{
-    max-width: 250px;
+    max-width: 60%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -47,7 +47,7 @@
 }
 
 .kb-fitimg {
-    height: 120px;
+    height: 100%;
     overflow: hidden;
     background-size: cover;
     background-position: left top;

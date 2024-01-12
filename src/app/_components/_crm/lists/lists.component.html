@@ -73,13 +73,15 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode="indeterminate"></mat-progress-bar>
   <div class="row">
-    <mat-form-field class="col-md-8" appearance="fill">
-      <mat-label>Search Lists</mat-label>
-      <input matInput type="text"  [(ngModel)]="searchInp" (input)="searchLists(searchInp, filterInp)" class="form-control-search"
-        id="offer-search" placeholder="Search Lists" />
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </mat-form-field>
-    <div class="col-md-4 text-right mt-2">
+    <div class="col-md-8 pr-0">
+      <mat-form-field class="col-md-6 p-0" appearance="fill">
+        <mat-label>Search Lists</mat-label>
+        <input matInput type="text"  [(ngModel)]="searchInp" (input)="searchLists(searchInp, filterInp)" class="form-control-search"
+          id="offer-search" placeholder="Search Lists"/>
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 text-right">
       <button mat-raised-button (click)="openDialog(adddialog, listObj)" color="primary" class="mr-2">Add List <i
           class="fas fa-plus"></i>
       </button>

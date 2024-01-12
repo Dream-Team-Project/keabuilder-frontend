@@ -57,7 +57,8 @@
   <div class="container-fluid">
     <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
     <div class="row">
-        <mat-form-field appearance="fill" class="col-md-7">
+      <div class="col-md-8 pr-0">
+        <mat-form-field appearance="fill" class="col-md-6 p-0">
             <mat-label>Search offers by name</mat-label>
             <input matInput [(ngModel)]="searchInp" (input)="searchoffers(searchInp, sortInp)" name="searchvalue" type="text" placeholder="Search offers">
             <button *ngIf="searchInp" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
@@ -65,9 +66,9 @@
             </button>
             <i class="fa-solid fa-magnifying-glass"></i>
         </mat-form-field>
-
-        <div class="col-md-5 text-right">
-            <button mat-raised-button (click)="openDialog(adddialog, offerObj)" color="primary" class="mx-3">Add Offer <i
+</div>
+        <div class="col-md-4 text-right">
+            <button mat-raised-button (click)="openDialog(adddialog, offerObj)" color="primary" class="mx-2">Add Offer <i
                 class="fas fa-plus"></i></button>
         </div>
     </div>

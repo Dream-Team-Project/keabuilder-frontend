@@ -13,10 +13,10 @@ import { FunnelService } from 'src/app/_services/funnels.service';
 
 @Component({
   selector: 'app-new-funnel-steps',
-  templateUrl: './new-funnel-steps.component.html',
-  styleUrls: ['./new-funnel-steps.component.css']
+  templateUrl: './funnel-steps.component.html',
+  styleUrls: ['./funnel-steps.component.css']
 })
-export class NewFunnelStepsComponent implements OnInit {
+export class FunnelStepsComponent implements OnInit {
 
    
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;

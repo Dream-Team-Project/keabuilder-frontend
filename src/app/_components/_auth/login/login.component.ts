@@ -7,11 +7,11 @@ import {environment} from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-new',
-  templateUrl: './login-new.component.html',
-  styleUrls: ['./login-new.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 
-export class LoginNewComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   @ViewChild('bgLoginImg') bgLoginImg: any;
 
@@ -70,6 +70,9 @@ export class LoginNewComponent implements OnInit {
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
+
+          var loginobj:any = {isloggedIn:true, course_assign:'all', username:'admin'};
+          localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
 
           this.redirectToDashboard();
         } else{
@@ -138,6 +141,9 @@ export class LoginNewComponent implements OnInit {
           this.isLoggedIn = true;
           this.roles = this.tokenStorage.getUser().roles;
 
+          var loginobj:any = {isloggedIn:true, course_assign:'all', username:'admin'};
+          localStorage.setItem("kbcourselogin", btoa(JSON.stringify(loginobj)));
+
           this.redirectToDashboard();
         },
         error: err => {
@@ -146,7 +152,10 @@ export class LoginNewComponent implements OnInit {
           this.isLoginFailed = true;
         }
       });
+
+
     }
+
   }
 
   decodeJwtResponse(token:any) {

@@ -51,6 +51,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
   campstatus = 'Draft';
   showmytime:any = '';
   filteredtimezone:any=[];
+  filteredsmtp:any=[];
   filteredcountry:any=[];
   selectedLists:any = [];
   selectedTags:any = [];
@@ -72,6 +73,8 @@ export class CrmCampaignBuilderComponent implements OnInit {
   smtpstatus=false;
   error=false;
   errormessage:any='';
+  allsmtp:any;
+ 
   
 
   constructor(public _general:GeneralService,
@@ -112,6 +115,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.fetchAddress();
     this.fetchEmails();
     this.fetchsmtp();
+    this.fetchAllsmtp();
     
   }
   fetchsmtp(){
@@ -119,7 +123,21 @@ export class CrmCampaignBuilderComponent implements OnInit {
       next: data => {
         // console.log(data.data[0]);
         if(data?.data?.length!=0 && data?.data[0]?.smtp_type && data?.data[0]?.emailfrom ){
-         this.smtpstatus=true;    
+         this.smtpstatus=true;   
+         this.fullcampobj.smtp_id= this.fullcampobj.smtp_id || data?.data[0]?.api_id;
+        }
+      }
+    });
+  }
+  fetchAllsmtp(){
+    this._addressService.fetchsmtp().subscribe({
+      next: data => {
+        // console.log(data);
+        if(data.success){
+         this.allsmtp=data.data;    
+        }
+        else{
+          this.allsmtp=[];
         }
       }
     });
@@ -138,7 +156,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
             // this.sendoptn = element.sendoption == 'immediately' || element.sendoption == '' ? false : true;
             this.fullcampobj.senddate = element.senddate;
             // this.fullcampobj.list = element.lists;
-            // this.fullcampobj.tag = element.tags;
+            this.fullcampobj.smtp_id = element.smtp_id;
             this.fullcampobj.addressid = element.addressid;
             this.fullcampobj.timezone = element.timezone;
             this.selectedLists=element.temp_lists;
@@ -304,7 +322,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
 
         getobj.preheader_text = getobj.preheader_text!=''? getobj.preheader_text+' - ' : '';
       
-        var maildata = {tomailid: this.testemail,preheader:getobj.preheader_text, subject: this.singleemail.subject,replyto:getobj.emailfrom, html: this.singleemail.body, addressid:getobj.addressid};
+        var maildata = {smtp_id:getobj.smtp_id,tomailid: this.testemail,preheader:getobj.preheader_text, subject: this.singleemail.subject,replyto:getobj.emailfrom, html: this.singleemail.body, addressid:getobj.addressid};
         this.MailerService.sendmailcampaign(maildata).subscribe({
           next: data1 => {
             this.dialog.closeAll();
@@ -379,7 +397,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     this.genaddress.country = event.source.value;
 
   }
-
+  
   gettimezone(event:any){
     this.genaddress.timezone = event.source.value;
     var timez = event.source.value;
@@ -422,6 +440,7 @@ export class CrmCampaignBuilderComponent implements OnInit {
     var value = event ? event.target.value : '';
     this.filteredcountry= this._addressService.country?.filter((option:any) => option?.name?.toLowerCase().includes(value?.toLowerCase()));
   }
+ 
    // start list actions
 
    filterListData(event:any) {

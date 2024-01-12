@@ -12,10 +12,10 @@ import { PageViewService } from 'src/app/_services/page-view.service';
 
 @Component({
   selector: 'app-new-funnels',
-  templateUrl: './new-funnels.component.html',
-  styleUrls: ['./new-funnels.component.css'],
+  templateUrl: './funnels.component.html',
+  styleUrls: ['./funnels.component.css'],
 })
-export class NewFunnelsComponent implements OnInit {
+export class FunnelsComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('colorbadgedialog') colorbadgedialog!: TemplateRef<any>;

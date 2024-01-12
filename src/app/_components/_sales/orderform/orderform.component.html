@@ -57,7 +57,8 @@
   <div class="container-fluid">
       <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
       <div class="row">
-          <mat-form-field appearance="fill" class="col-md-7">
+        <div class="col-md-8 pr-0">
+          <mat-form-field appearance="fill" class="col-md-8 p-0">
               <mat-label>Search order form by name</mat-label>
               <input matInput [(ngModel)]="searchInp" (input)="searchorderforms(searchInp, sortInp)" name="searchvalue" type="text" placeholder="Search order forms">
               <button *ngIf="searchInp" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
@@ -65,19 +66,9 @@
               </button>
               <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
-          <!-- <mat-form-field appearance="fill" class="col-md-3">
-              <mat-label>Sort By</mat-label>
-              <mat-select [(ngModel)]="search.sortby" name="sortby" (valueChange)="searchorderforms()">
-                  <mat-option [value]="'created_at ASC'">ASC By Create</mat-option>
-                  <mat-option [value]="'created_at DESC'">DESC By Create</mat-option>
-                  <mat-option [value]="'updated_at ASC'">ASC By Update</mat-option>
-                  <mat-option [value]="'updated_at DESC'">DESC By Update</mat-option>
-                  <mat-option [value]="'name ASC'">ASC By Name</mat-option>
-                <mat-option [value]="'name DESC'">DESC By Name</mat-option>
-              </mat-select>
-          </mat-form-field> -->
-          <div class="col-md-5 text-right">
-              <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-3">Add Order Form <i
+          </div>
+          <div class="col-md-4 text-right">
+              <button mat-raised-button (click)="openDialog(adddialog, productObj)" color="primary" class="mx-2">Add Order Form <i
                   class="fas fa-plus"></i></button>
           </div>
       </div>

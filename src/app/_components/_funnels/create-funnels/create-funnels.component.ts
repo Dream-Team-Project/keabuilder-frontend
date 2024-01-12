@@ -5,10 +5,10 @@ import { FunnelService } from 'src/app/_services/funnels.service';
 
 @Component({
   selector: 'app-create-new-funnels',
-  templateUrl: './create-new-funnels.component.html',
-  styleUrls: ['./create-new-funnels.component.css']
+  templateUrl: './create-funnels.component.html',
+  styleUrls: ['./create-funnels.component.css']
 })
-export class CreateNewFunnelsComponent implements OnInit {
+export class CreateFunnelsComponent implements OnInit {
  
 funnel_id:any;
 funnel:any;

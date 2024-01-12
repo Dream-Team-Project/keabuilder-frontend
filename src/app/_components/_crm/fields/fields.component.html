@@ -31,8 +31,7 @@
       <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">No</button>
       <button mat-button mat-dialog-close (click)="deleteSelectedFields(selectedFields)" class="text-danger">Yes</button>
     </div>
-  </ng-template>
-  
+</ng-template>
 <ng-template #fieldsetting>
     <h1 mat-dialog-title>{{selField.name.replaceAll('-',' ')}}</h1>
     <div mat-dialog-content>
@@ -90,16 +89,16 @@
         <button mat-button mat-dialog-close (click)="setField(selField)" cdkFocusInitial color="primary">{{selField.id ? 'Update' : 'Add'}}</button>
     </div>
 </ng-template>
-<ng-container *ngIf="field_list">
-    <div class="container-fluid">
-        <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-        <div class="row">
-            <mat-form-field appearance="fill" class="col-md-7">
+<div *ngIf="field_list" class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    <div class="row">
+        <div class="col-md-8 pr-0 d-flex flex-wrap">
+            <mat-form-field appearance="fill" class="col-md-6 pl-0 pr-2">
                 <mat-label>Search Fields</mat-label>
                 <input matInput  [(ngModel)]="searchInp" (input)="searchFields(searchInp, sortInp, filterInp)" type="text" placeholder="Search Field Name">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </mat-form-field>
-            <mat-form-field appearance="fill" class="col-md-2">
+            <mat-form-field appearance="fill" class="col-md-3 p-0">
                 <mat-label>Filter By Name</mat-label>
                 <mat-select [(ngModel)]="filterInp" name="kbfilter"  (ngModelChange)="searchFields(searchInp, sortInp, filterInp)">
                     <mat-option value="" selected><i class="fas fa-bars mr-1"></i> All</mat-option>
@@ -109,61 +108,61 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div class="col-md-3 text-right mt-2">
-                <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet()">Add Field <i
-                    class="fas fa-plus"></i></button>
+        </div>
+        <div class="col-md-4 text-right">
+            <button mat-raised-button color="primary" class="mx-3" (click)="openBottomSheet()">Add Field <i
+                class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" *ngIf="selectedFields.length > 0">
+            <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedFields)">
+            <span class="">Delete Selected Fields <i class="fa fa-trash-alt"></i></span>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12" *ngIf="selectedFields.length > 0">
-              <div class="float-right mb-3 kb-delbtn" (click)="openDialog(delselecteddialog, selectedFields)">
-                <span class="">Delete Selected Fields <i class="fa fa-trash-alt"></i></span>
-              </div>
-            </div>
-          </div>
-        <div class="row" *ngIf="pagefields?.length != 0; else nodata">
-            <div class="col-12">
-                <table class="table kb-table">
-                    <thead>
-                        <tr>
-                            <th><span class="align-items-center"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllFields($event)" matTooltip="Select All Page Fields" matTooltipPosition="above"></mat-checkbox></span></th>
-                            <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'name DESC'"></i></th>
-                            <th class="kb-table-sort" (click)="toggleSort('type')">Type <i class="fa-solid fa-up-long" *ngIf="sortInp == 'type ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'type DESC'"></i></th>
-                            <th class="kb-table-sort" (click)="toggleSort('field_tag')">Field Tag <i class="fa-solid fa-up-long" *ngIf="sortInp == 'field_tag ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'field_tag DESC'"></i></th>
-                            <th class="kb-table-sort" (click)="toggleSort('note')">Note <i class="fa-solid fa-up-long" *ngIf="sortInp == 'note ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'note DESC'"></i></th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let ff of pagefields, index as i">
-                            <td><span *ngIf="!ff.default_field" class="align-items-center fnt" matTooltip="Click to Select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="ff.selected" (ngModelChange)="selectFields($event, ff)"></mat-checkbox></span></td>
-                            <td (click)="editdialog.click()" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
-                            <td class="kb-text-overflow">{{ff?.name.replaceAll('-', ' ')}}</td>
-                            <td class="kb-text-overflow">{{ff?.field_tag | uppercase}}</td>
-                            <td class="kb-text-overflow ftsize">{{ ff.note ? ff.note : "--" }}</td>
-                            <td>
-                                <span class="d-flex"> 
-                                    <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
-                                    <i #editdialog mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil kb-table-action-icon"></i>
-                                    <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
-                                </span>    
-                            </td>                        
-                        </tr>
-                    </tbody>
-                </table>
-                <mat-paginator  #paginator [length]="fieldslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagefields($event)"></mat-paginator>
+    </div>
+    <div class="row" *ngIf="pagefields?.length != 0; else nodata">
+        <div class="col-12">
+            <table class="table kb-table">
+                <thead>
+                    <tr>
+                        <th><span class="align-items-center"><mat-checkbox class="align-items-center" [(ngModel)]="checked_selected" (ngModelChange)="selectAllFields($event)" matTooltip="Select All Page Fields" matTooltipPosition="above"></mat-checkbox></span></th>
+                        <th class="kb-table-sort" (click)="toggleSort('name')">Name <i class="fa-solid fa-up-long" *ngIf="sortInp == 'name ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'name DESC'"></i></th>
+                        <th class="kb-table-sort" (click)="toggleSort('type')">Type <i class="fa-solid fa-up-long" *ngIf="sortInp == 'type ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'type DESC'"></i></th>
+                        <th class="kb-table-sort" (click)="toggleSort('field_tag')">Field Tag <i class="fa-solid fa-up-long" *ngIf="sortInp == 'field_tag ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'field_tag DESC'"></i></th>
+                        <th class="kb-table-sort" (click)="toggleSort('note')">Note <i class="fa-solid fa-up-long" *ngIf="sortInp == 'note ASC'"></i> <i class="fa-solid fa-down-long" *ngIf="sortInp == 'note DESC'"></i></th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ff of pagefields, index as i">
+                        <td><span *ngIf="!ff.default_field" class="align-items-center fnt" matTooltip="Click to Select" matTooltipPosition="above"><mat-checkbox class="fnt align-items-center mr-2" [(ngModel)]="ff.selected" (ngModelChange)="selectFields($event, ff)"></mat-checkbox></span></td>
+                        <td (click)="editdialog.click()" class="kb-text-overflow kb-td-link">{{ff.label}}<span *ngIf="ff?.default_field" class="kb-info-tag kb-tag ml-2">Default</span></td>
+                        <td class="kb-text-overflow">{{ff?.name.replaceAll('-', ' ')}}</td>
+                        <td class="kb-text-overflow">{{ff?.field_tag | uppercase}}</td>
+                        <td class="kb-text-overflow ftsize">{{ ff.note ? ff.note : "--" }}</td>
+                        <td>
+                            <span class="d-flex"> 
+                                <mat-checkbox *ngIf="!ff.default_field" matTooltip="Required" matTooltipPosition="above" [(ngModel)]="ff.required" (ngModelChange)="toggleRequired(ff)" class="px-3"></mat-checkbox>
+                                <i #editdialog mat-ripple matTooltip="Edit" matTooltipPosition="above" (click)="openDialog(fieldsetting, ff)" class="fa fa-pencil kb-table-action-icon"></i>
+                                <i *ngIf="!ff.default_field" mat-ripple matTooltip="Delete" matTooltipPosition="above" (click)="openDialog(delfield, ff)" class="fa fa-trash-alt kb-table-action-icon kb-icon-del"></i>
+                            </span>    
+                        </td>                        
+                    </tr>
+                </tbody>
+            </table>
+            <mat-paginator  #paginator [length]="fieldslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagefields($event)"></mat-paginator>
+        </div>
+    </div>
+    <ng-template #nodata>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-4">
+            <img
+                src="/assets/images/website/website-empty.png"
+                class="img-fluid"
+                alt="No Fields Found"
+            />
             </div>
         </div>
-        <ng-template #nodata>
-            <div class="row justify-content-center mt-5">
-              <div class="col-md-4">
-                <img
-                  src="/assets/images/website/website-empty.png"
-                  class="img-fluid"
-                  alt="No Fields Found"
-                />
-              </div>
-            </div>
-          </ng-template>
-    </div>    
-</ng-container>
+        </ng-template>
+</div>    

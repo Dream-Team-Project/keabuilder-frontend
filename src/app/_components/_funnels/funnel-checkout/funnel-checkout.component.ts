@@ -14,10 +14,10 @@ import { RegistrationpaymentService } from 'src/app/_services/registrationpaymen
 
 @Component({
   selector: 'app-order-form',
-  templateUrl: './new-funnel-checkout.component.html',
-  styleUrls: ['./new-funnel-checkout.component.css']
+  templateUrl: './funnel-checkout.component.html',
+  styleUrls: ['./funnel-checkout.component.css']
 })
-export class NewFunnelCheckoutComponent implements OnInit {
+export class FunnelCheckoutComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
 

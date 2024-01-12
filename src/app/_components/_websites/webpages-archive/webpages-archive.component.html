@@ -14,14 +14,14 @@
       <div class="container-fluid">
         <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
             <div class="row">
-              
-                <mat-form-field  appearance="fill" class="col-md-6">
+              <div class="col-md-8 pr-0">
+                <mat-form-field  appearance="fill" class="col-md-6 p-0">
                   <mat-label>Search Archive Pages</mat-label>
                   <input #searchInp matInput type="text"  (input)="searchpages(searchInp,filterInp)" id="offer-search" placeholder="Search by page name">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </mat-form-field>
     
-                <mat-form-field appearance="fill" class="col-md-3 ">
+                <mat-form-field appearance="fill" class="col-md-4 px-2">
                   <mat-label>Showing Archive For</mat-label>
                   <mat-select  #filterInp name="showingcontacts" value='created_at DESC' (valueChange)="searchpages(searchInp, filterInp)">
                     <mat-option [value]="'created_at ASC'">Ascending By Create</mat-option>
@@ -30,7 +30,7 @@
                 <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
                   </mat-select>
                 </mat-form-field>
-             
+             </div>
             </div>
               <div class="row">
                 <div class="col-12">

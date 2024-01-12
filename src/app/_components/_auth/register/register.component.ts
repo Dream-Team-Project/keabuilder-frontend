@@ -19,11 +19,11 @@ declare let paypal:any;
 
 @Component({
   selector: 'register-newplan-register',
-  templateUrl: './register-newplan.component.html',
-  styleUrls: ['./register-newplan.component.css']
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 
-export class RegisterNewplanComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
 
@@ -391,9 +391,9 @@ savepaypaldetails:any;
               uniqueid: data.uniqueid,
             }
             this.tokenStorage.saveUser(userdata);
-            this._file.createuserfolder(data.uniqueid).subscribe(e=>{
-              // console.log(e);
-            });
+            // this._file.createuserfolder(data.uniqueid).subscribe(e=>{
+            //   // console.log(e);
+            // });
             var domainpath = window.location.hostname;
 
             var emailhtml = `Dear `+firstname+`,<br>
@@ -612,7 +612,7 @@ savepaypaldetails:any;
 }
 
   email_creationuser(data:any){
-    var emailhtml = `New User Sign Creation Successfully.
+    var emailhtml = `New User Creation Successfully.
     <br>
     UserId: `+data[6]+`<br>
     Username: `+data[0]+`<br>

@@ -160,22 +160,28 @@ export class CrmFormFetchComponent implements OnInit {
     });
   }
   notifyemailSent() {
+    // console.log(this.contact)
     return new Promise((resolve, reject)=>{
       if(this._form.form.notifyemail) {
+        let firstname=this.contact.firstname ? this.contact.firstname : '';
+        let lastname=this.contact.lastname ? this.contact.lastname : '';
+        let phone=this.contact.phone ? this.contact.phone : '';
+        let lists=this.contact.lists ? this.contact.lists : '';
+        let tags=this.contact.tags ? this.contact.tags : '';
         var emailhtmlbody=`Hello Admin,<br>
         <br>
         New Contact is added/updated in your Contact list.The detail of your new contact are as follows-<br>
         Email is - `+this.contact.email+`,<br>
-        First Name is - `+this.contact.firstname+` ,<br>
-        Last name is - ` +this.contact.lastname+`,<br>
-        Phone No is - `+this.contact.phone+` ,<br>
-        Subscribe Lists are - `+this.contact.lists+` ,<br>
-        Subscribe Tags are - `+this.contact.tags+` ,<br>
+        First Name is - `+firstname+` ,<br>
+        Last name is - ` +lastname+`,<br>
+        Phone No is - `+phone+` ,<br>
+        Subscribe Lists are - `+lists+` ,<br>
+        Subscribe Tags are - `+tags+` ,<br>
         <br>
         Thanks & regards<br>
         Kea Team`;
         var maildata = {
-          tomailid: this.contact.notifyemail?.split(','), 
+          tomailid: this._form.form.notifyemail?.split(','), 
           frommailid: 'support@keasolution.com',  
           subject: 'New Contact Added ', 
           html: emailhtmlbody,

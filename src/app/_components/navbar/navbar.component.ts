@@ -80,7 +80,6 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.tokenStorage.signOut()
     .then(()=>{
-      localStorage.removeItem("kbcourselogin");
       this.offcanvasoverlay=false;
       window.location.href = '/login';
       // this.router.navigate(['/login'],{relativeTo: this.route});

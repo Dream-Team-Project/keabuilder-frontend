@@ -40,7 +40,7 @@ export class WebsitePagesComponent implements OnInit {
   @ViewChild('paginator') paginator!: MatPaginator;
 
 readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  website_id:any;
+  website_id:string = '';
   spinner=false;
   delpage:any;
   hasError:boolean = false;
@@ -124,6 +124,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   errormessage:any='';
   pageslength:any;
   sortInp:any='';
+  visibility:any='';
+  filter:any='';
   
 
   constructor(private webpagesService: WebpagesService,
@@ -134,27 +136,27 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     public _general: GeneralService,
     private websiteService: WebsiteService,
     private userService: UserService,) {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation?.extras.state;
+      if(state) this.website_id = state['website_id'];
       this.toggleview = _general.getStorage('page_toggle');
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        this.website_id = params.get('website_id');
-      });
      }
+
+  ngOnInit(): void {
+    this.author = this.userService?.user?.name;
+    this.fetchData();
+  }
 
   templateDialog(templateRef: TemplateRef<any>) {
     this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
     });
   }
 
-  ngOnInit(): void {
-    this.fetchData();
-    this.author = this.userService?.user?.name;
-  }
-
   fetchData(){
-  this.getpagePages({pageIndex:0,pageSize:20});
+    this.getpagePages({pageIndex:0,pageSize:20});
+    this.fetchallwebsites();
   // this.showwebpages();
   // this.getWebsites();
-  this.fetchallwebsites();
   }
 
   pathuniqueremove(){
@@ -574,8 +576,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     this.searching = true;
     var obj = {
       search: search.value,
-      filter: filter.value,
-      visibility: visibility.value,
+      filter: filter.value || this.filter,
+      visibility: visibility.value || this.visibility,
       id:this.website_id,
       sortInp:sortInp.value || this.sortInp,
       pageIndex:this.paginator?.pageIndex || 0,

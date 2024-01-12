@@ -215,12 +215,13 @@
 
   
     <div class="row">
-      <mat-form-field appearance="fill" class="col-md-4 pl-3">
+      <div class="col-md-8 pr-0">
+      <mat-form-field appearance="fill" class="col-md-6 p-0">
         <mat-label>Search Members</mat-label>
         <input matInput #searchInp (input)="searchmembers(searchInp, sortInp,listInp, tagInp)" type="text" placeholder="Search Members">
         <i class="fa-solid fa-magnifying-glass"></i>
     </mat-form-field>
-    <mat-form-field appearance="fill" class="col-md-2 pl-0 m-0">
+    <mat-form-field appearance="fill" class="col-md-2 px-1">
       <mat-label>Sort By</mat-label>
       <mat-select #sortInp name="kbfilter" value='created_at DESC' (valueChange)="searchmembers(searchInp, sortInp,listInp, tagInp)">
           <mat-option [value]="'created_at ASC'">Ascending By Create</mat-option>
@@ -229,7 +230,7 @@
           <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
       </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="fill" class="col-md-2 pl-0 m-0">
+  <mat-form-field appearance="fill" class="col-md-2 px-1">
     <mat-label>Filter By List</mat-label>
     <mat-select #listInp name="listfilter" value='' (valueChange)="searchmembers(searchInp, sortInp,listInp, tagInp)">
         <mat-option value="" selected>All</mat-option>
@@ -238,7 +239,7 @@
           </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="fill" class="col-md-2 m-0 pl-0">
+  <mat-form-field appearance="fill" class="col-md-2 p-0">
     <mat-label>Filter By Tag</mat-label>
     <mat-select #tagInp name="tagfilter" value='' (valueChange)="searchmembers(searchInp, sortInp,listInp, tagInp)">
         <mat-option value="" selected>All</mat-option>
@@ -247,8 +248,8 @@
           </mat-option>
     </mat-select>
   </mat-form-field>
-
-      <div class="col-md-2 text-right align-items-center pl-0 m-0">
+</div>
+      <div class="col-md-4 text-right">
         <button (click)="openDialog(adddialog, 'new')" mat-raised-button color="primary" matTooltip="Add New Contact" matTooltipPosition="above" class="mr-2" >Add Member <i class="fa fa-plus" aria-hidden="true"></i></button>
 
          

@@ -200,54 +200,46 @@
   <mat-progress-bar *ngIf="searching" mode='indeterminate'></mat-progress-bar>
   <div class="container-fluid">
     
-    <div class="row align-items-center">
-          <mat-form-field  appearance="fill" class="col-md-3 pl-2 m-0">
+    <div class="row">
+      <div class="col-md-8 pr-0">
+          <mat-form-field  appearance="fill" class="col-md-6 p-0">
             <mat-label>{{searchpagetxt}}</mat-label>
-            <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibility,sortInp)" placeholder="Search Pages">
+            <input matInput #searchInp type="text" (input)="searchpages(searchInp, filterInp, visibilityInp,sortInp)" placeholder="Search Pages">
             <i class="fa-solid fa-magnifying-glass"></i>
           </mat-form-field>
-
-          <mat-form-field appearance="fill" class="col-md-2 p-0 m-0">
+          <mat-form-field appearance="fill" class="col-md-2 px-1">
+            <mat-label>Filter by Website</mat-label>
+            <mat-select name="sortInp" #sortInp [(ngModel)]="website_id" (ngModelChange)="searchpages(searchInp, filterInp, visibilityInp,sortInp)">
+              <mat-option [value]="''">All</mat-option>
+              <mat-option *ngFor="let web of allwebsites;" [value]="web.uniqueid">{{web.title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="col-md-2 p-0">
             <mat-label>Sort By</mat-label>
-            <mat-select name="kbfilter" value="created_at DESC" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
+            <mat-select name="kbfilter" [(ngModel)]="filter" #filterInp (valueChange)="searchpages(searchInp, filterInp, visibilityInp,sortInp)">
               <mat-option [value]="'page_name ASC'">Ascending By Name</mat-option>
               <mat-option [value]="'page_name DESC'">Descending By Name</mat-option>
               <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
               <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
+              <mat-option [value]="''">Descending By Created</mat-option>
             </mat-select>
           </mat-form-field>
-
-          
-          <mat-form-field appearance="fill" [class]="website_id ? 'col-md-3' : 'col-md-1 pl-1 m-0'">
+          <mat-form-field appearance="fill" class="col-md-2 p-0 pl-1">
             <mat-label>Visibility</mat-label>
-            <mat-select name="visibility" #visibility (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
-              <mat-option [value]="">Show All</mat-option>
+            <mat-select name="visibility1" #visibilityInp [(ngModel)]="visibility" (valueChange)="searchpages(searchInp, filterInp, visibilityInp,sortInp)">
+              <mat-option [value]="''">Show All</mat-option>
               <mat-option [value]="'draft'">Draft Only</mat-option>
               <mat-option [value]="'publish'">Publish Only</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="fill" class="col-md-2 p-0 m-0" *ngIf="!website_id">
-            <mat-label>Filter by</mat-label>
-            <mat-select name="sortInp" #sortInp (valueChange)="searchpages(searchInp, filterInp, visibility,sortInp)">
-              <mat-option [value]="">Please Select</mat-option>
-              <mat-option  *ngFor="let web of allwebsites;" [value]="web.uniqueid">{{web.title}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-      
-       
+         
+       </div>
 
-      <div class="col-md-4 text-right align-items-center pl-0 m-0" >
-        <span>
-          <button mat-raised-button [color]="'accent'" (click)="togglepageview()" *ngIf="!nodata" class="mr-1">
-            <span *ngIf="!toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
-            <ng-template #gridview><span>Grid View <i class="fas fa-th"></i></span></ng-template>
-          </button>
-        </span>
-       
-        <button mat-raised-button (click)="templateDialog(templatedialog)" color="primary" class="mr-1"><span class="keamobhd">Create Page </span> <i
+      <div class="col-md-4 text-right m-0" >
+        <button mat-raised-button (click)="templateDialog(templatedialog)" color="primary" class="m-0"><span class="keamobhd">Create Page </span> <i
           class="fas fa-plus"></i></button>
 
-        <button mat-raised-button (click)="archivepages()"> Archive Pages <i class="fas fa-archive"></i></button>
+        <button mat-raised-button (click)="archivepages()" class="mx-2"> Archive Pages <i class="fas fa-archive"></i></button>
        
       </div>
     </div>
@@ -263,10 +255,10 @@
       <!-- pages to show -->
       <ng-template #showpages>
         <!-- Pages -->
-        <div [class.px-3]="toggleview" class="row">
-          <div [class]="toggleview ? 'col-md-12' : 'col-md-4'"  class="cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;">
-            <div [class.row]="toggleview">
-              <div [style.height]="toggleview ? '150px' : '300px'" [class]="toggleview ? 'col-md-6' : 'col-md-12'" class="p-0">
+        <div class="row px-3">
+          <div class="col-md-12 cardpage mt-4 " *ngFor="let kbpage of kbpages; index as i;">
+            <div class="row">
+              <div [style.height]="'50px'" class="col-md-2 p-0">
                 <div class="kb-fitimg"
                 [ngStyle]="{
                   'background-image':
@@ -281,20 +273,22 @@
                 </div>
               </div>
 
-              <div [class]="toggleview ? 'col-md-6' : 'col-md-12 pt-3'">
+              <div class="col-md-10">
                 <div class="row align-items-center p-0 h-100">
-                  <div [class.p-0]="!toggleview" class="col-md-12">
+                  <div  class="col-md-12">
                     <div class="keabuilder-title-board line-ellipsis">
                       <span>{{kbpage.page_name}}</span>
                       <input type="text" [(ngModel)]="kbpage.page_name"
                         (blur)="changepagename(kbpage,kbpage.page_name,'namechange')" matTooltip="Edit Page Name"
                         matTooltipPosition="above">
                     </div>
+                  </div>
+                  <div class="col-md-6">
                     <p class="kb-pagedate mt-2 mb-3" matTooltip="Last Updated" matTooltipPosition="above">
                       <i class="far fa-calendar-alt" aria-hidden="true"></i> {{kbpage.updated_at}}
                     </p>
                   </div>
-                  <div [class.p-0]="!toggleview" class="col-md-12 text-right">
+                  <div class="col-md-6 text-right">
                     <button (click)="checkpagesettings('preview',kbpage)" mat-raised-button color="accent"
                       class="mr-2"> View <i class="far fa-eye"></i></button>
                     <button (click)="_general.redirectToBuilder(kbpage.uniqueid, 'website')" mat-raised-button

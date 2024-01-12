@@ -28,6 +28,7 @@ export class WebsiteHeadersComponent {
   errormessage:any='';
   headerslength:any;
   pageheaders:any;
+  filter:any='';
 
   constructor(
         public _image: ImageService,
@@ -145,7 +146,7 @@ export class WebsiteHeadersComponent {
     this.fetching = true;
     var obj = {
       search: search.value,
-      filter: filter?.value,
+      filter: filter?.value || this.filter,
       pageIndex:this.paginator?.pageIndex || 0,
       pageSize:this.paginator?.pageSize || 20,
     }
