@@ -48,15 +48,15 @@ import { WebpagesArchiveComponent } from './_components/_websites/webpages-archi
 // websites
 
 // new-funnels
-import { NewFunnelsComponent } from './_components/_funnels/funnels/new-funnels.component';
+import { FunnelsComponent } from './_components/_funnels/funnels/funnels.component';
 import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
-import { NewFunnelBuildComponent } from './_components/_funnels/funnel-build/new-funnel-build.component';
-import { FunnelArchiveComponent } from './_components/_funnels/funnel-archive/new-funnel-archive.component';
-import { CreateNewFunnelsComponent } from './_components/_funnels/create-funnels/create-new-funnels.component';
+import { FunnelBuildComponent } from './_components/_funnels/funnel-build/funnel-build.component';
+import { FunnelArchiveComponent } from './_components/_funnels/funnel-archive/funnel-archive.component';
+import { CreateFunnelsComponent } from './_components/_funnels/create-funnels/create-funnels.component';
 import { FunnelSettingsComponent } from './_components/_funnels/funnel-settings/funnel-settings.component';
 import { FunnelStepArchiveComponent } from './_components/_funnels/funnel-step-archive/funnel-step-archive.component';
-import { NewFunnelStepsComponent } from './_components/_funnels/funnel-steps/new-funnel-steps.component';
-import { NewFunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/new-funnel-checkout.component';
+import { FunnelStepsComponent } from './_components/_funnels/funnel-steps/funnel-steps.component';
+import { FunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/funnel-checkout.component';
 import { FunnelStepSettingsComponent } from './_components/_funnels/funnel-step-settings/funnel-step-settings.component';
 // new-funnels
 
@@ -200,15 +200,15 @@ if (currentDomain === appHost) {
 
     { path: 'funnels', component: FunnelComponent,
     children: [
-      { path: '', component: NewFunnelsComponent, canActivate: [AuthGuard] },
-      { path: 'all', component: NewFunnelsComponent, canActivate: [AuthGuard] },
-      { path: 'build', component: NewFunnelBuildComponent, canActivate: [AuthGuard] },
+      { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
+      { path: 'all', component: FunnelsComponent, canActivate: [AuthGuard] },
+      { path: 'build', component: FunnelBuildComponent, canActivate: [AuthGuard] },
       { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard] },
-  { path: 'funnels/:funnel_id', component: CreateNewFunnelsComponent,
+  { path: 'funnels/:funnel_id', component: CreateFunnelsComponent,
   children: [ 
-    { path: 'steps/:step_id', component: NewFunnelStepsComponent, canActivate: [AuthGuard] },
+    { path: 'steps/:step_id', component: FunnelStepsComponent, canActivate: [AuthGuard] },
     // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
     { path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
     { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
@@ -271,7 +271,7 @@ if (currentDomain === appHost) {
      //member-account-settings
     
     // builder
-    { path: 'fetch-orderform/:id', component: NewFunnelCheckoutComponent},
+    { path: 'fetch-orderform/:id', component: FunnelCheckoutComponent},
 
     // crm
 
@@ -490,7 +490,7 @@ export const RoutingComponents =
     BuilderTopbarComponent,
     ImageComponent,
     ComingSoonComponent,
-    NewFunnelCheckoutComponent,
+    FunnelCheckoutComponent,
     WebsitesComponent,
     CrmFieldsComponent,
     SalesComponent,
@@ -507,15 +507,15 @@ export const RoutingComponents =
     BillingComponent, 
     ProfileSettingsComponent,
     SignInSecurityComponent,
-    NewFunnelsComponent,
+    FunnelsComponent,
     FunnelComponent,
     FunnelStepSettingsComponent,
-    NewFunnelBuildComponent,
+    FunnelBuildComponent,
     FunnelArchiveComponent,
-    CreateNewFunnelsComponent,
+    CreateFunnelsComponent,
     FunnelSettingsComponent,
     FunnelStepArchiveComponent,
-    NewFunnelStepsComponent,
+    FunnelStepsComponent,
     DefaultPageViewComponent,
     //member-routes
     MemberForgotPasswordComponent,

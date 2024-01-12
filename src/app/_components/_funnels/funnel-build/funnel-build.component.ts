@@ -19,10 +19,10 @@ export interface DialogData {
 
 @Component({
   selector: 'app-new-funnel-build',
-  templateUrl: './new-funnel-build.component.html',
-  styleUrls: ['./new-funnel-build.component.css']
+  templateUrl: './funnel-build.component.html',
+  styleUrls: ['./funnel-build.component.css']
 })
-export class NewFunnelBuildComponent implements OnInit {
+export class FunnelBuildComponent implements OnInit {
 
   
   @ViewChild(MatAccordion)

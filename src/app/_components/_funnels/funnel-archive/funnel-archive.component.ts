@@ -12,8 +12,8 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 
 @Component({
   selector: 'app-new-funnel-archive',
-  templateUrl: './new-funnel-archive.component.html',
-  styleUrls: ['./new-funnel-archive.component.css']
+  templateUrl: './funnel-archive.component.html',
+  styleUrls: ['./funnel-archive.component.css']
 })
 export class FunnelArchiveComponent implements OnInit {
 
