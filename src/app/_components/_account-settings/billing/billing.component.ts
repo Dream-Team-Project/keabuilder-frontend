@@ -138,6 +138,9 @@ stripecard:any={
 
 }
 
+paymenttype = 'stripe';
+paypaldata:any = {current_period_end:''};
+
   constructor(
               public userService: UserService,
               public imageService: ImageService,
@@ -150,6 +153,7 @@ stripecard:any={
               ) { }
 
   ngOnInit(): void {
+    this.fetching=true;
     this.subscriptiondata().then((resp:any)=>{
       this.subscriptionplans.map((element:any)=>{
         // console.log(this.subscription_productid)
@@ -170,31 +174,41 @@ stripecard:any={
   subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
+      // console.log(data);
       if(data.success){
         // console.log(data)
-        this.stripedata.subscription=data?.subscription;
-        this.stripedata.customer=data?.customer;
-        this.stripedata.card=data?.card;
-        this.stripeaddress.id=this.stripedata?.customer?.id;
-        this.stripeaddress.name=this.stripedata?.customer?.name;
-        this.stripeaddress.email=this.stripedata?.customer?.email;
-        this.stripeaddress.phone=this.stripedata?.customer?.phone;
-        this.stripeaddress.line1=this.stripedata?.customer?.address?.line1;
-        this.stripeaddress.line2=this.stripedata?.customer?.address?.line2;
-        this.stripeaddress.city=this.stripedata?.customer?.address?.city;
-        this.stripeaddress.state=this.stripedata?.customer?.address?.state;
-        this.stripeaddress.country=this.stripedata?.customer?.address?.country;
-        this.stripeaddress.postal_code=this.stripedata?.customer?.address?.postal_code;
-        this.stripecard.id=this.stripedata?.card?.id;
-        this.stripecard.brand=this.stripedata?.card?.brand;
-        this.stripecard.country=this.stripedata?.card?.country;
-        this.stripecard.exp_year=this.stripedata?.card?.exp_year;
-        this.stripecard.exp_month=this.stripedata?.card?.exp_month;
-        this.stripecard.last4=this.stripedata?.card?.last4;
-        this.stripecard.funding=this.stripedata?.card?.funding;
-        this.stripecard.fingerprint=this.stripedata?.card?.fingerprint;
-        this.subscription_productid=this.stripedata?.subscription?.plan?.id;
+
+        if(data.paymenttype=='paypal'){
+          this.paymenttype = 'paypal';
+          this.paypaldata.current_period_end = data?.subscription?.billing_info?.next_billing_time;
+          this.subscription_productid=data.productid;
+        }else{
+
+          this.stripedata.subscription=data?.subscription;
+          this.stripedata.customer=data?.customer;
+          this.stripedata.card=data?.card;
+          this.stripeaddress.id=this.stripedata?.customer?.id;
+          this.stripeaddress.name=this.stripedata?.customer?.name;
+          this.stripeaddress.email=this.stripedata?.customer?.email;
+          this.stripeaddress.phone=this.stripedata?.customer?.phone;
+          this.stripeaddress.line1=this.stripedata?.customer?.address?.line1;
+          this.stripeaddress.line2=this.stripedata?.customer?.address?.line2;
+          this.stripeaddress.city=this.stripedata?.customer?.address?.city;
+          this.stripeaddress.state=this.stripedata?.customer?.address?.state;
+          this.stripeaddress.country=this.stripedata?.customer?.address?.country;
+          this.stripeaddress.postal_code=this.stripedata?.customer?.address?.postal_code;
+          this.stripecard.id=this.stripedata?.card?.id;
+          this.stripecard.brand=this.stripedata?.card?.brand;
+          this.stripecard.country=this.stripedata?.card?.country;
+          this.stripecard.exp_year=this.stripedata?.card?.exp_year;
+          this.stripecard.exp_month=this.stripedata?.card?.exp_month;
+          this.stripecard.last4=this.stripedata?.card?.last4;
+          this.stripecard.funding=this.stripedata?.card?.funding;
+          this.stripecard.fingerprint=this.stripedata?.card?.fingerprint;
+          this.subscription_productid=this.stripedata?.subscription?.plan?.id;
+        }
         resolve(true);
+
       }
       else{
         this.usertype='free';

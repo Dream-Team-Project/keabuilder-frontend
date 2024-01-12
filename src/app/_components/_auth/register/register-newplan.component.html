@@ -88,15 +88,36 @@
           <div class="clearfix"></div>
           <h5 *ngIf="!specialuser" class="mt-4">3. Choose your payment method</h5>
           <div *ngIf="!specialuser">
-              
-              <div>
+            
+              <div *ngIf="!securepaypalpayment">
                 <mat-label>Enter Card Details</mat-label>
                 <div class="kb-strip-cardbox mt-2">
-                  <ngx-stripe-card  [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+                  <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
                 </div>
                 <mat-error *ngIf="paymenterror">{{paymentMessage}}</mat-error>
                 <span *ngIf="paymentstatus" class="colr">{{successMessage}}</span>
               </div>
+
+              <div class="mt-4" *ngIf="!securepaypalpayment">
+                <p class="text-center">Or</p>
+                <div id="paypal-button-container-monthly" [ngStyle]="{'display':!checkhidemypayid ? 'none' : 'block'}"></div>
+
+                <div id="paypal-button-container-yearly" [ngStyle]="{'display':checkhidemypayid ? 'none' : 'block'}"></div>
+                <!-- <div id="paypal-button-container-P-920343785D8217846MWPIT6Y"></div> -->
+
+<!--                 
+                  <button *ngIf="!showPaypalButtons" 
+                  (click)="pay()">Pay With paypal</button>
+                
+                <ngx-paypal *ngIf="showPaypalButtons" 
+                  [config]="payPalConfig">
+                </ngx-paypal>
+                <button  *ngIf="showPaypalButtons" (click)="back()">Back</button> -->
+              </div>
+
+              <div class="text-center text-success" *ngIf="securepaypalpayment">
+                Payment has been received. Do not refresh the page. Please Complete the details and register.
+              </div>    
 
           </div>
 
@@ -714,4 +735,7 @@
      
     </div> 
 
+
+
 </div>
+

@@ -13,6 +13,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
 import {hashSync} from 'bcryptjs';
+import { environment } from 'src/environments/environment';
+
+declare let paypal:any;
 
 @Component({
   selector: 'register-newplan-register',
@@ -74,7 +77,7 @@ export class RegisterNewplanComponent implements OnInit {
     uniqueid:'',
     cardid:'',
     registration_type:'',
-
+    type:'stripe',
   };
   stripe:any={
     payeename:'',
@@ -112,26 +115,26 @@ export class RegisterNewplanComponent implements OnInit {
   products:any=[
     {name:'Startup',
     type:[
-    {name:'Monthly',value:'price_1OMpu7BFKaDgAHCwv86w1n9J'},
-    {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv'},
+    {name:'Monthly',value:'price_1OMpu7BFKaDgAHCwv86w1n9J',paypalvalue:'P-8V418761AK036645CMWQVOYI'},
+    {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv',paypalvalue:'P-9GW30098774876834MWQVPSQ'},
     ],
 },
     {name:'Entrepreneur',
     type:[
-      {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc'},
-    {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G'},
+      {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc',paypalvalue:'P-6HW058532V7164047MWQVUBQ'},
+    {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G',paypalvalue:'P-0N019837HE343330AMWQVUJY'},
     ],
   },
   {name:'Agency',
     type:[
-      {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM'},
-      {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I'},
+      {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM',paypalvalue:'P-0UJ58429A33637016MWQVUW'},
+      {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I',paypalvalue:'P-31262490MY041344DMWQVVBQ'},
     ],
   },
   {name:'Beta',
     type:[
-      {name:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa'},
-      {name:'Annual',value:'price_1OMnJqBFKaDgAHCwXYEHUk41'},
+      {name:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa',paypalvalue:'P-8YC71282FX3000908MWPFRNI'},
+      {name:'Annual',value:'price_1OMnJqBFKaDgAHCwXYEHUk41',paypalvalue:'P-40C344272E276050JMWQTF4I'},
     ],
   },
 ];
@@ -142,15 +145,25 @@ subscriptionplans:any=[
   {id:'plan-O149fUrEJB3jc0akzgs9',name:'Entrepreneur',type:'Annual',value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G',},
   {id:'plan-n5IKx4Z2asK7sYHS3lrd',name:'Agency',type:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM',},
   {id:'plan-bCR5pF562mZCjrALoDTQ',name:'Agency',type:'Annual',value:'price_1Ndr8LBFKaDgAHCw7jph534I',},
-  {id:'plan-xTn8SqarYE0eVIEaSdkM',name:'Beta',type:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa',},
-  {id:'plan-a47a5e100242ac120002',name:'Beta',type:'Annual',value:'price_1OMnJqBFKaDgAHCwXYEHUk41',},
+  {id:'plan-xTn8SqarYE0eVIEaSdkM',name:'Beta',type:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa'},
+  {id:'plan-a47a5e100242ac120002',name:'Beta',type:'Annual',value:'price_1OMnJqBFKaDgAHCwXYEHUk41'},
 ];
+
+paypalsubsrid:any='';
+paypalsubsridyearly:any = '';
+
 secret_route:string='8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV';
 specialuser=false;
 
 ischeck = false;
 
 isthischecked = false;
+
+checkhidemypayid = true;
+
+securepaypalpayment = false;
+
+savepaypaldetails:any;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -163,7 +176,7 @@ isthischecked = false;
               private ProgressSpinner :MatProgressSpinnerModule,
               private tokenStorage: TokenStorageService,
               private _route: ActivatedRoute,
-              private router: Router
+              private router: Router,
              ) { 
               this._route.paramMap.subscribe((params: ParamMap) => {
                 if(params.get('id') == this.secret_route ){
@@ -178,18 +191,36 @@ isthischecked = false;
                   // console.log(element);
                   this.productname=element.name;
                   this.productid=element.value;
+
+                  if(element.type=='Monthly'){
+                    this.checkhidemypayid = true;
+                  }else{
+                    this.checkhidemypayid = false;
+                  }
+
+
                   this.products.map((option:any)=>{
-                      if(option?.name==this.productname)
-                      {
+                    if(option?.name==this.productname)
+                    {
+                        console.log(option);
+                        // console.log(option);
                         this.product=option;
+
+                        this.paypalsubsrid = option?.type[0].paypalvalue;
+                        this.paypalsubsridyearly = option?.type[1].paypalvalue;
                       }
+                      
+                      // paypal
                     
                     });
+
                   }
                })
+
                if(!this.productid && (params.get('id') != this.secret_route )){
                 window.location.href='/login';
                }
+
               }); 
               
              }
@@ -199,15 +230,24 @@ isthischecked = false;
       this.subscriptionplans.map((element:any)=>{
 
         if(element?.id == params.get('id')){
-          console.log(element);
+          // console.log(element);
           this.products.forEach((pr:any) => {
             if(pr.name==element.name){
 
               pr.type.forEach((nm:any) => {
                 if(nm.name==mode){
-                  console.log(nm);
+                  // console.log(nm);
                   this.productid = nm.value;
+                  // paypal
+
+                  if(mode=='Monthly'){
+                    this.checkhidemypayid = true;
+                  }else{
+                    this.checkhidemypayid = false;
+                  }
+                  
                 }
+
               });
 
              
@@ -242,20 +282,103 @@ isthischecked = false;
     //   state: ['', [Validators.required]],
     //   zip: ['', [Validators.required]],
     // });
+
+    this.loadPayPalScript().then(() => {
+      // Render the PayPal button
+      this.renderPayPalButton();
+    });
     
   }
+
+  loadPayPalScript(): Promise<void> {
+    return new Promise<void>((resolve:any) => {
+      const script = document.createElement('script');
+      script.src = 'https://www.paypal.com/sdk/js?client-id='+environment.paypalkey+'&vault=true&intent=subscription';
+      script.onload = resolve;
+      script.setAttribute('data-sdk-integration-source','button-factory');
+      document.head.appendChild(script);
+    });
+  }
+
+  renderPayPalButton(): void {
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'horizontal',
+        label: 'paypal'
+    },
+      createSubscription: (data:any, actions: { subscription: { create: (arg0: { plan_id: string; }) => any; }; }) => {
+        return actions.subscription.create({
+          plan_id: this.paypalsubsrid,
+        });
+      },
+      onApprove: (data: any, actions: any) => {
+        // console.log(data);
+        if(data.subscriptionID){
+          this.securepaypalpayment = true;
+          this.savepaypaldetails = data;
+        }
+        // Handle onApprove logic
+      },
+      onCancel: (data: any, actions: any) => {
+        // Handle onCancel logic
+      },
+      onError: (err: any) => {
+        console.error(err);
+        // Handle onError logic
+      },
+      onClick: (data: any, actions: any) => {
+        // console.log("onClick", data, actions);
+      }
+    }).render('#paypal-button-container-monthly');
+
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'horizontal',
+        label: 'paypal'
+    },
+      createSubscription: (data:any, actions: { subscription: { create: (arg0: { plan_id: string; }) => any; }; }) => {
+        return actions.subscription.create({
+          plan_id: this.paypalsubsridyearly,
+        });
+      },
+      onApprove: (data: any, actions: any) => {
+        // console.log(data);
+        if(data.subscriptionID){
+          this.securepaypalpayment = true;
+          this.savepaypaldetails = data;
+        }
+        // Handle onApprove logic
+      },
+      onCancel: (data: any, actions: any) => {
+        // Handle onCancel logic
+      },
+      onError: (err: any) => {
+        console.error(err);
+        // Handle onError logic
+      },
+      onClick: (data: any, actions: any) => {
+        // console.log("onClick", data, actions);
+      }
+    }).render('#paypal-button-container-yearly');
+  }
+
   changeStatus(isChecked:any) {
     this.ischeck = isChecked;
   }
+
   onSubmit(): void {
     this.isSignUpFailed = false;
     this.errorMessage='';
     this.form.uniqueid=this.makeid(20);
     this.form.password=hashSync(this.form.password,8);
     if(this.specialuser) {
-      this.form.registration_type='free';
-      this.form.productid='price_F562mZCjrALoDTQbCR5pF562mZC';
-  }
+        this.form.registration_type='free';
+        this.form.productid='price_F562mZCjrALoDTQbCR5pF562mZC';
+    }
     const { username,firstname,lastname,company, email,phone, password} = this.form;
     if(this.specialuser || (this.form.customerid && this.form.productid && this.form.subscriptionid)){
     if(this.userFormControl.status=='VALID' && this.emailFormControl.status=='VALID' && this.passwordFormControl.status=='VALID' && this.firstnameFormControl.status=='VALID'){
@@ -320,6 +443,107 @@ isthischecked = false;
               }
             });
 
+            if(this.securepaypalpayment){
+              // for paypal only
+              var emailhtml2 = `Hello `+firstname+`,<br>
+              <br>
+              Welcome on board! We're delighted to have you become a part of the Kea community. By selecting our Beta Plan, you've embarked on an exciting digital adventure with us.<br>
+              <br>
+              Our dedicated team has meticulously crafted a suite of offerings that resonates with modern businesses like yours. Brace yourself for a plethora of robust features that aim to redefine your digital prowess.<br>
+              <br>
+              Here's What You Can Expect with the [Plan Name]: (Note: Features listed are specific to the Beta Plan)</br>
+              <br>
+              <strong>Beta Plan - Key Features</strong><br>
+              <br>
+              <strong>Bespoke Website</strong><br>
+              <br>
+              Create a powerful online presence with a custom website tailored to your brand.<br>
+              <br>
+              <strong>Marketing Funnel</strong><br>
+              <br>
+              Efficiently capture and retain your audience with a high-performance marketing funnel.<br>
+              <br>
+              <strong>Contact Management</strong><br>
+              <br>
+              Seamlessly manage and engage with up to 10,000 contacts.<br>
+              <br>
+              <strong>Unlimited Product Listings</strong><br>
+              <br>
+              Showcase your diverse offerings with unlimited product listings.<br>
+              <br>
+              <strong>Customizable Pages</strong><br>
+              <br>
+              Fine-tune your branding with 10 fully customizable pages.<br>
+              <br>
+              <strong>Exclusive Domain</strong><br>
+              <br>
+              Establish your unique online identity with a personalized domain.<br>
+              <br>
+              <strong>Tailored Campaigns</strong><br>
+              <br>
+              Drive growth with 100 meticulously crafted marketing campaigns.<br>
+              <br>
+              <strong>Collaborative Access</strong><br>
+              <br>
+              Optimize your operations with access for one user.<br>
+              <br>
+              <strong>Advanced Analytics</strong><br>
+              <br>
+              Gain insights into user behavior with heatmap snapshots and advanced analytics tools.<br>
+              <br>
+              <strong>Zapier Integration</strong><br>
+              <br>
+              Maximize efficiency with seamless automation through our Zapier integration.<br>
+              <br>
+              <strong>Priority Support</strong><br>
+              <br>
+              Our ticket support system ensures you're always a priority, with assistance just a click away.<br>
+              <br>
+              <strong>Business Strategy Session</strong><br>
+              <br>
+              Benefit from a free 30-minute call with our business strategists to align your goals and actions.<br>
+              <br>
+              <strong>Funnel Strategist Session</strong><br>
+              <br>
+              Refine your conversion path with a free 30-minute call with our funnel experts.<br>
+              <br>
+              <strong>Here's What Awaits You:<strong>
+              <br>
+              <strong>Access to Premium Features:</strong><br>
+              <br>
+              Dive into a suite of tools and functionalities exclusive to the Beta Plan.<br>
+              <br>    
+              <strong>Expert Support</strong><br>
+              <br>
+              Our dedicated team is here to assist, guide, and answer any queries you might have.</br>
+              <br>
+              <strong>Regular Updates:</strong><br>
+              <br>
+              Stay ahead of the curve with consistent updates tailored to enhance your experience.<br>
+              <br>
+              Kick Off Your Journey:<br>
+              <br>
+              <strong>Login:</strong> Use your registered email and password to access your dashboard.<br>
+              <strong>Explore:</strong> Familiarize yourself with the range of tools and features available.<br>
+              <strong>Seek Assistance: Should you have any questions, visit our [Help Center] or reach out directly via <strong>support@keasolution.com.<br>
+              <br>
+              <strong>Exclusive Bonus: As a token of our appreciation, enjoy [Bonus Feature or Discount] for the first month of your subscription! (if any)<br>
+              <br>
+              At Kea, our goal is to ensure you have everything you need to succeed. Your success is our success, and we're here every step of the way.<br>
+              <br>
+              Happy exploring, and here's to new beginnings!<br>
+              <br>
+              Warm regards,<br>
+              The Kea Team<br>`; 
+              var maildata2 = {tomailid: email, frommailid: 'support@keasolution.com', subject: 'Welcome Aboard: Your Subscription Plan is Active!', html: emailhtml2};
+              this.emailService.sendmail(maildata2).subscribe({
+                next: data => {
+                  // console.log(data);
+                }
+              });
+              // for paypal only
+            }
+
             // need to pass unique id to the wistia instead of username
             //  var userobject = {project_name: username};
             //   this._wistia.projectCreate(userobject).subscribe({
@@ -364,12 +588,17 @@ isthischecked = false;
     // }
 
   }
+
   duplicateusercheck(){
     return new Promise((resolve) => {
       let obj={username:this.form.username,email:this.form.email};
       this.authService.duplicatecheck(obj).subscribe((data:any)=>{
-      if(data.success)  resolve(data.success);
-      else this._snackBar.open(data?.message,'OK',{duration:2000});
+      if(data.success){
+        resolve(data.success);
+      }else{
+        this._snackBar.open(data?.message,'OK',{duration:2000});
+        this.spinner=false;
+      } 
      
         })
     });
@@ -465,7 +694,7 @@ isthischecked = false;
               resolve(result.token.id);
             }
         })
-        })
+      })
   }
 
   payment(){
@@ -475,31 +704,49 @@ isthischecked = false;
       
       this.spinnerpayment = true;
         this.duplicateusercheck().then((resp)=>{
-          this.createtoken().then((resp:any)=>{                                                                        
-            var data={name:this.form.firstname+' '+this.form?.lastname,email:this.form.email,phone:this.form.phone,address:this.stripe.payeeaddress,city:this.stripe.payeecity,state:this.stripe.payeestate,country:this.stripe.payeecountry,zip:this.stripe.payeezip,productid:this.productid,token:resp};
-            this.regpayService.registrationpayment(data).subscribe((data:any)=>{
-              // console.log(data.subscription)
-              if(data.success){
-                this.paymentstatus=true;
-                this.form.customerid=data?.customer?.id;
-                this.form.subscriptionid=data?.subscription?.id;
-                this.form.cardid=data?.customer?.default_source;
-                this.form.productid=this.productid;
-                this.form.registration_type='paid';
-                this.successMessage=data?.status;
-                // this._snackBar.open(data.status,'OK',{duration:2000});
-                this.onSubmit();
-                // console.log(this.form);
-              }
-              else{
-                this.paymenterror=true;
-                this.spinner=false;
-                this.spinnerpayment = false;
-                this.paymentMessage=data?.error?.raw?.message;
-                // this._snackBar.open(data.message,'OK',{duration:200});
-              }
-            })
-          })
+
+          if(this.securepaypalpayment){
+
+              this.paymentstatus=true;
+              this.form.customerid=this.savepaypaldetails?.orderID;
+              this.form.subscriptionid= this.savepaypaldetails?.subscriptionID;
+              this.form.cardid='paypal';
+              this.form.productid=this.productid;
+              this.form.registration_type='paid';
+              this.form.type = 'paypal';
+              this.onSubmit();
+
+          }else{
+
+            this.createtoken().then((resp:any)=>{                                                                        
+              var data={name:this.form.firstname+' '+this.form?.lastname,email:this.form.email,phone:this.form.phone,address:this.stripe.payeeaddress,city:this.stripe.payeecity,state:this.stripe.payeestate,country:this.stripe.payeecountry,zip:this.stripe.payeezip,productid:this.productid,token:resp};
+              this.regpayService.registrationpayment(data).subscribe((data:any)=>{
+                // console.log(data.subscription)
+                if(data.success){
+                  this.paymentstatus=true;
+                  this.form.customerid=data?.customer?.id;
+                  this.form.subscriptionid=data?.subscription?.id;
+                  this.form.cardid=data?.customer?.default_source;
+                  this.form.productid=this.productid;
+                  this.form.registration_type='paid';
+                  this.successMessage=data?.status;
+                  // this._snackBar.open(data.status,'OK',{duration:2000});
+                  this.onSubmit();
+                  // console.log(this.form);
+                }else{
+                  this.paymenterror=true;
+                  this.spinner=false;
+                  this.spinnerpayment = false;
+                  this.paymentMessage=data?.error?.raw?.message;
+                  // this._snackBar.open(data.message,'OK',{duration:200});
+                }
+
+              })
+            });
+
+          }
+
+
       })
 
     }

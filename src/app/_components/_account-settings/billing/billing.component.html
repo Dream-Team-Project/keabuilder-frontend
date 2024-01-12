@@ -284,7 +284,9 @@
       <h4>Change your plan</h4>
       <small>Upgrade or downgrade your current plan.</small>
 
-      <h6 class="mt-2">Next billing date:  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
+      <h6 class="mt-2" *ngIf="paymenttype=='stripe'">Next billing date:  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
+
+      <h6 class="mt-2" *ngIf="paymenttype=='paypal'">Next billing date:  {{ paypaldata?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
 
       <div class="row">
 
@@ -330,7 +332,7 @@
 
     </div>
 
-    <div class="col-md-6 mt-4">
+    <div class="col-md-6 mt-4" *ngIf="paymenttype=='stripe'">
       <hr class="mt-0">
       <h4>Payment Details</h4>
       <small>Update your billing information. Make sure to set your location correctly as it could affect your tax rates.</small>
@@ -370,7 +372,7 @@
 
     </div>
 
-    <div class="col-md-6 mkflx">
+    <div class="col-md-6 mkflx" *ngIf="paymenttype=='stripe'">
       <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
     </div>
 
