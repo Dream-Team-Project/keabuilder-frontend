@@ -82,16 +82,9 @@
             More {{getMoreState()}}
         </button>
         <mat-menu #more="matMenu" xPosition="after" yPosition="below">
-            <button mat-menu-item *ngIf="!ishf else rename" (click)="setTrigger('setting')"
-            [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
-            <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
+            <button mat-menu-item *ngIf="!ishf" (click)="!_general.saveDisabled ? saveastemp.emit() : ''" [disabled]="_general.saveDisabled">
+                <i class="fa-regular fa-copy"></i> Save As Template
             </button>
-            <ng-template #rename>
-                <button mat-menu-item (click)="openRenameHFDialog(renamehfdialog)"
-                    [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
-                    <i [innerHTML]="'setting' | svg | safeHtml"></i> Rename
-                </button>
-            </ng-template>
             <button mat-menu-item (click)="wireframeToggle.emit(true)" [class.kb-btn-active]="wftgl">
                 <i [innerHTML]="'wireframe' | svg | safeHtml"></i> Wireframe
             </button>
@@ -101,6 +94,16 @@
             <button mat-menu-item *ngIf="!wftgl" (click)="zoomEmit(!zoom.active); urdo = false" [class.kb-btn-active]="zoom.active">
                 <i [innerHTML]="'zoomin' | svg | safeHtml"></i> Zoom
             </button>
+            <button mat-menu-item *ngIf="!ishf else rename" (click)="setTrigger('setting')"
+            [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
+                <i [innerHTML]="'setting' | svg | safeHtml"></i> Setting
+            </button>
+            <ng-template #rename>
+                <button mat-menu-item (click)="openRenameHFDialog(renamehfdialog)"
+                    [class.kb-btn-active]="_general.selectedBlock.type == 'main'">
+                    <i [innerHTML]="'setting' | svg | safeHtml"></i> Rename
+                </button>
+            </ng-template>
         </mat-menu>
         <span *ngIf="urdo" class="kb-more-opt">
             <button mat-button matTooltip="Undo" [disabled]="!_section.pageSessionArr[_section.pageSession.undo-1]" (click)="_section.undo()">
@@ -123,9 +126,6 @@
         </button>
         <button mat-button (click)="!_general.saveDisabled ? setTrigger('save') : ''" [disabled]="_general.saveDisabled">
             <i [innerHTML]="'save' | svg | safeHtml"></i> Save
-        </button>
-        <button mat-button *ngIf="!ishf" (click)="!_general.saveDisabled ? saveastemp.emit() : ''" [disabled]="_general.saveDisabled">
-            <i class="fa-regular fa-copy"></i> Save As Template
         </button>
         <button mat-button [matMenuTriggerFor]="autosave" #autosavet="matMenuTrigger" [class.kb-btn-active]="autosavet.menuOpen">
             <i class="fa-regular fa-clock"></i> Auto Save > {{_general.autosave ? _general.autosave.value+' '+_general.autosave.unit : 'OFF'}}

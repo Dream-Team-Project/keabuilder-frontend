@@ -36,7 +36,7 @@ export class WebsitesComponent implements OnInit {
   selecteduid = '';
   nodata = false;
   searching:boolean = false;
-  selstatusshow = 'all';
+  selstatusshow = 'updated_at DESC';
   duplicatewebid  = '';
   selectedwebsite = '';
   confirmpass = '';
@@ -124,7 +124,7 @@ export class WebsitesComponent implements OnInit {
   }
 
   applykbfilter(){
-    var dt:any = {order:this.selstatusshow,
+    var dt:any = {filter:this.selstatusshow,
       pageIndex:this.paginator?.pageIndex || 0,
       pageSize:this.paginator?.pageSize || 6,};
     this.websiteService.shortbypaginatorwebsite(dt).subscribe({

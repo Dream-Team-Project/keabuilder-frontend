@@ -125,7 +125,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   pageslength:any;
   sortInp:any='';
   visibility:any='';
-  filter:any='';
+  filter:any='updated_at DESC';
   
 
   constructor(private webpagesService: WebpagesService,

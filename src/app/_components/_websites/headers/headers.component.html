@@ -54,7 +54,8 @@
               <mat-option [value]="'name DESC'">Descending By Name</mat-option>
               <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
               <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
-              <mat-option [value]="''">Descending By Created</mat-option>
+              <mat-option [value]="'created_at ASC'">Ascending By Create</mat-option>
+              <mat-option [value]="'created_at DESC'">Descending By Create</mat-option>
             </mat-select>
           </mat-form-field>
      </div>
@@ -66,16 +67,18 @@
   <div class="row px-3" >
     <div  class="col-md-12 cardpage mt-4" *ngFor="let header of headers">
         <div class="row">
-          <div [style.height]="'50px'" class="col-md-2 p-0">
-            <div [class.kb-disabled]="header.deleting" class="kb-fitimg" [ngStyle]="{'background-image': 'url('+_image.uploadImgPath+_general.getSSPath('header-'+header.uniqueid)+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
+          <div class="col-md-2 p-0">
+            <div [class.kb-disabled]="header.deleting" class="kb-fitimg rounded">
               <div class="kb-loader" *ngIf="header.deleting">
                 <div class="kb-loader-shadow"></div>
                 <div class="kb-loader-box"></div>
               </div>
+              <img [src]="_image.uploadImgPath + _general.getSSPath('header-' + header.uniqueid)" 
+              (error)="_image.handleImageError($event)" class="img-fluid">
             </div>
           </div>
           <div class="col-md-10">
-            <div class="row align-items-center p-0 h-100">
+            <div class="row align-items-center pl-4 h-100">
               <div class="col-md-12">
                 <div class="kb-title-board line-ellipsis">
                   <span class="line-ellipsis">{{header.name ? header.name : 'Header' | titlecase}}</span>

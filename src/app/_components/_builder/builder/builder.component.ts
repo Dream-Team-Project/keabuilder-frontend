@@ -156,11 +156,13 @@ export class BuilderComponent implements OnInit {
         _section.builderCDKMethodCalled$.subscribe(() => {
           setTimeout((e:any)=>{
             this.setDragDrop();
-            this._general.pageSaved = false;
             if(!this.ishf) this.savePreview();
-            else if(this.initial) {
+            if(this.initial) {
                 this._general.pageSaved = true;
                 this.initial = false;
+            }
+            else {
+              this._general.pageSaved = false;
             }
           })
         })
