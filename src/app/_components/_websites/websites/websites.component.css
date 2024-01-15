@@ -20,18 +20,11 @@
 .kb-fitimg {
     height: 100%;
     overflow: hidden;
-    background-size: cover;
+    border: 0.0625rem solid #eceeef;
+    /* background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
-    -webkit-transition: all 2s linear;
-    -moz-transition: all 2s linear;
-    -ms-transition: all 2s linear;
-    -o-transition: all 2s linear;
-    transition: all 2s linear;
-  }
-  
-  .kb-fitimg:hover {
-      background-position: center bottom;
+    background-image: url('/assets/uploads/images/webpage_thumbnail.jpg'); */
   }
 
   .kbimgcard{

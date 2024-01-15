@@ -124,8 +124,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   errormessage:any='';
   pageslength:any;
   sortInp:any='';
-  visibilityby:any='all';
-  filter:any='created_at DESC';
+  visibility:any='';
+  filter:any='updated_at DESC';
   
 
   constructor(private webpagesService: WebpagesService,

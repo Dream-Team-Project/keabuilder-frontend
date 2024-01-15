@@ -328,4 +328,8 @@ export class ImageService {
           }
           return path;
       }
+
+    handleImageError(event: any) {
+        event.target.src = this.uploadImgPath + '/webpage_thumbnail.jpg';
+    }
 }

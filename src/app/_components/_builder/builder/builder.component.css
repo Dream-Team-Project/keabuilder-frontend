@@ -122,6 +122,7 @@ div#kb-page-container {
     position: relative;
     transform-origin: top;
     transition: 0.2s ease;
+    margin-top: 32px;
 }
 
 .kb-tab-content textarea {
