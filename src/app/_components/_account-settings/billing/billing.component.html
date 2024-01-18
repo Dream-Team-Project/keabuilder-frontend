@@ -266,12 +266,13 @@
     <button
       mat-button
       mat-dialog-close
-      (click)="updatesubscription()"
+     (click)="validateSubscription()"
       class="text-danger"
       [disabled]="subscription_productidFormControl.invalid"
     >
       Yes
     </button>
+    <!-- (click)="updatesubscription()" -->
   </div>
 </ng-template>
 <!--update subscription-->
@@ -279,7 +280,6 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row" *ngIf="usertype != 'free ' && show; else nodata">
-
     <div class="col-md-12">
       <h4>Change your plan</h4>
       <small>Upgrade or downgrade your current plan.</small>
@@ -291,7 +291,7 @@
       <div class="row">
 
         <div class="col-md-2">
-          <div class="card kb-user-detail-box p-3 mt-4">
+          <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(updatedialog)" >
             <div class="justify-content-between">
               <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Beta'"></i>
                 <b>BETA</b>
@@ -300,27 +300,30 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" (click)="openDialog(updatedialog)" >
           <div class="card kb-user-detail-box p-3 mt-4">
             <div class="justify-content-between">
+              <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Startup'"></i>
                 <b>STARTUP</b>
                 <p class="m-0">Startup Spark Plan</p>
                 <p class="m-0">$97/month</p>
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" (click)="openDialog(updatedialog)" >
           <div class="card kb-user-detail-box p-3 mt-4">
             <div class="justify-content-between">
+              <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Entrepreneur'"></i>
                 <b>ENTREPRENEUR</b>
                 <p class="m-0">SMB Power Plan</p>
                 <p class="m-0">$197/month</p>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" (click)="openDialog(updatedialog)" >
           <div class="card kb-user-detail-box p-3 mt-4">
             <div class="justify-content-between">
+              <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Agency'"></i>
                 <b>AGENCY</b>
                 <p class="m-0">Agency advantage plan</p>
                 <p class="m-0">$1997</p>
@@ -477,7 +480,7 @@
 
   </div>
 
-    <ng-template #nodata>
+    <ng-template #nodata >
       <div class="row justify-content-center">
         <div class="col-md-6 pt-5">
           <h5 class="text-align-center text-center">Your are our Special User</h5>

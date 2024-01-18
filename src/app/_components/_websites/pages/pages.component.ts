@@ -124,7 +124,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   errormessage:any='';
   pageslength:any;
   sortInp:any='';
-  visibility:any='';
+  visibilityby:any='';
   filter:any='updated_at DESC';
   
 
@@ -562,15 +562,15 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   archive_popup(dataobj:any){
     this.openDialog(this.deldialog,dataobj,'')
-    this.showmytemplates = false;
-    this.addnewpagepopup = false;
-    this.insidepagefirst = true;
-    this.insidepagesecond = false;
-    this.quickeditpopup = false;
-    this.selecttemplate = false;
-    this.showpageurl = false;
+    // this.showmytemplates = false;
+    // this.addnewpagepopup = false;
+    // this.insidepagefirst = true;
+    // this.insidepagesecond = false;
+    // this.quickeditpopup = false;
+    // this.selecttemplate = false;
+    // this.showpageurl = false;
 
-    this.confirmarchivepage = true;
+    // this.confirmarchivepage = true;
     this.archive_id = dataobj.id;
     this.arpageobj = dataobj;
   }
@@ -720,8 +720,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.dialog.open(templateRef);
     }else{
       this.newwebsiteid = '';
-      this.searchpages('',this.filter,this.visibilityby,this.sortInp);
-      // this.getpagePages({pageIndex:0,pageSize:20});
       var acn;
       switch(type){
         case 'move':
@@ -736,7 +734,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.actionname = acn;
       this.delpage = page;
       this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-       
+        this.searchpages('',this.filter,this.visibilityby,this.sortInp);
       });
     }
 
