@@ -35,8 +35,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {ClipboardModule} from '@angular/cdk/clipboard';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { AppRoutingModule, RoutingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -60,10 +60,10 @@ import { FilterPipe } from './_pipes/filter.pipe';
 import { SortingPipe } from './_pipes/sorting.pipe';
 import { SvgPipe } from './_pipes/svg.pipe';
 
-import {MatStepperModule} from '@angular/material/stepper';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
-import {environment} from '../environments/environment';
+import { environment } from '../environments/environment';
 
 import { ApiInterceptor } from './_helpers/api.interceptor';
 import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
@@ -96,6 +96,7 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     MatListModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatPaginatorModule, 
     MatTabsModule,
     MatButtonModule,
     MatSnackBarModule,
@@ -111,7 +112,6 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     NgApexchartsModule,
     GoogleMapsModule,
     MatInputModule,
-    MatPaginatorModule,
     MatCardModule,
     MatCheckboxModule,
     MatSelectModule,

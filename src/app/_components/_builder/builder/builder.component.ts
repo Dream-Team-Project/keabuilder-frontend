@@ -15,7 +15,6 @@ import { RowService } from 'src/app/_services/_builder/row.service';
 import { ColumnService } from 'src/app/_services/_builder/column.service';
 import { ElementService } from 'src/app/_services/_builder/element.service';
 
-
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
