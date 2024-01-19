@@ -14,7 +14,7 @@ window.onload = function(a){
             var email = window.location.hash.split('?')[1]?.split('&')[1]?.split('=')[0]=='email'?window.location.hash.split('?')[1]?.split('&')[1]?.split('=')[1]:'';
             if(custmid && userid && offerid) {
                 var itemscustm = { customerid: custmid, user_id:userid, offerid:offerid, email: email };
-                const response = await fetch("https://app.keabuilder.com/api/paymentupsell", {
+                const response = await fetch("https://api.keabuilder.com/api/paymentupsell", {
                 // const response = await fetch("http://localhost:4200/api/paymentupsell", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

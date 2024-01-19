@@ -997,8 +997,8 @@ var kb_fullcontent = `
                 <a href="https://app.keabuilder.com/heatmap" target="_blank" id="brand-link"
                     class="layout-row layout-align-end-center"><span class="color-darker">Back to</span> <img
                         id="brand-wordmark"
-                        src="`+windoworigin+`/assets/images/logo/kblogo.png"
-                        alt="Kia Builder Logo" /></a>
+                        src="https://app.keabuilder.com/assets/images/logo/kblogo.png"
+                        alt="Kea Builder Logo" /></a>
             </div>
             <div class="ui-panel-manager size-fill">
                 <div class="ui-panel-manager-bounds size-fill">
