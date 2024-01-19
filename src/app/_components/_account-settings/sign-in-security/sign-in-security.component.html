@@ -41,7 +41,7 @@
   <button class="mb-4" type="button" mat-raised-button color="primary" (click)="generatetoken()">Send Verification Token </button>
    <mat-error *ngIf="error">{{errormessage}}</mat-error> 
 
-  <mat-form-field class="kb-full-width" appearance="fill">
+  <mat-form-field class="kb-full-width" appearance="fill" *ngIf="this.tokenmail">
   <mat-label>Token</mat-label>
     <input matInput type="text" name="token" placeholder="Token" [(ngModel)]="chktoken" [formControl]="tokenFormControl">
       <small class="text-danger" *ngIf="incrtkn" >Incorrect Token</small>
@@ -50,7 +50,7 @@
       </mat-error>
  </mat-form-field>
 
-<mat-form-field class="kb-full-width" appearance="fill">
+<mat-form-field class="kb-full-width" appearance="fill" *ngIf="this.tokenmail">
   <mat-label>New Password</mat-label>
   <input type="password" matInput [formControl]="passwordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="newpassword">
   <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
@@ -64,7 +64,7 @@
   </mat-error>
 </mat-form-field>
 
-<mat-form-field class="kb-full-width" appearance="fill">
+<mat-form-field class="kb-full-width" appearance="fill" *ngIf="this.tokenmail">
   <mat-label>Confirm Password</mat-label>
   <input type="password" matInput [formControl]="confirmpasswordFormControl" required minlength="6" [type]="hide ? 'password' : 'text'" [(ngModel)]="confirmpassword">
   <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="ar-eyeicon">
