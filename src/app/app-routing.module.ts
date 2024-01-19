@@ -157,7 +157,7 @@ if (currentDomain === appHost) {
   routes = [
 
     // auth
-    
+    // { path: 'auth', component: HeatmapsComponent, loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
     // { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
     // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
     // { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
@@ -338,7 +338,7 @@ if (currentDomain === appHost) {
       // { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
     
       // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
-    
+      { path: 'affiliates', component: AffiliatesComponent, loadChildren: () => import('./_modules/affiliate.module').then(m => m.AffiliateModule), canActivate: [AuthGuard] },
       // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
       // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
       // { path: 'affiliates-commission', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -352,7 +352,9 @@ if (currentDomain === appHost) {
       // Coming Soon Features ==>
 
     // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-    { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
+    { path: 'heatmap', component: HeatmapsComponent, loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
+    // { path: 'membership', component: MembershipComponent,
+    // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
     // { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
     // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent, canActivate: [AuthGuard] },
 
