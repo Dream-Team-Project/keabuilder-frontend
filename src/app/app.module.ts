@@ -75,12 +75,12 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
+    ViewNavbarComponent,
     SafeUrlPipe,
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
     SvgPipe,
-    ViewNavbarComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -147,4 +147,5 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
   ],
   bootstrap: [AppComponent],
 })
+
 export class AppModule { }

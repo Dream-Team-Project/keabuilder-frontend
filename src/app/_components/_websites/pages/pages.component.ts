@@ -8,7 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { UserService } from 'src/app/_services/user.service';
 import { WebsiteService } from 'src/app/_services/website.service';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
