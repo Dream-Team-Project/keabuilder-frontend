@@ -36,6 +36,15 @@ import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu
 // builder
 // websites
 import { WebsiteComponent } from './_components/_websites/website/website.component';
+import { WebsitesComponent } from './_components/_websites/websites/websites.component';
+import { WebsiteDetailsComponent } from './_components/_websites/details/details.component';
+import { WebsiteFootersComponent } from './_components/_websites/footers/footers.component';
+import { WebsiteHeadersComponent } from './_components/_websites/headers/headers.component';
+import { WebsiteNavigationComponent } from './_components/_websites/navigation/navigation.component';
+import { WebsitePagesComponent } from './_components/_websites//pages/pages.component';
+import { WebpagesArchiveComponent } from './_components/_websites/webpages-archive/webpages-archive.component';
+import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
+import { WebsiteMarketplaceComponent } from './_components/_websites/marketplace/marketplace.component';
 // websites
 
 // funnels
@@ -166,24 +175,24 @@ if (currentDomain === appHost) {
     // auth
 
     // website 
-    { path: 'websites', component: WebsiteComponent, loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
+    // { path: 'websites', component: WebsiteComponent, loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
 
-    // {path: 'websites', component: WebsiteComponent,
-    //   children: [
-    //     // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
-    //     // {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
-    //     // {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
-    //     // {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-    //     // {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
-    //     // {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
-    //     // {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
-    //     // {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
-    //     // {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
-    //     // {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-    //     // {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
-    //     // {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
-    //   ],
-    // canActivate: [AuthGuard] },
+    {path: 'websites', component: WebsiteComponent,
+      children: [
+        {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+        {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
+        {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
+        {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+        {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
+        {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
+        {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+        {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+        {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+      ],
+    canActivate: [AuthGuard] },
 
     // website 
 
@@ -409,6 +418,14 @@ else {
 export class AppRoutingModule { }
 export const RoutingComponents = 
   [
+    WebsiteComponent,
+    WebsitesComponent,
+    WebsiteDetailsComponent,
+    WebsiteFootersComponent,
+    WebsiteHeadersComponent,
+    WebsiteNavigationComponent,
+    WebsitePagesComponent,
+    WebpagesArchiveComponent,
     FeedbackFormComponent,
     LoginComponent,
     RegisterComponent,
