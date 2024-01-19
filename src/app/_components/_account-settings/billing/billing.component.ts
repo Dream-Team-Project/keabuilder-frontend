@@ -45,7 +45,7 @@ export class BillingComponent implements OnInit {
     locale: 'auto',
   };
   
-  fetching=true;
+  fetching=false;
   cngcard=false;
   show=false;
   stripedata:any={
@@ -53,8 +53,6 @@ export class BillingComponent implements OnInit {
     subscription:[],
     card:[],
   }
-
-  fetch=false;
   filteredcountry:any=[];
   error=false;
   errormessage:any;
@@ -69,20 +67,20 @@ export class BillingComponent implements OnInit {
   products:any=[
     {name:'Startup',
     type:[
-    {name:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw'},
-    {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv'},
+    {name:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw_m'},
+    {name:'Annual', value:'price_1NTeyPBFKaDgAHCwLv5twvpv_y'},
     ],
 },
     {name:'Entrepreneur',
     type:[
-      {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc'},
-    {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G'},
+      {name:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc_m'},
+    {name:'Annual', value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G_y'},
     ],
   },
   {name:'Agency',
     type:[
-      {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM'},
-      {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I'},
+      {name:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM_m'},
+      {name:'Annual', value:'price_1Ndr8LBFKaDgAHCw7jph534I_y'},
     ],
   },
   {name:'Beta',
@@ -92,13 +90,13 @@ export class BillingComponent implements OnInit {
   },
 ];
 subscriptionplans:any=[
-  {id:'plan-8yKU3Mz9BnHVth6SYOjC',name:'Startup',type:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw',},
-  {id:'plan-eeROpMVoVkNCasGIIXay',name:'Startup',type:'Annual',value:'price_1NTeyPBFKaDgAHCwLv5twvpv',},
-  {id:'plan-74KaBnAOAiMDJx6HK5rl',name:'Entrepreneur',type:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc',},
-  {id:'plan-O149fUrEJB3jc0akzgs9',name:'Entrepreneur',type:'Annual',value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G',},
-  {id:'plan-n5IKx4Z2asK7sYHS3lrd',name:'Agency',type:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM',},
-  {id:'plan-bCR5pF562mZCjrALoDTQ',name:'Agency',type:'Annual',value:'price_1Ndr8LBFKaDgAHCw7jph534I',},
   {id:'plan-xTn8SqarYE0eVIEaSdkM',name:'Beta',type:'Monthly',value:'price_1NgOpkBFKaDgAHCwesDitAQa',},
+  {id:'plan-8yKU3Mz9BnHVth6SYOjC',name:'Startup',type:'Monthly',value:'price_1NTevbBFKaDgAHCwEwUIyyJw_m',},
+  {id:'plan-eeROpMVoVkNCasGIIXay',name:'Startup',type:'Annual',value:'price_1NTeyPBFKaDgAHCwLv5twvpv_y',},
+  {id:'plan-74KaBnAOAiMDJx6HK5rl',name:'Entrepreneur',type:'Monthly',value:'price_1Ndr32BFKaDgAHCw5xKyngcc_m',},
+  {id:'plan-O149fUrEJB3jc0akzgs9',name:'Entrepreneur',type:'Annual',value:'price_1Ndr4lBFKaDgAHCw8WCP0i1G_y',},
+  {id:'plan-n5IKx4Z2asK7sYHS3lrd',name:'Agency',type:'Monthly',value:'price_1Ndr7RBFKaDgAHCwdcMETILM_m',},
+  {id:'plan-bCR5pF562mZCjrALoDTQ',name:'Agency',type:'Annual',value:'price_1Ndr8LBFKaDgAHCw7jph534I_y',},
 ];
 
   nameFormControl= new FormControl('', [Validators.required]);
@@ -137,7 +135,7 @@ stripecard:any={
   fingerprint:null,
 
 }
-
+currentPlan:any={};
 paymenttype = 'stripe';
 paypaldata:any = {current_period_end:''};
 
@@ -153,12 +151,16 @@ paypaldata:any = {current_period_end:''};
               ) { }
 
   ngOnInit(): void {
+   this.fetchdata();
+  }
+  fetchdata(){
     this.fetching=true;
     this.subscriptiondata().then((resp:any)=>{
       this.subscriptionplans.map((element:any)=>{
         // console.log(this.subscription_productid)
         this.fetching=false;
         if(element?.value == this.subscription_productid){
+          this.currentPlan=element;
          this.products.map((option:any)=>{
             if(option?.name == element.name)
             {
@@ -174,10 +176,8 @@ paypaldata:any = {current_period_end:''};
   subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
-      // console.log(data);
       if(data.success){
         // console.log(data)
-
         if(data.paymenttype=='paypal'){
           this.paymenttype = 'paypal';
           this.paypaldata.current_period_end = data?.subscription?.billing_info?.next_billing_time;
@@ -218,10 +218,22 @@ paypaldata:any = {current_period_end:''};
     });
   }
   openDialog(templateRef: TemplateRef<any>): void {
-    this.dialog.open(templateRef);
- //    .afterClosed().subscribe((resp:any) => {
- //     this.stripeaddress=null;
- //  })
+    this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
+    this.subscriptionplans.map((element:any)=>{
+      // console.log(this.subscription_productid)
+      if(element?.value == this.subscription_productid){
+       this.products.map((option:any)=>{
+          if(option?.name == element.name)
+          {
+            this.product=option;
+            this.show=true;
+          }
+        })
+      }
+      this.cngcard=false;
+    })
+
+  })
 }
 filtercountryData(event:any) {
  var value = event ? event.target.value : '';
@@ -307,38 +319,55 @@ createtoken(){
 }
 cancelsubscription(){
  let obj={subscriptionid:this.stripedata?.subscription?.id,type:'cancelplan'};
- // this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
- //   if(data?.success){
- //     this._general.openSnackBar(false,data?.message,'Ok','center','top');
- //     this.tokenservice.signOut();
- //   }
- //   else{
- //     this._general.openSnackBar(true,data?.message,'Ok','center','top');
- //   }
- // })
+ this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
+   if(data?.success){
+     this._general.openSnackBar(false,data?.message,'Ok','center','top');
+     this.fetchdata();
+   }
+   else{
+     this._general.openSnackBar(true,data?.message,'Ok','center','top');
+   }
+ })
 }
-
+resumesubscription(){
+  let obj={subscriptionid:this.stripedata?.subscription?.id,type:'resumeplan'};
+  this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
+    if(data?.success){
+      this._general.openSnackBar(false,data?.message,'Ok','center','top');
+      this.fetchdata();
+    }
+    else{
+      this._general.openSnackBar(true,data?.message,'Ok','center','top');
+    }
+  })
+ }
 updatesubscription(){
  // console.log(this.subscription_productid)
+ this.fetching=true;
  if(this.subscription_productid && this.subscription_productid != this.stripedata.subscription?.plan?.id){
- let obj={productid:this.subscription_productid,customerid:this.stripedata?.customer?.id,type:'updateplan'}; 
+ let obj={productid:this.subscription_productid,customerid:this.stripedata?.customer?.id,type:'updateplan',subscriptionid:this.stripedata?.subscription?.id}; 
  this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
    if(data.success){
      // console.log(data.subscription)
+     this.fetching=false;
      this.stripedata.subscription=data?.subscription;
+     this.fetchdata();
      this._general.openSnackBar(false,data?.message,'Ok','center','top');
      this.dialog.closeAll();
      this.error=false;
      this.errormessage='';
    }
    else{
+    this.fetching=false;
      this.error=true;
     this.errormessage=data?.message;
     this.openDialog(this.updatedialog);
+  
    }
  })
 }
 else{
+  this.fetching=false;
  this._general.openSnackBar(true,"Plan Allready Active",'Ok','center','top');
 
 }
@@ -349,5 +378,20 @@ productdetails(event:any){
 }
 subscriptiontype(event:any){
   this.subscription_productid=event.value;
+}
+
+validateSubscription() {
+  let currentSubscription = this.stripedata.subscription?.plan?.id;
+  let selectedSubscription = this.subscription_productid;
+  const currentSubscriptionIndex = this.subscriptionplans.findIndex((sub:any) => sub.value === currentSubscription);
+  const selectedSubscriptionIndex = this.subscriptionplans.findIndex((sub :any) => sub.value === selectedSubscription);
+  if (selectedSubscriptionIndex < currentSubscriptionIndex) {
+    let msg="Please contact the support team to downgrade your Subscription plan."
+            this._general.openSnackBar(true,msg,'Ok','center','top');
+              this.fetchdata();
+  }
+else{
+  this.updatesubscription();
+}
 }
 }

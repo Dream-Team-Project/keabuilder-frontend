@@ -108,11 +108,12 @@
               <mat-form-field appearance="fill" class="col-md-3 px-2">
                 <mat-label>Sort By</mat-label>
                 <mat-select name="kbfilter" [(ngModel)]="selstatusshow" (ngModelChange)="applykbfilter()">
-                  <mat-option value="nameasc" >Ascending By Name</mat-option>
-                  <mat-option value="namedesc">Descending By Name</mat-option>
-                  <mat-option value="dateasc" >Ascending By Date</mat-option>
-                  <mat-option value="datedesc">Descending By Date</mat-option>
-                  <mat-option value="all">Descending By Created</mat-option>
+                  <mat-option [value]="'name ASC'">Ascending By Name</mat-option>
+                  <mat-option [value]="'name DESC'">Descending By Name</mat-option>
+                  <mat-option [value]="'updated_at ASC'">Ascending By Update</mat-option>
+                  <mat-option [value]="'updated_at DESC'">Descending By Update</mat-option>
+                  <mat-option [value]="'created_at ASC'">Ascending By Create</mat-option>
+                  <mat-option [value]="'created_at DESC'">Descending By Create</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -144,8 +145,9 @@
                         </div>
                         <div class="col-md-12 kbimgcard">
                           
-                          <div class="kb-fitimg"
-                            [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+websites.thumbnail+ '), url(' + _image.uploadImgPath+'webpage_thumbnail1.jpg' + ')'}">
+                          <div class="kb-fitimg rounded">
+                            <img [src]="_image.uploadImgPath+websites.thumbnail"
+                            (error)="_image.handleImageError($event)" class="img-fluid">
                           </div>
 
                         </div>

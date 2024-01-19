@@ -27,7 +27,7 @@ export class WebsiteFootersComponent {
   datafooter:any;
   footerslength:any;
   pagefooters:any;
-  filter:any='';
+  filter:any='updated_at DESC';
 
   constructor(
         public _image: ImageService,

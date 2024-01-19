@@ -104,6 +104,7 @@ export class UpdateDnsComponent implements OnInit {
     data.zoneid=this.domain?.zoneid;
     data.domain=this.domain?.name;
     let recordid=data?.id ? data?.id : '';
+    data.content=JSON.stringify(data.content);
     // // console.log(recordid)
     // console.log(data)
     if(data.type && data.name && data.content && data.ttl){

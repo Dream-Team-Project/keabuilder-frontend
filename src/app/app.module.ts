@@ -68,18 +68,19 @@ import {environment} from '../environments/environment';
 import { ApiInterceptor } from './_helpers/api.interceptor';
 import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
+    ViewNavbarComponent,
     SafeUrlPipe,
     SafeHtmlPipe,
     FilterPipe,
     SortingPipe,
     SvgPipe,
-    ViewNavbarComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -146,4 +147,5 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
   ],
   bootstrap: [AppComponent],
 })
+
 export class AppModule { }

@@ -1,0 +1,58 @@
+.kb-plan-fnt{
+    font-family :'Times New Roman', Times, serif;
+    font-weight: 250;
+}
+.kb-plan-price{
+    font-weight: 700;
+    font-size: 35px;
+}
+.kb-plan-btn{
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 18px;
+}
+.kb-plan-btn:hover{
+    background-color: var(--primary-color);
+    color: white;
+}
+.kb-plan-sub-heading{
+    color: rgb(78, 205, 151);
+    font-weight: 700;
+}
+.kb-plan-check-icon{
+    color: #23856d;
+}
+.kb-plan-features-fnt{
+    margin-bottom: 0;
+    padding-bottom: 2px;
+}
+.kb-plan-color-g{
+    color:  rgb(78, 205, 151);
+}
+.kb-plan-color-o{
+    color: var(--primary-color);
+}
+.kb-plan-color-r{
+    color: #FF61C7;
+}
+.kb-plan-color-b{
+    color:#2819db;
+}
+.kb-plan-togglegroup {
+    background-color: white;
+    cursor: pointer;  
+}
+.kb-plan-disable{
+    background-color: gray;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+
+
+

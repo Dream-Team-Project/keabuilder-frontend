@@ -512,6 +512,13 @@ export class SidebarComponent implements OnInit {
               icon: 'fa-regular fa-credit-card',
               title: 'Billing'
             },
+            {
+              0:true,
+              routerlink: '/account/viewplans',
+              img: 'shield.gif',
+              icon: 'far fa-eye',
+              title: 'View Plans'
+            },
           ]
     }
 

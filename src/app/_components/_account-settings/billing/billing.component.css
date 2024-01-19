@@ -2,6 +2,10 @@
     font-size: 18px;
     font-weight: 500;
 }
+.kb-fnt1{
+    font-size: 24px;
+    font-weight: 500;
+}
 .kb-fnt-details-o{
     font-size: 12px;
     font-weight: 400;
@@ -57,6 +61,10 @@ cursor: pointer;
     .card{
         cursor: pointer;
     }
+    .statusplan {
+        position: absolute;
+        top: 20px;
+    }
 
     .selectplan {
         font-size: 25px;
@@ -64,6 +72,30 @@ cursor: pointer;
         top: -10px;
         right: -10px;
         color: var(--primary-color);
+    }
+    .cancelplan {
+        font-size: 25px;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+    .resumeplan{
+        color: var(--primary-color);
+        cursor: pointer;
+    }
+    .resumeplan:hover{
+        cursor: pointer;
+        color: white;
+        background-color: var(--primary-color);
+    }
+    .cancelplanbtn{
+        color: var(--kb-danger);
+        cursor: pointer;
+    }
+    .cancelplanbtn:hover{
+        cursor: pointer;
+        color: white;
+        background-color: var(--kb-danger);
     }
 
     .mkflx{

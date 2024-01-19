@@ -32,6 +32,7 @@ export class SignInSecurityComponent implements OnInit {
   hide = true;
   error=false;
   errormessage='';
+  tokenmail=false;
 
   constructor(public userService: UserService,
     private _general :GeneralService,
@@ -61,6 +62,7 @@ export class SignInSecurityComponent implements OnInit {
          var type = 'type2';
          this._auth.forgetPassword(emailInp, loctn,type).subscribe(resp=>{
           //  console.log(resp);
+          this.tokenmail=true;
            this._general.openSnackBar(false,resp[1], 'OK','center','top');
          });
 
@@ -138,10 +140,10 @@ export class SignInSecurityComponent implements OnInit {
     
   }
   openDialog(templateRef: TemplateRef<any>): void {
-    this.dialog.open(templateRef);
- //    .afterClosed().subscribe((resp:any) => {
- //     this.stripeaddress=null;
- //  })
+    this.dialog.open(templateRef) .afterClosed().subscribe((resp:any) => {
+      this.tokenmail=false;
+    //  this.stripeaddress=null;
+  })
 }
 removespecialchar(data:any){
   // console.log(data);

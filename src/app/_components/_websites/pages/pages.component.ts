@@ -8,7 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { UserService } from 'src/app/_services/user.service';
 import { WebsiteService } from 'src/app/_services/website.service';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
@@ -124,8 +124,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   errormessage:any='';
   pageslength:any;
   sortInp:any='';
-  visibility:any='';
-  filter:any='';
+  visibilityby:any='';
+  filter:any='updated_at DESC';
   
 
   constructor(private webpagesService: WebpagesService,
@@ -153,10 +153,11 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
   fetchData(){
-    this.getpagePages({pageIndex:0,pageSize:20});
+    // this.getpagePages({pageIndex:0,pageSize:20});
     this.fetchallwebsites();
   // this.showwebpages();
   // this.getWebsites();
+  this.searchpages('',this.filter,this.visibilityby,this.sortInp);
   }
 
   pathuniqueremove(){
@@ -254,9 +255,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     if(dataA.success !=0 && dataA?.data?.length!=0){
             this.kbpages=[];
              this.nodata = false;
-             let pages=this.website_id ? dataA.data[0].pages :  dataA.data;
-            //  if(this.website_id){
-              // console.log(pages)
+            //  console.log(dataA);
+             let pages=this.website_id ? dataA.data[0].pages :  dataA.data;   
                   pages.map((element:any)=>{
                   var mycustomdate =  new Date(element.updated_at);
                   var text1 = mycustomdate.toDateString();    
@@ -269,6 +269,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
                 })
         this.spinner=false;
         this.searching=false;  
+        this.resetobj();
     }else{
       this.nodata = true;
       this.searching = false;
@@ -277,7 +278,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   }
 
   checkpagesettings(value:any,data:any){
-    // console.log(data)
+    console.log(data)
     if(value=='preview'){
       var url = 'https://'+data.domain+'/'+data.page_path;
       window.open(url, '_blank');
@@ -297,7 +298,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           if(data.success==1){
               if(type!='quickedit'){
                 if(data.type=='name'){
-                  this.getpagePages({pageIndex:0,pageSize:20});
+                  this.searchpages('',this.filter,this.visibilityby,this.sortInp);
+                  // this.getpagePages({pageIndex:0,pageSize:20});
                   this._general.openSnackBar(false,'Name Changed Successfully!', 'OK','center','top');
                   this.resetobj();
                 }else if(data.type=='status'){
@@ -396,7 +398,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           this.searching = false;
           
           this._general.openSnackBar(false,'Page Details Updated Successfully', 'OK','center','top');
-          this.getpagePages({pageIndex:0,pageSize:20});
+          this.searchpages('',this.filter,this.visibilityby,this.sortInp);
+          // this.getpagePages({pageIndex:0,pageSize:20});
           this.resetobj();
 
         }
@@ -459,7 +462,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
             });
             
             this.searching = false;
-            this.getpagePages({pageIndex:0,pageSize:20});
+            this.searchpages('',this.filter,this.visibilityby,this.sortInp);
+            // this.getpagePages({pageIndex:0,pageSize:20});
             this.resetobj();
           }else{
             this.searching = false;
@@ -510,8 +514,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
               // console.log(data);
 
               this.actionname=='Move' ? this._general.openSnackBar(false,'Page Move Successfully!', 'OK','center','top'): this._general.openSnackBar(false,'Page Copy & Move Successfully!', 'OK','center','top');
-              this.getpagePages({pageIndex:0,pageSize:20});
-              // this.showwebpages();
+              // this.getpagePages({pageIndex:0,pageSize:20});
+              this.searchpages('',this.filter,this.visibilityby,this.sortInp);
               this.resetobj();
             }
           });
@@ -558,26 +562,27 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
   archive_popup(dataobj:any){
     this.openDialog(this.deldialog,dataobj,'')
-    this.showmytemplates = false;
-    this.addnewpagepopup = false;
-    this.insidepagefirst = true;
-    this.insidepagesecond = false;
-    this.quickeditpopup = false;
-    this.selecttemplate = false;
-    this.showpageurl = false;
+    // this.showmytemplates = false;
+    // this.addnewpagepopup = false;
+    // this.insidepagefirst = true;
+    // this.insidepagesecond = false;
+    // this.quickeditpopup = false;
+    // this.selecttemplate = false;
+    // this.showpageurl = false;
 
-    this.confirmarchivepage = true;
+    // this.confirmarchivepage = true;
     this.archive_id = dataobj.id;
     this.arpageobj = dataobj;
   }
 
 
   searchpages(search: any, filter: any, visibility:any,sortInp:any) {
+    let publish_status= visibility.value ? visibility.value : visibility;
     this.searching = true;
     var obj = {
-      search: search.value,
+      search: search.value || '',
       filter: filter.value || this.filter,
-      visibility: visibility.value || this.visibility,
+      visibility: publish_status,
       id:this.website_id,
       sortInp:sortInp.value || this.sortInp,
       pageIndex:this.paginator?.pageIndex || 0,
@@ -589,21 +594,25 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
         if(data.success){
           this.kbpages=[];
           this.searching=false;
-          data.data.map((element:any)=>{
-            var mycustomdate =  new Date(element.updated_at);
-            var text1 = mycustomdate.toDateString();    
-            var text2 = mycustomdate.toLocaleTimeString();
-            element.updated_at = text1+' '+text2;
-            element.defaulthome = data[0]?.homepage==element.uniqueid ? 1 : 0;
-            element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
-            element.domain=element.domain;
-            this.kbpages.push(element);
-          })
+          this.shortdata(data);
+          this.pageslength=data?.pages;
+          this.searching= false;
+          // data.data.map((element:any)=>{
+          //   var mycustomdate =  new Date(element.updated_at);
+          //   var text1 = mycustomdate.toDateString();    
+          //   var text2 = mycustomdate.toLocaleTimeString();
+          //   element.updated_at = text1+' '+text2;
+          //   element.defaulthome = data[0]?.homepage == element.uniqueid ? 1 : 0;
+          //   element.thumbnail = 'keaimage-page-'+element.uniqueid+'-screenshot.png';
+          //   element.domain=element.domain;
+          //   this.kbpages.push(element);
+          // })
           
         }
         else{
           this.searching=false;
           this.kbpages=[];
+          this.pageslength=0;
         }
        
       }
@@ -673,8 +682,8 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
           // this.hidepopupsidebar();
           // this.dialog.closeAll();
           this.searching = false;
-          this.getpagePages({pageIndex:0,pageSize:20});
-          // this.showwebpages();
+          // this.getpagePages({pageIndex:0,pageSize:20});
+          this.searchpages('',this.filter,this.visibilityby,this.sortInp);
           this.resetobj();
           // this.applykbfilter();
 
@@ -711,7 +720,6 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.dialog.open(templateRef);
     }else{
       this.newwebsiteid = '';
-      this.getpagePages({pageIndex:0,pageSize:20});
       var acn;
       switch(type){
         case 'move':
@@ -726,7 +734,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
       this.actionname = acn;
       this.delpage = page;
       this.dialog.open(templateRef).afterClosed().subscribe((data:any)=>{
-       
+        this.searchpages('',this.filter,this.visibilityby,this.sortInp);
       });
     }
 
@@ -734,7 +742,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
   resetobj(){
     this.form.pagename='';
     this.form.pagepath='';
-    this.website_id='';
+    // this.website_id='';
     this.reason='';
     this.searching=false;
     this.spinner=false;

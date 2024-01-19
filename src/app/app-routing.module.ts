@@ -35,19 +35,19 @@ import { PageViewComponent } from './_components/page-view/page-view.component';
 import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
 // websites
-import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
+import { WebsiteComponent } from './_components/_websites/website/website.component';
+import { WebsitesComponent } from './_components/_websites/websites/websites.component';
 import { WebsiteDetailsComponent } from './_components/_websites/details/details.component';
 import { WebsiteFootersComponent } from './_components/_websites/footers/footers.component';
 import { WebsiteHeadersComponent } from './_components/_websites/headers/headers.component';
-import { WebsiteMarketplaceComponent } from './_components/_websites/marketplace/marketplace.component';
 import { WebsiteNavigationComponent } from './_components/_websites/navigation/navigation.component';
 import { WebsitePagesComponent } from './_components/_websites//pages/pages.component';
-import { WebsiteComponent } from './_components/_websites/website/website.component';
-import { WebsitesComponent } from './_components/_websites/websites/websites.component';
 import { WebpagesArchiveComponent } from './_components/_websites/webpages-archive/webpages-archive.component';
+import { WebsiteDesignComponent } from './_components/_websites/design/design.component';
+import { WebsiteMarketplaceComponent } from './_components/_websites/marketplace/marketplace.component';
 // websites
 
-// new-funnels
+// funnels
 import { FunnelsComponent } from './_components/_funnels/funnels/funnels.component';
 import { FunnelComponent } from './_components/_funnels/funnel/funnel.component';
 import { FunnelBuildComponent } from './_components/_funnels/funnel-build/funnel-build.component';
@@ -58,7 +58,7 @@ import { FunnelStepArchiveComponent } from './_components/_funnels/funnel-step-a
 import { FunnelStepsComponent } from './_components/_funnels/funnel-steps/funnel-steps.component';
 import { FunnelCheckoutComponent } from './_components/_funnels/funnel-checkout/funnel-checkout.component';
 import { FunnelStepSettingsComponent } from './_components/_funnels/funnel-step-settings/funnel-step-settings.component';
-// new-funnels
+// funnels
 
 // crm
 import { CrmAutomationComponent } from './_components/_crm/automation/automation.component';
@@ -127,6 +127,7 @@ import { AccountComponent } from './_components/_account-settings/account/accoun
 import { ProfileSettingsComponent } from './_components/_account-settings/profile-settings/profile-settings.component';
 import { SignInSecurityComponent } from './_components/_account-settings/sign-in-security/sign-in-security.component';
 import { BillingComponent } from './_components/_account-settings/billing/billing.component';
+import { ViewplansComponent } from './_components/_account-settings/viewplans/viewplans.component';
 import { NewMembershipComponent } from './_components/_membership/new-membership/new-membership.component';
 
 //account-settings
@@ -175,10 +176,11 @@ if (currentDomain === appHost) {
     // auth
 
     // website 
+    // { path: 'websites', component: WebsiteComponent, loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
 
     {path: 'websites', component: WebsiteComponent,
       children: [
-        // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+        {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
         {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
         {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
         {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
@@ -376,6 +378,7 @@ if (currentDomain === appHost) {
       { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
       { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
       { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
+      { path: 'viewplans', component: ViewplansComponent, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard] },
     //account-settings
@@ -417,6 +420,14 @@ else {
 export class AppRoutingModule { }
 export const RoutingComponents = 
   [
+    WebsiteComponent,
+    WebsitesComponent,
+    WebsiteDetailsComponent,
+    WebsiteFootersComponent,
+    WebsiteHeadersComponent,
+    WebsiteNavigationComponent,
+    WebsitePagesComponent,
+    WebpagesArchiveComponent,
     FeedbackFormComponent,
     LoginComponent,
     RegisterComponent,
@@ -476,22 +487,12 @@ export const RoutingComponents =
     AffiliateAnnouncementsComponent,
     AffiliateExportsComponent,
     AffiliateSettingsComponent,
-    WebsiteComponent,
-    WebsitePagesComponent,
-    WebsiteDesignComponent,
-    WebsiteDetailsComponent,
-    WebsiteMarketplaceComponent,
-    WebsiteHeadersComponent,
-    WebsiteFootersComponent,
-    WebsiteNavigationComponent,
-    WebpagesArchiveComponent,
     IntegrationsComponent,
     CrmFormBuilderComponent,
     BuilderTopbarComponent,
     ImageComponent,
     ComingSoonComponent,
     FunnelCheckoutComponent,
-    WebsitesComponent,
     CrmFieldsComponent,
     SalesComponent,
     PaymentComponent,
@@ -504,7 +505,8 @@ export const RoutingComponents =
     DomainComponent,
     UpdateDnsComponent,
     AccountComponent,
-    BillingComponent, 
+    BillingComponent,
+    ViewplansComponent, 
     ProfileSettingsComponent,
     SignInSecurityComponent,
     FunnelsComponent,
