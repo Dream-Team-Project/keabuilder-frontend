@@ -127,6 +127,7 @@ import { AccountComponent } from './_components/_account-settings/account/accoun
 import { ProfileSettingsComponent } from './_components/_account-settings/profile-settings/profile-settings.component';
 import { SignInSecurityComponent } from './_components/_account-settings/sign-in-security/sign-in-security.component';
 import { BillingComponent } from './_components/_account-settings/billing/billing.component';
+import { ViewplansComponent } from './_components/_account-settings/viewplans/viewplans.component';
 import { NewMembershipComponent } from './_components/_membership/new-membership/new-membership.component';
 
 //account-settings
@@ -376,6 +377,7 @@ if (currentDomain === appHost) {
       { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
       { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
       { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
+      { path: 'viewplans', component: ViewplansComponent, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard] },
     //account-settings
@@ -504,7 +506,8 @@ export const RoutingComponents =
     DomainComponent,
     UpdateDnsComponent,
     AccountComponent,
-    BillingComponent, 
+    BillingComponent,
+    ViewplansComponent, 
     ProfileSettingsComponent,
     SignInSecurityComponent,
     FunnelsComponent,

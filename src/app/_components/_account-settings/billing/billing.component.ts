@@ -135,7 +135,7 @@ stripecard:any={
   fingerprint:null,
 
 }
-
+currentPlan:any={};
 paymenttype = 'stripe';
 paypaldata:any = {current_period_end:''};
 
@@ -160,6 +160,7 @@ paypaldata:any = {current_period_end:''};
         // console.log(this.subscription_productid)
         this.fetching=false;
         if(element?.value == this.subscription_productid){
+          this.currentPlan=element;
          this.products.map((option:any)=>{
             if(option?.name == element.name)
             {
@@ -175,10 +176,8 @@ paypaldata:any = {current_period_end:''};
   subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
-      // console.log(data);
       if(data.success){
         // console.log(data)
-
         if(data.paymenttype=='paypal'){
           this.paymenttype = 'paypal';
           this.paypaldata.current_period_end = data?.subscription?.billing_info?.next_billing_time;
@@ -320,17 +319,28 @@ createtoken(){
 }
 cancelsubscription(){
  let obj={subscriptionid:this.stripedata?.subscription?.id,type:'cancelplan'};
- // this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
- //   if(data?.success){
- //     this._general.openSnackBar(false,data?.message,'Ok','center','top');
- //     this.tokenservice.signOut();
- //   }
- //   else{
- //     this._general.openSnackBar(true,data?.message,'Ok','center','top');
- //   }
- // })
+ this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
+   if(data?.success){
+     this._general.openSnackBar(false,data?.message,'Ok','center','top');
+     this.fetchdata();
+   }
+   else{
+     this._general.openSnackBar(true,data?.message,'Ok','center','top');
+   }
+ })
 }
-
+resumesubscription(){
+  let obj={subscriptionid:this.stripedata?.subscription?.id,type:'resumeplan'};
+  this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
+    if(data?.success){
+      this._general.openSnackBar(false,data?.message,'Ok','center','top');
+      this.fetchdata();
+    }
+    else{
+      this._general.openSnackBar(true,data?.message,'Ok','center','top');
+    }
+  })
+ }
 updatesubscription(){
  // console.log(this.subscription_productid)
  this.fetching=true;
@@ -376,7 +386,7 @@ validateSubscription() {
   const currentSubscriptionIndex = this.subscriptionplans.findIndex((sub:any) => sub.value === currentSubscription);
   const selectedSubscriptionIndex = this.subscriptionplans.findIndex((sub :any) => sub.value === selectedSubscription);
   if (selectedSubscriptionIndex < currentSubscriptionIndex) {
-    let msg="Please contact the support team to downgrade your plan."
+    let msg="Please contact the support team to downgrade your Subscription plan."
             this._general.openSnackBar(true,msg,'Ok','center','top');
               this.fetchdata();
   }

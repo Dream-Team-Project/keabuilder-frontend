@@ -1,0 +1,194 @@
+<!--update subscription-->
+<ng-template #updatedialog>
+    <div class="d-flex justify-content-between">
+    <h1 mat-dialog-title>Update Subscription</h1> 
+  </div>
+    <div mat-dialog-content>
+      <mat-error *ngIf="error">{{ errormessage }}</mat-error>
+      <mat-form-field class="kb-full-width " appearance="fill">
+        <mat-label>Current Subsciption Plan</mat-label>
+        <mat-select [(ngModel)]="product" (selectionChange)="productdetails($event)">
+       <mat-option *ngFor="let item of products" [value]="item">{{item.name}}</mat-option>
+      </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field class="kb-full-width " appearance="fill">
+        <mat-label>Current Payment Plan</mat-label>
+        <mat-select [(ngModel)]="subscription_productid" (selectionChange)="subscriptiontype($event)" [formControl]="subscription_productidFormControl">
+          <mat-option *ngFor="let type of product?.type" [value]="type.value">{{type.name}}</mat-option>
+      </mat-select>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="justify-content-end">
+      <button mat-button mat-dialog-close cdkFocusInitial [color]="'primary'">
+        No
+      </button>
+      <button
+        mat-button
+        mat-dialog-close
+       (click)="validateSubscription()"
+        class="text-danger"
+        [disabled]="subscription_productidFormControl.invalid"
+      >
+        Yes
+      </button>
+      <!-- (click)="updatesubscription()" -->
+    </div>
+  </ng-template>
+  <!--update subscription-->
+<div class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    <div class="row align-items-center pb-4">
+        <div class="col-md-6 d-flex">
+          <h4 class="d-inline mb-0">Choose your plan</h4>
+        </div>
+        <div class="col-md-6 text-right d-flex justify-content-end">
+          <div class="kb-plan-togglegroup">
+          <mat-button-toggle-group name="fontstyle"[(ngModel)]="plantype" (valueChange)="changeplantype($event)">
+            <mat-button-toggle [value]="'Annual'">Annual</mat-button-toggle>
+            <mat-button-toggle [value]="'Monthly'">Monthly</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+          <button mat-raised-button color="accent" class="ml-2" (click)="_general.prevRoute()"><i
+            class="fa fa-arrow-left mr-2"></i>Back</button>
+        </div>
+        <div class="col-md-12">
+        <p>Pick the subscription that fits your needs.</p>
+        </div>
+      </div>
+    <div class="row mb-2">
+        <div class="col-md-3">
+          <div class="card kb-user-detail-box p-3 mt-3">
+            <div class="justify-content-between">
+              <span class="d-flex">
+                <p class="kb-plan-price kb-plan-color-b">Beta</p> <i class="fa fa-check-circle selectplan kb-plan-color-b" *ngIf="product?.name=='Beta'"></i></span>
+                <p class="my-1 kb-plan-fnt">Perfect for small business to getting started.</p>
+                <p class="my-2 align-items-center"><span class="kb-plan-price  kb-plan-color-b">$29</span>/month</p>
+                <p>Billed {{plantype}}</p>
+                <p class="justify-content-center text-center kb-plan-disable p-2" *ngIf="product?.name =='Beta' && this.currentPlan.type == this.plantype" >Current Plan</p>
+                <p class="justify-content-center text-center kb-plan-btn p-2" *ngIf="product?.name !='Beta' || this.currentPlan.type != this.plantype" (click)="openDialog(updatedialog)">Choose Plan</p>
+                <p><span class="kb-plan-sub-heading  kb-plan-color-b">Beta </span><span> plan include :</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1 website</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1 funnel</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">5,000 contacts</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> courses</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited products</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 webpages</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1 domain</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> automations</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">100 campaign</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> survey quiz (with logic)</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1 users</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Heat map</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Advance analytics</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Zapier</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 Ticket Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> 24*7 chat Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> 24*7 Zoom call Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">One free call [30 min] business strategy</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">One free call [30 min] funnel strategist</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card kb-user-detail-box p-3 mt-3">
+            <div class="justify-content-between">
+              <span class="d-flex">
+                <p class="kb-plan-price kb-plan-color-g">Startup</p><i class="fa fa-check-circle selectplan kb-plan-color-g" *ngIf="product?.name=='Startup'"></i></span>
+                <p class="my-1 kb-plan-fnt">Startup Spark Plan</p>
+                <p class="my-2 align-items-center"><span class="kb-plan-price kb-plan-color-g">$97</span>/month</p>
+                <p>Billed {{plantype}}</p>
+                <p class="justify-content-center text-center kb-plan-disable p-2" *ngIf="product?.name =='Startup' && this.currentPlan.type == this.plantype">Current Plan</p>
+                <p class="justify-content-center text-center kb-plan-btn p-2" *ngIf="product?.name !='Startup' || this.currentPlan.type != this.plantype" (click)="openDialog(updatedialog)">Choose Plan</p>
+                <p><span class="kb-plan-sub-heading  kb-plan-color-g">Startup </span><span> plan include :</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">3 website</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">50 funnel</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">25,000 contacts</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 courses</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited products</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">499 webpages</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 domain</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">50 automations</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">499 campaign</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">survey quiz (with logic)</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">5 users</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Heat map</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Advance analytics</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Zapier</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 Ticket Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> 24*7 chat Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> 24*7 Zoom call Support</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">2 hours/month business strategy call</span></p>
+                <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">2 hours / month funnel  strategist  call</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card kb-user-detail-box p-3 mt-3">
+                <div class="justify-content-between">
+                    <span class="d-flex">
+                    <p class="kb-plan-price kb-plan-color-r">Entrepreneur</p><i class="fa fa-check-circle selectplan kb-plan-color-r" *ngIf="product?.name=='Entrepreneur'"></i></span>
+                    <p class="my-1 kb-plan-fnt">SMB Power Plan</p>
+                    <p class="my-2 align-items-center"><span class="kb-plan-price kb-plan-color-r">$197</span>/month</p>
+                    <p>Billed {{plantype}}</p>
+                    <p class="justify-content-center text-center p-2 kb-plan-disable" *ngIf="product?.name =='Entrepreneur' && this.currentPlan.type == this.plantype">Current Plan</p>
+                    <p class="justify-content-center text-center kb-plan-btn p-2" *ngIf="product?.name !='Entrepreneur' || this.currentPlan.type!=this.plantype" (click)="openDialog(updatedialog)">Choose Plan</p>
+                    <p><span class="kb-plan-sub-heading  kb-plan-color-r">Entrepreneur </span><span> plan include :</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 website</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">200 funnel</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1,00,000 contacts</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">25 courses</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited products</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited webpages</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">20 domain</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited automations</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited campaign</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">survey quiz (with logic)</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 users</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Heat map</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Advance analytics</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Zapier</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 Ticket Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 chat Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3"><i class="fa-solid fa-xmark text-danger"></i> 24*7 Zoom call Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">5 hours/month business strategy call</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">5 hours / month funnel  strategist  call</span></p>
+                </div>
+              </div>
+          </div>
+        <div class="col-md-3">
+            <div class="card kb-user-detail-box p-3 mt-3">
+                <div class="justify-content-between">
+                    <span class="d-flex">
+                    <p class="kb-plan-price kb-plan-color-o">Agency</p> <i class="fa fa-check-circle selectplan kb-plan-color-o" *ngIf="product?.name=='Agency'"></i></span>
+                    <p class="my-1 kb-plan-fnt">Agency advantage plan</p>
+                    <p class="my-2 align-items-center"><span class="kb-plan-price kb-plan-color-o">$1997</span>/month</p>
+                    <p>Billed {{plantype}}</p>
+                    <p class="justify-content-center text-center kb-plan-disable p-2" *ngIf="product?.name =='Agency' && this.currentPlan.type == this.plantype">Current Plan</p>
+                    <p class="justify-content-center text-center kb-plan-btn p-2" *ngIf="product?.name !='Agency' || this.currentPlan.type != this.plantype" (click)="openDialog(updatedialog)">Choose Plan</p>
+                    <p><span class="kb-plan-sub-heading  kb-plan-color-o">Agency </span><span> plan include :</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited website</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited funnel</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">1 Million contacts</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited courses</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited products</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited webpages</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">100 domain</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited automations</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Unlimited campaign</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">survey quiz (with logic)</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">25 users</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Heat map</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Advance analytics</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">Zapier</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 Ticket Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 chat Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">24*7 Zoom call Support</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 hours/month business strategy call</span></p>
+                    <p class="kb-plan-features-fnt"><i class="fa-regular fa-circle-check kb-plan-check-icon"></i> <span class="px-3">10 hours /month funnel strategist call</span></p>
+                </div>
+          </div>
+        </div>
+    </div>
+    </div>
+

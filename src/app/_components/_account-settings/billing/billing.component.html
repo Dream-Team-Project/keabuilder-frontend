@@ -239,10 +239,31 @@
   </div>
 </ng-template>
 <!--cancel subscription-->
-
+<!--resume subscription-->
+<ng-template #resumedialog>
+  <h1 mat-dialog-title >Resume Subscription</h1>
+  <div mat-dialog-content>Would you like to Resume your subscription?</div>
+  <div mat-dialog-actions class="justify-content-end">
+    <button mat-button mat-dialog-close cdkFocusInitial  class="text-danger">
+      No**
+    </button>
+    <button
+      mat-button
+      mat-dialog-close
+      (click)="resumesubscription()"
+      [color]="'primary'"
+    >
+      Yes
+    </button>
+  </div>
+</ng-template>
+<!--resume subscription-->
 <!--update subscription-->
 <ng-template #updatedialog>
-  <h1 mat-dialog-title>Update Subscription</h1>
+  <div class="d-flex justify-content-between">
+  <h1 mat-dialog-title>Update Subscription</h1> 
+  <i matTooltip="Cancel Your Subscription" matTooltipPosition="above" class="fa-regular fa-circle-xmark text-danger" (click)="openDialog(canceldialog)"></i>
+</div>
   <div mat-dialog-content>
     <mat-error *ngIf="error">{{ errormessage }}</mat-error>
     <mat-form-field class="kb-full-width " appearance="fill">
@@ -280,15 +301,74 @@
 <div class="container-fluid">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
   <div class="row" *ngIf="usertype != 'free ' && show; else nodata">
-    <div class="col-md-12">
-      <h4>Change your plan</h4>
-      <small>Upgrade or downgrade your current plan.</small>
+    <div class="col-md-6" *ngIf="paymenttype=='stripe'">
+      <h4>Payment Details</h4>
+      <small>Update your billing information. Make sure to set your location correctly as it could affect your tax rates.</small>
+      
+      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(address)">
+        <div class="d-flex justify-content-between kb-user-detail align-items-center">
 
-      <h6 class="mt-2" *ngIf="paymenttype=='stripe'">Next billing date:  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
+            <div class="kb-fnt-details-o">
+              <b>Name:</b> {{ stripedata?.customer?.name | titlecase }}
+              <br>
+              <b>Address:</b> {{ stripedata?.customer?.address?.line1 }}
+              <br>
+              <b>City:</b> {{ stripedata?.customer?.address?.city }}
+              <br>
+              <b>State:</b> {{ stripedata?.customer?.address?.state }}
+              <br>
+              <b>Country:</b> {{ stripedata?.customer?.address?.country }}
+              <br>
+              <b>Zip:</b> {{ stripedata?.customer?.address?.postal_code }}
+              <br>
+              <b>Email:</b> {{ stripedata?.customer?.email }}
+              <br>
+              <b>Phone:</b> {{ stripedata?.customer?.phone }}
+            </div>
+          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+        </div>
+      </div>
+
+      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(changecard)">
+        <div class="d-flex justify-content-between kb-user-detail align-items-center">
+          {{ stripedata?.card?.brand }} ending in XXXX XXXX {{ stripedata?.card?.last4 }}
+          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
+        </div>
+      </div>
+
+      
+    </div>
+    <div class="col-md-6 mkflx" *ngIf="paymenttype=='stripe'">
+      <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
+    </div>
+    <div class="col-md-12 mt-4">
+      <hr class="mt-0">
+      <div class="py-2"><span class="kb-fnt1">{{currentPlan.name}}{{'('+ currentPlan.type  +')' }}</span><span class="kb-tag statusplan" [class]="stripedata?.subscription?.cancel_at_period_end ? 'kb-danger-tag' : 'kb-info-tag'">{{stripedata?.subscription?.cancel_at_period_end ? 'Cancel' : 'Active'}}</span></div>
+      <div class="d-flex" *ngIf="!stripedata?.subscription?.cancel_at_period_end">
+        <button mat-raised-button class="resumeplan" [routerLink]="'/account/viewplans'"><i class="far fa-eye"></i> View</button>
+        <button mat-raised-button class="cancelplanbtn ml-3" (click)="openDialog(canceldialog)"><i class="fa-regular fa-circle-xmark"></i> Cancel</button>
+      </div> 
+         <div *ngIf="stripedata?.subscription?.cancel_at_period_end">
+           <h4>You have Canceled your Subscription plan</h4>
+           <button mat-raised-button class="resumeplan" (click)="openDialog(resumedialog)"><i class="fa-solid fa-circle-play"></i> Resume Subscription</button> 
+         </div>
+      <h6 class="mt-2" *ngIf="paymenttype=='stripe'">{{stripedata?.subscription?.cancel_at_period_end ? 'Active upto ' : 'Next billing date '}} :  {{ stripedata?.subscription?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
 
       <h6 class="mt-2" *ngIf="paymenttype=='paypal'">Next billing date:  {{ paypaldata?.current_period_end | date : "dd-MMM-yyyy h:mm:ss a z"}}</h6>
-
-      <div class="row">
+      
+      <hr class="mt-0">
+      <!-- <span *ngIf="!stripedata?.subscription?.cancel_at_period_end">
+      <div class="d-flex">
+     <h4>Change your plan</h4><i matTooltip="Cancel Your Subscription" matTooltipPosition="above" class="fa-regular fa-circle-xmark text-danger" (click)="openDialog(canceldialog)"></i>
+    </div> 
+     <small>Upgrade or downgrade your current plan.</small>
+    </span>
+    <span *ngIf="stripedata?.subscription?.cancel_at_period_end">
+     <h4>You have Canceled your Subscription plan</h4>
+     <button mat-raised-button class="resumeplan" (click)="openDialog(resumedialog)"><i class="fa-solid fa-circle-play"></i> Resume Subscription</button> 
+    </span> -->
+     
+      <!-- <div class="row" *ngIf="!stripedata?.subscription?.cancel_at_period_end">
 
         <div class="col-md-2">
           <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(updatedialog)" >
@@ -303,7 +383,7 @@
         <div class="col-md-2" (click)="openDialog(updatedialog)" >
           <div class="card kb-user-detail-box p-3 mt-4">
             <div class="justify-content-between">
-              <i class="fa fa-check-circle selectplan" *ngIf="product?.name=='Startup'"></i>
+                <i class="fa fa-check-circle selectplan"  *ngIf="product?.name=='Startup'"></i>
                 <b>STARTUP</b>
                 <p class="m-0">Startup Spark Plan</p>
                 <p class="m-0">$97/month</p>
@@ -331,53 +411,13 @@
           </div>
         </div>
         <div class="col-md-4"></div>
-      </div>
+      </div> -->
 
     </div>
 
-    <div class="col-md-6 mt-4" *ngIf="paymenttype=='stripe'">
-      <hr class="mt-0">
-      <h4>Payment Details</h4>
-      <small>Update your billing information. Make sure to set your location correctly as it could affect your tax rates.</small>
-      
-      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(changecard)">
-        <div class="d-flex justify-content-between kb-user-detail align-items-center">
-          {{ stripedata?.card?.brand }} ending in XXXX XXXX {{ stripedata?.card?.last4 }}
-          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
-        </div>
-      </div>
+    
 
-      <div class="card kb-user-detail-box p-3 mt-4" (click)="openDialog(address)">
-        <div class="d-flex justify-content-between kb-user-detail align-items-center">
-
-            <div class="kb-fnt-details-o">
-              <b>Name:</b> {{ stripedata?.customer?.name | titlecase }}
-              <br>
-              <b>Address:</b> {{ stripedata?.customer?.address?.line1 }}
-              <br>
-              <b>City:</b> {{ stripedata?.customer?.address?.city }}
-              <br>
-              <b>State:</b> {{ stripedata?.customer?.address?.state }}
-              <br>
-              <b>Country:</b> {{ stripedata?.customer?.address?.country }}
-              <br>
-              <b>Zip:</b> {{ stripedata?.customer?.address?.postal_code }}
-              <br>
-              <b>Email:</b> {{ stripedata?.customer?.email }}
-              <br>
-              <b>Phone:</b> {{ stripedata?.customer?.phone }}
-            </div>
-
-          <i mat-ripple class="fa fa-pencil kb-edit-btn" aria-hidden="true" ></i>
-        </div>
-      </div>
-
-
-    </div>
-
-    <div class="col-md-6 mkflx" *ngIf="paymenttype=='stripe'">
-      <img src="/assets/images/userprofile/payplan.png" width="300" class="img-fluid" alt="">
-    </div>
+   
 
 
     <!-- OLD LAYOUT -->

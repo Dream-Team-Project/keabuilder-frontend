@@ -1565,7 +1565,7 @@ export class DashboardComponent implements OnInit {
     this.chartOptions13 = {
       series: this.data_browserbreak.data2,
       chart: {
-        type: "donut"
+        type: "pie"
       },
       labels: this.data_browserbreak.data,
       responsive: [
@@ -1591,7 +1591,7 @@ export class DashboardComponent implements OnInit {
     this.chartOptions14 = {
       series: this.data_osbreak.data2,
       chart: {
-        type: "donut"
+        type: "pie"
       },
       labels: this.data_osbreak.data,
       responsive: [
