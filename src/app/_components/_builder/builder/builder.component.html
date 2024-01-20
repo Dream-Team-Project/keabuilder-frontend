@@ -153,7 +153,7 @@
                                             [cdkDropListData]="column.elementArr" [cdkDropListConnectedTo]="_element.elementConnect"
                                             (cdkDropListDropped)="drop($event)"
                                             (change)="_element.selectedElements = column.elementArr">
-                                            <!-- elements start -->
+                                            <!-- elements start -->t
                                             <div cdkDrag *ngFor="let element of column.elementArr, index as ei"
                                                 [ngSwitch]="element.content.name"
                                                 [attr.data-name]="element.name ? element.name : ''"

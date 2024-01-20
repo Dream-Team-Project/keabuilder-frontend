@@ -71,7 +71,7 @@ import { CrmComponent } from './_components/_crm/crm/crm.component';
 // import { CrmContactsComponent } from './_components/_crm/contacts/contacts.component';
 // import { CrmFieldsComponent } from './_components/_crm/fields/fields.component';
 // import { CrmFormBuilderComponent } from './_components/_crm/form-builder/form-builder.component';
-// import { CrmFormFetchComponent } from './_components/_crm/form-fetch/form-fetch.component';
+import { CrmFormFetchComponent } from './_components/_crm/form-fetch/form-fetch.component';
 // import { CrmFormsComponent } from './_components/_crm/forms/forms.component';
 // import { CrmListsComponent } from './_components/_crm/lists/lists.component';
 // import { CrmReportsComponent } from './_components/_crm/reports/reports.component';
@@ -117,7 +117,7 @@ import { SalesComponent } from './_components/_sales/sales/sales.component';
 // import { OffersComponent } from './_components/_sales/offers/offers.component';
 // import { OfferComponent } from './_components/_sales/offer/offer.component';
 // import { CheckoutComponent } from './_components/_sales/checkout/checkout.component';
-// import { OrderFormComponent } from './_components/_sales/orderform/orderform.component';
+import { OrderFormComponent } from './_components/_sales/orderform/orderform.component';
 // import { OrderFormCheckoutComponent } from './_components/_sales/orderform/checkout/checkout.component';
 // sales
 
@@ -471,7 +471,7 @@ export const RoutingComponents =
     // NewMembershipComponent,
     // CrmComponent,
     // CrmFormsComponent,
-    // CrmFormFetchComponent,
+    CrmFormFetchComponent,
     // CrmEmailsComponent,
     // CrmEmailBuilderComponent,
     // CrmCampaignsComponent,
@@ -504,7 +504,7 @@ export const RoutingComponents =
     // PaymentComponent,
     // ProductsComponent,
     // OffersComponent,
-    // OrderFormComponent,
+    OrderFormComponent,
     // OrderFormCheckoutComponent,
     // OfferComponent,
     // CheckoutComponent,

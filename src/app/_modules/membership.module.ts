@@ -19,6 +19,8 @@ import { CourseSettingsComponent } from '../_components/_membership/course-setti
 import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
 import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
 import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
+import { ViewNavbarComponent } from '../_components/_membership/view-navbar/view-navbar.component';
+import { CourseSidebarComponent } from '../_components/_membership/course-sidebar/course-sidebar.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -36,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 const routes: Routes = [
@@ -80,6 +83,8 @@ const routes: Routes = [
     NewMembershipComponent,
     ViewCourseComponent,
     ViewLessonComponent,
+    ViewNavbarComponent,
+    CourseSidebarComponent,
   ],
   imports: [
     CommonModule,
@@ -104,6 +109,7 @@ const routes: Routes = [
     NgApexchartsModule,
     MatTabsModule,
     DragDropModule,
+    MatSidenavModule,
   ],
   exports: [RouterModule]
 })

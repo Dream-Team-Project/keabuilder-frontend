@@ -52,6 +52,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 const routes: Routes = [
@@ -138,6 +139,7 @@ const routes: Routes = [
     DragDropModule,
     NgApexchartsModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
+    MatSidenavModule,
   ],
   exports: [RouterModule]
 })
