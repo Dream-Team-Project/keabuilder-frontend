@@ -6,7 +6,7 @@ import { MemberAuthGuard } from './_guard/member-auth.guard';
 import { MemberSignedGuard } from './_guard/member-signed.guard';
 import { environment } from 'src/environments/environment';
 
-import { AnalyticsComponent } from './_components/analytics/analytics.component';
+// import { AnalyticsComponent } from './_components/analytics/analytics.component';
 import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
 import { DomainComponent } from './_components/domain/domain.component';
 import { UpdateDnsComponent } from './_components/update-dns/update-dns.component';
@@ -440,8 +440,8 @@ export const RoutingComponents =
     // ForgotPasswordComponent,
     // DashboardComponent, 
     StrategiesComponent,
-    AnalyticsComponent,
-    HeatmapsComponent,
+    // AnalyticsComponent,
+    // HeatmapsComponent,
     // HeatmapViewComponent,
     // ProfileComponent,
     TemplateComponent, 
