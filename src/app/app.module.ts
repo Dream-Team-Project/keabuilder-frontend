@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 // import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 // import { MatSliderModule } from '@angular/material/slider'
 import { MatSelectModule } from '@angular/material/select';
-// import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 // import { MatRadioModule } from '@angular/material/radio';
 // import { MatInputModule } from '@angular/material/input';
 // import { MatPaginatorModule } from '@angular/material/paginator';
@@ -101,7 +101,7 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     MatButtonModule,
     // MatSnackBarModule,
     // MatSliderModule,
-    // MatIconModule,
+    MatIconModule,
     // MatStepperModule,
     // MatRadioModule,
     // MatButtonToggleModule,

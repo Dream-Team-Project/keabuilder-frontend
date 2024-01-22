@@ -5,6 +5,7 @@ import { AuthGuard } from '../_guard/auth.guard';
 import { HeatmapsComponent } from '../_components/_heatmap/heatmaps/heatmaps.component';
 import { HeatmapsRecordingsComponent } from '../_components/_heatmap/recordings/recordings.component';
 import { HeatmapViewComponent } from '../_components/_heatmap/heatmap-view/heatmap-view';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 const routes: Routes = [
   { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
   // { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
@@ -19,6 +20,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    MatProgressBarModule,
   ],
   exports: [RouterModule]
 })

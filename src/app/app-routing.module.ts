@@ -269,9 +269,9 @@ if (currentDomain === appHost) {
 
      // member-account-settings
      
-       { path: 'profile/settings', component: MemberProfileSettingsComponent, canActivate: [AuthGuard] },
-       { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent, canActivate: [AuthGuard] },
-       { path: 'profile/billing', component: MemberBillingComponent, canActivate: [AuthGuard]},
+      //  { path: 'profile/settings', component: MemberProfileSettingsComponent, canActivate: [AuthGuard] },
+      //  { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent, canActivate: [AuthGuard] },
+      //  { path: 'profile/billing', component: MemberBillingComponent, canActivate: [AuthGuard]},
     
      //member-account-settings
     

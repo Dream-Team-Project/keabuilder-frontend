@@ -7,7 +7,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { UserService } from 'src/app/_services/user.service';
 import { FormControl, Validators } from '@angular/forms';
 import { WebsiteService } from 'src/app/_services/website.service';
-import {MatDialog,} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PageViewService } from 'src/app/_services/page-view.service';
 
 @Component({
