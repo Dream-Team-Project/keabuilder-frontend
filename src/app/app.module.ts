@@ -54,11 +54,11 @@ import { NgxTinymceModule } from 'ngx-tinymce';
 // import { ResizableModule } from 'angular-resizable-element';
 // import { NgxCaptureModule } from 'ngx-capture';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SafeUrlPipe } from './_pipes/safe-url.pipe';
-import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
-import { FilterPipe } from './_pipes/filter.pipe';
-import { SortingPipe } from './_pipes/sorting.pipe';
-import { SvgPipe } from './_pipes/svg.pipe';
+// import { SafeUrlPipe } from './_pipes/safe-url.pipe';
+// import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
+// import { FilterPipe } from './_pipes/filter.pipe';
+// import { SortingPipe } from './_pipes/sorting.pipe';
+// import { SvgPipe } from './_pipes/svg.pipe';
 
 // import { MatStepperModule } from '@angular/material/stepper';
 // import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -76,11 +76,11 @@ import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-
     SidebarComponent,
     NavbarComponent,
     ViewNavbarComponent,
-    SafeUrlPipe,
-    SafeHtmlPipe,
-    FilterPipe,
-    SortingPipe,
-    SvgPipe,
+    // SafeUrlPipe,
+    // SafeHtmlPipe,
+    // FilterPipe,
+    // SortingPipe,
+    // SvgPipe,
   ],
   imports: [
     AppRoutingModule,

@@ -10,7 +10,6 @@ import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
 import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
 import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
-import { ImageComponent } from '../_components/image/image.component';
 import { BuilderSettingComponent } from '../_components/_builder/builder-setting/builder-setting.component';
 import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -21,15 +20,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { SvgPipe } from '../_pipes/svg.pipe';
-import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
+import { PipeModule } from './pipe.module';
+import { OtherComponentModule } from './other-component.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { FilterPipe } from '../_pipes/filter.pipe';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -63,16 +61,14 @@ const routes: Routes = [
     OrderFormCheckoutComponent,
     OfferComponent,
     CheckoutComponent,
-    ImageComponent,
     BuilderSettingComponent,
     CrmFormFetchComponent,
-    SvgPipe,
-    SafeHtmlPipe,
-    FilterPipe,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    PipeModule,
+    OtherComponentModule,
     MatPaginatorModule,
     MatPaginatorModule, 
     MatProgressBarModule,

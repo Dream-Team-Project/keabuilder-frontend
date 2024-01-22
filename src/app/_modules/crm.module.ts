@@ -21,11 +21,7 @@ import { CrmTagsComponent } from '../_components/_crm/tags/tags.component';
 import { CrmEmailsComponent } from '../_components/_crm/emails/emails.component';
 import { CrmEmailBuilderComponent } from '../_components/_crm/email-builder/email-builder.component';
 import { BuilderSettingComponent } from '../_components/_builder/builder-setting/builder-setting.component';
-import { ImageComponent } from '../_components/image/image.component';
-import { FilterPipe } from '../_pipes/filter.pipe';
-import { SvgPipe } from '../_pipes/svg.pipe';
-import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
-import { SortingPipe } from '../_pipes/sorting.pipe';
+import { PipeModule } from './pipe.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -102,14 +98,11 @@ const routes: Routes = [
     CrmFormBuilderComponent,
     CrmFieldsComponent,
     BuilderSettingComponent,
-    ImageComponent,
-    SvgPipe,
-    SafeHtmlPipe,
-    FilterPipe ,
-    SortingPipe,
+    
   ],
   imports: [
     CommonModule,
+    PipeModule,
     RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule,

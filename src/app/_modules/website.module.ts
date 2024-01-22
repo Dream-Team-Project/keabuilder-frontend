@@ -22,8 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { FilterPipe } from '../_pipes/filter.pipe';
-import { SortingPipe } from '../_pipes/sorting.pipe';
+import { PipeModule } from './pipe.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -55,12 +54,12 @@ const routes: Routes = [
     WebsiteMarketplaceComponent,
     WebsiteDesignComponent,
     TemplateComponent,
-    FilterPipe,
-    SortingPipe,
+    
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    PipeModule,
     MatListModule,
     MatMenuModule,
     MatSelectModule,

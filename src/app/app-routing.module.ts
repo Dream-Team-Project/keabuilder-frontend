@@ -11,7 +11,7 @@ import { ComingSoonComponent } from './_components/coming-soon/coming-soon.compo
 import { DomainComponent } from './_components/domain/domain.component';
 import { UpdateDnsComponent } from './_components/update-dns/update-dns.component';
 import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
-import { ImageComponent } from './_components/image/image.component';
+// import { ImageComponent } from './_components/image/image.component';
 // import { IntegrationsComponent } from './_components/integrations/integrations.component';
 import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
 import { StrategiesComponent } from './_components/strategies/strategies.component';
@@ -26,11 +26,11 @@ import { StrategiesComponent } from './_components/strategies/strategies.compone
 // import { RegisterComponent } from './_components/_auth/register/register.component';
 // auth
 // builder
-import { TemplateComponent } from './_components/_builder/template/template.component';
-import { BuilderComponent } from './_components/_builder/builder/builder.component';
-import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
-import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
-import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
+// import { TemplateComponent } from './_components/_builder/template/template.component';
+// import { BuilderComponent } from './_components/_builder/builder/builder.component';
+// import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
+// import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
+// import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
 import { PageViewComponent } from './_components/page-view/page-view.component';
 import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
@@ -250,7 +250,7 @@ if (currentDomain === appHost) {
     // { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
-    { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+    // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
     { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
       domain: currentDomain,
       path: currentPath,
@@ -444,14 +444,14 @@ export const RoutingComponents =
     // HeatmapsComponent,
     // HeatmapViewComponent,
     // ProfileComponent,
-    TemplateComponent, 
+    // TemplateComponent, 
     PageViewComponent,
     // ScrumBoardsComponent,
     // ScrumBoardListComponent,   
     FetchMenuComponent,
-    BuilderComponent,
-    BuilderSettingComponent,
-    BulderWireframeComponent, 
+    // BuilderComponent,
+    // BuilderSettingComponent,
+    // BulderWireframeComponent, 
     PageNotFoundComponent,
     // HeatmapsRecordingsComponent,
     // MembershipCoursesComponent,
@@ -495,8 +495,8 @@ export const RoutingComponents =
     // AffiliateSettingsComponent,
     // IntegrationsComponent,
     // CrmFormBuilderComponent,
-    BuilderTopbarComponent,
-    ImageComponent,
+    // BuilderTopbarComponent,
+    // ImageComponent,
     ComingSoonComponent,
     // FunnelCheckoutComponent,
     // CrmFieldsComponent,
