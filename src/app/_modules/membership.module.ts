@@ -40,7 +40,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-
 const routes: Routes = [
 { path: 'membership', component: MembershipComponent,
       children : [
@@ -54,15 +53,15 @@ const routes: Routes = [
 
       ],
       canActivate: [AuthGuard] },
-        { path: 'new-membership', component: NewMembershipComponent,
-        children :[
-          { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-          { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-          { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-          ],canActivate: [AuthGuard] },
-          { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
-          { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
-        ];
+  { path: 'new-membership', component: NewMembershipComponent,
+  children :[
+    { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
+    ],canActivate: [AuthGuard] },
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
+    { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
+  ];
 
 @NgModule({
   declarations: [
