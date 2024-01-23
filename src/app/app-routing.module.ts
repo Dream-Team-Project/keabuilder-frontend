@@ -32,7 +32,7 @@ import { StrategiesComponent } from './_components/strategies/strategies.compone
 // import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
 // import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
 import { PageViewComponent } from './_components/page-view/page-view.component';
-import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
+// import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
 // websites
 import { WebsiteComponent } from './_components/_websites/website/website.component';
@@ -445,7 +445,7 @@ export const RoutingComponents =
     // PageViewComponent,
     // ScrumBoardsComponent,
     // ScrumBoardListComponent,   
-    FetchMenuComponent,
+    // FetchMenuComponent,
     // BuilderComponent,
     // BuilderSettingComponent,
     // BulderWireframeComponent, 

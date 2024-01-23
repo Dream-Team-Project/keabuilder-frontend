@@ -15,7 +15,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ],
   exports :[
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
 })
 export class PagenotfoundModule { }
