@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MemberNavbarModule } from './member-navbar.module';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatIconModule } from '@angular/material/icon';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -61,6 +62,7 @@ const routes: Routes = [
     FormsModule,
     RouterModule,
     DragDropModule,
+    MatIconModule,
   ],
   exports:[
     PageViewComponent,

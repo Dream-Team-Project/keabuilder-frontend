@@ -12,7 +12,8 @@ import { WebsitePagesComponent } from '../_components/_websites//pages/pages.com
 import { WebpagesArchiveComponent } from '../_components/_websites/webpages-archive/webpages-archive.component';
 import { WebsiteDesignComponent } from '../_components/_websites/design/design.component';
 import { WebsiteMarketplaceComponent } from '../_components/_websites/marketplace/marketplace.component';
-import { TemplateComponent } from '../_components/_builder/template/template.component';
+// import { TemplateComponent } from '../_components/_builder/template/template.component';
+import { TemplateModule } from './template.module';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
@@ -53,11 +54,12 @@ const routes: Routes = [
     WebpagesArchiveComponent,
     WebsiteMarketplaceComponent,
     WebsiteDesignComponent,
-    TemplateComponent,
+    // TemplateComponent,
     
   ],
   imports: [
     CommonModule,
+    TemplateModule,
     RouterModule.forChild(routes),
     PipeModule,
     MatListModule,

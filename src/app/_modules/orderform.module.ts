@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule,
     MatInputModule,
     MatFormFieldModule,
-    
+    MatButtonModule,
   ],
   exports:[
     OrderFormComponent,

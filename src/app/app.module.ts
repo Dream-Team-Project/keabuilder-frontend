@@ -75,7 +75,7 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
     AppComponent,
     RoutingComponents,
     SidebarComponent,
-    NavbarComponent,
+    NavbarComponent, 
     // ViewNavbarComponent,
     // CourseSidebarComponent,
     // SafeUrlPipe,

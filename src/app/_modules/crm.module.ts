@@ -50,6 +50,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ImageModule } from './image.module';
 
 
 const routes: Routes = [
@@ -104,6 +105,7 @@ const routes: Routes = [
     CommonModule,
     PipeModule,
     FormfetchModule,
+    ImageModule,
     BuilderSettingModule,
     RouterModule.forChild(routes),
     MatSelectModule,

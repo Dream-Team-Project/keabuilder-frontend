@@ -5,7 +5,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { OrderformService } from 'src/app/_services/_sales/orderform.service';
 
 @Component({
-    selector: 'order-form',
+    selector: 'app-order-form',
     templateUrl: './orderform.component.html',
     styleUrls: ['./orderform.component.css']
   })
