@@ -11,4 +11,4 @@ import { ImageComponent } from '../_components/image/image.component';
     ImageComponent,
   ]
 })
-export class OtherComponentModule { }
+export class ImageModule { }

@@ -21,7 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { PipeModule } from './pipe.module';
-import { OtherComponentModule } from './other-component.module';
+import { ImageModule } from './image.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
@@ -68,7 +68,7 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     PipeModule,
-    OtherComponentModule,
+    ImageModule,
     MatPaginatorModule,
     MatPaginatorModule, 
     MatProgressBarModule,
@@ -90,8 +90,6 @@ const routes: Routes = [
     MatButtonToggleModule,
     NgxStripeModule,
     MatCardModule,
-
-
   ],
   exports: [RouterModule]
 })
