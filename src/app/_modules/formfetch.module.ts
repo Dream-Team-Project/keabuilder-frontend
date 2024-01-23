@@ -4,6 +4,7 @@ import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PipeModule } from './pipe.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,8 @@ import { PipeModule } from './pipe.module';
     MatInputModule,
     MatFormFieldModule,
     PipeModule, 
+    FormsModule,
+    ReactiveFormsModule,
   ],
 exports:[
   CrmFormFetchComponent,
