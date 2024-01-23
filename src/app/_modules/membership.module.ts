@@ -19,8 +19,7 @@ import { CourseSettingsComponent } from '../_components/_membership/course-setti
 import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
 import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
 import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
-// import { ViewNavbarComponent } from '../_components/_membership/view-navbar/view-navbar.component';
-// import { CourseSidebarComponent } from '../_components/_membership/course-sidebar/course-sidebar.component';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -82,8 +81,7 @@ const routes: Routes = [
     NewMembershipComponent,
     ViewCourseComponent,
     ViewLessonComponent,
-    // ViewNavbarComponent,
-    // CourseSidebarComponent,
+   
   ],
   imports: [
     CommonModule,

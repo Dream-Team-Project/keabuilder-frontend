@@ -10,6 +10,6 @@ import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch
   
 exports:[
   CrmFormFetchComponent,
-],
+]
 })
 export class FormfetchModule { }

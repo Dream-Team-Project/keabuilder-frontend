@@ -140,7 +140,7 @@ import { DefaultPageViewComponent } from './_components/default-page-view/defaul
 import { MemberForgotPasswordComponent } from './_components/course-user/member-forgot-password/member-forgot-password.component';
 import { ViewLessonComponent } from './_components/_membership/view-lesson/view-lesson.component';
 import { ViewCourseComponent } from './_components/_membership/view-course/view-course.component';
-import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
+// import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
 import { MemberProfileSettingsComponent } from './_components/course-user/member-profile-settings/member-profile-settings.component';
 import { MemberSignInSecurityComponent } from './_components/course-user/member-sign-in-security/member-sign-in-security.component';
 import { MemberBillingComponent } from './_components/course-user/member-billing/member-billing.component';
@@ -251,18 +251,18 @@ if (currentDomain === appHost) {
     // { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-    { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
-      domain: currentDomain,
-      path: currentPath,
-    }},
-    { path: 'preview/:view_target/:user_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
-      domain: currentDomain,
-      path: currentPath,
-    }},
-    { path: 'preview/:view_target/:user_id/:website_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
-      domain: currentDomain,
-      path: currentPath,
-    }},
+    // { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
+    //   domain: currentDomain,
+    //   path: currentPath,
+    // }},
+    // { path: 'preview/:view_target/:user_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
+    //   domain: currentDomain,
+    //   path: currentPath,
+    // }},
+    // { path: 'preview/:view_target/:user_id/:website_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
+    //   domain: currentDomain,
+    //   path: currentPath,
+    // }},
     // { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
     // { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
 
@@ -396,10 +396,10 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
-    { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
+    // { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
     { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
     // auth guard
-    { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+    // { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
     { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
     { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
    
@@ -411,10 +411,7 @@ else {
     { path: 'profile/billing', component: MemberBillingComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard]},
     //member-account-settings
      // auth guard
-     { path: '**', component: PageViewComponent, data: {
-      domain: currentDomain,
-      path: currentPath,
-    },},
+    
   ]
 
 }
@@ -445,7 +442,7 @@ export const RoutingComponents =
     // HeatmapViewComponent,
     // ProfileComponent,
     // TemplateComponent, 
-    PageViewComponent,
+    // PageViewComponent,
     // ScrumBoardsComponent,
     // ScrumBoardListComponent,   
     FetchMenuComponent,
@@ -529,7 +526,7 @@ export const RoutingComponents =
     MemberForgotPasswordComponent,
     // ViewLessonComponent,
     // ViewCourseComponent,
-    CourseSidebarComponent,
+    // CourseSidebarComponent,
     MemberProfileSettingsComponent,
     MemberSignInSecurityComponent,  
     MemberBillingComponent,

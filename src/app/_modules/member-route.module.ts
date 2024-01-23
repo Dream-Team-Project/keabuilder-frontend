@@ -5,7 +5,6 @@ import { AuthGuard } from '../_guard/auth.guard';
 import { MemberForgotPasswordComponent } from '../_components/course-user/member-forgot-password/member-forgot-password.component';
 import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
 import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
-import { CourseSidebarComponent } from '../_components/_membership/course-sidebar/course-sidebar.component';
 import { MemberProfileSettingsComponent } from '../_components/course-user/member-profile-settings/member-profile-settings.component';
 import { MemberSignInSecurityComponent } from '../_components/course-user/member-sign-in-security/member-sign-in-security.component';
 import { MemberBillingComponent } from '../_components/course-user/member-billing/member-billing.component';
@@ -19,7 +18,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     MemberForgotPasswordComponent,
-    CourseSidebarComponent,
     MemberProfileSettingsComponent,
     MemberSignInSecurityComponent,  
     MemberBillingComponent,

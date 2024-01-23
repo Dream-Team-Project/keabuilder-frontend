@@ -22,6 +22,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
   { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
@@ -32,13 +33,13 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    PageviewModule,
     RouterModule.forChild(routes),
     BuilderSettingModule,
     BuilderTopbarModule,
     BuilderWireframeModule,
     FormfetchModule,
     OrderformModule,
+    PageviewModule,
     ImageModule,
     MatCheckboxModule,
     PipeModule,
@@ -53,6 +54,7 @@ const routes: Routes = [
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
   ],
   exports: [RouterModule]
 })

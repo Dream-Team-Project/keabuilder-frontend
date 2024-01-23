@@ -12,7 +12,8 @@ import { CrmContactComponent } from '../_components/_crm/contact/contact.compone
 import { CrmContactsComponent } from '../_components/_crm/contacts/contacts.component';
 import { CrmFieldsComponent } from '../_components/_crm/fields/fields.component';
 import { CrmFormBuilderComponent } from '../_components/_crm/form-builder/form-builder.component';
-import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
+// import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
+import { FormfetchModule } from './formfetch.module';
 import { CrmFormsComponent } from '../_components/_crm/forms/forms.component';
 import { CrmListsComponent } from '../_components/_crm/lists/lists.component';
 import { CrmReportsComponent } from '../_components/_crm/reports/reports.component';
@@ -69,7 +70,7 @@ const routes: Routes = [
     canActivate: [AuthGuard] },
     { path: 'crm/contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
     { path: 'crm/campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
-    { path: 'fetch-form/:user_id/:form_id', component: CrmFormFetchComponent},
+    { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule},
     
     { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
     { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
@@ -81,7 +82,6 @@ const routes: Routes = [
   declarations: [
     CrmComponent,
     CrmFormsComponent,
-    CrmFormFetchComponent,
     CrmEmailsComponent,
     CrmEmailBuilderComponent,
     CrmCampaignsComponent,
@@ -103,6 +103,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     PipeModule,
+    FormfetchModule,
     BuilderSettingModule,
     RouterModule.forChild(routes),
     MatSelectModule,
