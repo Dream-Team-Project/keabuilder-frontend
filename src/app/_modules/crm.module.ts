@@ -20,7 +20,7 @@ import { CrmSettingsComponent } from '../_components/_crm/settings/settings.comp
 import { CrmTagsComponent } from '../_components/_crm/tags/tags.component';
 import { CrmEmailsComponent } from '../_components/_crm/emails/emails.component';
 import { CrmEmailBuilderComponent } from '../_components/_crm/email-builder/email-builder.component';
-import { BuilderSettingComponent } from '../_components/_builder/builder-setting/builder-setting.component';
+import { BuilderSettingModule } from './builder-setting.module';
 import { PipeModule } from './pipe.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -97,12 +97,13 @@ const routes: Routes = [
     CrmAutomationWorkflowComponent, 
     CrmFormBuilderComponent,
     CrmFieldsComponent,
-    BuilderSettingComponent,
+    // BuilderSettingComponent,
     
   ],
   imports: [
     CommonModule,
     PipeModule,
+    BuilderSettingModule,
     RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule,

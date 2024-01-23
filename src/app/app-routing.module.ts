@@ -8,8 +8,8 @@ import { environment } from 'src/environments/environment';
 
 // import { AnalyticsComponent } from './_components/analytics/analytics.component';
 import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
-import { DomainComponent } from './_components/domain/domain.component';
-import { UpdateDnsComponent } from './_components/update-dns/update-dns.component';
+// import { DomainComponent } from './_components/domain/domain.component';
+// import { UpdateDnsComponent } from './_components/update-dns/update-dns.component';
 import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
 // import { ImageComponent } from './_components/image/image.component';
 // import { IntegrationsComponent } from './_components/integrations/integrations.component';
@@ -71,7 +71,7 @@ import { CrmComponent } from './_components/_crm/crm/crm.component';
 // import { CrmContactsComponent } from './_components/_crm/contacts/contacts.component';
 // import { CrmFieldsComponent } from './_components/_crm/fields/fields.component';
 // import { CrmFormBuilderComponent } from './_components/_crm/form-builder/form-builder.component';
-import { CrmFormFetchComponent } from './_components/_crm/form-fetch/form-fetch.component';
+// import { CrmFormFetchComponent } from './_components/_crm/form-fetch/form-fetch.component';
 // import { CrmFormsComponent } from './_components/_crm/forms/forms.component';
 // import { CrmListsComponent } from './_components/_crm/lists/lists.component';
 // import { CrmReportsComponent } from './_components/_crm/reports/reports.component';
@@ -117,7 +117,7 @@ import { SalesComponent } from './_components/_sales/sales/sales.component';
 // import { OffersComponent } from './_components/_sales/offers/offers.component';
 // import { OfferComponent } from './_components/_sales/offer/offer.component';
 // import { CheckoutComponent } from './_components/_sales/checkout/checkout.component';
-import { OrderFormComponent } from './_components/_sales/orderform/orderform.component';
+// import { OrderFormComponent } from './_components/_sales/orderform/orderform.component';
 // import { OrderFormCheckoutComponent } from './_components/_sales/orderform/checkout/checkout.component';
 // sales
 
@@ -242,8 +242,8 @@ if (currentDomain === appHost) {
     // sales 
   
     // { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-    { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
-    { path: 'domain/update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
+    // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
+    // { path: 'domain/update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
 
     // builder
 
@@ -471,7 +471,7 @@ export const RoutingComponents =
     // NewMembershipComponent,
     // CrmComponent,
     // CrmFormsComponent,
-    CrmFormFetchComponent,
+    // CrmFormFetchComponent,
     // CrmEmailsComponent,
     // CrmEmailBuilderComponent,
     // CrmCampaignsComponent,
@@ -504,12 +504,12 @@ export const RoutingComponents =
     // PaymentComponent,
     // ProductsComponent,
     // OffersComponent,
-    OrderFormComponent,
+    // OrderFormComponent,
     // OrderFormCheckoutComponent,
     // OfferComponent,
     // CheckoutComponent,
-    DomainComponent,
-    UpdateDnsComponent,
+    // DomainComponent,
+    // UpdateDnsComponent,
     // AccountComponent,
     // BillingComponent,
     // ViewplansComponent, 

@@ -10,8 +10,8 @@ import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
 import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
 import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
-import { BuilderSettingComponent } from '../_components/_builder/builder-setting/builder-setting.component';
-import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
+import { BuilderSettingModule } from './builder-setting.module';
+// import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,11 +28,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxStripeModule } from 'ngx-stripe';
 import { MatCardModule } from '@angular/material/card';
+import { FormfetchModule } from './formfetch.module';
 
 
 const routes: Routes = [
@@ -61,14 +62,15 @@ const routes: Routes = [
     OrderFormCheckoutComponent,
     OfferComponent,
     CheckoutComponent,
-    BuilderSettingComponent,
-    CrmFormFetchComponent,
+    // CrmFormFetchComponent,
   ],
   imports: [
     CommonModule,
+    FormfetchModule,
     RouterModule.forChild(routes),
     PipeModule,
     ImageModule,
+    BuilderSettingModule,
     MatPaginatorModule,
     MatPaginatorModule, 
     MatProgressBarModule,
