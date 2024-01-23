@@ -17,6 +17,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   ],
   exports:[
     OrderFormComponent,
-  ]
+  ],
 })
 export class OrderformModule { }

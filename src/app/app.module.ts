@@ -66,8 +66,8 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from '../environments/environment';
 
 import { ApiInterceptor } from './_helpers/api.interceptor';
-import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
-import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
+// import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
+// import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
 
 
 @NgModule({
@@ -76,8 +76,8 @@ import { CourseSidebarComponent } from './_components/_membership/course-sidebar
     RoutingComponents,
     SidebarComponent,
     NavbarComponent,
-    ViewNavbarComponent,
-    CourseSidebarComponent,
+    // ViewNavbarComponent,
+    // CourseSidebarComponent,
     // SafeUrlPipe,
     // SafeHtmlPipe,
     // FilterPipe,

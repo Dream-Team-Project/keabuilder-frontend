@@ -8,7 +8,8 @@ import { ProductsComponent } from '../_components/_sales/products/products.compo
 import { OffersComponent } from '../_components/_sales/offers/offers.component';
 import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
-import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
+// import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
+import { OrderformModule } from './orderform.module';
 import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
 import { BuilderSettingModule } from './builder-setting.module';
 // import { CrmFormFetchComponent } from '../_components/_crm/form-fetch/form-fetch.component';
@@ -45,7 +46,7 @@ const routes: Routes = [
       { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
       // { path: 'coupons', component: ComingSoonComponent, canActivate: [AuthGuard] },
       // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
-      { path: 'orderform', component: OrderFormComponent, canActivate: [AuthGuard] },
+      { path: 'orderform', component: OrderformModule, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard] },
     { path: 'sales/orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
@@ -58,7 +59,7 @@ const routes: Routes = [
     PaymentComponent,
     ProductsComponent,
     OffersComponent,
-    OrderFormComponent,
+    // OrderFormComponent,
     OrderFormCheckoutComponent,
     OfferComponent,
     CheckoutComponent,
@@ -67,6 +68,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormfetchModule,
+    OrderformModule, 
     RouterModule.forChild(routes),
     PipeModule,
     ImageModule,

@@ -50,6 +50,7 @@ canActivate: [AuthGuard] },
 
 @NgModule({
   declarations: [
+    FunnelComponent,
     FunnelsComponent,
     FunnelStepSettingsComponent,
     FunnelBuildComponent,

@@ -13,7 +13,7 @@ import { ComingSoonComponent } from './_components/coming-soon/coming-soon.compo
 import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
 // import { ImageComponent } from './_components/image/image.component';
 // import { IntegrationsComponent } from './_components/integrations/integrations.component';
-import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
+// import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
 import { StrategiesComponent } from './_components/strategies/strategies.component';
 // import { ScrumBoardsComponent } from './_components/scrumboard/scrum-boards/scrum-boards.component';
 // import { ScrumBoardListComponent } from './_components/scrumboard/scrum-board-list/scrum-board-list.component';
@@ -133,7 +133,7 @@ import { AccountComponent } from './_components/_account-settings/account/accoun
 //account-settings
 
 //default page view
-import { DefaultPageViewComponent } from './_components/default-page-view/default-page-view.component';
+// import { DefaultPageViewComponent } from './_components/default-page-view/default-page-view.component';
 //default page view
 
 // member-routes
@@ -390,7 +390,7 @@ if (currentDomain === appHost) {
     //account-settings
     
     // page not found
-    { path: '**', component: PageNotFoundComponent },
+    // { path: '**', component: PageNotFoundComponent },
    
   ]
 }
@@ -449,7 +449,7 @@ export const RoutingComponents =
     // BuilderComponent,
     // BuilderSettingComponent,
     // BulderWireframeComponent, 
-    PageNotFoundComponent,
+    // PageNotFoundComponent,
     // HeatmapsRecordingsComponent,
     // MembershipCoursesComponent,
     // MembershipModulesComponent,
@@ -521,7 +521,7 @@ export const RoutingComponents =
     // FunnelSettingsComponent,
     // FunnelStepArchiveComponent,
     // FunnelStepsComponent,
-    DefaultPageViewComponent,
+    // DefaultPageViewComponent,
     //member-routes
     MemberForgotPasswordComponent,
     // ViewLessonComponent,
