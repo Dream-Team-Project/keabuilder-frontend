@@ -63,10 +63,8 @@ const routes: Routes = [
     MatInputModule,
     MemberNavbarModule,
     FormsModule,
-    RouterModule,
     DragDropModule,
     MatIconModule,
-    RouterModule,
   ],
   exports:[
     PageViewComponent,

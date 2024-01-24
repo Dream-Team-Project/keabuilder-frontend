@@ -8,7 +8,7 @@ import { DefaultPageViewComponent } from '../_components/default-page-view/defau
     DefaultPageViewComponent, 
   ],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports :[
     DefaultPageViewComponent 
