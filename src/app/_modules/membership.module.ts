@@ -17,8 +17,7 @@ import { MembershipReportsComponent } from '../_components/_membership/membershi
 import { MembershipCustomizationComponent } from '../_components/_membership/membership-customization/membership-customization.component';
 import { CourseSettingsComponent } from '../_components/_membership/course-settings/course-settings.component';
 import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
-import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
-import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
+
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -38,6 +37,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ViewCourseModule } from './view-course.module';
+import { ViewLessonModule } from './view-lesson.module';
 
 const routes: Routes = [
 { path: 'membership', component: MembershipComponent,
@@ -58,8 +59,8 @@ const routes: Routes = [
     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
     { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
     ],canActivate: [AuthGuard] },
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,canActivate: [AuthGuard]},
-    { path: 'member/:course_id', component : ViewCourseComponent,canActivate: [AuthGuard]},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,canActivate: [AuthGuard]},
+    { path: 'member/:course_id', component : ViewCourseModule,canActivate: [AuthGuard]},
   ];
 
 @NgModule({
@@ -79,12 +80,13 @@ const routes: Routes = [
     MembershipCustomizationComponent,
     CourseSettingsComponent,
     NewMembershipComponent,
-    ViewCourseComponent,
-    ViewLessonComponent,
+   
    
   ],
   imports: [
     CommonModule,
+    ViewCourseModule,
+    ViewLessonModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,

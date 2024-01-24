@@ -12,6 +12,7 @@ export class ViewNavbarComponent implements OnInit {
 
   userimgpath = '/assets/images/profile/avatar.png';
   isDropdown = false;
+  isMenuOpen = false;
   scrollPosition:any = null;
   user_id:any='';
   admin=false;
@@ -54,5 +55,8 @@ export class ViewNavbarComponent implements OnInit {
   }
   Gotohref(url :any){
     window.open(url,'_self');
+  }
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

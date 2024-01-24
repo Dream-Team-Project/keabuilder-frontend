@@ -1,50 +1,14 @@
-<!-- <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top">
-  <div class="navbar-wrapper">
-    <div class="navbar-container content">
-      <div class="navbar-collapse" id="navbar-mobile">
-        <ul class="nav float-right overflow-hidden kb-nav-right">
-          <li class="dropdown dropdown-user nav-item">
-            <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown"
-              aria-expanded="false">
-              <div class="user-nav d-sm-flex d-none">
-                <span class="user-name">{{memberobj.firstname}}</span>
-              </div>
-              <span>
-                <div class="bw-avatar-content bw-change-color-badge">
-                    <div class="bw-avatar"  [matMenuTriggerFor]="menu">
-                    <img [src]="_image.getImgPath(userimgpath)" alt="">
-                  </div>
-                </div>
-              </span>
-              <mat-menu #menu="matMenu">
-                <p class="brkeml pl-4 pr-4 pt-2">Signed in as <br><small>{{memberobj.email}}</small></p>
-                <button mat-menu-item color="primary" id="defaultpri" (click)="Gotohref('/profile/settings')"><i class="fas fa-user"></i> My Profile</button>
-                <hr class="mt-1 mb-1">
-                <button mat-menu-item class="text-danger" (click)="logout()"><i class="fas fa-sign-out"></i> Sign Out</button>
-              </mat-menu>
-
-            </a>
-
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</nav> -->
-
-
-
 <div class="kb-navbar-wrapper">
   <div class="kb-navbar">
       <!-- <div>
           <mat-icon>menu</mat-icon>
       </div> -->
-      <div class="profileContainer " >
+      <!-- <div class="profileContainer " >
         <p >{{memberobj.firstname}}</p>
           <div class="position-relative d-flex gap-1 align-items-center py-1 profileImageContainer">
-            <img [src]="_image.getImgPath(userimgpath)" alt="" class="profileImage" [matMenuTriggerFor]="menu">
-              <i class="fa fa-caret-down" [matMenuTriggerFor]="menu"></i>
-              <mat-menu #menu="matMenu" class="profileDropdown" >
+            <img [src]="_image.getImgPath(userimgpath)" alt="" class="profileImage" [MenuTriggerFor]="menu">
+              <i class="fa fa-caret-down"></i>
+              <mat-menu #menu="myMenu"  class="profileDropdown" >
                   <p class="dropdownItem">Signed in as</p>
                   <p class="emailText dropdownItem">{{memberobj.email}}</p>
                   <div class="dropItemContainer" (click)="Gotohref('/profile/settings')">
@@ -58,6 +22,29 @@
                   </div>
           </mat-menu>
           </div>
+      </div> -->
+      <div class="profileContainer">
+        <p>{{ memberobj.firstname }}</p>
+        <div class="position-relative d-flex gap-1 align-items-center py-1 profileImageContainer">
+          <img [src]="_image.getImgPath(userimgpath)" alt="" class="profileImage" (click)="toggleMenu()">
+          <i class="fa fa-caret-down" (click)="toggleMenu()"></i>
+          
+          <!-- Simple Dropdown Menu -->
+          <div *ngIf="isMenuOpen" class="profileDropdown">
+            <p class="dropdownItem">Signed in as</p>
+            <p class="emailText dropdownItem">{{ memberobj.email }}</p>
+            <div class="dropItemContainer" (click)="Gotohref('/profile/settings')">
+              <i class="fas fa-user profileText"></i> 
+              <p class="profileText">My Profile</p>
+            </div>
+            <hr>
+            <div class="dropItemContainer" (click)="logout()">
+              <i class="fa fa-sign-out logoutText" aria-hidden="true"></i>
+              <p class="logoutText">Log Out</p>
+            </div>
+          </div>
+        </div>
       </div>
+      
   </div>
 </div>

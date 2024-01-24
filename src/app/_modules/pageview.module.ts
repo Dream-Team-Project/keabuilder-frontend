@@ -53,6 +53,7 @@ const routes: Routes = [
     CommonModule,
     BrowserModule,
     PagenotfoundModule,
+    MemberNavbarModule,
     PipeModule,
     RouterModule.forChild(routes),
     FormfetchModule,
