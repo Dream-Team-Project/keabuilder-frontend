@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 import { PagenotfoundModule } from './pagenotfound.module';
 import { PipeModule } from './pipe.module';
 import { FormfetchModule } from './formfetch.module';
-import { OrderformModule } from './orderform.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DefaultpageModule } from './defaultpage.module';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +16,8 @@ import { MemberNavbarModule } from './member-navbar.module';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
+import { FunnelCheckoutModule } from './funnel-checkout.module';
+import { BrowserModule } from '@angular/platform-browser';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -50,11 +51,12 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    BrowserModule,
     PagenotfoundModule,
     PipeModule,
     RouterModule.forChild(routes),
     FormfetchModule,
-    OrderformModule,
+    FunnelCheckoutModule,
     MatFormFieldModule,
     DefaultpageModule,
     MatInputModule,
@@ -63,6 +65,7 @@ const routes: Routes = [
     RouterModule,
     DragDropModule,
     MatIconModule,
+    RouterModule,
   ],
   exports:[
     PageViewComponent,

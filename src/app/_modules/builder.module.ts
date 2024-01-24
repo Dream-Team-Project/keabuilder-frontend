@@ -7,7 +7,6 @@ import { BuilderSettingModule } from './builder-setting.module';
 import { BuilderTopbarModule } from './builder-topbar.module';
 import { BuilderWireframeModule } from './builder-wireframe.module';
 import { FormfetchModule } from './formfetch.module';
-import { OrderformModule } from './orderform.module';
 import { PageviewModule } from './pageview.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatListModule } from '@angular/material/list';
@@ -23,6 +22,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { FunnelCheckoutModule } from './funnel-checkout.module';
 
 
 const routes: Routes = [
@@ -39,7 +39,7 @@ const routes: Routes = [
     BuilderTopbarModule,
     BuilderWireframeModule,
     FormfetchModule,
-    OrderformModule,
+    FunnelCheckoutModule,
     PageviewModule,
     ImageModule,
     MatCheckboxModule,

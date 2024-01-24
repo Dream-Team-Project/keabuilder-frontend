@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService,StripeCardComponent,StripeCardNumberComponent } from 'ngx-stripe';
-import {StripeCardElementOptions,StripeElementsOptions,PaymentIntent,} from '@stripe/stripe-js';
+import { StripeCardElementOptions,StripeElementsOptions,PaymentIntent,} from '@stripe/stripe-js';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { OrderformService } from 'src/app/_services/_sales/orderform.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
