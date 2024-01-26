@@ -31,7 +31,7 @@ import { StrategiesComponent } from './_components/strategies/strategies.compone
 // import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
 // import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
 // import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
-import { PageViewComponent } from './_components/page-view/page-view.component';
+// import { PageViewComponent } from './_components/page-view/page-view.component';
 // import { FetchMenuComponent } from './_components/_builder/fetch-menu/fetch-menu.component';
 // builder
 // websites
@@ -251,6 +251,7 @@ if (currentDomain === appHost) {
     // { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+    // { path: 'preview/:view_target/:template_id', loadComponent: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] },
     // { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
     //   domain: currentDomain,
     //   path: currentPath,
@@ -411,7 +412,11 @@ else {
     // { path: 'profile/billing', component: MemberBillingComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard]},
     //member-account-settings
      // auth guard
-    
+     { path: '**', loadChildren: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] , data: {
+      domain: currentDomain,
+      path: currentPath,
+    }
+  },
   ]
 
 }
