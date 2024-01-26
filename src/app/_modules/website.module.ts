@@ -12,7 +12,6 @@ import { WebsitePagesComponent } from '../_components/_websites//pages/pages.com
 import { WebpagesArchiveComponent } from '../_components/_websites/webpages-archive/webpages-archive.component';
 import { WebsiteDesignComponent } from '../_components/_websites/design/design.component';
 import { WebsiteMarketplaceComponent } from '../_components/_websites/marketplace/marketplace.component';
-// import { TemplateComponent } from '../_components/_builder/template/template.component';
 import { TemplateModule } from './template.module';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -28,6 +27,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const routes: Routes = [
   {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
@@ -39,7 +42,7 @@ const routes: Routes = [
   {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
   {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
   {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
-  {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]}
+  {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
@@ -54,8 +57,6 @@ const routes: Routes = [
     WebpagesArchiveComponent,
     WebsiteMarketplaceComponent,
     WebsiteDesignComponent,
-    // TemplateComponent,
-    
   ],
   imports: [
     CommonModule,
@@ -76,6 +77,11 @@ const routes: Routes = [
     MatButtonModule,
     MatAutocompleteModule,
     MatChipsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    
   ],
   exports: [RouterModule]
 })

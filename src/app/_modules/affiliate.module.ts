@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [
    { path: 'affiliates', component: AffiliatesComponent, canActivate: [AuthGuard] },
@@ -29,7 +30,7 @@ const routes: Routes = [
     { path: 'affiliates-exports', component: AffiliateExportsComponent, canActivate: [AuthGuard] },
     { path: 'affiliates-settings', component: AffiliateSettingsComponent, canActivate: [AuthGuard] },
     { path: 'integrations', component: IntegrationsComponent, canActivate: [AuthGuard] },
-]
+];
 @NgModule({
   declarations: [
     AffiliatesComponent,
@@ -53,6 +54,7 @@ const routes: Routes = [
     MatMenuModule,
     MatSelectModule,
     MatTableModule,
+    MatIconModule,
   ],
   exports: [RouterModule]
 })

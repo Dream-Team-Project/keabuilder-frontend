@@ -15,14 +15,19 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
-  
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
   { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
-  // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
 ];
@@ -45,6 +50,13 @@ const routes: Routes = [
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    NgApexchartsModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatProgressBarModule,
+    MatInputModule,
+  
   ],
   exports: [RouterModule]
 })

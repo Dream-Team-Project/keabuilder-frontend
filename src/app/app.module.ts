@@ -13,7 +13,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { MatTooltipModule } from '@angular/material/tooltip';
 // import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-// import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 // import { MatSliderModule } from '@angular/material/slider'
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -101,7 +101,7 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
     // MatPaginatorModule, 
     // MatTabsModule,
     MatButtonModule,
-    // MatSnackBarModule,
+    MatSnackBarModule,
     // MatSliderModule,
     MatIconModule,
     // MatStepperModule,
@@ -143,7 +143,7 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
   ],
   providers: [authInterceptorProviders, 
     // { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
-    // { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000} },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000} },
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
     // MatTableModule
   ],

@@ -96,7 +96,7 @@ import { MembershipComponent } from './_components/_membership/membership/member
 // import { MembershipCustomizationComponent } from './_components/_membership/membership-customization/membership-customization.component';
 // import { CourseSettingsComponent } from './_components/_membership/course-settings/course-settings.component';
 // affiliate
-import { AffiliatesComponent } from './_components/_affiliate/affiliates/affiliates.component';
+// import { AffiliatesComponent } from './_components/_affiliate/affiliates/affiliates.component';
 // import { AffiliateUsersComponent } from './_components/_affiliate/users/users.component';
 // import { AffiliateCommissionComponent } from './_components/_affiliate/commission/commission.component';
 // import { AffiliateTransactionsComponent } from './_components/_affiliate/transactions/transactions.component';
@@ -124,6 +124,9 @@ import { SalesComponent } from './_components/_sales/sales/sales.component';
 // account-setting
 
 import { AccountComponent } from './_components/_account-settings/account/account.component';
+import { LoginComponent } from './_components/_auth/login/login.component';
+import { DomainComponent } from './_components/domain/domain.component';
+import { ScrumBoardsComponent } from './_components/scrumboard/scrum-boards/scrum-boards.component';
 // import { ProfileSettingsComponent } from './_components/_account-settings/profile-settings/profile-settings.component';
 // import { SignInSecurityComponent } from './_components/_account-settings/sign-in-security/sign-in-security.component';
 // import { BillingComponent } from './_components/_account-settings/billing/billing.component';
@@ -155,19 +158,22 @@ var routes: Routes = [];
 
 if (currentDomain === appHost) {
   routes = [
-
-    // auth
-    // { path: 'auth', component: HeatmapsComponent, loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
-    // { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-    // { path: 'login', component: LoginComponent, canActivate: [SignedInGuard]},
-    // { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
-    // { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
-    // // { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-    // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-
-    // scrumboard
-    
-    // { path: 'scrumboard', component:ScrumBoardsComponent, canActivate: [AuthGuard] },
+    { path: '', loadChildren: () => import('./_modules/auth.module').then(m => m.AuthModule)},
+    { path: 'websites',component: WebsiteComponent, loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
+    { path: 'funnels',component: FunnelComponent,  loadChildren: () => import('./_modules/funnel.module').then(m => m.FunnelModule), canActivate: [AuthGuard] },
+    { path: 'membership',component: MembershipComponent, loadChildren: () => import('./_modules/membership.module').then(m => m.MembershipModule), canActivate: [AuthGuard] },
+    { path: 'crm',component: CrmComponent, loadChildren: () => import('./_modules/crm.module').then(m => m.CrmModule), canActivate: [AuthGuard] },
+    { path: 'sales',component: SalesComponent,  loadChildren: () => import('./_modules/sale.module').then(m => m.SaleModule), canActivate: [AuthGuard] },
+    { path: 'domain',component: DomainComponent, loadChildren: () => import('./_modules/domain.module').then(m => m.DomainModule), canActivate: [AuthGuard] },
+    { path: 'scrumboard',component: ScrumBoardsComponent, loadChildren: () => import('./_modules/scrumboard.module').then(m => m.ScrumboardModule), canActivate: [AuthGuard] },
+    { path: 'heatmap',component: HeatmapsComponent,loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
+    { path: 'account',component: AccountComponent, loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
+    // { path: 'affiliates', component: AffiliatesComponent, loadChildren: () => import('./_modules/affiliate.module').then(m => m.AffiliateModule), canActivate: [AuthGuard] },
+    { path: '**', loadChildren: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] , data: {
+      domain: currentDomain,
+      path: currentPath,
+    }
+  },
     // { path: 'scrumboardlist/:id', component:ScrumBoardListComponent, canActivate: [AuthGuard] },
    
 
@@ -177,9 +183,7 @@ if (currentDomain === appHost) {
     // auth
 
     // website 
-    { path: 'websites', component: WebsiteComponent, loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
-
-    // {path: 'websites', component: WebsiteComponent,
+     // {path: 'websites', component: WebsiteComponent,
     //   children: [
     //     {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
     //     {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
@@ -200,7 +204,7 @@ if (currentDomain === appHost) {
 
    
     // funnels
-{ path: 'funnels', component: FunnelComponent, loadChildren: () => import('./_modules/funnel.module').then(m => m.FunnelModule), canActivate: [AuthGuard] },
+
   //   { path: 'funnels', component: FunnelComponent,
   //   children: [
   //     { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
@@ -222,7 +226,7 @@ if (currentDomain === appHost) {
     
 
     // sales 
-    { path: 'sales', component: SalesComponent, loadChildren: () => import('./_modules/sale.module').then(m => m.SaleModule), canActivate: [AuthGuard] },
+   
   
     // { path: 'sales', component: SalesComponent, 
     // children: [
@@ -242,7 +246,7 @@ if (currentDomain === appHost) {
     // sales 
   
     // { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-    // { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
+    
     // { path: 'domain/update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
 
     // builder
@@ -252,6 +256,7 @@ if (currentDomain === appHost) {
     // { path: 'builder/form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
     // { path: 'preview/:view_target/:template_id', loadComponent: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] },
+    
     // { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
     //   domain: currentDomain,
     //   path: currentPath,
@@ -280,8 +285,7 @@ if (currentDomain === appHost) {
     // { path: 'fetch-orderform/:id', component: FunnelCheckoutComponent},
 
     // crm
-    { path: 'crm', component: CrmComponent, loadChildren: () => import('./_modules/crm.module').then(m => m.CrmModule), canActivate: [AuthGuard] },
-
+   
     // { path: 'fetch-form/:user_id/:form_id', component: CrmFormFetchComponent},
 
     // { path: 'crm', component: CrmComponent, 
@@ -305,7 +309,7 @@ if (currentDomain === appHost) {
     // crm
 
     // membership
-    { path: 'membership', component: MembershipComponent, loadChildren: () => import('./_modules/membership.module').then(m => m.MembershipModule), canActivate: [AuthGuard] },
+   
     // { path: 'membership', component: MembershipComponent,
     //   children : [
     //     { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
@@ -339,7 +343,7 @@ if (currentDomain === appHost) {
       // { path: 'strategies', component: ComingSoonComponent, canActivate: [AuthGuard] },
     
       // { path: 'membership', component: ComingSoonComponent, canActivate: [AuthGuard] }, 
-      { path: 'affiliates', component: AffiliatesComponent, loadChildren: () => import('./_modules/affiliate.module').then(m => m.AffiliateModule), canActivate: [AuthGuard] },
+     
       // { path: 'affiliates', component: ComingSoonComponent, canActivate: [AuthGuard] },
       // { path: 'affiliates-users', component: ComingSoonComponent, canActivate: [AuthGuard] },
       // { path: 'affiliates-commission', component: ComingSoonComponent, canActivate: [AuthGuard] },
@@ -353,7 +357,7 @@ if (currentDomain === appHost) {
       // Coming Soon Features ==>
 
     // { path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuard] },
-    { path: 'heatmap', component: HeatmapsComponent, loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
+   
     // { path: 'membership', component: MembershipComponent,
     // { path: 'heatmap', component: HeatmapsComponent, canActivate: [AuthGuard] },
     // { path: 'heatmap/:id', component: HeatmapViewComponent, canActivate: [AuthGuard] },
@@ -378,18 +382,18 @@ if (currentDomain === appHost) {
     // affiliate
 
     // account-settings
-    { path: 'account', component: AccountComponent, loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
-    // { path: 'account', component: AccountComponent,
+   
+    // { path: 'account', component: AccountComponent, loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule),
     // children: [
-    //   { path: '', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
-    //   { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
-    //   { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
-    //   { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
-    //   { path: 'viewplans', component: ViewplansComponent, canActivate: [AuthGuard] },
+    //   { path: '', component: ProfileSettingsComponent,loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
+    //   { path: 'settings', component: ProfileSettingsComponent,loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
+    //   { path: 'sign-in-security', component: SignInSecurityComponent,loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
+    //   { path: 'billing', component: BillingComponent,loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
+    //   { path: 'viewplans', component: ViewplansComponent,loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
     // ],
     // canActivate: [AuthGuard] },
     //account-settings
-    
+ 
     // page not found
     // { path: '**', component: PageNotFoundComponent },
    

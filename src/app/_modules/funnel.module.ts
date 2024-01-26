@@ -25,17 +25,16 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
-{ path: 'funnels', component: FunnelComponent,
-children: [
+
   { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
   { path: 'all', component: FunnelsComponent, canActivate: [AuthGuard] },
   { path: 'build', component: FunnelBuildComponent, canActivate: [AuthGuard] },
   { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
-],
-canActivate: [AuthGuard] },
-{ path: 'funnels/:funnel_id', component: CreateFunnelsComponent,
+  { path: ':funnel_id', component: CreateFunnelsComponent,
 children: [ 
 { path: 'steps/:step_id', component: FunnelStepsComponent, canActivate: [AuthGuard] },
 // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
@@ -43,10 +42,10 @@ children: [
 { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
 ],
 canActivate: [AuthGuard] },
-{ path: 'funnels/step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
 
   // builder
-{ path: 'fetch-orderform/:id', component: FunnelCheckoutModule},
+  { path: 'fetch-orderform/:id', component: FunnelCheckoutModule},
 ];
 
 @NgModule({
@@ -79,6 +78,8 @@ canActivate: [AuthGuard] },
     MatTooltipModule,
     MatChipsModule,
     MatIconModule, 
+    MatInputModule,
+    MatDialogModule
   ],
   exports: [RouterModule]
 })

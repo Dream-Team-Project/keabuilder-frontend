@@ -51,11 +51,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ImageModule } from './image.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 const routes: Routes = [
-    { path: 'crm', component: CrmComponent, 
-    children:[
       { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
       { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
       { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
@@ -67,11 +66,10 @@ const routes: Routes = [
       { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
       { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
       { path: 'emails', component: CrmEmailsComponent, canActivate: [AuthGuard] },
-    ],
-    canActivate: [AuthGuard] },
-    { path: 'crm/contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
-    { path: 'crm/campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
-    { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule},
+   
+    { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
+    { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule, canActivate: [AuthGuard]},
     
     { path: 'builder/automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
     { path: 'builder/email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
@@ -137,6 +135,8 @@ const routes: Routes = [
     NgApexchartsModule,
     ReactiveFormsModule.withConfig({warnOnNgModelWithFormControl: 'never'}),
     MatSidenavModule,
+    MatSnackBarModule,
+    MatDialogModule,
   ],
   exports: [RouterModule]
 })

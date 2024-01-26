@@ -39,10 +39,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ViewCourseModule } from './view-course.module';
 import { ViewLessonModule } from './view-lesson.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
-{ path: 'membership', component: MembershipComponent,
-      children : [
+
         { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
         { path: 'reports', component: MembershipReportsComponent, canActivate: [AuthGuard] }, 
         { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
@@ -51,8 +52,6 @@ const routes: Routes = [
         { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
         { path: 'settings', component: CourseSettingsComponent, canActivate: [AuthGuard] },
 
-      ],
-      canActivate: [AuthGuard] },
   { path: 'new-membership', component: NewMembershipComponent,
   children :[
     { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
@@ -109,6 +108,8 @@ const routes: Routes = [
     MatTabsModule,
     DragDropModule,
     MatSidenavModule,
+    MatInputModule,
+    MatDialogModule,
   ],
   exports: [RouterModule]
 })

@@ -14,17 +14,16 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 const routes: Routes = [
-{ path: 'account', component: AccountComponent,
-    children: [
       { path: '', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
       { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
       { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
       { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
       { path: 'viewplans', component: ViewplansComponent, canActivate: [AuthGuard] },
-    ],
-    canActivate: [AuthGuard] },
   ];
 @NgModule({
   declarations: [
@@ -45,6 +44,9 @@ const routes: Routes = [
     MatButtonModule,
     MatProgressBarModule,
     MatButtonToggleModule,
+    MatInputModule,
+    MatDialogModule,
+    MatCardModule,
   ],
   exports: [RouterModule]
 })
