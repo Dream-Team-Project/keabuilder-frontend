@@ -582,7 +582,7 @@ readonly separatorKeysCodes = [ENTER, COMMA] as const;
     var obj = {
       search: search.value || '',
       filter: filter.value || this.filter,
-      visibility: publish_status,
+      visibility: publish_status || 'all',
       id:this.website_id,
       sortInp:sortInp.value || this.sortInp,
       pageIndex:this.paginator?.pageIndex || 0,

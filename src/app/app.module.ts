@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -66,6 +66,7 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from '../environments/environment';
 
 import { ApiInterceptor } from './_helpers/api.interceptor';
+import { CommonModule } from '@angular/common';
 // import { ViewNavbarComponent } from './_components/_membership/view-navbar/view-navbar.component';
 // import { CourseSidebarComponent } from './_components/_membership/course-sidebar/course-sidebar.component';
 
@@ -85,8 +86,9 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
     // SvgPipe,
   ],
   imports: [
+    CommonModule,
     AppRoutingModule,
-    BrowserModule,
+    // BrowserModule,
     BrowserAnimationsModule,
     // ImageCropperModule,
     FormsModule,

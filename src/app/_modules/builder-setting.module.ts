@@ -10,7 +10,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +21,10 @@ import { ColorCircleModule } from 'ngx-color/circle';
 import { NgxColorsModule } from 'ngx-colors';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
 
 
 @NgModule({
@@ -51,7 +55,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     ColorMaterialModule,
     EditorModule,
     ClipboardModule,
-    
+    MatDialogModule,
+    MatAutocompleteModule, 
+    OverlayModule,  
+    PortalModule, 
   ],
   exports: [
     BuilderSettingComponent,

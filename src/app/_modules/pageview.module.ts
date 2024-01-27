@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { FunnelCheckoutModule } from './funnel-checkout.module';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -51,7 +51,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    BrowserModule,
+    // BrowserModule,
     PagenotfoundModule,
     MemberNavbarModule,
     PipeModule,

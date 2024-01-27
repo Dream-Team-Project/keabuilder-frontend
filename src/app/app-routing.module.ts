@@ -27,7 +27,7 @@ import { StrategiesComponent } from './_components/strategies/strategies.compone
 // auth
 // builder
 // import { TemplateComponent } from './_components/_builder/template/template.component';
-// import { BuilderComponent } from './_components/_builder/builder/builder.component';
+import { BuilderComponent } from './_components/_builder/builder/builder.component';
 // import { BuilderSettingComponent } from './_components/_builder/builder-setting/builder-setting.component';
 // import { BuilderTopbarComponent } from './_components/_builder/builder-topbar/builder-topbar.component';
 // import { BulderWireframeComponent } from './_components/_builder/bulder-wireframe/bulder-wireframe.component';
@@ -169,6 +169,8 @@ if (currentDomain === appHost) {
     { path: 'heatmap',component: HeatmapsComponent,loadChildren: () => import('./_modules/heatmap.module').then(m => m.HeatmapModule), canActivate: [AuthGuard] },
     { path: 'account',component: AccountComponent, loadChildren: () => import('./_modules/account-setting.module').then(m => m.AccountSettingModule), canActivate: [AuthGuard] },
     // { path: 'affiliates', component: AffiliatesComponent, loadChildren: () => import('./_modules/affiliate.module').then(m => m.AffiliateModule), canActivate: [AuthGuard] },
+    { path: 'builder/:target/:id',component: BuilderComponent, loadChildren: () => import('./_modules/builder.module').then(m => m.BuilderModule), canActivate: [AuthGuard] },
+    { path: 'builder',loadChildren: () => import('./_modules/crm-builders.module').then(m => m.CrmBuildersModule), canActivate: [AuthGuard] },
     { path: '**', loadChildren: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] , data: {
       domain: currentDomain,
       path: currentPath,
