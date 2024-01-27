@@ -23,9 +23,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { PortalModule } from '@angular/cdk/portal';
-
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -57,8 +55,7 @@ import { PortalModule } from '@angular/cdk/portal';
     ClipboardModule,
     MatDialogModule,
     MatAutocompleteModule, 
-    OverlayModule,  
-    PortalModule, 
+    MatButtonModule,
   ],
   exports: [
     BuilderSettingComponent,
