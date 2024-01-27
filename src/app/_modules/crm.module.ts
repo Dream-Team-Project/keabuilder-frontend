@@ -65,7 +65,7 @@ const routes: Routes = [
    
     { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
     { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
-    { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule, canActivate: [AuthGuard]},
+    // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule, canActivate: [AuthGuard]},
     { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
   ];
 
