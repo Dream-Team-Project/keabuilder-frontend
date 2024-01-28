@@ -11,10 +11,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
-  { path: 'scrumboard', component:ScrumBoardsComponent, canActivate: [AuthGuard] },
-  { path: 'scrumboardlist/:id', component:ScrumBoardListComponent, canActivate: [AuthGuard] },
+  { path: '', component:ScrumBoardsComponent, canActivate: [AuthGuard] },
+  { path: 'list/:id', component:ScrumBoardListComponent, canActivate: [AuthGuard] },
  
 ];
 
@@ -34,6 +36,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatMenuModule,
     MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
   ],
   exports: [RouterModule]
 })

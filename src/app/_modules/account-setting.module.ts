@@ -17,6 +17,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
       { path: '', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
@@ -47,6 +48,7 @@ const routes: Routes = [
     MatInputModule,
     MatDialogModule,
     MatCardModule,
+    MatSelectModule,
   ],
   exports: [RouterModule]
 })

@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../_guard/auth.guard';
 import { MembershipCoursesComponent } from '../_components/_membership/courses/courses.component';
-import { MembershipModulesComponent } from '../_components/_membership/modules/modules.component';
-import { MembershipLessonComponent } from '../_components/_membership/lesson/lesson.component';
 import { MembershipComponent } from '../_components/_membership/membership/membership.component';
 import { MembershipProductComponent } from '../_components/_membership/product/product.component';
 import { MembershipOffersComponent } from '../_components/_membership/offers/offers.component';
@@ -16,7 +14,7 @@ import { MembershipMarketplaceComponent } from '../_components/_membership/marke
 import { MembershipReportsComponent } from '../_components/_membership/membership-reports/membership-reports.component';
 import { MembershipCustomizationComponent } from '../_components/_membership/membership-customization/membership-customization.component';
 import { CourseSettingsComponent } from '../_components/_membership/course-settings/course-settings.component';
-import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
+
 
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,6 +39,7 @@ import { ViewCourseModule } from './view-course.module';
 import { ViewLessonModule } from './view-lesson.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NewMembershipModule } from './new-membership.module';
 
 const routes: Routes = [
 
@@ -52,12 +51,7 @@ const routes: Routes = [
         { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
         { path: 'settings', component: CourseSettingsComponent, canActivate: [AuthGuard] },
 
-  { path: 'new-membership', component: NewMembershipComponent,
-  children :[
-    { path: 'course/:course_id', component: MembershipModulesComponent, canActivate: [AuthGuard] },
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent, canActivate: [AuthGuard] },
-    ],canActivate: [AuthGuard] },
+ 
     { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,canActivate: [AuthGuard]},
     { path: 'member/:course_id', component : ViewCourseModule,canActivate: [AuthGuard]},
   ];
@@ -65,8 +59,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     MembershipCoursesComponent,
-    MembershipModulesComponent,
-    MembershipLessonComponent,
     MembershipComponent,
     MembershipProductComponent,
     MembershipOffersComponent,
@@ -78,7 +70,7 @@ const routes: Routes = [
     MembershipReportsComponent,
     MembershipCustomizationComponent,
     CourseSettingsComponent,
-    NewMembershipComponent,
+    
    
    
   ],
@@ -110,6 +102,7 @@ const routes: Routes = [
     MatSidenavModule,
     MatInputModule,
     MatDialogModule,
+    NewMembershipModule,
   ],
   exports: [RouterModule]
 })

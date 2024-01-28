@@ -57,7 +57,7 @@
 <h2 class=" fs-1 fw-bold">Scrumboard Boards</h2>
 <div class="d-flex w-80 overflow-x-auto">
 <div class="d-flex gap-2 mx-auto p-4">
-  <div *ngFor="let board of boards" class="boardCard px-3 py-4 rounded-3 d-flex flex-column justify-content-between mr-4" [routerLink]="'/scrumboardlist/'+board.uniqueid">
+  <div *ngFor="let board of boards" class="boardCard px-3 py-4 rounded-3 d-flex flex-column justify-content-between mr-4" [routerLink]="'/scrumboard/list/'+board.uniqueid">
     <div class="d-flex justify-content-between">
       <div>
         <h3 class="fw-bold">{{board?.boardName | titlecase}}</h3>

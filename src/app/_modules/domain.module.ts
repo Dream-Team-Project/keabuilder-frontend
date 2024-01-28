@@ -17,8 +17,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 const routes: Routes = [
-  { path: 'domain', component: DomainComponent, canActivate: [AuthGuard] },
-  { path: 'domain/update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
+  { path: '', component: DomainComponent, canActivate: [AuthGuard] },
+  { path: 'update/:uniqueid', component: UpdateDnsComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
