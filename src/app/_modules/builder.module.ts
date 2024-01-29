@@ -30,7 +30,7 @@ import { PagenotfoundModule } from './pagenotfound.module';
 const routes: Routes = [
   // { path: 'email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   // { path: 'form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
-  { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
   { path: '', component: PagenotfoundModule },
 ];
 @NgModule({
