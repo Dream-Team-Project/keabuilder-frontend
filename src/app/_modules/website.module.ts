@@ -33,16 +33,32 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const routes: Routes = [
-  {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
-  {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
-  {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-  {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
-  {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
-  {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
-  {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
-  {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
-  {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
-  {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+  {path: '', component: WebsiteComponent,
+      children: [
+        // {path: '', component: WebsiteDesignComponent, canActivate: [AuthGuard]},
+        {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
+        {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
+        {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+        {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
+        {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
+        {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+        // {path: 'marketplace', component: ComingSoonComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+        {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+        {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+      ],
+    canActivate: [AuthGuard] },
+  // {path: '', component: WebsitesComponent, canActivate: [AuthGuard]},
+  // {path: 'all', component: WebsitesComponent, canActivate: [AuthGuard]},
+  // {path:'pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+  // {path:'headers', component: WebsiteHeadersComponent, canActivate: [AuthGuard]},
+  // {path:'footers', component: WebsiteFootersComponent, canActivate: [AuthGuard]},
+  // {path:'navigation', component: WebsiteNavigationComponent, canActivate: [AuthGuard]},
+  // {path: ':website_id/details', component: WebsiteDetailsComponent, canActivate: [AuthGuard]},
+  // {path: ':website_id/pages', component: WebsitePagesComponent, canActivate: [AuthGuard]},
+  // {path: ':website_id/pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
+  // {path: 'pages/archive', component: WebpagesArchiveComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
