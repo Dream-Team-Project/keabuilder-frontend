@@ -8,8 +8,8 @@ import { ProductsComponent } from '../_components/_sales/products/products.compo
 import { OffersComponent } from '../_components/_sales/offers/offers.component';
 import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
-import { OrderformModule } from './orderform.module';
-import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
+// import { OrderformModule } from './orderform.module';
+// import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
 import { BuilderSettingModule } from './builder-setting.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -42,8 +42,8 @@ const routes: Routes = [
       { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
       { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
       { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-      { path: 'orderform', component: OrderformModule, canActivate: [AuthGuard] },
-      { path: 'orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
+      // { path: 'orderform', component: OrderformModule, canActivate: [AuthGuard] },
+      // { path: 'orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
       { path: 'offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
       { path: 'builder/checkout/:id', component: CheckoutComponent, canActivate: [AuthGuard] },
   ];
@@ -54,7 +54,7 @@ const routes: Routes = [
     PaymentComponent,
     ProductsComponent,
     OffersComponent,
-    OrderFormCheckoutComponent,
+    // OrderFormCheckoutComponent,
     OfferComponent,
     CheckoutComponent,
     // CrmFormFetchComponent,
@@ -62,12 +62,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormfetchModule,
-    OrderformModule, 
+    // OrderformModule, 
     RouterModule.forChild(routes),
     PipeModule,
     ImageModule,
     BuilderSettingModule,
-    MatPaginatorModule,
     MatPaginatorModule, 
     MatProgressBarModule,
     FormsModule, 

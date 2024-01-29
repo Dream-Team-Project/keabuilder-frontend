@@ -55,7 +55,6 @@ const routes: Routes = [
       { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
       { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
       { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-      { path: 'fields', component: CrmFormFieldsModule, canActivate: [AuthGuard] },
       { path: 'forms', component: CrmFormsComponent, canActivate: [AuthGuard] },
       { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
       { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },

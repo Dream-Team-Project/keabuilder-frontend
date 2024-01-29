@@ -10,8 +10,6 @@ import { CreateFunnelsComponent } from '../_components/_funnels/create-funnels/c
 import { FunnelSettingsComponent } from '../_components/_funnels/funnel-settings/funnel-settings.component';
 import { FunnelStepArchiveComponent } from '../_components/_funnels/funnel-step-archive/funnel-step-archive.component';
 import { FunnelStepsComponent } from '../_components/_funnels/funnel-steps/funnel-steps.component';
-// import { FunnelCheckoutComponent } from '../_components/_funnels/funnel-checkout/funnel-checkout.component';
-import { FunnelCheckoutModule } from './funnel-checkout.module';
 import { FunnelStepSettingsComponent } from '../_components/_funnels/funnel-step-settings/funnel-step-settings.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -45,7 +43,7 @@ canActivate: [AuthGuard] },
   { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
 
   // builder
-  { path: 'fetch-orderform/:id', component: FunnelCheckoutModule},
+  // { path: 'fetch-orderform/:id', component: FunnelCheckoutModule},
 ];
 
 @NgModule({
@@ -59,11 +57,10 @@ canActivate: [AuthGuard] },
     FunnelSettingsComponent,
     FunnelStepArchiveComponent,
     FunnelStepsComponent,
-    // FunnelCheckoutComponent,
+   
   ],
   imports: [
     CommonModule,
-    FunnelCheckoutModule,
     RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule, 

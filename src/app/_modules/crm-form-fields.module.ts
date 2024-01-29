@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthGuard } from '../_guard/auth.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { CrmFieldsComponent } from '../_components/_crm/fields/fields.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -24,12 +25,19 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
+
+
+const routes: Routes = [
+  { path: '', component: CrmFieldsComponent, canActivate: [AuthGuard] },
+];
+
 @NgModule({
   declarations: [
     CrmFieldsComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),
     RouterModule,
     PipeModule,
     MatPaginatorModule,
@@ -53,8 +61,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatBottomSheetModule,
     EditorModule,
     MatDatepickerModule,
-    MatListModule,
-
+   
   ],
   exports:[
     CrmFieldsComponent,
