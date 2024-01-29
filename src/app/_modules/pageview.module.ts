@@ -25,15 +25,15 @@ const currentPath:any = window.location.pathname;
 
 const routes: Routes = [
 
-  { path: 'preview/:view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
+  { path: ':view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
     domain: currentDomain,
     path: currentPath,
   }},
-  { path: 'preview/:view_target/:user_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
+  { path: ':view_target/:user_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
     domain: currentDomain,
     path: currentPath,
   }},
-  { path: 'preview/:view_target/:user_id/:website_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
+  { path: ':view_target/:user_id/:website_id/:page_id', component: PageViewComponent, pathMatch: 'full', data: {
     domain: currentDomain,
     path: currentPath,
   }},
