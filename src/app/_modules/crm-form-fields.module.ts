@@ -65,6 +65,7 @@ const routes: Routes = [
   ],
   exports:[
     CrmFieldsComponent,
+    RouterModule,
   ]
 })
 export class CrmFormFieldsModule { }

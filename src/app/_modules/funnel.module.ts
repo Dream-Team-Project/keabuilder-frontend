@@ -6,10 +6,6 @@ import { FunnelComponent } from '../_components/_funnels/funnel/funnel.component
 import { FunnelsComponent } from '../_components/_funnels/funnels/funnels.component';
 import { FunnelBuildComponent } from '../_components/_funnels/funnel-build/funnel-build.component';
 import { FunnelArchiveComponent } from '../_components/_funnels/funnel-archive/funnel-archive.component';
-import { CreateFunnelsComponent } from '../_components/_funnels/create-funnels/create-funnels.component';
-import { FunnelSettingsComponent } from '../_components/_funnels/funnel-settings/funnel-settings.component';
-import { FunnelStepArchiveComponent } from '../_components/_funnels/funnel-step-archive/funnel-step-archive.component';
-import { FunnelStepsComponent } from '../_components/_funnels/funnel-steps/funnel-steps.component';
 import { FunnelStepSettingsComponent } from '../_components/_funnels/funnel-step-settings/funnel-step-settings.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -32,14 +28,14 @@ const routes: Routes = [
   { path: 'all', component: FunnelsComponent, canActivate: [AuthGuard] },
   { path: 'build', component: FunnelBuildComponent, canActivate: [AuthGuard] },
   { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
-  { path: ':funnel_id', component: CreateFunnelsComponent,
-children: [ 
-{ path: 'steps/:step_id', component: FunnelStepsComponent, canActivate: [AuthGuard] },
-// { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
-{ path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
-{ path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
-],
-canActivate: [AuthGuard] },
+//   { path: ':funnel_id', component: CreateFunnelsComponent,
+// children: [ 
+// { path: 'steps/:step_id', component: FunnelStepsComponent, canActivate: [AuthGuard] },
+// // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
+// { path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
+// { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
+// ],
+// canActivate: [AuthGuard] },
   { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
 
   // builder
@@ -53,11 +49,6 @@ canActivate: [AuthGuard] },
     FunnelStepSettingsComponent,
     FunnelBuildComponent,
     FunnelArchiveComponent,
-    CreateFunnelsComponent,
-    FunnelSettingsComponent,
-    FunnelStepArchiveComponent,
-    FunnelStepsComponent,
-   
   ],
   imports: [
     CommonModule,

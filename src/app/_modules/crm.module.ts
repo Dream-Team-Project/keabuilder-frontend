@@ -6,7 +6,7 @@ import { CrmComponent } from '../_components/_crm/crm/crm.component';
 import { CrmAutomationComponent } from '../_components/_crm/automation/automation.component';
 import { CrmCampaignBuilderComponent } from '../_components/_crm/campaign-builder/campaign-builder.component';
 import { CrmCampaignsComponent } from '../_components/_crm/campaigns/campaigns.component';
-import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
+
 import { CrmContactsComponent } from '../_components/_crm/contacts/contacts.component';
 import { CrmFormFieldsModule } from './crm-form-fields.module';
 import { CrmBuildersModule } from './crm-builders.module';
@@ -56,16 +56,17 @@ const routes: Routes = [
       { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
       { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
       { path: 'forms', component: CrmFormsComponent, canActivate: [AuthGuard] },
+      // { path: 'fields', component: CrmFormFieldsModule, canActivate: [AuthGuard] },
       { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
       { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
       { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
       { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
       { path: 'emails', component: CrmEmailsComponent, canActivate: [AuthGuard] },
    
-    { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+    // { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
     { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
     // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule, canActivate: [AuthGuard]},
-    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+    // { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
   ];
 
 @NgModule({
@@ -75,7 +76,6 @@ const routes: Routes = [
     CrmEmailsComponent,
     CrmCampaignsComponent,
     CrmContactsComponent,
-    CrmContactComponent,
     CrmListsComponent,
     CrmTagsComponent,
     CrmReportsComponent,

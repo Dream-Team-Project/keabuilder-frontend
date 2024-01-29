@@ -6,7 +6,7 @@ import { SalesComponent } from '../_components/_sales/sales/sales.component';
 import { PaymentComponent } from '../_components/_sales/payment/payment.component';
 import { ProductsComponent } from '../_components/_sales/products/products.component';
 import { OffersComponent } from '../_components/_sales/offers/offers.component';
-import { OfferComponent } from '../_components/_sales/offer/offer.component';
+// import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
 // import { OrderformModule } from './orderform.module';
 // import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
@@ -44,7 +44,7 @@ const routes: Routes = [
       { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
       // { path: 'orderform', component: OrderformModule, canActivate: [AuthGuard] },
       // { path: 'orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
-      { path: 'offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
+      // { path: 'offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
       { path: 'builder/checkout/:id', component: CheckoutComponent, canActivate: [AuthGuard] },
   ];
 
@@ -55,7 +55,7 @@ const routes: Routes = [
     ProductsComponent,
     OffersComponent,
     // OrderFormCheckoutComponent,
-    OfferComponent,
+    // OfferComponent,
     CheckoutComponent,
     // CrmFormFetchComponent,
   ],
