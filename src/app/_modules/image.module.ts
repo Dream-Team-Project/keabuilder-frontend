@@ -9,12 +9,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { PipeModule } from './pipe.module';
 
 @NgModule({
   declarations: [
     ImageComponent,
   ],
   imports :[
+    CommonModule,
     ImageCropperModule,
     MatTabsModule, 
     MatFormFieldModule,
@@ -24,6 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatTooltipModule,
     MatIconModule,
     MatSelectModule,
+    PipeModule
   ],
   exports: [
     ImageComponent,

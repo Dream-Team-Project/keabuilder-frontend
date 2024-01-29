@@ -24,11 +24,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { FunnelCheckoutModule } from './funnel-checkout.module';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PagenotfoundModule } from './pagenotfound.module';
 
 const routes: Routes = [
-  { path: '', component: BuilderComponent, canActivate: [AuthGuard] },
-  // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  // { path: 'email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
+  // { path: 'form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
+  { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
+  { path: '', component: PagenotfoundModule },
 ];
 @NgModule({
   declarations: [
@@ -36,14 +39,13 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    ImageModule,
     BuilderSettingModule,
     BuilderTopbarModule,
     BuilderWireframeModule,
     FormfetchModule,
     FunnelCheckoutModule,
     PageviewModule,
-    ImageModule,
     MatCheckboxModule,
     PipeModule,
     DragDropModule,
@@ -59,8 +61,12 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-    
+    MatTooltipModule,
+    RouterModule.forChild(routes)
   ],
-  exports: [RouterModule]
+  exports: [
+    RouterModule,
+    BuilderComponent
+  ]
 })
 export class BuilderModule { }

@@ -10,11 +10,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { PipeModule } from './pipe.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { ColorMaterialModule } from 'ngx-color/material';
 import { ColorCircleModule } from 'ngx-color/circle';
@@ -24,6 +23,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { PipeModule } from './pipe.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,6 @@ import { MatButtonModule } from '@angular/material/button';
   ],
   imports: [
     CommonModule,
-    PipeModule,
     MatSliderModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -56,6 +55,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     MatAutocompleteModule, 
     MatButtonModule,
+    PipeModule
   ],
   exports: [
     BuilderSettingComponent,

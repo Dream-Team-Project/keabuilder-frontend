@@ -28,9 +28,7 @@ export class ImageComponent implements OnInit {
 
   @Input()
   set DialogImageToggle(val: any) {
-    if(this.connectWtParent) {
-      this.openDialog();
-    }
+    if(this.connectWtParent) this.openDialog();
     else this.connectWtParent = true;
   }   
 

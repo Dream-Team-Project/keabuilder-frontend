@@ -44,7 +44,6 @@ const routes: Routes = [
 { path: 'automation/:id', component: CrmAutomationBuilderComponent, canActivate: [AuthGuard] },
 { path: 'email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
 { path: 'form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
-
 ];
 
 @NgModule({
@@ -52,8 +51,7 @@ const routes: Routes = [
     CrmFormBuilderComponent,
     CrmEmailBuilderComponent,
     CrmAutomationBuilderComponent, 
-    CrmAutomationWorkflowComponent, 
-    
+    CrmAutomationWorkflowComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +60,6 @@ const routes: Routes = [
     CrmFormFieldsModule,
     ImageModule,
     BuilderSettingModule,
-    RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule,
     FormsModule,
@@ -92,7 +89,7 @@ const routes: Routes = [
     NgApexchartsModule,
     MatSidenavModule,
     MatSnackBarModule,
-    MatDialogModule,
+    RouterModule.forChild(routes)
   ],
   exports: [
     RouterModule,
