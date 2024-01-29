@@ -150,7 +150,7 @@
                             <button mat-menu-item class="inactive" (click)="toggleStatus(course,'draft')"><i
                                     class="fa fa-file pr-2"></i>Draft</button>
                         </mat-menu>
-                <button mat-raised-button color="primary" class="mr-2" (click)="GotoUrl('member/'+course.uniqueid)">Preview <i class="fa-solid fa-eye"></i></button>
+                <button mat-raised-button color="primary" class="mr-2" (click)="GotoUrl('membership/member/'+course.uniqueid)">Preview <i class="fa-solid fa-eye"></i></button>
                 <button [disabled]="course.deleting" mat-raised-button color="accent" [matMenuTriggerFor]="menu">More <i
                         class="fa-solid fa-gear"></i></button>
                 <mat-menu #menu="matMenu">

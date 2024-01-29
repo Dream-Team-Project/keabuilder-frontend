@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { SalesComponent } from '../_components/_sales/sales/sales.component';
 import { PaymentComponent } from '../_components/_sales/payment/payment.component';
 import { ProductsComponent } from '../_components/_sales/products/products.component';
 import { OffersComponent } from '../_components/_sales/offers/offers.component';
-// import { OfferComponent } from '../_components/_sales/offer/offer.component';
 import { CheckoutComponent } from '../_components/_sales/checkout/checkout.component';
-// import { OrderformModule } from './orderform.module';
-// import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
 import { BuilderSettingModule } from './builder-setting.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -35,17 +31,24 @@ import { MatCardModule } from '@angular/material/card';
 import { FormfetchModule } from './formfetch.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { OrderFormComponent } from '../_components/_sales/orderform/orderform.component';
+import { OrderFormCheckoutComponent } from '../_components/_sales/orderform/checkout/checkout.component';
+import { OfferComponent } from '../_components/_sales/offer/offer.component';
+import { MatRippleModule } from '@angular/material/core';
 
 
 const routes: Routes = [
-      { path: '', component:  OffersComponent, canActivate: [AuthGuard] },
-      { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
-      { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
-      { path: 'payment', component: PaymentComponent, canActivate: [AuthGuard] },
-      // { path: 'orderform', component: OrderformModule, canActivate: [AuthGuard] },
-      // { path: 'orderform/:id', component: OrderFormCheckoutComponent, canActivate: [AuthGuard] },
-      // { path: 'offer/:uniqueid', component: OfferComponent, canActivate: [AuthGuard] },
-      { path: 'builder/checkout/:id', component: CheckoutComponent, canActivate: [AuthGuard] },
+       { path: '', component:  SalesComponent,
+       children :[
+      { path: '', component:  OffersComponent,},
+      { path: 'offers', component: OffersComponent,},
+      { path: 'products', component: ProductsComponent,},
+      { path: 'payment', component: PaymentComponent,},
+      { path: 'orderform', component: OrderFormComponent,},
+      // { path: 'builder/checkout/:id', component: CheckoutComponent,},
+       ],},
+       { path: 'orderform/:id', component: OrderFormCheckoutComponent,},
+       { path: 'offer/:uniqueid', component: OfferComponent,},
   ];
 
 @NgModule({
@@ -54,15 +57,15 @@ const routes: Routes = [
     PaymentComponent,
     ProductsComponent,
     OffersComponent,
-    // OrderFormCheckoutComponent,
-    // OfferComponent,
+    OrderFormCheckoutComponent,
+    OfferComponent,
     CheckoutComponent,
+    OrderFormComponent,
     // CrmFormFetchComponent,
   ],
   imports: [
     CommonModule,
     FormfetchModule,
-    // OrderformModule, 
     RouterModule.forChild(routes),
     PipeModule,
     ImageModule,
@@ -88,7 +91,8 @@ const routes: Routes = [
     NgxStripeModule,
     MatCardModule,
     MatInputModule,
-    MatDialogModule
+    MatDialogModule,
+    MatRippleModule,
   ],
   exports: [RouterModule]
 })

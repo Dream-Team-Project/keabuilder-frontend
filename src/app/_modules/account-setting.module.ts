@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { AccountComponent } from '../_components/_account-settings/account/account.component';
 import { ProfileSettingsComponent } from '../_components/_account-settings/profile-settings/profile-settings.component';
 import { SignInSecurityComponent } from '../_components/_account-settings/sign-in-security/sign-in-security.component';
@@ -20,11 +19,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
-      { path: '', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
-      { path: 'settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
-      { path: 'sign-in-security', component: SignInSecurityComponent, canActivate: [AuthGuard] },
-      { path: 'billing', component: BillingComponent, canActivate: [AuthGuard] },
-      { path: 'viewplans', component: ViewplansComponent, canActivate: [AuthGuard] },
+      { path: '', component: AccountComponent,
+      children : [
+      { path: '', component: ProfileSettingsComponent, },
+      { path: 'settings', component: ProfileSettingsComponent, },
+      { path: 'sign-in-security', component: SignInSecurityComponent, },
+      { path: 'billing', component: BillingComponent,},
+      { path: 'viewplans', component: ViewplansComponent,},
+      ],}
   ];
 @NgModule({
   declarations: [

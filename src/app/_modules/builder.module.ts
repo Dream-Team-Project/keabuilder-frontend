@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
-import { BuilderComponent } from '../_components/_builder/builder/builder.component';
-import { BuilderSettingModule } from './builder-setting.module';
-import { BuilderTopbarModule } from './builder-topbar.module';
-import { BuilderWireframeModule } from './builder-wireframe.module';
+// import { BuilderComponent } from '../_components/_builder/builder/builder.component';
+// import { BuilderSettingModule } from './builder-setting.module';
+// import { BuilderTopbarModule } from './builder-topbar.module';
+// import { BuilderWireframeModule } from './builder-wireframe.module';
 import { FormfetchModule } from './formfetch.module';
 import { PageviewModule } from './pageview.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -31,18 +30,18 @@ const routes: Routes = [
   // { path: 'email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
   // { path: 'form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
   // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  { path: '', component: PagenotfoundModule },
+  // { path: '', component: PagenotfoundModule },
 ];
 @NgModule({
   declarations: [
-    BuilderComponent,
+    // BuilderComponent,
   ],
   imports: [
     CommonModule,
     ImageModule,
-    BuilderSettingModule,
-    BuilderTopbarModule,
-    BuilderWireframeModule,
+    // BuilderSettingModule,
+    // BuilderTopbarModule,
+    // BuilderWireframeModule,
     FormfetchModule,
     FunnelCheckoutModule,
     PageviewModule,
@@ -65,8 +64,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [
-    RouterModule,
-    BuilderComponent
+    // RouterModule,
+    // BuilderComponent
   ]
 })
 export class BuilderModule { }

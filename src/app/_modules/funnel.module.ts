@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { FunnelComponent } from '../_components/_funnels/funnel/funnel.component';
 import { FunnelsComponent } from '../_components/_funnels/funnels/funnels.component';
 import { FunnelBuildComponent } from '../_components/_funnels/funnel-build/funnel-build.component';
 import { FunnelArchiveComponent } from '../_components/_funnels/funnel-archive/funnel-archive.component';
 import { FunnelStepSettingsComponent } from '../_components/_funnels/funnel-step-settings/funnel-step-settings.component';
+import { FunnelStepsComponent } from '../_components/_funnels/funnel-steps/funnel-steps.component';
+import { FunnelSettingsComponent } from '../_components/_funnels/funnel-settings/funnel-settings.component';
+import { FunnelStepArchiveComponent } from '../_components/_funnels/funnel-step-archive/funnel-step-archive.component';
+import { CreateFunnelsComponent } from '../_components/_funnels/create-funnels/create-funnels.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -23,23 +26,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
-
-  { path: '', component: FunnelsComponent, canActivate: [AuthGuard] },
-  { path: 'all', component: FunnelsComponent, canActivate: [AuthGuard] },
-  { path: 'build', component: FunnelBuildComponent, canActivate: [AuthGuard] },
-  { path: 'archive', component: FunnelArchiveComponent, canActivate: [AuthGuard] },
-//   { path: ':funnel_id', component: CreateFunnelsComponent,
-// children: [ 
-// { path: 'steps/:step_id', component: FunnelStepsComponent, canActivate: [AuthGuard] },
-// // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
-// { path: 'settings', component: FunnelSettingsComponent, canActivate: [AuthGuard] },
-// { path: 'archive', component: FunnelStepArchiveComponent, canActivate: [AuthGuard] },
-// ],
-// canActivate: [AuthGuard] },
-  { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent, canActivate: [AuthGuard] },
-
+  { path: '', component: FunnelComponent,
+  children : [
+  { path: '', component: FunnelsComponent,},
+  { path: 'all', component: FunnelsComponent,},
+  { path: 'build', component: FunnelBuildComponent,},
+  { path: 'archive', component: FunnelArchiveComponent,},
+],},
+  { path: ':funnel_id', component: CreateFunnelsComponent,
+children: [ 
+{ path: 'steps/:step_id', component: FunnelStepsComponent,},
+// { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
+{ path: 'settings', component: FunnelSettingsComponent,},
+{ path: 'archive', component: FunnelStepArchiveComponent,},
+],},
+  { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent,},
+  
   // builder
   // { path: 'fetch-orderform/:id', component: FunnelCheckoutModule},
+  
 ];
 
 @NgModule({
@@ -49,6 +54,10 @@ const routes: Routes = [
     FunnelStepSettingsComponent,
     FunnelBuildComponent,
     FunnelArchiveComponent,
+    CreateFunnelsComponent,
+    FunnelStepsComponent,
+    FunnelSettingsComponent,
+    FunnelStepArchiveComponent,
   ],
   imports: [
     CommonModule,

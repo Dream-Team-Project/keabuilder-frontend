@@ -328,7 +328,7 @@ export class MembershipCoursesComponent implements OnInit {
   
   checkpagesettings(value:any,data:any){
     if(value=='preview'){
-      var url = 'https://'+data?.domain+'/member/'+data.uniqueid;
+      var url = 'https://'+data?.domain+'/membership/member/'+data.uniqueid;
       window.open(url, '_blank');
     }
   }

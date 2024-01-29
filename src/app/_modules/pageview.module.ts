@@ -1,11 +1,9 @@
 import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { MemberSignedGuard } from '../_guard/member-signed.guard';
 import { MemberAuthGuard } from '../_guard/member-auth.guard';
 import { PageViewComponent } from '../_components/page-view/page-view.component';
-// import { environment } from 'src/environments/environment';
 import { PagenotfoundModule } from './pagenotfound.module';
 import { PipeModule } from './pipe.module';
 import { FormfetchModule } from './formfetch.module';
@@ -17,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { FunnelCheckoutModule } from './funnel-checkout.module';
-// import { BrowserModule } from '@angular/platform-browser';
+
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -51,7 +49,6 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    // BrowserModule,
     PagenotfoundModule,
     MemberNavbarModule,
     PipeModule,

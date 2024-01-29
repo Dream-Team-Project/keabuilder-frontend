@@ -170,7 +170,7 @@
                     <button mat-menu-item class="inactive" (click)="toggleStatus(lesson,'draft')"><i
                             class="fa fa-file pr-2"></i>Draft</button>
                 </mat-menu>
-                <button mat-raised-button color="primary" class="mr-2" (click)="GotoUrl('/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid)">Preview <i class="far fa-eye"></i></button>
+                <button mat-raised-button color="primary" class="mr-2" (click)="GotoUrl('/membership/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid)">Preview <i class="far fa-eye"></i></button>
                 <button mat-raised-button color="accent" (click)="addContent()">Save <i class="far fa-save ml-1"></i></button>
             <!-- <button mat-raised-button color="accent" (click)="openDialog(lesson, 'details')">Customize <i class="far fa-edit"></i></button> -->
         </div>

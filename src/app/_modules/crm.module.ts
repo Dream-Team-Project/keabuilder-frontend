@@ -6,18 +6,15 @@ import { CrmComponent } from '../_components/_crm/crm/crm.component';
 import { CrmAutomationComponent } from '../_components/_crm/automation/automation.component';
 import { CrmCampaignBuilderComponent } from '../_components/_crm/campaign-builder/campaign-builder.component';
 import { CrmCampaignsComponent } from '../_components/_crm/campaigns/campaigns.component';
-
+import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
 import { CrmContactsComponent } from '../_components/_crm/contacts/contacts.component';
 import { CrmFormFieldsModule } from './crm-form-fields.module';
-import { CrmBuildersModule } from './crm-builders.module';
-import { FormfetchModule } from './formfetch.module';
 import { CrmFormsComponent } from '../_components/_crm/forms/forms.component';
 import { CrmListsComponent } from '../_components/_crm/lists/lists.component';
 import { CrmReportsComponent } from '../_components/_crm/reports/reports.component';
 import { CrmSettingsComponent } from '../_components/_crm/settings/settings.component';
 import { CrmTagsComponent } from '../_components/_crm/tags/tags.component';
 import { CrmEmailsComponent } from '../_components/_crm/emails/emails.component';
-import { BuilderSettingModule } from './builder-setting.module';
 import { PipeModule } from './pipe.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -50,23 +47,26 @@ import { ImageModule } from './image.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
+
+
 const routes: Routes = [
-      { path: '', component: CrmReportsComponent, canActivate: [AuthGuard] },
-      { path: 'automations', component: CrmAutomationComponent, canActivate: [AuthGuard] },
-      { path: 'campaigns', component: CrmCampaignsComponent, canActivate: [AuthGuard] },
-      { path: 'contacts', component: CrmContactsComponent, canActivate: [AuthGuard] },
-      { path: 'forms', component: CrmFormsComponent, canActivate: [AuthGuard] },
-      // { path: 'fields', component: CrmFormFieldsModule, canActivate: [AuthGuard] },
-      { path: 'lists', component: CrmListsComponent, canActivate: [AuthGuard] },
-      { path: 'reports', component: CrmReportsComponent, canActivate: [AuthGuard] },
-      { path: 'settings', component: CrmSettingsComponent, canActivate: [AuthGuard] },
-      { path: 'tags', component: CrmTagsComponent, canActivate: [AuthGuard] },
-      { path: 'emails', component: CrmEmailsComponent, canActivate: [AuthGuard] },
-   
-    // { path: 'contact/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
-    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent, canActivate: [AuthGuard] },
-    // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule, canActivate: [AuthGuard]},
-    // { path: 'member/:memberid/:uniqueid', component: CrmContactComponent, canActivate: [AuthGuard] },
+  { path: '', component: CrmComponent,
+  children : [
+      { path: '', component: CrmReportsComponent,},
+      { path: 'reports', component: CrmReportsComponent,},
+      { path: 'automations', component: CrmAutomationComponent, },
+      { path: 'campaigns', component: CrmCampaignsComponent,},
+      { path: 'contacts', component: CrmContactsComponent, },
+      { path: 'forms', component: CrmFormsComponent,},
+      { path: 'lists', component: CrmListsComponent,},
+      { path: 'settings', component: CrmSettingsComponent,},
+      { path: 'tags', component: CrmTagsComponent,},
+      { path: 'emails', component: CrmEmailsComponent,},
+  ],},
+    { path: 'contact/:uniqueid', component: CrmContactComponent,},
+    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent,},
+    // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule,},
+    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
   ];
 
 @NgModule({
@@ -82,15 +82,13 @@ const routes: Routes = [
     CrmSettingsComponent,
     CrmCampaignBuilderComponent,
     CrmAutomationComponent,
+    CrmContactComponent,
   ],
   imports: [
     CommonModule,
     PipeModule,
     CrmFormFieldsModule,
-    FormfetchModule,
-    CrmBuildersModule,
     ImageModule,
-    BuilderSettingModule,
     RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule,

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { MembershipCoursesComponent } from '../_components/_membership/courses/courses.component';
 import { MembershipComponent } from '../_components/_membership/membership/membership.component';
 import { MembershipProductComponent } from '../_components/_membership/product/product.component';
@@ -14,7 +13,8 @@ import { MembershipMarketplaceComponent } from '../_components/_membership/marke
 import { MembershipReportsComponent } from '../_components/_membership/membership-reports/membership-reports.component';
 import { MembershipCustomizationComponent } from '../_components/_membership/membership-customization/membership-customization.component';
 import { CourseSettingsComponent } from '../_components/_membership/course-settings/course-settings.component';
-
+import { MembershipLessonComponent } from '../_components/_membership/lesson/lesson.component';
+import { MembershipModulesComponent } from '../_components/_membership/modules/modules.component';
 
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,21 +39,27 @@ import { ViewCourseModule } from './view-course.module';
 import { ViewLessonModule } from './view-lesson.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NewMembershipModule } from './new-membership.module';
+import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
+
+
 
 const routes: Routes = [
-
-        { path: '', component: MembershipReportsComponent, canActivate: [AuthGuard] },
-        { path: 'reports', component: MembershipReportsComponent, canActivate: [AuthGuard] }, 
-        { path: 'memberships', component: MembershipCoursesComponent,canActivate: [AuthGuard] },
-        { path: 'members', component: MembershipMembersComponent, canActivate: [AuthGuard] },
-        { path: 'marketplace', component: MembershipMarketplaceComponent, canActivate: [AuthGuard] },
-        { path: 'customization', component: MembershipCustomizationComponent, canActivate: [AuthGuard] },
-        { path: 'settings', component: CourseSettingsComponent, canActivate: [AuthGuard] },
-
- 
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,canActivate: [AuthGuard]},
-    { path: 'member/:course_id', component : ViewCourseModule,canActivate: [AuthGuard]},
+  { path: '', component: MembershipComponent, 
+  children : [
+        { path: '', component: MembershipReportsComponent,},
+        { path: 'reports', component: MembershipReportsComponent,}, 
+        { path: 'memberships', component: MembershipCoursesComponent,},
+        { path: 'members', component: MembershipMembersComponent, },
+        { path: 'marketplace', component: MembershipMarketplaceComponent, },
+        { path: 'customization', component: MembershipCustomizationComponent, },
+        { path: 'settings', component: CourseSettingsComponent,},
+   ],},
+    { path: 'course/:course_id', component: MembershipModulesComponent,},
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,},
+    { path: 'member/:course_id', component : ViewCourseModule,},
+    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
   ];
 
 @NgModule({
@@ -70,9 +76,8 @@ const routes: Routes = [
     MembershipReportsComponent,
     MembershipCustomizationComponent,
     CourseSettingsComponent,
-    
-   
-   
+    MembershipModulesComponent,
+    MembershipLessonComponent,
   ],
   imports: [
     CommonModule,
@@ -102,7 +107,6 @@ const routes: Routes = [
     MatSidenavModule,
     MatInputModule,
     MatDialogModule,
-    NewMembershipModule,
   ],
   exports: [RouterModule]
 })
