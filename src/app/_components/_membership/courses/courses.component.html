@@ -145,7 +145,7 @@
               </span> -->
               <button [disabled]="course.deleting" mat-raised-button color="accent" (click)="checkpagesettings('preview',course)">View <i class="fa-solid fa-eye"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="primary"
-              [routerLink]="'/membership/course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
+              [routerLink]="'/membership/new-membership/course/'+course.uniqueid" class="mx-2">Edit <i class="fa-solid fa-pencil"></i></button>
               <button [disabled]="course.deleting" mat-raised-button color="accent"
               [matMenuTriggerFor]="menu">More <i class="fa-solid fa-gear"></i></button>
               <mat-menu #menu="matMenu">

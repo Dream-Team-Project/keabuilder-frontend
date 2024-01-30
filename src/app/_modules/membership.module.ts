@@ -15,7 +15,7 @@ import { MembershipCustomizationComponent } from '../_components/_membership/mem
 import { CourseSettingsComponent } from '../_components/_membership/course-settings/course-settings.component';
 import { MembershipLessonComponent } from '../_components/_membership/lesson/lesson.component';
 import { MembershipModulesComponent } from '../_components/_membership/modules/modules.component';
-
+import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -49,17 +49,20 @@ const routes: Routes = [
   children : [
         { path: '', component: MembershipReportsComponent,},
         { path: 'reports', component: MembershipReportsComponent,}, 
-        { path: 'memberships', component: MembershipCoursesComponent,},
+        { path: 'courses', component: MembershipCoursesComponent,},
         { path: 'members', component: MembershipMembersComponent, },
         { path: 'marketplace', component: MembershipMarketplaceComponent, },
         { path: 'customization', component: MembershipCustomizationComponent, },
         { path: 'settings', component: CourseSettingsComponent,},
    ],},
-    { path: 'course/:course_id', component: MembershipModulesComponent,},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,},
+   { path: 'new-membership/course', component: NewMembershipComponent,
+   children :[
+    { path: ':course_id', component: MembershipModulesComponent,},
+    { path: ':course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
+    { path: ':course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
+    ],},
     { path: 'member/:course_id', component : ViewCourseModule,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,},
     { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
   ];
 
@@ -79,6 +82,7 @@ const routes: Routes = [
     CourseSettingsComponent,
     MembershipModulesComponent,
     MembershipLessonComponent,
+    NewMembershipComponent,
   ],
   imports: [
     CommonModule,

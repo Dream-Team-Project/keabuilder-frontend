@@ -140,7 +140,7 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
-          routerlink: '/membership/memberships',
+          routerlink: '/membership/courses',
           img: 'shield.gif',
           icon: 'fa-regular fa-folder',
           title: 'Courses'

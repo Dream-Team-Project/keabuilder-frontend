@@ -153,6 +153,7 @@ subscriptiondata(){
 updatesubscription(){
   // console.log(this.subscription_productid)
   this.fetching=true;
+  if(this.usertype !='free'){
   if(this.subscription_productid && this.subscription_productid != this.stripedata.subscription?.plan?.id){
   let obj={productid:this.subscription_productid,customerid:this.stripedata?.customer?.id,type:'updateplan',subscriptionid:this.stripedata?.subscription?.id}; 
   this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
@@ -178,8 +179,11 @@ updatesubscription(){
  else{
    this.fetching=false;
   this._general.openSnackBar(true,"Plan Allready Active",'Ok','center','top');
- 
  }
+}else{
+  this.fetching=false;
+ this._general.openSnackBar(false,"You are our Special user",'Ok','center','top');
+}
  }
  productdetails(event:any){
    // this.productname=event.value.name;

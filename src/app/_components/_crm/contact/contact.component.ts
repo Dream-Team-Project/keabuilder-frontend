@@ -160,7 +160,7 @@ export class CrmContactComponent implements OnInit {
         this.contactFieldJSON = this.contactFields.map((cf:any) => {
           return  {id: cf.id, value: cf.value};
         });
-        console.log(this.contactFields);
+        // console.log(this.contactFields);
       }
     })
    
@@ -352,7 +352,7 @@ export class CrmContactComponent implements OnInit {
     member.offerid= this.filteredTempIds.offers.toString();
     member.contactid=this.contact.uniqueid;
     member.registration_type = member?.registration_type  ? member?.registration_type : 'free';
-    console.log(member)
+    // console.log(member)
     this.courseService.updatedelmember(member).subscribe((resp:any)=>{
       if(resp.success)  this._general.openSnackBar(false, resp.message, 'OK', 'center', 'top');
 
