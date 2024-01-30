@@ -95,7 +95,7 @@ subscriptionplans:any=[
        })
     })
   }
-  subscriptiondata(){
+subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
       if(data.success){
@@ -120,6 +120,7 @@ subscriptionplans:any=[
       })
     });
   }
+  
   openDialog(templateRef: TemplateRef<any>,plan:any): void {
     if(plan) {
     this.subscriptionplans.map((option:any)=>{
