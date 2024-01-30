@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
+    <div class="row">
+        <div class="col-md-12">
+            <button mat-icon-button  class="kb-invoice-btn" (click)="_general.prevRoute()"><i
+                class="fa fa-arrow-left mr-2"></i>Back</button>
+        <h2><span class="kb-billing-invoice">Invoices</span></h2>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-12">
+        <table class="table kb-table" dataSource="invoices">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <tr *ngFor="let invoice of customer?.invoices; index as i">
+                        <td>{{invoice.created | date :'mediumDate'}}</td>
+                        <td>{{'$ '+invoice.total+' USD'}}</td> 
+                        <td>
+                        <button mat-raised-button class="kb-invoice-view-btn mr-3" (click)="Gotoinvoice(invoice.hosted_invoice_url)"><i class="far fa-eye"></i> View</button>
+                        <button mat-raised-button class="kb-invoice-dwn-btn" (click)="Gotoinvoice(invoice.invoice_pdf)"><i class="fa-solid fa-download"></i> Download</button></td>
+                        
+                    </tr>
+                    </tbody>
+                    </table>
+                    <mat-paginator #paginator [length]="invoiceslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpageInvoices($event)"></mat-paginator>
+    </div>
+</div>
+</div>

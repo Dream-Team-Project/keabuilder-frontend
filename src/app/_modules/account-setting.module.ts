@@ -6,6 +6,7 @@ import { ProfileSettingsComponent } from '../_components/_account-settings/profi
 import { SignInSecurityComponent } from '../_components/_account-settings/sign-in-security/sign-in-security.component';
 import { BillingComponent } from '../_components/_account-settings/billing/billing.component';
 import { ViewplansComponent } from '../_components/_account-settings/viewplans/viewplans.component';
+import { InvoicesComponent } from '../_components/_account-settings/invoices/invoices.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -17,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const routes: Routes = [
       { path: '', component: AccountComponent,
@@ -26,7 +28,8 @@ const routes: Routes = [
       { path: 'sign-in-security', component: SignInSecurityComponent, },
       { path: 'billing', component: BillingComponent,},
       { path: 'viewplans', component: ViewplansComponent,},
-      ],}
+      ],},
+      { path: 'invoices/:id', component: InvoicesComponent,},
   ];
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ const routes: Routes = [
     ViewplansComponent, 
     ProfileSettingsComponent,
     SignInSecurityComponent,
+    InvoicesComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +55,7 @@ const routes: Routes = [
     MatDialogModule,
     MatCardModule,
     MatSelectModule,
+    MatPaginatorModule,
   ],
   exports: [RouterModule]
 })

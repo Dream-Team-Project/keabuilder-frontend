@@ -17,6 +17,8 @@ export class ViewplansComponent implements OnInit {
 
   fetching=false;
   product:any;
+  productname:any;
+  producttype:any;
   stripedata:any={
     customer:[],
     subscription:[],
@@ -118,11 +120,22 @@ subscriptionplans:any=[
       })
     });
   }
-  openDialog(templateRef: TemplateRef<any>): void {
+  openDialog(templateRef: TemplateRef<any>,plan:any): void {
+    if(plan) {
+    this.subscriptionplans.map((option:any)=>{
+      if(option?.name == plan && option?.type == this.plantype)
+      {
+        this.productname=option.name;
+        this.producttype=this.plantype;
+        this.product=option.value;
+        this.subscription_productid=option.id
+      }
+    })
+    }
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
     this.subscriptionplans.map((element:any)=>{
       // console.log(this.subscription_productid)
-      if(element?.value == this.subscription_productid){
+      if(element?.name == this.subscription_productid){
        this.products.map((option:any)=>{
           if(option?.name == element.name)
           {
@@ -156,7 +169,7 @@ updatesubscription(){
      this.fetching=false;
       this.error=true;
      this.errormessage=data?.message;
-     this.openDialog(this.updatedialog);
+     this.openDialog(this.updatedialog,'');
    
     }
   })

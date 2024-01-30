@@ -40,6 +40,7 @@ import { ViewLessonModule } from './view-lesson.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -107,6 +108,7 @@ const routes: Routes = [
     MatSidenavModule,
     MatInputModule,
     MatDialogModule,
+    MatCheckboxModule,
   ],
   exports: [RouterModule]
 })

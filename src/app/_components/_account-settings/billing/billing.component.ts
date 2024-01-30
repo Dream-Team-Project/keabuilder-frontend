@@ -142,8 +142,6 @@ paypaldata:any = {current_period_end:''};
   constructor(
               public userService: UserService,
               public imageService: ImageService,
-              private _auth: AuthService, 
-              private tokenservice:TokenStorageService,
               private _general:GeneralService,
               public dialog: MatDialog, 
               private stripeService: StripeService,

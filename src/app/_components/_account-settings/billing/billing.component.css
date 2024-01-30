@@ -97,6 +97,15 @@ cursor: pointer;
         color: white;
         background-color: var(--kb-danger);
     }
+    .kb-user-invoice{
+        color: var(--row-color);
+        cursor: pointer;
+    }
+    .kb-user-invoice:hover{
+        cursor: pointer;
+        color: white;
+        background-color: var(--row-color);
+    }
 
     .mkflx{
         display: flex;
