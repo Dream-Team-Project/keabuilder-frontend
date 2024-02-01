@@ -7,6 +7,7 @@ import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { WebsiteService } from 'src/app/_services/website.service';
 import { UserService } from 'src/app/_services/user.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-membership-courses',
@@ -17,6 +18,7 @@ import { UserService } from 'src/app/_services/user.service';
 export class MembershipCoursesComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
   
   btndisable=false;
   spinner=false;
@@ -62,6 +64,8 @@ export class MembershipCoursesComponent implements OnInit {
   errormessage:any='';
   subdomain:any;
   username:any;
+  courseslength:any;
+
   constructor(public _course: CourseService,
              public _image: ImageService, 
              private _file: FileUploadService,
@@ -112,6 +116,7 @@ export class MembershipCoursesComponent implements OnInit {
     this.fetching = true;
     this._course.getallcourses().subscribe((res:any)=>{
       this.courses = res.data;
+      this.courseslength=res?.data?.length || 0;
       this.fetching = false;
       // console.log(this.courses)
     }); 

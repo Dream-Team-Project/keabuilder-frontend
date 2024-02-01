@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { ApiInterceptor } from './_helpers/api.interceptor';
 import { CommonModule } from '@angular/common';
 
+
 // import { MatTooltipModule } from '@angular/material/tooltip';
 
 
@@ -31,7 +32,7 @@ import { CommonModule } from '@angular/common';
     AppComponent,
     RoutingComponents,
     SidebarComponent,
-    NavbarComponent, 
+    NavbarComponent,
   ],
   imports: [
     CommonModule,

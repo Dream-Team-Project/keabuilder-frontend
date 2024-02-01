@@ -13,6 +13,7 @@ import { MemberBillingComponent } from '../_components/course-user/member-billin
 import { environment } from 'src/environments/environment';
 import { MemberNavbarModule } from './member-navbar.module';
 import { MemberSidebarModule } from './member-sidebar.module';
+import { PageViewComponent } from '../_components/page-view/page-view.component';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -20,10 +21,10 @@ const appHost:any = environment.appHost;
 
 
 const routes: Routes = [
-  //  { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
+   { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
    // auth guard
-   // { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+   { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
    { path: 'member/:course_id', component : ViewCourseModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
   

@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
-// import { BuilderComponent } from '../_components/_builder/builder/builder.component';
-// import { BuilderSettingModule } from './builder-setting.module';
-// import { BuilderTopbarModule } from './builder-topbar.module';
-// import { BuilderWireframeModule } from './builder-wireframe.module';
+import { BuilderComponent } from '../_components/_builder/builder/builder.component';
+import { BuilderSettingModule } from './builder-setting.module';
+import { BuilderTopbarModule } from './builder-topbar.module';
+import { BuilderWireframeModule } from './builder-wireframe.module';
 import { FormfetchModule } from './formfetch.module';
 import { PageviewModule } from './pageview.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -24,27 +23,22 @@ import { MatInputModule } from '@angular/material/input';
 import { FunnelCheckoutModule } from './funnel-checkout.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { PagenotfoundModule } from './pagenotfound.module';
 
-const routes: Routes = [
-  // { path: 'email/:id', component: CrmEmailBuilderComponent, canActivate: [AuthGuard] },
-  // { path: 'form/:id', component: CrmFormBuilderComponent, canActivate: [AuthGuard] },
-  // { path: 'builder/:target/:id', component: BuilderComponent, canActivate: [AuthGuard] },
-  // { path: '', component: PagenotfoundModule },
-];
+
 @NgModule({
-  declarations: [
-    // BuilderComponent,
-  ],
+  declarations: [BuilderComponent],
   imports: [
     CommonModule,
     ImageModule,
-    // BuilderSettingModule,
-    // BuilderTopbarModule,
-    // BuilderWireframeModule,
+    BuilderSettingModule,
+    BuilderTopbarModule,
+    BuilderWireframeModule,
     FormfetchModule,
     FunnelCheckoutModule,
     PageviewModule,
+    PagenotfoundModule,
     MatCheckboxModule,
     PipeModule,
     DragDropModule,
@@ -61,11 +55,8 @@ const routes: Routes = [
     MatInputModule,
     MatDialogModule,
     MatTooltipModule,
-    RouterModule.forChild(routes)
+    
   ],
-  exports: [
-    // RouterModule,
-    // BuilderComponent
-  ]
+  exports: [BuilderComponent,]
 })
 export class BuilderModule { }

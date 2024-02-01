@@ -81,27 +81,27 @@
           </mat-select>
         </mat-form-field>
      </div>
-      <div class="col-md-4 text-right">
-        <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
+      <div class="col-md-4 text-right align-items-center">
+        <!-- <button mat-raised-button [color]="'accent'" (click)="toggleView()" *ngIf="courses.length != 0">
           <span *ngIf="toggleview else gridview">List View <i class="fas fa-th-list"></i></span>
           <ng-template #gridview><span>Grid View <i class="fas fa-th-large"></i></span></ng-template>
-        </button>
+        </button> -->
         <button mat-raised-button color="primary" (click)="openDialog(adddialog,'')" class="mx-3">Create New <i
             class="fas fa-plus"></i></button>
       </div>
     </div>
     <div class="row" *ngIf="courses?.length !=0; else nodata">
-      <div *ngFor="let course of courses" [class]="toggleview ? 'col-md-4' : 'col-md-12'">
+      <div *ngFor="let course of courses" class="col-md-6">
         <div class="row kb-course-block">
-          <div [class.kb-disabled]="course.deleting" class="kb-course-thumbnail p-0" [class]="toggleview ? 'ht-full col-12' : 'col-md-3'"
+          <div [class.kb-disabled]="course.deleting" class="kb-course-thumbnail p-0" class="col-md-4"
           [ngStyle]="{'background-image': 'url(' + _image.uploadImgPath+course.thumbnail+'), url(' + _image.uploadImgPath+'webpage_thumbnail.jpg' + ')'}">
           </div>
-          <div class="kb-course-content p-0" [class]="toggleview ? 'col-md-12' : 'col-md-9'">
-            <div class="p-2 align-items-center text-center" [class.px-3]="!toggleview">
-              <div class="kb-course-title">
+          <div class="kb-course-content p-0" class="col-md-8">
+        
+              <div class="col-md-12 kb-course-title pl-3 py-3">
                 {{course.title | titlecase}} 
               </div>
-              <div>
+          
                 <!-- <span [matTooltip]="course.total_modules+' Module'+(course.total_modules==1 ? '' : 's')" matTooltipPosition="above" class="mx-2">
                   <i class="fa-regular fa-folder pr-1"></i>
                   {{course.total_modules}}
@@ -110,10 +110,10 @@
                   <i class="fa-regular fa-user pr-1"></i>
                   {{course.total_members}}
                 </span> -->
-              </div>
-            </div>
-            <div class="row align-items-center py-1 px-5">
-              <div class="kb-course-card py-2"  [class]="toggleview ? 'col-md-12' : 'col-md-6'">
+              
+           
+              <div class="col-md-12">
+                <div class="col-md-12 kb-course-card p-1">
                 <span class="col-md-5"><i class="fa-regular fa-user pr-1 kb-colr"></i>
                   {{course.total_members+' '+'Members'}}
                 </span>
@@ -122,9 +122,7 @@
                   {{course.total_modules +' '+'Modules'}}
                 </span>
               </div>
-            </div>
-            <div class="row align-items-center py-1 px-5">
-              <div class="kb-course-card py-2"  [class]="toggleview ? 'col-md-12' : 'col-md-6'">
+              <div class="col-md-12 kb-course-card p-1">
               <span class="col-md-5"><i class="fa-regular fa-calendar pr-1 kb-colr"></i>
                 {{_general.dateformat(course.updated_at) | date:'mediumDate'}}
               </span>
@@ -134,9 +132,9 @@
                 </span>
               </div>
             </div>
-            <div>
-            </div>
-            <div class="kb-course-btn text-right" [class]="toggleview ? 'pt-2 px-2 pb-3' : 'p-3'">
+            
+        
+            <div class="col-md-12 p-3">
               <!-- <span class="kb-course-updatedat text-left float-left px-0 pb-2">
                 <span matTooltip="Updated At" matTooltipPosition="above">
                   <i class="fa-regular fa-calendar"></i>
@@ -160,18 +158,17 @@
                 </button>
               </mat-menu>
             </div>
+         
           </div>
+        </div>
           <div class="d-flex justify-content-end" >
             <div class="statbadg">
-              <!-- <span class="statusbadge" [class]="course.publish_status == 1 ? 'active1' : 'active2'" > -->
-                <!-- <i class="fas" [class]="course.publish_status==1 ? 'fa-check':'fa-file'"></i>
-                {{course.publish_status == 1 ? 'Publish' : 'Draft'}} -->
-                <button class="statusbadge" mat-raised-button [color]="course.publish_status == 1 ? 'primary' : 'accent'" class="toggle mr-2" mat-raised-button [matMenuTriggerFor]="menu1"
+                <button mat-raised-button  class="statusbadge" [color]="course.publish_status == 1 ? 'primary' : 'accent'" class="mr-2"  [matMenuTriggerFor]="menu1"
                             [class]="course.publish_status==1 ? 'active' : 'inactive'">
-                             <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i>
+                             <!-- <i class="pr-1 fas" [class]="course.publish_status==1 ? 'fa-check' : 'fa-file'"></i> -->
                             {{course.publish_status==1 ? 'Published' : 'Draft'}}<i
                                 class="fas fa-chevron-down drpdwnfa pl-2"></i>
-                        </button>
+            </button>
                         <mat-menu #menu1="matMenu">
                           <button mat-menu-item class="active" (click)="toggleStatus(course,'publish')"><i
                                   class="fa fa-check pr-2"></i>Publish</button>
@@ -181,12 +178,13 @@
               <!-- </span> -->
         </div>
       </div>
-    </div>
+    
     <div class="kb-spinner" *ngIf="spinner">
       <mat-spinner></mat-spinner>
     </div>
   </div>
   </div>
+  <mat-paginator  #paginator [length]="courseslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" *ngIf="courses?.length !=0"></mat-paginator>
   </div>
   <ng-template #nodata>
     <div class="row justify-content-center mt-5">

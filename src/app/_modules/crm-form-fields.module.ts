@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { CrmFieldsComponent } from '../_components/_crm/fields/fields.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,28 +22,16 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { CrmComponent } from '../_components/_crm/crm/crm.component';
-import { CrmReportsComponent } from '../_components/_crm/reports/reports.component';
 
 
 
-const routes: Routes = [
-  {path:'', component : CrmComponent,
-  children : [
-  { path: '', component: CrmReportsComponent,},
-  { path: 'fields', component: CrmFieldsComponent,},
-],
-}
-];
+
+
 
 @NgModule({
-  declarations: [
-    CrmFieldsComponent,
-  ],
+  declarations: [CrmFieldsComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
-    RouterModule,
     PipeModule,
     MatPaginatorModule,
     MatFormFieldModule,
@@ -69,9 +56,6 @@ const routes: Routes = [
     MatDatepickerModule,
    
   ],
-  exports:[
-    CrmFieldsComponent,
-    RouterModule,
-  ]
+  exports:[ CrmFieldsComponent]
 })
 export class CrmFormFieldsModule { }

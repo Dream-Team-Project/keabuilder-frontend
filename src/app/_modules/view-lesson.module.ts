@@ -8,6 +8,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -23,6 +25,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatIconModule,
     MatProgressBarModule,
     MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
   ],
   exports:[
     ViewLessonComponent,

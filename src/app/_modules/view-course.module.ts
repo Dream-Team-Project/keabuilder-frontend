@@ -6,6 +6,7 @@ import { MemberSidebarModule } from './member-sidebar.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSidenavModule,
     MatIconModule,
     MatTabsModule,
+    MatButtonModule,
   ],
   exports:[
     ViewCourseComponent,

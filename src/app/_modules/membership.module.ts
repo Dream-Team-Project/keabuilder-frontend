@@ -41,6 +41,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
+import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
+import { MemberNavbarModule } from './member-navbar.module';
+import { MemberSidebarModule } from './member-sidebar.module';
 
 
 
@@ -61,8 +65,8 @@ const routes: Routes = [
     { path: ':course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
     { path: ':course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
     ],},
-    { path: 'member/:course_id', component : ViewCourseModule,},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,},
+    { path: 'member/:course_id', component : ViewCourseComponent,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
     { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
   ];
 
@@ -88,6 +92,8 @@ const routes: Routes = [
     CommonModule,
     ViewCourseModule,
     ViewLessonModule,
+    MemberNavbarModule,
+    MemberSidebarModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,

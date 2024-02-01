@@ -6,10 +6,10 @@
     <h4 class=" courseHeading  ftsize">{{course.title | titlecase}}</h4>
     <div class="moduleContainer">
         <div *ngFor="let module of course.modules" class="moduleText">
-            <h3 class="ftsize1" (click)="Gotohref('/member/'+module.course_id)">{{module.title | titlecase}}</h3>
+            <h3 class="ftsize1" (click)="Gotohref('/membership/member/'+module.course_id)">{{module.title | titlecase}}</h3>
             <div class="lessonContainer ">
                 <a *ngFor="let lesson of module.lessons "
-                    [href]="'/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class=" lessonText">
+                    [href]="'/membership/member/'+lesson.course_id+'/'+lesson.module_id+'/'+lesson.uniqueid" class=" lessonText">
                     <div class="EachlessonText ">
                         <mat-icon class="lessonIcon">chrome_reader_mode</mat-icon>
                         <span class="ftsize1"> {{lesson.title | titlecase}}</span>

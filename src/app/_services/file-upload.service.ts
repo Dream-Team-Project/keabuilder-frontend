@@ -33,6 +33,7 @@ export class FileUploadService {
   uploadmembershipDocumentApi = "/api/uploadmembershipdocument";
   uploadDocumentApi = "/api/uploaddocument";
   deleteDocumentApi = "/api/deletedocument";
+  deleteLessonDocumentApi = "/api/deletelessondocument";
   renameDocumentApi = "/api/renamedocument";
   uploadDocumentPath = '/assets/uploads/documents/';
   uploadmembershipDocumentPath = '/assets/uploads/medias/';
@@ -569,6 +570,10 @@ deletefolderdocumentsApi = "/api/deletefolderdocuments";
 
   deleteDocument(path:string, folder:string):Observable<any> {
     return this.http.delete(this.deleteDocumentApi + '/' + path + '/' + folder)
+    .pipe(catchError(this.errorHandler));
+  }
+  deleteLessonDocument(path:string, folder:string,folder1:string):Observable<any> {
+    return this.http.delete(this.deleteLessonDocumentApi + '/' + path + '/' + folder+ '/' + folder1)
     .pipe(catchError(this.errorHandler));
   }
 

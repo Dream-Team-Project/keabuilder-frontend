@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { CrmComponent } from '../_components/_crm/crm/crm.component';
 import { CrmAutomationComponent } from '../_components/_crm/automation/automation.component';
 import { CrmCampaignBuilderComponent } from '../_components/_crm/campaign-builder/campaign-builder.component';
@@ -45,6 +44,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ImageModule } from './image.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CrmFormFieldRouteModule } from './crm-form-field-route.module';
 
 
 
@@ -65,7 +66,6 @@ const routes: Routes = [
   ],},
     { path: 'contact/:uniqueid', component: CrmContactComponent,},
     { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent,},
-    // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule,},
     { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
   ];
 
@@ -88,6 +88,7 @@ const routes: Routes = [
     CommonModule,
     PipeModule,
     CrmFormFieldsModule,
+    CrmFormFieldRouteModule,
     ImageModule,
     RouterModule.forChild(routes),
     MatSelectModule,
@@ -119,6 +120,7 @@ const routes: Routes = [
     MatSidenavModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatNativeDateModule,
   ],
   exports: [RouterModule]
 })
