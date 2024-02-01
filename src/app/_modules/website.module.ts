@@ -31,6 +31,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FetchmenuModule } from './fetchmenu.module';
 
 const routes: Routes = [
   {path: '', component: WebsiteComponent,
@@ -77,6 +78,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     TemplateModule,
+    FetchmenuModule,
     RouterModule.forChild(routes),
     PipeModule,
     MatListModule,

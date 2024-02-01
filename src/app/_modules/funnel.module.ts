@@ -36,7 +36,7 @@ const routes: Routes = [
   { path: ':funnel_id', component: CreateFunnelsComponent,
 children: [ 
 { path: 'steps/:step_id', component: FunnelStepsComponent,},
-// { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
+// { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent,},
 { path: 'settings', component: FunnelSettingsComponent,},
 { path: 'archive', component: FunnelStepArchiveComponent,},
 ],},

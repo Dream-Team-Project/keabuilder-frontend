@@ -28,6 +28,8 @@ import { PagenotfoundModule } from './pagenotfound.module';
 import { MatIconModule } from '@angular/material/icon';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TemplateModule } from './template.module';
+import { FetchmenuModule } from './fetchmenu.module';
 
 
 @NgModule({
@@ -35,6 +37,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
   imports: [
     CommonModule,
     ImageModule,
+    TemplateModule,
+    FetchmenuModule,
     BuilderSettingModule,
     BuilderTopbarModule,
     BuilderWireframeModule,
