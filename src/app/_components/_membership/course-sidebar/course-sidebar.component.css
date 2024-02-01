@@ -12,7 +12,7 @@
 .lessonText span{
     font-size: 16px;
     color: var(--kb-black);
-    opacity: .75;
+    opacity: 0.75;
 }
 .lessonText span:hover{
     opacity: 1;
