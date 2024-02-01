@@ -23,9 +23,6 @@ import { ApiInterceptor } from './_helpers/api.interceptor';
 import { CommonModule } from '@angular/common';
 
 
-// import { MatTooltipModule } from '@angular/material/tooltip';
-
-
 
 @NgModule({
   declarations: [
@@ -48,7 +45,6 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatSelectModule,
     MatSidenavModule,
-    // MatTooltipModule,
     NgxTinymceModule.forRoot({
       baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
     }),

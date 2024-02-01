@@ -25,6 +25,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { PagenotfoundModule } from './pagenotfound.module';
+import { MatIconModule } from '@angular/material/icon';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 
 @NgModule({
@@ -38,15 +41,15 @@ import { PagenotfoundModule } from './pagenotfound.module';
     FormfetchModule,
     FunnelCheckoutModule,
     PageviewModule,
-    PagenotfoundModule,
-    MatCheckboxModule,
+    // PagenotfoundModule,
+    // MatCheckboxModule,
     PipeModule,
     DragDropModule,
     MatListModule,
     MatFormFieldModule,
-    MatSlideToggleModule,
+    // MatSlideToggleModule,
     MatMenuModule,
-    MatSliderModule,
+    // MatSliderModule,
     MatProgressBarModule,
     MatSidenavModule,
     MatButtonModule,
@@ -55,6 +58,9 @@ import { PagenotfoundModule } from './pagenotfound.module';
     MatInputModule,
     MatDialogModule,
     MatTooltipModule,
+    MatIconModule,
+    EditorModule,
+    ClipboardModule,    
     
   ],
   exports: [BuilderComponent,]

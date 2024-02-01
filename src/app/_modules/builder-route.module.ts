@@ -3,6 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { BuilderComponent } from '../_components/_builder/builder/builder.component';
 import { BuilderModule } from './builder.module';
+// import { ImageModule } from './image.module';
+// import { BuilderSettingModule } from './builder-setting.module';
+// import { BuilderTopbarModule } from './builder-topbar.module';
+// import { BuilderWireframeModule } from './builder-wireframe.module';
+// import { FormfetchModule } from './formfetch.module';
 
 
 const routes: Routes = [
@@ -20,6 +25,7 @@ const routes: Routes = [
     // BuilderTopbarModule,
     // BuilderWireframeModule,
     // FormfetchModule,
+    // ImageModule
   ],
   exports: [RouterModule]
 })

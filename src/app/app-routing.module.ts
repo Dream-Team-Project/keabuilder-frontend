@@ -19,7 +19,7 @@ if (currentDomain === appHost) {
   routes = [
     { path: '', loadChildren: () => import('./_modules/auth.module').then(m => m.AuthModule)},
     { path: 'fetch-form/:user_id/:form_id',loadChildren: () => import('./_modules/formfetch-route.module').then(m => m.FormfetchRouteModule),canActivate: [AuthGuard]},
-    { path: 'fetch-orderform', loadChildren: () => import('./_modules/funnel-checkout-route.module').then(m => m.FunnelCheckoutRouteModule),canActivate: [AuthGuard]},
+    { path: 'fetch-orderform/:id', loadChildren: () => import('./_modules/funnel-checkout-route.module').then(m => m.FunnelCheckoutRouteModule),canActivate: [AuthGuard]},
     { path: 'websites', loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
     { path: 'funnels', loadChildren: () => import('./_modules/funnel.module').then(m => m.FunnelModule), canActivate: [AuthGuard] },
     { path: 'membership', loadChildren: () => import('./_modules/membership.module').then(m => m.MembershipModule), canActivate: [AuthGuard] },
@@ -69,7 +69,7 @@ else {
    
     //member-account-settings
      // auth guard
-     { path: '**', loadChildren: () => import('./_modules/pageview.module').then(m => m.PageviewModule), canActivate: [AuthGuard] , data: {
+     { path: '**', loadChildren: () => import('./_modules/pageview-route.module').then(m => m.PageviewRouteModule), data: {
       domain: currentDomain,
       path: currentPath,
     }

@@ -24,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { PipeModule } from './pipe.module';
+import { ImageModule } from './image.module';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { PipeModule } from './pipe.module';
   ],
   imports: [
     CommonModule,
+    ImageModule,
     MatSliderModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -56,7 +58,7 @@ import { PipeModule } from './pipe.module';
     MatDialogModule,
     MatAutocompleteModule, 
     MatButtonModule,
-    PipeModule
+    PipeModule, 
   ],
   exports: [
     BuilderSettingComponent,
