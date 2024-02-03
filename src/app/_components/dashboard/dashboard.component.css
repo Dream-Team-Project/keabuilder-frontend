@@ -1,7 +1,6 @@
 .kb-main-container {
     background: var(--kb-text-gray-50-color);
-    /* background: rgb(244 244 244 / 48%); */
-    padding-top: 30px;
+    padding-top: 50px;
     margin-bottom: -20px;
     margin-top: -26px;
 }
@@ -143,7 +142,7 @@ hr {
     line-height: normal;
 }
 .chart1{
-    max-width: 650px;
+    max-width: 750px;
 }
 .custmxht{
     height: 300px;
@@ -178,9 +177,13 @@ hr {
 .kbcustmwidthforbox3{
     max-width:660px;
 }
-/* .kbcustmwidthforbox4{
+.kbcustmwidthforbox5{
     max-width:660px;
-} */
+    /* height:335px; */
+}
+.kbcustmwidthforbox4{
+    max-width:660px;
+}
 .kbcustmwidthforbox4-recent{
     height: 405px;
     overflow-y: scroll;
@@ -231,8 +234,8 @@ color: var(--kb-text-green-400-color)
 }
 
 .adjustcard{
-    font-size: 64px;
-    font-weight: 600;
+    font-size: 30px;
+    font-weight: 800;
     text-align: center;
     margin: 0;
     overflow: hidden;
@@ -298,3 +301,19 @@ font-weight: 600;
     margin-right: 10px;
     vertical-align: middle;
 }
+
+
+.kb-equal-ht {
+    display: flex;
+  }
+
+  .kb-equal-ht-col-7 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .kb-card-ht {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }

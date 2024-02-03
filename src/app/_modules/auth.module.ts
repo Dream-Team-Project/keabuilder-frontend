@@ -14,7 +14,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
@@ -55,8 +55,7 @@ const routes: Routes = [
     MatSelectModule,
     MatMenuModule,
     MatProgressBarModule,
-    MatInputModule,
-  
+    MatInputModule,  
   ],
   exports: [RouterModule]
 })

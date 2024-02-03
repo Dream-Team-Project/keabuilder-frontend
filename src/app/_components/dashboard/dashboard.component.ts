@@ -5,6 +5,8 @@ import { DashboardService } from '../../_services/dashboard.service';
 import { UserService } from '../../_services/user.service';
 import { ReportingService } from 'src/app/_services/reporting.service';
 import { HeatmapsService } from 'src/app/_services/heatmaps.service';
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 import {
   ChartComponent,
@@ -53,6 +55,7 @@ export class DashboardComponent implements OnInit {
   public chartOptions13: Partial<ChartOptions> | any;
   public chartOptions14: Partial<ChartOptions> | any;
 
+  map:any;
   error?: string;
   fetching=false;
   isLoggedIn = false;
@@ -163,8 +166,8 @@ export class DashboardComponent implements OnInit {
         },
       ],
       chart: {
-        height: 350,
         type: 'bar',
+        height: 350,
       },
       plotOptions: {
         bar: {
@@ -259,7 +262,7 @@ export class DashboardComponent implements OnInit {
         },
       ],
       chart: {
-        height: 350,
+        // height: 350,
         type: 'area',
       },
       dataLabels: {
@@ -387,7 +390,7 @@ export class DashboardComponent implements OnInit {
         },
       ],
       chart: {
-        height: 350,
+        // height: 350,
         type: 'heatmap',
       },
       dataLabels: {
@@ -449,7 +452,7 @@ export class DashboardComponent implements OnInit {
       ],
       chart: {
         type: 'bar',
-        height: 350,
+        // height: 350,
       },
       plotOptions: {
         bar: {
@@ -506,7 +509,7 @@ export class DashboardComponent implements OnInit {
       ],
       chart: {
         type: 'bar',
-        height: 350,
+        // height: 350,
       },
       plotOptions: {
         bar: {
@@ -567,7 +570,7 @@ export class DashboardComponent implements OnInit {
       ],
       chart: {
         type: 'bar',
-        height: 350,
+        // height: 350,
       },
       plotOptions: {
         bar: {
@@ -762,7 +765,9 @@ export class DashboardComponent implements OnInit {
 
     this.visitordevice({ type: 'device'});
     
-    this.visitortopcountries({ type: 'topcountries'});
+    this.visitortopcountries({ type: 'topcountries'}).then((resp:any)=>{
+      // this.initializeMap();
+    });
     
     this.visitortopreferrals({ type: 'topreferrals'});
     
@@ -774,6 +779,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=false;
 
   }
+  
 
   visitorbrowser(condition:any){
     this.fetching=true;
@@ -876,6 +882,7 @@ export class DashboardComponent implements OnInit {
   }
 
   visitortopcountries(condition:any){
+    return new Promise((resolve) => {
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
       next: (data:any) => {
@@ -883,10 +890,13 @@ export class DashboardComponent implements OnInit {
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topcountry = data.data;
+
           }
           this.fetching=false;
+          resolve(true);
       }
     });
+  });
 
   }
 
@@ -1244,7 +1254,7 @@ export class DashboardComponent implements OnInit {
       ],
       chart: {
         type: "bar", // Change the chart type to "bar" for a bar graph
-        height: 350,
+        // height: 350,
       },
       plotOptions: {
         bar: { // Specify bar plot options
@@ -1289,8 +1299,8 @@ export class DashboardComponent implements OnInit {
     this.chartOptions12 = {
       series: this.campaign.chartData.y,
       chart: {
-        height: 350,
         type: 'pie',
+        height: 350,
         dropShadow: {
           enabled: true,
           color: '#111',
@@ -1317,7 +1327,7 @@ export class DashboardComponent implements OnInit {
         },
         expandOnClick: true,
       },
-      labels: this.campaign.chartData.x.map((label:string) => label.charAt(0).toUpperCase() + label.slice(1)),
+      labels: this.campaign.chartData.x.map((label:string) => label.charAt(0).toUpperCase() + label.slice(0,8)+'...'),
       dataLabels: {
         dropShadow: {
           blur: 2,
@@ -1506,7 +1516,7 @@ export class DashboardComponent implements OnInit {
       series: this.data_newvsret.data,
       chart: {
         type: "pie",
-        width:380,
+        height:350,
       },
       labels: ["New", "Returning"],
       responsive: [
@@ -1534,7 +1544,7 @@ export class DashboardComponent implements OnInit {
       series: this.data_devicebreak.data2,
       chart: {
         type: "pie",
-        width:370,
+        height:350,
       },
       labels: this.data_devicebreak.data,
       responsive: [
@@ -1565,7 +1575,8 @@ export class DashboardComponent implements OnInit {
     this.chartOptions13 = {
       series: this.data_browserbreak.data2,
       chart: {
-        type: "pie"
+        type: "polarArea",
+        height:350,
       },
       labels: this.data_browserbreak.data,
       responsive: [
@@ -1591,7 +1602,8 @@ export class DashboardComponent implements OnInit {
     this.chartOptions14 = {
       series: this.data_osbreak.data2,
       chart: {
-        type: "pie"
+        type: "polarArea",
+        height:350,
       },
       labels: this.data_osbreak.data,
       responsive: [
@@ -1611,6 +1623,28 @@ export class DashboardComponent implements OnInit {
     this.data_osbreak.fetched = true;
 
   }
+  
+  // initializeMap(): void {
+  //   this.map = L.map('map').setView([0, 0], 1); // Set the initial view
 
+  //   // Add a tile layer (you can customize the URL to use a different map provider)
+  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     attribution: '© OpenStreetMap contributors'
+  //   }).addTo(this.map);
+
+  //   this.addMarkers();
+  // }
+
+  // addMarkers(): void {
+  //   this.data_topcountry.forEach((item:any) => {
+  //     const marker = L.marker([item.latitude, item.longitude]).addTo(this.map); // You need to set the coordinates for each country
+
+  //     // Add a popup with country information
+  //     marker.bindPopup(`
+  //       <strong>${item.location}</strong><br>
+  //       Count: ${item.count}
+  //     `).openPopup();
+  //   });
+  // }
 
 }

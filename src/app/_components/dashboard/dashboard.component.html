@@ -1,11 +1,14 @@
-<div class="container-fluid kb-main-container pb-5" id="kea-dashboard">
+<div class="container-fluid kb-main-container" id="kea-dashboard">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
-  <div class="row">
-    <div class="col-md-4 adjustflex">
+ <div class="row">
+  <div class="col-1"></div>
+  <div class="col-10">
+  <div class="row pb-3">
+    <div class="col-lg-4 col-md-12 col-sm-12 adjustflex">
       <h2 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h2>
       <p class="card-category">{{randomwelcome}}</p>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="col-lg-2 col-md-6 col-sm-12">
       <div class="card card-stats">
         <div class="card-body ">
           <!-- <p class="card-category">Daily Visit</p> -->
@@ -22,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="col-lg-2 col-md-6 col-sm-12">
       <div class="card card-stats">
         <div class="card-body ">
           <p class="card-category d-flex justify-content-between align-items-center">
@@ -38,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="col-lg-2 col-md-6 col-sm-12">
       <div class="card card-stats">
         <div class="card-body ">
           <!-- <p class="card-category">Contacts</p> -->
@@ -55,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
+    <div class="col-lg-2 col-md-6 col-sm-12">
       <div class="card card-stats">
         <div class="card-body ">
           <!-- <p class="card-category">Daily Sales</p> -->
@@ -74,7 +77,7 @@
     </div>
   </div>
   
-  <div class="row" *ngIf="hidefornow">
+  <!-- <div class="row" *ngIf="hidefornow">
     <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="hidefornow">
       <div class="card card-stats">
         <div class="card-body ">
@@ -128,7 +131,6 @@
           <div class="row">
             <div class="col-10 col-md-10">
               <div class="numbers text-left">
-                <!-- <p class="card-title">Good {{greeting}}, {{userService.user.name | titlecase}}</p> -->
                 <p class="card-category">{{randomwelcome}}</p>
               </div>
             </div>
@@ -227,17 +229,18 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row" >
-    <div class="col-lg-8 col-sm-6">
+  </div> -->
+  
+  <div class="row py-3">
+    <div class="col-lg-7 col-md-12 col-sm-12">
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-sm-10">
+            <div class="col-10">
               <div class="numbers pull-left"><h5>Total Earnings</h5>
               </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-2">
               <!-- <mat-select value="month">
                 <mat-option value="month" selected>Last Month</mat-option>
                 <mat-option value="week">Last Week</mat-option>
@@ -258,7 +261,8 @@
             </div>
           </div>
           <h6 class="big-title">Total earnings monthly</h6>
-          <div class="kbcustmwidthforbox4">
+          <div class="chart1 kbcustmwidthforbox4 text-center">
+          <!-- <div class="kbcustmwidthforbox4"> -->
             <apx-chart *ngIf="data11"
               [series]="chartOptions11.series"
               [chart]="chartOptions11.chart"
@@ -271,8 +275,9 @@
               [fill]="chartOptions11.fill"
               [tooltip]="chartOptions11.tooltip"
             ></apx-chart>
-          </div>
         </div>
+        </div>
+
         <div class="card-footer" *ngIf="hidefornow">
           <hr>
           <div class="row">
@@ -294,11 +299,11 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-sm-6"  >
+    <div class="col-lg-5 col-md-12 col-sm-12">
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-sm-10">
+            <div class="col-10">
               <div class="numbers pull-left"><h5>Recent Sales Activity</h5></div>
             </div>
           </div>
@@ -347,9 +352,10 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-6 col-sm-6">
-      <div class="card">
+
+  <div class="row kb-equal-ht">
+    <div class="col-lg-7 col-md-12 col-sm-12 kb-equal-ht-col-7">
+      <div class="card kb-card-ht">
         <div class="card-header">
           <div class="row"   *ngIf="contact.fetched">
             <div class="col-sm-12">
@@ -424,8 +430,8 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-6 col-sm-6" *ngIf="data2.length!=0">
-      <div class="card">
+    <div class="col-lg-5 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
+      <div class="card kb-card-ht">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
@@ -446,12 +452,9 @@
               <div class=""></div>
             </div>
           </div>
-          
-          <div class="chart1 kbcustmwidthforbox3 text-center">
+          <div class="chart1 kbcustmwidthforbox5 text-center">
             <img *ngIf="!campaign.fetched" src="/assets/images/dashboard/campaign.png" class="img-fluid" width="400" alt="">
-       
             <button color="primary" *ngIf="!campaign.fetched" mat-raised-button class="mt-2" [routerLink]="['/crm/campaigns']"><i class="fa fa-envelope" aria-hidden="true"></i> Create Campaign</button>
-
             <apx-chart *ngIf="campaign.fetched"
               [series]="chartOptions12.series"
               [chart]="chartOptions12.chart"
@@ -465,9 +468,8 @@
               [subtitle]="chartOptions12.subtitle"
             ></apx-chart>
           </div>
-
         </div>
-        <div class="card-footer" *ngIf="hidefornow">
+          <div class="card-footer" *ngIf="hidefornow">
           <hr>
           <div class="row">
             <div class="col-sm-4">
@@ -491,11 +493,10 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
-
-  <div class="row" >
-    <div class="col-md-12">
+  <div class="row py-3">
+    <div class="col-12">
       <div class="card">
         <div class="card-header">
           <div class="row">
@@ -507,7 +508,7 @@
         </div>
         <div class="card-body">
           <!-- <h6 class="big-title">Total earnings in last Week</h6> -->
-          <div>
+          <div class="">
             <apx-chart *ngIf="data_pageview.fetched"
               [series]="chartOptions7.series"
               [chart]="chartOptions7.chart"
@@ -520,11 +521,11 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>  
+    </div> 
+  </div> 
 
   
-  <div class="row" *ngIf="hidefornow">
+  <!-- <div class="row" *ngIf="hidefornow">
     <div class="col-lg-4 col-sm-6">
       <div class="card">
         <div class="card-header">
@@ -694,33 +695,30 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
+  <div class="row py-3">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title">New vs. Returning Visitors</h5>
         </div>
-        <div class="card-body">
-          <div class="kbcustmwidthforbox2">
+        <div class="chart1 kbcustmwidthforbox3 text-center">
             <apx-chart *ngIf="data_newvsret.fetched"
               [series]="chartOptions4.series"
               [chart]="chartOptions4.chart"
               [labels]="chartOptions4.labels"
               [responsive]="chartOptions4.responsive"
             ></apx-chart>
-          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title">Device Breakdown</h5>
         </div>
-        <div class="card-body">
-          <div class="kbcustmwidthforbox2">
+        <div class="chart1 kbcustmwidthforbox3 text-center">
             <apx-chart *ngIf="data_devicebreak.fetched"
               [series]="chartOptions5.series"
               [chart]="chartOptions5.chart"
@@ -732,80 +730,43 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
+    <div class="row py-3">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title">Browser Breakdown</h5>
         </div>
-        <div class="card-body">
-          <div class="kbcustmwidthforbox2">
+        <div class="chart1 kbcustmwidthforbox3 text-center">
             <apx-chart *ngIf="data_browserbreak.fetched"
               [series]="chartOptions13.series"
               [chart]="chartOptions13.chart"
               [labels]="chartOptions13.labels"
               [responsive]="chartOptions13.responsive"
             ></apx-chart>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header">
           <h5 class="card-title">OS Breakdown</h5>
         </div>
-        <div class="card-body">
-          <div class="kbcustmwidthforbox2">
+        <div class="chart1 kbcustmwidthforbox3 text-center">
             <apx-chart *ngIf="data_osbreak.fetched"
               [series]="chartOptions14.series"
               [chart]="chartOptions14.chart"
               [labels]="chartOptions14.labels"
               [responsive]="chartOptions14.responsive"
             ></apx-chart>
-          </div>
         </div>
       </div>
     </div>
 
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top 10 Countries</h5>
-        </div>
-        <div class="card-body">
-
-          <div class="kb-table-list-item" *ngFor="let item of data_topcountry; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text"> <span class="kb-flag kb-flag-us"></span> {{item.location}}</span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top 10 Referrals</h5>
-        </div>
-        <div class="card-body">
-          
-          <div class="kb-table-list-item" *ngFor="let item of data_topreferrals; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text">
-              <img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals">{{makemyurl(item.referrals)}}</span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-12">
+  <div class="row py-3">
+    <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="card ">
         <div class="card-header ">
           <h5 class="card-title">Top Pages</h5>
@@ -824,9 +785,49 @@
         </div>
       </div>
     </div>
-
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Top 10 Referrals</h5>
+        </div>
+        <div class="card-body">
+          
+          <div class="kb-table-list-item" *ngFor="let item of data_topreferrals; index as i">
+            <span class="kb-reports-list-count">{{i+1}}.</span>
+            <span class="kb-reports-list-text">
+              <img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals">{{makemyurl(item.referrals)}}</span>
+              <span class="kb-reports-list-number">{{item.count}}</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div class="row py-3">
+    <div class="col-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Top 10 Countries</h5>
+        </div>
+        <div class="card-body">
+
+          <div class="kb-table-list-item" *ngFor="let item of data_topcountry; index as i">
+            <span class="kb-reports-list-count">{{i+1}}.</span>
+            <span class="kb-reports-list-text"> <span class="kb-flag kb-flag-us"></span> {{item.location}}</span>
+              <span class="kb-reports-list-number">{{item.count}}</span>
+          </div>
+          
+            <!-- <div id="map" ></div> -->
+          
+
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+<!-- 
   <div class="row" *ngIf="hidefornow" >
     <div class="col-md-3">
       <div class="card ">
@@ -952,6 +953,8 @@
         </div>
       </div>
     </div>
-  </div>
-
+  </div> -->
+</div>
+  <div class="col-1"></div>
+</div>
 </div>
