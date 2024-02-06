@@ -68,6 +68,9 @@ const routes: Routes = [
     { path: 'member/:course_id', component : ViewCourseComponent,},
     { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
     { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
+    // { path: 'profile/settings', component: MemberProfileSettingsComponent,},
+    // { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent,},
+    // { path: 'profile/billing', component: MemberBillingComponent,},
   ];
 
 @NgModule({

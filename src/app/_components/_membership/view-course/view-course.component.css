@@ -12,6 +12,7 @@
 }
 .sidebarContainer{
     height: 92vh;
+    width:20%;
     overflow-y: auto;
     background-color: #ecf0f1 !important;
     box-shadow: 1px 0px 5px grey;
@@ -38,7 +39,7 @@ mat-drawer-content{
 .mainContentContainer{
     height: 92vh;
     overflow: auto;
-    width: 75%;
+    width: 80%;
     padding-bottom: 2rem;
 }
 

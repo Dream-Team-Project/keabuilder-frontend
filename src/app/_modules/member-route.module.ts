@@ -14,6 +14,11 @@ import { environment } from 'src/environments/environment';
 import { MemberNavbarModule } from './member-navbar.module';
 import { MemberSidebarModule } from './member-sidebar.module';
 import { PageViewComponent } from '../_components/page-view/page-view.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -21,16 +26,15 @@ const appHost:any = environment.appHost;
 
 
 const routes: Routes = [
-   { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
-   { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
-   // auth guard
-   { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-   { path: 'member/:course_id', component : ViewCourseModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-   { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+   { path: 'login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
+   { path: 'forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
+   { path: 'library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+   { path: ':course_id', component : ViewCourseModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+   { path: ':course_id/:module_id/:lesson_id', component : ViewLessonModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
   
-  { path: 'profile/settings', component: MemberProfileSettingsComponent, canActivate: [AuthGuard] },
-  { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent, canActivate: [AuthGuard] },
-  { path: 'profile/billing', component: MemberBillingComponent, canActivate: [AuthGuard]},
+    { path: 'profile/settings', component: MemberProfileSettingsComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
+    { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
+    { path: 'profile/billing', component: MemberBillingComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard]},
 ];
 
 @NgModule({
@@ -48,7 +52,12 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MemberNavbarModule,
     MemberSidebarModule,
-   
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatProgressBarModule,
+    MatButtonModule,
   ],
   exports: [RouterModule]
 })

@@ -766,6 +766,26 @@
   </div>
 
   <div class="row py-3">
+    <div class="col-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Top 10 Countries</h5>
+        </div>
+        <div class="card-body">
+          <!-- <div class="kb-table-list-item" *ngFor="let item of data_topcountry; index as i">
+            <span class="kb-reports-list-count">{{i+1}}.</span>
+            <span class="kb-reports-list-text"> <span class="kb-flag kb-flag-us"></span> {{item.location}}</span>
+              <span class="kb-reports-list-number">{{item.count}}</span>
+          </div> -->
+        
+          <google-chart [data]="pieChartData"></google-chart>        
+
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row py-3">
     <div class="col-lg-6 col-md-12 col-sm-12">
       <div class="card ">
         <div class="card-header ">
@@ -804,28 +824,7 @@
     </div>
   </div>
 
-  <div class="row py-3">
-    <div class="col-12">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top 10 Countries</h5>
-        </div>
-        <div class="card-body">
-
-          <div class="kb-table-list-item" *ngFor="let item of data_topcountry; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text"> <span class="kb-flag kb-flag-us"></span> {{item.location}}</span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div>
-          
-            <!-- <div id="map" ></div> -->
-          
-
-        </div>
-      </div>
-    </div>
-    
-  </div>
+ 
   
 <!-- 
   <div class="row" *ngIf="hidefornow" >

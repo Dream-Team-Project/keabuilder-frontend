@@ -9,6 +9,7 @@ import { ComingSoonComponent } from './_components/coming-soon/coming-soon.compo
 import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
 import { StrategiesComponent } from './_components/strategies/strategies.component';
 import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
+import { MemberAuthGuard } from './_guard/member-auth.guard';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -22,6 +23,7 @@ if (currentDomain === appHost) {
     { path: 'fetch-orderform/:id', loadChildren: () => import('./_modules/funnel-checkout-route.module').then(m => m.FunnelCheckoutRouteModule),canActivate: [AuthGuard]},
     { path: 'websites', loadChildren: () => import('./_modules/website.module').then(m => m.WebsiteModule), canActivate: [AuthGuard] },
     { path: 'funnels', loadChildren: () => import('./_modules/funnel.module').then(m => m.FunnelModule), canActivate: [AuthGuard] },
+    { path: 'member', loadChildren: () => import('./_modules/member-route.module').then(m => m.MemberRouteModule)},
     { path: 'membership', loadChildren: () => import('./_modules/membership.module').then(m => m.MembershipModule), canActivate: [AuthGuard] },
     { path: 'sales', loadChildren: () => import('./_modules/sale.module').then(m => m.SaleModule), canActivate: [AuthGuard] },
     { path: 'domain',loadChildren: () => import('./_modules/domain.module').then(m => m.DomainModule), canActivate: [AuthGuard] },
@@ -52,23 +54,7 @@ if (currentDomain === appHost) {
 }
 else {
   routes = [
-    // { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
-    // { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
-    
-    // auth guard
-    // { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-    // { path: 'member/:course_id', component : ViewCourseComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-    // { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-   
-    
-    // member-account-settings
-    
-    // { path: 'profile/settings', component: MemberProfileSettingsComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
-    // { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard] },
-    // { path: 'profile/billing', component: MemberBillingComponent,data: { domain: currentDomain,path: currentPath,}, canActivate: [MemberAuthGuard]},
-   
-    //member-account-settings
-     // auth guard
+     { path: 'member', loadChildren: () => import('./_modules/member-route.module').then(m => m.MemberRouteModule)},
      { path: '**', loadChildren: () => import('./_modules/pageview-route.module').then(m => m.PageviewRouteModule), data: {
       domain: currentDomain,
       path: currentPath,

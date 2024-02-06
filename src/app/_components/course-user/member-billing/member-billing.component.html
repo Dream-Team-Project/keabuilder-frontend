@@ -2,12 +2,12 @@
   <div class="kb-w-100 kb-d-flex">
     <button mat-raised-button color="accent" (click)="Gotohref('/member/library','')" class="kb-ms-2"><i
         class="fa fa-arrow-left kb-ms-2"></i>Back</button>
-    <button mat-raised-button class="kb-ms-2" [class]="active" (click)="Gotohref('/profile/settings','active')"><i
+    <button mat-raised-button class="kb-ms-2" [class]="active" (click)="Gotohref('/member/profile/settings','active')"><i
         class="fa-regular fa-user" aria-hidden="true"></i> Profile Details</button>
     <button mat-raised-button class="kb-ms-2" [class]="active1"
-      (click)="Gotohref('/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved"
+      (click)="Gotohref('/member/profile/sign-in-security','active1')"><i class="fa-solid fa-shield-halved"
         aria-hidden="true"></i> Sign In & Security</button>
-    <button mat-raised-button class="kb-ms-2" [class]="active2" (click)="Gotohref('/profile/billing','active2')"><i
+    <button mat-raised-button class="kb-ms-2" [class]="active2" (click)="Gotohref('/member/profile/billing','active2')"><i
         class="fa-regular fa-credit-card" aria-hidden="true"></i> Billing</button>
   </div>
     <div class="row mt-4" *ngIf="registrationtype !='free'; else nodata">

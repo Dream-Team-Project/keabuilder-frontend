@@ -22,6 +22,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -41,6 +43,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    Ng2GoogleChartsModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,

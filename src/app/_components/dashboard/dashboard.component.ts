@@ -5,8 +5,7 @@ import { DashboardService } from '../../_services/dashboard.service';
 import { UserService } from '../../_services/user.service';
 import { ReportingService } from 'src/app/_services/reporting.service';
 import { HeatmapsService } from 'src/app/_services/heatmaps.service';
-import * as L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { GoogleChartInterface } from 'ng2-google-charts';
 
 import {
   ChartComponent,
@@ -55,7 +54,18 @@ export class DashboardComponent implements OnInit {
   public chartOptions13: Partial<ChartOptions> | any;
   public chartOptions14: Partial<ChartOptions> | any;
 
-  map:any;
+  public pieChartData: GoogleChartInterface = {
+    chartType: 'GeoChart',
+    dataTable: [['Country', 'Visit']],
+    options: {
+      height: 400,
+      colorAxis: { colors: ['#FFD700', '#FF0000'] },
+      datalessRegionColor: '#f8bbd0',
+      defaultColor: '#f5f5f5',
+    },
+  };
+
+
   error?: string;
   fetching=false;
   isLoggedIn = false;
@@ -147,7 +157,7 @@ export class DashboardComponent implements OnInit {
   data_topcountry:any = [];
   data_topreferrals:any = [];
   data_toplandingpage:any = [];
-
+  // chartData: any[] = [['Country', 'Count']];
 
   constructor(
     private _reportingService : ReportingService,
@@ -614,6 +624,17 @@ export class DashboardComponent implements OnInit {
         },
       },
     };
+    // this.pieChart = {
+    //     chartType: 'GeoChart',
+    //     dataTable: this.chartData,
+    //     options: {
+    //       region: 'world',
+    //       resolution: 'countries',
+    //       colorAxis: { colors: ['red', 'orange', 'yellow', 'green'] },
+    //       datalessRegionColor: '#f8bbd0',
+    //       defaultColor: '#f5f5f5',
+    //     }
+    // };
   }
 
   ngOnInit(): void {
@@ -766,7 +787,7 @@ export class DashboardComponent implements OnInit {
     this.visitordevice({ type: 'device'});
     
     this.visitortopcountries({ type: 'topcountries'}).then((resp:any)=>{
-      // this.initializeMap();
+      this.drawGeoChart()
     });
     
     this.visitortopreferrals({ type: 'topreferrals'});
@@ -779,8 +800,7 @@ export class DashboardComponent implements OnInit {
     this.fetching=false;
 
   }
-  
-
+   
   visitorbrowser(condition:any){
     this.fetching=true;
     this.dashboardService.visitordata(condition.type).subscribe({
@@ -890,7 +910,6 @@ export class DashboardComponent implements OnInit {
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topcountry = data.data;
-
           }
           this.fetching=false;
           resolve(true);
@@ -1624,27 +1643,22 @@ export class DashboardComponent implements OnInit {
 
   }
   
-  // initializeMap(): void {
-  //   this.map = L.map('map').setView([0, 0], 1); // Set the initial view
+  drawGeoChart() {
+    this.data_topcountry.forEach((item:any) => {
+      this.pieChartData.dataTable.push([item.location, item.count]);
+    });
 
-  //   // Add a tile layer (you can customize the URL to use a different map provider)
-  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     attribution: '© OpenStreetMap contributors'
-  //   }).addTo(this.map);
-
-  //   this.addMarkers();
-  // }
-
-  // addMarkers(): void {
-  //   this.data_topcountry.forEach((item:any) => {
-  //     const marker = L.marker([item.latitude, item.longitude]).addTo(this.map); // You need to set the coordinates for each country
-
-  //     // Add a popup with country information
-  //     marker.bindPopup(`
-  //       <strong>${item.location}</strong><br>
-  //       Count: ${item.count}
-  //     `).openPopup();
-  //   });
-  // }
+    // this.pieChart = {
+    //   chartType: 'GeoChart',
+    //   dataTable: this.chartData,
+    //   options: {
+    //     region: 'world',
+    //     resolution: 'countries',
+    //     colorAxis: { colors: ['red', 'orange', 'yellow', 'green'] },
+    //     datalessRegionColor: '#f8bbd0',
+    //     defaultColor: '#f5f5f5',
+    //   }
+    // };
+  }
 
 }
