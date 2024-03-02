@@ -15,12 +15,16 @@
   [class.navshadow]="scrollPosition > 100">
   <div class="navbar-wrapper">
     <div class="navbar-container content">
-      <div class="navbar-collapse" id="navbar-mobile">
+      <div class="navbar-collapse p-1" id="navbar-mobile">
         <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-          <!-- <span mat-ripple (click)="triggerSidebar()"><i class="fa-solid fa-bars"></i></span> -->
-          <button mat-icon-button (click)="triggerSidebar()" class="kb-navbar-icon">
-            <mat-icon>menu</mat-icon>
-          </button>
+          <div class="col-lg-12 col-md-12 col-sm-12 adjustflex">
+            <h4 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h4>
+            <p class="card-category">{{randomwelcome}}</p>
+          </div>
+        </div>
+        <div class="search-container1 pr-2">
+          <input type="text" class="search-input1" placeholder="Search For Help">
+          <i class="fas fa-search search-icon"></i>
         </div>
         <ul class="nav float-right overflow-hidden">
           <!-- <li class="nav-item nav-search"><a class="nav-link nav-link-search" (click)="showsearch()"><i

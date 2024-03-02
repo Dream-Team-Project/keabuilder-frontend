@@ -1,251 +1,216 @@
 <div class="container-fluid kb-main-container" id="kea-dashboard">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
  <div class="row">
-  <div class="col-1"></div>
-  <div class="col-10">
+  <div class="col-12">
+    
   <div class="row pb-3">
-    <div class="col-lg-4 col-md-12 col-sm-12 adjustflex">
-      <h2 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h2>
-      <p class="card-category">{{randomwelcome}}</p>
-    </div>
-    <div class="col-lg-2 col-md-6 col-sm-12">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <!-- <p class="card-category">Daily Visit</p> -->
-          <p class="card-category d-flex justify-content-between align-items-center">
-            <span>Daily Visit </span>
-            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="visitlimit" [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></span>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'visit')">Yesterday</button>
-              <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'visit')">2 days ago</button>
-              <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'visit')">3 days ago</button>
-            </mat-menu>
-          </p>
-          <p class="card-title adjustcard kb-colr-blue">{{dailyvisit}}</p>
+    <div class="col-lg-6 col-md-6 col-sm-12 kb-equal-ht-col-7">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card card-stats">
+            <div class="card-body ">
+              <p class="card-category d-flex justify-content-between align-items-center">
+                <span>Sales </span>
+                <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+              </p>
+              <p class="card-title adjustcard kb-colr-accent">${{dailysales}} </p>
+              <p class="card-category d-flex justify-content-between align-items-center">
+                <span>Conversion Rate</span>
+                <span class="kb-fnt-colr"> 7%  <i class="fa-solid fa-arrow-trend-up"></i></span>
+              </p>
+              <apx-chart
+              #chartspark1
+              [series]="chartOptions15.series"
+              [chart]="chartOptions15.chart"
+              [stroke]="chartOptions15.stroke"
+              [yaxis]="chartOptions15.yaxis"
+              [fill]="chartOptions15.fill"
+              [colors]="chartOptions15.colors"
+              [title]="chartOptions15.title"
+              [subtitle]="chartOptions15.subtitle"
+            ></apx-chart>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-6 col-sm-12">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <p class="card-category d-flex justify-content-between align-items-center">
-            <span>Revenue </span>
-            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="revenuelimit" [matMenuTriggerFor]="menu1"><i class="fa-solid fa-ellipsis-vertical"></i></span>
-            <mat-menu #menu1="matMenu">
-              <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'revenue')">Yesterday</button>
-              <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'revenue')">2 days ago</button>
-              <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'revenue')">3 days ago</button>
-            </mat-menu>
-          </p>
-          <p class="card-title adjustcard colr">${{totalrevenue}} </p>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card card-stats">
+            <div class="card-body ">
+              <p class="card-category d-flex justify-content-between align-items-center">
+                <span>New Clients </span>
+                <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+              </p>
+              <p class="card-title adjustcard kb-colr-green">{{totalmembers}} </p>
+              <p class="card-category d-flex justify-content-end align-items-center">
+                <!-- <span>Conversion Rate</span> -->
+                <span class="kb-fnt-colr"> 5%  <i class="fa-solid fa-arrow-trend-up"></i></span>
+              </p>
+              <apx-chart
+              #chartspark2
+              [series]="chartOptions16.series"
+              [chart]="chartOptions16.chart"
+              [stroke]="chartOptions16.stroke"
+              [yaxis]="chartOptions16.yaxis"
+              [fill]="chartOptions16.fill"
+              [colors]="chartOptions16.colors"
+              [title]="chartOptions16.title"
+              [subtitle]="chartOptions16.subtitle"
+            ></apx-chart>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-6 col-sm-12">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <!-- <p class="card-category">Contacts</p> -->
-          <p class="card-category d-flex justify-content-between align-items-center">
-            <span>Daily Contacts </span>
-            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="contactlimit"  [matMenuTriggerFor]="menu2"><i class="fa-solid fa-ellipsis-vertical"></i></span>
-            <mat-menu #menu2="matMenu">
-              <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'contacts')">Yesterday</button>
-              <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'contacts')">2 days ago</button>
-              <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'contacts')">3 days ago</button>
-            </mat-menu>
-          </p>
-          <p class="card-title adjustcard kb-colr-green">{{totalmembers}} </p>
+
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card card-stats">
+            <div class="card-body ">
+              <p class="card-category d-flex justify-content-between align-items-center">
+                <span>Active Users </span>
+                <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+              </p>
+              <p class="card-title adjustcard  kb-colr-blue">{{totalmembers}} </p>
+              <p class="card-category d-flex justify-content-end align-items-center">
+                <!-- <span>Conversion Rate</span> -->
+                <span class="kb-fnt-colr"> 5%  <i class="fa-solid fa-arrow-trend-up"></i></span>
+              </p>
+              <apx-chart
+              #chartspark3
+              [series]="chartOptions17.series"
+              [chart]="chartOptions17.chart"
+              [stroke]="chartOptions17.stroke"
+              [yaxis]="chartOptions17.yaxis"
+              [fill]="chartOptions17.fill"
+              [colors]="chartOptions17.colors"
+              [title]="chartOptions17.title"
+              [subtitle]="chartOptions17.subtitle"
+            ></apx-chart>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="card card-stats">
+            <div class="card-body ">
+              <p class="card-category d-flex justify-content-between align-items-center">
+                <span>Revenue </span>
+                <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+              </p>
+              <p class="card-title adjustcard  colr">${{totalrevenue}} </p>
+              <p class="card-category d-flex justify-content-end align-items-center">
+                <!-- <span>Conversion Rate</span> -->
+                <span class="kb-fnt-colr"> 3%  <i class="fa-solid fa-arrow-trend-up"></i></span>
+              </p>
+              <apx-chart
+              #chartspark4
+              [series]="chartOptions18.series"
+              [chart]="chartOptions18.chart"
+              [stroke]="chartOptions18.stroke"
+              [yaxis]="chartOptions18.yaxis"
+              [fill]="chartOptions18.fill"
+              [colors]="chartOptions18.colors"
+              [title]="chartOptions18.title"
+              [subtitle]="chartOptions18.subtitle"
+            ></apx-chart>
+            </div>
+          </div>
+        </div>
+   
     </div>
-    <div class="col-lg-2 col-md-6 col-sm-12">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <!-- <p class="card-category">Daily Sales</p> -->
-          <p class="card-category d-flex justify-content-between align-items-center">
-            <span>Daily Sales </span>
-            <span class="kb-elli-vertical" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-ellipsis-vertical"></i></span>
-            <mat-menu #menu3="matMenu">
-              <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
-              <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
-              <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
-            </mat-menu>
-          </p>
-          <p class="card-title adjustcard kb-colr-accent">${{dailysales}} </p>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 kb-equal-ht-col-7">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-stats">
+          <div class="card-body ">
+            <p class="card-category d-flex justify-content-between align-items-center">
+              <span class="kb-fnt-hd-size">Kea Support Tracker </span>
+              <span><i class="fa-solid fa-circle-plus"></i> Create A New Ticket</span>
+            </p>
+            <div class="row">
+              <div class="col-lg-5 col-md-5 col-sm-12">
+            <!-- <p><span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu></p> -->
+            <p class="card-title adjustticket kb-colr-accent">100 </p>
+            <p class="card-category">Total Tickets</p>
+            <div class="card-category mt-4 pt-4">
+            <div class="d-flex">
+            <span class="card-ticket-blue p-2"><i class="fa-solid fa-ticket kb-ticket-blue"></i></span>
+            <span class="pl-3">
+            <div>Total Tickets</div>
+            <div>100</div>
+          </span>
+          </div>
+          <div class="d-flex">
+            <span class="card-ticket-green p-2"><i class="fa-regular fa-circle-check kb-ticket-green"></i></span>
+            <span class="pl-3">
+            <div>Open Tickets</div>
+            <div>30</div>
+          </span>
+          </div>
+          <div class="d-flex">
+            <span class="card-ticket-orange p-2"><i class="fa-regular fa-clock kb-ticket-orange"></i></span>
+            <span class="pl-3">
+            <div>Response Time</div>
+            <div>1 Hour</div>
+          </span>
+          </div>
+          </div>
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-12">
+            <apx-chart
+            [series]="chartOptions19.series"
+            [chart]="chartOptions19.chart"
+            [plotOptions]="chartOptions19.plotOptions"
+            [labels]="chartOptions19.labels"
+          ></apx-chart>
+          </div>
+          </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
-  <!-- <div class="row" *ngIf="hidefornow">
-    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="hidefornow">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-4">
-              <div class="icon-big text-center icon-warning">
-                <img src="/assets/images/dashboard/last-working.png" class="img-fluid" alt="">
-              </div>
-            </div>
-            <div class="col-7 col-md-8">
-              <div class="numbers">
-                <p class="card-category">Last Working Platform</p>
-                <p class="card-title">Funnels </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats"><i class="fa fa-refresh"></i> View Now </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="hidefornow">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-3">
-              <div class="icon-big text-center icon-warning">
-                  <img src="/assets/images/dashboard/star-product.png" class="img-fluid" alt="">
-              </div>
-            </div>
-            <div class="col-7 col-md-9">
-              <div class="numbers">
-                <p class="card-title">Star Product </p>
-                <p class="card-category">Will Appear Here</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats"><i class="fa fa-clock-o"></i> See How! </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6" >
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-10 col-md-10">
-              <div class="numbers text-left">
-                <p class="card-category">{{randomwelcome}}</p>
-              </div>
-            </div>
-            <div class="col-2 col-md-2">
-              <div class="icon-big text-center icon-warning">
-                  <img src="/assets/images/dashboard/keababy.png" width="75" class="img-fluid" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats"><i class="fa fa-clock-o"></i> See How! </div>
-        </div>
-      </div>
-    </div>
+</div>
 
-    <div class="col-lg-2 col-md-2 col-sm-2">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-4">
-              <div class="icon-big text-center icon-warning">
-                  <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
-               </div>
-            </div>
-            <div class="col-7 col-md-8">
-              <div class="numbers">
-                <p class="card-category">Revenue</p>
-                <p class="card-title colr">${{totalrevenue}} </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats "><span class="text-success">
-            <i class="fa-solid fa-circle-arrow-up text-success"></i>5.56%</span>
-            <span class="float-right"> <mat-select value="month">
-            <mat-option value="month" selected>Last Month</mat-option>
-            <mat-option value="week">Last Week</mat-option>
-          </mat-select></span></div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-4">
-              <div class="icon-big text-center icon-warning">
-                <img src="/assets/images/dashboard/members.png" class="img-fluid" alt="">
-              </div>
-            </div>
-            <div class="col-7 col-md-8">
-              <div class="numbers">
-                <p class="card-category">Contacts</p>
-                <p class="card-title colr">{{totalmembers}} </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats"><span class="text-danger"><i class="fa-solid fa-circle-arrow-down text-danger"></i> 0%</span> <span class="float-right"> <mat-select value="month">
-            <mat-option value="month">Last Month</mat-option>
-            <mat-option value="week">Last Week</mat-option>
-          </mat-select></span> </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2">
-      <div class="card card-stats">
-        <div class="card-body ">
-          <div class="row">
-            <div class="col-5 col-md-4">
-              <div class="icon-big text-center icon-warning">
-                <img src="/assets/images/dashboard/revenue.png" class="img-fluid" alt="">
-              </div>
-            </div>
-            <div class="col-7 col-md-8">
-              <div class="numbers">
-                <p class="card-category">Daily Sales</p>
-                <p class="card-title colr">${{dailysales}} </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr>
-          <div class="stats"><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success"></i> 5.56%</span><span class="float-right">
-            <mat-select value="month">
-            <mat-option value="month">Last Month</mat-option>
-            <mat-option value="week">Last Week</mat-option>
-          </mat-select></span> </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  
   <div class="row py-3">
-    <div class="col-lg-7 col-md-12 col-sm-12">
+    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-10">
-              <div class="numbers pull-left"><h5>Total Earnings</h5>
+            <div class="col-12">
+              <div class="numbers pull-left d-flex justify-content-between">
+                <span class="kb-fnt-hd-size">Total Earnings</span>
+                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
               </div>
             </div>
-            <div class="col-2">
-              <!-- <mat-select value="month">
-                <mat-option value="month" selected>Last Month</mat-option>
-                <mat-option value="week">Last Week</mat-option>
-              </mat-select> -->
-            </div>
+            
           </div>
           <!-- <div class="row">
             <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
@@ -260,7 +225,7 @@
               <div class=""></div>
             </div>
           </div>
-          <h6 class="big-title">Total earnings monthly</h6>
+          <span class="kb-fnt-hd-size">Total earnings monthly</span>
           <div class="chart1 kbcustmwidthforbox4 text-center">
           <!-- <div class="kbcustmwidthforbox4"> -->
             <apx-chart *ngIf="data11"
@@ -299,12 +264,12 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-5 col-md-12 col-sm-12">
+    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card">
         <div class="card-header">
           <div class="row">
             <div class="col-10">
-              <div class="numbers pull-left"><h5>Recent Sales Activity</h5></div>
+              <div class="numbers pull-left "><span class="kb-fnt-hd-size">Recent Sales Activity</span></div>
             </div>
           </div>
           
@@ -323,17 +288,20 @@
             <button color="primary" *ngIf="recentsales.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
 
             <div class="row mb-3" *ngFor="let recent of recentsales">
-              <div class="col-sm-9 ">
+              <div class="col-sm-9">
                 <div class="row">
-                <span  class="col-sm-12 kbcustmwidthforbox4-mail">{{recent.email}}</span>
+                <span class="col-md-1"><i class="fa-regular fa-circle-user"></i></span>
+                <span  class="col-sm-11 pl-4">
+                  <div class="kb-fnt-subhd-size">User</div>
+                  <div class="kbcustmwidthforbox4-time">{{recent.time_ago}}</div>
+                </span>
                 </div>
-                <div class="row">
-                <span class="col-sm-12 kbcustmwidthforbox4-time">{{recent.time_ago}}</span>
-              </div>
+               
               </div>
               <div class="col-sm-3">
                 <span class="colr">+${{recent.salesamount}}</span>
               </div>
+              <hr>
             </div>
           </div>
         </div>
@@ -353,17 +321,22 @@
     </div>
   </div>
 
-  <div class="row kb-equal-ht">
-    <div class="col-lg-7 col-md-12 col-sm-12 kb-equal-ht-col-7">
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card kb-card-ht">
         <div class="card-header">
           <div class="row"   *ngIf="contact.fetched">
             <div class="col-sm-12">
               <div class="numbers pull-left d-flex justify-content-between">
-                <h5>Recent Contacts</h5>
-                <h5><span class="text-success">Overall : {{contact?.totalcontacts}}</span></h5>
-                <h5><span class="text-danger">Limit : {{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</span></h5>
-                <!-- <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span> -->
+                <span class="kb-fnt-hd-size">Recent Contacts</span>
+                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+                <!-- <h5><span class="text-success">Active : {{contact?.totalcontacts}}</span></h5>
+                <h5><span class="text-danger">Limit : {{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</span></h5> -->
               </div>
             </div>
             <div *ngIf="hidefornow" class="col-sm-5">
@@ -383,7 +356,6 @@
               <div class=""></div>
             </div>
           </div>
-          <!-- <h6 class="big-title">total Contact in last 7 days</h6> -->
           <div class="chart1 kbcustmwidthforbox3 text-center">
 
             <img *ngIf="!contact.fetched" src="/assets/images/dashboard/recentcontact.png" class="img-fluid" width="500" alt="">
@@ -403,6 +375,22 @@
             [tooltip]="chartOptions10.tooltip"
             [xaxis]="chartOptions10.xaxis"
             ></apx-chart>
+            <div class="d-flex justify-content-center">
+              <div class="px-4">
+                <div class="kb-ticket-orange"><i class="fa-regular fa-address-card card-ticket-orange p-2"></i></div>
+                <div class="kb-fnt-hd-size">{{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</div>
+                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Contacts Limit</div>
+                
+              </div>
+              <div class="px-4">
+                <div class="kb-ticket-green"><i class="fa-regular fa-address-card card-ticket-green p-2"></i></div>
+                <div class="kb-fnt-hd-size">{{contact?.totalcontacts}}</div>
+                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Active Contacts</div>
+               
+              </div>
+             
+              
+            </div>
           </div>
 
         </div>
@@ -430,13 +418,20 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-5 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
+    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
       <div class="card kb-card-ht">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
-              <div class="numbers pull-left"><h5>Recent Campaigns</h5>
-                <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div>
+              <div class="numbers pull-left d-flex justify-content-between">
+                <span class="kb-fnt-hd-size">Recent Campaigns</span>
+                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
+                <!-- <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div> -->
             </div>
         </div>
         <div *ngIf="hidefornow" class="row">
@@ -467,6 +462,24 @@
               [title]="chartOptions12.title"
               [subtitle]="chartOptions12.subtitle"
             ></apx-chart>
+            <div class="d-flex justify-content-center">
+              <div class="px-3">
+                <div class="kb-ticket-blue"><i class="fa-solid fa-play card-ticket-blue p-2"></i></div>
+                <div class="kb-fnt-hd-size">6,000</div>
+                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-blue pr-1"></i> Total Sent</div>
+              </div>
+              <div class="px-3">
+                <div class="kb-ticket-green"><i class="fa-regular fa-flag card-ticket-green p-2"></i></div>
+                <div class="kb-fnt-hd-size">4,500</div>
+                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Reached</div>
+              </div>
+              <div class="px-3">
+                <div class="kb-ticket-orange"><i class="fa-regular fa-envelope-open card-ticket-orange p-2"></i></div>
+                <div class="kb-fnt-hd-size">1,500</div>
+                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Open</div>
+              </div>
+              
+            </div>
           </div>
         </div>
           <div class="card-footer" *ngIf="hidefornow">
@@ -494,6 +507,738 @@
       </div>
     </div>
 </div>
+</div>
+
+
+<div class="row py-3">
+  <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Best Time To Send Marketing Emails</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox3 text-center">
+          <apx-chart
+          [series]="chartOptions20.series"
+          [chart]="chartOptions20.chart"
+          [dataLabels]="chartOptions20.dataLabels"
+          [plotOptions]="chartOptions20.plotOptions"
+          [yaxis]="chartOptions20.yaxis"
+          [xaxis]="chartOptions20.xaxis"
+          [legend]="chartOptions20.legend"
+          [colors]="chartOptions20.colors"
+          [grid]="chartOptions20.grid"
+        ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Top Performers</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Website</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">Funnel</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">Product</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">Blog</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">Other</button>
+              </mat-menu>
+          </div>
+      </div>
+      <div *ngIf="hidefornow" class="row">
+        <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
+      </div>
+      </div>
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox5 text-center">
+          <apx-chart
+            [series]="chartOptions21.series"
+            [chart]="chartOptions21.chart"
+            [xaxis]="chartOptions21.xaxis"
+            [stroke]="chartOptions21.stroke"
+            [plotOptions]="chartOptions21.plotOptions"
+            [dataLabels]="chartOptions21.dataLabels"
+            [yaxis]="chartOptions21.yaxis"
+            [labels]="chartOptions21.labels"
+            [legend]="chartOptions21.legend"
+            [title]="chartOptions21.title"
+            [subtitle]="chartOptions21.subtitle"
+            [responsive]="chartOptions21.responsive"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Members Analysis</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox3 text-center">
+          <apx-chart
+          [series]="chartOptions22.series"
+          [chart]="chartOptions22.chart"
+          [plotOptions]="chartOptions22.plotOptions"
+          [labels]="chartOptions22.labels"
+          [legend]="chartOptions22.legend"
+          
+        ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Courses Revenue</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+          </div>
+      </div>
+    
+      </div>
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox5 text-center">
+          <apx-chart
+          [series]="chartOptions23.series"
+          [chart]="chartOptions23.chart"
+          [colors]="chartOptions23.colors"
+          [yaxis]="chartOptions23.yaxis"
+          [dataLabels]="chartOptions23.dataLabels"
+          [markers]="chartOptions23.markers"
+          [stroke]="chartOptions23.stroke"
+          [grid]="chartOptions23.grid"
+          [xaxis]="chartOptions23.xaxis"
+          [tooltip]="chartOptions23.tooltip"
+          [annotations]="chartOptions23.annotations"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="row py-3">
+  <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Top Courses</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox3 text-center">
+          <apx-chart
+          [series]="chartOptions24.series"
+          [chart]="chartOptions24.chart"
+          [xaxis]="chartOptions24.xaxis"
+          [stroke]="chartOptions24.stroke"
+          [colors]="chartOptions24.colors"
+          [dataLabels]="chartOptions24.dataLabels"
+          [tooltip]="chartOptions24.tooltip"
+          [plotOptions]="chartOptions24.plotOptions"
+          [markers]="chartOptions24.markers"
+          [yaxis]="chartOptions24.yaxis"
+          [fill]="chartOptions24.fill"
+          [title]="chartOptions24.title"
+        ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Kea Browser States</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+       
+        <div class="chart1 kbcustmwidthforbox3">
+          <div class="row">
+            <div class="col-12 d-flex align-items-center">
+                <div class="col-9">
+                <img  class="kb-img-ht" [src]="'./assets/images/dashboard/chrome.svg'">
+                <span class=" kb-fnt-subhd1-size ml-2">Google Chrome</span>
+                </div>
+                <div class="col-3 float-right">
+                <apx-chart
+                [series]="chartOptions26.series"
+                [chart]="chartOptions26.chart"
+                [plotOptions]="chartOptions26.plotOptions"
+                [labels]="chartOptions26.labels"
+                [legend]="chartOptions26.legend"
+              ></apx-chart>
+            </div>
+            </div>
+            <div class="col-12 d-flex align-items-center">
+              <div class="col-9">
+                <img class="kb-img-ht"  [src]="'./assets/images/dashboard/safari.svg'">
+              <span class=" kb-fnt-subhd1-size ml-2">Apple Safari</span>
+              </div>
+              <div class="col-3 float-right">
+              <apx-chart
+              [series]="chartOptions27.series"
+              [chart]="chartOptions27.chart"
+              [plotOptions]="chartOptions27.plotOptions"
+              [labels]="chartOptions27.labels"
+              [legend]="chartOptions27.legend"
+            ></apx-chart>
+          </div>
+          </div>
+          <div class="col-12 d-flex align-items-center">
+            <div class="col-9">
+              <img class="kb-img-ht"  [src]="'./assets/images/dashboard/firefox.svg'">
+            <span class=" kb-fnt-subhd1-size ml-2">Morzila Firefox</span>
+            </div>
+            <div class="col-3 float-right">
+            <apx-chart
+            [series]="chartOptions28.series"
+            [chart]="chartOptions28.chart"
+            [plotOptions]="chartOptions28.plotOptions"
+            [labels]="chartOptions28.labels"
+            [legend]="chartOptions28.legend"
+          ></apx-chart>
+        </div>
+        </div>
+        <div class="col-12 d-flex align-items-center">
+          <div class="col-9">
+            <img class="kb-img-ht"  [src]="'./assets/images/dashboard/opera.svg'">
+          <span class=" kb-fnt-subhd1-size ml-2">Opera Mini</span>
+          </div>
+          <div class="col-3 float-right">
+          <apx-chart
+          [series]="chartOptions29.series"
+          [chart]="chartOptions29.chart"
+          [plotOptions]="chartOptions29.plotOptions"
+          [labels]="chartOptions29.labels"
+          [legend]="chartOptions29.legend"
+        ></apx-chart>
+      </div>
+      </div>
+      <div class="col-12 d-flex align-items-center">
+        <div class="col-9">
+          <img class="kb-img-ht"  [src]="'./assets/images/dashboard/internet_ex.svg'">
+        <span class=" kb-fnt-subhd1-size ml-2">Internet Explorer</span>
+        </div>
+        <div class="col-3 float-right">
+        <apx-chart
+        [series]="chartOptions30.series"
+        [chart]="chartOptions30.chart"
+        [plotOptions]="chartOptions30.plotOptions"
+        [labels]="chartOptions30.labels"
+        [legend]="chartOptions30.legend"
+      ></apx-chart>
+    </div>
+    </div>
+    <div class="col-12 d-flex align-items-center">
+      <div class="col-9">
+        <img class="kb-img-ht"  [src]="'./assets/images/dashboard/brave.svg'">
+      <span class=" kb-fnt-subhd1-size ml-2">Brave</span>
+      </div>
+      <div class="col-3 float-right">
+      <apx-chart
+      [series]="chartOptions31.series"
+      [chart]="chartOptions31.chart"
+      [plotOptions]="chartOptions31.plotOptions"
+      [labels]="chartOptions31.labels"
+      [legend]="chartOptions31.legend"
+    ></apx-chart>
+  </div>
+  </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
+    <div class="card kb-card-ht">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="numbers pull-left d-flex justify-content-between">
+              <span class="kb-fnt-hd-size">Device Breakdown</span>
+              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <mat-menu #menu3="matMenu">
+                <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+              </mat-menu>
+          </div>
+      </div>
+      </div>
+      <div class="card-body ">
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div class="chart1 kbcustmwidthforbox5 text-center">
+          <apx-chart
+          [series]="chartOptions25.series"
+          [chart]="chartOptions25.chart"
+          [labels]="chartOptions25.labels"
+          [fill]="chartOptions25.fill"
+          [dataLabels]="chartOptions25.dataLabels"
+          [responsive]="chartOptions25.responsive"
+          [legend]="chartOptions25.legend"
+          [colors]="chartOptions25.colors"
+        ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="row">
+          <div class="col-12">
+        <div class="card-header d-flex justify-content-between">
+          <span class="kb-fnt-hd-size">Traffic Outreach</span>
+          <!-- <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu> -->
+        </div>
+        <div class="my-3">
+          <mat-tab-group fitInkBarToContent>
+            <mat-tab label="Map">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-lg-8 col-md-8 col-sm-12">
+                    <div class="card-body">
+                      <div class="card-map p-2">
+                        <google-chart [data]="pieChartData"></google-chart>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-12 mt-3">
+                          <div class="p-3">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>India</span> <span>80</span></div>
+                            <div class="progress">
+                              <div class="progress-bar bg-success" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                          <div class="p-3">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Brazil</span> <span>40</span></div>
+                            <div class="progress">
+                              <div class="progress-bar bg-warning" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                          <div class="p-3">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Germany</span> <span>30</span></div>
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                          <div class="p-3">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Australia</span> <span>30</span></div>
+                            <div class="progress">
+                              <div class="progress-bar bg-info" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                          <div class="p-3">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Canada</span> <span>30</span></div>
+                            <div class="progress">
+                              <div class="progress-bar bg-danger" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Pages">
+              <div class="col-12 align-items-center my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">Top Pages</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <div class="card-body">
+                    
+                    <!-- <div class="kb-table-list-item" *ngFor="let item of data_toplandingpage; index as i">
+                      <span class="kb-reports-list-count">{{i+1}}.</span>
+                      <span class="kb-reports-list-text">
+                        <a [href]="item.landing_page" target="_blank" rel="noreferrer noopener">
+                          {{item.doc_title}}</a>
+                      </span>
+                        <span class="kb-reports-list-number">{{item.count}}</span>
+                    </div> -->
+                    <table class="table kb-table">
+                      <thead>
+                        <tr>
+                          <th>Sr.No</th>
+                          <th>Page Name</th>
+                          <th>Clicks</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of data_toplandingpage; index as i">
+                          <td>{{i+1}}</td>           
+                          <td> <a [href]="item.landing_page" target="_blank" rel="noreferrer noopener">
+                            {{item.doc_title}}</a></td>           
+                          <td>{{item.count}}</td>           
+                                    
+                        </tr>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Referrals">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">Top Referrals</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <div class="card-body">
+                    
+                    <!-- <div class="kb-table-list-item" *ngFor="let item of data_topreferrals; index as i">
+                      <span class="kb-reports-list-count">{{i+1}}.</span>
+                      <span class="kb-reports-list-text">
+                        <img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals">{{makemyurl(item.referrals)}}</span>
+                        <span class="kb-reports-list-number">{{item.count}}</span>
+                    </div> -->
+                    <table class="table kb-table">
+                      <thead>
+                        <tr>
+                          <th>Sr.No</th>
+                          <th>Name</th>
+                          <th>Counts</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of data_topreferrals; index as i">
+                          <td>{{i+1}}</td>           
+                          <td><img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals" class="pr-2">{{makemyurl(item.referrals)}}</td>           
+                          <td>{{item.count}}</td>           
+                                    
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Operating System">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">OS Breakdown</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <!-- <div class="chart1 kbcustmwidthforbox3 d-flex justify-content-center"> -->
+                    <div class="row">
+                      <div class="col-12 d-flex justify-content-center">
+                        <apx-chart class="w-75" *ngIf="data_osbreak.fetched"
+                        [series]="chartOptions14.series"
+                        [chart]="chartOptions14.chart"
+                        [labels]="chartOptions14.labels"
+                        [responsive]="chartOptions14.responsive"
+                      ></apx-chart>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Devices">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">Device Breakdown</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <!-- <div class="chart1 kbcustmwidthforbox3 d-flex justify-content-center"> -->
+                    <div class="row">
+                      <div class="col-12 d-flex justify-content-center">
+                        <apx-chart class="w-75" *ngIf="data_devicebreak.fetched"
+                        [series]="chartOptions5.series"
+                        [chart]="chartOptions5.chart"
+                        [labels]="chartOptions5.labels"
+                        [responsive]="chartOptions5.responsive"
+                      ></apx-chart>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Browsers">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">Browser Breakdown</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <!-- <div class="chart1 kbcustmwidthforbox3 d-flex justify-content-center"> -->
+                    <div class="row">
+                      <div class="col-12 d-flex justify-content-center p-2">
+                        <apx-chart class="w-75" *ngIf="data_browserbreak.fetched"
+                        [series]="chartOptions13.series"
+                        [chart]="chartOptions13.chart"
+                        [labels]="chartOptions13.labels"
+                        [title]="chartOptions13.title"
+                        [theme]="chartOptions13.theme"
+                        [fill]="chartOptions13.fill"
+                        [yaxis]="chartOptions13.yaxis"
+                        [stroke]="chartOptions13.stroke"
+                        [legend]="chartOptions13.legend"
+                        [plotOptions]="chartOptions13.plotOptions"
+                      ></apx-chart>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="New Vs Returning User">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">New vs. Returning Visitors</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <!-- <div class="chart1 kbcustmwidthforbox3 d-flex justify-content-center"> -->
+                    <div class="row">
+                      <div class="col-12 d-flex justify-content-center">
+                        <apx-chart class="w-75" *ngIf="data_newvsret.fetched"
+                        [series]="chartOptions4.series"
+                        [chart]="chartOptions4.chart"
+                        [labels]="chartOptions4.labels"
+                        [responsive]="chartOptions4.responsive"
+                        [legend]="chartOptions4.legend"
+                      ></apx-chart>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Heatmap">
+              <div class="container-fluid">
+                <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between">
+                    <span class="kb-fnt-hd-size">HeatMap</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <div class="row">
+                  <div class="col-12 d-flex justify-content-center">
+                    <apx-chart class="w-75"
+                    [series]="chartOptions32.series"
+                    [chart]="chartOptions32.chart"
+                    [dataLabels]="chartOptions32.dataLabels"
+                    [plotOptions]="chartOptions32.plotOptions"
+                    [title]="chartOptions32.title"
+                  ></apx-chart>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            </div>
+              </mat-tab>
+            <mat-tab label="Queries">
+              <div class="container-fluid">
+                <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 my-3">
+                <div class="card-map">
+                  <div class="card-header d-flex justify-content-between mb-3">
+                    <span class="kb-fnt-hd-size">Top Query</span>
+                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                          <mat-menu #menu3="matMenu">
+                            <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                            <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                            <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                          </mat-menu>
+                  </div>
+                  <div class="col-12">
+                    <table class="table kb-table">
+                      <thead>
+                        <tr>
+                          <th>Top Queries</th>
+                          <th>Clicks</th>
+                          <th>Impressions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of top_query">
+                          <td>{{item.name}}</td>           
+                          <td>{{item.click}}</td>           
+                          <td>{{item.impressions}}</td>           
+                                    
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- <mat-paginator  #paginator [length]="contactlength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page" (page)="getpagecontacts($event)"></mat-paginator> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+        <div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div> 
 
   <div class="row py-3">
     <div class="col-12">
@@ -501,7 +1246,14 @@
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
-              <div class="numbers pull-left"><h5>Page Views</h5>
+              <div class="numbers pull-left d-flex justify-content-between">
+                <span class="kb-fnt-hd-size">Page Views</span>
+                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <mat-menu #menu3="matMenu">
+                  <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
+                  <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
+                  <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
+                </mat-menu>
               </div>
             </div>
           </div>
@@ -524,436 +1276,6 @@
     </div> 
   </div> 
 
-  
-  <!-- <div class="row" *ngIf="hidefornow">
-    <div class="col-lg-4 col-sm-6">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-sm-7">
-              <div class="numbers pull-left"> ${{totalrevenue7day}} </div>
-            </div>
-            <div class="col-sm-5" *ngIf="hidefornow">
-              <div class="pull-right"><span class="badge badge-pill badge-success"> +18% </span></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-              <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-              <div class=""></div>
-            </div>
-          </div>
-          <h6 class="big-title">Total earnings in last Week</h6>
-          <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart *ngIf="campaign.fetched"
-              [series]="chartOptions.series"
-              [chart]="chartOptions.chart"
-              [yaxis]="chartOptions.yaxis"
-              [xaxis]="chartOptions.xaxis"
-              [labels]="chartOptions.labels"
-              [stroke]="chartOptions.stroke"
-              [title]="chartOptions.title"
-              [dataLabels]="chartOptions.dataLabels"
-              [fill]="chartOptions.fill"
-              [tooltip]="chartOptions.tooltip"
-            ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer" *ngIf="hidefornow">
-          <hr>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="footer-title">Sales Statistics</div>
-            </div>
-            <div class="col-sm-8">
-              <div class="pull-right">
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Weekly" matTooltipPosition="above" >Weekly</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Monthly" matTooltipPosition="above" >Monthly</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Yearly" matTooltipPosition="above" >Yearly</button>
-
-                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Sales" matTooltipPosition="above" >
-                  <i class="fas fa-play"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-6" *ngIf="data2.length!=0">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-sm-7">
-              <div class="numbers pull-left"> {{totalcontact7day}} </div>
-            </div>
-            <div class="col-sm-5" *ngIf="hidefornow">
-              <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-              <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-              <div class=""></div>
-            </div>
-          </div>
-          <h6 class="big-title">total Contact in last 7 days</h6>
-          <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart
-              [series]="chartOptions2.series"
-              [chart]="chartOptions2.chart"
-              [xaxis]="chartOptions2.xaxis"
-              [stroke]="chartOptions2.stroke"
-              [dataLabels]="chartOptions2.dataLabels"
-              [yaxis]="chartOptions2.yaxis"
-              [labels]="chartOptions2.labels"
-              [legend]="chartOptions2.legend"
-              [title]="chartOptions2.title"
-              [subtitle]="chartOptions2.subtitle"
-            ></apx-chart>
-          </div>
-
-        </div>
-        <div class="card-footer" *ngIf="hidefornow">
-          <hr>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="footer-title">Website Stats</div>
-            </div>
-            <div class="col-sm-8">
-              <div class="pull-right">
-
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1"  matTooltip="Page Views" matTooltipPosition="above" >Views</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Source" matTooltipPosition="above" >Source</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Devices" matTooltipPosition="above" >Devices</button>
-
-                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Stats" matTooltipPosition="above" >
-                  <i class="fas fa-play"></i>
-                </button>
-
-                  
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-sm-6" *ngIf="hidefornow">
-      <div class="card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-sm-7">
-              <div class="numbers pull-left"> 8,960 </div>
-            </div>
-            <div class="col-sm-5" >
-              <div class="pull-right"><span class="badge badge-pill badge-warning"> ~51% </span></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-              <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-              <div class=""></div>
-            </div>
-          </div>
-          <h6 class="big-title">Total Heatmaps report in last 3.5 Months</h6>
-          <div class="chart1 kbcustmwidthforbox3">
-            <apx-chart
-              [series]="chartOptions3.series"
-              [chart]="chartOptions3.chart"
-              [dataLabels]="chartOptions3.dataLabels"
-              [colors]="chartOptions3.colors"
-              [grid]="chartOptions3.grid"
-              [xaxis]="chartOptions3.xaxis"
-              [title]="chartOptions3.title"
-            ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer" >
-          <hr>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="footer-title">Heatmap Statistics</div>
-            </div>
-            <div class="col-sm-6">
-              <div class="pull-right">
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge" >View</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  
-  <div class="row py-3">
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">New vs. Returning Visitors</h5>
-        </div>
-        <div class="chart1 kbcustmwidthforbox3 text-center">
-            <apx-chart *ngIf="data_newvsret.fetched"
-              [series]="chartOptions4.series"
-              [chart]="chartOptions4.chart"
-              [labels]="chartOptions4.labels"
-              [responsive]="chartOptions4.responsive"
-            ></apx-chart>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Device Breakdown</h5>
-        </div>
-        <div class="chart1 kbcustmwidthforbox3 text-center">
-            <apx-chart *ngIf="data_devicebreak.fetched"
-              [series]="chartOptions5.series"
-              [chart]="chartOptions5.chart"
-              [labels]="chartOptions5.labels"
-              [responsive]="chartOptions5.responsive"
-            ></apx-chart>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row py-3">
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">Browser Breakdown</h5>
-        </div>
-        <div class="chart1 kbcustmwidthforbox3 text-center">
-            <apx-chart *ngIf="data_browserbreak.fetched"
-              [series]="chartOptions13.series"
-              [chart]="chartOptions13.chart"
-              [labels]="chartOptions13.labels"
-              [responsive]="chartOptions13.responsive"
-            ></apx-chart>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">OS Breakdown</h5>
-        </div>
-        <div class="chart1 kbcustmwidthforbox3 text-center">
-            <apx-chart *ngIf="data_osbreak.fetched"
-              [series]="chartOptions14.series"
-              [chart]="chartOptions14.chart"
-              [labels]="chartOptions14.labels"
-              [responsive]="chartOptions14.responsive"
-            ></apx-chart>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row py-3">
-    <div class="col-12">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top 10 Countries</h5>
-        </div>
-        <div class="card-body">
-          <!-- <div class="kb-table-list-item" *ngFor="let item of data_topcountry; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text"> <span class="kb-flag kb-flag-us"></span> {{item.location}}</span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div> -->
-        
-          <google-chart [data]="pieChartData"></google-chart>        
-
-        </div>
-      </div>
-    </div>
-    
-  </div>
-  <div class="row py-3">
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top Pages</h5>
-        </div>
-        <div class="card-body">
-          
-          <div class="kb-table-list-item" *ngFor="let item of data_toplandingpage; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text">
-              <a [href]="item.landing_page" target="_blank" rel="noreferrer noopener">
-                {{item.doc_title}}</a>
-            </span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Top 10 Referrals</h5>
-        </div>
-        <div class="card-body">
-          
-          <div class="kb-table-list-item" *ngFor="let item of data_topreferrals; index as i">
-            <span class="kb-reports-list-count">{{i+1}}.</span>
-            <span class="kb-reports-list-text">
-              <img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals">{{makemyurl(item.referrals)}}</span>
-              <span class="kb-reports-list-number">{{item.count}}</span>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-
- 
-  
-<!-- 
-  <div class="row" *ngIf="hidefornow" >
-    <div class="col-md-3">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Campaign</h5>
-          <p class="card-category">Last Week</p>
-        </div>
-        <div class="card-body">
-          <div class="chart1 kbcustmwidthforbox" >
-            <apx-chart
-            [series]="chartOptions6.series"
-            [chart]="chartOptions6.chart"
-            [dataLabels]="chartOptions6.dataLabels"
-            [plotOptions]="chartOptions6.plotOptions"
-            [yaxis]="chartOptions6.yaxis"
-            [legend]="chartOptions6.legend"
-            [fill]="chartOptions6.fill"
-            [stroke]="chartOptions6.stroke"
-            [tooltip]="chartOptions6.tooltip"
-            [xaxis]="chartOptions6.xaxis"
-          ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr class="mt-n4">
-          <div class="stats"><i class="fa fa-check"></i> Last Update 8 minutes ago </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">New Visitors</h5>
-          <p class="card-category">Last Week</p>
-        </div>
-        <div class="card-body ">
-          <div class="chart1 kbcustmwidthforbox" >
-            <apx-chart
-              [series]="chartOptions7.series"
-              [chart]="chartOptions7.chart"
-              [xaxis]="chartOptions7.xaxis"
-              [dataLabels]="chartOptions7.dataLabels"
-              [grid]="chartOptions7.grid"
-              [stroke]="chartOptions7.stroke"
-              [title]="chartOptions7.title"
-            ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr class="mt-n4">
-          <div class="stats"><i class="fa fa-check"></i> Last Update 1 minutes ago </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Orders</h5>
-          <p class="card-category">Statistics</p>
-        </div>
-        <div class="card-body ">
-          <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-              <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-              <div class=""></div>
-            </div>
-          </div>
-          <div class="chart1 kbcustmwidthforbox">
-            <apx-chart
-              [series]="chartOptions8.series"
-              [chart]="chartOptions8.chart"
-              [dataLabels]="chartOptions8.dataLabels"
-              [plotOptions]="chartOptions8.plotOptions"
-              [yaxis]="chartOptions8.yaxis"
-              [legend]="chartOptions8.legend"
-              [fill]="chartOptions8.fill"
-              [stroke]="chartOptions8.stroke"
-              [tooltip]="chartOptions8.tooltip"
-              [xaxis]="chartOptions8.xaxis"
-            ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr class="mt-n4">
-          <div class="stats"><i class="fa fa-check"></i> Updated 3 minutes ago </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card ">
-        <div class="card-header ">
-          <h5 class="card-title">Contacts</h5>
-          <p class="card-category">Statistics</p>
-        </div>
-        <div class="card-body ">
-          <div class="chart1 kbcustmwidthforbox">
-            <apx-chart
-              [series]="chartOptions9.series"
-              [chart]="chartOptions9.chart"
-              [dataLabels]="chartOptions9.dataLabels"
-              [plotOptions]="chartOptions9.plotOptions"
-              [yaxis]="chartOptions9.yaxis"
-              [legend]="chartOptions9.legend"
-              [fill]="chartOptions9.fill"
-              [stroke]="chartOptions9.stroke"
-              [tooltip]="chartOptions9.tooltip"
-              [xaxis]="chartOptions9.xaxis"
-            ></apx-chart>
-          </div>
-        </div>
-        <div class="card-footer ">
-          <hr class="mt-n4">
-          <div class="stats">
-            <span>
-              <i class="fa fa-download"></i> Downloads: 10k 
-            </span>
-            <span class="float-right">
-              <i class="fa fa-sign-in-alt"></i> Active Logins: 1k 
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>
-  <div class="col-1"></div>
 </div>
 </div>

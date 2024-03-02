@@ -23,6 +23,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 const routes: Routes = [
@@ -59,6 +61,8 @@ const routes: Routes = [
     MatMenuModule,
     MatProgressBarModule,
     MatInputModule,  
+    MatTabsModule,
+    MatSliderModule,
   ],
   exports: [RouterModule]
 })
