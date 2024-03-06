@@ -26,13 +26,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CrmComponent } from '../_components/_crm/crm/crm.component';
 import { CrmReportsComponent } from '../_components/_crm/reports/reports.component';
 
-
-
 const routes: Routes = [
   {path:'', component : CrmComponent,
   children : [
-  { path: '', component: CrmReportsComponent,},
-  { path: 'fields', component: CrmFieldsComponent,},
+  { path: '', component: CrmReportsComponent},
+  { path: 'fields', component: CrmFieldsComponent},
 ],
 }
 ];

@@ -46,20 +46,20 @@ import { CrmContactComponent } from '../_components/_crm/contact/contact.compone
 const routes: Routes = [
   { path: '', component: MembershipComponent, 
   children : [
-        { path: '', component: MembershipReportsComponent,},
-        { path: 'reports', component: MembershipReportsComponent,}, 
-        { path: 'memberships', component: MembershipCoursesComponent,},
+        { path: '', component: MembershipReportsComponent},
+        { path: 'reports', component: MembershipReportsComponent}, 
+        { path: 'memberships', component: MembershipCoursesComponent},
         { path: 'members', component: MembershipMembersComponent, },
         { path: 'marketplace', component: MembershipMarketplaceComponent, },
         { path: 'customization', component: MembershipCustomizationComponent, },
-        { path: 'settings', component: CourseSettingsComponent,},
-   ],},
-    { path: 'course/:course_id', component: MembershipModulesComponent,},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,},
-    { path: 'member/:course_id', component : ViewCourseModule,},
-    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
+        { path: 'settings', component: CourseSettingsComponent},
+   ]},
+    { path: 'course/:course_id', component: MembershipModulesComponent},
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent},
+    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule},
+    { path: 'member/:course_id', component : ViewCourseModule},
+    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent},
   ];
 
 @NgModule({

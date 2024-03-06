@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '../_guard/auth.guard';
 import { CrmComponent } from '../_components/_crm/crm/crm.component';
 import { CrmAutomationComponent } from '../_components/_crm/automation/automation.component';
 import { CrmCampaignBuilderComponent } from '../_components/_crm/campaign-builder/campaign-builder.component';
@@ -46,28 +45,24 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ImageModule } from './image.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-
-
-
 const routes: Routes = [
   { path: '', component: CrmComponent,
   children : [
-      { path: '', component: CrmReportsComponent,},
-      { path: 'reports', component: CrmReportsComponent,},
+      { path: '', component: CrmReportsComponent},
+      { path: 'reports', component: CrmReportsComponent},
       { path: 'automations', component: CrmAutomationComponent, },
-      { path: 'campaigns', component: CrmCampaignsComponent,},
+      { path: 'campaigns', component: CrmCampaignsComponent},
       { path: 'contacts', component: CrmContactsComponent, },
-      { path: 'forms', component: CrmFormsComponent,},
-      { path: 'lists', component: CrmListsComponent,},
-      { path: 'settings', component: CrmSettingsComponent,},
-      { path: 'tags', component: CrmTagsComponent,},
-      { path: 'emails', component: CrmEmailsComponent,},
-  ],},
-    { path: 'contact/:uniqueid', component: CrmContactComponent,},
-    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent,},
-    // { path: 'fetch-form/:user_id/:form_id', component: FormfetchModule,},
-    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
-  ];
+      { path: 'forms', component: CrmFormsComponent},
+      { path: 'lists', component: CrmListsComponent},
+      { path: 'settings', component: CrmSettingsComponent},
+      { path: 'tags', component: CrmTagsComponent},
+      { path: 'emails', component: CrmEmailsComponent},
+  ]},
+  { path: 'contact/:uniqueid', component: CrmContactComponent},
+  { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent},
+  { path: 'member/:memberid/:uniqueid', component: CrmContactComponent},
+];
 
 @NgModule({
   declarations: [

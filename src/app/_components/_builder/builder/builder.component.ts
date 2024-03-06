@@ -168,8 +168,9 @@ export class BuilderComponent implements OnInit {
         })
         document.addEventListener('contextmenu', event => event.preventDefault());
       }
-      else _general.redirectToPageNotFound();
-   })
+      console.log(_general.target);
+      // else _general.redirectToPageNotFound();
+    })
   }
 
   @HostListener('document:keydown.control.s', ['$event'])  

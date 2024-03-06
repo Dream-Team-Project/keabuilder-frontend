@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { BuilderComponent } from '../_components/_builder/builder/builder.component';
 import { CrmFormBuilderComponent } from '../_components/_crm/form-builder/form-builder.component';
-import { CrmEmailBuilderComponent } from '../_components/_crm/email-builder/email-builder.component';
+// import { CrmEmailBuilderComponent } from '../_components/_crm/email-builder/email-builder.component';
 import { CrmAutomationBuilderComponent } from '../_components/_crm/automation-builder/automation-builder.component';
 import { BuilderSettingModule } from './builder-setting.module';
 import { FormfetchModule } from './formfetch.module';
@@ -45,26 +44,23 @@ import { BuilderWireframeModule } from './builder-wireframe.module';
 import { PageviewModule } from './pageview.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-
-
 const routes: Routes = [
-{ path: 'automation/:id', component: CrmAutomationBuilderComponent,},
-{ path: 'email/:id', component: CrmEmailBuilderComponent,},
-{ path: 'form/:id', component: CrmFormBuilderComponent,},
-{ path: ':target/:id', component: BuilderComponent,},
+  { path: '', component: CrmFormBuilderComponent},
+  // { path: 'automation/:id', component: CrmAutomationBuilderComponent},
+  // { path: 'email/:id', component: CrmEmailBuilderComponent},
+  // { path: 'form/:id', component: CrmFormBuilderComponent}
 ];
 
 @NgModule({
   declarations: [
-    BuilderComponent,
     CrmFormBuilderComponent,
-    CrmEmailBuilderComponent,
+    // CrmEmailBuilderComponent,
     CrmAutomationBuilderComponent, 
     CrmAutomationWorkflowComponent,
-    
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(routes),
     ImageModule,
     CrmFormFieldsModule,
     BuilderSettingModule,
@@ -89,7 +85,6 @@ const routes: Routes = [
     MatInputModule,
     MatDialogModule,
     MatTooltipModule,
-    RouterModule.forChild(routes),
     MatAutocompleteModule,
     MatTabsModule,
     MatChipsModule,
@@ -104,7 +99,6 @@ const routes: Routes = [
     ClipboardModule,
     NgApexchartsModule,
     MatSnackBarModule,
-    RouterModule.forChild(routes),
     MatSelectModule,
     MatPaginatorModule,
   ],
@@ -112,4 +106,5 @@ const routes: Routes = [
     RouterModule,
   ]
 })
+
 export class CrmBuildersModule { }

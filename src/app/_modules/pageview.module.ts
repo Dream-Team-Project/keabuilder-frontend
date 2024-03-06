@@ -22,7 +22,6 @@ const currentPath:any = window.location.pathname;
 // const appHost:any = environment.appHost;
 
 const routes: Routes = [
-
   { path: ':view_target/:template_id', component: PageViewComponent, pathMatch: 'full', data: {
     domain: currentDomain,
     path: currentPath,
@@ -35,12 +34,12 @@ const routes: Routes = [
     domain: currentDomain,
     path: currentPath,
   }},
-  { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
-  { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+  { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath},canActivate: [MemberSignedGuard]},
+  { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath},canActivate: [MemberAuthGuard]},
   { path: '**', component: PageViewComponent, data: {
     domain: currentDomain,
     path: currentPath,
-  },},
+  }},
 ];
 
 @NgModule({
@@ -64,6 +63,7 @@ const routes: Routes = [
   ],
   exports:[
     PageViewComponent,
+    RouterModule
   ]
 })
 export class PageviewModule { }

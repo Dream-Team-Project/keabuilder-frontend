@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    BulderWireframeComponent, 
+    BulderWireframeComponent 
   ],
   imports:[
     CommonModule,
@@ -32,7 +32,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
   ],
   exports: [
-    BulderWireframeComponent, 
+    BulderWireframeComponent
   ]
 })
 export class BuilderWireframeModule { }

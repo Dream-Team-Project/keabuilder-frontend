@@ -27,7 +27,7 @@ import { PipeModule } from './pipe.module';
 
 @NgModule({
   declarations: [
-    BuilderSettingComponent, 
+    BuilderSettingComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +58,7 @@ import { PipeModule } from './pipe.module';
     PipeModule
   ],
   exports: [
-    BuilderSettingComponent,
+    BuilderSettingComponent
   ]
 })
 export class BuilderSettingModule { }

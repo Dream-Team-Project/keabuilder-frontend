@@ -20,12 +20,12 @@ const appHost:any = environment.appHost;
 
 
 const routes: Routes = [
-  //  { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberSignedGuard]},
+  //  { path: 'member/login', component : PageViewComponent, data: { domain: currentDomain,path: currentPath},canActivate: [MemberSignedGuard]},
    { path: 'member/forgot/password', component : MemberForgotPasswordComponent,canActivate: [MemberSignedGuard]},
    // auth guard
-   // { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-   { path: 'member/:course_id', component : ViewCourseModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
-   { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,data: { domain: currentDomain,path: currentPath,},canActivate: [MemberAuthGuard]},
+   // { path: 'member/library', component : PageViewComponent, data: { domain: currentDomain,path: currentPath},canActivate: [MemberAuthGuard]},
+   { path: 'member/:course_id', component : ViewCourseModule,data: { domain: currentDomain,path: currentPath},canActivate: [MemberAuthGuard]},
+   { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule,data: { domain: currentDomain,path: currentPath},canActivate: [MemberAuthGuard]},
   
   { path: 'profile/settings', component: MemberProfileSettingsComponent, canActivate: [AuthGuard] },
   { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent, canActivate: [AuthGuard] },

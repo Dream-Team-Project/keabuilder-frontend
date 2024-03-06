@@ -40,15 +40,15 @@ import { MatRippleModule } from '@angular/material/core';
 const routes: Routes = [
        { path: '', component:  SalesComponent,
        children :[
-      { path: '', component:  OffersComponent,},
-      { path: 'offers', component: OffersComponent,},
-      { path: 'products', component: ProductsComponent,},
-      { path: 'payment', component: PaymentComponent,},
-      { path: 'orderform', component: OrderFormComponent,},
-      // { path: 'builder/checkout/:id', component: CheckoutComponent,},
-       ],},
-       { path: 'orderform/:id', component: OrderFormCheckoutComponent,},
-       { path: 'offer/:uniqueid', component: OfferComponent,},
+      { path: '', component:  OffersComponent},
+      { path: 'offers', component: OffersComponent},
+      { path: 'products', component: ProductsComponent},
+      { path: 'payment', component: PaymentComponent},
+      { path: 'orderform', component: OrderFormComponent},
+      // { path: 'builder/checkout/:id', component: CheckoutComponent},
+       ]},
+       { path: 'orderform/:id', component: OrderFormCheckoutComponent},
+       { path: 'offer/:uniqueid', component: OfferComponent},
   ];
 
 @NgModule({

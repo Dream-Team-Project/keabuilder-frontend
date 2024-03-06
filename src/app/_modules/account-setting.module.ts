@@ -24,8 +24,8 @@ const routes: Routes = [
       { path: '', component: ProfileSettingsComponent, },
       { path: 'settings', component: ProfileSettingsComponent, },
       { path: 'sign-in-security', component: SignInSecurityComponent, },
-      { path: 'billing', component: BillingComponent,},
-      { path: 'viewplans', component: ViewplansComponent,},
+      { path: 'billing', component: BillingComponent},
+      { path: 'viewplans', component: ViewplansComponent},
       ],}
   ];
 @NgModule({

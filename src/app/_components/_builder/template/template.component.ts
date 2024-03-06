@@ -34,7 +34,7 @@ export class TemplateComponent implements OnInit {
   {title: 'Downsell',name : 'downsell'},
   { title: 'Webinar', name : 'webinar'},
   {title: 'Optin',name : 'optin'},
-  {title: 'Other',name : 'other',},
+  {title: 'Other',name : 'other'},
   ];
   spinner=true;
   templatenameFormControl = new FormControl('', [Validators.required,Validators.minLength(3),]);

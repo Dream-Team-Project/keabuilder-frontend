@@ -57,7 +57,7 @@
             [style.width]="_general.respToggleDevice.width">
             <div id="kb-globall-header" class="kb-gloabally-block" *ngIf="_general.includeLayout.header && _general.selectedHeader.id">
                 <header [id]="'kb-header-'+_general.selectedHeader.id">
-                    <app-page-view [target]="'header'" [target_id]="_general.selectedHeader.id"></app-page-view>
+                    <!-- <app-page-view [target]="'header'" [target_id]="_general.selectedHeader.id"></app-page-view> -->
                 </header>
                 <button color="secondary" mat-stroked-button class="kb-globally-edit-btn" (click)="_general.redirectLink('/builder/header/'+_general.selectedHeader.id)">Edit Header Globally</button>
             </div>
@@ -498,7 +498,7 @@
             </div>
             <div id="kb-globall-footer" class="kb-gloabally-block" *ngIf="_general.includeLayout.footer && _general.selectedFooter.id">
                 <footer [id]="'kb-footer-'+_general.selectedFooter.id">
-                    <app-page-view [target]="'footer'" [target_id]="_general.selectedFooter.id"></app-page-view>
+                    <!-- <app-page-view [target]="'footer'" [target_id]="_general.selectedFooter.id"></app-page-view> -->
                 </footer>
                 <button color="secondary" mat-stroked-button class="kb-globally-edit-btn" (click)="_general.redirectLink('/builder/footer/'+_general.selectedFooter.id)">Edit Footer Globally</button>
             </div>

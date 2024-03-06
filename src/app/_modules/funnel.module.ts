@@ -28,19 +28,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 const routes: Routes = [
   { path: '', component: FunnelComponent,
   children : [
-  { path: '', component: FunnelsComponent,},
-  { path: 'all', component: FunnelsComponent,},
-  { path: 'build', component: FunnelBuildComponent,},
-  { path: 'archive', component: FunnelArchiveComponent,},
-],},
+  { path: '', component: FunnelsComponent},
+  { path: 'all', component: FunnelsComponent},
+  { path: 'build', component: FunnelBuildComponent},
+  { path: 'archive', component: FunnelArchiveComponent},
+]},
   { path: ':funnel_id', component: CreateFunnelsComponent,
 children: [ 
-{ path: 'steps/:step_id', component: FunnelStepsComponent,},
+{ path: 'steps/:step_id', component: FunnelStepsComponent},
 // { path: 'steps/:step_id', component: CreateNewFunnelStepsComponent, canActivate: [AuthGuard] },
-{ path: 'settings', component: FunnelSettingsComponent,},
-{ path: 'archive', component: FunnelStepArchiveComponent,},
-],},
-  { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent,},
+{ path: 'settings', component: FunnelSettingsComponent},
+{ path: 'archive', component: FunnelStepArchiveComponent},
+]},
+  { path: 'step/settings/:step_id', component: FunnelStepSettingsComponent},
   
   // builder
   // { path: 'fetch-orderform/:id', component: FunnelCheckoutModule},

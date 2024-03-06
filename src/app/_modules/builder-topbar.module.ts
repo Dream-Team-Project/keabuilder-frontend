@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
-    BuilderTopbarComponent,
+    BuilderTopbarComponent
   ],
   imports:[
     CommonModule,
@@ -25,10 +25,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatTooltipModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule,
+    MatButtonModule
   ],
   exports: [
-    BuilderTopbarComponent,
+    BuilderTopbarComponent
   ]
 })
 export class BuilderTopbarModule { }

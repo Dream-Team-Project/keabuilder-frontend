@@ -10,9 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 const routes: Routes = [
-  { path: '', component: HeatmapsComponent,},
-  // { path: 'heatmap/:id', component: HeatmapViewComponent,},
-  // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent,},
+  { path: '', component: HeatmapsComponent},
+  // { path: 'heatmap/:id', component: HeatmapViewComponent},
+  // { path: 'heatmaps-recordings', component: HeatmapsRecordingsComponent},
 ];
 @NgModule({
   declarations: [

@@ -14,14 +14,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgxStripeModule } from 'ngx-stripe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+
+// 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -29,8 +30,8 @@ const routes: Routes = [
   { path: 'register/:id', component: RegisterComponent, canActivate: [SignedInGuard]},
   { path: 'forget', component: ForgotPasswordComponent, canActivate: [SignedInGuard]},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-
 ];
+
 @NgModule({
   declarations: [
     LoginComponent,
