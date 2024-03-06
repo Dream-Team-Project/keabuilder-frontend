@@ -17,7 +17,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { BuilderComponent } from '../_components/_builder/builder/builder.component';
-import { CrmEmailBuilderComponent } from '../_components/_crm/email-builder/email-builder.component';
 import { BuilderSettingModule } from './builder-setting.module';
 import { BuilderTopbarModule } from './builder-topbar.module';
 import { BuilderWireframeModule } from './builder-wireframe.module';
@@ -28,14 +27,12 @@ import { ImageModule } from './image.module';
 import { PipeModule } from './pipe.module';
 
 const routes: Routes = [
-  { path: 'email/:id', component: CrmEmailBuilderComponent},
   { path: ':target/:id', component: BuilderComponent }
 ];
 
 @NgModule({
   declarations: [
-    BuilderComponent,
-    CrmEmailBuilderComponent
+    BuilderComponent
   ],
   imports: [
     CommonModule,
