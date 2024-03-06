@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
 import { UserService } from './_services/user.service';
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event as NavigationEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -22,12 +23,14 @@ export class AppComponent {
   componetLoaded:boolean = false;
   loading:boolean = false;
   isLeft:any=true;
+  isDarkMode: boolean = false;
 
   constructor(
     private router:Router,
     private title: Title,
     public _user: UserService,
-    private _token: TokenStorageService
+    private _token: TokenStorageService,
+    private cookieService: CookieService,
     ) { 
       router.events
       .subscribe(
@@ -87,6 +90,7 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
+    this.getTheme();
     if(this.isLoggedIn) {
       const user = this._token.getUser();
       this.roles = user.roles;
@@ -119,6 +123,15 @@ export class AppComponent {
   onPositionChanged(isLeft: boolean) {
     this.isLeft = isLeft;
     // console.log(this.isLeft)
+  }
+  getTheme() {
+    const theme = this.cookieService.get('theme');
+    // console.log(theme)
+    if (theme) {
+      this.isDarkMode = theme === 'dark';
+    } else {
+      this.isDarkMode = false;
+    }
   }
 
 }

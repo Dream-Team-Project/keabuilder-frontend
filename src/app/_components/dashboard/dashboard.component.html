@@ -1,4 +1,4 @@
-<div class="container-fluid kb-main-container" id="kea-dashboard">
+<div class="container-fluid kb-main-container" id="kea-dashboard" [ngClass]="{ 'kb-main-container-dark': isDarkMode }">
   <mat-progress-bar *ngIf="fetching" mode='indeterminate'></mat-progress-bar>
  <div class="row">
   <div class="col-12">
@@ -7,9 +7,9 @@
     <div class="col-lg-6 col-md-6 col-sm-12 kb-equal-ht-col-7">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <div class="card card-stats">
-            <div class="card-body ">
-              <p class="card-category d-flex justify-content-between align-items-center">
+          <div class="card card-stats" [ngClass]="{ 'kb-card-dark': isDarkMode }">
+            <div class="card-body">
+              <p class="card-category d-flex justify-content-between align-items-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                 <span>Sales </span>
                 <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
@@ -18,8 +18,8 @@
                   <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
                 </mat-menu>
               </p>
-              <p class="card-title adjustcard kb-colr-accent">${{dailysales}} </p>
-              <p class="card-category d-flex justify-content-between align-items-center">
+              <p class="card-title adjustcard kb-colr-accent" >${{dailysales}} </p>
+              <p class="card-category d-flex justify-content-between align-items-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                 <span>Conversion Rate</span>
                 <span class="kb-fnt-colr"> 7%  <i class="fa-solid fa-arrow-trend-up"></i></span>
               </p>
@@ -38,9 +38,9 @@
           </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <div class="card card-stats">
+          <div class="card card-stats" [ngClass]="{ 'kb-card-dark': isDarkMode }">
             <div class="card-body ">
-              <p class="card-category d-flex justify-content-between align-items-center">
+              <p class="card-category d-flex justify-content-between align-items-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                 <span>New Clients </span>
                 <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
@@ -70,9 +70,9 @@
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <div class="card card-stats">
+          <div class="card card-stats" [ngClass]="{ 'kb-card-dark': isDarkMode }">
             <div class="card-body ">
-              <p class="card-category d-flex justify-content-between align-items-center">
+              <p class="card-category d-flex justify-content-between align-items-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                 <span>Active Users </span>
                 <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
@@ -101,9 +101,9 @@
           </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <div class="card card-stats">
+          <div class="card card-stats" [ngClass]="{ 'kb-card-dark': isDarkMode }">
             <div class="card-body ">
-              <p class="card-category d-flex justify-content-between align-items-center">
+              <p class="card-category d-flex justify-content-between align-items-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                 <span>Revenue </span>
                 <span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
@@ -137,14 +137,14 @@
     <div class="col-lg-6 col-md-6 col-sm-12 kb-equal-ht-col-7">
     <div class="row">
       <div class="col-12">
-        <div class="card card-stats">
+        <div class="card card-stats" [ngClass]="{ 'kb-card-dark': isDarkMode }">
           <div class="card-body ">
-            <p class="card-category d-flex justify-content-between align-items-center">
-              <span class="kb-fnt-hd-size">Kea Support Tracker </span>
-              <span><i class="fa-solid fa-circle-plus"></i> Create A New Ticket</span>
+            <p class="card-category d-flex justify-content-between align-items-center" >
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Kea Support Tracker </span>
+              <span [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-plus"></i> Create A New Ticket</span>
             </p>
             <div class="row">
-              <div class="col-lg-5 col-md-5 col-sm-12">
+              <div class="col-lg-5 col-md-5 col-sm-12" >
             <!-- <p><span class="" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
@@ -152,27 +152,27 @@
                 <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
               </mat-menu></p> -->
             <p class="card-title adjustticket kb-colr-accent">100 </p>
-            <p class="card-category">Total Tickets</p>
+            <p class="card-category" [ngClass]="{ 'kb-card-dark': isDarkMode }">Total Tickets</p>
             <div class="card-category mt-4 pt-4">
             <div class="d-flex">
             <span class="card-ticket-blue p-2"><i class="fa-solid fa-ticket kb-ticket-blue"></i></span>
             <span class="pl-3">
-            <div>Total Tickets</div>
-            <div>100</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">Total Tickets</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">100</div>
           </span>
           </div>
           <div class="d-flex">
             <span class="card-ticket-green p-2"><i class="fa-regular fa-circle-check kb-ticket-green"></i></span>
             <span class="pl-3">
-            <div>Open Tickets</div>
-            <div>30</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">Open Tickets</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">30</div>
           </span>
           </div>
           <div class="d-flex">
             <span class="card-ticket-orange p-2"><i class="fa-regular fa-clock kb-ticket-orange"></i></span>
             <span class="pl-3">
-            <div>Response Time</div>
-            <div>1 Hour</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">Response Time</div>
+            <div [ngClass]="{ 'kb-card-dark': isDarkMode }">1 Hour</div>
           </span>
           </div>
           </div>
@@ -196,13 +196,13 @@
     
   <div class="row py-3">
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-      <div class="card">
+      <div class="card" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="card-header">
           <div class="row">
             <div class="col-12">
               <div class="numbers pull-left d-flex justify-content-between">
-                <span class="kb-fnt-hd-size">Total Earnings</span>
-                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Total Earnings</span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"  ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
                   <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                   <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -225,8 +225,8 @@
               <div class=""></div>
             </div>
           </div>
-          <span class="kb-fnt-hd-size">Total earnings monthly</span>
-          <div class="chart1 kbcustmwidthforbox4 text-center">
+          <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Total earnings monthly</span>
+          <div class="chart1 kbcustmwidthforbox4 text-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
           <!-- <div class="kbcustmwidthforbox4"> -->
             <apx-chart *ngIf="data11"
               [series]="chartOptions11.series"
@@ -265,11 +265,11 @@
       </div>
     </div>
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-      <div class="card">
+      <div class="card" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="card-header">
           <div class="row">
-            <div class="col-10">
-              <div class="numbers pull-left "><span class="kb-fnt-hd-size">Recent Sales Activity</span></div>
+            <div class="col-10" >
+              <div class="numbers pull-left" ><span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Recent Sales Activity</span></div>
             </div>
           </div>
           
@@ -283,17 +283,17 @@
               <div class=""></div>
             </div>
           </div>
-          <div class="kbcustmwidthforbox4-recent text-center" [class.text-center]="recentsales.length==0">
+          <div class="kbcustmwidthforbox4-recent text-center" [ngClass]="{ 'kb-card-dark': isDarkMode }" [class.text-center]="recentsales.length==0">
             <img *ngIf="recentsales?.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" width="370" alt="">
             <button color="primary" *ngIf="recentsales?.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
 
-            <div class="row mb-3" *ngFor="let recent of recentsales">
+            <div class="row mb-3"  *ngFor="let recent of recentsales">
               <div class="col-sm-9">
                 <div class="row">
                 <span class="col-md-1"><i class="fa-regular fa-circle-user"></i></span>
-                <span  class="col-sm-11 pl-4">
-                  <div class="kb-fnt-subhd-size">User</div>
-                  <div class="kbcustmwidthforbox4-time">{{recent.time_ago}}</div>
+                <span  class="col-sm-11 pl-4" >
+                  <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">User</div>
+                  <div class="kbcustmwidthforbox4-time" [ngClass]="{ 'kb-card-dark': isDarkMode }">{{recent.time_ago}}</div>
                 </span>
                 </div>
                
@@ -325,13 +325,13 @@
 
   <div class="row" *ngIf="loadmore">
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-      <div class="card kb-card-ht">
+      <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="card-header">
           <div class="row"   *ngIf="contact.fetched">
             <div class="col-sm-12">
               <div class="numbers pull-left d-flex justify-content-between">
-                <span class="kb-fnt-hd-size">Recent Contacts</span>
-                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Recent Contacts</span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
                   <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                   <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -341,13 +341,6 @@
                 <h5><span class="text-danger">Limit : {{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</span></h5> -->
               </div>
             </div>
-            <div *ngIf="hidefornow" class="col-sm-5">
-              <div class="pull-right"><span class="badge badge-pill badge-danger"> -14% </span></div>
-            </div>
-          </div>
-          <div *ngIf="hidefornow" class="row">
-            <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
-          </div>
         </div>
         <div class="card-body">
           <div class="chartjs-size-monitor">
@@ -377,17 +370,17 @@
             [tooltip]="chartOptions10.tooltip"
             [xaxis]="chartOptions10.xaxis"
             ></apx-chart>
-            <div class="d-flex justify-content-center" *ngIf="contact.monthly?.length!=0">
+            <div class="d-flex justify-content-center"  *ngIf="contact.monthly?.length!=0">
               <div class="px-4">
                 <div class="kb-ticket-orange"><i class="fa-regular fa-address-card card-ticket-orange p-2"></i></div>
-                <div class="kb-fnt-hd-size">{{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</div>
-                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Contacts Limit</div>
+                <div class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">{{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</div>
+                <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Contacts Limit</div>
                 
               </div>
               <div class="px-4">
-                <div class="kb-ticket-green"><i class="fa-regular fa-address-card card-ticket-green p-2"></i></div>
-                <div class="kb-fnt-hd-size">{{contact?.totalcontacts}}</div>
-                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Active Contacts</div>
+                <div class="kb-ticket-green" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-regular fa-address-card card-ticket-green p-2"></i></div>
+                <div class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">{{contact?.totalcontacts}}</div>
+                <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Active Contacts</div>
                
               </div>
              
@@ -420,14 +413,15 @@
         </div>
       </div>
     </div>
+    </div>
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-      <div class="card kb-card-ht">
+      <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
               <div class="numbers pull-left d-flex justify-content-between">
-                <span class="kb-fnt-hd-size">Recent Campaigns</span>
-                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Recent Campaigns</span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
                   <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                   <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -436,9 +430,7 @@
                 <!-- <span class="colr ml-1" *ngIf="hidefornow">{{totalcontact7day}}</span></div> -->
             </div>
         </div>
-        <div *ngIf="hidefornow" class="row">
-          <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
-        </div>
+       
         </div>
         <div class="card-body" *ngIf="campaign.fetched">
           <div class="chartjs-size-monitor">
@@ -467,45 +459,24 @@
             <div class="d-flex justify-content-center" *ngIf="campaign.recents?.length != 0">
               <div class="px-3">
                 <div class="kb-ticket-blue"><i class="fa-solid fa-play card-ticket-blue p-2"></i></div>
-                <div class="kb-fnt-hd-size">6,000</div>
-                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-blue pr-1"></i> Total Sent</div>
+                <div class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">6,000</div>
+                <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-dot kb-circle-blue pr-1"></i> Total Sent</div>
               </div>
               <div class="px-3">
                 <div class="kb-ticket-green"><i class="fa-regular fa-flag card-ticket-green p-2"></i></div>
-                <div class="kb-fnt-hd-size">4,500</div>
-                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Reached</div>
+                <div class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">4,500</div>
+                <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-dot kb-circle-green pr-1"></i> Reached</div>
               </div>
               <div class="px-3">
-                <div class="kb-ticket-orange"><i class="fa-regular fa-envelope-open card-ticket-orange p-2"></i></div>
-                <div class="kb-fnt-hd-size">1,500</div>
-                <div class="kb-fnt-subhd-size"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Open</div>
+                <div class="kb-ticket-orange" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-regular fa-envelope-open card-ticket-orange p-2"></i></div>
+                <div class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">1,500</div>
+                <div class="kb-fnt-subhd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><i class="fa-solid fa-circle-dot kb-circle-orange pr-1"></i> Total Open</div>
               </div>
               
             </div>
           </div>
         </div>
-          <div class="card-footer" *ngIf="hidefornow">
-          <hr>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="footer-title">Website Stats</div>
-            </div>
-            <div class="col-sm-8">
-              <div class="pull-right">
-
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1"  matTooltip="Page Views" matTooltipPosition="above" >Views</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Source" matTooltipPosition="above" >Source</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Traffic By Devices" matTooltipPosition="above" >Devices</button>
-
-                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Stats" matTooltipPosition="above" >
-                  <i class="fas fa-play"></i>
-                </button>
-
-                  
-                </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
 </div>
@@ -514,13 +485,13 @@
 
 <div class="row py-3" *ngIf="loadmore">
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Best Time To Send Marketing Emails</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Best Time To Send Marketing Emails</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -556,13 +527,13 @@
     </div>
   </div>
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Top Performers</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Performers</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Website</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">Funnel</button>
@@ -609,13 +580,13 @@
 
 <div class="row" *ngIf="loadmore">
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Members Analysis</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Members Analysis</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -648,13 +619,13 @@
     </div>
   </div>
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Courses Revenue</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Courses Revenue</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"  ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -696,12 +667,12 @@
 
 <div class="row py-3" *ngIf="loadmore">
   <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Top Courses</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Courses</span>
               <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
@@ -741,13 +712,13 @@
     </div>
   </div>
   <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Kea Browser States</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Kea Browser States</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -857,13 +828,13 @@
     </div>
   </div>
   <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
-    <div class="card kb-card-ht">
+    <div class="card kb-card-ht" [ngClass]="{ 'kb-card-dark': isDarkMode }">
       <div class="card-header">
         <div class="row">
           <div class="col-sm-12">
             <div class="numbers pull-left d-flex justify-content-between">
-              <span class="kb-fnt-hd-size">Device Breakdown</span>
-              <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Device Breakdown</span>
+              <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
               <mat-menu #menu3="matMenu">
                 <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                 <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -872,7 +843,7 @@
           </div>
       </div>
       </div>
-      <div class="card-body ">
+      <div class="card-body">
         <div class="chartjs-size-monitor">
           <div class="chartjs-size-monitor-expand">
             <div class=""></div>
@@ -901,11 +872,11 @@
 
   <div class="row" *ngIf="loadmore">
     <div class="col-12">
-      <div class="card">
+      <div class="card" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="row">
           <div class="col-12">
         <div class="card-header d-flex justify-content-between">
-          <span class="kb-fnt-hd-size">Traffic Outreach</span>
+          <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Traffic Outreach</span>
           <!-- <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
                   <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
@@ -913,12 +884,12 @@
                   <button mat-menu-item [value]="'3'" (click)="triggerFunction($event,'sales')">3 days ago</button>
                 </mat-menu> -->
         </div>
-        <div class="my-3">
-          <mat-tab-group fitInkBarToContent>
+        <div class="my-3" [ngClass]="{ 'kb-card-dark': isDarkMode }">
+          <mat-tab-group fitInkBarToContent [ngClass]="{ 'kb-card-dark': isDarkMode }">
             <mat-tab label="Map">
               <div class="container-fluid">
                 <div class="row">
-                  <div class="col-lg-8 col-md-8 col-sm-12">
+                  <div class="col-lg-8 col-md-8 col-sm-12" >
                     <div class="card-body">
                       <div class="card-map p-2" *ngIf="!fetching">
                         <google-chart [data]="pieChartData"></google-chart>
@@ -930,31 +901,31 @@
                       <div class="row">
                         <div class="col-12 mt-3">
                           <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[0]?.location}}</span> <span>{{data_topcountry[0]?.count}}</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><span>{{data_topcountry[0]?.location}}</span> <span>{{data_topcountry[0]?.count}}</span></div>
                             <div class="progress">
                               <div class="progress-bar bg-success" role="progressbar" [style.width.%]="(data_topcountry[0]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                           <div class="p-3" *ngIf="data_topcountry[1]">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[1]?.location}}</span> <span>{{data_topcountry[1]?.count}}</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><span>{{data_topcountry[1]?.location}}</span> <span>{{data_topcountry[1]?.count}}</span></div>
                             <div class="progress">
                               <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="(data_topcountry[1]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                           <div class="p-3" *ngIf="data_topcountry[2]">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[2]?.location}}</span> <span>{{data_topcountry[2]?.count}}</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><span>{{data_topcountry[2]?.location}}</span> <span>{{data_topcountry[2]?.count}}</span></div>
                             <div class="progress">
                               <div class="progress-bar" role="progressbar" [style.width.%]="(data_topcountry[2]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                           <div class="p-3" *ngIf="data_topcountry[3]">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[3]?.location}}</span> <span>{{data_topcountry[3]?.count}}</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><span>{{data_topcountry[3]?.location}}</span> <span>{{data_topcountry[3]?.count}}</span></div>
                             <div class="progress">
                               <div class="progress-bar bg-info" role="progressbar" [style.width.%]="(data_topcountry[3]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                           <div class="p-3" *ngIf="data_topcountry[4]">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[4]?.location}}</span> <span>{{data_topcountry[4]?.count}}</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }"><span>{{data_topcountry[4]?.location}}</span> <span>{{data_topcountry[4]?.count}}</span></div>
                             <div class="progress">
                               <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="(data_topcountry[4]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -968,10 +939,10 @@
             </mat-tab>
             <mat-tab label="Pages">
               <div class="col-12 align-items-center my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">Top Pages</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Pages</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -988,20 +959,20 @@
                       </span>
                         <span class="kb-reports-list-number">{{item.count}}</span>
                     </div> -->
-                    <table class="table kb-table">
+                    <table class="table kb-table" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                       <thead>
                         <tr>
-                          <th>Sr.No</th>
-                          <th>Page Name</th>
-                          <th>Clicks</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Sr.No</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Page Name</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Clicks</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of data_toplandingpage; index as i">
-                          <td>{{i+1}}</td>           
-                          <td> <a [href]="item.landing_page" target="_blank" rel="noreferrer noopener">
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{i+1}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }"> <a [href]="item.landing_page" target="_blank" rel="noreferrer noopener">
                             {{item.doc_title}}</a></td>           
-                          <td>{{item.count}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{item.count}}</td>           
                                     
                         </tr>
                       </tbody>
@@ -1013,10 +984,10 @@
             </mat-tab>
             <mat-tab label="Referrals">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">Top Referrals</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Referrals</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1034,16 +1005,16 @@
                     <table class="table kb-table">
                       <thead>
                         <tr>
-                          <th>Sr.No</th>
-                          <th>Name</th>
-                          <th>Counts</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Sr.No</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Name</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Counts</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of data_topreferrals; index as i">
-                          <td>{{i+1}}</td>           
-                          <td><img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals" class="pr-2">{{makemyurl(item.referrals)}}</td>           
-                          <td>{{item.count}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{i+1}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }"><img [src]="'https://www.google.com/s2/favicons?domain='+item.referrals" class="pr-2">{{makemyurl(item.referrals)}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{item.count}}</td>           
                                     
                         </tr>
                       </tbody>
@@ -1054,9 +1025,9 @@
             </mat-tab>
             <mat-tab label="Operating System">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">OS Breakdown</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">OS Breakdown</span>
                     <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
@@ -1067,7 +1038,7 @@
                   <!-- <div class="chart1 kbcustmwidthforbox3 d-flex justify-content-center"> -->
                     <div class="row">
                       <div class="col-12 d-flex justify-content-center">
-                        <apx-chart class="w-75" *ngIf="data_osbreak.fetched"
+                        <apx-chart class="w-75" *ngIf="data_osbreak.fetched" 
                         [series]="chartOptions14.series"
                         [chart]="chartOptions14.chart"
                         [labels]="chartOptions14.labels"
@@ -1080,10 +1051,10 @@
             </mat-tab>
             <mat-tab label="Devices">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">Device Breakdown</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Device Breakdown</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1106,10 +1077,10 @@
             </mat-tab>
             <mat-tab label="Browsers">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">Browser Breakdown</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Browser Breakdown</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1138,10 +1109,10 @@
             </mat-tab>
             <mat-tab label="New Vs Returning User">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">New vs. Returning Visitors</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">New vs. Returning Visitors</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1167,10 +1138,10 @@
               <div class="container-fluid">
                 <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between">
-                    <span class="kb-fnt-hd-size">HeatMap</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">HeatMap</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1197,10 +1168,10 @@
               <div class="container-fluid">
                 <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12 my-3">
-                <div class="card-map">
+                <div class="card-map" [ngClass]="{ 'kb-card-dark': isDarkMode }">
                   <div class="card-header d-flex justify-content-between mb-3">
-                    <span class="kb-fnt-hd-size">Top Query</span>
-                    <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Query</span>
+                    <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                           <mat-menu #menu3="matMenu">
                             <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                             <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>
@@ -1211,16 +1182,16 @@
                     <table class="table kb-table">
                       <thead>
                         <tr>
-                          <th>Top Queries</th>
-                          <th>Clicks</th>
-                          <th>Impressions</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Top Queries</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Clicks</th>
+                          <th [ngClass]="{ 'kb-card-dark': isDarkMode }">Impressions</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of top_query">
-                          <td>{{item.name}}</td>           
-                          <td>{{item.click}}</td>           
-                          <td>{{item.impressions}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{item.name}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{item.click}}</td>           
+                          <td [ngClass]="{ 'kb-card-dark': isDarkMode }">{{item.impressions}}</td>           
                                     
                         </tr>
                       </tbody>
@@ -1244,13 +1215,13 @@
 
   <div class="row py-3" *ngIf="loadmore">
     <div class="col-12">
-      <div class="card">
+      <div class="card" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="card-header">
           <div class="row">
             <div class="col-sm-12">
               <div class="numbers pull-left d-flex justify-content-between">
-                <span class="kb-fnt-hd-size">Page Views</span>
-                <span class="kb-fnt-hd-size" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Page Views</span>
+                <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }" ngDefaultControl [(ngModel)]="saleslimit" [matMenuTriggerFor]="menu3"><i class="fa-solid fa-chevron-down"></i></span>
                 <mat-menu #menu3="matMenu">
                   <button mat-menu-item [value]="'1'" (click)="triggerFunction($event,'sales')">Yesterday</button>
                   <button mat-menu-item [value]="'2'" (click)="triggerFunction($event,'sales')">2 days ago</button>

@@ -17,6 +17,7 @@ import {
   ApexTitleSubtitle,
   ApexXAxis,
 } from 'ng-apexcharts';
+import { CookieService } from 'ngx-cookie-service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -114,6 +115,7 @@ export class DashboardComponent implements OnInit {
   };
   
   loadmore=false;
+  isDarkMode: boolean = false;
   error?: string;
   fetching=false;
   isLoggedIn = false;
@@ -272,7 +274,9 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private heatmapsService: HeatmapsService,
+    private cookieService: CookieService
   ) {
+    this.getTheme();
     this.fetching=true;
     this.chartOptions = {
       series: [
@@ -744,11 +748,18 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
    this.allfunctions();
-  
-
   }
+  getTheme() {
+    const theme = this.cookieService.get('theme');
+    // console.log(theme)
+    if (theme) {
+      this.isDarkMode = theme === 'dark';
+    } else {
+      this.isDarkMode = false;
+    }
+  }
+
   allfunctions(){
     let datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
@@ -1350,6 +1361,7 @@ export class DashboardComponent implements OnInit {
         show: true,
         width: 2,
         colors: ['transparent'],
+        // colors: ['#dea641'],
       },
       xaxis: {
         categories: [
@@ -1371,9 +1383,11 @@ export class DashboardComponent implements OnInit {
         title: {
           text: '',
         },
+        
       },
       fill: {
         opacity: 1,
+        colors:['#00ff00'],
       },
       tooltip: {
         y: {

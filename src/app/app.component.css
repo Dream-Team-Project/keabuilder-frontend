@@ -1,3 +1,4 @@
+
 main {
     position: relative;
 }
@@ -10,7 +11,7 @@ main {
     top: 60px;
     position: relative;
     transition: all .2s ease;
-    background: rgb(244 244 244 / 48%);
+    /* background: rgb(244 244 244 / 48%); */
 }
 .main-chatbar{
     width: 80px;
@@ -22,6 +23,10 @@ main {
 }
 .main-right{
     right: 0;   
+}
+.kb-card-dark{
+    background-color: var(--kb-dark-mode)!important;
+    /* color:white; */
 }
 
 ::ng-deep .mat-calendar-body-selected {

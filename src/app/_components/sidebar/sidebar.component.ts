@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,7 +14,7 @@ export class SidebarComponent implements OnInit {
     
   bkImg_right:any = 'url(./assets/images/sidebar/bar-img-right.svg)';
   bkImg_left:any = 'url(./assets/images/sidebar/bar-img-left.svg)';
-  constructor(public router: Router) { }
+  constructor(public router: Router,private cookieService: CookieService) { }
   connectWtParent:boolean = false;
   toggleSidebar:boolean = true;
   fullsidebar = true;
@@ -535,8 +536,19 @@ export class SidebarComponent implements OnInit {
   extramenus = true;
   backme = false;
   isLeft = true;
+  isDarkMode: boolean = false;
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { this.getTheme(); }
+
+  getTheme() {
+    const theme = this.cookieService.get('theme');
+    // console.log(theme)
+    if (theme) {
+      this.isDarkMode = theme === 'dark';
+    } else {
+      this.isDarkMode = false;
+    }
+  }
   
   changeFn(link: any) {
 

@@ -4,6 +4,8 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
 import { ImageService } from 'src/app/_services/image.service';
 import {MatDialog,} from '@angular/material/dialog';
+import { NavbarService } from 'src/app/_services/navbar.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,8 +21,12 @@ export class NavbarComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     public userService: UserService,
     public _image: ImageService,
-    public dialog: MatDialog
-    ) {  this.randomwelm(); }
+    public dialog: MatDialog,
+    private cookieService: CookieService
+    ) {  
+      this.randomwelm();
+    this.getTheme();
+     }
 
   DialogParentToggle:boolean = false;
   scrollPosition:any = null;
@@ -34,8 +40,7 @@ export class NavbarComponent implements OnInit {
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
   toggleSidebar:boolean = true;
-  selectedMode:any='light';
-  modeChange:any;
+  isDarkMode: boolean = false;
 
   ngOnInit(): void {
     var th:any = this;
@@ -58,7 +63,15 @@ export class NavbarComponent implements OnInit {
 
 
   }
-
+  getTheme() {
+    const theme = this.cookieService.get('theme');
+    // console.log(theme)
+    if (theme) {
+      this.isDarkMode = theme === 'dark';
+    } else {
+      this.isDarkMode = false;
+    }
+  }
   updateScroll(){
     this.scrollPosition = window.scrollY;
   }
@@ -156,7 +169,9 @@ export class NavbarComponent implements OnInit {
     const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
     this.randomwelcome = welcomeMessages[randomIndex];
   }
-  setMode(isDarkMode: boolean) {
-    this.modeChange.emit(isDarkMode);
+  setTheme(theme: string) {
+    this.isDarkMode = theme === 'dark';
+    this.cookieService.set('theme', theme);
+    window.location.href = '/';
   }
 }

@@ -4,6 +4,12 @@
     margin-bottom: -20px;
     margin-top: -26px;
 }
+.kb-main-container-dark {
+    background: var(--kb-dark-mode);
+    padding-top: 50px;
+    margin-bottom: -20px;
+    margin-top: -26px;
+  }
 /* Dashboard css start */
 .card {
     border-radius: 12px;
@@ -472,4 +478,9 @@ font-weight: 600;
 
 ::ng-deep .kb-table tbody tr {
     transition: 0.2s ease;
+}
+
+.kb-card-dark{
+    background-color: var(--kb-dark-shadow);
+    color:white;
 }

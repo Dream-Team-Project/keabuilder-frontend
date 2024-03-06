@@ -15,18 +15,18 @@
   [class.navshadow]="scrollPosition > 100">
   <div class="navbar-wrapper">
     <div class="navbar-container content">
-      <div class="navbar-collapse p-1" id="navbar-mobile">
+      <div class="navbar-collapse p-1" id="navbar-mobile" [ngClass]="{ 'kb-card-dark': isDarkMode }">
         <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
           <div class="col-lg-12 col-md-12 col-sm-12 adjustflex">
-            <h4 class="fntwght">Welcome back, {{userService.user.name | titlecase}}!</h4>
-            <p class="card-category">{{randomwelcome}}</p>
+            <h4 class="fntwght" [ngClass]="{ 'kb-card-dark': isDarkMode }">Welcome back, {{userService.user.name | titlecase}}!</h4>
+            <p class="card-category" [ngClass]="{ 'kb-card-dark': isDarkMode }">{{randomwelcome}}</p>
           </div>
         </div>
-        <div class="search-container1 pr-2">
-          <input type="text" class="search-input1" placeholder="Search For Help">
+        <div class="search-container1 pr-2" [ngClass]="{ 'kb-card-dark': isDarkMode }">
+          <input type="text" class="search-input1" placeholder="Search For Help" [ngClass]="{ 'kb-card-dark': isDarkMode }">
           <!-- <i class="fas fa-search search-icon"></i> -->
         </div>
-        <ul class="nav float-right overflow-hidden">
+        <ul class="nav float-right overflow-hidden" >
           <!-- <li class="nav-item nav-search"><a class="nav-link nav-link-search" (click)="showsearch()"><i
                 class="fas fa-search"></i></a>
             <div class="search-input" [class.open]="issearch">
@@ -37,14 +37,14 @@
               <ul class="search-list"></ul>
             </div>
           </li> -->
-          <li class="dropdown dropdown-notification nav-item">
+          <li class="dropdown dropdown-notification nav-item" >
             <div matTooltip="Light Mode" matTooltipPosition="below">
-              <div class="kb-mode-icon" (click)="setMode(false)">
+              <div class="kb-mode-icon" (click)="setTheme('light')">
                 <img [src]="'./assets/images/sidebar/light_mode.svg'">
               </div>
             </div>
             <div matTooltip="Dark Mode" matTooltipPosition="below">
-              <div class="kb-mode-icon" (click)="setMode(true)">
+              <div class="kb-mode-icon" (click)="setTheme('dark')">
                 <img [src]="'./assets/images/sidebar/dark_mode.svg'">
               </div>
             </div>
@@ -56,16 +56,14 @@
           </li>
           <li class="dropdown dropdown-user nav-item">
             <a class="dropdown-toggle nav-link dropdown-user-link" href="javascript:void(0);" data-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false" [ngClass]="{ 'kb-card-dark': isDarkMode }">
               <div class="user-nav d-sm-flex d-none">
-                <span class="user-name">{{userService.user.name}}</span>
+                <span class="user-name" [ngClass]="{ 'kb-card-dark': isDarkMode }">{{userService.user.name}}</span>
               </div>
               <span>
                 <div class="bw-avatar-content bw-change-color-badge">
-                  <!-- <div class="bw-avatar" (click)="showoffcanvasoverlay()"> -->
-                    <!-- <div class="bw-avatar"   (click)="mainDialog(profiledialog)"> -->
                     <div class="bw-avatar"  [matMenuTriggerFor]="menu">
-                    <img [src]="_image.getImgPath(userimgpath)" alt="">
+                    <img [src]="_image.getImgPath(userimgpath)" alt="" >
                   </div>
                 </div>
               </span>

@@ -754,3 +754,7 @@ div#topbar_notifications_logs {
     top: -12px;
   }
 }
+.kb-card-dark{
+  background-color: var(--kb-dark-shadow);
+  color:white;
+}

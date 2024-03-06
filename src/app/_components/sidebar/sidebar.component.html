@@ -1,6 +1,6 @@
 <div id="bw-sidebar" class="bw-sidebar-content sidebar-left reduce open bgimg-url" [style.backgroundImage]="isLeft ? bkImg_left : bkImg_right" [ngClass]="{'sidebar-left': isLeft, 'sidebar-right': !isLeft}">
   <div class="bw-sidebar-logo">
-    <img src="/assets/images/logo/kblogo.png" alt="Kea logo" [routerLink]="'/'">
+    <img [src]="isDarkMode ?  '/assets/images/logo/kblogo-white.png'  : '/assets/images/logo/kblogo.png'" alt="Kea logo" [routerLink]="'/'">
   </div>
   <div class="bw-sidebar-change" (click)="toggleSidebarPosition()" [class]="isLeft ? 'bw-sidebar-change-left' : 'bw-sidebar-change-right'">
     <img   [src]="'./assets/images/sidebar/change_sidebar_left.svg'" *ngIf="isLeft">

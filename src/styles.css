@@ -223,9 +223,11 @@
         --kb-info: #17a2b8;
         --kb-gray: #ececec;
         --kb-dim-black: rgb(34 38 42 / 20%);
+        --kb-dark-mode:#1E1E1E;
         --kb-dark: #2e2e2e; 
-        --kb-white: #fff;
+        --kb-white: #ffff;
         --kb-black: #000;
+        --kb-dark-shadow: #2F3349;
        
         --kb-text-accent-color : rgb(249, 115, 22) !important;
 --kb-text-accent-300-color : rgb(255, 202, 125) !important;
@@ -317,6 +319,7 @@
     body {
         margin: 0;
         padding: 0;
+        /* background: var(--kb-dark-mode); */
     }
     
     /* scrolling */
@@ -1028,10 +1031,10 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+/* input[type=number] {
   -webkit-appearance: textfield;
   -moz-appearance: textfield;
-}
+} */
 
 .kb-loader {
   animation: loader 5s linear infinite;

@@ -18,7 +18,7 @@
 }
 
 .kb-navbar-icon:hover {
-  background-color: rgba(244, 247, 248, 1);
+  background-color: rgb(159, 236, 163);
 }
 
 .navshadow {
@@ -53,7 +53,8 @@
 }
 
 .header-navbar .navbar-container {
-  padding-left: 12px;
+  /* padding-left: 10px;
+  padding-right: 10px; */
   -webkit-transition: all .2s ease;
   transition: all .2s ease;
   background: inherit;
@@ -1494,3 +1495,7 @@ a:hover {
   padding-left: 5px;
   padding-right: 5px;
 } 
+.kb-card-dark{
+  background-color: var(--kb-dark-shadow);
+  color:white;
+}
