@@ -108,9 +108,12 @@ export class DashboardComponent implements OnInit {
       colorAxis: { colors: ['#FFD700', '#FF0000'] },
       datalessRegionColor: '#f8bbd0',
       defaultColor: '#f5f5f5',
+      fetched:false,
     },
+    
   };
-  cntry_width:any='80%';
+  
+  loadmore=false;
   error?: string;
   fetching=false;
   isLoggedIn = false;
@@ -257,7 +260,7 @@ export class DashboardComponent implements OnInit {
   {name:'Life Coach',click:'20',impressions:'25'},
  ]
 
-  data_topcountry:any = [];
+  data_topcountry:any = {};
   data_topreferrals:any = [];
   data_toplandingpage:any = [];
   // chartData: any[] = [['Country', 'Count']];
@@ -742,7 +745,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
    
-    // last week revenue
+   this.allfunctions();
+  
+
+  }
+  allfunctions(){
     let datacondition2 = { type: 'lastweekrevenue', option: '7 DAY' };
     this.dashboardService.getconditionaldata(datacondition2).subscribe({
       next: (data:any) => {
@@ -914,7 +921,6 @@ export class DashboardComponent implements OnInit {
     this.devicebrakdown();
     this.heatMapchart();
     this.fetching=false;
-
   }
    
   visitorbrowser(condition:any){
@@ -1026,6 +1032,7 @@ export class DashboardComponent implements OnInit {
           if(data.data?.length>0){
             data.data.sort((a:any, b:any) => b.count - a.count);
             this.data_topcountry = data.data;
+            // console.log(this.data_topcountry)
           }
           this.fetching=false;
           resolve(true);
@@ -1560,8 +1567,8 @@ export class DashboardComponent implements OnInit {
     //   ],
     // };
     this.chartOptions12 = {
-      // series: this.campaign.chartData.y,
-      series: [44, 55, 67, 83],
+      series: this.campaign.chartData.y,
+      // series: [44, 55, 67, 83],
       chart: {
         height: 350,
         type: "radialBar"
@@ -1889,8 +1896,11 @@ export class DashboardComponent implements OnInit {
   }
   
   drawGeoChart() {
+    this.data_topcountry.total_count=0;
     this.data_topcountry.forEach((item:any) => {
       this.pieChartData.dataTable.push([item.location, item.count]);
+      this.data_topcountry.total_count=parseInt(this.data_topcountry.total_count)+parseInt(item.count);
+      this.pieChartData.options.fetched=true;
     });
 
     // this.pieChart = {
@@ -2303,9 +2313,9 @@ export class DashboardComponent implements OnInit {
                 show: true,
                 floating: true,
                 fontSize: "16px",
-                position: "left",
+                position: "bottom",
                 offsetX: 50,
-                offsetY: 10,
+                offsetY: 8,
                 labels: {
                   useSeriesColors: true
                 },
@@ -2864,5 +2874,8 @@ export class DashboardComponent implements OnInit {
     }
     return series;
   }
-  
+  loadMoreContent(){
+    this.loadmore=true;
+    // this.allfunctions();
+  }
 }

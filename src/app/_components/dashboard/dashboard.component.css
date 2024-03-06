@@ -438,6 +438,10 @@ font-weight: 600;
     transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease;
     transition: transform .3s cubic-bezier(.34,2,.6,1),box-shadow .2s ease,-webkit-transform .3s cubic-bezier(.34,2,.6,1);
 }
+.kb-loadmore-btn{
+    color: white;
+    background-color:#9dc209;
+}
 
 ::ng-deep .kb-table th {
     font-weight: 600;

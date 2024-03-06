@@ -8,12 +8,11 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input()
-  set openSidebar(val: any) {
-    if(this.connectWtParent) this.toggleSidebar = !this.toggleSidebar;
-    else this.connectWtParent = true;
-  }   
-  bkImg:any = 'url(./assets/images/sidebar/bar-img-left.svg)';
+  @Output() positionChanged = new EventEmitter<boolean>();
+
+    
+  bkImg_right:any = 'url(./assets/images/sidebar/bar-img-right.svg)';
+  bkImg_left:any = 'url(./assets/images/sidebar/bar-img-left.svg)';
   constructor(public router: Router) { }
   connectWtParent:boolean = false;
   toggleSidebar:boolean = true;
@@ -535,6 +534,7 @@ export class SidebarComponent implements OnInit {
   ];
   extramenus = true;
   backme = false;
+  isLeft = true;
 
   ngOnInit(): void {  }
   
@@ -590,6 +590,11 @@ export class SidebarComponent implements OnInit {
 
   gotoHelpDocs() {
     window.open('https://help.keabuilder.com','_blank');
+  }
+
+  toggleSidebarPosition() {
+    this.isLeft = !this.isLeft;
+    this.positionChanged.emit(this.isLeft);
   }
 
 }

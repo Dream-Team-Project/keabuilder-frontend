@@ -193,7 +193,7 @@
   </div>
 
 </div>
-
+    
   <div class="row py-3">
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card">
@@ -284,8 +284,8 @@
             </div>
           </div>
           <div class="kbcustmwidthforbox4-recent text-center" [class.text-center]="recentsales.length==0">
-            <img *ngIf="recentsales.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" width="370" alt="">
-            <button color="primary" *ngIf="recentsales.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
+            <img *ngIf="recentsales?.length==0" src="/assets/images/dashboard/salesactivity.png" class="img-fluid" width="370" alt="">
+            <button color="primary" *ngIf="recentsales?.length==0" mat-raised-button class="mt-2" [routerLink]="['/sales/orderform']"><i class="fa fa-dolly-flatbed" aria-hidden="true"></i> Create Order Form</button>
 
             <div class="row mb-3" *ngFor="let recent of recentsales">
               <div class="col-sm-9">
@@ -321,7 +321,9 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="text-center py-4" *ngIf="!loadmore"><button mat-raised-button  class="align-items-center kb-loadmore-btn" (click)="loadMoreContent()">Load More...</button></div>
+
+  <div class="row" *ngIf="loadmore">
     <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card kb-card-ht">
         <div class="card-header">
@@ -358,12 +360,12 @@
           </div>
           <div class="chart1 kbcustmwidthforbox3 text-center">
 
-            <img *ngIf="!contact.fetched" src="/assets/images/dashboard/recentcontact.png" class="img-fluid" width="500" alt="">
+            <img *ngIf="contact.monthly?.length==0" src="/assets/images/dashboard/recentcontact.png" class="img-fluid" width="500" alt="">
        
-            <button color="primary" *ngIf="!contact.fetched" mat-raised-button class="mt-2" [routerLink]="['/crm/contacts']"><i class="fa fa-users" aria-hidden="true"></i> Create Contacts</button>
+            <button color="primary" *ngIf="contact.monthly?.length==0" mat-raised-button class="mt-2" [routerLink]="['/crm/contacts']"><i class="fa fa-users" aria-hidden="true"></i> Create Contacts</button>
 
             <apx-chart
-            *ngIf="contact.fetched"
+            *ngIf="contact.monthly?.length!=0"
             [series]="chartOptions10.series"
             [chart]="chartOptions10.chart"
             [dataLabels]="chartOptions10.dataLabels"
@@ -375,7 +377,7 @@
             [tooltip]="chartOptions10.tooltip"
             [xaxis]="chartOptions10.xaxis"
             ></apx-chart>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center" *ngIf="contact.monthly?.length!=0">
               <div class="px-4">
                 <div class="kb-ticket-orange"><i class="fa-regular fa-address-card card-ticket-orange p-2"></i></div>
                 <div class="kb-fnt-hd-size">{{userplan?.contacts == 'unlimited' ? '10,00,000' : userplan?.contacts}}</div>
@@ -418,7 +420,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7" *ngIf="data2.length!=0">
+    <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
       <div class="card kb-card-ht">
         <div class="card-header">
           <div class="row">
@@ -438,7 +440,7 @@
           <div class="col-sm-12 "><span class="text-success"><i class="fa-solid fa-circle-arrow-up text-success mr-1"></i>5.56%</span></div>
         </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" *ngIf="campaign.fetched">
           <div class="chartjs-size-monitor">
             <div class="chartjs-size-monitor-expand">
               <div class=""></div>
@@ -448,9 +450,9 @@
             </div>
           </div>
           <div class="chart1 kbcustmwidthforbox5 text-center">
-            <img *ngIf="!campaign.fetched" src="/assets/images/dashboard/campaign.png" class="img-fluid" width="400" alt="">
-            <button color="primary" *ngIf="!campaign.fetched" mat-raised-button class="mt-2" [routerLink]="['/crm/campaigns']"><i class="fa fa-envelope" aria-hidden="true"></i> Create Campaign</button>
-            <apx-chart *ngIf="campaign.fetched"
+            <img *ngIf="campaign.recents.length == 0" src="/assets/images/dashboard/campaign.png" class="img-fluid" width="400" alt="">
+            <button color="primary" *ngIf="campaign.recents?.length == 0" mat-raised-button class="mt-2" [routerLink]="['/crm/campaigns']"><i class="fa fa-envelope" aria-hidden="true"></i> Create Campaign</button>
+            <apx-chart *ngIf="campaign.recents?.length != 0"
               [series]="chartOptions12.series"
               [chart]="chartOptions12.chart"
               [xaxis]="chartOptions12.xaxis"
@@ -462,7 +464,7 @@
               [title]="chartOptions12.title"
               [subtitle]="chartOptions12.subtitle"
             ></apx-chart>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center" *ngIf="campaign.recents?.length != 0">
               <div class="px-3">
                 <div class="kb-ticket-blue"><i class="fa-solid fa-play card-ticket-blue p-2"></i></div>
                 <div class="kb-fnt-hd-size">6,000</div>
@@ -510,7 +512,7 @@
 </div>
 
 
-<div class="row py-3">
+<div class="row py-3" *ngIf="loadmore">
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
     <div class="card kb-card-ht">
       <div class="card-header">
@@ -583,7 +585,7 @@
             <div class=""></div>
           </div>
         </div>
-        <div class="chart1 kbcustmwidthforbox5 text-center">
+        <div class="chart1 kbcustmwidthforbox5 text-center pb-3">
           <apx-chart
             [series]="chartOptions21.series"
             [chart]="chartOptions21.chart"
@@ -605,7 +607,7 @@
 </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="loadmore">
   <div class="col-lg-6 col-md-12 col-sm-12 kb-equal-ht-col-7">
     <div class="card kb-card-ht">
       <div class="card-header">
@@ -692,7 +694,7 @@
 </div>
 </div>
 
-<div class="row py-3">
+<div class="row py-3" *ngIf="loadmore">
   <div class="col-lg-4 col-md-12 col-sm-12 kb-equal-ht-col-7">
     <div class="card kb-card-ht">
       <div class="card-header">
@@ -897,7 +899,7 @@
 </div>
 </div>
 
-  <div class="row">
+  <div class="row" *ngIf="loadmore">
     <div class="col-12">
       <div class="card">
         <div class="row">
@@ -918,43 +920,43 @@
                 <div class="row">
                   <div class="col-lg-8 col-md-8 col-sm-12">
                     <div class="card-body">
-                      <div class="card-map p-2">
+                      <div class="card-map p-2" *ngIf="!fetching">
                         <google-chart [data]="pieChartData"></google-chart>
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-4 col-md-4 col-sm-12">
+                  <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="data_topcountry?.length != 0">
                     <div class="card-body">
                       <div class="row">
                         <div class="col-12 mt-3">
                           <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>India</span> <span>80</span></div>
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[0]?.location}}</span> <span>{{data_topcountry[0]?.count}}</span></div>
                             <div class="progress">
-                              <div class="progress-bar bg-success" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-success" role="progressbar" [style.width.%]="(data_topcountry[0]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
-                          <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Brazil</span> <span>40</span></div>
+                          <div class="p-3" *ngIf="data_topcountry[1]">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[1]?.location}}</span> <span>{{data_topcountry[1]?.count}}</span></div>
                             <div class="progress">
-                              <div class="progress-bar bg-warning" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-warning" role="progressbar" [style.width.%]="(data_topcountry[1]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
-                          <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Germany</span> <span>30</span></div>
+                          <div class="p-3" *ngIf="data_topcountry[2]">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[2]?.location}}</span> <span>{{data_topcountry[2]?.count}}</span></div>
                             <div class="progress">
-                              <div class="progress-bar" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar" role="progressbar" [style.width.%]="(data_topcountry[2]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
-                          <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Australia</span> <span>30</span></div>
+                          <div class="p-3" *ngIf="data_topcountry[3]">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[3]?.location}}</span> <span>{{data_topcountry[3]?.count}}</span></div>
                             <div class="progress">
-                              <div class="progress-bar bg-info" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-info" role="progressbar" [style.width.%]="(data_topcountry[3]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
-                          <div class="p-3">
-                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>Canada</span> <span>30</span></div>
+                          <div class="p-3" *ngIf="data_topcountry[4]">
+                            <div class="d-flex justify-content-between kb-fnt-hd-size"><span>{{data_topcountry[4]?.location}}</span> <span>{{data_topcountry[4]?.count}}</span></div>
                             <div class="progress">
-                              <div class="progress-bar bg-danger" role="progressbar" [style.width]="cntry_width" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="(data_topcountry[4]?.count / data_topcountry?.total_count)" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                           </div>
                         </div>
@@ -1240,7 +1242,7 @@
   </div>
   </div> 
 
-  <div class="row py-3">
+  <div class="row py-3" *ngIf="loadmore">
     <div class="col-12">
       <div class="card">
         <div class="card-header">

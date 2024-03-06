@@ -296,7 +296,7 @@ div#topbar_notifications_logs {
 .bw-sidebar-content {
   overflow: hidden;
   position: fixed;
-  left: 0;
+  /* right: 0; */
   top: 0;
   width: calc(100% - 80px);
   max-width: 80px;
@@ -326,12 +326,17 @@ div#topbar_notifications_logs {
   transform: translate(-110%);
 }
 
+.sidebar-left {
+  left: 0;
+}
+
+.sidebar-right {
+  right: 0;
+}
+
 .bgimg-url {
   background-size:center;
-  /* background-position:center; */
   max-width: 80px;
-  /* height: 100vh; */
-  /* overflow: scroll */
 }
 /* .bw-sidebar-content.absolute {
     position: absolute!important;
@@ -367,10 +372,15 @@ div#topbar_notifications_logs {
 .bw-sidebar-change img {
   height: 34px;
   cursor: pointer;
- position: relative;
- top: 20px;
- margin: 0 46px;
- z-index: 1;
+  position: relative;
+  top:10px;
+  z-index: 1;
+}
+.bw-sidebar-change-right{
+  margin-right :45px;
+}
+.bw-sidebar-change-left{
+  margin-left :45px;
 }
 
 

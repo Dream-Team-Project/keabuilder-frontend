@@ -34,6 +34,8 @@ export class NavbarComponent implements OnInit {
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
   toggleSidebar:boolean = true;
+  selectedMode:any='light';
+  modeChange:any;
 
   ngOnInit(): void {
     var th:any = this;
@@ -153,5 +155,8 @@ export class NavbarComponent implements OnInit {
     ];
     const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
     this.randomwelcome = welcomeMessages[randomIndex];
+  }
+  setMode(isDarkMode: boolean) {
+    this.modeChange.emit(isDarkMode);
   }
 }
