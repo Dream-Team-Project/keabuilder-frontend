@@ -10,9 +10,7 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
-  declarations: [
-    FunnelCheckoutComponent
-  ],
+  declarations: [FunnelCheckoutComponent],
   imports: [
     CommonModule,
     MatAutocompleteModule,
@@ -23,8 +21,6 @@ import { environment } from 'src/environments/environment';
     MatProgressBarModule,
     NgxStripeModule.forRoot(environment.stripekey),
   ],
-  exports:[
-    FunnelCheckoutComponent
-  ],
+  exports:[FunnelCheckoutComponent],
 })
 export class FunnelCheckoutModule { }

@@ -78,7 +78,6 @@ function allgeolocationdata() {
   
     // Define a callback function that will be called when the data loads
     window.callback = function (location) {
-    //   console.log(location);
       kb_location = location.country_name;
       allinonegeoloc[0] = location.country_code;
       allinonegeoloc[1] = location.country_name;
@@ -273,7 +272,7 @@ function recordheatmap(){
         latitude: allinonegeoloc[5],
         longitude: allinonegeoloc[6],
         ipv4: allinonegeoloc[7],
-        referrer: kb_referrer
+        referrer: kb_referrer,
     };
     // console.log(data);
 

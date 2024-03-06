@@ -8,12 +8,11 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input()
-  set openSidebar(val: any) {
-    if(this.connectWtParent) this.toggleSidebar = !this.toggleSidebar;
-    else this.connectWtParent = true;
-  }   
+  @Output() positionChanged = new EventEmitter<boolean>();
 
+    
+  bkImg_right:any = 'url(./assets/images/sidebar/bar-img-right.svg)';
+  bkImg_left:any = 'url(./assets/images/sidebar/bar-img-left.svg)';
   constructor(public router: Router) { }
   connectWtParent:boolean = false;
   toggleSidebar:boolean = true;
@@ -28,6 +27,7 @@ export class SidebarComponent implements OnInit {
       routerlink: '/dashboard',
       img: 'home.gif',
       icon: 'fa fa-home',
+      icon_img:'./assets/images/sidebar/dashboard.svg',
       title: 'Dashboard',
       submenu:null
     },{
@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit {
       routerlink: '/websites',
       img: 'browser.gif',
       icon: 'fas fa-desktop',
+      icon_img:'./assets/images/sidebar/website.svg',
       title: 'Websites',
       submenu:[
       {
@@ -91,6 +92,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/funnels',
       img: 'funnel.gif',
+      icon_img:'./assets/images/sidebar/funnel.svg',
       icon: 'fa fa-filter',
       title: 'Funnels',
       submenu:[
@@ -128,6 +130,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/membership',
       img: 'shield.gif',
+      icon_img:'./assets/images/sidebar/membership.svg',
       icon: 'fas fa-shield-alt',
       title: 'Membership',
       submenu:[
@@ -140,7 +143,7 @@ export class SidebarComponent implements OnInit {
         },
         {
           0:true,
-          routerlink: '/membership/memberships',
+          routerlink: '/membership/courses',
           img: 'shield.gif',
           icon: 'fa-regular fa-folder',
           title: 'Courses'
@@ -229,6 +232,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/crm',
       img: 'hacker.gif',
+      icon_img:'./assets/images/sidebar/crm.svg',
       icon: 'fas fa-user-secret',
       title: 'CRM',
       submenu:[
@@ -307,6 +311,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/sales',
       img: 'payment.gif',
+      icon_img:'./assets/images/sidebar/sales.svg',
       icon: 'fa fa-tags',
       title: 'Sales',
       submenu:[{
@@ -363,6 +368,7 @@ export class SidebarComponent implements OnInit {
     0:true,
     routerlink: '/domain',
     img: 'worldwide.gif',
+    icon_img:'./assets/images/sidebar/domain.svg',
     icon: 'fas fa-globe-americas',
     title: 'Domains',
     submenu:null
@@ -387,6 +393,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/heatmap',
       img: 'way.gif',
+      icon_img:'./assets/images/sidebar/heatmap.svg',
       icon: 'fas fa-fire',
       title: 'HeatMap',
       submenu:null
@@ -463,6 +470,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/scrumboard',
       img: 'worldwide.gif',
+      icon_img:'./assets/images/sidebar/scrumboard.svg',
       icon: 'fa-solid fa-chalkboard-user',
       title: 'Scrumboard',
       submenu:null,
@@ -488,6 +496,7 @@ export class SidebarComponent implements OnInit {
       0:true,
       routerlink: '/account',
       img: 'shield.gif',
+      icon_img:'./assets/images/sidebar/settings.svg',
       icon: 'fa-solid fa-gear',
       title: 'Account Settings',
       submenu:[
@@ -525,6 +534,7 @@ export class SidebarComponent implements OnInit {
   ];
   extramenus = true;
   backme = false;
+  isLeft = true;
 
   ngOnInit(): void {  }
   
@@ -580,6 +590,11 @@ export class SidebarComponent implements OnInit {
 
   gotoHelpDocs() {
     window.open('https://help.keabuilder.com','_blank');
+  }
+
+  toggleSidebarPosition() {
+    this.isLeft = !this.isLeft;
+    this.positionChanged.emit(this.isLeft);
   }
 
 }

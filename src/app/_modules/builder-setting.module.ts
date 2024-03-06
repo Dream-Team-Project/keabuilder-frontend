@@ -24,6 +24,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { PipeModule } from './pipe.module';
+import { ImageModule } from './image.module';
+import { FetchmenuModule } from './fetchmenu.module';
+import { TemplateModule } from './template.module';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatInputModule } from '@angular/material/input';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +39,9 @@ import { PipeModule } from './pipe.module';
   ],
   imports: [
     CommonModule,
+    ImageModule,
+    FetchmenuModule,
+    TemplateModule,
     MatSliderModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -39,7 +50,6 @@ import { PipeModule } from './pipe.module';
     MatButtonToggleModule,
     MatExpansionModule,
     MatRippleModule,
-    MatFormFieldModule,
     MatCheckboxModule,
     MatTabsModule,
     DragDropModule,
@@ -55,7 +65,12 @@ import { PipeModule } from './pipe.module';
     MatDialogModule,
     MatAutocompleteModule, 
     MatButtonModule,
-    PipeModule
+    PipeModule, 
+    MatListModule,
+    MatProgressBarModule,
+    MatSidenavModule, 
+    MatInputModule,
+    
   ],
   exports: [
     BuilderSettingComponent

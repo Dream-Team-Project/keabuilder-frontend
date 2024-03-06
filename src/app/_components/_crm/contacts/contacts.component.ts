@@ -10,7 +10,7 @@ import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 

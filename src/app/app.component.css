@@ -4,12 +4,24 @@ main {
 
 .kb-main-container{
     padding: 20px 10px;
-    width: calc(100% - 50px);
+    width: calc(100% - 160px);
     margin-left: auto;
+    margin-right: auto;
     top: 60px;
     position: relative;
     transition: all .2s ease;
     background: rgb(244 244 244 / 48%);
+}
+.main-chatbar{
+    width: 80px;
+    position: absolute;
+}
+.main-left{
+    left: 0;
+    
+}
+.main-right{
+    right: 0;   
 }
 
 ::ng-deep .mat-calendar-body-selected {

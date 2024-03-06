@@ -44,6 +44,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ImageModule } from './image.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CrmFormFieldRouteModule } from './crm-form-field-route.module';
 
 const routes: Routes = [
   { path: '', component: CrmComponent,
@@ -53,16 +55,16 @@ const routes: Routes = [
       { path: 'automations', component: CrmAutomationComponent, },
       { path: 'campaigns', component: CrmCampaignsComponent},
       { path: 'contacts', component: CrmContactsComponent, },
-      { path: 'forms', component: CrmFormsComponent},
-      { path: 'lists', component: CrmListsComponent},
-      { path: 'settings', component: CrmSettingsComponent},
-      { path: 'tags', component: CrmTagsComponent},
-      { path: 'emails', component: CrmEmailsComponent},
-  ]},
-  { path: 'contact/:uniqueid', component: CrmContactComponent},
-  { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent},
-  { path: 'member/:memberid/:uniqueid', component: CrmContactComponent},
-];
+      { path: 'forms', component: CrmFormsComponent,},
+      { path: 'lists', component: CrmListsComponent,},
+      { path: 'settings', component: CrmSettingsComponent,},
+      { path: 'tags', component: CrmTagsComponent,},
+      { path: 'emails', component: CrmEmailsComponent,},
+  ],},
+    { path: 'contact/:uniqueid', component: CrmContactComponent,},
+    { path: 'campaign/:uniqueid', component: CrmCampaignBuilderComponent,},
+    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
+  ];
 
 @NgModule({
   declarations: [
@@ -83,6 +85,7 @@ const routes: Routes = [
     CommonModule,
     PipeModule,
     CrmFormFieldsModule,
+    CrmFormFieldRouteModule,
     ImageModule,
     RouterModule.forChild(routes),
     MatSelectModule,
@@ -114,6 +117,7 @@ const routes: Routes = [
     MatSidenavModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatNativeDateModule,
   ],
   exports: [RouterModule]
 })

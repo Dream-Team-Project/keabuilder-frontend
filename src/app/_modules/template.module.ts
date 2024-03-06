@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -27,6 +30,9 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatMenuModule,
     MatButtonModule,
+    MatRippleModule,
+    MatTooltipModule,
+    MatDialogModule,
   ],
   exports: [
     TemplateComponent,

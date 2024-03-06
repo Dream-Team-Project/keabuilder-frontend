@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TagService } from 'src/app/_services/_crm/tag.service';
 import { ListService } from 'src/app/_services/_crm/list.service';
 import { WebsiteService } from 'src/app/_services/website.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-membrship-module',
@@ -24,6 +25,7 @@ import { WebsiteService } from 'src/app/_services/website.service';
 })
 export class MembershipModulesComponent implements OnInit {
 
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChildren(CdkDropList)
   public dlq: QueryList<CdkDropList>[] = [];
   
@@ -67,6 +69,7 @@ export class MembershipModulesComponent implements OnInit {
   users:any=[];
   tags:any=[];
   lists:Array<any> = [];
+  memberslength:any;
 
   constructor(
     private router: Router,

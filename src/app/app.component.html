@@ -1,7 +1,10 @@
 <div id="app">
   <mat-progress-bar *ngIf="currentDomain === appHost && loading" mode="indeterminate"></mat-progress-bar>
-  <app-sidebar [openSidebar]="toggleSidebar" *ngIf="currentDomain === appHost && isLoggedIn && _user.navVisible"></app-sidebar>
-  <main id="angularApp" [class.kb-main-container]="currentDomain === appHost && isLoggedIn && _user.navVisible" [class.kb-fixed-template]="toggleSidebar">
+  <app-sidebar *ngIf="currentDomain === appHost && isLoggedIn && _user.navVisible" (positionChanged)="onPositionChanged($event)"></app-sidebar>
+  <div  class="main-chatbar main-right"  [ngClass]="{'main-left': !isLeft, 'main-right': isLeft}" *ngIf="currentDomain === appHost && isLoggedIn && _user.navVisible">
+    <img [src]="'./assets/images/sidebar/chat1.png'">
+  </div>
+  <main id="angularApp" [class.kb-main-container]="currentDomain === appHost && isLoggedIn && _user.navVisible">
     <app-navbar (openSidebar)="triggerSidebar($event)" *ngIf="currentDomain === appHost && isLoggedIn && _user.navVisible"></app-navbar>
     <router-outlet (activate)="changeOfRoutes()"></router-outlet>
   </main>

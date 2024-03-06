@@ -20,10 +20,11 @@ export class NavbarComponent implements OnInit {
     public userService: UserService,
     public _image: ImageService,
     public dialog: MatDialog
-    ) {  }
+    ) {  this.randomwelm(); }
 
   DialogParentToggle:boolean = false;
   scrollPosition:any = null;
+  randomwelcome = "";
   issearch = false;
   notification = false;
   offcanvasoverlay = false;
@@ -33,6 +34,8 @@ export class NavbarComponent implements OnInit {
   hiderecentnotifi = false;
   userimgpath = '/assets/images/profile/avatar.png';
   toggleSidebar:boolean = true;
+  selectedMode:any='light';
+  modeChange:any;
 
   ngOnInit(): void {
     var th:any = this;
@@ -123,5 +126,37 @@ export class NavbarComponent implements OnInit {
     this.toggleSidebar = !this.toggleSidebar;
     this.openSidebar.emit(this.toggleSidebar);
   }
-
+  randomwelm(){
+    var welcomeMessages = [
+      "Welcome back! We're glad to see you.",
+      "Hello there! Ready to get started?",
+      "Good day! Let's make it productive.",
+      "Greetings! Your dashboard awaits you.",
+      "Hey, it's you again! Let's dive in.",
+      "Welcome! Get ready to explore a world of possibilities.",
+      "Greetings! Your journey begins here.",
+      "Hello! We're thrilled to have you with us.",
+      "Hey there! Let's make today awesome.",
+      "Welcome back! We missed you.",
+      "Hello! Your presence makes us smile.",
+      "Good day! Your adventure starts now.",
+      "Greetings! Get ready for a fantastic experience.",
+      "Hey, we hope you're ready for some exciting moments!",
+      "Welcome aboard! Let's navigate this together.",
+      "Hello! Your journey into our world begins now.",
+      "Good to see you! Let's make today productive.",
+      "Welcome back! Your presence brightens our day.",
+      "Hello! We're delighted to have you here.",
+      "Hey there! Let's dive into a world of possibilities.",
+      "Welcome! Your adventure awaits.",
+      "Greetings! Let's get started on something amazing.",
+      "Hello! Your presence is the best part of our day.",
+      "Good day! We're excited to have you here.",
+    ];
+    const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
+    this.randomwelcome = welcomeMessages[randomIndex];
+  }
+  setMode(isDarkMode: boolean) {
+    this.modeChange.emit(isDarkMode);
+  }
 }

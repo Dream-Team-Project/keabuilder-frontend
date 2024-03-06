@@ -5,10 +5,6 @@
     background-repeat: no-repeat;
 }
 
-.kb-course-thumbnail.ht-full {
-    height: 180px;
-}
-
 .kb-course-block {
     box-shadow: 0px 0px 2px 1px rgb(34 38 42 / 10%);
     margin: 14px 10px;
@@ -26,14 +22,14 @@
 .kb-course-title {
     color: var(--secondary-color);
     font-size: 16px;
-    max-width: 80%;
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 500;
 }
 
-.kb-course-subblock span {
+/* .kb-course-subblock span {
     font-size: 14px;
     text-align: center;
     color: var(--secondary-color);
@@ -51,7 +47,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: var(--kb-gray);
-}
+} */
 .kb-spinner{
     position: absolute;
     display: flex;
@@ -65,19 +61,14 @@
   }
 .kb-course-card {
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
-    /* max-width: 60%;
-    align-items: center; */
 }
 .kb-colr {
     color: var(--primary-color);
 }
 .statusbadge {
     color: var(--primary-color) ;
-    border:1px solid var(--primary-color);
-    font-size: 12px;
-    padding: 2px 12px;
+    font-size: 8px;
     border-radius: 5px;
-    /* border-radius: 50px 0px 0px 50px; */
     cursor: pointer;
     transition: .5s ease-in-out;
 }
@@ -87,6 +78,6 @@
 }
 .statbadg{
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 12px;
+    right: 17px;
 }

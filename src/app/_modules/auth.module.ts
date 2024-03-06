@@ -21,6 +21,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
+
 
 // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
 
@@ -42,6 +46,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    Ng2GoogleChartsModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,
@@ -56,8 +61,9 @@ const routes: Routes = [
     MatSelectModule,
     MatMenuModule,
     MatProgressBarModule,
-    MatInputModule,
-  
+    MatInputModule,  
+    MatTabsModule,
+    MatSliderModule,
   ],
   exports: [RouterModule]
 })

@@ -30,6 +30,7 @@ export class MembershipMembersComponent implements OnInit {
   
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
   @ViewChild('listInput') listInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   fetching:boolean = true;
   hide = true;
@@ -70,6 +71,7 @@ export class MembershipMembersComponent implements OnInit {
   courses:any=[];
   offers:any=[];
   user_id:any;
+  memberslength:any;
 
   constructor( private _snackBar: MatSnackBar,
                 private courseService:CourseService,
@@ -117,6 +119,7 @@ fetchOffers() {
       next: data => {
         // console.log(data);
         this.users =  data.data;
+        this.memberslength=data?.data?.length;
         this.fetching = false;
       }
       

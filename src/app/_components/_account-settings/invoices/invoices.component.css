@@ -1,0 +1,128 @@
+.kb-billing-invoice{
+    font-weight: 800;
+    cursor: pointer;    
+}
+.kb-invoice-btn{
+    cursor: pointer;
+    font-weight: 500;
+}
+.kb-invoice-btn:hover{
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+::ng-deep .kb-table th {
+    font-weight: 600;
+    border-bottom: 1px solid var(--primary-color)!important;
+}
+
+::ng-deep .kb-table tr {
+    text-transform: capitalize;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+::ng-deep .kb-table td {
+    padding: 4px 10px;
+    line-height: 40px;
+}
+
+::ng-deep .kb-table td.kb-text-overflow {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+::ng-deep .kb-table tbody tr:hover {
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+::ng-deep .kb-table tbody tr {
+    transition: 0.2s ease;
+}
+
+::ng-deep .kb-table-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--primary-color);
+  background: rgb(216 200 152 / 20%);
+  border: 1px solid var(--kb-dim-black);
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .kb-table-action-icon {
+    cursor: pointer;
+    line-height: inherit;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    margin: 0 2px;
+    transition: 0.2s ease;
+}
+
+::ng-deep .kb-table-action-icon:hover {
+    color: var(--primary-color);
+    background-color: rgb(216 200 152 / 20%);
+}
+
+::ng-deep .kb-table-action-icon.kb-icon-del:hover {
+    color: var(--kb-danger);
+    background-color: rgb(220 53 69 / 10%);
+}
+
+::ng-deep .kb-delbtn :hover{
+    color: var( --kb-danger);
+    cursor: pointer;
+    text-decoration:underline
+} 
+::ng-deep .kb-td-link {
+    cursor: pointer;
+}
+
+::ng-deep .mat-dialog-content .mat-form-field {
+    display: block;
+    width: 100%;
+}
+
+::ng-deep .kb-table-sort {
+    font-weight: 600;
+    border-bottom: 1px solid var(--primary-color)!important;
+}
+::ng-deep .kb-table-sort:hover{
+    font-weight: 600;
+    cursor: pointer;
+    color:  var(--kb-text-green-600-color)!important;
+}
+
+::ng-deep .global{
+    color: var(--primary-color);
+}
+.global{
+    color: var(--primary-color);
+}
+
+.kb-invoice-view-btn{
+    cursor: pointer;
+    color: var(--primary-color);
+}
+.kb-invoice-view-btn:hover{
+    cursor: pointer;
+    color: white;
+    background-color: var(--primary-color);
+}
+.kb-invoice-dwn-btn{
+    cursor: pointer;
+    color: var(--kb-text-green-600-color);
+}
+.kb-invoice-dwn-btn:hover{
+    cursor: pointer;
+    color: white;
+    background-color: var(--kb-text-green-600-color);
+}

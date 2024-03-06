@@ -89,13 +89,23 @@ cursor: pointer;
         background-color: var(--primary-color);
     }
     .cancelplanbtn{
-        color: var(--kb-danger);
+        color: white;
+        background-color: var(--kb-danger);
         cursor: pointer;
     }
     .cancelplanbtn:hover{
         cursor: pointer;
+        background-color: white;
+        color: var(--kb-danger);
+    }
+    .kb-user-invoice{
+        color: var(--row-color);
+        cursor: pointer;
+    }
+    .kb-user-invoice:hover{
+        cursor: pointer;
         color: white;
-        background-color: var(--kb-danger);
+        background-color: var(--row-color);
     }
 
     .mkflx{

@@ -15,7 +15,7 @@ import { MembershipCustomizationComponent } from '../_components/_membership/mem
 import { CourseSettingsComponent } from '../_components/_membership/course-settings/course-settings.component';
 import { MembershipLessonComponent } from '../_components/_membership/lesson/lesson.component';
 import { MembershipModulesComponent } from '../_components/_membership/modules/modules.component';
-
+import { NewMembershipComponent } from '../_components/_membership/new-membership/new-membership.component';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -40,26 +40,37 @@ import { ViewLessonModule } from './view-lesson.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CrmContactComponent } from '../_components/_crm/contact/contact.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ViewCourseComponent } from '../_components/_membership/view-course/view-course.component';
+import { ViewLessonComponent } from '../_components/_membership/view-lesson/view-lesson.component';
+import { MemberNavbarModule } from './member-navbar.module';
+import { MemberSidebarModule } from './member-sidebar.module';
 
 
 
 const routes: Routes = [
   { path: '', component: MembershipComponent, 
   children : [
-        { path: '', component: MembershipReportsComponent},
-        { path: 'reports', component: MembershipReportsComponent}, 
-        { path: 'memberships', component: MembershipCoursesComponent},
+        { path: '', component: MembershipReportsComponent,},
+        { path: 'reports', component: MembershipReportsComponent,}, 
+        { path: 'courses', component: MembershipCoursesComponent,},
         { path: 'members', component: MembershipMembersComponent, },
         { path: 'marketplace', component: MembershipMarketplaceComponent, },
         { path: 'customization', component: MembershipCustomizationComponent, },
-        { path: 'settings', component: CourseSettingsComponent},
-   ]},
-    { path: 'course/:course_id', component: MembershipModulesComponent},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent},
-    { path: 'course/:course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent},
-    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonModule},
-    { path: 'member/:course_id', component : ViewCourseModule},
-    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent},
+        { path: 'settings', component: CourseSettingsComponent,},
+   ],},
+   { path: 'new-membership/course', component: NewMembershipComponent,
+   children :[
+    { path: ':course_id', component: MembershipModulesComponent,},
+    { path: ':course_id/module/:module_id/lesson/:lesson_id/:tab', component: MembershipLessonComponent,},
+    { path: ':course_id/module/:module_id/lesson/:lesson_id', component: MembershipLessonComponent,},
+    ],},
+    { path: 'member/:course_id', component : ViewCourseComponent,},
+    { path: 'member/:course_id/:module_id/:lesson_id', component : ViewLessonComponent,},
+    { path: 'member/:memberid/:uniqueid', component: CrmContactComponent,},
+    // { path: 'profile/settings', component: MemberProfileSettingsComponent,},
+    // { path: 'profile/sign-in-security', component: MemberSignInSecurityComponent,},
+    // { path: 'profile/billing', component: MemberBillingComponent,},
   ];
 
 @NgModule({
@@ -78,11 +89,14 @@ const routes: Routes = [
     CourseSettingsComponent,
     MembershipModulesComponent,
     MembershipLessonComponent,
+    NewMembershipComponent,
   ],
   imports: [
     CommonModule,
     ViewCourseModule,
     ViewLessonModule,
+    MemberNavbarModule,
+    MemberSidebarModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,
@@ -107,6 +121,7 @@ const routes: Routes = [
     MatSidenavModule,
     MatInputModule,
     MatDialogModule,
+    MatCheckboxModule,
   ],
   exports: [RouterModule]
 })

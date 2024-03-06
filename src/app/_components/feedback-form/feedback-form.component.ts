@@ -123,4 +123,5 @@ export class FeedbackFormComponent implements OnInit {
   rate(rating: number) {
     this.feedback.rating = rating;
   }
+  
 }

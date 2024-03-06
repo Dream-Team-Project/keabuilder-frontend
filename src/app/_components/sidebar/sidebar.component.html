@@ -1,11 +1,12 @@
-<div id="bw-sidebar" class="bw-sidebar-content reduce open absolute" *ngIf="fullsidebar" (mouseover)="hoveropen = true"
-  (mouseleave)="hoveropen = false" [class.hoveropen]="hoveropen || toggleSidebar">
+<div id="bw-sidebar" class="bw-sidebar-content sidebar-left reduce open bgimg-url" [style.backgroundImage]="isLeft ? bkImg_left : bkImg_right" [ngClass]="{'sidebar-left': isLeft, 'sidebar-right': !isLeft}">
   <div class="bw-sidebar-logo">
-    <img src="/assets/images/logo/kblogo-white.png" alt="Kea logo" [routerLink]="'/'">
-    <div class="bw-logo__item__text" *ngIf="hoveropen || toggleSidebar">Keabuilder<div class="fadingEffect"></div>
-    </div>
+    <img src="/assets/images/logo/kblogo.png" alt="Kea logo" [routerLink]="'/'">
   </div>
-  <div class="bw-sidebar">
+  <div class="bw-sidebar-change" (click)="toggleSidebarPosition()" [class]="isLeft ? 'bw-sidebar-change-left' : 'bw-sidebar-change-right'">
+    <img   [src]="'./assets/images/sidebar/change_sidebar_left.svg'" *ngIf="isLeft">
+    <img   [src]="'./assets/images/sidebar/change_sidebar_right.svg'" *ngIf="!isLeft">
+  </div>
+  <div class="bw-sidebar mt-3">
       <button class="bw-sidebar__item hasIcon" (click)="backFn($event)" *ngIf="backme">
         <div class="bw-sidebar__item__icon">
           <i class="fas fa-arrow-alt-circle-left"></i>
@@ -17,10 +18,11 @@
     <span *ngFor="let menu of allmenu; index as i;" class="w-100 d-inline-block">
       <button class="bw-sidebar__item hasIcon" *ngIf="allmenu[i][0]" 
         [routerLink]="allmenu[i].routerlink" [routerLinkActive]="['a-active']" (click)="changeFn(allmenu[i].routerlink)">
-        <div class="bw-sidebar__item__icon">
-          <i [class]="allmenu[i].icon" aria-hidden="true"></i>
+        <div class="bw-sidebar__item__icon pb-0 mb-0">
+          <!-- <i [class]="allmenu[i].icon" aria-hidden="true"></i> -->
+          <img [src]="allmenu[i].icon_img">
         </div>
-        <div class="bw-sidebar__item__text">
+        <div class="bw-sidebar__item__text pt-0 mt-0">
           {{allmenu[i].title}}
         </div>
       </button>
@@ -46,8 +48,8 @@
       <div class="bw-sidebar__group__header">
         <button class="bw-sidebar__item hasIcon"  (click)="gotoHelpDocs()">
           <div class="bw-sidebar__item__icon">
-            <i class="fas fa-life-ring"></i>
-            <!-- <img src="/assets/images/sidebar/safe-box.gif" width="35" class="d-none"> -->
+            <!-- <i class="fas fa-life-ring"></i> -->
+            <img [src]="'./assets/images/sidebar/help.svg'">
           </div>
           <div class="bw-sidebar__item__text">
             Help
@@ -76,66 +78,15 @@
         </button>
       </div> -->
     </div>
-
-    <!-- Dropdown3 -->
-    <!-- <div class="bw-sidebar__group" [class]="{ 'open' : isOpen3 }" (click)="isOpen3 = !isOpen3" *ngIf="extramenus">
+    <!-- <div class="bw-sidebar__group"> 
       <div class="bw-sidebar__group__header">
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
+        <button class="bw-sidebar__item hasIcon">
           <div class="bw-sidebar__item__icon">
-            <i class="fas fa-book"></i>
-            <img src="/assets/images/sidebar/books.gif" width="35" class="d-none">
-          </div>
-          <div class="bw-sidebar__item__text">
-            Documentation
-          </div>
-          <div class="bw-sidebar__item__arrow"><i class="fas fa-chevron-up"></i></div>
-        </button>
-      </div>
-      <div class="bw-sidebar__group__content v-enter-to kb-padinglft" [style]="{height: isOpen3 ? '100%' : '0px'}">
-        <button class="bw-sidebar__item active hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"><i class="fas fa-rocket"></i></div>
-          <div class="bw-sidebar__item__text">
-            Getting Started
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"> <i class="fas fa-user-cog"></i></div>
-          <div class="bw-sidebar__item__text">
-            My Account Settings
-          </div>
-        </button>
-        <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-          <div class="bw-sidebar__item__icon"><i class="fas fa-user-cog"></i></div>
-          <div class="bw-sidebar__item__text">
-            Follow Up Funnels
+            <img [src]="'./assets/images/sidebar/change_sidebar.svg'">
           </div>
         </button>
       </div>
+      
     </div> -->
-
-    <!-- <a [routerLink]="['/advice']" [routerLinkActive]="['a-active']" *ngIf="extramenus">
-      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-chalkboard-teacher"></i>
-          <img src="/assets/images/sidebar/support.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Q&As, Advice and Troubleshooting
-        </div>
-      </button>
-    </a> -->
-
-    <!-- <a [routerLink]="['/training']" [routerLinkActive]="['a-active']" *ngIf="extramenus">
-      <button class="bw-sidebar__item hasIcon" [routerLinkActive]="['a-active']">
-        <div class="bw-sidebar__item__icon">
-          <i class="fas fa-clipboard-check"></i>
-          <img src="/assets/images/sidebar/notebook.gif" width="35" class="d-none">
-        </div>
-        <div class="bw-sidebar__item__text">
-          Training & Resources
-        </div>
-      </button>
-    </a> -->
-
   </div>
 </div>

@@ -10,11 +10,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { PipeModule } from './pipe.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ResizableModule } from 'angular-resizable-element';
+
 
 @NgModule({
-  declarations: [
-    ImageComponent,
-  ],
+  declarations: [ImageComponent],
   imports :[
     CommonModule,
     ImageCropperModule,
@@ -23,13 +28,17 @@ import { PipeModule } from './pipe.module';
     FormsModule, 
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    MatTooltipModule,
     MatIconModule,
     MatSelectModule,
-    PipeModule
+    PipeModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatButtonModule,
+    DragDropModule,
+    ClipboardModule,
+    ResizableModule,
   ],
-  exports: [
-    ImageComponent,
-  ]
+  exports: [ImageComponent]
 })
 export class ImageModule { }

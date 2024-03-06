@@ -21,7 +21,7 @@
             <mat-form-field appearance="fill" class="col-md-3 p-2">
               <mat-label>Visibility</mat-label>
               <mat-select name="visibility" #visibility value="" (valueChange)="searchpages(searchInp, filterInp, visibility)">
-                <mat-option [value]="">Show All</mat-option>
+                <mat-option value="">Show All</mat-option>
                 <mat-option [value]="'draft'">Draft Only</mat-option>
                 <mat-option [value]="'publish'">Publish Only</mat-option>
               </mat-select>
@@ -126,5 +126,6 @@
           <img src="/assets/images/website/website-empty.png" class="img-fluid" alt="No Page found">
         </div>
       </div>
+      <mat-paginator class="my-3"  #paginator [length]="pageslength" [pageSize]="20" [pageSizeOptions]="[20, 50, 100, 200, 500]" aria-label="Select page"></mat-paginator>
     </div>
 

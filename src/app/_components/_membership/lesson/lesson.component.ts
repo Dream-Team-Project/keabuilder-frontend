@@ -91,16 +91,19 @@ export class MembershipLessonComponent implements OnInit {
       this.course.uniqueid = params.get('course_id');
       this.module.uniqueid = params.get('module_id');
       this.lesson.uniqueid = params.get('lesson_id');
-      this.resetPostData();
-      this.fetchCourse();
-      this.fetchModule();
-      this.fetchautomation();
-      this.fetchDocument();
-      this.fetchLesson();
+     this.fetchData();
     })
    }
 
   ngOnInit(): void {
+  }
+  fetchData(){
+    this.resetPostData();
+    this.fetchCourse();
+    this.fetchModule();
+    this.fetchautomation();
+    this.fetchDocument();
+    this.fetchLesson();
   }
 
   ngAfterViewInit() {
@@ -143,31 +146,6 @@ export class MembershipLessonComponent implements OnInit {
       this.overlayRefDetach();
     })
   }
-
-  // fetchMedia() {
-  //   this.mediafetching = true;
-  //   // this._wistia.getAllMedia(this.wistia_project_id).subscribe(res=>{
-  //     // this.medias = res.data;
-  //     this.videos = [];
-  //     this.audios = [];
-  //     this.medias.forEach((item:any)=>{
-  //       if(item.hashed_id) {
-  //         var media = item.assets[0];
-  //         media.hashed_id = item.hashed_id;
-  //         media.name = item.name;
-  //         media.type = item.type;
-  //         if(item.type == 'Video') {
-  //           this.videos=this.lesson.video.split();
-  //         }
-  //         else if(item.type == 'Audio') {
-  //           this.audios.push(media);
-  //         }
-  //       }
-  //       else this.fetchMedia();
-  //     })
-  //     this.mediafetching = false;
-  //   // })
-  // }
 
   fetchDocument() {
     this.documentfetching = true;
@@ -313,20 +291,18 @@ export class MembershipLessonComponent implements OnInit {
 
     deleteMedia(media:any) {
       this.respWaiting = true;
-      this._wistia.deleteMedia(media.hashed_id).subscribe(res=>{
-        if(media.url == this.lesson.video) this.addVideo('');
-        else if(media.url == this.lesson.audio) this.addAudio('');
+      if(this.popask == 'deleteVideo') {this.addVideo('') ; this.videos=this.videos.filter((item:any) => item !=media);}
+      else if(this.popask == 'deleteAudio'){ this.addAudio(''); this.audios=this.audios.filter((item:any) => item !=media);}
         this.overlayRefDetach();
-        this._general.openSnackBar(false,media.type+' has been deleted', 'OK','center','top');
-        // this.fetchMedia();
-      });
+        this._general.openSnackBar(false,'item has been deleted', 'OK','center','top');
+        
     }
 
     updateMedia(media:any) {
       if(this.prevMediaName != media.name) {
-        this._wistia.updateMedia(media).subscribe(resp=>{
-          this._general.openSnackBar(false,media.type+' name has been updated', 'OK','center','top');
-        });
+        // this._wistia.updateMedia(media).subscribe(resp=>{
+        //   this._general.openSnackBar(false,media.type+' name has been updated', 'OK','center','top');
+        // });
       }
     }
 
@@ -391,7 +367,7 @@ export class MembershipLessonComponent implements OnInit {
 
   deleteDocument(document:any) {
     this.respWaiting = true;
-    this._file.deleteDocument(document.name+document.ext, this.wistia_project_id).subscribe(res=>{
+    this._file.deleteLessonDocument(document.name+document.ext,this.lesson.user_id, this.lesson.uniqueid).subscribe(res=>{
       var index = this.usedDocuments.indexOf(document);
       if(this.checkItem(document)) this.removeUsedDocument(index);
       this.overlayRefDetach();

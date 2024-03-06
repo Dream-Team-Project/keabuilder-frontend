@@ -1,4 +1,3 @@
-/* navbar css */
 
 .kb-navbar-icon {
   position: relative;
@@ -369,7 +368,6 @@ div#topbar_notifications_logs {
 .bw-sidebar__item a:hover {
   color: #2c3e50;
   text-decoration: none;
-  ;
 }
 
 #bw-sidebar.bw-sidebar-content.hoveropen {

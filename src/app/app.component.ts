@@ -21,6 +21,7 @@ export class AppComponent {
   username?: string;
   componetLoaded:boolean = false;
   loading:boolean = false;
+  isLeft:any=true;
 
   constructor(
     private router:Router,
@@ -112,8 +113,14 @@ export class AppComponent {
   }
 
   triggerSidebar(e:boolean) {
-    this.toggleSidebar = !this.toggleSidebar;
+    // this.toggleSidebar = !this.toggleSidebar;
+    
   }
+  onPositionChanged(isLeft: boolean) {
+    this.isLeft = isLeft;
+    // console.log(this.isLeft)
+  }
+
 }
 
 

@@ -17,6 +17,8 @@ export class ViewplansComponent implements OnInit {
 
   fetching=false;
   product:any;
+  productname:any;
+  producttype:any;
   stripedata:any={
     customer:[],
     subscription:[],
@@ -93,7 +95,7 @@ subscriptionplans:any=[
        })
     })
   }
-  subscriptiondata(){
+subscriptiondata(){
     return new Promise((resolve) => {
     this.regpayService.getsubscriptiondata().subscribe((data:any)=>{
       if(data.success){
@@ -118,11 +120,23 @@ subscriptionplans:any=[
       })
     });
   }
-  openDialog(templateRef: TemplateRef<any>): void {
+  
+  openDialog(templateRef: TemplateRef<any>,plan:any): void {
+    if(plan) {
+    this.subscriptionplans.map((option:any)=>{
+      if(option?.name == plan && option?.type == this.plantype)
+      {
+        this.productname=option.name;
+        this.producttype=this.plantype;
+        this.product=option.value;
+        this.subscription_productid=option.id
+      }
+    })
+    }
     this.dialog.open(templateRef).afterClosed().subscribe((resp:any) => {
     this.subscriptionplans.map((element:any)=>{
       // console.log(this.subscription_productid)
-      if(element?.value == this.subscription_productid){
+      if(element?.name == this.subscription_productid){
        this.products.map((option:any)=>{
           if(option?.name == element.name)
           {
@@ -139,6 +153,7 @@ subscriptionplans:any=[
 updatesubscription(){
   // console.log(this.subscription_productid)
   this.fetching=true;
+  if(this.usertype !='free'){
   if(this.subscription_productid && this.subscription_productid != this.stripedata.subscription?.plan?.id){
   let obj={productid:this.subscription_productid,customerid:this.stripedata?.customer?.id,type:'updateplan',subscriptionid:this.stripedata?.subscription?.id}; 
   this.regpayService.updatestripedata(obj).subscribe((data:any)=>{
@@ -156,7 +171,7 @@ updatesubscription(){
      this.fetching=false;
       this.error=true;
      this.errormessage=data?.message;
-     this.openDialog(this.updatedialog);
+     this.openDialog(this.updatedialog,'');
    
     }
   })
@@ -164,8 +179,11 @@ updatesubscription(){
  else{
    this.fetching=false;
   this._general.openSnackBar(true,"Plan Allready Active",'Ok','center','top');
- 
  }
+}else{
+  this.fetching=false;
+ this._general.openSnackBar(false,"You are our Special user",'Ok','center','top');
+}
  }
  productdetails(event:any){
    // this.productname=event.value.name;

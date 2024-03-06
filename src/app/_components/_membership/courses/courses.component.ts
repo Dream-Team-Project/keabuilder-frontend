@@ -6,6 +6,8 @@ import { ImageService } from 'src/app/_services/image.service';
 import { FileUploadService } from 'src/app/_services/file-upload.service';
 import { GeneralService } from 'src/app/_services/_builder/general.service';
 import { WebsiteService } from 'src/app/_services/website.service';
+import { UserService } from 'src/app/_services/user.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-membership-courses',
@@ -16,6 +18,7 @@ import { WebsiteService } from 'src/app/_services/website.service';
 export class MembershipCoursesComponent implements OnInit {
 
   @ViewChild('adddialog') adddialog!: TemplateRef<any>;
+  @ViewChild('paginator') paginator!: MatPaginator;
   
   btndisable=false;
   spinner=false;
@@ -60,27 +63,27 @@ export class MembershipCoursesComponent implements OnInit {
   error=false;
   errormessage:any='';
   subdomain:any;
+  username:any;
+  courseslength:any;
 
   constructor(public _course: CourseService,
              public _image: ImageService, 
              private _file: FileUploadService,
              public _general: GeneralService,
              public dialog: MatDialog,
-             public websiteService: WebsiteService,) {
+             public websiteService: WebsiteService,
+             public userService: UserService,) {
               this.toggleview = _general.getStorage('course_toggle');
               }
 
   ngOnInit(): void {
-    // this._course.getalloffers().subscribe({
-    //   next: data => {
-    //    data.data.forEach((element: any) => {
-    //       var genobj = {id:element.uniqueid,text:element.title};
-    //       this.offersList.push(genobj);
-    //       console.log(this.offersList);
-    //    });
-
-    //   }
-    // });
+    this.userService.getUsersDetails().subscribe({
+      next: data => {
+        if(data.data.length>0){
+          this.username = data.data[0].username;
+        }
+      }
+    });
     this.allCourses();
   }
 
@@ -113,6 +116,7 @@ export class MembershipCoursesComponent implements OnInit {
     this.fetching = true;
     this._course.getallcourses().subscribe((res:any)=>{
       this.courses = res.data;
+      this.courseslength=res?.data?.length || 0;
       this.fetching = false;
       // console.log(this.courses)
     }); 
@@ -148,8 +152,9 @@ export class MembershipCoursesComponent implements OnInit {
 
   createsubdomainname(){
     var uniqid = this._general.makeid(15);
-    let temp=this.course?.title?.replace(/\s/g,'');
-    return temp+uniqid;
+    // let temp=this.course?.title?.replace(/\s/g,'');
+    // return temp+uniqid;
+    return this.username+uniqid;
   }
 
   duplicateCourse(course:any) {

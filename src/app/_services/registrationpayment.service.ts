@@ -289,6 +289,10 @@ updatestripedata(obj:any): Observable<any>{
   obj.user_id=this.user_id;
   return this.http.post('/api/updatestripedetails',obj).pipe(catchError(this.errorHandler));
 } 
+getCustomerInvoices(obj:any): Observable<any>{
+  obj.user_id=this.user_id;
+  return this.http.post('/api/getcustomerinvoices',obj).pipe(catchError(this.errorHandler));
+}
 errorHandler(error: HttpErrorResponse) {
   return throwError(()=>error.message || "Sever Error")
 }
