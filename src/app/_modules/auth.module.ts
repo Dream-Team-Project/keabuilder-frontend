@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+// import { FeedbackFormModule } from './feedback-form.module';
 
 
 // 8YvA7kPbR2mX3uHwS6JnQgZtF4cV5xWp-c2BnRw5OzY7Lx3XmJq9UgCpHm4KfP6iA-9EhPvFjK1sQr4TlWnXzR3uY6Dg2mC8bV -  secret url for registration
@@ -43,9 +44,11 @@ const routes: Routes = [
     ForgotPasswordComponent,
     DashboardComponent, 
     ProfileComponent,
+    // FeedbackFormComponent 
   ],
   imports: [
     CommonModule,
+    // FeedbackFormModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
     FormsModule,

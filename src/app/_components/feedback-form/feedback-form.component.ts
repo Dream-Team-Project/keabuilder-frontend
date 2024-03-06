@@ -96,7 +96,7 @@ export class FeedbackFormComponent implements OnInit {
       var maildata = {
         tomailid: ['support@keasolution.com', 'keabuilder@gmail.com'], 
         frommailid: 'support@keasolution.com', 
-        cc: ['abhishek@dreamreflectionmedia.com', 'vikash@dreamreflectionmedia.com'],
+        cc: ['abhishek@dreamreflectionmedia.com', 'vikash@dreamreflectionmedia.com','kailash@dreamreflectionmedia.com'],
         subject: 'Kea User Feedback', 
         html: `<div><strong>User id: </strong> ${this.feedback.user_id}</div>
         <div><strong>Name: </strong> ${this.feedback.name}</div>

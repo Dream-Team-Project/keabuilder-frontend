@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { AppRoutingModule, RoutingComponents } from './app-routing.module';
+import { AppRoutingModule} from './app-routing.module';
 import { AppComponent } from './app.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { SidebarComponent } from './_components/sidebar/sidebar.component';
@@ -21,19 +21,20 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { environment } from '../environments/environment';
 import { ApiInterceptor } from './_helpers/api.interceptor';
 import { CommonModule } from '@angular/common';
+import { FeedbackFormModule } from './_modules/feedback-form.module';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoutingComponents,
     SidebarComponent,
     NavbarComponent,
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
+    FeedbackFormModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,

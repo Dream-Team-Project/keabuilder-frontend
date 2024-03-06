@@ -5,11 +5,11 @@ import { AuthGuard } from './_guard/auth.guard';
 // import { MemberAuthGuard } from './_guard/member-auth.guard';
 // import { MemberSignedGuard } from './_guard/member-signed.guard';
 import { environment } from 'src/environments/environment';
-import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
-import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
-import { StrategiesComponent } from './_components/strategies/strategies.component';
-import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
-import { MemberAuthGuard } from './_guard/member-auth.guard';
+// import { ComingSoonComponent } from './_components/coming-soon/coming-soon.component';
+// import { FeedbackFormComponent } from './_components/feedback-form/feedback-form.component';
+// import { StrategiesComponent } from './_components/strategies/strategies.component';
+// import { PageNotFoundComponent } from './_components/page-not-found/page-not-found.component';
+// import { MemberAuthGuard } from './_guard/member-auth.guard';
 
 const currentDomain:any = window.location.hostname;
 const currentPath:any = window.location.pathname;
@@ -69,10 +69,10 @@ else {
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const RoutingComponents = 
-  [
-    FeedbackFormComponent,
-    StrategiesComponent,
-    ComingSoonComponent,
-  ];
+// export const RoutingComponents = 
+//   [
+//     FeedbackFormComponent,
+//     StrategiesComponent,
+//     ComingSoonComponent,
+//   ];
 

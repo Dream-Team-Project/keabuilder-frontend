@@ -43,7 +43,6 @@ const routes: Routes = [
         {path:'footers', component: WebsiteFootersComponent,},
         {path:'navigation', component: WebsiteNavigationComponent,},
         {path: ':website_id/details', component: WebsiteDetailsComponent,},
-        // {path: 'marketplace', component: ComingSoonComponent,},
         {path: ':website_id/pages', component: WebsitePagesComponent,},
         {path: ':website_id/pages/archive', component: WebpagesArchiveComponent,},
         {path: 'pages/archive', component: WebpagesArchiveComponent,},
