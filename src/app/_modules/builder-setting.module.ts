@@ -31,6 +31,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { MatInputModule } from '@angular/material/input';
     MatProgressBarModule,
     MatSidenavModule, 
     MatInputModule,
+    MatSlideToggleModule,
     
   ],
   exports: [

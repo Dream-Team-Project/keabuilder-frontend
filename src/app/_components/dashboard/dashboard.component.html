@@ -228,7 +228,7 @@
           <span class="kb-fnt-hd-size" [ngClass]="{ 'kb-card-dark': isDarkMode }">Total earnings monthly</span>
           <div class="chart1 kbcustmwidthforbox4 text-center" [ngClass]="{ 'kb-card-dark': isDarkMode }">
           <!-- <div class="kbcustmwidthforbox4"> -->
-            <apx-chart *ngIf="data11"
+            <apx-chart *ngIf="data11" 
               [series]="chartOptions11.series"
               [chart]="chartOptions11.chart"
               [yaxis]="chartOptions11.yaxis"
@@ -241,26 +241,6 @@
               [tooltip]="chartOptions11.tooltip"
             ></apx-chart>
         </div>
-        </div>
-
-        <div class="card-footer" *ngIf="hidefornow">
-          <hr>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="footer-title">Sales Statistics</div>
-            </div>
-            <div class="col-sm-8">
-              <div class="pull-right">
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Weekly" matTooltipPosition="above" >Weekly</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Monthly" matTooltipPosition="above" >Monthly</button>
-                <button mat-raised-button color="accent" class="btn-round btn-icon badge mr-1" matTooltip="Sales By Yearly" matTooltipPosition="above" >Yearly</button>
-
-                <button mat-raised-button color="primary" class="btn-round btn-icon badge" matTooltip="Custom Sales" matTooltipPosition="above" >
-                  <i class="fas fa-play"></i>
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -1233,7 +1213,7 @@
         </div>
         <div class="card-body">
           <!-- <h6 class="big-title">Total earnings in last Week</h6> -->
-          <div class="">
+          <div class="text-center">
             <apx-chart *ngIf="data_pageview.fetched"
               [series]="chartOptions7.series"
               [chart]="chartOptions7.chart"

@@ -1361,7 +1361,7 @@ export class DashboardComponent implements OnInit {
         show: true,
         width: 2,
         colors: ['transparent'],
-        // colors: ['#dea641'],
+        // colors: ['white'],
       },
       xaxis: {
         categories: [
@@ -1378,12 +1378,29 @@ export class DashboardComponent implements OnInit {
           'Nov',
           'Dec',
         ],
+        axisBorder:{
+          show: true,
+          color: "#00ff00"
+        },
+        labels: {
+          style: {
+            colors: "#00ff00"
+          }
+        }
       },
       yaxis: {
         title: {
           text: '',
         },
-        
+        axisBorder:{
+        show: true,
+        color: "#00ff00"
+      },
+      labels: {
+        style: {
+          colors: "#00ff00"
+        }
+      },
       },
       fill: {
         opacity: 1,
@@ -1684,17 +1701,36 @@ export class DashboardComponent implements OnInit {
       markers: {
         size: 1
       },
-      xaxis: {
-        categories: this.data_pageview.data2,
-        title: {
-          text: ""
-        }
-      },
       yaxis: {
         title: {
           text: ""
         },
+        axisBorder:{
+          show: true,
+          color: "#ff8c00",
+        },
+        labels: {
+          style: {
+            colors: "#ff8c00",
+          }
+        }
       },
+      xaxis: {
+        categories: this.data_pageview.data2,
+        title: {
+          text: ""
+        },
+        axisBorder:{
+          show: true,
+          color: "#ff8c00",
+        },
+        labels: {
+          style: {
+            colors: "#ff8c00",
+          },
+        }
+      },
+     
       legend: {
         position: "top",
         horizontalAlign: "right",
@@ -2397,6 +2433,7 @@ export class DashboardComponent implements OnInit {
         {
           name: "Revenue",
           data: this.course_revenue.prices,
+          
         }
       ],
       chart: {
@@ -2414,6 +2451,35 @@ export class DashboardComponent implements OnInit {
         curve: "straight"
       },
       labels: this.course_revenue.dates,
+      xaxis: {
+        categories: this.data_pageview.data2,
+        title: {
+          text: ""
+        },
+        axisBorder:{
+          show: true,
+          color: "#00b7eb",
+        },
+        labels: {
+          style: {
+            colors: "#00b7eb",
+          },
+        }
+      },
+      yaxis: {
+        title: {
+          text: ""
+        },
+        axisBorder:{
+          show: true,
+          color: "#00b7eb",
+        },
+        labels: {
+          style: {
+            colors: "#00b7eb",
+          }
+        }
+      },
     };
   }
 

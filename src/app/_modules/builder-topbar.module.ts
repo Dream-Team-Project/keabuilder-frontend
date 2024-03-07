@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 
+
 @NgModule({
   declarations: [
     BuilderTopbarComponent
@@ -25,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatTooltipModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   exports: [
     BuilderTopbarComponent
